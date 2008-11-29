@@ -1,0 +1,6 @@
+<order xmlns="http://www.openehealth.org/tutorial">
+    <customer>123</customer>
+    <category>books</category>
+    <item>eating ozelots</item>
+    <count>3</count>
+</order>

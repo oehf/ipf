@@ -1,0 +1,67 @@
+<!--
+    Copyright 2008 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://activemq.apache.org/camel/schema/spring"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://activemq.apache.org/camel/schema/spring 
+http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
+
+    <camel:camelContext id="camelContext">
+        <camel:jmxAgent id="agent" disabled="true" />
+    </camel:camelContext>
+
+    <bean id="producerTemplate" 
+        factory-bean="camelContext"
+        factory-method="createProducerTemplate">
+    </bean>
+
+    <bean id="routeBuilder"
+        class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
+        <property name="routeModelExtender" ref="routeModelExtender" />
+        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    </bean>
+
+    <lang:groovy id="coreModelExtension" 
+        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
+        <lang:property name="routeBuilder" ref="routeBuilder" />
+    </lang:groovy>
+
+    <lang:groovy id="hl7ModelExtension" 
+        script-source="classpath:org/openehealth/ipf/platform/camel/hl7/extend/Hl7ModelExtension.groovy">
+    </lang:groovy>
+
+    <lang:groovy id="routeBuilderConfig" 
+        script-source="classpath:org/openehealth/ipf/platform/camel/hl7/extend/SampleRouteBuilderConfig.groovy">
+    </lang:groovy>
+
+    <lang:groovy id="routeModelExtender" 
+        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
+        <lang:property name="routeModelExtensions">
+            <list>
+                <ref bean="coreModelExtension" />
+                <ref bean="hl7ModelExtension" />
+            </list>
+        </lang:property>
+    </lang:groovy>
+
+</beans>

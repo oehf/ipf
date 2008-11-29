@@ -1,0 +1,163 @@
+<!--
+    Copyright 2008 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ctx="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+  <ctx:property-placeholder location="classpath:${cluster.node.dir}/context.properties" />
+
+  <!-- ================================================================= -->
+  <!--  Declarative Transaction Management                               -->
+  <!-- ================================================================= -->
+
+  <tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
+
+  <!-- ================================================================== -->
+  <!--  Flow Manager                                                      -->
+  <!-- ================================================================== -->
+
+  <bean id="flowManager" 
+    class="org.openehealth.ipf.platform.camel.flow.PlatformFlowManager">
+  </bean>
+
+  <!-- ================================================================== -->
+  <!--  Dedupe                                                            -->
+  <!-- ================================================================== -->
+
+  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe" />
+
+  <!-- ================================================================== -->
+  <!--  Flow Processors                                                   -->
+  <!-- ================================================================== -->
+
+  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor" />
+  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor" />
+  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowErrorProcessor" />
+
+  <!-- ================================================================= -->
+  <!--  Repositories                                                     -->
+  <!-- ================================================================= -->
+
+  <bean id="sequenceRepository" 
+    class="org.openehealth.ipf.commons.flow.repository.SequenceRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+  
+  <bean id="flowRepository" 
+    class="org.openehealth.ipf.commons.flow.repository.FlowRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+  
+  <bean id="configRepository" 
+    class="org.openehealth.ipf.commons.flow.repository.ConfigRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Hibernate Setup                                                  -->
+  <!-- ================================================================= -->
+
+  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource" ref="flowDataSource"/>
+    <property name="configLocation" value="/hibernate-flow.xml"/>
+    <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.openehealth.ipf.commons.flow.derby.DerbyDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">false</prop>
+        <!-- 
+            THESE SETTINGS ARE PRELIMINARY. CLUSTER-SUPPORT FOR LUCENE INDEX TO FOLLOW.
+         -->
+        <prop key="hibernate.search.autoregister_listeners">false</prop>
+        <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+        <prop key="hibernate.search.default.indexBase">${lucene.index.base}</prop>
+
+      </props>
+    </property>    
+  </bean>
+
+  <bean id="hibernateTemplate"
+    class="org.springframework.orm.hibernate3.HibernateTemplate">
+    <property name="sessionFactory" ref="hibernateSessionFactory" />
+  </bean>
+
+  <bean id="hibernateTransactionManager"
+    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="hibernateSessionFactory"/>
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Datasource Setup                                                 -->
+  <!-- ================================================================= -->
+
+  <bean id="flowDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+    <property name="url" value="jdbc:derby://${flowmgr.database.host}:${flowmgr.database.port}/${flowmgr.database.name};create=true" />
+    <property name="defaultAutoCommit" value="false" />
+    <property name="initialSize" value="10" />
+    <property name="maxActive" value="50" />
+  </bean>
+
+  <!-- ================================================================== -->
+  <!--  JMX Setup                                                         -->
+  <!-- ================================================================== -->
+
+  <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+    <property name="autodetect" value="false"/>
+    <property name="assembler" ref="assembler"/>
+    <property name="namingStrategy" ref="namingStrategy"/>
+    <property name="beans">
+      <map>
+        <entry
+            key="org.openehealth.ipf.platform:type=service,name=FlowManager"
+            value-ref="flowManagerMBean" />
+      </map>
+    </property>
+  </bean>
+
+  <bean id="flowManagerMBean" class="org.openehealth.ipf.commons.flow.jmx.FlowManagerMBean">
+    <property name="application" value="tutorial" />
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  JMX Annotation Support                                           -->
+  <!-- ================================================================= -->
+
+  <bean id="jmxAttributeSource"
+      class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource"/>
+
+  <bean id="assembler"
+      class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
+      <property name="attributeSource" ref="jmxAttributeSource"/>
+  </bean>
+
+  <bean id="namingStrategy"
+      class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
+      <property name="attributeSource" ref="jmxAttributeSource"/>
+  </bean>
+
+</beans>

@@ -1,0 +1,406 @@
+<!--
+    Copyright 2008 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="
+http://maven.apache.org/POM/4.0.0 
+http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf</groupId>
+    <artifactId>ipf</artifactId>
+    <version>1.5-SNAPSHOT</version>
+    <name>ipf</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <activemq-version>5.1.0</activemq-version>
+        <aspectj-version>1.5.4</aspectj-version>
+        <camel-version>1.5.0</camel-version>
+        <commons-dbcp-version>1.2.2</commons-dbcp-version>
+        <commons-httpclient-version>3.1</commons-httpclient-version>
+        <commons-io-version>1.4</commons-io-version>
+        <commons-logging-version>1.1.1</commons-logging-version>
+        <derby-version>10.4.1.3</derby-version>
+        <groovy-version>1.5.6</groovy-version>
+        <hapi-version>0.5.1</hapi-version>
+        <hibernate-version>3.2.4.sp1</hibernate-version>
+        <hibernate-annotations-version>3.3.0.ga</hibernate-annotations-version>
+        <hibernate-search-version>3.0.1.GA</hibernate-search-version>
+        <jasypt-version>1.5</jasypt-version>
+        <jetty-version>6.1.11</jetty-version>
+       	<joda-time-version>1.5.2</joda-time-version>
+        <junit-version>4.4</junit-version>
+        <junitperf-version>1.8</junitperf-version>
+        <log4j-version>1.2.14</log4j-version>
+        <persistence-api-version>1.0</persistence-api-version>
+        <spring-version>2.5.5</spring-version>
+        <xbean-spring-version>3.4</xbean-spring-version>
+        <xerces-impl-version>2.8.1</xerces-impl-version>
+    </properties>
+
+    <url>http://gforge.openehealth.org/gf/project/oehf-ipf/wiki/</url>
+
+    <organization>
+        <name>Open eHealth Foundation</name>
+        <url>http://www.openehealth.org/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>mrt1nz</id>
+            <name>Martin Krasser</name>
+            <email>krasserm@googlemail.com</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+                <role>Administrator</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>ohr</id>
+            <name>Christian Ohr</name>
+            <email>christian.ohr@icw.de</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>    
+        <developer>
+            <id>riemschneider</id>
+            <name>Jens Riemschneider</name>
+            <email>jens.riemschneider@icw.de</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>    
+        <developer>
+            <id>kolev</id>
+            <name>Mitko Kolev</name>
+            <email>mitko.kolev@icw.de</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>    
+    </developers>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <mailingLists>
+        <mailingList>
+            <name>Development List</name>
+            <subscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-developer</subscribe>
+            <unsubscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-developer</unsubscribe>
+            <post>ipf-developer@gforge.openehealth.org</post>
+        </mailingList>
+        <mailingList>
+            <name>User List</name>
+            <subscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-user</subscribe>
+            <unsubscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-user</unsubscribe>
+            <post>ipf-user@gforge.openehealth.org</post>
+        </mailingList>
+        <mailingList>
+            <name>Commits List</name>
+            <subscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-commits</subscribe>
+            <unsubscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-commits</unsubscribe>
+            <post>ipf-commits@gforge.openehealth.org</post>
+        </mailingList>
+    </mailingLists>
+
+    <!-- 
+
+    TODO: setup distribution management
+
+    <distributionManagement>
+        <repository>
+            <id></id>
+            <name></name>
+            <url></url>
+        </repository>
+        <snapshotRepository>
+            <id></id>
+            <name></name>
+            <url></url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <site>
+            <id</id>
+            <url></url>
+        </site>
+    </distributionManagement>
+
+    -->
+
+    <scm>
+        <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</connection>
+        <developerConnection>scm:svn:scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</developerConnection>
+        <url>scm:svn:scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</url>
+    </scm>
+
+    <modules>
+        <module>archetypes</module>
+        <module>commons</module>
+        <module>modules</module>
+        <module>platform-camel</module>
+        <module>platform-manager</module>
+        <module>tutorials</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>${commons-dbcp-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons-logging-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons-httpclient-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hl7</groupId>
+                <artifactId>hapi</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-core</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-spring</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-jms</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-jetty</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-all</artifactId>
+                <version>${activemq-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring</artifactId>
+                <version>${spring-version}</version>
+            </dependency>        
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring-version}</version>
+            </dependency>        
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate</artifactId>
+                <version>${hibernate-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-annotations</artifactId>
+                <version>${hibernate-annotations-version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-commons-annotations</artifactId>
+                <version>${hibernate-annotations-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-search</artifactId>
+                <version>${hibernate-search-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>persistence-api</artifactId>
+                <version>${persistence-api-version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derby</artifactId>
+                <version>${derby-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derbynet</artifactId>
+                <version>${derby-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derbyclient</artifactId>
+                <version>${derby-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jasypt</groupId>
+                <artifactId>jasypt</artifactId>
+                <version>${jasypt-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time-version}</version>
+            </dependency>        
+            <dependency>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty</artifactId>
+                <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-management</artifactId>
+                <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>${xerces-impl-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xbean</groupId>
+                <artifactId>xbean-spring</artifactId>
+                <version>${xbean-spring-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junitperf</groupId>
+                <artifactId>junitperf</artifactId>
+                <version>${junitperf-version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+    
+    <repositories>
+        <repository>
+            <id>java.net</id>
+            <name>java.net Maven Repository</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>servicemix</id>
+            <name>Apache ServiceMix Maven Repository</name>
+            <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <name>JBoss Maven Repository</name>
+            <url>http://repository.jboss.com/maven2</url>
+        </repository>
+    </repositories>
+    
+</project>

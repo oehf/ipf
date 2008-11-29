@@ -1,0 +1,89 @@
+<!--
+    Copyright 2008 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://activemq.apache.org/camel/schema/spring"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://activemq.apache.org/camel/schema/spring 
+http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
+
+  <!-- ================================================================== -->
+  <!--  Camel Context Setup                                               -->
+  <!-- ================================================================== -->
+
+  <camel:camelContext id="camelContext">
+      <camel:jmxAgent id="agent" usePlatformMBeanServer="true" />
+  </camel:camelContext>
+
+  <bean id="producerTemplate" 
+      factory-bean="camelContext"
+      factory-method="createProducerTemplate">
+  </bean>
+
+  <!-- ================================================================== -->
+  <!--  Camel JMS Setup                                                   -->
+  <!-- ================================================================== -->
+
+  <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+      <property name="connectionFactory" ref="jmsConnectionFactory"/> 
+      <property name="transactionManager" ref="jmsTransactionManager"/>
+      <property name="concurrentConsumers" value="3"/>
+      <property name="maxConcurrentConsumers" value="5"/>
+      <property name="transacted" value="true"/> 
+  </bean>
+
+  <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+      <property name="configuration" ref="jmsConfig"/>
+  </bean>
+
+  <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+      <property name="connectionFactory" ref="jmsConnectionFactory"/>
+  </bean>
+  
+  <!-- 
+    DO NOT USE this caching connection factory with the ActiveMQ failover://
+    transport. With caching connection factories no transactional failover
+    is possible. If non-transactional failover is acceptable you SHOULD use
+    use a caching connection factory for performance reasons.
+   -->
+  
+  <bean id="jmsConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+      <property name="targetConnectionFactory" ref="connectionFactory"/>
+  </bean>
+
+  <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+      <property name="brokerURL" value="${activemq.connection.broker.url}"/>
+      <property name="redeliveryPolicy" ref="redeliveryPolicy" />
+  </bean>
+  
+  <!-- 
+    We do not want to handle redeliveries on JMS provider-level. A rollback
+    on a transactional JMS session should put the message immediately into a 
+    dead-letter channel (maintained by the JMS provider). Redeliveries should
+    rather be attempted on Camel-level using Camel's DeadLetterChannel as error
+    handler. If all redelivery attempts fail on that level the JMS transaction
+    is rolled back. However, if there is a server crash (i.e. Camel JVM crash)
+    during redelivery, the message is consumed again from the JMS queue.  
+   -->
+  
+  <bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+      <property name="maximumRedeliveries" value="0" />
+  </bean>
+      
+</beans>

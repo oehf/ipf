@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Copyright 2008 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+  http://www.springframework.org/schema/beans 
+  http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <!-- ================================================================= -->
+  <!--  Flow Manager                                                     -->
+  <!-- ================================================================= -->
+
+  <bean id="flowManager" 
+    class="org.openehealth.ipf.commons.flow.FlowManagerBase">
+  </bean>
+
+  <bean id="flowRepository" 
+    class="org.openehealth.ipf.commons.flow.repository.FlowRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+  
+  <bean id="configRepository" 
+    class="org.openehealth.ipf.commons.flow.repository.ConfigRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+  
+  <!-- ================================================================= -->
+  <!--  System Transaction Management                                    -->
+  <!-- ================================================================= -->
+
+  <bean id="hibernateTransactionManager"
+    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="hibernateSessionFactory"/>
+  </bean>
+
+  <bean id="testTransactionManager"
+    class="org.openehealth.ipf.commons.flow.tx.TestTransactionManager">
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Hibernate Setup                                                  -->
+  <!-- ================================================================= -->
+
+  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource" ref="testDataSource"/>
+    <property name="configLocation" value="/hibernate-flow.xml"/>
+    <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.openehealth.ipf.commons.flow.derby.DerbyDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">false</prop>
+        <prop key="hibernate.search.autoregister_listeners">false</prop>
+        <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
+        <prop key="hibernate.search.default.indexBase">./target/lucene</prop>
+      </props>
+    </property>
+    <property name="eventListeners">
+      <map>
+        <entry key="pre-update" value-ref="textEncryptorEventListener"/>
+        <entry key="post-update">
+          <list>
+            <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
+          </list>
+        </entry>
+        <entry key="pre-insert" value-ref="textEncryptorEventListener"/>
+        <entry key="post-insert">
+          <list>
+            <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
+          </list>
+        </entry>
+        <entry key="post-delete" value-ref="textIndexEventListener"/>
+        <entry key="post-load" value-ref="textDecryptorEventListener"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="hibernateTemplate"
+    class="org.springframework.orm.hibernate3.HibernateTemplate">
+    <property name="sessionFactory" ref="hibernateSessionFactory" />
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Datasource Setup                                                 -->
+  <!-- ================================================================= -->
+
+  <bean id="testDataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource">
+    <property name="databaseName" value="target/testdb"/>
+    <property name="createDatabase" value="create"/>
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Crypto setup 		                                             -->
+  <!-- ================================================================= -->
+  
+  <bean id="stringEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+    <property name="password">
+      <value>test_password</value>
+    </property>
+  </bean>
+
+  <bean id="textEncryptorEventListener"
+    class="org.openehealth.ipf.commons.flow.hibernate.RenderedMessageEncryptEventListener">
+    <property name="stringEncryptor" ref="stringEncryptor" />
+  </bean>
+	
+  <bean id="textDecryptorEventListener" 
+    class="org.openehealth.ipf.commons.flow.hibernate.RenderedMessageDecryptEventListener">
+    <property name="stringEncryptor" ref="stringEncryptor"/>
+  </bean>
+
+  <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener" />
+
+</beans>

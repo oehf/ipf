@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><archetype>
+    <id>ipf-basic</id>
+    <sources>
+        <source>src\main\java\SampleServer.java</source>
+    </sources>
+    <testSources>
+        <source>src\test\java\SampleRouteTest.java</source>
+    </testSources>
+    <resources>
+        <resource>src\main\assembly\bin.xml</resource>
+        <resource>src\main\resources\context.xml</resource>
+        <resource>src\main\resources\SampleModelExtension.groovy</resource>
+        <resource>src\main\resources\SampleRouteConfig.groovy</resource>
+        <resource>.settings\org.codehaus.groovy.eclipse.preferences.prefs</resource>
+        <resource>.settings\org.eclipse.jdt.core.prefs</resource>
+        <resource>.settings\org.maven.ide.eclipse.prefs</resource>
+        <resource>.classpath</resource>
+        <resource>.project</resource>
+        <resource>startup.bat</resource>
+        <resource>startup.sh</resource>
+    </resources>
+    <testResources>
+        <resource>src\test\resources\log4j.xml</resource>
+    </testResources>
+</archetype>

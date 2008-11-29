@@ -1,0 +1,300 @@
+<!--
+    Copyright 2008 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://maven.apache.org/POM/4.0.0 
+http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.openehealth.ipf.platform-manager</groupId>
+	<artifactId>platform-manager</artifactId>
+	<name>platform-manager</name>
+	<packaging>pom</packaging>
+  
+	<!--  The project will compile only with maven version 2.0.9 + unless you provide your own artifacts with eclipse:to-maven goal -->
+  <!--  and set the dependent versions. -->
+  <!--  The reason for this limitation is that lower versions of Maven2  ( < 2.09)  consider  x.y.z-classifier < x.y.z.  -->
+  <!--  On the other hand the public eclipse artifacts assume that x.y.z-classifier >= x.y.z -->
+  
+  
+	<parent>
+		<groupId>org.openehealth.ipf</groupId>
+		<artifactId>ipf</artifactId>
+		<version>1.5-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<commons-codec-version>1.3</commons-codec-version>
+		<properties-maven-plugin-version>1.0</properties-maven-plugin-version>
+		<commons-logging-version>1.0.4</commons-logging-version>
+    <org-apache-log4j-version>1.2.13</org-apache-log4j-version>
+    <com-ibm-icu-version>3.6.1</com-ibm-icu-version>
+    
+		<!--  Version of eclipse dependency artifacts avaialble in the public repositories -->
+		<org.eclipse-osgi-version>3.3.0-v20070530</org.eclipse-osgi-version>
+    <org.eclipse.core.commands-version>3.3.0-I20070605-0010</org.eclipse.core.commands-version>
+    <org.eclipse.equinox.common-version>3.3.0-v20070426</org.eclipse.equinox.common-version>
+    <org.eclipse.swt.win32.win32.x86_version>3.3.0-v3346</org.eclipse.swt.win32.win32.x86_version>
+		<org.eclipse.swt.gtk.linux.x86_version>3.3.0-v3346</org.eclipse.swt.gtk.linux.x86_version>
+    <org.eclipse.swt-version>3.3.0-v3346</org.eclipse.swt-version>
+    <org.eclipse.core.expressions-version>3.3.0-v20070606-0010</org.eclipse.core.expressions-version>
+    <org.eclipse.ui.workbench-version>3.3.0-I20070608-1100</org.eclipse.ui.workbench-version>
+    <org.eclipse.jface-version>3.3.0-I20070606-0010</org.eclipse.jface-version>
+    <org.eclipse.jface.databinding-version>1.1.0-I20070606-0010</org.eclipse.jface.databinding-version>
+    <org.eclipse.core.runtime-version>3.3.100-v20070530</org.eclipse.core.runtime-version>
+    <org.eclipse.core.databinding-version>1.0.0-I20070606-0010</org.eclipse.core.databinding-version>
+    <org.eclipse.equinox.app-version>1.0.0-v20070606</org.eclipse.equinox.app-version>
+    <org.eclipse.help-version>3.3.0-v20070524</org.eclipse.help-version>
+    <org.eclipse.ui-version>3.3.0-I20070614-0800</org.eclipse.ui-version>
+    <org.eclipse.ui.views.properties.tabbed-version>3.3.0-I20070605-0010</org.eclipse.ui.views.properties.tabbed-version>
+    <org.eclipse.ui.forms-version>3.3.0-v20070511</org.eclipse.ui.forms-version>
+    <org.eclipse.ui.console-version>3.2.0-v20070530</org.eclipse.ui.console-version>
+    <org.eclipse.jface.text-version>3.3.0-v20070606-0010</org.eclipse.jface.text-version>
+    <org.eclipse.text-version>3.3.0-v20070606-0010</org.eclipse.text-version>
+    <org.eclipse.ui.workbench.texteditor-version>3.3.0-v20070606-0010</org.eclipse.ui.workbench.texteditor-version>
+    <org.eclipse.core.filesystem-version>1.1.0-v20070606</org.eclipse.core.filesystem-version>
+    <org.eclipse.core.variables-version>3.2.0-v20070426</org.eclipse.core.variables-version>
+    <org.eclipse.equinox.common-version>3.3.0-v20070426</org.eclipse.equinox.common-version>
+    
+	</properties>
+  <dependencyManagement>
+    <dependencies>
+    
+     <dependency>
+  			<groupId>com.ibm</groupId>
+  			<artifactId>icu</artifactId>
+  			<version>${com-ibm-icu-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commons-codec-version}</version>
+      </dependency>
+       <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>help</artifactId>
+        <version>${org.eclipse.help-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>jface</artifactId>
+        <version>${org.eclipse.jface-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>osgi</artifactId>
+        <version>${org.eclipse-osgi-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>swt</artifactId>
+        <version>${org.eclipse.swt-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>text</artifactId>
+        <version>${org.eclipse.text-version}</version>
+        <scope>compile</scope>
+      </dependency>
+       <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>ui</artifactId>
+        <version>${org.eclipse.ui-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      
+      <dependency>
+  			<groupId>org.eclipse.core</groupId>
+  			<artifactId>commands</artifactId>
+  			<version>${org.eclipse.core.commands-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.core</groupId>
+        <artifactId>databinding</artifactId>
+        <version>${org.eclipse.core.databinding-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.core</groupId>
+        <artifactId>expressions</artifactId>
+        <version>${org.eclipse.core.expressions-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.core</groupId>
+        <artifactId>filesystem</artifactId>
+        <version>${org.eclipse.core.filesystem-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.core</groupId>
+        <artifactId>runtime</artifactId>
+        <version>${org.eclipse.core.runtime-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.core</groupId>
+        <artifactId>variables</artifactId>
+        <version>${org.eclipse.core.variables-version}</version>
+        <scope>compile</scope>
+      </dependency>
+     
+      <dependency>
+        <groupId>org.eclipse.equinox</groupId>
+        <artifactId>app</artifactId>
+        <version>${org.eclipse.equinox.app-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.equinox</groupId>
+        <artifactId>common</artifactId>
+        <version>${org.eclipse.equinox.common-version}</version>
+        <scope>compile</scope>
+      </dependency>
+     
+      <dependency>
+        <groupId>org.eclipse.jface</groupId>
+        <artifactId>databinding</artifactId>
+        <version>${org.eclipse.jface.databinding-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jface</groupId>
+        <artifactId>text</artifactId>
+        <version>${org.eclipse.jface.text-version}</version>
+        <scope>compile</scope>
+     </dependency>     
+     
+      <dependency>
+        <groupId>org.eclipse.ui</groupId>
+        <artifactId>console</artifactId>
+        <version>${org.eclipse.ui.console-version}</version>
+        <scope>compile</scope>
+     </dependency>
+      <dependency>
+        <groupId>org.eclipse.ui</groupId>
+        <artifactId>forms</artifactId>
+        <version>${org.eclipse.ui.forms-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.ui</groupId>
+        <artifactId>workbench</artifactId>
+        <version>${org.eclipse.ui.workbench-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.ui.views.properties</groupId>
+        <artifactId>tabbed</artifactId>
+        <version>${org.eclipse.ui.views.properties.tabbed-version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+      <groupId>org.eclipse.ui.workbench</groupId>
+      <artifactId>texteditor</artifactId>
+      <version>${org.eclipse.ui.workbench.texteditor-version}</version>
+      <scope>compile</scope>
+     </dependency>
+  </dependencies>
+  </dependencyManagement>
+  
+  <profiles>
+		<profile>
+			<id>org.eclipse.swt.win32</id>
+			<activation>
+				<os>
+					<name>windows xp</name>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.swt.win32.win32</groupId>
+					<artifactId>x86</artifactId>
+					<version>${org.eclipse.swt.win32.win32.x86_version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>org.eclipse.swt.linux</id>
+			<activation>
+				<os>
+					<name>linux</name>
+					<arch>i386</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.swt.gtk.linux</groupId>
+					<artifactId>x86</artifactId>
+					<version>${org.eclipse.swt.gtk.linux.x86_version}</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+	<build>
+   <plugins>
+     <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-versions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>2.0.9</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>1.5</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>plugin.properties</include>
+					<include>build.properties</include>
+					<include>plugin.xml</include>
+					<include>icons/**</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+	<modules>
+		<module>plugins/org.openehealth.ipf.platform.manager.application</module>
+		<module>plugins/org.openehealth.ipf.platform.manager.connection</module>
+		<module>plugins/org.openehealth.ipf.platform.manager.connection.ui</module>
+		<module>plugins/org.openehealth.ipf.platform.manager.flowmanager</module>
+    <module>plugins/org.openehealth.ipf.platform.manager.flowmanager.ui</module>
+    <module>plugins/org.openehealth.ipf.platform.manager.jmxexplorer</module>
+		<module>plugins/org.openehealth.ipf.platform.manager.jmxexplorer.ui</module>
+	</modules>
+</project>

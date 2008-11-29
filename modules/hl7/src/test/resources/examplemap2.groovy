@@ -1,0 +1,24 @@
+
+mappings = {
+
+		 encounterType(['2.16.840.1.113883.12.4','2.16.840.1.113883.5.4'], 
+			 	E : 'EMER',
+			  	I : 'IMP',
+			  	O : 'AMB'
+		 )
+		 
+		 messageType(
+				'ADT^A01' : 'PRPA_IN402001')
+		
+		 vip(['2.16.840.1.113883.12.99','2.16.840.1.113883.5.1075'],
+				Y      : 'VIP',
+				(ELSE) : { it }
+		 )
+		 listTest(
+				'a~b'   : 'c~d'
+		 )
+		 nullTest(
+				 (null) : 'not null'
+		 )
+}
+

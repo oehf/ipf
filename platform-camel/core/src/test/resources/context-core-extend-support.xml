@@ -1,0 +1,67 @@
+<!--
+    Copyright 2008 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
+
+    <!-- ================================================================== -->
+    <!--  Test beans                                                        -->
+    <!-- ================================================================== -->
+
+    <bean id="blubConverter"
+        class="org.openehealth.ipf.platform.camel.test.transform.ext.StaticTransmogrifier">
+        <property name="from" value="blub" />
+        <property name="to" value="test" />
+    </bean> 
+
+    <bean id="sampleTransmogrifier"
+        class="org.openehealth.ipf.platform.camel.test.transform.ext.StaticTransmogrifier">
+        <property name="from" value="f" />
+        <property name="to" value="g" />
+    </bean>
+
+    <bean id="samplePredicate"
+        class="org.openehealth.ipf.platform.camel.test.transform.min.TestPredicate">
+        <constructor-arg value="blub" />
+    </bean>
+     
+    <bean id="sampleValidator"
+        class="org.openehealth.ipf.platform.camel.test.transform.min.TestValidator">
+    </bean>
+     
+    <bean id="sampleAggregator"
+        class="org.openehealth.ipf.platform.camel.test.transform.min.TestAggregator">
+    </bean>
+     
+    <bean id="sampleConverter" 
+        class="org.openehealth.ipf.platform.camel.test.transform.min.TestConverter">
+    </bean>
+
+    <bean id="sampleSplitRule"
+    	class="org.openehealth.ipf.platform.camel.core.process.splitter.SplitterTest$TestSplitRule">
+    </bean>    
+
+    <lang:groovy id="testTransmogrifier"
+        script-source="org/openehealth/ipf/platform/camel/core/transform/TestTransmogrifier.groovy">
+    </lang:groovy>
+
+</beans>
