@@ -111,6 +111,10 @@ public abstract class ProcessorAdapterType extends ProcessorType {
                 exchange.getIn().copyFrom(exchange.getOut());
             }
             
+            if (getProcessor() != null) {
+                exchange.setOut(null);
+            }
+            
             if (!exchange.isFailed()) {
                 super.processNext(exchange);
             }

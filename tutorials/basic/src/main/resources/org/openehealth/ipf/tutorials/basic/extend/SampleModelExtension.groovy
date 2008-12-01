@@ -28,7 +28,7 @@ public class SampleModelExtension {
          }
       
          ProcessorType.metaClass.setFileHeaderFrom = { String sourceHeader ->  
-             delegate.setOutHeader('org.apache.camel.file.name') { exchange -> 
+             delegate.setHeader('org.apache.camel.file.name') { exchange -> 
                  def destination = exchange.in.headers."$sourceHeader"
                  destination ? "${destination}.txt" : 'default.txt'
              }
