@@ -245,7 +245,7 @@ public class MBeanAttributeEditor implements IMBeanNodeEditor,
             if (event.getSource().equals(this.attributeNode.getAttributeInfo())) {
                 if (value instanceof Throwable) {
                     Throwable t = (Throwable) value;
-                    console.printThrowable(t);
+                    console.printOutputThrowable(t);
                 }
             }
             break;
@@ -258,7 +258,7 @@ public class MBeanAttributeEditor implements IMBeanNodeEditor,
                     attributeValue = readAttributeValue();
                 }
                 // print the result to the console
-                console.printMessage(this.attributeNode.getName() + " = "
+                console.printOutputMessage(this.attributeNode.getName() + " = "
                         + attributeValue, false);
 
                 this.valueText.setText(attributeValue);

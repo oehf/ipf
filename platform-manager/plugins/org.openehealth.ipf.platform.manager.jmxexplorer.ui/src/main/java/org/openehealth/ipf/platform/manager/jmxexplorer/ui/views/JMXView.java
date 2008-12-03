@@ -25,6 +25,10 @@ import javax.management.ObjectName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -44,18 +48,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.ViewPart;
@@ -67,12 +68,9 @@ import org.openehealth.ipf.platform.manager.connection.ui.tree.Node;
 import org.openehealth.ipf.platform.manager.connection.ui.utils.jobs.JobUtils;
 import org.openehealth.ipf.platform.manager.jmxexplorer.IJMXExplorerMediator;
 import org.openehealth.ipf.platform.manager.jmxexplorer.JMXExplorerEvent;
-import org.openehealth.ipf.platform.manager.jmxexplorer.ui.editor.MBeanNodeEditor;
-import org.openehealth.ipf.platform.manager.jmxexplorer.ui.editor.MBeanNodeEditorInput;
 import org.openehealth.ipf.platform.manager.jmxexplorer.ui.osgi.Activator;
 import org.openehealth.ipf.platform.manager.jmxexplorer.ui.tree.JMXConnectionNode;
 import org.openehealth.ipf.platform.manager.jmxexplorer.ui.tree.JMXConnectionTree;
-import org.openehealth.ipf.platform.manager.jmxexplorer.ui.tree.MBeanNode;
 import org.openehealth.ipf.platform.manager.jmxexplorer.ui.util.Messages;
 
 /**
@@ -93,8 +91,6 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
     private Action expandAll;
 
     private Action collapseAll;
-
-    private Action doubleClickAction;
 
     private JMXTreeContentProvider contentProvider;
 
@@ -153,20 +149,20 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
     }
 
     private void createContextMenu(TreeViewer viewer) {
-        MenuManager menuMgr = new MenuManager();
-        menuMgr.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+        final MenuManager menuMgr = new MenuManager();
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(new IMenuListener() {
-
             public void menuAboutToShow(IMenuManager manager) {
+                manager.add(new Separator(
+                        IWorkbenchActionConstants.MB_ADDITIONS));
                 JMXView.this.fillContextMenu(manager);
+                // menuMgr.add(new Separator());
+                // drillDownAdapter.addNavigationActions(menuMgr);
             }
         });
-        menuMgr
-                .add(new Separator(
-                        "popup:org.openehealth.ipf.platform.manager.connection.ui.view.ConnectionView?after=additions"));
+        menuMgr.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+        getSite().registerContextMenu(menuMgr, viewer);
         menuMgr.add(new Separator());
-
         drillDownAdapter.addNavigationActions(menuMgr);
         // add the properties action
         // menuMgr.add(new Separator());
@@ -175,7 +171,6 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
         Control viewerControl = viewer.getControl();
         Menu menu = menuMgr.createContextMenu(viewerControl);
         viewerControl.setMenu(menu);
-        getSite().registerContextMenu(menuMgr, viewer);
     }
 
     private void contributeToActionBars() {
@@ -248,54 +243,6 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
         collapseAll.setImageDescriptor(PlatformUI.getWorkbench()
                 .getSharedImages().getImageDescriptor(
                         ISharedImages.IMG_TOOL_UNDO));
-        doubleClickAction = new Action() {
-
-            @Override
-            public void run() {
-                ISelection selection = viewer.getSelection();
-                Object obj = ((IStructuredSelection) selection)
-                        .getFirstElement();
-                if (obj instanceof MBeanNode
-                        && obj.getClass() != MBeanNode.class) {
-                    MBeanNode node = (MBeanNode) obj;
-
-                    MBeanNodeEditorInput thisNodeEditorInput = new MBeanNodeEditorInput(
-                            node);
-
-                    try {
-                        IEditorReference[] references = JMXView.this.getSite()
-                                .getPage().getEditorReferences();
-                        for (int t = 0; t < references.length; t++) {
-                            IEditorInput input = references[t].getEditorInput();
-                            if (input != null) {
-                                if (input.equals(thisNodeEditorInput)) {
-                                    IEditorPart editor = references[t]
-                                            .getEditor(false);
-                                    JMXView.this.getSite().getPage()
-                                            .closeEditor(editor, false);
-                                    JMXView.this.getSite().getPage()
-                                            .openEditor(
-                                                    thisNodeEditorInput,
-                                                    MBeanNodeEditor.class
-                                                            .getName());
-                                    return;
-
-                                }
-                            }
-                        }
-                        JMXView.this.getSite().getPage().openEditor(
-                                thisNodeEditorInput,
-                                MBeanNodeEditor.class.getName());
-
-                    } catch (PartInitException e1) {
-                        log.error("Cannto open view", e1);
-                    }
-
-                    // /showMessage("Double-click detected on " +
-                    // obj.toString());
-                }
-            }
-        };
     }
 
     /**
@@ -315,7 +262,22 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
      */
     @Override
     public void mouseDoubleClick(MouseEvent e) {
-        doubleClickAction.run();
+        try {
+            IHandlerService services = (IHandlerService) getSite().getService(
+                    IHandlerService.class);
+            services
+                    .executeCommand(
+                            "org.openehealth.ipf.platform.manager.jmxexplorer.ui.open.jmxeditor",
+                            null);
+        } catch (NotHandledException ex) {
+            log.error("The double click on a connection is not handled", ex);
+        } catch (ExecutionException ex) {
+            log.error("Cannot execute double click", ex);
+        } catch (NotDefinedException ex) {
+            log.error("Not defined double click action", ex);
+        } catch (NotEnabledException ex) {
+            log.error("Double click action not enabled", ex);
+        }
     }
 
     /**

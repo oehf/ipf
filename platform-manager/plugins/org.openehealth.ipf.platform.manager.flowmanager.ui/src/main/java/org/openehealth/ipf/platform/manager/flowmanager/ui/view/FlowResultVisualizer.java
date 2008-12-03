@@ -123,8 +123,8 @@ public class FlowResultVisualizer implements Observer, MouseListener {
         tc2.getColumn().setWidth(120);
         tc3.getColumn().setWidth(120);
         tc4.getColumn().setWidth(100);
-        tc5.getColumn().setWidth(60);
-        tc6.getColumn().setWidth(90);
+        tc5.getColumn().setWidth(80);
+        tc6.getColumn().setWidth(130);
 
         new TableColumnViewerSorter(tableViewer, tc0) {
 

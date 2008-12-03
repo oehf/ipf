@@ -201,14 +201,6 @@
                id="org.openehealth.ipf.platform.manager.flowmanager.ui.popup.menu.flows">
          </command>
          <separator
-               name="org.openehealth.ipf.platform.manager.flowmanager.ui.flows.popup.separator"
-               visible="false">
-         </separator>
-         <command
-               commandId="org.openehealth.ipf.platform.manager.flowmanager.ui.search"
-               icon="icons/find.png">
-         </command>
-         <separator
                name="org.openehealth.ipf.platform.manager.flowmanager.ui.separator2"
                visible="true">
          </separator>

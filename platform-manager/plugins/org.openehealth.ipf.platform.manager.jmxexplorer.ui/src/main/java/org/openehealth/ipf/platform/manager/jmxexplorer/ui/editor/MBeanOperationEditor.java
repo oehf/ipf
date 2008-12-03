@@ -81,7 +81,7 @@ public class MBeanOperationEditor implements IMBeanNodeEditor,
         compositeEditor.setLayout(new GridLayout(3, false));
         compositeEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
                 true, 1, 1));
-        //compositeEditor.setText(operationNode.getOperationInfo().getName());
+        // compositeEditor.setText(operationNode.getOperationInfo().getName());
         compositeEditor.setToolTipText(this.operationNode.getOperationInfo()
                 .getDescription());
 
@@ -230,7 +230,7 @@ public class MBeanOperationEditor implements IMBeanNodeEditor,
                 buffer.append(", ");
             }
         }
-        buffer.append(");");
+        buffer.append(" );");
         // print in bold
         console.printMessage(buffer.toString(), true);
 
@@ -263,7 +263,7 @@ public class MBeanOperationEditor implements IMBeanNodeEditor,
             if (event.getSource().equals(this.operationNode.getOperationInfo())) {
                 if (value instanceof Throwable) {
                     Throwable t = (Throwable) value;
-                    console.printThrowable(t);
+                    console.printOutputThrowable(t);
                 }
             }
             break;
@@ -278,9 +278,9 @@ public class MBeanOperationEditor implements IMBeanNodeEditor,
                     String stringValue = MBeanUtils
                             .convertPropertySourceValueToString(propertySource,
                                     new StringBuffer());
-                    console.printMessage(stringValue, false);
+                    console.printOutputMessage(stringValue, false);
                 } else {
-                    console.printMessage("", false);
+                    console.printOutputMessage("", false);
                 }
             }
             break;

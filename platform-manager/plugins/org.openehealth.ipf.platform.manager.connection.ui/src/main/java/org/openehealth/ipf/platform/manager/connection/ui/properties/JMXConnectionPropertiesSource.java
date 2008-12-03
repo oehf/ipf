@@ -23,6 +23,7 @@ import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.openehealth.ipf.platform.manager.connection.IConnectionConfiguration;
 import org.openehealth.ipf.platform.manager.connection.IJMXConnectionManager;
+import org.openehealth.ipf.platform.manager.connection.mock.JMXConnectionManagerImplMock;
 import org.openehealth.ipf.platform.manager.connection.ui.osgi.Activator;
 import org.openehealth.ipf.platform.manager.connection.ui.utils.messages.Messages;
 
@@ -59,59 +60,71 @@ public class JMXConnectionPropertiesSource implements IPropertySource2 {
     //
     // private final static String typeDescription;
 
-    private final static String userNameDisplayName;
+    final static String userNameDisplayName;
 
-    private final static String userNameDescription;
+    final static String userNameDescription;
 
-    private static final String CONNECTION_HOST_ID = "connection.host";
+    static final String CONNECTION_NAME_ID = "connection.name";
 
-    private static final String CONNECTION_PORT_ID = "connection.port";
+    static final String CONNECTION_NAME_DESCRIPTION_ID = "connection.name.description";
 
-    private static final String CONNECTION_ACTIVE_ID = "connection.active";
+    static final String CONNECTION_HOST_ID = "connection.host";
 
-    // not used
-    // private static final String CONNECTION_TYPE_ID = "connection.type";
+    static final String CONNECTION_HOST_DESCRIPTION_ID = "connection.host.description";
 
-    private static final String CONNECTION_USERNAME_ID = "connection.username";
+    static final String CONNECTION_PORT_ID = "connection.port";
 
-    private static final String CONNECTION_NAME_ID = "connection.name";
+    static final String CONNECTION_PORT_DESCRIPTION_ID = "connection.port.description";
+
+    static final String CONNECTION_OPEN_ID = "connection.open";
+
+    static final String CONNECTION_OPEN_DESCRIPTION_ID = "connection.open.description";
+
+    static final String CONNECTION_USERNAME_ID = "connection.username";
+
+    static final String CONNECTION_USERNAME_DESCRIPTION_ID = "connection.username.description";
 
     static {
         // initialize the properties just once
-        hostDisplayName = Messages
-                .getLabelString("ConnectionPropertiesSource.host");
-        nameDisplayName = Messages
-                .getLabelString("ConnectionPropertiesSource.connnection.name");
-        nameDescription = Messages
-                .getLabelString("ConnectionPropertiesSource.connnection.name.description");
-        portDisplayName = Messages
-                .getLabelString("ConnectionPropertiesSource.port");
+        hostDisplayName = Messages.getLabelString(CONNECTION_HOST_ID);
         hostDescription = Messages
-                .getLabelString("ConnectionPropertiesSource.host.description");
+                .getLabelString(CONNECTION_HOST_DESCRIPTION_ID);
+
+        nameDisplayName = Messages.getLabelString(CONNECTION_NAME_ID);
+        nameDescription = Messages
+                .getLabelString(CONNECTION_NAME_DESCRIPTION_ID);
+
+        portDisplayName = Messages.getLabelString(CONNECTION_PORT_ID);
         portDescription = Messages
-                .getLabelString("ConnectionPropertiesSource.port.description");
-        activeDisplayName = Messages
-                .getLabelString("ConnectionPropertiesSource.active");
+                .getLabelString(CONNECTION_PORT_DESCRIPTION_ID);
+
+        activeDisplayName = Messages.getLabelString(CONNECTION_OPEN_ID);
         activeDescription = Messages
-                .getLabelString("ConnectionPropertiesSource.active.description");
-        // typeDisplayName = Messages
-        // .getLabelString("ConnectionPropertiesSource.type");
-        // typeDescription = Messages
-        // .getLabelString("ConnectionPropertiesSource.type.description");
-        userNameDisplayName = Messages
-                .getLabelString("ConnectionPropertiesSource.username");
+                .getLabelString(CONNECTION_OPEN_DESCRIPTION_ID);
+
+        userNameDisplayName = Messages.getLabelString(CONNECTION_USERNAME_ID);
         userNameDescription = Messages
-                .getLabelString("ConnectionPropertiesSource.username.description");
+                .getLabelString(CONNECTION_USERNAME_DESCRIPTION_ID);
+
     }
 
     private final IJMXConnectionManager jMXConnectionManager;
 
-    private final IConnectionConfiguration connectionConfiguration;
+    private final IConnectionConfiguration connection;
 
     public JMXConnectionPropertiesSource(IConnectionConfiguration connnection) {
-        this.connectionConfiguration = connnection;
+        this.connection = connnection;
         connectionPropertyDescriptors = initializePropertyDescriptors();
-        jMXConnectionManager = Activator.getDefault().getJMXConnectionManager();
+        if (Activator.getDefault() != null) {
+            // if we run in a OSGi environment, the activator getdefault will
+            // not fail.
+            jMXConnectionManager = Activator.getDefault()
+                    .getJMXConnectionManager();
+        } else {
+            // used for the tests
+            jMXConnectionManager = new JMXConnectionManagerImplMock();
+        }
+
     }
 
     /**
@@ -138,7 +151,7 @@ public class JMXConnectionPropertiesSource implements IPropertySource2 {
         descriptor.setAlwaysIncompatible(true);
         descriptors.add(descriptor);
 
-        descriptor = new PropertyDescriptor(CONNECTION_ACTIVE_ID,
+        descriptor = new PropertyDescriptor(CONNECTION_OPEN_ID,
                 activeDisplayName);
         descriptor.setDescription(activeDescription);
         descriptor.setAlwaysIncompatible(true);
@@ -192,18 +205,15 @@ public class JMXConnectionPropertiesSource implements IPropertySource2 {
     @Override
     public Object getPropertyValue(Object id) {
         if (id.equals(CONNECTION_HOST_ID)) {
-            return connectionConfiguration.getHost();
+            return connection.getHost();
         } else if (id.equals(CONNECTION_PORT_ID)) {
-            return connectionConfiguration.getPort();
-        } else if (id.equals(CONNECTION_ACTIVE_ID)) {
-            return jMXConnectionManager.isConnected(connectionConfiguration);
-        }
-        // else if (id.equals(CONNECTION_TYPE_ID)) {
-        // return "RMI";
-        // }
-        else if (id.equals(CONNECTION_USERNAME_ID)) {
-            return connectionConfiguration.getAuthenticationCredentials()
-                    .getUserName();
+            return connection.getPort();
+        } else if (id.equals(CONNECTION_OPEN_ID)) {
+            return jMXConnectionManager.isConnected(connection);
+        } else if (id.equals(CONNECTION_USERNAME_ID)) {
+            return connection.getAuthenticationCredentials().getUserName();
+        } else if (id.equals(CONNECTION_NAME_ID)) {
+            return connection.getName();
         } else
             return "";
 

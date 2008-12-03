@@ -54,5 +54,15 @@
         <version>${pom.version}</version>
       </dependency>
 	</dependencies>
+    <build>
+    <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <includes>
+                    <include>org/openehealth/**/Messages.properties</include>
+                </includes>
+            </resource>
+        </resources>
+  </build>
   
 </project>

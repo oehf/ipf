@@ -22,13 +22,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 /**
- * 
- * <p>
- * Copyright (c) 2008 <a
- * href="http://www.intercomponentware.com">InterComponentWare AG</a>
- * 
- * @author Mitko Kolev (i000174)
- * 
+ * @author Mitko Kolev
  */
 public class ApplicationWorkbenchAdvisorTest extends TestCase {
     private ApplicationWorkbenchAdvisor workbenchAdvisor;

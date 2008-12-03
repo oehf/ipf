@@ -8,6 +8,7 @@ Bundle-Vendor: InterComponentWare AG
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.eclipse.core.expressions;bundle-version="3.4.0",
  org.apache.commons.logging,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.console,

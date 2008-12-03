@@ -19,11 +19,8 @@ import junit.framework.TestCase;
 
 /**
  * Tests if the primitive arrays are converted correctly.
- * <p>
- * Copyright (c) 2008 <a
- * href="http://www.intercomponentware.com">InterComponentWare AG</a>
  * 
- * @author Mitko Kolev i000174
+ * @author Mitko Kolev
  */
 public class MBeanUtilsPrimitiveConversionTest extends TestCase {
 

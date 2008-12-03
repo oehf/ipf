@@ -110,16 +110,13 @@ public class ConnectionView extends ViewPart implements
         TreeViewerColumn tc1 = new TreeViewerColumn(viewer, SWT.CENTER);
         TreeViewerColumn tc2 = new TreeViewerColumn(viewer, SWT.CENTER);
 
-        tc0.getColumn().setText(
-                Messages.getLabelString("ConnectionPropertiesSource.name"));
+        tc0.getColumn().setText(Messages.getLabelString("connection.name"));
         tc0.setLabelProvider(new JMXConnectionLabelProvider(0));
         tc0.getColumn().setWidth(140);
-        tc1.getColumn().setText(
-                Messages.getLabelString("ConnectionPropertiesSource.host"));
+        tc1.getColumn().setText(Messages.getLabelString("connection.host"));
         tc1.setLabelProvider(new JMXConnectionLabelProvider(1));
         tc1.getColumn().setWidth(100);
-        tc2.getColumn().setText(
-                Messages.getLabelString("ConnectionPropertiesSource.port"));
+        tc2.getColumn().setText(Messages.getLabelString("connection.port"));
         tc2.setLabelProvider(new JMXConnectionLabelProvider(2));
         tc2.getColumn().setWidth(60);
 

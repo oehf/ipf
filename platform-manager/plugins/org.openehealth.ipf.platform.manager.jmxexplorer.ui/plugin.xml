@@ -62,7 +62,6 @@
     <extension
           point="org.eclipse.ui.preferencePages">
        <page
-             category="org.openehealth.ipf.platform.manager.jmxexplorer.ui"
              class="org.openehealth.ipf.platform.manager.jmxexplorer.ui.preferences.JMXExplorerPreferencePage"
              id="org.openehealth.ipf.platform.manager.jmxexplorer.ui.preferences.JMXExplorerPreferencePage"
              name="%JMX_Explorer_name">
@@ -94,6 +93,80 @@
              id="org.openehealth.ipf.platform.manager.jmxexplorer.ui.editor.MBeanNodeEditor"
              name="%jmx_editor_name">
        </editor>
+    </extension>
+    <extension
+          point="org.eclipse.ui.menus">
+       <menuContribution
+             locationURI="popup:org.openehealth.ipf.platform.manager.jmxexplorer.ui.views.JMXView?after=additions">
+          <command
+                commandId="org.openehealth.ipf.platform.manager.jmxexplorer.ui.open.jmxeditor"
+                icon="icons/database_edit.png"
+                style="push">
+          </command>
+          <separator
+                name="org.openehealth.ipf.platform.manager.jmxexplorer.ui.separator1"
+                visible="true">
+          </separator>
+       </menuContribution>
+    </extension>
+    <extension
+          point="org.eclipse.ui.commands">
+       <command
+             id="org.openehealth.ipf.platform.manager.jmxexplorer.ui.open.jmxeditor"
+             name="%open_jmx_editor">
+       </command>
+    </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             class="org.openehealth.ipf.platform.manager.jmxexplorer.ui.handlers.OpenJMXEditorHandler"
+             commandId="org.openehealth.ipf.platform.manager.jmxexplorer.ui.open.jmxeditor">
+          <enabledWhen>
+             <reference
+                   definitionId="org.openehealth.ipf.platform.manager.jmxexplorer.ui.single.mbean.selection">
+             </reference>
+          </enabledWhen>
+       </handler>
+    </extension>
+    <extension
+          point="org.eclipse.ui.bindings">
+       <key
+             commandId="org.openehealth.ipf.platform.manager.jmxexplorer.ui.open.jmxeditor"
+             contextId="org.eclipse.ui.contexts.window"
+             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+             sequence="CTRL+J">
+       </key>
+    </extension>
+    <extension
+          point="org.eclipse.core.expressions.definitions">
+       <definition
+             id="org.openehealth.ipf.platform.manager.jmxexplorer.ui.single.mbean.selection">
+          <and>
+             <with
+                   variable="selection">
+                <count
+                      value="+">
+                </count>
+                <iterate
+                      operator="and">
+                   <or>
+                      <adapt
+                            type="org.openehealth.ipf.platform.manager.jmxexplorer.ui.tree.MBeanAttributesGroupNode">
+                      </adapt>
+                      <adapt
+                            type="org.openehealth.ipf.platform.manager.jmxexplorer.ui.tree.MBeanAttributeNode">
+                      </adapt>
+                      <adapt
+                            type="org.openehealth.ipf.platform.manager.jmxexplorer.ui.tree.MBeanOperationNode">
+                      </adapt>
+                      <adapt
+                            type="org.openehealth.ipf.platform.manager.jmxexplorer.ui.tree.MBeanOperationsGroupNode">
+                      </adapt>
+                   </or>
+                </iterate>
+             </with>
+          </and>
+       </definition>
     </extension>
 
 </plugin>

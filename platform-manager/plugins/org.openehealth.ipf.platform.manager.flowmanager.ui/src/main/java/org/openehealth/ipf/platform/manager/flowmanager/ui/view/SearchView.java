@@ -149,14 +149,6 @@ public class SearchView extends ViewPart implements Observer {
 
     }
 
-    /**
-     * Just activates this part
-     * <p>
-     * Copyright (c) 2008 <a
-     * href="http://www.intercomponentware.com">InterComponentWare AG</a>
-     * 
-     * @author Mitko Kolev i000174
-     */
     final class UpdateGuiStateRunnable implements Runnable {
 
         public void run() {

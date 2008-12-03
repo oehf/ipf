@@ -69,6 +69,8 @@ public class MBeanNode extends Node {
         if (adapter == IPropertySource2.class
                 || adapter == IPropertySource.class) {
             return propertySouce;
+        } else if (adapter == MBeanNode.class) {
+            return this;
         }
         return super.getAdapter(adapter);
     }

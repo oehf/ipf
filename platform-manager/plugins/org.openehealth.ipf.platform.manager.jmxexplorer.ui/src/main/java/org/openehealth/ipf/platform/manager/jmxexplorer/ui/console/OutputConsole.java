@@ -31,8 +31,8 @@ import org.eclipse.ui.console.MessageConsoleStream;
 import org.openehealth.ipf.platform.manager.connection.IConnectionConfiguration;
 
 /**
- * Class which wraps the Eclipse console functionality.
- * Every connection has its own console instance.
+ * Class which wraps the Eclipse console functionality. Every connection has its
+ * own console instance.
  * 
  * @see ConsolePlugin
  * @see MessageConsole
@@ -45,7 +45,11 @@ public class OutputConsole {
 
     private MessageConsole console;
 
-    //private final IConnectionConfiguration connectionConfiguration;
+    protected final static String MESAGE_DATE_FORMAT = "yyyy.MM.dd HH:mm:ss";
+
+    protected final static String NO_DATE_FORMAT = "NO_DATE_FORMAT";
+
+    // private final IConnectionConfiguration connectionConfiguration;
 
     /**
      * Finds the console corresponding to this connection. If the console is not
@@ -67,7 +71,7 @@ public class OutputConsole {
                     null);
             consoleManager.addConsoles(new IConsole[] { console });
         }
-        //this.connectionConfiguration = connectionConfiguration;
+        // this.connectionConfiguration = connectionConfiguration;
         consoleManager.showConsoleView(console);
     }
 
@@ -78,14 +82,14 @@ public class OutputConsole {
      * @param t
      *            the java.lang.Trowable to be printed
      */
-    public void printThrowable(Throwable t) {
+    public void printOutputThrowable(Throwable t) {
         this.console.activate();
         MessageConsoleStream stream = null;
         PrintStream ps = null;
         this.console.clearConsole();
         try {
             stream = new MessageConsoleStream(console);
-            StringBuffer header = addMessageHeaders();
+            StringBuffer header = addMessageHeaders(NO_DATE_FORMAT);
             // print header
             stream.write(header.toString());
             // print the Throwable
@@ -117,7 +121,29 @@ public class OutputConsole {
     public void printMessage(String message, boolean bold) {
         this.console.activate();
         this.console.clearConsole();
-        StringBuffer header = addMessageHeaders();
+        StringBuffer header = addMessageHeaders(MESAGE_DATE_FORMAT);
+        MessageConsoleStream stream = null;
+        try {
+            stream = new MessageConsoleStream(console);
+            if (bold == true)
+                stream.setFontStyle(SWT.BOLD);
+            // print the header
+            stream.write(header.toString());
+            // print the message
+            stream.write(message);
+            stream.write("\n");
+
+        } catch (IOException e) {
+            log.error("Error writing to the console", e);
+        } finally {
+            closeConsoleStream(stream);
+        }
+    }
+
+    public void printOutputMessage(String message, boolean bold) {
+        this.console.activate();
+        this.console.clearConsole();
+        StringBuffer header = addMessageHeaders(NO_DATE_FORMAT);
         MessageConsoleStream stream = null;
         try {
             stream = new MessageConsoleStream(console);
@@ -142,15 +168,19 @@ public class OutputConsole {
      * 
      * @param connectionConfiguration
      *            the connection context of the console.
+     * @param formatPattern
+     *            the pattern to format the date.
      * @return
      */
-    protected StringBuffer addMessageHeaders() {
+    protected StringBuffer addMessageHeaders(String formatPattern) {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(new SimpleDateFormat().format(new Date(System
-                .currentTimeMillis())));
+        if (!formatPattern.equals(NO_DATE_FORMAT)) {
+            buffer.append(new SimpleDateFormat(formatPattern).format(new Date(
+                    System.currentTimeMillis())));
+        }
         buffer.append(" ");
-//        buffer.append(connectionConfiguration.getName());
-//        buffer.append(" ");
+        // buffer.append(connectionConfiguration.getName());
+        // buffer.append(" ");
         return buffer;
     }
 
