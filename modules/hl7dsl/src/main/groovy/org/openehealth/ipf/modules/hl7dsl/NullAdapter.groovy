@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import ca.uhn.hl7v2.model.*
+import ca.uhn.hl7v2.model.Primitive
+import ca.uhn.hl7v2.model.AbstractType
+import ca.uhn.hl7v2.model.DataTypeException
 
 /**
  * 
