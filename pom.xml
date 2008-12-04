@@ -36,6 +36,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <commons-io-version>1.4</commons-io-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <derby-version>10.4.1.3</derby-version>
+        <gmaven-version>1.0-rc-3</gmaven-version>
         <groovy-version>1.5.6</groovy-version>
         <hapi-version>0.5.1</hapi-version>
         <hibernate-version>3.2.4.sp1</hibernate-version>
@@ -157,8 +158,8 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 
     <scm>
         <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</connection>
-        <developerConnection>scm:svn:scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</developerConnection>
-        <url>scm:svn:scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</url>
+        <developerConnection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</developerConnection>
+        <url>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</url>
     </scm>
 
     <modules>
@@ -332,6 +333,16 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <artifactId>junitperf</artifactId>
                 <version>${junitperf-version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-mojo</artifactId>
+                <version>${gmaven-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy.maven.runtime</groupId>
+                <artifactId>gmaven-runtime-default</artifactId>
+                <version>${gmaven-version}</version>
+            </dependency>        
         </dependencies>
     </dependencyManagement>
 
@@ -362,6 +373,15 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <artifactId>wagon-ssh</artifactId>
             </extension>
         </extensions>-->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.groovy.maven</groupId>
+                    <artifactId>gmaven-plugin</artifactId>
+                    <version>${gmaven-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>        
     </build>
 
     <reporting>
@@ -413,6 +433,11 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             <name>java.net Maven Repository</name>
             <url>http://download.java.net/maven/2/</url>
         </repository>
+        <repository>
+            <id>codehaus</id>
+            <name>Codehaus Repository</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>        
         <repository>
             <id>jboss</id>
             <name>JBoss Maven Repository</name>
