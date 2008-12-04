@@ -137,29 +137,23 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         </mailingList>
     </mailingLists>
 
-    <!-- 
-
-    TODO: setup distribution management
-
     <distributionManagement>
         <repository>
-            <id></id>
-            <name></name>
-            <url></url>
+            <id>openehealth.releases</id>
+            <name>Open eHealth Releases Repository</name>
+            <url>scp://repo.openehealth.org/data/repositories/maven2/releases</url>
         </repository>
         <snapshotRepository>
-            <id></id>
-            <name></name>
-            <url></url>
+            <id>openehealth.snapshots</id>
+            <name>Open eHealth Snapshots Repository</name>
+            <url>scp://repo.openehealth.org/data/repositories/maven2/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
-            <id</id>
-            <url></url>
+            <id>openehealth.site</id>
+            <url>scp://repo.openehealth.org/data/sites</url>
         </site>
     </distributionManagement>
-
-    -->
 
     <scm>
         <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</connection>
@@ -219,7 +213,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <version>${groovy-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.hl7</groupId>
+                <groupId>ca.uhn.hl7v2</groupId>
                 <artifactId>hapi</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
@@ -362,6 +356,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
+        <!--<extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+            </extension>
+        </extensions>-->
     </build>
 
     <reporting>
@@ -387,14 +387,31 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     
     <repositories>
         <repository>
+            <id>openehealth.releases</id>
+            <name>Open eHealth Maven Repository</name>
+            <url>http://repo.openehealth.org/maven2/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>openehealth.snapshots</id>
+            <name>Open eHealth Maven Repository</name>
+            <url>http://repo.openehealth.org/maven2/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>java.net</id>
             <name>java.net Maven Repository</name>
             <url>http://download.java.net/maven/2/</url>
-        </repository>
-        <repository>
-            <id>servicemix</id>
-            <name>Apache ServiceMix Maven Repository</name>
-            <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
         </repository>
         <repository>
             <id>jboss</id>

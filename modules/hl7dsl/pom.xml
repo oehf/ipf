@@ -42,7 +42,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             <artifactId>groovy-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hl7</groupId>
+            <groupId>ca.uhn.hl7v2</groupId>
             <artifactId>hapi</artifactId>
         </dependency>
         <dependency>

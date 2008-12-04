@@ -39,10 +39,10 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hl7</groupId>
+            <groupId>ca.uhn.hl7v2</groupId>
             <artifactId>hapi</artifactId>
         </dependency>
-		<dependency>
+		    <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
