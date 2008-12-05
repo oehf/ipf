@@ -40,6 +40,7 @@ class RenderRouteBuilderConfig implements RouteBuilderConfig {
                 
         builder
             .from('direct:render-test')
+            .errorHandler(dlc)
             .initFlow('test-1')
                 .renderer('initRenderer')
                 .application("test")
@@ -49,7 +50,6 @@ class RenderRouteBuilderConfig implements RouteBuilderConfig {
                     throw new Exception('message rejected')
                 }
             }
-            .errorHandler(dlc)
             .to('mock:out')
             .ackFlow().renderer('ackRenderer')
         

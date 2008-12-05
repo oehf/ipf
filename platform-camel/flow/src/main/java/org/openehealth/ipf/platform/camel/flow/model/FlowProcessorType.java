@@ -19,16 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.camel.Processor;
-import org.apache.camel.model.ProcessorType;
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.spi.RouteContext;
+import org.openehealth.ipf.platform.camel.core.model.ProcessorTypeSupport;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessageRenderer;
 import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
 /**
  * @author Martin Krasser
  */
-public abstract class FlowProcessorType extends ProcessorType {
+public abstract class FlowProcessorType extends ProcessorTypeSupport {
 
     private List outputs = new ArrayList();
     

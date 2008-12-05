@@ -41,7 +41,7 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  * 
  * @author Jens Riemschneider
  */
-public class SplitterType extends ProcessorType<ProcessorType> {
+public class SplitterType extends ProcessorTypeSupport {
     /**
      * Creates a split type, i.e. a builder for {@link Splitter}
      * @param expression

@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
-import org.apache.camel.model.ProcessorType;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
@@ -33,7 +32,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 /**
  * @author Martin Krasser
  */
-public abstract class ProcessorAdapterType extends ProcessorType {
+public abstract class ProcessorAdapterType extends ProcessorTypeSupport {
 
     private List outputs = new ArrayList();
     
