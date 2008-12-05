@@ -134,9 +134,18 @@ class MessageUtils {
 
         // make message of correct version
         def version = msg.version
-
-        def name = eventType == 'ACK' ? 'ACK' : "${eventType}_${triggerEvent}"
-        String className = 'ca.uhn.hl7v2.model.v' + version.replace('.','') + ".message.$name"
+        def structName
+        
+        if (eventType == 'ACK') {
+            structName = 'ACK'   
+        } else {          
+            structName = "${eventType}_${triggerEvent}"  
+            if (['2.4', '2.5'].contains(version)) {
+                structName = Parser.getMessageStructureForEvent(structName, version)
+            }
+        }
+        
+        String className = 'ca.uhn.hl7v2.model.v' + version.replace('.', '') + ".message.$structName"
 
         Message out
         try {
@@ -172,8 +181,8 @@ class MessageUtils {
         outTerser.set('MSH-7', hl7Now())
         outTerser.set("MSH-9-1", eventType)
         outTerser.set("MSH-9-2", triggerEvent ?: Terser.get(msh, 9, 0, 2, 1))
-        if (['2.3.1', '2.4', '2.5'].contains(version))
-        	outTerser.set("MSH-9-3", Parser.getMessageStructureForEvent(name, version))
+        if (['2.4', '2.5'].contains(version))
+        	outTerser.set("MSH-9-3", structName)
        
         outTerser.set('MSH-10', MessageIDGenerator.getInstance().getNewID())
         outTerser.set('MSH-11', Terser.get(msh, 11, 0, 1, 1))       

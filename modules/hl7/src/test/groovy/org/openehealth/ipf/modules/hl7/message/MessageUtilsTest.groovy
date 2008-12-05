@@ -56,6 +56,30 @@ public class MessageUtilsTest extends GroovyTestCase {
         assert response.MSH.messageType.triggerEvent.value == 'Q22'
 	}
 	
+	void testResponseVersion22AckStructure() {
+		def parser = new GenericParser()
+        def origMsgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        def origMsg = parser.parse(origMsgText)
+        def respMsg = MessageUtils.response(origMsg, 'ACK', null)        
+        assert parser.encode(respMsg).contains('|ACK^A01|')
+	}
+	
+	void testResponseVersion25AckStructure() {
+		def parser = new GenericParser()
+        def origMsgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def origMsg = parser.parse(origMsgText)
+        def respMsg = MessageUtils.response(origMsg, 'ACK', null)        
+        assert parser.encode(respMsg).contains('|ACK^Q22^ACK|')
+	}
+	
+	void testResponseVersion25MappedStructureName() {
+		def parser = new GenericParser()
+        def origMsgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def origMsg = parser.parse(origMsgText)
+        def respMsg = MessageUtils.response(origMsg, 'RSP', 'K22')
+        assert parser.encode(respMsg).contains('|RSP^K22^RSP_K21|')
+	}
+	
 	void testPipeEncode() {
 		def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
