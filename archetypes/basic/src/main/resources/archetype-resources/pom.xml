@@ -82,7 +82,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         </repository>
         <repository>
             <id>codehaus</id>
-            <name>Codehaus Repository</name>
+            <name>Codehaus Maven Repository</name>
             <url>http://repository.codehaus.org</url>
         </repository> 
         <repository>
