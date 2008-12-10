@@ -382,6 +382,9 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
             <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
@@ -438,9 +441,6 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             </plugin>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-release-plugin</artifactId>
             </plugin>
         </plugins>
     </reporting>
