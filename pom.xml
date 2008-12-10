@@ -43,6 +43,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <hibernate-annotations-version>3.3.0.ga</hibernate-annotations-version>
         <hibernate-search-version>3.0.1.GA</hibernate-search-version>
         <jasypt-version>1.5</jasypt-version>
+        <javadoc-plugin-version>2.5</javadoc-plugin-version>
         <jetty-version>6.1.11</jetty-version>
        	<joda-time-version>1.5.2</joda-time-version>
         <junit-version>4.4</junit-version>
@@ -54,11 +55,11 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <xerces-impl-version>2.8.1</xerces-impl-version>
     </properties>
 
-    <url>http://gforge.openehealth.org/gf/project/oehf-ipf/wiki/</url>
+    <url>http://repo.openehealth.org/confluence/display/ipf</url>
 
     <organization>
         <name>Open eHealth Foundation</name>
-        <url>http://www.openehealth.org/</url>
+        <url>http://gforge.openehealth.org/</url>
     </organization>
 
     <developers>
@@ -355,6 +356,20 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     </dependencies>
     
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${javadoc-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.groovy.maven</groupId>
+                    <artifactId>gmaven-plugin</artifactId>
+                    <version>${gmaven-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -366,6 +381,27 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/bin.xml</descriptor>
+                        <descriptor>src/main/assembly/bin-nodeps.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+              </executions>
+            </plugin>
         </plugins>
         <!--<extensions>
             <extension>
@@ -373,21 +409,26 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <artifactId>wagon-ssh</artifactId>
             </extension>
         </extensions>-->
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.groovy.maven</groupId>
-                    <artifactId>gmaven-plugin</artifactId>
-                    <version>${gmaven-version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>        
     </build>
 
     <reporting>
         <plugins>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <links>
+                        <link>http://java.sun.com/javase/6/docs/api/</link>
+                        <link>http://java.sun.com/javaee/5/docs/api/</link>
+                        <link>http://hl7api.sourceforge.net/apidocs/</link>
+                        <link>http://groovy.codehaus.org/api/</link>
+                        <link>http://activemq.apache.org/camel/maven/camel-core/apidocs/</link>
+                        <link>http://static.springframework.org/spring/docs/2.5.x/api/</link>
+                    </links>
+                    <source>1.5</source>
+                    <aggregate>true</aggregate>
+                    <linksource>true</linksource>
+                    <excludePackageNames>*.tutorials,*.test</excludePackageNames>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -399,8 +440,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <artifactId>maven-project-info-reports-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jdepend-maven-plugin</artifactId>
+                <artifactId>maven-release-plugin</artifactId>
             </plugin>
         </plugins>
     </reporting>
