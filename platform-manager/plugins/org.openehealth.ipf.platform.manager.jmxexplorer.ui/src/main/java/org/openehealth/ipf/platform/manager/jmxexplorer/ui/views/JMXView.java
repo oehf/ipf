@@ -272,11 +272,11 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
         } catch (NotHandledException ex) {
             log.error("The double click on a connection is not handled", ex);
         } catch (ExecutionException ex) {
-            log.error("Cannot execute double click", ex);
+            log.error("Double click execution exception: ", ex);
         } catch (NotDefinedException ex) {
-            log.error("Not defined double click action", ex);
+            log.error("Not defined double click action");
         } catch (NotEnabledException ex) {
-            log.error("Double click action not enabled", ex);
+            log.error("Double click action not enabled for this type");
         }
     }
 
@@ -417,6 +417,12 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
                         connectionConfiguration);
                 JobUtils.runSafe(connectionOpenRunnable);
                 break;
+
+            case ConnectionEvent.CONNECTION_ADDED:
+                ConnectionAddedRunnable connectionAddedRunnable = new ConnectionAddedRunnable(
+                        connectionConfiguration);
+                JobUtils.runSafe(connectionAddedRunnable);
+                break;
             }
         }
     }
@@ -548,6 +554,25 @@ public class JMXView extends ViewPart implements Observer, MouseListener {
                 tree.addChild(node);
             }
             viewer.refresh();
+        }
+    }
+
+    /**
+     * Shows the connection in the viewer.
+     * 
+     * @author Mitko Kolev
+     */
+    final class ConnectionAddedRunnable implements Runnable {
+        private final IConnectionConfiguration connection;
+
+        public ConnectionAddedRunnable(IConnectionConfiguration connection) {
+            this.connection = connection;
+
+        }
+
+        @Override
+        public void run() {
+            showConnectionConfigurationInViewer(connection);
         }
     }
 

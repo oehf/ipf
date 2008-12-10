@@ -87,6 +87,8 @@ public class JMXExplorerMediatorImpl extends Observable implements
 
             } else if (event.getType() == ConnectionEvent.CONNECTION_REMOVED) {
                 notifyObserversWithConnectionEvent(event);
+            } else if (event.getType() == ConnectionEvent.CONNECTION_ADDED) {
+                notifyObserversWithConnectionEvent(event);
             }
         }
     }
@@ -127,8 +129,12 @@ public class JMXExplorerMediatorImpl extends Observable implements
         this.notifyObservers(event);
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.manager.jmxexplorer.IJMXExplorerMediator#getConnectionConfigurations()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.openehealth.ipf.platform.manager.jmxexplorer.IJMXExplorerMediator
+     * #getConnectionConfigurations()
      */
     @Override
     public List<IConnectionConfiguration> getConnectionConfigurations() {

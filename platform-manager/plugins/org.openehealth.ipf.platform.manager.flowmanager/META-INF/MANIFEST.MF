@@ -7,6 +7,7 @@ Bundle-Activator: org.openehealth.ipf.platform.manager.flowmanager.osgi.Activato
 Bundle-Vendor: InterComponentWare AG
 Bundle-ActivationPolicy: lazy
 Export-Package: 
+ org.openehealth.ipf.commons.flow.transfer,
  org.openehealth.ipf.platform.manager.flowmanager,
  org.openehealth.ipf.platform.manager.flowmanager.impl,
  org.openehealth.ipf.platform.manager.flowmanager.mock

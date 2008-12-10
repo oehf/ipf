@@ -86,7 +86,6 @@ public class OutputConsole {
         this.console.activate();
         MessageConsoleStream stream = null;
         PrintStream ps = null;
-        this.console.clearConsole();
         try {
             stream = new MessageConsoleStream(console);
             StringBuffer header = addMessageHeaders(NO_DATE_FORMAT);
@@ -142,7 +141,6 @@ public class OutputConsole {
 
     public void printOutputMessage(String message, boolean bold) {
         this.console.activate();
-        this.console.clearConsole();
         StringBuffer header = addMessageHeaders(NO_DATE_FORMAT);
         MessageConsoleStream stream = null;
         try {

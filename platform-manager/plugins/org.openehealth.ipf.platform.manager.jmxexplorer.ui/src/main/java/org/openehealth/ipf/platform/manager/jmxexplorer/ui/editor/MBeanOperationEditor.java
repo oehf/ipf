@@ -159,13 +159,17 @@ public class MBeanOperationEditor implements IMBeanNodeEditor,
 
         Label label = new Label(parameterComposite, SWT.NONE);
         label.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false));
-        label.setText(labelText
-                + MBeanUtils.getClassNameWithoutPackage(info.getType()));
+        label.setText(info.getName() == null ? "" : info.getName());
         label.setToolTipText(info.getType());
         label.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false));
-
         Text textValue = new Text(parameterComposite, SWT.BORDER);
-        textValue.setText(info.getName() == null ? "" : info.getName());
+        if (info.getType().equals("boolean")
+                || info.getType().equals("java.lang.Boolean")) {
+            textValue.setText("false");
+        } else {
+            textValue.setText(labelText
+                    + MBeanUtils.getClassNameWithoutPackage(info.getType()));
+        }
         GridData data = new GridData(SWT.NONE, SWT.NONE, false, false);
         data.minimumWidth = 80;
         data.widthHint = 80;
