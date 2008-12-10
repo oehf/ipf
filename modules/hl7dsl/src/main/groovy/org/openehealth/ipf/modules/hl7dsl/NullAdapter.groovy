@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.AbstractType
 import ca.uhn.hl7v2.model.DataTypeException
@@ -42,9 +43,13 @@ class NullAdapter extends TypeAdapter{
 class NullPrimitive extends AbstractType implements Primitive {
 	
 	NullPrimitive() {
-		super(null)
+		this(null)
 	}
 	
+    NullPrimitive(Message message) {
+        super(message)
+    }
+    	
 	String getValue() {
 		null
 	}

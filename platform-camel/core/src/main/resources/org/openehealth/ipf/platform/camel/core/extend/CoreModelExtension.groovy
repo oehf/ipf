@@ -47,7 +47,6 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
 import org.apache.camel.Expression
 import org.apache.camel.Processor
 import org.apache.camel.builder.DataFormatClause
-import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.ChoiceType
 import org.apache.camel.model.ProcessorType
 import org.apache.camel.processor.aggregate.AggregationStrategy

@@ -80,6 +80,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
                 <executions>
                     <execution>
                         <goals>
+                            <goal>generateStubs</goal>
                             <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>

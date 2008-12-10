@@ -17,7 +17,6 @@ package org.openehealth.ipf.modules.hl7.parser
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.*
-import ca.uhn.hl7v2.parser.model.*
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
