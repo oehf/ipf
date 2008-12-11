@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Integration Platform Manager Application Plug-in
+Bundle-Name: Integration Platform Manager Application plug-in
 Bundle-SymbolicName: org.openehealth.ipf.platform.manager.application;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.5.0
 Bundle-Activator: org.openehealth.ipf.platform.manager.application.Activator
 Bundle-Localization: plugin
 Bundle-Vendor: InterComponentWare AG
