@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0  http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.openehealth.ipf.platform-manager</groupId>
@@ -8,14 +8,14 @@
   
 	<!--  The project will compile only with maven version 2.0.9 + unless you provide your own artifacts with eclipse:to-maven goal -->
   <!--  and set the dependent versions. -->
-  <!--  The reason for this limitation is that lower versions of Maven2  ( < 2.09) consider  x.y.z-classifier < x.y.z.  -->
+  <!--  The reason for this limitation is that lower versions of Maven2  ( < 2.09) consider x.y.z-classifier < x.y.z.  -->
   <!--  On the other hand the public eclipse artifacts assume that x.y.z-classifier >= x.y.z -->
   
   
 	<parent>
 		<groupId>org.openehealth.ipf</groupId>
 		<artifactId>ipf</artifactId>
-		<version>1.5.0</version>
+		<version>1.6-SNAPSHOT</version>
 	</parent>
 
 	<properties>
