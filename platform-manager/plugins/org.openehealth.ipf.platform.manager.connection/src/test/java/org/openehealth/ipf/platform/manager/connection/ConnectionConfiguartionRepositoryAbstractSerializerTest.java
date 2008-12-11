@@ -44,9 +44,9 @@ public class ConnectionConfiguartionRepositoryAbstractSerializerTest extends
         System.setProperty("osgi.install.area", folder);
         String globalPath = serializer.getSerializationGlobalPath();
         assertTrue(globalPath
-                .indexOf(folder
+                .contains(folder
                         + File.separator
-                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER) == 0);
+                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER));
     }
 
     public void testConnectionRepositoryAbstractSerializerPathWithSeparatorAtTheEnd() {
@@ -56,8 +56,8 @@ public class ConnectionConfiguartionRepositoryAbstractSerializerTest extends
         System.setProperty("osgi.install.area", folder);
         String globalPath = serializer.getSerializationGlobalPath();
         assertTrue(globalPath
-                .indexOf(folder
-                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER) == 0);
+                .contains(folder
+                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER));
     }
 
     public void testConnectionRepositoryAbstractSerializerPathWithSeparatorAtTheEndWindows() {
@@ -66,13 +66,13 @@ public class ConnectionConfiguartionRepositoryAbstractSerializerTest extends
         System.setProperty("osgi.install.area", folder);
         String globalPath = serializer.getSerializationGlobalPath();
         assertTrue(globalPath
-                .indexOf("C:"
+                .contains("C:"
                         + File.separator
                         + "eclipse"
                         + File.separator
                         + "ipm"
                         + File.separator
-                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER) == 0);
+                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER));
     }
 
     public void testConnectionRepositoryAbstractSerializerPathWithNoFile() {
@@ -81,15 +81,21 @@ public class ConnectionConfiguartionRepositoryAbstractSerializerTest extends
         System.setProperty("osgi.install.area", folder);
         String globalPath = serializer.getSerializationGlobalPath();
         assertTrue(globalPath
-                .indexOf("C:"
+                .contains("C:"
                         + File.separator
                         + "eclipse"
                         + File.separator
                         + "ipm"
                         + File.separator
-                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER) == 0);
+                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER));
     }
-
+    
+    public void testSeparatorExistsAtTheBeginning(){
+        //Under Linux, the file separator at the beginning is a must
+        String globalPath = serializer.getSerializationGlobalPath();
+        assertTrue(globalPath.startsWith(File.separator));
+    }
+    
     public void testConnectionRepositoryAbstractSerializerPathWithFileSeparator() {
         String folder = "C:" + File.separator + "eclipse" + File.separator
                 + "ipm";
@@ -97,12 +103,12 @@ public class ConnectionConfiguartionRepositoryAbstractSerializerTest extends
         System.setProperty("osgi.install.area", folder);
         String globalPath = serializer.getSerializationGlobalPath();
         assertTrue(globalPath
-                .indexOf("C:"
+                .contains("C:"
                         + File.separator
                         + "eclipse"
                         + File.separator
                         + "ipm"
                         + File.separator
-                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER) == 0);
+                        + ConnectionConfigurationRepositoryAbstractSerializer.CONNECTIONS_LOCAL_FOLDER));
     }
 }

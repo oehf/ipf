@@ -42,12 +42,13 @@ public abstract class ConnectionConfigurationRepositoryAbstractSerializer {
                 installArea = installArea.substring(6);
             }
             // convert the / character to a separator, to have the real path
-            installArea = installArea.replace('/', File.separatorChar);
+            //add always a File.separator at the beginning (required for Linux) 
+            installArea = File.separator + installArea.replace('/', File.separatorChar);
 
             if (!installArea.endsWith(File.separator))
                 installArea = installArea + File.separator;
 
-            installArea = installArea + "connections";
+            installArea = installArea + CONNECTIONS_LOCAL_FOLDER;
             File f = new File(installArea);
             if (!f.exists()) {
                 f.mkdir();
