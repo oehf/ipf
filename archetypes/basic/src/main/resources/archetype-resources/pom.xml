@@ -14,7 +14,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <packaging>jar</packaging>
 
     <properties>
-        <ipf-version>1.5-SNAPSHOT</ipf-version>
+        <ipf-version>1.6-SNAPSHOT</ipf-version>
         <junit-version>4.4</junit-version>
     </properties>
 
