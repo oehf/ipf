@@ -24,6 +24,7 @@ import ca.uhn.hl7v2.util.DeepCopy
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
 class PrimitiveAdapter extends TypeAdapter {
 
@@ -42,5 +43,13 @@ class PrimitiveAdapter extends TypeAdapter {
     String toString() {
         target.value
     }
+    
+    def getAt(int idx) {
+        throw new AdapterException("Type ${type.class.simpleName} is a Primitive type and has no (sub-)components")
+    }
+    
+    def call(object) {
+        throw new AdapterException("Type ${type.class.simpleName} is a Primitive type and is not repeatable")
+    } 
     
 }

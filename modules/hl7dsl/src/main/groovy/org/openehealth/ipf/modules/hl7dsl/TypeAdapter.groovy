@@ -48,5 +48,9 @@ class TypeAdapter {
     void set(String s, Object v) {
         InvokerHelper.setProperty(type, s, v)
     }
-
+    
+    def call(object) {
+        throw new AdapterException("The type ${type.class.simpleName} is not repeatable for this field")
+    }
+    
 }

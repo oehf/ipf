@@ -27,6 +27,7 @@ import ca.uhn.hl7v2.model.Type
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
 class AdapterHelper {
 
@@ -38,12 +39,7 @@ class AdapterHelper {
     }
     
     static selector(elements) {
-        { idx -> idx != null ? 
-        		(elements.size <= idx ? 
-        				new NullAdapter() : 
-        				elements[idx]) : 
-        		elements 
-        }
+        new SelectorClosure(this, elements)
     }
     
     static List adaptStructures(Structure[] structures) {
@@ -88,6 +84,13 @@ class AdapterHelper {
             case VariesAdapter    : return stringValue(adapt(object.target.data))
             default               : return object.toString()
         }
+    }
+    
+    static def componentValue(def c) {
+        def firstElement = c[1]
+        firstElement instanceof SelectorClosure ? 
+                firstElement(0).value : 
+                firstElement.value
     }
 
 }

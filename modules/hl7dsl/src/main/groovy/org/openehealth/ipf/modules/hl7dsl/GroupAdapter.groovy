@@ -89,4 +89,9 @@ class GroupAdapter extends StructureAdapter {
         throw new UnsupportedOperationException('group copying not implemented yet')
     }
     
+    
+    def call(object) {
+        throw new AdapterException("The group ${group.class.simpleName} is not repeatable in this group or message")
+    }    
+    
 }

@@ -59,16 +59,10 @@ class MessageAdapter extends GroupAdapter implements Writable {
         writer.buffer.toString()
     }
 
-    boolean matches(String code, String type, String version) {
-    	
-    	// MSH-12 can be either Primitive or Composite (starting with v2.4)
-    	def messageVersion = get('MSH')[12]
-    	if (messageVersion instanceof CompositeAdapter) {
-    		messageVersion = messageVersion[1]
-    	}
-    	(code == '*' || code == get('MSH')[9][1].toString()) && 
-    	(type == '*' || type == get('MSH')[9][2].toString()) && 
-    	(version == '*' || version == messageVersion.toString())    
+    boolean matches(String code, String type, String v) {    	
+    	(code == '*' || code == get('MSH')[9][1].value) && 
+    	(type == '*' || type == get('MSH')[9][2].value) && 
+    	(v == '*' || v == version)    
     }
 
     

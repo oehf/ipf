@@ -18,6 +18,7 @@ package org.openehealth.ipf.modules.hl7dsl
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptTypes
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
 
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.DataTypeException
@@ -48,6 +49,10 @@ class CompositeAdapter extends TypeAdapter {
 
     void putAt(int idx, Object value) {
         getAt(idx).from(value)
+    }
+    
+    def getValue() {
+        componentValue(this)
     }
 
 }

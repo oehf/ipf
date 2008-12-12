@@ -66,6 +66,13 @@ class MessageAdapterTest extends GroovyTestCase {
         assert copy.MSH[5].value == 'Y'
         assert msg.MSH[5].value == 'X'
     }
+    
+    void testMatches() {
+        assert msg.matches('ADT', 'A01', '2.2')
+        assert msg.matches('ADT', 'A01', '*')
+        assertFalse msg.matches('ADT', 'A01', '2.3')
+        assertFalse msg.matches('ADT', 'A02', '2.2')
+    }
         
 
 }

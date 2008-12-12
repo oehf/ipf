@@ -31,6 +31,7 @@ import ca.uhn.hl7v2.util.DeepCopy
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
 class SegmentAdapter extends StructureAdapter {
 
@@ -89,6 +90,10 @@ class SegmentAdapter extends StructureAdapter {
         } else {
             throw new AdapterException("cannot assign from ${value.class.name} to ${SegmentAdapter.class.name}")
         }
+    }
+    
+    def call(object) {
+        throw new AdapterException("The segment ${segment.class.simpleName} is not repeatable in this group or message")
     }
     
 }

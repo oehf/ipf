@@ -42,5 +42,9 @@ class ExtraComponentsAdapter {
     def getAt(int idx) {
         adaptType(target.getComponent(componentIndex(idx)))
     }
-
+    
+    def getValue() {
+        componentValue(this)
+    }
+    
 }
