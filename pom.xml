@@ -309,17 +309,14 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit-version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>junitperf</groupId>
                 <artifactId>junitperf</artifactId>
                 <version>${junitperf-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-mojo</artifactId>
-                <version>${gmaven-version}</version>
-            </dependency>
+                <scope>test</scope>
+            </dependency>        
             <dependency>
                 <groupId>org.codehaus.groovy.maven.runtime</groupId>
                 <artifactId>gmaven-runtime-default</artifactId>
