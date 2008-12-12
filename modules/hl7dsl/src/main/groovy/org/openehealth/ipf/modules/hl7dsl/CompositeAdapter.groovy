@@ -35,12 +35,24 @@ class CompositeAdapter extends TypeAdapter {
         super(type)
     }
 
+    // Copy composite on composite
+    void from(CompositeAdapter value) {
+        DeepCopy.copy((Type)value.target, (Type)this.target)
+    }
+    
+    // Copy Primitive on first component
+    void from(PrimitiveAdapter value) {
+        getAt(1).from(value)
+    }
+    
+    // Try copying first repetition
+    void from(SelectorClosure value) {
+        from(value(0))
+    }
+    
+    // Everything else: copy String on first component
     void from(Object value) {
-        if (value instanceof CompositeAdapter) {
-            DeepCopy.copy((Type)value.target, (Type)this.target)
-        } else {
-            throw new AdapterException("cannot assign from ${value.class.name} to ${CompositeAdapter.class.name}")
-        }
+        getAt(1).from(value.toString())
     }
     
     def getAt(int idx) {

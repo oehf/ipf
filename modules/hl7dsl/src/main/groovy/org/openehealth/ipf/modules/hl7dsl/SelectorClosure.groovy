@@ -37,13 +37,14 @@ class SelectorClosure extends Closure{
 		call(0)?.getAt(idx)
 	}
 	
+	// Delegates assignments to the first repetition
+	def putAt(int idx, Object value) {
+	    call(0)?.putAt(idx, value)
+	}
+	
 	// Defining the value property with getValue() doesn't work
 	public Object getProperty(String property) {
-        if ("value".equals(property)) {
-            return call(0)?.value
-        } else {
-            return super.getProperty(property);        
-        }
+	    call(0)?.getProperty(property)
     }
 	
 	protected Object doCall(Object argument) {

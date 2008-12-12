@@ -78,10 +78,11 @@ class SegmentAdapter extends StructureAdapter {
     
     void putAt(int idx, def value) {
         def type = getAt(idx)
-        if (type instanceof Closure) {
-            throw new AdapterException('cannot assign to a repetition')
+        if (type instanceof SelectorClosure) {
+            type(0).from(value)
+        } else {
+            type.from(value)
         }
-        type.from(value)
     }
 
     void from(def value) {
