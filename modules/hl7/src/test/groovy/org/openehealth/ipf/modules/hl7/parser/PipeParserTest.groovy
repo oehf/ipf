@@ -44,5 +44,16 @@ public class PipeParserTest extends GroovyTestCase {
       } catch (Exception e) { 
     	  assert e.getMessage().contains('ZBE does not exist')
       }     
-  } 
+  }
+  
+  void testParseWithNullCustomClasses() {
+      def customFactory = new CustomModelClassFactory()
+      def parser = new PipeParser(customFactory)
+      try {
+    	  def hapiMessage = parser.parse(msgText)
+    	  println hapiMessage.get('ZBE').getClass().getName()
+      } catch (Exception e) { 
+    	  assert e.getMessage().contains('ZBE does not exist')
+      }     
+  }
 }

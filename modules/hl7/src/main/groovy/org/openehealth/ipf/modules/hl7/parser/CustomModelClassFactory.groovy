@@ -39,7 +39,7 @@ import org.apache.commons.logging.LogFactory
  * 
  */
 public class CustomModelClassFactory implements ModelClassFactory{
-
+	
 	ModelClassFactory defaultFactory
 	Map<String, String[]> customModelClasses
 	
@@ -53,15 +53,15 @@ public class CustomModelClassFactory implements ModelClassFactory{
 		defaultFactory = new DefaultModelClassFactory()
 		customModelClasses = map
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see ca.uhn.hl7v2.parser.ModelClassFactory#getMessageClass(java.lang.String, java.lang.String, boolean)
 	 */
 	public Class getMessageClass(String name, String version, boolean isExplicit){
-	    if (!isExplicit)
-        	name = Parser.getMessageStructureForEvent(name, version);
-        findClass("message", name, version) ?: defaultFactory.getMessageClass(name, version, isExplicit)	
-    }
+		if (!isExplicit)
+			name = Parser.getMessageStructureForEvent(name, version);
+		findClass("message", name, version) ?: defaultFactory.getMessageClass(name, version, isExplicit)	
+	}
 	
 	/* (non-Javadoc)
 	 * @see ca.uhn.hl7v2.parser.ModelClassFactory#getGroupClass(java.lang.String, java.lang.String)
@@ -86,23 +86,23 @@ public class CustomModelClassFactory implements ModelClassFactory{
 	
 	// Finds appropriate classes to be loaded for the given structure/type
 	protected Class findClass(String subpackage, String name, String version) {
-        if (!Parser.validVersion(version)) {
-            throw new HL7Exception("HL7 version $version is not supported",
-                    HL7Exception.UNSUPPORTED_VERSION_ID);
-        }
-        def classLoaded
-          customModelClasses[version]?.find {
-        	try {
-        	    def sep = it.endsWith('.') ? '' : '.'
-        		def fullyQualifiedName = "${it}${sep}${subpackage}.${name}"        		
-        		classLoaded = Class.forName(fullyQualifiedName)
-        		LOG.debug("Found ${fullyQualifiedName} in custom HL7 model definitions")
-        	} catch (Exception e) {
-        		// do nothing
-        	}
-        	return classLoaded
-          }
-        return classLoaded 
+		if (!Parser.validVersion(version)) {
+			throw new HL7Exception("HL7 version $version is not supported",
+			HL7Exception.UNSUPPORTED_VERSION_ID);
+		}
+		def classLoaded
+		customModelClasses?.getAt(version)?.find {
+			try {
+				def sep = it.endsWith('.') ? '' : '.'
+				def fullyQualifiedName = "${it}${sep}${subpackage}.${name}"        		
+				classLoaded = Class.forName(fullyQualifiedName)
+				LOG.debug("Found ${fullyQualifiedName} in custom HL7 model definitions")
+			} catch (Exception e) {
+				// do nothing
+			}
+			return classLoaded
+		}
+		return classLoaded 
 	}
 	
 }

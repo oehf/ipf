@@ -44,7 +44,8 @@ public class PipeParser extends ca.uhn.hl7v2.parser.PipeParser {
 	}
 
 	PipeParser(ValidationContext context) {
-		super()
+	    super()
+		factory = new CustomModelClassFactory();
 		setValidationContext(context)
 	}
 	
