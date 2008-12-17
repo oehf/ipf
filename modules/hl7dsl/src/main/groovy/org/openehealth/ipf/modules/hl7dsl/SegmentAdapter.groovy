@@ -97,4 +97,7 @@ class SegmentAdapter extends StructureAdapter {
         throw new AdapterException("The segment ${segment.class.simpleName} is not repeatable in this group or message")
     }
     
+    def getValue() {
+        componentValue(this)
+    }    
 }
