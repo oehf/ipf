@@ -20,6 +20,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptTypes
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.selector
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.stringValue
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
 
 import org.codehaus.groovy.runtime.InvokerHelper
 
