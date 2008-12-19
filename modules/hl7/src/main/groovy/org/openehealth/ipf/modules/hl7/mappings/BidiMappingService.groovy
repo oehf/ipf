@@ -102,12 +102,14 @@ public class BidiMappingService implements MappingService {
 
  	public Set<?> keys(Object mappingKey){
  		checkMappingKey(map, mappingKey)
- 		map[mappingKey].keySet()
+ 		map[mappingKey].keySet().findAll { !(it.startsWith('_%')) }
  	}
  	
  	public Collection<?> values(Object mappingKey){
  		checkMappingKey(map, mappingKey)
- 		map[mappingKey].values()
+ 		map[mappingKey].findAll({ 
+      !(it.key.startsWith('_%')) 
+    }).values()
  	}
  	
  	private Object retrieve(Map m, Object mappingKey, Object key) {

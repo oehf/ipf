@@ -92,6 +92,14 @@ public class HapiModelExtension {
 	        		mappingService?.getValueSystem(delegate)
 	        }
 
+	        String.metaClass.keys = { 
+	        		mappingService?.keys(delegate)
+	        }
+
+	        String.metaClass.values = { 
+    				mappingService?.values(delegate)
+	        }
+	        
 	        String.metaClass.hasKey = { 
 	        		mappingService?.keys(delegate)?.contains(it)
 	        }
@@ -203,6 +211,13 @@ public class HapiModelExtension {
 	        Message.metaClass.dump = { ->
         		MessageUtils.dump(delegate)
 		     }
+
+		    /**
+		     * Validates a message against a validation context 
+		     **/
+		    Message.metaClass.validate = { validationContext ->
+	    		MessageUtils.validate(delegate, validationContext)
+		    }
 	        
 	        // ----------------------------------------------------------------
 	        //  Extensions to HAPI Primitives

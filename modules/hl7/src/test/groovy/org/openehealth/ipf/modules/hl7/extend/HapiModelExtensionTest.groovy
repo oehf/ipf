@@ -17,7 +17,8 @@ package org.openehealth.ipf.modules.hl7.extend
 
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.Message
-import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.ClassPathResource
+
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
@@ -188,6 +189,15 @@ public class HapiModelExtensionTest extends GroovyTestCase {
             	// o.k.
             }
 
+    }
+
+    void testKeys() {
+        assert 'encounterType'.keys().sort() == ['E','I','O']
+        assert 'vip'.keys() == ['Y'] as Set
+    }
+    
+    void testValues() {
+        assert 'encounterType'.values().sort() == ['AMB','EMER','IMP']
     }
     
     void testHasKey() {
