@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.test.transaction;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.test.processor.FailureProcessor;
 
-
 /**
  * @author Martin Krasser
  */
@@ -27,30 +26,99 @@ public class TransactionalMessagingRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from("amq:queue:transactional-messaging-input")
-        .onException(Exception.class).to("mock:transactional-messaging-error").end()
+        /*
+         * We use two JMS components here:
+         * 
+         * - amqProcess for transactional message processing between JMS queues
+         * - amqDelivery for transactional delivery of messages to destinations
+         * 
+         * Transacted delivery is useful if destination system are unavailable
+         * or a message transport error occured. In this case the JMS provider
+         * should be configured to attempt a redelivery (1 redelivery attempt 
+         * in our case). We don't want to have redeliveries for normal message 
+         * processing between JMS queues. Therefore the amqProcess JMS
+         * component is configured to do no redelivery at all.
+         * 
+         * - Configuration of the amqProcess JMS component is done in 
+         *   context-transaction-process.xml
+         * - Configuration of the amqDelivery JMS component is done in 
+         *   context-transaction-delivery.xml
+         */
+        
+
+        // -----------------------------------------------------------------
+        // Read from transacted input JMS queue and multicast to internal
+        // destinations
+        // -----------------------------------------------------------------
+        
+        from("amqProcess:queue:txm-input")
+        // on exception rollback transaction and send to txm-error
+        .onException(Exception.class).to("mock:txm-error").end()
         .multicast()
         .to("direct:intern-1")
         .to("direct:intern-2");
         
+        // -----------------------------------------------------------------
+        // Read from first internal endpoint and route to output JMS queue 1
+        // without further message processing.
+        // -----------------------------------------------------------------
+        
         from("direct:intern-1")
-        .to("amq:queue:transactional-messaging-output-1");
+        .to("amqProcess:queue:txm-output-1");
+        
+        // -----------------------------------------------------------------
+        // Read from second internal endpoint and route to output JMS queue 2
+        // and throw an exception if body equals "blah". If an exception is
+        // thrown the transaction is rolled back which is
+        //
+        // - reading from input queue
+        // - writing to output queue 1
+        //
+        // If no exception is thrown then the transaction is committed which
+        // is
+        //
+        // - reading from input queue
+        // - writing to output queue 1
+        // - writing to output queue 2
+        //
+        // WHAT WE ACHIEVED HERE IS THAT WE READ AND WROTE MESSAGES FROM
+        // AND TO SEVERAL DESTINATIONS IN A SINGLE TRANSACTION WITHOUT
+        // USING XA!
+        // 
+        // -----------------------------------------------------------------
+        
         from("direct:intern-2")
         // the noErrorHandler() can be omitted here if an explicit
         // transactionErrorHandler(...) is configured for endpoint
-        // amq:queue:transactional-messaging-input
+        // amqProcess:queue:txm-input
         .errorHandler(noErrorHandler())
+        // throw exception if body equals "blah"
         .process(new FailureProcessor("blah"))
-        .to("amq:queue:transactional-messaging-output-2"); 
+        // otherwise send to output queue 2
+        .to("amqProcess:queue:txm-output-2"); 
 
-        // blah-messages rolled back at both endpoints
-        // other messages are committed at both endpoints
         
-        from("amq:queue:transactional-messaging-output-1")
-        .to("mock:transactional-messaging-mock");
-        from("amq:queue:transactional-messaging-output-2")
-        .to("mock:transactional-messaging-mock");
-    
+        // -----------------------------------------------------------------
+        // Read from transacted output queue and throw exception if body
+        // equals "blub". The amqDelivery JMS component is configured to
+        // attempt a single redelivery on rollback before giving up. 
+        // without further message processing. 
+        // -----------------------------------------------------------------
+        
+        from("amqDelivery:queue:txm-output-1")
+        // on exception rollback transaction and send to txm-error
+        .onException(Exception.class).to("mock:txm-error").end()
+        // throw exception if body equals "blub"
+        .process(new FailureProcessor("blub"))
+        .to("mock:txm-mock");
+        
+        // -----------------------------------------------------------------
+        // Read from transacted output queue and send to txm-mock.
+        // -----------------------------------------------------------------
+        
+        from("amqDelivery:queue:txm-output-2")
+        .to("mock:txm-mock");
+        
     }
 
 }

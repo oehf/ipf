@@ -15,10 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.test.transaction;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Collections;
-
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -31,46 +27,59 @@ import org.springframework.test.context.ContextConfiguration;
 /**
  * @author Martin Krasser
  */
-@ContextConfiguration(locations = {"/context-transaction.xml"})
+@ContextConfiguration(locations = {
+        "/context-transaction.xml", 
+        "/context-transaction-process.xml",
+        "/context-transaction-delivery.xml"
+})
 public class TransactionalMessagingTest extends TestSupport {
 
     private static final long TIMEOUT = 2000L;
     
-    @EndpointInject(uri="mock:transactional-messaging-mock")
-    private MockEndpoint transactionalMessagingMock;
+    @EndpointInject(uri="mock:txm-mock")
+    private MockEndpoint txmMock;
     
-    @EndpointInject(uri="mock:transactional-messaging-error")
-    private MockEndpoint transactionalMessagingError;
+    @EndpointInject(uri="mock:txm-error")
+    private MockEndpoint txmError;
     
     @EndpointInject(uri="mock:error")
     private MockEndpoint errorMock;
     
     @After
     public void tearDown() throws Exception {
-        transactionalMessagingMock.reset();
-        transactionalMessagingError.reset();
+        txmMock.reset();
+        txmError.reset();
         errorMock.reset();
         super.tearDown();
     }
 
     @Test
-    public void testRollback() throws InterruptedException {
-        transactionalMessagingError.expectedMessageCount(2); // 1 send, 1 retry -> 2 messages
-        transactionalMessagingMock.expectedMessageCount(0);  // transaction rolled back
-        sendBodies("amq:queue:transactional-messaging-input", ExchangePattern.InOnly, "blah", 1);
-        transactionalMessagingError.assertIsSatisfied();
-        Thread.sleep(TIMEOUT); // final JMS processing
-        transactionalMessagingMock.assertIsSatisfied();
+    public void testRollbackDelivery() throws InterruptedException {
+        txmMock.expectedBodiesReceived("blub");
+        txmError.expectedBodiesReceived("blub", "blub");
+        sendBodies("amqProcess:queue:txm-input", ExchangePattern.InOnly, "blub", 1);
+        txmError.assertIsSatisfied();
+        txmMock.assertIsSatisfied();
+    }
+
+    @Test
+    public void testRollbackProcess() throws InterruptedException {
+        txmMock.expectedMessageCount(0);
+        txmError.expectedBodiesReceived("blah");
+        sendBodies("amqProcess:queue:txm-input", ExchangePattern.InOnly, "blah", 1);
+        txmError.assertIsSatisfied();
+        Thread.sleep(TIMEOUT);
+        txmMock.assertIsSatisfied();
     }
 
     @Test
     public void testCommit() throws InterruptedException {
-        transactionalMessagingError.expectedMessageCount(0); // 1 send, no retry -> 1 message
-        transactionalMessagingMock.expectedMessageCount(2);  // transaction committed
-        sendBodies("amq:queue:transactional-messaging-input", ExchangePattern.InOnly, "blub", 1);
-        transactionalMessagingMock.assertIsSatisfied();
-        transactionalMessagingError.assertIsSatisfied();
-        assertEquals(2, Collections.frequency(bodies(transactionalMessagingMock.getReceivedExchanges()), "blub"));
+        txmError.expectedMessageCount(0);
+        txmMock.expectedBodiesReceived("clean", "clean");
+        sendBodies("amqProcess:queue:txm-input", ExchangePattern.InOnly, "clean", 1);
+        txmMock.assertIsSatisfied();
+        Thread.sleep(TIMEOUT);
+        txmError.assertIsSatisfied();
     }
 
 }
