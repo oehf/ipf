@@ -52,8 +52,7 @@ public class GnodeDataFormat implements DataFormat {
     }
 
     private XmlParser parser() throws Exception {
-        XmlParser xmlParser = new XmlParser();
-        xmlParser.setNamespaceAware(namespaceAware);
+        XmlParser xmlParser = new XmlParser(false, namespaceAware);
         return xmlParser;
     }
     
