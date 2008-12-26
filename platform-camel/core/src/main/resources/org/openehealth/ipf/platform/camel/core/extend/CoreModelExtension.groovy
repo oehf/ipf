@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
+import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionMessageExpression
+import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionObjectExpression
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersExpression
 
 import static org.apache.camel.builder.DataFormatClause.Operation.Marshal;
@@ -47,6 +49,7 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
 import org.apache.camel.Expression
 import org.apache.camel.Processor
 import org.apache.camel.builder.DataFormatClause
+import org.apache.camel.builder.ExpressionClause
 import org.apache.camel.model.ChoiceType
 import org.apache.camel.model.ProcessorType
 import org.apache.camel.processor.aggregate.AggregationStrategy
@@ -195,6 +198,18 @@ class CoreModelExtension {
              delegate.gpath(true)
          }
      
+         // ----------------------------------------------------------------
+         //  Platform ExpressionClause extensions
+         // ----------------------------------------------------------------
+         
+         ExpressionClause.metaClass.exceptionObject = { ->
+             delegate.expression(exceptionObjectExpression())
+         }
+  
+         ExpressionClause.metaClass.exceptionMessage = { ->
+             delegate.expression(exceptionMessageExpression())
+         }
+  
         // ----------------------------------------------------------------
         //  Adapter Extensions for RouteBuilder
         // ----------------------------------------------------------------

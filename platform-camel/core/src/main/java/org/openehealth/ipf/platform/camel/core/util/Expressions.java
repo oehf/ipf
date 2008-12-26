@@ -26,6 +26,9 @@ import org.openehealth.ipf.platform.camel.core.xml.MarkupBuilder;
  */
 public class Expressions {
 
+    private static String HANDLED_EXCEPTION_PROPERTY = 
+        "org.apache.camel.processor.DeadLetterChannel.FAILURE_HANDLED";
+    
     /**
      * Returns an {@link Expression} for the headers map of an {@link Exchange}'s
      * in-message.
@@ -74,4 +77,29 @@ public class Expressions {
         };
     }
 
+    public static Expression<Exchange> exceptionObjectExpression() {
+        return new Expression<Exchange>() {
+            public Object evaluate(Exchange exchange) {
+                return exception(exchange);
+            }
+        };
+    }
+    
+    public static Expression<Exchange> exceptionMessageExpression() {
+        return new Expression<Exchange>() {
+            public Object evaluate(Exchange exchange) {
+                Throwable throwable = exception(exchange);
+                return throwable == null ? null : throwable.getMessage();
+            }
+        };
+    }
+
+    private static Throwable exception(Exchange exchange) {
+        Throwable throwable = exchange.getException();
+        if (throwable != null) {
+            return throwable;
+        }
+        return (Throwable)exchange.getProperty(HANDLED_EXCEPTION_PROPERTY);
+    }
+    
 }
