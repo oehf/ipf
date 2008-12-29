@@ -97,7 +97,7 @@ public abstract class AbstractRouteBuilderTest {
         assertNull(exchange1.getException());
         assertEquals("message valid", exchange1.getOut().getBody());
         Exchange exchange2 = mockBooks.getExchanges().get(0);
-        assertTrue(exchange2.getIn().getBody(String.class).contains("category=\"books\""));
+        assertTrue(exchange2.getIn().getBody(String.class).contains("category='books'"));
     }
  
     @Test

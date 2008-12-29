@@ -15,25 +15,27 @@
  */
 package org.openehealth.ipf.tutorials.ref.transform
 
-import org.springframework.core.io.ClassPathResource
+import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
 
 /**
  * @author Martin Krasser
  */
-class AnimalOrderTransformerTest extends GroovyTestCase {
-    
-    void testSomething() {
-        
-        def input = new ClassPathResource('order/order-animals.xml').inputStream.text
-        def result = new ClassPathResource('order/order-animals-transformed.txt').inputStream.text
-        def node = new XmlParser(false, false).parseText(input)
-        
-        def transformer = new AnimalOrderTransformer()
-        transformer.templateResource = new ClassPathResource('order/order.template')
-        transformer.init()
+class BookOrderTransformer implements Transmogrifier {
+     
+     def ns = 'http://www.openehealth.org/tutorial'
+     
+     // --------------------------------------------------------
+     //  Implementation method
+     // --------------------------------------------------------
 
-        assertEquals(result, transformer.zap(node))
-        
-    }
-    
+     Object zap(Object order, Object... params) {
+         def builder = params[0] // via params().builder() in DSL 
+         builder.order(xmlns:ns, category:order.category.text()) {
+             customer(order.customer.text())
+             item(order.item.text())
+             count(order.count.text())
+         }
+         builder.result
+     }
+
 }

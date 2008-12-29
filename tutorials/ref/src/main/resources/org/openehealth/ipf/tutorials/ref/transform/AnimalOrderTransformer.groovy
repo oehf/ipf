@@ -16,47 +16,41 @@
 package org.openehealth.ipf.tutorials.ref.transform
 
 import groovy.xml.Namespaceimport groovy.text.SimpleTemplateEngine
+import groovy.text.TemplateEngine
+import groovy.text.Template
+
+import javax.annotation.PostConstruct
 
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
+import org.springframework.core.io.Resource
 
 /**
  * @author Martin Krasser
  */
 class AnimalOrderTransformer implements Transmogrifier {
- 
-    // --------------------------------------------------------
-    //  Support for namespaces
-    // --------------------------------------------------------
-    
-    def oehf = new Namespace("http://www.openehealth.org/tutorial", 'oehf')
-    
+     
     // --------------------------------------------------------
     //  Template setup
     // --------------------------------------------------------
 
-    def engine = new SimpleTemplateEngine();
-    def template = engine.createTemplate(
-            
-'''
-Order
------
-Customer: ${customer}
-Item:     ${item}
-Count:    ${count}
-'''
-
-    );
+    TemplateEngine engine = new SimpleTemplateEngine();
+    Template template
+    Resource templateResource 
     
+    @PostConstruct
+    void init() {
+        template = engine.createTemplate(templateResource.inputStream.text)
+    }
+
     // --------------------------------------------------------
     //  Implementation method
     // --------------------------------------------------------
 
-    Object zap(Object input, Object... params) {
-        def order = new XmlParser().parseText(input)
+    Object zap(Object order, Object... params) {
         def binding = [
-            customer : order[oehf.customer].text(),
-            item     : order[oehf.item].text(),
-            count    : order[oehf.count].text()
+            customer : order.customer.text(),
+            item     : order.item.text(),
+            count    : order.count.text()
         ]
         template.make(binding).toString()
     }

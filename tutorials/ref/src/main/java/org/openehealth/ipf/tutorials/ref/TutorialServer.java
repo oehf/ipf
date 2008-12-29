@@ -27,7 +27,9 @@ public class TutorialServer {
             "/context-tutorial.xml;" +
             "/context-flowmgr.xml;" + 
             "/context-camel.xml;" +
-            "/context-broker.xml;"
+            "/context-broker.xml;" +
+            "/context-jms-process.xml;" + 
+            "/context-jms-deliver.xml;"
         );
     }
     

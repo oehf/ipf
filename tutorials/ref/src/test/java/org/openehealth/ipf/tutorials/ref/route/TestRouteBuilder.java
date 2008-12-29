@@ -15,10 +15,14 @@
  */
 package org.openehealth.ipf.tutorials.ref.route;
 
-import static org.openehealth.ipf.tutorials.ref.util.Processors.responseMessageWriter;
+import static org.openehealth.ipf.platform.camel.core.util.Expressions.builderExpression;
+import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionMessageExpression;
 
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.xml.Namespaces;
+import org.apache.camel.spi.DataFormat;
+import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
+import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat;
 import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder;
 
 /**
@@ -30,15 +34,17 @@ public class TestRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         
         Namespaces ns = new Namespaces("oehf", "http://www.openehealth.org/tutorial");
+        DataFormat df = new GnodeDataFormat(false);
+        
+        ProcessorAdapter orderTransmogrifier = transmogrifier("animalOrderTransformer");
+        ProcessorAdapter bookTransmogrifier = transmogrifier("bookOrderTransformer").params(builderExpression());
         
         // ------------------------------------------------------------
-        //  Global error handling strategy (still experimental)
+        //  Global error handling strategy
         // ------------------------------------------------------------
         
-        onException(ValidationException.class)
-            .to("mock:error-app");
         onException(Exception.class)
-            .to("mock:error-sys");
+            .transform(exceptionMessageExpression()).to("mock:error-sys");
         
         // ------------------------------------------------------------
         //  Receive and validate order
@@ -50,9 +56,10 @@ public class TestRouteBuilder extends RouteBuilder {
             .to("seda:validated");
         
         from("direct:validation")
-            .errorHandler(noErrorHandler())
-            .intercept(responseMessageWriter())
-            .to("validator:order/order.xsd");
+            .onException(ValidationException.class)
+                .transform(exceptionMessageExpression()).to("mock:error-app").end()
+            .to("validator:order/order.xsd")
+            .transform(constant("message valid"));
         
         
         // ------------------------------------------------------------
@@ -63,15 +70,16 @@ public class TestRouteBuilder extends RouteBuilder {
         .choice()
             .when()
                 .xpath("/oehf:order/oehf:category = 'animals'", ns)
-                .process(transmogrifier("animalOrderTransformer"))
+                .unmarshal(df)
+                .process(orderTransmogrifier)
                 .to("mock:animals")
             .when()
                 .xpath("/oehf:order/oehf:category = 'books'", ns)
-                .to("xslt:order/order.xslt")
+                .unmarshal(df)
+                .process(bookTransmogrifier)
                 .to("mock:books")
             .otherwise()
                 .to("direct:error-sys");
-        
 
     }
 

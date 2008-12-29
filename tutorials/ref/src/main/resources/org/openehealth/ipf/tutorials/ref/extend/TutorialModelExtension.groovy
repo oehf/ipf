@@ -15,126 +15,48 @@
  */
 package org.openehealth.ipf.tutorials.ref.extend
 
-import static org.openehealth.ipf.tutorials.ref.util.Expressions.errorFilename
-import static org.openehealth.ipf.tutorials.ref.util.Expressions.orderFilename
-import static org.openehealth.ipf.tutorials.ref.util.Processors.responseCodeWriter
-import static org.openehealth.ipf.tutorials.ref.util.Processors.responseMessageWriter
+import static org.apache.camel.component.http.HttpProducer.HTTP_RESPONSE_CODE;
+import static org.openehealth.ipf.tutorials.ref.util.Expressions.filenameExpression
 
-import static org.apache.camel.builder.Builder.*
-
-import java.util.Map
-
-import org.apache.camel.Exchange
-import org.apache.camel.Message
-import org.apache.camel.ValidationException
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.component.http.HttpProducer
 import org.apache.camel.model.ProcessorType
-import org.apache.camel.processor.DelegateProcessor
+import org.apache.camel.model.RouteType
 
 /**
  * @author Martin Krasser
  */
 class TutorialModelExtension {
 
-    RouteBuilder routeBuilder
-    
     def extensions = {
 
         // ------------------------------------------------------------
-        //  Exception handling extensions
+        //  Flow management extensions
         // ------------------------------------------------------------
         
-        ProcessorType.metaClass.fail = {
-            delegate.to('direct:error-app')
-        }
-
-        ProcessorType.metaClass.handled = {
-             delegate
-                 .onException(ValidationException.class)
-                     .to('direct:error-app').end()
-                 .onException(Exception.class)
-                     .to('direct:error-sys').end()
-        }
-
-        ProcessorType.metaClass.handledDelivery = {
-            delegate.errorHandler(routeBuilder
-                    .deadLetterChannel('direct:error-sys')
-                    .maximumRedeliveries(3))
-        }
-        
-        ProcessorType.metaClass.handledReplay = {
-            delegate.replayErrorHandler('direct:error-sys')
-        }
-        
-        RouteBuilder.metaClass.handlers = {
-            [ 'error-app', 
-              'error-sys' ].each { name ->
-                delegate
-                    .from('direct:' + name).unhandled()
-                    .writeErrorFile(name, 'txt')
-                    .nakFlow()
-            }
-            
+        ProcessorType.metaClass.initFlow = { identifier, errorUri -> 
+            delegate.initFlow(identifier)
+                .replayErrorHandler(errorUri)
+                .application('tutorial')
+                .inType(String.class)
+                .outType(String.class)
+                .outConversion(false)
         }
         
         // ------------------------------------------------------------
-        //  File writer extensions
+        //  File endpoint extensions
         // ------------------------------------------------------------
         
-        ProcessorType.metaClass.writeOrderFile = { String extension ->
-            delegate
-                .setHeader('org.apache.camel.file.name', orderFilename(extension))
-                .to('file:order/output');
-        }
-        
-        ProcessorType.metaClass.writeErrorFile = { String name, String extension ->
-            delegate.inOnly()
-                .setHeader('org.apache.camel.file.name', errorFilename(extension))
-                .to('file:order/' + name);
+        ProcessorType.metaClass.toFile = { String dir, String filePrefix, String fileExtension ->
+            def header = 'org.apache.camel.file.name'
+            def expression = filenameExpression(filePrefix, fileExtension) 
+            delegate.setHeader(header, expression).to('file:' + dir);
         }
         
         // ------------------------------------------------------------
-        //  Responder extensions
+        //  HTTP endpoint extensions
         // ------------------------------------------------------------
-
-        /**
-         * Interceptor that writes a default validation response given by 
-         * defaultResponse argument. If the invocation of the next processor fails
-         * then the exception message is set as response (i.e. out-message) body.
-         */
-        ProcessorType.metaClass.writeValidationResponse = { String defaultResponse ->
-            delegate.intercept { exchange, next ->
-                try {
-                    next.proceed(exchange)
-                } catch (Exception e) {
-                    exchange.exception = e
-                }
-                exchange.out.body = exchange.failed ? exchange.exception.message : defaultResponse            
-            }
-        }
         
-        /**
-         * Interceptor that writes an HTTP 400 response code in case of a 
-         * ValidationException and and HTTP 500 response code in case of any other
-         * exception.
-         */
-        ProcessorType.metaClass.writeResponseCode = {
-            delegate.intercept { exchange, next ->
-                next.proceed(exchange)
-                if (!exchange.exception) {
-                    return
-                }
-                def out = exchange.getOut(false)
-                if (!out) {
-                    return
-                }
-                if (exchange.exception instanceof ValidationException) {
-                    out.headers[HttpProducer.HTTP_RESPONSE_CODE] = 400
-                } else {
-                    out.headers[HttpProducer.HTTP_RESPONSE_CODE] = 500
-                }
-            }
+        ProcessorType.metaClass.responseCode = { ->
+            delegate.setHeader(HTTP_RESPONSE_CODE)
         }
 
     }

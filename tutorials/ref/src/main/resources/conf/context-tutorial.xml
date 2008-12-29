@@ -64,7 +64,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <lang:groovy id="tutorialModelExtension" 
         script-source="classpath:org/openehealth/ipf/tutorials/ref/extend/TutorialModelExtension.groovy">
-        <lang:property name="routeBuilder" ref="routeBuilder" />
     </lang:groovy>
 
     <lang:groovy id="routeModelExtender" 
@@ -80,6 +79,11 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <lang:groovy id="animalOrderTransformer" 
         script-source="classpath:org/openehealth/ipf/tutorials/ref/transform/AnimalOrderTransformer.groovy">
+        <lang:property name="templateResource" value="classpath:order/order.template" />
+    </lang:groovy>
+
+    <lang:groovy id="bookOrderTransformer" 
+        script-source="classpath:org/openehealth/ipf/tutorials/ref/transform/BookOrderTransformer.groovy">
     </lang:groovy>
 
 </beans>

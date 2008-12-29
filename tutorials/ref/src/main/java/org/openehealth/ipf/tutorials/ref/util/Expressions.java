@@ -27,23 +27,15 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
  */
 public class Expressions {
 
-    public static Expression<Exchange> orderFilename(final String extension) {
-        return filename("order-", extension);
-    }
-    
-    public static Expression<Exchange> errorFilename(final String extension) {
-        return filename("error-", extension);
-    }
-    
-    public static Expression<Exchange> filename(final String prefix, final String extension) {
+    public static Expression<Exchange> filenameExpression(final String prefix, final String extension) {
         return new Expression<Exchange>() {
             public Object evaluate(Exchange exchange) {
                 ManagedMessage message = new PlatformMessage(exchange);
                 Long flowId = message.getFlowId();
                 if (flowId == null) {
-                    return prefix + UUID.randomUUID() + "." + extension;            
+                    return prefix + "-" + UUID.randomUUID() + "." + extension;            
                 } else {
-                    return prefix + message.getFlowId() + "." + extension;
+                    return prefix + "-" + message.getFlowId() + "." + extension;
                 }
             }
         };

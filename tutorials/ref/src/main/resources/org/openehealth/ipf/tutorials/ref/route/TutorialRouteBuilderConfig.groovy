@@ -15,123 +15,116 @@
  */
 package org.openehealth.ipf.tutorials.ref.route
 
-import static org.openehealth.ipf.tutorials.ref.util.Expressions.errorFilename;
-import static org.openehealth.ipf.tutorials.ref.util.Expressions.orderFilename;
-import static org.openehealth.ipf.tutorials.ref.util.Processors.responseCodeWriter;
-import static org.openehealth.ipf.tutorials.ref.util.Processors.responseMessageWriter;
-
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.builder.xml.Namespaces
-import org.apache.camel.model.ProcessorType;
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 
+import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 
 /**
  * @author Martin Krasser
  */
 class TutorialRouteBuilderConfig implements RouteBuilderConfig {
 
+    private String appErrorUri = 'direct:error-app'
+    private String sysErrorUri = 'direct:error-sys'
+        
     int httpPort
     
     void apply(RouteBuilder builder) {
+                
+        // ------------------------------------------------------------
+        //  Global error handling
+        // ------------------------------------------------------------
         
-        def ns = new Namespaces('oehf', 'http://www.openehealth.org/tutorial');
-        
+        builder
+            .onException(Exception.class)
+                .transform().exceptionMessage()
+                .responseCode().constant(500)
+                .to(sysErrorUri)
+                
         // ------------------------------------------------------------
         //  Receive order
         // ------------------------------------------------------------
 
-        builder.from('jetty:http://localhost:' + httpPort + '/tutorial').handled()
-            .writeResponseCode()
-            .initFlow('http')
-                .handledReplay()
-                .application('tutorial')
-                .inType(String.class)
-                .outType(String.class)
-                .outConversion(false)
+        builder.from('jetty:http://localhost:' + httpPort + '/tutorial')
+            .initFlow('http', sysErrorUri)
             .to('direct:received')
         
-        builder.from('file:order/input?delete=true').handled()
-            .initFlow('file')
-                .handledReplay()
-                .application('tutorial')
-                .inType(String.class)
-                .outType(String.class)
-                .outConversion(false)
-            .to('direct:received')
-        
-        builder.from('direct:order').handled()
-            .initFlow('direct')
-                .application('tutorial')
-                .outType(String.class)
+        builder.from('file:order/input?delete=true')
+            .initFlow('file', sysErrorUri)
             .to('direct:received')
         
         // ------------------------------------------------------------
         //  Validate order
         // ------------------------------------------------------------
         
-        builder.from('direct:received').handled()
+        builder.from('direct:received')
             .convertBodyTo(String.class)
             .validation('direct:validation')
             .to('jms:queue:validated')
         
-        builder.from('direct:validation').unhandled()
-            .writeValidationResponse('message valid')
+        builder.from('direct:validation')
+            .onException(ValidationException.class)
+                .transform().exceptionMessage()
+                .responseCode().constant(400)
+                .to(appErrorUri).end()
             .to('validator:order/order.xsd')
-        
+            .transmogrify {'message valid'}
         
         // ------------------------------------------------------------
         //  Process order
         // ------------------------------------------------------------
         
-        // Any exception causes a redirect to an error endpoint and a rollback
-        // on the transacted JMS session. The JMS provider is configured not to
-        // do redeliveries on rollback.
-        
-        builder.from('jms:queue:validated').handled()
+        builder.from('jms:queue:validated')
+            .unmarshal().gnode(false)
             .choice()
-                .when()
-                    .xpath('/oehf:order/oehf:category = \'animals\'', ns)
+                .when { it.in.body.category.text() == 'animals' }
                     .to('direct:transform-animal-orders')
-                .when()
-                    .xpath('/oehf:order/oehf:category = \'books\'', ns)
+                .when { it.in.body.category.text() == 'books' }
                     .to('direct:transform-book-orders')
                 .otherwise()
-                    .fail()
+                    .to('direct:error-sys')
                     
          builder.from('direct:transform-animal-orders')
              .transmogrify('animalOrderTransformer')
-             .to('jms:queue:transformed-animals')
+             .to('jmsDeliver:queue:transformed-animals')
         
          builder.from('direct:transform-book-orders')
-             .to('xslt:order/order.xslt')
-             .to('jms:queue:transformed-books')
+             .transmogrify('bookOrderTransformer')
+             .params().builder()
+             .to('jmsDeliver:queue:transformed-books')
 
         // ------------------------------------------------------------
         //  Deliver order
         // ------------------------------------------------------------
         
-        // The error handler installed here tries to make max. 3 redeliveries.
-        // If these fail the transacted JMS session is rolled back (without a
-        // redelivery on JMS-level)
+        // We use a different JMS component here (jmsDeliver) that has special
+        // redelivery settings (3 redelivery attempts). This is useful when
+        // sending the transformation results over HTTP, for example (not done
+        // here).
         
-        builder.from('jms:queue:transformed-animals').handledDelivery()
+        builder.from('jmsDeliver:queue:transformed-animals')
             .dedupeFlow()
-            .writeOrderFile('txt') // TODO: send via http
+            .toFile('order/out', 'order', 'txt')
             .ackFlow()
         
-        builder.from('jms:queue:transformed-books').unhandled()
+        builder.from('jmsDeliver:queue:transformed-books')
             .dedupeFlow()
-            .writeOrderFile('xml')
+            .toFile('order/out', 'order', 'xml')
             .ackFlow()
 
         // ------------------------------------------------------------
-        //  Install error handling routes
+        //  Error handling routes
         // ------------------------------------------------------------
+            
+        builder.from(sysErrorUri)
+            .toFile('order/err/sys', 'error', 'txt')
+            .nakFlow()
         
-        builder.handlers()
-        
+        builder.from(appErrorUri)
+            .toFile('order/err/app', 'error', 'txt')
+            .nakFlow()
+            
     }
 
 }

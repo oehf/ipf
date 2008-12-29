@@ -17,7 +17,7 @@ package org.openehealth.ipf.tutorials.ref.route
 
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.builder.xml.Namespaces
+
 import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 
 /**
@@ -27,48 +27,42 @@ class TransmogrifierRouteBuilderConfig implements RouteBuilderConfig {
     
     void apply(RouteBuilder builder) {
 
-        Namespaces ns = new Namespaces('oehf', 'http://www.openehealth.org/tutorial');
-        
         // ------------------------------------------------------------
-        //  Global error handling strategy (still experimental)
+        //  Global error handling strategy
         // ------------------------------------------------------------
-        
-        builder
-            .onException(ValidationException.class)
-            .to('mock:error-app')
         
         builder
             .onException(Exception.class)
-            .to('mock:error-sys')
+                .transform().exceptionMessage().to('mock:error-sys')
 
         // ------------------------------------------------------------
         //  Receive and validate order
         // ------------------------------------------------------------
         
         builder
-            .from('direct:order').convertBodyTo(String.class)
+            .from('direct:order')
+            .convertBodyTo(String.class)
             .validation('direct:validation')
             .to('seda:validated')
         
         builder
-            .from('direct:validation').unhandled()
-            // a tutorial-specific language extension
-            .writeValidationResponse('message valid')
+            .from('direct:validation')
+            .onException(ValidationException.class)
+                .transform().exceptionMessage().to('mock:error-app').end()
             .to('validator:order/order.xsd')
-        
-        
+            .transmogrify {'message valid'}
+            
         // ------------------------------------------------------------
         //  Process order
         // ------------------------------------------------------------
         
         builder
             .from('seda:validated')
+            .unmarshal().gnode(false)
             .choice()
-                .when()
-                    .xpath('/oehf:order/oehf:category = \'animals\'', ns)
+                .when { it.in.body.category.text() == 'animals' }
                     .to('direct:transform-animal-orders')
-                .when()
-                    .xpath('/oehf:order/oehf:category = \'books\'', ns)
+                .when { it.in.body.category.text() == 'books' }
                     .to('direct:transform-book-orders')
                 .otherwise()
                     .to('direct:error-sys')
@@ -78,7 +72,8 @@ class TransmogrifierRouteBuilderConfig implements RouteBuilderConfig {
              .to('mock:animals')
         
          builder.from('direct:transform-book-orders')
-             .to('xslt:order/order.xslt')
+             .transmogrify('bookOrderTransformer')
+             .params().builder()
              .to('mock:books')
 
     }
