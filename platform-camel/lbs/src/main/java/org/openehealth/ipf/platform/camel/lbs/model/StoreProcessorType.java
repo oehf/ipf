@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.camel.Processor;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.spi.RouteContext;
-import org.openehealth.ipf.platform.camel.core.model.InheritingProcessorType;
+import org.openehealth.ipf.platform.camel.core.model.ProcessorTypeSupport;
 import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
 import org.openehealth.ipf.platform.camel.lbs.process.StoreProcessor;
 
@@ -33,7 +33,7 @@ import org.openehealth.ipf.platform.camel.lbs.process.StoreProcessor;
  * This processor type provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
  */
-public class StoreProcessorType extends InheritingProcessorType {
+public class StoreProcessorType extends ProcessorTypeSupport {
 
     private List<ProcessorType<?>> outputs = new ArrayList<ProcessorType<?>>();
     
