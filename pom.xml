@@ -12,11 +12,15 @@
         <aspectj-version>1.5.4</aspectj-version>
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
         <camel-version>1.5.0</camel-version>
+        <commons-codec-version>1.3</commons-codec-version>
         <commons-dbcp-version>1.2.2</commons-dbcp-version>
+        <commons-fileupload-version>1.2.1</commons-fileupload-version>        
         <commons-httpclient-version>3.1</commons-httpclient-version>
         <commons-io-version>1.4</commons-io-version>
+        <commons-lang-version>2.4</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <derby-version>10.4.1.3</derby-version>
+        <easymock-version>2.4</easymock-version> 
         <gmaven-version>1.0-rc-3</gmaven-version>
         <groovy-version>1.5.6</groovy-version>
         <hapi-version>0.5.1</hapi-version>
@@ -161,14 +165,29 @@
                 <version>${log4j-version}</version>
             </dependency>
             <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec-version}</version>
+            </dependency> 
+            <dependency>
                 <groupId>commons-dbcp</groupId>
                 <artifactId>commons-dbcp</artifactId>
                 <version>${commons-dbcp-version}</version>
             </dependency>
             <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons-lang-version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -180,6 +199,12 @@
                 <artifactId>commons-httpclient</artifactId>
                 <version>${commons-httpclient-version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>${easymock-version}</version>
+                <scope>test</scope>
+            </dependency> 
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
@@ -207,7 +232,24 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring</artifactId>
+                <artifactId>camel-core</artifactId>
+                <version>${camel-version}</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-cxf</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-hl7</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-jetty</artifactId>
                 <version>${camel-version}</version>
             </dependency>
             <dependency>
@@ -217,7 +259,12 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>camel-jetty</artifactId>
+                <artifactId>camel-mina</artifactId>
+                <version>${camel-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-spring</artifactId>
                 <version>${camel-version}</version>
             </dependency>
             <dependency>
@@ -428,7 +475,7 @@
         </plugins>
     </reporting>
     
-    <repositories>
+    <repositories><!--
         <repository>
             <id>openehealth.releases</id>
             <name>Open eHealth Maven Repository</name>
@@ -451,7 +498,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <repository>
+        --><repository>
             <id>java.net</id>
             <name>java.net Maven Repository</name>
             <url>http://download.java.net/maven/2/</url>

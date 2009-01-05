@@ -27,26 +27,28 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 
 /**
  * This test runner dirties a Spring application context after all test methods
- * of a test class has been run
+ * of a test class has been run.
  * This allows test methods to use the same application context but mark it as
  * dirty to ensure that another test class recreates the application context.
- * <br><br><b>
+ * <p><b>
  * ATTENTION: Using this test runner will slow down overall test execution
  *            significantly!!! Do not use this runner if you don't really need 
  *            it. Use {@link SpringJUnit4ClassRunner} instead.
- * </b><br><br>Usage:<br><br>
- * <code>@RunWith(DirtySpringContextJUnit4ClassRunner.class)</code><br>
- * <code>public class MyTest { ...</code><br>
- * <br>
+ * </b><p>
+ * Usage:
+ * <blockquote><code><pre>
+ * &#064;RunWith(DirtySpringContextJUnit4ClassRunner.class)
+ * public class MyTest { ...
+ * </pre></code></blockquote>
  * For this runner to work it is important the the {@link DirtiesContextTestExecutionListener}
  * is used. By default this is the case when using this runner. If you specify
  * the listeners explicitly via the {@link TestExecutionListeners} annotation,
  * make sure that the {@link DirtiesContextTestExecutionListener} is included. E.g.:
- * <br><br>
- * <code>@RunWith(DirtySpringContextJUnit4ClassRunner.class)</code><br>
- * <code>@TestExecutionListeners({DirtiesContextTestExecutionListener.class, ...})</code><br>
- * <code>public class MyTest { ...</code></br>
- * 
+ * <blockquote><code><pre>
+ * &#064;RunWith(DirtySpringContextJUnit4ClassRunner.class)
+ * &#064;TestExecutionListeners({DirtiesContextTestExecutionListener.class, ...})
+ * public class MyTest { ...
+ * </pre></code></blockquote>
  * @author Jens Riemschneider
  */
 public class DirtySpringContextJUnit4ClassRunner extends SpringJUnit4ClassRunner {
