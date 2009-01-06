@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerSearchCriter
  * 
  * @see IFlowManagerSearchCriteria
  * 
- * @author Mitko Kolev (i000174)
+ * @author Mitko Kolev
  */
 public class FlowManagerSearchCriteriaImpl implements
         IFlowManagerSearchCriteria {

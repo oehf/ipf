@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 /**
  * <p>
  * 
- * @author Mitko Kolev (i000174)
+ * @author Mitko Kolev
  */
 public interface IFlowManagerMBean {
 

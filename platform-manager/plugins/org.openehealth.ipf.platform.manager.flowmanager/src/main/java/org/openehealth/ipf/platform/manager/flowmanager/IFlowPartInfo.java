@@ -22,7 +22,7 @@ import java.util.Date;
  * server-side FlowPartInfo methods.
  * <p>
  * 
- * @author Mitko Kolev (i000174)
+ * @author Mitko Kolev
  */
 public interface IFlowPartInfo {
 
