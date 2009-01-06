@@ -87,12 +87,12 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
                     
          builder.from('direct:transform-animal-orders')
              .transmogrify('animalOrderTransformer')
-             .to('jmsDeliver:queue:transformed-animals')
+             .to('jms:queue:transformed-animals')
         
          builder.from('direct:transform-book-orders')
              .transmogrify('bookOrderTransformer')
              .params().builder()
-             .to('jmsDeliver:queue:transformed-books')
+             .to('jms:queue:transformed-books')
 
         // ------------------------------------------------------------
         //  Deliver order
