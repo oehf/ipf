@@ -44,7 +44,7 @@ import org.openehealth.ipf.platform.manager.connection.ui.utils.messages.Message
  * Wizard for creating new connections
  * <p>
  * 
- * @author Mitko Kolev (i000174)
+ * @author Mitko Kolev
  */
 public class NewConnectionWizard extends Wizard implements INewWizard {
 
