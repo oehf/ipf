@@ -290,7 +290,7 @@ public class FlowManagerMBean {
         Integer mr = maxResults == null ? FlowFinderCriteria.DEFAULT_MAX_RESULTS : maxResults;
         return new FlowInfoFinderCriteria(from(Duration.parse(last),
                 upperTimeLimit), upperTimeLimit, application, mr,
-                searchExpression);
+                formatSearchExpression(searchExpression));
     }
     
     private static Date from(Duration duration, Date to) {
@@ -301,6 +301,16 @@ public class FlowManagerMBean {
         }
     }
 
+    private static String formatSearchExpression(String searchExpression) {
+        if (searchExpression == null) {
+            return searchExpression;
+        }
+        if (searchExpression.trim().isEmpty()) {
+            return null;
+        }
+        return searchExpression.trim();
+    }
+
     private static Date parseDate(String s) throws ParseException {
         return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).parse(s);
     }
@@ -308,6 +318,6 @@ public class FlowManagerMBean {
     private static String formatDate(Date d) {
         return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(d);
     }
-    
+
 }
 
