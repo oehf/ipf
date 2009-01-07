@@ -39,6 +39,7 @@ class TutorialModelExtension {
                 .inType(String.class)
                 .outType(String.class)
                 .outConversion(false)
+                .renderer('defaultRenderer')
         }
         
         // ------------------------------------------------------------

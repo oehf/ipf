@@ -89,15 +89,46 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
         <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="hibernate.format_sql">false</prop>
-        <!-- 
+        <prop key="hibernate.search.autoregister_listeners">false</prop>
+         <!-- 
             THESE SETTINGS ARE PRELIMINARY. CLUSTER-SUPPORT FOR LUCENE INDEX TO FOLLOW.
          -->
-        <prop key="hibernate.search.autoregister_listeners">false</prop>
         <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
         <prop key="hibernate.search.default.indexBase">${lucene.index.base}</prop>
-
+        
       </props>
     </property>    
+    <!-- 
+         Enables rendered message encryption and full text indexing:
+         * To use rendering without both encryption and full text indexing, 
+           delete the 'eventListeners' property. 
+         * To use rendering with encryption only, delete the                   
+           post-insert, post-update and post-delete entries. 
+         * To use rendering with full text indexing only, delete the bean
+           references to textDecryptorEventListener in the post-insert and 
+           post-update event listeners. Delete the pre-update, pre-insert 
+           and post-load entries as well. 
+     -->
+    <property name="eventListeners">
+      <map>
+        <entry key="pre-update" value-ref="textEncryptorEventListener"/>
+        <entry key="post-update">
+          <list>
+            <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
+          </list>
+        </entry>
+        <entry key="pre-insert" value-ref="textEncryptorEventListener"/>
+        <entry key="post-insert">
+          <list>
+            <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
+          </list>
+        </entry>
+        <entry key="post-delete" value-ref="textIndexEventListener"/>
+        <entry key="post-load" value-ref="textDecryptorEventListener"/>
+      </map>
+    </property>
   </bean>
 
   <bean id="hibernateTemplate"
@@ -160,4 +191,31 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
       <property name="attributeSource" ref="jmxAttributeSource"/>
   </bean>
 
+  <!-- ================================================================= -->
+  <!--  Message rendering with encryption setup                          -->
+  <!-- ================================================================= -->
+  
+  <bean id="stringEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+    <property name="password">
+      <value>test_password</value>
+    </property>
+  </bean>
+
+  <bean id="textEncryptorEventListener"
+    class="org.openehealth.ipf.commons.flow.hibernate.RenderedMessageEncryptEventListener">
+    <property name="stringEncryptor" ref="stringEncryptor" />
+  </bean>
+    
+  <bean id="textDecryptorEventListener" 
+    class="org.openehealth.ipf.commons.flow.hibernate.RenderedMessageDecryptEventListener">
+    <property name="stringEncryptor" ref="stringEncryptor"/>
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Full text indexing/search setup                                  -->
+  <!-- ================================================================= -->
+  
+  <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener"/>
+  <bean id="flowSearchCallback" class="org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback" />
+   
 </beans>
