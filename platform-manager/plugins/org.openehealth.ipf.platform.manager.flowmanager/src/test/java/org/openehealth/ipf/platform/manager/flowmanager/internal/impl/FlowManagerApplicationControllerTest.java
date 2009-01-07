@@ -136,7 +136,7 @@ public class FlowManagerApplicationControllerTest extends TestCase {
         flowManagerApplicationController.searchFlows(null,
                 new FlowManagerSearchCriteriaImpl(new Date(System
                         .currentTimeMillis() / 10000), new Date(System
-                        .currentTimeMillis()), true, false), null, null);
+                        .currentTimeMillis()), true, false, null), null, null);
 
     }
 
@@ -190,12 +190,14 @@ public class FlowManagerApplicationControllerTest extends TestCase {
         connectionManager
                 .addConnectionConfiguration(targetConnectionConfiguration);
 
+        //a flow manager should be added to the repository .
         connectionManager
                 .openConnectionConfiguration(targetConnectionConfiguration);
         assertTrue(connectionManager.isConnected(targetConnectionConfiguration));
         assertTrue(flowManagerRepository
                 .isFlowManagerRegistered(targetConnectionConfiguration));
 
+        //close connection should remove the flowManager from the repository.
         connectionManager
                 .closeConnectionConfiguration(targetConnectionConfiguration);
         assertTrue(!connectionManager
@@ -203,26 +205,24 @@ public class FlowManagerApplicationControllerTest extends TestCase {
         assertTrue(!flowManagerRepository
                 .isFlowManagerRegistered(targetConnectionConfiguration));
 
-        // the other test with remove connection
+      //open connection should add the flowManager from the repository.
         connectionManager
                 .openConnectionConfiguration(targetConnectionConfiguration);
         assertTrue(connectionManager.isConnected(targetConnectionConfiguration));
         assertTrue(flowManagerRepository
                 .isFlowManagerRegistered(targetConnectionConfiguration));
 
-        // the other test with remove connection
+        // restore the state and test if the flow manater instance is correctly
+        // removed from the repository.
         connectionManager
                 .removeConnectionConfiguration(targetConnectionConfiguration);
         assertTrue(!connectionManager
                 .isConnected(targetConnectionConfiguration));
         assertTrue(!flowManagerRepository
                 .isFlowManagerRegistered(targetConnectionConfiguration));
-        // restore the connection controller state.
-        connectionManager
-                .removeConnectionConfiguration(targetConnectionConfiguration);
     }
 
-    public void testFlowInfo() throws Exception {
+    public void testSearchWithNoCriteria() throws Exception {
         connectionManager
                 .addConnectionConfiguration(targetConnectionConfiguration);
 
@@ -235,7 +235,55 @@ public class FlowManagerApplicationControllerTest extends TestCase {
                 "");
         List<IFlowInfo> flows = flowManagerRepository
                 .getFlowInfos(targetConnectionConfiguration);
-        assertTrue(flows.size() > 0);
-        assertTrue(flows.get(0) instanceof IFlowInfo);
+        assertTrue("The mock implementation returns flows on normal execution", flows.size() > 0);
+    }
+
+    public void testSearchUnacknowledgedFlows() throws Exception {
+        connectionManager
+                .addConnectionConfiguration(targetConnectionConfiguration);
+
+        connectionManager
+                .openConnectionConfiguration(targetConnectionConfiguration);
+        assertTrue(connectionManager.isConnected(targetConnectionConfiguration));
+
+        long from = System.currentTimeMillis() / 10000;
+        long to = System.currentTimeMillis();
+        FlowManagerSearchCriteriaImpl criteria = new FlowManagerSearchCriteriaImpl(
+                new Date(from), new Date(to), true, false, "");
+        flowManagerApplicationController.searchFlows(
+                targetConnectionConfiguration, criteria,
+                new NullProgressMonitor(), "");
+        List<IFlowInfo> flows = flowManagerRepository
+                .getFlowInfos(targetConnectionConfiguration);
+        assertTrue("The mock implementation returns flows on normal execution",
+                flows.size() > 0);
+        for (IFlowInfo flow : flows) {
+            assertTrue(flow.getNakCount() == 0);
+        }
+
+    }
+
+    public void testSearchErrorFlows() throws Exception {
+        connectionManager
+                .addConnectionConfiguration(targetConnectionConfiguration);
+
+        connectionManager
+                .openConnectionConfiguration(targetConnectionConfiguration);
+        assertTrue(connectionManager.isConnected(targetConnectionConfiguration));
+
+        long from = System.currentTimeMillis() / 10000;
+        long to = System.currentTimeMillis();
+        FlowManagerSearchCriteriaImpl criteria = new FlowManagerSearchCriteriaImpl(
+                new Date(from), new Date(to), false, true, "");
+        flowManagerApplicationController.searchFlows(
+                targetConnectionConfiguration, criteria,
+                new NullProgressMonitor(), "");
+        List<IFlowInfo> flows = flowManagerRepository
+                .getFlowInfos(targetConnectionConfiguration);
+        assertTrue("The mock implementation returns flows on normal execution", flows.size() > 0);
+        for (IFlowInfo flow : flows) {
+            assertTrue(flow.getNakCount() > 0);
+
+        }
     }
 }

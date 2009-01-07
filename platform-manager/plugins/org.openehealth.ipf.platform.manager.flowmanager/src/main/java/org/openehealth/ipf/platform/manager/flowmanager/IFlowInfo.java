@@ -21,7 +21,9 @@ import java.util.List;
 /**
  * Hides the org.openehealth.ipf.commons.flow.transfer.FlowInfo. Restricts the
  * use of the server side interface only in this OSGI bundle. The implementation
- * of the interface will act as a proxy.
+ * of the interface will act as a proxy. 
+ * 
+ * The interface will be removed, when the Flow Manager MBean is declared as interface.
  * 
  * @author Mitko Kolev
  */

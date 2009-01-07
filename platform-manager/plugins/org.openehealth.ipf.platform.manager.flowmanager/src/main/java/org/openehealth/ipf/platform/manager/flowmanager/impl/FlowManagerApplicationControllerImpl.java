@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.manager.flowmanager.impl;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -25,7 +23,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 import org.openehealth.ipf.platform.manager.connection.ConnectionEvent;
 import org.openehealth.ipf.platform.manager.connection.IConnectionConfiguration;
 import org.openehealth.ipf.platform.manager.connection.IJMXConnectionManager;
@@ -38,6 +35,11 @@ import org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerSearchCriter
 /**
  * The class is used when a single instance of a FloManager is to be modified.
  * <p>
+ * 
+ * TODO: The search flows method should be moved to the FlowRepository. TODO:
+ * TODO: Add proper handling to date parse error on search (if the server
+ * implementation fails to parse the date). currently the validation of the date
+ * is done in the client UI.
  * 
  * @author Mitko Kolev
  */
@@ -191,8 +193,7 @@ public class FlowManagerApplicationControllerImpl implements
     }
 
     @Override
-    public synchronized void replayFlows(
-            IConnectionConfiguration connectionConfiguration,
+    public void replayFlows(IConnectionConfiguration connectionConfiguration,
             List<IFlowInfo> flows, IProgressMonitor monitor, String taskName) {
         if (connectionConfiguration == null) {
             return;
@@ -201,41 +202,11 @@ public class FlowManagerApplicationControllerImpl implements
             return;
         if (monitor == null)
             monitor = new NullProgressMonitor();
-        log.info("Invoking replayFlows on connection "
-                + connectionConfiguration);
-        IFlowManagerMBean fm = flowManagerRepository
-                .getFlowManager(connectionConfiguration);
-        final int TOTAL_WORK = flows.size() + 1;
         try {
-            if (fm != null) {
-                monitor.beginTask(taskName != null ? taskName : "", TOTAL_WORK);
-                for (IFlowInfo flow : flows) {
-                    long flowId = flow.getIdentifier();
-                    if (flow.isReplayable()) {
-                        fm.replayFlow(flowId);
-                    } else {
-                        // System.out.println("flow with ID " + flowId + " is
-                        // not replayable!");
-                    }
-                    // Thread.sleep(10);
-                    monitor.worked(1);
-                    if (monitor.isCanceled())
-                        break;
-                }
-
-            }
-
-            // finally search the flows to update the GUI
-            if (lastSearchCriteria != null) {
-                Thread.sleep(flowManagerRepository.getTimeoutOnReply());
-                List<FlowInfo> infos = searchFlowsInternal(
-                        connectionConfiguration, lastSearchCriteria, monitor,
-                        false);
-                if (infos != null) {
-                    flowManagerRepository.registerFlows(
-                            connectionConfiguration, infos);
-                }
-            }
+            monitor.beginTask(taskName != null ? taskName : "",
+                    IProgressMonitor.UNKNOWN);
+            flowManagerRepository.replayFlows(connectionConfiguration, flows,
+                    lastSearchCriteria);
         } catch (Throwable t) {
             flowManagerRepository.handleUncheckedException(
                     connectionConfiguration, t);
@@ -245,94 +216,32 @@ public class FlowManagerApplicationControllerImpl implements
     }
 
     @Override
-    public synchronized void searchFlows(
-            IConnectionConfiguration connectionConfiguration,
+    public void searchFlows(IConnectionConfiguration connectionConfiguration,
             IFlowManagerSearchCriteria criteria, IProgressMonitor monitor,
             String taskName) {
 
         if (connectionConfiguration == null) {
             return;
         }
-        log.info("Invoking searchFlows on connection "
-                + connectionConfiguration);
-        final int TOTAL_WORK = 3;
-        monitor.beginTask(taskName != null ? taskName : "", TOTAL_WORK);
-        boolean updateProgress = true;
-        // requires synchronization
-        this.lastSearchCriteria = criteria;
-
-        List<FlowInfo> flows = searchFlowsInternal(connectionConfiguration,
-                criteria, monitor, updateProgress);
-        if (flows != null) {
-            flowManagerRepository.registerFlows(connectionConfiguration, flows);
+        if (monitor == null) {
+            monitor = new NullProgressMonitor();
         }
-
-    }
-
-    private synchronized List<FlowInfo> searchFlowsInternal(
-            IConnectionConfiguration connectionConfiguration,
-            IFlowManagerSearchCriteria criteria, IProgressMonitor monitor,
-            boolean updateProgress) {
         try {
-            IFlowManagerMBean fm = flowManagerRepository
-                    .getFlowManager(connectionConfiguration);
-            if (fm != null) {
-                DateFormat format = DateFormat.getDateTimeInstance(
-                        DateFormat.MEDIUM, DateFormat.MEDIUM);
-
-                // if the to Date is null, set the current date
-                Date toDate = new Date(System.currentTimeMillis());
-                if (criteria != null && criteria.getToDate() != null) {
-                    toDate = criteria.getToDate();
-                }
-                long msInterval = toDate.getTime();
-                if (criteria != null && criteria.getFromDate() != null) {
-                    // this is the case where
-                    msInterval = toDate.getTime()
-                            - criteria.getFromDate().getTime();
-                }
-                String toDateString = format.format(toDate);
-                fm.setUpperTimeLimit(toDateString);
-                if (updateProgress) {
-                    monitor.worked(1);
-                }
-                List<FlowInfo> flowsInfos = null;
-                if (criteria == null) {
-                    log.debug("Criteria are not restricted.");
-                    flowsInfos = fm.findLastFlows(Long.toString(msInterval));
-                } else if (criteria.isRestrictedToErrorFlows()) {
-                    log.debug("Criteria are restricted to error flows.");
-                    flowsInfos = fm.findLastErrorFlows(Long
-                            .toString(msInterval));
-                } else if (criteria.isRestrictedToUnacknowledgedFlows()) {
-                    log.debug("Criteria are restricted ot UAK flows.");
-                    flowsInfos = fm.findLastUnackFlows(Long
-                            .toString(msInterval));
-                } else {
-                    log.debug("Criteria are not restricted.");
-                    flowsInfos = fm.findLastFlows(Long.toString(msInterval));
-                }
-                if (updateProgress) {
-                    monitor.worked(1);
-                }
-                // List<IFlowInfo> flows = buildFlows(flowsAsString);
-                if (updateProgress) {
-                    monitor.worked(1);
-                }
-                return flowsInfos;
-            }
+            log.info("Invoking searchFlows on connection "
+                    + connectionConfiguration);
+            monitor.beginTask(taskName != null ? taskName : "",
+                    IProgressMonitor.UNKNOWN);
+            // requires synchronization
+            this.lastSearchCriteria = criteria;
+            flowManagerRepository
+                    .searchFlows(connectionConfiguration, criteria);
 
         } catch (Throwable e) {
-            Throwable cause = e.getCause();
-            if (cause instanceof java.rmi.UnmarshalException) {
-                log.error("UNmarshall Excpetion", e);
-            }
             flowManagerRepository.handleUncheckedException(
                     connectionConfiguration, e);
-            // do nothing
+        } finally {
+            monitor.done();
         }
-        log.error("Returning no flows");
-        return null;
     }
 
     @Override

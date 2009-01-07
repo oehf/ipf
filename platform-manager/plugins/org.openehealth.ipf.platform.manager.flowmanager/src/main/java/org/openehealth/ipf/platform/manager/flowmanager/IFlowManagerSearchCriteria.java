@@ -33,5 +33,9 @@ public interface IFlowManagerSearchCriteria {
     public boolean isRestrictedToUnacknowledgedFlows();
 
     public boolean isRestrictedToErrorFlows();
+    
+    public String getIncomingFlowMessageSearchExpression();
+    
+    public boolean hasFullTextSearchExpression();
 
 }

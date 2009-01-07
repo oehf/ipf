@@ -25,6 +25,7 @@ import org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerMBean;
 /**
  * Basic implementation of the IFlowManagerMBean interface.
  * 
+ * 
  * @author Mitko Kolev
  */
 public class FlowManagerMBeanMock implements IFlowManagerMBean {
@@ -163,6 +164,24 @@ public class FlowManagerMBeanMock implements IFlowManagerMBean {
     @Override
     public String findFlowPartMessageText(long flowId, String flowPartInfoPath) {
         return null;
+    }
+
+    @Override
+    public List<FlowInfo> findLastErrorFlowsWithMessageText(String last,
+            String searchExpression) {
+        return findLastErrorFlows(last);
+    }
+
+    @Override
+    public List<FlowInfo> findLastFlowsWithMessageText(String last,
+            String searchExpression) {
+        return findLastFlows(last);
+    }
+
+    @Override
+    public List<FlowInfo> findLastUnackFlowsWithMessageText(String last,
+            String searchExpression) {
+        return findLastUnackFlows(last);
     }
 
 }

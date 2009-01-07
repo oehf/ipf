@@ -21,7 +21,8 @@ import java.util.List;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 
 /**
- * <p>
+ * The interface will be removed when the FlowManagerMBean is refactored to be
+ * an interface.
  * 
  * @author Mitko Kolev
  */
@@ -54,6 +55,15 @@ public interface IFlowManagerMBean {
     public List<FlowInfo> findLastErrorFlows(String last);
 
     public List<FlowInfo> findLastUnackFlows(String last);
+
+    public List<FlowInfo> findLastFlowsWithMessageText(String last,
+            String searchExpression);
+
+    public List<FlowInfo> findLastErrorFlowsWithMessageText(String last,
+            String searchExpression);
+
+    public List<FlowInfo> findLastUnackFlowsWithMessageText(String last,
+            String searchExpression);
 
     public int replayLastFlows(String last);
 

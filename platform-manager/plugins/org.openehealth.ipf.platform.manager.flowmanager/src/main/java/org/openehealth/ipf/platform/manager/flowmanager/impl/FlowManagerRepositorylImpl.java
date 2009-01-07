@@ -17,7 +17,10 @@ package org.openehealth.ipf.platform.manager.flowmanager.impl;
 
 import java.io.IOException;
 import java.rmi.ConnectException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
@@ -36,6 +39,7 @@ import org.openehealth.ipf.platform.manager.flowmanager.FlowManagerEvent;
 import org.openehealth.ipf.platform.manager.flowmanager.IFlowInfo;
 import org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerMBean;
 import org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerRepository;
+import org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerSearchCriteria;
 import org.openehealth.ipf.platform.manager.flowmanager.IFlowPartInfo;
 
 /**
@@ -100,36 +104,15 @@ public class FlowManagerRepositorylImpl extends Observable implements
         }
 
     }
-    
+
     private void flowManagerStateChanged(ConnectionEvent event) {
         if (event == null)
             return;
         this.setChanged();
         this.notifyObservers(event);
     }
-    
-    // just fire event
-    public void registerFlows(IConnectionConfiguration connectionConfiguration,
-            List<FlowInfo> flowsToRegister) {
-        log.info("Notifying observers for registered flows for connection "
-                + connectionConfiguration);
-        synchronized (this) {
-            if (flows.containsKey(connectionConfiguration)) {
-                flows.remove(connectionConfiguration);
-                flows.put((IConnectionConfiguration) connectionConfiguration
-                        .clone(), flowsToRegister);
-            } else {
-                flows.put((IConnectionConfiguration) connectionConfiguration
-                        .clone(), flowsToRegister);
-            }
-        }
-        this.setChanged();
-        // convert the newly created flows to IFlowInfos
-        FlowManagerEvent event = new FlowManagerEvent(connectionConfiguration,
-                FlowManagerEvent.FLOWS_RECEIVED,
-                getFlowInfos(connectionConfiguration));
-        this.notifyObservers(event);
-    }
+
+   
 
     public boolean isFlowManagerRegistered(
             IConnectionConfiguration connectionConfiguration) {
@@ -281,13 +264,6 @@ public class FlowManagerRepositorylImpl extends Observable implements
         return timeoutForSearchAfterReplay;
     }
 
-    protected IFlowManagerMBean getFlowManager(
-            IConnectionConfiguration connectionConfiguration) {
-        synchronized (this) {
-            return flowManagers.get(connectionConfiguration);
-        }
-    }
-
     @Override
     public String getApplication(
             IConnectionConfiguration connectionConfiguration) {
@@ -395,7 +371,8 @@ public class FlowManagerRepositorylImpl extends Observable implements
                 if (flowManagers.containsKey(connectionConfiguration)) {
                     IFlowManagerMBean mbean = this.flowManagers
                             .get(connectionConfiguration);
-                    String text = mbean.findFlowPartMessageText(flowId,partInfo.getPath());
+                    String text = mbean.findFlowPartMessageText(flowId,
+                            partInfo.getPath());
                     event = new FlowManagerEvent(connectionConfiguration,
                             FlowManagerEvent.FLOWMANAGER_MESSAGE_RECEIVED, text);
 
@@ -408,6 +385,142 @@ public class FlowManagerRepositorylImpl extends Observable implements
             log.error("The connection was broken!" + t);
             handleUncheckedException(connectionConfiguration, t);
         }
+    }
+
+    /**
+     * Replays the given flows. 
+     * After the replay, makes a search with the given criteria.
+     * 
+     * @param connectionConfiguration the target connection configuration.
+     * @param flows the flows to be replayed
+     * @param searchCriteria 
+     * @throws InterruptedException 
+     * @throws ParseException if the dates in the serach criteria are invalid 
+     */
+    public void replayFlows(IConnectionConfiguration connectionConfiguration,
+            List<IFlowInfo> flows, IFlowManagerSearchCriteria searchCriteria)
+            throws InterruptedException, ParseException {
+        synchronized (this) {
+            if (flowManagers.containsKey(connectionConfiguration)) {
+                IFlowManagerMBean mbean = this.flowManagers
+                        .get(connectionConfiguration);
+                for (IFlowInfo flow : flows) {
+                    long flowId = flow.getIdentifier();
+                    if (flow.isReplayable()) {
+                        mbean.replayFlow(flowId);
+                    }
+                }
+                if (searchCriteria != null) {
+                    Thread.sleep(getTimeoutOnReply());
+                    List<FlowInfo> infos = searchFlowsInternal(
+                            connectionConfiguration, searchCriteria);
+                    if (infos != null) {
+                        registerFlows(connectionConfiguration, infos);
+                    }
+                }
+            }
+        }// synchronized
+    }
+
+    public void searchFlows(IConnectionConfiguration connectionConfiguration,
+            IFlowManagerSearchCriteria criteria) throws ParseException {
+        List<FlowInfo> flows = new ArrayList<FlowInfo>();
+        synchronized (this) {
+            //search
+            flows = searchFlowsInternal(connectionConfiguration,
+                    criteria);
+            registerFlows(connectionConfiguration, flows);
+        }
+    }
+    
+    // just fire event
+    private void registerFlows(IConnectionConfiguration connectionConfiguration,
+            List<FlowInfo> flowsToRegister) {
+        log.info("Notifying observers for registered flows for connection "
+                + connectionConfiguration);
+        if (flows.containsKey(connectionConfiguration)) {
+            flows.remove(connectionConfiguration);
+            flows.put((IConnectionConfiguration) connectionConfiguration
+                    .clone(), flowsToRegister);
+        } else {
+            flows.put((IConnectionConfiguration) connectionConfiguration
+                    .clone(), flowsToRegister);
+        }
+
+        this.setChanged();
+        // convert the newly created flows to IFlowInfos
+        FlowManagerEvent event = new FlowManagerEvent(connectionConfiguration,
+                FlowManagerEvent.FLOWS_RECEIVED,
+                getFlowInfos(connectionConfiguration));
+        this.notifyObservers(event);
+    }
+
+    private List<FlowInfo> searchFlowsInternal(
+            IConnectionConfiguration connectionConfiguration,
+            IFlowManagerSearchCriteria criteria) throws ParseException {
+
+        if (flowManagers.containsKey(connectionConfiguration)) {
+            IFlowManagerMBean fm = this.flowManagers
+                    .get(connectionConfiguration);
+            if (fm != null) {
+                DateFormat format = DateFormat.getDateTimeInstance(
+                        DateFormat.MEDIUM, DateFormat.MEDIUM);
+
+                // if the to Date is null, set the current date
+                Date toDate = new Date(System.currentTimeMillis());
+                if (criteria != null && criteria.getToDate() != null) {
+                    toDate = criteria.getToDate();
+                }
+                long msInterval = toDate.getTime();
+                if (criteria != null && criteria.getFromDate() != null) {
+                    // this is the case where
+                    msInterval = toDate.getTime()
+                            - criteria.getFromDate().getTime();
+                }
+                String toDateString = format.format(toDate);
+                fm.setUpperTimeLimit(toDateString);
+                // do the search
+                List<FlowInfo> flowsInfos = doFlowManagerFind(fm, Long
+                        .toString(msInterval), criteria);
+                return flowsInfos;
+            }
+        }
+        log.error("Returning no flows, flow manager is unregistered!");
+        return new ArrayList<FlowInfo>();
+    }
+
+    private List<FlowInfo> doFlowManagerFind(IFlowManagerMBean fm,
+            String lastInMs, IFlowManagerSearchCriteria criteria) {
+        if (criteria == null) {
+            log.debug("Criteria are not restricted.");
+            // in this case we do not have any restrictions
+            return fm.findLastFlows(lastInMs);
+        }
+        List<FlowInfo> flowsInfos = new ArrayList<FlowInfo>();
+        if (criteria.hasFullTextSearchExpression()) {
+            String fullTextSearchExpression = criteria
+                    .getIncomingFlowMessageSearchExpression();
+            if (criteria.isRestrictedToErrorFlows()) {
+                flowsInfos = fm.findLastErrorFlowsWithMessageText(lastInMs,
+                        fullTextSearchExpression);
+            } else if (criteria.isRestrictedToUnacknowledgedFlows()) {
+                flowsInfos = fm.findLastUnackFlowsWithMessageText(lastInMs,
+                        fullTextSearchExpression);
+            } else {
+                flowsInfos = fm.findLastFlowsWithMessageText(lastInMs,
+                        fullTextSearchExpression);
+            }
+        } else {
+            if (criteria.isRestrictedToErrorFlows()) {
+                flowsInfos = fm.findLastErrorFlows(lastInMs);
+            } else if (criteria.isRestrictedToUnacknowledgedFlows()) {
+                flowsInfos = fm.findLastUnackFlows(lastInMs);
+            } else {
+                flowsInfos = fm.findLastFlows(lastInMs);
+            }
+        }
+        return flowsInfos;
+
     }
 
     /**

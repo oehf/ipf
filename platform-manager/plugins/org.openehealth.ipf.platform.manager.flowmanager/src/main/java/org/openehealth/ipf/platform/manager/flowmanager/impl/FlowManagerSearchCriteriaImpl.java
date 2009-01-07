@@ -34,9 +34,11 @@ public class FlowManagerSearchCriteriaImpl implements
 
     private final Date to;
 
-    private final boolean isRestrictedToAciveFlows;
+    private final boolean showOnlyUnacknowledged;
 
     private final boolean isRestrictedToErrorFlows;
+    
+    private final String flowMessageFullTextQuery;
 
     /**
      * Creates FlowManagerSearchCriteriaImpl
@@ -46,16 +48,17 @@ public class FlowManagerSearchCriteriaImpl implements
      * @param to
      *            the end date of the results
      * @param showOnlyActive
-     *            restrict the results to active flows
+     *            restrict the results to unacknowledged flows
      * @param showOnlyError
      *            restricts the results only to error flows.
      */
-    public FlowManagerSearchCriteriaImpl(Date from, Date to, boolean restrict,
-            boolean showOnlyError) {
+    public FlowManagerSearchCriteriaImpl(Date from, Date to, boolean showOnlyUnacknowledged,
+            boolean showOnlyError, String flowMessageFullTextQuery) {
         this.from = from;
         this.to = to;
-        this.isRestrictedToAciveFlows = restrict;
+        this.showOnlyUnacknowledged = showOnlyUnacknowledged;
         this.isRestrictedToErrorFlows = showOnlyError;
+        this.flowMessageFullTextQuery = flowMessageFullTextQuery;
     }
 
     @Override
@@ -70,11 +73,30 @@ public class FlowManagerSearchCriteriaImpl implements
 
     @Override
     public boolean isRestrictedToUnacknowledgedFlows() {
-        return isRestrictedToAciveFlows;
+        return showOnlyUnacknowledged;
     }
 
     @Override
     public boolean isRestrictedToErrorFlows() {
         return isRestrictedToErrorFlows;
+    }
+    
+    @Override
+    public String getIncomingFlowMessageSearchExpression() {
+        return flowMessageFullTextQuery;
+    }
+
+    /* (non-Javadoc)
+     * @see org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerSearchCriteria#hasFullTextSearchExpression()
+     */
+    @Override
+    public boolean hasFullTextSearchExpression() {
+        if (flowMessageFullTextQuery == null) {
+            return false;
+        }
+        if (flowMessageFullTextQuery.trim().equals("")) {
+            return false;
+        }
+        return true;
     }
 }
