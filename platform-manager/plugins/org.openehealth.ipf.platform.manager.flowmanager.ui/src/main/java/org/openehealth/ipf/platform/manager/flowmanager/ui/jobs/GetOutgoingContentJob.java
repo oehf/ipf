@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.manager.flowmanager.ui.jobs;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -31,18 +29,12 @@ import org.openehealth.ipf.platform.manager.flowmanager.ui.util.Messages;
 
 /**
  * 
- * UI job to execute replayFlows
+ * UI job to execute display of outgoing flow messages.
  * 
- * @see org.openehealth.ipf.platform.manager.flowmanager.IFlowManagerApplicationController#replayFlows(IConnectionConfiguration,
- *      List, IProgressMonitor, String)
  * 
  * @author Mitko Kolev
  */
 public class GetOutgoingContentJob extends SessionSafeWorkerJob {
-
-    private static final String replayFlowText = "handlers.flow.replay.text";
-
-    private static final String replayFlowFailedText = "handlers.flow.replay.failed.text";
 
     private final IConnectionConfiguration connectionConfiguration;
 
@@ -53,8 +45,7 @@ public class GetOutgoingContentJob extends SessionSafeWorkerJob {
     public GetOutgoingContentJob(Display display,
             IConnectionConfiguration connectionConfiguration,
             IFlowInfo flowInfo, IFlowPartInfo flowPartInfo) {
-        super(display, Messages.getLabelString(replayFlowText) + " @ "
-                + connectionConfiguration.toString());
+        super(display, connectionConfiguration.toString());
         this.connectionConfiguration = connectionConfiguration;
         this.flowInfo = flowInfo;
         this.flowPartInfo = flowPartInfo;
@@ -67,16 +58,20 @@ public class GetOutgoingContentJob extends SessionSafeWorkerJob {
                 .getFlowManagerApplicationController();
 
         try {
-            monitor.beginTask(connectionConfiguration.getName(),
+            monitor.beginTask(Messages
+                    .getLabelString("handlers.get.outgoing.flow.message.text"),
                     IProgressMonitor.UNKNOWN);
             flowMangerApplicationController.getFlowManagerRepository()
                     .findFlowPartMessage(connectionConfiguration,
                             flowInfo.getIdentifier(), flowPartInfo);
             return Status.OK_STATUS;
         } catch (Throwable ioe) {
-            return new Status(Status.ERROR, Activator.PLUGIN_ID, Messages
-                    .getLabelString(replayFlowFailedText)
-                    + " " + connectionConfiguration.toString() + ".");
+            return new Status(
+                    Status.ERROR,
+                    Activator.PLUGIN_ID,
+                    Messages
+                            .getLabelString("handlers.get.outgoing.flow.message.text.failed")
+                            + " " + connectionConfiguration.toString() + ".");
         } finally {
             monitor.done();
         }

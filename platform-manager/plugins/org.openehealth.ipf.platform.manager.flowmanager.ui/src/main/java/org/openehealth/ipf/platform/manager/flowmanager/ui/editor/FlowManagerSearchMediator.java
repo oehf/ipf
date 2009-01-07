@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
@@ -47,6 +49,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.PlatformUI;
@@ -71,6 +74,9 @@ import org.openehealth.ipf.platform.manager.flowmanager.ui.util.Messages;
  */
 public class FlowManagerSearchMediator implements Observer {
 
+    private final static Log log = LogFactory
+            .getLog(FlowManagerSearchMediator.class);
+
     private Button checkFrom;
 
     private Button checkTo;
@@ -88,6 +94,10 @@ public class FlowManagerSearchMediator implements Observer {
     private DateTime toDate;
 
     private DateTime toTime;
+
+    private Text flowMessageFullTextQuery;
+
+    private Button useFlowMessageFullTextSearch;
 
     private Button searchButton;
 
@@ -111,11 +121,15 @@ public class FlowManagerSearchMediator implements Observer {
 
     private static final String EDITOR_SEARCH_OPTIONS_KEY = "search";
 
+    private static final String USE_FLOW_MESSAGE_FULL_TEXT_SEARCH_KEY = "use.incoming.message.full.text.search";
+
     private boolean nakSelectionState = false;
 
     private boolean uakSelectionState = false;
 
     private boolean doNotRestrictState = true;
+
+    private boolean useFlowMessageFullTextSearchState = false;
 
     private final IFlowManagerRepository contorller;
 
@@ -223,7 +237,21 @@ public class FlowManagerSearchMediator implements Observer {
         toDate = new DateTime(group, SWT.DATE);
         toTime = new DateTime(group, SWT.TIME);
         checkTo = new Button(group, SWT.CHECK);
+
+        Group fullTextSearch = new Group(group, SWT.NONE);
+        fullTextSearch.setLayout(new GridLayout(3, true));
+        GridData fullTextSearchLayoutData = new GridData();
+        fullTextSearchLayoutData.horizontalSpan = 4;
+        fullTextSearchLayoutData.horizontalAlignment = GridData.FILL;
+        fullTextSearch.setLayoutData(fullTextSearchLayoutData);
+        fullTextSearch.setText(Messages
+                .getLabelString("manage.search.use.fulltext.search"));
+        flowMessageFullTextQuery = new Text(fullTextSearch, SWT.SINGLE
+                | SWT.BORDER);
+        useFlowMessageFullTextSearch = new Button(fullTextSearch, SWT.CHECK);
         searchButton = new Button(group, SWT.PUSH);
+
+        // component initialization
 
         checkFrom.setText(Messages.getLabelString("manage.search.check.lower")); //$NON-NLS-1$
         checkTo.setText(Messages.getLabelString("manage.search.check.upper")); //$NON-NLS-1$
@@ -308,6 +336,28 @@ public class FlowManagerSearchMediator implements Observer {
                 toTime.setEnabled(selected);
             }
         });
+        flowMessageFullTextQuery.setLayoutData(new GridData(SWT.FILL, SWT.NONE,
+                true, false, 2, 1));
+        useFlowMessageFullTextSearch.setLayoutData(new GridData(SWT.NONE,
+                SWT.NONE, false, false, 1, 1));
+        useFlowMessageFullTextSearch.setText(Messages
+                .getLabelString("manage.search.incoming.message"));
+        useFlowMessageFullTextSearch
+                .addSelectionListener(new SelectionListener() {
+
+                    @Override
+                    public void widgetDefaultSelected(SelectionEvent e) {
+                    }
+
+                    @Override
+                    public void widgetSelected(SelectionEvent e) {
+                        boolean selected = ((Button) e.widget).getSelection();
+                        flowMessageFullTextQuery.setEnabled(selected);
+                        useFlowMessageFullTextSearchState = selected;
+                    }
+
+                });
+
         IConnectionConfiguration connectionConfiguration = (IConnectionConfiguration) editorInput
                 .getAdapter(IConnectionConfiguration.class);
         // set the enable / disable state of the components
@@ -389,10 +439,15 @@ public class FlowManagerSearchMediator implements Observer {
                 return null;
             }
         }
+
         boolean isRestrictedToActiveFlows = uak.getSelection();
         boolean isRestricteToError = nak.getSelection();
+
         FlowManagerSearchCriteriaImpl searchCriteria = new FlowManagerSearchCriteriaImpl(
-                from, to, isRestrictedToActiveFlows, isRestricteToError);
+                from, to, isRestrictedToActiveFlows, isRestricteToError,
+                //use full text search
+                useFlowMessageFullTextSearch.getSelection() == false ? null
+                        : flowMessageFullTextQuery.getText());
         return searchCriteria;
     }
 
@@ -429,8 +484,15 @@ public class FlowManagerSearchMediator implements Observer {
 
         if (!contorller.isFlowManagerRegistered(connectionConfiguration)) {
             this.searchButton.setEnabled(false);
+            this.useFlowMessageFullTextSearch.setEnabled(false);
+            this.flowMessageFullTextQuery
+                    .setEnabled(useFlowMessageFullTextSearch.getSelection());
+
         } else {
             this.searchButton.setEnabled(true);
+            this.useFlowMessageFullTextSearch.setEnabled(true);
+            this.flowMessageFullTextQuery
+                    .setEnabled(useFlowMessageFullTextSearch.getSelection());
         }
     }
 
@@ -467,9 +529,9 @@ public class FlowManagerSearchMediator implements Observer {
                 readComponentState(thisMemento);
             }
         } catch (WorkbenchException we) {
-            // ignoreit
+            log.error(we); // ignoreit
         } catch (FileNotFoundException fnfe) {
-            // ignore
+            log.error(fnfe); // ignoreit
         }
     }
 
@@ -514,6 +576,18 @@ public class FlowManagerSearchMediator implements Observer {
                 doNotRestrict.setSelection(false);
                 doNotRestrictState = false;
             }
+            int useFlowMessageFullTextSearch = memento
+                    .getInteger(USE_FLOW_MESSAGE_FULL_TEXT_SEARCH_KEY);
+            if (useFlowMessageFullTextSearch == 1) {
+                this.useFlowMessageFullTextSearch.setSelection(true);
+                this.useFlowMessageFullTextSearchState = true;
+                this.flowMessageFullTextQuery.setEnabled(true);
+            } else {
+                this.useFlowMessageFullTextSearch.setSelection(false);
+                this.useFlowMessageFullTextSearchState = false;
+                this.flowMessageFullTextQuery.setEnabled(false);
+            }
+
         } catch (Exception e) {
             // if the memento is not ok
             nak.setSelection(false);
@@ -524,6 +598,9 @@ public class FlowManagerSearchMediator implements Observer {
 
             doNotRestrict.setSelection(true);
             doNotRestrictState = true;
+
+            this.useFlowMessageFullTextSearch.setSelection(false);
+            this.flowMessageFullTextQuery.setEnabled(false);
         }
     }
 
@@ -542,6 +619,11 @@ public class FlowManagerSearchMediator implements Observer {
             memento.putInteger(DO_NOT_RESTRICT_SEARCH_KEY, 1);
         } else {
             memento.putInteger(DO_NOT_RESTRICT_SEARCH_KEY, 0);
+        }
+        if (useFlowMessageFullTextSearchState == true) {
+            memento.putInteger(USE_FLOW_MESSAGE_FULL_TEXT_SEARCH_KEY, 1);
+        } else {
+            memento.putInteger(USE_FLOW_MESSAGE_FULL_TEXT_SEARCH_KEY, 0);
         }
     }
 
