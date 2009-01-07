@@ -35,6 +35,7 @@ import org.openehealth.ipf.commons.flow.transfer.FlowPartInfo;
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev 
  */
 @Indexed(index="messages.idx")
 @Entity
@@ -63,7 +64,6 @@ public class FlowPart {
     
     @Column(name="C_FILTER_COUNT")
     private int filterCount;
-    
     
     @Column(name="C_FLOW_ID")
     private Long flowId;
@@ -155,17 +155,20 @@ public class FlowPart {
         }
         return null;
     }
+
+    FlowPartMessage getFlowPartMessage() {
+        return flowPartMessage;
+    }
     
     /**
      * Sets the readable text representation of the flow packet. If the message
      * is null, after the current transaction is committed the existing message
      * in the database (if such exists) will be deleted.
      * 
-     * 
      * @param message
      *            the text associated with the packet of this flow.
      */
-    protected void setFlowPartMessageText(String message) {
+    public void setFlowPartMessageText(String message) {
         if (message == null) {
             this.flowPartMessage = null;
         } else {

@@ -15,73 +15,16 @@
  */
 package org.openehealth.ipf.commons.flow.transfer;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.flow.FlowManagerFindCriteriaUnawareMock;
-import org.openehealth.ipf.commons.flow.impl.TestMessage;
-import org.openehealth.ipf.commons.flow.jmx.FlowManagerMBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-
 
 /**
- * @author Mitko Kolev
+ * @author Martin Krasser
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/test-jmx.xml" })
-@TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
 public class FlowInfoTest {
-
-	@Autowired
-	private FlowManagerFindCriteriaUnawareMock flowManager;
-
-	@Autowired
-	private FlowManagerMBean flowManagerMBean;
-
-	public FlowInfoTest() {
-	}
-
-	public void setUp() {
-		flowManagerMBean.setApplication("test");
-	}
 
 	@Test
 	public void testToString() {
-		Long flowId = flowManager.beginFlow(new TestMessage("bytes"),
-				flowManagerMBean.getApplication());
-		FlowInfo info = flowManager.findFlow(flowId);
-
-		// make sure that the toString method will not yield an Exception
-		String flowString = info.toString();
-
-		int ackCount = info.getAckCount();
-		assertTrue(flowString.indexOf(String.valueOf(ackCount)) >= 0);
-
-		String status = info.getStatus();
-		assertTrue(flowString.indexOf(status) >= 0);
-
-		int nakCount = info.getNakCount();
-		assertTrue(flowString.indexOf(String.valueOf(nakCount)) >= 0);
-
+	    // TODO: implement
 	}
 
-	@Test
-	public void testDurationUtils() {
-		String dateString = FlowInfoUtils.durationString(-1);
-		assertTrue(dateString != null);
-
-		dateString = FlowInfoUtils.durationString(0);
-		assertTrue(dateString != null);
-
-		dateString = FlowInfoUtils.durationString(System.currentTimeMillis());
-		assertTrue(dateString != null);
-
-		dateString = FlowInfoUtils.durationString(Long.MAX_VALUE);
-		assertTrue(dateString != null);
-	}
 }

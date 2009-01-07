@@ -100,6 +100,14 @@
   </bean>
 
   <!-- ================================================================= -->
+  <!--  JDBC Template Setup                                              -->
+  <!-- ================================================================= -->
+
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="testDataSource" />
+  </bean>
+
+  <!-- ================================================================= -->
   <!--  Datasource Setup                                                 -->
   <!-- ================================================================= -->
 
@@ -109,25 +117,30 @@
   </bean>
 
   <!-- ================================================================= -->
-  <!--  Crypto setup 		                                             -->
+  <!--  Message encryption setup                                         -->
   <!-- ================================================================= -->
-  
+
   <bean id="stringEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
     <property name="password">
       <value>test_password</value>
     </property>
   </bean>
 
-  <bean id="textEncryptorEventListener"
+ <bean id="textEncryptorEventListener"
     class="org.openehealth.ipf.commons.flow.hibernate.RenderedMessageEncryptEventListener">
     <property name="stringEncryptor" ref="stringEncryptor" />
   </bean>
-	
-  <bean id="textDecryptorEventListener" 
+
+  <bean id="textDecryptorEventListener"
     class="org.openehealth.ipf.commons.flow.hibernate.RenderedMessageDecryptEventListener">
     <property name="stringEncryptor" ref="stringEncryptor"/>
   </bean>
 
+  <!-- ================================================================= -->
+  <!--  Fulltext search setup                                            -->
+  <!-- ================================================================= -->
+ 
   <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener" />
+  <bean id="flowSearchCallback" class="org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback" />
 
 </beans>

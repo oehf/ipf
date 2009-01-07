@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.flow.impl.TestMessage;
 import org.openehealth.ipf.commons.flow.repository.FlowRepository;
 import org.openehealth.ipf.commons.flow.task.FlowInsertTask;
 import org.openehealth.ipf.commons.flow.task.FlowLifecycleTask;
-import org.openehealth.ipf.commons.flow.task.FlowLifecycleWithMessageTask;
 import org.openehealth.ipf.commons.flow.tx.TestTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -36,7 +35,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.PlatformTransactionManager;
-
 
 /**
  * @author Martin Krasser
@@ -90,20 +88,6 @@ public class FlowManagerImplLoadTest {
     public void testLifecycle() throws Exception {
         for (int i = 0; i < NUM_THREADS; i++) {
             FlowLifecycleTask task = new FlowLifecycleTask();
-            task.setMessage(createMessage());
-            task.setFlowManager(flowManager);
-            task.setNumLoops(NUM_LOOPS);
-            task.setFlowRepository(flowRepository);
-            task.setTransactionManager(createTestTransactionManager());
-            threads.add(task);
-        }
-        startThreadsAndJoin();
-    }
-    
-    @Test
-    public void testLifecycleWithMessage() throws Exception {
-        for (int i = 0; i < NUM_THREADS; i++) {
-            FlowLifecycleWithMessageTask task = new FlowLifecycleWithMessageTask();
             task.setMessage(createMessage());
             task.setFlowManager(flowManager);
             task.setNumLoops(NUM_LOOPS);

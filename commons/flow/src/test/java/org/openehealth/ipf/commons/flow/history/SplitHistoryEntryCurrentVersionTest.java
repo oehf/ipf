@@ -47,11 +47,11 @@ public class SplitHistoryEntryCurrentVersionTest {
 
         // Hash codes do not necessarily have to be different, but the algorithm
         // should be good enough that the test values lead to different hashcodes
-        assertTrue("Two different entries should have different hash codes", 
-                entry1a.hashCode() != entry2.hashCode());
+        assertFalse("Two different entries should have different hash codes", 
+                entry1a.hashCode() == entry2.hashCode());
         
-        assertTrue("Two different entries should have different hash codes",
-                entry1a.hashCode() != entry3.hashCode());
+        assertFalse("Two different entries should have different hash codes",
+                entry1a.hashCode() == entry3.hashCode());
     }
 
     @Test
@@ -77,7 +77,6 @@ public class SplitHistoryEntryCurrentVersionTest {
                 entry4.equals(entry5));       
         assertTrue("same content should be equal", 
                 entry2.equals(entry5)); 
-        
         assertFalse("null should not be equal to anything", 
                 entry1a.equals(null));
         assertFalse("an unrelated type should never be equal", 

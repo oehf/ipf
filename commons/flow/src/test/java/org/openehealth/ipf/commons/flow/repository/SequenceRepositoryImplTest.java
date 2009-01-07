@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.flow.repository;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,9 +29,9 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-
 /**
  * @author Mitko Kolev
+ * @author Martin Krasser
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/test-tx-explicit.xml" })
@@ -60,26 +60,23 @@ public class SequenceRepositoryImplTest {
 
 	@Test
 	public void testNextNumber() throws Exception {
-
 		sequenceRepository.initSequence();
 		testTransactionManager.commitTransaction();
 		testTransactionManager.beginTransaction();
-		for (long t = 1; t < 10; t++) {
-			Long number = sequenceRepository.nextNumber();
-			assertTrue(number.equals(t));
+		for (long i = 1; i < 10; i++) {
+			long number = sequenceRepository.nextNumber();
+			assertEquals(i, number);
 		}
 	}
 
 	@Test
-	public void testNextNumberWithTransaction() throws Exception {
+	public void testNextNumberWithRollback() throws Exception {
 		sequenceRepository.initSequence();
-		Long number = sequenceRepository.nextNumber();
+		Long number1 = sequenceRepository.nextNumber();
 		testTransactionManager.rollbackTransaction();
-
 		testTransactionManager.beginTransaction();
-		sequenceRepository.initSequence();
-		Long newNumber = sequenceRepository.nextNumber();
-		assertTrue(newNumber.equals(number));
-
+		Long number2 = sequenceRepository.nextNumber();
+		assertEquals(number1, number2);
 	}
+	
 }

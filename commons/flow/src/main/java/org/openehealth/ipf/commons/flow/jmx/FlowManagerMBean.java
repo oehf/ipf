@@ -34,6 +34,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev
  */
 @ManagedResource(
         objectName="org.openehealth.ipf:type=service,name=FlowManager",
@@ -123,64 +124,101 @@ public class FlowManagerMBean {
     public void setUpperTimeLimitToCurrentTime() {
         this.upperTimeLimit = new Date();
     }
-    
-    @ManagedOperation(description="Find flows within given timespan")
-    @ManagedOperationParameters(
-            @ManagedOperationParameter(name="timespan", 
-                    description="Last n milliseconds (e.g. 2000), " +
-                            "seconds (e.g. 2s), " +
-                            "minutes (e.g. 2m) or " +
-                            "hours (e.g. 2h)")
-    )
+    @ManagedOperation(description = "Find flows within given timespan "
+            + "containing flowMessageSearchQuery in the flow message")
+    @ManagedOperationParameters(@ManagedOperationParameter(name = "timespan", description = "Last n milliseconds (e.g. 2000), "
+            + "seconds (e.g. 2s), "
+            + "minutes (e.g. 2m) or "
+            + "hours (e.g. 2h)"))
     public List<FlowInfo> findLastFlows(String last) {
         return flowManager.findFlows(finderCriteria(last));
     }
-
-    @ManagedOperation(description="Find flows with an ERROR acknowledgement within given timespan")
-    @ManagedOperationParameters(
-            @ManagedOperationParameter(name="timespan", 
-                    description="Last n milliseconds (e.g. 2000), " +
-                            "seconds (e.g. 2s), " +
-                            "minutes (e.g. 2m) or " +
-                            "hours (e.g. 2h)")
-    )
+    
+    @ManagedOperation(description = "Find flows with an ERROR acknowledgement within given timespan "
+            + "containing flowMessageSearchQuery in the flow message")
+    @ManagedOperationParameters(@ManagedOperationParameter(name = "timespan", description = "Last n milliseconds (e.g. 2000), "
+            + "seconds (e.g. 2s), "
+            + "minutes (e.g. 2m) or "
+            + "hours (e.g. 2h)"))
     public List<FlowInfo> findLastErrorFlows(String last) {
         return flowManager.findErrorFlows(finderCriteria(last));
     }
 
-    @ManagedOperation(description="Find flows without any acknowledgement within given timespan")
-    @ManagedOperationParameters(
-            @ManagedOperationParameter(name="timespan", 
-                    description="Last n milliseconds (e.g. 2000), " +
-                            "seconds (e.g. 2s), " +
-                            "minutes (e.g. 2m) or " +
-                            "hours (e.g. 2h)")
-    )
+    @ManagedOperation(description = "Find flows without any acknowledgement within given timespan "
+            + "containing flowMessageSearchQuery in the flow message")
+    @ManagedOperationParameters(@ManagedOperationParameter(name = "timespan", description = "Last n milliseconds (e.g. 2000), "
+            + "seconds (e.g. 2s), "
+            + "minutes (e.g. 2m) or "
+            + "hours (e.g. 2h)"))
     public List<FlowInfo> findLastUnackFlows(String last) {
         return flowManager.findUnackFlows(finderCriteria(last));
     }
     
-    @ManagedOperation(description="Find the initial flow message text for flow with identifier the given flowId. ")
+    @ManagedOperation(description = "Find flows within given timespan " +
+    		" containing searchExpression in the inbound flow message text")
+    @ManagedOperationParameters( {
+            @ManagedOperationParameter(name = "timespan", description = "Last n milliseconds (e.g. 2000), "
+                    + "seconds (e.g. 2s), "
+                    + "minutes (e.g. 2m) or "
+                    + "hours (e.g. 2h)"),
+            @ManagedOperationParameter(name = "searchExpression", description = "The query "
+                    + "for the inbound message's string representation.\n "
+                    + "e.g. \"+hl7 -test\" will match flows "
+                    + "with inbound message containing \"hl7\", not containing \"test\".\n"
+                    + "e.g. \"hl7\" will match flows "
+                    + "with inbound message containing the word \"hl7\".") })
+    public List<FlowInfo> findLastFlowsWithMessageText(String last, String searchExpression) {
+        return flowManager.findFlows(finderCriteria(last, searchExpression));
+    }
+    
+    @ManagedOperation(description = "Find flows with an ERROR acknowledgement within given timespan " + 
+            "containing searchExpression in the inbound flow message text")
+    @ManagedOperationParameters( {
+            @ManagedOperationParameter(name = "timespan", description = "Last n milliseconds (e.g. 2000), "
+                    + "seconds (e.g. 2s), "
+                    + "minutes (e.g. 2m) or "
+                    + "hours (e.g. 2h)"),
+            @ManagedOperationParameter(name = "searchExpression", description = "The query "
+                    + "for the inbound message's string representation.\n "
+                    + "e.g. \"+hl7 -test\" will match flows "
+                    + "with inbound message containing \"hl7\", not containing \"test\".\n"
+                    + "e.g. \"hl7\" will match flows "
+                    + "with inbound message containing the word \"hl7\".") })
+    public List<FlowInfo> findLastErrorFlowsWithMessageText(String last, String searchExpression) {
+        return flowManager.findErrorFlows(finderCriteria(last, searchExpression));
+    }
+    
+    @ManagedOperation(description = "Find flows without any acknowledgement within given timespan " +
+            "containing searchExpression in the inbound flow message text")
+    @ManagedOperationParameters( {
+            @ManagedOperationParameter(name = "timespan", description = "Last n milliseconds (e.g. 2000), "
+                    + "seconds (e.g. 2s), "
+                    + "minutes (e.g. 2m) or "
+                    + "hours (e.g. 2h)"),
+            @ManagedOperationParameter(name = "searchExpression", description = "The query "
+                    + "for the inbound message's string representation.\n "
+                    + "e.g. \"+hl7 -test\" will match flows "
+                    + "with inbound message containing \"hl7\", not containing \"test\".\n"
+                    + "e.g. \"hl7\" will match flows "
+                    + "with inbound message containing the word \"hl7\".") })
+    public List<FlowInfo> findLastUnackFlowsWithMessageText(String last, String searchExpression) {
+        return flowManager.findUnackFlows(finderCriteria(last, searchExpression));
+    }
+    
+    @ManagedOperation(description="Find inbound message text of flow with given identifier.")
     @ManagedOperationParameters(
-            @ManagedOperationParameter(name="flowId", 
-                                        description="The flow identifier of the flow, " +
-                                                    "whose message text is requested.")
+            @ManagedOperationParameter(name="identifier", description="Flow identifier")
     )
     public String findFlowMessageText(long flowId) {
         return flowManager.findFlowMessageText(flowId);
     } 
     
-    @ManagedOperation(description = "Find the flow part message text of the given flowPartInfo" +
-                                    " (part of flow with the given flowId).")
-    @ManagedOperationParameters( {@ManagedOperationParameter( name = "flowId", 
-                                        description = "The flow identifier of the flow, " +
-                                                      "to which the part with the given flowPartPath belongs."),
-                                  @ManagedOperationParameter(name = "flowPartPath", 
-                                        description = "The path of the flow part " + 
-                                                      "(part of the flow with the given flowId) " + 
-                                                      "for which message text is requested.") })
-    public String findFlowPartMessageText(long flowId, String flowPartPath) {
-        return flowManager.findFlowPartMessageText(flowId, flowPartPath);
+    @ManagedOperation(description = "Find outbound message text of flow with given identifier and path")
+    @ManagedOperationParameters( {
+            @ManagedOperationParameter( name = "identifier", description = "Flow identifier"),
+            @ManagedOperationParameter(name = "flowPath", description = "Flow path") })
+    public String findFlowPartMessageText(long flowId, String flowPath) {
+        return flowManager.findFlowPartMessageText(flowId, flowPath);
     }
 
     @ManagedOperation(description="Replay flows within given timespan")
@@ -219,8 +257,7 @@ public class FlowManagerMBean {
         return flowManager.replayUnackFlows(finderCriteria(last));
     }
 
-    @ManagedOperation(description="Find flow with given identifier. " +
-    		"The message content will not be returned.")
+    @ManagedOperation(description="Find flow with given identifier")
     @ManagedOperationParameters(
             @ManagedOperationParameter(name="identifier", description="Flow identifier")
     )
@@ -228,11 +265,10 @@ public class FlowManagerMBean {
         return flowManager.findFlow(flowId);
     }
     
-    @ManagedOperation(description="Find flow with given identifier. " +
-    		"The message content can optionally be returned.")
+    @ManagedOperation(description="Find flow with given identifier")
     @ManagedOperationParameters({
             @ManagedOperationParameter(name="identifier", description="Flow identifier"),
-            @ManagedOperationParameter(name="includeText", description="Include message content")
+            @ManagedOperationParameter(name="includeText", description="Include flow message text")
     })
     public FlowInfo findFlow(long flowId, boolean includeText) {
         return flowManager.findFlow(flowId, includeText);
@@ -247,9 +283,14 @@ public class FlowManagerMBean {
     }
     
     private FlowInfoFinderCriteria finderCriteria(String last) {
+        return finderCriteria(last, null);
+    }
+    
+    private FlowInfoFinderCriteria finderCriteria(String last, String searchExpression) {
         Integer mr = maxResults == null ? FlowFinderCriteria.DEFAULT_MAX_RESULTS : maxResults;
-        return new FlowInfoFinderCriteria(from(Duration.parse(last), upperTimeLimit), 
-                upperTimeLimit, application, mr);
+        return new FlowInfoFinderCriteria(from(Duration.parse(last),
+                upperTimeLimit), upperTimeLimit, application, mr,
+                searchExpression);
     }
     
     private static Date from(Duration duration, Date to) {

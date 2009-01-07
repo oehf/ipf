@@ -57,7 +57,7 @@ public interface FlowManager {
     String findFlowMessageText(Long flowId);
     
     @Transactional(readOnly=true)
-    String findFlowPartMessageText(Long flowId, String flowPartPath);
+    String findFlowPartMessageText(Long flowId, String flowPath);
     
     @Transactional
     int replayFlows(FlowInfoFinderCriteria finderCriteria);

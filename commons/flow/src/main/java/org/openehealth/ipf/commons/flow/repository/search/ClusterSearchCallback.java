@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.flow.repository;
+package org.openehealth.ipf.commons.flow.repository.search;
 
+import java.util.List;
+
+import org.hibernate.Session;
 import org.openehealth.ipf.commons.flow.domain.Flow;
 
 /**
- * Callback handler for updating a flow object.
- * 
  * @author Martin Krasser
  */
-public interface FlowUpdateCallbackHandler {
+public class ClusterSearchCallback implements FlowSearchCallback {
 
-    /**
-     * Updates the given flow while an update-lock is held on the flow.
-     * 
-     * @param flow flow to be updated.
-     * @return update result;
-     */
-    Object update(Flow flow);
+    @Override
+    public List<Flow> findFlows(Session session, FlowSearchCriteria criteria) {
+        throw new UnsupportedOperationException("clustered search not implemented");
+    }
     
 }

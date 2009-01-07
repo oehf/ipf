@@ -19,11 +19,14 @@ import java.util.Date;
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev 
  */
 public class FlowFinderCriteria {
 
     public static final int DEFAULT_MAX_RESULTS = -1;
-    
+
+    private String inboundMessageQuery;
+    private String outboundMessageQuery;
     private String application;
     private Date from;
     private Date to;
@@ -32,14 +35,27 @@ public class FlowFinderCriteria {
     public FlowFinderCriteria(Date from, Date to, String application) {
         this(from, to, application, DEFAULT_MAX_RESULTS);
     }
-    
+
     public FlowFinderCriteria(Date from, Date to, String application, int maxResults) {
+        this(from, to, application, maxResults, null);
+    }
+
+    public FlowFinderCriteria(Date from, Date to, String application, int maxResults, 
+            String inboundMessageQuery) {
+        this(from, to, application, maxResults, inboundMessageQuery, null);
+    }
+    
+    public FlowFinderCriteria(Date from, Date to, String application, int maxResults, 
+            String inboundMessageQuery,
+            String outboundMessageQuery) {
         this.from = from;
         this.to = to;
         this.application = application;
         this.maxResults = maxResults;
+        this.inboundMessageQuery = inboundMessageQuery;
+        this.outboundMessageQuery = outboundMessageQuery;
     }
-    
+
     public String getApplication() {
         return application;
     }
@@ -63,7 +79,7 @@ public class FlowFinderCriteria {
     public void setTo(Date to) {
         this.to = to;
     }
-    
+
     public int getMaxResults() {
         return maxResults;
     }
@@ -71,5 +87,18 @@ public class FlowFinderCriteria {
     public void setMaxResults(int maxResults) {
         this.maxResults = maxResults;
     }
+
+    public String getInboundMessageQuery() {
+        return inboundMessageQuery;
+    }
     
+    public String getOutboundMessageQuery() {
+        return outboundMessageQuery;
+    }
+    
+    public boolean hasMessageQuery() {
+        return inboundMessageQuery != null
+            || outboundMessageQuery != null;
+    }
+
 }

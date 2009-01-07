@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.flow.history;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,46 +30,6 @@ public class SplitHistoryEntryOldVersionTest {
 	@Before
 	public void setUp() throws Exception {
 		entry = new SplitHistoryEntry(2, 3);
-	}
-
-	@Test
-	public void testHashcode() {
-		for (int numSiblings = 3; numSiblings < 50; numSiblings++) {
-			SplitHistoryEntry entry11 = new SplitHistoryEntry(1, numSiblings);
-			SplitHistoryEntry entry12 = new SplitHistoryEntry(1, numSiblings);
-			assertEquals(entry11.hashCode(), entry12.hashCode());
-
-			SplitHistoryEntry entry21 = new SplitHistoryEntry(2, numSiblings);
-			SplitHistoryEntry entry22 = new SplitHistoryEntry(2, numSiblings);
-
-			assertEquals(entry21.hashCode(), entry22.hashCode());
-
-		}
-	}
-
-	@Test
-	public void testEquals() {
-		for (int numSiblings = 3; numSiblings < 50; numSiblings++) {
-			SplitHistoryEntry entry11 = new SplitHistoryEntry(1, numSiblings);
-			SplitHistoryEntry entry12 = new SplitHistoryEntry(1, numSiblings);
-
-			// here the convention method
-			assertFalse(entry11.equals(null));
-			assertFalse(entry11.equals(entry11.toString()));
-			assertEquals(entry11, entry11);
-
-			assertEquals(entry11, entry12);
-			assertEquals(entry12, entry11);
-
-			SplitHistoryEntry entry21 = new SplitHistoryEntry(2, numSiblings);
-			SplitHistoryEntry entry22 = new SplitHistoryEntry(2, numSiblings);
-
-			assertEquals(entry21, entry22);
-			assertEquals(entry22, entry21);
-
-			assertFalse(entry12.equals(entry22));
-		}
-
 	}
 
 	@Test

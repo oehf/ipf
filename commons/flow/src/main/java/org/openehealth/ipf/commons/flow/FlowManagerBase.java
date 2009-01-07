@@ -31,6 +31,7 @@ import static org.openehealth.ipf.commons.flow.transfer.FlowInfoUtils.textString
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev 
  */
 public class FlowManagerBase implements FlowManager {
 
@@ -62,11 +63,10 @@ public class FlowManagerBase implements FlowManager {
 
     public boolean flowCompleted(Long flowId) {
         Flow flow = loadFlow(flowId);
-        if (!flow.isAckCountExpectationSet()) {
-            throw new FlowStatusException(
-                    "acknowledgement count expectation not set on flow object");
+        if (flow.isAckCountExpectationSet()) {
+            return flow.isAckCountExpectedReached();
         }
-        return flow.isAckCountExpectedReached();
+        throw new FlowStatusException("acknowledgement count expectation not set on flow object");
     }
 
     public List<FlowInfo> findFlows(FlowInfoFinderCriteria finderCriteria) {
@@ -85,14 +85,12 @@ public class FlowManagerBase implements FlowManager {
         return textString(loadFlow(flowId).getFlowMessageText());
     } 
     
-    public String findFlowPartMessageText(Long flowId, String flowPartPath) {
+    public String findFlowPartMessageText(Long flowId, String flowPath) {
         Flow flow = loadFlow(flowId);
-
-        // try to load part with clean or error status
-        FlowPart part = flow.getPart(flowPartPath);
+        FlowPart part = flow.getPart(flowPath);
         if (part == null) {
-            throw new IllegalArgumentException("No flow part with the path "
-                    + flowPartPath + " exists!");
+            throw new IllegalArgumentException(
+                "No flow part with path " + flowPath + " exists");
         }
         return textString(part.getFlowPartMessageText());
     }
@@ -251,7 +249,9 @@ public class FlowManagerBase implements FlowManager {
                 flowInfoFinderCriteria.getFrom(),
                 flowInfoFinderCriteria.getTo(),
                 flowInfoFinderCriteria.getApplication(),
-                flowInfoFinderCriteria.getMaxResults());
+                flowInfoFinderCriteria.getMaxResults(), 
+                flowInfoFinderCriteria.getInboundMessageQuery(),
+                flowInfoFinderCriteria.getOutboundMessageQuery());
     }
     
 }

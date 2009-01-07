@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.flow.domain.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Encrypts a FlowMessage message on Insert or Update.
+ * Encrypts flow (part) message text on insert or update.
  * 
  * @see PreInsertEventListener
  * @see PreUpdateEventListener
@@ -37,25 +37,27 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Mitko Kolev
  */
 public class RenderedMessageEncryptEventListener implements
-        PreInsertEventListener, PreUpdateEventListener, Initializable {
+        PreInsertEventListener, 
+        PreUpdateEventListener, 
+        Initializable {
+
+    private static final long serialVersionUID = -7516699694816986560L;
 
     @Autowired
     private StringEncryptor stringEncryptor;
-    /**
-     * Generated
-     */
-    private static final long serialVersionUID = -7516699694816986560L;
 
-    public RenderedMessageEncryptEventListener() {
+    public StringEncryptor getStringEncryptor() {
+        return stringEncryptor;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.hibernate.event.PreInsertEventListener#onPreInsert(org.hibernate.
-     * event.PreInsertEvent)
-     */
+    public void setStringEncryptor(StringEncryptor stringEncryptor) {
+        this.stringEncryptor = stringEncryptor;
+    }
+    
+    @Override
+    public void initialize(Configuration cfg) {
+    }
+
     @Override
     public boolean onPreInsert(PreInsertEvent event) {
         Object entity = event.getEntity();
@@ -64,13 +66,6 @@ public class RenderedMessageEncryptEventListener implements
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.hibernate.event.PreUpdateEventListener#onPreUpdate(org.hibernate.
-     * event.PreUpdateEvent)
-     */
     @Override
     public boolean onPreUpdate(PreUpdateEvent event) {
         Object entity = event.getEntity();
@@ -91,30 +86,4 @@ public class RenderedMessageEncryptEventListener implements
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.hibernate.event.Initializable#initialize(org.hibernate.cfg.Configuration
-     * )
-     */
-    @Override
-    public void initialize(Configuration cfg) {
-        if (stringEncryptor == null) {
-            throw new IllegalArgumentException(
-                    "Cannot initialize the RenderedMessageEncryptEventListener, "
-                            + " no org.jasypt.encryption.StringEncryptor is provided in the configuration!"
-                            + "If you do not wish to use encryption, "
-                            + "remove the listener from the configuration!");
-        }
-
-    }
-
-    public StringEncryptor getStringEncryptor() {
-        return stringEncryptor;
-    }
-
-    public void setStringEncryptor(StringEncryptor stringEncryptor) {
-        this.stringEncryptor = stringEncryptor;
-    }
 }

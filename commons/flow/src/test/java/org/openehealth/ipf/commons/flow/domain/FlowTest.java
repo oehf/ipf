@@ -15,368 +15,163 @@
  */
 package org.openehealth.ipf.commons.flow.domain;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
+import static org.openehealth.ipf.commons.flow.util.Flows.createFlow;
 
-import org.junit.After;
-import org.junit.Before;
+import java.io.IOException;
+import java.util.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.flow.FlowException;
-import org.openehealth.ipf.commons.flow.repository.FlowRepository;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
-import org.openehealth.ipf.commons.flow.tx.TestTransactionManager;
-import org.openehealth.ipf.commons.flow.util.Flows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 
 /**
  * @author Mitko Kolev
+ * @author Martin Krasser 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/test-tx-explicit.xml" })
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
 public class FlowTest {
 
-	@Autowired
-	private TestTransactionManager testTransactionManager;
-
-	@Autowired
-	private FlowRepository flowRepository;
-
-	@Before
-	public void setUp() throws Exception {
-		testTransactionManager.beginTransaction();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		testTransactionManager.commitTransaction();
-	}
-
-	@Test
-	public void testCreateAndRollbackSingleFlow() throws Exception {
-		Flow flow = persistFlow("flow1.binary");
-		Flow flowReturned = flowRepository.find(flow.getIdentifier());
-		assertTrue(Flows.deepEquals(flowReturned, flow));
-		testTransactionManager.rollbackTransaction();
-
-		// search for the flow
-		testTransactionManager.beginTransaction();
-		try {
-			flowRepository.find(flow.getIdentifier());
-			fail();
-		} catch (Throwable t) {
-			assertTrue(t instanceof FlowException);
-		}
-	}
-
-	@Test
-	public void testStatusCountWithInvalidate2TimesAndThenValidate()
-			throws Exception {
-
-		Flow flow = this.createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-
-		// clear the fourth part
-		for (FlowPart part : flow.getParts()) {
-			if (part.getPath().equals("0.1.1")) {
-				flow.getParts().remove(part);
-				break;
-			}
-		}
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		// simulate fourth part fails
-		flow.invalidate("0.1.1");
-		testTransactionManager.commitTransaction();
-
-		// update the error flow to error for the second time
-		testTransactionManager.beginTransaction();
-		int cleans = flow.getStatusCount(FlowStatus.CLEAN);
-		int errors = flow.getStatusCount(FlowStatus.ERROR);
-		assertTrue(cleans == 3);
-		assertTrue(errors == 1);
-		// this is the same as update("0.1.1", ERROR)
-		flow.invalidate("0.1.1");
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		// the ERROR status must not be deleted at this point
-		cleans = flow.getStatusCount(FlowStatus.CLEAN);
-		errors = flow.getStatusCount(FlowStatus.ERROR);
-		assertTrue(cleans == 3);
-		assertTrue(errors == 1);
-		testTransactionManager.commitTransaction();
-
-		// the ERROR status must not be deleted at this point, and CLEANS must
-		// be incremented
-		testTransactionManager.beginTransaction();
-		flow.acknowledge("0.1.1", false);
-		errors = flow.getStatusCount(FlowStatus.ERROR);
-		cleans = flow.getStatusCount(FlowStatus.CLEAN);
-		assertTrue(cleans == 4);
-		assertTrue(errors == 1);
-	}
+    @Test
+    public void testStatusCount()throws Exception {
+        Flow flow = createFlow("blah");
+        flow.setAckCountExpected(3);
+        flow.invalidate("0.2");
+        assertEquals(2, flow.getStatusCount(CLEAN));
+        assertEquals(1, flow.getStatusCount(ERROR));
+        flow.invalidate("0.2");
+        assertEquals(2, flow.getStatusCount(CLEAN));
+        assertEquals(1, flow.getStatusCount(ERROR));
+        flow.acknowledge("0.2", false);
+        assertEquals(3, flow.getStatusCount(CLEAN));
+        assertEquals(1, flow.getStatusCount(ERROR));
+    }
 
 	@Test
 	public void testPrepareReplayWithErrorParts() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.ERROR);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
+	    Flow flow = createFlow("blah", 2);
+	    flow.getPart("0.0").setStatus(ERROR);
+        assertEquals(1, flow.getStatusCount(CLEAN));
+        assertEquals(1, flow.getStatusCount(ERROR));
 		flow.prepareReplay();
-		int errorsAfterClean = flow.getStatusCount(FlowStatus.ERROR);
-		int cleansAfterClean = flow.getStatusCount(FlowStatus.CLEAN);
-		assertTrue(cleansAfterClean == 0);
-		assertTrue(errorsAfterClean == 0);
+        assertEquals(1, flow.getStatusCount(CLEAN));
+        assertEquals(0, flow.getStatusCount(ERROR));
 	}
 
 	@Test
 	public void testClearErrorStatus() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.ERROR);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
+        Flow flow = createFlow("blah", 2);
+        flow.getPart("0.0").setStatus(ERROR);
+        assertEquals(1, flow.getStatusCount(CLEAN));
+        assertEquals(1, flow.getStatusCount(ERROR));
 		flow.clearErrorStatus();
-
-		int errorsAfterClean = flow.getStatusCount(FlowStatus.ERROR);
-		int cleansAfterClean = flow.getStatusCount(FlowStatus.CLEAN);
-		assertTrue(cleansAfterClean == 0);
-		assertTrue(errorsAfterClean == 0);
+        assertEquals(1, flow.getStatusCount(CLEAN));
+        assertEquals(0, flow.getStatusCount(ERROR));
 	}
 
 	@Test
-	public void testCleanupMessageOnFinishedParts() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
+	public void testIsReplayable() throws Exception {
+        Flow flow = createFlow("blah", 1);
+        flow.setAckCountExpected(1);
 		assertTrue(flow.isReplayable());
-		for (FlowPart part : flow.getParts()) {
-			flow.acknowledge(part.getPath(), true);// use cleanup
-		}
+		flow.acknowledge("0.0", true);
 		assertFalse(flow.isReplayable());
 	}
 
 	@Test
 	public void testFlowInfoProperties() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		assertTrue(flow.isReplayable());
+		Flow flow = createFlow("blah", 1);
 		FlowInfo info = flow.getInfo();
-		assertFlowAndFlowInfoEqual(flow, info);
-
-		List<Flow> flows = new ArrayList<Flow>();
-		flows.add(flow);
-		List<FlowInfo> infos = Flow.getInfos(flows);
-		for (FlowInfo i : infos) {
-			assertFlowAndFlowInfoEqual(flow, i);
-		}
+		assertEquals(flow.getCreationTime(), info.getCreationTime());
+        assertEquals(flow.getApplication(), info.getApplication());
+        assertEquals(flow.getIdentifier(), info.getIdentifier());
+        assertEquals(flow.getReplayCount(), info.getReplayCount());
+        assertEquals(flow.getStatus().toString(), info.getStatus());
 	}
 
 	@Test
 	public void testHashCodeAndEquals() throws IOException {
-		Flow flow1 = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow1.setAckCountExpected(4);
-
-		Flow flow2 = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow2.setAckCountExpected(4);
-
-		// Hibernate will not behave properly if it assigns the ids!
-		assertTrue(flow1.getIdentifier() != null);
-		assertTrue(flow2.getIdentifier() != null);
-
-		// test hashcode and equals
-		assertTrue(flow1.equals(flow1));
-		assertFalse(flow1.equals(flow1.getIdentifier()));
-		assertFalse(flow1.equals(flow2));
-		assertFalse(flow2.equals(flow1));
-		assertFalse(flow1.hashCode() == flow2.hashCode());
-	}
-
-	private void assertFlowAndFlowInfoEqual(Flow flow, FlowInfo info) {
-		assertTrue(info.getCreationTime().equals(flow.getCreationTime()));
-		assertTrue(info.getApplication().equals(flow.getApplication()));
-		assertTrue(info.getIdentifier().equals(flow.getIdentifier()));
-		assertTrue(info.getReplayCount() == flow.getReplayCount());
-		assertTrue(info.getStatus().equals(flow.getStatus().toString()));
+		Flow flow1 = createFlow("blah");
+        Flow flow2 = createFlow("blub");
+        flow1.setIdentifier(1L);
+        flow2.setIdentifier(1L);
+        assertEquals(flow1, flow2);
+        assertEquals(flow1.hashCode(), flow2.hashCode());
 	}
 
 	@Test
-	public void testDoNotCleanupMessageOnFinishedParts() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		assertTrue(flow.isReplayable());
-		for (FlowPart part : flow.getParts()) {
-			flow.acknowledge(part.getPath(), false);// do not use cleanup
-		}
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		flow = flowRepository.find(flow.getIdentifier());
-		assertTrue(flow.isReplayable());
-		int errorsAfterAcknowledge = flow.getStatusCount(FlowStatus.ERROR);
-		int cleansAfterAcknowledge = flow.getStatusCount(FlowStatus.CLEAN);
-		assertTrue(cleansAfterAcknowledge == 4);
-		assertTrue(errorsAfterAcknowledge == 0);
+	public void testAcknowledge() throws Exception {
+	    Flow flow = createFlow("blah", 0);
+	    assertEquals(0, flow.getStatusCount(CLEAN));
+        flow.acknowledge("0.0", false);
+	    flow.acknowledge("0.1", false);
+        assertEquals(2, flow.getStatusCount(CLEAN));
 	}
 
 	@Test
-	public void testPrepareReplayWithCleanParts() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		flow.prepareReplay();
-		flowRepository.merge(flow);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		int errorsAfterClean = flow.getStatusCount(FlowStatus.ERROR);
-		int cleansAfterClean = flow.getStatusCount(FlowStatus.CLEAN);
-		assertTrue(cleansAfterClean == 4);
-		assertTrue(errorsAfterClean == 0);
+	public void testPrepareReplay() throws Exception {
+        Flow flow = createFlow("blah");
+        flow.getPart("0.0").setStatus(ERROR);
+        assertEquals(1, flow.getStatusCount(CLEAN));
+        assertEquals(1, flow.getStatusCount(ERROR));
+        flow.prepareReplay();
+        assertEquals(1, flow.getStatusCount(CLEAN));
+        assertEquals(0, flow.getStatusCount(ERROR));
 	}
 
 	@Test
-	public void testFilterError() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.ERROR);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		for (FlowPart part : flow.getParts()) {
-			assertFalse(flow.filter(part.getPath()));
-			assertTrue(part.getFilterCount() == 0);
-		}
+	public void testFilter() throws Exception {
+        Flow flow = createFlow("blah");
+        flow.getPart("0.0").setStatus(ERROR);
+        assertEquals(0, flow.getPart("0.0").getFilterCount());
+        assertEquals(0, flow.getPart("0.1").getFilterCount());
+        assertFalse(flow.filter("0.0"));
+        assertTrue(flow.filter("0.1"));
+        assertEquals(0, flow.getPart("0.0").getFilterCount());
+        assertEquals(1, flow.getPart("0.1").getFilterCount());
 	}
 
 	@Test
 	public void testIsAckCountExpectedReached() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-		assertTrue(flow.isAckCountExpectationSet());
-		assertTrue(flow.isAckCountExpectedReached());
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		flow = createFlowWith4Parts(FlowStatus.ERROR);
-		flow.setAckCountExpected(4);
-		assertTrue(flow.isAckCountExpectationSet());
+        Flow flow = createFlow("blah", 0);
+		flow.setAckCountExpected(2);
 		assertFalse(flow.isAckCountExpectedReached());
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		flow = createFlowWith4Parts(FlowStatus.ERROR);
-		flow.setAckCountExpected(-1);
-		assertFalse(flow.isAckCountExpectationSet());
-		assertFalse(flow.isAckCountExpectedReached());
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(-1);
-		assertFalse(flow.isAckCountExpectationSet());
-		assertFalse(flow.isAckCountExpectedReached());
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(0);
-		assertTrue(flow.isAckCountExpectationSet());
-		assertTrue(flow.isAckCountExpectedReached());
-
+		flow.acknowledge("0.0", false);
+        assertFalse(flow.isAckCountExpectedReached());
+        flow.acknowledge("0.1", false);
+        assertTrue(flow.isAckCountExpectedReached());
+        flow.setAckCountExpected(FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED);
+        assertFalse(flow.isAckCountExpectedReached());
 	}
 
 	@Test
-	public void testFilterClean() throws Exception {
-		Flow flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-		testTransactionManager.commitTransaction();
-
-		testTransactionManager.beginTransaction();
-		for (FlowPart part : flow.getParts()) {
-			assertTrue(flow.filter(part.getPath()));
-			assertTrue(part.getFilterCount() == 1);
-		}
-
-	}
-
-	@Test
-	public void testGetLatestUpdateIsNotNull() throws IOException {
-		Flow flow = createFlowWith4Parts(FlowStatus.CLEAN);
-		flow.setAckCountExpected(4);
-		assertTrue(flow.getLatestUpdate() != null);
-
-		flow.acknowledge("0.1.1", true);
-		assertTrue(flow
-				.getPartDuration(flow.getPart("0.0.1", FlowStatus.CLEAN)) >= 0);
-
+	public void testGetLatestUpdate() throws IOException {
+		Flow flow = createFlow("blah");
+		Date date1 = new Date(1000L);
+		flow.setCreationTime(date1);
+		assertEquals(date1, flow.getLatestUpdate());
+        Date date2 = new Date(2000L);
+        flow.setReplayTime(date2);
+        assertEquals(date2, flow.getLatestUpdate());
 	}
 	
-	private Flow createFlowWith4Parts(FlowStatus status) throws IOException {
-		String packet = "Initial Packet";
-		Flow flow = persistFlow(packet);
-		flow.getParts().clear();
-		int cleans = flow.getStatusCount(status);
-		assertTrue(cleans == 0);
-		// also create the part
-		flow.update("0.0.0", status);
-		cleans = flow.getStatusCount(status);
-		assertTrue(cleans == 1);
-
-		flow.update("0.0.1", status);
-		cleans = flow.getStatusCount(status);
-		assertTrue(cleans == 2);
-
-		flow.update("0.1.0", status);
-		cleans = flow.getStatusCount(status);
-		assertTrue(cleans == 3);
-
-		flow.update("0.1.1", status);
-		cleans = flow.getStatusCount(status);
-		assertTrue(cleans == 4);
-		return flow;
-	}
-
-	private Flow persistFlow(String packet) throws IOException {
-		Flow flow = Flows.createFlow(packet);
-		flowRepository.persist(flow);
-		return flow;
-	}
 	@Test
-    public void testGetPartsByPath() throws IOException {
-        Flow flow = this.createFlowWith4Parts(FlowStatus.CLEAN);
-        flow.setAckCountExpected(4);
-        assertTrue("This method must not create parts", flow
-                .getPart("non-existing-part-path") == null);
-        assertTrue("This method must be null friendly",
-                flow.getPart(null) == null);
-        for (FlowPart part : flow.getParts()) {
-            assertTrue("Must return the exising parts correctly", part
-                    .equals(flow.getPart(part.getPath())));
-        }
-
+    public void testGetNullPart() throws IOException {
+        Flow flow = createFlow("blah");
+        assertNull(flow.getPart("non-existing-part-path"));
+        assertNull(flow.getPart(null));
     }
+	
 }

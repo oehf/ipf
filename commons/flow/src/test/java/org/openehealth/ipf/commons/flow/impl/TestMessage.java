@@ -59,9 +59,6 @@ public class TestMessage implements ManagedMessage {
         this.history = history;
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.flow.ManagedMessage#render()
-     */
     @Override
     public String render() {
         return "Rendered: " + implementation; 

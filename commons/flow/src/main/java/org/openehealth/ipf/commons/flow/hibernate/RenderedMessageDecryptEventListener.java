@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.flow.domain.TextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Decrypts a FlowMessage on update,load and insert.
+ * Decrypts flow (part) message text on insert, update and load.
  * 
  * @see PostUpdateEventListener
  * @see PostLoadEventListener
@@ -40,27 +40,28 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Mitko Kolev
  */
 public class RenderedMessageDecryptEventListener implements
-        PostLoadEventListener, PostInsertEventListener,
-        PostUpdateEventListener, Initializable {
+        PostLoadEventListener, 
+        PostInsertEventListener,
+        PostUpdateEventListener, 
+        Initializable {
+
+    private static final long serialVersionUID = -7516699694816986560L;
 
     @Autowired
     private StringEncryptor stringEncryptor;
 
-    public RenderedMessageDecryptEventListener() {
+    public StringEncryptor getStringEncryptor() {
+        return stringEncryptor;
     }
 
-    /**
-     * Generated
-     */
-    private static final long serialVersionUID = -7516699694816986560L;
+    public void setStringEncryptor(StringEncryptor stringEncryptor) {
+        this.stringEncryptor = stringEncryptor;
+    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.hibernate.event.PostLoadEventListener#onPostLoad(org.hibernate.event
-     * .PostLoadEvent)
-     */
+    @Override
+    public void initialize(Configuration cfg) {
+    }
+
     @Override
     public void onPostLoad(PostLoadEvent event) {
         Object entity = event.getEntity();
@@ -78,24 +79,7 @@ public class RenderedMessageDecryptEventListener implements
         decrypt(event.getEntity(), event.getId(), event.getState());
     }
 
-    public StringEncryptor getStringEncryptor() {
-        return stringEncryptor;
-    }
-
-    public void setStringEncryptor(StringEncryptor stringEncryptor) {
-        this.stringEncryptor = stringEncryptor;
-    }
-
-    /**
-     * Decrypts with the given cryptoService
-     * 
-     * @param cryptoService
-     * @param entityObject
-     * @param id
-     * @param state
-     */
     protected void decrypt(Object entityObject, Serializable id, Object[] state) {
-
         if (entityObject instanceof TextMessage) {
             TextMessage entity = (TextMessage) entityObject;
             if (state != null) {
@@ -115,19 +99,4 @@ public class RenderedMessageDecryptEventListener implements
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.avalon.framework.activity.Initializable#initialize()
-     */
-    @Override
-    public void initialize(Configuration cfg) {
-        if (stringEncryptor == null) {
-            throw new IllegalArgumentException(
-                    "Cannot initialize the RenderedMessageDecryptEventListener, "
-                            + " no org.jasypt.encryption.StringEncryptor is provided in the configuration!"
-                            + "If you do not wish to use encryption, "
-                            + "remove the listener from the configuration!");
-        }
-    }
 }

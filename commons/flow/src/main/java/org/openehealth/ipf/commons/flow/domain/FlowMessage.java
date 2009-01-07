@@ -24,10 +24,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
-import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
-import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 
 /**
@@ -35,12 +33,10 @@ import org.hibernate.search.annotations.Store;
  * 
  * @author Mitko Kolev
  */
-@Indexed(index = "messages.idx")
 @Entity
 @Table(name = "T_FLOW_MESSAGE", schema = "PLATFORM")
 public class FlowMessage implements TextMessage {
 
-    @DocumentId
     @Id
     @Column(name = "C_ID", length = 128)
     private final String identifier; // internal

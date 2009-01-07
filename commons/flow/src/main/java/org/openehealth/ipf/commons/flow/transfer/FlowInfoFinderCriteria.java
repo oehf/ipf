@@ -19,6 +19,7 @@ import java.util.Date;
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev 
  */
 public class FlowInfoFinderCriteria {
 
@@ -28,16 +29,32 @@ public class FlowInfoFinderCriteria {
     private Date from;
     private Date to;
     private int maxResults;
+    
+    private String inboundMessageQuery;
+    private String outboundMessageQuery;
 
     public FlowInfoFinderCriteria(Date from, Date to, String application) {
         this(from, to, application, DEFAULT_MAX_RESULTS);
     }
     
     public FlowInfoFinderCriteria(Date from, Date to, String application, int maxResults) {
+        this(from, to, application, maxResults, null);
+    }
+    
+    public FlowInfoFinderCriteria(Date from, Date to, String application, int maxResults, 
+            String inboundMessageQuery) {
+        this(from, to, application, maxResults, inboundMessageQuery, null);
+    }
+    
+    public FlowInfoFinderCriteria(Date from, Date to, String application, int maxResults, 
+            String inboundMessageQuery,
+            String outboundMessageQuery) {
         this.from = from;
         this.to = to;
         this.application = application;
         this.maxResults = maxResults;
+        this.inboundMessageQuery = inboundMessageQuery;
+        this.outboundMessageQuery = outboundMessageQuery;
     }
     
     public String getApplication() {
@@ -70,6 +87,22 @@ public class FlowInfoFinderCriteria {
 
     public void setMaxResults(int maxResults) {
         this.maxResults = maxResults;
+    }
+
+    public String getInboundMessageQuery() {
+        return inboundMessageQuery;
+    }
+
+    public void setInboundMessageQuery(String inboundMessageQuery) {
+        this.inboundMessageQuery = inboundMessageQuery;
+    }
+    
+    public String getOutboundMessageQuery() {
+        return outboundMessageQuery;
+    }
+
+    public void setOutboundMessageQuery(String outboundMessageQuery) {
+        this.outboundMessageQuery = outboundMessageQuery;
     }
     
 }

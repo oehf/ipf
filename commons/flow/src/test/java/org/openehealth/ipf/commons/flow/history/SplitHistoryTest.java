@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,10 +35,6 @@ public class SplitHistoryTest {
 	public void setUp() throws Exception {
 		history = new SplitHistory();
 		historySplit = new SplitHistory().split(3);
-	}
-
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	@Test
@@ -73,7 +68,6 @@ public class SplitHistoryTest {
 	public void testHashcode() {
 		SplitHistory history1 = SplitHistory.parse("[(0/1)]");
 		SplitHistory history2 = SplitHistory.parse("[(0/1),(1/3)]");
-
 		assertFalse(history1.hashCode() == history2.hashCode());
 		assertTrue(history1.hashCode() == history1.hashCode());
 		assertTrue(history1.hashCode() == history.hashCode());

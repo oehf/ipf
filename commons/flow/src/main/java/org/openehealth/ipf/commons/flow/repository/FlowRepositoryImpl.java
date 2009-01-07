@@ -33,6 +33,9 @@ import org.hibernate.criterion.Restrictions;
 import org.openehealth.ipf.commons.flow.FlowException;
 import org.openehealth.ipf.commons.flow.domain.Flow;
 import org.openehealth.ipf.commons.flow.domain.FlowStatus;
+import org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback;
+import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCallback;
+import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateObjectRetrievalFailureException;
@@ -40,13 +43,21 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev 
  */
 public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepository {
 
     private static final Log LOG = LogFactory.getLog(FlowRepositoryImpl.class);
-    
+
     @Autowired(required = false)
     private SequenceRepository sequenceRepository;
+
+    @Autowired(required = false)
+    private FlowSearchCallback flowSearchCallback;
+    
+    public FlowRepositoryImpl() {
+        flowSearchCallback = new DefaultSearchCallback();
+    }
     
     @PostConstruct
     public void init() {
@@ -56,7 +67,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
         }
         sequenceRepository.initSequence();
     }
-    
+
     public void persist(Flow flow) {
         // Generate a sequence number for flow
         flow.setIdentifier(sequenceRepository.nextNumber());
@@ -73,7 +84,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
     }
 
     public Flow find(Long id) {
-        Flow flow = (Flow)getHibernateTemplate().get(Flow.class, id);
+        Flow flow = (Flow) getHibernateTemplate().get(Flow.class, id);
         if (flow == null) {
             throw new FlowException("no flow with id " + id);
         }
@@ -82,116 +93,121 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
 
     public Flow lock(Long id) {
         try {
-            return (Flow)getHibernateTemplate().load(Flow.class, id, LockMode.UPGRADE);
+            return (Flow) getHibernateTemplate().load(Flow.class, id, LockMode.UPGRADE);
         } catch (HibernateObjectRetrievalFailureException e) {
             throw new FlowException("no flow with id " + id);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<Flow> findFlows(final FlowFinderCriteria finderCriteria) {
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session) throws HibernateException {
-                return execute(createFlowsCriteria(finderCriteria), session, 
-                        finderCriteria.getMaxResults(), false);
+                return execute(finderCriteria, createFlowsCriteria(finderCriteria), session, false);
             }
-        });        
+        });
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<Flow> findErrorFlows(final FlowFinderCriteria finderCriteria) {
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session) throws HibernateException {
-                return execute(createErrorFlowsCriteria(finderCriteria), session, 
-                        finderCriteria.getMaxResults(), false);
+                return execute(finderCriteria, createErrorFlowsCriteria(finderCriteria), session, false);
             }
-        });        
+        });
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<Flow> findUnackFlows(final FlowFinderCriteria finderCriteria) {
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session) throws HibernateException {
-                return execute(createUnackFlowsCriteria(finderCriteria), session, 
-                        finderCriteria.getMaxResults(), false);
+                return execute(finderCriteria, createUnackFlowsCriteria(finderCriteria), session, false);
             }
-        });        
+        });
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<Long> findFlowIds(final FlowFinderCriteria finderCriteria) {
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session) throws HibernateException {
-                return execute(createFlowsCriteria(finderCriteria), session, 
-                        finderCriteria.getMaxResults(), true);
+                return execute(finderCriteria, createFlowsCriteria(finderCriteria), session, true);
             }
-        });        
+        });
     }
 
     @SuppressWarnings("unchecked")
     public List<Long> findErrorFlowIds(final FlowFinderCriteria finderCriteria) {
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session) throws HibernateException {
-                return execute(createErrorFlowsCriteria(finderCriteria), session, 
-                        finderCriteria.getMaxResults(), true);
+                return execute(finderCriteria, createErrorFlowsCriteria(finderCriteria), session, true);
             }
-        });        
+        });
     }
 
     @SuppressWarnings("unchecked")
     public List<Long> findUnackFlowIds(final FlowFinderCriteria finderCriteria) {
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session) throws HibernateException {
-                return execute(createUnackFlowsCriteria(finderCriteria), session, 
-                        finderCriteria.getMaxResults(), true);
+                return execute(finderCriteria, createUnackFlowsCriteria(finderCriteria), session, true);
             }
-        });        
+        });
     }
 
-    private static Object execute(DetachedCriteria detachedCriteria, Session session, 
-            int maxResults, boolean idProjection) {
-        
-        Criteria criteria = detachedCriteria.getExecutableCriteria(session);
-        
+    private Object execute(FlowFinderCriteria flowFinderCriteria,
+            DetachedCriteria flowStatusCriteria, Session session,
+            boolean idProjection) {
+
+        Criteria criteria = flowStatusCriteria.getExecutableCriteria(session);
+
         if (idProjection) {
             criteria.setProjection(Projections.id());
         }
+        
+        int maxResults = flowFinderCriteria.getMaxResults();
         if (maxResults != FlowFinderCriteria.DEFAULT_MAX_RESULTS) {
             criteria.setMaxResults(maxResults);
         }
-       
-        return criteria.list();
+
+        if (flowFinderCriteria.hasMessageQuery()) {
+            FlowSearchCriteria flowSearchCriteria = new FlowSearchCriteria();
+            flowSearchCriteria.setHibernateCriteria(criteria);
+            flowSearchCriteria.setInboundMessageQuery(flowFinderCriteria.getInboundMessageQuery());
+            flowSearchCriteria.setOutboundMessageQuery(flowFinderCriteria.getOutboundMessageQuery());
+            return flowSearchCallback.findFlows(session, flowSearchCriteria);
+        } else {
+            return criteria.list();
+        }
     }
-    
+
     private static DetachedCriteria createFlowsCriteria(FlowFinderCriteria finderCriteria) {
-        
         DetachedCriteria criteria = DetachedCriteria.forClass(Flow.class)
-            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-            .setFetchMode("parts", FetchMode.JOIN) // eager
-            .add(Restrictions.ge("creationTime", finderCriteria.getFrom()))
-            .addOrder(Order.desc("identifier"));
-        
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+                .setFetchMode("parts", FetchMode.JOIN) // eager
+                .add(Restrictions.ge("creationTime", finderCriteria.getFrom()))
+                .addOrder(Order.desc("identifier"));
+
         if (finderCriteria.getApplication() != null) {
             // constrain query to a certain application name
-            criteria.add(Restrictions.eq("application", finderCriteria.getApplication()));
+            criteria.add(Restrictions.eq("application", finderCriteria
+                    .getApplication()));
         }
         if (finderCriteria.getTo() != null) {
             // there's an upper limit to creationTime property
-            criteria.add(Restrictions.le("creationTime", finderCriteria.getTo()));
+            criteria.add(Restrictions
+                    .le("creationTime", finderCriteria.getTo()));
         }
-        
+
         return criteria;
     }
-    
+
     private static DetachedCriteria createErrorFlowsCriteria(FlowFinderCriteria finderCriteria) {
-        return createFlowsCriteria(finderCriteria)
-            .createAlias("parts", "p")
-            .add(Restrictions.eq("p.status", FlowStatus.ERROR));
+        return createFlowsCriteria(finderCriteria).createAlias("parts", "p").add(
+                Restrictions.eq("p.status", FlowStatus.ERROR));
     }
-    
+
     private static DetachedCriteria createUnackFlowsCriteria(FlowFinderCriteria finderCriteria) {
-        return createFlowsCriteria(finderCriteria)
-            .add(Restrictions.isEmpty("parts"));
+        return createFlowsCriteria(finderCriteria).add(
+                Restrictions.isEmpty("parts"));
     }
-    
+
 }

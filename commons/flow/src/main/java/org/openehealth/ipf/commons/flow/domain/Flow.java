@@ -48,6 +48,7 @@ import static org.openehealth.ipf.commons.flow.transfer.FlowInfo.ACK_COUNT_EXPEC
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev 
  */
 @Indexed(index="messages.idx")
 @Entity
@@ -232,14 +233,17 @@ public class Flow {
         }
         return null;
     }
+
+    FlowMessage getFlowMessage() {
+        return flowMessage;
+    }
     
     /**
-     * 
      * Reads the readable text associated with the flow packet from the
      * database.
      * 
      * @return The readable text of the flow packet. If such does not exist,
-     *         returns null.
+     *         returns <code>null</code>.
      */
     public String getFlowMessageText() {
         if (flowMessage != null) {
@@ -480,8 +484,8 @@ public class Flow {
         setReplayTime(currentTime());
         incrementReplayCount();
         clearErrorStatus();
-        for(FlowPart part: getParts()){
-            if(part.getStatus().equals(FlowStatus.ERROR)){
+        for (FlowPart part: getParts()){
+            if (part.getStatus().equals(FlowStatus.ERROR)){
                 part.setFlowPartMessageText(null);
             }
         }
