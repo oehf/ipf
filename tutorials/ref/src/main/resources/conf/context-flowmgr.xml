@@ -52,9 +52,17 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
   <!--  Flow Processors                                                   -->
   <!-- ================================================================== -->
 
-  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor" />
-  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor" />
-  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowErrorProcessor" />
+  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor">
+    <property name="messageRenderer" ref="messageRenderer" />
+  </bean>
+
+  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor">
+    <property name="messageRenderer" ref="messageRenderer" />
+  </bean>
+
+  <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowErrorProcessor">
+    <property name="messageRenderer" ref="messageRenderer" />
+  </bean>
 
   <!-- ================================================================= -->
   <!--  Repositories                                                     -->
@@ -218,4 +226,12 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
   <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener"/>
   <bean id="flowSearchCallback" class="org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback" />
    
+  <!-- ================================================================== -->
+  <!--  Message renderer                                                  -->
+  <!-- ================================================================== -->
+        
+  <bean id="messageRenderer"
+    class="org.openehealth.ipf.platform.camel.flow.render.SimpleMessageRenderer">
+  </bean>
+    
 </beans>

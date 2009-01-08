@@ -107,14 +107,11 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
             .dedupeFlow()
             .toFile('order/out', 'order', 'txt')
             .ackFlow()
-            .renderer('defaultRenderer')
-            
         
         builder.from('jmsDeliver:queue:transformed-books')
             .dedupeFlow()
             .toFile('order/out', 'order', 'xml')
             .ackFlow()
-            .renderer('defaultRenderer')
 
         // ------------------------------------------------------------
         //  Error handling routes
@@ -123,12 +120,10 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
         builder.from(sysErrorUri)
             .toFile('order/err/sys', 'error', 'txt')
             .nakFlow()
-            .renderer('defaultRenderer')
         
         builder.from(appErrorUri)
             .toFile('order/err/app', 'error', 'txt')
             .nakFlow()
-            .renderer('defaultRenderer')
             
     }
 
