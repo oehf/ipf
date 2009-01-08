@@ -95,6 +95,25 @@ public abstract class FlowProcessor extends DelegateProcessor implements Process
     }
 
     /**
+     * Sets the {@link PlatformMessageRenderer} used by this processor.
+     * 
+     * @param flowManager
+     *            {@link PlatformMessageRenderer} used by this processor.
+     */
+    public void setMessageRenderer(PlatformMessageRenderer messageRenderer) {
+        this.messageRenderer = messageRenderer;
+    }
+    
+    /**
+     * Returns the {@link PlatformMessageRenderer} used by this processor.
+     * 
+     * @return the {@link PlatformMessageRenderer} used by this processor.
+     */
+    public PlatformMessageRenderer getMessageRenderer() {
+        return messageRenderer;
+    }
+    
+    /**
      * Sets the {@link DataFormat} to be applied to the {@link Exchange#getIn()}
      * message body for creating a byte array representation. The original
      * message body is not replaced by the byte array. The data format is only

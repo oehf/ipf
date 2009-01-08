@@ -93,20 +93,20 @@ public abstract class FlowProcessorType extends ProcessorTypeSupport {
             .inFormat(inFormat)
             .outFormat(outFormat)
             .outConversion(outConversion)
-            .renderer(renderer(routeContext))
+            .renderer(renderer(routeContext, processor.getMessageRenderer()))
             .setProcessor(routeContext.createProcessor(this));
         return processor;
     }
     
     protected abstract FlowProcessor doCreateProcessor(RouteContext routeContext) throws Exception;
 
-    private PlatformMessageRenderer renderer(RouteContext routeContext) {
+    private PlatformMessageRenderer renderer(RouteContext routeContext, PlatformMessageRenderer defaultRenderer) {
         if (messageRenderer != null) {
             return messageRenderer;
         } else if (messageRendererBeanName != null) {
             return routeContext.lookup(messageRendererBeanName, PlatformMessageRenderer.class);
         } else {
-            return null;
+            return defaultRenderer;
         }
     }
 }
