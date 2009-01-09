@@ -28,8 +28,10 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
 	<cxf:cxfEndpoint id="soapEndpointHugeFile"
 		serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-		address="http://localhost:9000/SoapContext/HugeFilePort" endpointName="s:SoapOverHttp"
-		serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
+		address="http://localhost:9000/SoapContext/HugeFilePort" 
+		endpointName="s:SoapOverHttp"
+		serviceName="s:SOAPService" 
+		wsdlURL="hello_world.wsdl"
 		xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
 		<cxf:properties>
 			<entry key="mtom-enabled" value="true" />

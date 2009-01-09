@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.process;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.activation.DataHandler;
@@ -37,10 +38,6 @@ import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
 public class StoreProcessor extends AttachmentHandlingProcessor {
     private static final Log log = LogFactory.getLog(StoreProcessor.class);    
 
-    /** Name of the exchange property that is used to store the list of created attachments */
-    static final String CREATED_ATTACHMENTS = 
-        "org.openehealth.ipf.platform.camel.lbs.process.StoreProcessor.CreatedAttachments";
-    
     /* (non-Javadoc)
      * @see org.apache.camel.processor.DelegateProcessor#processNext(org.apache.camel.Exchange)
      */
@@ -63,9 +60,11 @@ public class StoreProcessor extends AttachmentHandlingProcessor {
                 unitOfWorkId = unitOfWork.getId();
                 unitOfWork.addSynchronization(new AttachmentCleanUp(unitOfWorkId));
             }
-                            
-            Collection<AttachmentDataSource> attachments = 
-                getAttachmentHandler().extract(unitOfWorkId, inMessage);
+                
+        	Collection<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>();
+            for (AttachmentHandler handler : getAttachmentHandlers()) {
+            	attachments.addAll(handler.extract(unitOfWorkId, inMessage));
+            }
             
             for (AttachmentDataSource attachment : attachments) {
                 inMessage.addAttachment(attachment.getId(), new DataHandler(attachment));
@@ -84,12 +83,16 @@ public class StoreProcessor extends AttachmentHandlingProcessor {
 
         @Override
         public void onComplete(Exchange exchange) {
-            getAttachmentHandler().cleanUp(unitOfWorkId, exchange.getOut());
+            for (AttachmentHandler handler : getAttachmentHandlers()) {
+            	handler.cleanUp(unitOfWorkId, exchange.getOut());
+            }
         }
 
         @Override
         public void onFailure(Exchange exchange) {
-            getAttachmentHandler().cleanUp(unitOfWorkId, exchange.getOut());
+            for (AttachmentHandler handler : getAttachmentHandlers()) {
+            	handler.cleanUp(unitOfWorkId, exchange.getOut());
+            }
         }
     }
 }

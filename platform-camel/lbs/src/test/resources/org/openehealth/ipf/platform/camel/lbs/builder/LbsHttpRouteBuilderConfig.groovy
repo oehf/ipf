@@ -31,7 +31,6 @@ import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory
 
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler
 
 import org.apache.camel.builder.RouteBuilder
 
@@ -48,17 +47,17 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
         // --------------------------------------------------------------
         //  LBS routes
         // --------------------------------------------------------------
-        AttachmentHandler handler = builder.bean(AttachmentHandler.class)
+        AttachmentFactory factory = builder.bean(AttachmentFactory.class)
 
         builder.from('jetty:http://localhost:8080/lbstest_no_extract')
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:8080/lbstest_extract')
-            .store().with(handler)
+            .store().with(factory)
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:8080/lbstest_ping')
-            .store().with(handler)
+            .store().with(factory)
             .process { Exchange exchange ->
                 def dataSource = exchange.in.getBody(AttachmentDataSource.class)
                 exchange.out.setBody(dataSource)
@@ -66,31 +65,31 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock');
             
         builder.from('jetty:http://localhost:8080/lbstest_extract_factory_via_bean')
-            .store().with('httpExtractionHandler')
+            .store().with('attachmentFactory')
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:8080/lbstest_extract_router')
-            .store().with(handler)
+            .store().with(factory)
             .setHeader('tag').constant('I was here')
-            .fetch().with(handler)
+            .fetch().with(factory)
             .to('http://localhost:8080/lbstest_receiver')
 
         builder.from('direct:lbstest_send_only')
-            .fetch().with(handler)
+            .fetch().with(factory)
             .to('http://localhost:8080/lbstest_receiver')
             
         builder.from('direct:lbstest_non_http')
-            .store().with(handler)
+            .store().with(factory)
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:8080/lbstest_receiver')
-            .store().with(handler)
+            .store().with(factory)
             .to('mock:mock')
             
         
         // Example routes only tested with groovy
         builder.from('jetty:http://localhost:8080/lbstest_example1')
-            .store().with(handler)
+            .store().with(factory)
             .process { Exchange exchange ->
                 def reader = new BufferedReader(new InputStreamReader(exchange.in.getBody(InputStream.class)))
                 try {
@@ -109,7 +108,7 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:8080/lbstest_example2')
-            .store().with(handler)
+            .store().with(factory)
             .process { Exchange exchange ->
                 exchange.in.attachments.each {
                     if (it.value.contentType.startsWith('text/plain')) {
@@ -120,14 +119,14 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:8080/lbstest_example3')
-            .store().with(handler)
+            .store().with(factory)
             .process { Exchange exchange ->
                 def attachmentFactory = builder.bean(AttachmentFactory.class, 'attachmentFactory') 
                 def inputStream = new ByteArrayInputStream('hello world'.bytes)
                 def attachment = attachmentFactory.createAttachment(exchange.unitOfWork.id, 'text/xml', null, null, inputStream)
                 exchange.in.addAttachment('hello', new DataHandler(attachment))
             }
-            .fetch().with(handler)
+            .fetch().with(factory)
             .to('http://localhost:8080/lbstest_receiver')
             
         builder.from('mina:tcp://localhost:6125?sync=true&codec=mllpStoreCodec')

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.lbs.http;
+package org.openehealth.ipf.platform.camel.lbs.process;
 
 import static org.apache.commons.lang.Validate.notNull;
 
@@ -41,7 +41,6 @@ import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.io.IOUtils;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
 
 /**
  * A handler for attachments contained in an Http message.
@@ -49,7 +48,7 @@ import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
  * This handler can extract multipart messages
  * @author Jens Riemschneider
  */
-public class HttpAttachmentHandler implements AttachmentHandler {
+class HttpAttachmentHandler implements AttachmentHandler {
     private AttachmentFactory attachmentFactory;
 
     /**
@@ -70,7 +69,8 @@ public class HttpAttachmentHandler implements AttachmentHandler {
         try {
             HttpServletRequest request = message.getBody(HttpServletRequest.class);
             if (request != null) {
-                Collection<AttachmentDataSource> attachments = extract(unitOfWorkId, request);
+            	String subUnit = getSubUnit(unitOfWorkId);
+                Collection<AttachmentDataSource> attachments = extract(subUnit, request);
                 message.setBody(attachments.size() == 1 ? attachments.iterator().next() : "");
                 return attachments;
             }
@@ -82,7 +82,11 @@ public class HttpAttachmentHandler implements AttachmentHandler {
         return Collections.emptyList();
     }
 
-    /* (non-Javadoc)
+    private String getSubUnit(String unitOfWorkId) {
+		return unitOfWorkId + ".http";
+	}
+
+	/* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler#integrate(org.apache.camel.Message, java.util.Map)
      */
     @Override
@@ -100,21 +104,22 @@ public class HttpAttachmentHandler implements AttachmentHandler {
      */
     @Override
     public void cleanUp(String unitOfWorkId, Message message) {
-        Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(unitOfWorkId);
+    	String subUnit = getSubUnit(unitOfWorkId);    	
+        Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(subUnit);
         AttachmentDataSource requiredAttachment = getRequiredAttachment(message);
         if (requiredAttachment != null) {
             attachments.remove(requiredAttachment);
-            deleteAttachments(unitOfWorkId, attachments);
-            attachmentFactory.deleteAttachmentDelayed(unitOfWorkId, requiredAttachment);
+            deleteAttachments(subUnit, attachments);
+            attachmentFactory.deleteAttachmentDelayed(subUnit, requiredAttachment);
         }
         else {
-            deleteAttachments(unitOfWorkId, attachments);
+            deleteAttachments(subUnit, attachments);
         }
     }
 
-    private void deleteAttachments(String unitOfWorkId, Collection<AttachmentDataSource> attachments) {
+    private void deleteAttachments(String subUnit, Collection<AttachmentDataSource> attachments) {
         for (AttachmentDataSource attachment : attachments) {                    
-            attachmentFactory.deleteAttachment(unitOfWorkId, attachment);
+            attachmentFactory.deleteAttachment(subUnit, attachment);
         }
     }    
     
@@ -225,36 +230,36 @@ public class HttpAttachmentHandler implements AttachmentHandler {
         }
     }
 
-    private Collection<AttachmentDataSource> extract(String unitOfWorkId, HttpServletRequest request) throws Exception {
+    private Collection<AttachmentDataSource> extract(String subUnit, HttpServletRequest request) throws Exception {
         if (ServletFileUpload.isMultipartContent(request)) {            
-            return extractFromMultipart(unitOfWorkId, request);
+            return extractFromMultipart(subUnit, request);
         }
-        return extractFromSingle(unitOfWorkId, request);
+        return extractFromSingle(subUnit, request);
     }
 
-    private List<AttachmentDataSource> extractFromSingle(String unitOfWorkId, HttpServletRequest request) throws Exception {
+    private List<AttachmentDataSource> extractFromSingle(String subUnit, HttpServletRequest request) throws Exception {
         List<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>();
-        handleAttachment(unitOfWorkId, attachments, 
+        handleAttachment(subUnit, attachments, 
                 request.getContentType(), request.getPathTranslated(), null, request.getInputStream());        
         return attachments;
     }
 
-    private List<AttachmentDataSource> extractFromMultipart(String unitOfWorkId, HttpServletRequest request) throws Exception {
+    private List<AttachmentDataSource> extractFromMultipart(String subUnit, HttpServletRequest request) throws Exception {
         List<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>();
         ServletFileUpload upload = new ServletFileUpload(null);
         FileItemIterator iter = upload.getItemIterator(request);
         while (iter.hasNext()) {
-            extractFromSinglePart(unitOfWorkId, attachments, iter);
+            extractFromSinglePart(subUnit, attachments, iter);
         }
         
         return attachments;
     }
 
-    private void extractFromSinglePart(String unitOfWorkId, List<AttachmentDataSource> attachments, FileItemIterator iter) throws Exception {        
+    private void extractFromSinglePart(String subUnit, List<AttachmentDataSource> attachments, FileItemIterator iter) throws Exception {        
         FileItemStream next = iter.next();
         InputStream inputStream = next.openStream();
         try {
-            handleAttachment(unitOfWorkId, attachments, 
+            handleAttachment(subUnit, attachments, 
                     next.getContentType(), next.getName(), next.getFieldName(), inputStream);
         }
         finally {
@@ -262,11 +267,11 @@ public class HttpAttachmentHandler implements AttachmentHandler {
         }
     }
 
-    private void handleAttachment(String unitOfWorkId, List<AttachmentDataSource> attachments, 
+    private void handleAttachment(String subUnit, List<AttachmentDataSource> attachments, 
             String contentType, String name, String id, InputStream inputStream) throws IOException {
         
         AttachmentDataSource attachment = 
-            attachmentFactory.createAttachment(unitOfWorkId, contentType, name, id, inputStream);
+            attachmentFactory.createAttachment(subUnit, contentType, name, id, inputStream);
         
         attachments.add(attachment);
     }

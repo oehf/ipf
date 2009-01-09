@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.camel.Processor;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.spi.RouteContext;
+import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
 import org.openehealth.ipf.platform.camel.core.model.ProcessorTypeSupport;
 import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
 import org.openehealth.ipf.platform.camel.lbs.process.FetchProcessor;
@@ -36,9 +37,9 @@ import org.openehealth.ipf.platform.camel.lbs.process.FetchProcessor;
 public class FetchProcessorType extends ProcessorTypeSupport {
 
     private List<ProcessorType<?>> outputs = new ArrayList<ProcessorType<?>>();
-    
-    private AttachmentHandler handler;
-    private String handlerBean;
+
+    private AttachmentFactory factory;
+    private String factoryBeanName;
     
     /**
      * Sets the {@link AttachmentHandler} of the processor.
@@ -53,14 +54,15 @@ public class FetchProcessorType extends ProcessorTypeSupport {
      * This method or {@link #with(String)} must be called at least once.
      * Otherwise an {@link IllegalArgumentException} is thrown when creating
      * the route.
-     *  
+     * <p>
+     * This method can be called multiple times to add multiple handlers.
      * @param handler
      *          the handler for integrating attachments
      * @return this type instance for usage with a fluent API
      */
-    public FetchProcessorType with(AttachmentHandler handler) {
-        notNull(handler, "handler cannot be null");
-        this.handler = handler;
+    public FetchProcessorType with(AttachmentFactory factory) {
+        notNull(factory, "factory cannot be null");
+        this.factory = factory;
         return this;
     }
     
@@ -76,14 +78,15 @@ public class FetchProcessorType extends ProcessorTypeSupport {
      * This method or {@link #with(AttachmentHandler)} must be called at 
      * least once. Otherwise an {@link IllegalArgumentException} is thrown when 
      * creating the route.
-     *  
+     * <p>
+     * This method can be called multiple times to add multiple handlers.
      * @param handlerBeanName
      *          the bean name of the handler for integrating attachments
      * @return this type instance for usage with a fluent API
      */
-    public FetchProcessorType with(String handlerBeanName) {
-        notNull(handlerBeanName, "handlerBeanName cannot be null");
-        this.handlerBean = handlerBeanName;
+    public FetchProcessorType with(String factoryBeanName) {
+        notNull(factoryBeanName, "factoryBeanName cannot be null");
+        this.factoryBeanName = factoryBeanName;
         return this;
     }
     
@@ -95,16 +98,17 @@ public class FetchProcessorType extends ProcessorTypeSupport {
         FetchProcessor fetcher = new FetchProcessor();
 
         fetcher.setProcessor(routeContext.createProcessor(this));
-                
-        if (handler == null) {
-            handler = routeContext.lookup(handlerBean, AttachmentHandler.class);
+
+        if (factoryBeanName != null) {
+            factory = routeContext.lookup(factoryBeanName, AttachmentFactory.class);
         }
         
-        if (handler == null) {
-            throw new IllegalStateException("attachment handler must be set via handleBy()");
+        if (factory == null) {
+            throw new IllegalStateException("attachment factory must be set via with()");
         }
 
-        fetcher.with(handler);
+        fetcher.with(factory);
+        
         return fetcher;
     }
     
@@ -121,7 +125,7 @@ public class FetchProcessorType extends ProcessorTypeSupport {
      */
     @Override
     public String toString() {
-        return String.format("{%1$s: handler=%2$s, handlerBean=%3$s}",
-                getClass().getSimpleName(), handler, handlerBean);
+        return String.format("{%1$s: factory=%2$s, factoryBeanName=%3$s}",
+                getClass().getSimpleName(), factory, factoryBeanName);
     }
 }

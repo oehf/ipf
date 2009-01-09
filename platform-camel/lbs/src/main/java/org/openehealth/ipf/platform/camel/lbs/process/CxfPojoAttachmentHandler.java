@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.lbs.cxf;
+package org.openehealth.ipf.platform.camel.lbs.process;
 
 import static org.apache.commons.lang.Validate.notNull;
 
@@ -33,7 +33,6 @@ import org.apache.camel.NoTypeConversionAvailableException;
 import org.apache.cxf.message.MessageContentsList;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
 
 /**
  * A handler for attachments contained in a CXF Soap POJO message.
@@ -42,7 +41,7 @@ import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
  * <code>POJO</code>. Can be used with SwA and MTOM.
  * @author Jens Riemschneider
  */
-public class CxfPojoAttachmentHandler implements AttachmentHandler {
+class CxfPojoAttachmentHandler implements AttachmentHandler {
     private static final String ATTACHMENT_ID_PARAM_PREFIX = "org.openehealth.ipf.platform.camel.lbs.cxf.CxfPojoAttachmentHandler.Param.";
     
     private AttachmentFactory attachmentFactory;
@@ -62,12 +61,21 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
      */
     @Override
     public Collection<AttachmentDataSource> extract(String unitOfWorkId, Message message) throws Exception {
-        return extractFromParams(unitOfWorkId, message, getParams(message));
+    	String subUnit = getSubUnit(unitOfWorkId);
+        return extractFromParams(subUnit, message, getParams(message));
     }
 
-    private List<Object> getParams(Message message) {
+    private String getSubUnit(String unitOfWorkId) {
+		return unitOfWorkId + ".cxf";
+	}
+
+	private List<Object> getParams(Message message) {
         try {
-            return message.getBody(MessageContentsList.class);            
+            MessageContentsList params = message.getBody(MessageContentsList.class);
+            if (params == null) {
+                return Collections.emptyList();
+            }
+            return params;            
         }
         catch (NoTypeConversionAvailableException e) {
             // This is ok. This message is not intended to be processed by this handler
@@ -76,13 +84,13 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
         return Collections.emptyList();
     }
 
-    private Collection<AttachmentDataSource> extractFromParams(String unitOfWorkId, Message message, List<Object> params) throws IOException {
+    private Collection<AttachmentDataSource> extractFromParams(String subUnit, Message message, List<Object> params) throws IOException {
         List<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>(); 
         for (int idx = 0; idx < params.size(); ++idx) {
             Object param = params.get(idx);
             if (param instanceof DataHandler) {
                 DataHandler dataHandler = (DataHandler) param;
-                AttachmentDataSource dataSource = extractFromDataHandler(unitOfWorkId, dataHandler, idx);
+                AttachmentDataSource dataSource = extractFromDataHandler(subUnit, dataHandler, idx);
                 attachments.add(dataSource);
                 params.set(idx, new DataHandler(dataSource));
             }
@@ -90,7 +98,7 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
                 Holder holder = (Holder) param;
                 if (holder.value instanceof DataHandler) {
                     DataHandler dataHandler = (DataHandler) holder.value;
-                    AttachmentDataSource dataSource = extractFromDataHandler(unitOfWorkId, dataHandler, idx);
+                    AttachmentDataSource dataSource = extractFromDataHandler(subUnit, dataHandler, idx);
                     attachments.add(dataSource);
                     holder.value = new DataHandler(dataSource);
                 }
@@ -99,12 +107,12 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
         return attachments;
     }
 
-    private AttachmentDataSource extractFromDataHandler(String unitOfWorkId, DataHandler handler, int paramIdx) throws IOException {
+    private AttachmentDataSource extractFromDataHandler(String subUnit, DataHandler handler, int paramIdx) throws IOException {
         InputStream inputStream = handler.getInputStream();
         try {
             String contentType = handler.getContentType();
             String id = ATTACHMENT_ID_PARAM_PREFIX + paramIdx;
-            return attachmentFactory.createAttachment(unitOfWorkId, contentType, null, id, inputStream);
+            return attachmentFactory.createAttachment(subUnit, contentType, null, id, inputStream);
         }
         finally {
             inputStream.close();
@@ -124,16 +132,17 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
      */
     @Override
     public void cleanUp(String unitOfWorkId, Message message) {
-        Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(unitOfWorkId);
+    	String subUnit = getSubUnit(unitOfWorkId);
+        Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(subUnit);
         Collection<AttachmentDataSource> requiredAttachments = getRequiredAttachments(message);
         attachments.removeAll(requiredAttachments);
         
         for (AttachmentDataSource attachment : attachments) {                    
-            attachmentFactory.deleteAttachment(unitOfWorkId, attachment);
+            attachmentFactory.deleteAttachment(subUnit, attachment);
         }
         
         for (AttachmentDataSource attachment : requiredAttachments) {                    
-            attachmentFactory.deleteAttachmentDelayed(unitOfWorkId, attachment);
+            attachmentFactory.deleteAttachmentDelayed(subUnit, attachment);
         }
     }    
     

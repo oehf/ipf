@@ -50,7 +50,6 @@ import org.openehealth.ipf.commons.lbs.store.FlatFileSystemLayout;
 import org.openehealth.ipf.commons.lbs.store.FlatUriUuidConversion;
 import org.openehealth.ipf.commons.lbs.store.UuidUriConversionStrategy;
 import org.openehealth.ipf.platform.camel.lbs.builder.RouteBuilder;
-import org.openehealth.ipf.platform.camel.lbs.cxf.CxfPojoAttachmentHandler;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -89,7 +88,7 @@ public class LbsCxfHugeFileTest {
     public static final long CONTENT_SIZE = 1024 * 1024 * 100 + 5;
     private File baseDir;
 
-    private CxfPojoAttachmentHandler handler;
+    private AttachmentFactory factory;
 
     private DiskStore store;
 
@@ -106,8 +105,7 @@ public class LbsCxfHugeFileTest {
         FileSystemLayoutStrategy layout = new FlatFileSystemLayout(baseDir);
         UuidUriConversionStrategy conversion = new FlatUriUuidConversion(baseUri);
         store = new DiskStore(layout, conversion);
-        AttachmentFactory factory = new AttachmentFactory(store, "default");
-        handler = new CxfPojoAttachmentHandler(factory);
+        factory = new AttachmentFactory(store, "default");
 
         URL wsdlResource = getClass().getClassLoader().getResource("hello_world.wsdl");
         SOAPService service = new SOAPService(wsdlResource);
@@ -136,7 +134,7 @@ public class LbsCxfHugeFileTest {
             @Override
             public void configure() throws Exception {
                 from("cxf:bean:soapEndpointHugeFile?dataFormat=POJO")
-                    .intercept(store().with(handler))
+                    .intercept(store().with(factory))
                     .process(new Processor() {
                         @Override
                         public void process(Exchange exchange) throws Exception {                            

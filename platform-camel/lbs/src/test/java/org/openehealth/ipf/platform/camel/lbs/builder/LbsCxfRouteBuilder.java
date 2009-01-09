@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.builder;
 
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
+import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
 import org.openehealth.ipf.platform.camel.lbs.process.cxf.AbstractLbsCxfTest;
 
 /**
@@ -25,38 +25,38 @@ public class LbsCxfRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        AttachmentHandler handler = bean(AttachmentHandler.class);
+        AttachmentFactory factory = bean(AttachmentFactory.class);
         
         from("cxf:bean:soapEndpointNoExtract?dataFormat=POJO") 
             .to("bean:serviceBean?methodName=processSOAP");
         
         from("cxf:bean:soapEndpointExtract?dataFormat=POJO")
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("bean:serviceBean?methodName=processSOAP")
-            .intercept(store().with(handler));
+            .intercept(store().with(factory));
         
         from("cxf:bean:soapEndpointExtractRouter?dataFormat=POJO")
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("cxf:bean:soapEndpointExtract?dataFormat=POJO")
-            .intercept(store().with(handler));
+            .intercept(store().with(factory));
 
         from("cxf:bean:soapEndpointExtractRouterRealServer?dataFormat=POJO")
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("cxf:bean:soapEndpointRealServer?dataFormat=POJO")
-            .intercept(store().with(handler));
+            .intercept(store().with(factory));
         
         from("direct:cxflbs")
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("mock:mock")
-            .intercept(store().with(handler));
+            .intercept(store().with(factory));
 
         from("cxf:bean:soapEndpointExtractSwA?dataFormat=POJO")
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("bean:serviceBean?methodName=processSOAP")
-            .intercept(store().with(handler));
+            .intercept(store().with(factory));
     }
 }

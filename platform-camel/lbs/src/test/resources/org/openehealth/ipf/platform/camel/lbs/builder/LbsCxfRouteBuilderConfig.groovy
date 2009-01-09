@@ -34,7 +34,6 @@ import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory
 
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler
 import org.openehealth.ipf.platform.camel.lbs.process.cxf.AbstractLbsCxfTest
 
 import org.apache.camel.builder.RouteBuilder
@@ -48,43 +47,43 @@ class LbsCxfRouteBuilderConfig implements RouteBuilderConfig {
         
         builder.errorHandler(builder.noErrorHandler())
         
-        AttachmentHandler handler = builder.bean(AttachmentHandler.class)
+        AttachmentFactory factory = builder.bean(AttachmentFactory.class)
         
         builder.from('cxf:bean:soapEndpointNoExtract') 
             .to('bean:serviceBean?methodName=processSOAP')
         
         builder.from('cxf:bean:soapEndpointExtract?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with(handler)
+            .store().with(factory)
             .to('bean:serviceBean?methodName=processSOAP')
-            .store().with(handler)
+            .store().with(factory)
         
         builder.from('cxf:bean:soapEndpointExtractRouter?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with(handler)
+            .store().with(factory)
             .to('cxf:bean:soapEndpointExtract?dataFormat=POJO')
-            .store().with(handler)
+            .store().with(factory)
 
         builder.from('cxf:bean:soapEndpointExtractRouterRealServer?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with(handler)
+            .store().with(factory)
             .to('cxf:bean:soapEndpointRealServer?dataFormat=POJO')
-            .store().with(handler)
+            .store().with(factory)
         
         builder.from('direct:cxflbs')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with(handler)
+            .store().with(factory)
             .to('mock:mock')
-            .store().with(handler)
+            .store().with(factory)
 
         builder.from('cxf:bean:soapEndpointExtractSwA?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with(handler)
+            .store().with(factory)
             .to("bean:serviceBean?methodName=processSOAP")
-            .store().with(handler)
+            .store().with(factory)
             
         builder.from('cxf:bean:soapEndpointExample1')
-            .store().with(handler)
+            .store().with(factory)
             .process { Exchange exchange ->
                 def params = exchange.in.getBody(List.class)
                 def reader = new BufferedReader(new InputStreamReader(params.get(1).value.inputStream))

@@ -12,13 +12,16 @@
 	-->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://activemq.apache.org/camel/schema/spring"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:camel="http://activemq.apache.org/camel/schema/spring"
 	xmlns:cxf="http://activemq.apache.org/camel/schema/cxfEndpoint"
+    xmlns:cxfcore="http://cxf.apache.org/core"
 	xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://activemq.apache.org/camel/schema/cxfEndpoint
 http://activemq.apache.org/camel/schema/cxfEndpoint/camel-cxf.xsd
+http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
 http://activemq.apache.org/camel/schema/spring 
 http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
@@ -29,12 +32,16 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 	<!--
 		==================================================================
 	-->
-	<!--
-		Route Setup
-	-->
+	<!-- Route Setup -->
 	<!--
 		==================================================================
 	-->
+
+	<cxfcore:bus>
+		<cxfcore:features>
+			<cxfcore:logging />
+		</cxfcore:features>
+	</cxfcore:bus>
 
 	<cxf:cxfEndpoint id="soapEndpointNoExtract"
 		serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
@@ -46,25 +53,25 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 		</cxf:properties>
 	</cxf:cxfEndpoint>
 
-    <cxf:cxfEndpoint id="soapEndpointExtract"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/ExtractPort" endpointName="s:SoapOverHttp"
-        serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
-        xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
-        <cxf:properties>
-            <entry key="mtom-enabled" value="true" />
-        </cxf:properties>
-    </cxf:cxfEndpoint>
+	<cxf:cxfEndpoint id="soapEndpointExtract"
+		serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+		address="http://localhost:9000/SoapContext/ExtractPort" endpointName="s:SoapOverHttp"
+		serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
+		xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
+		<cxf:properties>
+			<entry key="mtom-enabled" value="true" />
+		</cxf:properties>
+	</cxf:cxfEndpoint>
 
-    <cxf:cxfEndpoint id="soapEndpointPing"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/PingPort" endpointName="s:SoapOverHttp"
-        serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
-        xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
-        <cxf:properties>
-            <entry key="mtom-enabled" value="true" />
-        </cxf:properties>
-    </cxf:cxfEndpoint>
+	<cxf:cxfEndpoint id="soapEndpointPing"
+		serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+		address="http://localhost:9000/SoapContext/PingPort" endpointName="s:SoapOverHttp"
+		serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
+		xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
+		<cxf:properties>
+			<entry key="mtom-enabled" value="true" />
+		</cxf:properties>
+	</cxf:cxfEndpoint>
 
 	<cxf:cxfEndpoint id="soapEndpointExtractRouter"
 		serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
@@ -124,9 +131,5 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 		<constructor-arg ref="largeBinaryStore" />
 		<constructor-arg value="unnamed" />
 	</bean>
-
-    <bean id="cxfExtractionHandler" class="org.openehealth.ipf.platform.camel.lbs.cxf.CxfPojoAttachmentHandler">
-        <constructor-arg ref="attachmentFactory"/>
-    </bean>
 
 </beans>

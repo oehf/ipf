@@ -53,7 +53,9 @@ public class FetchProcessor extends AttachmentHandlingProcessor {
         if (exchange.getPattern().isInCapable() && hasAttachmentHandler()) {
             Message inMessage = exchange.getIn();            
             Collection<AttachmentDataSource> attachments = getAttachments(inMessage);            
-            getAttachmentHandler().integrate(inMessage, attachments);
+            for (AttachmentHandler handler : getAttachmentHandlers()) {
+                handler.integrate(inMessage, attachments);
+            }
             
             log.info("integrated attachments: " + attachments);
         }

@@ -66,10 +66,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
   <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore"/>
   
-  <bean id="httpExtractionHandler" class="org.openehealth.ipf.platform.camel.lbs.http.HttpAttachmentHandler">
-  	<constructor-arg ref="attachmentFactory"/>
-  </bean>
-  
   <bean id="attachmentFactory" class="org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory">
 	<constructor-arg ref="largeBinaryStore"/>
 	<constructor-arg value="unnamed"/>

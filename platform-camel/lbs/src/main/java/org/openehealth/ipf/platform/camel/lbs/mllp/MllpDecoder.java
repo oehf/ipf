@@ -156,7 +156,7 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
         public SessionContent(AttachmentFactory attachmentFactory) {
             notNull(attachmentFactory, "attachmentFactory cannot be null");
             this.attachmentFactory = attachmentFactory;
-            this.unitOfWorkId = new UuidGenerator().generateId();
+            this.unitOfWorkId = new UuidGenerator().generateId() + ".mllp";
         }
         
         public void resetMessage() {

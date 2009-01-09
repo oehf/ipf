@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.lbs.builder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
+import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
 
 /**
  * @author Jens Riemschneider
@@ -27,7 +27,7 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        AttachmentHandler handler = bean(AttachmentHandler.class);
+        AttachmentFactory factory = bean(AttachmentFactory.class);
 
         errorHandler(deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
         
@@ -35,11 +35,11 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
             .to("mock:mock");
         
         from("jetty:http://localhost:8080/lbstest_extract")
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("mock:mock");
         
         from("jetty:http://localhost:8080/lbstest_ping")
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .process(new Processor() {
                 @Override
                 public void process(Exchange exchange) throws Exception {
@@ -51,26 +51,26 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
             .to("mock:mock");
         
         from("jetty:http://localhost:8080/lbstest_extract_factory_via_bean")
-            .intercept(store().with(bean(AttachmentHandler.class, "httpExtractionHandler")))
+            .intercept(store().with(bean(AttachmentFactory.class, "attachmentFactory")))
             .to("mock:mock");
         
         from("jetty:http://localhost:8080/lbstest_extract_router")
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .setHeader("tag", constant("I was here"))
-            .intercept(fetch().with(handler))
+            .intercept(fetch().with(factory))
             .to("http://localhost:8080/lbstest_receiver");      
 
         from("direct:lbstest_send_only")
-            .intercept(fetch().with(handler))
+            .intercept(fetch().with(factory))
             .to("http://localhost:8080/lbstest_receiver");
         
         
         from("direct:lbstest_non_http")
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("mock:mock");
 
         from("jetty:http://localhost:8080/lbstest_receiver")
-            .intercept(store().with(handler))
+            .intercept(store().with(factory))
             .to("mock:mock");
     }
 }
