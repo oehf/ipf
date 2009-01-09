@@ -24,7 +24,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-lbs</artifactId>
     <name>platform-camel-lbs</name>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -32,88 +32,10 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <version>1.6-SNAPSHOT</version>
     </parent>
     
-    <properties>
-  		<easymock-version>2.4</easymock-version>
-  		<ipf-version>1.6-SNAPSHOT</ipf-version> 
-    </properties>
-    
-    <dependencies>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-test</artifactId>
-            <version>${pom.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-lbs</artifactId>
-            <version>${pom.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>        
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-lbs</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-test</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <scope>test</scope>
-            <type>test-jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cxf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hl7</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mina</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-        </dependency> 
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>${groovy-version}</version>
-        </dependency>
-		<dependency>
-		    <groupId>org.easymock</groupId>
-		    <artifactId>easymock</artifactId>
-		    <scope>test</scope>
-		</dependency> 
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>core</module>
+        <module>cxf</module>
+        <module>http</module>
+        <module>mina</module>
+    </modules>
 </project>
