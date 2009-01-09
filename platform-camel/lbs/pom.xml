@@ -111,5 +111,9 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 		    <artifactId>easymock</artifactId>
 		    <scope>test</scope>
 		</dependency> 
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
     </dependencies>
 </project>
