@@ -73,7 +73,7 @@ public class DiskStore implements LargeBinaryStore {
         this.fileSystemLayout = fileSystemLayout;
         this.uuidUriConversion = uuidUriConversion;
         
-        log.info("Created: " + this);
+        log.debug("Created: " + this);
     }
     
     /**
@@ -168,7 +168,7 @@ public class DiskStore implements LargeBinaryStore {
             throw new ResourceIOException("Could not delete: " + file.getAbsolutePath());
         }
         
-        log.info("deleted resource: " + resourceUri);
+        log.debug("deleted resource: " + resourceUri);
     }
 
     /* (non-Javadoc)
@@ -262,7 +262,7 @@ public class DiskStore implements LargeBinaryStore {
         writeToDisk(uuid, binary);
         URI resourceUri = uuidUriConversion.toUri(uuid);
         
-        log.info("added resource: " + resourceUri);
+        log.debug("added resource: " + resourceUri);
         return resourceUri;
     }
     

@@ -55,7 +55,7 @@ public class MemoryStore implements LargeBinaryStore {
      * Constructs the memory store 
      */
     public MemoryStore() {
-        log.info("created: " + this);
+        log.debug("created: " + this);
     }
     
     /* (non-Javadoc)
@@ -184,7 +184,7 @@ public class MemoryStore implements LargeBinaryStore {
         resources.put(uri, binary);     // Don't need putIfAbsent here because
                                         // the URI is definitely unused
         
-        log.info("added resource: uri=" + uri);
+        log.debug("added resource: uri=" + uri);
         return uri;
     }
     

@@ -99,7 +99,7 @@ final public class LargeBinaryStoreDataSource implements AttachmentCompatibleDat
         @Override
         public void close() throws IOException {
             super.close();
-            log.info("Deleting resource after closing InputStream: " + getResourceUri());
+            log.debug("Deleting resource after closing InputStream: " + getResourceUri());
             delete();
         }
     }

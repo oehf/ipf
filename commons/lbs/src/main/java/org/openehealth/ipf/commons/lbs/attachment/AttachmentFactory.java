@@ -62,7 +62,7 @@ public class AttachmentFactory {
         this.defaultAttachmentId = defaultAttachmentId;
         this.unitOfWorkMap = new HashMap<String, List<AttachmentDataSource>>();
         
-        log.info("created: " + this);
+        log.debug("created: " + this);
     }
     
     /**
@@ -149,7 +149,7 @@ public class AttachmentFactory {
         attachment.delete();
         unregisterFromUnitOfWork(unitOfWorkId, attachment);
 
-        log.info("deleted attachment: " + attachment);
+        log.debug("deleted attachment: " + attachment);
     }    
     
     /**
@@ -166,7 +166,7 @@ public class AttachmentFactory {
         attachment.deleteAfterNextUsage();
         unregisterFromUnitOfWork(unitOfWorkId, attachment);
 
-        log.info("marked attachment for delayed deletion: " + attachment);
+        log.debug("marked attachment for delayed deletion: " + attachment);
     }
 
     /**
@@ -198,7 +198,7 @@ public class AttachmentFactory {
         
         registerWithUnitOfWork(unitOfWorkId, attachment);
          
-        log.info("created attachment: " + attachment);
+        log.debug("created attachment: " + attachment);
 
         return attachment;
     }
