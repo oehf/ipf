@@ -128,17 +128,17 @@
         <repository>
             <id>openehealth.releases</id>
             <name>Open eHealth Releases Repository</name>
-            <url>scp://repo.openehealth.org/data/repositories/maven2/releases</url>
+            <url>file:/data/repositories/maven2/releases</url>
         </repository>
         <snapshotRepository>
             <id>openehealth.snapshots</id>
             <name>Open eHealth Snapshots Repository</name>
-            <url>scp://repo.openehealth.org/data/repositories/maven2/snapshots</url>
+            <url>file:/data/repositories/maven2/snapshots</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <site>
             <id>openehealth.site</id>
-            <url>scp://repo.openehealth.org/data/sites</url>
+            <url>file:/data/sites</url>
         </site>
     </distributionManagement>
 
@@ -436,12 +436,6 @@
               </executions>
             </plugin>
         </plugins>
-        <!--<extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh</artifactId>
-            </extension>
-        </extensions>-->
     </build>
 
     <reporting>
