@@ -126,27 +126,27 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
     public void integrate(Message message, Collection<AttachmentDataSource> attachments) {
         // Does nothing because attachments are already integrated
     }
-
+    
     /* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler#cleanUp(java.lang.String, org.apache.camel.Message)
      */
     @Override
-    public void cleanUp(String unitOfWorkId, Message message) {
+    public void cleanUp(String unitOfWorkId, Message message, List<AttachmentDataSource> requiredAttachments) {
     	String subUnit = getSubUnit(unitOfWorkId);
         Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(subUnit);
-        Collection<AttachmentDataSource> requiredAttachments = getRequiredAttachments(message);
-        attachments.removeAll(requiredAttachments);
         
-        for (AttachmentDataSource attachment : attachments) {                    
-            attachmentFactory.deleteAttachment(subUnit, attachment);
-        }
-        
-        for (AttachmentDataSource attachment : requiredAttachments) {                    
-            attachmentFactory.deleteAttachmentDelayed(subUnit, attachment);
+        for (AttachmentDataSource attachment : attachments) {
+            if (requiredAttachments.contains(attachment)) {
+                attachmentFactory.deleteAttachmentDelayed(subUnit, attachment);
+            }
+            else {
+                attachmentFactory.deleteAttachment(subUnit, attachment);
+            }
         }
     }    
-    
-    private Collection<AttachmentDataSource> getRequiredAttachments(Message message) {
+
+    @Override
+    public Collection<? extends AttachmentDataSource> getRequiredAttachments(Message message) {
         List<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>(); 
         List<Object> params = getParams(message);
         for (Object param : params) {

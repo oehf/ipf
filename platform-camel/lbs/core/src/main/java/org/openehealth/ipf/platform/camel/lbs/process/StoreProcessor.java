@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.lbs.process;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.activation.DataHandler;
 
@@ -83,15 +84,24 @@ public class StoreProcessor extends AttachmentHandlingProcessor {
 
         @Override
         public void onComplete(Exchange exchange) {
-            for (AttachmentHandler handler : getAttachmentHandlers()) {
-            	handler.cleanUp(unitOfWorkId, exchange.getOut());
-            }
+            cleanUp(exchange);
         }
 
         @Override
         public void onFailure(Exchange exchange) {
+            cleanUp(exchange);
+        }
+
+        private void cleanUp(Exchange exchange) {
+            Message outMessage = exchange.getOut();
+            
+            List<AttachmentDataSource> requiredAttachments = new ArrayList<AttachmentDataSource>();
             for (AttachmentHandler handler : getAttachmentHandlers()) {
-            	handler.cleanUp(unitOfWorkId, exchange.getOut());
+                requiredAttachments.addAll(handler.getRequiredAttachments(outMessage));
+            }
+
+            for (AttachmentHandler handler : getAttachmentHandlers()) {
+                handler.cleanUp(unitOfWorkId, outMessage, requiredAttachments);
             }
         }
     }

@@ -48,7 +48,7 @@ import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
  * This handler can extract multipart messages
  * @author Jens Riemschneider
  */
-class HttpAttachmentHandler implements AttachmentHandler {
+public class HttpAttachmentHandler implements AttachmentHandler {
     private AttachmentFactory attachmentFactory;
 
     /**
@@ -103,26 +103,19 @@ class HttpAttachmentHandler implements AttachmentHandler {
      * @see org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler#cleanUp(java.lang.String, org.apache.camel.Message)
      */
     @Override
-    public void cleanUp(String unitOfWorkId, Message message) {
+    public void cleanUp(String unitOfWorkId, Message message, List<AttachmentDataSource> requiredAttachments) {
     	String subUnit = getSubUnit(unitOfWorkId);    	
-        Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(subUnit);
-        AttachmentDataSource requiredAttachment = getRequiredAttachment(message);
-        if (requiredAttachment != null) {
-            attachments.remove(requiredAttachment);
-            deleteAttachments(subUnit, attachments);
-            attachmentFactory.deleteAttachmentDelayed(subUnit, requiredAttachment);
-        }
-        else {
-            deleteAttachments(subUnit, attachments);
+        Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(subUnit);        
+        for (AttachmentDataSource attachment : attachments) {
+            if (requiredAttachments.contains(attachment)) {
+                attachmentFactory.deleteAttachmentDelayed(subUnit, attachment);
+            }
+            else {
+                attachmentFactory.deleteAttachment(subUnit, attachment);
+            }
         }
     }
 
-    private void deleteAttachments(String subUnit, Collection<AttachmentDataSource> attachments) {
-        for (AttachmentDataSource attachment : attachments) {                    
-            attachmentFactory.deleteAttachment(subUnit, attachment);
-        }
-    }    
-    
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
@@ -276,14 +269,16 @@ class HttpAttachmentHandler implements AttachmentHandler {
         attachments.add(attachment);
     }
 
-    private AttachmentDataSource getRequiredAttachment(Message message) {
+    @Override
+    public Collection<? extends AttachmentDataSource> getRequiredAttachments(Message message) {
         try {
-            return message.getBody(AttachmentDataSource.class);
+            return Collections.singletonList(message.getBody(AttachmentDataSource.class));
         }
         catch (NoTypeConversionAvailableException e) {
             // This is ok. This message is not intended to be processed by this handler
             // TODO: Find a way to do this without exception handling
         }
-        return null;
+        return Collections.emptyList();
     }
+
 }

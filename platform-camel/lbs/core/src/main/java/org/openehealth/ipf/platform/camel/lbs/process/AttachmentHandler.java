@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.lbs.process;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.camel.Message;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
@@ -79,6 +80,16 @@ public interface AttachmentHandler {
      *          the id of the current unit of work 
      * @param message
      *          the message that is going to be send out
+     * @param requiredAttachments 
+     *          the attachments that are still needed by the message
      */
-    void cleanUp(String unitOfWorkId, Message message);
+    void cleanUp(String unitOfWorkId, Message message, List<AttachmentDataSource> requiredAttachments);
+
+    /**
+     * Determines the attachments that are required by the given message
+     * @param message
+     *          the message to check
+     * @return the list of attachments
+     */
+    Collection<? extends AttachmentDataSource> getRequiredAttachments(Message message);
 }
