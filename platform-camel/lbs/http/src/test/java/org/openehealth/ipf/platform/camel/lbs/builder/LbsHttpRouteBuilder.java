@@ -33,14 +33,14 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
 
         errorHandler(deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
         
-        from("jetty:http://localhost:8080/lbstest_no_extract")
+        from("jetty:http://localhost:9452/lbstest_no_extract")
             .to("mock:mock");
         
-        from("jetty:http://localhost:8080/lbstest_extract")
+        from("jetty:http://localhost:9452/lbstest_extract")
             .intercept(store().with(handlers))
             .to("mock:mock");
         
-        from("jetty:http://localhost:8080/lbstest_ping")
+        from("jetty:http://localhost:9452/lbstest_ping")
             .intercept(store().with(handlers))
             .process(new Processor() {
                 @Override
@@ -53,26 +53,26 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
             .to("mock:mock");
         
         // Note: This is not available via java, only groovy. Simply make the test work
-        from("jetty:http://localhost:8080/lbstest_extract_factory_via_bean")
+        from("jetty:http://localhost:9452/lbstest_extract_factory_via_bean")
             .intercept(store().with(handlers))
             .to("mock:mock");
         
-        from("jetty:http://localhost:8080/lbstest_extract_router")
+        from("jetty:http://localhost:9452/lbstest_extract_router")
             .intercept(store().with(handlers))
             .setHeader("tag", constant("I was here"))
             .intercept(fetch().with(handlers))
-            .to("http://localhost:8080/lbstest_receiver");      
+            .to("http://localhost:9452/lbstest_receiver");      
 
         from("direct:lbstest_send_only")
             .intercept(fetch().with(handlers))
-            .to("http://localhost:8080/lbstest_receiver");
+            .to("http://localhost:9452/lbstest_receiver");
         
         
         from("direct:lbstest_non_http")
             .intercept(store().with(handlers))
             .to("mock:mock");
 
-        from("jetty:http://localhost:8080/lbstest_receiver")
+        from("jetty:http://localhost:9452/lbstest_receiver")
             .intercept(store().with(handlers))
             .to("mock:mock");
     }

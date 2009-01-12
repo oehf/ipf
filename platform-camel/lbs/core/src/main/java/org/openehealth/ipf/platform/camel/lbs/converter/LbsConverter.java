@@ -63,7 +63,7 @@ public final class LbsConverter {
      */
     @Converter
     public static InputStream toInputStream(DataSource dataSource) throws IOException {
-        log.info("converted data source to input stream: " + dataSource);
+        log.debug("converted data source to input stream: " + dataSource);
         return dataSource.getInputStream();
     }
     
@@ -80,7 +80,7 @@ public final class LbsConverter {
         InputStream inputStream = dataSource.getInputStream();
         try {
             String result = IOUtils.toString(inputStream);
-            log.info("converted data source to string: " + dataSource + " -> " + result);
+            log.debug("converted data source to string: " + dataSource + " -> " + result);
             return result;
         }
         finally {
@@ -98,7 +98,7 @@ public final class LbsConverter {
      */
     @Converter
     public static byte[] toByteArray(DataSource dataSource) throws IOException {
-        log.info("converted data source to byte[]: " + dataSource);
+        log.debug("converted data source to byte[]: " + dataSource);
         InputStream inputStream = dataSource.getInputStream();
         try {
             return IOUtils.toByteArray(inputStream);

@@ -70,7 +70,7 @@ public class StoreProcessor extends AttachmentHandlingProcessor {
                 inMessage.addAttachment(attachment.getId(), new DataHandler(attachment));
             }
             
-            log.info("extracted attachments: " + attachments);
+            log.debug("extracted attachments: " + attachments);
         }
     }
 

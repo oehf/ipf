@@ -96,6 +96,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
+            <version>${groovy-version}</version>
         </dependency>
 		<dependency>
 		    <groupId>org.easymock</groupId>

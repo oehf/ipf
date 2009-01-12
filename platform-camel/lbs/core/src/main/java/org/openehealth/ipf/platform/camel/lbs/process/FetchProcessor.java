@@ -57,7 +57,7 @@ public class FetchProcessor extends AttachmentHandlingProcessor {
                 handler.integrate(inMessage, attachments);
             }
             
-            log.info("integrated attachments: " + attachments);
+            log.debug("integrated attachments: " + attachments);
         }
     }
     

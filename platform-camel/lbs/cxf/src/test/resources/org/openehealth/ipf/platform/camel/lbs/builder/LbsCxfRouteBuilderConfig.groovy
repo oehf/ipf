@@ -81,16 +81,22 @@ class LbsCxfRouteBuilderConfig implements RouteBuilderConfig {
             .store().with('attachmentHandlers')
             
         builder.from('cxf:bean:soapEndpointExample1')
+            // Store the binaries of the operation paremeters
             .store().with('attachmentHandlers')
+            // Custom processing to find a token in a binary
             .process { Exchange exchange ->
+                // Operation parameters are contained in a list
                 def params = exchange.in.getBody(List.class)
-                def reader = new BufferedReader(new InputStreamReader(params.get(1).value.inputStream))
+                // In this example, the parameter with index 1 contains a binary
+                def inputStream = params.get(1).value.inputStream
+                def reader = new BufferedReader(new InputStreamReader(inputStream))
                 try {
                     def line = reader.readLine()
+                    // Look for the token
                     while (line != null && !line.contains('blu')) {
-                        println(line)
                         line = reader.readLine()
                     }
+                    // If found set the header
                     if (line != null) {
                         exchange.in.setHeader('tokenfound', 'yes')
                     }
@@ -102,16 +108,25 @@ class LbsCxfRouteBuilderConfig implements RouteBuilderConfig {
             .to('bean:serviceBean?methodName=processSOAP')
 
         builder.from('direct:start')
-            .process { Exchange exchange ->                
+            // Custom processor to manually create a SOAP call
+            .process { Exchange exchange ->
+                // The attachment factory can be used to create attachments manually
                 def attachmentFactory = builder.bean(AttachmentFactory.class, 'attachmentFactory') 
                 def inputStream1 = new ByteArrayInputStream('hello world'.bytes)
+            
+                // Using the unit of work from the original exchange we can ensure that the
+                // attachment is removed once the message has been processed by the route
                 def attachment1 = attachmentFactory.createAttachment(exchange.unitOfWork.id, 'text/plain', null, null, inputStream1)
                 def inputStream2 = new ByteArrayInputStream('this is me'.bytes)
                 def attachment2 = attachmentFactory.createAttachment(exchange.unitOfWork.id, 'text/plain', null, null, inputStream2)
-                def params = new MessageContentsList()
+                
+                // The list of parameters for the operation call
+                def params = new MessageContentsList()                
                 params.set(0, new Holder<String>('Hello world'))
                 params.set(1, new Holder<DataHandler>(new DataHandler(attachment1)))
                 params.set(2, new DataHandler(attachment2))
+                
+                // postMe is the operation being called
                 exchange.in.setHeader(CxfConstants.OPERATION_NAME, "postMe")
                 exchange.in.body = params
             }

@@ -55,7 +55,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
      */
     @Test
     public void testExample1() throws Exception {        
-        PostMethod method = new PostMethod("http://localhost:8080/lbstest_example1");
+        PostMethod method = new PostMethod("http://localhost:9452/lbstest_example1");
         method.setRequestEntity(new FileRequestEntity(file, "unknown/unknown"));
 
         mock.expectedMessageCount(1);
@@ -72,7 +72,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
      */
     @Test
     public void testExample2() throws Exception {        
-        PostMethod method = new PostMethod("http://localhost:8080/lbstest_example2");
+        PostMethod method = new PostMethod("http://localhost:9452/lbstest_example2");
         method.setRequestEntity(new StringRequestEntity("testtext", "text/plain", null));
 
         mock.expectedMessageCount(1);
@@ -89,7 +89,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
      */
     @Test
     public void testExample3() throws Exception {        
-        PostMethod method = new PostMethod("http://localhost:8080/lbstest_example3");
+        PostMethod method = new PostMethod("http://localhost:9452/lbstest_example3");
         method.setRequestEntity(new StringRequestEntity("testtext", "text/plain", null));
 
         mock.expectedMessageCount(1);

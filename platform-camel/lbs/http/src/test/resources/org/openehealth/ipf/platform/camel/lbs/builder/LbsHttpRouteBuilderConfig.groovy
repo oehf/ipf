@@ -47,14 +47,14 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
         // --------------------------------------------------------------
         //  LBS routes
         // --------------------------------------------------------------
-        builder.from('jetty:http://localhost:8080/lbstest_no_extract')
+        builder.from('jetty:http://localhost:9452/lbstest_no_extract')
             .to('mock:mock')
 
-        builder.from('jetty:http://localhost:8080/lbstest_extract')
+        builder.from('jetty:http://localhost:9452/lbstest_extract')
             .store().with('attachmentHandlers')
             .to('mock:mock')
 
-        builder.from('jetty:http://localhost:8080/lbstest_ping')
+        builder.from('jetty:http://localhost:9452/lbstest_ping')
             .store().with('attachmentHandlers')
             .process { Exchange exchange ->
                 def dataSource = exchange.in.getBody(AttachmentDataSource.class)
@@ -62,39 +62,45 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             }
             .to('mock:mock');
             
-        builder.from('jetty:http://localhost:8080/lbstest_extract_factory_via_bean')
+        builder.from('jetty:http://localhost:9452/lbstest_extract_factory_via_bean')
             .store().with('attachmentHandlers')
             .to('mock:mock')
 
-        builder.from('jetty:http://localhost:8080/lbstest_extract_router')
+        builder.from('jetty:http://localhost:9452/lbstest_extract_router')
             .store().with('attachmentHandlers')
             .setHeader('tag').constant('I was here')
             .fetch().with('attachmentHandlers')
-            .to('http://localhost:8080/lbstest_receiver')
+            .to('http://localhost:9452/lbstest_receiver')
 
         builder.from('direct:lbstest_send_only')
             .fetch().with('attachmentHandlers')
-            .to('http://localhost:8080/lbstest_receiver')
+            .to('http://localhost:9452/lbstest_receiver')
             
         builder.from('direct:lbstest_non_http')
             .store().with('attachmentHandlers')
             .to('mock:mock')
             
-        builder.from('jetty:http://localhost:8080/lbstest_receiver')
+        builder.from('jetty:http://localhost:9452/lbstest_receiver')
             .store().with('attachmentHandlers')
             .to('mock:mock')
             
         
         // Example routes only tested with groovy
-        builder.from('jetty:http://localhost:8080/lbstest_example1')
-            .store().with('attachmentHandlers')
+        builder.from('jetty:http://localhost:9452/lbstest_example1')
+            // Replace the message content with a data source
+            .store().with('attachmentHandlers') 
+            // Custom processing to find a token
             .process { Exchange exchange ->
-                def reader = new BufferedReader(new InputStreamReader(exchange.in.getBody(InputStream.class)))
+                // Get the stream from the data source and read it
+                def inputStream = exchange.in.getBody(InputStream.class)            
+                def reader = new BufferedReader(new InputStreamReader(inputStream))
                 try {
                     def line = reader.readLine()
+                    // Look for the token
                     while (line != null && !line.contains('blu')) {
                         line = reader.readLine()
                     }
+                    // If found set the header
                     if (line != null) {
                         exchange.in.setHeader('tokenfound', 'yes')
                     }
@@ -105,9 +111,12 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             }
             .to('mock:mock')
             
-        builder.from('jetty:http://localhost:8080/lbstest_example2')
+        builder.from('jetty:http://localhost:9452/lbstest_example2')
+            // Replace the message content with data sources
             .store().with('attachmentHandlers')
+            // Custom processing to look for text attachments
             .process { Exchange exchange ->
+                // Run through all attachments and check the content type
                 exchange.in.attachments.each {
                     if (it.value.contentType.startsWith('text/plain')) {
                         exchange.in.setHeader('textfound', 'yes')
@@ -116,15 +125,20 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             }
             .to('mock:mock')
             
-        builder.from('jetty:http://localhost:8080/lbstest_example3')
+        builder.from('jetty:http://localhost:9452/lbstest_example3')
             .store().with('attachmentHandlers')
             .process { Exchange exchange ->
+                // The attachment factory can be used to create attachments manually
                 def attachmentFactory = builder.bean(AttachmentFactory.class, 'attachmentFactory') 
                 def inputStream = new ByteArrayInputStream('hello world'.bytes)
+                
+                // Using the unit of work from the original exchange we can ensure that the
+                // attachment is removed once the message has been processed by the route
                 def attachment = attachmentFactory.createAttachment(exchange.unitOfWork.id, 'text/xml', null, null, inputStream)
                 exchange.in.addAttachment('hello', new DataHandler(attachment))
             }
+            // Create a POST request with the attachments
             .fetch().with('attachmentHandlers')
-            .to('http://localhost:8080/lbstest_receiver')
+            .to('http://localhost:9452/lbstest_receiver')
     }    
 }

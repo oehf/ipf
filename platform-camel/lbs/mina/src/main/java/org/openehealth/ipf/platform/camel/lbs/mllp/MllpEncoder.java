@@ -81,7 +81,7 @@ public class MllpEncoder extends ProtocolEncoderAdapter {
             putAndSendIfFull(out, buffer, (byte) MllpStoreCodec.LAST_CHARACTER);
         
             out.write(buffer.getAndDrop());
-            log.info("encoded message: " + message);
+            log.debug("encoded message: " + message);
         }
         finally {
             reader.close();

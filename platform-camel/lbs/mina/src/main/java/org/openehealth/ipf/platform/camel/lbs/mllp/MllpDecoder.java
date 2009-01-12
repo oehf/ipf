@@ -82,7 +82,7 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
             outputStream.close();
             try {
                 out.write(message);
-                log.info("decoded message: " + message);
+                log.debug("decoded message: " + message);
             }
             catch (RuntimeException e) {
                 sessionContent.cleanUpOpenMessage();

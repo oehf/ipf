@@ -83,19 +83,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractLbsHttpTest {
     
     private static final String ENDPOINT_NO_EXTRACT = 
-        "http://localhost:8080/lbstest_no_extract";
+        "http://localhost:9452/lbstest_no_extract";
 
     private static final String ENDPOINT_EXTRACT = 
-        "http://localhost:8080/lbstest_extract";
+        "http://localhost:9452/lbstest_extract";
     
     private static final String ENDPOINT_PING = 
-        "http://localhost:8080/lbstest_ping";
+        "http://localhost:9452/lbstest_ping";
     
     private static final String ENDPOINT_EXTRACT_FACTORY_VIA_BEAN = 
-        "http://localhost:8080/lbstest_extract_factory_via_bean";
+        "http://localhost:9452/lbstest_extract_factory_via_bean";
 
     private static final String ENDPOINT_EXTRACT_ROUTER = 
-        "http://localhost:8080/lbstest_extract_router";
+        "http://localhost:9452/lbstest_extract_router";
     
     private static final String ENDPOINT_SEND_ONLY = 
         "direct:lbstest_send_only";
