@@ -98,9 +98,6 @@ public abstract class AbstractLbsHttpTest {
     private static final String ENDPOINT_EXTRACT_ROUTER = 
         "http://localhost:9452/lbstest_extract_router";
     
-    private static final String ENDPOINT_ASYNC = 
-        "http://localhost:9452/lbstest_async";
-
     private static final String ENDPOINT_SEND_ONLY = 
         "direct:lbstest_send_only";
     
@@ -281,11 +278,6 @@ public abstract class AbstractLbsHttpTest {
         testFile(ENDPOINT_EXTRACT_ROUTER);
     }
     
-    @Test
-    public void testFileEndpointAsync() throws Exception {
-        testFile(ENDPOINT_ASYNC);
-    }
-
     private void testFile(final String endpoint) throws Exception {
         PostMethod method = new PostMethod(endpoint);
         method.setRequestEntity(new FileRequestEntity(file, "unknown/unknown"));

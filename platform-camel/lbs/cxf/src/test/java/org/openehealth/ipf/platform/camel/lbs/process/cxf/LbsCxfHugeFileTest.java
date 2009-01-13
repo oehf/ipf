@@ -25,8 +25,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.annotation.Resource;
@@ -50,7 +48,6 @@ import org.openehealth.ipf.platform.camel.lbs.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

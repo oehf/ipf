@@ -84,11 +84,6 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .store().with('attachmentHandlers')
             .to('mock:mock')
             
-        builder.from('jetty:http://localhost:9452/lbstest_async')
-            .thread(2)
-            .store().with('attachmentHandlers')
-            .to('mock:mock')            
-        
         // Example routes only tested with groovy
         builder.from('jetty:http://localhost:9452/lbstest_example1')
             // Replace the message content with a data source
