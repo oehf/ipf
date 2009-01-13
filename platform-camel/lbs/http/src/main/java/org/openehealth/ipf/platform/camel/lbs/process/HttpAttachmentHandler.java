@@ -39,6 +39,7 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.io.IOUtils;
+import org.mortbay.jetty.HttpParser;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
 import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
 
@@ -67,6 +68,7 @@ public class HttpAttachmentHandler implements AttachmentHandler {
     @Override
     public Collection<AttachmentDataSource> extract(String unitOfWorkId, Message message) throws Exception {
         try {
+            HttpParser.Input input = message.getBody(HttpParser.Input.class);
             HttpServletRequest request = message.getBody(HttpServletRequest.class);
             if (request != null) {
             	String subUnit = getSubUnit(unitOfWorkId);

@@ -14,11 +14,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://activemq.apache.org/camel/schema/spring"
 	xmlns:cxf="http://activemq.apache.org/camel/schema/cxfEndpoint"
+    xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://activemq.apache.org/camel/schema/cxfEndpoint
 http://activemq.apache.org/camel/schema/cxfEndpoint/camel-cxf.xsd
+http://www.springframework.org/schema/util 
+http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://activemq.apache.org/camel/schema/spring 
 http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
@@ -56,14 +59,11 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         <constructor-arg value="unnamed" />
     </bean>
 
-    <bean id="attachmentHandlers" class="java.util.ArrayList">
-       <constructor-arg>
-            <list>
-                <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoAttachmentHandler">
-                   <constructor-arg ref="attachmentFactory"/>
-                </bean>
-            </list>            
-       </constructor-arg>
-    </bean>
+    <!-- This bean is a list of attachment handlers. Add all handlers used within the routes to this list -->
+    <util:list id="attachmentHandlers" list-class="java.util.ArrayList">
+        <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoAttachmentHandler">
+           <constructor-arg ref="attachmentFactory"/>
+        </bean>
+    </util:list>
 
 </beans>

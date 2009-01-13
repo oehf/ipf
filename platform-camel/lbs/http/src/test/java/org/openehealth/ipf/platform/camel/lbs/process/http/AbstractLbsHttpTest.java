@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
@@ -97,12 +98,15 @@ public abstract class AbstractLbsHttpTest {
     private static final String ENDPOINT_EXTRACT_ROUTER = 
         "http://localhost:9452/lbstest_extract_router";
     
+    private static final String ENDPOINT_ASYNC = 
+        "http://localhost:9452/lbstest_async";
+
     private static final String ENDPOINT_SEND_ONLY = 
         "direct:lbstest_send_only";
     
     private static final String ENDPOINT_NON_HTTP = 
         "direct:lbstest_non_http";
-    
+        
     @EndpointInject(uri="mock:mock")
     protected MockEndpoint mock;
 
@@ -276,6 +280,11 @@ public abstract class AbstractLbsHttpTest {
     public void testFileEndpointRouter() throws Exception {
         testFile(ENDPOINT_EXTRACT_ROUTER);
     }
+    
+    @Test
+    public void testFileEndpointAsync() throws Exception {
+        testFile(ENDPOINT_ASYNC);
+    }
 
     private void testFile(final String endpoint) throws Exception {
         PostMethod method = new PostMethod(endpoint);
@@ -291,6 +300,16 @@ public abstract class AbstractLbsHttpTest {
         mock.assertIsSatisfied();
         String receivedBody = outputGenerator.getReceivedBody();        
         assertEquals("blu bla", receivedBody);
+
+        Map<String, DataHandler> receivedAttachments = outputGenerator.getReceivedAttachments();
+        assertEquals(1, receivedAttachments.size());
+        DataHandler attachment = receivedAttachments.values().iterator().next();
+        DataSource dataSource = attachment.getDataSource();
+        assertTrue(dataSource instanceof AttachmentDataSource);
+        AttachmentDataSource attachmentDataSource = (AttachmentDataSource) dataSource;        
+        
+        assertFalse("clean up did not remove temporary resource",
+                store.contains(attachmentDataSource.getResourceUri()));
     }
     
     @Test
@@ -501,6 +520,7 @@ public abstract class AbstractLbsHttpTest {
         private final String output;
         private final Map<String, String> attachmentContents = new HashMap<String, String>();
         private String receivedBody;
+        private Map<String, DataHandler> receivedAttachments;
 
         private TestOutputGenerator(String output) {
             this.output = output;
@@ -513,6 +533,7 @@ public abstract class AbstractLbsHttpTest {
         @Override
         public void process(Exchange exchange) throws Exception {
             Map<String, DataHandler> attachments = exchange.getIn().getAttachments();
+            receivedAttachments = attachments;
             for (Map.Entry<String, DataHandler> attachment : attachments.entrySet()) {
                 DataHandler dataHandler = attachment.getValue();
                 InputStream inputStream = dataHandler.getInputStream();
@@ -531,6 +552,10 @@ public abstract class AbstractLbsHttpTest {
         
         public Map<String, String> getReceivedContent() {
             return attachmentContents;
+        }
+        
+        public Map<String, DataHandler> getReceivedAttachments() {
+            return receivedAttachments;
         }
     }
 }

@@ -25,8 +25,11 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.annotation.Resource;
 import javax.mail.util.ByteArrayDataSource;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
@@ -85,8 +88,7 @@ public class LbsCxfHugeFileTest {
     @Autowired    
     private DiskStore store;
     
-    @Autowired
-    @Qualifier("attachmentHandlers")
+    @Resource(name = "attachmentHandlers")
     private ArrayList<AttachmentHandler> handlers;
 
     @Autowired
