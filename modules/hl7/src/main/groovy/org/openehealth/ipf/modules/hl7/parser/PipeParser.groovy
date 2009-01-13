@@ -19,6 +19,9 @@ import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.HL7Exception
+
+import org.openehealth.ipf.modules.hl7.validation.ValidationContextFactory
+
 import java.lang.reflect.Constructor;
 
 /**
@@ -36,11 +39,13 @@ public class PipeParser extends ca.uhn.hl7v2.parser.PipeParser {
 	PipeParser() {
 		super()
 		factory = new CustomModelClassFactory();
+		setValidationContext(ValidationContextFactory.DEFAULT_TYPE_RULES)
 	}
 	
 	PipeParser(ModelClassFactory factory) {
 		super()
 		this.factory = factory
+		setValidationContext(ValidationContextFactory.DEFAULT_TYPE_RULES)
 	}
 
 	PipeParser(ValidationContext context) {
