@@ -48,6 +48,10 @@ public class ShortcutSyntaxTest extends GroovyTestCase{
          assert 'Nachname' == msg2.NK1(0)[2][1].value
          assert 'Nachname' == msg2.NK1[2][1].value
          assert 'Nachname' == msg2.NK1[2].value
+         assert '333-4444' == msg2.NK1(0)[5](0)[1].value
+         assert '333-5555' == msg2.NK1(0)[5](1)[1].value
+         assert '333-4444' == msg2.NK1[5].value
+         assert '333-5555' == msg2.NK1[5](1).value
      }
      
      void testShortCut25OnRepeatableField() {     
