@@ -107,8 +107,10 @@ public class AbstractSyntaxRuleBuilder extends MessageRuleBuilder{
                          segment(container, pos++, result, 0, 255)
                      } else {
                          // Optional repeatable group
-                         group(container, pos++, result[0], 0, 255, result[1])
+                         group(container, pos++, result.name, 0, 255, result.args)
                      }
+                 } else if (it[0] instanceof Map){
+                     group(container, pos++, it[0].name, 0, 255, it[0].args)
                  }
                  
              } else if (it instanceof Closure) {
@@ -119,25 +121,26 @@ public class AbstractSyntaxRuleBuilder extends MessageRuleBuilder{
                      segment(container, pos++, result, 1, 255)
                  } else if (result instanceof Collection) {
                      if (result[0] instanceof String) {
-                         // Repeatable optional segment
+                         // Repeatable optional segment.
                          segment(container, pos++, result[0], 0, 255)
                      } else {
                          // Optional repeatable group
-                         group(container, pos++, result[0][0], 0, 255, result[0][1])
+                         group(container, pos++, result[0].name, 0, 255, result[0].args)
                      }
-                 } 
+                 } else if (result instanceof Map) {
+                     group(container, pos++, result.name, 1, 255, result.args)
+                 }
              } 
          }
      }
      
     // Called on groups. 
     def methodMissing(String name, args) {
-        [name, args]
+        return [name:name, args:args]
     }
     
     // Adds a group to the container and calls analyzeSegment recursively
     protected void group(AbstractSegmentContainer container, int pos, String name, int min, int max, args) {
- 	    // println "group $name on $pos is $min to $max"
         AbstractSegmentContainer p = new SegGroup([min:min, max:max, name:name])
  	    p.usage = usage(min, max)
         container.setChild(pos, p)
@@ -146,7 +149,6 @@ public class AbstractSyntaxRuleBuilder extends MessageRuleBuilder{
     
     // Adds a segment to the container
     protected void segment(AbstractSegmentContainer container, int pos, String name, int min, int max) {
- 	    // println "segment $name on $pos is $min to $max"
 	    ProfileStructure p = new Seg([min:min, max:max, name:name])
  	    p.usage = usage(min, max)
         container.setChild(pos, p)

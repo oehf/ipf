@@ -168,7 +168,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 void testValidAbstractSyntax2() {
     DefaultValidationContext context = new DefaultValidationContext()
     context.builder()        
-        .forVersion('2.4')
+        .forVersion('2.5')
             .message('ORU', 'R01').abstractSyntax(
                     'MSH',
                     [  {  'SFT'  }  ],
