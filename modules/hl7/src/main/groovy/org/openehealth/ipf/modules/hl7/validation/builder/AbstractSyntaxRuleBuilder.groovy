@@ -21,7 +21,7 @@ import ca.uhn.hl7v2.validation.ValidationException
 import ca.uhn.hl7v2.parser.Parser
 import ca.uhn.hl7v2.HL7Exception
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-import org.openehealth.ipf.modules.hl7.validation.AbstractSyntaxValidator
+import org.openehealth.ipf.modules.hl7.validation.support.AbstractSyntaxValidator
 
 /**
  * Allows to add rules for checking the existence and cardinality of groups 

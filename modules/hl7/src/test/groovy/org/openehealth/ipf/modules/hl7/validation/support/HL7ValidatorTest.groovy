@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.validation
+package org.openehealth.ipf.modules.hl7.validation.support
 
 import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.parser.PipeParser
 import ca.uhn.hl7v2.HL7Exception
+
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
 /**
  * @author Christian Ohr
@@ -28,7 +30,7 @@ public class HL7ValidatorTest extends GroovyTestCase{
     	// while it parses a message. It fails because of the nonsense
     	// rule that IDs may not be longer than 1
     	void testValidate(){
-    	    ValidationContext context = new DefaultValidationContext().builder()        
+    	    ValidationContext context = new DefaultValidationContext().configure()        
                 .forVersion().asOf('2.3')
                     .type('DT')
                         .matches(/(\d{4}([01]\d(\d{2})?)?)?/)				// YYYY[MM[DD]]

@@ -27,7 +27,7 @@ import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
 /**
  * IPF implementation of a HAPI validation context. It's strongly recommended
  * to use the {@link RuleBuilder} to assemble the rules that are checked during
- * validation by calling {@link #builder()}
+ * validation by calling {@link #configure()}
  * A ValidationContext can either be injected into a HAPI Parser instance (is this case the
  * message is validated during parsing) or be used in seperate validation steps, e.g.
  * using HAPI's MessageValidator. 
@@ -36,7 +36,7 @@ import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
  * rules match the input data, all rules are tested in the order of their insertion. Example:
  * <pre>
  * ValidationContext context = ValidationContextFactory.DEFAULT_TYPE_RULES
- * context.builder()
+ * context.configure()
  *    .forVersion(...)
  *    ...
  * </pre>
@@ -45,7 +45,7 @@ import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
  * ValidationContext existingContext = ....
  * ValidationContext context = new DefaultValidationContext()
  * context.addContext(existingContext)
- *    .builder()
+ *    .configure()
  *    	.forVersion(...)
  *      ...
  * </pre>
@@ -53,7 +53,7 @@ import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
  * @author Christian Ohr
  */
 public class DefaultValidationContext implements ValidationContext{
-	
+	    
 	private Map ruleMap = [
 	'2.1'   : [:],
 	'2.2'   : [:],
@@ -65,6 +65,9 @@ public class DefaultValidationContext implements ValidationContext{
 	]
 	
 	private def nestedValidationContexts = []
+	
+	public DefaultValidationContext() {	    
+	}
 	
 	/**
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getPrimitiveRules(java.lang.String, java.lang.String, ca.uhn.hl7v2.model.Primitive)
@@ -126,7 +129,7 @@ public class DefaultValidationContext implements ValidationContext{
 	/**
 	 * Launches the RuleBuilder in order to add validation rules
 	 */
-	public RuleBuilder builder() {
+	public RuleBuilder configure() {
 		new RuleBuilder(this)
 	}
 	

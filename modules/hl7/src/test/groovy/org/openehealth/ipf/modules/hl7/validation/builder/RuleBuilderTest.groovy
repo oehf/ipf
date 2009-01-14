@@ -24,42 +24,42 @@ public class RuleBuilderTest extends GroovyTestCase {
     
      void testForVersion() {
          def context = new DefaultValidationContext()
-         def builder = context.builder().forVersion('2.4')
+         def builder = context.configure().forVersion('2.4')
          assert context == builder.context
          assert builder.version == '2.4'
      }
      
      void testForAllVersions() {
          def context = new DefaultValidationContext()
-         def builder = context.builder().forAllVersions()
+         def builder = context.configure().forAllVersions()
          assert context == builder.context
          assert builder.version == '2.1 2.2 2.3 2.3.1 2.4 2.5 2.6'
      }
      
      void testForVersionAsOf() {
          def context = new DefaultValidationContext()
-         def builder = context.builder().forVersion().asOf('2.3')
+         def builder = context.configure().forVersion().asOf('2.3')
          assert context == builder.context
          assert builder.version == '2.3 2.3.1 2.4 2.5 2.6'
      }
      
      void testForVersionBefore() {
          def context = new DefaultValidationContext()
-         def builder = context.builder().forVersion().before('2.3')
+         def builder = context.configure().forVersion().before('2.3')
          assert context == builder.context
          assert builder.version == '2.1 2.2'
      }
      
      void testForVersionExcept() {
          def context = new DefaultValidationContext()
-         def builder = context.builder().forVersion().except('2.3.1')
+         def builder = context.configure().forVersion().except('2.3.1')
          assert context == builder.context
          assert builder.version == '2.1 2.2 2.3 2.4 2.5 2.6'
      }
      
      void testForVersionAndType() {
          def context = new DefaultValidationContext()
-         def builder = context.builder().forVersionAndType('2.4', 'ST')
+         def builder = context.configure().forVersionAndType('2.4', 'ST')
          assert context == builder.context
          assert builder.version == '2.4'
          assert builder.typeName == 'ST'

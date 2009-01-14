@@ -23,7 +23,7 @@ import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.conf.store.ProfileStoreFactory
 import ca.uhn.hl7v2.model.Message
 
-import org.openehealth.ipf.modules.hl7.validation.ClassPathProfileStore
+import org.openehealth.ipf.modules.hl7.validation.support.ClassPathProfileStore
 import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureEncodingRule
@@ -71,7 +71,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	// while it parses a message. It fails because of the nonsense
 	// rule that IDs may not be longer than 1
 	void testComplete(){
-	    ValidationContext context = new DefaultValidationContext().builder()        
+	    ValidationContext context = new DefaultValidationContext().configure()        
             .forVersion().asOf('2.3')
                 .type('DT')
                     .matches(/(\d{4}([01]\d(\d{2})?)?)?/)				// YYYY[MM[DD]]
@@ -111,7 +111,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	void testConformanceProfile() {
 	    DefaultValidationContext context = new DefaultValidationContext()
 	    ProfileStoreFactory.setStore(new ClassPathProfileStore())
-	    context.builder()
+	    context.configure()
 	        .forVersion('2.5')
 	            .message('QBP', 'Q22').conformsToProfile('IHE-PDQ-QBP-Q22')
 	    def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
@@ -128,7 +128,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 
 	void testValidAbstractSyntax1() {
 	    DefaultValidationContext context = new DefaultValidationContext()
-	    context.builder()        
+	    context.configure()        
 	        .forVersion('2.5')
 	            .message('ADT', 'A01').abstractSyntax(
 	                    'MSH',
@@ -167,7 +167,7 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 
 void testValidAbstractSyntax2() {
     DefaultValidationContext context = new DefaultValidationContext()
-    context.builder()        
+    context.configure()        
         .forVersion('2.5')
             .message('ORU', 'R01').abstractSyntax(
                     'MSH',
@@ -214,7 +214,7 @@ void testValidAbstractSyntax2() {
 
 	void testInvalidAbstractSyntax() {
 	    DefaultValidationContext context = new DefaultValidationContext()
-	    context.builder()
+	    context.configure()
 	        .forVersion('2.5')
 	            .message('ADT', 'A01').abstractSyntax(
                 'MSH',
