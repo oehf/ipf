@@ -21,10 +21,15 @@ import org.apache.camel.builder.RouteBuilder/**
  */
 public class SampleRouteConfig implements RouteBuilderConfig {
 
+     def validationContext
+     
      void apply(RouteBuilder builder) {
 
         builder.from('direct:input')
             .unmarshal().ghl7()
+            .validate('myValidatorBean')
+                .input { it.in.body.target }
+                .profile(validationContext)
             .transmogrify { msg ->
                 msg.PV1[3][2] = '' // clear room nr.
                 msg.PV1[3][3] = '' // clear bed nr.

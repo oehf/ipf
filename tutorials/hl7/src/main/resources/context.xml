@@ -62,6 +62,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     
     <lang:groovy id="routeBuilderConfig" 
         script-source="classpath:org/openehealth/ipf/tutorials/hl7/route/SampleRouteConfig.groovy">
+        <lang:property name="validationContext" ref="validationContext" />
     </lang:groovy>
 
     <lang:groovy id="routeModelExtender" 
@@ -74,5 +75,18 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
             </list>
         </lang:property>
     </lang:groovy>
+   
+   
+   <bean id="myValidatorBean" class="org.openehealth.ipf.modules.hl7.validation.support.HL7Validator"/>
+   
+   <bean id="validationContext" 
+       class="org.openehealth.ipf.modules.hl7.validation.ValidationContextFactoryBean"/>
+
+   <bean id="defaultTypeRules" 
+       class="org.openehealth.ipf.modules.hl7.validation.builder.DefaultTypeRulesBuilder"/>
+
+   <lang:groovy id="myCustomRules" 
+       script-source="classpath:org/openehealth/ipf/tutorials/hl7/validation/SampleRulesBuilder.groovy"/>
+    
 
 </beans>
