@@ -63,4 +63,8 @@ public class ValidationContextFactory{
                  .type('SI').matches(/\d*/)
          .context
          
+     /**
+      * @return an empty validation context
+      */
+     static final ValidationContext NO_RULES = new DefaultValidationContext()
 }

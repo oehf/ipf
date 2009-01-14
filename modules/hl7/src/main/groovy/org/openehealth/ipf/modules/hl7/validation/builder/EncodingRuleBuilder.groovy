@@ -17,6 +17,7 @@ package org.openehealth.ipf.modules.hl7.validation.builder
 
 import ca.uhn.hl7v2.validation.MessageRule
 import ca.uhn.hl7v2.validation.ValidationContext
+import ca.uhn.hl7v2.validation.impl.XMLSchemaRule
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureEncodingRule
 
 /**
@@ -31,6 +32,13 @@ public class EncodingRuleBuilder extends VersionBuilder{
 		this.encoding = encoding
 	}
 	
+	/**
+	 * Adds an existing HAPI {@link XmlSchemaRule} to the set of rules.
+	 */
+	RuleBuilder isValidXML() {
+	     context.addEncodingRule(version, "XML", new XMLSchemaRule())
+	}
+	 
 	RuleBuilder checkIf(Closure c) {
 		if (!rule) {
 			rule = new ClosureEncodingRule(c)
