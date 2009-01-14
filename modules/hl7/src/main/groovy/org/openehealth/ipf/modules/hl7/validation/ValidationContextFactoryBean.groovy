@@ -19,6 +19,8 @@ import org.springframework.beans.factory.config.AbstractFactoryBean
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.ApplicationContext
 
+import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuilder
+
 /**
  * FactoryBean to be used if a DefaultValidationContext shall be initialized from a
  * Spring application context.

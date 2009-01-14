@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.conf.ProfileException
 import ca.uhn.hl7v2.conf.spec.message.StaticDef
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.util.Terser;
 
 /**
  * Subclass of HAPI's conformance validator, that stops checking at the segment level, i.e. the
@@ -30,8 +31,12 @@ import ca.uhn.hl7v2.model.Message
  */
 public class AbstractSyntaxValidator extends DefaultValidator {
 
+    /**
+     * Omit the checks for correct version, trigger event and structure
+     */
      public HL7Exception[] validate(Message message, StaticDef profile) throws ProfileException, HL7Exception {
-         super.validate(message, profile)
+         def exceptionList = testGroup(message, profile, profile.getIdentifier());         
+         exceptionList as HL7Exception[]    
      }
      
      /**
