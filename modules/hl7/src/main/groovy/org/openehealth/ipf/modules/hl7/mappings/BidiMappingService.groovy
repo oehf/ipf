@@ -54,17 +54,31 @@ public class BidiMappingService implements MappingService {
     synchronized public void setMappingScript(Resource resource) {
      	Binding binding = new Binding()
 		GroovyShell shell = new GroovyShell(binding);
+     	evaluateResource(resource, shell, binding)
+    }
+    
+    // Read in several mapping definition
+    synchronized public void setMappingScripts(Resource[] resources) {
+     	Binding binding = new Binding()
+		GroovyShell shell = new GroovyShell(binding);
+     	resources.each { resource ->
+     	   evaluateResource(resource, shell, binding)    
+     	}
+    }
+    
+    private void evaluateResource(Resource resource, GroovyShell shell, Binding binding) {
     	try {
         	shell.evaluate(resource.inputStream)
         	Closure c = binding.mappings
         	def mb = new MappingsBuilder()
         	c?.delegate = this
-        	map = mb.mappings(c)
-           	createReverseMap()   		
+        	map.putAll(mb.mappings(c))
+           	updateReverseMap()   		
     	} catch (Exception e) {
     		// TODO handle: IOException (file not found) or CompilationException (error in script)
     		throw e
     	}
+        
     }
      	
  	public Object get(Object mappingKey, Object key){
@@ -125,7 +139,7 @@ public class BidiMappingService implements MappingService {
  		elseClause != null ? elseClause.toString() : null
  	}
  	
-    private void createReverseMap() {
+    private void updateReverseMap() {
     	map?.each { mappingKey, m ->
 			reverseMap[mappingKey] = [:]
 			m.each { key, value ->
