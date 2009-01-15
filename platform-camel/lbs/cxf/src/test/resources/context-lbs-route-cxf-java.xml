@@ -28,19 +28,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
     <import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" />
 
-    <!--
-		==================================================================
-	-->
-    <!-- Route Setup -->
-    <!--
-		==================================================================
-	-->
-
-    <!--
-        cxfcore:bus> <cxfcore:features> <cxfcore:logging /> </cxfcore:features>
-        </cxfcore:bus
-    -->
-
     <cxf:cxfEndpoint id="soapEndpointNoExtract"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
         address="http://localhost:9000/SoapContext/NoExtractPort" endpointName="s:SoapOverHttp"
