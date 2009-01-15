@@ -24,7 +24,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-lbs</artifactId>
     <name>commons-lbs</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
@@ -32,27 +32,28 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <version>1.6-SNAPSHOT</version>
     </parent>
     
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>org.openehealth.ipf.commons.lbs.*</osgi.export.pkg>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
-
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
-        
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency> 
-			
 		<dependency>
 		    <groupId>org.easymock</groupId>
 		    <artifactId>easymock</artifactId>

@@ -4,13 +4,18 @@
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-test</artifactId>
     <name>commons-test</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>commons</artifactId>
         <version>1.6-SNAPSHOT</version>
     </parent>
+    
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>org.openehealth.ipf.commons.test.*</osgi.export.pkg>
+    </properties>
     
     <dependencies>
         <dependency>

@@ -4,7 +4,7 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-hl7</artifactId>
     <name>platform-camel-hl7</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -12,43 +12,27 @@
         <version>1.6-SNAPSHOT</version>
     </parent>
     
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.hl7.*</osgi.export.pkg>
+    </properties>
+    
     <dependencies>
         <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${pom.version}</version>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-hl7dsl</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generateStubs</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <fileset>
-                                    <directory>src/main/resources</directory>
-                                    <includes>
-                                        <include>**/*.groovy</include>
-                                    </includes>
-                                </fileset>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

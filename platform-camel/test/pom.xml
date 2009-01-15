@@ -4,7 +4,7 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-test</artifactId>
     <name>platform-camel-test</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <description>
         Provides test classes (processors, adapters, predicates ...) used by
         all platform-camel modules. This module also tests Camel's behavior
@@ -19,6 +19,11 @@
         <artifactId>platform-camel</artifactId>
         <version>1.6-SNAPSHOT</version>
     </parent>
+    
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.test.*</osgi.export.pkg>
+    </properties>
     
     <dependencies>
         <dependency>

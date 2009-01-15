@@ -4,13 +4,18 @@
     <groupId>org.openehealth.ipf.modules</groupId>
     <artifactId>modules-hl7</artifactId>
     <name>modules-hl7</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>modules</artifactId>
         <version>1.6-SNAPSHOT</version>
     </parent>
+    
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>org.openehealth.ipf.modules.hl7.*</osgi.export.pkg>
+    </properties>
     
     <dependencies>
         <dependency>
@@ -47,23 +52,5 @@
             <artifactId>spring-test</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generateStubs</goal>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
     
 </project>

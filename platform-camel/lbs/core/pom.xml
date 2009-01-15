@@ -24,7 +24,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-lbs-core</artifactId>
     <name>platform-camel-lbs-core</name>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

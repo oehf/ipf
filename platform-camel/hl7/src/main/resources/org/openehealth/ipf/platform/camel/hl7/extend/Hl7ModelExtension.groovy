@@ -20,7 +20,6 @@ import ca.uhn.hl7v2.parser.Parser
 import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.model.ProcessorType
 
-import org.openehealth.ipf.platform.camel.core.extend.RouteModelException
 import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
 
 /**

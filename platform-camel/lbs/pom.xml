@@ -32,6 +32,11 @@ http://maven.apache.org/maven-v4_0_0.xsd">
         <version>1.6-SNAPSHOT</version>
     </parent>
     
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.lbs.*</osgi.export.pkg>
+    </properties>
+    
     <modules>
         <module>core</module>
         <module>cxf</module>
