@@ -45,7 +45,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.lbs.store.DiskStore;
 import org.openehealth.ipf.platform.camel.lbs.builder.RouteBuilder;
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
+import org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -85,8 +85,8 @@ public class LbsCxfHugeFileTest {
     @Autowired    
     private DiskStore store;
     
-    @Resource(name = "attachmentHandlers")
-    private ArrayList<AttachmentHandler> handlers;
+    @Resource(name = "resourceHandlers")
+    private ArrayList<ResourceHandler> handlers;
 
     @Autowired
     private CamelContext camelContext;

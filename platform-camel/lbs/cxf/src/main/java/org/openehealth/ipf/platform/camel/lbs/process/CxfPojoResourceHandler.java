@@ -31,36 +31,36 @@ import javax.xml.ws.Holder;
 import org.apache.camel.Message;
 import org.apache.camel.NoTypeConversionAvailableException;
 import org.apache.cxf.message.MessageContentsList;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 
 /**
- * A handler for attachments contained in a CXF Soap POJO message.
+ * A handler for resources contained in a CXF Soap POJO message.
  * <p>
  * This handler should be used for CXF endpoints using the data format 
  * <code>POJO</code>. Can be used with SwA and MTOM.
  * @author Jens Riemschneider
  */
-public class CxfPojoAttachmentHandler implements AttachmentHandler {
-    private static final String ATTACHMENT_ID_PARAM_PREFIX = "org.openehealth.ipf.platform.camel.lbs.cxf.CxfPojoAttachmentHandler.Param.";
+public class CxfPojoResourceHandler implements ResourceHandler {
+    private static final String RESOURCE_ID_PARAM_PREFIX = "org.openehealth.ipf.platform.camel.lbs.cxf.CxfPojoResourceHandler.Param.";
     
-    private AttachmentFactory attachmentFactory;
+    private ResourceFactory resourceFactory;
 
     /**
      * Constructs the handler
-     * @param attachmentFactory
-     *          the factory for attachments that are extracted by this handler
+     * @param resourceFactory
+     *          the factory for resources that are extracted by this handler
      */    
-    public CxfPojoAttachmentHandler(AttachmentFactory attachmentFactory) {
-        notNull(attachmentFactory, "attachmentFactory cannot be null");
-        this.attachmentFactory = attachmentFactory;
+    public CxfPojoResourceHandler(ResourceFactory resourceFactory) {
+        notNull(resourceFactory, "resourceFactory cannot be null");
+        this.resourceFactory = resourceFactory;
     }       
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.lbs.process.AttachmentExtractionHandler#handle(org.apache.camel.Message)
+     * @see org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler#handle(org.apache.camel.Message)
      */
     @Override
-    public Collection<AttachmentDataSource> extract(String unitOfWorkId, Message message) throws Exception {
+    public Collection<ResourceDataSource> extract(String unitOfWorkId, Message message) throws Exception {
     	String subUnit = getSubUnit(unitOfWorkId);
         return extractFromParams(subUnit, message, getParams(message));
     }
@@ -84,35 +84,35 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
         return Collections.emptyList();
     }
 
-    private Collection<AttachmentDataSource> extractFromParams(String subUnit, Message message, List<Object> params) throws IOException {
-        List<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>(); 
+    private Collection<ResourceDataSource> extractFromParams(String subUnit, Message message, List<Object> params) throws IOException {
+        List<ResourceDataSource> resources = new ArrayList<ResourceDataSource>(); 
         for (int idx = 0; idx < params.size(); ++idx) {
             Object param = params.get(idx);
             if (param instanceof DataHandler) {
                 DataHandler dataHandler = (DataHandler) param;
-                AttachmentDataSource dataSource = extractFromDataHandler(subUnit, dataHandler, idx);
-                attachments.add(dataSource);
+                ResourceDataSource dataSource = extractFromDataHandler(subUnit, dataHandler, idx);
+                resources.add(dataSource);
                 params.set(idx, new DataHandler(dataSource));
             }
             else if (param instanceof Holder) {
                 Holder holder = (Holder) param;
                 if (holder.value instanceof DataHandler) {
                     DataHandler dataHandler = (DataHandler) holder.value;
-                    AttachmentDataSource dataSource = extractFromDataHandler(subUnit, dataHandler, idx);
-                    attachments.add(dataSource);
+                    ResourceDataSource dataSource = extractFromDataHandler(subUnit, dataHandler, idx);
+                    resources.add(dataSource);
                     holder.value = new DataHandler(dataSource);
                 }
             }
         }
-        return attachments;
+        return resources;
     }
 
-    private AttachmentDataSource extractFromDataHandler(String subUnit, DataHandler handler, int paramIdx) throws IOException {
+    private ResourceDataSource extractFromDataHandler(String subUnit, DataHandler handler, int paramIdx) throws IOException {
         InputStream inputStream = handler.getInputStream();
         try {
             String contentType = handler.getContentType();
-            String id = ATTACHMENT_ID_PARAM_PREFIX + paramIdx;
-            return attachmentFactory.createAttachment(subUnit, contentType, null, id, inputStream);
+            String id = RESOURCE_ID_PARAM_PREFIX + paramIdx;
+            return resourceFactory.createResource(subUnit, contentType, null, id, inputStream);
         }
         finally {
             inputStream.close();
@@ -120,61 +120,61 @@ public class CxfPojoAttachmentHandler implements AttachmentHandler {
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler#integrate(org.apache.camel.Message, java.util.Map)
+     * @see org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler#integrate(org.apache.camel.Message, java.util.Map)
      */
     @Override
-    public void integrate(Message message, Collection<AttachmentDataSource> attachments) {
-        // Does nothing because attachments are already integrated
+    public void integrate(Message message) {
+        // Does nothing because resource are already integrated
     }
     
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler#cleanUp(java.lang.String, org.apache.camel.Message)
+     * @see org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler#cleanUp(java.lang.String, org.apache.camel.Message)
      */
     @Override
-    public void cleanUp(String unitOfWorkId, Message message, List<AttachmentDataSource> requiredAttachments) {
+    public void cleanUp(String unitOfWorkId, Message message, List<ResourceDataSource> requiredResources) {
     	String subUnit = getSubUnit(unitOfWorkId);
-        Collection<AttachmentDataSource> attachments = attachmentFactory.getAttachments(subUnit);
+        Collection<ResourceDataSource> resources = resourceFactory.getResources(subUnit);
         
-        for (AttachmentDataSource attachment : attachments) {
-            if (requiredAttachments.contains(attachment)) {
-                attachmentFactory.deleteAttachmentDelayed(subUnit, attachment);
+        for (ResourceDataSource resource : resources) {
+            if (requiredResources.contains(resource)) {
+                resourceFactory.deleteResourceDelayed(subUnit, resource);
             }
             else {
-                attachmentFactory.deleteAttachment(subUnit, attachment);
+                resourceFactory.deleteResource(subUnit, resource);
             }
         }
     }    
 
     @Override
-    public Collection<? extends AttachmentDataSource> getRequiredAttachments(Message message) {
-        List<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>(); 
+    public Collection<? extends ResourceDataSource> getRequiredResources(Message message) {
+        List<ResourceDataSource> resources = new ArrayList<ResourceDataSource>(); 
         List<Object> params = getParams(message);
         for (Object param : params) {
-            AttachmentDataSource attachment = getAttachment(param);
-            if (attachment != null) {
-                attachments.add(attachment);
+            ResourceDataSource resource = getResource(param);
+            if (resource != null) {
+                resources.add(resource);
             }
         }
-        return attachments;
+        return resources;
     }
 
-    private AttachmentDataSource getAttachment(Object param) {
+    private ResourceDataSource getResource(Object param) {
         if (param instanceof DataHandler) {
-            return getAttachment((DataHandler) param);
+            return getResource((DataHandler) param);
         }
         else if (param instanceof Holder) {
             Holder holder = (Holder) param;
             if (holder.value instanceof DataHandler) {
-                return getAttachment((DataHandler) holder.value);
+                return getResource((DataHandler) holder.value);
             }
         }
         return null;
     }
 
-    private AttachmentDataSource getAttachment(DataHandler handler) {
+    private ResourceDataSource getResource(DataHandler handler) {
         DataSource dataSource = handler.getDataSource();
-        if (dataSource instanceof AttachmentDataSource) {
-            return (AttachmentDataSource) dataSource;
+        if (dataSource instanceof ResourceDataSource) {
+            return (ResourceDataSource) dataSource;
         }
         return null;
     }

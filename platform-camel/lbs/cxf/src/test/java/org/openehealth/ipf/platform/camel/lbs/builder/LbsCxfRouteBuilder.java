@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.lbs.builder;
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
+import org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler;
 import org.openehealth.ipf.platform.camel.lbs.process.cxf.AbstractLbsCxfTest;
 
 /**
@@ -27,7 +27,7 @@ public class LbsCxfRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        List<AttachmentHandler> handlers = bean(List.class, "attachmentHandlers");
+        List<ResourceHandler> handlers = bean(List.class, "resourceHandlers");
         
         from("cxf:bean:soapEndpointNoExtract?dataFormat=POJO") 
             .to("bean:serviceBean?methodName=processSOAP");

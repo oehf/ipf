@@ -23,44 +23,44 @@ import java.util.List;
 import org.apache.camel.processor.DelegateProcessor;
 
 /**
- * Base class for processors that require an {@link AttachmentHandler} to 
+ * Base class for processors that require an {@link ResourceHandler} to 
  * process exchanges.
  * @author Jens Riemschneider
  */
-public abstract class AttachmentHandlingProcessor extends DelegateProcessor {
-    private List<AttachmentHandler> attachmentHandlers = new ArrayList<AttachmentHandler>();
+public abstract class ResourceHandlingProcessor extends DelegateProcessor {
+    private List<ResourceHandler> resourceHandlers = new ArrayList<ResourceHandler>();
 
     /**
-     * Sets the {@link AttachmentHandler} of the processor.
+     * Sets the {@link ResourceHandler} of the processor.
      * <p>
-     * An attachment handler enables the processor to handle a specific type of
+     * A resource handler enables the processor to handle a specific type of
      * endpoint exchange. The handler contains the actual strategy for 
-     * integrating/extracting attachments into/from a specific message type 
+     * integrating/extracting resources into/from a specific message type 
      * (e.g. an HTTP message).
      * <p>
      * This method can be called multiple times to add multiple handlers.
      * @param handler
-     *          handler for integrating and extracting attachments
+     *          handler for integrating and extracting resources
      * @return this instance for usage with a fluent API
      */
-    public AttachmentHandlingProcessor with(List<AttachmentHandler> handlers) {
+    public ResourceHandlingProcessor with(List<ResourceHandler> handlers) {
         notNull(handlers, "handlers cannot be null");
-        attachmentHandlers.addAll(handlers);
+        resourceHandlers.addAll(handlers);
         return this;
     }
     
     /**
-     * @return the attachment handler configured by {@link #with(AttachmentHandler)}
+     * @return the resource handlers configured by {@link #with(ResourceHandler)}
      */
-    protected final List<AttachmentHandler> getAttachmentHandlers() {
-        return attachmentHandlers;
+    protected final List<ResourceHandler> getResourceHandlers() {
+        return resourceHandlers;
     }
     
     /**
-     * @return {@code true} if an attachment handler was configured
+     * @return {@code true} if an resource handler was configured
      */
-    protected final boolean hasAttachmentHandler() {
-        return attachmentHandlers.size() > 0;
+    protected final boolean hasResourceHandler() {
+        return resourceHandlers.size() > 0;
     }
     
     /* (non-Javadoc)
@@ -68,7 +68,7 @@ public abstract class AttachmentHandlingProcessor extends DelegateProcessor {
      */
     @Override
     public String toString() {
-        return String.format("{%1$s: attachmentHandlers=%2$s, super=%3$s}",
-                getClass().getSimpleName(), attachmentHandlers, super.toString());
+        return String.format("{%1$s: resourceHandlers=%2$s, super=%3$s}",
+                getClass().getSimpleName(), resourceHandlers, super.toString());
     }
 }

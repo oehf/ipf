@@ -19,8 +19,8 @@ import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
+import org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler;
 
 /**
  * @author Jens Riemschneider
@@ -29,7 +29,7 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        List<AttachmentHandler> handlers = bean(List.class, "attachmentHandlers");
+        List<ResourceHandler> handlers = bean(List.class, "resourceHandlers");
 
         errorHandler(deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
         
@@ -45,8 +45,8 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
             .process(new Processor() {
                 @Override
                 public void process(Exchange exchange) throws Exception {
-                    AttachmentDataSource dataSource = 
-                        exchange.getIn().getBody(AttachmentDataSource.class);
+                    ResourceDataSource dataSource = 
+                        exchange.getIn().getBody(ResourceDataSource.class);
                     exchange.getOut().setBody(dataSource);
                 }
             })

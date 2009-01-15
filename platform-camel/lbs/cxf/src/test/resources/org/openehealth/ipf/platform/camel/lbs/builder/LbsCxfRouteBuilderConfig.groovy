@@ -32,7 +32,7 @@ import org.apache.camel.component.cxf.CxfConstants
 
 import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory
 
 import org.openehealth.ipf.platform.camel.lbs.process.cxf.AbstractLbsCxfTest
 
@@ -52,37 +52,37 @@ class LbsCxfRouteBuilderConfig implements RouteBuilderConfig {
         
         builder.from('cxf:bean:soapEndpointExtract?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to('bean:serviceBean?methodName=processSOAP')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
         
         builder.from('cxf:bean:soapEndpointExtractRouter?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to('cxf:bean:soapEndpointExtract?dataFormat=POJO')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
 
         builder.from('cxf:bean:soapEndpointExtractRouterRealServer?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to('cxf:bean:soapEndpointRealServer?dataFormat=POJO')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
         
         builder.from('direct:cxflbs')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to('mock:mock')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
 
         builder.from('cxf:bean:soapEndpointExtractSwA?dataFormat=POJO')
             .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to("bean:serviceBean?methodName=processSOAP")
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             
         builder.from('cxf:bean:soapEndpointExample1')
             // Store the binaries of the operation paremeters
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             // Custom processing to find a token in a binary
             .process { Exchange exchange ->
                 // Operation parameters are contained in a list
@@ -110,21 +110,21 @@ class LbsCxfRouteBuilderConfig implements RouteBuilderConfig {
         builder.from('direct:start')
             // Custom processor to manually create a SOAP call
             .process { Exchange exchange ->
-                // The attachment factory can be used to create attachments manually
-                def attachmentFactory = builder.bean(AttachmentFactory.class, 'attachmentFactory') 
+                // The resource factory can be used to create resource manually
+                def resourceFactory = builder.bean(ResourceFactory.class, 'resourceFactory') 
                 def inputStream1 = new ByteArrayInputStream('hello world'.bytes)
             
                 // Using the unit of work from the original exchange we can ensure that the
-                // attachment is removed once the message has been processed by the route
-                def attachment1 = attachmentFactory.createAttachment(exchange.unitOfWork.id, 'text/plain', null, null, inputStream1)
+                // resource is removed once the message has been processed by the route
+                def resource1 = resourceFactory.createResource(exchange.unitOfWork.id, 'text/plain', null, null, inputStream1)
                 def inputStream2 = new ByteArrayInputStream('this is me'.bytes)
-                def attachment2 = attachmentFactory.createAttachment(exchange.unitOfWork.id, 'text/plain', null, null, inputStream2)
+                def resource2 = resourceFactory.createResource(exchange.unitOfWork.id, 'text/plain', null, null, inputStream2)
                 
                 // The list of parameters for the operation call
                 def params = new MessageContentsList()                
                 params.set(0, new Holder<String>('Hello world'))
-                params.set(1, new Holder<DataHandler>(new DataHandler(attachment1)))
-                params.set(2, new DataHandler(attachment2))
+                params.set(1, new Holder<DataHandler>(new DataHandler(resource1)))
+                params.set(2, new DataHandler(resource2))
                 
                 // postMe is the operation being called
                 exchange.in.setHeader(CxfConstants.OPERATION_NAME, "postMe")

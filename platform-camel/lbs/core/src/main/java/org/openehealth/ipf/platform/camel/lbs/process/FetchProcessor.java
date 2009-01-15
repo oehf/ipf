@@ -15,28 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.process;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
 
 /**
  * Processor that integrates attachments into the body of an input message.
  * <p>
- * All attachments are passed to an {@link AttachmentHandler}. The result is an 
+ * All attachments are passed to an {@link ResourceHandler}. The result is an 
  * input message that can be used with endpoints compatible with the handler. 
  * @author Jens Riemschneider
  */
-public class FetchProcessor extends AttachmentHandlingProcessor {
+public class FetchProcessor extends ResourceHandlingProcessor {
     private static final Log log = LogFactory.getLog(FetchProcessor.class);    
     
     /* (non-Javadoc)
@@ -50,26 +41,13 @@ public class FetchProcessor extends AttachmentHandlingProcessor {
     }
     
     private void performIntegration(Exchange exchange) throws Exception {
-        if (exchange.getPattern().isInCapable() && hasAttachmentHandler()) {
+        if (exchange.getPattern().isInCapable() && hasResourceHandler()) {
             Message inMessage = exchange.getIn();            
-            Collection<AttachmentDataSource> attachments = getAttachments(inMessage);            
-            for (AttachmentHandler handler : getAttachmentHandlers()) {
-                handler.integrate(inMessage, attachments);
+            for (ResourceHandler handler : getResourceHandlers()) {
+                handler.integrate(inMessage);
             }
             
-            log.debug("integrated attachments: " + attachments);
+            log.debug("integrated attachments");
         }
-    }
-    
-    private Collection<AttachmentDataSource> getAttachments(Message message) throws IOException {
-        Map<String, DataHandler> camelAttachments = message.getAttachments();
-        Collection<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>(camelAttachments.size());
-        for (Map.Entry<String, DataHandler> entry : camelAttachments.entrySet()) {
-            DataSource dataSource = entry.getValue().getDataSource();
-            AttachmentDataSource attachment = new AttachmentDataSource(entry.getKey(), dataSource);
-            attachments.add(attachment);
-        }
-        
-        return attachments;
     }
 }

@@ -30,8 +30,8 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.commons.lbs.store.MemoryStore;
 import org.openehealth.ipf.commons.lbs.utils.NiceClass;
@@ -42,7 +42,7 @@ import org.openehealth.ipf.platform.camel.lbs.mllp.MllpDecoder.SessionContent;
  */
 public class MllpDecoderTest {
     private MemoryStore store;
-    private TestAttachmentFactory attachmentFactory;
+    private TestResourceFactory resourceFactory;
     private MllpDecoder decoder;
     private SessionContent sessionContent;
     private TestDecoderOutput out;
@@ -55,9 +55,9 @@ public class MllpDecoderTest {
     @Before
     public void setUp() throws Exception {
         store = new MemoryStore();
-        attachmentFactory = new TestAttachmentFactory(store, "defaultid");
-        decoder = new MllpDecoder(attachmentFactory);
-        sessionContent = new SessionContent(attachmentFactory);
+        resourceFactory = new TestResourceFactory(store, "defaultid");
+        decoder = new MllpDecoder(resourceFactory);
+        sessionContent = new SessionContent(resourceFactory);
         out = new TestDecoderOutput();
         session = EasyMock.createNiceMock(IoSession.class);
     }
@@ -67,7 +67,7 @@ public class MllpDecoderTest {
         String message = START + "Hello World" + END + CR;
         ByteBuffer in = toByteBuffer(message);
         assertTrue(decoder.doDecode(sessionContent, in, out));
-        assertEquals("Hello World", IOUtils.toString(out.getAttachment().getInputStream()));
+        assertEquals("Hello World", IOUtils.toString(out.getResource().getInputStream()));
         assertEquals(message.length(), in.position());
     }
     
@@ -76,9 +76,9 @@ public class MllpDecoderTest {
         String message = START + "Hello World" + END + CR + START + "Bye" + END + CR;
         ByteBuffer in = toByteBuffer(message);
         assertTrue(decoder.doDecode(sessionContent, in, out));
-        assertEquals("Hello World", IOUtils.toString(out.getAttachment().getInputStream()));
+        assertEquals("Hello World", IOUtils.toString(out.getResource().getInputStream()));
         assertTrue(decoder.doDecode(sessionContent, in, out));
-        assertEquals("Bye", IOUtils.toString(out.getAttachment().getInputStream()));
+        assertEquals("Bye", IOUtils.toString(out.getResource().getInputStream()));
         assertEquals(message.length(), in.position());
     }
     
@@ -89,10 +89,10 @@ public class MllpDecoderTest {
         ByteBuffer in1 = toByteBuffer(messagePart1);
         ByteBuffer in2 = toByteBuffer(messagePart2);
         assertFalse(decoder.doDecode(sessionContent, in1, out));
-        assertNull(out.getAttachment());
+        assertNull(out.getResource());
         assertTrue(decoder.doDecode(sessionContent, in2, out));
         assertEquals("This is only the beginning of the message. It continues in the next buffer", 
-                IOUtils.toString(out.getAttachment().getInputStream()));
+                IOUtils.toString(out.getResource().getInputStream()));
     }
     
     @Test
@@ -102,10 +102,10 @@ public class MllpDecoderTest {
         ByteBuffer in1 = toByteBuffer(messagePart1);
         ByteBuffer in2 = toByteBuffer(messagePart2);
         assertFalse(decoder.doDecode(sessionContent, in1, out));
-        assertNull(out.getAttachment());
+        assertNull(out.getResource());
         assertTrue(decoder.doDecode(sessionContent, in2, out));
         assertEquals("This is nearly the whole message", 
-                IOUtils.toString(out.getAttachment().getInputStream()));
+                IOUtils.toString(out.getResource().getInputStream()));
     }
     
     @Test
@@ -115,10 +115,10 @@ public class MllpDecoderTest {
         ByteBuffer in1 = toByteBuffer(messagePart1);
         ByteBuffer in2 = toByteBuffer(messagePart2);
         assertFalse(decoder.doDecode(sessionContent, in1, out));
-        assertNull(out.getAttachment());
+        assertNull(out.getResource());
         assertTrue(decoder.doDecode(sessionContent, in2, out));
         assertEquals("This is nearly the whole message", 
-                IOUtils.toString(out.getAttachment().getInputStream()));
+                IOUtils.toString(out.getResource().getInputStream()));
     }
     
     @Test
@@ -128,10 +128,10 @@ public class MllpDecoderTest {
         ByteBuffer in1 = toByteBuffer(messagePart1);
         ByteBuffer in2 = toByteBuffer(messagePart2);
         assertFalse(decoder.doDecode(sessionContent, in1, out));
-        assertNull(out.getAttachment());
+        assertNull(out.getResource());
         assertTrue(decoder.doDecode(sessionContent, in2, out));
         assertEquals("This is nearly the whole message", 
-                IOUtils.toString(out.getAttachment().getInputStream()));
+                IOUtils.toString(out.getResource().getInputStream()));
     }
     
     @Test
@@ -146,9 +146,9 @@ public class MllpDecoderTest {
             assertEquals("test", e.getMessage());
         }
 
-        AttachmentDataSource attachment = out.getAttachment();
-        assertFalse("Attachment must be removed when an exception occurs", 
-                store.contains(attachment.getResourceUri()));
+        ResourceDataSource resource = out.getResource();
+        assertFalse("Resource must be removed when an exception occurs", 
+                store.contains(resource.getResourceUri()));
     }
     
     @Test
@@ -158,11 +158,11 @@ public class MllpDecoderTest {
         assertFalse(decoder.doDecode(sessionContent, in, out));
         decoder.finishDecode(sessionContent);
         
-        // Attachment was not written but it was created by the factory
-        assertNull(out.getAttachment());
-        AttachmentDataSource attachment = attachmentFactory.getAttachment();
-        assertFalse("Attachment must be removed when an exception occurs", 
-                store.contains(attachment.getResourceUri()));
+        // Resource was not written but it was created by the factory
+        assertNull(out.getResource());
+        ResourceDataSource resource = resourceFactory.getResource();
+        assertFalse("Resource must be removed when an exception occurs", 
+                store.contains(resource.getResourceUri()));
     }
     
     @Test(expected = IllegalStateException.class)
@@ -181,9 +181,9 @@ public class MllpDecoderTest {
     public void testNiceClass() throws Exception {
         ByteBuffer buffer = ByteBuffer.allocate(1);
 
-        NiceClass.checkToString(decoder, attachmentFactory);
+        NiceClass.checkToString(decoder, resourceFactory);
         NiceClass.checkNullSafety(decoder, 
-                asList(buffer, out, attachmentFactory, session), 
+                asList(buffer, out, resourceFactory, session), 
                 asList());
     }    
     
@@ -195,13 +195,13 @@ public class MllpDecoderTest {
     }
 
     private final class TestDecoderOutput implements ProtocolDecoderOutput {
-        private AttachmentDataSource attachment;
+        private ResourceDataSource resource;
         private boolean throwsException;
 
         @Override
         public void write(Object message) {
-            assertNull("Multiple calls not expected", attachment);
-            attachment = (AttachmentDataSource) message;
+            assertNull("Multiple calls not expected", resource);
+            resource = (ResourceDataSource) message;
             if (throwsException) {
                 throw new RuntimeException("test");
             }
@@ -210,9 +210,9 @@ public class MllpDecoderTest {
         @Override
         public void flush() {}
 
-        public AttachmentDataSource getAttachment() {
-            AttachmentDataSource last = attachment;
-            attachment = null;
+        public ResourceDataSource getResource() {
+            ResourceDataSource last = resource;
+            resource = null;
             return last;
         }
         
@@ -221,20 +221,20 @@ public class MllpDecoderTest {
         }
     }
     
-    private final class TestAttachmentFactory extends AttachmentFactory {
-        private AttachmentDataSource attachment;
+    private final class TestResourceFactory extends ResourceFactory {
+        private ResourceDataSource resource;
 
-        public TestAttachmentFactory(LargeBinaryStore store, String defaultAttachmentId) {
-            super(store, defaultAttachmentId);
+        public TestResourceFactory(LargeBinaryStore store, String defaultResourceId) {
+            super(store, defaultResourceId);
         }
         
-        public AttachmentDataSource createAttachment(String unitOfWorkId) throws IOException {
-            attachment = super.createAttachment(unitOfWorkId);
-            return attachment;
+        public ResourceDataSource createResource(String unitOfWorkId) throws IOException {
+            resource = super.createResource(unitOfWorkId);
+            return resource;
         }
         
-        public AttachmentDataSource getAttachment() {
-            return attachment;
+        public ResourceDataSource getResource() {
+            return resource;
         }
     }
 }

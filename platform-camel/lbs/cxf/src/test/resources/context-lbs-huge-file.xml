@@ -53,16 +53,16 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         <constructor-arg value="target/store"/>
     </bean>
 
-    <bean id="attachmentFactory"
-        class="org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory">
+    <bean id="resourceFactory"
+        class="org.openehealth.ipf.commons.lbs.resource.ResourceFactory">
         <constructor-arg ref="largeBinaryStore" />
         <constructor-arg value="unnamed" />
     </bean>
 
-    <!-- This bean is a list of attachment handlers. Add all handlers used within the routes to this list -->
-    <util:list id="attachmentHandlers" list-class="java.util.ArrayList">
-        <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoAttachmentHandler">
-           <constructor-arg ref="attachmentFactory"/>
+    <!-- This bean is a list of resource handlers. Add all handlers used within the routes to this list -->
+    <util:list id="resourceHandlers" list-class="java.util.ArrayList">
+        <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoResourceHandler">
+           <constructor-arg ref="resourceFactory"/>
         </bean>
     </util:list>
 

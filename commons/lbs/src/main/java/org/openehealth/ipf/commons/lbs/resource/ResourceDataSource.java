@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.lbs.attachment;
+package org.openehealth.ipf.commons.lbs.resource;
 
 import static org.apache.commons.lang.Validate.notNull;
 
@@ -26,18 +26,18 @@ import java.net.URI;
 import javax.activation.DataSource;
 
 /**
- * Wrapper class for a data source that is used as an attachment.
+ * Wrapper class for a data source that is used as an resource.
  * <p>
  * This class mainly delegates to the data source that it wraps. This wrapper
- * adds specific attachment related support if the original data source is not 
- * an {@link AttachmentCompatibleDataSource}.
+ * adds specific resource related support if the original data source is not 
+ * an {@link ResourceCompatibleDataSource}.
  * <p> 
  * The main purpose of this class is to abstract from the different data sources 
- * that can be contained in the Camel attachments. 
+ * that can be contained in the Camel messages. 
  * @author Jens Riemschneider
  */
-public class AttachmentDataSource implements AttachmentCompatibleDataSource {
-    private final AttachmentCompatibleDataSource dataSource;
+public class ResourceDataSource implements ResourceCompatibleDataSource {
+    private final ResourceCompatibleDataSource dataSource;
     private final String id;
 
     /**
@@ -45,47 +45,47 @@ public class AttachmentDataSource implements AttachmentCompatibleDataSource {
      * <p>
      * Wrapping is performed in the following way:
      * <ul>
-     *  <li> If the data source is already an {@code AttachmentDataSource} the
-     *  new {@code AttachmentDataSource} wraps the data source contained in the
+     *  <li> If the data source is already a {@code ResourceDataSource} the
+     *  new {@code ResourceDataSource} wraps the data source contained in the
      *  old one
-     *  <li> If the data source is an {@link AttachmentCompatibleDataSource} the
+     *  <li> If the data source is a {@link ResourceCompatibleDataSource} the
      *  data source is wrapped without adding additional support
      *  <li> If the data source is any other {@link DataSource} it is wrapped
-     *  by adding support for an attachments as defined by the 
-     *  {@link AttachmentCompatibleDataSource}
+     *  by adding support for a resource as defined by the 
+     *  {@link ResourceCompatibleDataSource}
      * </ul>
      * @param id
-     *          the id of the attachment
+     *          the id of the resource
      * @param dataSource
-     *          the data source to wrap containing the attachment data
+     *          the data source to wrap containing the resource
      */
-    public AttachmentDataSource(String id, DataSource dataSource) {
+    public ResourceDataSource(String id, DataSource dataSource) {
         notNull(id, "id cannot be null");
         notNull(dataSource, "dataSource cannot be null");
         
-        if (dataSource instanceof AttachmentDataSource) {
+        if (dataSource instanceof ResourceDataSource) {
             // No need to wrap a wrapper
-            this.dataSource = ((AttachmentDataSource)dataSource).getWrappedDataSource();
+            this.dataSource = ((ResourceDataSource)dataSource).getWrappedDataSource();
         }
-        else if (dataSource instanceof AttachmentCompatibleDataSource) {
-            this.dataSource = (AttachmentCompatibleDataSource)dataSource;
+        else if (dataSource instanceof ResourceCompatibleDataSource) {
+            this.dataSource = (ResourceCompatibleDataSource)dataSource;
         }
         else {
-            this.dataSource = new AttachmentCompatibleDataSourceAdapter(dataSource);
+            this.dataSource = new ResourceCompatibleDataSourceAdapter(dataSource);
         }
         
         this.id = id;
     }
 
     /** 
-     * @return id of the attachment
+     * @return id of the resource
      */
     public String getId() {
         return id;
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.lbs.attachment.AttachmentCompatibleDataSource#getResourceUri()
+     * @see org.openehealth.ipf.platform.camel.lbs.resource.ResourceCompatibleDataSource#getResourceUri()
      */
     @Override
     public URI getResourceUri() {
@@ -93,7 +93,7 @@ public class AttachmentDataSource implements AttachmentCompatibleDataSource {
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.lbs.attachment.AttachmentCompatibleDataSource#getContentLength()
+     * @see org.openehealth.ipf.platform.camel.lbs.resource.ResourceCompatibleDataSource#getContentLength()
      */
     @Override
     public long getContentLength() throws IOException {
@@ -133,7 +133,7 @@ public class AttachmentDataSource implements AttachmentCompatibleDataSource {
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.lbs.attachment.AttachmentCompatibleDataSource#deleteAfterNextUsage()
+     * @see org.openehealth.ipf.commons.lbs.resource.ResourceCompatibleDataSource#deleteAfterNextUsage()
      */
     @Override
     public void deleteAfterNextUsage() {
@@ -153,26 +153,26 @@ public class AttachmentDataSource implements AttachmentCompatibleDataSource {
                 .getSimpleName(), id, dataSource);
     }
 
-    private AttachmentCompatibleDataSource getWrappedDataSource() {
+    private ResourceCompatibleDataSource getWrappedDataSource() {
         return dataSource;
     }
     
     /**
      * Adapter class for data sources that do not directly support the overall 
-     * requirements of an attachment (i.e. {@link AttachmentCompatibleDataSource}).
+     * requirements of a resource (i.e. {@link ResourceCompatibleDataSource}).
      * <p>
      * This class adds resource URI and content length support to the data
      * source. 
      * <p>
      * Note that this class does not calculate the length of the content in 
-     * advance. It will only do this if the attachment requires this information.
+     * advance. It will only do this if the resource requires this information.
      * The length is also only calculated once. 
      */
-    private final class AttachmentCompatibleDataSourceAdapter implements AttachmentCompatibleDataSource {
+    private final class ResourceCompatibleDataSourceAdapter implements ResourceCompatibleDataSource {
         private final DataSource dataSource;
         private Long cachedContentLength;
         
-        public AttachmentCompatibleDataSourceAdapter(DataSource dataSource) {
+        public ResourceCompatibleDataSourceAdapter(DataSource dataSource) {
             notNull(dataSource, "dataSource cannot be null");
             this.dataSource = dataSource;
         }

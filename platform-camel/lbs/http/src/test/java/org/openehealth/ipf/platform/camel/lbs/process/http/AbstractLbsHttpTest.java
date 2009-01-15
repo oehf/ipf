@@ -21,7 +21,6 @@ import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -34,9 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.annotation.Resource;
 import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -65,10 +63,12 @@ import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentCompatibleDataSource;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceCompatibleDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.commons.lbs.utils.CorruptedInputStream;
+import org.openehealth.ipf.platform.camel.lbs.process.ResourceList;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -116,6 +116,9 @@ public abstract class AbstractLbsHttpTest {
     @Autowired
     private LargeBinaryStore store;
     
+    @Resource(name = "resourceFactory")
+    private ResourceFactory factory;
+    
     protected File file;
 
     protected HttpClient httpClient;
@@ -141,9 +144,9 @@ public abstract class AbstractLbsHttpTest {
         
         file.delete();
     }
-
+    
     @Test
-    public void testTextWithoutAttachmentExtract() throws Exception {
+    public void testTextWithoutResourceExtract() throws Exception {
         PostMethod method = new PostMethod(ENDPOINT_NO_EXTRACT);
         method.setRequestEntity(new StringRequestEntity("testtext", "text/plain", null));
 
@@ -161,7 +164,7 @@ public abstract class AbstractLbsHttpTest {
     }
 
     @Test
-    public void testFileWithoutAttachmentExtract() throws Exception {        
+    public void testFileWithoutResourceExtract() throws Exception {        
         PostMethod method = new PostMethod(ENDPOINT_NO_EXTRACT);
         method.setRequestEntity(new FileRequestEntity(file, "unknown/unknown"));
 
@@ -185,7 +188,7 @@ public abstract class AbstractLbsHttpTest {
     }
     
     @Test
-    public void testMultipartWithoutAttachmentExtract() throws Exception {        
+    public void testMultipartWithoutResourceExtract() throws Exception {        
         PostMethod method = new PostMethod(ENDPOINT_NO_EXTRACT);
         Part[] parts = new Part[] {
                 new FilePart("file1", file),
@@ -278,7 +281,7 @@ public abstract class AbstractLbsHttpTest {
         testFile(ENDPOINT_EXTRACT_ROUTER);
     }
     
-    private void testFile(final String endpoint) throws Exception {
+    protected void testFile(final String endpoint) throws Exception {
         PostMethod method = new PostMethod(endpoint);
         method.setRequestEntity(new FileRequestEntity(file, "unknown/unknown"));
 
@@ -293,15 +296,12 @@ public abstract class AbstractLbsHttpTest {
         String receivedBody = outputGenerator.getReceivedBody();        
         assertEquals("blu bla", receivedBody);
 
-        Map<String, DataHandler> receivedAttachments = outputGenerator.getReceivedAttachments();
-        assertEquals(1, receivedAttachments.size());
-        DataHandler attachment = receivedAttachments.values().iterator().next();
-        DataSource dataSource = attachment.getDataSource();
-        assertTrue(dataSource instanceof AttachmentDataSource);
-        AttachmentDataSource attachmentDataSource = (AttachmentDataSource) dataSource;        
+        ResourceList receivedResources = outputGenerator.getReceivedResources();
+        assertEquals(1, receivedResources.size());
+        ResourceDataSource resource = receivedResources.get(0);        
         
         assertFalse("clean up did not remove temporary resource",
-                store.contains(attachmentDataSource.getResourceUri()));
+                store.contains(resource.getResourceUri()));
     }
     
     @Test
@@ -316,9 +316,9 @@ public abstract class AbstractLbsHttpTest {
         mock.whenAnyExchangeReceived(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                AttachmentDataSource attachment = 
-                    exchange.getIn().getBody(AttachmentDataSource.class);
-                resourceUri[0] = attachment.getResourceUri();
+                ResourceDataSource resource = 
+                    exchange.getIn().getBody(ResourceDataSource.class);
+                resourceUri[0] = resource.getResourceUri();
             }            
         });
 
@@ -379,16 +379,29 @@ public abstract class AbstractLbsHttpTest {
         assertEquals("testtext1", receivedContent.get("text1"));
         assertEquals("testtext2", receivedContent.get("text2"));
   
-        assertEquals("", outputGenerator.getReceivedBody());
+        assertEquals("blu bla", outputGenerator.getReceivedBody());
     }
     
     @Test
     public void testMultipartSendOnly() throws Exception {
         Exchange sendExchange = new DefaultExchange(camelContext);
+        
         FileDataSource dataSource1 = new FileDataSource(file);
-        ByteArrayDataSource dataSource2 = new ByteArrayDataSource("testdata".getBytes(), "text/plain");
-        sendExchange.getIn().addAttachment("first", new DataHandler(dataSource1));
-        sendExchange.getIn().addAttachment("second", new DataHandler(dataSource2));
+        InputStream inputStream = dataSource1.getInputStream();
+        ResourceDataSource resource1 = 
+            factory.createResource("test", "text/plain", "text", "first", inputStream);
+        inputStream.close();
+        
+        ByteArrayDataSource dataSource2 = new ByteArrayDataSource("testdata".getBytes(), "text/plain");        
+        inputStream = dataSource2.getInputStream();
+        ResourceDataSource resource2 = 
+            factory.createResource("test", "text/plain", "text", "second", dataSource2.getInputStream());
+        inputStream.close();
+
+        ResourceList resources = new ResourceList();
+        resources.add(resource1);
+        resources.add(resource2);
+        sendExchange.getIn().setBody(resources);
         sendExchange.setPattern(ExchangePattern.InOut);
 
         mock.expectedMessageCount(1);
@@ -407,37 +420,16 @@ public abstract class AbstractLbsHttpTest {
     }
     
     @Test
-    public void testStoreDoesNotHandleNonHttpAttachment() throws Exception {
+    public void testStoreDoesNotHandleNonHttpMessage() throws Exception {
         Exchange sendExchange = new DefaultExchange(camelContext);
-        FileDataSource dataSource = new FileDataSource(file);
-        DataHandler dataHandler = new DataHandler(dataSource);
-        sendExchange.getIn().addAttachment("content", dataHandler);
+        sendExchange.getIn().setBody("nix http");
 
         mock.expectedMessageCount(1);
+        mock.expectedBodiesReceived("nix http");
         
         producerTemplate.send(ENDPOINT_NON_HTTP, sendExchange);
 
         mock.assertIsSatisfied();
-        
-        Exchange exchange = mock.getReceivedExchanges().get(0);
-        assertEquals(1, exchange.getIn().getAttachments().size());
-        assertSame(dataHandler, exchange.getIn().getAttachment("content"));
-    }
-    
-    @Test
-    public void testStoreDoesNotHandleNonHttpText() throws Exception {
-        Exchange sendExchange = new DefaultExchange(camelContext);
-        sendExchange.getIn().setBody("testbody");
-
-        mock.expectedMessageCount(1);
-        mock.expectedBodiesReceived("testbody");
-        
-        producerTemplate.send(ENDPOINT_NON_HTTP, sendExchange);
-
-        mock.assertIsSatisfied();
-        
-        Exchange exchange = mock.getReceivedExchanges().get(0);
-        assertEquals(0, exchange.getIn().getAttachments().size());
     }
     
     /**
@@ -449,15 +441,22 @@ public abstract class AbstractLbsHttpTest {
     public void testFetchHandlesCorruptStreamMultipart() throws Exception {
         Exchange sendExchange = new DefaultExchange(camelContext);
         CorruptedInputStream inputStream = new CorruptedInputStream();        
-        AttachmentCompatibleDataSource dataSource1 = createMock(AttachmentCompatibleDataSource.class);
+        ResourceCompatibleDataSource dataSource1 = createMock(ResourceCompatibleDataSource.class);
         expect(dataSource1.getInputStream()).andReturn(inputStream).anyTimes();
         expect(dataSource1.getContentType()).andReturn("text/plain").anyTimes();
         expect(dataSource1.getName()).andReturn("test").anyTimes();
         expect(dataSource1.getContentLength()).andReturn(245L).anyTimes();
         replay(dataSource1);
+
         ByteArrayDataSource dataSource2 = new ByteArrayDataSource("testdata".getBytes(), "text/plain");
-        sendExchange.getIn().addAttachment("first", new DataHandler(dataSource1));
-        sendExchange.getIn().addAttachment("second", new DataHandler(dataSource2));
+        
+        ResourceDataSource resource1 = new ResourceDataSource("first", dataSource1);
+        ResourceDataSource resource2 = new ResourceDataSource("second", dataSource2);
+
+        ResourceList resources = new ResourceList();
+        resources.add(resource1);
+        resources.add(resource2);
+        sendExchange.getIn().setBody(resources);
 
         // Note that the mock endpoint might receive several exchanges. These 
         // are cut off because reading from the stream failed at some point.
@@ -487,13 +486,18 @@ public abstract class AbstractLbsHttpTest {
     public void testFetchHandlesCorruptStreamSingle() throws Exception {
         Exchange sendExchange = new DefaultExchange(camelContext);
         CorruptedInputStream inputStream = new CorruptedInputStream();        
-        AttachmentCompatibleDataSource dataSource = createMock(AttachmentCompatibleDataSource.class);
+        ResourceCompatibleDataSource dataSource = createMock(ResourceCompatibleDataSource.class);
         expect(dataSource.getInputStream()).andReturn(inputStream).anyTimes();
         expect(dataSource.getContentType()).andReturn("text/plain").anyTimes();
         expect(dataSource.getName()).andReturn("test").anyTimes();
         expect(dataSource.getContentLength()).andReturn(245L).anyTimes();
         replay(dataSource);
-        sendExchange.getIn().addAttachment("content", new DataHandler(dataSource));
+        
+        ResourceDataSource resource = new ResourceDataSource("content", dataSource);
+
+        ResourceList resources = new ResourceList();
+        resources.add(resource);
+        sendExchange.getIn().setBody(resources);
 
         // In this case the mock endpoint does not receive messages because the
         // failure occurs before the request is streamed out
@@ -510,9 +514,9 @@ public abstract class AbstractLbsHttpTest {
 
     private final class TestOutputGenerator implements Processor {
         private final String output;
-        private final Map<String, String> attachmentContents = new HashMap<String, String>();
+        private final Map<String, String> receivedContent = new HashMap<String, String>();
         private String receivedBody;
-        private Map<String, DataHandler> receivedAttachments;
+        private ResourceList receivedResources;
 
         private TestOutputGenerator(String output) {
             this.output = output;
@@ -524,13 +528,12 @@ public abstract class AbstractLbsHttpTest {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            Map<String, DataHandler> attachments = exchange.getIn().getAttachments();
-            receivedAttachments = attachments;
-            for (Map.Entry<String, DataHandler> attachment : attachments.entrySet()) {
-                DataHandler dataHandler = attachment.getValue();
-                InputStream inputStream = dataHandler.getInputStream();
+            ResourceList resources = exchange.getIn().getBody(ResourceList.class);
+            receivedResources = resources;
+            for (ResourceDataSource resource : resources) {
+                InputStream inputStream = resource.getInputStream();
                 try {
-                    attachmentContents.put(attachment.getKey(), IOUtils.toString(inputStream));
+                    receivedContent.put(resource.getId(), IOUtils.toString(inputStream));
                 }
                 finally {
                     inputStream.close();
@@ -543,11 +546,11 @@ public abstract class AbstractLbsHttpTest {
         }
         
         public Map<String, String> getReceivedContent() {
-            return attachmentContents;
+            return receivedContent;
         }
         
-        public Map<String, DataHandler> getReceivedAttachments() {
-            return receivedAttachments;
+        public ResourceList getReceivedResources() {
+            return receivedResources;
         }
     }
 }

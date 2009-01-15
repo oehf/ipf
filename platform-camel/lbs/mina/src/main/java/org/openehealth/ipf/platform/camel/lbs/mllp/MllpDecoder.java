@@ -30,8 +30,8 @@ import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.platform.camel.lbs.mllp.MllpMessagePart.MllpMessageExtractionState;
 
 /**
@@ -42,18 +42,18 @@ import org.openehealth.ipf.platform.camel.lbs.mllp.MllpMessagePart.MllpMessageEx
 public class MllpDecoder extends CumulativeProtocolDecoder {
     private static final String SESSION_CONTENT = MllpDecoder.class.getName() + ".SessionContent";
     
-    private AttachmentFactory attachmentFactory;
+    private ResourceFactory resourceFactory;
     
     private static final Log log = LogFactory.getLog(MllpDecoder.class);    
 
     /**
      * Construct the decoder
-     * @param attachmentFactory
+     * @param resourceFactory
      *          the factory to create messages
      */
-    public MllpDecoder(AttachmentFactory attachmentFactory) {
-        notNull(attachmentFactory, "attachmentFactory cannot be null");
-        this.attachmentFactory = attachmentFactory;
+    public MllpDecoder(ResourceFactory resourceFactory) {
+        notNull(resourceFactory, "resourceFactory cannot be null");
+        this.resourceFactory = resourceFactory;
     }
     
     /* (non-Javadoc)
@@ -70,7 +70,7 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
     }
 
     boolean doDecode(SessionContent sessionContent, ByteBuffer in, ProtocolDecoderOutput out) throws IOException {
-        AttachmentDataSource message = sessionContent.getMessage();
+        ResourceDataSource message = sessionContent.getMessage();
         MllpMessageExtractionState state = sessionContent.getExtractionState();
         OutputStream outputStream = sessionContent.getOutputStream(message);
         
@@ -121,15 +121,15 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
      */
     @Override
     public String toString() {
-        return String.format("{%1$s: attachmentFactory=%2$s}", getClass()
-                .getSimpleName(), attachmentFactory);
+        return String.format("{%1$s: resourceFactory=%2$s}", getClass()
+                .getSimpleName(), resourceFactory);
     }
 
     private SessionContent getSessionContent(IoSession session) throws IOException {
         SessionContent sessionContent = (SessionContent) session.getAttribute(SESSION_CONTENT);
         
         if (sessionContent == null) {
-            sessionContent = new SessionContent(attachmentFactory);
+            sessionContent = new SessionContent(resourceFactory);
             session.setAttribute(SESSION_CONTENT, sessionContent);
         }
         
@@ -147,15 +147,15 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
     }
     
     static class SessionContent {        
-        private AttachmentFactory attachmentFactory;
+        private ResourceFactory resourceFactory;
         private OutputStream outputStream;
         private MllpMessageExtractionState state;
-        private AttachmentDataSource message;
+        private ResourceDataSource message;
         private String unitOfWorkId;
         
-        public SessionContent(AttachmentFactory attachmentFactory) {
-            notNull(attachmentFactory, "attachmentFactory cannot be null");
-            this.attachmentFactory = attachmentFactory;
+        public SessionContent(ResourceFactory resourceFactory) {
+            notNull(resourceFactory, "resourceFactory cannot be null");
+            this.resourceFactory = resourceFactory;
             this.unitOfWorkId = new UuidGenerator().generateId() + ".mllp";
         }
         
@@ -169,9 +169,9 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
                 outputStream.close();
             }
             
-            List<AttachmentDataSource> createdAttachments = attachmentFactory.getAttachments(unitOfWorkId);
-            for (AttachmentDataSource attachment : createdAttachments) {
-                attachmentFactory.deleteAttachment(unitOfWorkId, attachment);
+            List<ResourceDataSource> createdResources = resourceFactory.getResources(unitOfWorkId);
+            for (ResourceDataSource resource : createdResources) {
+                resourceFactory.deleteResource(unitOfWorkId, resource);
             }
         }
         
@@ -182,14 +182,14 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
             return state;
         }
 
-        public AttachmentDataSource getMessage() throws IOException {
+        public ResourceDataSource getMessage() throws IOException {
             if (message == null) {
-                message = attachmentFactory.createAttachment(unitOfWorkId);
+                message = resourceFactory.createResource(unitOfWorkId);
             }            
             return message;
         }
         
-        public OutputStream getOutputStream(AttachmentDataSource message) throws IOException {
+        public OutputStream getOutputStream(ResourceDataSource message) throws IOException {
             if (outputStream == null) {
                 outputStream = message.getOutputStream();
             }            

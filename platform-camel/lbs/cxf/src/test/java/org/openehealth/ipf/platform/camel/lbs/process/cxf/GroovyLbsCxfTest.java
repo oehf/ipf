@@ -27,7 +27,7 @@ import org.apache.camel.impl.DefaultExchange;
 import org.apache.cxf.message.MessageContentsList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -64,9 +64,9 @@ public class GroovyLbsCxfTest extends AbstractLbsCxfTest {
             public void process(Exchange exchange) throws Exception {
                 MessageContentsList params = exchange.getIn().getBody(MessageContentsList.class);
                 Holder<DataHandler> param = (Holder<DataHandler>) params.get(1);
-                assertTrue(param.value.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(param.value.getDataSource() instanceof ResourceDataSource);
                 DataHandler onewayParam = (DataHandler) params.get(2);
-                assertTrue(onewayParam.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(onewayParam.getDataSource() instanceof ResourceDataSource);
                 assertEquals("yes", exchange.getIn().getHeader("tokenfound"));
             }
         });        
@@ -88,9 +88,9 @@ public class GroovyLbsCxfTest extends AbstractLbsCxfTest {
                 called[0] = true;
                 MessageContentsList params = exchange.getIn().getBody(MessageContentsList.class);
                 Holder<DataHandler> param = (Holder<DataHandler>) params.get(1);
-                assertTrue(param.value.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(param.value.getDataSource() instanceof ResourceDataSource);
                 DataHandler onewayParam = (DataHandler) params.get(2);
-                assertTrue(onewayParam.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(onewayParam.getDataSource() instanceof ResourceDataSource);
             }
         });        
         

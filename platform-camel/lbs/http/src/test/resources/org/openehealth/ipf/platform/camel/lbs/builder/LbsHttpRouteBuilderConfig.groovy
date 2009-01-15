@@ -28,12 +28,16 @@ import org.apache.camel.Exchange
 
 import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory
 
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource
+import org.openehealth.ipf.platform.camel.lbs.process.ResourceList
 
 import org.apache.camel.builder.RouteBuilder
 
+
+import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore
+import org.openehealth.ipf.commons.lbs.resource.LargeBinaryStoreDataSource
 
 /**
  * @author Jens Riemschneider
@@ -51,43 +55,71 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:9452/lbstest_extract')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:9452/lbstest_ping')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .process { Exchange exchange ->
-                def dataSource = exchange.in.getBody(AttachmentDataSource.class)
+                def dataSource = exchange.in.getBody(ResourceDataSource.class)
                 exchange.out.setBody(dataSource)
             }
             .to('mock:mock');
             
         builder.from('jetty:http://localhost:9452/lbstest_extract_factory_via_bean')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:9452/lbstest_extract_router')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .setHeader('tag').constant('I was here')
-            .fetch().with('attachmentHandlers')
+            .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
 
         builder.from('direct:lbstest_send_only')
-            .fetch().with('attachmentHandlers')
+            .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
             
         builder.from('direct:lbstest_non_http')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:9452/lbstest_receiver')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
+            .to('mock:mock')
+            
+        builder.from('jetty:http://localhost:9452/lbstest_jms')
+            .store().with('resourceHandlers')
+            .process { Exchange exchange ->
+                def resourceList = exchange.in.getBody(ResourceList.class)
+                def dataSource = resourceList.get(0)
+                exchange.in.setHeader('resourceUri', dataSource.resourceUri.toString())
+                exchange.in.setHeader('name', dataSource.id)
+                exchange.in.setHeader('contentType', dataSource.contentType)
+                exchange.in.body = ''
+            }
+            .to('jms:temp:queue:lbstest')
+            
+        builder.from('jms:temp:queue:lbstest')
+            .process { Exchange exchange ->
+                def resourceUri = exchange.in.getHeader('resourceUri')
+                def name = exchange.in.getHeader('name')
+                def contentType = exchange.in.getHeader('contentType')
+                def resourceFactory = builder.bean(ResourceFactory.class, 'resourceFactory')
+                def store = builder.bean(LargeBinaryStore.class, 'largeBinaryStore')
+                println("in: " + resourceUri + ", " + name + ", " + contentType)
+                def largeBinaryDataSource = new LargeBinaryStoreDataSource(store, URI.create(resourceUri), contentType, name)
+                def dataSource = new ResourceDataSource(name, largeBinaryDataSource)
+                def resourceList = new ResourceList()
+                resourceList.add(dataSource)
+                exchange.in.body = resourceList
+            }
             .to('mock:mock')
             
         // Example routes only tested with groovy
         builder.from('jetty:http://localhost:9452/lbstest_example1')
             // Replace the message content with a data source
-            .store().with('attachmentHandlers') 
+            .store().with('resourceHandlers') 
             // Custom processing to find a token
             .process { Exchange exchange ->
                 // Get the stream from the data source and read it
@@ -112,12 +144,12 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             
         builder.from('jetty:http://localhost:9452/lbstest_example2')
             // Replace the message content with data sources
-            .store().with('attachmentHandlers')
-            // Custom processing to look for text attachments
+            .store().with('resourceHandlers')
+            // Custom processing to look for text resources
             .process { Exchange exchange ->
-                // Run through all attachments and check the content type
-                exchange.in.attachments.each {
-                    if (it.value.contentType.startsWith('text/plain')) {
+                // Run through all resources and check the content type
+                exchange.in.getBody(ResourceList.class).each {
+                    if (it.contentType.startsWith('text/plain')) {
                         exchange.in.setHeader('textfound', 'yes')
                     }
                 }
@@ -125,19 +157,21 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:9452/lbstest_example3')
-            .store().with('attachmentHandlers')
+            .store().with('resourceHandlers')
             .process { Exchange exchange ->
-                // The attachment factory can be used to create attachments manually
-                def attachmentFactory = builder.bean(AttachmentFactory.class, 'attachmentFactory') 
+                // The resource factory can be used to create resources manually
+                def resourceFactory = builder.bean(ResourceFactory.class, 'resourceFactory') 
                 def inputStream = new ByteArrayInputStream('hello world'.bytes)
                 
                 // Using the unit of work from the original exchange we can ensure that the
-                // attachment is removed once the message has been processed by the route
-                def attachment = attachmentFactory.createAttachment(exchange.unitOfWork.id, 'text/xml', null, null, inputStream)
-                exchange.in.addAttachment('hello', new DataHandler(attachment))
+                // resource is removed once the message has been processed by the route
+                def resource = resourceFactory.createResource(exchange.unitOfWork.id, 'text/xml', null, 'hello', inputStream)
+                def resourceList = exchange.in.getBody(ResourceList.class)
+                resourceList.add(resource)
+                println(resourceList)
             }
-            // Create a POST request with the attachments
-            .fetch().with('attachmentHandlers')
+            // Create a POST request with the resources
+            .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
     }    
 }

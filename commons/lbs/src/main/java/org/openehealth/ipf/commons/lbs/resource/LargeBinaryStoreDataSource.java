@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.lbs.attachment;
+package org.openehealth.ipf.commons.lbs.resource;
 
 import static org.apache.commons.lang.Validate.notNull;
 
@@ -31,12 +31,12 @@ import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
  * Data source implementation that wraps a resource {@code URI} from a
  * {@link LargeBinaryStore}.
  * <p>
- * This implementation supports read-only usage of the data source as an
- * attachment.
+ * This implementation supports read-only usage of the data source as a
+ * resource.
  * 
  * @author Jens Riemschneider
  */
-final public class LargeBinaryStoreDataSource implements AttachmentCompatibleDataSource {
+final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataSource {
     private final LargeBinaryStore store;
     private final URI resourceUri;
     private final String contentType;
@@ -105,7 +105,7 @@ final public class LargeBinaryStoreDataSource implements AttachmentCompatibleDat
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.lbs.attachment.AttachmentCompatibleDataSource#deleteAfterNextUsage()
+     * @see org.openehealth.ipf.commons.lbs.resource.ResourceCompatibleDataSource#deleteAfterNextUsage()
      */
     @Override
     public void deleteAfterNextUsage() {
@@ -113,7 +113,7 @@ final public class LargeBinaryStoreDataSource implements AttachmentCompatibleDat
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.lbs.attachment.AttachmentCompatibleDataSource#delete()
+     * @see org.openehealth.ipf.commons.lbs.resource.ResourceCompatibleDataSource#delete()
      */
     @Override
     public void delete() {
@@ -137,7 +137,7 @@ final public class LargeBinaryStoreDataSource implements AttachmentCompatibleDat
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.lbs.attachment.ResourceCompatible#getResourceUri()
+     * @see org.openehealth.ipf.platform.camel.lbs.resource.ResourceCompatible#getResourceUri()
      */
     @Override
     public URI getResourceUri() {
@@ -145,7 +145,7 @@ final public class LargeBinaryStoreDataSource implements AttachmentCompatibleDat
     }
 
     /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.lbs.attachment.ResourceCompatible#getContentLength()
+     * @see org.openehealth.ipf.platform.camel.lbs.resource.ResourceCompatible#getContentLength()
      */
     @Override
     public long getContentLength() {

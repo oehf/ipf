@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.lbs.attachment;
+package org.openehealth.ipf.commons.lbs.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,22 +22,22 @@ import java.net.URI;
 import javax.activation.DataSource;
 
 /**
- * Represents a data source that is compatible with the attachment requirements.
+ * Represents a data source that is compatible with the resource requirements.
  * <p>
- * Attachments require functionality in addition to that supported by a standard
+ * Resources require functionality in addition to that supported by a standard
  * {@link DataSource}. This includes:
  * <ul>
  *  <li> Support for retrieving a resource {@code URI} that represents a storage 
- *    location of the resource encapsulated by the attachment
+ *    location of the resource
  *  <li> Support for retrieving the content length
  * </ul>
  *  
  * @author Jens Riemschneider
  */
-public interface AttachmentCompatibleDataSource extends DataSource {
+public interface ResourceCompatibleDataSource extends DataSource {
 
     /** 
-     * @return resource URI of the attachment, or {@code null} if the URI cannot
+     * @return resource URI of the resource, or {@code null} if the URI cannot
      *          be determined
      */
     URI getResourceUri();

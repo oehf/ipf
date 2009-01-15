@@ -32,7 +32,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
   </camel:camelContext>
 
   <bean id="mllpStoreCodec" class="org.openehealth.ipf.platform.camel.lbs.mllp.MllpStoreCodec">
-	<constructor-arg ref="attachmentFactory"/>
+	<constructor-arg ref="resourceFactory"/>
 	<constructor-arg ref="camelContext"/>
   </bean>
 
@@ -45,7 +45,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
   
   <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore"/>
   
-  <bean id="attachmentFactory" class="org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory">
+  <bean id="resourceFactory" class="org.openehealth.ipf.commons.lbs.resource.ResourceFactory">
 	<constructor-arg ref="largeBinaryStore"/>
 	<constructor-arg value="unnamed"/>
   </bean>

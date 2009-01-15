@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.lbs.attachment;
+package org.openehealth.ipf.commons.lbs.resource;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.net.URI;
 
 import org.junit.Test;
+import org.openehealth.ipf.commons.lbs.resource.LargeBinaryStoreDataSource;
 import org.openehealth.ipf.commons.lbs.store.MemoryStore;
 import org.openehealth.ipf.commons.lbs.utils.NiceClass;
 

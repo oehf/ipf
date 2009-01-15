@@ -34,7 +34,7 @@ public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builde
      * <p>
      * The created processor extracts binary data from a protocol dependent 
      * Camel input body (e.g. an HTTP request from the jetty endpoint) and 
-     * creates an attachment that is stored in a {@link LargeBinaryStore}.
+     * creates a resource that is stored in a {@link LargeBinaryStore}.
      * @return the created store processor
      */
     public StoreProcessor store() {        
@@ -44,7 +44,7 @@ public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builde
     /**
      * Creates a fetch processor.
      * <p>
-     * The created processor integrates attachments into a protocol dependent 
+     * The created processor integrates resources into a protocol dependent 
      * Camel input body (e.g. an HTTP request for the http endpoint).
      * @return the created fetch processor
      */

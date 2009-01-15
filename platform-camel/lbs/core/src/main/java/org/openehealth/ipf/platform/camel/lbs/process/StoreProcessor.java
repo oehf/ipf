@@ -19,24 +19,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.activation.DataHandler;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.spi.Synchronization;
 import org.apache.camel.spi.UnitOfWork;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 
 /**
- * Processor that extracts attachments from the body of an input message.
+ * Processor that extracts resources from the body of an input message.
  * <p>
- * The message is passed to an attached {@link AttachmentHandler} that returns
- * the attachments which are added as Camel attachments to the input message.
+ * The message is passed to an attached {@link ResourceHandler} that performs
+ * the necessary extraction
  * @author Jens Riemschneider
  */
-public class StoreProcessor extends AttachmentHandlingProcessor {
+public class StoreProcessor extends ResourceHandlingProcessor {
     private static final Log log = LogFactory.getLog(StoreProcessor.class);    
 
     /* (non-Javadoc)
@@ -50,35 +48,31 @@ public class StoreProcessor extends AttachmentHandlingProcessor {
     }
     
     private void performExtraction(Exchange exchange) throws Exception {
-        if (exchange.getPattern().isInCapable() && hasAttachmentHandler()) {
+        if (exchange.getPattern().isInCapable() && hasResourceHandler()) {
             Message inMessage = exchange.getIn();
             UnitOfWork unitOfWork = exchange.getUnitOfWork();
             String unitOfWorkId = "none";
             if (unitOfWork == null) {
-                log.warn("No unit of work defined. StoreProcessor is unable to perform clean up of stored attachments");                
+                log.warn("No unit of work defined. StoreProcessor is unable to perform clean up of stored resources");                
             }
             else {
                 unitOfWorkId = unitOfWork.getId();
-                unitOfWork.addSynchronization(new AttachmentCleanUp(unitOfWorkId));
+                unitOfWork.addSynchronization(new ResourceCleanUp(unitOfWorkId));
             }
                 
-        	Collection<AttachmentDataSource> attachments = new ArrayList<AttachmentDataSource>();
-            for (AttachmentHandler handler : getAttachmentHandlers()) {
-            	attachments.addAll(handler.extract(unitOfWorkId, inMessage));
+        	Collection<ResourceDataSource> resources = new ArrayList<ResourceDataSource>();
+            for (ResourceHandler handler : getResourceHandlers()) {
+            	resources.addAll(handler.extract(unitOfWorkId, inMessage));
             }
             
-            for (AttachmentDataSource attachment : attachments) {
-                inMessage.addAttachment(attachment.getId(), new DataHandler(attachment));
-            }
-            
-            log.debug("extracted attachments: " + attachments);
+            log.debug("extracted resources: " + resources);
         }
     }
 
-    private final class AttachmentCleanUp implements Synchronization {
+    private final class ResourceCleanUp implements Synchronization {
         private String unitOfWorkId;
 
-        public AttachmentCleanUp(String unitOfWorkId) {
+        public ResourceCleanUp(String unitOfWorkId) {
             this.unitOfWorkId = unitOfWorkId;
         }
 
@@ -95,13 +89,13 @@ public class StoreProcessor extends AttachmentHandlingProcessor {
         private void cleanUp(Exchange exchange) {
             Message outMessage = exchange.getOut();
             
-            List<AttachmentDataSource> requiredAttachments = new ArrayList<AttachmentDataSource>();
-            for (AttachmentHandler handler : getAttachmentHandlers()) {
-                requiredAttachments.addAll(handler.getRequiredAttachments(outMessage));
+            List<ResourceDataSource> requiredResources = new ArrayList<ResourceDataSource>();
+            for (ResourceHandler handler : getResourceHandlers()) {
+                requiredResources.addAll(handler.getRequiredResources(outMessage));
             }
 
-            for (AttachmentHandler handler : getAttachmentHandlers()) {
-                handler.cleanUp(unitOfWorkId, outMessage, requiredAttachments);
+            for (ResourceHandler handler : getResourceHandlers()) {
+                handler.cleanUp(unitOfWorkId, outMessage, requiredResources);
             }
         }
     }

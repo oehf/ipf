@@ -23,6 +23,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openehealth.ipf.platform.camel.lbs.process.ResourceList;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -50,6 +51,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(DirtySpringContextJUnit4ClassRunner.class) // DO NOT SIMPLY COPY!!! see above
 @ContextConfiguration(locations = { "/context-lbs-route-http-groovy.xml" })
 public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
+    private static final String ENDPOINT_JMS_QUEUE = 
+        "http://localhost:9452/lbstest_jms";
+    
     /**
      * Test to verify that example code works 
      */
@@ -99,6 +103,12 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
 
         mock.assertIsSatisfied();
         Exchange exchange = mock.getReceivedExchanges().get(0);
-        assertEquals(2, exchange.getIn().getAttachments().size());
+        ResourceList resourceList = exchange.getIn().getBody(ResourceList.class);
+        assertEquals(2, resourceList.size());
+    }
+
+    @Test
+    public void testFileEndpointJms() throws Exception {
+        testFile(ENDPOINT_JMS_QUEUE);
     }
 }

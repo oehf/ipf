@@ -24,7 +24,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.model.ProcessorTypeSupport;
-import org.openehealth.ipf.platform.camel.lbs.process.AttachmentHandler;
+import org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler;
 import org.openehealth.ipf.platform.camel.lbs.process.StoreProcessor;
 
 /**
@@ -37,29 +37,29 @@ public class StoreProcessorType extends ProcessorTypeSupport {
 
     private List<ProcessorType<?>> outputs = new ArrayList<ProcessorType<?>>();
     
-    private String attachmentHandlersBeanName;
+    private String resourceHandlersBeanName;
     
     /**
-     * Sets the {@link AttachmentHandler} of the processor.
-     * An attachment handler enables the processor to handle a specific type of
+     * Sets the {@link ResourceHandler} of the processor.
+     * A resource handler enables the processor to handle a specific type of
      * endpoint exchange. The handler contains the actual strategy for 
-     * integrating attachments from specific message type (e.g. an HTTP message).
+     * integrating resources from specific message type (e.g. an HTTP message).
      * <p>
-     * When calling this method or {@link #with(AttachmentHandler)} multiple  
+     * When calling this method or {@link #with(ResourceHandler)} multiple  
      * times the result is undefined.  
      * <p>
-     * This method or {@link #with(AttachmentHandler)} must be called at 
+     * This method or {@link #with(ResourceHandler)} must be called at 
      * least once. Otherwise an {@link IllegalArgumentException} is thrown when 
      * creating the route.
      * <p>
      * This method can be called multiple times to add multiple handlers.
      * @param handlerBeanName
-     *          the bean name of the handler for integrating attachments
+     *          the bean name of the handler for integrating resources
      * @return this type instance for usage with a fluent API
      */
-    public StoreProcessorType with(String attachmentHandlersBeanName) {
-        notNull(attachmentHandlersBeanName, "attachmentHandlersBeanName cannot be null");
-        this.attachmentHandlersBeanName = attachmentHandlersBeanName;
+    public StoreProcessorType with(String resourceHandlersBeanName) {
+        notNull(resourceHandlersBeanName, "resourceHandlersBeanName cannot be null");
+        this.resourceHandlersBeanName = resourceHandlersBeanName;
         return this;
     }
     
@@ -72,11 +72,11 @@ public class StoreProcessorType extends ProcessorTypeSupport {
 
         storer.setProcessor(routeContext.createProcessor(this));
 
-        if (attachmentHandlersBeanName == null) {
-            throw new IllegalStateException("attachment handlers must be set via with()");
+        if (resourceHandlersBeanName == null) {
+            throw new IllegalStateException("resource handlers must be set via with()");
         }
         
-        storer.with(routeContext.lookup(attachmentHandlersBeanName, List.class));
+        storer.with(routeContext.lookup(resourceHandlersBeanName, List.class));
         
         return storer;
     }
@@ -94,7 +94,7 @@ public class StoreProcessorType extends ProcessorTypeSupport {
      */
     @Override
     public String toString() {
-        return String.format("{%1$s: attachmentHandlersBeanName=%2$s}",
-                getClass().getSimpleName(), attachmentHandlersBeanName);
+        return String.format("{%1$s: resourceHandlersBeanName=%2$s}",
+                getClass().getSimpleName(), resourceHandlersBeanName);
     }
 }

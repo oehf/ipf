@@ -42,7 +42,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +116,7 @@ public class LbsMllpViaMinaTest {
     }
 
     @Test
-    public void testTextWithoutAttachmentExtract() throws Exception {
+    public void testTextWithoutResourceExtract() throws Exception {
         mock.expectedMessageCount(1);
 
         mock.whenAnyExchangeReceived(new Processor() {
@@ -177,7 +177,7 @@ public class LbsMllpViaMinaTest {
     }
 
     @Test
-    public void testHL7WithAttachmentExtract() throws Exception {
+    public void testHL7WithResourceExtract() throws Exception {
         mock.expectedMessageCount(2);
 
         StringBuffer textBuffer = new StringBuffer("MSH|^~\\&|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.4\r\n");
@@ -192,9 +192,9 @@ public class LbsMllpViaMinaTest {
             
             @Override
             public void process(Exchange exchange) throws Exception {
-                AttachmentDataSource attachment = exchange.getIn().getBody(AttachmentDataSource.class);
-                assertNotNull(attachment);
-                resourceUri[cnt] = attachment.getResourceUri();
+                ResourceDataSource resource = exchange.getIn().getBody(ResourceDataSource.class);
+                assertNotNull(resource);
+                resourceUri[cnt] = resource.getResourceUri();
                 ++cnt;
                 assertTrue(store.contains(resourceUri[0]));
                 InputStream receivedStream = exchange.getIn().getBody(InputStream.class);
@@ -250,7 +250,7 @@ public class LbsMllpViaMinaTest {
     }
     
     @Test
-    public void testHL7UnmarshalWithAttachmentExtract() throws Exception {
+    public void testHL7UnmarshalWithResourceExtract() throws Exception {
         mock.expectedMessageCount(2);
 
         StringBuffer textBuffer = new StringBuffer("MSH|^~\\&|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.4\r\n");
@@ -295,7 +295,7 @@ public class LbsMllpViaMinaTest {
     }
     
     @Test
-    public void testHL7MarshalRouterWithAttachmentExtract() throws Exception {
+    public void testHL7MarshalRouterWithResourceExtract() throws Exception {
         mock.expectedMessageCount(2);
 
         StringBuffer textBuffer = new StringBuffer("MSH|^~\\&|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.4\r\n");
@@ -340,7 +340,7 @@ public class LbsMllpViaMinaTest {
     }
     
     @Test
-    public void testHL7RouterWithAttachmentExtract() throws Exception {
+    public void testHL7RouterWithResourceExtract() throws Exception {
         mock.expectedMessageCount(2);
 
         StringBuffer textBuffer = new StringBuffer("MSH|^~\\&|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.4\r\n");

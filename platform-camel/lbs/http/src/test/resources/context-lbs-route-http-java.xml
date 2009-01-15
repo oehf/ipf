@@ -33,15 +33,15 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore" />
 
-    <bean id="attachmentFactory" class="org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory">
+    <bean id="resourceFactory" class="org.openehealth.ipf.commons.lbs.resource.ResourceFactory">
         <constructor-arg ref="largeBinaryStore" />
         <constructor-arg value="unnamed" />
     </bean>
 
-    <!-- This bean is a list of attachment handlers. Add all handlers used within the routes to this list -->
-    <util:list id="attachmentHandlers">
-        <bean class="org.openehealth.ipf.platform.camel.lbs.process.HttpAttachmentHandler">
-            <constructor-arg ref="attachmentFactory" />
+    <!-- This bean is a list of resource handlers. Add all handlers used within the routes to this list -->
+    <util:list id="resourceHandlers">
+        <bean class="org.openehealth.ipf.platform.camel.lbs.process.HttpResourceHandler">
+            <constructor-arg ref="resourceFactory" />
         </bean>
     </util:list>
     

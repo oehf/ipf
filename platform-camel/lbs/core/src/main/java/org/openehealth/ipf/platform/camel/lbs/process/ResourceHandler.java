@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.camel.Message;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 
 /**
  * Provides support for handling extraction and integration of attachments for a 
@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
  * integrating attachments into an exchange send to the endpoint.
  * @author Jens Riemschneider
  */
-public interface AttachmentHandler {
+public interface ResourceHandler {
 
     /**
      * Handle message extraction for the given message.
@@ -49,7 +49,7 @@ public interface AttachmentHandler {
      * @throws Exception 
      *          any kind of exception that occurred during the handling
      */
-    Collection<AttachmentDataSource> extract(String unitOfWorkId, Message message) throws Exception;
+    Collection<ResourceDataSource> extract(String unitOfWorkId, Message message) throws Exception;
 
     /**
      * Handle message integration for the given message.
@@ -61,12 +61,10 @@ public interface AttachmentHandler {
      * an exception if it is not compatible.
      * @param message
      *          the message that is to be handled 
-     * @param attachments
-     *          the attachments that need to be integrated into the message
      * @throws Exception 
      *          any kind of exception that occurred during the handling
      */
-    void integrate(Message message, Collection<AttachmentDataSource> attachments) throws Exception;
+    void integrate(Message message) throws Exception;
 
     /**
      * Removes the attachments that were created for the given unit of work
@@ -83,7 +81,7 @@ public interface AttachmentHandler {
      * @param requiredAttachments 
      *          the attachments that are still needed by the message
      */
-    void cleanUp(String unitOfWorkId, Message message, List<AttachmentDataSource> requiredAttachments);
+    void cleanUp(String unitOfWorkId, Message message, List<ResourceDataSource> requiredAttachments);
 
     /**
      * Determines the attachments that are required by the given message
@@ -91,5 +89,5 @@ public interface AttachmentHandler {
      *          the message to check
      * @return the list of attachments
      */
-    Collection<? extends AttachmentDataSource> getRequiredAttachments(Message message);
+    Collection<? extends ResourceDataSource> getRequiredResources(Message message);
 }

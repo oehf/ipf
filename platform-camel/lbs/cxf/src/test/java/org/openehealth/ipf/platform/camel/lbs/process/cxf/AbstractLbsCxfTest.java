@@ -53,7 +53,7 @@ import org.apache.cxf.message.MessageContentsList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,7 +148,7 @@ public abstract class AbstractLbsCxfTest {
     }
 
     @Test
-    public void testStandardSOAPCallWithoutAttachmentExtract() throws Exception {        
+    public void testStandardSOAPCallWithoutResourceExtract() throws Exception {
         enableMTOM(); 
         setEndpoint(ENDPOINT_NO_EXTRACT);
         serviceBean.setCheckProcessor(new Processor() {
@@ -157,7 +157,6 @@ public abstract class AbstractLbsCxfTest {
                 assertTrue(exchange instanceof CxfExchange);
                 CxfExchange cxfExchange = (CxfExchange) exchange;
                 CxfMessage cxfMessage = cxfExchange.getIn();
-                assertEquals(0, cxfMessage.getAttachments().size());
                 Message inMessage = cxfMessage.getMessage();
                 Collection<Attachment> attachments = inMessage.getAttachments();
                 assertEquals(0, attachments.size());
@@ -169,7 +168,7 @@ public abstract class AbstractLbsCxfTest {
     }
 
     @Test
-    public void testAttachmentSOAPCallWithoutAttachmentExtract() throws Exception {        
+    public void testAttachmentSOAPCallWithoutResourceExtract() throws Exception {        
         enableMTOM(); 
         setEndpoint(ENDPOINT_NO_EXTRACT);
         serviceBean.setCheckProcessor(new Processor() {
@@ -178,7 +177,6 @@ public abstract class AbstractLbsCxfTest {
                 assertTrue(exchange instanceof CxfExchange);
                 CxfExchange cxfExchange = (CxfExchange) exchange;
                 CxfMessage cxfMessage = cxfExchange.getIn();
-                assertEquals(0, cxfMessage.getAttachments().size());
                 Message inMessage = cxfMessage.getMessage();
                 Collection<Attachment> attachments = inMessage.getAttachments();
                 assertEquals(2, attachments.size());
@@ -198,14 +196,14 @@ public abstract class AbstractLbsCxfTest {
     }
 
     @Test
-    public void testStandardSOAPCallWithAttachmentExtract() throws Exception {
+    public void testStandardSOAPCallWithResourceExtract() throws Exception {
         setEndpoint(ENDPOINT_EXTRACT);
         String response = greeter.greetMe("Hello Camel!!");
         assertEquals("Greetings from Apache Camel!!!! Request was Hello Camel!!", response);
     }
 
     @Test
-    public void testAttachmentSOAPCallWithAttachmentExtract() throws Exception {        
+    public void testAttachmentSOAPCallWithResourceExtract() throws Exception {        
         enableMTOM(); 
         setEndpoint(ENDPOINT_EXTRACT);
         serviceBean.setCheckProcessor(new Processor() {
@@ -213,9 +211,9 @@ public abstract class AbstractLbsCxfTest {
             public void process(Exchange exchange) throws Exception {
                 MessageContentsList params = exchange.getIn().getBody(MessageContentsList.class);
                 Holder<DataHandler> param = (Holder<DataHandler>) params.get(1);
-                assertTrue(param.value.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(param.value.getDataSource() instanceof ResourceDataSource);
                 DataHandler onewayParam = (DataHandler) params.get(2);
-                assertTrue(onewayParam.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(onewayParam.getDataSource() instanceof ResourceDataSource);
             }
         });        
         
@@ -228,7 +226,7 @@ public abstract class AbstractLbsCxfTest {
     }
     
     @Test
-    public void testDelayedAttachmentRemoval() throws Exception {
+    public void testDelayedResourceRemoval() throws Exception {
         enableMTOM(); 
         setEndpoint(ENDPOINT_EXTRACT);
 
@@ -238,9 +236,9 @@ public abstract class AbstractLbsCxfTest {
             public void process(Exchange exchange) throws Exception {
                 MessageContentsList params = exchange.getIn().getBody(MessageContentsList.class);
                 DataHandler param = (DataHandler) params.get(0);
-                assertTrue(param.getDataSource() instanceof AttachmentDataSource);
-                AttachmentDataSource attachment = (AttachmentDataSource) param.getDataSource();
-                resourceUri[0] = attachment.getResourceUri();
+                assertTrue(param.getDataSource() instanceof ResourceDataSource);
+                ResourceDataSource resource = (ResourceDataSource) param.getDataSource();
+                resourceUri[0] = resource.getResourceUri();
             }
         });        
         
@@ -273,9 +271,9 @@ public abstract class AbstractLbsCxfTest {
             public void process(Exchange exchange) throws Exception {
                 MessageContentsList params = exchange.getIn().getBody(MessageContentsList.class);
                 Holder<DataHandler> param = (Holder<DataHandler>) params.get(1);
-                assertTrue(param.value.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(param.value.getDataSource() instanceof ResourceDataSource);
                 DataHandler onewayParam = (DataHandler) params.get(2);
-                assertTrue(onewayParam.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(onewayParam.getDataSource() instanceof ResourceDataSource);
             }
         });        
         
@@ -343,16 +341,16 @@ public abstract class AbstractLbsCxfTest {
     }
     
     @Test
-    public void testAttachmentSOAPCallWithAttachmentExtractSwA() throws Exception {        
+    public void testAttachmentSOAPCallWithResourceExtractSwA() throws Exception {        
         setEndpoint(ENDPOINT_EXTRACT_SWA);
         serviceBean.setCheckProcessor(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
                 MessageContentsList params = exchange.getIn().getBody(MessageContentsList.class);
                 Holder<DataHandler> param = (Holder<DataHandler>) params.get(1);
-                assertTrue(param.value.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(param.value.getDataSource() instanceof ResourceDataSource);
                 DataHandler onewayParam = (DataHandler) params.get(2);
-                assertTrue(onewayParam.getDataSource() instanceof AttachmentDataSource);
+                assertTrue(onewayParam.getDataSource() instanceof ResourceDataSource);
             }
         });        
         
@@ -375,7 +373,7 @@ public abstract class AbstractLbsCxfTest {
             if (exchange.getIn().getHeader(CxfConstants.OPERATION_NAME).equals("postMe")) {
                 MessageContentsList outParams = exchange.getOut().getBody(MessageContentsList.class);
                 Holder<DataHandler> handler = (Holder<DataHandler>) outParams.get(2);
-                if (!(handler.value.getDataSource() instanceof AttachmentDataSource)) {
+                if (!(handler.value.getDataSource() instanceof ResourceDataSource)) {
                     throw new AssertionError("Output was not replaced with stored resource");
                 }
             }

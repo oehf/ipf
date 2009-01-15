@@ -21,10 +21,10 @@ import org.apache.camel.CamelContext;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
-import org.openehealth.ipf.commons.lbs.attachment.AttachmentFactory;
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 
 /**
- * Codec implementation for MLLP messages stored as an attachment
+ * Codec implementation for MLLP messages stored as a resource
  * @author Jens Riemschneider
  */
 public class MllpStoreCodec implements ProtocolCodecFactory {
@@ -32,20 +32,20 @@ public class MllpStoreCodec implements ProtocolCodecFactory {
     public static final char END_MESSAGE = '\u001c';   
     public static final char LAST_CHARACTER = 13;
     
-    private final AttachmentFactory attachmentFactory;
+    private final ResourceFactory resourceFactory;
     private final CamelContext camelContext;
 
     /**
      * Constructs the codec
-     * @param attachmentFactory 
-     *          the factory used to create new attachments
+     * @param resourceFactory 
+     *          the factory used to create new resources
      * @param camelContext
      *          the camel context used to access type converters
      */
-    public MllpStoreCodec(AttachmentFactory attachmentFactory, CamelContext camelContext) {
-        notNull(attachmentFactory, "attachmentFactory cannot be null");
+    public MllpStoreCodec(ResourceFactory resourceFactory, CamelContext camelContext) {
+        notNull(resourceFactory, "resourceFactory cannot be null");
         notNull(camelContext, "camelContext cannot be null");
-        this.attachmentFactory = attachmentFactory;
+        this.resourceFactory = resourceFactory;
         this.camelContext = camelContext;
     }
     
@@ -54,7 +54,7 @@ public class MllpStoreCodec implements ProtocolCodecFactory {
      */
     @Override
     public ProtocolDecoder getDecoder() throws Exception {        
-        return new MllpDecoder(attachmentFactory);
+        return new MllpDecoder(resourceFactory);
     }
 
     /* (non-Javadoc)
@@ -70,7 +70,7 @@ public class MllpStoreCodec implements ProtocolCodecFactory {
      */
     @Override
     public String toString() {
-        return String.format("{%1$s: attachmentFactory=%2$s, camelContext=%3$s}",
-                getClass().getSimpleName(), attachmentFactory, camelContext);        
+        return String.format("{%1$s: resourceFactory=%2$s, camelContext=%3$s}",
+                getClass().getSimpleName(), resourceFactory, camelContext);        
     }
 }
