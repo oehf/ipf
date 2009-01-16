@@ -107,7 +107,6 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
                 def contentType = exchange.in.getHeader('contentType')
                 def resourceFactory = builder.bean(ResourceFactory.class, 'resourceFactory')
                 def store = builder.bean(LargeBinaryStore.class, 'largeBinaryStore')
-                println("in: " + resourceUri + ", " + name + ", " + contentType)
                 def largeBinaryDataSource = new LargeBinaryStoreDataSource(store, URI.create(resourceUri), contentType, name)
                 def dataSource = new ResourceDataSource(name, largeBinaryDataSource)
                 def resourceList = new ResourceList()
@@ -168,7 +167,6 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
                 def resource = resourceFactory.createResource(exchange.unitOfWork.id, 'text/xml', null, 'hello', inputStream)
                 def resourceList = exchange.in.getBody(ResourceList.class)
                 resourceList.add(resource)
-                println(resourceList)
             }
             // Create a POST request with the resources
             .fetch().with('resourceHandlers')

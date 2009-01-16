@@ -110,7 +110,7 @@ class LbsCxfRouteBuilderConfig implements RouteBuilderConfig {
         builder.from('direct:start')
             // Custom processor to manually create a SOAP call
             .process { Exchange exchange ->
-                // The resource factory can be used to create resource manually
+                // The resource factory can be used to create resources manually
                 def resourceFactory = builder.bean(ResourceFactory.class, 'resourceFactory') 
                 def inputStream1 = new ByteArrayInputStream('hello world'.bytes)
             
