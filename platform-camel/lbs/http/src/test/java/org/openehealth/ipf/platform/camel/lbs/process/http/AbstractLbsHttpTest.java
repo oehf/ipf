@@ -143,6 +143,7 @@ public abstract class AbstractLbsHttpTest {
         mock.whenAnyExchangeReceived(null);
         
         file.delete();
+        store.deleteAll();
     }
     
     @Test
@@ -306,7 +307,6 @@ public abstract class AbstractLbsHttpTest {
     
     @Test
     public void testPingFile() throws Exception {
-        System.out.println("start");
         PostMethod method = new PostMethod(ENDPOINT_PING);
         method.setRequestEntity(new FileRequestEntity(file, "unknown/unknown"));
 

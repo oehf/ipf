@@ -191,7 +191,7 @@ public class ResourceFactory {
     
     private ResourceDataSource createResource(String unitOfWorkId, String contentType, String name, String id, URI resourceUri) {
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, resourceUri, contentType, name);
+            new LargeBinaryStoreDataSource(resourceUri, contentType, name);
         
         ResourceDataSource resource = new ResourceDataSource(safeResourceId(id), dataSource);
         

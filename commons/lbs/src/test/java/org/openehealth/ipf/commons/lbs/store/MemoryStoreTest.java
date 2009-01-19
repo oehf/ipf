@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.lbs.store;
 
+import org.junit.After;
 import org.junit.Before;
 import org.openehealth.ipf.commons.lbs.store.MemoryStore;
 
@@ -27,6 +28,12 @@ import org.openehealth.ipf.commons.lbs.store.MemoryStore;
 public class MemoryStoreTest extends LargeBinaryStoreTest {
     @Before
     public void setUp() {
+        StoreRegistration.reset();
         setStore(new MemoryStore()); 
+    }
+    
+    @After
+    public void tearDown() {
+        getStore().deleteAll();
     }
 }

@@ -26,6 +26,7 @@ import java.net.URI;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
+import org.openehealth.ipf.commons.lbs.store.StoreRegistration;
 
 /**
  * Data source implementation that wraps a resource {@code URI} from a
@@ -37,7 +38,6 @@ import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
  * @author Jens Riemschneider
  */
 final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataSource {
-    private final LargeBinaryStore store;
     private final URI resourceUri;
     private final String contentType;
     private final String name;
@@ -47,10 +47,7 @@ final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataS
     private static final Log log = LogFactory.getLog(LargeBinaryStoreDataSource.class);
     
     /**
-     * Constructs the data source.
-     * 
-     * @param store
-     *            the store that manages the resource
+     * Constructs the data source
      * @param resourceUri
      *            the {@code URI} of the resource in the store
      * @param contentType
@@ -58,14 +55,10 @@ final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataS
      * @param name
      *            name of the resource (can be {@code null})
      */
-    public LargeBinaryStoreDataSource(LargeBinaryStore store, URI resourceUri,
-            String contentType, String name) {
-
+    public LargeBinaryStoreDataSource(URI resourceUri, String contentType, String name) {
         notNull(contentType, "contentType cannot be null");
         notNull(resourceUri, "resourceUri cannot be null");
-        notNull(store, "store cannot be null");
 
-        this.store = store;
         this.resourceUri = resourceUri;
         this.contentType = contentType;
         this.name = name;
@@ -84,24 +77,11 @@ final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataS
      */
     @Override
     public InputStream getInputStream() throws IOException {
-        InputStream inputStream = store.getInputStream(resourceUri);
+        InputStream inputStream = getStore().getInputStream(resourceUri);
         if (deleteResourceAfterUsage) {
             inputStream = new AutoRemoveInputStream(inputStream);
         }
         return inputStream;
-    }
-
-    private class AutoRemoveInputStream extends FilterInputStream {
-        protected AutoRemoveInputStream(InputStream in) {
-            super(in);
-        }
-        
-        @Override
-        public void close() throws IOException {
-            super.close();
-            log.debug("Deleting resource after closing InputStream: " + getResourceUri());
-            delete();
-        }
     }
 
     /* (non-Javadoc)
@@ -117,7 +97,7 @@ final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataS
      */
     @Override
     public void delete() {
-        store.delete(resourceUri);
+        getStore().delete(resourceUri);
     }
     
     /* (non-Javadoc)
@@ -133,7 +113,7 @@ final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataS
      */
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return store.getOutputStream(resourceUri);
+        return getStore().getOutputStream(resourceUri);
     }
 
     /* (non-Javadoc)
@@ -149,7 +129,7 @@ final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataS
      */
     @Override
     public long getContentLength() {
-        return store.getSize(resourceUri);
+        return getStore().getSize(resourceUri);
     }
 
     /* (non-Javadoc)
@@ -158,8 +138,24 @@ final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataS
     @Override
     public String toString() {
         return String.format(
-                    "{%1$s: contentType=%2$s, name=%3$s, resourceUri=%4$s, store=%5$s}",
-                    getClass().getSimpleName(), contentType, name,
-                    resourceUri, store);
+                    "{%1$s: contentType=%2$s, name=%3$s, resourceUri=%4$s}",
+                    getClass().getSimpleName(), contentType, name, resourceUri);
+    }
+    
+    private LargeBinaryStore getStore() {
+        return StoreRegistration.getStore(resourceUri);
+    }
+
+    private class AutoRemoveInputStream extends FilterInputStream {
+        protected AutoRemoveInputStream(InputStream in) {
+            super(in);
+        }
+        
+        @Override
+        public void close() throws IOException {
+            super.close();
+            log.debug("Deleting resource after closing InputStream: " + getResourceUri());
+            delete();
+        }
     }
 }

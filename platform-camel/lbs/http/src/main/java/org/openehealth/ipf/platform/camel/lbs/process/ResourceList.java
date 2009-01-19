@@ -1,7 +1,6 @@
 package org.openehealth.ipf.platform.camel.lbs.process;
 
 import java.util.ArrayList;
-
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 
 /**

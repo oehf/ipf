@@ -26,21 +26,37 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.lbs.resource.LargeBinaryStoreDataSource;
 import org.openehealth.ipf.commons.lbs.store.MemoryStore;
+import org.openehealth.ipf.commons.lbs.store.StoreRegistration;
 import org.openehealth.ipf.commons.lbs.utils.NiceClass;
 
 /**
  * @author Jens Riemschneider
  */
 public class LargeBinaryStoreDataSourceTest {
+    private MemoryStore store;
+
+    @Before
+    public void setUp() {
+        StoreRegistration.reset();
+        store = new MemoryStore();
+    }
+    
+    @After
+    public void tearDown() {
+        store.deleteAll();
+        StoreRegistration.reset();
+    }
+    
     @Test
     public void testGetters() throws Exception {
-        MemoryStore store = new MemoryStore();
         URI uri = store.add(new byte[] { 1, 2 });
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, uri, "test/plain", "test");
+            new LargeBinaryStoreDataSource(uri, "test/plain", "test");
         
         assertEquals("test/plain", dataSource.getContentType());
         assertEquals("test", dataSource.getName());
@@ -53,15 +69,14 @@ public class LargeBinaryStoreDataSourceTest {
         }
         finally {
             inputStream.close();
-        }        
+        }       
     }
     
     @Test
     public void testGetOutputStreamFails() throws Exception {
-        MemoryStore store = new MemoryStore();
         URI uri = store.add(new byte[] { 1, 2 });
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, uri, "test/plain", "test");
+            new LargeBinaryStoreDataSource(uri, "test/plain", "test");
         
         OutputStream outputStream = dataSource.getOutputStream();
         assertNotNull(outputStream);
@@ -86,20 +101,18 @@ public class LargeBinaryStoreDataSourceTest {
     
     @Test
     public void testGetContentLength() {
-        MemoryStore store = new MemoryStore();
         URI uri = store.add(new byte[] { 1, 2 });
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, uri, "test/plain", "test");
+            new LargeBinaryStoreDataSource(uri, "test/plain", "test");
         
         assertEquals(2, dataSource.getContentLength());
     }
     
     @Test
     public void testResourceIsDeletedAfterInputStreamClosed() throws Exception {
-        MemoryStore store = new MemoryStore();
         URI uri = store.add(new byte[] { 1, 2 });
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, uri, "test/plain", "test");
+            new LargeBinaryStoreDataSource(uri, "test/plain", "test");
         
         dataSource.deleteAfterNextUsage();
         dataSource.getInputStream().close();
@@ -109,10 +122,9 @@ public class LargeBinaryStoreDataSourceTest {
     
     @Test
     public void testResourceIsNotDeletedAfterInputStreamClosed() throws Exception {
-        MemoryStore store = new MemoryStore();
         URI uri = store.add(new byte[] { 1, 2 });
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, uri, "test/plain", "test");
+            new LargeBinaryStoreDataSource(uri, "test/plain", "test");
         
         // No call to deleteAfterNextUsage()
         dataSource.getInputStream().close();
@@ -122,41 +134,32 @@ public class LargeBinaryStoreDataSourceTest {
     
     @Test
     public void testNullNameIsOk() {
-        MemoryStore store = new MemoryStore();
         URI uri = store.add(new byte[] { 1, 2 });
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, uri, "test/plain", null);
+            new LargeBinaryStoreDataSource(uri, "test/plain", null);
 
         assertNull(dataSource.getName());
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testNullSafetyConstructorStore() throws Exception {
-        new LargeBinaryStoreDataSource(null, new URI("http://blubla"), "test/plain", "test");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void testNullSafetyConstructorUri() throws Exception {
-        MemoryStore store = new MemoryStore();
-        new LargeBinaryStoreDataSource(store, null, "test/plain", "test");
+        new LargeBinaryStoreDataSource(null, "test/plain", "test");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullSafetyConstructorContentType() throws Exception {
-        MemoryStore store = new MemoryStore();
-        new LargeBinaryStoreDataSource(store, new URI("http://blubla"), null, "test");
+        new LargeBinaryStoreDataSource(new URI("http://blubla"), null, "test");
     }
     
     @Test
     public void testNiceClass() throws Exception {
-        MemoryStore store = new MemoryStore();
         URI uri = store.add(new byte[] { 1, 2 });
         LargeBinaryStoreDataSource dataSource = 
-            new LargeBinaryStoreDataSource(store, uri, "test/plain", "test");
+            new LargeBinaryStoreDataSource(uri, "test/plain", "test");
 
-        NiceClass.checkToString(dataSource, store, uri, "test/plain", "test");
+        NiceClass.checkToString(dataSource, uri, "test/plain", "test");
         NiceClass.checkNullSafety(dataSource, 
                 asList(store, uri, "bla"), 
-                asList("LargeBinaryStoreDataSource:4"));
+                asList("LargeBinaryStoreDataSource:3"));
     }
 }

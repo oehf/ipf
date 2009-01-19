@@ -49,6 +49,8 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
     
     @Before
     public void setUp() throws Exception {
+        StoreRegistration.reset();
+        
         File temp = File.createTempFile(getClass().getName(), "");
         temp.delete();
         storeLocation = new File(temp.getAbsolutePath());
@@ -70,6 +72,8 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
                 FileUtils.deleteDirectory(storeLocation);
             }
         }
+
+        StoreRegistration.reset();
     }
     
     @Test

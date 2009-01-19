@@ -141,7 +141,8 @@ public abstract class AbstractLbsCxfTest {
     }
 
     @After
-    public void tearDown() throws Exception {        
+    public void tearDown() throws Exception {
+        store.deleteAll();
         file.delete();
         mock.reset();
         serviceBean.setCheckProcessor(null);

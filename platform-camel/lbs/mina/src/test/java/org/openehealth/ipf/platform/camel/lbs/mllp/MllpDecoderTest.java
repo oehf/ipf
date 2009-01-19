@@ -28,12 +28,14 @@ import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.easymock.EasyMock;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.commons.lbs.store.MemoryStore;
+import org.openehealth.ipf.commons.lbs.store.StoreRegistration;
 import org.openehealth.ipf.commons.lbs.utils.NiceClass;
 import org.openehealth.ipf.platform.camel.lbs.mllp.MllpDecoder.SessionContent;
 
@@ -60,6 +62,12 @@ public class MllpDecoderTest {
         sessionContent = new SessionContent(resourceFactory);
         out = new TestDecoderOutput();
         session = EasyMock.createNiceMock(IoSession.class);
+    }
+    
+    @After
+    public void tearDown() throws Exception {
+        store.deleteAll();
+        StoreRegistration.reset();
     }
 
     @Test

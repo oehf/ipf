@@ -90,29 +90,29 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             
         builder.from('jetty:http://localhost:9452/lbstest_jms')
             .store().with('resourceHandlers')
-            .process { Exchange exchange ->
-                def resourceList = exchange.in.getBody(ResourceList.class)
-                def dataSource = resourceList.get(0)
-                exchange.in.setHeader('resourceUri', dataSource.resourceUri.toString())
-                exchange.in.setHeader('name', dataSource.id)
-                exchange.in.setHeader('contentType', dataSource.contentType)
-                exchange.in.body = ''
-            }
+//            .process { Exchange exchange ->
+//                def resourceList = exchange.in.getBody(ResourceList.class)
+//                def dataSource = resourceList.get(0)
+//                exchange.in.setHeader('resourceUri', dataSource.resourceUri.toString())
+//                exchange.in.setHeader('name', dataSource.id)
+//                exchange.in.setHeader('contentType', dataSource.contentType)
+//                exchange.in.body = ''
+//            }
             .to('jms:temp:queue:lbstest')
             
         builder.from('jms:temp:queue:lbstest')
-            .process { Exchange exchange ->
-                def resourceUri = exchange.in.getHeader('resourceUri')
-                def name = exchange.in.getHeader('name')
-                def contentType = exchange.in.getHeader('contentType')
-                def resourceFactory = builder.bean(ResourceFactory.class, 'resourceFactory')
-                def store = builder.bean(LargeBinaryStore.class, 'largeBinaryStore')
-                def largeBinaryDataSource = new LargeBinaryStoreDataSource(store, URI.create(resourceUri), contentType, name)
-                def dataSource = new ResourceDataSource(name, largeBinaryDataSource)
-                def resourceList = new ResourceList()
-                resourceList.add(dataSource)
-                exchange.in.body = resourceList
-            }
+//            .process { Exchange exchange ->
+//                def resourceUri = exchange.in.getHeader('resourceUri')
+//                def name = exchange.in.getHeader('name')
+//                def contentType = exchange.in.getHeader('contentType')
+//                def resourceFactory = builder.bean(ResourceFactory.class, 'resourceFactory')
+//                def store = builder.bean(LargeBinaryStore.class, 'largeBinaryStore')
+//                def largeBinaryDataSource = new LargeBinaryStoreDataSource(store, URI.create(resourceUri), contentType, name)
+//                def dataSource = new ResourceDataSource(name, largeBinaryDataSource)
+//                def resourceList = new ResourceList()
+//                resourceList.add(dataSource)
+//                exchange.in.body = resourceList
+//            }
             .to('mock:mock')
             
         // Example routes only tested with groovy

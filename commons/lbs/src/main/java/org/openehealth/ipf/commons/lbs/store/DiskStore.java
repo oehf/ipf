@@ -73,6 +73,8 @@ public class DiskStore implements LargeBinaryStore {
         this.fileSystemLayout = fileSystemLayout;
         this.uuidUriConversion = uuidUriConversion;
         
+        StoreRegistration.register(this);
+        
         log.debug("Created: " + this);
     }
     

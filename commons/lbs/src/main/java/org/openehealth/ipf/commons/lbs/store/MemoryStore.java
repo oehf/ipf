@@ -55,6 +55,7 @@ public class MemoryStore implements LargeBinaryStore {
      * Constructs the memory store 
      */
     public MemoryStore() {
+        StoreRegistration.register(this);
         log.debug("created: " + this);
     }
     
@@ -80,7 +81,6 @@ public class MemoryStore implements LargeBinaryStore {
             throw new ResourceIOException(e);
         }
     }
-
 
     /* (non-Javadoc)
      * @see org.openehealth.ipf.commons.lbs.LargeBinaryStore#add()

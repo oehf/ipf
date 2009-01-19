@@ -29,12 +29,14 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.commons.lbs.store.MemoryStore;
+import org.openehealth.ipf.commons.lbs.store.StoreRegistration;
 import org.openehealth.ipf.commons.lbs.utils.NiceClass;
 
 /**
@@ -53,10 +55,17 @@ public class ResourceFactoryImplTest {
     
     @Before
     public void setUp() {
+        StoreRegistration.reset();
         store = new MemoryStore();
         factory = new ResourceFactory(store, "default");
 
         inputStream = new ByteArrayInputStream(CONTENT.getBytes());
+    }
+    
+    @After
+    public void tearDown() {
+        store.deleteAll();
+        StoreRegistration.reset();
     }
 
     @Test
