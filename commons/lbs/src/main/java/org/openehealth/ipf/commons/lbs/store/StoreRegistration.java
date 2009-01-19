@@ -2,9 +2,11 @@ package org.openehealth.ipf.commons.lbs.store;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,8 +14,8 @@ import org.apache.commons.logging.LogFactory;
 public class StoreRegistration {
     private static final Log log = LogFactory.getLog(StoreRegistration.class); 
         
-    private static final Set<LargeBinaryStore> registeredStores = 
-        new HashSet<LargeBinaryStore>();
+    private static final Set<LargeBinaryStore> registeredStores =
+        Collections.synchronizedSet(new HashSet<LargeBinaryStore>());
 
     public static void register(LargeBinaryStore store) {
         registeredStores.add(store);
@@ -26,12 +28,7 @@ public class StoreRegistration {
     }
     
     public static LargeBinaryStore getStore(URI resourceUri) {
-        List<LargeBinaryStore> matchingStores = new ArrayList<LargeBinaryStore>();
-        for (LargeBinaryStore store : registeredStores) {
-            if (store.contains(resourceUri)) {
-                matchingStores.add(store);
-            }
-        }
+        List<LargeBinaryStore> matchingStores = getMatchingStores(resourceUri);
         
         if (matchingStores.size() == 0) {
             log.warn("resource URI not found in any registered store: " + resourceUri);
@@ -44,5 +41,17 @@ public class StoreRegistration {
         }
         
         return matchingStores.get(0);
+    }
+
+    private static List<LargeBinaryStore> getMatchingStores(URI resourceUri) {
+        synchronized(registeredStores) {
+            List<LargeBinaryStore> matchingStores = new ArrayList<LargeBinaryStore>();
+            for (LargeBinaryStore store : registeredStores) {
+                if (store.contains(resourceUri)) {
+                    matchingStores.add(store);
+                }
+            }
+            return matchingStores;
+        }
     }
 }
