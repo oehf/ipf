@@ -97,7 +97,15 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <scope>test</scope>
-        </dependency>        
+        </dependency>
+
+        <!--
+            The following dependencies are a workaround for an issue in Camel 1.5 #1146
+            camel and mina use incompatible versions of slf4j. Currently we have to exclude
+            the older version and use the newer one. According to the bug report, the
+            unit work fine. However, we need to remove these dependencies as soons as
+            Camel 1.5.1 goes live. An IPF tracker issue has been reported for this problem. 
+        -->
         <dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-core</artifactId>

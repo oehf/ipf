@@ -21,6 +21,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.commons.logging.Log;
@@ -37,7 +38,10 @@ import org.openehealth.ipf.commons.lbs.store.StoreRegistration;
  * 
  * @author Jens Riemschneider
  */
-final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataSource {
+final public class LargeBinaryStoreDataSource implements ResourceCompatibleDataSource, Serializable {
+    /** Serialization UID */
+    private static final long serialVersionUID = 3930847973245118248L;
+    
     private final URI resourceUri;
     private final String contentType;
     private final String name;

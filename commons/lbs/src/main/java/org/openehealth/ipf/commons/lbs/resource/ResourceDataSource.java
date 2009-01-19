@@ -21,6 +21,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.activation.DataSource;
@@ -36,7 +37,10 @@ import javax.activation.DataSource;
  * that can be contained in the Camel messages. 
  * @author Jens Riemschneider
  */
-public class ResourceDataSource implements ResourceCompatibleDataSource {
+public class ResourceDataSource implements ResourceCompatibleDataSource, Serializable {
+    /** Serialization UID */
+    private static final long serialVersionUID = -3393333837281554055L;
+    
     private final ResourceCompatibleDataSource dataSource;
     private final String id;
 
