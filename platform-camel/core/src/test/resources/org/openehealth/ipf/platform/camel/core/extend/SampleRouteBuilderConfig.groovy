@@ -27,6 +27,7 @@ import org.apache.camel.builder.RouteBuilder
 class SampleRouteBuilderConfig implements RouteBuilderConfig {
         
     void apply(RouteBuilder builder) {
+        
         builder
             .input('direct:input1')
             .transmogrify('blubConverter')  

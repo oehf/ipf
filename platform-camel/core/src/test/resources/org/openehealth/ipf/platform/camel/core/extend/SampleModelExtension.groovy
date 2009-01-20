@@ -38,14 +38,14 @@ class SampleModelExtension {
             delegate.to(endpointUri)
         }
         
-        ProcessorType.metaClass.filter = { String body ->
-            delegate.filter(body().isNotEqualTo(body))
+        ProcessorType.metaClass.filter = { String msgBody ->
+            delegate.filter(body().isNotEqualTo(msgBody))
         }
         
         ProcessorType.metaClass.transmogrifyAndFilter = { String bean, String body ->
             delegate
                 .transmogrify(bean) // also an extension (core)
-                .filter(body)       // also an extension (sample)
+                .filter(body)     // also an extension (sample)
         }
         
     }
