@@ -15,6 +15,7 @@
     <properties>
         <osgi.export.pkg></osgi.export.pkg>
         <osgi.private.pkg>org.openehealth.ipf.osgi.extender.basic.*</osgi.private.pkg>
+        <osgi.spring.context>*;create-asynchronously:=false</osgi.spring.context>
     </properties>
 
     <dependencies>

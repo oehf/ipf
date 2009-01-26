@@ -30,7 +30,7 @@ public class ExtensionsCount {
         count = 0
     }
 
-    def extensions = {
+    static extensions = { // may also have instance scope
         count++
     }
     

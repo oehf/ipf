@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.osgi.extender.basic
 
+import static java.lang.reflect.Modifier.STATIC
+
 import org.apache.commons.logging.Logimport org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.osgi.commons.bundle.BundleHeaders
 
@@ -29,7 +31,18 @@ public class ExtensionClass {
      Class<?> target  
      
      void activate() {
-         target.newInstance().extensions.call()
+         def prop = target.metaClass.getMetaProperty('extensions')
+         
+         if (!prop) {
+             LOG.warn("class ${target} has no \"extensions\" closure defined")
+             return
+         }
+         
+         if (prop.modifiers & STATIC) {
+             target.extensions.call()
+         } else {
+             target.newInstance().extensions.call()
+         }
          LOG.info("Extension class ${this} activated")
      }
 
