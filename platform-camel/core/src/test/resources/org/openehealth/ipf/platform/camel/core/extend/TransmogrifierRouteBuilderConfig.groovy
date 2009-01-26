@@ -91,8 +91,13 @@ class TransmogrifierRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:output')
 
         builder
-            .from('direct:input9') 
+            .from('direct:input9a') 
             .transmogrify('sampleTransmogrifier')
+            .to('mock:output')
+
+        builder
+            .from('direct:input9b') 
+            .transmogrify(context.sampleTransmogrifier)
             .to('mock:output')
 
         builder

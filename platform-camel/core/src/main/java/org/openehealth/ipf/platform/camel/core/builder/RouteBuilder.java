@@ -19,7 +19,6 @@ import org.apache.camel.Processor;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spring.SpringRouteBuilder;
-
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 import org.openehealth.ipf.commons.core.modules.api.Converter;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
@@ -36,6 +35,7 @@ import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.core.bridge.InOnlyBridge;
+import org.openehealth.ipf.platform.camel.core.extend.DefaultConfigExtender;
 import org.openehealth.ipf.platform.camel.core.extend.RouteModelExtender;
 import org.openehealth.ipf.platform.camel.core.process.Enricher;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
@@ -47,13 +47,24 @@ import org.openehealth.ipf.platform.camel.core.process.Validation;
  */
 public class RouteBuilder extends SpringRouteBuilder {
 
+    public static final String DEFAULT_CONTEXT_PROPERTY_NAME = "context"; 
+    
     // ----------------------------------------------------------------
     //  Configuration
     // ----------------------------------------------------------------
     
+    private String contextPropertyName = DEFAULT_CONTEXT_PROPERTY_NAME;
+    
     private RouteModelExtender routeModelExtender;
     
     private RouteBuilderConfig routeBuilderConfig;
+    
+    private DefaultConfigExtender routeConfigExtender;
+    
+    public RouteBuilder() {
+        routeConfigExtender = new DefaultConfigExtender();
+        routeConfigExtender.setRouteBuilder(this);
+    }
     
     /**
      * Sets an optional route model extender instance used for activating 
@@ -76,6 +87,35 @@ public class RouteBuilder extends SpringRouteBuilder {
     public void setRouteBuilderConfig(RouteBuilderConfig routeBuilderConfig) {
         this.routeBuilderConfig = routeBuilderConfig;
     }
+
+    /**
+     * Returns the name of the context property to be dynamically defined on the
+     * {@link #routeBuilderConfig} object of this builder. This is only relevant
+     * for {@link RouteBuilderConfig} Groovy implementations that want to lookup
+     * Spring beans from the context object.
+     * 
+     * @return the contextPropertyName
+     * @see #setContextPropertyName(String)
+     */
+    public String getContextPropertyName() {
+        return contextPropertyName;
+    }
+
+    /**
+     * Set the name of the context property to be dynamically defined on the
+     * {@link #routeBuilderConfig} object of this builder. The default name is
+     * <code>context</code>. If this conflicts with existing properties defined
+     * for {@link #routeBuilderConfig} then the property name can be changed
+     * using this setter. This is only relevant for {@link RouteBuilderConfig}
+     * Groovy implementations that want to lookup Spring beans from the context
+     * object.
+     * 
+     * @param contextPropertyName
+     *            the contextPropertyName to set
+     */
+    public void setContextPropertyName(String contextPropertyName) {
+        this.contextPropertyName = contextPropertyName;
+    }
     
     /**
      * Configures this route builder using an external route builder
@@ -95,15 +135,17 @@ public class RouteBuilder extends SpringRouteBuilder {
             routeModelExtender.activate();
         }
         if (routeBuilderConfig != null) {
+            // dynamically add a property for bean lookups from context
+            routeConfigExtender.defineContextProperty(routeBuilderConfig);
             routeBuilderConfig.apply(this);
-        } 
+        }
     }
     
     // ----------------------------------------------------------------
     //  Adapter
     // ----------------------------------------------------------------
     
-    public PredicateAdapter predicate(Predicate predicate) {
+    public static PredicateAdapter predicate(Predicate predicate) {
         return new PredicateAdapter(predicate);
     }
     
@@ -145,7 +187,7 @@ public class RouteBuilder extends SpringRouteBuilder {
         return new ParserAdapter(bean(Parser.class, parserBeanName));
     }
 
-    public ParserAdapter parser(Parser<?> parser) {
+    public static ParserAdapter parser(Parser<?> parser) {
         return new ParserAdapter(parser);
     }
 
@@ -162,7 +204,14 @@ public class RouteBuilder extends SpringRouteBuilder {
         return new RendererAdapter(bean(Renderer.class, rendererBeanName));
     }
 
-    public RendererAdapter renderer(Renderer<?> renderer) {
+    /**
+     * Creates a new {@link RendererAdapter} that adapts a {@link Renderer}.
+     * 
+     * @param renderer
+     *            a {@link Renderer}.
+     * @return an adapted {@link Renderer}.
+     */
+    public static RendererAdapter renderer(Renderer<?> renderer) {
         return new RendererAdapter(renderer);
     }
 
@@ -187,7 +236,7 @@ public class RouteBuilder extends SpringRouteBuilder {
      *            a transmogrifier.
      * @return an adapted transmogrifier.
      */
-    public TransmogrifierAdapter transmogrifier(Transmogrifier<?, ?> transmogrifier) {
+    public static TransmogrifierAdapter transmogrifier(Transmogrifier<?, ?> transmogrifier) {
         return new TransmogrifierAdapter(transmogrifier);
     }
  
@@ -212,11 +261,19 @@ public class RouteBuilder extends SpringRouteBuilder {
      *            a validator.
      * @return an adapted validator.
      */
-    public ValidatorAdapter validator(Validator<?, ?> validator) {
+    public static ValidatorAdapter validator(Validator<?, ?> validator) {
         return new ValidatorAdapter(validator);
     }
 
-    public AggregatorAdapter aggregationStrategy(Aggregator aggregator) {
+    /**
+     * Creates a new {@link AggregatorAdapter} that adapts the given
+     * <code>aggregator</code>.
+     * 
+     * @param an
+     *            an aggregator.
+     * @return an adapted aggregator.
+     */
+    public static AggregatorAdapter aggregationStrategy(Aggregator aggregator) {
         return new AggregatorAdapter(aggregator);
     }
     
@@ -233,7 +290,7 @@ public class RouteBuilder extends SpringRouteBuilder {
         return new AggregatorAdapter(bean(Aggregator.class, aggregatorBeanName));
     }
     
-    public DataFormatAdapter dataFormatParser(Parser<?> parser) {
+    public static DataFormatAdapter dataFormatParser(Parser<?> parser) {
         return new DataFormatAdapter(parser);
     }
     
@@ -241,7 +298,7 @@ public class RouteBuilder extends SpringRouteBuilder {
         return new DataFormatAdapter(bean(Parser.class, parserBeanName));
     }
     
-    public DataFormatAdapter dataFormatRenderer(Renderer<?> renderer) {
+    public static DataFormatAdapter dataFormatRenderer(Renderer<?> renderer) {
         return new DataFormatAdapter(renderer);
     }
     
@@ -263,7 +320,7 @@ public class RouteBuilder extends SpringRouteBuilder {
      *            URI of resource endpoint for obtaining additional data.
      * @return an enricher.
      */
-    public Enricher enricher(AggregationStrategy aggregationStrategy, String resourceUri) {
+    public static Enricher enricher(AggregationStrategy aggregationStrategy, String resourceUri) {
         return new Enricher(aggregationStrategy, resourceUri);
     }
     
@@ -292,7 +349,7 @@ public class RouteBuilder extends SpringRouteBuilder {
      *            URI of the endpoint that validates an exchange.
      * @return a validation process object.
      */
-    public Validation validation(String validatorUri) {
+    public static Validation validation(String validatorUri) {
         return new Validation(validatorUri);
     }
     
@@ -303,7 +360,7 @@ public class RouteBuilder extends SpringRouteBuilder {
      *            processor that validates an exchange.
      * @return a validation process object.
      */
-    public Validation validation(Processor validator) {
+    public static Validation validation(Processor validator) {
         return new Validation(validator);
     }
     
@@ -316,7 +373,7 @@ public class RouteBuilder extends SpringRouteBuilder {
      * 
      * @return a {@link InOnlyBridge}.
      */
-    public DelegateProcessor inOnlyBridge() {
+    public static DelegateProcessor inOnlyBridge() {
         return new InOnlyBridge();
     }
 

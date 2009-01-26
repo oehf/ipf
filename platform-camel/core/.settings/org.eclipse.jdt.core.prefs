@@ -1,5 +1,6 @@
-#Sun Oct 05 14:31:54 CEST 2008
+#Fri Jan 23 13:36:40 CET 2009
 eclipse.preferences.version=1
+org.eclipse.jdt.core.builder.resourceCopyExclusionFilter=*.launch,*.groovy
 org.eclipse.jdt.core.compiler.problem.annotationSuperInterface=warning
 org.eclipse.jdt.core.compiler.problem.autoboxing=ignore
 org.eclipse.jdt.core.compiler.problem.deprecation=warning

@@ -15,6 +15,7 @@
     <properties>
         <!-- These settings are preliminary -->
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.core.*</osgi.export.pkg>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.core.extend.StaticCoreModelExtension</ipf.extension.classes>
     </properties>
     
     <dependencies>

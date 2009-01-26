@@ -83,7 +83,14 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     @Test
     public void testTransmogrifierBean() throws InterruptedException {
         mockOutput.expectedBodiesReceived("g");
-        producerTemplate.sendBody("direct:input9", "f");
+        producerTemplate.sendBody("direct:input9a", "f");
+        mockOutput.assertIsSatisfied();
+    }
+    
+    @Test
+    public void testTransmogrifierBeanFromContextProperty() throws InterruptedException {
+        mockOutput.expectedBodiesReceived("g");
+        producerTemplate.sendBody("direct:input9b", "f");
         mockOutput.assertIsSatisfied();
     }
     
