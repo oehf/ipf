@@ -23,7 +23,7 @@ import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
  */
 public class PipeParserTest extends GroovyTestCase {
 
-  def msgText = this.class.classLoader.getResource('TestT01.txt')?.text
+  def msgText = this.class.classLoader.getResource('msg-08.hl7')?.text
   def customPackageVersion = '2.5'
   def customPackageName = 'org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25'      
      

@@ -12,18 +12,20 @@
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>*</osgi.import.pkg>
+        <osgi.dynamic.import.pkg></osgi.dynamic.import.pkg>
         <osgi.private.pkg></osgi.private.pkg>
         <osgi.bundle.activator />
         <osgi.embed.dependency />
         <osgi.fragment.host />
+        <osgi.spring.context />
         <ipf.extension.classes />
         <ipf.extension.beans />
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
+        <bundle-plugin-version>1.4.3</bundle-plugin-version>
         <jar-plugin-version>2.2</jar-plugin-version>
         <javadoc-plugin-version>2.5</javadoc-plugin-version>
-        <bundle-plugin-version>1.4.3</bundle-plugin-version>
         
         <!-- Dependency version properties -->
         <activemq-version>5.1.0</activemq-version>
@@ -494,10 +496,12 @@
                     <instructions>
                         <Export-Package>${osgi.export.pkg}</Export-Package>
                         <Import-Package>${osgi.import.pkg}</Import-Package>
+                        <DynamicImport-Package>${osgi.dynamic.import.pkg}</DynamicImport-Package>
                         <Private-Package>${osgi.private.pkg}</Private-Package>
                         <Bundle-Activator>${osgi.bundle.activator}</Bundle-Activator>
                         <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
                         <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
+                        <Spring-Context>${osgi.spring.context}</Spring-Context>
                         <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
                     </instructions>
