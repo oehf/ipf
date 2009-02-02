@@ -61,12 +61,6 @@ import org.apache.camel.spi.DataFormat
  */
 public class StaticCoreModelExtension {
 
-     static {
-         
-         ExpandoMetaClass.enableGlobally()
-     
-     }
-     
      static extensions = { 
              
          // ----------------------------------------------------------------
