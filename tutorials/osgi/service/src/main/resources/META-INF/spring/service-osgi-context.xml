@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:osgi="http://www.springframework.org/schema/osgi"
+    xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/osgi
+http://www.springframework.org/schema/osgi/spring-osgi.xsd
+http://www.springframework.org/schema/osgi-compendium
+http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+    <!--
+        Service export. 
+     -->
+    <osgi:service id="sampleTransmogrifierExporter" ref="sampleTransmogrifier" auto-export="interfaces" />
+    <osgi:service id="genderTransmogrifierExporter" ref="genderTransmogrifier" auto-export="interfaces" />
+
+    <!--
+        Obtain config from configuration admin service. 
+     -->
+    <osgix:property-placeholder 
+        persistent-id="org.openehealth.ipf.tutorials.osgi.service" defaults-ref="service.properties">
+    </osgix:property-placeholder>
+
+</beans>

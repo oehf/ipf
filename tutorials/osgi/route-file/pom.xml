@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.tutorials</groupId>
+    <artifactId>tutorials-osgi-route-file</artifactId>
+    <name>tutorials-osgi-route-file</name>
+    <packaging>bundle</packaging>
+
+    <parent>
+        <groupId>org.openehealth.ipf.tutorials</groupId>
+        <artifactId>tutorials-osgi</artifactId>
+        <version>1.6-SNAPSHOT</version>
+    </parent>
+    
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>
+            org.openehealth.ipf.tutorials.osgi.route.file.*
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.commons.core.modules.api,
+            org.openehealth.ipf.platform.camel.core.builder,
+            org.openehealth.ipf.platform.camel.core.extend,
+            *
+        </osgi.import.pkg>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

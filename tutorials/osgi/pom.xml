@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.tutorials</groupId>
+    <artifactId>tutorials-osgi</artifactId>
+    <name>tutorials-osgi</name>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.openehealth.ipf.tutorials</groupId>
+        <artifactId>tutorials</artifactId>
+        <version>1.6-SNAPSHOT</version>
+    </parent>
+    
+    <modules>
+        <module>extension</module>
+        <module>mapping</module>
+        <module>service</module>
+        <module>route-file</module>
+        <module>route-web</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

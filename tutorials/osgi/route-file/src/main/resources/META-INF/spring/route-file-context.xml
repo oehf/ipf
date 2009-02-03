@@ -1,0 +1,21 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:camel="http://activemq.apache.org/camel/schema/osgi" 
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://activemq.apache.org/camel/schema/osgi 
+http://activemq.apache.org/camel/schema/osgi/camel-osgi.xsd">
+
+    <camel:camelContext id="camelContext" />
+
+    <bean id="routeBuilder"
+        class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
+        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    </bean>
+
+    <bean id="routeBuilderConfig" 
+        class="org.openehealth.ipf.tutorials.osgi.route.file.SampleRouteConfig">
+    </bean>
+
+</beans>
