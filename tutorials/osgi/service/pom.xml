@@ -24,6 +24,12 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.modules</groupId>
+            <artifactId>modules-hl7dsl</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
         </dependency>

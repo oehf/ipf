@@ -18,16 +18,9 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
      -->
     <util:properties id="service.properties" location="classpath:META-INF/spring/service.properties"/>
 
-    <!--
-        Service implementation.
-     -->
-    <bean id="sampleTransmogrifier" 
-        class="org.openehealth.ipf.tutorials.osgi.service.impl.SampleTransmogrifier">
-        <property name="prefix" value= "${service.prefix}" />
-    </bean>
-
-    <bean id="genderTransmogrifier" 
-        class="org.openehealth.ipf.tutorials.osgi.service.impl.GenderTransmogrifier">
+    <bean id="admissionTransmogrifier" 
+        class="org.openehealth.ipf.tutorials.osgi.service.impl.AdmissionTransmogrifier">
+        <property name="sendingFacility" value= "${service.sending.facility}" />
     </bean>
 
 </beans>

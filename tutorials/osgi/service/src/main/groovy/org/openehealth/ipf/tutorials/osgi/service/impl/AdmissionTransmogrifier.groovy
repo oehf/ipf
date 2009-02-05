@@ -15,23 +15,27 @@
  */
 package org.openehealth.ipf.tutorials.osgi.service.impl
 
-import org.openehealth.ipf.commons.core.modules.api.Transmogrifierimport javax.annotation.PostConstructimport org.apache.commons.logging.Logimport org.apache.commons.logging.LogFactory
-/**
+import javax.annotation.PostConstruct
+import org.apache.commons.logging.Logimport org.apache.commons.logging.LogFactory
+import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
+/**
  * @author Martin Krasser
  */
-public class SampleTransmogrifier implements Transmogrifier {
+public class AdmissionTransmogrifier  implements Transmogrifier {
 
-     static Log LOG = LogFactory.getLog(SampleTransmogrifier.class)
+    static Log LOG = LogFactory.getLog(AdmissionTransmogrifier.class)
      
-     String prefix = 'Prefix: '
+    String sendingFacility = 'UNK'
      
-     Object zap(Object input, Object[] params) {
-         prefix + input
-     }
- 
-     @PostConstruct
-     void init() {
-         LOG.debug("Prefix set to value ${prefix}")
-     }
-     
+    Object zap(Object msg, Object[] params) {
+        msg.MSH[4] = sendingFacility
+        msg.PID[8] = msg.PID[8].mapGender()
+        msg
+    }
+    
+    @PostConstruct
+    void init() {
+        LOG.debug("Use ${sendingFacility} for sending facility")
+    }
+    
 }

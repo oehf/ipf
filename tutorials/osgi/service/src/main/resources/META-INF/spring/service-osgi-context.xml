@@ -14,11 +14,10 @@ http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
     <!--
         Service export. 
      -->
-    <osgi:service id="sampleTransmogrifierExporter" ref="sampleTransmogrifier" auto-export="interfaces" />
-    <osgi:service id="genderTransmogrifierExporter" ref="genderTransmogrifier" auto-export="interfaces" />
+    <osgi:service ref="admissionTransmogrifier" auto-export="interfaces" />
 
     <!--
-        Obtain config from configuration admin service. 
+        Obtain config from configuration admin service or fallback to default.
      -->
     <osgix:property-placeholder 
         persistent-id="org.openehealth.ipf.tutorials.osgi.service" defaults-ref="service.properties">

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.tutorials.osgi.service.impl;
+package org.openehealth.ipf.tutorials.osgi.service.impl
 
-import org.junit.Ignore;
-
+import org.junit.Ignore
 /**
  * @author Martin Krasser
  */
 @Ignore
-public class SampleTransmogrifierOsgiTest {
-
+public class AdmissionTransmogrifierOsgiTest {
+    
 }
