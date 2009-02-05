@@ -8,7 +8,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/osgi
 http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
-    <osgi:reference id="genderTransmogrifier" bean-name="genderTransmogrifier" timeout="10000" 
+    <osgi:reference id="admissionTransmogrifier" bean-name="admissionTransmogrifier" timeout="10000" 
         interface="org.openehealth.ipf.commons.core.modules.api.Transmogrifier">
     </osgi:reference>
 

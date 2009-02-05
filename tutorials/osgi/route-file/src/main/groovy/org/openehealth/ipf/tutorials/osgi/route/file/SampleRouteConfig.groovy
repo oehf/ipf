@@ -28,7 +28,7 @@ public class SampleRouteConfig implements RouteBuilderConfig {
          builder
              .from('file:workspace/input?delete=true')
              .unmarshal().ghl7()
-             .transmogrify(context.genderTransmogrifier)
+             .transmogrify(context.admissionTransmogrifier)
              .marshal().ghl7()
              .to('file:workspace/output?append=false&autoCreate=false')         
 
