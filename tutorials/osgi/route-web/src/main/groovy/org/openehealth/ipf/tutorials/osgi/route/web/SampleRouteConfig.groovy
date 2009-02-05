@@ -26,9 +26,9 @@ public class SampleRouteConfig implements RouteBuilderConfig {
      void apply(RouteBuilder builder) {
 
          builder
-         .from('jetty:http://localhost:8080/tutorial')
+             .from('jetty:http://localhost:8080/tutorial')
              .unmarshal().ghl7()
-             .transmogrify(context.genderTransmogrifier)
+             .transmogrify(context.admissionTransmogrifier)
              .marshal().ghl7()
              .setFilename('output.hl7')
              .to('file:workspace/output?append=false&autoCreate=false')         
