@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.tutorials</groupId>
     <artifactId>tutorials-osgi-extension</artifactId>
     <name>tutorials-osgi-extension</name>
-    <packaging>bundle</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>

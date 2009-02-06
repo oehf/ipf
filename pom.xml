@@ -468,6 +468,14 @@
                 <artifactId>maven-release-plugin</artifactId>
             </plugin>
             <plugin>
+              <artifactId>maven-jar-plugin</artifactId>
+              <configuration>
+                <archive>  
+                  <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                </archive> 
+              </configuration>
+            </plugin>  
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
@@ -491,7 +499,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
                 <configuration>
                     <instructions>
                         <Export-Package>${osgi.export.pkg}</Export-Package>
@@ -506,6 +513,29 @@
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
                     </instructions>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>    
+                            <goal>manifest</goal>
+                        </goals>   
+                    </execution>
+                    <execution>
+                        <id>bundle-install</id>
+                        <phase>install</phase>
+                        <goals>    
+                            <goal>install</goal>
+                        </goals>   
+                    </execution>
+                    <execution>
+                        <id>bundle-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>    
+                            <goal>deploy</goal>
+                        </goals>   
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

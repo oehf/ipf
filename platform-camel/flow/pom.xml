@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-flow</artifactId>
     <name>platform-camel-flow</name>
-    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>

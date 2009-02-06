@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.tutorials</groupId>
     <artifactId>tutorials-osgi-route-file</artifactId>
     <name>tutorials-osgi-route-file</name>
-    <packaging>bundle</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>

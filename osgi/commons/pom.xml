@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.osgi</groupId>
     <artifactId>osgi-commons</artifactId>
     <name>osgi-commons</name>
-    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>

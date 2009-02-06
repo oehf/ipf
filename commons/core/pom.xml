@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-core</artifactId>
     <name>commons-core</name>
-    <packaging>bundle</packaging>
     
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.commons.core.*</osgi.export.pkg>

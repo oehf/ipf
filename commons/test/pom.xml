@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-test</artifactId>
     <name>commons-test</name>
-    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>

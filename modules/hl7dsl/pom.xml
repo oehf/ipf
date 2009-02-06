@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.modules</groupId>
     <artifactId>modules-hl7dsl</artifactId>
     <name>modules-hl7dsl</name>
-    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>

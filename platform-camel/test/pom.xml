@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-test</artifactId>
     <name>platform-camel-test</name>
-    <packaging>bundle</packaging>
     <description>
         Provides test classes (processors, adapters, predicates ...) used by
         all platform-camel modules. This module also tests Camel's behavior

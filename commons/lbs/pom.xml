@@ -24,7 +24,6 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-lbs</artifactId>
     <name>commons-lbs</name>
-    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>

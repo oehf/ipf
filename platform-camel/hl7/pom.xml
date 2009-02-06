@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-hl7</artifactId>
     <name>platform-camel-hl7</name>
-    <packaging>bundle</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
