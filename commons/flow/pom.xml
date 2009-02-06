@@ -22,6 +22,7 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-core</artifactId>
             <version>${pom.version}</version>
+            <type>bundle</type>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
