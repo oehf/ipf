@@ -8,11 +8,11 @@
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
         <artifactId>tutorials-osgi</artifactId>
-        <version>1.6-SNAPSHOT</version>
+        <version>1.6-m1</version>
     </parent>
     
     <properties>
-        <osgi.export.pkg></osgi.export.pkg>
+        <osgi.export.pkg />
         <osgi.private.pkg>org.openehealth.ipf.tutorials.osgi.service.impl</osgi.private.pkg>
     </properties>
 

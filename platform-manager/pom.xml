@@ -8,14 +8,14 @@
   
 	<!--  The project will compile only with maven version 2.0.9 + unless you provide your own artifacts with eclipse:to-maven goal -->
   <!--  and set the dependent versions. -->
-  <!--  The reason for this limitation is that lower versions of Maven2  ( < 2.09) consider x.y.z-classifier < x.y.z.  -->
+  <!--  The reason for this limitation is that lower versions of Maven2  ( < 2.09) consider x.y.z-classifier < x.y.z. -->
   <!--  On the other hand the public eclipse artifacts assume that x.y.z-classifier >= x.y.z -->
   
   
 	<parent>
 		<groupId>org.openehealth.ipf</groupId>
 		<artifactId>ipf</artifactId>
-		<version>1.6-SNAPSHOT</version>
+		<version>1.6-m1</version>
 	</parent>
 
 	<properties>
