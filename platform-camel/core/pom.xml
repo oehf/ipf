@@ -20,9 +20,15 @@
     
     <dependencies>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-test</artifactId>
             <version>${pom.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -35,7 +41,6 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>${groovy-version}</version>
         </dependency>
     </dependencies>
 

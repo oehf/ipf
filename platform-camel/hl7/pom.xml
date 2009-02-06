@@ -20,8 +20,10 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
@@ -29,10 +31,8 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${pom.version}</version>
-            <scope>test</scope>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
         </dependency>
     </dependencies>
 
