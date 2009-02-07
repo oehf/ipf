@@ -28,10 +28,6 @@ public class ExtensionBean {
 
      static Log LOG = LogFactory.getLog(ExtensionBean.class)
     
-     static {
-         ExpandoMetaClass.enableGlobally()
-     }
-     
      BeanFactory  factory
 
      String name   
