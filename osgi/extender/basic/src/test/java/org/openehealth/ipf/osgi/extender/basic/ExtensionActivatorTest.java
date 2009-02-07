@@ -22,38 +22,26 @@ import static org.openehealth.ipf.osgi.commons.bundle.BundleHeaders.EXTENSION_CL
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.openehealth.ipf.osgi.extender.basic.ExtensionsCount;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.osgi.mock.MockBundle;
-import org.springframework.osgi.mock.MockBundleContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 /**
  * @author Martin Krasser
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/context.xml" })
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public class ExtensionActivatorTest {
 
     private static BundleEvent bundleEvent;
     
-    @Autowired
-    private MockBundleContext context;
-
+    private static ExtensionActivator bundleListener;
+    
     @BeforeClass
     @SuppressWarnings("unchecked")
     public static void setUpBeforeClass() throws Exception {
         Bundle bundle = new MockBundle();
         bundle.getHeaders().put(EXTENSION_CLASSES_HEADER, ExtensionsCount.class.getName());
         bundleEvent = new BundleEvent(BundleEvent.STARTED, bundle);
+        bundleListener = new ExtensionActivator();
     }
 
     @Before
@@ -63,13 +51,8 @@ public class ExtensionActivatorTest {
 
     @Test
     public void testBundleChanged() {
-        bundleListener().bundleChanged(bundleEvent);
+        bundleListener.bundleChanged(bundleEvent);
         assertEquals(1, ExtensionsCount.getValue());
     }
 
-    public BundleListener bundleListener() {
-        assertEquals(1, context.getBundleListeners().size());
-        return (BundleListener) context.getBundleListeners().iterator().next();
-    }
-    
 }

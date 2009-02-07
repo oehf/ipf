@@ -14,7 +14,7 @@
     <properties>
         <osgi.export.pkg />
         <osgi.private.pkg>org.openehealth.ipf.osgi.extender.basic.*</osgi.private.pkg>
-        <osgi.spring.context>*;create-asynchronously:=false</osgi.spring.context>
+        <osgi.bundle.activator>org.openehealth.ipf.osgi.extender.basic.ExtensionActivator</osgi.bundle.activator>
     </properties>
 
     <dependencies>
@@ -24,12 +24,8 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.osgi</groupId>
-            <artifactId>spring-osgi-core</artifactId>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
         </dependency>
     </dependencies>
 

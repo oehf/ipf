@@ -17,31 +17,20 @@ package org.openehealth.ipf.osgi.extender.basic;
 
 import static org.osgi.framework.BundleEvent.STARTED;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.osgi.extender.basic.ExtensionClass;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.SynchronousBundleListener;
-import org.springframework.osgi.context.BundleContextAware;
 
 /**
  * @author Martin Krasser
  */
-public class ExtensionActivator implements BundleContextAware, SynchronousBundleListener {
+public class ExtensionActivator implements BundleActivator, SynchronousBundleListener {
 
     private static final Log LOG = LogFactory.getLog(ExtensionActivator.class);
     
-    private BundleContext context;
-    
-    @Override
-    public void setBundleContext(BundleContext context) {
-        this.context = context;
-    }
-
     @Override
     public void bundleChanged(BundleEvent event) {
         if (event.getType() == STARTED) {
@@ -49,14 +38,14 @@ public class ExtensionActivator implements BundleContextAware, SynchronousBundle
         }
     }
     
-    @PostConstruct
-    public void init() {
+    @Override
+    public void start(BundleContext context) throws Exception {
         context.addBundleListener(this);
         LOG.debug("initialized extension activator");
     }
-    
-    @PreDestroy
-    public void destroy() {
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
         context.removeBundleListener(this);
         LOG.debug("destroyed extension activator");
     }

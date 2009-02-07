@@ -28,6 +28,10 @@ public class ExtensionClass {
 
     static Log LOG = LogFactory.getLog(ExtensionClass.class)
     
+     static {
+         ExpandoMetaClass.enableGlobally()
+     }
+     
      Class<?> target  
      
      void activate() {
