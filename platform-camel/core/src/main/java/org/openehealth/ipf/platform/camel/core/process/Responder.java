@@ -128,8 +128,16 @@ public class Responder extends DelegateProcessor {
     protected boolean process(Exchange original, Exchange response) {
         return true;
     }
-    
-    private Exchange createDelegateExchange(Exchange source) {
+
+    /**
+     * Creates the exchange for the next processor returned by
+     * {@link #getProcessor()} from a source exchange.
+     * 
+     * @param source
+     *            a source exchange.
+     * @return exchange for the next processor.
+     */
+    protected Exchange createDelegateExchange(Exchange source) {
         DefaultExchange result = new DefaultExchange(source.getContext());
         result.getIn().copyFrom(source.getIn());
         return result;
