@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.core.extend
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionMessageExpression
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionObjectExpression
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersExpression
-
+import org.openehealth.ipf.platform.camel.core.model.EnricherType
 import static org.apache.camel.builder.DataFormatClause.Operation.Marshal;
 import static org.apache.camel.builder.DataFormatClause.Operation.Unmarshal;
 
@@ -103,14 +103,6 @@ public class StaticCoreModelExtension {
          //  Platform Processor Extensions
          // ----------------------------------------------------------------
          
-         ProcessorType.metaClass.enrich = {String resourceUri, AggregationStrategy aggregationStrategy ->
-             delegate.process(RouteBuilder.enricher(aggregationStrategy, resourceUri))
-         }
-         
-         ProcessorType.metaClass.enrich = { String resourceUri, Closure aggregationLogic ->
-             delegate.process(RouteBuilder.enricher(new DelegatingAggregationStrategy(aggregationLogic), resourceUri))
-         }
-         
          ProcessorType.metaClass.validation = { Processor validator ->
              delegate.intercept(RouteBuilder.validation(validator))
          }
@@ -127,10 +119,19 @@ public class StaticCoreModelExtension {
              delegate.intercept(RouteBuilder.inOnlyBridge())
          }
          
+         ProcessorType.metaClass.enrich = {String resourceUri, AggregationStrategy aggregationStrategy ->
+             delegate.addOutput(new EnricherType(aggregationStrategy, resourceUri))
+             return delegate
+         }
+         
+         ProcessorType.metaClass.enrich = { String resourceUri, Closure aggregationLogic ->
+             delegate.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic))
+         }
+     
          ProcessorType.metaClass.split = { Expression expression -> 
              SplitterType answer = new SplitterType(expression)        
              delegate.addOutput(answer)
-             answer
+             return answer
          }
      
          ProcessorType.metaClass.split = { Closure expressionLogic -> 

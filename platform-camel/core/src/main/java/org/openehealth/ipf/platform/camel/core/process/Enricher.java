@@ -50,7 +50,7 @@ public class Enricher implements Processor {
      *            URI of resource endpoint for obtaining additional data.
      */
     public Enricher(String resourceUri) {
-        this(new CopyAggregationStrategy(), resourceUri);
+        this(defauAggregationStrategy(), resourceUri);
     }
     
     /**
@@ -65,6 +65,24 @@ public class Enricher implements Processor {
     public Enricher(AggregationStrategy aggregationStrategy, String resourceUri) {
         this.aggregationStrategy = aggregationStrategy;
         this.resourceUri = resourceUri;
+    }
+    
+    /**
+     * Sets the aggregation strategy for this enricher.
+     * 
+     * @param aggregationStrategy the aggregationStrategy to set
+     */
+    public void setAggregationStrategy(AggregationStrategy aggregationStrategy) {
+        this.aggregationStrategy = aggregationStrategy;
+    }
+    
+    /**
+     * Sets the default aggregation strategy for this enricher.
+     * 
+     * @param aggregationStrategy the aggregationStrategy to set
+     */
+    public void setDefaultAggregationStrategy() {
+        this.aggregationStrategy = defauAggregationStrategy();
     }
     
     /**
@@ -96,7 +114,10 @@ public class Enricher implements Processor {
             // copy aggregation result onto original exchange (preserving pattern)
             copyExchange(aggregatedExchange, exchange);
         }
-        
+    }
+    
+    private static AggregationStrategy defauAggregationStrategy() {
+        return new CopyAggregationStrategy();
     }
     
     private static class CopyAggregationStrategy implements AggregationStrategy {
