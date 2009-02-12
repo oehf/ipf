@@ -66,8 +66,8 @@ public class EnricherRouteBuilder extends RouteBuilder {
         .process(enricher("testAggregator", "direct:enricher-fault-resource"));
         
         from("direct:enricher-test-8")
-        //.errorHandler(noErrorHandler()) // avoid re-deliveries
-        .process(enricher("testAggregator", "direct:enricher-fault-resource"));
+        .errorHandler(noErrorHandler()) // avoid re-deliveries
+        .process(enricher("testAggregator", "direct:enricher-error-resource"));
         
         // -------------------------------------------------------------
         //  Enricher resources

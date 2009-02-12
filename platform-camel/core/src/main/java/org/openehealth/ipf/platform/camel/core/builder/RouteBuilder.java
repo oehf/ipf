@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.core.builder;
 
+import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.util.CamelContextHelper;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 import org.openehealth.ipf.commons.core.modules.api.Converter;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
@@ -309,7 +311,7 @@ public class RouteBuilder extends SpringRouteBuilder {
     // ----------------------------------------------------------------
     //  Processor
     // ----------------------------------------------------------------
-    
+
     /**
      * Creates a new {@link Enricher}.
      * 
@@ -319,9 +321,13 @@ public class RouteBuilder extends SpringRouteBuilder {
      * @param resourceUri
      *            URI of resource endpoint for obtaining additional data.
      * @return an enricher.
+     * @throws Exception
+     *             if a producer cannot be created for the endpoint represented
+     *             by <code>resourceUri</code>.
      */
-    public static Enricher enricher(AggregationStrategy aggregationStrategy, String resourceUri) {
-        return new Enricher(aggregationStrategy, resourceUri);
+    public Enricher enricher(AggregationStrategy aggregationStrategy, String resourceUri) throws Exception {
+        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(getContext(), resourceUri);
+        return new Enricher(aggregationStrategy, endpoint.createProducer());
     }
     
     /**
@@ -337,9 +343,13 @@ public class RouteBuilder extends SpringRouteBuilder {
      * @param resourceUri
      *            URI of resource endpoint for obtaining additional data.
      * @return an enricher.
+     * @throws Exception
+     *             if a producer cannot be created for the endpoint represented
+     *             by <code>resourceUri</code>.
      */
-    public Enricher enricher(String aggregatorBeanName, String resourceUri) {
-        return new Enricher(aggregationStrategy(aggregatorBeanName).aggregationInput(outBody()), resourceUri);
+    public Enricher enricher(String aggregatorBeanName, String resourceUri) throws Exception {
+        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(getContext(), resourceUri);
+        return new Enricher(aggregationStrategy(aggregatorBeanName).aggregationInput(outBody()), endpoint.createProducer());
     }
 
     /**

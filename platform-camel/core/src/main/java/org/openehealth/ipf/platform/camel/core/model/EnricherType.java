@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
+import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputType;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
@@ -43,7 +44,8 @@ public class EnricherType extends OutputType<EnricherType> {
     
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
-        Enricher enricher = new Enricher(null, resourceUri);
+        Endpoint endpoint = routeContext.resolveEndpoint(resourceUri);
+        Enricher enricher = new Enricher(null, endpoint.createProducer());
         if (aggregationStrategy == null) {
             enricher.setDefaultAggregationStrategy();
         } else {

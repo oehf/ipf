@@ -131,7 +131,8 @@ public class EnricherRouteTest extends AbstractRouteTest {
 
     @Test
     public void testEnrichErrorInOut() throws InterruptedException {
-        Exchange exchange = producerTemplate.send("direct:enricher-test-4", new Processor() {
+        Exchange exchange = producerTemplate.send("direct:enricher-test-8", 
+                ExchangePattern.InOut, new Processor() {
                     public void process(Exchange exchange) {
                         exchange.getIn().setBody("test");
                     }
