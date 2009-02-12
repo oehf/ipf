@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
+import org.apache.camel.model.OutputType;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.model.language.ExpressionType;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
@@ -41,7 +42,7 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  * 
  * @author Jens Riemschneider
  */
-public class SplitterType extends ProcessorTypeSupport {
+public class SplitterType extends OutputType<ProcessorType> {
     /**
      * Creates a split type, i.e. a builder for {@link Splitter}
      * @param expression
