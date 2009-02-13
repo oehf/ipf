@@ -14,47 +14,8 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-test</artifactId>
-            <version>${pom.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-lbs</artifactId>
-            <version>${pom.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-lbs</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-test</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-lbs-core</artifactId>
             <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <scope>test</scope>
-            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -64,29 +25,12 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mina</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <!--
             The following dependencies are a workaround for an issue in Camel 1.5 #1146
             camel and mina use incompatible versions of slf4j. Currently we have to exclude
             the older version and use the newer one. According to the bug report, the
-            unit work fine. However, we need to remove these dependencies as soons as
+            unit work fine. However, we need to remove these dependencies as soon as
             Camel 1.5.1 goes live. An IPF tracker issue has been reported for this problem. 
         -->
         <dependency>

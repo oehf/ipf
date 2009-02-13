@@ -28,14 +28,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.annotation.Resource;
-import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.camel.CamelContext;
@@ -551,6 +552,32 @@ public abstract class AbstractLbsHttpTest {
         
         public ResourceList getReceivedResources() {
             return receivedResources;
+        }
+    }
+
+    private static class ByteArrayDataSource implements DataSource {
+        private byte[] data;
+        private String contentType;
+
+        public ByteArrayDataSource(byte[] data, String contentType) {
+            this.data = data;
+            this.contentType = contentType;
+        }
+
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(data);
+        }
+
+        public OutputStream getOutputStream() throws IOException {
+            throw new IOException("read-only data source");
+        }
+
+        public String getContentType() {
+            return contentType;
+        }
+
+        public String getName() {
+            return "test";
         }
     }
 }
