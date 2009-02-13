@@ -15,13 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.flow.process;
 
+import static org.openehealth.ipf.platform.camel.flow.PlatformPacket.serializableCopy;
+import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.marshal;
+import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.unmarshal;
+
 import java.io.InputStream;
 import java.util.HashMap;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.processor.DelegateProcessor;
@@ -34,10 +37,6 @@ import org.openehealth.ipf.platform.camel.flow.PlatformPacket;
 import org.openehealth.ipf.platform.camel.flow.PlatformPacketFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.openehealth.ipf.platform.camel.flow.PlatformPacket.serializableCopy;
-import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.marshal;
-import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.unmarshal;
-
 
 /**
  * A base class for processors that trigger {@link FlowManager} operations.
@@ -46,7 +45,7 @@ import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.unmarshal
  * 
  * @author Martin Krasser
  */
-public abstract class FlowProcessor extends DelegateProcessor implements Processor, PlatformPacketFactory {
+public abstract class FlowProcessor extends DelegateProcessor implements PlatformPacketFactory {
 
     @Autowired
     private CamelContext camelContext;

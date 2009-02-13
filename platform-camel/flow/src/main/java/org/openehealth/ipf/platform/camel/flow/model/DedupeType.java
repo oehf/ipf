@@ -1,0 +1,40 @@
+/*
+ * Copyright 2009 the original author or authors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openehealth.ipf.platform.camel.flow.model;
+
+import org.apache.camel.model.FilterType;
+import org.apache.camel.model.language.ExpressionType;
+import org.apache.camel.processor.FilterProcessor;
+import org.apache.camel.spi.RouteContext;
+import org.openehealth.ipf.platform.camel.core.util.Contexts;
+import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
+
+/**
+ * @author Martin Krasser
+ */
+public class DedupeType extends FilterType {
+
+    @Override
+    public FilterProcessor createProcessor(RouteContext routeContext) throws Exception {
+        setExpression(new ExpressionType(createDedupe(routeContext)));
+        return super.createProcessor(routeContext);
+    }
+
+    private static Dedupe createDedupe(RouteContext routeContext) {
+        return Contexts.bean(Dedupe.class, routeContext.getCamelContext());
+    }
+    
+}
