@@ -15,6 +15,7 @@
     <modules>
         <module>commons</module>
         <module>extender</module>
+        <module>config</module>
     </modules>
 
     <dependencies>
