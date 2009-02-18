@@ -27,8 +27,14 @@ public class ParserAdapterType extends ProcessorAdapterType {
 
     private Parser parser;
     
+    private String parserBean;
+    
     public ParserAdapterType(Parser parser) {
         this.parser = parser;
+    }
+    
+    public ParserAdapterType(String parserBean) {
+        this.parserBean = parserBean;
     }
     
     @Override
@@ -43,6 +49,9 @@ public class ParserAdapterType extends ProcessorAdapterType {
 
     @Override
     protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+        if (parserBean != null) {
+            parser = routeContext.lookup(parserBean, Parser.class);
+        }
         return new ParserAdapter(parser);
     }
 

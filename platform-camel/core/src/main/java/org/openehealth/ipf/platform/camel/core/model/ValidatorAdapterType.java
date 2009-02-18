@@ -27,7 +27,13 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
 
     private Validator validator;
 
+    private String validatorBean;
+    
     private Object profile;
+    
+    public ValidatorAdapterType(String validatorBean) {
+        this.validatorBean = validatorBean;
+    }
     
     public ValidatorAdapterType(Validator validator) {
         this.validator = validator;
@@ -50,6 +56,9 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
 
     @Override
     protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+        if (validatorBean != null) {
+            validator = routeContext.lookup(validatorBean, Validator.class);
+        }
         ValidatorAdapter adapter = new ValidatorAdapter(validator);
         if (profile != null) {
             return adapter.profile(profile);

@@ -27,8 +27,14 @@ public class RendererAdapterType extends ProcessorAdapterType {
 
     private Renderer renderer;
     
+    private String rendererBean;
+    
     public RendererAdapterType(Renderer renderer) {
         this.renderer = renderer;
+    }
+    
+    public RendererAdapterType(String rendererBean) {
+        this.rendererBean = rendererBean;
     }
     
     @Override
@@ -43,6 +49,9 @@ public class RendererAdapterType extends ProcessorAdapterType {
 
     @Override
     protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+        if (rendererBean != null) {
+            renderer = routeContext.lookup(rendererBean, Renderer.class);
+        }
         return new RendererAdapter(renderer);
     }
 

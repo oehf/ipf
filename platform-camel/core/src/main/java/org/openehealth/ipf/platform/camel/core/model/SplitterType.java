@@ -41,8 +41,15 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  * to the next processor in the route, which is done automatically by Camel.
  * 
  * @author Jens Riemschneider
+ * @author Martin Krasser
  */
 public class SplitterType extends OutputType<ProcessorType> {
+
+    private AggregationStrategy aggregationStrategy;
+    private ExpressionType expressionType;
+    private String expressionBean;
+    private List<ProcessorType<?>> outputs = new ArrayList<ProcessorType<?>>();
+
     /**
      * Creates a split type, i.e. a builder for {@link Splitter}
      * @param expression
@@ -52,6 +59,11 @@ public class SplitterType extends OutputType<ProcessorType> {
     public SplitterType(Expression expression) {
         notNull(expression, "expression");
         this.expressionType = new ExpressionType(expression);
+    }
+
+    public SplitterType(String expressionBean) {
+        notNull(expressionBean, "expressionBean");
+        this.expressionBean = expressionBean;
     }
 
     /* (non-Javadoc)
@@ -64,7 +76,9 @@ public class SplitterType extends OutputType<ProcessorType> {
         if (aggregationStrategy == null) {
             aggregationStrategy = new UseLatestAggregationStrategy();
         }
-        
+        if (expressionBean != null) {
+            expressionType = new ExpressionType(routeContext.lookup(expressionBean, Expression.class));
+        }
         Expression expression = expressionType.createExpression(routeContext);
         Splitter splitter = createSplitterInstance(expression, childProcessor);
         
@@ -126,7 +140,4 @@ public class SplitterType extends OutputType<ProcessorType> {
         return outputs;
     }
 
-    private AggregationStrategy aggregationStrategy;
-    private ExpressionType expressionType;
-    private List<ProcessorType<?>> outputs = new ArrayList<ProcessorType<?>>();
 }

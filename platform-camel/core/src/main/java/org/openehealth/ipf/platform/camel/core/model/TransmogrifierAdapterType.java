@@ -27,8 +27,15 @@ public class TransmogrifierAdapterType extends ProcessorAdapterType {
 
     private Transmogrifier transmogrifier;
     
+    private String transmogrifierBean;
+    
     public TransmogrifierAdapterType(Transmogrifier transmogrifier) {
         this.transmogrifier = transmogrifier;
+        this.params().headers();
+    }
+
+    public TransmogrifierAdapterType(String transmogrifierBean) {
+        this.transmogrifierBean = transmogrifierBean;
         this.params().headers();
     }
 
@@ -44,6 +51,9 @@ public class TransmogrifierAdapterType extends ProcessorAdapterType {
 
     @Override
     protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
+        if (transmogrifierBean != null) {
+            transmogrifier = routeContext.lookup(transmogrifierBean, Transmogrifier.class);
+        }
         return new TransmogrifierAdapter(transmogrifier);
     }
 
