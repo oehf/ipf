@@ -14,7 +14,7 @@
     <properties>
         <!-- These settings are preliminary -->
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.flow.*</osgi.export.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.flow.extend.StaticFlowModelExtension</ipf.extension.classes>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension</ipf.extension.classes>
     </properties>
     
     <dependencies>
