@@ -77,7 +77,7 @@ public class AbstractSyntaxRuleBuilder extends MessageRuleBuilder{
      /**
       * 
       */
-     AbstractSyntaxRuleBuilder(String version, DefaultValidationContext context, String messageType, String triggerEvent, Object... args) {
+     AbstractSyntaxRuleBuilder(String version, DefaultValidationContext context, String messageType, triggerEvent, Object... args) {
          super(version, context, messageType, triggerEvent)
          staticRules = new StaticDef()
          staticRules.eventType = triggerEvent

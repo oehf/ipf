@@ -84,7 +84,7 @@ public class VersionBuilder extends RuleBuilder{
      * @param triggerEvent
      * @return builder that allows to add a Message validation rule
      */
-	MessageRuleBuilder message(String messageType, String triggerEvent) {
+	MessageRuleBuilder message(String messageType, triggerEvent) {
 		new MessageRuleBuilder(version, context, messageType, triggerEvent)
 	}
 	

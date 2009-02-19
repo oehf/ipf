@@ -19,19 +19,19 @@ import ca.uhn.hl7v2.validation.MessageRule
 import ca.uhn.hl7v2.validation.impl.ConformanceProfileRule
 import ca.uhn.hl7v2.validation.ValidationContext
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
-
+import ca.uhn.hl7v2.validation.Rule
 /**
  * @author Christian Ohr
  */
 public class MessageRuleBuilder extends VersionBuilder{
 	
 	String messageType
-	String triggerEvent
+	def triggerEvent
 	
 	MessageRuleBuilder() {	    
 	}
 	
-	MessageRuleBuilder(String version, ValidationContext context, String messageType, String triggerEvent) {
+	MessageRuleBuilder(String version, ValidationContext context, String messageType, triggerEvent) {
 		super(version, context)
 		this.messageType = messageType
 		this.triggerEvent = triggerEvent
@@ -40,7 +40,7 @@ public class MessageRuleBuilder extends VersionBuilder{
 	RuleBuilder checkIf(Closure c) {
 		if (!rule) {
 			rule = new ClosureMessageRule(c)
-			context.addMessageRule(version, messageType, triggerEvent, rule)
+			addMessageRule(rule)
 		} else {
 			rule.testClosure = c
 		}
@@ -53,7 +53,7 @@ public class MessageRuleBuilder extends VersionBuilder{
 	 * be taken from MSH-22.
 	 */
 	RuleBuilder conformsToProfile(String profileID) {
-	     context.addMessageRule(version, messageType, triggerEvent, new ConformanceProfileRule(profileID))
+	     addMessageRule(new ConformanceProfileRule(profileID))
 	}
 	 
 	/**
@@ -62,6 +62,18 @@ public class MessageRuleBuilder extends VersionBuilder{
 	 */
 	RuleBuilder abstractSyntax(Object... args) {
 	    new AbstractSyntaxRuleBuilder(version, context, messageType, triggerEvent, args)
+	}
+	 
+	protected void addMessageRule(Rule rule) {
+	    if (triggerEvent instanceof Collection) {
+	        triggerEvent.each {
+	            context.addMessageRule(version, messageType, it, rule)
+	        }
+	    } else {
+	        triggerEvent.tokenize().each {
+	            context.addMessageRule(version, messageType, it, rule)
+	        }
+	    }
 	}
 	
 }

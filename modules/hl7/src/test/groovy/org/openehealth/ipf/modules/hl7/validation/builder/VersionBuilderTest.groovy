@@ -33,6 +33,21 @@ public class VersionBuilderTest extends GroovyTestCase {
          assert builder.messageType == 'ADT'
          assert builder.triggerEvent == 'A01'
      }
+     
+     void testMessage2() {
+         def builder = new VersionBuilder('2.4', null).message('ADT', 'A01 A02 A03')
+         assert builder.version == '2.4'
+         assert builder.messageType == 'ADT'
+         assert builder.triggerEvent == 'A01 A02 A03'
+     }
+     
+     void testMessage3() {
+         def builder = new VersionBuilder('2.4', null).message('ADT', ['A01','A02','A03'])
+         assert builder.version == '2.4'
+         assert builder.messageType == 'ADT'
+         assert builder.triggerEvent == ['A01','A02','A03']
+     }
+     
      void testEncoding() {
          def builder = new VersionBuilder('2.4', null).encoding('blorg')
          assert builder.version == '2.4'

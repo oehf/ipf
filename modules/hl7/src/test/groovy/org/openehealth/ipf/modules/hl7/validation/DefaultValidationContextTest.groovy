@@ -126,6 +126,38 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	}
 */
 
+    void testWildcardMessageRule() {
+        DefaultValidationContext context = new DefaultValidationContext()
+        context.configure()        
+            .forVersion('2.5')
+                .message('ADT', '*')
+                    .checkIf { null }
+        assert context.getMessageRules('2.5', 'ADT', 'A01').size() == 1
+        assert context.getMessageRules('2.5', 'ADT', 'A02').size() == 1
+    }
+
+    void testMultiMessageRule1() {
+        DefaultValidationContext context = new DefaultValidationContext()
+        context.configure()        
+            .forVersion('2.5')
+                .message('ADT', 'A01 A02')
+                    .checkIf { null }
+        assert context.getMessageRules('2.5', 'ADT', 'A01').size() == 1
+        assert context.getMessageRules('2.5', 'ADT', 'A02').size() == 1
+        assert context.getMessageRules('2.5', 'ADT', 'A03').size() == 0
+    }
+
+    void testMultiMessageRule2() {
+        DefaultValidationContext context = new DefaultValidationContext()
+        context.configure()        
+            .forVersion('2.5')
+                .message('ADT', ['A01', 'A02'])
+                    .checkIf { null }
+        assert context.getMessageRules('2.5', 'ADT', 'A01').size() == 1
+        assert context.getMessageRules('2.5', 'ADT', 'A02').size() == 1
+        assert context.getMessageRules('2.5', 'ADT', 'A03').size() == 0
+    }
+    
 	void testValidAbstractSyntax1() {
 	    DefaultValidationContext context = new DefaultValidationContext()
 	    context.configure()        

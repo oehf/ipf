@@ -73,36 +73,58 @@ public class DefaultValidationContext implements ValidationContext{
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getPrimitiveRules(java.lang.String, java.lang.String, ca.uhn.hl7v2.model.Primitive)
 	 */
 	public PrimitiveTypeRule[] getPrimitiveRules(String version, String typeName, Primitive type){
+	    def rules = []
 		def matchingRules = ruleMap[version]["_P_$typeName"]
+	    if (matchingRules) {
+	        rules.addAll(matchingRules)
+	    }
 		for (ValidationContext context : nestedValidationContexts) {
-		    def additionalRules = context.getPrimitiveRules(version, typeName, type).toList()
-		    matchingRules.addAll(additionalRules)
+		    matchingRules = context.getPrimitiveRules(version, typeName, type).toList()
+		    if (matchingRules) {
+		        rules.addAll(matchingRules)
+		    }
 		}
-		matchingRules ? matchingRules as PrimitiveTypeRule[] : [] as PrimitiveTypeRule[]
+		rules as PrimitiveTypeRule[]
 	}
 	
 	/**
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getMessageRules(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public MessageRule[] getMessageRules(String version, String messageType, String triggerEvent){
+	    def rules = []
 		def matchingRules = ruleMap[version]["_M_$messageType^$triggerEvent"]
+	    if (matchingRules) {
+	        rules.addAll(matchingRules)
+	    }
+	    matchingRules = ruleMap[version]["_M_$messageType^*"]
+	    if (matchingRules) {
+	        rules.addAll(matchingRules)
+	    }
 		for (ValidationContext context : nestedValidationContexts) {
-		    def additionalRules = context.getMessageRules(version, messageType, triggerEvent).toList()
-		    matchingRules.addAll(additionalRules)
+		    matchingRules = context.getMessageRules(version, messageType, triggerEvent).toList()
+		    if (matchingRules) {
+		        rules.addAll(matchingRules)
+		    }
 		}
-		matchingRules ? matchingRules as MessageRule[] : [] as MessageRule[]
+		rules as MessageRule[]
 	}
 	
 	/**
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getEncodingRules(java.lang.String, java.lang.String)
 	 */
 	public EncodingRule[] getEncodingRules(String version, String encoding){
+	    def rules = []
 		def matchingRules = ruleMap[version]["_E_$encoding"]
+	    if (matchingRules) {
+	        rules.addAll(matchingRules)
+	    }
 		for (ValidationContext context : nestedValidationContexts) {
-		    def additionalRules = context.getEncodingRules(version, encoding).toList()
-		    matchingRules.addAll(additionalRules)
+		    matchingRules = context.getEncodingRules(version, encoding).toList()
+		    if (matchingRules) {
+		        rules.addAll(matchingRules)
+		    }
 		}
-		matchingRules ? matchingRules as EncodingRule[] : [] as EncodingRule[]
+		rules as EncodingRule[]
 	}
 	
 	/**
