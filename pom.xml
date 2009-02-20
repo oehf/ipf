@@ -15,6 +15,7 @@
         <osgi.dynamic.import.pkg />
         <osgi.private.pkg />
         <osgi.bundle.activator />
+        <osgi.bundle.classpath />
         <osgi.embed.dependency />
         <osgi.fragment.host />
         <osgi.spring.context />
@@ -43,7 +44,7 @@
         <gmaven-version>1.0-rc-3</gmaven-version>
         <groovy-version>1.6-RC-1</groovy-version>
         <hapi-version>0.5.1</hapi-version>
-        <hibernate-version>3.2.4.sp1</hibernate-version>
+        <hibernate-version>3.2.6.ga</hibernate-version>
         <hibernate-annotations-version>3.3.0.ga</hibernate-annotations-version>
         <hibernate-search-version>3.0.1.GA</hibernate-search-version>
         <jasypt-version>1.5</jasypt-version>
@@ -506,6 +507,7 @@
                         <DynamicImport-Package>${osgi.dynamic.import.pkg}</DynamicImport-Package>
                         <Private-Package>${osgi.private.pkg}</Private-Package>
                         <Bundle-Activator>${osgi.bundle.activator}</Bundle-Activator>
+                        <Bundle-Classpath>${osgi.bundle.classpath}</Bundle-Classpath>
                         <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
                         <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
                         <Spring-Context>${osgi.spring.context}</Spring-Context>

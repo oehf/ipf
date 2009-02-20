@@ -27,11 +27,13 @@ public class SampleRouteConfig implements RouteBuilderConfig {
 
          builder
              .from('jetty:http://localhost:8080/tutorial')
+             .initFlow('http').application('osgi-web')
              .unmarshal().ghl7()
              .transmogrify(context.admissionTransmogrifier)
              .marshal().ghl7()
              .setFilename('output.hl7')
              .to('file:workspace/output?append=false&autoCreate=false')         
+             .ackFlow()
 
      }
     

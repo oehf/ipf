@@ -27,10 +27,12 @@ public class SampleRouteConfig implements RouteBuilderConfig {
 
          builder
              .from('file:workspace/input?delete=true')
+             .initFlow('file').application('osgi-file')
              .unmarshal().ghl7()
              .transmogrify(context.admissionTransmogrifier)
              .marshal().ghl7()
-             .to('file:workspace/output?append=false&autoCreate=false')         
+             .to('file:workspace/output?append=false&autoCreate=false')
+             .ackFlow()
 
      }
     

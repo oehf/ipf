@@ -15,8 +15,14 @@
  */
 package org.openehealth.ipf.modules.hl7.mappings
 
-import org.springframework.osgi.context.BundleContextAwareimport org.osgi.framework.BundleContextimport javax.annotation.PostConstructimport org.osgi.framework.Bundleimport org.springframework.core.io.Resource
-import org.springframework.core.io.UrlResourceimport org.apache.commons.logging.Logimport org.apache.commons.logging.LogFactory/**
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+
+import org.osgi.framework.Bundle
+import org.osgi.framework.BundleContext
+import org.springframework.core.io.Resource
+import org.springframework.core.io.UrlResourceimport org.springframework.osgi.context.BundleContextAware
+/**
  * Searches the bundle space (including fragments) for mapping scripts
  * and configures the BidiMappingService with them.  
  * 
@@ -37,7 +43,6 @@ public class BidiMappingServiceConfigurer implements BundleContextAware {
         this.context = context
     }
     
-    @PostConstruct
     void configure() {
         def resources = context.bundle.findEntries(
                 MAPPING_PATH, 

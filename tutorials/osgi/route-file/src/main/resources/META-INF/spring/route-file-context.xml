@@ -1,12 +1,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://activemq.apache.org/camel/schema/osgi" 
+    xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://activemq.apache.org/camel/schema/osgi 
-http://activemq.apache.org/camel/schema/osgi/camel-osgi.xsd">
+http://activemq.apache.org/camel/schema/osgi/camel-osgi.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
+    <context:annotation-config />
+    
     <camel:camelContext id="camelContext" />
 
     <bean id="routeBuilder"
@@ -18,4 +23,9 @@ http://activemq.apache.org/camel/schema/osgi/camel-osgi.xsd">
         class="org.openehealth.ipf.tutorials.osgi.route.file.SampleRouteConfig">
     </bean>
 
+    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe" />
+    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor" />
+    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor" />
+    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowErrorProcessor" />
+    
 </beans>

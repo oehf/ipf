@@ -12,8 +12,13 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg></osgi.export.pkg>
-        <osgi.fragment.host>org.openehealth.ipf.platform-camel.platform-camel-flow</osgi.fragment.host>
+        <osgi.export.pkg />
+        <osgi.import.pkg>
+            org.apache.derby.jdbc
+        </osgi.import.pkg>
+        <osgi.fragment.host>
+            org.openehealth.ipf.platform-camel.platform-camel-flow
+        </osgi.fragment.host>
     </properties>
     
 </project>

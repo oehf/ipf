@@ -1,18 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
 http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+   
+  <context:annotation-config />
 
-    <context:annotation-config />
+  <!-- ================================================================= -->
+  <!--  Declarative Transaction Management                               -->
+  <!-- ================================================================= -->
 
-    <!-- DO NOT CONFIGURE FLOW PROCESSORS HERE -->
+  <tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
+
+  <!-- ================================================================== -->
+  <!--  Flow Manager                                                      -->
+  <!-- ================================================================== -->
+
+  <bean id="flowManager" 
+    class="org.openehealth.ipf.platform.camel.flow.PlatformFlowManager">
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Repositories                                                     -->
+  <!-- ================================================================= -->
+
+  <bean id="flowRepository" init-method="init"
+    class="org.openehealth.ipf.commons.flow.repository.FlowRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+  
+  <bean id="configRepository" 
+    class="org.openehealth.ipf.commons.flow.repository.ConfigRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+
+  <bean id="sequenceRepository" 
+    class="org.openehealth.ipf.commons.flow.repository.SequenceRepositoryImpl">
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+  </bean>
+  
+  <!-- ================================================================= -->
+  <!--  Hibernate Setup                                                  -->
+  <!-- ================================================================= -->
+
+  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource" ref="flowDataSource"/>
+    <property name="configLocation" value="/hibernate-flow.xml"/>
+    <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.openehealth.ipf.commons.flow.derby.DerbyDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">false</prop>
+      </props>
+    </property>    
+  </bean>
+
+  <bean id="hibernateTemplate"
+    class="org.springframework.orm.hibernate3.HibernateTemplate">
+    <property name="sessionFactory" ref="hibernateSessionFactory" />
+  </bean>
+
+  <bean id="hibernateTransactionManager"
+    class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="hibernateSessionFactory"/>
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  Datasource Setup                                                 -->
+  <!-- ================================================================= -->
+
+  <bean id="flowDataSource" class="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource">
+    <property name="databaseName" value="workspace/derby"/>
+    <property name="createDatabase" value="create"/>
+  </bean>
+
+  <!-- <bean id="flowDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+    <property name="url" value="jdbc:derby://localhost:1527/data/flowmgr;create=true" />
+    <property name="defaultAutoCommit" value="false" />
+    <property name="initialSize" value="10" />
+    <property name="maxActive" value="50" />
+  </bean> -->
+
+  <!-- ================================================================== -->
+  <!--  JMX Setup                                                         -->
+  <!-- ================================================================== -->
+
+  <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+    <property name="autodetect" value="false"/>
+    <property name="assembler" ref="assembler"/>
+    <property name="namingStrategy" ref="namingStrategy"/>
+    <property name="beans">
+      <map>
+        <entry
+            key="org.openehealth.ipf.platform:type=service,name=FlowManager"
+            value-ref="flowManagerMBean" />
+      </map>
+    </property>
+  </bean>
+
+  <bean id="flowManagerMBean" class="org.openehealth.ipf.commons.flow.jmx.FlowManagerMBean">
+    <property name="application" value="tutorial" />
+  </bean>
+
+  <!-- ================================================================= -->
+  <!--  JMX Annotation Support                                           -->
+  <!-- ================================================================= -->
+
+  <bean id="jmxAttributeSource"
+      class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource"/>
+
+  <bean id="assembler"
+      class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
+      <property name="attributeSource" ref="jmxAttributeSource"/>
+  </bean>
+
+  <bean id="namingStrategy"
+      class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
+      <property name="attributeSource" ref="jmxAttributeSource"/>
+  </bean>
 
 </beans>

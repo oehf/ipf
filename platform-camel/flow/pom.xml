@@ -13,8 +13,29 @@
     
     <properties>
         <!-- These settings are preliminary -->
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.flow.*</osgi.export.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension</ipf.extension.classes>
+        <osgi.export.pkg>
+            org.openehealth.ipf.platform.camel.flow.*
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.apache.camel,
+            org.apache.camel.model,
+            org.apache.camel.processor,
+            *
+        </osgi.import.pkg>
+        <!--
+            Dynamic imports are needed when we serialize and deserialize
+            message payloads to and from packet bytes. It's turned off 
+            for development purposes to ensure that other required classes
+            aren't loaded via dynamic imports.
+         -->
+        <!-- 
+        <osgi.dynamic.import.pkg>
+            *
+        </osgi.dynamic.import.pkg>
+        -->
+        <ipf.extension.classes>
+            org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension
+        </ipf.extension.classes>
     </properties>
     
     <dependencies>
@@ -40,7 +61,7 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
@@ -60,7 +81,7 @@
                         </goals>
                     </execution>
                </executions>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>    
 
