@@ -32,6 +32,7 @@ public class SampleRouteConfig implements RouteBuilderConfig {
              .transmogrify(context.admissionTransmogrifier)
              .marshal().ghl7()
              .setFilename('output.hl7')
+             .dedupeFlow()
              .to('file:workspace/output?append=false&autoCreate=false')         
              .ackFlow()
 

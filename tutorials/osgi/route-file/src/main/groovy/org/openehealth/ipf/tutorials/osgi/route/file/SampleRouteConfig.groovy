@@ -31,6 +31,7 @@ public class SampleRouteConfig implements RouteBuilderConfig {
              .unmarshal().ghl7()
              .transmogrify(context.admissionTransmogrifier)
              .marshal().ghl7()
+             .dedupeFlow()
              .to('file:workspace/output?append=false&autoCreate=false')
              .ackFlow()
 

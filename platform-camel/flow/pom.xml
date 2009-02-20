@@ -22,17 +22,6 @@
             org.apache.camel.processor,
             *
         </osgi.import.pkg>
-        <!--
-            Dynamic imports are needed when we serialize and deserialize
-            message payloads to and from packet bytes. It's turned off 
-            for development purposes to ensure that other required classes
-            aren't loaded via dynamic imports.
-         -->
-        <!-- 
-        <osgi.dynamic.import.pkg>
-            *
-        </osgi.dynamic.import.pkg>
-        -->
         <ipf.extension.classes>
             org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension
         </ipf.extension.classes>

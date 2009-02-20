@@ -7,6 +7,13 @@
     
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.commons.core.*</osgi.export.pkg>
+        <!--
+            Needed to load any class via
+            org.openehealth.ipf.commons.core.io.IOUtils.deserialize(byte[])
+         -->
+        <osgi.dynamic.import.pkg>
+            *
+        </osgi.dynamic.import.pkg>
     </properties>
 
     <parent>
