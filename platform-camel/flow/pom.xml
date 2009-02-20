@@ -12,8 +12,8 @@
     </parent>
     
     <properties>
-        <!-- These settings are preliminary -->
         <osgi.export.pkg>
+            org.apache.camel.*;version=1.5.0,
             org.openehealth.ipf.platform.camel.flow.*
         </osgi.export.pkg>
         <osgi.import.pkg>
