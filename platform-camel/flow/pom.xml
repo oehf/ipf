@@ -13,7 +13,7 @@
     
     <properties>
         <osgi.export.pkg>
-            org.apache.camel.*;version=1.5.0,
+            org.apache.camel.*;version=${camel-version},
             org.openehealth.ipf.platform.camel.flow.*
         </osgi.export.pkg>
         <ipf.extension.classes>
