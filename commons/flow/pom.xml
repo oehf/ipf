@@ -12,22 +12,9 @@
     </parent>
     
     <properties>
-        <!-- These settings are preliminary -->
         <osgi.export.pkg>
             org.openehealth.ipf.commons.flow.*
         </osgi.export.pkg>
-        <osgi.import.pkg>
-            org.aopalliance.aop,
-            org.springframework.aop,
-            org.springframework.aop.framework,
-            org.springframework.jmx.export,
-            org.springframework.jmx.export.annotation,
-            org.springframework.jmx.export.assembler,
-            org.springframework.jmx.export.naming,
-            org.hibernate.jdbc,
-            org.hibernate.proxy,
-            *
-        </osgi.import.pkg>
         <osgi.fragment.host>
             org.openehealth.ipf.platform-camel.platform-camel-flow
         </osgi.fragment.host>

@@ -14,7 +14,20 @@
     <properties>
         <osgi.export.pkg />
         <osgi.import.pkg>
-            org.apache.derby.jdbc
+            org.aopalliance.aop,
+            org.apache.derby.jdbc,
+            org.hibernate.jdbc,
+            org.hibernate.proxy,
+            org.openehealth.ipf.commons.flow.domain,
+            org.openehealth.ipf.commons.flow.config,
+            org.openehealth.ipf.commons.flow.derby,
+            org.openehealth.ipf.commons.flow.repository,
+            org.springframework.aop,
+            org.springframework.aop.framework,
+            org.springframework.jmx.export,
+            org.springframework.jmx.export.annotation,
+            org.springframework.jmx.export.assembler,
+            org.springframework.jmx.export.naming
         </osgi.import.pkg>
         <osgi.fragment.host>
             org.openehealth.ipf.platform-camel.platform-camel-flow
