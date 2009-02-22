@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:osgi="http://www.springframework.org/schema/osgi"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/osgi
+http://www.springframework.org/schema/osgi/spring-osgi.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <osgi:service ref="flowManager" 
+        interface="org.openehealth.ipf.commons.flow.FlowManager">
+    </osgi:service>
+        
+    <osgi:service ref="flowManager" 
+        interface="org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry">
+    </osgi:service>
+
+    <osgi:reference id="flowRepository" timeout="10000" 
+        interface="org.openehealth.ipf.commons.flow.repository.FlowRepository">
+    </osgi:reference>
+    
+    <osgi:reference id="configRepository" timeout="10000" 
+        interface="org.openehealth.ipf.commons.flow.repository.ConfigRepository">
+    </osgi:reference>
+    
+    <osgi:reference id="hibernateTransactionManager" timeout="10000"
+        interface="org.springframework.transaction.PlatformTransactionManager">
+    </osgi:reference>
+    
+</beans>

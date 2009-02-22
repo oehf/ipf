@@ -12,7 +12,7 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
         interface="org.openehealth.ipf.commons.core.modules.api.Transmogrifier">
     </osgi:reference>
 
-    <osgi:reference id="flowManager" bean-name="flowManager" timeout="10000" 
+    <osgi:reference id="flowManager" timeout="10000" 
         interface="org.openehealth.ipf.commons.flow.FlowManager">
     </osgi:reference>
 
@@ -21,7 +21,7 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
         the OSGi whiteborard pattern.
      -->
 
-    <osgi:reference id="replayStrategyRegistry" bean-name="flowManager" timeout="10000" 
+    <osgi:reference id="replayStrategyRegistry" timeout="10000" 
         interface="org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry">
     </osgi:reference>
 

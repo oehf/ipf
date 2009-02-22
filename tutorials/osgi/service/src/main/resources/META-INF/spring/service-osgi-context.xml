@@ -11,10 +11,9 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd
 http://www.springframework.org/schema/osgi-compendium
 http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
-    <!--
-        Service export. 
-     -->
-    <osgi:service ref="admissionTransmogrifier" auto-export="interfaces" />
+    <osgi:service ref="admissionTransmogrifier" 
+        interface="org.openehealth.ipf.commons.core.modules.api.Transmogrifier">
+    </osgi:service>
 
     <!--
         Obtain config from configuration admin service or fallback to default.
