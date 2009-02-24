@@ -19,6 +19,7 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.test.TestSupport;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,6 +33,7 @@ import org.springframework.test.context.ContextConfiguration;
         "/context-transaction-process.xml",
         "/context-transaction-delivery.xml"
 })
+@Ignore
 public class TransactionalMessagingTest extends TestSupport {
 
     private static final long TIMEOUT = 2000L;
