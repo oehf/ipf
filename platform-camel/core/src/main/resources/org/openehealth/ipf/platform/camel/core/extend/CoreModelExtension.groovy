@@ -121,10 +121,6 @@ class CoreModelExtension {
             delegate.intercept(RouteBuilder.validation(new DelegatingProcessor(validatorLogic)))
         }
     
-        ProcessorType.metaClass.inOnly = { ->
-            delegate.intercept(RouteBuilder.inOnlyBridge())
-        }
-        
         ProcessorType.metaClass.enrich = {String resourceUri, AggregationStrategy aggregationStrategy ->
             delegate.addOutput(new EnricherType(aggregationStrategy, resourceUri))
             return delegate

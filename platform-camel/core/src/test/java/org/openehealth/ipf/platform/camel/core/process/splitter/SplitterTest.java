@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.Expression;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -61,7 +62,7 @@ public class SplitterTest {
     
     @Test
     public void testProcess() throws Exception {
-        Exchange origExchange = new DefaultExchange((CamelContext)null);
+        Exchange origExchange = new DefaultExchange((CamelContext)null, ExchangePattern.InOut);
         origExchange.getIn().setBody("bla,blu");
         splitter.process(origExchange);
         
@@ -83,7 +84,7 @@ public class SplitterTest {
     public void testResetToDefaults() throws Exception {
         splitter.aggregate(null);
         
-        Exchange origExchange = new DefaultExchange((CamelContext)null);
+        Exchange origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitter.process(origExchange);
         
@@ -98,7 +99,7 @@ public class SplitterTest {
     
     @Test
     public void testSplitRuleWithArrayResult() throws Exception {
-        Exchange origExchange = new DefaultExchange((CamelContext)null);
+        Exchange origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         Splitter splitterWithArrayResult = new Splitter(new Expression() {
             @Override
@@ -126,7 +127,7 @@ public class SplitterTest {
                 return "smurf:" + exchange.getIn().getBody();
             }}, dest);
 
-        Exchange origExchange = new DefaultExchange((CamelContext)null);
+        Exchange origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitterSimpleRule.process(origExchange);
 
@@ -143,7 +144,7 @@ public class SplitterTest {
                 return null;
             }}, dest);
 
-        Exchange origExchange = new DefaultExchange((CamelContext)null);
+        Exchange origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitterEmptyRule.process(origExchange);
 
@@ -161,7 +162,7 @@ public class SplitterTest {
                 return results.iterator();
             }}, dest);
 
-        Exchange origExchange = new DefaultExchange((CamelContext)null);
+        Exchange origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitterIteratorRule.process(origExchange);
 
@@ -173,6 +174,10 @@ public class SplitterTest {
         assertEquals("blu", origExchange.getOut().getBody());
     }
 
+    private static Exchange createTestExchange() {
+        return new DefaultExchange((CamelContext)null, ExchangePattern.InOut);
+    }
+    
     private static String getContent(Exchange exchange) {
         Message message = exchange.getIn();
         return (String)message.getBody();

@@ -87,6 +87,19 @@ public abstract class AbstractFlowSplitTest {
         assertEquals(initial, new PlatformMessage(result).getSplitHistory()); 
     }
     
+    @Test
+    public void testConvertCamelPipeline() throws InterruptedException {
+        mock1.expectedBodiesReceived("test");
+        mock2.expectedBodiesReceived("test");
+        Exchange result = (Exchange)producerTemplate.send("direct:flow-test-pipe", 
+                createMessage("test").getExchange());
+        mock1.assertIsSatisfied();
+        mock2.assertIsSatisfied();
+        assertEquals(initial, new PlatformMessage(mock1.getExchanges().get(0)).getSplitHistory());
+        assertEquals(initial, new PlatformMessage(mock2.getExchanges().get(0)).getSplitHistory());
+        assertEquals(initial, new PlatformMessage(result).getSplitHistory()); 
+    }
+    
     private PlatformMessage createMessage(String body) {
         PlatformMessage platformMessage = new PlatformMessage(createExchange(body));
         platformMessage.setSplitHistory(initial);

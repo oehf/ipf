@@ -17,9 +17,6 @@ package org.openehealth.ipf.platform.camel.core.model;
 
 import groovy.lang.Closure;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
@@ -36,8 +33,6 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  */
 public abstract class ProcessorAdapterType extends OutputType<ProcessorType> {
 
-    private List outputs = new ArrayList();
-    
     private Expression inputExpression;
     private Expression paramsExpression;
     
@@ -70,11 +65,6 @@ public abstract class ProcessorAdapterType extends OutputType<ProcessorType> {
         return new ParamsType(this);
     }
     
-    @Override
-    public List getOutputs() {
-        return outputs;
-    }
-
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
         ProcessorAdapter adapter = doCreateProcessor(routeContext);

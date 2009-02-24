@@ -32,6 +32,7 @@ import org.openehealth.ipf.platform.camel.core.bridge.InOnlyBridge;
 /**
  * @author Martin Krasser
  */
+@Deprecated
 public class InOnlyBridgeTest {
 
     private Exchange target;

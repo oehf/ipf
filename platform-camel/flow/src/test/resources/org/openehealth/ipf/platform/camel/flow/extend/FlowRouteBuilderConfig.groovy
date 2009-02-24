@@ -119,6 +119,18 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
             .to("mock:mock-2")
             .ackFlow()
 
+        // --------------------------------------------------------------
+        //  Pipe Flows
+        // --------------------------------------------------------------
+        
+        builder
+            .from("direct:flow-test-pipe")
+            .initFlow("test-pipe")
+                .application("test")
+                .outType(String.class)
+            .to("direct:out-1")
+            .to("direct:out-2")
+        
     }
     
 }

@@ -30,6 +30,7 @@ import org.apache.camel.processor.DelegateProcessor;
  * 
  * @author Martin Krasser
  */
+@Deprecated
 public class InOnlyBridge extends DelegateProcessor {
 
     /**

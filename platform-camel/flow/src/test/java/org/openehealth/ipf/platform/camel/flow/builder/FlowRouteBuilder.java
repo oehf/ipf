@@ -104,5 +104,17 @@ public class FlowRouteBuilder extends RouteBuilder {
         from("direct:out-2")
         .to("mock:mock-2")
         .intercept(flowEnd());
+        
+        // --------------------------------------------------------------
+        //  Pipe Flows
+        // --------------------------------------------------------------
+        
+        from("direct:flow-test-pipe")
+        .intercept(flowBegin("test-pipe")
+                .application("test")
+                .outType(String.class))
+        .to("direct:out-1")
+        .to("direct:out-2");
+
     }
 }

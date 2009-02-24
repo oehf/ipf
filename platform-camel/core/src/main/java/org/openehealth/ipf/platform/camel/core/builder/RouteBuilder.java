@@ -47,6 +47,7 @@ import org.openehealth.ipf.platform.camel.core.process.Validation;
  * 
  * @author Martin Krasser
  */
+@SuppressWarnings("deprecation")
 public class RouteBuilder extends SpringRouteBuilder {
 
     public static final String DEFAULT_CONTEXT_PROPERTY_NAME = "context"; 
@@ -383,6 +384,7 @@ public class RouteBuilder extends SpringRouteBuilder {
      * 
      * @return a {@link InOnlyBridge}.
      */
+    @Deprecated
     public static DelegateProcessor inOnlyBridge() {
         return new InOnlyBridge();
     }

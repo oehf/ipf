@@ -37,12 +37,6 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 @Aspect
 public class ExchangeAggregate {
 
-    /**
-     * Name of the system property to activate this aspect.
-     */
-    public static String ASPECT_ACTIVE_SYSTEM_PROPERTY = 
-        "org.apache.camel.processor.exchange.aggregate.active"; 
-    
     @SuppressWarnings("unused") private MulticastProcessor multicast;
     @SuppressWarnings("unused") private ProcessorExchangePair pair;
     
@@ -60,11 +54,7 @@ public class ExchangeAggregate {
      */
     @Around("multicastExchangeProcess()")
     public void aroundExchangeProcess(ProceedingJoinPoint pjp) throws Throwable {
-        if (isActive()) {
-            doAroundExchangeProcess(pjp);
-        } else {
-            pjp.proceed(pjp.getArgs());
-        }
+        doAroundExchangeProcess(pjp);
     }
     
     /**
@@ -87,10 +77,6 @@ public class ExchangeAggregate {
     
     private ManagedMessage getMessage(ProceedingJoinPoint pjp) {
         return new PlatformMessage((Exchange)pjp.getArgs()[0]);
-    }
-    
-    private static boolean isActive() {
-        return Boolean.parseBoolean(System.getProperty(ASPECT_ACTIVE_SYSTEM_PROPERTY));
     }
     
 }
