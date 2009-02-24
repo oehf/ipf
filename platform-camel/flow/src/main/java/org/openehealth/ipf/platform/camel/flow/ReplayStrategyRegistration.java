@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,15 @@
 package org.openehealth.ipf.platform.camel.flow;
 
 /**
- * A registry for {@link ReplayStrategy}s.
+ * An object representing the registration of a {@link ReplayStrategy}.
  * 
  * @author Martin Krasser
  */
-public interface ReplayStrategyRegistry {
+public interface ReplayStrategyRegistration {
 
     /**
-     * Registers the <code>replayStrategy</code> under the id returned by
-     * {@link ReplayStrategy#getIdentifier()}.
-     * 
-     * @param replayStrategy
-     *            a replay strategy.
-     * @return a registration object.
+     * Terminates the registration
      */
-    public ReplayStrategyRegistration register(ReplayStrategy replayStrategy);
+    void terminate();
     
 }

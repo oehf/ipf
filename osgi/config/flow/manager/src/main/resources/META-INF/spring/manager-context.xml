@@ -27,7 +27,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
   <!-- ================================================================== -->
 
   <bean id="flowManager" 
-    class="org.openehealth.ipf.platform.camel.flow.PlatformFlowManager">
+    class="org.openehealth.ipf.platform.camel.flow.osgi.OsgiPlatformFlowManager">
   </bean>
 
   <!-- ================================================================== -->

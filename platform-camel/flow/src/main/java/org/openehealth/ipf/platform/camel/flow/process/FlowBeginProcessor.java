@@ -29,8 +29,12 @@ import org.openehealth.ipf.platform.camel.core.process.Noop;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 import org.openehealth.ipf.platform.camel.flow.PlatformPacket;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategy;
+import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistration;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry;
+import org.openehealth.ipf.platform.camel.flow.osgi.OsgiReplayStrategyRegistry;
+import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.osgi.context.BundleContextAware;
 
 /**
  * A processor that triggers a
@@ -38,12 +42,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Martin Krasser
  */
-public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy {
+public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy, BundleContextAware {
 
     private static final Log LOG = LogFactory.getLog(FlowBeginProcessor.class);
 
-    @Autowired
+    @Autowired(required=false)
     private ReplayStrategyRegistry registry;
+    
+    private ReplayStrategyRegistration registration;
     
     private Processor replayErrorProcessor;
     
@@ -72,6 +78,10 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
         this.replayErrorProcessor = new Noop();
     }
     
+    public void setBundleContext(BundleContext bundleContext) {
+        this.registry = new OsgiReplayStrategyRegistry(bundleContext);
+    }
+
     @Override
     public String toString() {
         return "FlowBeginProcessor[" + identifier + " -> " + getProcessor() + "]";
@@ -140,9 +150,15 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
      */
     public void register() {
         if (registry != null) {
-            registry.register(this);
+            registration = registry.register(this);
         } else {
             LOG.warn("no replay strategy registry defined in application context");
+        }
+    }
+
+    public void unregister() {
+        if (registration != null) {
+            registration.terminate();
         }
     }
 
@@ -197,6 +213,12 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
             LOG.error(e);
         }
         
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        unregister();
+        super.doStop();
     }
 
     private Endpoint resolveReplayErrorEndpoint(String replayErrorUri) {

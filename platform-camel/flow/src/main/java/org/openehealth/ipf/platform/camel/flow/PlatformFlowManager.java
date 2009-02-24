@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.flow;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,23 +44,16 @@ public class PlatformFlowManager extends FlowManagerBase implements ReplayStrate
      * Creates a new {@link PlatformFlowManager}.
      */
     public PlatformFlowManager() {
-        this.replayStrategies = new HashMap<String, ReplayStrategy>();
+        this.replayStrategies = Collections.synchronizedMap(new HashMap<String, ReplayStrategy>());
     }
     
     /* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry#register(org.openehealth.ipf.platform.camel.flow.ReplayStrategy)
      */
-    public void register(ReplayStrategy replayStrategy) {
+    public ReplayStrategyRegistration register(ReplayStrategy replayStrategy) {
         replayStrategies.put(replayStrategy.getIdentifier(), replayStrategy);
-        LOG.info("Registered replay strategy with identifier " + replayStrategy.getIdentifier());
-    }
-    
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry#unregister(org.openehealth.ipf.platform.camel.flow.ReplayStrategy)
-     */
-    public void unregister(ReplayStrategy replayStrategy) {
-        replayStrategies.remove(replayStrategy.getIdentifier());
-        LOG.info("Unregistered replay strategy with identifier " + replayStrategy.getIdentifier());
+        LOG.info("Registered replay strategy with identifier " + replayStrategy.getIdentifier() + " at flow manager");
+        return new LocalReplayStrategyRegistration(replayStrategy);
     }
     
     /**
@@ -67,26 +61,55 @@ public class PlatformFlowManager extends FlowManagerBase implements ReplayStrate
      * {@link ReplayStrategy#replay(PlatformPacket)}.
      * 
      * @param packet
-     *            packet to be replayed.
+     *            serialized {@link PlatformPacket} to be replayed.
      * @throws Exception
      *             if replay fails.
-     * @return an optionally updated packet.
+     * @return an optionally updated serialized {@link PlatformPacket}.
      * 
      * @see PlatformPacket#deserialize(byte[])
      * @see PlatformPacket#serialize()
      */
     @Override
     protected byte[] replayFlow(byte[] packet) throws Exception {
-        PlatformPacket input = PlatformPacket.deserialize(packet);
-        ReplayStrategy strategy = getReplayStrategy(input);
-        if (strategy == null) {
-            throw new FlowReplayException("no replay strategy found");
-        }
-        return strategy.replay(input).serialize();
+        return replayFlow(PlatformPacket.deserialize(packet)).serialize();
     }
 
-    private ReplayStrategy getReplayStrategy(PlatformPacket packet) {
-        return replayStrategies.get(packet.getReplayStrategyId());
+    /**
+     * Delegates replay of the <code>packet</code> to
+     * {@link ReplayStrategy#replay(PlatformPacket)}.
+     * 
+     * @param packet
+     *            {@link PlatformPacket} to be replayed.
+     * @throws Exception
+     *             if replay fails.
+     * @return an optionally updated {@link PlatformPacket}.
+     * 
+     * @see PlatformPacket#deserialize(byte[])
+     * @see PlatformPacket#serialize()
+     */
+    protected PlatformPacket replayFlow(PlatformPacket packet) throws Exception {
+        String replayStrategyId = packet.getReplayStrategyId();
+        ReplayStrategy replayStrategy = replayStrategies.get(replayStrategyId);
+        if (replayStrategy == null) {
+            throw new FlowReplayException("replay strategy " + replayStrategyId + " not found");
+        }
+        return replayStrategy.replay(packet);
+        
+    }
+    
+    private class LocalReplayStrategyRegistration implements ReplayStrategyRegistration {
+     
+        private ReplayStrategy replayStrategy;
+        
+        public LocalReplayStrategyRegistration(ReplayStrategy replayStrategy) {
+            this.replayStrategy = replayStrategy;
+        }
+
+        public void terminate() {
+            replayStrategies.remove(replayStrategy.getIdentifier());
+            LOG.info("Unregistered replay strategy with identifier " + replayStrategy.getIdentifier() + " from flow manager");
+        }
+        
     }
     
 }

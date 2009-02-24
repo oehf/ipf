@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.flow.repository;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -59,8 +57,8 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
         flowSearchCallback = new DefaultSearchCallback();
     }
     
-    @PostConstruct
-    public void init() {
+    public void initDao() throws Exception {
+        super.initDao();
         if (sequenceRepository == null) {
             sequenceRepository = new SequenceRepositoryMock();
             LOG.warn("no sequence repository injected, using mock repository");

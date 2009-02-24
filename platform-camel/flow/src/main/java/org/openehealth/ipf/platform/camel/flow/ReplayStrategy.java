@@ -44,4 +44,5 @@ public interface ReplayStrategy {
      * Registers this strategy at a {@link ReplayStrategyRegistry}.
      */
     void register();
+
 }
