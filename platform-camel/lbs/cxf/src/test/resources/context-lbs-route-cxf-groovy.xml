@@ -32,7 +32,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <cxf:cxfEndpoint id="soapEndpointNoExtract"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/NoExtractPort" endpointName="s:SoapOverHttp"
+        address="http://localhost:9002/SoapContext/NoExtractPort" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
         <cxf:properties>
@@ -42,7 +42,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <cxf:cxfEndpoint id="soapEndpointExtract"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/ExtractPort" endpointName="s:SoapOverHttp"
+        address="http://localhost:9002/SoapContext/ExtractPort" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
         <cxf:properties>
@@ -52,7 +52,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <cxf:cxfEndpoint id="soapEndpointExtractRouter"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/ExtractPortRouter"
+        address="http://localhost:9002/SoapContext/ExtractPortRouter"
         endpointName="s:SoapOverHttp" serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
         <cxf:properties>
@@ -62,7 +62,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <cxf:cxfEndpoint id="soapEndpointExtractRouterRealServer"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/ExtractPortRouterRealServer"
+        address="http://localhost:9002/SoapContext/ExtractPortRouterRealServer"
         endpointName="s:SoapOverHttp" serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
         <cxf:properties>
@@ -72,7 +72,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <cxf:cxfEndpoint id="soapEndpointRealServer"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/RealServer" endpointName="s:SoapOverHttp"
+        address="http://localhost:9002/SoapContext/RealServer" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
         <cxf:properties>
@@ -82,14 +82,14 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <cxf:cxfEndpoint id="soapEndpointExtractSwA"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/ExtractSwAPort" endpointName="s:SoapOverHttp"
+        address="http://localhost:9002/SoapContext/ExtractSwAPort" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
     </cxf:cxfEndpoint>
 
     <cxf:cxfEndpoint id="soapEndpointExample1"
         serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-        address="http://localhost:9000/SoapContext/ExtractExample1"
+        address="http://localhost:9002/SoapContext/ExtractExample1"
         endpointName="s:SoapOverHttp" serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
         <cxf:properties>

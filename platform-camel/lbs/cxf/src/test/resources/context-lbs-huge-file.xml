@@ -31,7 +31,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
 	<cxf:cxfEndpoint id="soapEndpointHugeFile"
 		serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
-		address="http://localhost:9000/SoapContext/HugeFilePort" 
+		address="http://localhost:9001/SoapContext/HugeFilePort" 
 		endpointName="s:SoapOverHttp"
 		serviceName="s:SOAPService" 
 		wsdlURL="hello_world.wsdl"

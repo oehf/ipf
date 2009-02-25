@@ -459,15 +459,7 @@ public abstract class AbstractLbsHttpTest {
         resources.add(resource2);
         sendExchange.getIn().setBody(resources);
 
-        // Note that the mock endpoint might receive several exchanges. These 
-        // are cut off because reading from the stream failed at some point.
-        // The endpoint might receive multiple requests because sending is 
-        // retried by the HttpClient and Camel.
-        // The expected count is 4 * 3. 4 = number of retries due to the 
-        // HttpClient, 3 = number of retries due to Camel Error Handler config.
-        // The count is expected here to avoid those messages to come in late
-        // and mess up other tests.
-        mock.expectedMessageCount(12);
+        mock.expectedMessageCount(0);
 
         Exchange output = producerTemplate.send(ENDPOINT_SEND_ONLY, sendExchange);
         
@@ -500,8 +492,6 @@ public abstract class AbstractLbsHttpTest {
         resources.add(resource);
         sendExchange.getIn().setBody(resources);
 
-        // In this case the mock endpoint does not receive messages because the
-        // failure occurs before the request is streamed out
         mock.expectedMessageCount(0);
 
         Exchange output = producerTemplate.send(ENDPOINT_SEND_ONLY, sendExchange);

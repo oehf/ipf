@@ -15,9 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.process.cxf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -34,7 +32,6 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.Holder;
 import javax.xml.ws.soap.SOAPBinding;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
@@ -43,6 +40,7 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.cxf.CxfConstants;
 import org.apache.camel.component.cxf.CxfExchange;
 import org.apache.camel.component.cxf.CxfMessage;
+import org.apache.camel.component.cxf.spring.CxfEndpointBean;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.processor.DelegateProcessor;
@@ -72,29 +70,28 @@ public abstract class AbstractLbsCxfTest {
     
     protected static final String FILE_CONTENT = "blu bla";
 
-    private static final String ENDPOINT_NO_EXTRACT = 
-        "http://localhost:9000/SoapContext/NoExtractPort";
+    @Autowired @Qualifier("soapEndpointNoExtract")
+    private CxfEndpointBean endpointNoExtract;
+    
+    @Autowired @Qualifier("soapEndpointExtract")
+    private CxfEndpointBean endpointExtract;
 
-    private static final String ENDPOINT_EXTRACT = 
-        "http://localhost:9000/SoapContext/ExtractPort";
+    @Autowired @Qualifier("soapEndpointExtractRouter")
+    private CxfEndpointBean endpointExtractRouter; 
     
-    private static final String ENDPOINT_EXTRACT_ROUTER = 
-        "http://localhost:9000/SoapContext/ExtractPortRouter";
+    @Autowired @Qualifier("soapEndpointExtractRouterRealServer")
+    private CxfEndpointBean endpointExtractRouterRealServer; 
     
-    private static final String ENDPOINT_EXTRACT_ROUTER_REAL_SERVER = 
-        "http://localhost:9000/SoapContext/ExtractPortRouterRealServer";
+    @Autowired @Qualifier("soapEndpointRealServer")
+    private CxfEndpointBean endpointRealServer; 
     
-    private static final String ENDPOINT_REAL_SERVER = 
-        "http://localhost:9000/SoapContext/RealServer";
+    @Autowired @Qualifier("soapEndpointExtractSwA")
+    private CxfEndpointBean endpointExtractSwA; 
     
     private static final String ENDPOINT_NON_CXF = 
         "direct:cxflbs";
     
-    private static final String ENDPOINT_EXTRACT_SWA = 
-        "http://localhost:9000/SoapContext/ExtractSwAPort";
-    
-    @Autowired
-    @Qualifier("serviceBean")
+    @Autowired @Qualifier("serviceBean")
     protected ServiceBean serviceBean;
     
     private File file;
@@ -147,11 +144,11 @@ public abstract class AbstractLbsCxfTest {
         mock.reset();
         serviceBean.setCheckProcessor(null);
     }
-
+    
     @Test
     public void testStandardSOAPCallWithoutResourceExtract() throws Exception {
         enableMTOM(); 
-        setEndpoint(ENDPOINT_NO_EXTRACT);
+        setEndpoint(endpointNoExtract);
         serviceBean.setCheckProcessor(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -171,7 +168,7 @@ public abstract class AbstractLbsCxfTest {
     @Test
     public void testAttachmentSOAPCallWithoutResourceExtract() throws Exception {        
         enableMTOM(); 
-        setEndpoint(ENDPOINT_NO_EXTRACT);
+        setEndpoint(endpointNoExtract);
         serviceBean.setCheckProcessor(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -198,7 +195,7 @@ public abstract class AbstractLbsCxfTest {
 
     @Test
     public void testStandardSOAPCallWithResourceExtract() throws Exception {
-        setEndpoint(ENDPOINT_EXTRACT);
+        setEndpoint(endpointExtract);
         String response = greeter.greetMe("Hello Camel!!");
         assertEquals("Greetings from Apache Camel!!!! Request was Hello Camel!!", response);
     }
@@ -206,7 +203,7 @@ public abstract class AbstractLbsCxfTest {
     @Test
     public void testAttachmentSOAPCallWithResourceExtract() throws Exception {        
         enableMTOM(); 
-        setEndpoint(ENDPOINT_EXTRACT);
+        setEndpoint(endpointExtract);
         serviceBean.setCheckProcessor(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -229,7 +226,7 @@ public abstract class AbstractLbsCxfTest {
     @Test
     public void testDelayedResourceRemoval() throws Exception {
         enableMTOM(); 
-        setEndpoint(ENDPOINT_EXTRACT);
+        setEndpoint(endpointExtract);
 
         final URI resourceUri[] = new URI[1];
         serviceBean.setCheckProcessor(new Processor() {
@@ -258,7 +255,7 @@ public abstract class AbstractLbsCxfTest {
     
     @Test
     public void testStandardSOAPCallRouter() throws Exception {
-        setEndpoint(ENDPOINT_EXTRACT_ROUTER);       
+        setEndpoint(endpointExtractRouter);       
         String response = greeter.greetMe("Hello Camel!!");
         assertEquals("Greetings from Apache Camel!!!! Request was Hello Camel!!", response);
     }
@@ -266,7 +263,7 @@ public abstract class AbstractLbsCxfTest {
     @Test
     public void testAttachmentSOAPCallRouter() throws Exception {        
         enableMTOM(); 
-        setEndpoint(ENDPOINT_EXTRACT_ROUTER);
+        setEndpoint(endpointExtractRouter);
         serviceBean.setCheckProcessor(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -300,10 +297,10 @@ public abstract class AbstractLbsCxfTest {
     @Test
     public void testRoutingToRealServer() throws Exception {
         enableMTOM(); 
-        setEndpoint(ENDPOINT_EXTRACT_ROUTER_REAL_SERVER);
+        setEndpoint(endpointExtractRouterRealServer);
 
         Object implementor = new GreeterImpl();
-        String address = ENDPOINT_REAL_SERVER;
+        String address = endpointRealServer.getAddress();
         Endpoint endpoint = Endpoint.publish(address, implementor);
         try {
             Holder<String> nameHolder = new Holder("Hello Camel!!");
@@ -343,7 +340,7 @@ public abstract class AbstractLbsCxfTest {
     
     @Test
     public void testAttachmentSOAPCallWithResourceExtractSwA() throws Exception {        
-        setEndpoint(ENDPOINT_EXTRACT_SWA);
+        setEndpoint(endpointExtractSwA);
         serviceBean.setCheckProcessor(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -363,8 +360,8 @@ public abstract class AbstractLbsCxfTest {
         assertEquals(FILE_CONTENT + FILE_CONTENT, toString(handlerHolder));
     }
     
-    protected void setEndpoint(String endpoint) {
-        provider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+    protected void setEndpoint(CxfEndpointBean endpoint) {
+        provider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint.getAddress());
     }
 
     public static final class CheckOutputDataSource extends DelegateProcessor {

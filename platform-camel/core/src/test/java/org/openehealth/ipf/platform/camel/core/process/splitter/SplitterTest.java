@@ -62,7 +62,7 @@ public class SplitterTest {
     
     @Test
     public void testProcess() throws Exception {
-        Exchange origExchange = new DefaultExchange((CamelContext)null, ExchangePattern.InOut);
+        Exchange origExchange = createTestExchange();
         origExchange.getIn().setBody("bla,blu");
         splitter.process(origExchange);
         

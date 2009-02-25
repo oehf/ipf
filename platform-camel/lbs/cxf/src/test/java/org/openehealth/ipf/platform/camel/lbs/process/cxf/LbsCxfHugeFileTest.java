@@ -74,7 +74,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class LbsCxfHugeFileTest {
 
     private static final String ENDPOINT = 
-        "http://localhost:9000/SoapContext/HugeFilePort";
+        "http://localhost:9001/SoapContext/HugeFilePort";
 
     private Greeter greeter;
     private BindingProvider provider;

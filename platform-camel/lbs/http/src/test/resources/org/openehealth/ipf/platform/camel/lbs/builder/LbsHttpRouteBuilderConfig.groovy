@@ -44,7 +44,7 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
     
     void apply(RouteBuilder builder) {
         
-        builder.errorHandler(builder.deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
+        builder.errorHandler(builder.noErrorHandler())
 
         // --------------------------------------------------------------
         //  LBS routes
@@ -100,7 +100,7 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             // Custom processing to find a token
             .process { Exchange exchange ->
                 // Get the stream from the data source and read it
-                def inputStream = exchange.in.getBody(InputStream.class)            
+                def inputStream = exchange.in.getBody(InputStream.class)                
                 def reader = new BufferedReader(new InputStreamReader(inputStream))
                 try {
                     def line = reader.readLine()

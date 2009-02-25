@@ -23,12 +23,15 @@ import javax.xml.ws.Holder;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.component.cxf.spring.CxfEndpointBean;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.cxf.message.MessageContentsList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -55,10 +58,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(DirtySpringContextJUnit4ClassRunner.class) // DO NOT SIMPLY COPY!!! see above
 @ContextConfiguration(locations = { "/context-lbs-route-cxf-groovy.xml" })
 public class GroovyLbsCxfTest extends AbstractLbsCxfTest {
+    
+    @Autowired @Qualifier("soapEndpointExample1")
+    private CxfEndpointBean endpointExample1;
+    
     @Test
-    public void testExample1() throws Exception {        
+    public void testExample1() throws Exception {
         enableMTOM(); 
-        setEndpoint("http://localhost:9000/SoapContext/ExtractExample1");
+        setEndpoint(endpointExample1);
         serviceBean.setCheckProcessor(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {

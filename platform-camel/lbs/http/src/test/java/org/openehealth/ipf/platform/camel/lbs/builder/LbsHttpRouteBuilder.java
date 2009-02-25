@@ -31,7 +31,7 @@ public class LbsHttpRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         List<ResourceHandler> handlers = bean(List.class, "resourceHandlers");
 
-        errorHandler(deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
+        errorHandler(noErrorHandler());
         
         from("jetty:http://localhost:9452/lbstest_no_extract")
             .to("mock:mock");
