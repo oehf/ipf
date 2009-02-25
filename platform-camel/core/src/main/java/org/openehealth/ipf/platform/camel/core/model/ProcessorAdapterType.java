@@ -17,12 +17,8 @@ package org.openehealth.ipf.platform.camel.core.model;
 
 import groovy.lang.Closure;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
-import org.apache.camel.model.OutputType;
-import org.apache.camel.model.ProcessorType;
-import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.StaticParams;
@@ -31,7 +27,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 /**
  * @author Martin Krasser
  */
-public abstract class ProcessorAdapterType extends OutputType<ProcessorType> {
+public abstract class ProcessorAdapterType extends DelegateType {
 
     private Expression inputExpression;
     private Expression paramsExpression;
@@ -66,7 +62,7 @@ public abstract class ProcessorAdapterType extends OutputType<ProcessorType> {
     }
     
     @Override
-    public Processor createProcessor(RouteContext routeContext) throws Exception {
+    protected Processor doCreateDelegate(RouteContext routeContext) {
         ProcessorAdapter adapter = doCreateProcessor(routeContext);
         if (inputExpression != null) {
             adapter.input(inputExpression);
@@ -74,43 +70,9 @@ public abstract class ProcessorAdapterType extends OutputType<ProcessorType> {
         if (paramsExpression != null) {
             adapter.params(paramsExpression);
         }
-        return new AdaptingProcessor(adapter, routeContext.createProcessor(this));
+        return adapter;
     }
-    
+
     protected abstract ProcessorAdapter doCreateProcessor(RouteContext routeContext);
-    
-    private static class AdaptingProcessor extends DelegateProcessor {
-        
-        private Processor adaptee;
-
-        public AdaptingProcessor(Processor adaptee, Processor next) {
-            super(next);
-            this.adaptee = adaptee;
-        }
-        
-        @Override
-        public String toString() {
-            String adapteeName = adaptee.getClass().getSimpleName();
-            return adapteeName + "[" + getProcessor() + "]";
-        }
-
-        @Override
-        protected void processNext(Exchange exchange) throws Exception {
-            adaptee.process(exchange);
-            
-            if (exchange.getPattern().isOutCapable()) {
-                exchange.getIn().copyFrom(exchange.getOut());
-            }
-            
-            if (getProcessor() != null) {
-                exchange.setOut(null);
-            }
-            
-            if (!exchange.isFailed()) {
-                super.processNext(exchange);
-            }
-        }
-
-    }
     
 }

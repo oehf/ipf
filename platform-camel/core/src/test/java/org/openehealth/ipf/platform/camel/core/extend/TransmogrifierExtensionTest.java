@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
+import static org.junit.Assert.assertEquals;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -24,6 +28,17 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = { "/context-core-extend-transmogrifier.xml" })
 public class TransmogrifierExtensionTest extends AbstractExtensionTest {
 
+    @Test
+    public void testReply() {
+        Exchange exchange = producerTemplate.request("direct:reply", new Processor() {
+            public void process(Exchange exchange) throws Exception {
+                exchange.getIn().setBody("abc");
+            }
+        });
+        assertEquals("abc", exchange.getIn().getBody());
+        assertEquals("abcxyz", exchange.getOut().getBody());
+    }
+    
     @Test
     public void testClosureOneParam() throws InterruptedException {
         mockOutput.expectedBodiesReceived("bulb");

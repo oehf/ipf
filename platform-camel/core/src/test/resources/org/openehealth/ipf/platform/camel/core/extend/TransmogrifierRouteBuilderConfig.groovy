@@ -37,7 +37,16 @@ class TransmogrifierRouteBuilderConfig implements RouteBuilderConfig {
        transmogrifier.to = 'b'
 
        builder.errorHandler(builder.noErrorHandler())
-        
+
+       builder
+           .from('direct:reply')
+           .transmogrify {it + 'xyz'}
+       
+       builder
+           .from('direct:forward')
+           .transmogrify {it + 'xyz'}
+           .to('mock:output')
+
        builder
             .from('direct:input1') 
             .transmogrify {input -> input.reverse()}  
