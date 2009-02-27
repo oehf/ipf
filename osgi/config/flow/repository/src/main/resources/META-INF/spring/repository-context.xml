@@ -57,6 +57,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="hibernate.format_sql">false</prop>
+        <prop key="hibernate.search.autoregister_listeners">false</prop>
       </props>
     </property>    
   </bean>
