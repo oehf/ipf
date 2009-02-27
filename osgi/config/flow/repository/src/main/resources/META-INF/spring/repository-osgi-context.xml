@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:osgi="http://www.springframework.org/schema/osgi"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:osgi="http://www.springframework.org/schema/osgi"
+    xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
 http://www.springframework.org/schema/osgi
 http://www.springframework.org/schema/osgi/spring-osgi.xsd
-http://www.springframework.org/schema/context
-http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+http://www.springframework.org/schema/osgi-compendium
+http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+    <osgix:property-placeholder 
+        persistent-id="org.openehealth.ipf.osgi.config.flow.repository" defaults-ref="repository.properties">
+    </osgix:property-placeholder>
 
     <osgi:service ref="flowRepository" context-class-loader="service-provider"
         interface="org.openehealth.ipf.commons.flow.repository.FlowRepository">

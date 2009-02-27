@@ -18,6 +18,7 @@
         <osgi.bundle.classpath />
         <osgi.embed.dependency />
         <osgi.fragment.host />
+        <osgi.require.bundle />
         <osgi.spring.context />
         <ipf.extension.classes />
         <ipf.extension.beans />
@@ -510,6 +511,7 @@
                         <Bundle-Classpath>${osgi.bundle.classpath}</Bundle-Classpath>
                         <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
                         <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
+                        <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
                         <Spring-Context>${osgi.spring.context}</Spring-Context>
                         <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>

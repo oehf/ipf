@@ -12,16 +12,23 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg />
         <osgi.import.pkg>
             org.aopalliance.aop,
-            org.apache.derby.jdbc,
+            org.apache.commons.dbcp,
             org.hibernate.jdbc,
             org.hibernate.proxy,
             org.springframework.aop,
             org.springframework.aop.framework,
             org.springframework.transaction
         </osgi.import.pkg>
+        <!-- 
+            Needed because package org.apache.derby.jdbc
+            is split across these two bundles.
+         -->
+        <osgi.require.bundle>
+            com.springsource.org.apache.derby,
+            com.springsource.org.apache.derby.client
+        </osgi.require.bundle>
         <osgi.fragment.host>
             org.openehealth.ipf.commons.commons-flow
         </osgi.fragment.host>

@@ -15,9 +15,6 @@
         <osgi.export.pkg>
             org.openehealth.ipf.commons.flow.*
         </osgi.export.pkg>
-        <!-- <osgi.fragment.host>
-            org.openehealth.ipf.platform-camel.platform-camel-flow
-        </osgi.fragment.host> -->
     </properties>
     
     <dependencies>

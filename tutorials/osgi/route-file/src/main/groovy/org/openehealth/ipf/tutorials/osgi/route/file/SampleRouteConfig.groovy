@@ -26,7 +26,7 @@ public class SampleRouteConfig implements RouteBuilderConfig {
      void apply(RouteBuilder builder) {
 
          builder
-             .from('file:workspace/input?delete=true')
+             .from('file:workspace/input')
              .initFlow('file').application('osgi-file')
              .unmarshal().ghl7()
              .transmogrify(context.admissionTransmogrifier)
