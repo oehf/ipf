@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.commons</groupId>
+    <artifactId>commons-event</artifactId>
+    <name>platform-camel-event</name>
+    <packaging>bundle</packaging>
+    
+    <parent>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>commons</artifactId>
+        <version>1.6-SNAPSHOT</version>
+    </parent>
+    
+    <properties>
+        <!-- These settings are preliminary -->
+        <osgi.export.pkg>org.openehealth.ipf.commons.event.*</osgi.export.pkg>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
