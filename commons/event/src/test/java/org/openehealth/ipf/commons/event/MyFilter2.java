@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.event;
+package org.openehealth.ipf.commons.event;
 
+import org.openehealth.ipf.commons.event.EventEngine;
 import org.openehealth.ipf.commons.event.EventFilter;
 import org.openehealth.ipf.commons.event.EventObject;
 
-public class TestFilter1 implements EventFilter {
-    @Override
+public class MyFilter2 implements EventFilter {
     public boolean accepts(EventObject eventObject) {
-        if (eventObject instanceof TestEventImpl1) {
-            return true;
-        }
         Object topic = eventObject.getMetaData(EventObject.MetaDataKeys.TOPIC.getKey());
-        return "filtered".equals(topic);
+        return EventEngine.DEFAULT_TOPIC.equals(topic);
     }
 }

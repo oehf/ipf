@@ -15,35 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.event;
 
-import org.openehealth.ipf.commons.event.EventHandler;
 import org.openehealth.ipf.commons.event.EventObject;
 
-public class TestHandler1 implements EventHandler {
-    private boolean handled;
-    private String prop;
-    private TestEventImpl1 handledEvent;
+public class MyEventImpl2 extends EventObject {
 
-    public void handle(EventObject eventObject) {
-        handled = true;
-        if (eventObject instanceof TestEventImpl1){
-            handledEvent = (TestEventImpl1) eventObject;
-            prop = handledEvent.getProp();
-        }
-    }
-    
-    public boolean isHandled() {
-        return handled;
-    }
-
-    public String getProp() {
-        return prop;
-    }
-    
-    public TestEventImpl1 getHandledEvent() {
-        return handledEvent;
-    }
-    
-    public void reset() {
-        handled = false;
-    }
+    /** Serial Version UID */
+    private static final long serialVersionUID = 8464850227102682379L;
 }

@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.event;
+package org.openehealth.ipf.commons.event;
 
-import org.openehealth.ipf.commons.event.EventEngine;
-import org.openehealth.ipf.commons.event.EventFilter;
 import org.openehealth.ipf.commons.event.EventObject;
 
-public class TestFilter2 implements EventFilter {
-    public boolean accepts(EventObject eventObject) {
-        Object topic = eventObject.getMetaData(EventObject.MetaDataKeys.TOPIC.getKey());
-        return EventEngine.DEFAULT_TOPIC.equals(topic);
-    }
+public class MyEventImpl2 extends EventObject {
+
+    /** Serial Version UID */
+    private static final long serialVersionUID = 8464850227102682379L;
 }

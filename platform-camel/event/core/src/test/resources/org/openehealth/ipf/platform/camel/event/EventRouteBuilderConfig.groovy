@@ -26,8 +26,8 @@ import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
 import org.openehealth.ipf.commons.event.EventChannelAdapter
 import org.openehealth.ipf.commons.event.EventObject
 
-import org.openehealth.ipf.platform.camel.event.TestEventImpl1
-import org.openehealth.ipf.platform.camel.event.TestEventImpl2
+import org.openehealth.ipf.platform.camel.event.MyEventImpl1
+import org.openehealth.ipf.platform.camel.event.MyEventImpl2
 
 /**
  * @author Jens Riemschneider
@@ -38,19 +38,19 @@ class EventRouteBuilderConfig implements RouteBuilderConfig {
         builder.errorHandler(builder.deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
         
         builder.from('direct:start_simple')
-            .publish { new TestEventImpl1('hello world') }
+            .publish { new MyEventImpl1('hello world') }
             .to('mock:mock')
 
         builder.from('direct:start_unsub_topic')
-            .publish { new TestEventImpl1('hello world') }.toTopic('noone_subscribed')                
+            .publish { new MyEventImpl1('hello world') }.toTopic('noone_subscribed')                
             .to('mock:mock')
             
         builder.from('direct:start_topic')
-            .publish { new TestEventImpl1('hello world') }.toTopic('test')                
+            .publish { new MyEventImpl1('hello world') }.toTopic('test')                
             .to('mock:mock')
 
         builder.from('direct:start_filter')
-            .publish { new TestEventImpl2() }.toTopic('filtered')
+            .publish { new MyEventImpl2() }.toTopic('filtered')
             .to('mock:mock')
     }
 }    

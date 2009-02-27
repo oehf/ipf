@@ -39,9 +39,9 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     
     <bean id="eventEngine" class="org.openehealth.ipf.platform.camel.event.AutoDiscoveryEventEngine"/>
     
-    <bean id="eventHandler" class="org.openehealth.ipf.platform.camel.event.TestHandler1" />
+    <bean id="eventHandler" class="org.openehealth.ipf.platform.camel.event.MyHandler1" />
     
-    <bean id="eventFilter" class="org.openehealth.ipf.platform.camel.event.TestFilter1" />
+    <bean id="eventFilter" class="org.openehealth.ipf.platform.camel.event.MyFilter1" />
     
     <bean id="simpleSubscription" class="org.openehealth.ipf.commons.event.Subscription">
         <property name="handler" ref="eventHandler" />

@@ -1,4 +1,4 @@
-package org.openehealth.ipf.platform.camel.event;
+package org.openehealth.ipf.commons.event;
 
 import static org.junit.Assert.*;
 
@@ -12,8 +12,8 @@ import org.openehealth.ipf.commons.event.Subscription;
 import org.openehealth.ipf.commons.event.UnsupportedDeliveryModeException;
 
 public class EventIntegrationTest {
-    private TestHandler1 handler1;
-    private TestHandler2 handler2;
+    private MyHandler1 handler1;
+    private MyHandler2 handler2;
     private EventEngine eventEngine;
     private EventFilter filter1;
     private EventFilter filter2;
@@ -22,11 +22,11 @@ public class EventIntegrationTest {
     public void setUp() {
         eventEngine = new EventEngine();
         
-        handler1 = new TestHandler1();
-        handler2 = new TestHandler2();
+        handler1 = new MyHandler1();
+        handler2 = new MyHandler2();
         
-        filter1 = new TestFilter1();
-        filter2 = new TestFilter2();
+        filter1 = new MyFilter1();
+        filter2 = new MyFilter2();
     }
     
     @Test
@@ -34,7 +34,7 @@ public class EventIntegrationTest {
         eventEngine.subscribe(new Subscription(handler1));
         eventEngine.subscribe(new Subscription(handler2));
 
-        eventEngine.publish(null, new TestEventImpl2(), true);
+        eventEngine.publish(null, new MyEventImpl2(), true);
         
         assertTrue(handler1.isHandled());
         assertTrue(handler2.isHandled());
@@ -45,7 +45,7 @@ public class EventIntegrationTest {
         eventEngine.subscribe(new Subscription(handler1, "filtered"));
         eventEngine.subscribe(new Subscription(handler2));
 
-        eventEngine.publish("filtered", new TestEventImpl2(), true);
+        eventEngine.publish("filtered", new MyEventImpl2(), true);
         
         assertTrue(handler1.isHandled());
         assertFalse(handler2.isHandled());
@@ -56,7 +56,7 @@ public class EventIntegrationTest {
         eventEngine.subscribe(new Subscription(handler1, "filtered", filter1));
         eventEngine.subscribe(new Subscription(handler2, "filtered", filter2));
 
-        eventEngine.publish("filtered", new TestEventImpl2(), true);
+        eventEngine.publish("filtered", new MyEventImpl2(), true);
         
         assertTrue(handler1.isHandled());
         assertFalse(handler2.isHandled());
@@ -64,7 +64,7 @@ public class EventIntegrationTest {
     
     @Test(expected=UnsupportedDeliveryModeException.class)
     public void testNonAvailableDeliveryOption() {
-        eventEngine.publish(null, new TestEventImpl2(), false);        
+        eventEngine.publish(null, new MyEventImpl2(), false);        
     }
 
     @Test
@@ -80,7 +80,7 @@ public class EventIntegrationTest {
         });
         
         eventEngine.subscribe(new Subscription(handler1));
-        eventEngine.publish(null, new TestEventImpl2(), false);        
+        eventEngine.publish(null, new MyEventImpl2(), false);        
         assertTrue(handler1.isHandled());
     }
 }

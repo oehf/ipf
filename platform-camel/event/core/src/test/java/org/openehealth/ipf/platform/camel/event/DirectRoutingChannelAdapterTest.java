@@ -11,7 +11,7 @@ import org.openehealth.ipf.commons.event.Subscription;
 import org.openehealth.ipf.platform.camel.event.adapter.RoutingChannelAdapter;
 
 public class DirectRoutingChannelAdapterTest extends BaseCamelRoutingChannelAdapterTest {
-    private TestHandler1 handler;
+    private MyHandler1 handler;
     private ProducerTemplate producerTemplate;
     private EventEngine eventEngine;
 
@@ -23,7 +23,7 @@ public class DirectRoutingChannelAdapterTest extends BaseCamelRoutingChannelAdap
         setAdapter(new RoutingChannelAdapter(eventEngine, producerTemplate, "direct:send", false));
         eventEngine.registerChannel(getAdapter());
         
-        handler = new TestHandler1();
+        handler = new MyHandler1();
         Subscription subscription = new Subscription();
         subscription.setHandler(handler);
         eventEngine.subscribe(subscription);
@@ -31,10 +31,10 @@ public class DirectRoutingChannelAdapterTest extends BaseCamelRoutingChannelAdap
 
     @Test
     public void testDirectChannel() {
-        TestEventImpl1 event = new TestEventImpl1("hello world");
+        MyEventImpl1 event = new MyEventImpl1("hello world");
         eventEngine.publish(null, event, true);
         
-        TestEventImpl1 handledEvent = handler.getHandledEvent();
+        MyEventImpl1 handledEvent = handler.getHandledEvent();
         assertNotNull(handledEvent);
         assertEquals("hello world", handler.getProp());
     }

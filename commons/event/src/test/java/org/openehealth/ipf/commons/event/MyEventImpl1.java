@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.event;
+package org.openehealth.ipf.commons.event;
 
 import org.openehealth.ipf.commons.event.EventObject;
 
-public class TestEventImpl1 extends EventObject {
+public class MyEventImpl1 extends EventObject {
     /** Serial version UID */
     private static final long serialVersionUID = -6112721595017049322L;
     
     private final String prop;
 
-    public TestEventImpl1(String prop) {
+    public MyEventImpl1(String prop) {
         super();
         this.prop = prop;
     }

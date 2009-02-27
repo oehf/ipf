@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.event.EventEngine;
 import org.openehealth.ipf.commons.event.EventFilter;
 import org.openehealth.ipf.commons.event.EventObject;
 
-public class TestFilter2 implements EventFilter {
+public class MyFilter2 implements EventFilter {
     public boolean accepts(EventObject eventObject) {
         Object topic = eventObject.getMetaData(EventObject.MetaDataKeys.TOPIC.getKey());
         return EventEngine.DEFAULT_TOPIC.equals(topic);

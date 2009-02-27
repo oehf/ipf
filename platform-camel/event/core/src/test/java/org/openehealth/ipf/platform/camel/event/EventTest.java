@@ -45,7 +45,7 @@ public class EventTest {
     
     @Autowired
     @Qualifier("eventHandler")
-    private TestHandler1 handler;
+    private MyHandler1 handler;
     
     @After
     public void tearDown() {

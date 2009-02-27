@@ -18,6 +18,7 @@
         <module>flow</module>
         <module>hl7</module>
         <module>lbs</module>
+        <module>event</module>
     </modules>
 
     <dependencies>

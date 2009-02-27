@@ -15,30 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.event;
 
-public class TestHandler3 {
-    private boolean handled;
-    private String prop;
-    private TestEventImpl1 handledEvent;
-    
-    public void handle(TestEventImpl1 event) {
-        handled = true;
-        handledEvent = event;
-        prop = event.getProp();
-    }
+import org.openehealth.ipf.commons.event.EventHandler;
+import org.openehealth.ipf.commons.event.EventObject;
 
-    public void handle(TestEventImpl2 event) {
-        handled = true;
-    }
-    
+public class MyHandler2 implements EventHandler {
+    private boolean handled;
+
     public boolean isHandled() {
         return handled;
     }
 
-    public String getProp() {
-        return prop;
-    }
-    
-    public TestEventImpl1 getHandledEvent() {
-        return handledEvent;
+    @Override
+    public void handle(EventObject eventObject) {
+        handled = true;
     }
 }

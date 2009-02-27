@@ -39,6 +39,5 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     
     <modules>
         <module>core</module>
-        <module>jms</module>
     </modules>
 </project>

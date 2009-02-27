@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.event;
+package org.openehealth.ipf.commons.event;
 
 import org.openehealth.ipf.commons.event.EventHandler;
 import org.openehealth.ipf.commons.event.EventObject;
 
-public class TestHandler1 implements EventHandler {
+public class MyHandler1 implements EventHandler {
     private boolean handled;
     private String prop;
-    private TestEventImpl1 handledEvent;
+    private MyEventImpl1 handledEvent;
 
     public void handle(EventObject eventObject) {
         handled = true;
-        if (eventObject instanceof TestEventImpl1){
-            handledEvent = (TestEventImpl1) eventObject;
+        if (eventObject instanceof MyEventImpl1){
+            handledEvent = (MyEventImpl1) eventObject;
             prop = handledEvent.getProp();
         }
     }
@@ -39,7 +39,7 @@ public class TestHandler1 implements EventHandler {
         return prop;
     }
     
-    public TestEventImpl1 getHandledEvent() {
+    public MyEventImpl1 getHandledEvent() {
         return handledEvent;
     }
 }

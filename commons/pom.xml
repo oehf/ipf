@@ -17,6 +17,7 @@
         <module>core</module>
         <module>flow</module>
         <module>lbs</module>
+        <module>event</module>
     </modules>
 
 </project>

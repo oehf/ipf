@@ -15,10 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.event;
 
+import org.openehealth.ipf.commons.event.EventFilter;
 import org.openehealth.ipf.commons.event.EventObject;
 
-public class TestEventImpl2 extends EventObject {
-
-    /** Serial Version UID */
-    private static final long serialVersionUID = 8464850227102682379L;
+public class MyFilter1 implements EventFilter {
+    @Override
+    public boolean accepts(EventObject eventObject) {
+        if (eventObject instanceof MyEventImpl1) {
+            return true;
+        }
+        Object topic = eventObject.getMetaData(EventObject.MetaDataKeys.TOPIC.getKey());
+        return "filtered".equals(topic);
+    }
 }
