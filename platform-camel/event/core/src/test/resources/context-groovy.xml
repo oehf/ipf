@@ -76,7 +76,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 	</lang:groovy>
 
     <lang:groovy id="eventModelExtension"
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/event/extend/EventModelExtension.groovy">
+        script-source="classpath:org/openehealth/ipf/platform/camel/event/extend/EventModelExtension.groovy">
     </lang:groovy>
 
 	<lang:groovy id="routeModelExtender"
