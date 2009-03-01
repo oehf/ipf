@@ -61,7 +61,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <!-- Route related stuff -->
 
-	<bean id="routeBuilder" class="org.openehealth.ipf.platform.camel.event.builder.RouteBuilder">
+	<bean id="routeBuilder" class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
 		<property name="routeModelExtender" ref="routeModelExtender" />
 		<property name="routeBuilderConfig" ref="routeBuilderConfig" />
 	</bean>

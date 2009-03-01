@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.event.builder;
+package org.openehealth.ipf.platform.camel.event.model;
 
 import static org.apache.commons.lang.Validate.notNull;
 
@@ -24,6 +24,7 @@ import org.apache.camel.model.OutputType;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.event.EventEngine;
+import org.openehealth.ipf.platform.camel.event.process.Publisher;
 
 /**
  * Processor type for {@link Publisher}

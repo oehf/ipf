@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.event.extend
 
-import org.openehealth.ipf.platform.camel.event.builder.PublishProcessorType
 import org.apache.camel.model.ProcessorType
 
+import org.openehealth.ipf.platform.camel.event.model.PublishProcessorType
+
 /**
- * Extension that defines the DSL elements related to the IPF event infrastructure
+ * Extension that defines the DSL elements related to the IPF event infrastructure.
  * 
  * @author Jens Riemschneider
  */
