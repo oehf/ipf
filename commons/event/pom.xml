@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-event</artifactId>
-    <name>platform-camel-event</name>
+    <name>commons-event</name>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
