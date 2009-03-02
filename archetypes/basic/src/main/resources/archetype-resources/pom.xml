@@ -13,21 +13,22 @@ http://maven.apache.org/maven-v4_0_0.xsd">
     <version>${version}</version>
     <packaging>jar</packaging>
 
-    <properties>
-        <ipf-version>1.6-SNAPSHOT</ipf-version>
-        <junit-version>4.4</junit-version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
-            <version>${ipf-version}</version>
+            <version>1.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>2.5.6</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
+            <version>4.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
