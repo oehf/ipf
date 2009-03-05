@@ -46,7 +46,7 @@ class LbsModelExtension {
         RouteType.metaClass.noStreamCaching = {
             def type = new NoStreamCachingType();
             delegate.addOutput(type)
-            delegate
+            type
         }         
     }    
 }
