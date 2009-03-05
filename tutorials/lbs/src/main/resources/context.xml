@@ -1,0 +1,97 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:camel="http://activemq.apache.org/camel/schema/spring"
+       xmlns:cxf="http://activemq.apache.org/camel/schema/cxfEndpoint"             
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang 
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://www.springframework.org/schema/util                                         
+http://www.springframework.org/schema/util/spring-util-2.5.xsd                     
+http://activemq.apache.org/camel/schema/cxfEndpoint                                
+http://activemq.apache.org/camel/schema/cxfEndpoint/camel-cxf.xsd                  
+http://activemq.apache.org/camel/schema/spring 
+http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />                       
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />        
+	<import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" />  
+
+    <camel:camelContext id="camelContext">
+        <camel:jmxAgent id="agent" disabled="true" />
+    </camel:camelContext>
+
+    <bean id="producerTemplate" 
+        factory-bean="camelContext"
+        factory-method="createProducerTemplate">
+    </bean>
+
+    <bean id="routeBuilder"
+        class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
+        <property name="routeModelExtender" ref="routeModelExtender" />
+        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    </bean>
+
+    <lang:groovy id="coreModelExtension" 
+        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
+        <lang:property name="routeBuilder" ref="routeBuilder" />
+    </lang:groovy>
+
+    <lang:groovy id="sampleModelExtension" 
+        script-source="classpath:org/openehealth/tutorial/SampleModelExtension.groovy">
+    </lang:groovy>
+
+    <lang:groovy id="routeBuilderConfig" 
+        script-source="classpath:org/openehealth/tutorial/SampleRouteConfig.groovy">
+    </lang:groovy>
+
+	<lang:groovy id="routeModelExtender" script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
+        <lang:property name="routeModelExtensions">
+            <list>
+                <ref bean="coreModelExtension" />
+                <ref bean="lbsModelExtension" />
+                <ref bean="sampleModelExtension" />
+            </list>
+        </lang:property>
+    </lang:groovy>
+
+    <!-- Allows usage of store() and fetch() within routes -->
+    <lang:groovy id="lbsModelExtension" 
+        script-source="classpath:org/openehealth/ipf/platform/camel/lbs/extend/LbsModelExtension.groovy">
+    </lang:groovy>
+
+	<!-- Stores the binaries while processing the routes -->
+    <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.DiskStore">
+        <constructor-arg value="target/tempstore"/>
+    </bean>
+
+    <!-- Creates data sources used as resources in Camel messages -->
+    <bean id="resourceFactory" class="org.openehealth.ipf.commons.lbs.resource.ResourceFactory">
+        <constructor-arg ref="largeBinaryStore" />
+        <constructor-arg value="unnamed" />
+    </bean>
+
+    <cxf:cxfEndpoint id="imageBinServer"
+        serviceClass="org.openehealth.tutorial.imagebin.ImageBin"
+        address="http://localhost:8413/ImageBin/ImageBinPort"
+        endpointName="s:ImageBin" serviceName="s:ImageBinService" 
+        wsdlURL="wsdl/imagebin.wsdl"
+        xmlns:s="http://tutorial.openehealth.org/imagebin/">
+        <cxf:properties>
+            <entry key="mtom-enabled" value="true" />
+        </cxf:properties>
+    </cxf:cxfEndpoint>
+
+	<!-- This bean is a list of resource handlers. Add all handlers used within the routes to this list -->
+    <util:list id="resourceHandlers">
+        <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoResourceHandler">
+            <constructor-arg ref="resourceFactory" />
+        </bean>
+        <bean class="org.openehealth.ipf.platform.camel.lbs.process.HttpResourceHandler">
+            <constructor-arg ref="resourceFactory" />
+        </bean>
+    </util:list>
+</beans>

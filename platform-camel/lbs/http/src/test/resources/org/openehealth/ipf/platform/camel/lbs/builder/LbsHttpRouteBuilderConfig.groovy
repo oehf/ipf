@@ -44,19 +44,22 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
     
     void apply(RouteBuilder builder) {
         
-        builder.errorHandler(builder.noErrorHandler())
+        builder.errorHandler(builder.deadLetterChannel().maximumRedeliveries(0).initialRedeliveryDelay(0));
 
         // --------------------------------------------------------------
         //  LBS routes
         // --------------------------------------------------------------
         builder.from('jetty:http://localhost:9452/lbstest_no_extract')
+            .noStreamCaching()
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:9452/lbstest_extract')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:9452/lbstest_ping')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 def dataSource = exchange.in.getBody(ResourceDataSource.class)
@@ -65,28 +68,34 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock');
             
         builder.from('jetty:http://localhost:9452/lbstest_extract_factory_via_bean')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
         builder.from('jetty:http://localhost:9452/lbstest_extract_router')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .setHeader('tag').constant('I was here')
             .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
 
         builder.from('direct:lbstest_send_only')
+            .noStreamCaching()
             .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
             
         builder.from('direct:lbstest_non_http')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:9452/lbstest_receiver')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:9452/lbstest_jms')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .to('jms:temp:queue:lbstest')
             
@@ -95,6 +104,7 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             
         // Example routes only tested with groovy
         builder.from('jetty:http://localhost:9452/lbstest_example1')
+            .noStreamCaching()
             // Replace the message content with a data source
             .store().with('resourceHandlers') 
             // Custom processing to find a token
@@ -120,6 +130,7 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:9452/lbstest_example2')
+            .noStreamCaching()
             // Replace the message content with data sources
             .store().with('resourceHandlers')
             // Custom processing to look for text resources
@@ -134,6 +145,7 @@ class LbsHttpRouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:mock')
             
         builder.from('jetty:http://localhost:9452/lbstest_example3')
+            .noStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 // The resource factory can be used to create resources manually

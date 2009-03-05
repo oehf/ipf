@@ -21,6 +21,8 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression
 import org.apache.camel.Expression
 
 import org.apache.camel.model.ProcessorType
+import org.apache.camel.model.RouteType
+import org.openehealth.ipf.platform.camel.lbs.model.NoStreamCachingType
 
 /**
  * @author Jens Riemschneider
@@ -28,17 +30,23 @@ import org.apache.camel.model.ProcessorType
 class LbsModelExtension {
 
     def extensions = {
-        ProcessorType.metaClass.store = { ->
-            StoreProcessorType answer = new StoreProcessorType()
+            
+        ProcessorType.metaClass.store = {
+            def answer = new StoreProcessorType()
             delegate.addOutput(answer)
             answer
         }        
 
-        ProcessorType.metaClass.fetch = { ->
-            FetchProcessorType answer = new FetchProcessorType()
+        ProcessorType.metaClass.fetch = {
+            def answer = new FetchProcessorType()
             delegate.addOutput(answer)
             answer
         }        
-    }
-    
+
+        RouteType.metaClass.noStreamCaching = {
+            def type = new NoStreamCachingType();
+            delegate.addOutput(type)
+            delegate
+        }         
+    }    
 }
