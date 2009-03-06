@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-/**
+import org.springframework.beans.factory.InitializingBean/**
  * Activates route model extensions that have been injected as 
  * routeModelExtensions list. Each element in the list is an object that
  * defines an instance closure named 'extensions'. For example:
@@ -35,10 +35,9 @@ package org.openehealth.ipf.platform.camel.core.extend
  * This extension can then be used within route definitions like
  *
  * <pre>
- * class MyConfig implements RouteBuilderConfig {
- *     void apply(RouteBuilder routeBuilder) {
- *         builder
- *             .from('direct:input')
+ * class MyConfig extends SpringRouteBuilder {
+ *     void configure() {
+ *         from('direct:input')
  *             .myCoolNewDslElement('blah')
  *             .to('direct:output')
  *     }
@@ -47,7 +46,7 @@ package org.openehealth.ipf.platform.camel.core.extend
  * 
  * @author Martin Krasser
  */
-class DefaultModelExtender implements RouteModelExtender {
+class DefaultModelExtender implements RouteModelExtender, InitializingBean {
     
     List routeModelExtensions
     
@@ -55,6 +54,10 @@ class DefaultModelExtender implements RouteModelExtender {
         ExpandoMetaClass.enableGlobally()
     }
     
+    void afterPropertiesSet() {
+        activate()
+        
+    }
     void activate() {
         routeModelExtensions.each { extension ->
             extension.extensions.call()

@@ -13,42 +13,33 @@ http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://activemq.apache.org/camel/schema/spring 
 http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true" />
-    </camel:camelContext>
+    <camel:camelContext id="camelContext" /> 
 
     <bean id="producerTemplate" 
         factory-bean="camelContext"
         factory-method="createProducerTemplate">
     </bean>
 
-    <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
-        <property name="routeModelExtender" ref="routeModelExtender" />
-        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    <bean id="routeBuilder" depends-on="routeModelExtender"
+        class="${package}.SampleRouteBuilder">
     </bean>
 
-    <lang:groovy id="coreModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
-        <lang:property name="routeBuilder" ref="routeBuilder" />
-    </lang:groovy>
+    <bean id="sampleModelExtension" 
+        class="${package}.SampleModelExtension">
+    </bean>
 
-    <lang:groovy id="sampleModelExtension" 
-        script-source="classpath:${packageInPathFormat}/SampleModelExtension.groovy">
-    </lang:groovy>
+    <bean id="coreModelExtension" 
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+    </bean>
 
-    <lang:groovy id="routeBuilderConfig" 
-        script-source="classpath:${packageInPathFormat}/SampleRouteConfig.groovy">
-    </lang:groovy>
-
-    <lang:groovy id="routeModelExtender" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
-        <lang:property name="routeModelExtensions">
+    <bean id="routeModelExtender" 
+        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
                 <ref bean="sampleModelExtension" />
             </list>
-        </lang:property>
-    </lang:groovy>
+        </property>
+    </bean>
 
 </beans>

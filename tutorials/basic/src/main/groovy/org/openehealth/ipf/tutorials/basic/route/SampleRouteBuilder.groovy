@@ -15,25 +15,23 @@
  */
 package org.openehealth.ipf.tutorials.basic.route
 
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-import org.apache.camel.builder.RouteBuilder/**
+import org.apache.camel.spring.SpringRouteBuilder/**
  * @author Martin Krasser
  */
-public class SampleRouteConfig implements RouteBuilderConfig {
+public class SampleRouteBuilder extends SpringRouteBuilder {
 
-    void apply(RouteBuilder builder) {
+    void configure() {
         
-        builder.from('jetty:http://localhost:7799/tutorial')
+        from('jetty:http://0.0.0.0:7799/tutorial')
             .convertBodyTo(String.class)
             .to('direct:input1')
        
-        builder.from('direct:input1')
+        from('direct:input1')
             .transmogrify { it * 2 }
             .setFileHeaderFrom('destination')
             .to('file:target/output?append=false')
 
-        builder
-            .from('direct:input2')
+        from('direct:input2')
             .reverse()
             
     }

@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.core.process.builder;
 
 import org.apache.camel.Processor;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder;
+import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
 import org.openehealth.ipf.platform.camel.test.transformer.ConstantTransformer;
 import org.openehealth.ipf.platform.camel.test.transformer.FailureTransformer;
 
@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.test.transformer.FailureTransformer;
  * @author Martin Krasser
  */
 @SuppressWarnings("unchecked")
-public class EnricherRouteBuilder extends RouteBuilder {
+public class EnricherRouteBuilder extends RouteBuilderSupport {
 
     @Override
     public void configure() throws Exception {
@@ -36,20 +36,20 @@ public class EnricherRouteBuilder extends RouteBuilder {
         // -------------------------------------------------------------
         
         from("direct:enricher-test-1")
-        .process(enricher("testAggregator", "direct:enricher-constant-resource"))
+        .process(helper.enricher("testAggregator", "direct:enricher-constant-resource"))
         .to("mock:mock");
 
         from("direct:enricher-test-2")
-        .process(enricher(aggregation(), "direct:enricher-constant-resource"))
+        .process(helper.enricher(aggregation(), "direct:enricher-constant-resource"))
         .to("mock:mock");
         
         from("direct:enricher-test-3")
-        .process(enricher("testAggregator", "direct:enricher-fault-resource"))
+        .process(helper.enricher("testAggregator", "direct:enricher-fault-resource"))
         .to("mock:mock");
         
         from("direct:enricher-test-4")
         .errorHandler(noErrorHandler()) // avoid re-deliveries
-        .process(enricher("testAggregator", "direct:enricher-error-resource"))
+        .process(helper.enricher("testAggregator", "direct:enricher-error-resource"))
         .to("mock:mock");
         
         // -------------------------------------------------------------
@@ -57,17 +57,17 @@ public class EnricherRouteBuilder extends RouteBuilder {
         // -------------------------------------------------------------
         
         from("direct:enricher-test-5")
-        .process(enricher("testAggregator", "direct:enricher-constant-resource"));
+        .process(helper.enricher("testAggregator", "direct:enricher-constant-resource"));
 
         from("direct:enricher-test-6")
-        .process(enricher(aggregation(), "direct:enricher-constant-resource"));
+        .process(helper.enricher(aggregation(), "direct:enricher-constant-resource"));
 
         from("direct:enricher-test-7")
-        .process(enricher("testAggregator", "direct:enricher-fault-resource"));
+        .process(helper.enricher("testAggregator", "direct:enricher-fault-resource"));
         
         from("direct:enricher-test-8")
         .errorHandler(noErrorHandler()) // avoid re-deliveries
-        .process(enricher("testAggregator", "direct:enricher-error-resource"));
+        .process(helper.enricher("testAggregator", "direct:enricher-error-resource"));
         
         // -------------------------------------------------------------
         //  Enricher resources
@@ -81,7 +81,7 @@ public class EnricherRouteBuilder extends RouteBuilder {
 
     private AggregationStrategy aggregation() {
         // read new input data from in message (not from out message by default)
-        return aggregationStrategy("testAggregator").aggregationInput(body());
+        return helper.aggregationStrategy("testAggregator").aggregationInput(body());
     }
     
     private Processor constantResource() {

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.core.process.builder;
 
 import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder;
+import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
 import org.openehealth.ipf.platform.camel.test.transformer.ConstantTransformer;
 import org.openehealth.ipf.platform.camel.test.transformer.FailureTransformer;
 
@@ -24,22 +24,22 @@ import org.openehealth.ipf.platform.camel.test.transformer.FailureTransformer;
 /**
  * @author Martin Krasser
  */
-public class ValidationRouteBuilder extends RouteBuilder {
+public class ValidationRouteBuilder extends RouteBuilderSupport {
 
     @Override
     public void configure() throws Exception {
 
         from("direct:validation-test-1")
-        .intercept(validation("direct:positive-validator"))
+        .intercept(helper.validation("direct:positive-validator"))
         .to("mock:mock");
 
         from("direct:validation-test-2")
-        .intercept(validation("direct:fault-validator"))
+        .intercept(helper.validation("direct:fault-validator"))
         .to("mock:mock");
 
         from("direct:validation-test-3")
         .errorHandler(noErrorHandler())
-        .intercept(validation("direct:error-validator"))
+        .intercept(helper.validation("direct:error-validator"))
         .to("mock:mock");
 
         // -------------------------------------------------------------

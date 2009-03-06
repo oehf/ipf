@@ -48,6 +48,7 @@ import org.openehealth.ipf.platform.camel.core.model.RendererAdapterType
 import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterType
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
 import org.openehealth.ipf.platform.camel.core.model.DataFormatAdapterType
+import org.openehealth.ipf.platform.camel.core.process.Validation
 
 import org.apache.camel.Expression
 import org.apache.camel.Processor
@@ -110,15 +111,15 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
         
         ProcessorType.metaClass.validation = { Processor validator ->
-            delegate.intercept(RouteBuilder.validation(validator))
+            delegate.intercept(new Validation(validator))
         }
 
         ProcessorType.metaClass.validation = { String validationUri ->
-            delegate.intercept(RouteBuilder.validation(validationUri))
+            delegate.intercept(new Validation(validationUri))
         }
         
         ProcessorType.metaClass.validation = { Closure validatorLogic ->
-            delegate.intercept(RouteBuilder.validation(new DelegatingProcessor(validatorLogic)))
+            delegate.intercept(new Validation(new DelegatingProcessor(validatorLogic)))
         }
     
         ProcessorType.metaClass.enrich = {String resourceUri, AggregationStrategy aggregationStrategy ->
@@ -255,11 +256,11 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
 
         DataFormatClause.metaClass.parse = { Parser parser ->
-            delegate.processorType.unmarshal(RouteBuilder.dataFormatParser(parser))
+            delegate.processorType.unmarshal(new DataFormatAdapter((Parser)parser))
         }
         
         DataFormatClause.metaClass.render = { Renderer renderer ->
-            delegate.processorType.marshal(RouteBuilder.dataFormatRenderer(renderer))
+            delegate.processorType.marshal(new DataFormatAdapter((Renderer)renderer))
         }
     
         DataFormatClause.metaClass.parse = { String parserBeanName ->

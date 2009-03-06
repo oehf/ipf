@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
 import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder;
+import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
 
 
 /**
  * @author Martin Krasser
  */
-public class TransmogrifierRouteBuilder extends RouteBuilder {
+public class TransmogrifierRouteBuilder extends RouteBuilderSupport {
 
     @Override
     public void configure() throws Exception {
@@ -41,18 +41,18 @@ public class TransmogrifierRouteBuilder extends RouteBuilder {
 
     private Processor transmogrifier1() {
     	// take input from body (no params)
-        return transmogrifier("testTransmogrifier");
+        return helper.transmogrifier("testTransmogrifier");
     }
     
     private Processor transmogrifier2() {
     	// take input from body (static params)
-        return transmogrifier("testTransmogrifier")
+        return helper.transmogrifier("testTransmogrifier")
             .staticParams(" eats", " mice");
     }
     
     private Processor transmogrifier3() {
     	// take input from foo header (static params)
-        return transmogrifier("testTransmogrifier")
+        return helper.transmogrifier("testTransmogrifier")
             .staticParams(" likes", " fish")
             .input(header("foo"));
     }

@@ -16,14 +16,14 @@
 package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
 import org.apache.camel.Predicate;
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder;
+import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
 
 
 /**
  * @author Martin Krasser
  */
 @SuppressWarnings("unchecked")
-public class PredicateRouteBuilder extends RouteBuilder {
+public class PredicateRouteBuilder extends RouteBuilderSupport {
 
     @Override
     public void configure() throws Exception {
@@ -38,11 +38,11 @@ public class PredicateRouteBuilder extends RouteBuilder {
     }
 
     private Predicate predicate1() {
-        return predicate("testPredicate");
+        return helper.predicate("testPredicate");
     }
 
     private Predicate predicate2() {
-        return predicate("testPredicate").input(header("foo"));
+        return helper.predicate("testPredicate").input(header("foo"));
     }
 
 }

@@ -17,14 +17,14 @@ package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
 import org.apache.camel.spi.DataFormat;
 import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder;
+import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
 import org.openehealth.ipf.platform.camel.test.transform.min.TestConverter;
 
 /**
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class DataFormatRouteBuilder extends RouteBuilder {
+public class DataFormatRouteBuilder extends RouteBuilderSupport {
 	
     @Override
     public void configure() throws Exception {

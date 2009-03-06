@@ -4,9 +4,9 @@
 package ${package}
 
 import org.apache.camel.model.ProcessorType
-public class SampleModelExtension {
+class SampleModelExtension {
 
-     def extensions = {
+     static extensions = {
          
          ProcessorType.metaClass.reverse = {
              delegate.transmogrify { it.reverse() }

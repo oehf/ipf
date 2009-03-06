@@ -16,24 +16,24 @@
 package org.openehealth.ipf.platform.camel.core.process.builder;
 
 import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder;
+import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
 import org.openehealth.ipf.platform.camel.test.transformer.ConstantTransformer;
 
 
 /**
  * @author Martin Krasser
  */
-public class ResponderRouteBuilder extends RouteBuilder {
+public class ResponderRouteBuilder extends RouteBuilderSupport {
 
     @Override
     public void configure() throws Exception {
 
         from("direct:responder-test-1")
-        .intercept(validation(responseGenerator()))
+        .intercept(helper.validation(responseGenerator()))
         .to("mock:mock");
 
         from("direct:responder-test-2")
-        .intercept(validation("direct:response-generator"))
+        .intercept(helper.validation("direct:response-generator"))
         .to("mock:mock");
 
         from("direct:response-generator").process(responseGenerator());

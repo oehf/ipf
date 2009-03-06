@@ -15,14 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.builder;
 
-import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spring.SpringRouteBuilder;
-import org.apache.camel.util.CamelContextHelper;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
-import org.openehealth.ipf.commons.core.modules.api.Converter;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openehealth.ipf.commons.core.modules.api.Predicate;
 import org.openehealth.ipf.commons.core.modules.api.Renderer;
@@ -64,9 +61,12 @@ public class RouteBuilder extends SpringRouteBuilder {
     
     private DefaultConfigExtender routeConfigExtender;
     
+    private RouteHelper routeHelper;
+    
     public RouteBuilder() {
         routeConfigExtender = new DefaultConfigExtender();
         routeConfigExtender.setRouteBuilder(this);
+        routeHelper = new RouteHelper(this);
     }
     
     /**
@@ -148,231 +148,92 @@ public class RouteBuilder extends SpringRouteBuilder {
     //  Adapter
     // ----------------------------------------------------------------
     
-    public static PredicateAdapter predicate(Predicate predicate) {
-        return new PredicateAdapter(predicate);
+    public PredicateAdapter predicate(Predicate predicate) {
+        return routeHelper.predicate(predicate);
     }
     
-    /**
-     * Creates a new {@link PredicateAdapter} that adapts a {@link Predicate}
-     * Spring bean identified by name <code>predicateBeanName</code>.
-     * 
-     * @param predicateBeanName
-     *            name of the {@link Predicate} bean.
-     * @return an adapted {@link Predicate} bean.
-     */
     public PredicateAdapter predicate(String predicateBeanName) {
-        return new PredicateAdapter(bean(Predicate.class, predicateBeanName));
+        return routeHelper.predicate(predicateBeanName);
     }
     
-    /**
-     * Creates a new {@link ConverterAdapter} that adapts a
-     * {@link Converter} Spring bean identified by name
-     * <code>converterBeanName</code>.
-     * 
-     * @param converterBeanName
-     *            name of the {@link Converter} bean.
-     * @return an adapted {@link Converter} bean.
-     */
     public ConverterAdapter converter(String converterBeanName) {
-        return new ConverterAdapter(bean(Converter.class, converterBeanName));
+        return routeHelper.converter(converterBeanName);
     }
 
-    /**
-     * Creates a new {@link ParserAdapter} that adapts a
-     * {@link Parser} Spring bean identified by name
-     * <code>parserBeanName</code>.
-     * 
-     * @param parserBeanName
-     *            name of the {@link Parser} bean.
-     * @return an adapted {@link Parser} bean.
-     */
     public ParserAdapter parser(String parserBeanName) {
-        return new ParserAdapter(bean(Parser.class, parserBeanName));
+        return routeHelper.parser(parserBeanName);
     }
 
-    public static ParserAdapter parser(Parser<?> parser) {
-        return new ParserAdapter(parser);
+    public ParserAdapter parser(Parser<?> parser) {
+        return routeHelper.parser(parser);
     }
 
-    /**
-     * Creates a new {@link RendererAdapter} that adapts a
-     * {@link Renderer} Spring bean identified by name
-     * <code>rendererBeanName</code>.
-     * 
-     * @param rendererBeanName
-     *            name of the {@link Renderer} bean.
-     * @return an adapted {@link Renderer} bean.
-     */
     public RendererAdapter renderer(String rendererBeanName) {
-        return new RendererAdapter(bean(Renderer.class, rendererBeanName));
+        return routeHelper.renderer(rendererBeanName);
     }
 
-    /**
-     * Creates a new {@link RendererAdapter} that adapts a {@link Renderer}.
-     * 
-     * @param renderer
-     *            a {@link Renderer}.
-     * @return an adapted {@link Renderer}.
-     */
-    public static RendererAdapter renderer(Renderer<?> renderer) {
-        return new RendererAdapter(renderer);
+    public RendererAdapter renderer(Renderer<?> renderer) {
+        return routeHelper.renderer(renderer);
     }
 
-    /**
-     * Creates a new {@link TransmogrifierAdapter} that adapts a
-     * {@link Transmogrifier} Spring bean identified by name
-     * <code>transmogrifierBeanName</code>.
-     * 
-     * @param transmogrifierBeanName
-     *            name of the {@link Transmogrifier} bean.
-     * @return an adapted {@link Transmogrifier} bean.
-     */
     public TransmogrifierAdapter transmogrifier(String transmogrifierBeanName) {
-        return new TransmogrifierAdapter(bean(Transmogrifier.class, transmogrifierBeanName));
+        return routeHelper.transmogrifier(transmogrifierBeanName);
     }
  
-    /**
-     * Creates a new {@link TransmogrifierAdapter} that adapts the given
-     * <code>transmogrifier</code>.
-     * 
-     * @param transmogrifier
-     *            a transmogrifier.
-     * @return an adapted transmogrifier.
-     */
-    public static TransmogrifierAdapter transmogrifier(Transmogrifier<?, ?> transmogrifier) {
-        return new TransmogrifierAdapter(transmogrifier);
+    public TransmogrifierAdapter transmogrifier(Transmogrifier<?, ?> transmogrifier) {
+        return routeHelper.transmogrifier(transmogrifier);
     }
  
-    /**
-     * Creates a new {@link ValidatorAdapter} that adapts a
-     * {@link Validator} Spring bean identified by name
-     * <code>validatorBeanName</code>.
-     * 
-     * @param validatorBeanName
-     *            name of the {@link Validator} bean.
-     * @return an adapted {@link Validator} bean.
-     */
     public ValidatorAdapter validator(String validatorBeanName) {
-        return new ValidatorAdapter(bean(Validator.class, validatorBeanName));
+        return routeHelper.validator(validatorBeanName);
     }
 
-    /**
-     * Creates a new {@link ValidatorAdapter} that adapts the given
-     * <code>validator</code>.
-     * 
-     * @param validator
-     *            a validator.
-     * @return an adapted validator.
-     */
-    public static ValidatorAdapter validator(Validator<?, ?> validator) {
-        return new ValidatorAdapter(validator);
+    public ValidatorAdapter validator(Validator<?, ?> validator) {
+        return routeHelper.validator(validator);
     }
 
-    /**
-     * Creates a new {@link AggregatorAdapter} that adapts the given
-     * <code>aggregator</code>.
-     * 
-     * @param an
-     *            an aggregator.
-     * @return an adapted aggregator.
-     */
-    public static AggregatorAdapter aggregationStrategy(Aggregator aggregator) {
-        return new AggregatorAdapter(aggregator);
+    public AggregatorAdapter aggregationStrategy(Aggregator aggregator) {
+        return routeHelper.aggregationStrategy(aggregator);
     }
     
-    /**
-     * Creates a new {@link AggregatorAdapter} that adapts a
-     * {@link Aggregator} Spring bean identified by name
-     * <code>aggregatorBeanName</code>.
-     * 
-     * @param aggregatorBeanName
-     *            name of the {@link Aggregator} bean.
-     * @return an adapted {@link Aggregator} bean.
-     */
     public AggregatorAdapter aggregationStrategy(String aggregatorBeanName) {
-        return new AggregatorAdapter(bean(Aggregator.class, aggregatorBeanName));
+        return routeHelper.aggregationStrategy(aggregatorBeanName);
     }
     
-    public static DataFormatAdapter dataFormatParser(Parser<?> parser) {
-        return new DataFormatAdapter(parser);
+    public DataFormatAdapter dataFormatParser(Parser<?> parser) {
+        return routeHelper.dataFormatParser(parser);
     }
     
     public DataFormatAdapter dataFormatParser(String parserBeanName) {
-        return new DataFormatAdapter(bean(Parser.class, parserBeanName));
+        return routeHelper.dataFormatParser(parserBeanName);
     }
     
-    public static DataFormatAdapter dataFormatRenderer(Renderer<?> renderer) {
-        return new DataFormatAdapter(renderer);
+    public DataFormatAdapter dataFormatRenderer(Renderer<?> renderer) {
+        return routeHelper.dataFormatRenderer(renderer);
     }
     
     public DataFormatAdapter dataFormatRenderer(String rendererBeanName) {
-        return new DataFormatAdapter(bean(Renderer.class, rendererBeanName));
+        return routeHelper.dataFormatRenderer(rendererBeanName);
     }
     
     // ----------------------------------------------------------------
     //  Processor
     // ----------------------------------------------------------------
 
-    /**
-     * Creates a new {@link Enricher}.
-     * 
-     * @param aggregationStrategy
-     *            aggregation strategy to combine input data and additional
-     *            data.
-     * @param resourceUri
-     *            URI of resource endpoint for obtaining additional data.
-     * @return an enricher.
-     * @throws Exception
-     *             if a producer cannot be created for the endpoint represented
-     *             by <code>resourceUri</code>.
-     */
     public Enricher enricher(AggregationStrategy aggregationStrategy, String resourceUri) throws Exception {
-        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(getContext(), resourceUri);
-        return new Enricher(aggregationStrategy, endpoint.createProducer());
+        return routeHelper.enricher(aggregationStrategy, resourceUri);
     }
     
-    /**
-     * Creates a new {@link Enricher} using an {@link AggregatorAdapter} that
-     * adapts an {@link Aggregator} Spring bean identified by name
-     * <code>aggregatorBeanName</code>. The adapter is configured to obtain
-     * the enrichment data from the resource's response-message's body (i.e.
-     * from the out-message's body of the exchange used to communicate with the
-     * resource).
-     * 
-     * @param aggregatorBeanName
-     *            name of the {@link Aggregator} bean.
-     * @param resourceUri
-     *            URI of resource endpoint for obtaining additional data.
-     * @return an enricher.
-     * @throws Exception
-     *             if a producer cannot be created for the endpoint represented
-     *             by <code>resourceUri</code>.
-     */
     public Enricher enricher(String aggregatorBeanName, String resourceUri) throws Exception {
-        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(getContext(), resourceUri);
-        return new Enricher(aggregationStrategy(aggregatorBeanName).aggregationInput(outBody()), endpoint.createProducer());
+        return routeHelper.enricher(aggregatorBeanName, resourceUri);
     }
 
-    /**
-     * Creates a {@link Validation} process object.
-     * 
-     * @param validatorUri
-     *            URI of the endpoint that validates an exchange.
-     * @return a validation process object.
-     */
-    public static Validation validation(String validatorUri) {
-        return new Validation(validatorUri);
+    public Validation validation(String validatorUri) {
+        return routeHelper.validation(validatorUri);
     }
     
-    /**
-     * Creates a {@link Validation} process object.
-     * 
-     * @param validator
-     *            processor that validates an exchange.
-     * @return a validation process object.
-     */
-    public static Validation validation(Processor validator) {
-        return new Validation(validator);
+    public Validation validation(Processor validator) {
+        return routeHelper.validation(validator);
     }
     
     // ----------------------------------------------------------------
@@ -380,12 +241,12 @@ public class RouteBuilder extends SpringRouteBuilder {
     // ----------------------------------------------------------------
     
     /**
-     * Creates a {@link InOnlyBridge}.
+     * Creates an {@link InOnlyBridge}.
      * 
-     * @return a {@link InOnlyBridge}.
+     * @return an {@link InOnlyBridge}.
      */
     @Deprecated
-    public static DelegateProcessor inOnlyBridge() {
+    public DelegateProcessor inOnlyBridge() {
         return new InOnlyBridge();
     }
 

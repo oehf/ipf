@@ -15,17 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder;
+import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
 
 /**
  * @author Martin Krasser
  */
-public class RendererRouteBuilder extends RouteBuilder {
+public class RendererRouteBuilder extends RouteBuilderSupport {
 
     @Override
     public void configure() throws Exception {
         from("direct:renderer-test")
-        .process(renderer("testRenderer"));
+        .process(helper.renderer("testRenderer"));
     }
 
 }
