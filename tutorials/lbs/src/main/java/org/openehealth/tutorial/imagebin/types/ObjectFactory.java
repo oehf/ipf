@@ -30,11 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Upload }
+     * Create an instance of {@link DownloadResponse }
      * 
      */
-    public Upload createUpload() {
-        return new Upload();
+    public DownloadResponse createDownloadResponse() {
+        return new DownloadResponse();
     }
 
     /**
@@ -54,11 +54,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DownloadResponse }
+     * Create an instance of {@link Upload }
      * 
      */
-    public DownloadResponse createDownloadResponse() {
-        return new DownloadResponse();
+    public Upload createUpload() {
+        return new Upload();
     }
 
 }

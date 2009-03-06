@@ -57,9 +57,7 @@ public class ImageBinImpl implements ImageBin {
             return resourceUri.toString();
         }
         catch (IOException e) {
-            // Not properly handled, but ok for now
-            e.printStackTrace();
+            throw new AssertionError(e);
         }
-        return "";
     }
 }

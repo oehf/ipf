@@ -4,14 +4,19 @@ import java.io.File;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.soap.SOAPBinding;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class ImageBinServer {
-    private Endpoint imageBinEndpoint;
+    private static Log log = LogFactory.getLog(ImageBinServer.class);
+    
+    private Endpoint imageBinEndpoint;    
 
     public void start() {
         File directory = new File("target/store");
         directory.mkdir();
         
-        System.out.println("Starting ImageBin Server");
+        log.debug("Starting ImageBin Server");
         
         // Publish the service
         Object imageBin = new ImageBinImpl(directory.getAbsolutePath());
@@ -22,11 +27,11 @@ public class ImageBinServer {
         SOAPBinding binding = (SOAPBinding) imageBinEndpoint.getBinding();
         binding.setMTOMEnabled(true);
         
-        System.out.println("ImageBin ready...");
+        log.debug("ImageBin ready");
     }
     
     public void stop() {        
-        System.out.println("ImageBin exiting");        
+        log.debug("ImageBin exiting");        
         imageBinEndpoint.stop();
     }
 }

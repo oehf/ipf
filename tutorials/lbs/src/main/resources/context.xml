@@ -40,10 +40,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         <lang:property name="routeBuilder" ref="routeBuilder" />
     </lang:groovy>
 
-    <lang:groovy id="sampleModelExtension" 
-        script-source="classpath:org/openehealth/tutorial/SampleModelExtension.groovy">
-    </lang:groovy>
-
     <lang:groovy id="routeBuilderConfig" 
         script-source="classpath:org/openehealth/tutorial/SampleRouteConfig.groovy">
     </lang:groovy>
@@ -53,7 +49,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
             <list>
                 <ref bean="coreModelExtension" />
                 <ref bean="lbsModelExtension" />
-                <ref bean="sampleModelExtension" />
             </list>
         </lang:property>
     </lang:groovy>
