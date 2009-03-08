@@ -15,19 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.core.process;
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.producerTemplate;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.processor.DelegateProcessor;
 
 /**
  * Implements a response generation process to be used in combination with
- * {@link ProcessorType#intercept(DelegateProcessor)}. For generating a
- * response the incoming {@link Exchange} is sent to an endpoint identified by
- * <code>responseGeneratorUri</code> (set at construction time) that is
+ * {@link ProcessorType#intercept(DelegateProcessor)}. For generating a response
+ * the incoming {@link Exchange} is sent to a
+ * <code>responseGeneratorProcessor</code> (set at construction time) that is
  * generating a response message from the original {@link Exchange}. The
  * response is then communicated back to the initiator and the original exchange
  * is forwarded to the next processor as in-only {@link Exchange}.
@@ -37,19 +36,7 @@ import org.apache.camel.processor.DelegateProcessor;
 public class Responder extends DelegateProcessor {
 
     private Processor responseGeneratorProcessor;
-    
-    private String responseGeneratorUri;
-    
-    /**
-     * Creates a new {@link Responder}.
-     * 
-     * @param responseGeneratorUri
-     *            URI of the endpoint that generates the response message for an
-     *            exchange.
-     */
-    public Responder(String responseGeneratorUri) {
-        this(null, responseGeneratorUri);
-    }
+    private Producer responseGeneratorProducer;
     
     /**
      * Creates a new {@link Responder}.
@@ -58,48 +45,35 @@ public class Responder extends DelegateProcessor {
      *            processor that generates the response message for an exchange.
      */
     public Responder(Processor responseGeneratorProcessor) {
-        this(responseGeneratorProcessor, null);
+        this.responseGeneratorProcessor = responseGeneratorProcessor;
     }
-    
+
     /**
      * Creates a new {@link Responder}.
      * 
-     * @param responseGeneratorUri
-     *            URI of the endpoint that generates the response message for an
-     *            exchange.
-     * @param responseGeneratorProcessor
-     *            processor that generates the response message for an exchange.
+     * @param responseGeneratorProducer
+     *            producer that generates the response message for an exchange.
      */
-    private Responder(Processor responseGeneratorProcessor, String responseGeneratorUri) {
-        this.responseGeneratorProcessor = responseGeneratorProcessor;
-        this.responseGeneratorUri = responseGeneratorUri;
+    public Responder(Producer responseGeneratorProducer) {
+        this.responseGeneratorProducer = responseGeneratorProducer;
     }
-    
+
     /**
-     * Sends the incoming {@link Exchange} to an endpoint identified by
-     * <code>responseGeneratorUri</code> (set at construction time) that is
-     * generating a response message from the original {@link Exchange}. The
+     * Sends the incoming {@link Exchange} to an
+     * <code>responseGeneratorProcessor</code> (set at construction time) that
+     * is generating a response message from the original {@link Exchange}. The
      * response is then communicated back to the initiator and the original
      * exchange is forwarded to the next processor as in-only {@link Exchange}.
      * 
-     * @param exchange original exchange.
+     * @param exchange
+     *            original exchange.
      */
     @Override
     protected void processNext(Exchange exchange) throws Exception {
-        Exchange serviceExchange = null;
-        
-        // Create delegate exchange before initial exchange is processed
         Exchange delegateExchange = createDelegateExchange(exchange);
+        Exchange serviceExchange = exchange.copy();
         
-        if (responseGeneratorUri != null) {
-            // communication with response service via template
-            serviceExchange = producerTemplate(exchange).send(responseGeneratorUri, exchange.copy());
-        } else {
-            // communication with response service via processor
-            serviceExchange = exchange.copy();
-            responseGeneratorProcessor.process(serviceExchange);
-        }
-        
+        getResponseGenerator().process(serviceExchange);
         // copy service exchange over to original exchange
         // (sends response back to exchange initiator)
         exchange.copyFrom(serviceExchange);
@@ -112,9 +86,9 @@ public class Responder extends DelegateProcessor {
 
     /**
      * Processes the <code>original</code> exchange and the
-     * <code>response</code> exchange (returned from endpoint identified by
-     * <code>responseGeneratorUri</code>) and returns a decision whether to
-     * continue processing. The default implementation always returns
+     * <code>response</code> exchange (returned from a
+     * <code>responseGeneratorProcessor</code>) and returns a decision whether
+     * to continue processing. The default implementation always returns
      * <code>true</code>. This method is intended to be overwritten by
      * subclasses.
      * 
@@ -141,6 +115,30 @@ public class Responder extends DelegateProcessor {
         DefaultExchange result = new DefaultExchange(source.getContext());
         result.getIn().copyFrom(source.getIn());
         return result;
+    }
+    
+    @Override
+    protected void doStart() throws Exception {
+        super.doStart();
+        if (responseGeneratorProducer != null) {
+            responseGeneratorProducer.start();
+        }
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        if (responseGeneratorProducer != null) {
+            responseGeneratorProducer.stop();
+        }
+        super.doStop();
+    }
+
+    private Processor getResponseGenerator() {
+        if (responseGeneratorProcessor != null) {
+            return responseGeneratorProcessor;
+        } else {
+            return responseGeneratorProducer;
+        }
     }
     
 }

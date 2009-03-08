@@ -17,19 +17,20 @@ package org.openehealth.ipf.platform.camel.core.process;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.model.ProcessorType;
 import org.apache.camel.processor.DelegateProcessor;
 
 /**
  * Implements a validation process to be used in combination with
  * {@link ProcessorType#intercept(DelegateProcessor)}. The incoming
- * {@link Exchange} is validated against an endpoint identified by
- * <code>validatorUri</code> set at construction time. If validation succeeds
- * the validation result is returned to the initiator and the in-message of the
- * incoming {@link Exchange} is forwarded to the next processor using an in-only
- * {@link Exchange}. If validation fails (validator returned fault or
- * exception) then the validation fault or exception is returned to the
- * initiator and processing stops.
+ * {@link Exchange} is validated against a <code>validator</code> (a {#link
+ * Processor}) set at construction time. If validation succeeds the validation
+ * result is returned to the initiator and the in-message of the incoming
+ * {@link Exchange} is forwarded to the next processor using an in-only
+ * {@link Exchange}. If validation fails (validator returned fault or exception)
+ * then the validation fault or exception is returned to the initiator and
+ * processing stops.
  * 
  * @author Martin Krasser
  */
@@ -38,20 +39,20 @@ public class Validation extends Responder {
     /**
      * Creates a new {@link Validation} process.
      * 
-     * @param validatorUri
-     *            URI of the endpoint that creates a validation response.
+     * @param validator
+     *            processor that creates a validation response.
      */
-    public Validation(String validatorUri) {
-        super(validatorUri);
+    public Validation(Processor validator) {
+        super(validator);
     }
 
     /**
      * Creates a new {@link Validation} process.
      * 
      * @param validator
-     *            processor that creates a validation response.
+     *            producer that creates a validation response.
      */
-    public Validation(Processor validator) {
+    public Validation(Producer validator) {
         super(validator);
     }
 

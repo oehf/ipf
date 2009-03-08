@@ -271,9 +271,13 @@ public class RouteHelper {
      * @param validatorUri
      *            URI of the endpoint that validates an exchange.
      * @return a validation process object.
+     * @throws Exception
+     *             if a producer cannot be created for the endpoint represented
+     *             by <code>validatorUri</code>.
      */
-    public Validation validation(String validatorUri) {
-        return new Validation(validatorUri);
+    public Validation validation(String validatorUri) throws Exception {
+        Endpoint endpoint = CamelContextHelper.getMandatoryEndpoint(routeBuilder.getContext(), validatorUri);
+        return new Validation(endpoint.createProducer());
     }
     
     /**

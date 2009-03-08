@@ -48,7 +48,7 @@ import org.openehealth.ipf.platform.camel.core.model.RendererAdapterType
 import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterType
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
 import org.openehealth.ipf.platform.camel.core.model.DataFormatAdapterType
-import org.openehealth.ipf.platform.camel.core.process.Validation
+import org.openehealth.ipf.platform.camel.core.model.ValidationType
 
 import org.apache.camel.Expression
 import org.apache.camel.Processor
@@ -111,15 +111,19 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
         
         ProcessorType.metaClass.validation = { Processor validator ->
-            delegate.intercept(new Validation(validator))
+            ValidationType answer = new ValidationType(validator)
+            delegate.addOutput(answer)
+            return answer
         }
 
         ProcessorType.metaClass.validation = { String validationUri ->
-            delegate.intercept(new Validation(validationUri))
+            ValidationType answer = new ValidationType(validationUri)
+            delegate.addOutput(answer)
+            return answer
         }
         
         ProcessorType.metaClass.validation = { Closure validatorLogic ->
-            delegate.intercept(new Validation(new DelegatingProcessor(validatorLogic)))
+            delegate.validation(new DelegatingProcessor(validatorLogic))
         }
     
         ProcessorType.metaClass.enrich = {String resourceUri, AggregationStrategy aggregationStrategy ->

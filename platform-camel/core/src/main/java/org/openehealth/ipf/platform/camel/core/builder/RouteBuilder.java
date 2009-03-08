@@ -228,7 +228,7 @@ public class RouteBuilder extends SpringRouteBuilder {
         return routeHelper.enricher(aggregatorBeanName, resourceUri);
     }
 
-    public Validation validation(String validatorUri) {
+    public Validation validation(String validatorUri) throws Exception {
         return routeHelper.validation(validatorUri);
     }
     
