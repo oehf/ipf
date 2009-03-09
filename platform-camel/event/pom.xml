@@ -11,6 +11,11 @@
         <version>1.6-SNAPSHOT</version>
     </parent>
     
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.event.*</osgi.export.pkg>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.event.extend.EventModelExtension</ipf.extension.classes>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>commons-lang</groupId>

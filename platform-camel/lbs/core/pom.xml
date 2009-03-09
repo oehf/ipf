@@ -5,6 +5,10 @@
     <artifactId>platform-camel-lbs-core</artifactId>
     <name>platform-camel-lbs-core</name>
      
+    <properties>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.lbs.extend.LbsModelExtension</ipf.extension.classes>
+    </properties>
+
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>platform-camel-lbs</artifactId>

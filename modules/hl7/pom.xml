@@ -12,7 +12,6 @@
     </parent>
     
     <properties>
-        <!-- These settings are preliminary -->
         <osgi.export.pkg>org.openehealth.ipf.modules.hl7.*</osgi.export.pkg>
         <ipf.extension.beans>hapiModelExtension</ipf.extension.beans>
     </properties>

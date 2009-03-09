@@ -13,7 +13,6 @@
     </parent>
     
     <properties>
-        <!-- These settings are preliminary -->
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.lbs.*</osgi.export.pkg>
     </properties>
     

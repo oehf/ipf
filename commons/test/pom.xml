@@ -12,7 +12,6 @@
     </parent>
     
     <properties>
-        <!-- These settings are preliminary -->
         <osgi.export.pkg>org.openehealth.ipf.commons.test.*</osgi.export.pkg>
     </properties>
     

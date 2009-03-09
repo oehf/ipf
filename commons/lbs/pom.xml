@@ -12,7 +12,6 @@
     </parent>
     
     <properties>
-        <!-- These settings are preliminary -->
         <osgi.export.pkg>org.openehealth.ipf.commons.lbs.*</osgi.export.pkg>
     </properties>
     

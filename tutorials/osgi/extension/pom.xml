@@ -12,7 +12,6 @@
     </parent>
     
     <properties>
-        <!-- These settings are preliminary -->
         <osgi.export.pkg>org.openehealth.ipf.tutorials.osgi.extension.*</osgi.export.pkg>
         <ipf.extension.classes>org.openehealth.ipf.tutorials.osgi.extension.SampleExtension</ipf.extension.classes>
     </properties>
