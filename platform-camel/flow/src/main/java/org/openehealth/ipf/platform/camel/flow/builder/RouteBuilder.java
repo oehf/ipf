@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.flow.builder;
 
 import org.apache.camel.Expression;
-import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry;
+import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
 import org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor;
@@ -25,72 +25,40 @@ import org.openehealth.ipf.platform.camel.flow.process.Splitter;
 
 /**
  * Route builder with support methods for flow management DSL extensions.
- * 
+ * <p>
+ * <strong>This route builder will be deprecated in one of the upcoming
+ * releases.</strong>. It is recommended to use the {@link SpringRouteBuilder}
+ * and {@link RouteHelper} instead.
+ *
  * @author Martin Krasser
  */
 public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builder.RouteBuilder {
 
-    // ----------------------------------------------------------------
-    //  Flow management interceptors
-    // ----------------------------------------------------------------
+    private RouteHelper routeHelper;
     
-    /**
-     * Returns a new {@link FlowBeginProcessor} after assigning the
-     * <code>identifier</code>. The returned processor is registered at the
-     * {@link ReplayStrategyRegistry}.
-     * 
-     * @param identifier
-     *            the identifier to set on the {@link FlowBeginProcessor}.
-     * @return a new {@link FlowBeginProcessor}.
-     */
+    public RouteBuilder() {
+        super();
+        this.routeHelper = new RouteHelper(this);
+    }
+    
     public FlowBeginProcessor flowBegin(String identifier) {
-        FlowBeginProcessor processor = bean(FlowBeginProcessor.class);
-        processor
-            .identifier(identifier)
-            .register();
-        return processor;
+        return routeHelper.flowBegin(identifier);
     }
     
-    /**
-     * Returns a new {@link FlowEndProcessor}.
-     * 
-     * @return a new {@link FlowEndProcessor}.
-     */
     public FlowEndProcessor flowEnd() {
-        return bean(FlowEndProcessor.class);
+        return routeHelper.flowEnd();
     }
 
-    /**
-     * Returns a new {@link FlowErrorProcessor}.
-     * 
-     * @return a new {@link FlowErrorProcessor}.
-     */
     public FlowErrorProcessor flowError() {
-        return bean(FlowErrorProcessor.class);
+        return routeHelper.flowError();
     }
 
-    /**
-     * Returns a new {@link Dedupe}.
-     * 
-     * @return a new {@link Dedupe}.
-     */
     public Dedupe dedupe() {
-        return bean(Dedupe.class);
+        return routeHelper.dedupe();
     }
     
-    // ----------------------------------------------------------------
-    //  Flow management-specific message processors
-    // ----------------------------------------------------------------
-    
-    /**
-     * Returns a new {@link Splitter}
-     * 
-     * @param splitRule
-     *          expression that performs the splitting of the original exchange
-     * @return the new {@link Splitter}
-     */
     public Splitter split(Expression splitRule) {
-        return new Splitter(splitRule, null);
+        return routeHelper.split(splitRule);
     }
 
 }

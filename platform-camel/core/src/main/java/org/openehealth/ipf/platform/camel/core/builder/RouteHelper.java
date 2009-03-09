@@ -39,6 +39,8 @@ import org.openehealth.ipf.platform.camel.core.process.Enricher;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
 
 /**
+ * Helper class for creating IPF extensions in Java-based route definitions.
+ * 
  * @author Martin Krasser
  */
 public class RouteHelper {

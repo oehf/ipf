@@ -40,7 +40,11 @@ import org.openehealth.ipf.platform.camel.core.process.Enricher;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
 
 /**
- * Route builder with support methods for common platform DSL extensions. 
+ * Route builder with support methods for common platform DSL extensions.
+ * <p>
+ * <strong>This route builder will be deprecated in one of the upcoming
+ * releases.</strong>. It is recommended to use the {@link SpringRouteBuilder}
+ * and {@link RouteHelper} instead.
  * 
  * @author Martin Krasser
  */
