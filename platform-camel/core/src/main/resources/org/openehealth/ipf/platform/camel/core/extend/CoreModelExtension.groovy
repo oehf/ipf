@@ -249,7 +249,7 @@ class CoreModelExtension {
             return answer
         }
         
-        ProcessorType.metaClass.render = { Renderer rendererBeanName ->
+        ProcessorType.metaClass.render = { String rendererBeanName ->
             RendererAdapterType answer = new RendererAdapterType(rendererBeanName)
             delegate.addOutput(answer)
             return answer

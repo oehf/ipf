@@ -38,4 +38,11 @@ public class RendererExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
     }
     
+    @Test
+    public void testRenderBean() throws InterruptedException {
+        mockOutput.expectedBodiesReceived("bleh");
+        producerTemplate.sendBody("direct:input3", "bleh");
+        mockOutput.assertIsSatisfied();
+    }
+    
 }

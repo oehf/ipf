@@ -39,6 +39,11 @@ class RendererRouteBuilderConfig implements RouteBuilderConfig {
             .from('direct:input2')
             .parse('sampleConverter')
             .to('mock:output')
+            
+        builder
+            .from('direct:input3')
+            .render('sampleConverter')
+            .to('mock:output')    
         
     }
     
