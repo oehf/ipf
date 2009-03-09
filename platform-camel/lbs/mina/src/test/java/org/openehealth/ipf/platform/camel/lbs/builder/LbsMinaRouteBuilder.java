@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.builder;
 
+import org.apache.camel.spring.SpringRouteBuilder;
+
 /**
  * @author Jens Riemschneider
  */
-public class LbsMinaRouteBuilder extends RouteBuilder {
+public class LbsMinaRouteBuilder extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {

@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.lbs.process.cxf;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.openehealth.ipf.platform.camel.lbs.builder.RouteHelper.store;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.annotation.Resource;
@@ -36,6 +38,7 @@ import javax.xml.ws.soap.SOAPBinding;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.cxf.message.MessageContentsList;
@@ -44,7 +47,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.lbs.store.DiskStore;
-import org.openehealth.ipf.platform.camel.lbs.builder.RouteBuilder;
 import org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler;
 import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,8 +122,8 @@ public class LbsCxfHugeFileTest {
         }
     }
 
-    private RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
+    private SpringRouteBuilder createRouteBuilder() throws Exception {
+        return new SpringRouteBuilder() {
             @Override
             public void configure() throws Exception {
                 from("cxf:bean:soapEndpointHugeFile?dataFormat=POJO")

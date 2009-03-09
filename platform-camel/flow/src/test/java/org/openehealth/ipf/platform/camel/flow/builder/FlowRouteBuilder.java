@@ -17,12 +17,11 @@ package org.openehealth.ipf.platform.camel.flow.builder;
 
 import org.apache.camel.impl.SerializationDataFormat;
 import org.apache.camel.spi.DataFormat;
-import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder;
 
 /**
  * @author Martin Krasser
  */
-public class FlowRouteBuilder extends RouteBuilder {
+public class FlowRouteBuilder extends BaseRouteBuilder {
 
     private DataFormat serialization = new SerializationDataFormat();
     
@@ -34,43 +33,43 @@ public class FlowRouteBuilder extends RouteBuilder {
         // --------------------------------------------------------------
         
         from("direct:flow-test-1")
-        .intercept(flowBegin("test-1")
+        .intercept(routeHelper.flowBegin("test-1")
                 .application("test")
                 .outType(String.class))
         .setHeader("foo", constant("test-1"))
         .to("mock:mock")
-        .intercept(flowEnd());
+        .intercept(routeHelper.flowEnd());
 
         from("direct:flow-test-2")
-        .intercept(flowBegin("test-2")
+        .intercept(routeHelper.flowBegin("test-2")
                 .application("test")
                 .inFormat(serialization)
                 .outFormat(serialization))
         .setHeader("foo", constant("test-2"))
         .to("mock:mock")
-        .intercept(flowEnd());
+        .intercept(routeHelper.flowEnd());
 
         from("direct:flow-test-3")
-        .intercept(flowBegin("test-3")
+        .intercept(routeHelper.flowBegin("test-3")
                 .application("test")
                 .inFormat(serialization)
                 .outConversion(false))
         .setHeader("foo", constant("test-3"))
         .to("mock:mock")
-        .intercept(flowEnd());
+        .intercept(routeHelper.flowEnd());
     
         from("direct:flow-test-4")
-        .intercept(flowBegin("test-4")
+        .intercept(routeHelper.flowBegin("test-4")
                 .application("test")
                 .outType(String.class))
         .setHeader("foo", constant("test-4"))
-        .filter(dedupe())
+        .filter(routeHelper.dedupe())
         .to("mock:mock")
-        .intercept(flowEnd());
+        .intercept(routeHelper.flowEnd());
 
         from("direct:flow-test-5")
         .errorHandler(noErrorHandler())
-        .intercept(flowBegin("test-5")
+        .intercept(routeHelper.flowBegin("test-5")
                 .application("test")
                 .outType(String.class))
         .throwFault("unhandled fault")
@@ -78,7 +77,7 @@ public class FlowRouteBuilder extends RouteBuilder {
 
         from("direct:flow-test-6")
         .errorHandler(noErrorHandler())
-        .intercept(flowBegin("test-6")
+        .intercept(routeHelper.flowBegin("test-6")
                 .replayErrorHandler("mock:error")
                 .application("test")
                 .outType(String.class))
@@ -90,7 +89,7 @@ public class FlowRouteBuilder extends RouteBuilder {
         // --------------------------------------------------------------
         
         from("direct:flow-test-split")
-        .intercept(flowBegin("test-split")
+        .intercept(routeHelper.flowBegin("test-split")
                 .application("test")
                 .outType(String.class))
         .multicast()
@@ -99,18 +98,18 @@ public class FlowRouteBuilder extends RouteBuilder {
 
         from("direct:out-1")
         .to("mock:mock-1")
-        .intercept(flowEnd());
+        .intercept(routeHelper.flowEnd());
 
         from("direct:out-2")
         .to("mock:mock-2")
-        .intercept(flowEnd());
+        .intercept(routeHelper.flowEnd());
         
         // --------------------------------------------------------------
         //  Pipe Flows
         // --------------------------------------------------------------
         
         from("direct:flow-test-pipe")
-        .intercept(flowBegin("test-pipe")
+        .intercept(routeHelper.flowBegin("test-pipe")
                 .application("test")
                 .outType(String.class))
         .to("direct:out-1")

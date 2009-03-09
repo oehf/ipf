@@ -23,7 +23,7 @@ import org.apache.camel.Expression;
 /**
  * @author Jens Riemschneider
  */
-public class SplitRouteBuilder extends RouteBuilder {
+public class SplitRouteBuilder extends BaseRouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -33,11 +33,11 @@ public class SplitRouteBuilder extends RouteBuilder {
         // --------------------------------------------------------------
         
         from("direct:split-test-ipfsplit")
-        .intercept(flowBegin("test-ipfsplit")
+        .intercept(routeHelper.flowBegin("test-ipfsplit")
                 .application("test")
                 .outType(String.class))
-        .intercept(split(new TestSplitRule()))
-        .intercept(flowEnd())
+        .intercept(routeHelper.split(new TestSplitRule()))
+        .intercept(routeHelper.flowEnd())
         .to("mock:mock-1");
         
 
@@ -46,7 +46,7 @@ public class SplitRouteBuilder extends RouteBuilder {
         .to("direct:out-4");
         
         from("direct:out-3")
-        .intercept(split(new TestSplitRule()))
+        .intercept(routeHelper.split(new TestSplitRule()))
         .to("mock:mock-1");
         
         from("direct:out-4")

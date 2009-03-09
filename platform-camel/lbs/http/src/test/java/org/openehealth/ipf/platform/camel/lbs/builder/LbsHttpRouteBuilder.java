@@ -15,17 +15,21 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.builder;
 
+import static org.openehealth.ipf.platform.camel.lbs.builder.RouteHelper.fetch;
+import static org.openehealth.ipf.platform.camel.lbs.builder.RouteHelper.store;
+
 import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler;
 
 /**
  * @author Jens Riemschneider
  */
-public class LbsHttpRouteBuilder extends RouteBuilder {
+public class LbsHttpRouteBuilder extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {

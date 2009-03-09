@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,12 @@ import org.openehealth.ipf.platform.camel.lbs.process.FetchProcessor;
 import org.openehealth.ipf.platform.camel.lbs.process.StoreProcessor;
 
 /**
- * Route builder with support methods for lbs management DSL extensions.
+ * Helper class for creating IPF extensions in Java-based route definitions.
  * 
- * @author Jens Riemschneider
+ * @author Martin Krasser
  */
-public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builder.RouteBuilder {
+public class RouteHelper {
 
-    // ----------------------------------------------------------------
-    //  LBS management
-    // ----------------------------------------------------------------
     /**
      * Creates a store processor.
      * <p>
@@ -37,7 +34,7 @@ public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builde
      * creates a resource that is stored in a {@link LargeBinaryStore}.
      * @return the created store processor
      */
-    public StoreProcessor store() {        
+    public static StoreProcessor store() {        
         return new StoreProcessor();
     }
 
@@ -48,7 +45,8 @@ public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builde
      * Camel input body (e.g. an HTTP request for the http endpoint).
      * @return the created fetch processor
      */
-    public FetchProcessor fetch() {        
+    public static FetchProcessor fetch() {        
         return new FetchProcessor();
     }
+
 }

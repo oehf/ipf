@@ -36,6 +36,10 @@ public class RouteHelper {
         this.routeBuilder = routeBuilder;
     }
     
+    public void setRouteBuilder(SpringRouteBuilder routeBuilder) {
+        this.routeBuilder = routeBuilder;
+    }
+    
     /**
      * Returns a new {@link FlowBeginProcessor} after assigning the
      * <code>identifier</code>. The returned processor is registered at the

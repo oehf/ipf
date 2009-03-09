@@ -21,23 +21,31 @@ import static org.openehealth.ipf.platform.camel.core.util.Expressions.exception
 import org.apache.camel.ValidationException;
 import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.spi.DataFormat;
+import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
+import org.openehealth.ipf.platform.camel.core.builder.RouteHelper;
 import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat;
-import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder;
 
 /**
  * @author Martin Krasser
  */
-public class TestRouteBuilder extends RouteBuilder {
+public class TestRouteBuilder extends SpringRouteBuilder {
 
+    private RouteHelper coreHelper;
+    
+    public TestRouteBuilder() {
+        super();
+        this.coreHelper = new RouteHelper(this);
+    }
+    
     @Override
     public void configure() throws Exception {
         
         Namespaces ns = new Namespaces("oehf", "http://www.openehealth.org/tutorial");
         DataFormat df = new GnodeDataFormat(false);
         
-        ProcessorAdapter orderTransmogrifier = transmogrifier("animalOrderTransformer");
-        ProcessorAdapter bookTransmogrifier = transmogrifier("bookOrderTransformer").params(builderExpression());
+        ProcessorAdapter orderTransmogrifier = coreHelper.transmogrifier("animalOrderTransformer");
+        ProcessorAdapter bookTransmogrifier = coreHelper.transmogrifier("bookOrderTransformer").params(builderExpression());
         
         // ------------------------------------------------------------
         //  Global error handling strategy
@@ -52,7 +60,7 @@ public class TestRouteBuilder extends RouteBuilder {
         
         from("direct:order")
             .convertBodyTo(String.class)
-            .intercept(validation("direct:validation"))
+            .intercept(coreHelper.validation("direct:validation"))
             .to("seda:validated");
         
         from("direct:validation")
