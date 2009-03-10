@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.lbs.process.cxf.AbstractLbsCxfTest;
 /**
  * @author Jens Riemschneider
  */
-public class LbsCxfRouteBuilder extends SpringRouteBuilder {
+public class LbsCxfRouteBuilderJava extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {

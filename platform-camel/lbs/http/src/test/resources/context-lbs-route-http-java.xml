@@ -29,7 +29,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.lbs.builder.LbsHttpRouteBuilder" />
+        class="org.openehealth.ipf.platform.camel.lbs.builder.LbsHttpRouteBuilderJava" />
 
     <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore" />
 

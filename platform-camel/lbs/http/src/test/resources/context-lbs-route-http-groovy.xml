@@ -33,34 +33,27 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 		factory-method="createProducerTemplate">
 	</bean>
 
-	<bean id="routeBuilder"
-		class="org.openehealth.ipf.platform.camel.lbs.builder.RouteBuilder">
-		<property name="routeModelExtender" ref="routeModelExtender" />
-		<property name="routeBuilderConfig" ref="routeBuilderConfig" />
+	<bean id="routeBuilder" depends-on="routeModelExtender"
+		class="org.openehealth.ipf.platform.camel.lbs.builder.LbsHttpRouteBuilderGroovy">
 	</bean>
 
-	<lang:groovy id="routeBuilderConfig"
-		script-source="classpath:org/openehealth/ipf/platform/camel/lbs/builder/LbsHttpRouteBuilderConfig.groovy">
-	</lang:groovy>
+    <bean id="coreModelExtension"
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+    </bean>
 
-	<lang:groovy id="coreModelExtension"
-		script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
-		<lang:property name="routeBuilder" ref="routeBuilder" />
-	</lang:groovy>
+    <bean id="lbsModelExtension"
+        class="org.openehealth.ipf.platform.camel.lbs.extend.LbsModelExtension">
+    </bean>
 
-	<lang:groovy id="lbsModelExtension"
-		script-source="classpath:org/openehealth/ipf/platform/camel/lbs/extend/LbsModelExtension.groovy">
-	</lang:groovy>
-
-	<lang:groovy id="routeModelExtender"
-		script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
-		<lang:property name="routeModelExtensions">
-			<list>
-				<ref bean="coreModelExtension" />
-				<ref bean="lbsModelExtension" />
-			</list>
-		</lang:property>
-	</lang:groovy>
+    <bean id="routeModelExtender"
+        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
+            <list>
+                <ref bean="coreModelExtension" />
+                <ref bean="lbsModelExtension" />
+            </list>
+        </property>
+    </bean>
 
 	<bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore" />
 

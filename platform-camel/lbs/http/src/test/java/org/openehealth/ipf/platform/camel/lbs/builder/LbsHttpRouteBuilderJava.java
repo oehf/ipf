@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.lbs.process.ResourceHandler;
 /**
  * @author Jens Riemschneider
  */
-public class LbsHttpRouteBuilder extends SpringRouteBuilder {
+public class LbsHttpRouteBuilderJava extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
