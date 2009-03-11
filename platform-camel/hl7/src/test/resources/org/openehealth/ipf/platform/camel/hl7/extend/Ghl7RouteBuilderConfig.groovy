@@ -34,15 +34,18 @@ class Ghl7RouteBuilderConfig implements RouteBuilderConfig {
             .to('mock:output')
         
         builder.from("direct:input2")
-            .marshal()
-            .ghl7('UTF-8')
+            .marshal().ghl7('UTF-8')
             .to('mock:output')
         
         builder.from("direct:input3")
-            .unmarshal()
-            .ghl7(parser, 'UTF-8')
+            .unmarshal().ghl7(parser, 'UTF-8')
             .to('mock:output')
             
+        builder.from("direct:input4")
+            .unmarshal().ghl7()
+            .validate().ghl7()
+            .to('mock:output')
+
     }
     
 }

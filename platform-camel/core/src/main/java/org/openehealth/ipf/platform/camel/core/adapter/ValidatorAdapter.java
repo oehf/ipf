@@ -37,6 +37,8 @@ public class ValidatorAdapter extends ProcessorAdapter {
     
     private Object profile;
     
+    private Expression profileExpression;
+    
     /**
      * Creates a new {@link ValidatorAdapter} and sets the delegate
      * {@link Validator}.
@@ -50,21 +52,46 @@ public class ValidatorAdapter extends ProcessorAdapter {
     
     /**
      * Sets the profile to validate the input data against.
-     * Sets an {@link Expression} for obtaining input data from an
-     * {@link Exchange}. Input data are passed to adapted
-     * transform-support-library objects.
      * 
      * @param profile
      *            validation profile.
      * @return this object.
      */
+    public ValidatorAdapter staticProfile(Object profile) {
+        this.profile = profile;
+        return this;
+    }
+    
+    /**
+     * Sets the profile to validate the input data against.
+     * 
+     * @param profile
+     *            validation profile.
+     * @return this object.
+     */
+    @Deprecated
     public ValidatorAdapter profile(Object profile) {
         this.profile = profile;
         return this;
     }
     
     /**
-     * Delegates validation of input data and input parameters to a
+     * Sets the profile expression to validate the input data against.
+     * Sets an {@link Expression} for obtaining profile data from an
+     * {@link Exchange}. Profile data are passed to adapted
+     * transform-support-library objects.
+     * 
+     * @param profile
+     *            validation profile expression.
+     * @return this object.
+     */
+    public ValidatorAdapter profile(Expression profileExpression) {
+        this.profileExpression = profileExpression;
+        return this;
+    }
+    
+    /**
+     * Delegates validation of input data against a profile to a
      * {@link Validator} object. Validation errors messages are written
      * to body of the message returned by {@link #faultMessage(Exchange)}.
      * 
@@ -84,7 +111,7 @@ public class ValidatorAdapter extends ProcessorAdapter {
         prepareResult(exchange);
         
         try {
-            validator.validate(inputData, profile);
+            validator.validate(inputData, getProfile(exchange));
         } catch (ValidationException e) {
             Message fault = faultMessage(exchange);
             // TODO: revise exception handling 
@@ -92,4 +119,11 @@ public class ValidatorAdapter extends ProcessorAdapter {
         }
     }
 
+    private Object getProfile(Exchange exchange) {
+        if (profileExpression != null) {
+            return profileExpression.evaluate(exchange);
+        } else {
+            return profile;
+        }
+    }
 }

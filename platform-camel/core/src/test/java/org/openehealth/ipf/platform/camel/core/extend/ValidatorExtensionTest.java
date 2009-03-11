@@ -114,4 +114,11 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
     }
     
+    @Test
+    public void testValidatorProfileExpression() throws InterruptedException {
+        mockOutput.expectedBodiesReceived("blah");
+        producerTemplate.sendBodyAndHeader("direct:input8", "blah", "profile", "derived");
+        mockOutput.assertIsSatisfied();
+    }
+    
 }

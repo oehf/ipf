@@ -215,6 +215,12 @@ class CoreModelExtension {
             delegate.transmogrify(new DelegatingTransmogrifier(closure))
         }
 
+        ProcessorType.metaClass.validate = {->
+            ValidatorAdapterType answer = new ValidatorAdapterType()
+            delegate.addOutput(answer)
+            return answer
+        }
+    
         ProcessorType.metaClass.validate = { Validator validator ->
             ValidatorAdapterType answer = new ValidatorAdapterType(validator)
             delegate.addOutput(answer)

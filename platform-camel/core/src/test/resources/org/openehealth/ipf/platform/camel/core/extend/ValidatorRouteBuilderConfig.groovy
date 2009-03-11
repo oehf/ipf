@@ -55,7 +55,7 @@ class ValidatorRouteBuilderConfig implements RouteBuilderConfig {
             .validate {body, profile -> 
                 profile == 'abcd'
             }
-            .profile('abcd')
+            .staticProfile('abcd')
             .to('mock:output')
 
        builder
@@ -64,21 +64,26 @@ class ValidatorRouteBuilderConfig implements RouteBuilderConfig {
                 profile == message.body
             }
             .input {exchange -> exchange.in}
-            .profile('abcd')
+            .staticProfile('abcd')
             .to('mock:output')
 
        builder
             .from('direct:input6') 
             .validate('sampleValidator')
-            .profile('bean')
+            .staticProfile('bean')
             .to('mock:output')
     
        builder
             .from('direct:input7') 
             .validate(new TestValidator())
-            .profile('object')
+            .staticProfile('object')
             .to('mock:output')
             
+       builder
+            .from('direct:input8') 
+            .validate {body, profile -> profile == 'derived'}
+            .profile { it.in.headers.profile }
+            .to('mock:output')
     }
 
 }

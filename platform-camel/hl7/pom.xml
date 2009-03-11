@@ -12,7 +12,13 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.hl7.*</osgi.export.pkg>
+        <osgi.export.pkg>
+            org.openehealth.ipf.platform.camel.hl7.*
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.apache.camel.builder,
+            *
+        </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.hl7.extend.Hl7ModelExtension</ipf.extension.classes>
     </properties>
     
@@ -21,11 +27,15 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
             <version>${pom.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-hl7dsl</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.modules</groupId>
+            <artifactId>modules-hl7</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>

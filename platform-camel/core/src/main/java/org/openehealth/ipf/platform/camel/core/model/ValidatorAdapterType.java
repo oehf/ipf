@@ -15,10 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
+import groovy.lang.Closure;
+
+import org.apache.camel.Expression;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
 /**
  * @author Martin Krasser
@@ -30,17 +34,39 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
     private String validatorBean;
     
     private Object profile;
+
+    private Expression profileExpression;
     
-    public ValidatorAdapterType(String validatorBean) {
-        this.validatorBean = validatorBean;
+    public ValidatorAdapterType() {
+        this(new AlwaysValid());
     }
     
     public ValidatorAdapterType(Validator validator) {
         this.validator = validator;
     }
     
+    public ValidatorAdapterType(String validatorBean) {
+        this.validatorBean = validatorBean;
+    }
+    
+    public ValidatorAdapterType staticProfile(Object profile) {
+        this.profile = profile;
+        return this;
+    }
+    
+    @Deprecated
     public ValidatorAdapterType profile(Object profile) {
         this.profile = profile;
+        return this;
+    }
+    
+    public ValidatorAdapterType profile(Expression profileExpression) {
+        this.profileExpression = profileExpression;
+        return this;
+    }
+    
+    public ProcessorAdapterType profile(Closure profileExpression) {
+        this.profileExpression = new DelegatingExpression(profileExpression);
         return this;
     }
     
@@ -61,9 +87,21 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
         }
         ValidatorAdapter adapter = new ValidatorAdapter(validator);
         if (profile != null) {
-            return adapter.profile(profile);
+            return adapter.staticProfile(profile);
+        }
+        if (profileExpression != null) {
+            return adapter.profile(profileExpression);
         }
         return adapter;
     }
 
+    private static class AlwaysValid implements Validator<Object, Object> {
+
+        @Override
+        public void validate(Object message, Object profile) {
+            // any input is valid
+        }
+        
+    }
+    
 }

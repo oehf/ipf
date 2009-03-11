@@ -16,10 +16,12 @@
 package org.openehealth.ipf.platform.camel.hl7.extend
 
 import ca.uhn.hl7v2.parser.Parser
-
+import ca.uhn.hl7v2.validation.impl.DefaultValidationimport org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression
 import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.model.ProcessorType
 
+import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
 import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
 
 /**
@@ -56,6 +58,16 @@ class Hl7ModelExtension {
             delegate.dataFormat(hl7DataFormat)
         }
     
+        // ----------------------------------------------------------------
+        //  Validator adapter extensions
+        // ----------------------------------------------------------------
+        
+        ValidatorAdapterType.metaClass.ghl7 = {-> 
+            delegate.validator = new HL7Validator()
+            delegate.profile(new DefaultValidation()) 
+            delegate.input(new Hl7InputExpression())
+        }
+        
     }
         
 }

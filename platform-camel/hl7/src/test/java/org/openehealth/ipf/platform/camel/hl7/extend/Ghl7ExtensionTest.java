@@ -47,11 +47,12 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testUnmarshal() throws Exception {
-        InputStream stream = inputStream(resource);
-        mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input3", stream);
-        mockOutput.assertIsSatisfied();
-        assertEquals(inputMessage(resource).toString(), resultAdapter().toString());
+        testUnmarshal("direct:input3");
+    }
+
+    @Test
+    public void testValidateDefault() throws Exception {
+        testUnmarshal("direct:input4");
     }
 
     private void testMarshal(String endpoint) throws Exception {
@@ -62,6 +63,14 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
         assertEquals(message.toString(), resultString());
     }
     
+    public void testUnmarshal(String endpoint) throws Exception {
+        InputStream stream = inputStream(resource);
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody(endpoint, stream);
+        mockOutput.assertIsSatisfied();
+        assertEquals(inputMessage(resource).toString(), resultAdapter().toString());
+    }
+
     private String resultString() {
         return resultMessage().getBody(String.class);
     }
