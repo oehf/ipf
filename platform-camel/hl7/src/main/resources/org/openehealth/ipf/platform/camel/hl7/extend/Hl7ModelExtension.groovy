@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
  */
 class Hl7ModelExtension {
      
-    def extensions = { 
+    static extensions = { 
 
         // ----------------------------------------------------------------
         //  Adapter Extensions for DataFormatClause
