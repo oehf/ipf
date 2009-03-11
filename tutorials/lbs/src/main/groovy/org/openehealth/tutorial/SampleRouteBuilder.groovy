@@ -1,32 +1,48 @@
+/*
+ * Copyright 2009 the original author or authors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.tutorial
 
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.Exchange
-import org.apache.cxf.message.MessageContentsList
 import javax.activation.DataHandler
 import javax.activation.DataSource
+
+import org.apache.camel.Exchange
+import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.camel.component.cxf.CxfConstants
+import org.apache.cxf.message.MessageContentsList
+
 import org.openehealth.ipf.platform.camel.lbs.process.ResourceList
 
 
-public class SampleRouteConfig implements RouteBuilderConfig {
+class SampleRouteBuilder extends SpringRouteBuilder {
     
-    void apply(RouteBuilder builder) {
+    void configure() {
         // When the jetty endpoint receives a message the route checks the header 
         // for the request method.
         // The request method in the header is used to find out if we have a POST 
         // or GET request.
         // Depending on the request, we route the message to a "direct" endpoint.
-        builder.from('jetty:http://localhost:8412/imagebin')
+        from('jetty:http://localhost:8412/imagebin')
                 .noStreamCaching()                   // tell Camel to not read the stream in memory
                 .choice()   
-                .when(builder.header('http.requestMethod').isEqualTo('POST')).to('direct:upload')
-                .when(builder.header('http.requestMethod').isEqualTo('GET')).to('direct:download')
+                .when(header('http.requestMethod').isEqualTo('POST')).to('direct:upload')
+                .when(header('http.requestMethod').isEqualTo('GET')).to('direct:download')
                 .otherwise().end()
         
         // Deal with uploads
-        builder.from('direct:upload')
+        from('direct:upload')
                 .noStreamCaching()                   // tell Camel to not read the stream in memory
                 .store().with('resourceHandlers')    // ensure we can upload large files
                 .process { Exchange exchange ->
@@ -45,7 +61,7 @@ public class SampleRouteConfig implements RouteBuilderConfig {
                 }
         
         // Deal with downloads
-        builder.from('direct:download')
+        from('direct:download')
                 .noStreamCaching()                   // tell Camel to not read the stream in memory
                 .process { Exchange exchange ->
                     // Transform the message into the CXF format

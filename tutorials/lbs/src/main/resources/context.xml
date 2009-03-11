@@ -29,41 +29,37 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         factory-method="createProducerTemplate">
     </bean>
 
-    <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
-        <property name="routeModelExtender" ref="routeModelExtender" />
-        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    <bean id="routeBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.tutorial.SampleRouteBuilder">
     </bean>
 
-    <lang:groovy id="coreModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
-        <lang:property name="routeBuilder" ref="routeBuilder" />
-    </lang:groovy>
+    <bean id="coreModelExtension" 
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+    </bean>
 
-    <lang:groovy id="routeBuilderConfig" 
-        script-source="classpath:org/openehealth/tutorial/SampleRouteConfig.groovy">
-    </lang:groovy>
+    <bean id="lbsModelExtension" 
+        class="org.openehealth.ipf.platform.camel.lbs.extend.LbsModelExtension">
+    </bean>
 
-	<lang:groovy id="routeModelExtender" script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
-        <lang:property name="routeModelExtensions">
+	<bean id="routeModelExtender" class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
                 <ref bean="lbsModelExtension" />
             </list>
-        </lang:property>
-    </lang:groovy>
+        </property>
+    </bean>
 
-    <!-- Allows usage of store() and fetch() within routes -->
-    <lang:groovy id="lbsModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/lbs/extend/LbsModelExtension.groovy">
-    </lang:groovy>
-
-	<!-- Stores the binaries while processing the routes -->
+	<!-- 
+        Stores the binaries while processing the routes
+     -->
     <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.DiskStore">
         <constructor-arg value="target/tempstore"/>
     </bean>
 
-    <!-- Creates data sources used as resources in Camel messages -->
+    <!--
+        Creates data sources used as resources in Camel messages
+     -->
     <bean id="resourceFactory" class="org.openehealth.ipf.commons.lbs.resource.ResourceFactory">
         <constructor-arg ref="largeBinaryStore" />
         <constructor-arg value="unnamed" />
@@ -80,7 +76,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         </cxf:properties>
     </cxf:cxfEndpoint>
 
-	<!-- This bean is a list of resource handlers. Add all handlers used within the routes to this list -->
     <util:list id="resourceHandlers">
         <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoResourceHandler">
             <constructor-arg ref="resourceFactory" />
@@ -89,4 +84,5 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
             <constructor-arg ref="resourceFactory" />
         </bean>
     </util:list>
+    
 </beans>
