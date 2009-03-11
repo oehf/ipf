@@ -26,9 +26,10 @@ public class SampleRouteConfig implements RouteBuilderConfig {
      void apply(RouteBuilder builder) {
 
          builder
-             .from('file:workspace/input')
+             .from('file:workspace/input?lock=false')
              .initFlow('file').application('osgi-file')
              .unmarshal().ghl7()
+             .validate().ghl7()
              .transmogrify(context.admissionTransmogrifier)
              .marshal().ghl7()
              .dedupeFlow()
