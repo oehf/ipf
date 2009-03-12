@@ -421,10 +421,15 @@
                 <scope>test</scope>
             </dependency>        
             <dependency>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-mojo</artifactId>
+                <version>${gmaven-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.codehaus.groovy.maven.runtime</groupId>
                 <artifactId>gmaven-runtime-default</artifactId>
                 <version>${gmaven-version}</version>
-            </dependency>        
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
