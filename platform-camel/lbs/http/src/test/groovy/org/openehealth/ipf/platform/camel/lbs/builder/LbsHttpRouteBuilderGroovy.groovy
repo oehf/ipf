@@ -47,16 +47,16 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
         //  LBS routes
         // --------------------------------------------------------------
         from('jetty:http://localhost:9452/lbstest_no_extract')
-            .noStreamCaching()
+            .disableStreamCaching()
             .to('mock:mock')
 
         from('jetty:http://localhost:9452/lbstest_extract')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
         from('jetty:http://localhost:9452/lbstest_ping')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 def dataSource = exchange.in.getBody(ResourceDataSource.class)
@@ -65,43 +65,51 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .to('mock:mock');
             
         from('jetty:http://localhost:9452/lbstest_extract_factory_via_bean')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
         from('jetty:http://localhost:9452/lbstest_extract_router')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .setHeader('tag').constant('I was here')
             .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
 
         from('direct:lbstest_send_only')
-            .noStreamCaching()
+            .disableStreamCaching()
             .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
             
         from('direct:lbstest_non_http')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_receiver')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_jms')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('jms:temp:queue:lbstest')
+            
+        from('direct:lbstest_download')
+            .disableStreamCaching()
+            .to('http://localhost:9452/lbstest_download')
+            
+        from('jetty:http://localhost:9452/lbstest_download')
+            .disableStreamCaching()
+            .transform().constant(new org.openehealth.ipf.platform.camel.lbs.process.http.GroovyLbsHttpTest.HugeContentInputStream())
             
         from('jms:temp:queue:lbstest')
             .to('mock:mock')
             
         // Example routes only tested with groovy
         from('jetty:http://localhost:9452/lbstest_example1')
-            .noStreamCaching()
+            .disableStreamCaching()
             // Replace the message content with a data source
             .store().with('resourceHandlers') 
             // Custom processing to find a token
@@ -127,7 +135,7 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_example2')
-            .noStreamCaching()
+            .disableStreamCaching()
             // Replace the message content with data sources
             .store().with('resourceHandlers')
             // Custom processing to look for text resources
@@ -142,7 +150,7 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_example3')
-            .noStreamCaching()
+            .disableStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 // The resource factory can be used to create resources manually
