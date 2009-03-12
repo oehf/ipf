@@ -19,7 +19,6 @@
             org.openehealth.ipf.commons.core.modules.api,
             org.openehealth.ipf.platform.camel.core.builder,
             org.openehealth.ipf.platform.camel.core.extend,
-            org.openehealth.ipf.platform.camel.core.extend,
             org.openehealth.ipf.platform.camel.flow.dedupe,
             org.openehealth.ipf.platform.camel.flow.process,
             org.openehealth.ipf.platform.camel.flow,
