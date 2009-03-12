@@ -90,6 +90,14 @@ class CoreModelExtension {
             delegate.filter(new DelegatingCamelPredicate(predicateLogic))
         }
         
+        ProcessorType.metaClass.transform = { Closure transformExpression ->
+            delegate.transform(new DelegatingExpression(transformExpression))
+        }
+    
+        ProcessorType.metaClass.setProperty = { String name, Closure propertyExpression ->
+            delegate.setProperty(name, new DelegatingExpression(propertyExpression))
+        }
+
         ProcessorType.metaClass.setHeader = { String name, Closure headerExpression ->
             delegate.setHeader(name, new DelegatingExpression(headerExpression))
         }
@@ -100,6 +108,10 @@ class CoreModelExtension {
 
         ProcessorType.metaClass.setFaultHeader = { String name, Closure headerExpression ->
             delegate.setFaultHeader(name, new DelegatingExpression(headerExpression))
+        }
+
+        ProcessorType.metaClass.setBody = {Closure bodyExpression ->
+            delegate.setBody(new DelegatingExpression(bodyExpression))
         }
 
         ChoiceType.metaClass.when = { Closure predicateLogic ->
