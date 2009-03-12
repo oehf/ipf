@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.hl7.validation.support
 import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.parser.PipeParser
 import ca.uhn.hl7v2.HL7Exception
-
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
 /**
@@ -29,7 +29,7 @@ public class HL7ValidatorTest extends GroovyTestCase{
     	// A test that builds up rules and applies them to the parser
     	// while it parses a message. It fails because of the nonsense
     	// rule that IDs may not be longer than 1
-    	void testValidate(){
+    	void testValidateWhileParsing(){
     	    ValidationContext context = new DefaultValidationContext().configure()        
                 .forVersion().asOf('2.3')
                     .type('DT')
@@ -58,15 +58,72 @@ public class HL7ValidatorTest extends GroovyTestCase{
                 
             def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
             def parser = new PipeParser()
+            parser.validationContext = context
                     
             try {
                 def msg = parser.parse(msgText)
-                new HL7Validator().validate(msg, context)
+                fail("The message should fail")
             } catch (Exception e) {
                 assert e instanceof HL7Exception
                 assert e.message.contains('IDs may not be longer than 1')
                 assert e.message.contains('MSH (rep 0) Field #8')
             }    
     }
-    
+    	
+    void testValidateMessageByValidatorSuccess() {
+        ValidationContext context = new DefaultValidationContext()
+    	context.configure()        
+    	    .forVersion('2.2')
+    	            .message('ADT', 'A01').abstractSyntax(
+    	                    'MSH',
+    	                    'EVN',
+    	                    'PID',
+    	                    [  {  'NK1'  }  ],
+    	                    'PV1',
+    	                    [  {  INSURANCE(
+                              'IN1',
+                              [  'IN2'  ] ,
+                              [  'IN3'  ]
+    	                    )}]
+    	            )
+            
+        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        def parser = new PipeParser()
+                
+        def msg = parser.parse(msgText)
+        new HL7Validator().validate(msg, context)
+    	    
+    }
+
+    void testValidateMessageByValidatorFail() {
+        ValidationContext context = new DefaultValidationContext()
+    	context.configure()        
+    	    .forVersion('2.2')
+    	            .message('ADT', 'A01').abstractSyntax(
+    	                    'MSH',
+    	                    'EVN',
+    	                    'PID',
+    	                    // [  {  'NK1'  }  ],  no NK1 expected
+    	                    'PV1',
+    	                    [  {  INSURANCE(
+                              'IN1',
+                              [  'IN2'  ] ,
+                              [  'IN3'  ]
+    	                    )}]
+    	            )
+            
+        def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        def parser = new PipeParser()
+                
+        try {
+            def msg = parser.parse(msgText)
+            new HL7Validator().validate(msg, context)
+            fail("The message should fail")
+        } catch (Exception e) {
+            assert e instanceof ValidationException
+            assert e.message.contains('Invalid message')
+            assert e.cause.cause.message.contains('The structure NK1 appears in the message but not in the profile')
+        }    
+    	    
+    	}
 }
