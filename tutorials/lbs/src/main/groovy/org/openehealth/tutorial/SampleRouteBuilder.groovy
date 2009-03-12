@@ -35,7 +35,7 @@ class SampleRouteBuilder extends SpringRouteBuilder {
         // or GET request.
         // Depending on the request, we route the message to a "direct" endpoint.
         from('jetty:http://localhost:8412/imagebin')
-                .noStreamCaching()                   // tell Camel to not read the stream in memory
+                .disableStreamCaching()              // tell Camel to not read the stream in memory
                 .choice()   
                 .when(header('http.requestMethod').isEqualTo('POST')).to('direct:upload')
                 .when(header('http.requestMethod').isEqualTo('GET')).to('direct:download')
@@ -43,7 +43,7 @@ class SampleRouteBuilder extends SpringRouteBuilder {
         
         // Deal with uploads
         from('direct:upload')
-                .noStreamCaching()                   // tell Camel to not read the stream in memory
+                .disableStreamCaching()              // tell Camel to not read the stream in memory
                 .store().with('resourceHandlers')    // ensure we can upload large files
                 .process { Exchange exchange ->
                     // Transform the message into the CXF format
@@ -62,7 +62,7 @@ class SampleRouteBuilder extends SpringRouteBuilder {
         
         // Deal with downloads
         from('direct:download')
-                .noStreamCaching()                   // tell Camel to not read the stream in memory
+                .disableStreamCaching()              // tell Camel to not read the stream in memory
                 .process { Exchange exchange ->
                     // Transform the message into the CXF format
                     def params = new MessageContentsList()
