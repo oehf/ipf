@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.Producer;
-import org.apache.camel.component.http.HttpEndpoint;
 
 /**
  * IPF version of the HTTP component
@@ -31,10 +30,10 @@ import org.apache.camel.component.http.HttpEndpoint;
 public class HttpComponent extends org.apache.camel.component.http.HttpComponent {
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        final HttpEndpoint originalEndpoint = 
-            (HttpEndpoint) super.createEndpoint(uri, remaining, parameters);
+        final org.apache.camel.component.http.HttpEndpoint originalEndpoint = 
+            (org.apache.camel.component.http.HttpEndpoint) super.createEndpoint(uri, remaining, parameters);
         
-        return new DelegatingEndpoint(originalEndpoint) {
+        return new HttpEndpoint(originalEndpoint) {
             @Override
             public Producer createProducer() throws Exception {
                 return new HttpProducer(originalEndpoint);

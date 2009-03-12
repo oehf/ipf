@@ -96,14 +96,14 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .store().with('resourceHandlers')
             .to('jms:temp:queue:lbstest')
             
-/*        from('direct:lbstest_download')
+        from('direct:lbstest_download')
             .disableStreamCaching()
             .to('http://localhost:9452/lbstest_download')
             
         from('jetty:http://localhost:9452/lbstest_download')
             .disableStreamCaching()
             .transform().constant(new org.openehealth.ipf.platform.camel.lbs.process.http.GroovyLbsHttpTest.HugeContentInputStream())
-  */          
+            
         from('jms:temp:queue:lbstest')
             .to('mock:mock')
             

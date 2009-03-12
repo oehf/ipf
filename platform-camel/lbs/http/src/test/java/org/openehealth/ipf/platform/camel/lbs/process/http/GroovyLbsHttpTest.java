@@ -15,10 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.process.http;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.commons.httpclient.methods.FileRequestEntity;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.junit.Test;
@@ -51,9 +56,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(DirtySpringContextJUnit4ClassRunner.class) // DO NOT SIMPLY COPY!!! see above
 @ContextConfiguration(locations = { "/context-lbs-route-http-groovy.xml" })
 public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
-    private static final String ENDPOINT_JMS_QUEUE = 
+    public static final String ENDPOINT_JMS_QUEUE = 
         "http://localhost:9452/lbstest_jms";
-    
+
+    public static final long CONTENT_SIZE = 1024 * 1024 * 100 + 5;
+
     /**
      * Test to verify that example code works 
      */
@@ -106,9 +113,102 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
         ResourceList resourceList = exchange.getIn().getBody(ResourceList.class);
         assertEquals(2, resourceList.size());
     }
+    
+    @Test
+    public void testHugeFileUpload() throws Exception {
+        PostMethod method = new PostMethod(ENDPOINT_EXTRACT);
+        InputStream inputStream = new HugeContentInputStream();
+        InputStreamRequestEntity requestEntity = 
+            new InputStreamRequestEntity(inputStream, CONTENT_SIZE, "text/plain");
+        method.setRequestEntity(requestEntity);
 
+        final int[] count = { 0 };
+
+        mock.expectedMessageCount(1);
+        mock.whenAnyExchangeReceived(new Processor() {
+            @Override
+            public void process(Exchange exchange) throws Exception {
+                InputStream inputStream = exchange.getIn().getBody(InputStream.class);
+                int length = getLength(inputStream);
+                inputStream.close();
+                count[0] = length;
+            }
+        });
+
+        httpClient.executeMethod(method);
+        mock.assertIsSatisfied();
+        assertEquals(CONTENT_SIZE, count[0]);
+    }
+    
+    @Test
+    public void testHugeFileDownload() throws Exception {
+        Object result = producerTemplate.requestBody("direct:lbstest_download", "bla");
+        assertTrue(result instanceof InputStream);
+        assertEquals(CONTENT_SIZE, getLength((InputStream) result));
+    }
+
+    public static int getLength(InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[1024];
+        int length = 0;
+        boolean done = false;
+        while (!done) {
+            int read = inputStream.read(buffer, 0, buffer.length);
+            if (read == -1) {
+                done = true;
+            }
+            else {
+                length += read;
+            }
+        }
+        return length;
+    }
+    
     @Test
     public void testFileEndpointJms() throws Exception {
         testFile(ENDPOINT_JMS_QUEUE);
+    }
+
+    public static final class HugeContentInputStream extends InputStream {
+        private long readBytes;
+        private int count;
+        
+        @Override
+        public int read() throws IOException {
+            if (readBytes == CONTENT_SIZE) {
+                return -1;
+            }
+            ++readBytes;
+            return 'L';
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            if (readBytes == CONTENT_SIZE) {
+                return -1;
+            }
+
+            long sizeToRead = len;
+            if (readBytes + sizeToRead > CONTENT_SIZE) {
+                sizeToRead = Math.max(0, CONTENT_SIZE - readBytes);
+            }
+            
+            Arrays.fill(b, off, (int)(off + sizeToRead), (byte)65);
+            readBytes += sizeToRead;
+            if (++count == 1000) {
+                count = 0;
+            }
+            return (int) sizeToRead;
+        }
+        
+        public long getReadBytes() {
+            return readBytes;
+        }
+        
+        @Override
+        public void close() throws IOException {
+            super.close();
+            assertEquals(CONTENT_SIZE, readBytes);
+            readBytes = 0;
+        }
     }
 }

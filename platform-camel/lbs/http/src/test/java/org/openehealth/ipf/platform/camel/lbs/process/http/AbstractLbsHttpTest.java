@@ -84,25 +84,25 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public abstract class AbstractLbsHttpTest {
     
-    private static final String ENDPOINT_NO_EXTRACT = 
+    public static final String ENDPOINT_NO_EXTRACT = 
         "http://localhost:9452/lbstest_no_extract";
 
-    private static final String ENDPOINT_EXTRACT = 
+    public static final String ENDPOINT_EXTRACT = 
         "http://localhost:9452/lbstest_extract";
     
-    private static final String ENDPOINT_PING = 
+    public static final String ENDPOINT_PING = 
         "http://localhost:9452/lbstest_ping";
     
-    private static final String ENDPOINT_EXTRACT_FACTORY_VIA_BEAN = 
+    public static final String ENDPOINT_EXTRACT_FACTORY_VIA_BEAN = 
         "http://localhost:9452/lbstest_extract_factory_via_bean";
 
-    private static final String ENDPOINT_EXTRACT_ROUTER = 
+    public static final String ENDPOINT_EXTRACT_ROUTER = 
         "http://localhost:9452/lbstest_extract_router";
     
-    private static final String ENDPOINT_SEND_ONLY = 
+    public static final String ENDPOINT_SEND_ONLY = 
         "direct:lbstest_send_only";
     
-    private static final String ENDPOINT_NON_HTTP = 
+    public static final String ENDPOINT_NON_HTTP = 
         "direct:lbstest_non_http";
         
     @EndpointInject(uri="mock:mock")
@@ -112,10 +112,10 @@ public abstract class AbstractLbsHttpTest {
     private CamelContext camelContext;
 
     @Autowired
-    private ProducerTemplate producerTemplate;
+    protected ProducerTemplate producerTemplate;
     
     @Autowired
-    private LargeBinaryStore store;
+    protected LargeBinaryStore store;
     
     @Resource(name = "resourceFactory")
     private ResourceFactory factory;
@@ -503,7 +503,7 @@ public abstract class AbstractLbsHttpTest {
         assertEquals(ProtocolException.class, output.getException().getClass());
     }
 
-    private final class TestOutputGenerator implements Processor {
+    protected final class TestOutputGenerator implements Processor {
         private final String output;
         private final Map<String, String> receivedContent = new HashMap<String, String>();
         private String receivedBody;

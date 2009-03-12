@@ -28,6 +28,9 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 	<camel:camelContext id="camelContext">
 		<camel:jmxAgent id="agent" disabled="true" />
 	</camel:camelContext>
+    
+    <bean id="http" class="org.openehealth.ipf.platform.camel.http.HttpComponent">
+    </bean>
 
 	<bean id="producerTemplate" factory-bean="camelContext"
 		factory-method="createProducerTemplate">
@@ -55,7 +58,9 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         </property>
     </bean>
 
-	<bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore" />
+    <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.DiskStore">
+        <constructor-arg value="target/store"/>
+    </bean>
 
 	<bean id="resourceFactory"
 		class="org.openehealth.ipf.commons.lbs.resource.ResourceFactory">

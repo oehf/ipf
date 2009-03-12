@@ -17,16 +17,26 @@ package org.openehealth.ipf.platform.camel.http;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.net.URI;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Consumer;
-import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.PollingConsumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.component.http.HttpBinding;
+import org.apache.camel.component.http.HttpClientConfigurer;
+import org.apache.camel.component.http.HttpConsumer;
+import org.apache.camel.component.http.HttpExchange;
+import org.apache.camel.spi.HeaderFilterStrategy;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.params.HttpClientParams;
 
 /**
  * An endpoint implementation that delegates all calls to another endpoint
@@ -35,15 +45,19 @@ import org.apache.camel.Producer;
  * into an existing endpoint
  * @author Jens Riemschneider
  */
-public class DelegatingEndpoint implements Endpoint {
-    private Endpoint originalEndpoint;
+public class HttpEndpoint extends org.apache.camel.component.http.HttpEndpoint {
+    private org.apache.camel.component.http.HttpEndpoint originalEndpoint;
 
     /**
      * Constructs the new endpoint
      * @param originalEndpoint
      *          the endpoint that this endpoint delegates to
+     * @throws Exception 
      */
-    public DelegatingEndpoint(Endpoint originalEndpoint) {
+    public HttpEndpoint(org.apache.camel.component.http.HttpEndpoint originalEndpoint) throws Exception {
+        super(originalEndpoint.getEndpointUri(), 
+                (HttpComponent)originalEndpoint.getComponent(), 
+                originalEndpoint.getHttpUri(), null);
         notNull(originalEndpoint, "originalEndpoint cannot be null");
         this.originalEndpoint = originalEndpoint;
     }
@@ -59,17 +73,17 @@ public class DelegatingEndpoint implements Endpoint {
     }
 
     @Override
-    public Exchange createExchange() {
+    public HttpExchange createExchange() {
         return originalEndpoint.createExchange();
     }
 
     @Override
-    public Exchange createExchange(ExchangePattern pattern) {
+    public HttpExchange createExchange(ExchangePattern pattern) {
         return originalEndpoint.createExchange(pattern);
     }
 
     @Override
-    public Exchange createExchange(Exchange exchange) {
+    public HttpExchange createExchange(Exchange exchange) {
         return originalEndpoint.createExchange(exchange);
     }
 
@@ -119,4 +133,80 @@ public class DelegatingEndpoint implements Endpoint {
     public void setContext(CamelContext context) {
         originalEndpoint.setContext(context);
     }
+
+    @Override
+    public HttpExchange createExchange(HttpServletRequest request, HttpServletResponse response) {
+        return originalEndpoint.createExchange(request, response);
+    }
+
+    @Override
+    public HttpClient createHttpClient() {
+        return originalEndpoint.createHttpClient();
+    }
+
+    @Override
+    public void connect(HttpConsumer consumer) throws Exception {
+        originalEndpoint.connect(consumer);
+    }
+
+    @Override
+    public void disconnect(HttpConsumer consumer) throws Exception {
+        originalEndpoint.disconnect(consumer);
+    }
+
+    @Override
+    public HttpClientParams getClientParams() {
+        return originalEndpoint.getClientParams();
+    }
+
+    @Override
+    public void setClientParams(HttpClientParams clientParams) {
+        originalEndpoint.setClientParams(clientParams);
+    }
+
+    @Override
+    public HttpClientConfigurer getHttpClientConfigurer() {
+        return originalEndpoint.getHttpClientConfigurer();
+    }
+
+    @Override
+    public void setHttpClientConfigurer(HttpClientConfigurer httpClientConfigurer) {
+        originalEndpoint.setHttpClientConfigurer(httpClientConfigurer);
+    }
+
+    @Override
+    public HttpBinding getBinding() {
+        return originalEndpoint.getBinding();
+    }
+
+    @Override
+    public HeaderFilterStrategy getHeaderFilterStrategy() {
+        return originalEndpoint.getHeaderFilterStrategy();
+    }
+
+    @Override
+    public void setBinding(HttpBinding binding) {
+        originalEndpoint.setBinding(binding);
+    }
+
+    @Override
+    public String getPath() {
+        return originalEndpoint.getPath();
+    }
+
+    @Override
+    public int getPort() {
+        return originalEndpoint.getPort();
+    }
+
+    @Override
+    public String getProtocol() {
+        return originalEndpoint.getProtocol();
+    }
+
+    @Override
+    public URI getHttpUri() {
+        return originalEndpoint.getHttpUri();
+    }
 }
+
