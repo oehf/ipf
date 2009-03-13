@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>org.openehealth.ipf</groupId>
 		<artifactId>ipf</artifactId>
-		<version>1.6-m2</version>
+		<version>1.6-SNAPSHOT</version>
 	</parent>
 
 	<properties>
