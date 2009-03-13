@@ -12,7 +12,13 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.osgi.extender.spring.*</osgi.export.pkg>
+        <osgi.export.pkg>
+            org.openehealth.ipf.osgi.extender.spring.*
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.osgi.commons.bundle,
+            *
+        </osgi.import.pkg>
         <osgi.fragment.host>org.springframework.osgi.extender</osgi.fragment.host>
     </properties>
 

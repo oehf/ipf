@@ -13,7 +13,13 @@
     
     <properties>
         <osgi.export.pkg />
-        <osgi.private.pkg>org.openehealth.ipf.osgi.extender.basic.*</osgi.private.pkg>
+        <osgi.private.pkg>
+            org.openehealth.ipf.osgi.extender.basic.*
+        </osgi.private.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.osgi.commons.bundle,
+            *
+        </osgi.import.pkg>
         <osgi.bundle.activator>org.openehealth.ipf.osgi.extender.basic.ExtensionActivator</osgi.bundle.activator>
     </properties>
 

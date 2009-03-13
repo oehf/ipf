@@ -12,7 +12,16 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.hl7.*</osgi.export.pkg>
+        <osgi.export.pkg>
+            org.openehealth.ipf.platform.camel.hl7.*
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.apache.camel.builder,
+            org.openehealth.ipf.modules.hl7.validation,
+            org.openehealth.ipf.modules.hl7.validation.support,
+            org.openehealth.ipf.platform.camel.core.model,
+            *
+        </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.hl7.extend.Hl7ModelExtension</ipf.extension.classes>
     </properties>
     

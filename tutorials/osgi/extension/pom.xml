@@ -12,7 +12,13 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.tutorials.osgi.extension.*</osgi.export.pkg>
+        <osgi.export.pkg>
+            org.openehealth.ipf.tutorials.osgi.extension.*
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.apache.camel.model,
+            *
+        </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.tutorials.osgi.extension.SampleExtension</ipf.extension.classes>
     </properties>
 
