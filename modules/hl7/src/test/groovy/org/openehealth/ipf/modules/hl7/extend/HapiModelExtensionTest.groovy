@@ -136,6 +136,7 @@ public class HapiModelExtensionTest extends GroovyTestCase {
         assert 'X'.mapEncounterType() == null
         assert 'X'.mapEncounterType('WRONG') == 'WRONG'
         assert 'Y'.mapVip() == 'VIP'
+        
         try {
         	assert 'Y'.map('BLABLA')
         	fail()
@@ -146,7 +147,10 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     
     void testList() {
     	assert ['a','b'].map('listTest') == ['c','d']
-    	def x = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
+    	assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
+    	assert ['x','y'].map('listTest2') == ['c','d']
+      assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
+      def x = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
     	def y = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
     	x.setValue('a')
     	y.setValue('b')

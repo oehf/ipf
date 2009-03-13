@@ -17,6 +17,9 @@ mappings = {
 		 listTest(
 				'a~b'   : 'c~d'
 		 )
+		 listTest2(
+				(ELSE)  : 'c~d'
+		 )
 		 nullTest(
 				 (null) : 'not null'
 		 )
