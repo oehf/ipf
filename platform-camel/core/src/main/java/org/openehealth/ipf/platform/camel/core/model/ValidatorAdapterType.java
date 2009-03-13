@@ -49,6 +49,10 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
         this.validatorBean = validatorBean;
     }
     
+    public void setValidator(Validator validator) {
+        this.validator = validator;
+    }
+    
     public ValidatorAdapterType staticProfile(Object profile) {
         this.profile = profile;
         return this;

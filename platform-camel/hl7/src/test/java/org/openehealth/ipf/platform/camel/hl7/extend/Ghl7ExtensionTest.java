@@ -63,7 +63,7 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
         assertEquals(message.toString(), resultString());
     }
     
-    public void testUnmarshal(String endpoint) throws Exception {
+    private void testUnmarshal(String endpoint) throws Exception {
         InputStream stream = inputStream(resource);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, stream);

@@ -65,8 +65,8 @@ class Hl7ModelExtension {
         // ----------------------------------------------------------------
         
         ValidatorAdapterType.metaClass.ghl7 = {-> 
-            delegate.validator = new HL7Validator()
-            delegate.profile(new DefaultValidationContext()) 
+            delegate.setValidator(new HL7Validator())
+            delegate.staticProfile(new DefaultValidationContext()) 
             delegate.input(new Hl7InputExpression())
         }
         
