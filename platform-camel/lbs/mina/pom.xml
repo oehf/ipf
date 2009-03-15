@@ -36,7 +36,7 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
             <version>${pom.version}</version>
-            <classifier>test</classifier>
+            <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
         
