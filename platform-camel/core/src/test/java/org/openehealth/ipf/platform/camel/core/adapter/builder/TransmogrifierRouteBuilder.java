@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
 import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
+import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSupport;
 
 
 /**

@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.core.process.builder;
 
 import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
-import org.openehealth.ipf.platform.camel.test.transformer.ConstantTransformer;
-import org.openehealth.ipf.platform.camel.test.transformer.FailureTransformer;
+import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSupport;
+import org.openehealth.ipf.platform.camel.core.support.transformer.ConstantTransformer;
+import org.openehealth.ipf.platform.camel.core.support.transformer.FailureTransformer;
 
 
 /**

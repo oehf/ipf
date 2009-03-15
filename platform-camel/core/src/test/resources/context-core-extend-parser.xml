@@ -16,19 +16,16 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/lang 
-http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <lang:groovy id="testModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/EmptyModelExtension.groovy">
-    </lang:groovy>
+    <bean id="testModelExtension" 
+        class="org.openehealth.ipf.platform.camel.core.extend.EmptyModelExtension">
+    </bean>
 
-    <lang:groovy id="routeBuilderConfig" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/ParserRouteBuilderConfig.groovy">
-    </lang:groovy>
+    <bean id="routeBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.ipf.platform.camel.core.extend.ParserRouteBuilder">
+    </bean>
 
 </beans>

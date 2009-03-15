@@ -12,6 +12,7 @@
     </parent>
 
     <dependencies>
+        <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-lbs-core</artifactId>
@@ -29,5 +30,15 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
         </dependency>
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${pom.version}</version>
+            <classifier>test</classifier>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 </project>

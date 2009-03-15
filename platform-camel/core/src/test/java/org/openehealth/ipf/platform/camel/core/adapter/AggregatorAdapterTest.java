@@ -25,7 +25,7 @@ import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter;
-import org.openehealth.ipf.platform.camel.test.transform.min.TestAggregator;
+import org.openehealth.ipf.platform.camel.core.support.transform.min.TestAggregator;
 
 /**
  * @author Martin Krasser

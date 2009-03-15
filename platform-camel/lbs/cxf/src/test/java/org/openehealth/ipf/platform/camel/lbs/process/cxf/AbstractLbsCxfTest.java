@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.process.cxf;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,6 +34,7 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.Holder;
 import javax.xml.ws.soap.SOAPBinding;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
@@ -53,7 +56,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
-import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
+import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

@@ -39,23 +39,23 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
   </bean>
 
   <bean id="testPredicate" 
-      class="org.openehealth.ipf.platform.camel.test.transform.min.TestPredicate">
+      class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestPredicate">
       <constructor-arg value="test" />
   </bean>
       
   <bean id="testAggregator" 
-      class="org.openehealth.ipf.platform.camel.test.transform.min.TestAggregator" />
+      class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestAggregator" />
 
   <bean id="testValidator" 
-      class="org.openehealth.ipf.platform.camel.test.transform.min.TestValidator" />
+      class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestValidator" />
 
   <bean id="testRenderer" 
-      class="org.openehealth.ipf.platform.camel.test.transform.min.TestRenderer" />
+      class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestRenderer" />
 
   <bean id="testConverter" 
-      class="org.openehealth.ipf.platform.camel.test.transform.min.TestConverter" />
+      class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestConverter" />
 
   <bean id="testTransmogrifier" 
-      class="org.openehealth.ipf.platform.camel.test.transform.min.TestTransmogrifier" />
+      class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestTransmogrifier" />
 
 </beans>

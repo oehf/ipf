@@ -23,8 +23,8 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
-import org.openehealth.ipf.platform.camel.test.domain.Cat;
-import org.openehealth.ipf.platform.camel.test.domain.Dog;
+import org.openehealth.ipf.platform.camel.core.support.domain.Cat;
+import org.openehealth.ipf.platform.camel.core.support.domain.Dog;
 
 
 /**

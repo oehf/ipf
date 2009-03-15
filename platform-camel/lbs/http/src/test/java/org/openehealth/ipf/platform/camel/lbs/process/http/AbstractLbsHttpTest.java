@@ -69,8 +69,8 @@ import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.commons.lbs.utils.CorruptedInputStream;
+import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
 import org.openehealth.ipf.platform.camel.lbs.process.ResourceList;
-import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 
 

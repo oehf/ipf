@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.process.http;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -28,8 +30,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
 import org.openehealth.ipf.platform.camel.lbs.process.ResourceList;
-import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

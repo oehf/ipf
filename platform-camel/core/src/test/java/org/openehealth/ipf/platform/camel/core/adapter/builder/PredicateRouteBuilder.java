@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
 import org.apache.camel.Predicate;
-import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
+import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSupport;
 
 
 /**

@@ -13,7 +13,6 @@
     </parent>
 
     <modules>
-        <module>test</module>
         <module>core</module>
         <module>flow</module>
         <module>hl7</module>

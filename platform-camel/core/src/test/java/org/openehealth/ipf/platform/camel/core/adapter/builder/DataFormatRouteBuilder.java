@@ -17,8 +17,8 @@ package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
 import org.apache.camel.spi.DataFormat;
 import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
-import org.openehealth.ipf.platform.camel.core.support.RouteBuilderSupport;
-import org.openehealth.ipf.platform.camel.test.transform.min.TestConverter;
+import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSupport;
+import org.openehealth.ipf.platform.camel.core.support.transform.min.TestConverter;
 
 /**
  * @author Christian Ohr

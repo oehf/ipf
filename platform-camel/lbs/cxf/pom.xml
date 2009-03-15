@@ -12,15 +12,26 @@
     </parent>
     
     <dependencies>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cxf</artifactId>
-        </dependency>
+        <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-lbs-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf</artifactId>
+        </dependency>
+
+        <!-- Dependencies for tests --> 
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${pom.version}</version>
+            <classifier>test</classifier>
+            <scope>test</scope>
+        </dependency>
     
+    </dependencies>
+         
 </project>

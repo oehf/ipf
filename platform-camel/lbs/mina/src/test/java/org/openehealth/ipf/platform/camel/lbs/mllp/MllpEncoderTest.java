@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.mllp;
 
-import static org.junit.Assert.*;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.activation.DataSource;
+
 import org.apache.camel.TypeConverter;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.commons.io.IOUtils;

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.lbs.process.http;
 
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
+import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

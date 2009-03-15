@@ -29,7 +29,7 @@ import org.apache.cxf.message.MessageContentsList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
-import org.openehealth.ipf.platform.camel.test.junit.DirtySpringContextJUnit4ClassRunner;
+import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
