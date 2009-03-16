@@ -30,7 +30,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 	<import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" />
 
 	<cxf:cxfEndpoint id="soapEndpointHugeFile"
-		serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+		serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
 		address="http://localhost:9001/SoapContext/HugeFilePort" 
 		endpointName="s:SoapOverHttp"
 		serviceName="s:SOAPService" 
@@ -61,7 +61,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <!-- This bean is a list of resource handlers. Add all handlers used within the routes to this list -->
     <util:list id="resourceHandlers" list-class="java.util.ArrayList">
-        <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoResourceHandler">
+        <bean class="org.openehealth.ipf.platform.camel.lbs.cxf.process.CxfPojoResourceHandler">
            <constructor-arg ref="resourceFactory"/>
         </bean>
     </util:list>

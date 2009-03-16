@@ -24,7 +24,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </camel:camelContext>
 
     <!-- This codec is used with a MINA endpoint to efficiently process large binaries wrapped by MLLP -->
-    <bean id="mllpStoreCodec" class="org.openehealth.ipf.platform.camel.lbs.mllp.MllpStoreCodec">
+    <bean id="mllpStoreCodec" class="org.openehealth.ipf.platform.camel.lbs.mina.mllp.MllpStoreCodec">
         <constructor-arg ref="resourceFactory" />
         <constructor-arg ref="camelContext" />
     </bean>
@@ -33,7 +33,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.lbs.builder.LbsMinaRouteBuilder" />
+        class="org.openehealth.ipf.platform.camel.lbs.mina.builder.LbsMinaRouteBuilder" />
 
     <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore" />
 

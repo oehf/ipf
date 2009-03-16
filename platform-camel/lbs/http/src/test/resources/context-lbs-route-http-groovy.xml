@@ -37,7 +37,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 	</bean>
 
 	<bean id="routeBuilder" depends-on="routeModelExtender"
-		class="org.openehealth.ipf.platform.camel.lbs.builder.LbsHttpRouteBuilderGroovy">
+		class="org.openehealth.ipf.platform.camel.lbs.http.builder.LbsHttpRouteBuilderGroovy">
 	</bean>
 
     <bean id="coreModelExtension"
@@ -45,7 +45,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="lbsModelExtension"
-        class="org.openehealth.ipf.platform.camel.lbs.extend.LbsModelExtension">
+        class="org.openehealth.ipf.platform.camel.lbs.core.extend.LbsModelExtension">
     </bean>
 
     <bean id="routeModelExtender"
@@ -70,7 +70,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <!-- This bean is a list of resource handlers. Add all handlers used within the routes to this list -->
     <util:list id="resourceHandlers">
-        <bean class="org.openehealth.ipf.platform.camel.lbs.process.HttpResourceHandler">
+        <bean class="org.openehealth.ipf.platform.camel.lbs.http.process.HttpResourceHandler">
             <constructor-arg ref="resourceFactory" />
         </bean>
     </util:list>

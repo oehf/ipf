@@ -23,7 +23,7 @@ import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.camel.component.cxf.CxfConstants
 import org.apache.cxf.message.MessageContentsList
 
-import org.openehealth.ipf.platform.camel.lbs.process.ResourceList
+import org.openehealth.ipf.platform.camel.lbs.http.process.ResourceList
 
 
 class SampleRouteBuilder extends SpringRouteBuilder {

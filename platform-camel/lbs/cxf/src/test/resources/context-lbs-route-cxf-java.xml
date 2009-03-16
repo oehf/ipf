@@ -29,7 +29,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" />
 
     <cxf:cxfEndpoint id="soapEndpointNoExtract"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+        serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
         address="http://localhost:9000/SoapContext/NoExtractPort" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
@@ -39,7 +39,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </cxf:cxfEndpoint>
 
     <cxf:cxfEndpoint id="soapEndpointExtract"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+        serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
         address="http://localhost:9000/SoapContext/ExtractPort" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
@@ -49,7 +49,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </cxf:cxfEndpoint>
 
     <cxf:cxfEndpoint id="soapEndpointPing"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+        serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
         address="http://localhost:9000/SoapContext/PingPort" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
@@ -59,7 +59,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </cxf:cxfEndpoint>
 
     <cxf:cxfEndpoint id="soapEndpointExtractRouter"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+        serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
         address="http://localhost:9000/SoapContext/ExtractPortRouter"
         endpointName="s:SoapOverHttp" serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
@@ -69,7 +69,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </cxf:cxfEndpoint>
 
     <cxf:cxfEndpoint id="soapEndpointExtractRouterRealServer"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+        serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
         address="http://localhost:9000/SoapContext/ExtractPortRouterRealServer"
         endpointName="s:SoapOverHttp" serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
@@ -79,7 +79,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </cxf:cxfEndpoint>
 
     <cxf:cxfEndpoint id="soapEndpointRealServer"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+        serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
         address="http://localhost:9000/SoapContext/RealServer" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
@@ -89,7 +89,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </cxf:cxfEndpoint>
 
     <cxf:cxfEndpoint id="soapEndpointExtractSwA"
-        serviceClass="org.openehealth.ipf.platform.camel.lbs.process.cxf.Greeter"
+        serviceClass="org.openehealth.ipf.platform.camel.lbs.cxf.process.Greeter"
         address="http://localhost:9000/SoapContext/ExtractSwAPort" endpointName="s:SoapOverHttp"
         serviceName="s:SOAPService" wsdlURL="hello_world.wsdl"
         xmlns:s="http://cxf.process.lbs.camel.platform.ipf.openehealth.org/">
@@ -100,13 +100,13 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </camel:camelContext>
 
     <bean id="serviceBean"
-        class="org.openehealth.ipf.platform.camel.lbs.process.cxf.ServiceBean" />
+        class="org.openehealth.ipf.platform.camel.lbs.cxf.process.ServiceBean" />
 
     <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate">
     </bean>
 
     <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.lbs.builder.LbsCxfRouteBuilderJava" />
+        class="org.openehealth.ipf.platform.camel.lbs.cxf.builder.LbsCxfRouteBuilderJava" />
 
     <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore" />
 
@@ -117,7 +117,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <!-- This bean is a list of resource handlers. Add all handlers used within the routes to this list -->
     <util:list id="resourceHandlers">
-        <bean class="org.openehealth.ipf.platform.camel.lbs.process.CxfPojoResourceHandler">
+        <bean class="org.openehealth.ipf.platform.camel.lbs.cxf.process.CxfPojoResourceHandler">
            <constructor-arg ref="resourceFactory"/>
         </bean>
     </util:list>
