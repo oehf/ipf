@@ -1,3 +1,4 @@
-#Wed Oct 08 13:44:45 CEST 2008
+#Wed Mar 11 13:00:15 CET 2009
 eclipse.preferences.version=1
+groovy.compiler.output.path=bin-groovy
 support.groovy=true
