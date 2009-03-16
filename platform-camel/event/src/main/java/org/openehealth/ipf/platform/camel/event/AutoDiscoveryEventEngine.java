@@ -42,7 +42,6 @@ public class AutoDiscoveryEventEngine extends EventEngine implements Application
      */
     @Override
     public void distributeToHandlers(EventObject event) {
-        // TODO Auto-generated method stub
         super.distributeToHandlers(event);
     }
 }

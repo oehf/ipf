@@ -32,7 +32,6 @@ class EventModelExtension {
             answer.eventFactoryClosure(closure)
             delegate.addOutput(answer)
             answer
-        }        
+        }
     }
-    
 }

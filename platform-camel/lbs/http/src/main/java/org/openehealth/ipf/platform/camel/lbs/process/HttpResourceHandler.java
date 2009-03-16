@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.process;
 
+import static org.apache.commons.lang.Validate.noNullElements;
 import static org.apache.commons.lang.Validate.notNull;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.camel.Message;
-import org.apache.camel.NoTypeConversionAvailableException;
+import org.apache.camel.component.http.HttpMessage;
 import org.apache.camel.component.http.HttpMethods;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -38,6 +39,7 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 
@@ -65,18 +67,12 @@ public class HttpResourceHandler implements ResourceHandler {
      */
     @Override
     public Collection<ResourceDataSource> extract(String unitOfWorkId, Message message) throws Exception {
-        try {
-            HttpServletRequest request = message.getBody(HttpServletRequest.class);
-            if (request != null) {
-            	String subUnit = getSubUnit(unitOfWorkId);
-                ResourceList resources = extract(subUnit, request);
-                message.setBody(resources);
-                return resources;
-            }
-        }
-        catch (NoTypeConversionAvailableException e) {
-            // This is ok. This message is not intended to be processed by this handler
-            // TODO: Find a way to do this without exception handling
+        if (message instanceof HttpMessage) {
+            HttpServletRequest request = ((HttpMessage)message).getRequest();
+        	String subUnit = getSubUnit(unitOfWorkId);
+            ResourceList resources = extract(subUnit, request);
+            message.setBody(resources);
+            return resources;
         }
         return Collections.emptyList();
     }
@@ -90,15 +86,11 @@ public class HttpResourceHandler implements ResourceHandler {
      */
     @Override
     public void integrate(Message message) throws Exception {
-        try {
+        if (message.getBody() instanceof ResourceList) {
             ResourceList resourceList = message.getBody(ResourceList.class);
             if (resourceList != null) {
                 integrate(message, resourceList);
             }
-        }
-        catch (NoTypeConversionAvailableException e) {
-            // This is ok. This message is not intended to be processed by this handler
-            // TODO: Find a way to do this without exception handling
         }
     }
 
@@ -117,6 +109,7 @@ public class HttpResourceHandler implements ResourceHandler {
      */
     @Override
     public void cleanUp(String unitOfWorkId, Message message, List<ResourceDataSource> requiredResources) {
+        noNullElements(requiredResources, "requiredResources cannot be null");
     	String subUnit = getSubUnit(unitOfWorkId);    	
         Collection<ResourceDataSource> resources = resourceFactory.getResources(subUnit);        
         for (ResourceDataSource resource : resources) {
@@ -129,13 +122,9 @@ public class HttpResourceHandler implements ResourceHandler {
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
-        return String.format("{%1$s: resourceFactory=%2$s}", getClass()
-                .getSimpleName(), resourceFactory);
+        return new ToStringBuilder(this).append(resourceFactory).toString();
     }
     
     private void integrateToSingle(Message message, ResourceList resourceList) throws IOException {
@@ -282,12 +271,8 @@ public class HttpResourceHandler implements ResourceHandler {
 
     @Override
     public Collection<? extends ResourceDataSource> getRequiredResources(Message message) {
-        try {
+        if (message.getBody() instanceof ResourceDataSource) {
             return Collections.singletonList(message.getBody(ResourceDataSource.class));
-        }
-        catch (NoTypeConversionAvailableException e) {
-            // This is ok. This message is not intended to be processed by this handler
-            // TODO: Find a way to do this without exception handling
         }
         return Collections.emptyList();
     }
