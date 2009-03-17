@@ -40,11 +40,12 @@ class DefaultConfigExtender {
      * object. 
      */
     void defineContextProperty(RouteBuilderConfig config) {
+        def builder = routeBuilder
         def emc = new ExpandoMetaClass(config.class, false)
-        def ctx = new Context(applicationContext:routeBuilder.applicationContext)
+        def ctx = new Context(applicationContext:builder.applicationContext)
         
         // Capitalize first letter of context property name
-        def prop = routeBuilder.contextPropertyName.replaceAll('^.') { it ? it[0].toUpperCase() : it }
+        def prop = builder.contextPropertyName.replaceAll('^.') { it ? it[0].toUpperCase() : it }
         
         emc."get${prop}" << { -> ctx }
         emc.initialize()
