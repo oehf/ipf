@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
         <artifactId>osgi</artifactId>
-        <version>1.6-SNAPSHOT</version>
+        <version>1.6-m2a</version>
     </parent>
     
     <modules>

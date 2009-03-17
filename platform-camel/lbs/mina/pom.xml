@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
         <artifactId>platform-camel-lbs</artifactId>
-        <version>1.6-SNAPSHOT</version>
+        <version>1.6-m2a</version>
     </parent>
 
     <dependencies>
