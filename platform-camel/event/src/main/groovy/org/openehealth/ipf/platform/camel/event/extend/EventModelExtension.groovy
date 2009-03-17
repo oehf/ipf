@@ -26,12 +26,16 @@ import org.openehealth.ipf.platform.camel.event.model.PublishProcessorType
  */
 class EventModelExtension {
 
-    def extensions = {
+    static extensions = {
+        
         ProcessorType.metaClass.publish = { Closure closure ->
             PublishProcessorType answer = new PublishProcessorType()
             answer.eventFactoryClosure(closure)
             delegate.addOutput(answer)
             answer
+            
         }
+        
     }
+    
 }

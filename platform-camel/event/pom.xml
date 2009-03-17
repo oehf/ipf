@@ -59,17 +59,8 @@
                         <goals>
                             <goal>generateStubs</goal>
                             <goal>compile</goal>
+                            <goal>testCompile</goal>
                         </goals>
-                        <configuration>
-                            <sources>
-                                <fileset>
-                                    <directory>${pom.basedir}/src/main/resources</directory>
-                                    <includes>
-                                        <include>**/*.groovy</include>
-                                    </includes>
-                                </fileset>
-                            </sources>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

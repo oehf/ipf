@@ -12,14 +12,12 @@
 	-->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:camel="http://activemq.apache.org/camel/schema/spring"
     xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/lang 
-http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://www.springframework.org/schema/util 
 http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://activemq.apache.org/camel/schema/spring 
@@ -61,31 +59,25 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <!-- Route related stuff -->
 
-	<bean id="routeBuilder" class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
-		<property name="routeModelExtender" ref="routeModelExtender" />
-		<property name="routeBuilderConfig" ref="routeBuilderConfig" />
+	<bean id="routeBuilder" depends-on="routeModelExtender" 
+        class="org.openehealth.ipf.platform.camel.event.EventRouteBuilder">
 	</bean>
 
-	<lang:groovy id="routeBuilderConfig"
-		script-source="classpath:org/openehealth/ipf/platform/camel/event/EventRouteBuilderConfig.groovy">
-	</lang:groovy>
+	<bean id="coreModelExtension"
+		class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+	</bean>
 
-	<lang:groovy id="coreModelExtension"
-		script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
-		<lang:property name="routeBuilder" ref="routeBuilder" />
-	</lang:groovy>
+    <bean id="eventModelExtension"
+        class="org.openehealth.ipf.platform.camel.event.extend.EventModelExtension">
+    </bean>
 
-    <lang:groovy id="eventModelExtension"
-        script-source="classpath:org/openehealth/ipf/platform/camel/event/extend/EventModelExtension.groovy">
-    </lang:groovy>
-
-	<lang:groovy id="routeModelExtender"
-		script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
-		<lang:property name="routeModelExtensions">
+	<bean id="routeModelExtender"
+		class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+		<property name="routeModelExtensions">
 			<list>
 				<ref bean="coreModelExtension" />
                 <ref bean="eventModelExtension" />
 			</list>
-		</lang:property>
-	</lang:groovy>
+		</property>
+	</bean>
 </beans>

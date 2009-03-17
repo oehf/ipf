@@ -15,41 +15,31 @@
  */
 package org.openehealth.ipf.platform.camel.event
 
-import org.apache.camel.CamelContext
-import org.apache.camel.Exchange
-import org.apache.camel.ProducerTemplate
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.impl.DefaultExchange
-
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
-import org.openehealth.ipf.commons.event.EventChannelAdapter
-import org.openehealth.ipf.commons.event.EventObject
-
+import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.event.MyEventImpl1
 import org.openehealth.ipf.platform.camel.event.MyEventImpl2
 
 /**
  * @author Jens Riemschneider
  */
-class EventRouteBuilderConfig implements RouteBuilderConfig {
+class EventRouteBuilder extends SpringRouteBuilder {
      
-    void apply(RouteBuilder builder) {
-        builder.errorHandler(builder.deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
+    void configure() {
+        errorHandler(deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
         
-        builder.from('direct:start_simple')
+        from('direct:start_simple')
             .publish { new MyEventImpl1('hello world') }
             .to('mock:mock')
 
-        builder.from('direct:start_unsub_topic')
+        from('direct:start_unsub_topic')
             .publish { new MyEventImpl1('hello world') }.toTopic('noone_subscribed')                
             .to('mock:mock')
             
-        builder.from('direct:start_topic')
+        from('direct:start_topic')
             .publish { new MyEventImpl1('hello world') }.toTopic('test')                
             .to('mock:mock')
 
-        builder.from('direct:start_filter')
+        from('direct:start_filter')
             .publish { new MyEventImpl2() }.toTopic('filtered')
             .to('mock:mock')
     }
