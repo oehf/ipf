@@ -23,10 +23,10 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-            <groupId>ca.uhn.hl7v2</groupId>
+            <groupId>org.hl7</groupId>
             <artifactId>hapi</artifactId>
         </dependency>
-		    <dependency>
+        <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>

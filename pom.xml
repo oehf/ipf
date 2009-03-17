@@ -250,8 +250,8 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy-version}</version>
             </dependency>
-            <dependency>
-                <groupId>ca.uhn.hl7v2</groupId>
+			<dependency>
+                <groupId>org.hl7</groupId>
                 <artifactId>hapi</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
