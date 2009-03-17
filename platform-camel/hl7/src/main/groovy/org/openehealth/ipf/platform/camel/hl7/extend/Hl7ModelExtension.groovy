@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.hl7.extend
 import ca.uhn.hl7v2.parser.Parser
 
 import org.apache.camel.builder.DataFormatClause
-import org.apache.camel.model.ProcessorType
 
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
@@ -61,7 +60,7 @@ class Hl7ModelExtension {
         }
     
         // ----------------------------------------------------------------
-        //  Validator adapter extensions
+        //  IPF model class extensions
         // ----------------------------------------------------------------
         
         ValidatorAdapterType.metaClass.ghl7 = {-> 

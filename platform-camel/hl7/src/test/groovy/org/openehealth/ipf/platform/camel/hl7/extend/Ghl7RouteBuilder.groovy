@@ -17,31 +17,29 @@ package org.openehealth.ipf.platform.camel.hl7.extend
 
 import ca.uhn.hl7v2.parser.GenericParser
 
-import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
+import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
  */
-class Ghl7RouteBuilderConfig implements RouteBuilderConfig {
+class Ghl7RouteBuilder extends SpringRouteBuilder {
     
     def parser = new GenericParser()
      
-    void apply(RouteBuilder builder) {
+    void configure() {
         
-        builder.from("direct:input1")
+        from("direct:input1")
             .marshal().ghl7()
             .to('mock:output')
         
-        builder.from("direct:input2")
+        from("direct:input2")
             .marshal().ghl7('UTF-8')
             .to('mock:output')
         
-        builder.from("direct:input3")
+        from("direct:input3")
             .unmarshal().ghl7(parser, 'UTF-8')
             .to('mock:output')
             
-        builder.from("direct:input4")
+        from("direct:input4")
             .unmarshal().ghl7()
             .validate().ghl7()
             .to('mock:output')

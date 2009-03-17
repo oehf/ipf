@@ -15,18 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.extend
 
-import org.apache.camel.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
-/**
+import org.apache.camel.spring.SpringRouteBuilder
+/**
  * @author Martin Krasser
  */
-class SampleRouteBuilderConfig implements RouteBuilderConfig {
+class SampleRouteBuilder extends SpringRouteBuilder {
     
-    void apply(RouteBuilder builder) {
+    void configure() {
         
-        builder
-            .from("direct:input1")
+        from("direct:input1")
             // create a message adapter from an HL7 string
             .unmarshal().ghl7()
             // transmogrifiers are passed in-message bodies
