@@ -17,29 +17,22 @@ package org.openehealth.ipf.platform.camel.flow.extend
 
 import static org.apache.camel.builder.Builder.*
 
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
-import org.apache.camel.Exchange;
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.impl.SerializationDataFormat
-
-import java.util.Arrays
+import org.apache.camel.spring.SpringRouteBuilder
 
 /**
  * @author Martin Krasser
  */
-class RenderRouteBuilderConfig implements RouteBuilderConfig {
+class RenderRouteBuilder extends SpringRouteBuilder {
     
-    void apply(RouteBuilder builder) {
+    void configure() {
     
-        def dlc = builder.deadLetterChannel('direct:err').maximumRedeliveries(0)
+        def dlc = deadLetterChannel('direct:err').maximumRedeliveries(0)
         
         // --------------------------
         //  Default route
         // --------------------------
                 
-        builder
-            .from('direct:render-test')
+        from('direct:render-test')
             .errorHandler(dlc)
             .initFlow('test-1')
                 .renderer('initRenderer')
@@ -57,8 +50,7 @@ class RenderRouteBuilderConfig implements RouteBuilderConfig {
         //  Error route
         // --------------------------
         
-        builder
-            .from('direct:err')
+        from('direct:err')
             .nakFlow().renderer('nakRenderer')
             .to('mock:err')
 

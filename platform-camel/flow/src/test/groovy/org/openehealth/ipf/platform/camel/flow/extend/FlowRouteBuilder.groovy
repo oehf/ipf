@@ -17,31 +17,25 @@ package org.openehealth.ipf.platform.camel.flow.extend
 
 import static org.apache.camel.builder.Builder.*
 
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
-import org.apache.camel.Exchange;
-import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.impl.SerializationDataFormat
-
-import java.util.Arrays
+import org.apache.camel.spring.SpringRouteBuilder
 
 /**
  * @author Martin Krasser
  */
-class FlowRouteBuilderConfig implements RouteBuilderConfig {
+class FlowRouteBuilder extends SpringRouteBuilder {
     
-    void apply(RouteBuilder builder) {
+    void configure() {
         
         def serialization = new SerializationDataFormat()
         
-        builder.errorHandler(builder.noErrorHandler())
+        errorHandler(noErrorHandler())
         
         // --------------------------------------------------------------
         //  Linear Flows
         // --------------------------------------------------------------
 
-        builder
-            .from("direct:flow-test-1")
+        from("direct:flow-test-1")
             .initFlow("test-1")
                 .application("test")
                 .outType(String.class)
@@ -49,8 +43,7 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
             .to("mock:mock")
             .ackFlow()
 
-        builder
-            .from("direct:flow-test-2")
+        from("direct:flow-test-2")
             .initFlow("test-2")
                 .application("test")
                 .inFormat(serialization)
@@ -59,8 +52,7 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
             .to("mock:mock")
             .ackFlow()
 
-        builder
-            .from("direct:flow-test-3")
+        from("direct:flow-test-3")
             .initFlow("test-3")
                 .application("test")
                 .inFormat(serialization)
@@ -69,8 +61,7 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
             .to("mock:mock")
             .ackFlow()
 
-        builder
-            .from("direct:flow-test-4")
+        from("direct:flow-test-4")
             .initFlow("test-4")
                 .application("test")
                 .outType(String.class)
@@ -79,16 +70,14 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
             .to("mock:mock")
             .ackFlow()
 
-        builder
-            .from("direct:flow-test-5")
+        from("direct:flow-test-5")
             .initFlow("test-5")
                 .application("test")
                 .outType(String.class)
             .throwFault("unhandled fault")
             .to("mock:mock")
 
-        builder
-            .from("direct:flow-test-6")
+        from("direct:flow-test-6")
             .initFlow("test-6")
                 .replayErrorHandler("mock:error")
                 .application("test")
@@ -100,8 +89,7 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
         //  Split Flows (original Camel splitter)
         // --------------------------------------------------------------
         
-        builder
-            .from("direct:flow-test-split")
+        from("direct:flow-test-split")
             .initFlow("test-split")
                 .application("test")
                 .outType(String.class)
@@ -109,13 +97,11 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
             .to("direct:out-1")
             .to("direct:out-2")
     
-        builder
-            .from("direct:out-1")
+        from("direct:out-1")
             .to("mock:mock-1")
             .ackFlow()
     
-        builder
-            .from("direct:out-2")
+        from("direct:out-2")
             .to("mock:mock-2")
             .ackFlow()
 
@@ -123,8 +109,7 @@ class FlowRouteBuilderConfig implements RouteBuilderConfig {
         //  Pipe Flows
         // --------------------------------------------------------------
         
-        builder
-            .from("direct:flow-test-pipe")
+        from("direct:flow-test-pipe")
             .initFlow("test-pipe")
                 .application("test")
                 .outType(String.class)

@@ -17,28 +17,22 @@ package org.openehealth.ipf.platform.camel.flow.extend
 
 import static org.apache.camel.builder.Builder.*
 
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
-import org.apache.camel.Exchange;
-import org.apache.camel.builder.RouteBuilder
-
-import java.util.Arrays
-
+import org.apache.camel.Exchange
+import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Jens Riemschneider
  */
-class SplitRouteBuilderConfig implements RouteBuilderConfig {
+class SplitRouteBuilder extends SpringRouteBuilder {
     
-    void apply(RouteBuilder builder) {
+    void configure() {
         
-        builder.errorHandler(builder.noErrorHandler())
+        errorHandler(noErrorHandler())
         
         // --------------------------------------------------------------
         //  Split Flows (IPF splitter)
         // --------------------------------------------------------------
         
-        builder
-            .from("direct:split-test-ipfsplit")
+        from("direct:split-test-ipfsplit")
             .initFlow("test-ipfsplit")
                 .application("test")
                 .outType(String.class)
@@ -49,20 +43,17 @@ class SplitRouteBuilderConfig implements RouteBuilderConfig {
             .ackFlow()
 
             
-        builder
-            .from("direct:split-test-ipfsplit-agg")
+        from("direct:split-test-ipfsplit-agg")
             .to("direct:out-3")
             .to("direct:out-4")
         
-        builder
-            .from("direct:out-3")
+        from("direct:out-3")
             .split { Exchange exchange -> 
                 exchange.in.body.split(',') as List
             }
             .to("mock:mock-1")
             
-        builder
-            .from("direct:out-4")
+        from("direct:out-4")
             .to("mock:mock-2")
     }
     

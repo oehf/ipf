@@ -51,6 +51,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/groovy</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -81,17 +89,8 @@
                         <goals>
                             <goal>generateStubs</goal>
                             <goal>compile</goal>
+                            <goal>testCompile</goal>
                         </goals>
-                        <configuration>
-                            <sources>
-                                <fileset>
-                                    <directory>${pom.basedir}/src/main/resources</directory>
-                                    <includes>
-                                        <include>**/*.groovy</include>
-                                    </includes>
-                                </fileset>
-                            </sources>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

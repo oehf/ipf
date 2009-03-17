@@ -16,13 +16,10 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
        xmlns:camel="http://activemq.apache.org/camel/schema/spring"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/lang 
-http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://activemq.apache.org/camel/schema/spring 
 http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
@@ -35,34 +32,26 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         factory-method="createProducerTemplate">
     </bean>
 
-    <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder">
-        <property name="routeModelExtender" ref="routeModelExtender" />
-        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    <bean id="routeBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.ipf.platform.camel.flow.extend.FlowRouteBuilder">
     </bean>
 
-    <lang:groovy id="routeBuilderConfig" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/flow/extend/FlowRouteBuilderConfig.groovy">
-    </lang:groovy>
+    <bean id="coreModelExtension"
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+    </bean>
 
-    <lang:groovy id="coreModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
-        <lang:property name="routeBuilder" ref="routeBuilder" />
-    </lang:groovy>
+    <bean id="flowModelExtension"
+        class="org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension">
+    </bean>
 
-    <lang:groovy id="flowModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/flow/extend/FlowModelExtension.groovy">
-        <lang:property name="routeBuilder" ref="routeBuilder" />
-    </lang:groovy>
-
-    <lang:groovy id="routeModelExtender" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
-        <lang:property name="routeModelExtensions">
+    <bean id="routeModelExtender" 
+        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
                 <ref bean="flowModelExtension" />
             </list>
-        </lang:property>
-    </lang:groovy>
+        </property>
+    </bean>
 
 </beans>
