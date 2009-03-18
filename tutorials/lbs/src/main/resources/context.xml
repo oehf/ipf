@@ -33,13 +33,9 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         class="org.openehealth.tutorial.SampleRouteBuilder">
     </bean>
 
-    <bean id="coreModelExtension" 
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
+    <bean id="coreModelExtension" class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension" />
 
-    <bean id="lbsModelExtension" 
-        class="org.openehealth.ipf.platform.camel.lbs.core.extend.LbsModelExtension">
-    </bean>
+    <bean id="lbsModelExtension" class="org.openehealth.ipf.platform.camel.lbs.core.extend.LbsModelExtension" />
 
 	<bean id="routeModelExtender" class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
         <property name="routeModelExtensions">
@@ -65,12 +61,16 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         <constructor-arg value="unnamed" />
     </bean>
 
+    <!-- Definition of a CXF endpoint via a service using a WSDL. -->
     <cxf:cxfEndpoint id="imageBinServer"
         serviceClass="org.openehealth.tutorial.imagebin.ImageBin"
         address="http://localhost:8413/ImageBin/ImageBinPort"
-        endpointName="s:ImageBin" serviceName="s:ImageBinService" 
+        endpointName="s:ImageBin" 
+        serviceName="s:ImageBinService" 
         wsdlURL="wsdl/imagebin.wsdl"
         xmlns:s="http://tutorial.openehealth.org/imagebin/">
+
+        <!-- Enabling MTOM is recommended with large binaries -->
         <cxf:properties>
             <entry key="mtom-enabled" value="true" />
         </cxf:properties>
