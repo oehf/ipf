@@ -28,7 +28,7 @@ class BookOrderTransformer implements Transmogrifier {
      //  Implementation method
      // --------------------------------------------------------
 
-     Object zap(Object order, Object... params) {
+     Object zap(Object order, Object[] params) {
          def builder = params[0] // via params().builder() in DSL 
          builder.order(xmlns:ns, category:order.category.text()) {
              customer(order.customer.text())

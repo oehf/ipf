@@ -46,7 +46,7 @@ class AnimalOrderTransformer implements Transmogrifier {
     //  Implementation method
     // --------------------------------------------------------
 
-    Object zap(Object order, Object... params) {
+    Object zap(Object order, Object[] params) {
         def binding = [
             customer : order.customer.text(),
             item     : order.item.text(),

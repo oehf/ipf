@@ -45,13 +45,13 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <bean class="org.openehealth.ipf.tutorials.ref.route.TestRouteBuilderJava" />
 
-    <lang:groovy id="animalOrderTransformer" 
-        script-source="classpath:org/openehealth/ipf/tutorials/ref/transform/AnimalOrderTransformer.groovy">
-        <lang:property name="templateResource" value="classpath:order/order.template" />
-    </lang:groovy>
+    <bean id="animalOrderTransformer" 
+        class="org.openehealth.ipf.tutorials.ref.transform.AnimalOrderTransformer">
+        <property name="templateResource" value="classpath:order/order.template" />
+    </bean>
 
-    <lang:groovy id="bookOrderTransformer" 
-        script-source="classpath:org/openehealth/ipf/tutorials/ref/transform/BookOrderTransformer.groovy">
-    </lang:groovy>
+    <bean id="bookOrderTransformer" 
+        class="org.openehealth.ipf.tutorials.ref.transform.BookOrderTransformer">
+    </bean>
 
 </beans>
