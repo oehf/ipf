@@ -40,16 +40,11 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 		class="org.openehealth.ipf.platform.camel.lbs.http.builder.LbsHttpRouteBuilderGroovy">
 	</bean>
 
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
+    <bean id="coreModelExtension" class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension" />
 
-    <bean id="lbsModelExtension"
-        class="org.openehealth.ipf.platform.camel.lbs.core.extend.LbsModelExtension">
-    </bean>
+    <bean id="lbsModelExtension" class="org.openehealth.ipf.platform.camel.lbs.core.extend.LbsModelExtension" />
 
-    <bean id="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+    <bean id="routeModelExtender" class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
         <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />

@@ -109,6 +109,7 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             
         // Example routes only tested with groovy
         from('jetty:http://localhost:9452/lbstest_example1')
+            // Turn it off, otherwise Camel reads the stream into memory
             .disableStreamCaching()
             // Replace the message content with a data source
             .store().with('resourceHandlers') 
@@ -135,6 +136,7 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_example2')
+            // Turn it off, otherwise Camel reads the stream into memory
             .disableStreamCaching()
             // Replace the message content with data sources
             .store().with('resourceHandlers')
