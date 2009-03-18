@@ -16,37 +16,30 @@
 package org.openehealth.ipf.tutorials.ref.route
 
 import org.apache.camel.ValidationException;
-import org.apache.camel.builder.RouteBuilder
-
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
+import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
  */
-class TransmogrifierRouteBuilderConfig implements RouteBuilderConfig {
+class TestRouteBuilderGroovy extends SpringRouteBuilder {
     
-    void apply(RouteBuilder builder) {
+    void configure() {
 
         // ------------------------------------------------------------
         //  Global error handling strategy
         // ------------------------------------------------------------
         
-        builder
-            .onException(Exception.class)
-                .transform().exceptionMessage().to('mock:error-sys')
+        onException(Exception.class).transform().exceptionMessage().to('mock:error-sys')
 
         // ------------------------------------------------------------
         //  Receive and validate order
         // ------------------------------------------------------------
         
-        builder
-            .from('direct:order')
+        from('direct:order')
             .convertBodyTo(String.class)
             .validation('direct:validation')
             .to('seda:validated')
         
-        builder
-            .from('direct:validation')
+        from('direct:validation')
             .onException(ValidationException.class)
                 .transform().exceptionMessage().to('mock:error-app').end()
             .to('validator:order/order.xsd')
@@ -56,8 +49,7 @@ class TransmogrifierRouteBuilderConfig implements RouteBuilderConfig {
         //  Process order
         // ------------------------------------------------------------
         
-        builder
-            .from('seda:validated')
+        from('seda:validated')
             .unmarshal().gnode(false)
             .choice()
                 .when { it.in.body.category.text() == 'animals' }
@@ -67,11 +59,11 @@ class TransmogrifierRouteBuilderConfig implements RouteBuilderConfig {
                 .otherwise()
                     .to('direct:error-sys')
                     
-         builder.from('direct:transform-animal-orders')
+         from('direct:transform-animal-orders')
              .transmogrify('animalOrderTransformer')
              .to('mock:animals')
         
-         builder.from('direct:transform-book-orders')
+         from('direct:transform-book-orders')
              .transmogrify('bookOrderTransformer')
              .params().builder()
              .to('mock:books')

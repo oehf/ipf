@@ -26,7 +26,7 @@ import org.apache.camel.model.RouteType
  */
 class TutorialModelExtension {
 
-    def extensions = {
+    static extensions = {
 
         // ------------------------------------------------------------
         //  Flow management extensions

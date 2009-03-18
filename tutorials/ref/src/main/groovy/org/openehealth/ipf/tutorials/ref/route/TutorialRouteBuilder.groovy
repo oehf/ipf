@@ -16,41 +16,37 @@
 package org.openehealth.ipf.tutorials.ref.route
 
 import org.apache.camel.ValidationException;
-import org.apache.camel.builder.RouteBuilder
-
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-
+import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
  */
-class TutorialRouteBuilderConfig implements RouteBuilderConfig {
+class TutorialRouteBuilder extends SpringRouteBuilder {
 
     private String appErrorUri = 'direct:error-app'
     private String sysErrorUri = 'direct:error-sys'
         
     int httpPort
     
-    void apply(RouteBuilder builder) {
+    void configure() {
                 
         // ------------------------------------------------------------
         //  Global error handling
         // ------------------------------------------------------------
         
-        builder
-            .onException(Exception.class)
-                .transform().exceptionMessage()
-                .responseCode().constant(500)
-                .to(sysErrorUri)
+        onException(Exception.class)
+            .transform().exceptionMessage()
+            .responseCode().constant(500)
+            .to(sysErrorUri)
                 
         // ------------------------------------------------------------
         //  Receive order
         // ------------------------------------------------------------
 
-        builder.from('jetty:http://localhost:' + httpPort + '/tutorial')
+        from('jetty:http://localhost:' + httpPort + '/tutorial')
             .initFlow('http', sysErrorUri)
             .to('direct:received')
         
-        builder.from('file:order/input?delete=true')
+        from('file:order/input?delete=true')
             .initFlow('file', sysErrorUri)
             .to('direct:received')
         
@@ -58,12 +54,12 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
         //  Validate order
         // ------------------------------------------------------------
         
-        builder.from('direct:received')
+        from('direct:received')
             .convertBodyTo(String.class)
             .validation('direct:validation')
             .to('jms:queue:validated')
         
-        builder.from('direct:validation')
+        from('direct:validation')
             .onException(ValidationException.class)
                 .transform().exceptionMessage()
                 .responseCode().constant(400)
@@ -75,7 +71,7 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
         //  Process order
         // ------------------------------------------------------------
         
-        builder.from('jms:queue:validated')
+        from('jms:queue:validated')
             .unmarshal().gnode(false)
             .choice()
                 .when { it.in.body.category.text() == 'animals' }
@@ -85,11 +81,11 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
                 .otherwise()
                     .to('direct:error-sys')
                     
-         builder.from('direct:transform-animal-orders')
+         from('direct:transform-animal-orders')
              .transmogrify('animalOrderTransformer')
              .to('jms:queue:transformed-animals')
         
-         builder.from('direct:transform-book-orders')
+         from('direct:transform-book-orders')
              .transmogrify('bookOrderTransformer')
              .params().builder()
              .to('jms:queue:transformed-books')
@@ -103,12 +99,12 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
         // sending the transformation results over HTTP, for example (not done
         // here).
         
-        builder.from('jmsDeliver:queue:transformed-animals')
+        from('jmsDeliver:queue:transformed-animals')
             .dedupeFlow()
             .toFile('order/out', 'order', 'txt')
             .ackFlow()
         
-        builder.from('jmsDeliver:queue:transformed-books')
+        from('jmsDeliver:queue:transformed-books')
             .dedupeFlow()
             .toFile('order/out', 'order', 'xml')
             .ackFlow()
@@ -117,11 +113,11 @@ class TutorialRouteBuilderConfig implements RouteBuilderConfig {
         //  Error handling routes
         // ------------------------------------------------------------
             
-        builder.from(sysErrorUri)
+        from(sysErrorUri)
             .toFile('order/err/sys', 'error', 'txt')
             .nakFlow()
         
-        builder.from(appErrorUri)
+        from(appErrorUri)
             .toFile('order/err/app', 'error', 'txt')
             .nakFlow()
             

@@ -29,11 +29,11 @@ import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat;
 /**
  * @author Martin Krasser
  */
-public class TestRouteBuilder extends SpringRouteBuilder {
+public class TestRouteBuilderJava extends SpringRouteBuilder {
 
     private RouteHelper coreHelper;
     
-    public TestRouteBuilder() {
+    public TestRouteBuilderJava() {
         super();
         this.coreHelper = new RouteHelper(this);
     }
