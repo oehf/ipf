@@ -26,6 +26,11 @@ public class BidiMappingServiceTest extends GroovyTestCase {
 		assert hl7MappingService.getKey("encounterType", "IMP") == "I"
 		assert hl7MappingService.getKeySystem("encounterType") == "2.16.840.1.113883.12.4"		
 		assert hl7MappingService.get("nullTest", null) == "not null"
+		
+		assert hl7MappingService.get("reverseElseTest", "a") == "b"
+		assert hl7MappingService.get("reverseElseTest", "d") == "c"
+		assert hl7MappingService.getKey("reverseElseTest", "b") == "a"
+		assert hl7MappingService.getKey("reverseElseTest", "c") == "a"		
 
 	}
 

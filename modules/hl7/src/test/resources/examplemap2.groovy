@@ -23,5 +23,10 @@ mappings = {
 		 nullTest(
 				 (null) : 'not null'
 		 )
+		 reverseElseTest(
+		         'a'	: 'b',
+		         (ELSE)	: 'c',
+		         { 'a' }: (ELSE)
+		 )
 }
 

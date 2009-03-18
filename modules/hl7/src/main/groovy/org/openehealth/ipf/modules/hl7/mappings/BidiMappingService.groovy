@@ -140,17 +140,25 @@ public class BidiMappingService implements MappingService {
  	}
  	
     private void updateReverseMap() {
+        def reverseElseKey
     	map?.each { mappingKey, m ->
 			reverseMap[mappingKey] = [:]
 			m.each { key, value ->
 				if (key != KEYSYSTEM && key != VALUESYSTEM) {
 					if (key != ELSE) {
-						reverseMap[mappingKey][joinKey(value)] = key
-					} else {
-						reverseMap[mappingKey][ELSE] = value
+					    if (value != ELSE) {
+					        reverseMap[mappingKey][joinKey(value)] = key
+					    } else {
+					        reverseMap[mappingKey][ELSE] = key
+					        reverseElseKey = key
+					    }
 					}
 				}
 			}
+	        if (reverseElseKey) {
+	            m.remove(reverseElseKey)
+	            reverseElseKey = null
+	        }
     	}
     }
     
