@@ -16,13 +16,10 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
        xmlns:camel="http://activemq.apache.org/camel/schema/spring"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/lang 
-http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://activemq.apache.org/camel/schema/spring 
 http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
@@ -35,58 +32,49 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         factory-method="createProducerTemplate">
     </bean>
 
-    <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
-        <property name="routeModelExtender" ref="routeModelExtender" />
-        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    <bean id="routeBuilder" depends-on="routeModelExtender" 
+        class="org.openehealth.ipf.tutorials.hl7.route.SampleRouteBuilder">
     </bean>
 
-    <bean id="mappingService" 
-        class="org.openehealth.ipf.modules.hl7.mappings.BidiMappingService">
-        <property name="mappingScript" value="classpath:map.groovy"/>
+    <bean id="coreModelExtension" 
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
 
-    <lang:groovy id="coreModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/CoreModelExtension.groovy">
-        <lang:property name="routeBuilder" ref="routeBuilder" />
-    </lang:groovy>
+    <bean id="hl7ModelExtension" 
+        class="org.openehealth.ipf.platform.camel.hl7.extend.Hl7ModelExtension">
+    </bean>
 
-    <lang:groovy id="hl7ModelExtension" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/hl7/extend/Hl7ModelExtension.groovy">
-    </lang:groovy>
+    <bean id="hapiModelExtension" 
+        class="org.openehealth.ipf.modules.hl7.extend.HapiModelExtension">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
 
-    <lang:groovy id="hapiModelExtension" 
-        script-source="classpath:org/openehealth/ipf/modules/hl7/extend/HapiModelExtension.groovy">
-        <lang:property name="mappingService" ref="mappingService" />
-    </lang:groovy>
-    
-    <lang:groovy id="routeBuilderConfig" 
-        script-source="classpath:org/openehealth/ipf/tutorials/hl7/route/SampleRouteConfig.groovy">
-        <lang:property name="validationContext" ref="validationContext" />
-    </lang:groovy>
-
-    <lang:groovy id="routeModelExtender" 
-        script-source="classpath:org/openehealth/ipf/platform/camel/core/extend/DefaultModelExtender.groovy">
-        <lang:property name="routeModelExtensions">
+    <bean id="routeModelExtender"
+        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
                 <ref bean="hl7ModelExtension" />
                 <ref bean="hapiModelExtension" />
             </list>
-        </lang:property>
-    </lang:groovy>
-   
-   
-   <bean id="myValidatorBean" class="org.openehealth.ipf.modules.hl7.validation.support.HL7Validator"/>
-   
-   <bean id="validationContext" 
-       class="org.openehealth.ipf.modules.hl7.validation.ValidationContextFactoryBean"/>
-
-   <bean id="defaultTypeRules" 
-       class="org.openehealth.ipf.modules.hl7.validation.builder.DefaultTypeRulesBuilder"/>
-
-   <lang:groovy id="myCustomRules" 
-       script-source="classpath:org/openehealth/ipf/tutorials/hl7/validation/SampleRulesBuilder.groovy"/>
+        </property>
+    </bean>
     
+    <bean id="mappingService" 
+        class="org.openehealth.ipf.modules.hl7.mappings.BidiMappingService">
+        <property name="mappingScript" value="classpath:map.groovy"/>
+    </bean>
+
+    <bean id="validationContext" 
+       class="org.openehealth.ipf.modules.hl7.validation.ValidationContextFactoryBean">
+    </bean>
+
+    <bean id="defaultTypeRules" 
+       class="org.openehealth.ipf.modules.hl7.validation.builder.DefaultTypeRulesBuilder">
+    </bean>
+
+    <bean id="myCustomRules" 
+       class="org.openehealth.ipf.tutorials.hl7.validation.SampleRulesBuilder">
+    </bean>
 
 </beans>

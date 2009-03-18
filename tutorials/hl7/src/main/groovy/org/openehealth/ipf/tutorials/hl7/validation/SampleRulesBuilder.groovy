@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.tutorials.hl7.validation
 
+import ca.uhn.hl7v2.validation.ValidationContext
+
 import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
 import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuilder
-import ca.uhn.hl7v2.validation.ValidationContext
 
 /**
  * @author Christian Ohr
  */
-public class SampleRulesBuilder extends ValidationContextBuilder{
+public class SampleRulesBuilder extends ValidationContextBuilder {
 
     // We define only a subset of the segments defined in the HL7 2.2 spec
     

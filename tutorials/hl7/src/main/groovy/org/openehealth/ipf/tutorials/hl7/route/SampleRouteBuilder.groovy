@@ -15,21 +15,20 @@
  */
 package org.openehealth.ipf.tutorials.hl7.route
 
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
-import org.apache.camel.builder.RouteBuilder/**
+import ca.uhn.hl7v2.validation.ValidationContext
+
+import org.apache.camel.spring.SpringRouteBuilder
+/**
  * @author Martin Krasser
  */
-public class SampleRouteConfig implements RouteBuilderConfig {
+public class SampleRouteBuilder extends SpringRouteBuilder {
 
-     def validationContext
-     
-     void apply(RouteBuilder builder) {
+     void configure() {
 
-        builder.from('direct:input')
+        from('direct:input')
             .unmarshal().ghl7()
-            .validate('myValidatorBean')
-                .input { it.in.body.target }
-                .profile(validationContext)
+            .validate().ghl7()
+                .profile(bean(ValidationContext.class))
             .transmogrify { msg ->
                 msg.PV1[3][2] = '' // clear room nr.
                 msg.PV1[3][3] = '' // clear bed nr.
