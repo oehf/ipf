@@ -28,10 +28,14 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
              .unmarshal().ghl7()
              .validate().ghl7()
              .transmogrify('admissionTransmogrifier')
-             .marshal().ghl7()
-             .setFilename('output.hl7')
              .dedupeFlow()
-             .to('file:workspace/output?append=false&autoCreate=false')         
+             .marshal().ghl7()
+             .inOnly()
+             .to('jms:queue:delivery-web')
+             
+         from('jms:queue:delivery-web')
+             .setFilename('output.hl7')
+             .to('file:workspace/output?append=false&autoCreate=false')
              .ackFlow()
 
      }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <!-- ================================================================== -->
+    <!--  Camel JMS Setup                                                   -->
+    <!-- ================================================================== -->
+
+    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/> 
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+        <property name="concurrentConsumers" value="3"/>
+        <property name="maxConcurrentConsumers" value="5"/>
+        <property name="transacted" value="true"/> 
+    </bean>
+
+    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="jmsConfig"/>
+    </bean>
+
+    <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
+  
+    <bean id="jmsConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <property name="targetConnectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:60001"/>
+        <property name="redeliveryPolicy" ref="redeliveryPolicy" />
+    </bean>
+  
+    <bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+        <property name="maximumRedeliveries" value="0" />
+    </bean>
+
+    <!-- ================================================================== -->
+    <!--  Broker configuration                                              -->
+    <!-- ================================================================== -->
+
+    <bean class="org.apache.activemq.broker.BrokerService" init-method="start" destroy-method="stop">
+        <property name="useJmx" value="true" />
+        <property name="persistent" value="true" />
+        <property name="brokerName" value="default" />
+        <property name="dataDirectory" value="workspace/amq" />
+        <property name="useShutdownHook" value="true" />
+        <property name="persistenceAdapter">
+            <bean class="org.apache.activemq.store.amq.AMQPersistenceAdapter">
+                <property name="cleanupInterval" value="2000" />
+                <property name="directory" value="workspace/amq" />
+            </bean>
+        </property>
+        <property name="transportConnectors">
+            <list>
+                <bean class="org.apache.activemq.broker.TransportConnector">
+                    <property name="uri" value="tcp://localhost:60001" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+</beans>

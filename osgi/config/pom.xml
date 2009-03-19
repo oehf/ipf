@@ -15,6 +15,7 @@
     <modules>
         <module>hl7</module>
         <module>flow</module>
+        <module>jms</module>
         <module>log</module>
     </modules>
     
