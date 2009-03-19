@@ -15,17 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-hl7</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
