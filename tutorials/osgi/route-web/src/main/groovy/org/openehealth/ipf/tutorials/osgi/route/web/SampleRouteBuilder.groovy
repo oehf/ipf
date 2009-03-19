@@ -15,22 +15,19 @@
  */
 package org.openehealth.ipf.tutorials.osgi.route.web
 
-import org.apache.camel.builder.RouteBuilder
-
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
+import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
  */
-public class SampleRouteConfig implements RouteBuilderConfig {
+public class SampleRouteBuilder extends SpringRouteBuilder {
 
-     void apply(RouteBuilder builder) {
+     void configure() {
 
-         builder
-             .from('jetty:http://localhost:8080/tutorial')
-             .initFlow('http').application('osgi-web')
+         from('jetty:http://localhost:8080/tutorial')
+             .initFlow(this.class.package.name).application('osgi-web')
              .unmarshal().ghl7()
              .validate().ghl7()
-             .transmogrify(context.admissionTransmogrifier)
+             .transmogrify('admissionTransmogrifier')
              .marshal().ghl7()
              .setFilename('output.hl7')
              .dedupeFlow()

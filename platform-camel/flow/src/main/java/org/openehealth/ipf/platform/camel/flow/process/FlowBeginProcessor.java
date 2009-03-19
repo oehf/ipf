@@ -31,10 +31,7 @@ import org.openehealth.ipf.platform.camel.flow.PlatformPacket;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategy;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistration;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry;
-import org.openehealth.ipf.platform.camel.flow.osgi.OsgiReplayStrategyRegistry;
-import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.osgi.context.BundleContextAware;
 
 /**
  * A processor that triggers a
@@ -42,11 +39,11 @@ import org.springframework.osgi.context.BundleContextAware;
  * 
  * @author Martin Krasser
  */
-public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy, BundleContextAware {
+public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy {
 
     private static final Log LOG = LogFactory.getLog(FlowBeginProcessor.class);
 
-    @Autowired(required=false)
+    @Autowired
     private ReplayStrategyRegistry registry;
     
     private ReplayStrategyRegistration registration;
@@ -78,10 +75,10 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy,
         this.replayErrorProcessor = new Noop();
     }
     
-    public void setBundleContext(BundleContext bundleContext) {
-        this.registry = new OsgiReplayStrategyRegistry(bundleContext);
+    public void setRegistry(ReplayStrategyRegistry registry) {
+        this.registry = registry;
     }
-
+    
     @Override
     public String toString() {
         return "FlowBeginProcessor[" + identifier + " -> " + getProcessor() + "]";

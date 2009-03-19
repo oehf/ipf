@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.flow.model;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.model.FilterType;
 import org.apache.camel.model.language.ExpressionType;
 import org.apache.camel.processor.FilterProcessor;
 import org.apache.camel.spi.RouteContext;
+import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.platform.camel.core.util.Contexts;
 import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
 
@@ -34,7 +36,16 @@ public class DedupeType extends FilterType {
     }
 
     private static Dedupe createDedupe(RouteContext routeContext) {
-        return Contexts.bean(Dedupe.class, routeContext.getCamelContext());
+        CamelContext camelContext = routeContext.getCamelContext();
+        Dedupe dedupe = Contexts.beanOrNull(Dedupe.class, camelContext);
+        
+        if (dedupe != null) {
+            return dedupe;
+        }
+        
+        dedupe = new Dedupe();
+        dedupe.setFlowManager(Contexts.bean(FlowManager.class, camelContext));
+        return dedupe;
     }
     
 }

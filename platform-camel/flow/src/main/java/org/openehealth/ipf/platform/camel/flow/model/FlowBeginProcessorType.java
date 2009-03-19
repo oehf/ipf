@@ -15,9 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.flow.model;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.spi.RouteContext;
+import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 import org.openehealth.ipf.platform.camel.core.util.Contexts;
+import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry;
 import org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
@@ -75,7 +78,23 @@ public class FlowBeginProcessorType extends FlowProcessorType {
     }
 
     private static FlowBeginProcessor createFlowBeginProcessor(RouteContext routeContext) {
-        return Contexts.bean(FlowBeginProcessor.class, routeContext.getCamelContext());
+        CamelContext camelContext = routeContext.getCamelContext();
+        
+        // Try to obtain a FlowBeginProcessor bean (its definition is optional)
+        FlowBeginProcessor processor = Contexts.beanOrNull(FlowBeginProcessor.class, camelContext);
+        
+        if (processor != null) {
+            return processor;
+        }
+        
+        // No FlowBeginProcessor bean found so let's create one. We need a
+        // - reference to a ReplayStrategyRegistry
+        // - reference to a FlowManager
+        processor = new FlowBeginProcessor();
+        processor.setCamelContext(camelContext);
+        processor.setFlowManager(Contexts.bean(FlowManager.class, camelContext));
+        processor.setRegistry(Contexts.bean(ReplayStrategyRegistry.class, camelContext));
+        return processor;
     }
     
 }

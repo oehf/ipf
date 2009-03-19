@@ -24,11 +24,12 @@ import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistration;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.springframework.osgi.context.BundleContextAware;
 
 /**
  * @author Martin Krasser
  */
-public class OsgiReplayStrategyRegistry implements ReplayStrategyRegistry {
+public class OsgiReplayStrategyRegistry implements ReplayStrategyRegistry, BundleContextAware {
 
     private static final Log LOG = LogFactory.getLog(OsgiReplayStrategyRegistry.class);
     
@@ -37,10 +38,10 @@ public class OsgiReplayStrategyRegistry implements ReplayStrategyRegistry {
 
     private BundleContext bundleContext;
     
-    public OsgiReplayStrategyRegistry(BundleContext bundleContext) {
+    public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
-    
+
     public ReplayStrategyRegistration register(ReplayStrategy replayStrategy) {
         ServiceRegistration registration = bundleContext.registerService(ReplayStrategy.class.getName(), 
                 replayStrategy, createRegistrationProperties(replayStrategy.getIdentifier()));

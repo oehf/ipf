@@ -14,18 +14,8 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     
     <camel:camelContext id="camelContext" />
 
-    <bean id="routeBuilder"
-        class="org.openehealth.ipf.platform.camel.core.builder.RouteBuilder">
-        <property name="routeBuilderConfig" ref="routeBuilderConfig" />
+    <bean id="routeBuilder" 
+        class="org.openehealth.ipf.tutorials.osgi.route.web.SampleRouteBuilder">
     </bean>
-
-    <bean id="routeBuilderConfig" 
-        class="org.openehealth.ipf.tutorials.osgi.route.web.SampleRouteConfig">
-    </bean>
-
-    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe" />
-    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowBeginProcessor" />
-    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowEndProcessor" />
-    <bean scope="prototype" class="org.openehealth.ipf.platform.camel.flow.process.FlowErrorProcessor" />
 
 </beans>

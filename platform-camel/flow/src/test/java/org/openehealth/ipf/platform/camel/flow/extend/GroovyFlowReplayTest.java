@@ -22,7 +22,10 @@ import org.springframework.test.context.ContextConfiguration;
 /**
  * @author Martin Krasser
  */
-@ContextConfiguration(locations = { "/context-flow-route-groovy.xml" })
+@ContextConfiguration(locations = { 
+        "/context-flow-processor.xml", 
+        "/context-flow-route-groovy.xml" 
+})
 public class GroovyFlowReplayTest extends AbstractFlowReplayTest {
 
 }

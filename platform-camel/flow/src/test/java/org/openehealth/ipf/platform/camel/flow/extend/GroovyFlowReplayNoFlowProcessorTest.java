@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.flow.process;
+package org.openehealth.ipf.platform.camel.flow.extend;
 
+import org.openehealth.ipf.platform.camel.flow.process.AbstractFlowReplayTest;
 import org.springframework.test.context.ContextConfiguration;
+
 
 /**
  * @author Martin Krasser
  */
-@ContextConfiguration(locations = { 
-        "/context-flow-processor.xml", 
-        "/context-flow-route-java.xml" 
-})
-public class JavaFlowReplayTest extends AbstractFlowReplayTest {
+@ContextConfiguration(locations = { "/context-flow-route-groovy.xml" })
+public class GroovyFlowReplayNoFlowProcessorTest extends AbstractFlowReplayTest {
 
 }

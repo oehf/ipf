@@ -25,19 +25,27 @@ import org.springframework.context.ApplicationContext;
 public class Contexts {
 
     public static <T> T bean(Class<T> type, CamelContext camelContext) {
+        T bean = beanOrNull(type, camelContext);
+        if (bean == null) {
+            throw new IllegalArgumentException(
+                    "No bean available in the application context of type: " 
+                    + type);
+        }
+        return bean;
+    }
+    
+    public static <T> T beanOrNull(Class<T> type, CamelContext camelContext) {
         ApplicationContext springContext = getApplicationContext(camelContext);
         String[] names = springContext.getBeanNamesForType(type, true, true);
         int count = names == null ? 0 : names.length;
         if (count == 1) {
             return (T)springContext.getBean(names[0]);
-        } else if (count > 1) {
+        } else if (count == 0) {
+            return null; 
+        } else {
             throw new IllegalArgumentException(
                     "Too many beans in the application context of type: " 
                     + type + ". Found: " + count);
-        } else {
-            throw new IllegalArgumentException(
-                    "No bean available in the application context of type: " 
-                    + type);
         }
     }
 

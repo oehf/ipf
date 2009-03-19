@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.flow.model;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.spi.RouteContext;
+import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.platform.camel.core.util.Contexts;
 import org.openehealth.ipf.platform.camel.flow.process.FlowErrorProcessor;
 import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
@@ -41,7 +43,17 @@ public class FlowErrorProcessorType extends FlowProcessorType {
     }
 
     private static FlowErrorProcessor createFlowErrorProcessor(RouteContext routeContext) {
-        return Contexts.bean(FlowErrorProcessor.class, routeContext.getCamelContext());
+        CamelContext camelContext = routeContext.getCamelContext();
+        FlowErrorProcessor processor = Contexts.beanOrNull(FlowErrorProcessor.class, camelContext);
+        
+        if (processor != null) {
+            return processor;
+        }
+        
+        processor = new FlowErrorProcessor();
+        processor.setCamelContext(camelContext);
+        processor.setFlowManager(Contexts.bean(FlowManager.class, camelContext));
+        return processor;
     }
     
 }

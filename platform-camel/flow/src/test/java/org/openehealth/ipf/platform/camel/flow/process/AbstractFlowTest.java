@@ -34,6 +34,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
         "/context-flow-platform.xml",
+        "/context-flow-processor.xml",
         "/context-flow-support.xml"
 })
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})

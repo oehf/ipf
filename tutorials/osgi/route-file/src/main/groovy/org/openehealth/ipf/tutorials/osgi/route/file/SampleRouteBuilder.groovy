@@ -15,22 +15,19 @@
  */
 package org.openehealth.ipf.tutorials.osgi.route.file
 
-import org.apache.camel.builder.RouteBuilder
-
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilderConfig
+import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
  */
-public class SampleRouteConfig implements RouteBuilderConfig {
+public class SampleRouteBuilder extends SpringRouteBuilder {
 
-     void apply(RouteBuilder builder) {
+     void configure() {
 
-         builder
-             .from('file:workspace/input?lock=false')
-             .initFlow('file').application('osgi-file')
+         from('file:workspace/input?lock=false')
+             .initFlow(this.class.package.name).application('osgi-file')
              .unmarshal().ghl7()
              .validate().ghl7()
-             .transmogrify(context.admissionTransmogrifier)
+             .transmogrify('admissionTransmogrifier')
              .marshal().ghl7()
              .dedupeFlow()
              .to('file:workspace/output?append=false&autoCreate=false')
