@@ -33,7 +33,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.flow.extend.FlowRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.flow.extend.GroovyFlowRouteBuilder">
     </bean>
 
     <bean id="coreModelExtension"

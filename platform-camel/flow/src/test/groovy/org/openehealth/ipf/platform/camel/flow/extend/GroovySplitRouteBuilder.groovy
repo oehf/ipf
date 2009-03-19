@@ -22,7 +22,7 @@ import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Jens Riemschneider
  */
-class SplitRouteBuilder extends SpringRouteBuilder {
+class GroovySplitRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
         

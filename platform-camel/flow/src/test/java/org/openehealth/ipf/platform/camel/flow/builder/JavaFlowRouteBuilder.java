@@ -21,7 +21,7 @@ import org.apache.camel.spi.DataFormat;
 /**
  * @author Martin Krasser
  */
-public class FlowRouteBuilder extends BaseRouteBuilder {
+public class JavaFlowRouteBuilder extends BaseRouteBuilder {
 
     private DataFormat serialization = new SerializationDataFormat();
     

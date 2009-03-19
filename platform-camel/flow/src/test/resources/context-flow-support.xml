@@ -59,7 +59,7 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
     <property name="hibernateProperties">
       <props>
         <prop key="hibernate.dialect">org.openehealth.ipf.commons.flow.derby.DerbyDialect</prop>
-        <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="hibernate.format_sql">false</prop>
         <prop key="hibernate.search.autoregister_listeners">false</prop>

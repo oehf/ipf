@@ -23,7 +23,7 @@ import org.apache.camel.Expression;
 /**
  * @author Jens Riemschneider
  */
-public class SplitRouteBuilder extends BaseRouteBuilder {
+public class JavaSplitRouteBuilder extends BaseRouteBuilder {
 
     @Override
     public void configure() throws Exception {

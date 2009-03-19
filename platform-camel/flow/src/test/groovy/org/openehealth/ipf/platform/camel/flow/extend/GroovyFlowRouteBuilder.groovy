@@ -23,7 +23,7 @@ import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
  */
-class FlowRouteBuilder extends SpringRouteBuilder {
+class GroovyFlowRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
         

@@ -22,7 +22,7 @@ import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
  */
-class RenderRouteBuilder extends SpringRouteBuilder {
+class GroovyRenderRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
     
