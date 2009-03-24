@@ -1,4 +1,4 @@
-Open eHealth Integration Platform (IPF)
+Open eHealth Integration Platform (IPF) 
 ---------------------------------------
 
 The Open eHealth Integration Platform (IPF) is a stable, production-ready 
