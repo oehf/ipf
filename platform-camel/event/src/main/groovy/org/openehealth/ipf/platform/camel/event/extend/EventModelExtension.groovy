@@ -28,9 +28,9 @@ class EventModelExtension {
 
     static extensions = {
         
-        ProcessorType.metaClass.publish = { Closure closure ->
+        ProcessorType.metaClass.publish = { Closure publishingLogic ->
             PublishProcessorType answer = new PublishProcessorType()
-            answer.eventFactoryClosure(closure)
+            answer.eventFactoryClosure(publishingLogic)
             delegate.addOutput(answer)
             answer
             

@@ -20,16 +20,16 @@ import javax.xml.ws.ResponseWrapper;
 public interface Greeter {
 
     @WebResult(name = "attachinfo", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types")
-    @RequestWrapper(localName = "pingMe", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.process.cxf.types.PingMe")
-    @ResponseWrapper(localName = "pingMeResponse", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.process.cxf.types.PingMeResponse")
+    @RequestWrapper(localName = "pingMe", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.cxf.process.types.PingMe")
+    @ResponseWrapper(localName = "pingMeResponse", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.cxf.process.types.PingMeResponse")
     @WebMethod
     public javax.activation.DataHandler pingMe(
         @WebParam(mode = WebParam.Mode.INOUT, name = "attachinfo", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types")
         javax.activation.DataHandler attachinfo
     );
 
-    @RequestWrapper(localName = "postMe", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.process.cxf.types.PostMe")
-    @ResponseWrapper(localName = "postMeResponse", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.process.cxf.types.PostMeResponse")
+    @RequestWrapper(localName = "postMe", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.cxf.process.types.PostMe")
+    @ResponseWrapper(localName = "postMeResponse", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.cxf.process.types.PostMeResponse")
     @WebMethod
     public void postMe(
         @WebParam(mode = WebParam.Mode.INOUT, name = "name", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types")
@@ -41,8 +41,8 @@ public interface Greeter {
     );
 
     @WebResult(name = "responseType", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types")
-    @RequestWrapper(localName = "greetMe", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.process.cxf.types.GreetMe")
-    @ResponseWrapper(localName = "response", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.process.cxf.types.Response")
+    @RequestWrapper(localName = "greetMe", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.cxf.process.types.GreetMe")
+    @ResponseWrapper(localName = "response", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types", className = "org.openehealth.ipf.platform.camel.lbs.cxf.process.types.Response")
     @WebMethod
     public java.lang.String greetMe(
         @WebParam(name = "requestType", targetNamespace = "http://cxf.process.lbs.camel.platform.ipf.openehealth.org/types")

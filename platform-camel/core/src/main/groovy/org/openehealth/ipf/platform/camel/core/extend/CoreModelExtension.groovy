@@ -150,20 +150,20 @@ class CoreModelExtension {
             delegate.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic))
         }
     
-        ProcessorType.metaClass.split = { Expression expression -> 
-            SplitterType answer = new SplitterType(expression)        
+        ProcessorType.metaClass.split = { Expression splitExpression -> 
+            SplitterType answer = new SplitterType(splitExpression)        
             delegate.addOutput(answer)
             return answer
         }
     
-        ProcessorType.metaClass.split = { String expressionBeanName -> 
-            SplitterType answer = new SplitterType(expressionBeanName)        
+        ProcessorType.metaClass.split = { String splitExpressionBeanName -> 
+            SplitterType answer = new SplitterType(splitExpressionBeanName)        
             delegate.addOutput(answer)
             return answer
         }
 
-        ProcessorType.metaClass.split = { Closure expressionLogic -> 
-            delegate.split(new DelegatingExpression(expressionLogic))        
+        ProcessorType.metaClass.split = { Closure splitLogic -> 
+            delegate.split(new DelegatingExpression(splitLogic))        
         }
         
          // ----------------------------------------------------------------
@@ -242,8 +242,8 @@ class CoreModelExtension {
             return answer
         }
 
-        ProcessorType.metaClass.transmogrify = { Closure closure ->
-            delegate.transmogrify(new DelegatingTransmogrifier(closure))
+        ProcessorType.metaClass.transmogrify = { Closure transmogrifierLogic ->
+            delegate.transmogrify(new DelegatingTransmogrifier(transmogrifierLogic))
         }
 
         ProcessorType.metaClass.validate = {->
