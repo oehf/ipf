@@ -96,35 +96,23 @@ public class DiskStore implements LargeBinaryStore {
         return dir;
     }
     
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.lbs.LargeBinaryStore#add(byte[])
-     */
     @Override
     public URI add(byte[] binary) {
         notNull(binary, "binary cannot be null");
         return add(new ByteArrayInputStream(binary));
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.lbs.LargeBinaryStore#add(java.io.InputStream)
-     */
     @Override
     public URI add(InputStream binary) {
         notNull(binary, "binary cannot be null");
         return addResource(binary);
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.lbs.LargeBinaryStore#add()
-     */
     @Override
     public URI add() {
         return add(new byte[] {});
     }
     
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.lbs.LargeBinaryStore#getByteArray(java.net.URI)
-     */
     @Override
     public byte[] getByteArray(URI resourceUri) {
         notNull(resourceUri, "resourceUri cannot be null");
@@ -142,9 +130,6 @@ public class DiskStore implements LargeBinaryStore {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.lbs.LargeBinaryStore#getStream(java.net.URI)
-     */
     @Override
     public InputStream getInputStream(URI resourceUri) {
         notNull(resourceUri, "resourceUri cannot be null");
@@ -158,36 +143,64 @@ public class DiskStore implements LargeBinaryStore {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.lbs.LargeBinaryStore#delete(java.net.URI)
-     */
     @Override
     public void delete(URI resourceUri) {
         notNull(resourceUri, "resourceUri cannot be null");
         
         File file = getMandatoryFileForResource(resourceUri);
-        if (!file.delete()) {
-            throw new ResourceIOException("Could not delete: " + file.getAbsolutePath());
-        }
+        deleteWithRetry(file);
         
         log.debug("deleted resource: " + resourceUri);
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.lbs.LargeBinaryStore#deleteAll()
-     */
     @Override
     public void deleteAll() {
-        try {
-            FileUtils.cleanDirectory(fileSystemLayout.getBaseDir());
-        } catch (IOException e) {
-            throw new ResourceIOException("Could not delete: " + fileSystemLayout.getBaseDir(), e);
+        deleteDirWithRetry(fileSystemLayout.getBaseDir());
+    }
+
+    private void deleteDirWithRetry(File dir) {
+        for (int attempt = 1; attempt <= 5; ++attempt) {
+            try {
+                FileUtils.cleanDirectory(dir);
+                return;
+            }
+            catch (IOException e) {
+                if (attempt < 5) {
+                    log.debug("Attempt to delete directory '" + dir + "' failed. Retrying deletion.");
+                    sleep();
+                }
+                else {
+                    log.warn("Deletion of directory '" + dir.getAbsolutePath() + "' failed due to: " + e.getMessage());
+                    throw new ResourceIOException("Could not delete: " + dir, e);
+                }
+            }
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.core.lbs.LargeBinaryStore#contains(java.net.URI)
-     */
+    private void deleteWithRetry(File file) {
+        for (int attempt = 1; attempt <= 5; ++attempt) {
+            if (file.delete()) {
+                return;
+            }
+            else {
+                if (attempt < 5) {
+                    log.debug("Attempt to delete file '" + file.getAbsolutePath() + "' failed. Retrying deletion.");
+                    sleep();
+                }
+            }
+        }
+        
+        log.warn("Deletion of file '" + file.getAbsolutePath() + "' failed");
+        throw new ResourceIOException("Could not delete: " + file.getAbsolutePath());            
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e1) {
+        }
+    }
+
     @Override
     public boolean contains(URI resourceUri) {
         notNull(resourceUri, "resourceUri cannot be null");
@@ -201,9 +214,6 @@ public class DiskStore implements LargeBinaryStore {
         return file.exists();
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.lbs.LargeBinaryStore#getSize(java.net.URI)
-     */
     @Override
     public long getSize(URI resourceUri) {
         notNull(resourceUri, "resourceUri cannot be null");
@@ -212,9 +222,6 @@ public class DiskStore implements LargeBinaryStore {
         return file.length();
     }
 
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.lbs.LargeBinaryStore#getOutputStream(java.net.URI)
-     */
     @Override
     public OutputStream getOutputStream(URI resourceUri) {
         notNull(resourceUri, "resourceUri cannot be null");
@@ -227,9 +234,6 @@ public class DiskStore implements LargeBinaryStore {
         }
     }
     
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return String.format("{%1$s: fileSystemLayout=%2$s, uuidUriConversion=%3$s}", getClass()
