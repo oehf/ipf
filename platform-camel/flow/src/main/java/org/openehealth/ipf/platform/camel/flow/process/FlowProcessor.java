@@ -96,7 +96,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
     /**
      * Sets the {@link PlatformMessageRenderer} used by this processor.
      * 
-     * @param flowManager
+     * @param messageRenderer
      *            {@link PlatformMessageRenderer} used by this processor.
      */
     public void setMessageRenderer(PlatformMessageRenderer messageRenderer) {
@@ -132,12 +132,15 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
     /**
      * Sets the {@link DataFormat} to be applied to a message body's byte array
      * representation for creating the {@link Exchange#getIn()} message body
-     * (replacing the original message body). The data format is only applied
-     * during {@link #createPacket()} calls. Calls to this method are made by
-     * the {@link PlatformMessage#createPacket()} method on messages created by
-     * this processor.
+     * (replacing the original message body). The outFormat is applied: 
+     * <ul>
+     * <li> if {@link #outConversion(boolean)} is set to true, during {@link #createPacket()} 
+     * calls, made by {@link PlatformMessage#createPacket()}</li>
+     * <li> during {@link #createExchange(PlatformPacket)} calls, made by {@link FlowBeginProcessor#replay(PlatformPacket)})</li></ul>
+     * If both {@link #outFormat(DataFormat)} and {@link #outType(Class)} are set, 
+     * outType is ignored and only outFormat is used.
      * 
-     * @param inFormat
+     * @param outFormat
      *            a data formatting strategy.
      * @return this processor.
      */
@@ -167,10 +170,13 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
     /**
      * Sets the data type the {@link Exchange#getIn()} message body shall be
      * converted to (replacing the original message body) from the internal byte
-     * array representation. The conversion is only made during
-     * {@link #createPacket()} calls. Calls to this method are made by the
-     * {@link PlatformMessage#createPacket()} method on messages created by this
-     * processor.
+     * array representation. The conversion is made:
+     * <ul>
+     * <li> if {@link #outConversion(boolean)} is set to true, during {@link #createPacket()} 
+     * calls, made by {@link PlatformMessage#createPacket()}
+     * <li> during {@link #createExchange(PlatformPacket)} calls, made by 
+     * {@link FlowBeginProcessor#replay(PlatformPacket)})</li>  
+     * </ul>
      * 
      * @param outType
      *            type of the {@link Exchange#getIn()} message's body that
@@ -317,7 +323,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
             in.setBody(null);
         }
         if (outFormat != null) {
-            in.setBody(unmarshal(bytes, exchange, inFormat));
+            in.setBody(unmarshal(bytes, exchange, outFormat));
         } else if (outType != null) {
             in.setBody(bytes, outType);
         } else { // fallback

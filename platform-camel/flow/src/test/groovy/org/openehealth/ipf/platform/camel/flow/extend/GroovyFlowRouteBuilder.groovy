@@ -19,6 +19,7 @@ import static org.apache.camel.builder.Builder.*
 
 import org.apache.camel.impl.SerializationDataFormat
 import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.impl.StringDataFormat
 
 /**
  * @author Martin Krasser
@@ -84,6 +85,25 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
                 .outType(String.class)
             .throwFault("handled fault")
             .to("mock:mock")
+                     
+        from("direct:flow-test-7")
+            .initFlow("test-7")
+                .application("test")
+                .inFormat(serialization)
+                .outFormat(new StringDataFormat("UTF-8"))
+                .outConversion(false)
+             .setHeader("foo", constant("test-4"))
+             .to("mock:mock")
+             .ackFlow()
+        
+        from("direct:flow-test-8")
+            .initFlow("test-8")
+                .application("test")
+                .inFormat(serialization)
+                .outFormat(new StringDataFormat("UTF-8"))
+            .setHeader("foo", constant("test-8"))
+            .to("mock:mock")
+            .ackFlow()
             
         // --------------------------------------------------------------
         //  Split Flows (original Camel splitter)

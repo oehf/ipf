@@ -110,7 +110,8 @@ public abstract class AbstractFlowReplayTest {
         mock.reset();
         mock.expectedMessageCount(1);
         flowManager.replayFlow(flowId);
-        assertTrue(firstBody() instanceof InputStream);
+        assertTrue("Expected body instanceOf InputStream, but was "
+                + firstBody().getClass(), firstBody() instanceof InputStream);
         mock.assertIsSatisfied();
         assertEquals("test-3", firstHeader("foo"));
     }
@@ -131,7 +132,7 @@ public abstract class AbstractFlowReplayTest {
     public void testReplayUnhandled() throws InterruptedException {
         mock.expectedMessageCount(0);
         error.expectedMessageCount(0);
-        Exchange result = (Exchange)producerTemplate.send("direct:flow-test-5", createExchange("test"));
+        Exchange result = producerTemplate.send("direct:flow-test-5", createExchange("test"));
         mock.assertIsSatisfied();
         error.assertIsSatisfied();
         Long flowId = flowId(result); 
@@ -148,7 +149,7 @@ public abstract class AbstractFlowReplayTest {
     public void testReplayHandled() throws InterruptedException {
         mock.expectedMessageCount(0);
         error.expectedMessageCount(0);
-        Exchange result = (Exchange)producerTemplate.send("direct:flow-test-6", createExchange("test"));
+        Exchange result = producerTemplate.send("direct:flow-test-6", createExchange("test"));
         mock.assertIsSatisfied();
         error.assertIsSatisfied();
         Long flowId = flowId(result); 
@@ -159,6 +160,45 @@ public abstract class AbstractFlowReplayTest {
         flowManager.replayFlow(flowId);
         mock.assertIsSatisfied();
         error.assertIsSatisfied();
+    }
+    
+    @Test
+    public void testOutFormatNoOutConversion() throws InterruptedException {
+        // test whether during the creation of a platform packet
+        // outFormat(StringDataFormat) is not applied, when outConversion(false)
+        // is set.
+        mock.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:flow-test-7", Double.valueOf(1.1));
+        mock.assertIsSatisfied();
+        Long flowId = firstFlowId();
+        assertEquals(Double.class, firstBody().getClass());
+        // tests whether during a replay(), outFormat(StringDataFormat)is
+        // correctly applied, when outConversion(false) is set (the setting
+        // should be ignored)
+        mock.reset();
+        mock.expectedMessageCount(1);
+        flowManager.replayFlow(flowId);
+        mock.assertIsSatisfied();
+        assertEquals(String.class, firstBody().getClass());
+    }
+
+    @Test
+    public void testOutFormatWithOutConversion() throws InterruptedException {
+        // test whether during the creation of a platform packet
+        // outFormat(StringDataFormat)
+        // is correctly applied, when outConversion(true) is set.
+        mock.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:flow-test-8", Double.valueOf(1.1));
+        mock.assertIsSatisfied();
+        Long flowId = firstFlowId();
+        assertEquals(String.class, firstBody().getClass());
+        // tests whether outFormat(StringDataFormat)is correctly applied
+        // during a replay, when outConversion(true) is set.
+        mock.reset();
+        mock.expectedMessageCount(1);
+        flowManager.replayFlow(flowId);
+        mock.assertIsSatisfied();
+        assertEquals(String.class, firstBody().getClass());
     }
     
     private Exchange createExchange(String body) {

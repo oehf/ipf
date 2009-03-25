@@ -16,14 +16,14 @@
 package org.openehealth.ipf.platform.camel.flow.builder;
 
 import org.apache.camel.impl.SerializationDataFormat;
+import org.apache.camel.impl.StringDataFormat;
 import org.apache.camel.spi.DataFormat;
-
 /**
  * @author Martin Krasser
  */
 public class JavaFlowRouteBuilder extends BaseRouteBuilder {
 
-    private DataFormat serialization = new SerializationDataFormat();
+    private final DataFormat serialization = new SerializationDataFormat();
     
     @Override
     public void configure() throws Exception {
@@ -84,6 +84,27 @@ public class JavaFlowRouteBuilder extends BaseRouteBuilder {
         .throwFault("handled fault")
         .to("mock:mock");
 
+             
+        from("direct:flow-test-7")
+        .errorHandler(noErrorHandler())
+        .intercept(routeHelper.flowBegin("test-7")
+                .application("test")
+                .inFormat(serialization)
+                .outFormat(new StringDataFormat("UTF-8"))
+                .outConversion(false))
+        .setHeader("foo", constant("test-7"))
+        .to("mock:mock")
+        .intercept(routeHelper.flowEnd());
+                
+        from("direct:flow-test-8")
+        .errorHandler(noErrorHandler())
+        .intercept(routeHelper.flowBegin("test-8")
+                .application("test")
+                .inFormat(serialization)
+                .outFormat(new StringDataFormat("UTF-8")))
+        .setHeader("foo", constant("test-8"))
+        .to("mock:mock")
+        .intercept(routeHelper.flowEnd());
         // --------------------------------------------------------------
         //  Split Flows (original Camel splitter)
         // --------------------------------------------------------------
@@ -114,6 +135,5 @@ public class JavaFlowRouteBuilder extends BaseRouteBuilder {
                 .outType(String.class))
         .to("direct:out-1")
         .to("direct:out-2");
-
     }
 }
