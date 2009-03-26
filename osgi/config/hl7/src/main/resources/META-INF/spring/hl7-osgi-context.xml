@@ -15,6 +15,8 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         <property name="mappingService" ref="mappingService" />
     </bean>
     
-    <osgi:service ref="mappingService" auto-export="interfaces" />
+    <osgi:service ref="mappingService" 
+        interface="org.openehealth.ipf.modules.hl7.mappings.MappingService">
+    </osgi:service>
 
 </beans>

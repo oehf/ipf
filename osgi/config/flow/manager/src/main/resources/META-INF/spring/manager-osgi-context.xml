@@ -15,10 +15,6 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         interface="org.openehealth.ipf.commons.flow.FlowManager">
     </osgi:service>
         
-    <osgi:service ref="flowManager" 
-        interface="org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry">
-    </osgi:service>
-
     <osgi:reference id="flowRepository" timeout="10000" 
         interface="org.openehealth.ipf.commons.flow.repository.FlowRepository">
     </osgi:reference>
