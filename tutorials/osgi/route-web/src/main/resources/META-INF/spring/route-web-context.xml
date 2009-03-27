@@ -18,4 +18,12 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         class="org.openehealth.ipf.tutorials.osgi.route.web.SampleRouteBuilder">
     </bean>
 
+    <bean id="initRenderer"
+        class="org.openehealth.ipf.tutorials.osgi.route.web.render.InitRenderer">
+    </bean>
+
+    <bean id="ackRenderer"
+        class="org.openehealth.ipf.tutorials.osgi.route.web.render.AckRenderer">
+    </bean>
+
 </beans>

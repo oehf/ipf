@@ -23,8 +23,10 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
 
      void configure() {
 
-         from('jetty:http://localhost:8080/tutorial')
-             .initFlow(this.class.package.name).application('osgi-web')
+         from('jetty:http://0.0.0.0:8080/tutorial')
+             .initFlow(this.class.package.name)
+                 .application('osgi-web')
+                 .renderer('initRenderer')
              .unmarshal().ghl7()
              .validate().ghl7()
              .transmogrify('admissionTransmogrifier')
@@ -36,7 +38,7 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
          from('jms:queue:delivery-web')
              .setFilename('output.hl7')
              .to('file:workspace/output?append=false&autoCreate=false')
-             .ackFlow()
+             .ackFlow().renderer('ackRenderer')
 
      }
     
