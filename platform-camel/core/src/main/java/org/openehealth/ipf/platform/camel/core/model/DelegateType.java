@@ -21,10 +21,19 @@ import java.util.List;
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputType;
 import org.apache.camel.model.ProcessorType;
+import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.Pipeline;
 import org.apache.camel.spi.RouteContext;
 
 /**
+ * An {@link OutputType} that combines the {@link Processor} created by
+ * {@link #doCreateDelegate(RouteContext)} and the child processor created by
+ * {@link RouteContext#createProcessor(ProcessorType)} into a {@link Pipeline}.
+ * This base class supports the implementation of parameterizable DSL extensions
+ * without forcing implementors to create {@link DelegateProcessor} instances.
+ * Instead, plain {@link Processor} instances can be returned by
+ * {@link #doCreateDelegate(RouteContext)} implementations.
+ * 
  * @author Martin Krasser
  */
 public abstract class DelegateType extends OutputType<ProcessorType> {
@@ -41,7 +50,15 @@ public abstract class DelegateType extends OutputType<ProcessorType> {
         }
         return Pipeline.newInstance(processors);
     }
-    
-    protected abstract Processor doCreateDelegate(RouteContext routeContext);
+
+    /**
+     * Creates a {@link Processor} for this DSL element.
+     * 
+     * @param routeContext
+     *            the current route context.
+     * @return a {@link Processor} instance.
+     * @throws Exception
+     */
+    protected abstract Processor doCreateDelegate(RouteContext routeContext) throws Exception;
     
 }
