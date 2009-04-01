@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JMX Explorer UI plug-in
 Bundle-SymbolicName: org.openehealth.ipf.platform.manager.jmxexplorer.ui;singleton:=true
-Bundle-Version: 1.5.0
+Bundle-Version: 1.6.0
 Bundle-Activator: org.openehealth.ipf.platform.manager.jmxexplorer.ui.osgi.Activator
-Bundle-Vendor: InterComponentWare AG
+Bundle-Vendor: Open eHealth Foundation
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -13,9 +13,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.console,
  org.eclipse.jface.text,
- org.openehealth.ipf.platform.manager.connection;bundle-version="1.5.0",
- org.openehealth.ipf.platform.manager.connection.ui;bundle-version="1.5.0",
- org.openehealth.ipf.platform.manager.jmxexplorer;bundle-version="1.5.0"
+ org.openehealth.ipf.platform.manager.connection;bundle-version="1.6.0",
+ org.openehealth.ipf.platform.manager.connection.ui;bundle-version="1.6.0",
+ org.openehealth.ipf.platform.manager.jmxexplorer;bundle-version="1.6.0"
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: global
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,

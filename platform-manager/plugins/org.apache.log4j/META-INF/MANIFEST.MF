@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: org.apache.log4j
 Bundle-SymbolicName: org.apache.log4j
 Bundle-Version: 1.2.15
-Bundle-Vendor: InterComponentWare AG
+Bundle-Vendor: Open eHealth Foundation
 Export-Package: org.apache.log4j,
  org.apache.log4j.chainsaw,
  org.apache.log4j.config,

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Commons Loggin Properties Fragment
 Bundle-SymbolicName: org.openehealth.ipf.platform.manager.commons.logging.properties
-Bundle-Version: 1.5.0
-Bundle-Vendor: InterComponentWare AG
+Bundle-Version: 1.6.0
+Bundle-Vendor: Open eHealth Foundation
 Fragment-Host: org.apache.commons.logging;bundle-version="1.1.1"
 Import-Package: org.apache.log4j

@@ -4,7 +4,7 @@ Bundle-Name: org.apache.commons.logging
 Bundle-SymbolicName: org.apache.commons.logging
 Bundle-Version: 1.1.1
 Bundle-ClassPath: commons-logging-1.1.1.jar
-Bundle-Vendor: InterComponentWare AG
+Bundle-Vendor: Open eHealth Foundation
 Export-Package: org.apache.commons.logging,
  org.apache.commons.logging.impl
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
