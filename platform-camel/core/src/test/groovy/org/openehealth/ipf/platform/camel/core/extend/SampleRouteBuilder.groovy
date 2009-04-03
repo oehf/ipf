@@ -88,8 +88,13 @@ class SampleRouteBuilder extends SpringRouteBuilder {
                         
         from('direct:input7')
             // checked exception thrown by closure
-            // wrapped by GroovyRuntimeException
-            .onException(GroovyRuntimeException.class)
+            // still wrapped by GroovyRuntimeException
+            // but since Camel 1.6 onException clause 
+            // also investigates exception causes, so
+            // throwing checked exceptions from closures
+            // and handling them with onException works
+            // as expected.
+            .onException(IOException.class)
                 .handled(true)
                 .process { it.out.body = 'failure' }
                 .end()
