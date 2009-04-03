@@ -187,27 +187,6 @@ public class Node implements IAdaptable {
     }
 
     /**
-     * Returns if this node or its children match the given pattern.
-     * 
-     * @param pattern
-     * @return
-     */
-    public boolean matchesDeep(String pattern) {
-        if (name == null)
-            return false;
-        if (matches(pattern))
-            return true;
-        for (Node node : children) {
-            if (node.getName() == null) {
-                return false;
-            } else {
-                return node.matchesDeep(pattern);
-            }
-        }
-        return false;
-    }
-
-    /**
      * Returns if this node has a direct child with this name.
      * 
      * @param name

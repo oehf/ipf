@@ -17,85 +17,54 @@ package org.openehealth.ipf.platform.manager.connection.ui.utils.sorter;
 
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Tree;
 
 /**
- * Sorter for a Tree column.
+ * A general purpose TreeColumnViewer sorter, which sorts the elements with a
+ * sorter given by the client.
  * 
  * @author Mitko Kolev
  */
-public abstract class TreeColumnViewerSorter extends ViewerComparator {
+public abstract class TreeColumnViewerSorter extends ColumnViewerSorter {
 
-    private static final int ASC = 1;
-
-    private static final int NONE = 0;
-
-    private static final int DESC = -1;
-
-    private int direction = 0;
-
-    private final TreeViewerColumn column;
-
-    private final ColumnViewer viewer;
+    private final TreeViewerColumn treeViewerColumn;
 
     public TreeColumnViewerSorter(ColumnViewer viewer, TreeViewerColumn column) {
-        this.column = column;
-        this.viewer = viewer;
-        this.column.getColumn().addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                if (TreeColumnViewerSorter.this.viewer.getComparator() != null) {
-                    if (TreeColumnViewerSorter.this.viewer.getComparator() == TreeColumnViewerSorter.this) {
-                        int tdirection = TreeColumnViewerSorter.this.direction;
-
-                        if (tdirection == ASC) {
-                            setSorter(TreeColumnViewerSorter.this, DESC);
-                        } else if (tdirection == DESC) {
-                            setSorter(TreeColumnViewerSorter.this, NONE);
-                        }
-                    } else {
-                        setSorter(TreeColumnViewerSorter.this, ASC);
-                    }
-                } else {
-                    setSorter(TreeColumnViewerSorter.this, ASC);
-                }
-            }
-        });
+        super(viewer);
+        this.treeViewerColumn = column;
+        // add a selection listener to the Tree column
+        this.treeViewerColumn.getColumn().addSelectionListener(
+                new SelectionDirectionModifier());
     }
 
-    public void setSorter(TreeColumnViewerSorter sorter, int direction) {
-        if (direction == NONE) {
-            column.getColumn().getParent().setSortColumn(null);
-            column.getColumn().getParent().setSortDirection(SWT.NONE);
-            viewer.setComparator(null);
-        } else {
-            column.getColumn().getParent().setSortColumn(column.getColumn());
-            sorter.direction = direction;
-
-            if (direction == ASC) {
-                column.getColumn().getParent().setSortDirection(SWT.DOWN);
-            } else {
-                column.getColumn().getParent().setSortDirection(SWT.UP);
-            }
-
-            if (viewer.getComparator() == sorter) {
-                viewer.refresh();
-            } else {
-                viewer.setComparator(sorter);
-            }
-
-        }
-    }
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @seeorg.openehealth.ipf.platform.manager.connection.ui.utils.sorter.
+     * ColumnViewerSorter
+     * #setSorterDirection(org.openehealth.ipf.platform.manager
+     * .connection.ui.utils.sorter.ColumnViewerSorter.Direction)
+     */
     @Override
-    public int compare(Viewer viewer, Object e1, Object e2) {
-        return direction * doCompare(viewer, e1, e2);
+    public void setSorterDirection(Direction direction) {
+
+        super.setSorterDirection(direction);
+        Tree tree = treeViewerColumn.getColumn().getParent();
+
+        if (direction == NONE) {// Do not sort
+            tree.setSortColumn(null);
+            tree.setSortDirection(SWT.NONE);
+        } else {
+            tree.setSortColumn(treeViewerColumn.getColumn());
+            if (direction == DOWN) {
+                tree.setSortDirection(SWT.DOWN);
+            } else {// Direction = UP
+                tree.setSortDirection(SWT.UP);
+            }
+            updateViewer(this);
+        }
+
     }
 
-    protected abstract int doCompare(Viewer viewer, Object e1, Object e2);
 }
