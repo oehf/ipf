@@ -117,6 +117,17 @@
             </roles>
             <timezone>+1</timezone>
         </developer>    
+        <developer>
+            <id>boris</id>
+            <name>Boris Stanojevic</name>
+            <email>boris.stanojevic@icw.de</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>    
     </developers>
 
     <licenses>
