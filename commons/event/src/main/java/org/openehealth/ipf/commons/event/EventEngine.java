@@ -21,10 +21,11 @@ public class EventEngine {
      */
     public static final String DEFAULT_TOPIC = "default";
 
-    private List<EventChannelAdapter> channelAdapters =
+    private final List<EventChannelAdapter> channelAdapters =
         new ArrayList<EventChannelAdapter>();
     
-    private Map<String, List<Subscription>> topicSubscriptions = 
+    // Note: this field requires synchronization
+    private final Map<String, List<Subscription>> topicSubscriptions = 
         new HashMap<String, List<Subscription>>();
     
     /**
@@ -72,12 +73,14 @@ public class EventEngine {
         
         String topic = (String) eventObject.getMetaData(EventObject.MetaDataKeys.TOPIC.getKey());
         
-        List<Subscription> subscriptions = topicSubscriptions.get(topic);
-        if (subscriptions != null) {
-            for (Subscription subscription : subscriptions) {
-                EventFilter filter = subscription.getFilter();
-                if (filter == null || filter.accepts(eventObject)) {
-                    subscription.getHandler().handle(eventObject);
+        synchronized(topicSubscriptions) {
+            List<Subscription> subscriptions = topicSubscriptions.get(topic);
+            if (subscriptions != null) {
+                for (Subscription subscription : subscriptions) {
+                    EventFilter filter = subscription.getFilter();
+                    if (filter == null || filter.accepts(eventObject)) {
+                        subscription.getHandler().handle(eventObject);
+                    }
                 }
             }
         }
@@ -94,14 +97,49 @@ public class EventEngine {
         notNull(subscription.getHandler(), "subscription.getHandler() cannot be null");
         
         String topic = normalize(subscription.getTopic());
-        List<Subscription> subscriptions = topicSubscriptions.get(topic);
-        if (subscriptions == null) {
-            subscriptions = new ArrayList<Subscription>();            
+        synchronized(topicSubscriptions) {
+            List<Subscription> subscriptions = topicSubscriptions.get(topic);
+            if (subscriptions == null) {
+                subscriptions = new ArrayList<Subscription>();            
+            }
+            subscriptions.add(subscription);
+            topicSubscriptions.put(topic, subscriptions);
         }
-        subscriptions.add(subscription);
-        topicSubscriptions.put(topic, subscriptions);
     }
     
+    /**
+     * Unregisters a handler from a specific topic
+     * @param subscription
+     *          the subscription information containing handler, filter and topic
+     *          to remove
+     * @throws IllegalArgumentException
+     *          if the subscription is invalid or has not been subscribed before
+     */
+    public void unsubscribe(Subscription subscription) {
+        notNull(subscription, "subscription cannot be null");
+        notNull(subscription.getHandler(), "subscription.getHandler() cannot be null");
+        
+        String topic = normalize(subscription.getTopic());
+        synchronized(topicSubscriptions) {
+            List<Subscription> subscriptions = topicSubscriptions.get(topic);
+            if (subscriptions == null) {
+                throw new IllegalArgumentException("Invalid subscription information. Subscription was not registred: " + subscription);
+            }
+            
+            if (!subscriptions.remove(subscription)) {
+                throw new IllegalArgumentException("Invalid subscription information. Subscription was not registred: " + subscription);
+            }
+            
+            if (subscriptions.size() == 0) {
+                topicSubscriptions.remove(topic);
+            }
+        }
+    }
+    
+    /**
+     * Registers a channel via its adapter
+     * @param adapter  the channel adapter
+     */
     public void registerChannel(EventChannelAdapter adapter) {
         notNull(adapter, "adapter cannot be null");
         channelAdapters.add(0, adapter);

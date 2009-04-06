@@ -2,6 +2,9 @@ package org.openehealth.ipf.commons.event;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 /**
  * Base class for channel adapter implementations
  * <p>
@@ -18,7 +21,8 @@ import static org.apache.commons.lang.Validate.notNull;
  * @author Jens Riemschneider
  */
 public class EventChannelAdapter {
-    private EventEngine engine;
+    private final EventEngine engine;
+    private final Executor executor = Executors.newCachedThreadPool();
 
     /**
      * Constructs the channel adapter 
@@ -36,33 +40,42 @@ public class EventChannelAdapter {
      * The engine calls this method after the event source published the event.
      * <p>
      * The base class implementation simply distributes the event synchronously 
-     * to subscribed handlers via the event engine
+     * or asynchronously to subscribed handlers via the event engine. It ignores
+     * all other delivery modes.
      * @param event
      *          the event to consume
-     * @param quality 
-     *          the quality of service parameters for the delivery
+     * @param mode 
+     *          the delivery mode
      */
-    public void send(EventObject event, DeliveryMode quality) {
+    public void send(final EventObject event, DeliveryMode mode) {
         notNull(event, "event cannot be null");
-        notNull(quality, "quality cannot be null");
+        notNull(mode, "mode cannot be null");
         
-        engine.distributeToHandlers(event);
+        if (mode.isSync()) {
+            engine.distributeToHandlers(event);
+        }
+        else {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    getEventEngine().distributeToHandlers(event);
+                }            
+            });
+        }
     }
 
     /**
      * Determines if this adapter accepts the given delivery mode
      * <p>
-     * This base class can only provide synchronous handling of events.
+     * This base class accepts any delivery mode. However, it only provides
+     * synchronous and asynchronous handling of events. Other modes are ignored.
      * @param mode
      *          the delivery mode
      * @return <code>true</code> if this adapter can process an event object with 
      *         the given delivery mode
      */
     public boolean accepts(DeliveryMode mode) {
-        if (mode.isSync()) {
-            return true;
-        }
-        return false;
+        return true;
     }
     
     /**
