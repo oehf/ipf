@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>org.openehealth.ipf.platform-manager</groupId>
 		<artifactId>platform-manager</artifactId>
-		<version>1.6.0</version>
+		<version>1.7-SNAPSHOT</version>
 	</parent>
 	
 	<modelVersion>4.0.0</modelVersion>
