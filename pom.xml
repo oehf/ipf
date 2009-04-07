@@ -497,6 +497,9 @@
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
+        				<configuration>
+        					<preparationGoals>clean verify install</preparationGoals>
+        				</configuration>
             </plugin>
             <plugin>
               <artifactId>maven-jar-plugin</artifactId>
