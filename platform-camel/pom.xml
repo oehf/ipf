@@ -16,7 +16,7 @@
         <module>core</module>
         <module>flow</module>
         <module>hl7</module>
-        <!--<module>lbs</module>-->
+        <module>lbs</module>
         <module>http</module>
         <module>event</module>
     </modules>
