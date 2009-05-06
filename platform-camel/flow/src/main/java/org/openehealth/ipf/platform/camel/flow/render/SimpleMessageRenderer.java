@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2008-2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.flow.render;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.camel.Message;
+import org.apache.commons.io.IOUtils;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessageRenderer;
 
@@ -24,7 +29,22 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessageRenderer;
 public class SimpleMessageRenderer implements PlatformMessageRenderer {
 
     public String render(PlatformMessage message) {
-        return message.getExchange().getIn().getBody(String.class);
+        Message input = message.getExchange().getIn();
+        if (input.getBody() instanceof InputStream) {
+            return render((InputStream)input.getBody());
+        } else {
+            return input.getBody(String.class);
+        }
+    }
+    
+    private String render(InputStream stream) {
+        try {
+            String result = IOUtils.toString(stream);
+            stream.reset();
+            return result;
+        } catch (IOException e) {
+            return null;
+        }
     }
     
 }
