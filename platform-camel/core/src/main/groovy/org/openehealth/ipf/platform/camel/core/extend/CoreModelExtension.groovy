@@ -76,7 +76,12 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
         //  Core Extensions
         // ----------------------------------------------------------------
-            
+
+        ProcessorType.metaClass.process = { String processorBeanName ->
+            delegate.addOutput(new org.openehealth.ipf.platform.camel.core.model.ProcessorType(processorBeanName))
+            return delegate
+        }
+
         ProcessorType.metaClass.process = { Closure processorLogic ->
             delegate.process(new DelegatingProcessor(processorLogic))
         }

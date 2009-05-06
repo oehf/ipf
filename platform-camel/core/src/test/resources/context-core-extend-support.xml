@@ -41,6 +41,10 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
         <constructor-arg value="blub" />
     </bean>
      
+    <bean id="sampleProcessor"
+        class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestProcessor">
+    </bean>
+
     <bean id="sampleValidator"
         class="org.openehealth.ipf.platform.camel.core.support.transform.min.TestValidator">
     </bean>

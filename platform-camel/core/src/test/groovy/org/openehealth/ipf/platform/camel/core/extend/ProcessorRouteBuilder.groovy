@@ -35,6 +35,10 @@ class ProcessorRouteBuilder extends SpringRouteBuilder {
             }  
             .to('mock:output')
 
+        from('direct:input3') 
+            .process('sampleProcessor')
+            .to('mock:output')
+
     }
     
 }

@@ -38,5 +38,12 @@ public class ProcessorExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
     }
     
+    @Test
+    public void testBean() throws InterruptedException {
+        mockOutput.expectedBodiesReceived("abcxyz");
+        producerTemplate.sendBody("direct:input3", "abc");
+        mockOutput.assertIsSatisfied();
+    }
+    
 
 }
