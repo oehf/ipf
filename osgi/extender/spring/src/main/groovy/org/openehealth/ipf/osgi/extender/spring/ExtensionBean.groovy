@@ -37,7 +37,11 @@ public class ExtensionBean {
          if (!bean) {
              LOG.warn("Extension bean ${this} not defined")
          }
-         bean.extensions.call()
+         try {
+             bean.extensions.call()
+         } catch (Exception e) {
+             LOG.error("Extension bean ${this} could not be activated", e)
+         }
          LOG.info("Extension bean ${this} activated")
      }
 

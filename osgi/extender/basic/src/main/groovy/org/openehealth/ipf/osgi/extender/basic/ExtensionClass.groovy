@@ -38,14 +38,19 @@ public class ExtensionClass {
          def prop = target.metaClass.getMetaProperty('extensions')
          
          if (!prop) {
-             LOG.warn("class ${target} has no \"extensions\" closure defined")
+             LOG.error("class ${target} has no \"extensions\" closure defined")
              return
          }
          
-         if (prop.modifiers & STATIC) {
-             target.extensions.call()
-         } else {
-             target.newInstance().extensions.call()
+         try {
+             if (prop.modifiers & STATIC) {
+                 target.extensions.call()
+             } else {
+                 target.newInstance().extensions.call()
+             }
+             
+         } catch (Exception e) {
+             LOG.error("Extension class ${this} could not be activated", e)
          }
          LOG.info("Extension class ${this} activated")
      }
@@ -64,4 +69,5 @@ public class ExtensionClass {
          loadAll(bundle).each { it.activate() }
      }
      
+     private static activateExtension
 }
