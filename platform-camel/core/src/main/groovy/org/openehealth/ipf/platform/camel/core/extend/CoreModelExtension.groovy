@@ -44,6 +44,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingTransmogrifier
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator 
 import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat
 import org.openehealth.ipf.platform.camel.core.dataformat.GpathDataFormat
+import org.openehealth.ipf.platform.camel.core.model.AuditType
 import org.openehealth.ipf.platform.camel.core.model.EnricherType
 import org.openehealth.ipf.platform.camel.core.model.SplitterType
 import org.openehealth.ipf.platform.camel.core.model.ParserAdapterType
@@ -171,6 +172,12 @@ class CoreModelExtension {
             delegate.split(new DelegatingExpression(splitLogic))        
         }
         
+        ProcessorType.metaClass.audit = {-> 
+            AuditType answer = new AuditType()        
+            delegate.addOutput(answer)
+            return answer
+        }
+    
          // ----------------------------------------------------------------
          //  Platform DataFormatClause extensions
          // ----------------------------------------------------------------
