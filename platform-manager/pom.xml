@@ -257,11 +257,19 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <manifestLocation>${project.build.directory}/classes-ignore/META-INF</manifestLocation>
+        </configuration>
+      </plugin>
     </plugins>
 		<resources>
 			<resource>
 				<directory>.</directory>
 				<includes>
+					<include>META-INF/*</include>
 					<include>plugin.properties</include>
 					<include>build.properties</include>
 					<include>plugin.xml</include>

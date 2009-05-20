@@ -59,7 +59,7 @@
 
   <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
     <property name="dataSource" ref="testDataSource"/>
-    <property name="configLocation" value="/hibernate-flow.xml"/>
+    <property name="configLocation" value="classpath:hibernate-flow.xml"/>
     <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
     <property name="hibernateProperties">
       <props>

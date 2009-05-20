@@ -532,7 +532,7 @@
               <artifactId>maven-jar-plugin</artifactId>
               <configuration>
                 <archive>  
-                  <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                  <manifestFile>META-INF/MANIFEST.MF</manifestFile>
                 </archive> 
               </configuration>
             </plugin>  
@@ -575,6 +575,7 @@
                         <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
                     </instructions>
+                    <manifestLocation>META-INF</manifestLocation>
                 </configuration>
                 <executions>
                     <execution>
@@ -601,6 +602,17 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>META-INF/**/*</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
     <reporting>
