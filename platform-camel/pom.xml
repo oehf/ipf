@@ -19,6 +19,7 @@
         <module>lbs</module>
         <module>http</module>
         <module>event</module>
+        <module>ihe</module>
     </modules>
 
     <dependencies>
