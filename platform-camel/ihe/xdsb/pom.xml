@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.platform-camel</groupId>
+    <artifactId>platform-camel-ihe-xdsb</artifactId>
+    <name>platform-camel-ihe-xdsb</name>
+    <packaging>pom</packaging>
+     
+    <parent>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>platform-camel-ihe</artifactId>
+        <version>1.7-SNAPSHOT</version>
+    </parent>
+    
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.xdsb.*</osgi.export.pkg>
+    </properties>
+    
+    <modules>
+        <module>commons</module>
+        <module>iti18</module>
+        <module>iti41</module>
+        <module>iti42</module>
+        <module>iti43</module>
+    </modules>
+
+    <dependencies>
+        <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+        </dependency>
+
+        <!-- Dependencies for tests -->
+    </dependencies>
+
+</project>

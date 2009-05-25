@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.platform-camel</groupId>
+    <artifactId>platform-camel-ihe-xdsb-iti18</artifactId>
+    <name>platform-camel-ihe-xdsb-iti18</name>
+     
+    <properties>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.xdsb.iti18.*</ipf.extension.classes>
+    </properties>
+
+    <parent>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>platform-camel-ihe-xdsb</artifactId>
+        <version>1.7-SNAPSHOT</version>
+    </parent>
+    
+    <dependencies>
+        <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xdsb-commons</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xdsb-commons</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>catalina</artifactId>
+            <version>6.0.18</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>coyote</artifactId>
+            <version>6.0.18</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>jasper</artifactId>
+            <version>6.0.18</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
