@@ -41,7 +41,7 @@ public class ExchangeAggregate {
     @SuppressWarnings("unused") private ProcessorExchangePair pair;
     
     @SuppressWarnings("unused")
-    @Pointcut("execution(void MulticastProcessor.process(Exchange))")
+    @Pointcut("execution(void org.apache.camel.processor.MulticastProcessor.process(org.apache.camel.Exchange))")
     private void multicastExchangeProcess() {}
     
     /**

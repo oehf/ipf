@@ -81,6 +81,37 @@
                     </execution>
                </executions>
             </plugin>
+            <!--
+                Need to offer Eclipse AJDT a jar file to weave that
+                doesn't conflict with the existing camel-core jar on
+                the classpath (that's a workaround until load-time
+                weaving is implemented). 
+             -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.camel</groupId>
+                                    <artifactId>camel-core</artifactId>
+                                    <version>${camel-version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>camel-core.jar</destFileName>
+                                    <outputDirectory>lib</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+                
+            </plugin>
         </plugins>
     </build>    
     

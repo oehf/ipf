@@ -6,7 +6,7 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
-			<name>org.eclipse.jdt.core.javabuilder</name>
+			<name>org.eclipse.ajdt.core.ajbuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -15,13 +15,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-        <buildCommand>
-            <name>org.codehaus.groovy.eclipse.groovyBuilder</name>
-            <arguments>
-            </arguments>
-        </buildCommand>
+		<buildCommand>
+			<name>org.codehaus.groovy.eclipse.groovyBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.ajdt.ui.ajnature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 		<nature>org.codehaus.groovy.eclipse.groovyNature</nature>

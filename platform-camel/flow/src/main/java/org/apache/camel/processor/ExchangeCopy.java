@@ -44,12 +44,12 @@ public class ExchangeCopy {
     
     @SuppressWarnings("unused")
     @Pointcut("execution(Iterable<ProcessorExchangePair> " +
-            "MulticastProcessor.createProcessorExchangePairs(Exchange)) && args(exchange)")
+            "org.apache.camel.processor.MulticastProcessor.createProcessorExchangePairs(org.apache.camel.Exchange)) && args(exchange)")
     private void multicastExchangeCopy(Exchange exchange) {}
     
     @SuppressWarnings("unused")
     @Pointcut("execution(Iterable<ProcessorExchangePair> " +
-            "Splitter.createProcessorExchangePairs(Exchange)) && args(exchange)")
+            "org.apache.camel.processor.Splitter.createProcessorExchangePairs(org.apache.camel.Exchange)) && args(exchange)")
     private void splitterExchangeCopy(Exchange exchange) {}
     
     @SuppressWarnings("unused")
