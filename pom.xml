@@ -22,6 +22,7 @@
         <osgi.spring.context />
         <ipf.extension.classes />
         <ipf.extension.beans />
+        <eclipse.supplement.bundle />
 
         <!-- Plugin version properties -->
         <aspectj-plugin-version>1.1</aspectj-plugin-version>
@@ -30,6 +31,7 @@
         <enforcer-plugin-version>1.0-beta-1</enforcer-plugin-version>
         <jar-plugin-version>2.2</jar-plugin-version>
         <javadoc-plugin-version>2.5</javadoc-plugin-version>
+        <release-plugin-version>2.0-beta-9</release-plugin-version>
 
         <!-- Dependency version properties -->
         <activemq-version>5.1.0</activemq-version>
@@ -45,7 +47,7 @@
         <derby-version>10.4.1.3</derby-version>
         <easymock-version>2.4</easymock-version> 
         <gmaven-version>1.0-rc-5</gmaven-version>
-        <groovy-version>1.6.1</groovy-version>
+        <groovy-version>1.6.3</groovy-version>
         <hapi-version>0.5.1</hapi-version>
         <hibernate-version>3.2.6.ga</hibernate-version>
         <hibernate-annotations-version>3.3.0.ga</hibernate-annotations-version>
@@ -175,7 +177,7 @@
         </snapshotRepository>
         <site>
             <id>openehealth.site</id>
-            <url>file:/data/sites</url>
+            <url>file:/data/sites/ipf/reports/ipf-${pom.version}</url>
         </site>
     </distributionManagement>
 
@@ -187,6 +189,7 @@
 
     <modules>
         <module>archetypes</module>
+		<module>assembly</module>
         <module>commons</module>
         <module>modules</module>
         <module>osgi</module>
@@ -263,7 +266,7 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy-version}</version>
             </dependency>
-			<dependency>
+			      <dependency>
                 <groupId>org.hl7</groupId>
                 <artifactId>hapi</artifactId>
                 <version>${hapi-version}</version>
@@ -353,6 +356,11 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
+                <version>${spring-version}</version>
+            </dependency>        
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-agent</artifactId>
                 <version>${spring-version}</version>
             </dependency>        
             <dependency>
@@ -524,9 +532,10 @@
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
-        				<configuration>
-        					<preparationGoals>clean verify install</preparationGoals>
-        				</configuration>
+                <version>${release-plugin-version}</version>
+        			<configuration>
+        				<preparationGoals>clean verify install</preparationGoals>
+        			</configuration>
             </plugin>
             <plugin>
               <artifactId>maven-jar-plugin</artifactId>
@@ -536,15 +545,6 @@
                 </archive> 
               </configuration>
             </plugin>  
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/bin.xml</descriptor>
-                        <descriptor>src/main/assembly/bin-nodeps.xml</descriptor>
-                    </descriptors>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -574,6 +574,7 @@
                         <Spring-Context>${osgi.spring.context}</Spring-Context>
                         <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
+                        <Eclipse-SupplementBundle>${eclipse.supplement.bundle}</Eclipse-SupplementBundle>
                     </instructions>
                     <manifestLocation>META-INF</manifestLocation>
                 </configuration>

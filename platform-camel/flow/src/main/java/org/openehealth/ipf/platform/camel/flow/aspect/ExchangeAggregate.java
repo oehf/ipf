@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2008-2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.processor;
+package org.openehealth.ipf.platform.camel.flow.aspect;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair;
+import org.apache.camel.processor.MulticastProcessor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -37,9 +37,6 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 @Aspect
 public class ExchangeAggregate {
 
-    @SuppressWarnings("unused") private MulticastProcessor multicast;
-    @SuppressWarnings("unused") private ProcessorExchangePair pair;
-    
     @SuppressWarnings("unused")
     @Pointcut("execution(void org.apache.camel.processor.MulticastProcessor.process(org.apache.camel.Exchange))")
     private void multicastExchangeProcess() {}
@@ -66,6 +63,7 @@ public class ExchangeAggregate {
      * @throws Throwable
      */
     protected void doAroundExchangeProcess(ProceedingJoinPoint pjp) throws Throwable {
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         ManagedMessage message = getMessage(pjp);
         SplitHistory original = message.getSplitHistory();
         pjp.proceed(pjp.getArgs());

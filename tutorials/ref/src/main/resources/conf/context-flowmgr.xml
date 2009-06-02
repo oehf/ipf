@@ -29,6 +29,12 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
   <ctx:property-placeholder location="classpath:${cluster.node.dir}/context.properties" />
 
   <!-- ================================================================= -->
+  <!--  Load-time weaving                                                -->
+  <!-- ================================================================= -->
+
+  <ctx:load-time-weaver/>
+
+  <!-- ================================================================= -->
   <!--  Declarative Transaction Management                               -->
   <!-- ================================================================= -->
 

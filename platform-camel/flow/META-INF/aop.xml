@@ -1,0 +1,13 @@
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+
+    <weaver>
+        <include within="org.apache.camel..*" />
+    </weaver>
+
+    <aspects>
+        <aspect name="org.openehealth.ipf.platform.camel.flow.aspect.ExchangeAggregate" />
+        <aspect name="org.openehealth.ipf.platform.camel.flow.aspect.ExchangeCopy" />
+    </aspects>
+
+</aspectj>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.processor;
+package org.openehealth.ipf.platform.camel.flow.aspect;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -30,14 +30,22 @@ import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
 import org.openehealth.ipf.commons.flow.history.SplitHistory;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 
 /**
  * @author Martin Krasser
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "/context-weaver.xml" })
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public class SplitterCopyAspectTest {
 
     private Processor splitter;

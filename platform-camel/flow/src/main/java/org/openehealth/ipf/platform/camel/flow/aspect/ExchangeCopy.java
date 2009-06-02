@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2008-2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.processor;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.openehealth.ipf.platform.camel.flow.aspect;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair;
+import org.apache.camel.processor.ExchangeCopyHelper;
+import org.apache.camel.processor.MulticastProcessor;
+import org.apache.camel.processor.Splitter;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.openehealth.ipf.commons.flow.ManagedMessage;
 import org.openehealth.ipf.commons.flow.history.SplitHistory;
-import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 
 
 /**
@@ -38,17 +35,13 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 @Aspect
 public class ExchangeCopy {
 
-    @SuppressWarnings("unused") private Splitter splitter;
-    @SuppressWarnings("unused") private MulticastProcessor multicast;
-    @SuppressWarnings("unused") private ProcessorExchangePair pair;
-    
     @SuppressWarnings("unused")
-    @Pointcut("execution(Iterable<ProcessorExchangePair> " +
+    @Pointcut("execution(Iterable<org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair> " +
             "org.apache.camel.processor.MulticastProcessor.createProcessorExchangePairs(org.apache.camel.Exchange)) && args(exchange)")
     private void multicastExchangeCopy(Exchange exchange) {}
     
     @SuppressWarnings("unused")
-    @Pointcut("execution(Iterable<ProcessorExchangePair> " +
+    @Pointcut("execution(Iterable<org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair> " +
             "org.apache.camel.processor.Splitter.createProcessorExchangePairs(org.apache.camel.Exchange)) && args(exchange)")
     private void splitterExchangeCopy(Exchange exchange) {}
     
@@ -70,36 +63,9 @@ public class ExchangeCopy {
      * @see SplitHistory#SplitHistory(int)
      */
     @AfterReturning(pointcut="exchangeCopy(exchange)", returning="pairs")
-    public void afterCopy(Exchange exchange, Iterable<ProcessorExchangePair> pairs) {
-        ArrayList<ManagedMessage> copies = new ArrayList<ManagedMessage>(countElements(pairs));
-        for (ProcessorExchangePair pair : pairs) {
-            copies.add(new PlatformMessage(pair.getExchange()));
-        }
-        afterCopy(new PlatformMessage(exchange), copies);
-    }
-    
-    private void afterCopy(ManagedMessage message, List<ManagedMessage> copies) {
-        if (copies.size() < 2) {
-            return;
-        }
-        SplitHistory history = message.getSplitHistory();
-        SplitHistory[] splits = history.split(copies.size());
-        
-        for (int i = 0; i < splits.length; i++) {
-            copies.get(i).setSplitHistory(splits[i]);
-        }
-        
-    }
-    
-    private static int countElements(Iterable<ProcessorExchangePair> pairs) {
-        // Currently we can only handle split results
-        // that are lists because we need its size.
-        if (pairs instanceof List) {
-             return ((List<ProcessorExchangePair>)pairs).size();
-        } else {
-            throw new IllegalArgumentException("Cannot determine split size from split result.");
-        }
-        
+    public void afterCopy(Exchange exchange, Iterable pairs) {
+        System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+        ExchangeCopyHelper.afterCopy(exchange, pairs);
     }
     
 }

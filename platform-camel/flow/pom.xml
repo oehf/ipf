@@ -13,12 +13,21 @@
     
     <properties>
         <osgi.export.pkg>
-            org.apache.camel.*;version=${camel-version},
             org.openehealth.ipf.platform.camel.flow.*
         </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.apache.camel.processor,
+            *
+        </osgi.import.pkg>
+        <osgi.require.bundle>
+            com.springsource.org.aspectj.runtime;visibility:=reexport
+        </osgi.require.bundle>
         <ipf.extension.classes>
             org.openehealth.ipf.platform.camel.flow.extend.FlowModelExtension
         </ipf.extension.classes>
+        <eclipse.supplement.bundle>
+            org.apache.camel.camel-core;version=${camel-version}
+        </eclipse.supplement.bundle>
     </properties>
     
     <dependencies>
@@ -58,36 +67,22 @@
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>META-INF/**/*</include>
+                </includes>
+            </resource>
         </resources>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
+                <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <weaveDependencies>
-                        <weaveDependency>
-                            <groupId>org.apache.camel</groupId>
-                            <artifactId>camel-core</artifactId>
-                        </weaveDependency>
-                    </weaveDependencies>
+                    <argLine>-Xmx256m -javaagent:${project.build.directory}/lib/spring-agent.jar</argLine>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-               </executions>
             </plugin>
-            <!--
-                Need to offer Eclipse AJDT a jar file to weave that
-                doesn't conflict with the existing camel-core jar on
-                the classpath (that's a workaround until load-time
-                weaving is implemented). 
-             -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
@@ -98,19 +93,17 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.apache.camel</groupId>
-                                    <artifactId>camel-core</artifactId>
-                                    <version>${camel-version}</version>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>spring-agent</artifactId>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <destFileName>camel-core.jar</destFileName>
-                                    <outputDirectory>lib</outputDirectory>
+                                    <destFileName>spring-agent.jar</destFileName>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
-                
             </plugin>
         </plugins>
     </build>    
