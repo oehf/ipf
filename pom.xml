@@ -189,7 +189,7 @@
 
     <modules>
         <module>archetypes</module>
-		<module>assembly</module>
+        <module>assembly</module>
         <module>commons</module>
         <module>modules</module>
         <module>osgi</module>
