@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2008-2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,7 @@ import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.builder.ExpressionClause
 import org.apache.camel.builder.NoErrorHandlerBuilder
 import org.apache.camel.model.ChoiceType
+import org.apache.camel.model.ExceptionType
 import org.apache.camel.model.ProcessorType
 import org.apache.camel.model.dataformat.DataFormatType
 import org.apache.camel.processor.aggregate.AggregationStrategy
@@ -210,6 +211,14 @@ class CoreModelExtension {
              delegate.expression(exceptionMessageExpression())
          }
   
+        // ----------------------------------------------------------------
+        //  Platform ExceptionType extensions
+        // ----------------------------------------------------------------
+        
+        ExceptionType.metaClass.onWhen = { Closure predicate ->
+            delegate.onWhen(new DelegatingCamelPredicate(predicate))
+        }
+
         // ----------------------------------------------------------------
         //  Adapter Extensions for RouteBuilder
         // ----------------------------------------------------------------
