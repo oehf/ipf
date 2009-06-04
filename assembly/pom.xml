@@ -139,11 +139,31 @@
             <artifactId>platform-camel-lbs-mina</artifactId>
             <version>${pom.version}</version>
         </dependency>
-
-        <!--
-		    TODO: ADD NEW COMPONENTS
-         -->
-
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xdsb-commons</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xdsb-iti18</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xdsb-iti41</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xdsb-iti42</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xdsb-iti43</artifactId>
+            <version>${pom.version}</version>
+        </dependency>	
     </dependencies>
 
     <profiles>
