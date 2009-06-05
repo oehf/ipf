@@ -6,7 +6,7 @@
     <name>platform-camel-ihe-xdsb-iti43</name>
      
     <properties>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe-xdsb.iti43.*</ipf.extension.classes>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe-xdsb.iti43.*</osgi.export.pkg>
     </properties>
 
     <parent>

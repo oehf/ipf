@@ -6,7 +6,7 @@
     <name>platform-camel-ihe-xdsb-commons</name>
      
     <properties>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.xdsb.commons.*</ipf.extension.classes>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.xdsb.commons.*</osgi.export.pkg>
     </properties>
 
     <parent>
