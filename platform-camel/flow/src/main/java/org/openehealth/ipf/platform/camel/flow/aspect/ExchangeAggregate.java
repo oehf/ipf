@@ -63,7 +63,6 @@ public class ExchangeAggregate {
      * @throws Throwable
      */
     protected void doAroundExchangeProcess(ProceedingJoinPoint pjp) throws Throwable {
-        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         ManagedMessage message = getMessage(pjp);
         SplitHistory original = message.getSplitHistory();
         pjp.proceed(pjp.getArgs());

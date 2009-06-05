@@ -64,7 +64,6 @@ public class ExchangeCopy {
      */
     @AfterReturning(pointcut="exchangeCopy(exchange)", returning="pairs")
     public void afterCopy(Exchange exchange, Iterable pairs) {
-        System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
         ExchangeCopyHelper.afterCopy(exchange, pairs);
     }
     
