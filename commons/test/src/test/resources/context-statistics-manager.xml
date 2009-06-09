@@ -1,0 +1,52 @@
+
+    <!--
+        Copyright 2009 the original author or authors. Licensed under
+        the Apache License, Version 2.0 (the "License"); you may not use
+        this file except in compliance with the License. You may obtain
+        a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+        applicable law or agreed to in writing, software distributed
+        under the License is distributed on an "AS IS" BASIS, WITHOUT
+        WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions
+        and limitations under the License.
+    -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:camel="http://activemq.apache.org/camel/schema/spring"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="statisticsManager"
+        class="org.openehealth.ipf.commons.test.performance.StatisticsManager">
+        <property name="bindings">
+            <map>
+                <entry key-ref="throughputStatistics" 
+                    value-ref="throughputStatisticsRenderer" />
+                <entry key-ref="processingTimeStatistics"
+                    value-ref="processingTimeStatisticsRenderer" />
+                <entry key-ref="throughtputDistributionStatistics"
+                    value-ref="throughtputDistributionStatisticsRenderer" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="processingTimeStatistics"
+        class="org.openehealth.ipf.commons.test.performance.processingtime.ProcessingTimeStatistics" />
+    <bean id="processingTimeStatisticsRenderer"
+        class="org.openehealth.ipf.commons.test.performance.processingtime.ProcessingTimeStatisticsRenderer" />
+
+    <bean id="throughputStatistics"
+        class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatistics" />
+    <bean id="throughputStatisticsRenderer"
+        class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatisticsRenderer" />
+
+    <bean id="throughtputDistributionStatistics"
+        class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputDistributionStatistics" />
+    <bean id="throughtputDistributionStatisticsRenderer"
+        class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputDistributionStatisticsRenderer" />
+
+</beans>
