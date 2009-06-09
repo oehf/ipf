@@ -24,7 +24,7 @@ import org.apache.camel.spring.SpringRouteBuilder;
 public class RouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
-        from("xdsb-iti18:xdsb-iti18-service1")
+        from("xdsb-iti18:xdsb-iti18-service1?audit=false")
             .process(new AdhocQueryProcessor("service 1: "));
 
         from("xdsb-iti18:xdsb-iti18-service2")

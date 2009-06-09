@@ -52,9 +52,6 @@ public class AuditFinalInterceptor extends AuditInterceptor {
     
     @Override
     public void handleMessage(Message message) throws Fault {
-        if(isAuditDisabled()) {
-            return;
-        }
         AuditDataset auditDataset = getAuditDataset(message);
 
         // try to extract response as POJO 

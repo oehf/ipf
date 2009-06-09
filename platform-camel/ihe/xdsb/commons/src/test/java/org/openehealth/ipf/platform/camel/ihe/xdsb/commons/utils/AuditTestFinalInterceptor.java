@@ -63,11 +63,6 @@ abstract public class AuditTestFinalInterceptor extends AuditInterceptor {
     
     @Override
     public void handleMessage(Message message) throws Fault {
-        // check whether we should process or not
-        if(isAuditDisabled()) {
-            return;
-        }
-        
         Exchange exchange = message.getExchange();
         AuditDataset auditDataset = (AuditDataset)exchange.get(CXF_EXCHANGE_KEY);
         if(auditDataset == null) {

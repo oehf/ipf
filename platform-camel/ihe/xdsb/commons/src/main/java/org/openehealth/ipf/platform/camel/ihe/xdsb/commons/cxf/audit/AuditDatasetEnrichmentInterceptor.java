@@ -63,10 +63,6 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
     
     @Override
     public void handleMessage(Message message) throws Fault {
-        // check whether we should process
-        if(isAuditDisabled()) {
-            return;
-        }
         AuditDataset auditDataset = getAuditDataset(message);
 
         // determine what direction do we handle

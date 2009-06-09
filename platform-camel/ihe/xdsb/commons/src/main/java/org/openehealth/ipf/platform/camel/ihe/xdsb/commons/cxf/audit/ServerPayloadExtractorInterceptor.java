@@ -53,7 +53,7 @@ public class ServerPayloadExtractorInterceptor extends AuditInterceptor {
     @Override
     public void handleMessage(Message message) throws Fault {
         // check whether we should process
-        if(isAuditDisabled() || ( ! getAuditStrategy().needSavePayload())) {
+        if( ! getAuditStrategy().needSavePayload()) {
             return;
         }
         AuditDataset auditDataset = getAuditDataset(message);

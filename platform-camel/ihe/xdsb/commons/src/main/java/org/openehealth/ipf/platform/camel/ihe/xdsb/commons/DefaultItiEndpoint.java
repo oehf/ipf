@@ -32,6 +32,13 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
 
     private final String serviceAddress;
     private final String serviceUrl;
+    
+    /**
+     * Whether we should audit or not -- an URL parameter.  
+     * Equals to <code>true</code> per default.
+     */
+    private boolean audit = true;
+
 
     /**
      * Constructs the endpoint.
@@ -98,4 +105,27 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
         }
         return serviceAddress;
     }
+
+
+    /**
+     * Returns the parameter which was automatically set on the basis of endpoint URL.
+     * 
+     * @return
+     *      <code>true</code> when auditing is enabled, <code>false</code> otherwise 
+     */
+    public boolean isAudit() {
+        return this.audit;
+    }
+    
+    
+    /**
+     * Parameter setter used in automatic URL-based configuration. 
+     * 
+     * @param audit
+     *      auditing on/off switch
+     */
+    public void setAudit(boolean audit) {
+        this.audit = audit;
+    }
+
 }

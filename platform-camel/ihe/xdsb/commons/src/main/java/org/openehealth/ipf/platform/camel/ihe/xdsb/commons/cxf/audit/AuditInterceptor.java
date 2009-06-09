@@ -45,14 +45,6 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
 
     
     /**
-     * Global on/off switcher of all audit-related interceptors.
-     * <p>
-     * Per default, auditing is enabled (i.e. the value of this 
-     * flag equals to <code>false</code>).   
-     */
-    private static boolean auditDisabled = false; // TODO: configure via endpoint URI
-    
-    /**
      * Constructor which sets a strategy.
      * 
      * @param auditStrategy
@@ -101,36 +93,6 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
         return auditDataset;
     }
     
-    
-    /**
-     * Returns the current status of auditing.
-     * 
-     * @return
-     *      <code>true</code> when auditing is disabled; <code>false</code> otherwise
-     */
-    public static boolean isAuditDisabled() {
-        return auditDisabled;
-    }
-
-    
-    /**
-     * Switches all ATNA auditing activities on.
-     * <p>
-     * Auditing activities are active per default, so this method makes  
-     * only sense after {@link disableAudit()}.   
-     */
-    public static void enableAudit() {
-        auditDisabled = false;
-    }
-
-    
-    /**
-     * Switches all ATNA auditing activities off. 
-     */
-    public static void disableAudit() {
-        auditDisabled = true;
-    }
-
     
     /**
      * Returns the audit strategy associated with this interceptor. 

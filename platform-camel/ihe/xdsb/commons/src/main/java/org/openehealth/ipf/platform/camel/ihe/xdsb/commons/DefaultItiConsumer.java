@@ -108,14 +108,16 @@ public abstract class DefaultItiConsumer extends DefaultConsumer<Exchange> {
             svrFactory.setProperties(Collections.<String, Object>singletonMap("mtom-enabled", "true"));
         }
 
-        // auditing-related interceptors
-        AuditStrategy auditStrategy = createAuditStrategy();
-        svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor(auditStrategy));
-        svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
-
-        AuditFinalInterceptor auditOutInterceptor = new AuditFinalInterceptor(auditStrategy, true);
-        svrFactory.getOutInterceptors().add(auditOutInterceptor);
-        svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
+        // install auditing-related interceptors if the user has not switched auditing off
+        if(this.endpoint.isAudit()) {
+            AuditStrategy auditStrategy = createAuditStrategy();
+            svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor(auditStrategy));
+            svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
+    
+            AuditFinalInterceptor auditOutInterceptor = new AuditFinalInterceptor(auditStrategy, true);
+            svrFactory.getOutInterceptors().add(auditOutInterceptor);
+            svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
+        }
         
         // protocol-related interceptors
         svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());

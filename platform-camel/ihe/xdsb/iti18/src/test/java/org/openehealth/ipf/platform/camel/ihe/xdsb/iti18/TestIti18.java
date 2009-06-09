@@ -43,7 +43,7 @@ public class TestIti18 {
     @Autowired
     private ProducerTemplate<Exchange> producerTemplate;
 
-    private static final String SERVICE1 = "xdsb-iti18://localhost:9091/xdsb-iti18-service1";
+    private static final String SERVICE1 = "xdsb-iti18://localhost:9091/xdsb-iti18-service1?audit=false";
     private static final String SERVICE2 = "xdsb-iti18://localhost:9091/xdsb-iti18-service2";
 
     

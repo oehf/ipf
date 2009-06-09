@@ -115,15 +115,17 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> {
             }
             client.getOutInterceptors().add(interceptor);
 
-            // auditing-related interceptors
-            AuditStrategy auditStrategy = createAuditStrategy();
-            client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
-            client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor(auditStrategy));
-            client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor(auditStrategy));
-
-            AuditFinalInterceptor finalInterceptor = new AuditFinalInterceptor(auditStrategy, false);
-            client.getInInterceptors().add(finalInterceptor);
-            client.getInFaultInterceptors().add(finalInterceptor);
+            // install auditing-related interceptors if the user has not switched auditing off
+            if(this.endpoint.isAudit()) {
+                AuditStrategy auditStrategy = createAuditStrategy();
+                client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
+                client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor(auditStrategy));
+                client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor(auditStrategy));
+    
+                AuditFinalInterceptor finalInterceptor = new AuditFinalInterceptor(auditStrategy, false);
+                client.getInInterceptors().add(finalInterceptor);
+                client.getInFaultInterceptors().add(finalInterceptor);
+            }
             
             //
             this.client.set(port);
