@@ -53,11 +53,13 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
     }
 
     /**
-     * Defines the headers that should be flagged with {@code mustUnderstand}.
+     * Adds a set of SOAP headers which are to be flagged 
+     * with {@code mustUnderstand}.
+     *  
      * @param headers
-     *          the headers to flag.
+     *          the headers to flag, represented as Strings 
      */
-    public void setHeaders(List<String> headers) {
+    public void addHeaders(List<String> headers) {
         for (String header : headers) {
             int namespaceEnd = header.indexOf('}');
             String namespace = header.substring(1, namespaceEnd);
@@ -66,6 +68,17 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
         }
     }
 
+    /**
+     * Adds an item to the list of SOAP headers which  
+     * are to be flagged with {@code mustUnderstand}.
+     *  
+     * @param header
+     */
+    public void addHeader(QName header) {
+        this.mustUnderstandHeaders.add(header);
+    }
+    
+    
     private Header getHeader(List<Header> headers, QName name) {
         for (Header header : headers) {
             if (header.getName().equals(name)) {

@@ -26,6 +26,11 @@ import org.apache.cxf.bus.CXFBusImpl;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.WsSecurityUnderstandingInInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditFinalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.ServerPayloadExtractorInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,8 +39,9 @@ import java.util.Collections;
  * Camel component used to create process incoming exchanges based on webservice calls.
  *
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-public class DefaultItiConsumer extends DefaultConsumer<Exchange> {
+public abstract class DefaultItiConsumer extends DefaultConsumer<Exchange> {
     private static final Log log = LogFactory.getLog(DefaultItiConsumer.class);
 
     private final DefaultItiEndpoint endpoint;
@@ -101,10 +107,33 @@ public class DefaultItiConsumer extends DefaultConsumer<Exchange> {
         if (info.isMtom()) {
             svrFactory.setProperties(Collections.<String, Object>singletonMap("mtom-enabled", "true"));
         }
+
+        // auditing-related interceptors
+        AuditStrategy auditStrategy = createAuditStrategy();
+        svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor(auditStrategy));
+        svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
+
+        AuditFinalInterceptor auditOutInterceptor = new AuditFinalInterceptor(auditStrategy, true);
+        svrFactory.getOutInterceptors().add(auditOutInterceptor);
+        svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
+        
+        // protocol-related interceptors
+        svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
+        
+        // CXF bus configuration
         CXFBusImpl bus = (CXFBusImpl) svrFactory.getBus();
         bus.setFeatures(Arrays.<AbstractFeature>asList(new WSAddressingFeature()));
         svrFactory.create();
 
         log.debug("Published webservice endpoint for: " + info.getServiceName());
     }
+    
+    
+    /**
+     * Creates a transaction-specific server-side audit strategy.
+     * 
+     * @return 
+     *      a newly created audit strategy instance
+     */
+    abstract protected AuditStrategy createAuditStrategy();
 }

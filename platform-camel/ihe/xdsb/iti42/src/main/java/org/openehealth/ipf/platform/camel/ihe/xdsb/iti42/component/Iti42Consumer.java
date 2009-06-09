@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.xdsb.iti42.component;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.ItiServiceInfo;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.iti42.audit.Iti42ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti42.service.Iti42Service;
 
 /**
@@ -35,5 +37,11 @@ public class Iti42Consumer extends DefaultItiConsumer {
      */
     public Iti42Consumer(Iti42Endpoint endpoint, Processor processor, ItiServiceInfo serviceInfo) {
         super(endpoint, processor, new Iti42Service(), serviceInfo);
+    }
+
+    
+    @Override
+    protected AuditStrategy createAuditStrategy() {
+        return new Iti42ServerAuditStrategy();
     }
 }

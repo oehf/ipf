@@ -21,6 +21,8 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
@@ -75,7 +77,10 @@ public class TestServers {
         }
     }
 
-    /** Simple test servlet class */
+    /** 
+     * Simple test servlet class. 
+     */
+    @Ignore
     public static class Servlet extends HttpServlet {
         private static final long serialVersionUID = 1L;
 

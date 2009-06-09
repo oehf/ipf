@@ -18,8 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.xdsb.iti18.component;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.query.AdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.iti18.audit.Iti18ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti18.service.Iti18PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
@@ -27,6 +29,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
  * The producer implementation for the ITI-18 component.
  */
 public class Iti18Producer extends DefaultItiProducer<Iti18PortType> {
+    
     /**
      * Constructs the producer.
      * @param endpoint
@@ -38,11 +41,18 @@ public class Iti18Producer extends DefaultItiProducer<Iti18PortType> {
         super(endpoint, serviceInfo);
     }
 
+    
     @Override
     protected void callService(Exchange exchange) {
         AdhocQueryRequest body =
                 exchange.getIn().getBody(AdhocQueryRequest.class);
         AdhocQueryResponse result = getClient().documentRegistryRegistryStoredQuery(body);
         Exchanges.resultMessage(exchange).setBody(result);
+    }
+
+    
+    @Override
+    protected AuditStrategy createAuditStrategy() {
+        return new Iti18ClientAuditStrategy();
     }
 }

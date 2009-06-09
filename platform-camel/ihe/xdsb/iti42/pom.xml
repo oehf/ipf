@@ -28,25 +28,7 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-xdsb-commons</artifactId>
             <version>${pom.version}</version>
-            <scope>test</scope>
             <classifier>tests</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>catalina</artifactId>
-            <version>6.0.18</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>coyote</artifactId>
-            <version>6.0.18</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>jasper</artifactId>
-            <version>6.0.18</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

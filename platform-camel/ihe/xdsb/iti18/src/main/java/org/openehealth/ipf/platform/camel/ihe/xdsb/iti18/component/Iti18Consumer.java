@@ -18,12 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.xdsb.iti18.component;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.ItiServiceInfo;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.iti18.audit.Iti18ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti18.service.Iti18Service;
 
 /**
  * The Camel consumer for the ITI-18 transaction.
  */
 public class Iti18Consumer extends DefaultItiConsumer {
+    
     /**
      * Constructs the consumer.
      * @param endpoint
@@ -35,5 +38,11 @@ public class Iti18Consumer extends DefaultItiConsumer {
      */
     public Iti18Consumer(Iti18Endpoint endpoint, Processor processor, ItiServiceInfo serviceInfo) {
         super(endpoint, processor, new Iti18Service(), serviceInfo);
+    }
+    
+    
+    @Override
+    protected AuditStrategy createAuditStrategy() {
+        return new Iti18ServerAuditStrategy();
     }
 }

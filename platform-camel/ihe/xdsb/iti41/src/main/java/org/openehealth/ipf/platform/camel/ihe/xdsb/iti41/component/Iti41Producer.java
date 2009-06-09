@@ -19,7 +19,9 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.rs.RegistryResponseType;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.iti41.audit.Iti41ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti41.service.Iti41PortType;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti41.service.ProvideAndRegisterDocumentSetRequestType;
 
@@ -27,6 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xdsb.iti41.service.ProvideAndRegis
  * The producer implementation for the ITI-41 component.
  */
 public class Iti41Producer extends DefaultItiProducer<Iti41PortType> {
+    
     /**
      * Constructs the producer.
      * @param endpoint
@@ -38,11 +41,18 @@ public class Iti41Producer extends DefaultItiProducer<Iti41PortType> {
         super(endpoint, serviceInfo);
     }
 
+    
     @Override
     protected void callService(Exchange exchange) {
         ProvideAndRegisterDocumentSetRequestType body =
                 exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
         RegistryResponseType result = getClient().documentRepositoryProvideAndRegisterDocumentSetB(body);
         Exchanges.resultMessage(exchange).setBody(result);
+    }
+
+    
+    @Override
+    protected AuditStrategy createAuditStrategy() {
+        return new Iti41ClientAuditStrategy();
     }
 }

@@ -16,9 +16,15 @@
 package org.openehealth.ipf.platform.camel.ihe.xdsb.iti43;
 
 import static junit.framework.Assert.assertEquals;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
+import org.apache.cxf.bus.CXFBusImpl;
+import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.utils.CxfTestUtils;
@@ -43,6 +49,21 @@ public class TestIti43 {
     private static final String SERVICE1 = "xdsb-iti43://localhost:9091/xdsb-iti43-service1";
     private static final String SERVICE2 = "xdsb-iti43://localhost:9091/xdsb-iti43-service2";
 
+    
+    @Before
+    public void setUp() {
+        /*
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
+        */
+        
+        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
+        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
+        bus.getOutInterceptors().add(new TestIti43AuditFinalInterceptor(true));
+        bus.getInInterceptors().add(new TestIti43AuditFinalInterceptor(false));
+    }
+
+    
     /** Calls the route attached to the ITI-43 endpoint. */
     @Test
     public void testIti43() {

@@ -19,14 +19,17 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.iti42.audit.Iti42ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti42.service.Iti42PortType;
 
 /**
  * The producer implementation for the ITI-42 component.
  */
 public class Iti42Producer extends DefaultItiProducer<Iti42PortType> {
+    
     /**
      * Constructs the producer.
      * @param endpoint
@@ -38,11 +41,18 @@ public class Iti42Producer extends DefaultItiProducer<Iti42PortType> {
         super(endpoint, serviceInfo);
     }
 
+    
     @Override
     protected void callService(Exchange exchange) {
         SubmitObjectsRequest body =
                 exchange.getIn().getBody(SubmitObjectsRequest.class);
         RegistryResponseType result = getClient().documentRegistryRegisterDocumentSetB(body);
         Exchanges.resultMessage(exchange).setBody(result);
+    }
+
+    
+    @Override
+    protected AuditStrategy createAuditStrategy() {
+        return new Iti42ClientAuditStrategy();
     }
 }

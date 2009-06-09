@@ -16,13 +16,20 @@
 package org.openehealth.ipf.platform.camel.ihe.xdsb.iti18;
 
 import static junit.framework.Assert.assertEquals;
+
+import java.util.UUID;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
+import org.apache.cxf.bus.CXFBusImpl;
+import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.query.AdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.rim.AdhocQueryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -39,10 +46,26 @@ public class TestIti18 {
     private static final String SERVICE1 = "xdsb-iti18://localhost:9091/xdsb-iti18-service1";
     private static final String SERVICE2 = "xdsb-iti18://localhost:9091/xdsb-iti18-service2";
 
+    
+    @Before
+    public void setUp() {
+        /*
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
+        */
+        
+        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
+        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
+        bus.getOutInterceptors().add(new TestIti18AuditFinalInterceptor(true));
+        bus.getInInterceptors().add(new TestIti18AuditFinalInterceptor(false));
+    }
+    
     /** Calls the route attached to the ITI-18 endpoint. */
     @Test
     public void testIti18() {
         AdhocQueryRequest request = new AdhocQueryRequest();
+        request.setAdhocQuery(new AdhocQueryType());
+        request.getAdhocQuery().setId(UUID.randomUUID().toString());
         request.setComment("ok");
 
         AdhocQueryResponse response1 =

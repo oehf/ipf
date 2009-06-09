@@ -15,22 +15,30 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xdsb.commons;
 
+import static org.apache.commons.lang.Validate.notNull;
+
+import java.net.URL;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.Binding;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
+import javax.xml.ws.soap.SOAPBinding;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
-import static org.apache.commons.lang.Validate.notNull;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.MustUnderstandDecoratorInterceptor;
-
-import javax.xml.ws.Binding;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import javax.xml.ws.soap.SOAPBinding;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Map;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditFinalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.ClientOutputStreamSubstituteInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.ClientPayloadExtractorInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.utils.SoapUtils;
 
 /**
  * Camel producer used to make calls to a webservice.
@@ -39,6 +47,7 @@ import java.util.Map;
  *          the type of the webservice.
  *
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
 public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> {
     private static final Log log = LogFactory.getLog(DefaultItiProducer.class);
@@ -97,15 +106,38 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> {
             soapBinding.setMTOMEnabled(serviceInfo.isMtom());
 
             Client client = ClientProxy.getClient(port);
+            
+            // protocol-related interceptors
             MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
-            interceptor.setHeaders(Arrays.asList("{http://www.w3.org/2005/08/addressing}Action"));
-            interceptor.setHeaders(Arrays.asList("{http://www.w3.org/2005/08/addressing}ReplyTo"));
+            for(String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
+                interceptor.addHeader(new QName(nsUri, "Action"));
+                interceptor.addHeader(new QName(nsUri, "ReplyTo"));
+            }
             client.getOutInterceptors().add(interceptor);
 
-            this.client.set(port);
+            // auditing-related interceptors
+            AuditStrategy auditStrategy = createAuditStrategy();
+            client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
+            client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor(auditStrategy));
+            client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor(auditStrategy));
 
+            AuditFinalInterceptor finalInterceptor = new AuditFinalInterceptor(auditStrategy, false);
+            client.getInInterceptors().add(finalInterceptor);
+            client.getInFaultInterceptors().add(finalInterceptor);
+            
+            //
+            this.client.set(port);
             log.debug("Created client adapter for: " + serviceInfo.getServiceName());
         }
         return client.get();
     }
+
+
+    /**
+     * Creates a transaction-specific client-side audit strategy.
+     * 
+     * @return 
+     *      a newly created audit strategy instance
+     */
+    abstract protected AuditStrategy createAuditStrategy();
 }

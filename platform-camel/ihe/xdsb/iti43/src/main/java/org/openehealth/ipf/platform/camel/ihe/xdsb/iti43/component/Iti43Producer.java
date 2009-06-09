@@ -19,6 +19,8 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xdsb.iti43.audit.Iti43ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti43.service.Iti43PortType;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti43.service.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.iti43.service.RetrieveDocumentSetResponseType;
@@ -27,6 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xdsb.iti43.service.RetrieveDocumen
  * The producer implementation for the ITI-42 component.
  */
 public class Iti43Producer extends DefaultItiProducer<Iti43PortType> {
+    
     /**
      * Constructs the producer.
      * @param endpoint
@@ -38,11 +41,18 @@ public class Iti43Producer extends DefaultItiProducer<Iti43PortType> {
         super(endpoint, serviceInfo);
     }
 
+    
     @Override
     protected void callService(Exchange exchange) {
         RetrieveDocumentSetRequestType body =
                 exchange.getIn().getBody(RetrieveDocumentSetRequestType.class);
         RetrieveDocumentSetResponseType result = getClient().documentRepositoryRetrieveDocumentSet(body);
         Exchanges.resultMessage(exchange).setBody(result);
+    }
+
+    
+    @Override
+    protected AuditStrategy createAuditStrategy() {
+        return new Iti43ClientAuditStrategy();
     }
 }

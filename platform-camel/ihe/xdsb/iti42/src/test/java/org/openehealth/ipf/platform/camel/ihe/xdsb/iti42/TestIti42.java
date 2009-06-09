@@ -16,8 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.xdsb.iti42;
 
 import static junit.framework.Assert.assertEquals;
+
+import java.util.UUID;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
+import org.apache.cxf.bus.CXFBusImpl;
+import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.platform.camel.ihe.xdsb.commons.stub.ebrs.lcm.SubmitObjectsRequest;
@@ -39,10 +45,26 @@ public class TestIti42 {
     private static final String SERVICE1 = "xdsb-iti42://localhost:9091/xdsb-iti42-service1";
     private static final String SERVICE2 = "xdsb-iti42://localhost:9091/xdsb-iti42-service2";
 
+    
+    @Before
+    public void setUp() {
+        /*
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
+        */
+        
+        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
+        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
+        bus.getOutInterceptors().add(new TestIti42AuditFinalInterceptor(true));
+        bus.getInInterceptors().add(new TestIti42AuditFinalInterceptor(false));
+    }
+
+    
     /** Calls the route attached to the ITI-42 endpoint. */
     @Test
     public void testIti42() {
         SubmitObjectsRequest request = new SubmitObjectsRequest();
+        request.setId(UUID.randomUUID().toString());
         request.setComment("ok");
 
         RegistryResponseType response1 =
