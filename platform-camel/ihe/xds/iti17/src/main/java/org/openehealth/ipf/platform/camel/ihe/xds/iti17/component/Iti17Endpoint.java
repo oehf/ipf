@@ -19,14 +19,16 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiEndpoint;
-
 import java.net.URISyntaxException;
 
 /**
  * The Camel endpoint for the ITI-17 transaction.
  */
 public class Iti17Endpoint extends DefaultItiEndpoint {
+    private Iti17Consumer activeConsumer;
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -48,5 +50,15 @@ public class Iti17Endpoint extends DefaultItiEndpoint {
 
     public Consumer<Exchange> createConsumer(Processor processor) throws Exception {
         return new Iti17Consumer(this, processor);
+    }
+
+    public Iti17Consumer getActiveConsumer() {
+        return activeConsumer;
+    }
+
+    public void setActiveConsumer(Iti17Consumer activeConsumer) {
+        Validate.isTrue(this.activeConsumer == null || activeConsumer == null,
+                "Only one ITI-17 consumer can be active at any time");
+        this.activeConsumer = activeConsumer;
     }
 }

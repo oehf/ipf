@@ -24,8 +24,8 @@ import org.apache.catalina.loader.VirtualWebappLoader;
 import org.apache.catalina.startup.Embedded;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.web.context.ContextLoaderListener;
 
-import java.io.File;
 import java.net.InetAddress;
 
 /**
@@ -39,17 +39,21 @@ public class TomcatServer extends ServletServer {
 
     private Embedded embedded;
     private Wrapper wrapper;
-    
+
     @Override
     public void start() {
         embedded = new Embedded();
 
-        Context context = embedded.createContext(getContextPath(), new File(".").getAbsolutePath());
+        String base = getContextFile().getParentFile().getAbsolutePath();
+        
+        Context context = embedded.createContext(getContextPath(), base);
         TomcatServletWrapper.setServlet(getServlet());
         context.setWrapperClass(TomcatServletWrapper.class.getName());
+        context.addParameter("contextConfigLocation", "/" + getContextFile().getName());
+        context.addApplicationListener(ContextLoaderListener.class.getName());
 
         wrapper = context.createWrapper();
-        wrapper.setName("servlet");        
+        wrapper.setName("servlet");
         wrapper.setServletClass(getServlet().getClass().getName());
 
         context.addChild(wrapper);
@@ -59,7 +63,7 @@ public class TomcatServer extends ServletServer {
         loader.setVirtualClasspath(System.getProperty("java.class.path"));
         context.setLoader(loader);
         
-        Host host = embedded.createHost("localhost", new File(".").getAbsolutePath());
+        Host host = embedded.createHost("localhost", base);
         host.addChild(context);
         
         Engine engine = embedded.createEngine();

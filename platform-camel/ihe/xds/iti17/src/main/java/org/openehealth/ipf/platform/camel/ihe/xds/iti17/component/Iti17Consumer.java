@@ -21,17 +21,16 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
-import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.Auditable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.audit.Iti17ServerAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet;
 
 /**
  * The Camel consumer for the ITI-17 transaction.
  */
 public class Iti17Consumer extends DefaultConsumer<Exchange> implements Auditable {
+    
     private final Iti17Endpoint endpoint;
     
     /**
@@ -44,13 +43,6 @@ public class Iti17Consumer extends DefaultConsumer<Exchange> implements Auditabl
     public Iti17Consumer(Iti17Endpoint endpoint, Processor processor) {
         super(endpoint, processor);
         this.endpoint = endpoint;
-        
-        publishService();
-    }
-
-    private void publishService() {
-        Validate.notNull(endpoint.getServiceAddress());
-        Iti17Servlet.addConsumer(endpoint.getServiceAddress(), this);
     }
 
     /**
@@ -66,6 +58,18 @@ public class Iti17Consumer extends DefaultConsumer<Exchange> implements Auditabl
         exchange.getIn().setBody(requestURI);
         getProcessor().process(exchange);
         return Exchanges.resultMessage(exchange).getBody(InputStream.class);
+    }
+    
+    @Override
+    protected void doStart() throws Exception {
+        super.doStart();
+        endpoint.setActiveConsumer(this);
+    }
+    
+    @Override
+    protected void doStop() throws Exception {
+        endpoint.setActiveConsumer(null);
+        super.doStop();
     }
 
     @Override

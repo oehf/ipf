@@ -19,36 +19,28 @@ import static junit.framework.Assert.assertEquals;
 
 import java.util.UUID;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.ProducerTemplate;
 import org.apache.cxf.bus.CXFBusImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
-import org.junit.Before;
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AdhocQueryType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Tests the ITI-18 component with the webservice and the client defined within the URI.
  * @author Jens Riemschneider
  */
-@RunWith(DirtySpringContextJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/iti-18.xml")
-public class TestIti18 {
-    @Autowired
-    private ProducerTemplate<Exchange> producerTemplate;
-
+public class TestIti18 extends StandardTestWebContainer {
     private static final String SERVICE1 = "xds-iti18://localhost:9091/xds-iti18-service1?audit=false";
     private static final String SERVICE2 = "xds-iti18://localhost:9091/xds-iti18-service2";
 
-    
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() throws Exception {
+        startServer(new CXFServlet(), "iti-18.xml");
+
         /*
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
@@ -69,12 +61,12 @@ public class TestIti18 {
         request.setComment("ok");
 
         AdhocQueryResponse response1 =
-                (AdhocQueryResponse) producerTemplate.requestBody(SERVICE1, request);
+                (AdhocQueryResponse) getProducerTemplate().requestBody(SERVICE1, request);
 
         assertEquals("service 1: ok", response1.getStatus());
 
         AdhocQueryResponse response2 =
-                (AdhocQueryResponse) producerTemplate.requestBody(SERVICE2, request);
+                (AdhocQueryResponse) getProducerTemplate().requestBody(SERVICE2, request);
 
         assertEquals("service 2: ok", response2.getStatus());
     }

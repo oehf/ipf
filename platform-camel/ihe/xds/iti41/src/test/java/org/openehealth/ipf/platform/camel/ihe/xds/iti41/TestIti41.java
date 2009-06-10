@@ -19,21 +19,16 @@ import static junit.framework.Assert.assertEquals;
 
 import java.util.UUID;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.ProducerTemplate;
 import org.apache.cxf.bus.CXFBusImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
-import org.junit.Before;
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.ProvideAndRegisterDocumentSetRequestType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 
@@ -41,18 +36,14 @@ import javax.activation.DataSource;
  * Tests the ITI-41 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/iti-41.xml")
-public class TestIti41 {
-    @Autowired
-    private ProducerTemplate<Exchange> producerTemplate;
-
+public class TestIti41 extends StandardTestWebContainer {
     private static final String SERVICE1 = "xds-iti41://localhost:9091/xds-iti41-service1";
     private static final String SERVICE2 = "xds-iti41://localhost:9091/xds-iti41-service2";
-
     
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() throws Exception {
+        startServer(new CXFServlet(), "iti-41.xml");
+        
         /*
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
@@ -64,7 +55,6 @@ public class TestIti41 {
         bus.getInInterceptors().add(new Iti41TestAuditFinalInterceptor(false));
     }
     
-    
     /** Calls the route attached to the ITI-41 endpoint. */
     @Test
     public void testIti41() {
@@ -75,12 +65,12 @@ public class TestIti41 {
         request.setSubmitObjectsRequest(submitObjectRequest);
 
         RegistryResponseType response1 =
-                (RegistryResponseType)producerTemplate.requestBody(SERVICE1, request);
+                (RegistryResponseType)getProducerTemplate().requestBody(SERVICE1, request);
 
         assertEquals("service 1: ok", response1.getStatus());
 
         RegistryResponseType response2 =
-                (RegistryResponseType)producerTemplate.requestBody(SERVICE2, request);
+                (RegistryResponseType)getProducerTemplate().requestBody(SERVICE2, request);
 
         assertEquals("service 2: ok", response2.getStatus());
     }
@@ -100,7 +90,7 @@ public class TestIti41 {
         request.setSubmitObjectsRequest(submitObjectRequest);
 
         RegistryResponseType response =
-            (RegistryResponseType)producerTemplate.requestBody(SERVICE1, request);
+            (RegistryResponseType)getProducerTemplate().requestBody(SERVICE1, request);
 
         assertEquals("service 1: ok", response.getStatus());
     }

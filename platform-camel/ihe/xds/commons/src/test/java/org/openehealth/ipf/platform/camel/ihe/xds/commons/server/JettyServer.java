@@ -20,6 +20,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
+import org.springframework.web.context.ContextLoaderListener;
 
 /**
  * A servlet server based on Jetty.
@@ -31,12 +32,20 @@ public class JettyServer extends ServletServer {
     private Server server;
 
     @Override
+    @SuppressWarnings("unchecked")  // Required by getInitParams implementation
     public void start() {
+        String base = getContextFile().getParentFile().getAbsolutePath();
+
         Connector connector = new SelectChannelConnector();
         server = new Server();
         server.addConnector(connector);
         connector.setPort(getPort());
         Context context = new Context(Context.NO_SESSIONS);
+        context.setResourceBase(base);
+        ContextLoaderListener listener = new ContextLoaderListener();
+
+        context.getInitParams().put("contextConfigLocation", "/" + getContextFile().getName());
+        context.addEventListener(listener);
 
         context.setContextPath(getContextPath());
         ServletHolder holder = new ServletHolder(getServlet());

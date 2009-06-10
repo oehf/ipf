@@ -18,15 +18,19 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.camel.CamelContext;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Consumer;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Endpoint;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Servlet implementation to dispatch incoming ITI-17 (Retrieve Document)
@@ -36,25 +40,33 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Consumer;
 public class Iti17Servlet extends HttpServlet {
     private static final long serialVersionUID = -401129606220792110L;
     
-    private final static Map<String, Iti17Consumer> consumers = new ConcurrentHashMap<String, Iti17Consumer>();
-    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String requestURI = req.getRequestURI();
-        Iti17Consumer consumer = getConsumer(requestURI);
+        CamelContext camelContext = getCamelContext();
+        
+        String requestURI = req.getRequestURI();        
+        String endpointName = toEndpointName(requestURI);
+        
+        Iti17Endpoint endpoint = camelContext.getEndpoint(endpointName, Iti17Endpoint.class);
+        if (endpoint == null) {
+            super.doGet(req, resp);
+            return;
+        }
+
+        Iti17Consumer consumer = endpoint.getActiveConsumer();
         if (consumer == null) {
             super.doGet(req, resp);
             return;
         }
         
-        String fullRequestUri = req.getRequestURL()
+        String fullRequestURI = req.getRequestURL()
             .append("?")
             .append(req.getQueryString())
             .toString();
-        
+    
         InputStream inputStream;
         try {
-            inputStream = consumer.process(fullRequestUri);
+            inputStream = consumer.process(fullRequestURI);
         }        
         catch (Exception e) {
             resp.setStatus(500);
@@ -70,23 +82,18 @@ public class Iti17Servlet extends HttpServlet {
         }
     }
 
-    private Iti17Consumer getConsumer(String requestURI) {
-        for (Map.Entry<String, Iti17Consumer> entry : consumers.entrySet()) {
-            if (requestURI.startsWith(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return null;
+    private String toEndpointName(String requestURI) {
+        String serviceName = requestURI.startsWith("/") ? requestURI.substring(1) : requestURI;
+        return "xds-iti17:" + serviceName;
     }
 
-    /**
-     * Adds a consumer to a specific service address.
-     * @param serviceAddress
-     *          the address of the service to add the consumer to.
-     * @param iti17Consumer
-     *          the consumer to add.
-     */
-    public static void addConsumer(String serviceAddress, Iti17Consumer iti17Consumer) {
-        consumers.put(serviceAddress, iti17Consumer);
+    private CamelContext getCamelContext() {
+        ServletContext servletContext = getServletContext();
+        ApplicationContext appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+        Map<?, ?> camelContextBeans = appContext.getBeansOfType(CamelContext.class);
+        Validate.isTrue(camelContextBeans.size() == 1, "A single camelContext bean is required in the application context");
+        CamelContext camelContext = (CamelContext) camelContextBeans.values().iterator().next();
+        Validate.notNull(camelContext, "A single camelContext bean is required in the application context");
+        return camelContext;
     }
 }

@@ -22,11 +22,14 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -52,10 +55,13 @@ public class TestServers {
     }
 
     private void checkServer(ServletServer server) throws Exception {
+        File contextFile = new ClassPathResource("test.xml").getFile();
+
         server.setServlet(new Servlet());
         server.setPort(9090);
         server.setContextPath("/testContext");
         server.setServletPath("/testServlet/*");
+        server.setContextFile(contextFile);
         server.start();
         checkPostRequest();
         server.stop();

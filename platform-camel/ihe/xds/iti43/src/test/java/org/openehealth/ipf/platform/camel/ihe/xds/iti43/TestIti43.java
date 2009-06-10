@@ -17,41 +17,33 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43;
 
 import static junit.framework.Assert.assertEquals;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.ProducerTemplate;
 import org.apache.cxf.bus.CXFBusImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.apache.cxf.transport.servlet.CXFServlet;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.CxfTestUtils;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetResponseType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import javax.activation.DataHandler;
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.
  * author Jens Riemschneider
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/iti-43.xml")
-public class TestIti43 {
-    @Autowired
-    private ProducerTemplate<Exchange> producerTemplate;
-
+public class TestIti43 extends StandardTestWebContainer {
     private static final String SERVICE1 = "xds-iti43://localhost:9091/xds-iti43-service1";
     private static final String SERVICE2 = "xds-iti43://localhost:9091/xds-iti43-service2";
 
     
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() throws Exception {
+        startServer(new CXFServlet(), "iti-43.xml");
+        
         /*
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
@@ -73,11 +65,11 @@ public class TestIti43 {
         request.getDocumentRequest().add(documentRequest);
 
         RetrieveDocumentSetResponseType response1 =
-                (RetrieveDocumentSetResponseType) producerTemplate.requestBody(SERVICE1, request);
+                (RetrieveDocumentSetResponseType) getProducerTemplate().requestBody(SERVICE1, request);
         assertEquals("service 1: ok", response1.getRegistryResponse().getStatus());
 
         RetrieveDocumentSetResponseType response2 =
-                (RetrieveDocumentSetResponseType) producerTemplate.requestBody(SERVICE2, request);
+                (RetrieveDocumentSetResponseType) getProducerTemplate().requestBody(SERVICE2, request);
 
         assertEquals("service 2: ok", response2.getRegistryResponse().getStatus());
     }
@@ -91,7 +83,7 @@ public class TestIti43 {
         documentRequest.setDocumentUniqueId("large");
         request.getDocumentRequest().add(documentRequest);
         RetrieveDocumentSetResponseType response =
-                (RetrieveDocumentSetResponseType) producerTemplate.requestBody(SERVICE1, request);
+                (RetrieveDocumentSetResponseType) getProducerTemplate().requestBody(SERVICE1, request);
 
         DataHandler dataHandler = response.getDocumentResponse().get(0).getDocument();
         assertTrue(CxfTestUtils.isCxfUsingMtom(dataHandler));

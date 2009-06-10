@@ -17,30 +17,28 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti16;
 
 import static junit.framework.Assert.assertEquals;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.ProducerTemplate;
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Tests the ITI-16 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/iti-16.xml")
-public class TestIti16 {
-    @Autowired
-    private ProducerTemplate<Exchange> producerTemplate;
+public class TestIti16 extends StandardTestWebContainer {
 
     private static final String SERVICE1 = "xds-iti16://localhost:9091/xds-iti16-service1";
     private static final String SERVICE2 = "xds-iti16://localhost:9091/xds-iti16-service2";
 
+    @BeforeClass
+    public static void setUp() throws Exception {
+        startServer(new CXFServlet(), "iti-16.xml");
+    }
+    
     /** Calls the route attached to the ITI-16 endpoint. */
     @Test
     public void testIti16() {
@@ -48,14 +46,14 @@ public class TestIti16 {
         request.setSQLQuery("ok");
 
         AdhocQueryResponse response1 =
-                (AdhocQueryResponse)producerTemplate.requestBody(SERVICE1, request);
+                (AdhocQueryResponse)getProducerTemplate().requestBody(SERVICE1, request);
 
         RegistryObjectType actual1 = 
             (RegistryObjectType) response1.getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);
         assertEquals("service 1: ok", actual1.getObjectType());
 
         AdhocQueryResponse response2 =
-                (AdhocQueryResponse)producerTemplate.requestBody(SERVICE2, request);
+                (AdhocQueryResponse)getProducerTemplate().requestBody(SERVICE2, request);
 
         RegistryObjectType actual2 = 
             (RegistryObjectType) response2.getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);

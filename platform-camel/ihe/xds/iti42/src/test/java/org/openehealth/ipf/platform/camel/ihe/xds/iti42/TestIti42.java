@@ -19,35 +19,28 @@ import static junit.framework.Assert.assertEquals;
 
 import java.util.UUID;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.ProducerTemplate;
 import org.apache.cxf.bus.CXFBusImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
-import org.junit.Before;
+import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Tests the ITI-42 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/iti-42.xml")
-public class TestIti42 {
-    @Autowired
-    private ProducerTemplate<Exchange> producerTemplate;
-
+public class TestIti42 extends StandardTestWebContainer {
     private static final String SERVICE1 = "xds-iti42://localhost:9091/xds-iti42-service1";
     private static final String SERVICE2 = "xds-iti42://localhost:9091/xds-iti42-service2";
 
     
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() throws Exception {
+        startServer(new CXFServlet(), "iti-42.xml");
+        
         /*
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
@@ -68,11 +61,11 @@ public class TestIti42 {
         request.setComment("ok");
 
         RegistryResponseType response1 =
-                (RegistryResponseType) producerTemplate.requestBody(SERVICE1, request);
+                (RegistryResponseType) getProducerTemplate().requestBody(SERVICE1, request);
         assertEquals("service 1: ok", response1.getStatus());
 
         RegistryResponseType response2 =
-                (RegistryResponseType) producerTemplate.requestBody(SERVICE2, request);
+                (RegistryResponseType) getProducerTemplate().requestBody(SERVICE2, request);
         assertEquals("service 2: ok", response2.getStatus());
     }
 }

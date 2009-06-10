@@ -41,13 +41,4 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti14.RouteBuilder" />
-
-    <bean id="server" class="org.openehealth.ipf.platform.camel.ihe.xds.commons.server.TomcatServer" init-method="start">
-        <property name="servlet" ref="servlet"/>
-        <property name="port" value="9091"/>
-        <property name="contextPath" value=""/>
-        <property name="servletPath" value="/*"/>
-    </bean>
-
-    <bean id="servlet" class="org.apache.cxf.transport.servlet.CXFServlet" />
 </beans>

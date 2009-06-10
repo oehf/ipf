@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.server;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.io.File;
+
 import javax.servlet.Servlet;
 
 /**
@@ -30,6 +32,7 @@ public abstract class ServletServer {
     private int port;
     private String contextPath;
     private String servletPath;
+    private File contextFile;
 
     /**
      * Starts the server.
@@ -107,5 +110,21 @@ public abstract class ServletServer {
      */
     public Servlet getServlet() {
         return servlet;
+    }
+
+    /**
+     * @return the location of the context file.
+     */
+    public File getContextFile() {
+        return contextFile;
+    }
+
+    /**
+     * @param contextFile
+     *          the location of the context file.
+     */
+    public void setContextFile(File contextFile) {
+        notNull(contextFile, "contextFile cannot be null");
+        this.contextFile = contextFile;
     }
 }
