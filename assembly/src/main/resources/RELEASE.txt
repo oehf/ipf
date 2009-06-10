@@ -1,0 +1,3 @@
+The IPF 1.7-m1 release notes are available at
+
+http://repo.openehealth.org/confluence/display/ipf/IPF+1.7-m1
