@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.hl7.extend;
+package org.openehealth.ipf.platform.camel.hl7.transport;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
@@ -38,7 +38,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 @ContextConfiguration(locations = { "/config/context-transport.xml" })
-public class Hl7TransportTest {
+public class TransportTest {
 
     @Autowired
     protected ProducerTemplate<Exchange> producerTemplate;
