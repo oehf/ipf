@@ -36,7 +36,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.hl7.extend.TransportRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.hl7.transport.TransportRouteBuilder">
     </bean>
 
     <bean id="coreModelExtension"

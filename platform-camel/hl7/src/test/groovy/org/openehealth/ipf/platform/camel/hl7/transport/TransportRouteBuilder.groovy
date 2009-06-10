@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.hl7.extend
+package org.openehealth.ipf.platform.camel.hl7.transport
 
 import org.apache.camel.spring.SpringRouteBuilder
 /**
