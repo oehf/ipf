@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
@@ -26,11 +27,19 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 public class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset genericAuditDataset) {
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset auditDataset) {
+        AuditorManager.getRegistryAuditor().auditRegistryQueryEvent(
+                eventOutcome,
+                auditDataset.getUserId(),
+                auditDataset.getUserName(),
+                auditDataset.getClientIpAddress(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getPayload(),
+                /*auditDataset.getPatientId()*/ null);
     }
 
     @Override
     public AuditDataset createAuditDataset() {
-        return new Iti16AuditDataset(true);
+        return new AuditDataset(true);
     }
 }

@@ -84,7 +84,7 @@ abstract public class AuditTestFinalInterceptor extends AuditInterceptor {
          *         
          */
         
-        boolean isServerSide = "server".equals(auditDataset.getRole()); 
+        boolean isServerSide = auditDataset.isServerSide(); 
 
         boolean isOutbound = (message == exchange.getOutMessage()) || 
                              (message == exchange.getOutFaultMessage());

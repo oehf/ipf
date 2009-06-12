@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42.audit;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml30Utils;
 
 /**
  * Audit strategy for ITI-42.
@@ -27,20 +28,14 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.Submit
 abstract public class Iti42AuditStrategy implements AuditStrategy {
 
     @Override
-    public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
-        SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
-        Iti42AuditDataset auditDataset = (Iti42AuditDataset) genericAuditDataset;
+    public void enrichDataset(Object pojo, AuditDataset auditDataset) {
+        SubmitObjectsRequest submitObjectsRequest = (SubmitObjectsRequest) pojo;
 
-        auditDataset.setSubmissionSetUuid(request.getId());
+        Ebxml30Utils.enrichDatasetFromSubmitObjectsRequest(submitObjectsRequest, auditDataset);
     }
 
     @Override
     public boolean needSavePayload() {
         return false;
-    }
-
-    @Override
-    public AuditDataset createAuditDataset() {
-        return new Iti42AuditDataset(true);
     }
 }

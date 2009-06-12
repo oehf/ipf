@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -28,21 +29,19 @@ import java.io.OutputStream;
  * 
  * @author Dmytro Rud
  */
-public class WrappedOutputStream extends OutputStream {
+public class WrappedOutputStream extends FilterOutputStream {
 
-    private final OutputStream wrappedStream;
     private final StringBuilder payloadCollector;
     private boolean isActive;
 
     /**
      * Constructor.
      * 
-     * @param os
-     *            the output data stream to be wrapped
+     * @param os the output data stream to be wrapped
      */
     public WrappedOutputStream(OutputStream os) {
+        super(os);
         this.isActive = true;
-        this.wrappedStream = os;
         this.payloadCollector = new StringBuilder();
     }
 
@@ -75,7 +74,7 @@ public class WrappedOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b) throws IOException {
-        wrappedStream.write(b);
+        super.write(b);
         if (isActive) {
             payloadCollector.append(new String(b));
         }
@@ -83,7 +82,7 @@ public class WrappedOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        wrappedStream.write(b, off, len);
+        super.write(b, off, len);
         if (isActive) {
             payloadCollector.append(new String(b, off, len));
         }
@@ -91,20 +90,10 @@ public class WrappedOutputStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        wrappedStream.write(b);
+        super.write(b);
         // TODO: is that of any use at all?
         if (isActive) {
-            payloadCollector.append(b);
+            payloadCollector.append((char) (b & 0xFF));
         }
-    }
-
-    @Override
-    public void flush() throws IOException {
-        wrappedStream.flush();
-    }
-
-    @Override
-    public void close() throws IOException {
-        wrappedStream.close();
     }
 }

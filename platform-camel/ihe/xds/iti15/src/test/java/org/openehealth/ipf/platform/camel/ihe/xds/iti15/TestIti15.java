@@ -17,16 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti15;
 
 import static junit.framework.Assert.assertEquals;
 
-import java.util.List;
-
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.OrganizationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml21TestUtils;
 
 /**
  * Tests the ITI-15 transaction with a webservice and client adapter defined via URIs.
@@ -39,19 +36,14 @@ public class TestIti15 extends StandardTestWebContainer {
     @BeforeClass
     public static void setUp() throws Exception {
         startServer(new CXFServlet(), "iti-15.xml");
+        installTestInterceptors(Iti15TestAuditFinalInterceptor.class);
     }
     
     /** Calls the route attached to the ITI-15 endpoint. */
     @Test
     public void testIti15() {
-        SubmitObjectsRequest request = new SubmitObjectsRequest();
-        LeafRegistryObjectListType leafRegistryObjectListType = new LeafRegistryObjectListType();
-        List<Object> objectRefOrAssociationOrAuditableEvent = leafRegistryObjectListType.getObjectRefOrAssociationOrAuditableEvent();
-        OrganizationType orgType = new OrganizationType();
-        orgType.setObjectType("ok");
-        objectRefOrAssociationOrAuditableEvent.add(orgType);
-        request.setLeafRegistryObjectList(leafRegistryObjectListType);
-
+        SubmitObjectsRequest request = Ebxml21TestUtils.createTestSubmitObjectRequest();
+        
         RegistryResponse response1 =
                 (RegistryResponse)getProducerTemplate().requestBody(SERVICE1, request);
 

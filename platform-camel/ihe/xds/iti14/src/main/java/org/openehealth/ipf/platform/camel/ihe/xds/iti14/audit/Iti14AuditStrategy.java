@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml21TestUtils;
 
 /**
  * Audit strategy for ITI-14.
@@ -27,6 +29,8 @@ abstract public class Iti14AuditStrategy implements AuditStrategy {
 
     @Override
     public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
+        SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
+        Ebxml21TestUtils.enrichDatasetFromSubmitObjectsRequest(request, genericAuditDataset);
     }
 
     @Override

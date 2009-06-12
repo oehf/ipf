@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti15.audit;
-
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.utils;
 
 /**
- * ITI-15 specific Audit Dataset.
+ * Generic (version-agnostic) constants and subroutines for handling ebXML.  
  * 
  * @author Dmytro Rud
  */
-public class Iti15AuditDataset extends AuditDataset {
-
-    public Iti15AuditDataset(boolean isServerSide) {
-        super(isServerSide);
-    }
+public class EbxmlUtils {
+    
+    public static final String XDS_UNIQUE_ID_ATTRIBUTE = "XDSSubmissionSet.uniqueId"; 
+    public static final String XDS_PATIENT_ID_ATTRIBUTE = "XDSSubmissionSet.patientId";
+    
 }

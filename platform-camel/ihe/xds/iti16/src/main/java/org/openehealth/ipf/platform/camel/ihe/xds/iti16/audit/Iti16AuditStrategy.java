@@ -27,10 +27,11 @@ abstract public class Iti16AuditStrategy implements AuditStrategy {
 
     @Override
     public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
+        // no additional steps necessary
     }
 
     @Override
     public boolean needSavePayload() {
-        return false;
+        return true;
     }
 }

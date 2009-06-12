@@ -17,16 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti14;
 
 import static junit.framework.Assert.assertEquals;
 
-import java.util.List;
-
-import org.apache.cxf.transport.servlet.CXFServlet;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.BeforeClass;
+import org.apache.cxf.transport.servlet.CXFServlet;
+
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.OrganizationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml21TestUtils;
 
 /**
  * Tests the ITI-14 transaction with a webservice and client adapter defined via URIs.
@@ -39,18 +37,13 @@ public class TestIti14 extends StandardTestWebContainer {
     @BeforeClass
     public static void setUp() throws Exception {
         startServer(new CXFServlet(), "iti-14.xml");
+        installTestInterceptors(Iti14TestAuditFinalInterceptor.class);
     }
     
     /** Calls the route attached to the ITI-14 endpoint. */
     @Test
     public void testIti14() {
-        SubmitObjectsRequest request = new SubmitObjectsRequest();
-        LeafRegistryObjectListType leafRegistryObjectListType = new LeafRegistryObjectListType();
-        List<Object> objectRefOrAssociationOrAuditableEvent = leafRegistryObjectListType.getObjectRefOrAssociationOrAuditableEvent();
-        OrganizationType orgType = new OrganizationType();
-        orgType.setObjectType("ok");
-        objectRefOrAssociationOrAuditableEvent.add(orgType);
-        request.setLeafRegistryObjectList(leafRegistryObjectListType);
+        SubmitObjectsRequest request = Ebxml21TestUtils.createTestSubmitObjectRequest();
 
         RegistryResponse response1 =
                 (RegistryResponse) getProducerTemplate().requestBody(SERVICE1, request);

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
-import org.openhealthtools.ihe.atna.auditor.XDSRepositoryAuditor;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
@@ -34,7 +34,7 @@ public class Iti43ServerAuditStrategy extends Iti43AuditStrategy {
     {
         Iti43AuditDataset auditDataset = (Iti43AuditDataset)genericAuditDataset;
         
-        XDSRepositoryAuditor.getAuditor().auditRetrieveDocumentSetEvent(
+        AuditorManager.getRepositoryAuditor().auditRetrieveDocumentSetEvent(
                 eventOutcome,
                 auditDataset.getUserId(),
                 auditDataset.getUserName(),

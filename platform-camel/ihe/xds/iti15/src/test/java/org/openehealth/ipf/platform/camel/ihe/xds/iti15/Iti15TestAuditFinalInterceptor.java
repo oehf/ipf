@@ -13,18 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti15;
+
+import static junit.framework.Assert.assertNotNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.AuditTestFinalInterceptor;
 
 /**
- * ITI-14 specific Audit Dataset.
+ * Test XDS ATNA audit for ITI-14.
  * 
  * @author Dmytro Rud
  */
-public class Iti14AuditDataset extends AuditDataset {
+public class Iti15TestAuditFinalInterceptor extends AuditTestFinalInterceptor {
 
-    public Iti14AuditDataset(boolean isServerSide) {
+    public Iti15TestAuditFinalInterceptor(boolean isServerSide) {
         super(isServerSide);
     }
+
+
+    @Override
+    public void checkTransactionSpecificFields(AuditDataset auditDataset, boolean isServerSide) {
+        assertNotNull(auditDataset.getSubmissionSetUuid());
+        assertNotNull(auditDataset.getPatientId());
+    }
+
 }

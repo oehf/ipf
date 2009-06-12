@@ -19,8 +19,6 @@ import static junit.framework.Assert.assertEquals;
 
 import java.util.UUID;
 
-import org.apache.cxf.bus.CXFBusImpl;
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,16 +38,7 @@ public class TestIti18 extends StandardTestWebContainer {
     @BeforeClass
     public static void setUp() throws Exception {
         startServer(new CXFServlet(), "iti-18.xml");
-
-        /*
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
-        */
-        
-        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
-        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
-        bus.getOutInterceptors().add(new Iti18TestAuditFinalInterceptor(true));
-        bus.getInInterceptors().add(new Iti18TestAuditFinalInterceptor(false));
+        installTestInterceptors(Iti18TestAuditFinalInterceptor.class);
     }
     
     /** Calls the route attached to the ITI-18 endpoint. */

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
-import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
@@ -34,13 +34,13 @@ public class Iti43ClientAuditStrategy extends Iti43AuditStrategy {
     {
         Iti43AuditDataset auditDataset = (Iti43AuditDataset)genericAuditDataset;
         
-        XDSConsumerAuditor.getAuditor().auditRetrieveDocumentSetEvent(
+        AuditorManager.getConsumerAuditor().auditRetrieveDocumentSetEvent(
                 eventOutcome,
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getDocumentUuids(),
                 auditDataset.getRepositoryUuids(),
                 auditDataset.getHomeCommunityUuids(),
-                /* patientId */ null);
+                auditDataset.getPatientId());
     }
 
     

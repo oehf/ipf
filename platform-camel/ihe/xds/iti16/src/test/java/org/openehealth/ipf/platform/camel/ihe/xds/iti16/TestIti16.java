@@ -37,6 +37,7 @@ public class TestIti16 extends StandardTestWebContainer {
     @BeforeClass
     public static void setUp() throws Exception {
         startServer(new CXFServlet(), "iti-16.xml");
+        installTestInterceptors(Iti16TestAuditFinalInterceptor.class);
     }
     
     /** Calls the route attached to the ITI-16 endpoint. */

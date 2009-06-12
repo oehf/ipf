@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 public class AuditDataset {
 
     // whether we audit on server (true) or on client (false) 
-    private final boolean isServerSide; 
+    private final boolean serverSide; 
     
     // SOAP Body (XML) payload
     private String payload;
@@ -38,6 +38,10 @@ public class AuditDataset {
     private String clientIpAddress;
     // service (i.e. registry or repository) endpoint URL
     private String serviceEndpointUrl;
+    // patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO"
+    private String patientId;
+    // submission set unique ID
+    private String submissionSetUuid;
 
 
     /**
@@ -48,7 +52,7 @@ public class AuditDataset {
      *      side (<code>true</code>) or on the client side (<code>false</code>) 
      */
     public AuditDataset(boolean isServerSide) {
-        this.isServerSide = isServerSide;
+        this.serverSide = isServerSide;
     }
     
 
@@ -90,6 +94,26 @@ public class AuditDataset {
     
     public String getServiceEndpointUrl() {
         return serviceEndpointUrl;
+    }
+    
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+
+    public void setSubmissionSetUuid(String submissionSetUuid) {
+        this.submissionSetUuid = submissionSetUuid;
+    }
+
+
+    public String getSubmissionSetUuid() {
+        return submissionSetUuid;
     }
     
     
@@ -142,13 +166,18 @@ public class AuditDataset {
 
 
     /**
-     * Returns the role (from the CXF point of view) of the participant
-     * whose activities are being audited using this audit dataset.
+     * Returns string representation of the role role (from the CXF point of view) 
+     * of the participant whose activities are being audited using this audit dataset.
      * 
      * @return
      *      either "server" or "client"
      */
     public String getRole() {
-        return isServerSide ? "server" : "client";
+        return serverSide ? "server" : "client";
+    }
+
+    
+    public boolean isServerSide() {
+        return serverSide;
     }
 }

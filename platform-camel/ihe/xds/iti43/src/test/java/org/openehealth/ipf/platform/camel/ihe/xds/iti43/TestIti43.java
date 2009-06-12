@@ -16,12 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43;
 
 import static junit.framework.Assert.assertEquals;
-
-import org.apache.cxf.bus.CXFBusImpl;
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
-import org.apache.cxf.transport.servlet.CXFServlet;
-
 import static org.junit.Assert.assertTrue;
+
+import org.apache.cxf.transport.servlet.CXFServlet;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,16 +40,7 @@ public class TestIti43 extends StandardTestWebContainer {
     @BeforeClass
     public static void setUp() throws Exception {
         startServer(new CXFServlet(), "iti-43.xml");
-        
-        /*
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
-        */
-        
-        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
-        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
-        bus.getOutInterceptors().add(new Iti43TestAuditFinalInterceptor(true));
-        bus.getInInterceptors().add(new Iti43TestAuditFinalInterceptor(false));
+        installTestInterceptors(Iti43TestAuditFinalInterceptor.class);        
     }
 
     

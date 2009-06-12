@@ -13,28 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti42.audit;
+package org.openehealth.ipf.platform.camel.ihe.xds.iti16;
+
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertNotNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.AuditTestFinalInterceptor;
 
 /**
- * ITI-42 specific Audit Dataset.
+ * Test XDS ATNA audit for ITI-16.
  * 
  * @author Dmytro Rud
  */
-public class Iti42AuditDataset extends AuditDataset {
+public class Iti16TestAuditFinalInterceptor extends AuditTestFinalInterceptor {
 
-    private String submissionSetUuid;
-
-    public Iti42AuditDataset(boolean isServerSide) {
+    public Iti16TestAuditFinalInterceptor(boolean isServerSide) {
         super(isServerSide);
     }
 
-    public void setSubmissionSetUuid(String submissionSetUuid) {
-        this.submissionSetUuid = submissionSetUuid;
+
+    @Override
+    public void checkTransactionSpecificFields(AuditDataset auditDataset, boolean isServerSide) {
+        String payload = auditDataset.getPayload();
+        assertNotNull(payload);
+        assertTrue(payload.startsWith("<"));
+        assertTrue(payload.endsWith("Envelope>"));
     }
 
-    public String getSubmissionSetUuid() {
-        return submissionSetUuid;
-    }
 }

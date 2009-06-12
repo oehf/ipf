@@ -16,14 +16,18 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 
 import org.apache.camel.ProducerTemplate;
+import org.apache.cxf.bus.CXFBusImpl;
+import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.AfterClass;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.ServletServer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.TomcatServer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.AuditTestFinalInterceptor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -64,5 +68,30 @@ public class StandardTestWebContainer {
 
     public static ProducerTemplate<?> getProducerTemplate() {
         return producerTemplate;
+    }
+    
+
+    /**
+     * Installs transaction-specific audit test interceptors.
+     * 
+     * @param <T>
+     *      class of interceptor     
+     * @param interceptorClass
+     *      class of interceptor     
+     * @throws Exception
+     *      when reflection fails
+     */
+    public static <T extends AuditTestFinalInterceptor> void 
+        installTestInterceptors(Class<T> interceptorClass) throws Exception
+    {
+        Constructor<T> constructor = interceptorClass.getConstructor(boolean.class);
+       
+        T inboundInterceptor = constructor.newInstance(false);
+        T outboundInterceptor = constructor.newInstance(true);
+        
+        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
+        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
+        bus.getOutInterceptors().add(outboundInterceptor);
+        bus.getInInterceptors().add(inboundInterceptor);
     }
 }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml30Utils;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.ProvideAndRegisterDocumentSetRequestType;
 
 
@@ -31,14 +32,12 @@ abstract public class Iti41AuditStrategy implements AuditStrategy {
     @Override
     public void enrichDataset(
             Object pojo, 
-            AuditDataset genericAuditDataset) 
+            AuditDataset auditDataset) 
     {
         ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
-        Iti41AuditDataset auditDataset = (Iti41AuditDataset)genericAuditDataset;
-        
-        SubmitObjectsRequest submissionSet = request.getSubmitObjectsRequest();
-        if(submissionSet != null) {
-            auditDataset.setSubmissionSetUuid(submissionSet.getId());
+        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
+        if(submitObjectsRequest != null) {
+            Ebxml30Utils.enrichDatasetFromSubmitObjectsRequest(submitObjectsRequest, auditDataset);
         }
     }
 

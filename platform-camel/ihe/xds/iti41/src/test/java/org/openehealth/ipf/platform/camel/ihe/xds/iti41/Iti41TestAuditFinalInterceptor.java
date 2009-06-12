@@ -19,7 +19,6 @@ import static junit.framework.Assert.assertNotNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.AuditTestFinalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit.Iti41AuditDataset;
 
 /**
  * Test XDS ATNA audit for ITI-41. 
@@ -35,9 +34,7 @@ public class Iti41TestAuditFinalInterceptor extends AuditTestFinalInterceptor {
 
     @Override
     public void checkTransactionSpecificFields(AuditDataset auditDataset, boolean isServerSide) {
-        Iti41AuditDataset iti41AuditDataset = (Iti41AuditDataset)auditDataset;
-        
-        assertNotNull(iti41AuditDataset.getSubmissionSetUuid());
+        assertNotNull(auditDataset.getSubmissionSetUuid());
     }
     
 }
