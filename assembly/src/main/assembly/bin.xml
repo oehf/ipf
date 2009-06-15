@@ -14,9 +14,9 @@
     limitations under the License.
 -->
 <assembly>
-	<id>bin</id>
+    <id>bin</id>
     <formats>
-		<format>zip</format>
+        <format>zip</format>
     </formats>
     <dependencySets>
         <dependencySet>
@@ -24,13 +24,13 @@
             <scope>runtime</scope>
             <useTransitiveDependencies>false</useTransitiveDependencies>
         </dependencySet>
-		<dependencySet>
+        <dependencySet>
             <outputDirectory>lib</outputDirectory>
             <scope>runtime</scope>
             <useTransitiveDependencies>true</useTransitiveDependencies>
-			<excludes>
-		        <exclude>org.openehealth.ipf.*</exclude>
-		    </excludes>
+            <excludes>
+                <exclude>org.openehealth.ipf.*</exclude>
+            </excludes>
         </dependencySet>
     </dependencySets>
     <componentDescriptors>
