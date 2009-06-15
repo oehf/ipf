@@ -141,29 +141,49 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xdsb-commons</artifactId>
+            <artifactId>platform-camel-ihe-xds-commons</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xdsb-iti18</artifactId>
+            <artifactId>platform-camel-ihe-xds-iti14</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xdsb-iti41</artifactId>
+            <artifactId>platform-camel-ihe-xds-iti15</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xdsb-iti42</artifactId>
+            <artifactId>platform-camel-ihe-xds-iti16</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xdsb-iti43</artifactId>
+            <artifactId>platform-camel-ihe-xds-iti17</artifactId>
             <version>${pom.version}</version>
-        </dependency>	
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xds-iti18</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xds-iti41</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xds-iti42</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-xds-iti43</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
     </dependencies>
 
     <profiles>
