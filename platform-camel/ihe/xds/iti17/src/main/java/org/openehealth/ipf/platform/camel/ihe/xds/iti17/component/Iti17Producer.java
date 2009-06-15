@@ -26,7 +26,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.Auditable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti17.audit.Iti17ClientAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * The producer implementation for the ITI-17 component.
@@ -62,6 +63,19 @@ public class Iti17Producer extends DefaultProducer<Exchange> implements Auditabl
             if (!keepConnection) {
                 get.releaseConnection();
             }
+            
+            // audit
+            // TODO: finer mapping between HTTP response codes and event outcome codes
+            RFC3881EventOutcomeCodes eventOutcome = 
+                keepConnection ? 
+                    RFC3881EventOutcomeCodes.SUCCESS : 
+                    RFC3881EventOutcomeCodes.MAJOR_FAILURE;
+            
+            AuditorManager.getConsumerAuditor().auditRetrieveDocumentEvent(
+                    eventOutcome, 
+                    uri, 
+                    /*documentUniqueId*/ null, 
+                    /*patientId*/ null);
         }
     }
 
@@ -87,6 +101,7 @@ public class Iti17Producer extends DefaultProducer<Exchange> implements Auditabl
 
     @Override
     public AuditStrategy createAuditStrategy() {
-        return new Iti17ClientAuditStrategy();
+        // audit strategies are used in Web Service-based transactions only  
+        return null;
     }
 }

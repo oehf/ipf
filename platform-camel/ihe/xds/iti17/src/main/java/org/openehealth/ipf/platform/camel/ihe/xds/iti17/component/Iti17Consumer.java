@@ -24,7 +24,6 @@ import org.apache.camel.impl.DefaultConsumer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.Auditable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti17.audit.Iti17ServerAuditStrategy;
 
 /**
  * The Camel consumer for the ITI-17 transaction.
@@ -74,6 +73,7 @@ public class Iti17Consumer extends DefaultConsumer<Exchange> implements Auditabl
 
     @Override
     public AuditStrategy createAuditStrategy() {
-        return new Iti17ServerAuditStrategy();
+        // audit strategies are used in Web Service-based transactions only  
+        return null;
     }
 }

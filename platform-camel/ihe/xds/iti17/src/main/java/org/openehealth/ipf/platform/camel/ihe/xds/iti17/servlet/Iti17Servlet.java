@@ -27,8 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.camel.CamelContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Consumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Endpoint;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -70,6 +72,7 @@ public class Iti17Servlet extends HttpServlet {
         }        
         catch (Exception e) {
             resp.setStatus(500);
+            audit(false, req.getRemoteAddr(), fullRequestURI);
             return;
         }
 
@@ -79,6 +82,7 @@ public class Iti17Servlet extends HttpServlet {
         }
         finally {
             inputStream.close();
+            audit(true, req.getRemoteAddr(), fullRequestURI);
         }
     }
 
@@ -95,5 +99,13 @@ public class Iti17Servlet extends HttpServlet {
         CamelContext camelContext = (CamelContext) camelContextBeans.values().iterator().next();
         Validate.notNull(camelContext, "A single camelContext bean is required in the application context");
         return camelContext;
+    }
+    
+    private void audit(boolean successful, String clientIpAddress, String documentUri) {
+        AuditorManager.getRepositoryAuditor().auditRetrieveDocumentEvent(
+                successful ? RFC3881EventOutcomeCodes.SUCCESS : RFC3881EventOutcomeCodes.MAJOR_FAILURE,
+                clientIpAddress, 
+                documentUri, 
+                /*documentUniqueId*/ null);
     }
 }
