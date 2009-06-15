@@ -12,8 +12,9 @@
         See the License for the specific language governing permissions
         and limitations under the License.
     -->
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://activemq.apache.org/camel/schema/spring"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
@@ -21,6 +22,10 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <bean id="statistics"
         class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatistics">
+    </bean>
+
+    <bean id="statisticsRenderer"
+        class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatisticsRenderer">
     </bean>
 
 </beans>

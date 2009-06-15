@@ -17,14 +17,9 @@ package org.openehealth.ipf.commons.test.performance.handler;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Statistics;
 import org.openehealth.ipf.commons.test.performance.StatisticsManager;
-import org.openehealth.ipf.commons.test.performance.Timestamp;
 
 /**
  * @see StatisticsManager
@@ -50,20 +45,9 @@ public class PerformanceRequestHandler {
         return buffer.toString();
     }
 
-    public void onRequestAtTime(Date requestTime, String name) {
-        notNull(requestTime,
-                "The server time in method onRequestAtTime can not be null");
-        Measurement m = new Measurement(
-                new Timestamp(0L, TimeUnit.MILLISECONDS), name);
-        MeasurementHistory measurementHistory = new MeasurementHistory(
-                requestTime);
-        measurementHistory.add(m);
-        statisticsManager.updateStatistics(measurementHistory);
-    }
-
-    public String onRequestAtTime(Date time) {
-        onRequestAtTime(time, "");
-        return "Measurement registered on " + time;
+    public void onMeasurementHistory(MeasurementHistory history) {
+        notNull(history, "The history must not be null!");
+        statisticsManager.updateStatistics(history);
     }
 
     /**

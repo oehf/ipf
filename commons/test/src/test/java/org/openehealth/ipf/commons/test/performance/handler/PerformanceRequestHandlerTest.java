@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.test.performance.handler;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.junit.After;
@@ -32,6 +30,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import static org.junit.Assert.assertEquals;
+
+import static org.openehealth.ipf.commons.test.performance.PerformanceMeasurementTestUtils.createMeasurementHistory;
 
 /**
  * @author Mitko Kolev
@@ -60,24 +60,24 @@ public class PerformanceRequestHandlerTest {
 
     @Test
     public void testStatisticsReceiveReset() {
-        handler.onRequestAtTime(new Date(), "1");
-        assertEquals(1, throughputStatistics.getUpdatesCount());
+        handler.onMeasurementHistory(createMeasurementHistory());
+        handler.onResetStatistics();
+        assertEquals(0, throughputStatistics.getUpdatesCount());
     }
 
     @Test
     public void testStatisticsReceiveUpdate() {
-        handler.onRequestAtTime(new Date(), "1");
+        handler.onMeasurementHistory(createMeasurementHistory());
         assertEquals(1, throughputStatistics.getUpdatesCount());
     }
 
     @Test
-    public void testStatisticsReceiveUpdateAtTime() {
-        handler.onRequestAtTime(new Date(), "1");
-        handler.onRequestAtTime(new Date(), "1");
-        handler.onRequestAtTime(new Date(), "1");
-        handler.onRequestAtTime(new Date(), "1");
+    public void testStatisticsReceiveUpdateManyTimes() {
+        handler.onMeasurementHistory(createMeasurementHistory());
+        handler.onMeasurementHistory(createMeasurementHistory());
+        handler.onMeasurementHistory(createMeasurementHistory());
+        handler.onMeasurementHistory(createMeasurementHistory());
         assertEquals(4, throughputStatistics.getUpdatesCount());
     }
-
 
 }

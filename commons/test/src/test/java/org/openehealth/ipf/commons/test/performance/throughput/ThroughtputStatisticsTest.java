@@ -15,11 +15,13 @@
  */
 package org.openehealth.ipf.commons.test.performance.throughput;
 
+import java.util.Date;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatistics;
+import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -27,6 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import static org.openehealth.ipf.commons.test.performance.PerformanceMeasurementTestUtils.createMeasurementHistory;
 
@@ -40,6 +43,9 @@ public class ThroughtputStatisticsTest {
 
     @Autowired
     ThroughputStatistics statistics;
+
+    @Autowired
+    ThroughputStatisticsRenderer renderer;
 
     @Before
     public void setUp() {
@@ -78,7 +84,24 @@ public class ThroughtputStatisticsTest {
 
         assertEquals(maxUpdates, statistics.getUpdatesCount());
     }
-    
+
+    @Test
+    public void testFromIsTheReferenceDate() {
+        MeasurementHistory measurementHistory = createMeasurementHistory();
+        statistics.update(measurementHistory);
+        assertEquals(measurementHistory.getReferenceDate(), new Date(statistics
+                .getFromTime()));
+    }
+
+    @Test
+    public void testToIsTheReferenceDateIncremented() {
+        MeasurementHistory measurementHistory = createMeasurementHistory();
+        statistics.update(measurementHistory);
+        assertEquals(
+                statistics.calcuateProcessedSystemTime(measurementHistory),
+                statistics.getToTime());
+    }
+
     @Test
     public void testThroughputHasValidUpdateCounts() {
         int maxUpdates = 30;
@@ -86,5 +109,14 @@ public class ThroughtputStatisticsTest {
             statistics.update(createMeasurementHistory());
         Throughput t = statistics.getThroughput();
         assertEquals(maxUpdates, t.getCount());
+    }
+
+    @Test
+    public void testReportsContainNumberOfUpdates() {
+        int maxUpdates = 30;
+        for (int updates = 0; updates < maxUpdates; updates++)
+            statistics.update(createMeasurementHistory());
+        String report = renderer.render(statistics);
+        assertTrue(report.contains(String.valueOf(maxUpdates)));
     }
 }

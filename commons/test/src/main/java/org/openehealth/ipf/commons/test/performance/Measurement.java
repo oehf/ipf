@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.test.performance;
 import static org.apache.commons.lang.Validate.notNull;
 
 import java.io.Serializable;
+
 /**
  * @author Mitko Kolev
  */
@@ -39,14 +40,14 @@ public class Measurement implements Serializable {
         super();
         notNull(name, "The name must not be null!");
         notNull(timestamp, "The timestamp must not be null!");
-        
+
         this.name = name;
         this.timestamp = timestamp;
     }
 
     public Measurement(Timestamp timestamp) {
-        this(timestamp,EMPTY_NAME);
-        
+        this(timestamp, EMPTY_NAME);
+
     }
 
     /**
@@ -63,12 +64,40 @@ public class Measurement implements Serializable {
         return timestamp;
     }
 
-
     /**
      * @return
      */
     public boolean isNameEmpty() {
         return name.equals(EMPTY_NAME);
     }
-   
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Measurement other = (Measurement) obj;
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        if (timestamp == null) {
+            if (other.timestamp != null) {
+                return false;
+            }
+        } else if (!timestamp.equals(other.timestamp)) {
+            return false;
+        }
+        return true;
+    }
+
 }

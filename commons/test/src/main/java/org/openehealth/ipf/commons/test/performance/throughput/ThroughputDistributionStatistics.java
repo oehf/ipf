@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.test.performance.throughput;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,8 +50,7 @@ public class ThroughputDistributionStatistics extends ThroughputStatistics {
     @Override
     public void update(MeasurementHistory history) {
         super.update(history);
-        Date referenceDate = history.getReferenceDate();
-        frequencies.addValue(referenceDate.getTime());
+        frequencies.addValue(calcuateProcessedSystemTime(history));
     }
 
     public ThroughputDistribution getThroughputDistribution() {

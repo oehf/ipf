@@ -29,6 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import static org.openehealth.ipf.commons.test.performance.PerformanceMeasurementTestUtils.createMeasurementHistory;
 
@@ -42,6 +43,9 @@ public class ProcessingTimeStatitsticsTest {
 
     @Autowired
     ProcessingTimeStatistics statistics;
+
+    @Autowired
+    ProcessingTimeStatisticsRenderer renderer;
 
     @Before
     public void setUp() {
@@ -73,12 +77,23 @@ public class ProcessingTimeStatitsticsTest {
         statistics.update(createMeasurementHistory());
         statistics.update(createMeasurementHistory(3));
         List<String> names = statistics.getMeasurementNames();
-        
-        StatisticalSummary summary0 = statistics.getStatisticalSummaryByName(names.get(0));
-        StatisticalSummary summary1 = statistics.getStatisticalSummaryByName(names.get(1));
-        
+
+        StatisticalSummary summary0 = statistics
+                .getStatisticalSummaryByName(names.get(0));
+        StatisticalSummary summary1 = statistics
+                .getStatisticalSummaryByName(names.get(1));
+
         assertEquals(2l, summary0.getN());
         assertEquals(1l, summary1.getN());
-        
+
+    }
+
+    @Test
+    public void testReportsContainNumberOfUpdates() {
+        int maxUpdates = 30;
+        for (int updates = 0; updates < maxUpdates; updates++)
+            statistics.update(createMeasurementHistory());
+        String report = renderer.render(statistics);
+        assertTrue(report.contains(String.valueOf(maxUpdates)));
     }
 }

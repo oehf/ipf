@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.test.performance;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-
 /**
  * @author Mitko Kolev
  */
@@ -33,33 +32,40 @@ public class PerformanceMeasurementTestUtils {
         return createMeasurementHistory(2);
     }
 
+    public static MeasurementHistory createMeasurementHistory(Date referenceDate) {
+        return createMeasurementHistory(referenceDate, 2);
+    }
+
     /**
-     * Creates measurement history with the given numeber of measurements
+     * Creates measurement history with the given number of measurements
      * 
      * @param numberOfMeasurementPoints
      * @return
      */
     public static MeasurementHistory createMeasurementHistory(
             int numberOfMeasurementPoints) {
+        return createMeasurementHistory(new Date(), numberOfMeasurementPoints);
+    }
 
-        long initialMeasurementTimestamp = System.currentTimeMillis()
-                - (numberOfMeasurementPoints * 1000);
+    public static MeasurementHistory createMeasurementHistory(
+            Date referenceDate, int numberOfMeasurementPoints) {
 
-        Date referenceDate = new Date(initialMeasurementTimestamp);
+        long initialMeasurementTimestamp = System.currentTimeMillis();
 
         long[] measurementTimestamps = new long[numberOfMeasurementPoints];
 
-        
         for (int t = 0; t < numberOfMeasurementPoints; t++) {
             measurementTimestamps[t] = initialMeasurementTimestamp + 1000 * t;
         }
         MeasurementHistory history = new MeasurementHistory(referenceDate);
-       
-        //the first one
-        history.add(new Measurement(new Timestamp(measurementTimestamps[0],TimeUnit.MILLISECONDS)));
+
+        // the first one
+        history.add(new Measurement(new Timestamp(measurementTimestamps[0],
+                TimeUnit.MILLISECONDS)));
         for (int t = 1; t < numberOfMeasurementPoints; t++) {
-            Measurement measurement = new Measurement(new Timestamp(measurementTimestamps[t],
-                            TimeUnit.MILLISECONDS), String.valueOf(t));
+            Measurement measurement = new Measurement(new Timestamp(
+                    measurementTimestamps[t], TimeUnit.MILLISECONDS), String
+                    .valueOf(t));
             history.add(measurement);
         }
 

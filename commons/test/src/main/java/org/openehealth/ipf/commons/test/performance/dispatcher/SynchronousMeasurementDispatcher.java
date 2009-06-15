@@ -31,6 +31,6 @@ public class SynchronousMeasurementDispatcher extends MeasurementDispatcher {
     public void dispatch(MeasurementHistory measurementHistory) {
         StatisticsManager statisticsManager = getStatisticsManager();
         statisticsManager.updateStatistics(measurementHistory);
-        updateThroughputServer(measurementHistory);
+        updatePerformanceMeasurementServer(measurementHistory);
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.test.performance.throughput;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
@@ -52,7 +53,7 @@ public class ThroughputStatistics implements Statistics {
         if (fromTime == VALUE_NOT_SET) {
             fromTime = history.getReferenceDate().getTime();
         }
-        toTime = history.getReferenceDate().getTime();
+        toTime = calcuateProcessedSystemTime(history);
         updatesCount++;
     }
 
@@ -73,6 +74,18 @@ public class ThroughputStatistics implements Statistics {
         Timestamp to = new Timestamp(toTime, TimeUnit.MILLISECONDS);
         Throughput throughput = new Throughput(updatesCount, from, to);
         return throughput;
+    }
+
+    public long calcuateProcessedSystemTime(MeasurementHistory history) {
+        Timestamp from = history.getFirstMeasurementTimestamp();
+        Timestamp to = history.getLastMeasurementTimestamp();
+
+        Date referenceDate = history.getReferenceDate();
+
+        long differenceMs = to.getValue(TimeUnit.MILLISECONDS)
+                - from.getValue(TimeUnit.MILLISECONDS);
+
+        return referenceDate.getTime() + differenceMs;
     }
 
     /**

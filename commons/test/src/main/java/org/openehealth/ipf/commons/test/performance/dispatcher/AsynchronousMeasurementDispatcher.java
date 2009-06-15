@@ -69,7 +69,7 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
         notNull(measurementHistory, "The measurementHistory must not be null!");
         try {
             queue.put(measurementHistory);
-            updateThroughputServer(measurementHistory);
+            updatePerformanceMeasurementServer(measurementHistory);
 
         } catch (InterruptedException e) {
             LOG.error("Inserting measurementHistory int the "

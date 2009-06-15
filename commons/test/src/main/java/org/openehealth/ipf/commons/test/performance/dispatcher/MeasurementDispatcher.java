@@ -17,18 +17,19 @@ package org.openehealth.ipf.commons.test.performance.dispatcher;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.tools.ant.filters.StringInputStream;
 import org.openehealth.ipf.commons.test.http.client.Client;
 import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.StatisticsManager;
 import org.springframework.beans.factory.InitializingBean;
+
+import static org.openehealth.ipf.commons.core.io.IOUtils.serialize;
 
 /**
  * @see StatisticsManager
@@ -97,20 +98,20 @@ public abstract class MeasurementDispatcher implements InitializingBean {
     }
 
     /**
-     * Sends an HTTP POST request with the current time to the throughput server to update the
-     * throughput.
+     * If a performance measurement server is used, sends an HTTP POST request
+     * with body the given <code>measurementHistory</code> to that performance
+     * server.
      */
-    protected void updateThroughputServer(MeasurementHistory measurementHistory) {
+    protected void updatePerformanceMeasurementServer(
+            MeasurementHistory measurementHistory) {
         if (performanceServerURL == null)
             return;
         try {
-            // send a POST request with the current time (the message is processed)
-            //TODO decide should the whole measurement history should be sent? 
-            InputStream request = new StringInputStream(String
-                    .valueOf(new Date().getTime()));
-            client.execute(request);
+            // send the current measurement history
+            client.execute(new ByteArrayInputStream(
+                    serialize(measurementHistory)));
         } catch (Exception e) {
-            LOG.error("Can not reach the throughput server", e);
+            LOG.error("Can not reach the performance measuerment server", e);
         }
     }
 
@@ -125,7 +126,7 @@ public abstract class MeasurementDispatcher implements InitializingBean {
                     + StatisticsManager.class.getName());
         }
 
-        // check the throughput server client
+        // check the server client
         if (performanceServerURL == null) {
             LOG.info("Using no performance server");
         } else {

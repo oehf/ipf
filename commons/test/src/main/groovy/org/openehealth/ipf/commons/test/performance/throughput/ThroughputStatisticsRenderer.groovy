@@ -34,26 +34,26 @@ import org.openehealth.ipf.commons.test.performance.StatisticsRenderer
  * @author Mitko Kolev
  */
 class ThroughputStatisticsRenderer implements StatisticsRenderer {
-	
+    
     static String DATE_PATTERN = 'd MMM HH:mm:ss'
-     
-	String render(Statistics model) {
-	    Throughput throughput = model.throughput
-	    renderThroughput(throughput)
-	}
-	
-	String renderThroughput(Throughput throughput){
-	    StringWriter writer = new StringWriter()
+    
+    String render(Statistics model) {
+        Throughput throughput = model.throughput
+        renderThroughput(throughput)
+    }
+    
+    String renderThroughput(Throughput throughput){
+        StringWriter writer = new StringWriter()
         MarkupBuilder builder = new MarkupBuilder(writer)
         
         builder.throughput(){
             h3('Throughput')
             table(border:'1'){
-                th('Updates')
+                th('Count of processed messages')
                 th('From')
                 th('To')
-                th('Duration of the measurements in seconds')
-                th('Throughput (updates / duration in seconds)')
+                th('Time duration (seconds)')
+                th('Throughput (count / time duration)')
                 tr(){
                     td(throughput.count)
                     td(throughput.from.format(DATE_PATTERN))
@@ -64,6 +64,6 @@ class ThroughputStatisticsRenderer implements StatisticsRenderer {
             }
         }
         writer.toString()
-	}
-	
+    }
+    
 }

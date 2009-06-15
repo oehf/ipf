@@ -35,35 +35,42 @@ import org.openehealth.ipf.commons.test.performance.StatisticsRenderer
  * @author Mitko Kolev
  */
 class ThroughputDistributionStatisticsRenderer extends ThroughputStatisticsRenderer {
-	
-	String render(Statistics model) {
-		StringWriter writer = new StringWriter()
-		MarkupBuilder builder = new MarkupBuilder(writer)
-		ThroughputDistribution distribution = model.throughputDistribution
-		
-		//render the cumulative throughput
-		writer.write(renderThroughput(distribution.cumulativeThroughput))
-		
-		builder.throughputDistribution(){
-			h3('Throughput distribution')
-			table(border:'1'){
-				th('Interval')
-				th('From')
-				th('To')
-				th('Throughput')
-			}
-			int binIndex = 1
-			for (Throughput t : distribution.throughput){
-				tr(){
-					td(binIndex)
-					td(t.from)
-					td(t.to)
-					td(format(t.valueSeconds))
-				}
-				binIndex ++
-			}    
-		}
-		writer.toString()
-	}
-	
+    
+    String binDatePattern = 'HH:mm:ss'  
+    
+    String render(Statistics model) {
+        StringWriter writer = new StringWriter()
+        MarkupBuilder builder = new MarkupBuilder(writer)
+        ThroughputDistribution distribution = model.throughputDistribution
+        
+        //render the cumulative throughput
+        writer.write(renderThroughput(distribution.cumulativeThroughput))
+        
+        builder.throughputDistribution(){
+            h3('Throughput distribution')
+            table(border:'1'){
+                th('Interval')
+                th('Count of processed messages')
+                th('From')
+                th('To')
+                th('Time duration (seconds)')
+                th('Throughput (count / time duration)')
+                
+                int binIndex = 1
+                for (Throughput t : distribution.throughput){
+                    tr(){
+                        td(binIndex)
+                        td(t.count)
+                        td(t.from.format(binDatePattern))
+                        td(t.to.format(binDatePattern))
+                        td(format(t.durationSeconds))
+                        td(format(t.valueSeconds))
+                    }
+                    binIndex ++
+                }
+            }
+        }
+        writer.toString()
+    }
+    
 }

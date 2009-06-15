@@ -22,9 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
-import org.openehealth.ipf.commons.test.performance.throughput.Throughput;
-import org.openehealth.ipf.commons.test.performance.throughput.ThroughputDistribution;
-import org.openehealth.ipf.commons.test.performance.throughput.ThroughputDistributionStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -43,7 +40,6 @@ import static org.openehealth.ipf.commons.test.performance.PerformanceMeasuremen
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
 public class ThroughputDistributionStatisticsTest {
 
-    private final static int FIRST_BIN_INDEX = 0;
     private final static int LAST_BIN_INDEX = Integer.MAX_VALUE;
 
     @Autowired
@@ -59,7 +55,7 @@ public class ThroughputDistributionStatisticsTest {
     }
 
     @Test
-    public void testSingleUpdate() {
+    public void testStatisticsAreUpdated() {
         MeasurementHistory history = createMeasurementHistory();
         statistics.update(history);
         assertEquals(1, statistics.getUpdatesCount());
@@ -83,46 +79,27 @@ public class ThroughputDistributionStatisticsTest {
     }
 
     @Test
-    public void testStatisticsContainTheFinishTimeOfMeasurementData() {
+    public void testUpdateAndThenResetTheDistributionIs0() {
+        statistics.update(createMeasurementHistory());
+        statistics.reset();
+        List<Throughput> throughputs = statistics.getThroughputDistribution()
+                .getThroughput();
+        for (Throughput t : throughputs) {
+            assertEquals(0, t.getCount());
+        }
+    }
+
+    @Test
+    public void testStatisticsConsiderAllMeasurements() {
         MeasurementHistory measurementHistory = createMeasurementHistory();
         statistics.update(measurementHistory);
-        long elementsInTheFrequencies = statistics
-                .getElementCount(measurementHistory.getReferenceDate()
-                        .getTime());
+        long elementsInTheFrequencies = statistics.getElementCount(statistics
+                .calcuateProcessedSystemTime(measurementHistory));
         assertEquals(1, elementsInTheFrequencies);
     }
 
     @Test
-    public void testUpdateFirstBinIs100Percents() {
-
-        statistics.update(createMeasurementHistory());
-        ThroughputDistribution distribution = statistics
-                .getThroughputDistribution();
-        assertEquals(1, getCountAt(FIRST_BIN_INDEX, distribution));
-    }
-
-    @Test
-    public void testUpdateAndClearFirstBinIs0Percents() {
-        statistics.update(createMeasurementHistory());
-        statistics.reset();
-        ThroughputDistribution distribution = statistics
-                .getThroughputDistribution();
-        assertEquals(0, getCountAt(FIRST_BIN_INDEX, distribution));
-    }
-
-    @Test
-    public void testTwoUpdatesFistIs50Percents() {
-        statistics.update(createMeasurementHistory(4));
-        statistics.update(createMeasurementHistory());
-        ThroughputDistribution distribution = statistics
-                .getThroughputDistribution();
-
-        assertEquals(1, getCountAt(FIRST_BIN_INDEX, distribution));
-    }
-
-    @Test
-    public void testTwoUpdatesLastIs50Percents() {
-        statistics.update(createMeasurementHistory(4));
+    public void testOneUpdate() {
         statistics.update(createMeasurementHistory());
         ThroughputDistribution distribution = statistics
                 .getThroughputDistribution();
@@ -130,26 +107,35 @@ public class ThroughputDistributionStatisticsTest {
     }
 
     @Test
-    public void testThreeUpdates() {
-
-        statistics.update(createMeasurementHistory(10));
-        statistics.update(createMeasurementHistory(3));
+    public void testTwoUpdates() {
         statistics.update(createMeasurementHistory());
+        statistics.update(createMeasurementHistory(10));
+        ThroughputDistribution distribution = statistics
+                .getThroughputDistribution();
+
+        assertEquals(1, getCountAt(LAST_BIN_INDEX, distribution));
+    }
+
+    @Test
+    public void testThreeUpdates() {
+        statistics.update(createMeasurementHistory());
+        statistics.update(createMeasurementHistory());
+        statistics.update(createMeasurementHistory(10));
 
         ThroughputDistribution distribution = statistics
                 .getThroughputDistribution();
 
-        // we have 3 values, so the first bin must contain 1/3 of all values
-        assertEquals(1, getCountAt(FIRST_BIN_INDEX, distribution));
+        // we have 3 values, so the last bin with the latest time must contain
+        // 1/3 of all values
+        assertEquals(1, getCountAt(LAST_BIN_INDEX, distribution));
     }
 
     long getCountAt(int index, ThroughputDistribution distribution) {
-        List<Throughput> frequencyBins = distribution.getThroughput();
+        List<Throughput> throughputs = distribution.getThroughput();
         if (index == LAST_BIN_INDEX) {
-            return distribution.getThroughput().get(frequencyBins.size() - 1)
-                    .getCount();
+            return throughputs.get(throughputs.size() - 1).getCount();
         } else {
-            return distribution.getThroughput().get(index).getCount();
+            return throughputs.get(index).getCount();
         }
     }
 

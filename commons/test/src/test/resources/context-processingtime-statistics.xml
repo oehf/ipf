@@ -24,4 +24,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
         class="org.openehealth.ipf.commons.test.performance.processingtime.ProcessingTimeStatistics">
     </bean>
 
+ <bean id="processingTimeStatisticsRenderer"
+        class="org.openehealth.ipf.commons.test.performance.processingtime.ProcessingTimeStatisticsRenderer" />
+
 </beans>

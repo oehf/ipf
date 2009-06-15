@@ -23,7 +23,7 @@ import java.util.Formatter;
 public class NumberUtils {
 
     /**
-     * Format the given <code>value</code> into a represenation with 4 digits
+     * Format the given <code>value</code> into a representation with 4 digits
      * after the comma.
      * 
      * @param value
@@ -33,9 +33,9 @@ public class NumberUtils {
     public static String format(double value) {
         return format(value, 4);
     }
-    
+
     /**
-     * Format the given <code>value</code> into a represenation with
+     * Format the given <code>value</code> into a representation with
      * <code>precision</code> digits after the comma.
      * 
      * @param value
@@ -45,7 +45,8 @@ public class NumberUtils {
      * @return formatted number.
      */
     public static String format(double value, int precision) {
-        return new Formatter().format("%1." + precision + "f", value).toString();
+        return new Formatter().format("%1." + precision + "f", value)
+                .toString();
     }
-    
+
 }
