@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNull;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.RuntimeCamelException;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -37,7 +38,7 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
                 exchange.getIn().setBody("blah");
             }
         });
-        assertNull(result.getFault(false));
+        assertNull(result.getException());
         mockOutput.assertIsSatisfied();
     }
     
@@ -49,7 +50,7 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
                 exchange.getIn().setBody("blub");
             }
         });
-        assertEquals("validation closure returned false", result.getFault(false).getBody());
+        assertEquals("validation closure returned false", result.getException().getMessage());
         mockOutput.assertIsSatisfied();
     }
     
@@ -61,7 +62,7 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
                 exchange.getIn().setBody("blub");
             }
         });
-        assertEquals("juhu", result.getFault(false).getBody());
+        assertEquals("juhu", result.getException().getMessage());
         mockOutput.assertIsSatisfied();
     }
     
@@ -72,11 +73,9 @@ public class ValidatorExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
     }
     
-    @Test
+    @Test(expected=RuntimeCamelException.class)
     public void testBooleanClosureOneParamInOnlyFailure() throws InterruptedException {
-        mockOutput.expectedMessageCount(0);
         producerTemplate.sendBody("direct:input1", "blub");
-        mockOutput.assertIsSatisfied();
     }
     
     @Test

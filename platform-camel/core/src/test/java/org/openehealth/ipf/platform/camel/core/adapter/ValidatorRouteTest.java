@@ -17,10 +17,14 @@ package org.openehealth.ipf.platform.camel.core.adapter;
 
 import static junit.framework.Assert.assertEquals;
 
+import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.junit.After;
 import org.junit.Test;
+import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
 
 
@@ -29,6 +33,15 @@ import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
  */
 public class ValidatorRouteTest extends AbstractRouteTest {
 
+    @EndpointInject(uri="mock:error")
+    protected MockEndpoint error;
+    
+    @After
+    public void tearDown() throws Exception {
+        error.reset();
+        super.tearDown();
+    }
+    
     @Test
     public void testValidator1() throws InterruptedException {
         String result = (String) producerTemplate.sendBody("direct:validator-test",
@@ -44,7 +57,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
                         exchange.getIn().setBody("incorrect");
                     }
         });
-        assertEquals("bullshit", exchange.getFault(false).getBody());
+        assertEquals(ValidationException.class, exchange.getException().getClass());
     }
 
 }

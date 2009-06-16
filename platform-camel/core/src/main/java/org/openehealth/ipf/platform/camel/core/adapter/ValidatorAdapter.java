@@ -15,15 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.faultMessage;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResult;
 
 import java.io.IOException;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.Message;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 
 /**
@@ -105,18 +102,10 @@ public class ValidatorAdapter extends ProcessorAdapter {
      *             if a general processing error occurs.
      */
     @Override
-    protected void doProcess(Exchange exchange, Object inputData, 
-            Object... inputParams) throws IOException {
+    protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) throws IOException {
         
         prepareResult(exchange);
-        
-        try {
-            validator.validate(inputData, getProfile(exchange));
-        } catch (ValidationException e) {
-            Message fault = faultMessage(exchange);
-            // TODO: revise exception handling 
-            fault.setBody(e.getMessage());
-        }
+        validator.validate(inputData, getProfile(exchange));
     }
 
     private Object getProfile(Exchange exchange) {

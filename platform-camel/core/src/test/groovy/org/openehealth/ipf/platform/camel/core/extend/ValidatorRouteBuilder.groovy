@@ -29,7 +29,7 @@ class ValidatorRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
         
-        errorHandler(noErrorHandler())
+        onException(ValidationException.class).to('mock:error')
         
         from('direct:input1') 
             .validate {body -> body == 'blah'}  
