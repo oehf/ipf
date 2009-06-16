@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.modules</groupId>
+    <artifactId>modules-cda</artifactId>
+    <name>modules-cda</name>
+    
+    <parent>
+        <groupId>org.openehealth.ipf.modules</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.7-SNAPSHOT</version>
+    </parent>
+    
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.modules.cda.*</osgi.export.pkg>
+        <ipf.extension.beans>cdaModelExtension</ipf.extension.beans>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+       <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovytools-builder</artifactId>
+            <version>${metabuilder-version}</version>
+        </dependency>
+       <dependency>
+            <groupId>org.openhealthtools.ihe</groupId>
+            <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
+            <version>${oht-version}</version>
+        </dependency>
+    </dependencies>
+    
+</project>
