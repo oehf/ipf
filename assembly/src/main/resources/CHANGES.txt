@@ -1,0 +1,4 @@
+Changes in IPF 1.7-m1
+---------------------
+
+See http://repo.openehealth.org/confluence/display/ipf/IPF+1.7-m1#IPF1.7-m1-Changessince1.6.0
