@@ -66,7 +66,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <bean id="performanceRouteBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceRouteBuilder">
-        <property name="httpPort" value="8081"/>
+        <property name="httpPort" value="8651"/>
         <property name="statisticsPath" value="statistics"/>
     </bean>
 
