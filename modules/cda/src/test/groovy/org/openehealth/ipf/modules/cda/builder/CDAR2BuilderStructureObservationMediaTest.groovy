@@ -101,7 +101,7 @@ public class CDAR2BuilderStructureObservationMediaTest extends AbstractCDAR2Buil
 			}//entry
 		}
 		
-		println entry
-//		assertEquals 8, entry.observation.entryRelationship.regionOfInterest.value.size
+		// println entry
+    // assertEquals 8, entry.observation.entryRelationship.regionOfInterest.value.size
 	}
 }

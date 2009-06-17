@@ -30,11 +30,7 @@ public class CCDBuilderTest extends GroovyTestCase{
      }
 
      public void setUp() throws Exception {
-         def t = System.currentTimeMillis()
-         print 'Create CCD Builder ....'
          builder = new CCDBuilder(getClass().getClassLoader())
-         t = System.currentTimeMillis() - t
-         println " done in $t milliseconds."
      }
          
      public void testBuildCCDMetaData() {
@@ -131,7 +127,7 @@ public class CCDBuilderTest extends GroovyTestCase{
          def opts = [:]
          opts[XMLResource.OPTION_DECLARE_XML] = true
          opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-         System.out.println(renderer.render(document, opts))
+         // println(renderer.render(document, opts))
      }
     
 }

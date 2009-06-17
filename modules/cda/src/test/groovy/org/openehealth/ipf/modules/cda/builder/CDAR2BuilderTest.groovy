@@ -45,7 +45,7 @@ public class CDAR2BuilderTest extends AbstractCDAR2BuilderTest{
                  }
              }
          }
-         println  role
+         // println  role
 
      }
          
@@ -198,7 +198,7 @@ public class CDAR2BuilderTest extends AbstractCDAR2BuilderTest{
           def opts = [:]
           opts[XMLResource.OPTION_DECLARE_XML] = true
           opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-          System.out.println(renderer.render(document, opts))
+          // println(renderer.render(document, opts))
      }
     
 }

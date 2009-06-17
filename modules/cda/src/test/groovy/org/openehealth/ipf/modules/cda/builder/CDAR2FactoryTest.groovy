@@ -42,8 +42,8 @@ public class CDAR2FactoryTest extends GroovyTestCase{
       new CDAR2ModelExtension().extensions.call()
       def iEd = factory.newInstance(null, 'text', 'replace with encoded value', [mediaType:'application/pdf', representation:'B64'])
       assert iEd.getText() == 'replace with encoded value';
-     // assert iEd.getRepresentation().toString() == 'B64'
-      println iEd.getMediaType()
+      // assert iEd.getRepresentation().toString() == 'B64'
+      // println iEd.getMediaType()
     }
     
     void testNewInstanceWithAttributes() {
