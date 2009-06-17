@@ -37,9 +37,9 @@ import static org.junit.Assert.assertEquals;
  * @author Mitko Kolev
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/context-application.xml" })
+@ContextConfiguration(locations = { "/context-measure.xml" })
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
-public class PerformanceMeasurementExtensionTest {
+public class MeasureExtensionTest {
 
     private final static String DEFAULT_BODY = "body";
 

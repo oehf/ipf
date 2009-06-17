@@ -18,19 +18,40 @@ package org.openehealth.ipf.commons.test.performance;
 import static org.apache.commons.lang.Validate.notNull;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Mitko Kolev
  */
+@XmlRootElement(name = "measurement", namespace = "http://www.openehealth.org/ipf/commons/test/performance/types/1.0")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Measurement implements Serializable {
 
     private static final long serialVersionUID = 5300482522175786091L;
 
     private final static String EMPTY_NAME = "";
 
-    private final String name;
+    @XmlAttribute(name = "name", required = true)
+    private String name;
 
-    private final Timestamp timestamp;
+    @XmlElement(name = "timestamp", required = true)
+    private Timestamp timestamp;
+
+    public Measurement() {
+        this(new Timestamp(System.currentTimeMillis(), TimeUnit.MILLISECONDS),
+                EMPTY_NAME);
+    }
+
+    public Measurement(Timestamp timestamp) {
+        this(timestamp, EMPTY_NAME);
+
+    }
 
     /**
      * @param timestamp
@@ -45,11 +66,6 @@ public class Measurement implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Measurement(Timestamp timestamp) {
-        this(timestamp, EMPTY_NAME);
-
-    }
-
     /**
      * @return the name
      */
@@ -58,10 +74,26 @@ public class Measurement implements Serializable {
     }
 
     /**
+     * @param name
+     *            the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * @return the timestamp
      */
     public Timestamp getTimestamp() {
         return timestamp;
+    }
+
+    /**
+     * @param timestamp
+     *            the timestamp to set
+     */
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     /**
@@ -100,4 +132,13 @@ public class Measurement implements Serializable {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result
+                + ((timestamp == null) ? 0 : timestamp.hashCode());
+        return result;
+    }
 }

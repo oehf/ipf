@@ -20,9 +20,11 @@ import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.camel.Exchange
 
 /**
+ * Contains test routes, that are instrumeted for performance measurement  
+ * 
  * @author Mitko Kolev
  */
-class ApplicationRouteBuilder extends SpringRouteBuilder {
+class MeasureRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
         errorHandler(noErrorHandler())

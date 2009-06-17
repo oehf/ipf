@@ -34,10 +34,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <ctx:property-placeholder
         location="classpath:/performance.measurement.server.properties"/>
 
-    <!-- ============================================================== -->
-    <!-- Setup of the Camel route of the performance measurement server -->
-    <!-- ============================================================== -->
-
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true"/>
     </camel:camelContext>
@@ -45,12 +41,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate">
     </bean>
 
-   
-    <bean id="performanceMeasurmentRouteBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceMeasurementRouteBuilder">
-        <property name="httpPort" value="${http.port}"/>
-    </bean>
-    
     <bean id="coreModelExtension"
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
@@ -64,19 +54,21 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         </property>
     </bean>
 
-    <!-- ============================================================== -->
-    <!--   Setup of the HTTP request handler                            -->
-    <!--  ============================================================= -->
+    <!-- =============================================================== -->
+    <!-- Configuration of the performance measurement component          -->
+    <!-- =============================================================== -->
 
+
+    <bean id="performanceMeasurmentRouteBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceRouteBuilder">
+        <property name="httpPort" value="${http.port}"/>
+    </bean>
 
     <bean id="performanceRequestHandler"
         class="org.openehealth.ipf.commons.test.performance.handler.PerformanceRequestHandler">
         <property name="statisticsManager" ref="statisticsManager"/>
     </bean>
 
-    <!-- ============================================================== -->
-    <!--  Setup of the application statistics                           -->
-    <!--  ============================================================= -->
 
     <bean id="statisticsManager"
         class="org.openehealth.ipf.commons.test.performance.StatisticsManager">
@@ -84,14 +76,13 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
             <map>
                 <entry key-ref="throughtputDistributionStatistics"
                     value-ref="throughtputDistributionStatisticsRenderer"/>
-                <entry key-ref="processingTimeStatistics"
-                    value-ref="processingTimeStatisticsRenderer"/>
+                <entry key-ref="processingTimeStatistics" value-ref="processingTimeStatisticsRenderer"/>
             </map>
         </property>
     </bean>
 
     <!-- ================================================================== -->
-    <!-- Definition of statistics for the performance server                -->
+    <!-- Configuration of the statistics used by the server                 -->
     <!-- ================================================================== -->
 
     <bean id="throughtputDistributionStatistics"

@@ -35,7 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Mitko Kolev
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/context-application.xml" })
+@ContextConfiguration(locations = { "/context-measure.xml" })
 public abstract class MeasureProcessorTest {
     @Autowired
     private CamelContext context;

@@ -22,16 +22,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * @author Mitko Kolev
  */
+@XmlType(name = "timestamp", namespace = "http://www.openehealth.org/ipf/commons/test/performance/types/1.0")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Timestamp implements Serializable {
 
     private static final long serialVersionUID = 5310347155712235170L;
-    
+
     private static final TimeUnit NANO_UNIT = TimeUnit.NANOSECONDS;
-    
-    private final long nanoValue;
+
+    @XmlAttribute(name = "nanoValue", required = true)
+    private long nanoValue;
+
+    public Timestamp() {
+        this.nanoValue = NANO_UNIT.convert(System.currentTimeMillis(),
+                TimeUnit.MILLISECONDS);
+    }
 
     public Timestamp(Long value, TimeUnit unit) {
         notNull(unit, "The unit must not be null!");
@@ -61,6 +74,14 @@ public class Timestamp implements Serializable {
     }
 
     /**
+     * @param nanoValue
+     *            the nanoValue to set
+     */
+    public void setNanoValue(long nanoValue) {
+        this.nanoValue = nanoValue;
+    }
+
+    /**
      * Returns the timestamp value in the given unit
      * 
      * @param unit
@@ -83,24 +104,25 @@ public class Timestamp implements Serializable {
         Date date = new Date(getValue(TimeUnit.MILLISECONDS));
         return format.format(date);
     }
-    
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj){
+        if (this == obj) {
             return true;
-        }if (obj == null){
+        }
+        if (obj == null) {
             return false;
-        }if (getClass() != obj.getClass()){
+        }
+        if (getClass() != obj.getClass()) {
             return false;
         }
         Timestamp other = (Timestamp) obj;
-        if (nanoValue != other.nanoValue){
+        if (nanoValue != other.nanoValue) {
             return false;
         }
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;

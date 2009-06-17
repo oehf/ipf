@@ -18,13 +18,13 @@ package org.openehealth.ipf.platform.camel.test.performance.server;
 import static org.apache.camel.component.http.HttpMethods.DELETE;
 import static org.apache.camel.component.http.HttpMethods.GET;
 import static org.apache.camel.component.http.HttpMethods.HTTP_METHOD;
-import static org.apache.camel.component.http.HttpMethods.POST;
-import static org.apache.camel.component.http.HttpMethods.PUT;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.RuntimeCamelException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,12 +40,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openehealth.ipf.commons.test.http.client.Client;
+import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
 import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Statistics;
 import org.openehealth.ipf.commons.test.performance.StatisticsManager;
 import org.openehealth.ipf.commons.test.performance.StatisticsRenderer;
 import org.openehealth.ipf.commons.test.performance.Timestamp;
+import org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher;
 import org.openehealth.ipf.commons.test.performance.handler.PerformanceRequestHandler;
 import org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +60,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import static org.openehealth.ipf.commons.core.io.IOUtils.serialize;
+import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.marshall;
 
 /**
  * Test for the stand-alone performance server.
@@ -96,11 +98,28 @@ public class PerformanceMeasurementServerTest {
     @Autowired
     protected StatisticsManager statisticsManager;
 
+    /**
+     * Use a HTTP client to send the measurements to the server
+     */
+    private final Client client;
+
     // inject the properties from the application context (prior to Spring 3.0)
     @Autowired
     Integer httpPort;
 
     private CountDownLatch sync;
+
+    public PerformanceMeasurementServerTest() {
+        client = new Client();
+        client.setContentType("text/xml; Content-Encoding: "
+                + MeasurementDispatcher.CONTENT_ENCODING);
+        client.setHandler(new ResponseHandler() {
+            @Override
+            public void handleResponse(InputStream response) throws Exception {
+                // do nothing
+            }
+        });
+    }
 
     @Before
     public void setUp() {
@@ -121,10 +140,10 @@ public class PerformanceMeasurementServerTest {
      * Tests if the synchronization object receives an update. This is required
      * for the other tests.
      * 
-     * @throws InterruptedException
+     * @throws Exception
      */
     @Test
-    public void testSyncIsUpdated() throws InterruptedException, IOException {
+    public void testSyncIsUpdated() throws Exception {
         postMeasurementHistory();
         sync.await(MAX_AWAIT_SECONDS, TimeUnit.SECONDS);
         String msg = "The synchronization object must be updated on sendMeasurementRequest(). "
@@ -137,14 +156,14 @@ public class PerformanceMeasurementServerTest {
     }
 
     @Test
-    public void testPOST() throws InterruptedException, IOException {
+    public void testPOST() throws Exception {
         postMeasurementHistory();
         sync.await(MAX_AWAIT_SECONDS, TimeUnit.SECONDS);
         assertEquals(1, throughputStatistics.getUpdatesCount());
     }
 
     @Test
-    public void testGET() throws InterruptedException, IOException {
+    public void testGET() throws Exception {
         postMeasurementHistory();
         sync.await(MAX_AWAIT_SECONDS, TimeUnit.SECONDS);
         String response = sendStatisticsGETRequest();
@@ -154,26 +173,15 @@ public class PerformanceMeasurementServerTest {
     }
 
     @Test
-    public void testDELETE() throws InterruptedException, IOException {
+    public void testDELETE() throws Exception {
         postMeasurementHistory();
         sendStatisticsDELETERequest();
         sync.await(MAX_AWAIT_SECONDS, TimeUnit.SECONDS);
         assertEquals(0, throughputStatistics.getUpdatesCount());
     }
 
-    public void testPUTFails() throws Throwable {
-        postMeasurementHistory();
-        try {
-            producerTemplate.sendBodyAndHeader(buildURL(), EMPTY_BODY,
-                    HTTP_METHOD, PUT);
-        } catch (RuntimeCamelException re) {
-            throw re.getCause();
-        }
-    }
-
     @Test
-    public void testStatisticsAreUpdatedOnManyServerRequests()
-            throws InterruptedException, IOException {
+    public void testManyPOSTs() throws Exception {
         int requests = 30;
         sync = new CountDownLatch(requests);
         for (int t = 0; t < requests; t++)
@@ -183,15 +191,18 @@ public class PerformanceMeasurementServerTest {
         assertEquals(0, sync.getCount());
     }
 
-    private void postMeasurementHistory() throws IOException {
+    private void postMeasurementHistory() throws Exception {
         // send the current time
         MeasurementHistory history = new MeasurementHistory(new Date());
         history.add(new Measurement(new Timestamp(System.currentTimeMillis(),
                 TimeUnit.MILLISECONDS)));
         history.add(new Measurement(new Timestamp(System.currentTimeMillis(),
                 TimeUnit.MILLISECONDS), "finish"));
-        producerTemplate.sendBodyAndHeader(buildURL(), serialize(history),
-                HTTP_METHOD, POST);
+
+        String xml = marshall(history);
+        client.setServerUrl(new URL(buildURL()));
+        client.execute(new ByteArrayInputStream(xml
+                .getBytes(MeasurementDispatcher.CONTENT_ENCODING)));
     }
 
     private void sendStatisticsDELETERequest() {
@@ -210,8 +221,9 @@ public class PerformanceMeasurementServerTest {
     }
 
     /**
-     * A StatisticsManager which delegates to a delegate StatisticsManager and
-     * updates the sync object on {@link #updateStatistics(MeasurementHistory)}
+     * A StatisticsManager which delegates to a the StatisticsManager in the
+     * configuration context and updates the sync object on
+     * {@link #updateStatistics(MeasurementHistory)}
      */
     class MyStatisticsManager extends StatisticsManager {
         private final StatisticsManager delegate;

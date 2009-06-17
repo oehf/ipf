@@ -54,7 +54,8 @@ public class ThroughputDistributionStatistics extends ThroughputStatistics {
     }
 
     public ThroughputDistribution getThroughputDistribution() {
-        return new ThroughputDistribution(getThroughput(), getThroughputForIntervals());
+        return new ThroughputDistribution(getThroughput(),
+                getThroughputForIntervals());
     }
 
     long getElementCount(long date) {
@@ -94,8 +95,7 @@ public class ThroughputDistributionStatistics extends ThroughputStatistics {
 
         long lastTo = getToTime();
         long duration = (lastTo - getFromTime());
-        // make the step a little bigger
-        long step = duration / (this.numberOfIntervalBins - 1);
+        long step = duration / (this.numberOfIntervalBins);
         for (int t = 0; t < numberOfIntervalBins; t++) {
             long to = lastTo - t * step;
             long from = to - step;

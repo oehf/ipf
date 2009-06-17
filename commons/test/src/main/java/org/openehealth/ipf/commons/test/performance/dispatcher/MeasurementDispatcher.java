@@ -21,21 +21,26 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.xml.bind.JAXBException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.test.http.client.Client;
 import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
+import org.openehealth.ipf.commons.test.performance.MeasurementLostException;
 import org.openehealth.ipf.commons.test.performance.StatisticsManager;
 import org.springframework.beans.factory.InitializingBean;
 
-import static org.openehealth.ipf.commons.core.io.IOUtils.serialize;
+import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.marshall;
 
 /**
  * @see StatisticsManager
  * @author Mitko Kolev
  */
 public abstract class MeasurementDispatcher implements InitializingBean {
+
+    public static String CONTENT_ENCODING = "UTF-8";
 
     // TODO 1 review the initial implementation with the test Client
     // TODO 2 write a test for the the setting with the performance server URL
@@ -107,11 +112,22 @@ public abstract class MeasurementDispatcher implements InitializingBean {
         if (performanceServerURL == null)
             return;
         try {
-            // send the current measurement history
-            client.execute(new ByteArrayInputStream(
-                    serialize(measurementHistory)));
+            // marshall and send the current measurement history
+            String xml = marshall(measurementHistory);
+
+            client.execute(new ByteArrayInputStream(xml
+                    .getBytes(CONTENT_ENCODING)));
+
+        } catch (JAXBException e) {
+            String msg = "Unable to marshall the measurement history to XML";
+            LOG.error(msg, e);
+            throw new MeasurementLostException(msg, e);
         } catch (Exception e) {
-            LOG.error("Can not reach the performance measuerment server", e);
+            String msg = "Sending the performance measuerment to the server at "
+                    + performanceServerURL + " failed!";
+            LOG.error(msg, e);
+            throw new MeasurementLostException(msg, e);
+
         }
     }
 
@@ -132,6 +148,7 @@ public abstract class MeasurementDispatcher implements InitializingBean {
         } else {
             client = new Client();
             client.setServerUrl(new URL(performanceServerURL));
+            client.setContentType("text/xml; charset=" + CONTENT_ENCODING);
             client.setHandler(new ResponseHandler() {
                 @Override
                 public void handleResponse(InputStream response)

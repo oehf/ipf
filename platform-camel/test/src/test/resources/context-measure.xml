@@ -25,8 +25,8 @@ http://activemq.apache.org/camel/schema/spring
 http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
     <!-- ================================================================== -->
-    <!--  Camel Setup of a typical IPF application  that uses               -->
-    <!--  the performance measurement component                             -->
+    <!--  Configuration the test application that uses the performance      -->
+    <!--  measurement component                                             -->
     <!-- ================================================================== -->
 
     <camel:camelContext id="camelContext">
@@ -40,7 +40,6 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <bean id="coreModelExtension"
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
-
 
     <bean id="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
@@ -57,20 +56,16 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.test.performance.route.ApplicationRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.test.performance.route.MeasureRouteBuilder">
     </bean>
 
+    <!-- =============================================================== -->
+    <!-- Configuration of the HTTP interface, exposed by the component   -->
+    <!-- =============================================================== -->
 
-    <!-- ================================================================ -->
-    <!--Setup of performance measurement infrastructure                   -->
-    <!-- ================================================================ -->
 
-    <bean id="performanceModelExtension"
-        class="org.openehealth.ipf.platform.camel.test.performance.extend.PerformanceModelExtension">
-    </bean>
-
-    <bean id="performanceMeasurementRouteBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceMeasurementRouteBuilder">
+    <bean id="performanceRouteBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceRouteBuilder">
         <property name="httpPort" value="8081"/>
         <property name="statisticsPath" value="statistics"/>
     </bean>
@@ -80,17 +75,19 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
         <property name="statisticsManager" ref="statisticsManager"/>
     </bean>
 
-    <bean id="measurementDataDispatcher"
-        class="org.openehealth.ipf.commons.test.performance.dispatcher.SynchronousMeasurementDispatcher">
-        <!--
-            This test configuration uses synchronous dispatching for simplicity
-        -->
-        <property name="statisticsManager" ref="statisticsManager"/>
+    <!-- =============================================================== -->
+    <!-- Configuration of the performance measurement component          -->
+    <!-- =============================================================== -->
+
+    <bean id="performanceModelExtension"
+        class="org.openehealth.ipf.platform.camel.test.performance.extend.PerformanceModelExtension">
     </bean>
 
-    <!-- ============================================================== -->
-    <!--  Setup of the application statistics                           -->
-    <!--  ============================================================= -->
+    <!-- Using synchronous dispatching for the tests  -->
+    <bean id="measurementDataDispatcher"
+        class="org.openehealth.ipf.commons.test.performance.dispatcher.SynchronousMeasurementDispatcher">
+        <property name="statisticsManager" ref="statisticsManager"/>
+    </bean>
 
     <bean id="statisticsManager"
         class="org.openehealth.ipf.commons.test.performance.StatisticsManager">
@@ -101,6 +98,10 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
             </map>
         </property>
     </bean>
+
+    <!-- =============================================================== -->
+    <!-- Configuration of the statistics objects, and their renderers    -->
+    <!-- =============================================================== -->
 
     <bean id="throughtputStatistics"
         class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatistics"/>

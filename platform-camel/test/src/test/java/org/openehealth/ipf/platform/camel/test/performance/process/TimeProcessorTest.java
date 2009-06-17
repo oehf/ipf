@@ -69,13 +69,13 @@ public class TimeProcessorTest extends MeasureProcessorTest {
         assertNotSame(last, newHistory.getLastMeasurement());
     }
     
-     @Test
-     public void testUpdatedTimeIsGreater()throws Exception {
-         Measurement initial = initialHistory.getLastMeasurement();
-         processor.process(exchange);
-         MeasurementHistory history = processor.getMeasurementHistory(exchange);
-         Measurement last = history.getLastMeasurement();
-         assertTrue(last.getTimestamp().getNanoValue() > initial.getTimestamp().getNanoValue());
-     }
+    @Test
+    public void testUpdatedTimeIsAfterTheLastTime()throws Exception {
+        Measurement initial = initialHistory.getLastMeasurement();
+        processor.process(exchange);
+        MeasurementHistory history = processor.getMeasurementHistory(exchange);
+        Measurement last = history.getLastMeasurement();
+        assertTrue(last.getTimestamp().getNanoValue() > initial.getTimestamp().getNanoValue());
+    }
    
 }

@@ -17,38 +17,50 @@ package org.openehealth.ipf.commons.test.performance;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Mitko Kolev
  */
+@XmlRootElement(name = "measurementHistory", namespace = "http://www.openehealth.org/ipf/commons/test/performance/types/1.0")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MeasurementHistory implements Serializable {
 
     private static final long serialVersionUID = -5551291616837750950L;
 
+    @XmlElementRef(name = "measurements")
     private List<Measurement> measurements;
 
+    @XmlElement(name = "referenceDate", type = Date.class)
     private Date referenceDate;
+
+    public MeasurementHistory() {
+        this.measurements = new ArrayList<Measurement>();
+        this.referenceDate = new Date();
+    }
 
     public MeasurementHistory(Date referenceDate) {
         notNull(referenceDate, "The referenceDate must not be null!");
         this.measurements = new ArrayList<Measurement>();
         this.referenceDate = referenceDate;
-
     }
 
     public MeasurementHistory(MeasurementHistory copy) {
         notNull(copy, "The copy must not be null!");
-        this.measurements = new ArrayList<Measurement>(copy.measurements);
+
         this.referenceDate = new Date(copy.referenceDate.getTime());
+        this.measurements = new ArrayList<Measurement>(copy.measurements);
+
     }
 
     /**
@@ -59,25 +71,41 @@ public class MeasurementHistory implements Serializable {
     }
 
     /**
+     * @param measurements
+     *            the measurements to set
+     */
+    public void setMeasurements(List<Measurement> measurements) {
+        this.measurements = measurements;
+    }
+
+    /**
      * @return the referenceDate
      */
     public Date getReferenceDate() {
         return referenceDate;
     }
 
+    /**
+     * @param referenceDate
+     *            the referenceDate to set
+     */
+    public void setReferenceDate(Date referenceDate) {
+        this.referenceDate = referenceDate;
+    }
+
     public void add(Measurement measurement) {
         notNull(measurement, "The measurement must not be null!");
         measurements.add(measurement);
     }
-    
+
     public Measurement getFirstMeasurement() {
         return measurements.get(0);
     }
-    
+
     public Measurement getLastMeasurement() {
         return measurements.get(measurements.size() - 1);
     }
-    
+
     public Timestamp getFirstMeasurementTimestamp() {
         return measurements.get(0).getTimestamp();
     }
@@ -86,54 +114,44 @@ public class MeasurementHistory implements Serializable {
         return measurements.get(measurements.size() - 1).getTimestamp();
     }
 
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeLong(referenceDate.getTime());
-        writeMeasurements(out);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MeasurementHistory other = (MeasurementHistory) obj;
+        if (measurements == null) {
+            if (other.measurements != null) {
+                return false;
+            }
+        } else if (!measurements.equals(other.measurements)) {
+            return false;
+        }
+        if (referenceDate == null) {
+            if (other.referenceDate != null) {
+                return false;
+            }
+        } else if (!referenceDate.equals(other.referenceDate)) {
+            return false;
+        }
+        return true;
     }
 
-    private void readObject(ObjectInputStream in) throws IOException,
-            ClassNotFoundException {
-        this.referenceDate = new Date(in.readLong());
-        this.measurements = readMeasurements(in);
-    }
-
-    private void writeMeasurements(ObjectOutputStream out) throws IOException {
-        String[] names = new String[measurements.size()];
-        long[] times = new long[measurements.size()];
-        for (int t = 0; t < measurements.size(); t++) {
-            names[t] = measurements.get(t).getName();
-            times[t] = measurements.get(t).getTimestamp().getNanoValue();
-        }
-        out.writeObject(names);
-        out.writeObject(times);
-    }
-
-    /**
-     * The method exists to provide deserialization for the Measurement and
-     * ArrayList classes. These classes can not be deserialized in Groovy. For
-     * more detailed description of the problem check
-     * http://jira.codehaus.org/browse/GROOVY-1627
-     * 
-     * @param in
-     * @return
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    private List<Measurement> readMeasurements(ObjectInputStream in)
-            throws IOException, ClassNotFoundException {
-
-        String[] names = (String[]) in.readObject();
-        long[] nanoTimes = (long[]) in.readObject();
-        List<Measurement> measurements = new ArrayList<Measurement>();
-        if (names == null || names.length == 0) {
-            return measurements;
-        }
-        for (int t = 0; t < names.length; t++) {
-            Measurement m = new Measurement(new Timestamp(nanoTimes[t],
-                    TimeUnit.NANOSECONDS), names[t]);
-            measurements.add(m);
-        }
-        return measurements;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((measurements == null) ? 0 : measurements.hashCode());
+        result = prime * result
+                + ((referenceDate == null) ? 0 : referenceDate.hashCode());
+        return result;
     }
 
 }

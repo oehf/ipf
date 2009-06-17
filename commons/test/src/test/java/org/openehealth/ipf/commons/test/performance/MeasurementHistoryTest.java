@@ -15,10 +15,18 @@
  */
 package org.openehealth.ipf.commons.test.performance;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.io.IOUtils;
+import org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,4 +63,41 @@ public class MeasurementHistoryTest {
 
     }
 
+    @Test
+    public void testXMLSerialization() throws Exception {
+        MeasurementHistory history = createMeasurementHistory(20);
+        JAXBContext context = JAXBContext.newInstance(MeasurementHistory.class,
+                Measurement.class, Timestamp.class);
+        Marshaller marshaller = context.createMarshaller();
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        marshaller.marshal(history, outStream);
+
+        MeasurementHistory unmarshalledHistory = (MeasurementHistory) unmarshaller
+                .unmarshal(new ByteArrayInputStream(outStream.toByteArray()));
+
+        assertEquals(history, unmarshalledHistory);
+
+    }
+
+    @Test
+    public void testXMLSerializationWithXMLUtils() throws Exception {
+        // test unmarshall with string
+        MeasurementHistory history = createMeasurementHistory(20);
+        String marshalled = MeasurementHistoryXMLUtils.marshall(history);
+        MeasurementHistory unmarshalled = MeasurementHistoryXMLUtils
+                .unmarshall(marshalled);
+        assertEquals(history, unmarshalled);
+    }
+
+    @Test
+    public void testXMLSerializationWithXMLUtils2() throws Exception {
+        // test unmarshall with a string reader
+        MeasurementHistory history = createMeasurementHistory(20);
+        String marshalled = MeasurementHistoryXMLUtils.marshall(history);
+        MeasurementHistory unmarshalled = MeasurementHistoryXMLUtils
+                .unmarshall(new StringReader(marshalled));
+        assertEquals(history, unmarshalled);
+    }
 }

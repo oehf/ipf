@@ -13,46 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.test.performance.route
+ package org.openehealth.ipf.platform.camel.test.performance.route
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-import static org.apache.camel.component.http.HttpMethods.HTTP_METHOD
-import static org.apache.camel.component.http.HttpMethods.GET
-import static org.apache.camel.component.http.HttpMethods.DELETE
-import static org.apache.camel.component.http.HttpMethods.POST
-import static org.apache.camel.component.http.HttpProducer.HTTP_RESPONSE_CODE
-import static org.apache.commons.httpclient.HttpStatus.SC_METHOD_NOT_ALLOWED
+ import org.openehealth.ipf.commons.test.performance.MeasurementHistory
 
-import static org.apache.commons.io.IOUtils.closeQuietly
-import static org.apache.commons.io.IOUtils.toByteArray
-import static org.openehealth.ipf.commons.core.io.IOUtils.deserialize
-/**
+ import java.io.InputStreamReader
+ import java.util.Date
+
+ import org.apache.camel.spring.SpringRouteBuilder
+ import org.apache.commons.logging.Log
+ import org.apache.commons.logging.LogFactory
+
+ import static org.apache.camel.component.http.HttpMethods.HTTP_METHOD
+ import static org.apache.camel.component.http.HttpMethods.GET
+ import static org.apache.camel.component.http.HttpMethods.DELETE
+ import static org.apache.camel.component.http.HttpMethods.POST
+ import static org.apache.camel.component.http.HttpProducer.HTTP_RESPONSE_CODE
+ import static org.apache.commons.httpclient.HttpStatus.SC_METHOD_NOT_ALLOWED
+
+ import static org.apache.commons.io.IOUtils.closeQuietly
+ import static org.apache.commons.io.IOUtils.toString
+ import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.unmarshall
+ import static org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher.CONTENT_ENCODING
+
+ /**
  * A route builder that provides REST style interface for accessing the statistics. 
  * If the route builder is declared in the Spring application context, Camel will apply it 
  * automatically.
  * 
  * @author Mitko Kolev
  */
-public class PerformanceMeasurementRouteBuilder extends SpringRouteBuilder {
+public class PerformanceRouteBuilder extends SpringRouteBuilder {
     
     private final static String LOCALHOST = '0.0.0.0'
-    private final static Log LOG = LogFactory.getLog(PerformanceMeasurementRouteBuilder.class.getName())
+    private final static Log LOG = LogFactory.getLog(PerformanceRouteBuilder.class.getName())
     
     /**
-     * The port on which the server should be accessed
+     * The port on which the Jetty server should accept requests
      */
     int httpPort
+    
     /**
-     * The URI path to access the statistcs resource
+     * The URI path to access statistcs related resources
      */
     String statisticsPath = 'statistics'
     
     /**
      * The bean name to handle the requests from the Jetty server
      */
-    String requestHanlderBean = 'performanceRequestHandler'
+    String requestHandlerBean = 'performanceRequestHandler'
     
     /**
      * The method name of the <code>requestHanlderBean</code> 
@@ -64,6 +73,12 @@ public class PerformanceMeasurementRouteBuilder extends SpringRouteBuilder {
      * to handle requests to reset the statistcs data
      */
     String resetMethod = 'onResetStatistics'
+    
+    /**
+     * The method name of the <code>requestHanlderBean</code> 
+     * to handle update requests with measurment history objects
+     */    
+    String updateMethod = 'onMeasurementHistory'
     
     /**
      * Confiuration for the HTTP client, used by the embedded Jetty server 
@@ -84,25 +99,28 @@ public class PerformanceMeasurementRouteBuilder extends SpringRouteBuilder {
                 .when(header(HTTP_METHOD).isEqualTo(POST)).to('direct:updateStatistics')
                 .otherwise().to('direct:notAllowedStatisticsOperation')
         from('direct:getStatistics')
-                .to('bean:' + requestHanlderBean + '?method=' + reportsMethod )
+                .to('bean:' + requestHandlerBean + '?method=' + reportsMethod )
         from('direct:resetStatistics')
-                .to('bean:' + requestHanlderBean + '?method=' + resetMethod )
+                .to('bean:' + requestHandlerBean + '?method=' + resetMethod )
         from('direct:updateStatistics')
                 .to('seda:measurement')
                 .transform{'Measurement history request queued'}
-        from('seda:measurement')//TODO from camel 1.6.1 provide setting for concurrentConsumers
+        from('seda:measurement')//uses a single consumer
                 .setBody {exchange ->
                     def history
-                    InputStream stream = exchange.in.body
+                    //get the measurement history from the request body
+                    InputStream stream = exchange.in.getBody(InputStream.class)
                     try{
-                        byte [] body = toByteArray(stream)
-                        history = deserialize(body)
+                        //TODO: extract the content encoding from the Content-Type header
+                        history = unmarshall(new InputStreamReader(stream, CONTENT_ENCODING))
                     }finally{
                         closeQuietly(stream)
                     }
+                    //use the server date for a reference date of the measurements
+                    history.setReferenceDate(new Date())
                     history
                 }
-                .to('bean:performanceRequestHandler?method=onMeasurementHistory')
+                .to('bean:' + requestHandlerBean + '?method=' +  updateMethod)
         from('direct:notAllowedStatisticsOperation')
                 .setHeader(HTTP_RESPONSE_CODE).constant(SC_METHOD_NOT_ALLOWED)
                 .transform{'The HTTP method is not allowed!'  }

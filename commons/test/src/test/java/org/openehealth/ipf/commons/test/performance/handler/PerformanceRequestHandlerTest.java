@@ -58,17 +58,18 @@ public class PerformanceRequestHandlerTest {
         statisticsManager.resetStatistics();
     }
 
+    
+    @Test
+    public void testStatisticsReceiveUpdate() {
+        handler.onMeasurementHistory(createMeasurementHistory());
+        assertEquals(1, throughputStatistics.getUpdatesCount());
+    }
+    
     @Test
     public void testStatisticsReceiveReset() {
         handler.onMeasurementHistory(createMeasurementHistory());
         handler.onResetStatistics();
         assertEquals(0, throughputStatistics.getUpdatesCount());
-    }
-
-    @Test
-    public void testStatisticsReceiveUpdate() {
-        handler.onMeasurementHistory(createMeasurementHistory());
-        assertEquals(1, throughputStatistics.getUpdatesCount());
     }
 
     @Test

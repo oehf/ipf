@@ -49,12 +49,12 @@ class ThroughputDistributionStatisticsRenderer extends ThroughputStatisticsRende
         builder.throughputDistribution(){
             h3('Throughput distribution')
             table(border:'1'){
-                th('Interval')
+                th('Time interval')
                 th('Count of processed messages')
                 th('From')
                 th('To')
-                th('Time duration (seconds)')
-                th('Throughput (count / time duration)')
+                th('Duration (seconds)')
+                th('Throughput (count / duration)')
                 
                 int binIndex = 1
                 for (Throughput t : distribution.throughput){
@@ -72,5 +72,4 @@ class ThroughputDistributionStatisticsRenderer extends ThroughputStatisticsRende
         }
         writer.toString()
     }
-    
-}
+}    
