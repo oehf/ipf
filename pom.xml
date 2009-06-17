@@ -276,6 +276,11 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy-version}</version>
             </dependency>
+           <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovytools-builder</artifactId>
+                <version>${metabuilder-version}</version>
+            </dependency>
 			      <dependency>
                 <groupId>org.hl7</groupId>
                 <artifactId>hapi</artifactId>
@@ -467,6 +472,11 @@
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
                 <artifactId>org.openhealthtools.ihe.atna.nodeauth</artifactId>
+                <version>${oht-version}</version>
+            </dependency>
+           <dependency>
+                <groupId>org.openhealthtools.ihe</groupId>
+                <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
                 <version>${oht-version}</version>
             </dependency>
             <dependency>

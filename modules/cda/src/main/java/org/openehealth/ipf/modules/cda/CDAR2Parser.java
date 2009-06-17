@@ -56,7 +56,6 @@ public class CDAR2Parser implements Parser<POCDMT000040ClinicalDocument> {
      */
     public POCDMT000040ClinicalDocument parse(InputStream is, Object... options)
             throws IOException {
-        CDAR2Package packageInstance = CDAR2Package.eINSTANCE;
         Resource resources = new CDAR2ResourceFactoryImpl().createResource(URI.createURI(CDAR2Package.eNS_URI));
         if (options != null && options.length > 0 && options[0] instanceof Map) {
             resources.load(is, (Map<?,?>)options[0]);
