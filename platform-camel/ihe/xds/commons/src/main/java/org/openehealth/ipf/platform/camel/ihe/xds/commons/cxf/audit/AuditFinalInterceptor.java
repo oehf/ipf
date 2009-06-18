@@ -21,7 +21,6 @@ import org.apache.cxf.message.AbstractWrappedMessage;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
-import org.apache.cxf.interceptor.Fault;
 
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
@@ -51,7 +50,7 @@ public class AuditFinalInterceptor extends AuditInterceptor {
 
     
     @Override
-    public void handleMessage(Message message) throws Fault {
+    public void process(Message message) throws Exception {
         AuditDataset auditDataset = getAuditDataset(message);
 
         // try to extract response as POJO 
@@ -71,7 +70,7 @@ public class AuditFinalInterceptor extends AuditInterceptor {
                     RFC3881EventOutcomeCodes.SUCCESS;
 
         // perform transaction-specific auditing
-        getAuditStrategy().doAudit(eventOutcome, auditDataset);
+        getAuditStrategy().audit(eventOutcome, auditDataset);
     }
     
 }

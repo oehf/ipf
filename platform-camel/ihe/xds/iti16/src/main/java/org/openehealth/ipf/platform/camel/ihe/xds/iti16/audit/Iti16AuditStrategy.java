@@ -23,7 +23,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrateg
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti16AuditStrategy implements AuditStrategy {
+abstract public class Iti16AuditStrategy extends AuditStrategy {
+
+    public Iti16AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+        super(serverSide, allowIncompleteAudit);
+    }
 
     @Override
     public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {

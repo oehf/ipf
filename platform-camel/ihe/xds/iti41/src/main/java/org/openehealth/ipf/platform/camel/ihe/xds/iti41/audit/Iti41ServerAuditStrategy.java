@@ -27,11 +27,19 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  */
 public class Iti41ServerAuditStrategy extends Iti41AuditStrategy {
 
+    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
+        "ClientIpAddress",
+        "ServiceEndpointUrl",
+        "SubmissionSetUuid",
+        "PatientId"};
+
+    
+    public Iti41ServerAuditStrategy(boolean allowIncompleteAudit) {
+        super(true, allowIncompleteAudit);
+    }
+
     @Override
-    public void doAudit(
-            RFC3881EventOutcomeCodes eventOutcome, 
-            AuditDataset auditDataset) 
-    {
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset auditDataset) {
         AuditorManager.getRepositoryAuditor().auditProvideAndRegisterDocumentSetBEvent(
                 eventOutcome,
                 auditDataset.getUserId(),
@@ -41,9 +49,8 @@ public class Iti41ServerAuditStrategy extends Iti41AuditStrategy {
                 auditDataset.getPatientId());
     }
 
-    
     @Override
-    public AuditDataset createAuditDataset() {
-        return new AuditDataset(true);
+    public String[] getNecessaryAuditFieldNames() {
+        return NECESSARY_AUDIT_FIELDS;
     }
 }

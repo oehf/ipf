@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.utils;
 import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.OrganizationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
 
@@ -35,9 +34,6 @@ public class Ebxml21TestUtils extends Ebxml21Utils {
      * @return
      */
     public static SubmitObjectsRequest createTestSubmitObjectRequest() { 
-        OrganizationType orgType = new OrganizationType();
-        orgType.setObjectType("ok");
-        
         RegistryPackageType registryPackageType = new RegistryPackageType();
         registryPackageType.getExternalIdentifier().add(
                 Ebxml21Utils.createExternalIdentifierType(
@@ -47,10 +43,11 @@ public class Ebxml21TestUtils extends Ebxml21Utils {
                 Ebxml21Utils.createExternalIdentifierType(
                         Ebxml21Utils.XDS_UNIQUE_ID_ATTRIBUTE,
                         "229.6.58.29.24.1235"));
-        
+
+        registryPackageType.setObjectType("ok");
+
         LeafRegistryObjectListType leafRegistryObjectListType = new LeafRegistryObjectListType();
         List<Object> objectRefOrAssociationOrAuditableEvent = leafRegistryObjectListType.getObjectRefOrAssociationOrAuditableEvent();
-        objectRefOrAssociationOrAuditableEvent.add(orgType);
         objectRefOrAssociationOrAuditableEvent.add(registryPackageType);
         
         SubmitObjectsRequest request = new SubmitObjectsRequest();

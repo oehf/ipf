@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16;
 
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertNotNull;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.AuditTestFinalInterceptor;
 
@@ -35,10 +32,7 @@ public class Iti16TestAuditFinalInterceptor extends AuditTestFinalInterceptor {
 
     @Override
     public void checkTransactionSpecificFields(AuditDataset auditDataset, boolean isServerSide) {
-        String payload = auditDataset.getPayload();
-        assertNotNull(payload);
-        assertTrue(payload.startsWith("<"));
-        assertTrue(payload.endsWith("Envelope>"));
+        testPayload(auditDataset);
     }
 
 }

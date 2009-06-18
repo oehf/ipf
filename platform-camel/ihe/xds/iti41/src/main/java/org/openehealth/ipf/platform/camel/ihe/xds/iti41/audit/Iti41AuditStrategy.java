@@ -27,24 +27,18 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.ProvideAndRegist
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti41AuditStrategy implements AuditStrategy {
+abstract public class Iti41AuditStrategy extends AuditStrategy {
+
+    public Iti41AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+        super(serverSide, allowIncompleteAudit);
+    }
 
     @Override
-    public void enrichDataset(
-            Object pojo, 
-            AuditDataset auditDataset) 
-    {
+    public void enrichDataset(Object pojo, AuditDataset auditDataset) {
         ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if(submitObjectsRequest != null) {
             Ebxml30Utils.enrichDatasetFromSubmitObjectsRequest(submitObjectsRequest, auditDataset);
         }
     }
-
-    
-    @Override
-    public boolean needSavePayload() {
-        return false;
-    }
-
 }

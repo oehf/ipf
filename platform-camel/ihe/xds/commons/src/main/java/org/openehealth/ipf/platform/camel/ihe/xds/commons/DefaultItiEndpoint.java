@@ -38,6 +38,14 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      * Equals to <code>true</code> per default.
      */
     private boolean audit = true;
+    
+    /**
+     * Whether the system is allowed to write down audit items
+     * even if if was not able to collect all necessary data --
+     * an URL parameter, targeted on debug purposes only,
+     * defaults to <code>false</code>. 
+     */
+    private boolean allowIncompleteAudit = false;
 
 
     /**
@@ -107,23 +115,22 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
     }
 
 
-    /**
-     * Returns the parameter which was automatically set on the basis of endpoint URL.
-     * 
-     * @return <code>true</code> when auditing is enabled, <code>false</code> otherwise.
-     */
+
+    /* ----- automatically generated getters and setters ----- */
+    
     public boolean isAudit() {
         return audit;
     }
     
-    
-    /**
-     * Parameter setter used in automatic URL-based configuration. 
-     * 
-     * @param audit
-     *      auditing on/off switch.
-     */
     public void setAudit(boolean audit) {
         this.audit = audit;
+    }
+
+    public void setAllowIncompleteAudit(boolean allowIncompleteAudit) {
+        this.allowIncompleteAudit = allowIncompleteAudit;
+    }
+
+    public boolean isAllowIncompleteAudit() {
+        return allowIncompleteAudit;
     }
 }

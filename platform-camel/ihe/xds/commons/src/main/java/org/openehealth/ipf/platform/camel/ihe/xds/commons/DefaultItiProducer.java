@@ -121,7 +121,7 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
         // install auditing-related interceptors if the user has not switched
         // auditing off
         if (endpoint.isAudit()) {
-            AuditStrategy auditStrategy = createAuditStrategy();
+            AuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
             client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
             client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor(auditStrategy));
             client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor(auditStrategy));

@@ -18,12 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.helpers.IOUtils;
-import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.interceptor.AttachmentInInterceptor;
 import org.apache.cxf.interceptor.StaxInInterceptor;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 
@@ -51,7 +49,7 @@ public class ServerPayloadExtractorInterceptor extends AuditInterceptor {
 
     
     @Override
-    public void handleMessage(Message message) throws Fault {
+    public void process(Message message) throws Exception {
         // check whether we should process
         if( ! getAuditStrategy().needSavePayload()) {
             return;
@@ -59,18 +57,13 @@ public class ServerPayloadExtractorInterceptor extends AuditInterceptor {
         AuditDataset auditDataset = getAuditDataset(message);
         
         // extract XML body bytes and save them into the AuditDataset
-        try {
-            InputStream stream = message.getContent(InputStream.class);
-            byte[] streamBytes = IOUtils.readBytesFromStream(stream);
-            String payload = new String(streamBytes);
-            auditDataset.setPayload(payload);
+        InputStream stream = message.getContent(InputStream.class);
+        byte[] streamBytes = IOUtils.readBytesFromStream(stream);
+        String payload = new String(streamBytes);
+        auditDataset.setPayload(payload);
 
-            // restore the stream
-            message.setContent(InputStream.class, new ByteArrayInputStream(streamBytes));
-            
-        } catch(IOException ioe) {
-            // nop
-        }
+        // restore the stream
+        message.setContent(InputStream.class, new ByteArrayInputStream(streamBytes));
     }
 }
 

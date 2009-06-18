@@ -42,7 +42,7 @@ public class Iti18Consumer extends DefaultItiConsumer {
     
     
     @Override
-    public AuditStrategy createAuditStrategy() {
-        return new Iti18ServerAuditStrategy();
+    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti18ServerAuditStrategy(allowIncompleteAudit);
     }
 }

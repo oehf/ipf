@@ -35,7 +35,7 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
     /**
      * Key used to store audit datasets in CXF exchanges
      */
-    protected static final String CXF_EXCHANGE_KEY = "atna.audit.dataset";
+    public static final String CXF_EXCHANGE_KEY = "atna.audit.dataset";
 
 
     /**
@@ -55,15 +55,6 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
         super(phase);
         Validate.notNull(auditStrategy);
         this.auditStrategy = auditStrategy;
-    }
-    
-    
-    /**
-     * Constructor which sets no strategy. 
-     * Be careful&nbsp;&mdash; all tries to use strategy will cause NPEs!
-     */
-    public AuditInterceptor(String phase) {
-        super(phase);
     }
     
     
@@ -105,5 +96,29 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
             LOG.warn("Audit strategy not set, NPE is pending");
         }
         return this.auditStrategy;
+    }
+    
+    
+    /**
+     * Performs the actual work, being called from {@link #handleMessage(Message)}.   
+     * 
+     * @param message CXF message to process 
+     */
+    public abstract void process(Message message) throws Exception;
+    
+    
+    /**
+     * Calls {@link #process(Message)} and "forwards" all exceptions
+     * to the error log instead of letting them break message flow.
+     * 
+     * @param message CXF message to process 
+     */
+    @Override
+    public final void handleMessage(Message message) {
+        try {
+            process(message);
+        } catch(Exception e) {
+            LOG.error("Fault in audit interceptor", e);
+        }
     }
 }

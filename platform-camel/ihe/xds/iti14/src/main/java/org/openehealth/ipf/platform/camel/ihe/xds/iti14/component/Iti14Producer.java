@@ -49,7 +49,7 @@ public class Iti14Producer extends DefaultItiProducer<Iti14PortType> {
     }
 
     @Override
-    public AuditStrategy createAuditStrategy() {
-        return new Iti14ClientAuditStrategy();
+    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti14ClientAuditStrategy(allowIncompleteAudit);
     }
 }

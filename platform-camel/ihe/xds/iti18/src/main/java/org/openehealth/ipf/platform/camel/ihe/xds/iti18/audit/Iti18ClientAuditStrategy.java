@@ -26,6 +26,17 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  */
 public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
 
+    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
+        "ServiceEndpointUrl",
+        "QueryUuid",
+        "Payload"
+        /*"PatientId"*/};
+
+    
+    public Iti18ClientAuditStrategy(boolean allowIncompleteAudit) {
+        super(false, allowIncompleteAudit);
+    }
+
     @Override
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset genericAuditDataset) {
         Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
@@ -40,7 +51,7 @@ public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
     }
 
     @Override
-    public AuditDataset createAuditDataset() {
-        return new Iti18AuditDataset(false);
+    public String[] getNecessaryAuditFieldNames() {
+        return NECESSARY_AUDIT_FIELDS;
     }
 }

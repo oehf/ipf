@@ -17,13 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
 import java.io.OutputStream;
 
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.SoapVersion;
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
-import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 
@@ -50,7 +48,7 @@ public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
     }
     
     
-    public void handleMessage(Message message) {
+    public void process(Message message) throws Exception {
         // check whether we should process
         if( ! getAuditStrategy().needSavePayload()) {
             return;
@@ -61,14 +59,9 @@ public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
         // (we need it to extract SOAP document from the collected payload, 
         // as the latter can contain parts of MIME markup as well)
         String soapEnvelopePrefix;
-        try {
-            SoapVersion soapVersion = ((SoapMessage)message).getVersion();
-            XMLStreamWriter xmlWriter = message.getContent(XMLStreamWriter.class);
-            soapEnvelopePrefix = xmlWriter.getPrefix(soapVersion.getNamespace());
-        } catch(XMLStreamException xmlse) {
-            // actually cannot occur
-            throw new Fault(xmlse);
-        }
+        SoapVersion soapVersion = ((SoapMessage)message).getVersion();
+        XMLStreamWriter xmlWriter = message.getContent(XMLStreamWriter.class);
+        soapEnvelopePrefix = xmlWriter.getPrefix(soapVersion.getNamespace());
 
         // get the payload and store it in the audit dataset
         WrappedOutputStream wrapper = (WrappedOutputStream)message.getContent(OutputStream.class);

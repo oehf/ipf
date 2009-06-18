@@ -25,7 +25,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AdhocQ
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti18AuditStrategy implements AuditStrategy {
+abstract public class Iti18AuditStrategy extends AuditStrategy {
+
+    public Iti18AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+        super(serverSide, allowIncompleteAudit);
+    }
 
     @Override
     public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
@@ -41,5 +45,10 @@ abstract public class Iti18AuditStrategy implements AuditStrategy {
     @Override
     public boolean needSavePayload() {
         return true;
+    }
+    
+    @Override
+    public AuditDataset createAuditDataset() {
+        return new Iti18AuditDataset(isServerSide());
     }
 }

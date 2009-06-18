@@ -52,7 +52,7 @@ public class Iti42Producer extends DefaultItiProducer<Iti42PortType> {
 
     
     @Override
-    public AuditStrategy createAuditStrategy() {
-        return new Iti42ClientAuditStrategy();
+    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti42ClientAuditStrategy(allowIncompleteAudit);
     }
 }

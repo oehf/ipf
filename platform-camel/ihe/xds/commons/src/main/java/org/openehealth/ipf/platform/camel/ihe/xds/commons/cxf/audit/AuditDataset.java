@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A data structure used to store information pieces collected 
@@ -95,40 +97,38 @@ public class AuditDataset {
     public String getServiceEndpointUrl() {
         return serviceEndpointUrl;
     }
-    
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 
-
     public String getPatientId() {
         return patientId;
     }
-
 
     public void setSubmissionSetUuid(String submissionSetUuid) {
         this.submissionSetUuid = submissionSetUuid;
     }
 
-
     public String getSubmissionSetUuid() {
         return submissionSetUuid;
     }
-    
+
+    public boolean isServerSide() {
+        return serverSide;
+    }
+
     
     /**
      * <i>"What you see is what I get"</i>&nbsp;&mdash; returns a string that consists 
-     * from all fields available through getter methods, exclusive <code>getClass()</code>.
+     * from all fields available through getter methods.
      * 
      * @return
      *      string representation of this audit dataset
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder()
-            .append(getClass().getCanonicalName())
-            .append(" [");
+        StringBuilder sb = new StringBuilder("[");
         
         try {
             Method[] methods = this.getClass().getMethods();
@@ -136,12 +136,11 @@ public class AuditDataset {
                 String methodName = method.getName();
                 Class<?> methodReturnType = method.getReturnType();
                 
-                if(methodName.startsWith("get") && 
-                  ( ! "getClass".equals(methodName)) &&
+                if((methodName.startsWith("get") || methodName.startsWith("is")) && 
                   (method.getParameterTypes().length == 0)) {
                     sb
                         .append("\n    ")
-                        .append(method.getName().substring(3))
+                        .append(method.getName())
                         .append(" -> ");
                     
                     if(methodReturnType == String[].class) {
@@ -163,21 +162,35 @@ public class AuditDataset {
         }
         return sb.append("\n]").toString();
     }
-
-
-    /**
-     * Returns string representation of the role role (from the CXF point of view) 
-     * of the participant whose activities are being audited using this audit dataset.
-     * 
-     * @return
-     *      either "server" or "client"
-     */
-    public String getRole() {
-        return serverSide ? "server" : "client";
-    }
-
     
-    public boolean isServerSide() {
-        return serverSide;
+    
+    
+    /**
+     * Checks whether this audit dataset contains non-null values in 
+     * the fields from the given list.
+     * 
+     * @param fieldNames 
+     *      a list of field names with first letter capitalized, e.g. "Address"
+     * @param positiveCheck
+     *      <code>true</code> when the given fields must be present; 
+     *      <code>false</code> when they must be absent.
+     * @return
+     *      a set of names of the fields which do not match the given condition
+     *      (i.e. are absent when they must be present, and vice versa).
+     * @throws Exception
+     *      on reflection errors
+     */
+    public Set<String> checkFields(String[] fieldNames, boolean positiveCheck) throws Exception {
+        Set<String> result = new HashSet<String>();
+        
+        for(String fieldName : fieldNames) {
+            Method m = getClass().getMethod("get" + fieldName);
+            Object o = m.invoke(this);
+            if((o == null) == positiveCheck) {
+                result.add(fieldName);
+            }
+        }
+        
+        return result;
     }
 }

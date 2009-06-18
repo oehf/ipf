@@ -131,7 +131,7 @@ public abstract class DefaultItiConsumer extends DefaultConsumer<Exchange> imple
     private void configureInterceptors(ServerFactoryBean svrFactory) {
         // install auditing-related interceptors if the user has not switched auditing off
         if (endpoint.isAudit()) {
-            AuditStrategy auditStrategy = createAuditStrategy();
+            AuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
             svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor(auditStrategy));
             svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
     

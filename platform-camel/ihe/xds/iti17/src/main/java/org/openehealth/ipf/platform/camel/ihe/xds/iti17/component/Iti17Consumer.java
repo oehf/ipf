@@ -72,7 +72,7 @@ public class Iti17Consumer extends DefaultConsumer<Exchange> implements Auditabl
     }
 
     @Override
-    public AuditStrategy createAuditStrategy() {
+    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
         // audit strategies are used in Web Service-based transactions only  
         return null;
     }

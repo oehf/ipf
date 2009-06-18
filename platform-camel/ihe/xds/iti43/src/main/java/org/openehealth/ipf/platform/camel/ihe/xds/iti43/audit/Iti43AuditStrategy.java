@@ -27,7 +27,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocument
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti43AuditStrategy implements AuditStrategy {
+abstract public class Iti43AuditStrategy extends AuditStrategy {
+
+    public Iti43AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+        super(serverSide, allowIncompleteAudit);
+    }
 
     @Override
     public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
@@ -54,10 +58,9 @@ abstract public class Iti43AuditStrategy implements AuditStrategy {
             auditDataset.setHomeCommunityUuids(homeCommunityUuids);
         }
     }
-
+    
     @Override
-    public boolean needSavePayload() {
-        return false;
+    public AuditDataset createAuditDataset() {
+        return new Iti43AuditDataset(isServerSide());
     }
-
 }

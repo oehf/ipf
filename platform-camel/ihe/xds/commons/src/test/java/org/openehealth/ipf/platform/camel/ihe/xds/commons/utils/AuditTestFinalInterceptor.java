@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.interceptor.Fault;
 
@@ -39,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditInterce
  * 
  * @author Dmytro Rud
  */
-abstract public class AuditTestFinalInterceptor extends AuditInterceptor {
+abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor<Message> {
 
     private static final transient Log LOG = LogFactory.getLog(AuditTestFinalInterceptor.class);
     
@@ -64,7 +65,7 @@ abstract public class AuditTestFinalInterceptor extends AuditInterceptor {
     @Override
     public void handleMessage(Message message) throws Fault {
         Exchange exchange = message.getExchange();
-        AuditDataset auditDataset = (AuditDataset)exchange.get(CXF_EXCHANGE_KEY);
+        AuditDataset auditDataset = (AuditDataset)exchange.get(AuditInterceptor.CXF_EXCHANGE_KEY);
         if(auditDataset == null) {
             LOG.warn("audit dataset not found");
             return;
@@ -115,4 +116,18 @@ abstract public class AuditTestFinalInterceptor extends AuditInterceptor {
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
     abstract public void checkTransactionSpecificFields(AuditDataset auditDataset, boolean isServerSide);
+    
+    
+    /**
+     * Tests whether some payload is collected in the given dataset
+     * and (naively) whether this payload contains SOAP data.
+     *  
+     * @param auditDataset
+     */
+    protected void testPayload(AuditDataset auditDataset) {
+        String payload = auditDataset.getPayload();
+        assertNotNull(payload);
+        assertTrue(payload.startsWith("<"));
+        assertTrue(payload.endsWith("Envelope>"));
+    }
 }

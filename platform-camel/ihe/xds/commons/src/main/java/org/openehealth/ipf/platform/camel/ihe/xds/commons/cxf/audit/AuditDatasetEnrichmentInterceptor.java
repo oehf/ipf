@@ -26,7 +26,6 @@ import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
-import org.apache.cxf.interceptor.Fault;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.SoapUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -62,7 +61,7 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
 
     
     @Override
-    public void handleMessage(Message message) throws Fault {
+    public void process(Message message) throws Exception {
         AuditDataset auditDataset = getAuditDataset(message);
 
         // determine what direction do we handle
@@ -78,11 +77,6 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
                     JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_INBOUND :
                     JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
         
-        if(wsaProperties == null) {
-            LOG.error("Missing WS-Addressing headers");
-            return;
-        }
-            
         /*
          * TODO: is WS-Addressing obligatory or optional?
          * ITI TF Vol. 2 states in a table in appendix V, chapter V.3.2, 
@@ -93,13 +87,17 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
          * "conditional, _when_ WS-Addressing is used".
          */
         
-        // extract client User ID from WS-Addressing <wsa:ReplyTo> element
-        EndpointReferenceType replyTo = wsaProperties.getReplyTo();
-        if(replyTo != null) {
-            AttributedURIType address = replyTo.getAddress();
-            if(address != null) {
-                auditDataset.setUserId(address.getValue());
+        if(wsaProperties != null) {
+            // extract client User ID from WS-Addressing <wsa:ReplyTo> element
+            EndpointReferenceType replyTo = wsaProperties.getReplyTo();
+            if(replyTo != null) {
+                AttributedURIType address = replyTo.getAddress();
+                if(address != null) {
+                    auditDataset.setUserId(address.getValue());
+                }
             }
+        } else {
+            LOG.error("Missing WS-Addressing headers");
         }
 
         // get <soapenv:Header> element
@@ -134,9 +132,7 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
 
         // perform transaction-specific audit dataset enrichment
         Object pojo = message.getContent(List.class).get(0);
-        if(pojo != null) {
-            getAuditStrategy().enrichDataset(pojo, auditDataset);
-        }
+        getAuditStrategy().enrichDataset(pojo, auditDataset);
     }
 
 }

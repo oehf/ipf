@@ -25,16 +25,15 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml21Utils;
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti15AuditStrategy implements AuditStrategy {
+abstract public class Iti15AuditStrategy extends AuditStrategy {
+
+    public Iti15AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+        super(serverSide, allowIncompleteAudit);
+    }
 
     @Override
     public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
         SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
         Ebxml21Utils.enrichDatasetFromSubmitObjectsRequest(request, genericAuditDataset);
-    }
-    
-    @Override
-    public boolean needSavePayload() {
-        return false;
     }
 }

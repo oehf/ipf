@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti14;
 import org.apache.camel.Processor;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
 
@@ -45,11 +45,11 @@ class RegisterDocumentSetProcessor implements Processor {
 
     public void process(Exchange exchange) throws Exception {
         SubmitObjectsRequest request = exchange.getIn().getBody(SubmitObjectsRequest.class);
-        RegistryObjectType orgType = 
-            (RegistryObjectType) request.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent().get(0);
+        RegistryPackageType registryPackageType = 
+            (RegistryPackageType) request.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent().get(0);
 
         RegistryResponse response = new RegistryResponse();
-        response.setStatus(prefix + orgType.getObjectType());
+        response.setStatus(prefix + registryPackageType.getObjectType());
         Exchanges.resultMessage(exchange).setBody(response);
     }
 }

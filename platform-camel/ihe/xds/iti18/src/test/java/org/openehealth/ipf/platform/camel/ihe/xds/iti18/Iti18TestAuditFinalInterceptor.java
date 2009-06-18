@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18;
 
-import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.assertNotNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
@@ -40,10 +39,7 @@ public class Iti18TestAuditFinalInterceptor extends AuditTestFinalInterceptor {
         
         assertNotNull(iti18AuditDataset.getQueryUuid());
         
-        String payload = iti18AuditDataset.getPayload();
-        assertNotNull(payload);
-        assertTrue(payload.startsWith("<"));
-        assertTrue(payload.endsWith("Envelope>"));
+        testPayload(iti18AuditDataset);
     }
 
 }

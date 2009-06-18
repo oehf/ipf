@@ -26,5 +26,5 @@ public interface Auditable {
      * Creates a transaction-specific audit strategy.
      * @return a newly created audit strategy instance
      */
-    AuditStrategy createAuditStrategy();
+    AuditStrategy createAuditStrategy(boolean allowIncompleteAudit);
 }

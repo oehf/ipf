@@ -44,7 +44,7 @@ public class ClientOutputStreamSubstituteInterceptor extends AuditInterceptor {
     }
     
     
-    public void handleMessage(Message message) {
+    public void process(Message message) throws Exception {
         // check whether we should process
         if( ! getAuditStrategy().needSavePayload()) {
             return;
