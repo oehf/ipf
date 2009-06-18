@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
+import org.openehealth.ipf.commons.test.performance.StatisticsRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -29,7 +30,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import static org.openehealth.ipf.commons.test.performance.PerformanceMeasurementTestUtils.createMeasurementHistory;
 
@@ -39,13 +39,13 @@ import static org.openehealth.ipf.commons.test.performance.PerformanceMeasuremen
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/context-throughput-statistics.xml" })
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
-public class ThroughtputStatisticsTest {
+public class ThroughtputStatisticsTest extends AbstractThroughputStatisticsTest {
 
     @Autowired
-    ThroughputStatistics statistics;
+    private ThroughputStatistics statistics;
 
     @Autowired
-    ThroughputStatisticsRenderer renderer;
+    private StatisticsRenderer renderer;
 
     @Before
     public void setUp() {
@@ -56,33 +56,14 @@ public class ThroughtputStatisticsTest {
         statistics.reset();
     }
 
-    @Test
-    public void testUpdateAndThenClear() {
-        statistics.update(createMeasurementHistory());
-        statistics.reset();
-        assertEquals(0, statistics.getUpdatesCount());
+    @Override
+    public ThroughputStatistics getStatistics() {
+        return statistics;
     }
 
-    @Test
-    public void testUpdateIncrementsDataCount() {
-        statistics.update(createMeasurementHistory());
-        assertEquals(1, statistics.getUpdatesCount());
-    }
-
-    @Test
-    public void testDescriptionIsSet() {
-        String testDescription = "test";
-        statistics.setDescription(testDescription);
-        assertEquals(testDescription, statistics.getDescription());
-    }
-
-    @Test
-    public void testManyUpdates() {
-        int maxUpdates = 30;
-        for (int updates = 0; updates < maxUpdates; updates++)
-            statistics.update(createMeasurementHistory());
-
-        assertEquals(maxUpdates, statistics.getUpdatesCount());
+    @Override
+    public StatisticsRenderer getRenderer() {
+        return renderer;
     }
 
     @Test
@@ -105,18 +86,10 @@ public class ThroughtputStatisticsTest {
     @Test
     public void testThroughputHasValidUpdateCounts() {
         int maxUpdates = 30;
-        for (int updates = 0; updates < maxUpdates; updates++)
+        for (int updates = 0; updates < maxUpdates; updates++) {
             statistics.update(createMeasurementHistory());
+        }
         Throughput t = statistics.getThroughput();
         assertEquals(maxUpdates, t.getCount());
-    }
-
-    @Test
-    public void testReportsContainNumberOfUpdates() {
-        int maxUpdates = 30;
-        for (int updates = 0; updates < maxUpdates; updates++)
-            statistics.update(createMeasurementHistory());
-        String report = renderer.render(statistics);
-        assertTrue(report.contains(String.valueOf(maxUpdates)));
     }
 }

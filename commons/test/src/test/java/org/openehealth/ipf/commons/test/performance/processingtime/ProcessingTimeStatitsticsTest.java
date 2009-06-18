@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openehealth.ipf.commons.test.performance.StatisticsRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -45,7 +46,7 @@ public class ProcessingTimeStatitsticsTest {
     ProcessingTimeStatistics statistics;
 
     @Autowired
-    ProcessingTimeStatisticsRenderer renderer;
+    StatisticsRenderer renderer;
 
     @Before
     public void setUp() {
@@ -91,8 +92,9 @@ public class ProcessingTimeStatitsticsTest {
     @Test
     public void testReportsContainNumberOfUpdates() {
         int maxUpdates = 30;
-        for (int updates = 0; updates < maxUpdates; updates++)
+        for (int updates = 0; updates < maxUpdates; updates++) {
             statistics.update(createMeasurementHistory());
+        }
         String report = renderer.render(statistics);
         assertTrue(report.contains(String.valueOf(maxUpdates)));
     }

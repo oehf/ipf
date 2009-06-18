@@ -20,11 +20,11 @@
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <bean id="statistics"
+    <bean id="throughputStatistics"
         class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatistics">
     </bean>
 
-    <bean id="statisticsRenderer"
+    <bean id="throughputStatisticsRenderer"
         class="org.openehealth.ipf.commons.test.performance.throughput.ThroughputStatisticsRenderer">
     </bean>
 

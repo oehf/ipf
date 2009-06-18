@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
+import org.openehealth.ipf.commons.test.performance.StatisticsRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -38,12 +39,16 @@ import static org.openehealth.ipf.commons.test.performance.PerformanceMeasuremen
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/context-throughput-distribution-statistics.xml" })
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
-public class ThroughputDistributionStatisticsTest {
+public class ThroughputDistributionStatisticsTest extends
+        AbstractThroughputStatisticsTest {
 
     private final static int LAST_BIN_INDEX = Integer.MAX_VALUE;
 
     @Autowired
-    ThroughputDistributionStatistics statistics;
+    private ThroughputDistributionStatistics statistics;
+
+    @Autowired
+    private StatisticsRenderer renderer;
 
     @Before
     public void setUp() {
@@ -52,6 +57,16 @@ public class ThroughputDistributionStatisticsTest {
     @After
     public void tearDown() {
         statistics.reset();
+    }
+
+    @Override
+    public ThroughputStatistics getStatistics() {
+        return statistics;
+    }
+
+    @Override
+    public StatisticsRenderer getRenderer() {
+        return renderer;
     }
 
     @Test
