@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
         <artifactId>osgi-extender</artifactId>
-        <version>1.7-m1</version>
+        <version>1.7-SNAPSHOT</version>
     </parent>
     
     <properties>
