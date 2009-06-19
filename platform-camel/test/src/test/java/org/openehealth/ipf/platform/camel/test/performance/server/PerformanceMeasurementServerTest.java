@@ -79,7 +79,7 @@ public class PerformanceMeasurementServerTest {
      * be processed in less than 100ms.
      * 
      */
-    private final int MAX_AWAIT_SECONDS = 15;
+    private final int MAX_AWAIT_SECONDS = 30;
 
     private final String EMPTY_BODY = "";
 
@@ -175,8 +175,8 @@ public class PerformanceMeasurementServerTest {
     @Test
     public void testDELETE() throws Exception {
         postMeasurementHistory();
-        sendStatisticsDELETERequest();
         sync.await(MAX_AWAIT_SECONDS, TimeUnit.SECONDS);
+        sendStatisticsDELETERequest();
         assertEquals(0, throughputStatistics.getUpdatesCount());
     }
 
@@ -184,8 +184,9 @@ public class PerformanceMeasurementServerTest {
     public void testManyPOSTs() throws Exception {
         int requests = 30;
         sync = new CountDownLatch(requests);
-        for (int t = 0; t < requests; t++)
+        for (int t = 0; t < requests; t++){
             postMeasurementHistory();
+        }
         sync.await(MAX_AWAIT_SECONDS, TimeUnit.SECONDS);
 
         assertEquals(0, sync.getCount());
