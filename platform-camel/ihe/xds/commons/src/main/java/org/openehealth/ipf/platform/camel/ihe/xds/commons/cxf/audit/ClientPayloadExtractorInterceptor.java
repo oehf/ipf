@@ -48,6 +48,7 @@ public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
     }
     
     
+    @Override
     public void process(Message message) throws Exception {
         // check whether we should process
         if( ! getAuditStrategy().needSavePayload()) {
