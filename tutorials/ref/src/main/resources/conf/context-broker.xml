@@ -38,7 +38,8 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     <property name="useShutdownHook" value="true" />
     <property name="managementContext">
       <bean class="org.apache.activemq.broker.jmx.ManagementContext">
-        <property name="connectorPort" value="${activemq.management.connector.port}" />
+        <property name="useMBeanServer" value="true" />
+        <property name="createConnector" value="false" />
       </bean>
     </property>
     <property name="persistenceAdapter">
