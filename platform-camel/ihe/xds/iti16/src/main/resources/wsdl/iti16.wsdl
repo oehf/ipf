@@ -40,9 +40,9 @@
     <portType name="DocumentRegistry_PortType">
         <operation name="DocumentRegistry_QueryRegistry">
             <input message="ihe:QueryRegistry_Message"
-                   wsaw:Action="urn:ihe:iti:2007:RegistryStoredQuery"/>
+                   wsaw:Action="urn:ihe:iti:2007:QueryRegistry"/>
             <output message="ihe:QueryRegistryResponse_Message"
-                    wsaw:Action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+                    wsaw:Action="urn:ihe:iti:2007:QueryRegistryResponse"/>
         </operation>
     </portType>
 

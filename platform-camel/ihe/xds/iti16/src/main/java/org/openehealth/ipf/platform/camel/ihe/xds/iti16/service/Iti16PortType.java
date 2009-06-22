@@ -41,7 +41,7 @@ public interface Iti16PortType {
      * @return the response.
      */
     @WebResult(name = "AdhocQueryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", partName = "body")
-    @Action(input = "urn:ihe:iti:2007:RegistryStoredQuery", output = "urn:ihe:iti:2007:RegistryStoredQueryResponse")
+    @Action(input = "urn:ihe:iti:2007:QueryRegistry", output = "urn:ihe:iti:2007:QueryRegistryResponse")
     @WebMethod(operationName = "DocumentRegistry_QueryRegistry")
 public AdhocQueryResponse documentRegistryQueryRegistry(
         @WebParam(partName = "body", name = "AdhocQueryRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1")
