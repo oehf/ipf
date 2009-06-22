@@ -17,29 +17,46 @@ package ccdbuilders
 
 import groovytools.builder.*
 
-// The Clinical Document
-
+// The Continuity of Care document
 
 continuityOfCareDocument(schema:'clinicalDocument') {
    properties {
       code(schema:'loincCode', def: {
-         build {
+         getMetaBuilder().build {
             loincCode(code:'34133-9',
-                      displayName:'Summarization of episode note')
+	                   displayName:'Summarization of episode note')
          }
-      })
+	   })
       component(schema:'ccd_component')
-   }
+	}
 
-   collections {
-      templateIds(collection:'templateId', def: {
-         buildList {
-            ii(root:'2.16.840.1.113883.3.27.1776')
-         }
-      })
-      {
-         templateId(schema:'ii')
-      }
-   }
+	collections {
+	   templateIds(collection:'templateId', def: {
+	       getMetaBuilder().buildList {
+	         ii(root:'2.16.840.1.113883.3.27.1776')
+	      }
+	   })
+	   {
+	      templateId(schema:'ii')
+	   }
+	}
 }
+
+
+ccd_component(schema:'component') {
+    properties {
+       structuredBody(schema:'ccd_structuredBody')
+    }
+ }
+
+//  Add CCD sections as properties
+
+ ccd_structuredBody(schema:'structuredBody') {
+    properties {
+       purpose(schema:'ccd_purpose')
+       payers(schema:'ccd_payers')
+       // ...
+    }
+ }
+
 

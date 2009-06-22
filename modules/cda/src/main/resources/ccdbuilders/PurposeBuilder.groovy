@@ -16,7 +16,7 @@
 package ccdbuilders
 
 import groovytools.builder.*
-
+import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationship
 // Chapter 2.8 : Purpose
 
 // CONF-15: CCD MAY contain exactly one and SHALL NOT contain more than
@@ -26,36 +26,47 @@ import groovytools.builder.*
 // (templateId 2.16.840.1.113883.10.20.1.30).
 
 ccd_purpose(schema:'section') {
-    
 	properties {
-        // CONF-16: The purpose section SHALL contain Section / code.
-        // CONF-17: The value for “Section / code” SHALL be “48764-5”
-        // “Summary purpose” 2.16.840.1.113883.6.1 LOINC STATIC.// 
-		code(schema:'loincCode', def: {
-		    loincCode(code:'48764-5',
-		              displayName:'Summary purpose')
-		})
-        // CONF-18: The purpose section SHALL contain Section / title.
-        // CONF-19: (NOT ENFORCED) Section / title SHOULD be valued with a
-        // case-insensitive language-insensitive text string containing “purpose”.
-        title(schema:'st', req:true, def:'Summary purpose')
-        purposeActivity(schema:'ccd_purposeActivity')
-	}
-	collections {
-	    templateIds(collection:'templateId', def: {
-	        buildList {
-	          templateId(root:'2.16.840.1.113883.10.20.1.13')
+	    // CONF-16: The purpose section SHALL contain Section / code.
+	    // CONF-17: The value for “Section / code” SHALL be “48764-5”
+	    // “Summary purpose” 2.16.840.1.113883.6.1 LOINC STATIC.
+         code(schema:'loincCode', def: {
+             getMetaBuilder().build {
+                 loincCode(code:'48764-5',
+		                displayName:'Summary purpose')
+             }
+         })
+		
+       // CONF-18: The purpose section SHALL contain Section / title.
+       // CONF-19: (NOT ENFORCED) Section / title SHOULD be valued with a
+       // case-insensitive language-insensitive text string containing “purpose”.
+        title(def: {
+	        getMetaBuilder().build {
+	            st('Summary purpose')
 	        }
 	    })
+	    text(schema:'strucDocText', req:true)
+	    purposeActivity(schema:'ccd_purposeActivity')
+	}
+	collections {
+	   templateIds(collection:'templateId', def: {
+	     getMetaBuilder().buildList {
+	       ii(root:'2.16.840.1.113883.10.20.1.13') // CONF-15
+	     }
+	   })
 	}
 }
+
+
 
 // CONF-20 - CONF-25: Implemented by MetaClass extension
 // CONF-26: A purpose activity SHALL contain exactly one Act / entryRelationship /
 // @typeCode, with a value of “RSON” “Has reason” 2.16.840.1.113883.5.1002
 // ActRelationshipType STATIC, to indicate the reason or purpose for creating the CCD.
+
 ccd_purposeActivity(schema:'entryRelationship') {
-    properties {
-        typeCode(factory:'XACT_RELATIONSHIP_ENTRY_RELATIONSHIP', def:'RSON')
-    }
+ properties {
+     typeCode(factory:'XACT_RELATIONSHIP_ENTRY_RELATIONSHIP',
+              def: XActRelationshipEntryRelationship.RSON_LITERAL)
+ }
 }
