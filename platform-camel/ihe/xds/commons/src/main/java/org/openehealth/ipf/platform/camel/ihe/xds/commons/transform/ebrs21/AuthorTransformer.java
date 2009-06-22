@@ -70,7 +70,10 @@ public class AuthorTransformer {
         List<String> roles = Ebrs21.getSlotValues(classification, SLOT_NAME_AUTHOR_ROLE);
         List<String> specialties = Ebrs21.getSlotValues(classification, SLOT_NAME_AUTHOR_SPECIALTY);
         
-        Person person = persons.get(0) != null ? personTransformer.fromHL7(persons.get(0)) : null;
+        Person person = null;
+        if (persons.size() > 0 && persons.get(0) != null) {
+            person = personTransformer.fromHL7(persons.get(0));
+        }
         
         if (person != null && institutions.isEmpty() && roles.isEmpty() && specialties.isEmpty()) {
             return null;

@@ -124,13 +124,30 @@ public class AuthorTransformerTest {
         ClassificationType classification = transformer.toEbXML21(author, docEntry);
         Author result = transformer.fromEbXML21(classification);
         assertNotNull(result);
-        assertEquals("Adams", author.getAuthorPerson().getName().getFamilyName());
-        assertEquals("123", author.getAuthorPerson().getId().getId());
-        assertEquals("1.2.840.113619.6.197", author.getAuthorPerson().getId().getAssigningAuthority().getUniversalId());
-        assertEquals(Vocabulary.UNIVERSAL_ID_TYPE_OID, author.getAuthorPerson().getId().getAssigningAuthority().getUniversalIdType());
+        assertEquals("Adams", result.getAuthorPerson().getName().getFamilyName());
+        assertEquals("123", result.getAuthorPerson().getId().getId());
+        assertEquals("1.2.840.113619.6.197", result.getAuthorPerson().getId().getAssigningAuthority().getUniversalId());
+        assertEquals(Vocabulary.UNIVERSAL_ID_TYPE_OID, result.getAuthorPerson().getId().getAssigningAuthority().getUniversalIdType());
         
-        assertEquals(Arrays.asList("inst1", "inst2"), author.getAuthorInstitution());
-        assertEquals(Arrays.asList("role1", "role2"), author.getAuthorRole());
-        assertEquals(Arrays.asList("spec1", "spec2"), author.getAuthorSpecialty());
+        assertEquals(Arrays.asList("inst1", "inst2"), result.getAuthorInstitution());
+        assertEquals(Arrays.asList("role1", "role2"), result.getAuthorRole());
+        assertEquals(Arrays.asList("spec1", "spec2"), result.getAuthorSpecialty());
+    }
+    
+    @Test
+    public void testFromEbXML21Null() {
+        assertNull(transformer.fromEbXML21(null));
+    }
+    
+    @Test
+    public void testFromEbXML21Empty() {
+        ExtrinsicObjectType docEntry = new ExtrinsicObjectType();
+        ClassificationType ebXML = transformer.toEbXML21(new Author(), docEntry);
+        Author result = transformer.fromEbXML21(ebXML);
+        assertNotNull(result);
+        assertNull(result.getAuthorPerson());
+        assertEquals(0, result.getAuthorInstitution().size());
+        assertEquals(0, result.getAuthorRole().size());
+        assertEquals(0, result.getAuthorSpecialty().size());
     }
 }
