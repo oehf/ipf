@@ -13,31 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid;
 
 import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.AddressTransformer;
 
 /**
- * Transforms a PID-11 conforming string into a {@link PatientInfo} instance. 
+ * Transforms a PID-8 conforming string into a {@link PatientInfo} instance. 
  * @author Jens Riemschneider
  */
-public class PatientAddressPIDTransformer implements PIDTransformer {
-    private final AddressTransformer addressTransformer = new AddressTransformer();
-
+public class GenderPIDTransformer implements PIDTransformer {
     @Override
     public void fromHL7(String hl7Data, PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-        
-        patientInfo.setAddress(addressTransformer.fromHL7(hl7Data));
+
+        patientInfo.setGender(hl7Data == null || hl7Data.isEmpty() ? null : hl7Data);
     }
 
     @Override
     public String toHL7(PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
         
-        return addressTransformer.toHL7(patientInfo.getAddress());
+        return patientInfo.getGender();
     }
 }

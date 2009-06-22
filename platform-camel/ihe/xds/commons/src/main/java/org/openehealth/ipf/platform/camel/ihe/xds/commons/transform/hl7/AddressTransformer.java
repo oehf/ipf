@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7;
 
 import java.util.List;
 

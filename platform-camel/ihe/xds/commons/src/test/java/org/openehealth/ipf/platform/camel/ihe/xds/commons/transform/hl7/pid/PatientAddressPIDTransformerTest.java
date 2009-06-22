@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid;
 
 import static org.junit.Assert.*;
 
@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.PatientAddressPIDTransformer;
 
 /**
  * Tests for {@link PatientAddressPIDTransformer}.

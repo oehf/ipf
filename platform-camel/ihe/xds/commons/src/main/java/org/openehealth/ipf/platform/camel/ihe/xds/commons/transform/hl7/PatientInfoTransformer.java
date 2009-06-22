@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,12 +27,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7Delimiter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSProfileViolationException;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid.DateOfBirthPIDTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid.GenderPIDTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid.PIDTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid.PatientAddressPIDTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid.SourcePatientIdentifierPIDTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid.SourcePatientNamePIDTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.DateOfBirthPIDTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.GenderPIDTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.PIDTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.PatientAddressPIDTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.SourcePatientIdentifierPIDTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.SourcePatientNamePIDTransformer;
 
 /**
  * Transformation logic for a {@link PatientInfo}.

@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.AddressTransformer;
 
 /**
  * Tests for {@link AddressTransformer}.

@@ -13,58 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.DateOfBirthPIDTransformer;
 
 /**
- * Tests for {@link GenderPIDTransformer}.
+ * Tests for {@link DateOfBirthPIDTransformer}.
  * @author Jens Riemschneider
  */
-public class GenderPIDTransformerTest {
-    private GenderPIDTransformer transformer;
+public class DateOfBirthPIDTransformerTest {
+    private DateOfBirthPIDTransformer transformer;
     
     @Before
     public void setUp() {
-        transformer = new GenderPIDTransformer();
+        transformer = new DateOfBirthPIDTransformer();
     }
     
     @Test
     public void testToHL7() {
-        PatientInfo patientInfo = new PatientInfo();        
-        patientInfo.setGender("M");
-        assertEquals("M", transformer.toHL7(patientInfo));
+        PatientInfo patientInfo = new PatientInfo();
+        patientInfo.setDateOfBirth("123456+0100");
+        assertEquals("123456+0100", transformer.toHL7(patientInfo));
     }
     
     @Test
-    public void testToHL7Null() {
-        PatientInfo patientInfo = new PatientInfo();        
-        assertNull(transformer.toHL7(patientInfo));
+    public void testToHL7WithNoDate() {
+        assertNull(transformer.toHL7(new PatientInfo()));
     }
     
     
     @Test
     public void testFromHL7() {
         PatientInfo patientInfo = new PatientInfo();
-        transformer.fromHL7("F", patientInfo);
-        assertEquals("F", patientInfo.getGender());
+        transformer.fromHL7("6543-0100^sdf", patientInfo);
+        assertEquals("6543-0100", patientInfo.getDateOfBirth());
     }
-    
+
     @Test
     public void testFromHL7Null() {
         PatientInfo patientInfo = new PatientInfo();
         transformer.fromHL7(null, patientInfo);
-        assertNull(patientInfo.getGender());
+        assertNull(patientInfo.getDateOfBirth());
     }
-    
+
     @Test
     public void testFromHL7Empty() {
         PatientInfo patientInfo = new PatientInfo();
         transformer.fromHL7("", patientInfo);
-        assertNull(patientInfo.getGender());
-    }    
+        assertNull(patientInfo.getDateOfBirth());
+    }
 }

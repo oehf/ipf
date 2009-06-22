@@ -13,33 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.pid;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import java.util.List;
-
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7Delimiter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.AddressTransformer;
 
 /**
- * Transforms a PID-7 conforming string into a {@link PatientInfo} instance. 
+ * Transforms a PID-11 conforming string into a {@link PatientInfo} instance. 
  * @author Jens Riemschneider
  */
-public class DateOfBirthPIDTransformer implements PIDTransformer {
+public class PatientAddressPIDTransformer implements PIDTransformer {
+    private final AddressTransformer addressTransformer = new AddressTransformer();
+
     @Override
     public void fromHL7(String hl7Data, PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
         
-        List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7Data);
-        patientInfo.setDateOfBirth(HL7.get(parts, 1, true));
+        patientInfo.setAddress(addressTransformer.fromHL7(hl7Data));
     }
 
     @Override
     public String toHL7(PatientInfo patientInfo) {
         notNull(patientInfo, "patientInfo cannot be null");
-
-        return HL7.escape(patientInfo.getDateOfBirth());
+        
+        return addressTransformer.toHL7(patientInfo.getAddress());
     }
 }

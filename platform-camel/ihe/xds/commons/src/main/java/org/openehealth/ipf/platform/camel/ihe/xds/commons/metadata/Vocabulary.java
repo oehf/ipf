@@ -26,4 +26,24 @@ public abstract class Vocabulary {
     
     /** Universal ID Type to be used for all HD data types used with XDS */
     public static final String UNIVERSAL_ID_TYPE_OID = "ISO";
+    
+    /** XDSDocumentEntry classification node */
+    public static final String DOC_ENTRY_CLASS_NODE = 
+        "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
+    
+    /** Author External Classification Scheme of the Document Entry */
+    public static final String DOC_ENTRY_AUTHOR_CLASS_SCHEME = 
+        "urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d";
+
+    /** Name of the slot that is used for author persons */
+    public static final String SLOT_NAME_AUTHOR_PERSON = "authorPerson";
+    
+    /** Name of the slot that is used for author institutions */
+    public static final String SLOT_NAME_AUTHOR_INSTITUTION = "authorInstitution";
+        
+    /** Name of the slot that is used for author roles */
+    public static final String SLOT_NAME_AUTHOR_ROLE = "authorRole";
+
+    /** Name of the slot that is used for author specialties */
+    public static final String SLOT_NAME_AUTHOR_SPECIALTY = "authorSpecialty";
 }
