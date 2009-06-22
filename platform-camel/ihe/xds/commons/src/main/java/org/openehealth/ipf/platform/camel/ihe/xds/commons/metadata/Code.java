@@ -24,7 +24,6 @@ public class Code {
     private String code;
     private LocalizedString displayName;
     private String schemeName;
-    private String schemeUUID;
     
     public String getCode() {
         return code;
@@ -48,13 +47,5 @@ public class Code {
     
     public void setSchemeName(String schemeName) {
         this.schemeName = schemeName;
-    }
-    
-    public String getSchemeUUID() {
-        return schemeUUID;
-    }
-    
-    public void setSchemeUUID(String schemeUUID) {
-        this.schemeUUID = schemeUUID;
     }
 }

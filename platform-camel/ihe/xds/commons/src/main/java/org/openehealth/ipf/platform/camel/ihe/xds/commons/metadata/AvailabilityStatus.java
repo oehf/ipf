@@ -34,4 +34,18 @@ public enum AvailabilityStatus {
     private AvailabilityStatus(String representation) {        
         this.representation = representation;
     }
+
+    public static AvailabilityStatus valueOfRepresentation(String representation) {
+        if (representation == null) {
+            return null;
+        }
+        
+        for (AvailabilityStatus status : AvailabilityStatus.values()) {
+            if (representation.equals(status.getRepresentation())) {
+                return status;
+            }
+        }
+        
+        throw new IllegalArgumentException("Unknown status representation: " + representation);
+    }
 }

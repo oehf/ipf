@@ -29,7 +29,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Name;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
 
 /**
@@ -38,7 +37,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotTy
  */
 public class AuthorTransformerTest {
     private AuthorTransformer transformer;
-    private ExtrinsicObjectType docEntry;
     private Author author;
     
     @Before
@@ -71,17 +69,14 @@ public class AuthorTransformerTest {
         
         author.getAuthorSpecialty().add("spec1");
         author.getAuthorSpecialty().add("spec2");
-        
-        docEntry = new ExtrinsicObjectType();
     }
     
     @Test
     public void testToEbXML21() {
-        ClassificationType ebXML = transformer.toEbXML21(author, docEntry);        
+        ClassificationType ebXML = transformer.toEbXML21(author);        
         assertNotNull(ebXML);
         assertSame(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME), 
                 ebXML.getClassificationScheme());        
-        assertSame(docEntry, ebXML.getClassifiedObject());
         assertEquals("", ebXML.getNodeRepresentation());
         
         List<SlotType1> slots = ebXML.getSlot();
@@ -102,26 +97,25 @@ public class AuthorTransformerTest {
     
     @Test
     public void testToEbXML21WithNull() {
-        assertNull(transformer.toEbXML21(null, new ExtrinsicObjectType()));
+        assertNull(transformer.toEbXML21(null));
     }
     
     @Test
     public void testToEbXML21WithEmptyAuthor() {
-        ExtrinsicObjectType docEntry = new ExtrinsicObjectType();
-        ClassificationType ebXML = transformer.toEbXML21(new Author(), docEntry);
+        ClassificationType ebXML = transformer.toEbXML21(new Author());
         assertNotNull(ebXML);
         assertSame(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME), 
                 ebXML.getClassificationScheme());        
-        assertSame(docEntry, ebXML.getClassifiedObject());
         assertEquals("", ebXML.getNodeRepresentation());
         
         assertEquals(0, ebXML.getSlot().size());
     }
     
     
+    
     @Test
     public void testFromEbXML21() {
-        ClassificationType classification = transformer.toEbXML21(author, docEntry);
+        ClassificationType classification = transformer.toEbXML21(author);
         Author result = transformer.fromEbXML21(classification);
         assertNotNull(result);
         assertEquals("Adams", result.getAuthorPerson().getName().getFamilyName());
@@ -141,8 +135,7 @@ public class AuthorTransformerTest {
     
     @Test
     public void testFromEbXML21Empty() {
-        ExtrinsicObjectType docEntry = new ExtrinsicObjectType();
-        ClassificationType ebXML = transformer.toEbXML21(new Author(), docEntry);
+        ClassificationType ebXML = transformer.toEbXML21(new Author());
         Author result = transformer.fromEbXML21(ebXML);
         assertNotNull(result);
         assertNull(result.getAuthorPerson());

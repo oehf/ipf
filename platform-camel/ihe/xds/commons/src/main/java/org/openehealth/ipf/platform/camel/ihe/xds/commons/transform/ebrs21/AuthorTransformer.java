@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21;
 
-import static org.apache.commons.lang.Validate.notNull;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.*;
 
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.List;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer;
 
 /**
@@ -33,15 +31,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTr
 public class AuthorTransformer {
     private PersonTransformer personTransformer = new PersonTransformer();        
 
-    public ClassificationType toEbXML21(Author author, ExtrinsicObjectType docEntry) {
-        notNull(docEntry, "docEntry cannot be null");
-        
+    public ClassificationType toEbXML21(Author author) {
         if (author == null) {
             return null;
         }
         
         ClassificationType classification = 
-            Ebrs21.createClassification(Ebrs21.getObjFromLib(DOC_ENTRY_AUTHOR_CLASS_SCHEME), docEntry);
+            Ebrs21.createClassification(Ebrs21.getObjFromLib(DOC_ENTRY_AUTHOR_CLASS_SCHEME));
 
         String hl7XCN = personTransformer.toHL7(author.getAuthorPerson());
         if (hl7XCN != null) {

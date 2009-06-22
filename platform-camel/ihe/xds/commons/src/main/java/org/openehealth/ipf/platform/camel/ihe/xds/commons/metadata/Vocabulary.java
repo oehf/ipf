@@ -46,4 +46,7 @@ public abstract class Vocabulary {
 
     /** Name of the slot that is used for author specialties */
     public static final String SLOT_NAME_AUTHOR_SPECIALTY = "authorSpecialty";
+
+    /** Name of the slot that is used for coding schemes */
+    public static final String SLOT_NAME_CODING_SCHEME = "codingScheme";
 }

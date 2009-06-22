@@ -22,8 +22,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.InternationalStringType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LocalizedStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
@@ -34,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ValueL
  * @author Jens Riemschneider
  */
 public class Ebrs21 {
-    private final static ObjectFactory objectFactory = new ObjectFactory();
+    private final static ObjectFactory rimFactory = new ObjectFactory();
     
     private final static Map<String, ObjectRefType> objectLibrary;
     
@@ -53,17 +57,11 @@ public class Ebrs21 {
      * Creates a classification with the given scheme.
      * @param scheme
      *          the scheme object.
-     * @param classifiedObj
-     *          the classified object.
      * @return the created classification.
      */
-    public static ClassificationType createClassification(ObjectRefType scheme, Object classifiedObj) {
-        notNull(classifiedObj, "classifiedObj cannot be null");
-        notNull(scheme, "scheme cannot be null");
-        
-        ClassificationType classification = objectFactory.createClassificationType();        
+    public static ClassificationType createClassification(ObjectRefType scheme) {
+        ClassificationType classification = rimFactory.createClassificationType();        
         classification.setClassificationScheme(scheme);
-        classification.setClassifiedObject(classifiedObj);
         classification.setNodeRepresentation("");
         return classification;
     }
@@ -90,9 +88,9 @@ public class Ebrs21 {
         }
         
         List<SlotType1> slots = classification.getSlot();
-        SlotType1 slot = objectFactory.createSlotType1();
+        SlotType1 slot = rimFactory.createSlotType1();
         slot.setName(slotName);
-        ValueListType valueList = objectFactory.createValueListType();
+        ValueListType valueList = rimFactory.createValueListType();
         slot.setValueList(valueList);
         List<String> values = valueList.getValue();
         for (String slotValue : slotValues) {
@@ -139,5 +137,61 @@ public class Ebrs21 {
      */
     public static Collection<ObjectRefType> getObjLib() {
         return objectLibrary.values();
+    }
+
+    /**
+     * Creates an international string via a single localized string.
+     * @param localized
+     *          the string to convert.
+     * @return the created string instance.
+     */
+    public static InternationalStringType createInternationalString(LocalizedString localized) {
+        if (localized == null) {
+            return null;
+        }
+        
+        InternationalStringType international = rimFactory.createInternationalStringType();
+        international.getLocalizedString().add(createLocalizedString(localized));
+        return international;
+    }
+
+    private static LocalizedStringType createLocalizedString(LocalizedString localized) {
+        LocalizedStringType localizedEbRS21 = rimFactory.createLocalizedStringType();
+        localizedEbRS21.setCharset(localized.getCharset());
+        localizedEbRS21.setLang(localized.getLang());
+        localizedEbRS21.setValue(localized.getValue());
+        return localizedEbRS21;
+    }
+
+    /**
+     * Retrieves a localized string from an international string.
+     * @param international
+     *          the international string.
+     * @param idx
+     *          the index of the localized string within the international string.
+     * @return the international string. Can be <code>null</code> if the index was out
+     *          of bounds or if the element was null.
+     */
+    public static LocalizedString getLocalizedString(InternationalStringType international, int idx) {
+        if (international == null) {
+            return null;
+        }
+        
+        List<LocalizedStringType> localizedList = international.getLocalizedString();
+        if (idx >= localizedList.size() || idx < 0) {
+            return null;
+        }
+        
+        LocalizedStringType localizedEbRS21 = localizedList.get(idx);
+        if (localizedEbRS21 == null) {
+            return null;
+        }
+        
+        LocalizedString localized = new LocalizedString();
+        localized.setCharset(localizedEbRS21.getCharset());
+        localized.setLang(localizedEbRS21.getLang());
+        localized.setValue(localizedEbRS21.getValue());
+        
+        return localized;
     }
 }

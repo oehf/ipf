@@ -29,10 +29,13 @@ import javax.xml.bind.Unmarshaller;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.InternationalStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LocalizedStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
@@ -63,8 +66,9 @@ public class Ebrs21Test {
     @Test
     public void testCreateClassification() throws Exception {        
         ClassificationType classification = 
-            Ebrs21.createClassification(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME), docEntry);
+            Ebrs21.createClassification(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME));
         docEntry.getClassification().add(classification);
+        classification.setClassifiedObject(docEntry);
         
         SubmitObjectsRequest received = send();
         
@@ -106,8 +110,9 @@ public class Ebrs21Test {
     @Test
     public void testAddSlot() throws Exception {
         ClassificationType classification = 
-            Ebrs21.createClassification(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME), docEntry);
+            Ebrs21.createClassification(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME));
         docEntry.getClassification().add(classification);
+        classification.setClassifiedObject(docEntry);
 
         Ebrs21.addSlot(classification, "something", "a", "b", "c");
 
@@ -136,5 +141,43 @@ public class Ebrs21Test {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         SubmitObjectsRequest received = (SubmitObjectsRequest) unmarshaller.unmarshal(inputStream);
         return received;
+    }
+    
+    @Test
+    public void testCreateInternationalString() {
+        LocalizedString localized = new LocalizedString();
+        localized.setCharset("charset");
+        localized.setLang("lang");
+        localized.setValue("value");
+        InternationalStringType international = Ebrs21.createInternationalString(localized);
+        assertNotNull(international);
+        
+        List<LocalizedStringType> localizedStrings = international.getLocalizedString();
+        assertEquals(1, localizedStrings.size());
+        assertEquals("charset", localizedStrings.get(0).getCharset());
+        assertEquals("lang", localizedStrings.get(0).getLang());
+        assertEquals("value", localizedStrings.get(0).getValue());
+    }
+    
+    @Test
+    public void testGetLocalizedString() {
+        LocalizedStringType localized1 = new LocalizedStringType();
+        localized1.setCharset("charset1");
+        localized1.setLang("lang1");
+        localized1.setValue("value1");
+        
+        LocalizedStringType localized2 = new LocalizedStringType();
+        localized2.setCharset("charset2");
+        localized2.setLang("lang2");
+        localized2.setValue("value2");
+
+        InternationalStringType international = new InternationalStringType();
+        international.getLocalizedString().add(localized1);
+        international.getLocalizedString().add(localized2);
+        
+        LocalizedString result = Ebrs21.getLocalizedString(international, 1);
+        assertEquals("charset2", result.getCharset());
+        assertEquals("lang2", result.getLang());
+        assertEquals("value2", result.getValue());
     }
 }
