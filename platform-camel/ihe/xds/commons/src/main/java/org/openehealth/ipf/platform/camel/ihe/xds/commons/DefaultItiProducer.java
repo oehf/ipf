@@ -32,6 +32,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.ws.addressing.MAPAggregator;
+import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.MustUnderstandDecoratorInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditFinalInterceptor;
@@ -109,14 +111,27 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
     private void configureInterceptors(T port) {
         Client client = ClientProxy.getClient(port);
         
-        // protocol-related interceptors
-        MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
-        for (String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
-            interceptor.addHeader(new QName(nsUri, "Action"));
-            interceptor.addHeader(new QName(nsUri, "ReplyTo"));
+        // WS-Addressing-related interceptors
+        if(serviceInfo.isAddressing()) {
+            MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
+            for (String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
+                interceptor.addHeader(new QName(nsUri, "Action"));
+                interceptor.addHeader(new QName(nsUri, "ReplyTo"));
+            }
+
+            client.getOutInterceptors().add(interceptor);
+
+            MAPCodec mapCodec = new MAPCodec();
+            MAPAggregator mapAggregator = new MAPAggregator();
+            client.getInInterceptors().add(mapCodec);
+            client.getInInterceptors().add(mapAggregator);
+            client.getInFaultInterceptors().add(mapCodec);
+            client.getInFaultInterceptors().add(mapAggregator);
+            client.getOutInterceptors().add(mapCodec);
+            client.getOutInterceptors().add(mapAggregator);
+            client.getOutFaultInterceptors().add(mapCodec);
+            client.getOutFaultInterceptors().add(mapAggregator);
         }
-        
-        client.getOutInterceptors().add(interceptor);
         
         // install auditing-related interceptors if the user has not switched
         // auditing off
@@ -137,7 +152,6 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
 
         Map<String, Object> reqContext = bindingProvider.getRequestContext();
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint.getServiceUrl());
-        reqContext.put("org.apache.cxf.ws.addressing.using", Boolean.TRUE);
 
         Binding binding = bindingProvider.getBinding();
         SOAPBinding soapBinding = (SOAPBinding) binding;

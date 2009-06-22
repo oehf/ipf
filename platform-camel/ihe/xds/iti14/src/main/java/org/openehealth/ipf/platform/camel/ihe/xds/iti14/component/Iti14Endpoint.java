@@ -35,7 +35,8 @@ public class Iti14Endpoint extends DefaultItiEndpoint {
             Iti14PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
             false,
-            "wsdl/iti14.wsdl");
+            "wsdl/iti14.wsdl",
+            false);
 
     /**
      * Constructs the endpoint.

@@ -39,10 +39,10 @@
 
     <portType name="DocumentRegistry_PortType">
         <operation name="DocumentRegistry_QueryRegistry">
-            <input message="ihe:QueryRegistry_Message"
-                   wsaw:Action="urn:ihe:iti:2007:QueryRegistry"/>
-            <output message="ihe:QueryRegistryResponse_Message"
-                    wsaw:Action="urn:ihe:iti:2007:QueryRegistryResponse"/>
+            <input message="ihe:QueryRegistry_Message"/>
+<!--                   wsaw:Action="urn:ihe:iti:2007:QueryRegistry"/>-->
+            <output message="ihe:QueryRegistryResponse_Message"/>
+<!--                    wsaw:Action="urn:ihe:iti:2007:QueryRegistryResponse"/>-->
         </operation>
     </portType>
 
@@ -62,7 +62,7 @@
     <service name="DocumentRegistry_Service">
         <port name="DocumentRegistry_Port_Soap11" binding="ihe:DocumentRegistry_Binding_Soap11">
             <soap:address location="http://servicelocation/DocumentRegistry_Service"/>
-            <wsaw:UsingAddressing xmlns:wswa="http://www.w3.org/2005/02/addressing/wsdl"/>
+<!--            <wsaw:UsingAddressing xmlns:wswa="http://www.w3.org/2005/02/addressing/wsdl"/>-->
         </port>
     </service>
 </definitions>

@@ -35,7 +35,8 @@ public class Iti43Endpoint extends DefaultItiEndpoint {
             Iti43PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
             true,
-            "wsdl/iti43.wsdl");
+            "wsdl/iti43.wsdl",
+            true);
 
     /**
      * Constructs the endpoint.

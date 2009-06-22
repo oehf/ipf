@@ -22,8 +22,6 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapBindingConfiguration;
-import org.apache.cxf.bus.CXFBusImpl;
-import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
@@ -32,8 +30,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ServerPayloadExtractorInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
-
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -98,16 +94,10 @@ public abstract class DefaultItiConsumer extends DefaultConsumer<Exchange> imple
         configureService(svrFactory, webService, info);
         configureBinding(svrFactory, info);
         configureInterceptors(svrFactory);        
-        configureBus(svrFactory);
         
         svrFactory.create();
 
         log.debug("Published webservice endpoint for: " + info.getServiceName());
-    }
-
-    private void configureBus(ServerFactoryBean svrFactory) {
-        CXFBusImpl bus = (CXFBusImpl) svrFactory.getBus();
-        bus.setFeatures(Arrays.<AbstractFeature>asList(new WSAddressingFeature()));
     }
 
     private void configureService(ServerFactoryBean svrFactory, Object webService, ItiServiceInfo<?> info) {

@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit.Iti43AuditDataset;
 public class Iti43TestAuditFinalInterceptor extends AuditTestFinalInterceptor {
 
     public Iti43TestAuditFinalInterceptor(boolean isServerSide) {
-        super(isServerSide);
+        super(isServerSide, true);
     }
 
 

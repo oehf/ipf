@@ -30,6 +30,7 @@ public class ItiServiceInfo<T> {
     private final QName serviceName;
     private final String wsdlLocation;
     private final boolean mtom;
+    private final boolean addressing;
 
     /**
      * Constructs the service info.
@@ -44,7 +45,7 @@ public class ItiServiceInfo<T> {
      * @param wsdlLocation
      *          the location of the WSDL of this webservice.
      */
-    public ItiServiceInfo(QName serviceName, Class<T> serviceClass, QName bindingName, boolean mtom, String wsdlLocation) {
+    public ItiServiceInfo(QName serviceName, Class<T> serviceClass, QName bindingName, boolean mtom, String wsdlLocation, boolean addressing) {
         Validate.notNull(serviceName, "serviceName");
         Validate.notNull(serviceClass, "serviceClass");
         Validate.notNull(bindingName, "bindingName");
@@ -55,6 +56,7 @@ public class ItiServiceInfo<T> {
         this.bindingName = bindingName;
         this.mtom = mtom;
         this.wsdlLocation = wsdlLocation;
+        this.addressing = addressing;
     }
 
     /**
@@ -90,5 +92,15 @@ public class ItiServiceInfo<T> {
      */
     public String getWsdlLocation() {
         return wsdlLocation;
+    }
+
+    /**
+     * Whether WS-Addressing should be supported.  
+     * Currently affects only the client side (i.e. the Camel producer). 
+     * 
+     * @return {@code true} if this service requires WS-Addressing.
+     */
+    public boolean isAddressing() {
+        return addressing;
     }
 }

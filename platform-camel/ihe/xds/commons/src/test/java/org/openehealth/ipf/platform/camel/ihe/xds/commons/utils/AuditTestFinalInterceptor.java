@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.utils;
 import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 import org.apache.commons.logging.Log;
@@ -48,7 +49,12 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
     private static final String IP_REGEXP   = "(" + BYTE_REGEXP + "\\.){3}" + BYTE_REGEXP;
     private static Pattern IP_PATTERN = Pattern.compile(IP_REGEXP);
     
+    /**
+     * Whether WS-Addressing is used in the transaction.
+     */
+    private final boolean addressing;
 
+    
     /**
      * Constructor.
      * 
@@ -56,9 +62,11 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    public AuditTestFinalInterceptor(boolean isServerSide) {
+    public AuditTestFinalInterceptor(boolean isServerSide, boolean addressing) {
         super(isServerSide ? Phase.PREPARE_SEND : Phase.PRE_LOGICAL);
         addAfter(AuditFinalInterceptor.class.getName());
+        
+        this.addressing = addressing;
     }
 
     
@@ -91,7 +99,8 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
                              (message == exchange.getOutFaultMessage());
 
         if(isServerSide && isOutbound) {
-            assertNotNull(auditDataset.getUserId());
+            assertEquals(isAddressing(), (auditDataset.getUserId() != null));
+
             assertTrue(IP_PATTERN.matcher(auditDataset.getClientIpAddress()).matches());
             assertTrue(auditDataset.getServiceEndpointUrl().startsWith("http://"));
             
@@ -129,5 +138,10 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
         assertNotNull(payload);
         assertTrue(payload.startsWith("<"));
         assertTrue(payload.endsWith("Envelope>"));
+    }
+
+
+    public boolean isAddressing() {
+        return addressing;
     }
 }

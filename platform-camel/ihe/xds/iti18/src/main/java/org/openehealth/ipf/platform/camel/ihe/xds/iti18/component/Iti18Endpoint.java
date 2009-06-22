@@ -36,7 +36,8 @@ public class Iti18Endpoint extends DefaultItiEndpoint {
             Iti18PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
             false,
-            "wsdl/iti18.wsdl");
+            "wsdl/iti18.wsdl",
+            true);
 
     /**
      * Constructs the endpoint

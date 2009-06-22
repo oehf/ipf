@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.AuditTestFinalIn
 public class Iti16TestAuditFinalInterceptor extends AuditTestFinalInterceptor {
 
     public Iti16TestAuditFinalInterceptor(boolean isServerSide) {
-        super(isServerSide);
+        super(isServerSide, false);
     }
 
 

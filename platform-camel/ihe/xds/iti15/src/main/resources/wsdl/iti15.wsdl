@@ -43,10 +43,10 @@
 
     <portType name="DocumentRepository_PortType">
         <operation name="DocumentRepository_ProvideAndRegisterDocumentSet">
-            <input message="ihe:ProvideAndRegisterDocumentSet_Message"
-                   wsaw:Action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet"/>
-            <output message="ihe:ProvideAndRegisterDocumentSetResponse_Message"
-                    wsaw:Action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSetResponse"/>
+            <input message="ihe:ProvideAndRegisterDocumentSet_Message"/>
+<!--                   wsaw:Action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet"/>-->
+            <output message="ihe:ProvideAndRegisterDocumentSetResponse_Message"/>
+<!--                    wsaw:Action="urn:ihe:iti:2007:ProvideAndRegisterDocumentSetResponse"/>-->
         </operation>
     </portType>
 
@@ -66,7 +66,7 @@
     <service name="DocumentRepository_Service">
         <port name="DocumentRepository_Port_Soap11" binding="ihe:DocumentRepository_Binding_Soap11">
             <soap:address location="http://servicelocation/DocumentRepository_Service"/>
-            <wsaw:UsingAddressing xmlns:wswa="http://www.w3.org/2005/02/addressing/wsdl"/>
+<!--            <wsaw:UsingAddressing xmlns:wswa="http://www.w3.org/2005/02/addressing/wsdl"/>-->
         </port>
     </service>
 </definitions>
