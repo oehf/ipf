@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
@@ -30,6 +31,7 @@ public class ProvideAndRegisterDocumentSet {
     private SubmissionSet submissionSet;
     private final List<Folder> folders = new ArrayList<Folder>();
     private final List<Document> documents = new ArrayList<Document>();
+    private final List<Association> associations = new ArrayList<Association>();
     
     public SubmissionSet getSubmissionSet() {
         return submissionSet;
@@ -45,5 +47,9 @@ public class ProvideAndRegisterDocumentSet {
 
     public List<Document> getDocuments() {
         return documents;
+    }
+
+    public List<Association> getAssociations() {
+        return associations;
     }
 }

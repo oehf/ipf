@@ -25,7 +25,10 @@ import java.util.Map;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.InternationalStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LocalizedStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
@@ -55,48 +58,35 @@ public class Ebrs21 {
     
     /**
      * Creates a classification with the given scheme.
-     * @param scheme
-     *          the scheme object.
      * @return the created classification.
      */
-    public static ClassificationType createClassification(ObjectRefType scheme) {
-        ClassificationType classification = rimFactory.createClassificationType();        
-        classification.setClassificationScheme(scheme);
-        classification.setNodeRepresentation("");
-        return classification;
+    public static ClassificationType createClassification() {
+        return rimFactory.createClassificationType();
     }
  
     /**
-     * Adds a slot to the given classification.
+     * Adds a slot to the given slot list.
      * <p>
      * This method always creates a new slot, no matter if a slot with the given
      * name is already within the slot list.
-     * @param classification
-     *          the classification.
+     * @param slots
+     *          the slots (e.g. of a classification or extrinsic object) to which the slot 
+     *          is to be added
      * @param slotName
      *          the name of the slot.
      * @param slotValues
-     *          the values of the slot to be added as a value list. If this list is empty or
-     *          <code>null</code> no slot will be created.
+     *          the values of the slot to be added as a value list. If this list is empty 
+     *          or <code>null</code> no slot will be created. Only values that are not 
+     *          <code>null</code> will be added to the slot.
      */
-    public static void addSlot(ClassificationType classification, String slotName, String... slotValues) {
-        notNull(slotName, "slotName cannot be null");
-        notNull(classification, "classification cannot be null");
+    public static void addSlot(List<SlotType1> slots, String slotName, String... slotValues) {
+        notNull(slots, "slots cannot be null");
         
         if (slotValues == null || slotValues.length == 0) {
             return;
         }
         
-        List<SlotType1> slots = classification.getSlot();
-        SlotType1 slot = rimFactory.createSlotType1();
-        slot.setName(slotName);
-        ValueListType valueList = rimFactory.createValueListType();
-        slot.setValueList(valueList);
-        List<String> values = valueList.getValue();
-        for (String slotValue : slotValues) {
-            values.add(slotValue);            
-        }
-        slots.add(slot);
+        slots.add(createSlot(slotName, slotValues));
     }
 
     /**
@@ -193,5 +183,60 @@ public class Ebrs21 {
         localized.setValue(localizedEbRS21.getValue());
         
         return localized;
+    }
+
+    /**
+     * Creates a new ebXML 2.1 Association. 
+     * @return the new association.
+     */
+    public static AssociationType1 createAssociation() {
+        return rimFactory.createAssociationType1();
+    }
+
+    /**
+     * Creates a new ebXML 2.1 extrinsic object.
+     * @return the new extrinsic object.
+     */
+    public static ExtrinsicObjectType createExtrinsicObjectType() {
+        return rimFactory.createExtrinsicObjectType();
+    }
+
+    /**
+     * Creates a new ebXML 2.1 external identifier.
+     * @return the new external identifier.
+     */
+    public static ExternalIdentifierType createExternalIdentifiable() {
+        return rimFactory.createExternalIdentifierType();
+    }
+
+    /**
+     * Creates a new ebXML 2.1 slot.
+     * @param slotName
+     *          name of the slot.     
+     * @param slotValues
+     *          the values of the slot to be added as a value list. If this list is empty or
+     *          <code>null</code> an empty slot will be created. Only values that are not 
+     *          <code>null</code> will be added to the slot.
+     * @return the new slot. 
+     */
+    public static SlotType1 createSlot(String slotName, String... slotValues) {
+        notNull(slotName, "slotName cannot be null");
+        
+        SlotType1 slot = rimFactory.createSlotType1();
+        slot.setName(slotName);
+
+        if (slotValues == null || slotValues.length == 0) {
+            return slot;
+        }
+        
+        ValueListType valueList = rimFactory.createValueListType();
+        slot.setValueList(valueList);
+        List<String> values = valueList.getValue();
+        for (String slotValue : slotValues) {
+            if (slotValue != null) {
+                values.add(slotValue);
+            }
+        }
+        return slot;
     }
 }

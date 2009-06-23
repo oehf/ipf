@@ -22,6 +22,7 @@ import java.util.List;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer;
 
 /**
@@ -36,21 +37,22 @@ public class AuthorTransformer {
             return null;
         }
         
-        ClassificationType classification = 
-            Ebrs21.createClassification(Ebrs21.getObjFromLib(DOC_ENTRY_AUTHOR_CLASS_SCHEME));
+        ClassificationType classification = Ebrs21.createClassification();
+        classification.setNodeRepresentation("");
+        List<SlotType1> slots = classification.getSlot();
 
         String hl7XCN = personTransformer.toHL7(author.getAuthorPerson());
         if (hl7XCN != null) {
-            Ebrs21.addSlot(classification, SLOT_NAME_AUTHOR_PERSON, hl7XCN);
+            Ebrs21.addSlot(slots, SLOT_NAME_AUTHOR_PERSON, hl7XCN);
         }
         
-        Ebrs21.addSlot(classification, SLOT_NAME_AUTHOR_INSTITUTION, 
+        Ebrs21.addSlot(slots, SLOT_NAME_AUTHOR_INSTITUTION, 
                 author.getAuthorInstitution().toArray(new String[0]));
         
-        Ebrs21.addSlot(classification, SLOT_NAME_AUTHOR_ROLE, 
+        Ebrs21.addSlot(slots, SLOT_NAME_AUTHOR_ROLE, 
                 author.getAuthorRole().toArray(new String[0]));
 
-        Ebrs21.addSlot(classification, SLOT_NAME_AUTHOR_SPECIALTY, 
+        Ebrs21.addSlot(slots, SLOT_NAME_AUTHOR_SPECIALTY, 
                 author.getAuthorSpecialty().toArray(new String[0]));
         
         return classification;
@@ -69,10 +71,6 @@ public class AuthorTransformer {
         Person person = null;
         if (persons.size() > 0 && persons.get(0) != null) {
             person = personTransformer.fromHL7(persons.get(0));
-        }
-        
-        if (person != null && institutions.isEmpty() && roles.isEmpty() && specialties.isEmpty()) {
-            return null;
         }
         
         Author author = new Author();        

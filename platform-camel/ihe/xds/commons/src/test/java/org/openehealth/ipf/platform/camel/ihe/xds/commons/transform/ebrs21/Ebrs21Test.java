@@ -65,10 +65,11 @@ public class Ebrs21Test {
     
     @Test
     public void testCreateClassification() throws Exception {        
-        ClassificationType classification = 
-            Ebrs21.createClassification(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME));
+        ClassificationType classification = Ebrs21.createClassification();
         docEntry.getClassification().add(classification);
         classification.setClassifiedObject(docEntry);
+        classification.setClassificationScheme(
+                Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME));
         
         SubmitObjectsRequest received = send();
         
@@ -80,7 +81,7 @@ public class Ebrs21Test {
         assertNotNull(classificationResult);
         
         assertSame(resultScheme, classificationResult.getClassificationScheme());
-        assertEquals("", classificationResult.getNodeRepresentation());
+        assertNull(classificationResult.getNodeRepresentation());
         assertSame(docEntryResult, classificationResult.getClassifiedObject());
     }
     
@@ -109,12 +110,12 @@ public class Ebrs21Test {
 
     @Test
     public void testAddSlot() throws Exception {
-        ClassificationType classification = 
-            Ebrs21.createClassification(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME));
+        ClassificationType classification = Ebrs21.createClassification();
         docEntry.getClassification().add(classification);
         classification.setClassifiedObject(docEntry);
+        classification.setClassificationScheme(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME));
 
-        Ebrs21.addSlot(classification, "something", "a", "b", "c");
+        Ebrs21.addSlot(classification.getSlot(), "something", "a", "b", "c");
 
         SubmitObjectsRequest received = send();        
         ExtrinsicObjectType docEntryResult = getDocumentEntry(received);

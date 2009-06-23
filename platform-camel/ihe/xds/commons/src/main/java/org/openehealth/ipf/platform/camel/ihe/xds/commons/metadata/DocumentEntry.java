@@ -39,7 +39,6 @@ public class DocumentEntry {
     private String languageCode;
     private Person legalAuthenticator;
     private String mimeType;
-    private Association parentDocument;
     private Identifiable patientID;
     private Code practiceSettingCode;
     private String serviceStartTime;
@@ -154,14 +153,6 @@ public class DocumentEntry {
     
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
-    }
-    
-    public Association getParentDocument() {
-        return parentDocument;
-    }
-    
-    public void setParentDocument(Association parentDocument) {
-        this.parentDocument = parentDocument;
     }
     
     public Identifiable getPatientID() {

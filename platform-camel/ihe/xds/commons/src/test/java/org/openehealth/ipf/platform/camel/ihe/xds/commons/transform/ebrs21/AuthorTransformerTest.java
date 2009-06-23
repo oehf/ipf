@@ -75,8 +75,7 @@ public class AuthorTransformerTest {
     public void testToEbXML21() {
         ClassificationType ebXML = transformer.toEbXML21(author);        
         assertNotNull(ebXML);
-        assertSame(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME), 
-                ebXML.getClassificationScheme());        
+        assertNull(ebXML.getClassificationScheme());        
         assertEquals("", ebXML.getNodeRepresentation());
         
         List<SlotType1> slots = ebXML.getSlot();
@@ -104,8 +103,7 @@ public class AuthorTransformerTest {
     public void testToEbXML21WithEmptyAuthor() {
         ClassificationType ebXML = transformer.toEbXML21(new Author());
         assertNotNull(ebXML);
-        assertSame(Ebrs21.getObjFromLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME), 
-                ebXML.getClassificationScheme());        
+        assertNull(ebXML.getClassificationScheme());        
         assertEquals("", ebXML.getNodeRepresentation());
         
         assertEquals(0, ebXML.getSlot().size());

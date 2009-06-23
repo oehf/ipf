@@ -21,10 +21,43 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
  * @author Jens Riemschneider
  */
 public enum AssociationType {
-    APPEND,
-    REPLACE,
-    TRANSFORM,
-    TRANSFORM_AND_REPLACE,
-    HAS_MEMBER,
-    SIGNS;
+    APPEND("APND"),
+    REPLACE("RPLC"),
+    TRANSFORM("XFRM"),
+    TRANSFORM_AND_REPLACE("XFRM_RPLC"),
+    HAS_MEMBER(null),
+    SIGNS("signs");
+
+    private final String representation;
+    
+    private AssociationType(String representation) {
+        this.representation = representation;
+    }
+
+    /**
+     * @return a string representation.
+     */
+    public String getRepresentation() {
+        return representation;
+    }
+    
+    /**
+     * Returns the association type that is represented by the given string.
+     * @param representation
+     *          the string representation.
+     * @return the association type.
+     */
+    public static AssociationType valueOfRepresentation(String representation) {
+        if (representation == null) {
+            return null;
+        }
+        
+        for (AssociationType type : AssociationType.values()) {
+            if (representation.equals(type.getRepresentation())) {
+                return type;
+            }
+        }
+        
+        throw new IllegalArgumentException("Unsupported Association Type representation: " + representation);
+    }
 }

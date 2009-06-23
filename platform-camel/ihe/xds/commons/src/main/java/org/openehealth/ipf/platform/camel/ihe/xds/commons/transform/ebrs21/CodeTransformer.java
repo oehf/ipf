@@ -27,22 +27,34 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.Classi
  * @author Jens Riemschneider
  */
 public class CodeTransformer {
+    /**
+     * Transforms a {@link Code} instance to a {@link ClassificationType}. 
+     * @param code
+     *          the code instance to transform.
+     * @return the {@link ClassificationType}.
+     */
     public ClassificationType toEbXML21(Code code) {
         if (code == null) {
             return null;
         }
         
-        ClassificationType classification = Ebrs21.createClassification(null);
+        ClassificationType classification = Ebrs21.createClassification();
         classification.setNodeRepresentation(code.getCode());
         classification.setName(Ebrs21.createInternationalString(code.getDisplayName()));
         
         if (code.getSchemeName() != null) {
-            Ebrs21.addSlot(classification, SLOT_NAME_CODING_SCHEME, code.getSchemeName());
+            Ebrs21.addSlot(classification.getSlot(), SLOT_NAME_CODING_SCHEME, code.getSchemeName());
         }
         
         return classification;
     }
     
+    /**
+     * Transforms a {@link ClassificationType} to a {@link Code} instance. 
+     * @param classification
+     *          {@link ClassificationType}
+     * @return the code instance.
+     */
     public Code fromEbXML21(ClassificationType classification) {
         if (classification == null) {
             return null;
