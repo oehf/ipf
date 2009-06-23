@@ -221,6 +221,7 @@ ivxbts(schema:'ts', factory:'IVXBTS') {
 }
 ivlts(schema:'_any', factory:'IVLTS') {
 	properties {
+        value(schema:'ts')
 		center(schema:'ts')
 		low(schema:'ivxbts')
 		width(schema:'pq')

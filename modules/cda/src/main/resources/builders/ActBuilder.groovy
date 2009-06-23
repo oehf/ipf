@@ -204,10 +204,11 @@ serviceEvent(schema:'infrastructureRoot', factory:'POCDMT000040_SERVICE_EVENT') 
 
 nonXMLBody(schema:'infrastructureRoot', factory:'POCDMT000040_NON_XML_BODY') {
     properties {
+        moodCode(factory:'ACT_MOOD')
+        classCode(factory:'ACT_CLASS')
         text(schema:'ed')
         confidentialityCode(schema:'confidentialityCode')
         languageCode(schema:'cs')
-        moodCode(factory:'ACT_MOOD')
     }
 }
 
@@ -401,7 +402,7 @@ regionOfInterest(schema:'clinicalStatement',factory:'POCDMT000040_REGION_OF_INTE
     properties {
         classCode(factory:'ACT_CLASS_ROOT', def: ActClassROI.ROIOVL_LITERAL)
         moodCode(factory:'XDOCUMENT_ACT_MOOD', def: XDocumentActMood.EVN_LITERAL)
-        ID1(schema:'st')
+        ID()
         code(schema:'cs', req:true)
     }
     collections {
@@ -409,7 +410,12 @@ regionOfInterest(schema:'clinicalStatement',factory:'POCDMT000040_REGION_OF_INTE
             id(schema:'ii')
         }
         values(collection:'value', min: 1){
-            value(schema:'_int', factory: 'POCDMT000040_REGION_OF_INTEREST_VALUE')
+            value(factory: 'POCDMT000040_REGION_OF_INTEREST_VALUE'){
+              properties{
+                value(factory: java.math.BigInteger)
+                unsorted(def:false)
+              }
+            }
         }
     }
 }

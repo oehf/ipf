@@ -36,7 +36,7 @@ public abstract class AbstractCDAR2BuilderTest extends GroovyTestCase {
 	
 	public void setUp() throws Exception {
 		if (!builder)
-            builder = new CDAR2Builder(getClass().getClassLoader())
+            builder = new CDAR2Builder(getClass().getClassLoader()) 
 	}
 		
 }

@@ -124,7 +124,7 @@ public class CDAR2ModelExtension{
          AbstractEnumerator.metaClass {
              setText { String s	-> delegate.getByName(s) }
          }
-
+         
          StrucDocText.metaClass {
              setText { String s	-> setLiteralText(delegate.mixed, s) }
              getText {			   -> getLiteralText(delegate.mixed) }
@@ -218,6 +218,11 @@ public class CDAR2ModelExtension{
              
              getPatient { -> delegate.recordTarget[0].patientRole }
              
+         }
+         
+         POCDMT000040RegionOfInterest.metaClass {
+             setID { String s -> delegate.setID1(s)}
+             getID { -> getID1()}
          }
          
      }    

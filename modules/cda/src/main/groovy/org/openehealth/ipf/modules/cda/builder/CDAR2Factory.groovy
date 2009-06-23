@@ -16,20 +16,17 @@
 package org.openehealth.ipf.modules.cda.builder
 
 import org.codehaus.groovy.runtime.InvokerHelper
-import org.openhealthtools.ihe.common.cdar2.CDAR2Package
 
 import groovytools.builder.PropertyException
+
+import org.openhealthtools.ihe.common.cdar2.CDAR2Package
 import org.eclipse.emf.ecore.EClassifier
-import org.eclipse.emf.ecore.impl.EClassImpl
-import org.eclipse.emf.ecore.impl.EAttributeImpl
-import org.eclipse.emf.common.util.EList
 
 /**
  * @author Christian Ohr
  */
 public class CDAR2Factory extends AbstractFactory{
 	
-	static def ePackage = org.openhealthtools.ihe.common.cdar2.CDAR2Package.eINSTANCE
 	static def f = org.openhealthtools.ihe.common.cdar2.CDAR2Factory.eINSTANCE
 	static def factories = [:]
 	def type
@@ -54,7 +51,7 @@ public class CDAR2Factory extends AbstractFactory{
 			return super.newInstance(builder, name, value, attrs)
 		}
 		def object
-		// Create CDAR2 object directly from String, is possible
+		// Create CDAR2 object directly from String if possible
 		if (type instanceof org.eclipse.emf.ecore.EDataType 
 		&& value && value instanceof String) {
 			try {
@@ -65,24 +62,8 @@ public class CDAR2Factory extends AbstractFactory{
 				object.setText(value)
 			}
 		} else {      
-			// Create CDAR2 object and set value of attributes afterwards
+			// Create CDAR2 object
 			object = f.create(type)
-			// TODO: review this code -> is not O.K. if onHandleNodeAttributes returns 'true'
-			if (attrs) {
-				attrs.each(){ key, val ->
-               if (val instanceof String) {
-                  def evaluatedValue
-                  try {
-					 evaluatedValue = createAttributeByNameFromString(object.class, key, val);
-                  } catch (Exception e) {
-                     evaluatedValue = val
-                  }
-				  InvokerHelper.setProperty(object, key, evaluatedValue)
-               } else {
-                  InvokerHelper.setProperty(object, key, val)
-               }
-				}
-			}
 			if (value) {
 				if (value instanceof String) {
 					object.setText(value)
@@ -116,32 +97,20 @@ public class CDAR2Factory extends AbstractFactory{
 		
 	}
 	
-	/*
-	 * @see AbstractFactory.onHandleNodeAttributes
+	/**
+	 * Delegates the object instanciation to the underlieing factory
+	 * @param type
+	 * @papram value
+	 * @return type instance object 
 	 */
-	public boolean onHandleNodeAttributes(FactoryBuilderSupport builder, Object node, Map attributes) {
-		return false
+	public def createFromString(Object type, String value){
+		return f.createFromString(type, value) 
 	}
 	
 	/**
-	 * Reflect the attribute type and instanciate it properly from factory
-	 * This needs a revision if no factory is found: for generic Boolean, Real etc. values
+	 * @param name
+	 * @return factory instance for name
 	 */
-	protected def createAttributeByNameFromString(Class klass, String key, String value){
-		EClassImpl classifierImpl = (EClassImpl) ePackage.getEClassifier(klass.getInterfaces()[0].getSimpleName());
-		if (classifierImpl){
-			EList eList = classifierImpl.getEAllAttributes();
-			for ( Iterator i = eList.iterator(); i.hasNext(); ) {
-				EAttributeImpl attrImpl = (EAttributeImpl)i.next();
-				if (attrImpl.getName().equals(key)){
-					def instance = f.createFromString(attrImpl.basicGetEAttributeType(), value);
-					return instance
-				}
-			}    
-		}
-		return value
-	}
-	
 	static def factoryFor(String name) {
 		if (!factories.containsKey(name)) {
 			synchronized(this) {
@@ -150,6 +119,5 @@ public class CDAR2Factory extends AbstractFactory{
 		}
 		factories.get(name)
 	}
-	
 	
 }

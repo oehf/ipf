@@ -25,45 +25,43 @@ import org.openhealthtools.ihe.common.cdar2.impl.*
  * @author Stefan Ivanov
  */
 public class CDAR2BuilderStructureEncounterTest extends AbstractCDAR2BuilderTest {
-	
-	/**
-	 * Test simple Encounter
-	 */
-	public void testEncounter() {
-		def entry = builder.build {
-			entry{
-			    encounter(classCode:'ENC', moodCode:'RQO'){
-                    code(
-                        code:'185389009',
-                        codeSystem:'2.16.840.1.113883.6.96',
-                        codeSystemName:'SNOMED CT',
-                        displayName:'Follow-up visit'
-                    )
-                    effectiveTime{
-                        low(value:'20000412')
-                        high(value:'20000417')
-                    }
-			    }
-			}//entry
-		}
-		// println entry.encounter
-	}
-	
-	/**
-	 * Test encounter defaults
-	 */
-	public void testEncountertDefaultValues() {
-		def entry = builder.build {
-			entry{
-				encounter(classCode:'ENC', moodCode:'RQO')
-			}//entry
-		}
-		
-//		assertTrue(entry.observation.isSetMoodCode())
-//		assert entry.observation.moodCode.name == 'INT'
-//		assert entry.observation.classCode.name == 'OBS'
-//		assertFalse(entry.observation.isSetNegationInd())
-//		assertEquals 0, entry.observation.entryRelationship.size
-//		assertNull entry.observation.text	
-	}	
+
+  /**
+   * Test encounter defaults
+   */
+  public void testEncountertDefaultValues() {
+    def entry = builder.build {
+      entry {
+        encounter()
+      }//entry
+    }
+
+    assertFalse entry.encounter.isSetMoodCode()
+    assertEquals 'INT', entry.encounter.moodCode.name
+    assertEquals 'ENC', entry.encounter.classCode.name
+    assertEquals 0, entry.encounter.entryRelationship.size
+  }
+
+  /**
+   * Test simple Encounter
+   */
+  public void testSimpleEncounter() {
+    def entry = builder.build {
+      entry {
+        encounter(classCode: 'ENC', moodCode: 'RQO') {
+          code(
+                  code: '185389009',
+                  codeSystem: '2.16.840.1.113883.6.96',
+                  codeSystemName: 'SNOMED CT',
+                  displayName: 'Follow-up visit'
+          )
+          effectiveTime {
+            low(value: '20000412')
+            high(value: '20000417')
+          }
+        }
+      }//entry
+    }
+    assertNotNull entry.encounter
+  }
 }

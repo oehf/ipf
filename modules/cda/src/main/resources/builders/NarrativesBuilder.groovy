@@ -349,12 +349,13 @@ strucDocParagraph(schema:'strucDocHasCommonAttrs', factory:'STRUC_DOC_PARAGRAPH'
 strucDocRenderMultiMedia(schema:'strucDocHasCommonAttrs', factory:'STRUC_DOC_RENDER_MULTI_MEDIA') {
    properties {
       caption(schema:'strucDocCaption')
+      referencedObject(req:true)//expects array list
    }
-   collections {
-      referencedObjects(collection:'referencedObject') {
-         referencedObject()
-      }
-   }
+//   collections {
+//      referencedObjects(collection:'referencedObject') {
+//         referencedObject()
+//      }
+//   }
 }
 
 strucDocSub(factory:'STRUC_DOC_SUB') {
