@@ -26,7 +26,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LocalizedStringType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
 
 /**
  * Tests for {@link IdentifiableTransformer}.
@@ -111,13 +110,10 @@ public class IdentifiableTransformerTest {
 
     @Test
     public void testToEbXML21SourcePatient() {
-        SlotType1 result = transformer.toEbXML21SourcePatient(identifiable);
+        String result = transformer.toEbXML21SourcePatient(identifiable);
         assertNotNull(result);
         
-        List<String> valueList = result.getValueList().getValue();
-        assertEquals(1, valueList.size());
-        assertEquals("21\\T\\3^^^namespace&uni&uniType", valueList.get(0));
-        assertEquals(Vocabulary.SLOT_NAME_SOURCE_PATIENT_ID, result.getName());
+        assertEquals("21\\T\\3^^^namespace&uni&uniType", result);
     }
 
     @Test
@@ -127,19 +123,16 @@ public class IdentifiableTransformerTest {
 
     @Test
     public void testToEbXML21SourcePatientEmpty() {
-        SlotType1 result = transformer.toEbXML21SourcePatient(new Identifiable());
+        String result = transformer.toEbXML21SourcePatient(new Identifiable());
         assertNotNull(result);
-        
-        List<String> valueList = result.getValueList().getValue();
-        assertEquals(0, valueList.size());
-        assertEquals(Vocabulary.SLOT_NAME_SOURCE_PATIENT_ID, result.getName());
+        assertEquals("", result);
     }
 
 
 
     @Test
     public void testFromEbXML21SourcePatient() {
-        SlotType1 ebXML = transformer.toEbXML21SourcePatient(identifiable);
+        String ebXML = transformer.toEbXML21SourcePatient(identifiable);
         Identifiable result = transformer.fromEbXML21SourcePatientID(ebXML);       
         assertNotNull(result);
         
@@ -158,7 +151,7 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testFromEbXML21SourcePatientEmpty() {
-        Identifiable result = transformer.fromEbXML21SourcePatientID(new SlotType1());
+        Identifiable result = transformer.fromEbXML21SourcePatientID("");
         assertNotNull(result);
         assertNull(result.getId());
         assertNull(result.getAssigningAuthority());

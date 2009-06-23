@@ -23,8 +23,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ValueListType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.AssigningAuthorityTransformer;
 
 /**
@@ -58,18 +56,19 @@ public class IdentifiableTransformer {
     }
     
     /**
-     * Transforms an {@link Identifiable} into a {@link SlotType1} for usage with
+     * Transforms an {@link Identifiable} into a slot value for usage with
      * a Source Patient ID (not Patient ID).
      * @param identifiable
      *          the identifiable instance.
      * @return the ebXML 2.1 representation.
      */
-    public SlotType1 toEbXML21SourcePatient(Identifiable identifiable) {
+    public String toEbXML21SourcePatient(Identifiable identifiable) {
         if (identifiable == null) {
             return null;
         }
         
-        return Ebrs21.createSlot(Vocabulary.SLOT_NAME_SOURCE_PATIENT_ID, toHL7CX(identifiable));
+        String hl7cx = toHL7CX(identifiable);
+        return hl7cx != null ? hl7cx : "";
     }
 
     /**
@@ -91,21 +90,16 @@ public class IdentifiableTransformer {
     /**
      * Transforms an external identifier into an {@link Identifiable} for usage
      * with a Source Patient ID (not Patient ID).
-     * @param slot
-     *          the ebXML 2.1 representation.
+     * @param slotValue
+     *          the ebXML 2.1 representation of the slot value.
      * @return the identifiable instance.
      */
-    public Identifiable fromEbXML21SourcePatientID(SlotType1 slot) {
-        if (slot == null) {
+    public Identifiable fromEbXML21SourcePatientID(String slotValue) {
+        if (slotValue == null) {
             return null;
         }
         
-        ValueListType valueList = slot.getValueList();
-        String value = null;
-        if (valueList != null && valueList.getValue().size() > 0) {
-            value = valueList.getValue().get(0);
-        }
-        return fromHl7CX(value);
+        return fromHl7CX(slotValue);
     }
 
     private Identifiable fromHl7CX(String hl7CX) {

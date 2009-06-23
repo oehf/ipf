@@ -86,7 +86,18 @@ public class Ebrs21 {
             return;
         }
         
-        slots.add(createSlot(slotName, slotValues));
+        SlotType1 slot = rimFactory.createSlotType1();
+        slot.setName(slotName);
+
+        ValueListType valueList = rimFactory.createValueListType();
+        slot.setValueList(valueList);
+        List<String> values = valueList.getValue();
+        for (String slotValue : slotValues) {
+            if (slotValue != null) {
+                values.add(slotValue);
+            }
+        }
+        slots.add(slot);
     }
 
     /**
@@ -207,36 +218,5 @@ public class Ebrs21 {
      */
     public static ExternalIdentifierType createExternalIdentifiable() {
         return rimFactory.createExternalIdentifierType();
-    }
-
-    /**
-     * Creates a new ebXML 2.1 slot.
-     * @param slotName
-     *          name of the slot.     
-     * @param slotValues
-     *          the values of the slot to be added as a value list. If this list is empty or
-     *          <code>null</code> an empty slot will be created. Only values that are not 
-     *          <code>null</code> will be added to the slot.
-     * @return the new slot. 
-     */
-    public static SlotType1 createSlot(String slotName, String... slotValues) {
-        notNull(slotName, "slotName cannot be null");
-        
-        SlotType1 slot = rimFactory.createSlotType1();
-        slot.setName(slotName);
-
-        if (slotValues == null || slotValues.length == 0) {
-            return slot;
-        }
-        
-        ValueListType valueList = rimFactory.createValueListType();
-        slot.setValueList(valueList);
-        List<String> values = valueList.getValue();
-        for (String slotValue : slotValues) {
-            if (slotValue != null) {
-                values.add(slotValue);
-            }
-        }
-        return slot;
     }
 }

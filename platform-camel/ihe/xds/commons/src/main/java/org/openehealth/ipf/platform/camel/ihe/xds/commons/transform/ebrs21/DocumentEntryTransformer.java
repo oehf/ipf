@@ -98,6 +98,9 @@ public class DocumentEntryTransformer {
         
         String hl7LegalAuthenticator = personTransformer.toHL7(documentEntry.getLegalAuthenticator());
         Ebrs21.addSlot(slots, SLOT_NAME_LEGAL_AUTHENTICATOR, hl7LegalAuthenticator);
+        
+        String slotValue = identifiableTransformer.toEbXML21SourcePatient(documentEntry.getSourcePatientID());
+        Ebrs21.addSlot(slots, SLOT_NAME_SOURCE_PATIENT_ID, slotValue);
     }
 
     private void addClassifications(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
