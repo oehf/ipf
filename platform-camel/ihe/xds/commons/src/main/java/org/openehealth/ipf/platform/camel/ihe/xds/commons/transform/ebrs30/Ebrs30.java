@@ -24,6 +24,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ClassificationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.InternationalStringType;
@@ -185,4 +187,22 @@ public class Ebrs30 {
         
         return localized;
     }
+    
+
+    /**
+     * Creates a new ebXML 3.0 external identifier.
+     * @return the new external identifier.
+     */
+    public static ExternalIdentifierType createExternalIdentifiable() {
+        return rimFactory.createExternalIdentifierType();
+    }
+
+    /**
+     * Creates a new ebXML 3.0 Association. 
+     * @return the new association.
+     */
+    public static AssociationType1 createAssociation() {
+        return rimFactory.createAssociationType1();
+    }
+
 }
