@@ -49,6 +49,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotTy
 public class DocumentEntryTransformerTest {
     private DocumentEntryTransformer transformer;
     private DocumentEntry documentEntry;
+    private StringBuilder veryLongUriString;
     
     @Before
     public void setUp() {
@@ -108,6 +109,11 @@ public class DocumentEntryTransformerTest {
         documentEntry.getConfidentialityCodes().add(createCode(7));
         documentEntry.getEventCodeList().add(createCode(8));
         documentEntry.getEventCodeList().add(createCode(9));
+        
+        veryLongUriString = new StringBuilder();
+        for (int idx = 0; idx < 1000; ++idx) {
+            veryLongUriString.append("1234567890");
+        }        
     }
 
     @Test
@@ -204,7 +210,26 @@ public class DocumentEntryTransformerTest {
         assertEquals(0, ebXML.getClassification().size());
         assertEquals(0, ebXML.getExternalIdentifier().size());
     }
+    
+    @Test
+    public void testToEbXML21WithURIThatFitsExactlyIntoOneSlot() {
+        String uri = veryLongUriString.substring(0, 126);
+        documentEntry.setUri(uri);
+        ExtrinsicObjectType ebXML = transformer.toEbXML21(documentEntry);
+        assertSlot(Vocabulary.SLOT_NAME_URI, ebXML.getSlot(), "1|" + uri);
+    }
 
+    @Test
+    public void testToEbXML21WithShortestUriUsingTwoSlots() {
+        String uri = veryLongUriString.substring(0, 127);
+        documentEntry.setUri(uri);
+        ExtrinsicObjectType ebXML = transformer.toEbXML21(documentEntry);
+        String uriPart1 = uri.substring(0, 126);
+        String uriPart2 = uri.substring(126, 127);
+        assertSlot(Vocabulary.SLOT_NAME_URI, ebXML.getSlot(), "1|" + uriPart1, "2|" + uriPart2);
+    }
+    
+    
     
     
     @Test
@@ -225,6 +250,17 @@ public class DocumentEntryTransformerTest {
     public void testFromEbXML21Empty() {
         DocumentEntry result = transformer.fromEbXML21(new ExtrinsicObjectType());
         assertEquals(new DocumentEntry(), result);
+    }
+    
+    @Test
+    public void testFromEbXML21WithUriInMultipleSlots() {
+        documentEntry.setUri(veryLongUriString.substring(0, 1000));
+        
+        ExtrinsicObjectType ebXML = transformer.toEbXML21(documentEntry);
+        DocumentEntry result = transformer.fromEbXML21(ebXML);
+
+        assertNotNull(result);
+        assertEquals(documentEntry, result);
     }
     
     
