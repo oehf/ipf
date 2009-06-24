@@ -214,9 +214,17 @@ public class Ebrs21 {
 
     /**
      * Creates a new ebXML 2.1 external identifier.
+     * @param value 
+     *          the value of the external identifier.
      * @return the new external identifier.
      */
-    public static ExternalIdentifierType createExternalIdentifiable() {
-        return rimFactory.createExternalIdentifierType();
+    public static ExternalIdentifierType createExternalIdentifiable(String value) {
+        if (value == null) {
+            return null;
+        }
+        
+        ExternalIdentifierType identifier = rimFactory.createExternalIdentifierType();
+        identifier.setValue(value);
+        return identifier;
     }
 }

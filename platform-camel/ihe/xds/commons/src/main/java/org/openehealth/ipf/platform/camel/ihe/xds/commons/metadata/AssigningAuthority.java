@@ -26,6 +26,14 @@ public class AssigningAuthority {
     private String universalId;     // HD.2
     private String universalIdType; // HD.3
     
+    public AssigningAuthority() {}
+
+    public AssigningAuthority(String namespaceId, String universalId, String universalIdType) {
+        this.namespaceId = namespaceId;
+        this.universalId = universalId;
+        this.universalIdType = universalIdType;
+    }
+
     public String getNamespaceId() {
         return namespaceId;
     }

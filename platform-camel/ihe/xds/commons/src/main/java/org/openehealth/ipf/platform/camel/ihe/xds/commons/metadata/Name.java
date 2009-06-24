@@ -29,6 +29,16 @@ public class Name {
     private String suffix;                      // XCN.5, XPN.4
     private String prefix;                      // XCN.6, XPN.5
     
+    public Name() {}
+    
+    public Name(String familyName, String givenName, String secondAndFurtherGivenNames, String suffix, String prefix) {
+        this.familyName = familyName;
+        this.givenName = givenName;
+        this.secondAndFurtherGivenNames = secondAndFurtherGivenNames;
+        this.suffix = suffix;
+        this.prefix = prefix;
+    }
+
     public String getFamilyName() {
         return familyName;
     }

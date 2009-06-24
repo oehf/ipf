@@ -27,6 +27,14 @@ public class LocalizedString {
     private String charset;
     private String value;
     
+    public LocalizedString() {}
+
+    public LocalizedString(String value, String lang, String charset) {
+        this.value = value;
+        this.lang = lang;
+        this.charset = charset;
+    }
+
     public String getLang() {
         return lang;
     }

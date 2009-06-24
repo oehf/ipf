@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,10 +45,10 @@ public class DocumentEntry {
     private Long size;
     private Identifiable sourcePatientID;
     private PatientInfo sourcePatientInfo;
-    private String title;
+    private LocalizedString title;
     private Code typeCode;
     private UniqueID uniqueID;
-    private URI uri;
+    private String uri;
     private String repositoryUniqueId; 
 
     /**
@@ -211,11 +210,11 @@ public class DocumentEntry {
         this.sourcePatientID = sourcePatientID;
     }
 
-    public String getTitle() {
+    public LocalizedString getTitle() {
         return title;
     }
     
-    public void setTitle(String title) {
+    public void setTitle(LocalizedString title) {
         this.title = title;
     }
     
@@ -235,11 +234,11 @@ public class DocumentEntry {
         this.uniqueID = uniqueID;
     }
     
-    public URI getUri() {
+    public String getUri() {
         return uri;
     }
     
-    public void setUri(URI uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
     

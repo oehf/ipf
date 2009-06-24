@@ -25,6 +25,14 @@ public class Code {
     private LocalizedString displayName;
     private String schemeName;
     
+    public Code() {}
+    
+    public Code(String code, LocalizedString displayName, String schemeName) {
+        this.code = code;
+        this.displayName = displayName;
+        this.schemeName = schemeName;
+    }
+
     public String getCode() {
         return code;
     }

@@ -25,7 +25,14 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 public class Identifiable {
     private String id;                                // CX.1
     private AssigningAuthority assigningAuthority;    // CX.4
+
+    public Identifiable() {}
     
+    public Identifiable(String id, AssigningAuthority assigningAuthority) {
+        this.id = id;
+        this.assigningAuthority = assigningAuthority;
+    }
+
     public String getId() {
         return id;
     }

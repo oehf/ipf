@@ -20,9 +20,6 @@ import java.util.List;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7Delimiter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.AssigningAuthorityTransformer;
 
 /**
@@ -33,89 +30,42 @@ public class IdentifiableTransformer {
     private final AssigningAuthorityTransformer assigningAuthorityTransformer = new AssigningAuthorityTransformer();
     
     /**
-     * Transforms an {@link Identifiable} into an {@link ExternalIdentifierType}
-     * for usage with a Patient ID (not Source Patient ID).
+     * Transforms an {@link Identifiable} to its ebXML 2.1 representation.
      * @param identifiable
      *          the identifiable instance.
      * @return the ebXML 2.1 representation.
      */
-    public ExternalIdentifierType toEbXML21Patient(Identifiable identifiable) {
+    public String toEbXML21(Identifiable identifiable) {
         if (identifiable == null) {
             return null;
         }
         
-        ExternalIdentifierType result = Ebrs21.createExternalIdentifiable();
-        result.setIdentificationScheme(Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
-        result.setValue(toHL7CX(identifiable));
+        String hl7HD = assigningAuthorityTransformer.toHL7(identifiable.getAssigningAuthority());
         
-        LocalizedString localized = new LocalizedString();
-        localized.setValue(Vocabulary.LOCALIZED_STRING_PATIENT_ID);
-        result.setName(Ebrs21.createInternationalString(localized));
+        String hl7cx = HL7.render(HL7Delimiter.COMPONENT, 
+            HL7.escape(identifiable.getId()),
+            null,
+            null,
+            hl7HD);
         
-        return result;
-    }
-    
-    /**
-     * Transforms an {@link Identifiable} into a slot value for usage with
-     * a Source Patient ID (not Patient ID).
-     * @param identifiable
-     *          the identifiable instance.
-     * @return the ebXML 2.1 representation.
-     */
-    public String toEbXML21SourcePatient(Identifiable identifiable) {
-        if (identifiable == null) {
-            return null;
-        }
-        
-        String hl7cx = toHL7CX(identifiable);
         return hl7cx != null ? hl7cx : "";
     }
 
     /**
-     * Transforms an external identifier into an {@link Identifiable} for usage
-     * with a Patient ID (not Source Patient ID).
-     * @param externalIdentifier
-     *          the ebXML 2.1 representation.
+     * Transforms an ebXML string into an {@link Identifiable}.
+     * @param ebXML
+     *          the ebXML 2.1 representation of the value.
      * @return the identifiable instance.
      */
-    public Identifiable fromEbXML21PatientID(ExternalIdentifierType externalIdentifier) {
-        if (externalIdentifier == null) {
+    public Identifiable fromEbXML21(String ebXML) {
+        if (ebXML == null) {
             return null;
         }
         
-        
-        return fromHl7CX(externalIdentifier.getValue());
-    }
-
-    /**
-     * Transforms an external identifier into an {@link Identifiable} for usage
-     * with a Source Patient ID (not Patient ID).
-     * @param slotValue
-     *          the ebXML 2.1 representation of the slot value.
-     * @return the identifiable instance.
-     */
-    public Identifiable fromEbXML21SourcePatientID(String slotValue) {
-        if (slotValue == null) {
-            return null;
-        }
-        
-        return fromHl7CX(slotValue);
-    }
-
-    private Identifiable fromHl7CX(String hl7CX) {
         Identifiable identifiable = new Identifiable();
-        List<String> cx = HL7.parse(HL7Delimiter.COMPONENT, hl7CX);
+        List<String> cx = HL7.parse(HL7Delimiter.COMPONENT, ebXML);
         identifiable.setId(HL7.get(cx, 1, true));       
         identifiable.setAssigningAuthority(assigningAuthorityTransformer.fromHL7(HL7.get(cx, 4, false)));
         return identifiable;
-    }
-    
-    private String toHL7CX(Identifiable identifiable) {
-        String hl7HD = assigningAuthorityTransformer.toHL7(identifiable.getAssigningAuthority());
-        return HL7.render(HL7Delimiter.COMPONENT, 
-                HL7.escape(identifiable.getId()),
-                null,
-                null,
-                hl7HD);
     }    
 }

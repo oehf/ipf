@@ -57,15 +57,25 @@ public abstract class Vocabulary {
     public static final String DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME = 
         "urn:uuid:f33fb8ac-18af-42cc-ae0e-ed0b0bdb91e1";
     
-    /** patientId ExternalIdentifier of the Document Entry */
-    public static final String DOC_ENTRY_PATIENT_ID_EXTERNAL_ID =
-        "urn:uuid:58a6f841-87b3-4a3e-92fd-a8ffeff98427";
-    
     /** practiceSettingCode ExternalIdentifier of the Document Entry */
     public static final String DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME =
         "urn:uuid:cccf5598-8b07-4b77-a05e-ae952c785ead";
     
+    /** typeCode ExternalIdentifier of the Document Entry */
+    public static final String DOC_ENTRY_TYPE_CODE_CLASS_SCHEME =
+        "urn:uuid:f0306f51-975f-434e-a61c-c59651d33983";
     
+
+    
+    /** patientId ExternalIdentifier of the Document Entry */
+    public static final String DOC_ENTRY_PATIENT_ID_EXTERNAL_ID =
+        "urn:uuid:58a6f841-87b3-4a3e-92fd-a8ffeff98427";
+    
+    /** uniqueId ExternalIdentifier of the Document Entry */
+    public static final String DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID =
+        "urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab";
+    
+
     
     /** Name of the slot that is used for author persons */
     public static final String SLOT_NAME_AUTHOR_PERSON = "authorPerson";
@@ -105,6 +115,12 @@ public abstract class Vocabulary {
     
     /** Name of the slot that is used for the source patient ID */
     public static final String SLOT_NAME_SOURCE_PATIENT_ID = "sourcePatientId";
+
+    /** Name of the slot that is used for the source patient info */
+    public static final String SLOT_NAME_SOURCE_PATIENT_INFO = "sourcePatientInfo";
+    
+    /** Name of the slot that is used for the URI */
+    public static final String SLOT_NAME_URI = "URI";
     
     
     
@@ -119,6 +135,10 @@ public abstract class Vocabulary {
     public static final String NODE_REPRESENTATION_CONFIDENTIALITY_CODE = "confidentialityCode";
     
     
+
     /** Localized String used for the patient ID external identifier */
     public static final String LOCALIZED_STRING_PATIENT_ID = "XDSDocumentEntry.patientId";
+
+    /** Localized String used for the unique ID external identifier */
+    public static final String LOCALIZED_STRING_UNIQUE_ID = "XDSDocumentEntry.uniqueId";
 }

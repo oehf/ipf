@@ -17,16 +17,19 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21;
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PatientInfoTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer;
 
 /**
@@ -38,6 +41,7 @@ public class DocumentEntryTransformer {
     private final CodeTransformer codeTransformer = new CodeTransformer();
     private final PersonTransformer personTransformer = new PersonTransformer();
     private final IdentifiableTransformer identifiableTransformer = new IdentifiableTransformer();
+    private final PatientInfoTransformer patientInfoTransformer = new PatientInfoTransformer();
     
     /**
      * Transforms the given document entry into its ebXML 2.1 representation.
@@ -61,13 +65,27 @@ public class DocumentEntryTransformer {
     }
 
     private void addExternalIdentifiers(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
+        String patientID = identifiableTransformer.toEbXML21(documentEntry.getPatientID());
         addExternalIdentifier(extrinsic, 
-                identifiableTransformer.toEbXML21Patient(documentEntry.getPatientID()));
+                Ebrs21.createExternalIdentifiable(patientID),
+                DOC_ENTRY_PATIENT_ID_EXTERNAL_ID,
+                LOCALIZED_STRING_PATIENT_ID);
+        
+        String uniqueID = documentEntry.getUniqueID() != null ? documentEntry.getUniqueID().getValue() : null;
+        addExternalIdentifier(extrinsic, 
+                Ebrs21.createExternalIdentifiable(uniqueID),
+                DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID,
+                LOCALIZED_STRING_UNIQUE_ID);
     }
 
-    private void addExternalIdentifier(ExtrinsicObjectType extrinsic, ExternalIdentifierType identifier) {
+    private void addExternalIdentifier(ExtrinsicObjectType extrinsic, ExternalIdentifierType identifier, String scheme, String name) {
         if (identifier != null) {
             extrinsic.getExternalIdentifier().add(identifier);
+            
+            identifier.setIdentificationScheme(scheme);
+            LocalizedString localized = new LocalizedString();
+            localized.setValue(name);
+            identifier.setName(Ebrs21.createInternationalString(localized));
         }
     }
 
@@ -78,6 +96,9 @@ public class DocumentEntryTransformer {
         extrinsic.setDescription(
                 Ebrs21.createInternationalString(documentEntry.getComments()));
 
+        extrinsic.setName(
+                Ebrs21.createInternationalString(documentEntry.getTitle()));
+        
         EntryUUID entryUUID = documentEntry.getEntryUUID();
         extrinsic.setId(entryUUID != null ? entryUUID.getValue() : null);
         
@@ -91,7 +112,8 @@ public class DocumentEntryTransformer {
         Ebrs21.addSlot(slots, SLOT_NAME_HASH, documentEntry.getHash());
         Ebrs21.addSlot(slots, SLOT_NAME_LANGUAGE_CODE, documentEntry.getLanguageCode());
         Ebrs21.addSlot(slots, SLOT_NAME_SERVICE_START_TIME, documentEntry.getServiceStartTime());
-        Ebrs21.addSlot(slots, SLOT_NAME_SERVICE_STOP_TIME, documentEntry.getServiceStopTime());
+        Ebrs21.addSlot(slots, SLOT_NAME_SERVICE_STOP_TIME, documentEntry.getServiceStopTime());        
+        Ebrs21.addSlot(slots, SLOT_NAME_URI, convertUri(documentEntry.getUri()));
         
         Long size = documentEntry.getSize();
         Ebrs21.addSlot(slots, SLOT_NAME_SIZE, size != null ? size.toString() : null);
@@ -99,8 +121,34 @@ public class DocumentEntryTransformer {
         String hl7LegalAuthenticator = personTransformer.toHL7(documentEntry.getLegalAuthenticator());
         Ebrs21.addSlot(slots, SLOT_NAME_LEGAL_AUTHENTICATOR, hl7LegalAuthenticator);
         
-        String slotValue = identifiableTransformer.toEbXML21SourcePatient(documentEntry.getSourcePatientID());
-        Ebrs21.addSlot(slots, SLOT_NAME_SOURCE_PATIENT_ID, slotValue);
+        String sourcePatient = identifiableTransformer.toEbXML21(documentEntry.getSourcePatientID());
+        Ebrs21.addSlot(slots, SLOT_NAME_SOURCE_PATIENT_ID, sourcePatient);
+        
+        List<String> slotValues = patientInfoTransformer.toHL7(documentEntry.getSourcePatientInfo());
+        Ebrs21.addSlot(slots, SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[0]));
+    }
+
+    private String[] convertUri(String uri) {
+        List<String> uriParts = new ArrayList<String>();
+        
+        int slotIdx = 1;
+        int start = 0;
+        while (start < uri.length()) {
+            String prefix = slotIdx + "|";
+            int validLength = 128 - prefix.length();
+            if (uri.length() < start + validLength) {
+                validLength = uri.length() - start;
+            }
+            
+            String uriPart = uri.substring(start, start + validLength);
+            String slotValue = prefix + uriPart;
+            uriParts.add(slotValue);
+            
+            start += validLength;
+            ++slotIdx;
+        }
+        
+        return uriParts.toArray(new String[0]);
     }
 
     private void addClassifications(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
@@ -118,6 +166,9 @@ public class DocumentEntryTransformer {
         
         ClassificationType practiceSetting = codeTransformer.toEbXML21(documentEntry.getPracticeSettingCode());
         addClassification(extrinsic, practiceSetting, DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
+        
+        ClassificationType typeCode = codeTransformer.toEbXML21(documentEntry.getTypeCode());
+        addClassification(extrinsic, typeCode, DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
         
         for (Code confCode : documentEntry.getConfidentialityCodes()) {
             ClassificationType conf = codeTransformer.toEbXML21(confCode);
