@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15.service;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import java.util.Map;
 
 import javax.activation.DataHandler;
@@ -41,9 +39,10 @@ public class Iti15Service extends DefaultItiWebService implements Iti15PortType 
     private WebServiceContext wsc;
 
     public RegistryResponse documentRepositoryProvideAndRegisterDocumentSet(SubmitObjectsRequest body) {
+        // We need to put together a structure similar to what is done in ITI-41
+        // This means we have to put any message attachments into a ProvideAndRegisterDocumentSet
         MessageContext messageContext = wsc.getMessageContext();
         Map<?, ?> dataHandlers = (Map<?, ?>) messageContext.get(MessageContext.INBOUND_MESSAGE_ATTACHMENTS);
-        notNull(dataHandlers, "dataHandlers cannot be null");
         
         ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
         request.setSubmitObjectsRequest(body);
@@ -51,9 +50,9 @@ public class Iti15Service extends DefaultItiWebService implements Iti15PortType 
             Document doc = new Document();
             doc.setId((String) entry.getKey());
             doc.setValue((DataHandler) entry.getValue());
-            request.getDocument().add(doc );
+            request.getDocument().add(doc);
         }
-
+        
         return process(request, RegistryResponse.class);
     }
 }

@@ -21,7 +21,10 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.xml.ws.BindingProvider;
 import org.apache.camel.Exchange;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ProvidedAttachmentOutInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
@@ -63,6 +66,15 @@ public class Iti15Producer extends DefaultItiProducer<Iti15PortType> {
         
         RegistryResponse result = getClient().documentRepositoryProvideAndRegisterDocumentSet(body.getSubmitObjectsRequest());
         Exchanges.resultMessage(exchange).setBody(result);
+    }
+    
+    @Override
+    protected void configureInterceptors(Iti15PortType port) {
+        super.configureInterceptors(port);
+        
+        Client client = ClientProxy.getClient(port);
+        client.getOutInterceptors().add(new ProvidedAttachmentOutInterceptor());
+        client.getOutInterceptors().add(new FixContentTypeOutInterceptor());
     }
 
     @Override

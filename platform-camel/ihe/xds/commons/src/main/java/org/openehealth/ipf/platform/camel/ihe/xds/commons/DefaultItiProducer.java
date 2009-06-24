@@ -108,7 +108,7 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
         return threadLocalPort.get();
     }
 
-    private void configureInterceptors(T port) {
+    protected void configureInterceptors(T port) {
         Client client = ClientProxy.getClient(port);
         
         // WS-Addressing-related interceptors
@@ -133,10 +133,6 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
             client.getOutFaultInterceptors().add(mapAggregator);
         }
         
-        if (!serviceInfo.isMtom()) {
-            client.getOutInterceptors().add(new ProvidedAttachmentOutInterceptor());
-        }
-        
         // install auditing-related interceptors if the user has not switched
         // auditing off
         if (endpoint.isAudit()) {
@@ -151,7 +147,7 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
         }
     }
 
-    private void configureBinding(T port) {
+    protected void configureBinding(T port) {
         BindingProvider bindingProvider = (BindingProvider) port;
 
         Map<String, Object> reqContext = bindingProvider.getRequestContext();
@@ -160,5 +156,12 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
         Binding binding = bindingProvider.getBinding();
         SOAPBinding soapBinding = (SOAPBinding) binding;
         soapBinding.setMTOMEnabled(serviceInfo.isMtom());
+    }
+    
+    /**
+     * @return the info describing the web-service.
+     */
+    public ItiServiceInfo<T> getServiceInfo() {
+        return serviceInfo;
     }
 }
