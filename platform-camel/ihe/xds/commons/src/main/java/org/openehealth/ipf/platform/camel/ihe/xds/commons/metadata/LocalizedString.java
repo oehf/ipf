@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Representation of a localized string.<p>
  * Main purpose of this class is to have an implementation that is 
@@ -57,5 +60,47 @@ public class LocalizedString {
     
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((charset == null) ? 0 : charset.hashCode());
+        result = prime * result + ((lang == null) ? 0 : lang.hashCode());
+        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        LocalizedString other = (LocalizedString) obj;
+        if (charset == null) {
+            if (other.charset != null)
+                return false;
+        } else if (!charset.equals(other.charset))
+            return false;
+        if (lang == null) {
+            if (other.lang != null)
+                return false;
+        } else if (!lang.equals(other.lang))
+            return false;
+        if (value == null) {
+            if (other.value != null)
+                return false;
+        } else if (!value.equals(other.value))
+            return false;
+        return true;
+    }
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -88,4 +88,9 @@ public class AssigningAuthorityTransformerTest {
     public void testFromHL7Null() {
         assertNull(transformer.fromHL7(null));
     }
+
+    @Test
+    public void testFromHL7Nothing() {
+        assertNull(transformer.fromHL7(""));
+    }
 }

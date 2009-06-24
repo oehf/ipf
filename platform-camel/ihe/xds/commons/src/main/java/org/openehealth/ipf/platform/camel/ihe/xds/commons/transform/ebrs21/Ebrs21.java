@@ -114,10 +114,25 @@ public class Ebrs21 {
         notNull(classification, "classification cannot be null");
         notNull(slotName, "slotName cannot be null");
         
-        List<SlotType1> slots = classification.getSlot();       
-        for (SlotType1 slot : slots) {
-            if (slotName.equals(slot.getName())) {
-                return slot.getValueList().getValue();
+        return getSlotValues(classification.getSlot(), slotName);
+    }
+
+    /**
+     * Returns the slot values of a given slot.
+     * @param slots
+     *          the slot list.
+     * @param slotName
+     *          the slot name to look for.
+     * @return the list of values. The list is empty if the slot was not found.
+     */
+    public static List<String> getSlotValues(List<SlotType1> slots, String slotName) {
+        notNull(slotName, "slotName cannot be null");
+        
+        if (slots != null) {
+            for (SlotType1 slot : slots) {
+                if (slotName.equals(slot.getName())) {
+                    return slot.getValueList().getValue();
+                }
             }
         }
         

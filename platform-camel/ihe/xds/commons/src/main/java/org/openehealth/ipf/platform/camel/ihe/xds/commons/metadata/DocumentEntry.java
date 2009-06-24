@@ -18,6 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Represents an XDS document entry according to the IHE XDS specification.
  * 
@@ -256,5 +259,193 @@ public class DocumentEntry {
 
     public List<Code> getEventCodeList() {
         return eventCodeList;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((author == null) ? 0 : author.hashCode());
+        result = prime * result
+                + ((availabilityStatus == null) ? 0 : availabilityStatus.hashCode());
+        result = prime * result + ((classCode == null) ? 0 : classCode.hashCode());
+        result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+        result = prime * result
+                + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
+        result = prime * result + ((creationTime == null) ? 0 : creationTime.hashCode());
+        result = prime * result + ((entryUUID == null) ? 0 : entryUUID.hashCode());
+        result = prime * result + ((eventCodeList == null) ? 0 : eventCodeList.hashCode());
+        result = prime * result + ((formatCode == null) ? 0 : formatCode.hashCode());
+        result = prime * result + ((hash == null) ? 0 : hash.hashCode());
+        result = prime
+                * result
+                + ((healthcareFacilityTypeCode == null) ? 0 : healthcareFacilityTypeCode.hashCode());
+        result = prime * result + ((languageCode == null) ? 0 : languageCode.hashCode());
+        result = prime * result
+                + ((legalAuthenticator == null) ? 0 : legalAuthenticator.hashCode());
+        result = prime * result + ((mimeType == null) ? 0 : mimeType.hashCode());
+        result = prime * result + ((patientID == null) ? 0 : patientID.hashCode());
+        result = prime * result
+                + ((practiceSettingCode == null) ? 0 : practiceSettingCode.hashCode());
+        result = prime * result
+                + ((repositoryUniqueId == null) ? 0 : repositoryUniqueId.hashCode());
+        result = prime * result + ((serviceStartTime == null) ? 0 : serviceStartTime.hashCode());
+        result = prime * result + ((serviceStopTime == null) ? 0 : serviceStopTime.hashCode());
+        result = prime * result + ((size == null) ? 0 : size.hashCode());
+        result = prime * result + ((sourcePatientID == null) ? 0 : sourcePatientID.hashCode());
+        result = prime * result + ((sourcePatientInfo == null) ? 0 : sourcePatientInfo.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((typeCode == null) ? 0 : typeCode.hashCode());
+        result = prime * result + ((uniqueID == null) ? 0 : uniqueID.hashCode());
+        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        DocumentEntry other = (DocumentEntry) obj;
+        if (author == null) {
+            if (other.author != null)
+                return false;
+        } else if (!author.equals(other.author))
+            return false;
+        if (availabilityStatus == null) {
+            if (other.availabilityStatus != null)
+                return false;
+        } else if (!availabilityStatus.equals(other.availabilityStatus))
+            return false;
+        if (classCode == null) {
+            if (other.classCode != null)
+                return false;
+        } else if (!classCode.equals(other.classCode))
+            return false;
+        if (comments == null) {
+            if (other.comments != null)
+                return false;
+        } else if (!comments.equals(other.comments))
+            return false;
+        if (confidentialityCodes == null) {
+            if (other.confidentialityCodes != null)
+                return false;
+        } else if (!confidentialityCodes.equals(other.confidentialityCodes))
+            return false;
+        if (creationTime == null) {
+            if (other.creationTime != null)
+                return false;
+        } else if (!creationTime.equals(other.creationTime))
+            return false;
+        if (entryUUID == null) {
+            if (other.entryUUID != null)
+                return false;
+        } else if (!entryUUID.equals(other.entryUUID))
+            return false;
+        if (eventCodeList == null) {
+            if (other.eventCodeList != null)
+                return false;
+        } else if (!eventCodeList.equals(other.eventCodeList))
+            return false;
+        if (formatCode == null) {
+            if (other.formatCode != null)
+                return false;
+        } else if (!formatCode.equals(other.formatCode))
+            return false;
+        if (hash == null) {
+            if (other.hash != null)
+                return false;
+        } else if (!hash.equals(other.hash))
+            return false;
+        if (healthcareFacilityTypeCode == null) {
+            if (other.healthcareFacilityTypeCode != null)
+                return false;
+        } else if (!healthcareFacilityTypeCode.equals(other.healthcareFacilityTypeCode))
+            return false;
+        if (languageCode == null) {
+            if (other.languageCode != null)
+                return false;
+        } else if (!languageCode.equals(other.languageCode))
+            return false;
+        if (legalAuthenticator == null) {
+            if (other.legalAuthenticator != null)
+                return false;
+        } else if (!legalAuthenticator.equals(other.legalAuthenticator))
+            return false;
+        if (mimeType == null) {
+            if (other.mimeType != null)
+                return false;
+        } else if (!mimeType.equals(other.mimeType))
+            return false;
+        if (patientID == null) {
+            if (other.patientID != null)
+                return false;
+        } else if (!patientID.equals(other.patientID))
+            return false;
+        if (practiceSettingCode == null) {
+            if (other.practiceSettingCode != null)
+                return false;
+        } else if (!practiceSettingCode.equals(other.practiceSettingCode))
+            return false;
+        if (repositoryUniqueId == null) {
+            if (other.repositoryUniqueId != null)
+                return false;
+        } else if (!repositoryUniqueId.equals(other.repositoryUniqueId))
+            return false;
+        if (serviceStartTime == null) {
+            if (other.serviceStartTime != null)
+                return false;
+        } else if (!serviceStartTime.equals(other.serviceStartTime))
+            return false;
+        if (serviceStopTime == null) {
+            if (other.serviceStopTime != null)
+                return false;
+        } else if (!serviceStopTime.equals(other.serviceStopTime))
+            return false;
+        if (size == null) {
+            if (other.size != null)
+                return false;
+        } else if (!size.equals(other.size))
+            return false;
+        if (sourcePatientID == null) {
+            if (other.sourcePatientID != null)
+                return false;
+        } else if (!sourcePatientID.equals(other.sourcePatientID))
+            return false;
+        if (sourcePatientInfo == null) {
+            if (other.sourcePatientInfo != null)
+                return false;
+        } else if (!sourcePatientInfo.equals(other.sourcePatientInfo))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (typeCode == null) {
+            if (other.typeCode != null)
+                return false;
+        } else if (!typeCode.equals(other.typeCode))
+            return false;
+        if (uniqueID == null) {
+            if (other.uniqueID != null)
+                return false;
+        } else if (!uniqueID.equals(other.uniqueID))
+            return false;
+        if (uri == null) {
+            if (other.uri != null)
+                return false;
+        } else if (!uri.equals(other.uri))
+            return false;
+        return true;
+    }
+    
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

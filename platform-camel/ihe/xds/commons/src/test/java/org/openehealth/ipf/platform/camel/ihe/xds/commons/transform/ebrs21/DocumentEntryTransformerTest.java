@@ -207,6 +207,27 @@ public class DocumentEntryTransformerTest {
 
     
     
+    @Test
+    public void testFromEbXML21() {
+        ExtrinsicObjectType ebXML = transformer.toEbXML21(documentEntry);
+        DocumentEntry result = transformer.fromEbXML21(ebXML);
+        
+        assertNotNull(result);
+        assertEquals(documentEntry, result);
+    }
+    
+    @Test
+    public void testFromEbXML21Null() {
+        assertNull(transformer.fromEbXML21(null));
+    }
+    
+    @Test
+    public void testFromEbXML21Empty() {
+        DocumentEntry result = transformer.fromEbXML21(new ExtrinsicObjectType());
+        assertEquals(new DocumentEntry(), result);
+    }
+    
+    
     
     private void assertExternalIdentifier(String scheme, List<ExternalIdentifierType> identifiers, 
             String expectedValue, String name) {

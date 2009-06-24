@@ -19,15 +19,17 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabu
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.InternationalStringType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LocalizedStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PatientInfoTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer;
@@ -76,8 +78,32 @@ public class DocumentEntryTransformer {
         }
         
         DocumentEntry docEntry = new DocumentEntry();
+        addAttributesFromEbXML21(docEntry, extrinsic);
+        addClassificationsFromEbXML21(docEntry, extrinsic);
+        addSlotsFromEbXML21(docEntry, extrinsic);
+        addExternalIdentifiersFromEbXML21(docEntry, extrinsic);
         
         return docEntry;
+    }
+
+    private void addExternalIdentifiersFromEbXML21(DocumentEntry docEntry, ExtrinsicObjectType extrinsic) {
+        List<ExternalIdentifierType> externalIdentifiers = extrinsic.getExternalIdentifier();
+        
+        String patientID = getExternalIdentifier(externalIdentifiers, DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
+        docEntry.setPatientID(identifiableTransformer.fromEbXML21(patientID));
+        
+        String uniqueID = getExternalIdentifier(externalIdentifiers, DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
+        docEntry.setUniqueID(uniqueID != null ? new UniqueID(uniqueID) : null);
+    }
+
+    private String getExternalIdentifier(List<ExternalIdentifierType> externalIdentifiers, String scheme) {
+        for (ExternalIdentifierType externalIdentifier : externalIdentifiers) {
+            if (scheme.equals(externalIdentifier.getIdentificationScheme())) {
+                return externalIdentifier.getValue();
+            }
+        }
+        
+        return null;
     }
 
     private void addExternalIdentifiers(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
@@ -105,6 +131,14 @@ public class DocumentEntryTransformer {
         }
     }
 
+    private void addAttributesFromEbXML21(DocumentEntry docEntry, ExtrinsicObjectType extrinsic) {
+        docEntry.setAvailabilityStatus(AvailabilityStatus.valueOfRepresentation(extrinsic.getStatus()));        
+        docEntry.setComments(getSingleLocalizedString(extrinsic.getDescription()));
+        docEntry.setTitle(getSingleLocalizedString(extrinsic.getName()));
+        docEntry.setEntryUUID(extrinsic.getId() != null ? new EntryUUID(extrinsic.getId()) : null);
+        docEntry.setMimeType(extrinsic.getMimeType());
+    }
+
     private void addAttributes(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
         AvailabilityStatus status = documentEntry.getAvailabilityStatus();
         extrinsic.setStatus(status != null ? status.getRepresentation() : null);        
@@ -119,6 +153,29 @@ public class DocumentEntryTransformer {
         extrinsic.setId(entryUUID != null ? entryUUID.getValue() : null);
         
         extrinsic.setMimeType(documentEntry.getMimeType());
+    }
+
+    private void addSlotsFromEbXML21(DocumentEntry docEntry, ExtrinsicObjectType extrinsic) {
+        List<SlotType1> slots = extrinsic.getSlot();
+        
+        docEntry.setCreationTime(getSingleSlotValue(slots, SLOT_NAME_CREATION_TIME));
+        docEntry.setHash(getSingleSlotValue(slots, SLOT_NAME_HASH));
+        docEntry.setLanguageCode(getSingleSlotValue(slots, SLOT_NAME_LANGUAGE_CODE));
+        docEntry.setServiceStartTime(getSingleSlotValue(slots, SLOT_NAME_SERVICE_START_TIME));
+        docEntry.setServiceStopTime(getSingleSlotValue(slots, SLOT_NAME_SERVICE_STOP_TIME));
+        docEntry.setUri(convertUriFromEbXML21(Ebrs21.getSlotValues(slots, SLOT_NAME_URI)));
+        
+        String size = getSingleSlotValue(slots, SLOT_NAME_SIZE);
+        docEntry.setSize(size != null ? Long.parseLong(size) : null);
+        
+        String hl7LegalAuthenticator = getSingleSlotValue(slots, SLOT_NAME_LEGAL_AUTHENTICATOR);
+        docEntry.setLegalAuthenticator(personTransformer.fromHL7(hl7LegalAuthenticator));
+        
+        String sourcePatient = getSingleSlotValue(slots, SLOT_NAME_SOURCE_PATIENT_ID);
+        docEntry.setSourcePatientID(identifiableTransformer.fromEbXML21(sourcePatient));
+        
+        List<String> slotValues = Ebrs21.getSlotValues(slots, SLOT_NAME_SOURCE_PATIENT_INFO);        
+        docEntry.setSourcePatientInfo(patientInfoTransformer.fromHL7(slotValues));
     }
 
     private void addSlots(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
@@ -142,6 +199,29 @@ public class DocumentEntryTransformer {
         
         List<String> slotValues = patientInfoTransformer.toHL7(documentEntry.getSourcePatientInfo());
         Ebrs21.addSlot(slots, SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[0]));
+    }
+
+    private String convertUriFromEbXML21(List<String> slotValues) {
+        String[] uriParts = new String[10];
+        for (String slotValue : slotValues) {
+            int separatorIdx = slotValue.indexOf('|');
+            if (separatorIdx > 0) {
+                int uriIdx = Integer.parseInt(slotValue.substring(0, separatorIdx));
+                if (uriIdx < 10) {
+                    uriParts[uriIdx] = slotValue.substring(separatorIdx + 1);
+                }
+            }
+        }
+        
+        StringBuilder builder = new StringBuilder();
+        for (String uriPart : uriParts) {
+            if (uriPart != null) {
+                builder.append(uriPart);
+            }
+        }
+        
+        String uri = builder.toString();
+        return uri.isEmpty() ? null : uri;
     }
 
     private String[] convertUri(String uri) {
@@ -169,6 +249,36 @@ public class DocumentEntryTransformer {
         }
         
         return uriParts.toArray(new String[0]);
+    }
+
+    private void addClassificationsFromEbXML21(DocumentEntry docEntry, ExtrinsicObjectType extrinsic) {
+        ClassificationType author = getSingleClassification(extrinsic, DOC_ENTRY_AUTHOR_CLASS_SCHEME);
+        docEntry.setAuthor(authorTransformer.fromEbXML21(author));
+        
+        ClassificationType classCode = getSingleClassification(extrinsic, DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
+        docEntry.setClassCode(codeTransformer.fromEbXML21(classCode));
+
+        ClassificationType formatCode = getSingleClassification(extrinsic, DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME);
+        docEntry.setFormatCode(codeTransformer.fromEbXML21(formatCode));
+
+        ClassificationType healthcareFacility = getSingleClassification(extrinsic, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
+        docEntry.setHealthcareFacilityTypeCode(codeTransformer.fromEbXML21(healthcareFacility));
+        
+        ClassificationType practiceSetting = getSingleClassification(extrinsic, DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
+        docEntry.setPracticeSettingCode(codeTransformer.fromEbXML21(practiceSetting));
+        
+        ClassificationType typeCode = getSingleClassification(extrinsic, DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
+        docEntry.setTypeCode(codeTransformer.fromEbXML21(typeCode));
+        
+        List<Code> confidentialityCodes = docEntry.getConfidentialityCodes();
+        for (ClassificationType code : getClassifications(extrinsic, DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME)) {
+            confidentialityCodes.add(codeTransformer.fromEbXML21(code));
+        }
+
+        List<Code> eventCodeList = docEntry.getEventCodeList();
+        for (ClassificationType code : getClassifications(extrinsic, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME)) {
+            eventCodeList.add(codeTransformer.fromEbXML21(code));
+        }
     }
 
     private void addClassifications(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
@@ -208,5 +318,46 @@ public class DocumentEntryTransformer {
             classification.setClassifiedObject(extrinsic);
             classification.setClassificationScheme(classScheme);
         }
+    }
+
+    private LocalizedString getSingleLocalizedString(InternationalStringType description) {
+        if (description == null) {
+            return null;
+        }
+        
+        List<LocalizedStringType> list = description.getLocalizedString();
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        
+        LocalizedStringType localizedEbXML = list.get(0);
+        return new LocalizedString(
+                localizedEbXML.getValue(), 
+                localizedEbXML.getLang(), 
+                localizedEbXML.getCharset());
+    }
+
+    private ClassificationType getSingleClassification(ExtrinsicObjectType extrinsic, String scheme) {
+        List<ClassificationType> classifications = getClassifications(extrinsic, scheme);
+        if (classifications.size() == 0) {
+            return null;
+        }
+        
+        return classifications.get(0);
+    }
+
+    private List<ClassificationType> getClassifications(ExtrinsicObjectType extrinsic, String scheme) {
+        List<ClassificationType> results = new ArrayList<ClassificationType>();
+        for (ClassificationType classification : extrinsic.getClassification()) {
+            if (scheme.equals(classification.getClassificationScheme())) {
+                results.add(classification);
+            }
+        }
+        return results;
+    }
+
+    private String getSingleSlotValue(List<SlotType1> slots, String slotName) {
+        List<String> slotValues = Ebrs21.getSlotValues(slots, slotName);
+        return slotValues.size() > 0 ? slotValues.get(0) : null;
     }
 }

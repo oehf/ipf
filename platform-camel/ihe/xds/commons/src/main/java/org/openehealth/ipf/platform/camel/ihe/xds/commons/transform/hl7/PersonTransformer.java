@@ -45,18 +45,15 @@ public class PersonTransformer {
         List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7XCN);
         List<String> fn = HL7.parse(HL7Delimiter.SUBCOMPONENT, HL7.get(parts, 2, false)); 
 
-        Person person = new Person();   
-
         String idNumber = HL7.get(parts, 1, true);
         AssigningAuthority assigningAuthority = 
             assigningAuthorityTransformer.fromHL7(HL7.get(parts, 9, false));
         
+        Identifiable id = null;
         if (idNumber != null || assigningAuthority != null) {            
-            Identifiable id = new Identifiable();
+            id = new Identifiable();
             id.setId(idNumber);
             id.setAssigningAuthority(assigningAuthority);
-            
-            person.setId(id);
         }
         
         String familyName = HL7.get(fn, 1, true);
@@ -65,18 +62,25 @@ public class PersonTransformer {
         String suffix = HL7.get(parts, 5, true);
         String prefix = HL7.get(parts, 6, true);
         
+        Name name = null;
         if (familyName != null || givenName != null || secondAndFurtherGivenNames != null 
                 || suffix != null || prefix != null) {
-            Name name = new Name();
+            name = new Name();
             name.setFamilyName(familyName);
             name.setGivenName(givenName);
             name.setSecondAndFurtherGivenNames(secondAndFurtherGivenNames);
             name.setSuffix(suffix);
             name.setPrefix(prefix);
-            person.setName(name);
         }
 
-        return person;
+        if (id != null || name != null) {
+            Person person = new Person();
+            person.setId(id);
+            person.setName(name);
+            return person;
+        }
+        
+        return null;
     }
     
     /**

@@ -18,6 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Represents the human or machine that created an entry.
  * 
@@ -66,5 +69,53 @@ public class Author {
      */
     public List<String> getAuthorSpecialty() {
         return authorSpecialty;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((authorInstitution == null) ? 0 : authorInstitution.hashCode());
+        result = prime * result + ((authorPerson == null) ? 0 : authorPerson.hashCode());
+        result = prime * result + ((authorRole == null) ? 0 : authorRole.hashCode());
+        result = prime * result + ((authorSpecialty == null) ? 0 : authorSpecialty.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Author other = (Author) obj;
+        if (authorInstitution == null) {
+            if (other.authorInstitution != null)
+                return false;
+        } else if (!authorInstitution.equals(other.authorInstitution))
+            return false;
+        if (authorPerson == null) {
+            if (other.authorPerson != null)
+                return false;
+        } else if (!authorPerson.equals(other.authorPerson))
+            return false;
+        if (authorRole == null) {
+            if (other.authorRole != null)
+                return false;
+        } else if (!authorRole.equals(other.authorRole))
+            return false;
+        if (authorSpecialty == null) {
+            if (other.authorSpecialty != null)
+                return false;
+        } else if (!authorSpecialty.equals(other.authorSpecialty))
+            return false;
+        return true;
+    }
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

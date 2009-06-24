@@ -17,6 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
 import javax.activation.DataHandler;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Represents the contents of a document and the describing entry.
  * @author Jens Riemschneider
@@ -39,5 +42,10 @@ public class Document {
 
     public void setDocumentEntry(DocumentEntry documentEntry) {
         this.documentEntry = documentEntry;
+    }
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

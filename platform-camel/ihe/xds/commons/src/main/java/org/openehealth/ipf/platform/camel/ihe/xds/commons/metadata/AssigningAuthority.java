@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Represents an authority that assigns IDs.
  * <p>
@@ -56,5 +59,47 @@ public class AssigningAuthority {
 
     public void setUniversalIdType(String universalIdType) {
         this.universalIdType = universalIdType;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((namespaceId == null) ? 0 : namespaceId.hashCode());
+        result = prime * result + ((universalId == null) ? 0 : universalId.hashCode());
+        result = prime * result + ((universalIdType == null) ? 0 : universalIdType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        AssigningAuthority other = (AssigningAuthority) obj;
+        if (namespaceId == null) {
+            if (other.namespaceId != null)
+                return false;
+        } else if (!namespaceId.equals(other.namespaceId))
+            return false;
+        if (universalId == null) {
+            if (other.universalId != null)
+                return false;
+        } else if (!universalId.equals(other.universalId))
+            return false;
+        if (universalIdType == null) {
+            if (other.universalIdType != null)
+                return false;
+        } else if (!universalIdType.equals(other.universalIdType))
+            return false;
+        return true;
+    }
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

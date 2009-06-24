@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Represents the address of a patient.
  * <p>
@@ -84,5 +87,71 @@ public class Address {
 
     public void setCountyParishCode(String countyParishCode) {
         this.countyParishCode = countyParishCode;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((city == null) ? 0 : city.hashCode());
+        result = prime * result + ((country == null) ? 0 : country.hashCode());
+        result = prime * result + ((countyParishCode == null) ? 0 : countyParishCode.hashCode());
+        result = prime * result + ((otherDesignation == null) ? 0 : otherDesignation.hashCode());
+        result = prime * result + ((stateOrProvince == null) ? 0 : stateOrProvince.hashCode());
+        result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
+        result = prime * result + ((zipOrPostalCode == null) ? 0 : zipOrPostalCode.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Address other = (Address) obj;
+        if (city == null) {
+            if (other.city != null)
+                return false;
+        } else if (!city.equals(other.city))
+            return false;
+        if (country == null) {
+            if (other.country != null)
+                return false;
+        } else if (!country.equals(other.country))
+            return false;
+        if (countyParishCode == null) {
+            if (other.countyParishCode != null)
+                return false;
+        } else if (!countyParishCode.equals(other.countyParishCode))
+            return false;
+        if (otherDesignation == null) {
+            if (other.otherDesignation != null)
+                return false;
+        } else if (!otherDesignation.equals(other.otherDesignation))
+            return false;
+        if (stateOrProvince == null) {
+            if (other.stateOrProvince != null)
+                return false;
+        } else if (!stateOrProvince.equals(other.stateOrProvince))
+            return false;
+        if (streetAddress == null) {
+            if (other.streetAddress != null)
+                return false;
+        } else if (!streetAddress.equals(other.streetAddress))
+            return false;
+        if (zipOrPostalCode == null) {
+            if (other.zipOrPostalCode != null)
+                return false;
+        } else if (!zipOrPostalCode.equals(other.zipOrPostalCode))
+            return false;
+        return true;
+    }
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

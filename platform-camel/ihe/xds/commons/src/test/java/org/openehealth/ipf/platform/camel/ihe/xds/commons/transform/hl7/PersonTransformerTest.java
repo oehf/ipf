@@ -151,8 +151,11 @@ public class PersonTransformerTest {
 
     @Test
     public void testFromHL7WithNullParam() {
-        Person person = new PersonTransformer().fromHL7(null);
-        assertNull(person.getId());
-        assertNull(person.getName());
+        assertNull(new PersonTransformer().fromHL7(null));
+    }    
+
+    @Test
+    public void testFromHL7WithEmptyParam() {
+        assertNull(new PersonTransformer().fromHL7(""));
     }    
 }
