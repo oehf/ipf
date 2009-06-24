@@ -86,18 +86,20 @@ public class Ebrs21 {
             return;
         }
         
-        SlotType1 slot = rimFactory.createSlotType1();
-        slot.setName(slotName);
-
         ValueListType valueList = rimFactory.createValueListType();
-        slot.setValueList(valueList);
         List<String> values = valueList.getValue();
         for (String slotValue : slotValues) {
             if (slotValue != null) {
                 values.add(slotValue);
             }
         }
-        slots.add(slot);
+
+        if (!values.isEmpty()) {
+            SlotType1 slot = rimFactory.createSlotType1();
+            slot.setName(slotName);
+            slot.setValueList(valueList);
+            slots.add(slot);
+        }
     }
 
     /**

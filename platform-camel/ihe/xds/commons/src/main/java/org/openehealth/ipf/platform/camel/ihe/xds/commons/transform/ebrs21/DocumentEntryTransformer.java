@@ -63,6 +63,22 @@ public class DocumentEntryTransformer {
         
         return extrinsic;
     }
+    
+    /**
+     * Transforms the given extrinsic object into a {@link DocumentEntry}.
+     * @param extrinsic
+     *          the ebXML 2.1 representation of a document entry.
+     * @return the document entry instance.
+     */
+    public DocumentEntry fromEbXML21(ExtrinsicObjectType extrinsic) {
+        if (extrinsic == null) {
+            return null;
+        }
+        
+        DocumentEntry docEntry = new DocumentEntry();
+        
+        return docEntry;
+    }
 
     private void addExternalIdentifiers(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
         String patientID = identifiableTransformer.toEbXML21(documentEntry.getPatientID());
@@ -129,6 +145,10 @@ public class DocumentEntryTransformer {
     }
 
     private String[] convertUri(String uri) {
+        if (uri == null) {
+            return new String[0];
+        }
+        
         List<String> uriParts = new ArrayList<String>();
         
         int slotIdx = 1;

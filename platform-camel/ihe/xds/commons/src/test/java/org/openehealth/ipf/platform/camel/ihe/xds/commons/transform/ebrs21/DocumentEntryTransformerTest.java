@@ -183,6 +183,27 @@ public class DocumentEntryTransformerTest {
         assertEquals(2, ebXML.getExternalIdentifier().size());
     }
 
+    @Test
+    public void testToEbXML21Null() {
+        assertNull(transformer.toEbXML21(null));
+    }
+   
+    @Test
+    public void testToEbXML21Empty() {
+        ExtrinsicObjectType ebXML = transformer.toEbXML21(new DocumentEntry());        
+        assertNotNull(ebXML);
+        
+        assertNull(ebXML.getStatus());
+        assertNull(ebXML.getMimeType());
+        assertNull(ebXML.getId());
+        
+        assertNull(ebXML.getDescription());        
+        assertNull(ebXML.getName());
+        
+        assertEquals(0, ebXML.getSlot().size());
+        assertEquals(0, ebXML.getClassification().size());
+        assertEquals(0, ebXML.getExternalIdentifier().size());
+    }
 
     
     
