@@ -17,6 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti15;
 
 import static junit.framework.Assert.assertEquals;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContain
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml21TestUtils;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType.Document;
 
 /**
  * Tests the ITI-15 transaction with a webservice and client adapter defined via URIs.
@@ -42,7 +48,15 @@ public class TestIti15 extends StandardTestWebContainer {
     /** Calls the route attached to the ITI-15 endpoint. */
     @Test
     public void testIti15() {
-        SubmitObjectsRequest request = Ebxml21TestUtils.createTestSubmitObjectRequest();
+        SubmitObjectsRequest submitObjectsRequest = Ebxml21TestUtils.createTestSubmitObjectRequest();
+        ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
+        request.setSubmitObjectsRequest(submitObjectsRequest);
+        
+        Document document = new Document();
+        DataSource dataSource = new LargeDataSource();
+        document.setId("testdoc");
+        document.setValue(new DataHandler(dataSource));
+        request.getDocument().add(document);
         
         RegistryResponse response1 =
                 (RegistryResponse)getProducerTemplate().requestBody(SERVICE1, request);

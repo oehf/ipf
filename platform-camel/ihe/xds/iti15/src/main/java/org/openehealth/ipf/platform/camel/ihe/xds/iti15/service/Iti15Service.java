@@ -15,9 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15.service;
 
+import static org.apache.commons.lang.Validate.notNull;
+
+import java.util.Map;
+
+import javax.activation.DataHandler;
+import javax.annotation.Resource;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType.Document;
 
 /**
  * Service implementation for the IHE ITI-15 transaction (Provide and Register Document Set).
@@ -27,7 +37,23 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitO
  * @author Jens Riemschneider
  */
 public class Iti15Service extends DefaultItiWebService implements Iti15PortType {
+    @Resource
+    private WebServiceContext wsc;
+
     public RegistryResponse documentRepositoryProvideAndRegisterDocumentSet(SubmitObjectsRequest body) {
-        return process(body, RegistryResponse.class);
+        MessageContext messageContext = wsc.getMessageContext();
+        Map<?, ?> dataHandlers = (Map<?, ?>) messageContext.get(MessageContext.INBOUND_MESSAGE_ATTACHMENTS);
+        notNull(dataHandlers, "dataHandlers cannot be null");
+        
+        ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
+        request.setSubmitObjectsRequest(body);
+        for (Map.Entry<?, ?> entry : dataHandlers.entrySet()) {
+            Document doc = new Document();
+            doc.setId((String) entry.getKey());
+            doc.setValue((DataHandler) entry.getValue());
+            request.getDocument().add(doc );
+        }
+
+        return process(request, RegistryResponse.class);
     }
 }

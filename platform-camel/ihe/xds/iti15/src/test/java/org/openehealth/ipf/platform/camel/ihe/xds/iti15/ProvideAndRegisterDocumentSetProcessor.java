@@ -21,6 +21,8 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType.Document;
 
 /**
  * Processor for a ProvideAndRegisterDocumentSet request used in Tests.
@@ -43,12 +45,25 @@ class ProvideAndRegisterDocumentSetProcessor implements Processor {
     }
 
     public void process(Exchange exchange) throws Exception {
-        SubmitObjectsRequest request = exchange.getIn().getBody(SubmitObjectsRequest.class);
+        ProvideAndRegisterDocumentSetRequestType request = exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
+        SubmitObjectsRequest objectsRequest = request.getSubmitObjectsRequest();
         RegistryObjectType orgType = 
-            (RegistryObjectType) request.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent().get(0);
+            (RegistryObjectType) objectsRequest.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent().get(0);
 
+        String value = orgType.getObjectType();
+        
+        if (request.getDocument().size() != 1) {
+            value = "did not contain the correct amount of documents. Was: " + request.getDocument().size();
+        }
+        else {
+            Document document = request.getDocument().get(0);
+            if (!document.getId().equals("testdoc")) {
+                value = "wrong document id. Was: " + document.getId();
+            }            
+        }
+        
         RegistryResponse response = new RegistryResponse();
-        response.setStatus(prefix + orgType.getObjectType());
+        response.setStatus(prefix + value);
         Exchanges.resultMessage(exchange).setBody(response);
     }
 }

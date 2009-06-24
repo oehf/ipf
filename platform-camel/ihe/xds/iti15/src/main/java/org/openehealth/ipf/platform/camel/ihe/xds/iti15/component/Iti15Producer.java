@@ -15,15 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15.component;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.activation.DataHandler;
+import javax.xml.ws.BindingProvider;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ProvidedAttachmentOutInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti15.audit.Iti15ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.Iti15PortType;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType.Document;
 
 /**
  * The producer implementation for the ITI-15 component.
@@ -42,9 +49,19 @@ public class Iti15Producer extends DefaultItiProducer<Iti15PortType> {
 
     @Override
     protected void callService(Exchange exchange) {
-        SubmitObjectsRequest body =
-                exchange.getIn().getBody(SubmitObjectsRequest.class);
-        RegistryResponse result = getClient().documentRepositoryProvideAndRegisterDocumentSet(body);
+        ProvideAndRegisterDocumentSetRequestType body =
+                exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
+        BindingProvider bindingProvider = (BindingProvider)getClient();
+        Map<String, Object> requestContext = bindingProvider.getRequestContext();
+        
+        Map<String, DataHandler> attachments = new HashMap<String, DataHandler>();
+        for (Document document : body.getDocument()) {
+            attachments.put(document.getId(), document.getValue());
+        }
+        
+        requestContext.put(ProvidedAttachmentOutInterceptor.ATTACHMENTS, attachments);
+        
+        RegistryResponse result = getClient().documentRepositoryProvideAndRegisterDocumentSet(body.getSubmitObjectsRequest());
         Exchanges.resultMessage(exchange).setBody(result);
     }
 

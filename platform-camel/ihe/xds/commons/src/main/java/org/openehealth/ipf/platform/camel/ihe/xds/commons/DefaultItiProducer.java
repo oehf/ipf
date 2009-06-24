@@ -133,6 +133,10 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
             client.getOutFaultInterceptors().add(mapAggregator);
         }
         
+        if (!serviceInfo.isMtom()) {
+            client.getOutInterceptors().add(new ProvidedAttachmentOutInterceptor());
+        }
+        
         // install auditing-related interceptors if the user has not switched
         // auditing off
         if (endpoint.isAudit()) {
