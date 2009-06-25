@@ -21,7 +21,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti16.audit.Iti16ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti16.service.Iti16PortType;
 
@@ -44,7 +44,7 @@ public class Iti16Producer extends DefaultItiProducer<Iti16PortType> {
     protected void callService(Exchange exchange) {
         AdhocQueryRequest body =
                 exchange.getIn().getBody(AdhocQueryRequest.class);
-        AdhocQueryResponse result = getClient().documentRegistryQueryRegistry(body);
+        RegistryResponse result = getClient().documentRegistryQueryRegistry(body);
         Exchanges.resultMessage(exchange).setBody(result);
     }
 

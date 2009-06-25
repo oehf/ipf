@@ -24,6 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.Adho
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.OrganizationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectListType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 
 /**
  * Processor for a QueryRegistry request used in Tests.
@@ -55,6 +56,8 @@ class QueryRegistryProcessor implements Processor {
         orgType.setObjectType(prefix + request.getSQLQuery());
         objectRefOrAssociationOrAuditableEvent.add(orgType);
         response.setSQLQueryResult(registryObjectListType);
-        Exchanges.resultMessage(exchange).setBody(response);
+        RegistryResponse registryResponse = new RegistryResponse();
+        registryResponse.setAdhocQueryResponse(response);
+        Exchanges.resultMessage(exchange).setBody(registryResponse);
     }
 }

@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti16.service;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 
 /**
  * Service implementation for the IHE ITI-16 transaction (Query Registry).
@@ -28,7 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.Adho
  */
 public class Iti16Service extends DefaultItiWebService implements Iti16PortType {
     @Override
-    public AdhocQueryResponse documentRegistryQueryRegistry(AdhocQueryRequest body) {
-        return process(body, AdhocQueryResponse.class);
+    public RegistryResponse documentRegistryQueryRegistry(AdhocQueryRequest body) {
+        return process(body, RegistryResponse.class);
     }
 }

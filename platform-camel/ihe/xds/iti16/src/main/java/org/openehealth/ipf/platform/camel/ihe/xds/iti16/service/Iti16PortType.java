@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 
 /**
  * Provides the ITI-16 web-service interface.
@@ -40,10 +40,10 @@ public interface Iti16PortType {
      *          the request.
      * @return the response.
      */
-    @WebResult(name = "AdhocQueryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1", partName = "body")
+    @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1", partName = "body")
     @Action(input = "urn:ihe:iti:2007:QueryRegistry", output = "urn:ihe:iti:2007:QueryRegistryResponse")
     @WebMethod(operationName = "DocumentRegistry_QueryRegistry")
-public AdhocQueryResponse documentRegistryQueryRegistry(
+    public RegistryResponse documentRegistryQueryRegistry(
         @WebParam(partName = "body", name = "AdhocQueryRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1")
         AdhocQueryRequest body
     );

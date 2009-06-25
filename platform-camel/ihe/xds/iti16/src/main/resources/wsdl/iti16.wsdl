@@ -17,6 +17,7 @@
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:ihe="urn:ihe:iti:xds:2007"
         xmlns:query="urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1"
+        xmlns:rs="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1"
         xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
         targetNamespace="urn:ihe:iti:xds:2007"
         name="DocumentRegistry">
@@ -26,6 +27,7 @@
     <types>
         <xsd:schema elementFormDefault="qualified">
             <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1" schemaLocation="classpath:wsdl/schema/ebRS21/query.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1" schemaLocation="classpath:wsdl/schema/ebRS21/rs.xsd"/>
         </xsd:schema>
     </types>
 
@@ -34,7 +36,7 @@
     </message>
 
     <message name="QueryRegistryResponse_Message">
-        <part name="body" element="query:AdhocQueryResponse"/>
+        <part name="body" element="rs:RegistryResponse"/>
     </message>
 
     <portType name="DocumentRegistry_PortType">

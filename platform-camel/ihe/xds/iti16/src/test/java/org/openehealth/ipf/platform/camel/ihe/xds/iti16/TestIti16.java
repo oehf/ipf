@@ -22,8 +22,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 
 /**
  * Tests the ITI-16 transaction with a webservice and client adapter defined via URIs.
@@ -46,18 +46,18 @@ public class TestIti16 extends StandardTestWebContainer {
         AdhocQueryRequest request = new AdhocQueryRequest();
         request.setSQLQuery("ok");
 
-        AdhocQueryResponse response1 =
-                (AdhocQueryResponse)getProducerTemplate().requestBody(SERVICE1, request);
+        RegistryResponse response1 =
+                (RegistryResponse)getProducerTemplate().requestBody(SERVICE1, request);
 
         RegistryObjectType actual1 = 
-            (RegistryObjectType) response1.getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);
+            (RegistryObjectType) response1.getAdhocQueryResponse().getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);
         assertEquals("service 1: ok", actual1.getObjectType());
 
-        AdhocQueryResponse response2 =
-                (AdhocQueryResponse)getProducerTemplate().requestBody(SERVICE2, request);
+        RegistryResponse response2 =
+                (RegistryResponse)getProducerTemplate().requestBody(SERVICE2, request);
 
         RegistryObjectType actual2 = 
-            (RegistryObjectType) response2.getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);
+            (RegistryObjectType) response2.getAdhocQueryResponse().getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);
         assertEquals("service 2: ok", actual2.getObjectType());
     }
 }
