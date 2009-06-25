@@ -29,6 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ClassificationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExternalIdentifierType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.InternationalStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.SlotType1;
 
@@ -90,12 +91,12 @@ public abstract class Ebrs30TestUtils {
      *          the expected localized index of the name.
      * @return the classification that matched the assertion.
      */
-    public static ClassificationType assertClassification(String scheme, List<ClassificationType> classifications, int occurrence, String expectedClassifiedObject, String expectedNodeRepresentation, int expectedLocalizedIdxName) {
+    public static ClassificationType assertClassification(String scheme, List<ClassificationType> classifications, int occurrence, IdentifiableType expectedClassifiedObject, String expectedNodeRepresentation, int expectedLocalizedIdxName) {
         List<ClassificationType> filtered = Ebrs30.getClassifications(classifications, scheme);
         assertTrue(filtered.size() > occurrence);
 
         ClassificationType classification = filtered.get(occurrence);
-        assertEquals(expectedClassifiedObject, classification.getClassifiedObject());
+        assertEquals(expectedClassifiedObject.getId(), classification.getClassifiedObject());
         assertEquals(expectedNodeRepresentation, classification.getNodeRepresentation());
         if (expectedLocalizedIdxName > 0) {
             assertEquals(createLocal(expectedLocalizedIdxName), toLocal(classification.getName()));
@@ -224,4 +225,20 @@ public abstract class Ebrs30TestUtils {
     public static LocalizedString createLocal(int idx) {
         return new LocalizedString("value " + idx, "lang " + idx, "charset " + idx);
     }    
+    
+
+    /*
+    private static void printXml(ExtrinsicObjectType eos) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance("org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim");
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(eos, System.out);
+            
+        } catch (Exception e) {
+            
+            throw new RuntimeException(e); 
+        }
+    }
+    */
 }

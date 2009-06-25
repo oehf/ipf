@@ -25,6 +25,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryPackageType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ClassificationType;
@@ -249,6 +250,14 @@ public class Ebrs30 {
     }
 
     /**
+     * Creates a new ebXML 3.0 registry package.
+     * @return the new registry package.
+     */
+    public static RegistryPackageType createRegistryPackage() {
+        return rimFactory.createRegistryPackageType();
+    }
+
+    /**
      * Adds a given classification to the list of classifications.
      * <p>
      * This method allows the classification to be <code>null</code> and will
@@ -263,11 +272,11 @@ public class Ebrs30 {
      * @param classScheme
      *          the scheme of the classification.
      */
-    public static void addClassification(List<ClassificationType> classifications, ClassificationType classification, String classifiedObject, String classScheme) {
+    public static void addClassification(List<ClassificationType> classifications, ClassificationType classification, IdentifiableType classifiedObject, String classScheme) {
         if (classification != null) {
             classifications.add(classification);
 
-            classification.setClassifiedObject(classifiedObject);
+            classification.setClassifiedObject(classifiedObject.getId());
             classification.setClassificationScheme(classScheme);
         }
     }

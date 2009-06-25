@@ -160,34 +160,33 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
     protected void addClassifications(DocumentEntry documentEntry, ExtrinsicObjectType extrinsic) {
         super.addClassifications(documentEntry, extrinsic);
         List<ClassificationType> classifications = extrinsic.getClassification();
-        String id = extrinsic.getId();
         
         ClassificationType author = authorTransformer.toEbXML30(documentEntry.getAuthor());
-        addClassification(classifications, author, id, DOC_ENTRY_AUTHOR_CLASS_SCHEME);
+        addClassification(classifications, author, extrinsic, DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         
         ClassificationType classCode = codeTransformer.toEbXML30(documentEntry.getClassCode());
-        addClassification(classifications, classCode, id, DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
+        addClassification(classifications, classCode, extrinsic, DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
         
         ClassificationType formatCode = codeTransformer.toEbXML30(documentEntry.getFormatCode());
-        addClassification(classifications, formatCode, id, DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME);
+        addClassification(classifications, formatCode, extrinsic, DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME);
 
         ClassificationType healthcareFacility = codeTransformer.toEbXML30(documentEntry.getHealthcareFacilityTypeCode());
-        addClassification(classifications, healthcareFacility, id, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
+        addClassification(classifications, healthcareFacility, extrinsic, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
         
         ClassificationType practiceSetting = codeTransformer.toEbXML30(documentEntry.getPracticeSettingCode());
-        addClassification(classifications, practiceSetting, id, DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
+        addClassification(classifications, practiceSetting, extrinsic, DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
         
         ClassificationType typeCode = codeTransformer.toEbXML30(documentEntry.getTypeCode());
-        addClassification(classifications, typeCode, id, DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
+        addClassification(classifications, typeCode, extrinsic, DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
         
         for (Code confCode : documentEntry.getConfidentialityCodes()) {
             ClassificationType conf = codeTransformer.toEbXML30(confCode);
-            addClassification(classifications, conf, id, DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME);
+            addClassification(classifications, conf, extrinsic, DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME);
         }
         
         for (Code eventCode : documentEntry.getEventCodeList()) {
             ClassificationType event = codeTransformer.toEbXML30(eventCode);
-            addClassification(classifications, event, id, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
+            addClassification(classifications, event, extrinsic, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
         }
     }
 }

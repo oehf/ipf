@@ -131,39 +131,38 @@ public class DocumentEntryTransformerTest {
         
         
         List<ClassificationType> classifications = ebXML.getClassification();
-        String id = ebXML.getId();
         
-        ClassificationType classification = assertClassification(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, classifications, 0, id, "", -1);
+        ClassificationType classification = assertClassification(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, classifications, 0, ebXML, "", -1);
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_PERSON, classification.getSlot(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlot(), "inst1", "inst2");
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_ROLE, classification.getSlot(), "role1", "role2");
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlot(), "spec1", "spec2");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, classifications, 0, id, "code 1", 1);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, classifications, 0, ebXML, "code 1", 1);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 1");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, classifications, 0, id, "code 6", 6);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, classifications, 0, ebXML, "code 6", 6);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 6");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, classifications, 1, id, "code 7", 7);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, classifications, 1, ebXML, "code 7", 7);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 7");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, classifications, 0, id, "code 8", 8);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, classifications, 0, ebXML, "code 8", 8);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 8");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, classifications, 1, id, "code 9", 9);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, classifications, 1, ebXML, "code 9", 9);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 9");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, classifications, 0, id, "code 2", 2);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, classifications, 0, ebXML, "code 2", 2);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 2");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, classifications, 0, id, "code 3", 3);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, classifications, 0, ebXML, "code 3", 3);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 3");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, classifications, 0, id, "code 4", 4);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, classifications, 0, ebXML, "code 4", 4);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 4");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, classifications, 0, id, "code 5", 5);
+        classification = assertClassification(Vocabulary.DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, classifications, 0, ebXML, "code 5", 5);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 5");
         
         assertExternalIdentifier(Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, ebXML.getExternalIdentifier(), 
@@ -199,9 +198,6 @@ public class DocumentEntryTransformerTest {
         assertEquals(0, ebXML.getClassification().size());
         assertEquals(0, ebXML.getExternalIdentifier().size());
     }
-    
-
-    
     
     @Test
     public void testFromEbXML30() {
