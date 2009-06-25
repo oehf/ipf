@@ -105,7 +105,7 @@ public class Ebrs30Test {
         docEntry.getClassification().add(classification);
         classification.setClassifiedObject(docEntry.getId());
 
-        Ebrs30.addSlot(classification, "something", "a", "b", "c");
+        Ebrs30.addSlot(classification.getSlot(), "something", "a", "b", "c");
 
         SubmitObjectsRequest received = send();        
         ExtrinsicObjectType docEntryResult = getDocumentEntry(received);

@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.SlotType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ClassificationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer;
 
@@ -38,19 +39,20 @@ public class AuthorTransformer {
         }
         
         ClassificationType classification = Ebrs30.createClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME);
+        List<SlotType1> slots = classification.getSlot();
         
         String s = personTransformer.toHL7(author.getAuthorPerson());
         if(s != null) {
-            Ebrs30.addSlot(classification, SLOT_NAME_AUTHOR_PERSON, s);
+            Ebrs30.addSlot(slots, SLOT_NAME_AUTHOR_PERSON, s);
         }
         
-        Ebrs30.addSlot(classification, SLOT_NAME_AUTHOR_INSTITUTION, 
+        Ebrs30.addSlot(slots, SLOT_NAME_AUTHOR_INSTITUTION, 
                 author.getAuthorInstitution().toArray(new String[0]));
         
-        Ebrs30.addSlot(classification, SLOT_NAME_AUTHOR_ROLE, 
+        Ebrs30.addSlot(slots, SLOT_NAME_AUTHOR_ROLE, 
                 author.getAuthorRole().toArray(new String[0]));
 
-        Ebrs30.addSlot(classification, SLOT_NAME_AUTHOR_SPECIALTY, 
+        Ebrs30.addSlot(slots, SLOT_NAME_AUTHOR_SPECIALTY, 
                 author.getAuthorSpecialty().toArray(new String[0]));
         
         return classification;

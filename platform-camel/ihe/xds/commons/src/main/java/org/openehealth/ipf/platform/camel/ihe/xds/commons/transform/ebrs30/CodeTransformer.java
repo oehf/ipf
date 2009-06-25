@@ -38,7 +38,7 @@ public class CodeTransformer {
         classification.setName(Ebrs30.createInternationalString(code.getDisplayName()));
         
         if (code.getSchemeName() != null) {
-            Ebrs30.addSlot(classification, SLOT_NAME_CODING_SCHEME, code.getSchemeName());
+            Ebrs30.addSlot(classification.getSlot(), SLOT_NAME_CODING_SCHEME, code.getSchemeName());
         }
         
         return classification;

@@ -27,6 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedStri
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ClassificationType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.InternationalStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.LocalizedStringType;
@@ -44,9 +45,8 @@ public class Ebrs30 {
     public static final QName EXTRINSIC_OBJECT_QNAME = 
         new QName("urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0", "ExtrinsicObject", "rim"); 
     
-    private final static ObjectFactory rimFactory = new ObjectFactory();
+    private final static ObjectFactory rimFactory = new ObjectFactory(); 
 
-    
     /**
      * Wraps the given intrinsic object into JAXB to insert it into an XML element list.
      * @param qname 
@@ -76,21 +76,22 @@ public class Ebrs30 {
     }
  
     /**
-     * Adds a slot to the given classification.
+     * Adds a slot to the given slot list.
      * <p>
      * This method always creates a new slot, no matter if a slot with the given
      * name is already within the slot list.
-     * @param classification
-     *          the classification.
+     * @param slots
+     *          the slots (e.g. of a classification or extrinsic object) to which the slot 
+     *          is to be added
      * @param slotName
      *          the name of the slot.
      * @param slotValues
-     *          the values of the slot to be added as a value list. If this list is empty or
-     *          <code>null</code> no slot will be created.
+     *          the values of the slot to be added as a value list. If this list is empty 
+     *          or <code>null</code> no slot will be created. Only values that are not 
+     *          <code>null</code> will be added to the slot.
      */
-    public static void addSlot(ClassificationType classification, String slotName, String... slotValues) {
-        notNull(slotName, "slotName cannot be null");
-        notNull(classification, "classification cannot be null");
+    public static void addSlot(List<SlotType1> slots, String slotName, String... slotValues) {
+        notNull(slots, "slots cannot be null");
         
         if (slotValues == null || slotValues.length == 0) {
             return;
@@ -99,15 +100,17 @@ public class Ebrs30 {
         ValueListType valueList = rimFactory.createValueListType();
         List<String> values = valueList.getValue();
         for (String slotValue : slotValues) {
-            values.add(slotValue);            
+            if (slotValue != null) {
+                values.add(slotValue);
+            }
         }
-        
-        SlotType1 slot = rimFactory.createSlotType1();
-        slot.setName(slotName);
-        slot.setValueList(valueList);
 
-        List<SlotType1> slots = classification.getSlot();
-        slots.add(slot);
+        if (!values.isEmpty()) {
+            SlotType1 slot = rimFactory.createSlotType1();
+            slot.setName(slotName);
+            slot.setValueList(valueList);
+            slots.add(slot);
+        }
     }
 
     /**
@@ -122,16 +125,31 @@ public class Ebrs30 {
         notNull(classification, "classification cannot be null");
         notNull(slotName, "slotName cannot be null");
         
-        List<SlotType1> slots = classification.getSlot();       
-        for (SlotType1 slot : slots) {
-            if (slotName.equals(slot.getName())) {
-                return slot.getValueList().getValue();
+        return getSlotValues(classification.getSlot(), slotName);
+    }
+
+    /**
+     * Returns the slot values of a given slot.
+     * @param slots
+     *          the slot list.
+     * @param slotName
+     *          the slot name to look for.
+     * @return the list of values. The list is empty if the slot was not found.
+     */
+    public static List<String> getSlotValues(List<SlotType1> slots, String slotName) {
+        notNull(slotName, "slotName cannot be null");
+        
+        if (slots != null) {
+            for (SlotType1 slot : slots) {
+                if (slotName.equals(slot.getName())) {
+                    return slot.getValueList().getValue();
+                }
             }
         }
         
         return Collections.emptyList();
     }
-
+    
     /**
      * Creates an international string via a single localized string.
      * @param localized
@@ -205,4 +223,27 @@ public class Ebrs30 {
         return rimFactory.createAssociationType1();
     }
 
+    /**
+     * Creates a new ebXML 3.0 extrinsic object.
+     * @return the new extrinsic object.
+     */
+    public static ExtrinsicObjectType createExtrinsicObjectType() {
+        return rimFactory.createExtrinsicObjectType();
+    }
+
+    /**
+     * Creates a new ebXML 3.0 external identifier.
+     * @param value 
+     *          the value of the external identifier.
+     * @return the new external identifier.
+     */
+    public static ExternalIdentifierType createExternalIdentifiable(String value) {
+        if (value == null) {
+            return null;
+        }
+        
+        ExternalIdentifierType identifier = rimFactory.createExternalIdentifierType();
+        identifier.setValue(value);
+        return identifier;
+    }
 }

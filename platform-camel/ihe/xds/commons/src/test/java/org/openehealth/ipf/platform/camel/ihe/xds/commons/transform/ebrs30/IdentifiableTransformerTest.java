@@ -17,15 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs30;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExternalIdentifierType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.LocalizedStringType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21.IdentifiableTransformer;
 
 /**
  * Tests for {@link IdentifiableTransformer}.
@@ -34,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Locali
 public class IdentifiableTransformerTest {
     private IdentifiableTransformer transformer;
     private Identifiable identifiable;
-    
+
     @Before
     public void setUp() {
         transformer = new IdentifiableTransformer();
@@ -50,80 +46,21 @@ public class IdentifiableTransformerTest {
     }
     
     @Test
-    public void testToEbXML30Patient() {
-        ExternalIdentifierType result = transformer.toEbXML30Patient(identifiable);
-        assertNotNull(result);
-        
-        assertEquals("21\\T\\3^^^namespace&uni&uniType", result.getValue());
-        List<LocalizedStringType> localizedStrings = result.getName().getLocalizedString();
-        assertEquals(1, localizedStrings.size());
-        assertEquals(Vocabulary.LOCALIZED_STRING_PATIENT_ID, localizedStrings.get(0).getValue());
-        assertEquals(Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, result.getIdentificationScheme());
-    }
-    
-    @Test
-    public void testToEbXML30PatientNull() {
-        assertNull(transformer.toEbXML30Patient(null));
-    }
-
-    @Test
-    public void testToEbXML30PatientEmpty() {
-        ExternalIdentifierType result = transformer.toEbXML30Patient(new Identifiable());        
-        assertNotNull(result);
-        assertNull(result.getValue());
-        List<LocalizedStringType> localizedStrings = result.getName().getLocalizedString();
-        assertEquals(1, localizedStrings.size());
-        assertEquals(Vocabulary.LOCALIZED_STRING_PATIENT_ID, localizedStrings.get(0).getValue());
-        assertEquals(Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, result.getIdentificationScheme());
-    }
-
-    
-    
-    @Test
-    public void testFromEbXML30Patient() {
-        ExternalIdentifierType ebXML = transformer.toEbXML30Patient(identifiable);
-        Identifiable result = transformer.fromEbXML30PatientID(ebXML);       
-        assertNotNull(result);
-        
-        assertEquals("21&3", result.getId());
-        
-        AssigningAuthority assigningAuthority = result.getAssigningAuthority();
-        assertEquals("namespace", assigningAuthority.getNamespaceId());
-        assertEquals("uni", assigningAuthority.getUniversalId());
-        assertEquals("uniType", assigningAuthority.getUniversalIdType());
-    }
-    
-    @Test
-    public void testFromEbXML30PatientNull() {
-        assertNull(transformer.fromEbXML30PatientID(null));
-    }
-    
-    @Test
-    public void testFromEbXML30PatientEmpty() {
-        Identifiable result = transformer.fromEbXML30PatientID(new ExternalIdentifierType());
-        assertNotNull(result);
-        assertNull(result.getId());
-        assertNull(result.getAssigningAuthority());
-    }
-
-    
-
-    @Test
-    public void testToEbXML30SourcePatient() {
-        String result = transformer.toEbXML30SourcePatient(identifiable);
+    public void testToEbXML21SourcePatient() {
+        String result = transformer.toEbXML21(identifiable);
         assertNotNull(result);
         
         assertEquals("21\\T\\3^^^namespace&uni&uniType", result);
     }
 
     @Test
-    public void testToEbXML30SourcePatientNull() {
-        assertNull(transformer.toEbXML30SourcePatient(null));
+    public void testToEbXML21SourcePatientNull() {
+        assertNull(transformer.toEbXML21(null));
     }
 
     @Test
-    public void testToEbXML30SourcePatientEmpty() {
-        String result = transformer.toEbXML30SourcePatient(new Identifiable());
+    public void testToEbXML21SourcePatientEmpty() {
+        String result = transformer.toEbXML21(new Identifiable());
         assertNotNull(result);
         assertEquals("", result);
     }
@@ -131,9 +68,9 @@ public class IdentifiableTransformerTest {
 
 
     @Test
-    public void testFromEbXML30SourcePatient() {
-        String ebXML = transformer.toEbXML30SourcePatient(identifiable);
-        Identifiable result = transformer.fromEbXML30SourcePatientID(ebXML);       
+    public void testFromEbXML21SourcePatient() {
+        String ebXML = transformer.toEbXML21(identifiable);
+        Identifiable result = transformer.fromEbXML21(ebXML);       
         assertNotNull(result);
         
         assertEquals("21&3", result.getId());
@@ -145,13 +82,13 @@ public class IdentifiableTransformerTest {
     }
     
     @Test
-    public void testFromEbXML30SourcePatientNull() {
-        assertNull(transformer.fromEbXML30SourcePatientID(null));
+    public void testFromEbXML21SourcePatientNull() {
+        assertNull(transformer.fromEbXML21(null));
     }
     
     @Test
-    public void testFromEbXML30SourcePatientEmpty() {
-        Identifiable result = transformer.fromEbXML30SourcePatientID("");
+    public void testFromEbXML21SourcePatientEmpty() {
+        Identifiable result = transformer.fromEbXML21("");
         assertNotNull(result);
         assertNull(result.getId());
         assertNull(result.getAssigningAuthority());
