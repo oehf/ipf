@@ -18,15 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7Delimiter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSProfileViolationException;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.DateOfBirthPIDTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.GenderPIDTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.PIDTransformer;
@@ -44,16 +40,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid.Sour
 public class PatientInfoTransformer {
     private static final String PID_PREFIX = "PID-";
     
-    private static final Set<Integer> forbiddenPidNumbers;
     private static final Map<Integer, PIDTransformer> pidTransformers;
     
     static {
-        forbiddenPidNumbers = new HashSet<Integer>();
-        forbiddenPidNumbers.add(2);
-        forbiddenPidNumbers.add(4);
-        forbiddenPidNumbers.add(12);
-        forbiddenPidNumbers.add(19);
-        
         pidTransformers = new HashMap<Integer, PIDTransformer>();
         pidTransformers.put(3, new SourcePatientIdentifierPIDTransformer());
         pidTransformers.put(5, new SourcePatientNamePIDTransformer());
@@ -79,19 +68,13 @@ public class PatientInfoTransformer {
         
         for (String hl7PIDLine : hl7PID) {
             List<String> fields = HL7.parse(HL7Delimiter.FIELD, hl7PIDLine);
-            if (fields.size() != 2) {
-                throw new XDSProfileViolationException("Too many fields in PID-X definition: " + hl7PIDLine);
-            }
-            
-            String pidNoStr = fields.get(0);
-            Integer pidNo = getPidNumber(pidNoStr);
-            if (forbiddenPidNumbers.contains(pidNo)) {
-                throw new XDSProfileViolationException("XDS does not allow usage of " + pidNoStr);
-            }
-            
-            PIDTransformer transformer = pidTransformers.get(pidNo);
-            if (transformer != null) {            
-                transformer.fromHL7(fields.get(1), patientInfo);
+            if (fields.size() == 2) {
+                String pidNoStr = fields.get(0);
+                Integer pidNo = getPidNumber(pidNoStr);
+                PIDTransformer transformer = pidTransformers.get(pidNo);
+                if (transformer != null) {            
+                    transformer.fromHL7(fields.get(1), patientInfo);
+                }
             }
         }
         
@@ -124,14 +107,14 @@ public class PatientInfoTransformer {
 
     private Integer getPidNumber(String pidNoStr) {
         if (!pidNoStr.startsWith(PID_PREFIX)) {
-            throw new XDSProfileViolationException("Not a valid PID-X definition: " + pidNoStr);
+            return null;
         }
         
         try {
             return Integer.parseInt(pidNoStr.substring(PID_PREFIX.length()));                
         }
         catch (NumberFormatException e) {
-            throw new XDSProfileViolationException("Not a valid PID-X definition: " + pidNoStr);
+            return null;
         }
     }
 }

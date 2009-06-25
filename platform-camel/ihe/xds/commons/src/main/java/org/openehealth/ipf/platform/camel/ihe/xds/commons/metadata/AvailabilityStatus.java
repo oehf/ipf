@@ -25,27 +25,39 @@ public enum AvailabilityStatus {
     DEPRECATED("Deprecated"),
     SUBMITTED("Submitted");
     
-    private final String representation;
+    private final String opcode;
 
-    public String getRepresentation() {
-        return representation;
+    public String getOpcode() {
+        return opcode;
     }
 
-    private AvailabilityStatus(String representation) {        
-        this.representation = representation;
+    private AvailabilityStatus(String opcode) {        
+        this.opcode = opcode;
     }
 
-    public static AvailabilityStatus valueOfRepresentation(String representation) {
-        if (representation == null) {
+    public static AvailabilityStatus valueOfOpcode(String opcode) {
+        if (opcode == null) {
             return null;
         }
         
         for (AvailabilityStatus status : AvailabilityStatus.values()) {
-            if (representation.equals(status.getRepresentation())) {
+            if (opcode.equals(status.getOpcode())) {
                 return status;
             }
         }
         
-        throw new IllegalArgumentException("Unknown status representation: " + representation);
+        throw new IllegalArgumentException("Unknown status opcode: " + opcode);
+    }
+
+    /**
+     * Retrieves the representation of a given status.
+     * <p>
+     * This is a <code>null</code>-safe version of {@link #getOpcode()}.
+     * @param status
+     *          the status. Can be <code>null</code>.
+     * @return the representation or <code>null</code> if the status was <code>null</code>.
+     */
+    public static String toOpcode(AvailabilityStatus status) {
+        return status != null ? status.getOpcode() : null;
     }
 }

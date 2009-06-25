@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.pid;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSProfileViolationException;
 
 /**
  * Provides transformation for PID-X strings.

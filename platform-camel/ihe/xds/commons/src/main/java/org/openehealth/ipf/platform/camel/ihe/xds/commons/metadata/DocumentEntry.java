@@ -26,14 +26,11 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author Jens Riemschneider
  */
-public class DocumentEntry {
+public class DocumentEntry extends XDSMetaClass {
     private Author author;
-    private AvailabilityStatus availabilityStatus;
     private Code classCode;
-    private LocalizedString comments;
     private final List<Code> confidentialityCodes = new ArrayList<Code>();
     private String creationTime;
-    private EntryUUID entryUUID;
     private final List<Code> eventCodeList = new ArrayList<Code>();
     private Code formatCode;
     private String hash;
@@ -41,16 +38,13 @@ public class DocumentEntry {
     private String languageCode;
     private Person legalAuthenticator;
     private String mimeType;
-    private Identifiable patientID;
     private Code practiceSettingCode;
     private String serviceStartTime;
     private String serviceStopTime;
     private Long size;
     private Identifiable sourcePatientID;
     private PatientInfo sourcePatientInfo;
-    private LocalizedString title;
     private Code typeCode;
-    private UniqueID uniqueID;
     private String uri;
     private String repositoryUniqueId; 
 
@@ -69,14 +63,6 @@ public class DocumentEntry {
         this.author = author;
     }
     
-    public AvailabilityStatus getAvailabilityStatus() {
-        return availabilityStatus;
-    }
-    
-    public void setAvailabilityStatus(AvailabilityStatus availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
-    }
-    
     public Code getClassCode() {
         return classCode;
     }
@@ -85,28 +71,12 @@ public class DocumentEntry {
         this.classCode = classCode;
     }
     
-    public LocalizedString getComments() {
-        return comments;
-    }
-    
-    public void setComments(LocalizedString comments) {
-        this.comments = comments;
-    }
-    
     public String getCreationTime() {
         return creationTime;
     }
     
     public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
-    }
-    
-    public EntryUUID getEntryUUID() {
-        return entryUUID;
-    }
-    
-    public void setEntryUUID(EntryUUID entryUUID) {
-        this.entryUUID = entryUUID;
     }
     
     public Code getFormatCode() {
@@ -157,14 +127,6 @@ public class DocumentEntry {
         this.mimeType = mimeType;
     }
     
-    public Identifiable getPatientID() {
-        return patientID;
-    }
-    
-    public void setPatientID(Identifiable patientID) {
-        this.patientID = patientID;
-    }
-    
     public Code getPracticeSettingCode() {
         return practiceSettingCode;
     }
@@ -213,28 +175,12 @@ public class DocumentEntry {
         this.sourcePatientID = sourcePatientID;
     }
 
-    public LocalizedString getTitle() {
-        return title;
-    }
-    
-    public void setTitle(LocalizedString title) {
-        this.title = title;
-    }
-    
     public Code getTypeCode() {
         return typeCode;
     }
     
     public void setTypeCode(Code typeCode) {
         this.typeCode = typeCode;
-    }
-    
-    public UniqueID getUniqueID() {
-        return uniqueID;
-    }
-    
-    public void setUniqueID(UniqueID uniqueID) {
-        this.uniqueID = uniqueID;
     }
     
     public String getUri() {
@@ -260,20 +206,16 @@ public class DocumentEntry {
     public List<Code> getEventCodeList() {
         return eventCodeList;
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((author == null) ? 0 : author.hashCode());
-        result = prime * result
-                + ((availabilityStatus == null) ? 0 : availabilityStatus.hashCode());
         result = prime * result + ((classCode == null) ? 0 : classCode.hashCode());
-        result = prime * result + ((comments == null) ? 0 : comments.hashCode());
         result = prime * result
                 + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
         result = prime * result + ((creationTime == null) ? 0 : creationTime.hashCode());
-        result = prime * result + ((entryUUID == null) ? 0 : entryUUID.hashCode());
         result = prime * result + ((eventCodeList == null) ? 0 : eventCodeList.hashCode());
         result = prime * result + ((formatCode == null) ? 0 : formatCode.hashCode());
         result = prime * result + ((hash == null) ? 0 : hash.hashCode());
@@ -284,7 +226,6 @@ public class DocumentEntry {
         result = prime * result
                 + ((legalAuthenticator == null) ? 0 : legalAuthenticator.hashCode());
         result = prime * result + ((mimeType == null) ? 0 : mimeType.hashCode());
-        result = prime * result + ((patientID == null) ? 0 : patientID.hashCode());
         result = prime * result
                 + ((practiceSettingCode == null) ? 0 : practiceSettingCode.hashCode());
         result = prime * result
@@ -294,9 +235,7 @@ public class DocumentEntry {
         result = prime * result + ((size == null) ? 0 : size.hashCode());
         result = prime * result + ((sourcePatientID == null) ? 0 : sourcePatientID.hashCode());
         result = prime * result + ((sourcePatientInfo == null) ? 0 : sourcePatientInfo.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((typeCode == null) ? 0 : typeCode.hashCode());
-        result = prime * result + ((uniqueID == null) ? 0 : uniqueID.hashCode());
         result = prime * result + ((uri == null) ? 0 : uri.hashCode());
         return result;
     }
@@ -305,7 +244,7 @@ public class DocumentEntry {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
@@ -315,20 +254,10 @@ public class DocumentEntry {
                 return false;
         } else if (!author.equals(other.author))
             return false;
-        if (availabilityStatus == null) {
-            if (other.availabilityStatus != null)
-                return false;
-        } else if (!availabilityStatus.equals(other.availabilityStatus))
-            return false;
         if (classCode == null) {
             if (other.classCode != null)
                 return false;
         } else if (!classCode.equals(other.classCode))
-            return false;
-        if (comments == null) {
-            if (other.comments != null)
-                return false;
-        } else if (!comments.equals(other.comments))
             return false;
         if (confidentialityCodes == null) {
             if (other.confidentialityCodes != null)
@@ -339,11 +268,6 @@ public class DocumentEntry {
             if (other.creationTime != null)
                 return false;
         } else if (!creationTime.equals(other.creationTime))
-            return false;
-        if (entryUUID == null) {
-            if (other.entryUUID != null)
-                return false;
-        } else if (!entryUUID.equals(other.entryUUID))
             return false;
         if (eventCodeList == null) {
             if (other.eventCodeList != null)
@@ -380,11 +304,6 @@ public class DocumentEntry {
                 return false;
         } else if (!mimeType.equals(other.mimeType))
             return false;
-        if (patientID == null) {
-            if (other.patientID != null)
-                return false;
-        } else if (!patientID.equals(other.patientID))
-            return false;
         if (practiceSettingCode == null) {
             if (other.practiceSettingCode != null)
                 return false;
@@ -420,20 +339,10 @@ public class DocumentEntry {
                 return false;
         } else if (!sourcePatientInfo.equals(other.sourcePatientInfo))
             return false;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
         if (typeCode == null) {
             if (other.typeCode != null)
                 return false;
         } else if (!typeCode.equals(other.typeCode))
-            return false;
-        if (uniqueID == null) {
-            if (other.uniqueID != null)
-                return false;
-        } else if (!uniqueID.equals(other.uniqueID))
             return false;
         if (uri == null) {
             if (other.uri != null)
@@ -442,8 +351,7 @@ public class DocumentEntry {
             return false;
         return true;
     }
-    
-    
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

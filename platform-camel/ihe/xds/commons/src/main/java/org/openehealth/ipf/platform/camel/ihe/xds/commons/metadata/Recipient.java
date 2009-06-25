@@ -19,47 +19,42 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * Represents an identifiable person.
- * <p>
- * This class contains members from the HL7v2 XCN data type. The XDS profile
- * imposes some limitations on the XCN type. Most notably the XCN.9
- * component has the same restrictions as the CX.4 component (as described
- * in {@link Identifiable}. 
+ * Represents a recipient containing a person and/or organization.
  * @author Jens Riemschneider
  */
-public class Person {    
-    private Identifiable id;        // XCN.1 and XCN.9
-    private Name name;              // XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6
-
-    public Person() {}
+public class Recipient {
+    private Person person;
+    private Organization organization;
     
-    public Person(Identifiable id, Name name) {
-        this.id = id;
-        this.name = name;
+    public Recipient() {}
+    
+    public Recipient(Organization organization, Person person) {
+        this.organization = organization;
+        this.person = person;
     }
 
-    public Identifiable getId() {
-        return id;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setId(Identifiable id) {
-        this.id = id;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
-    public Name getName() {
-        return name;
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setName(Name name) {
-        this.name = name;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((organization == null) ? 0 : organization.hashCode());
+        result = prime * result + ((person == null) ? 0 : person.hashCode());
         return result;
     }
 
@@ -71,22 +66,23 @@ public class Person {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Person other = (Person) obj;
-        if (id == null) {
-            if (other.id != null)
+        Recipient other = (Recipient) obj;
+        if (organization == null) {
+            if (other.organization != null)
                 return false;
-        } else if (!id.equals(other.id))
+        } else if (!organization.equals(other.organization))
             return false;
-        if (name == null) {
-            if (other.name != null)
+        if (person == null) {
+            if (other.person != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!person.equals(other.person))
             return false;
         return true;
     }
     
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
+    }    
 }

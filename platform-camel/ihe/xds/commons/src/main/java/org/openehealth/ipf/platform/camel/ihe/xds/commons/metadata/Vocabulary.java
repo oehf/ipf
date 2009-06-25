@@ -24,11 +24,6 @@ public abstract class Vocabulary {
         throw new UnsupportedOperationException("Cannot be instantiated");
     }
     
-    /** Universal ID Type to be used for all HD data types used with XDS */
-    public static final String UNIVERSAL_ID_TYPE_OID = "ISO";
-    
-    
-    
     /** XDSDocumentEntry classification node */
     public static final String DOC_ENTRY_CLASS_NODE = 
         "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
@@ -65,8 +60,6 @@ public abstract class Vocabulary {
     public static final String DOC_ENTRY_TYPE_CODE_CLASS_SCHEME =
         "urn:uuid:f0306f51-975f-434e-a61c-c59651d33983";
     
-
-    
     /** patientId ExternalIdentifier of the Document Entry */
     public static final String DOC_ENTRY_PATIENT_ID_EXTERNAL_ID =
         "urn:uuid:58a6f841-87b3-4a3e-92fd-a8ffeff98427";
@@ -75,7 +68,76 @@ public abstract class Vocabulary {
     public static final String DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID =
         "urn:uuid:2e82c1f6-a085-4c72-9da3-8640a32e42ab";
     
+    /** Localized String used for the patient ID external identifier of a document entry */
+    public static final String DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID = "XDSDocumentEntry.patientId";
 
+    /** Localized String used for the unique ID external identifier of a document entry */
+    public static final String DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID = "XDSDocumentEntry.uniqueId";
+
+
+    
+    
+    /** XDSFolder classification node */
+    public static final String FOLDER_CLASS_NODE = 
+        "urn:uuid:d9d542f3-6cc4-48b6-8870-ea235fbc94c2";    
+    
+    /** codeList External Classification Scheme of the folder */
+    public static final String FOLDER_CODE_LIST_CLASS_SCHEME =
+        "urn:uuid:1ba97051-7806-41a8-a48b-8fce7af683c5";    
+    
+    /** patientId ExternalIdentifier of the Folder */
+    public static final String FOLDER_PATIENT_ID_EXTERNAL_ID =
+        "urn:uuid:f64ffdf0-4b97-4e06-b79f-a52b38ec2f8a";
+    
+    /** uniqueId ExternalIdentifier of the Folder */
+    public static final String FOLDER_UNIQUE_ID_EXTERNAL_ID =
+        "urn:uuid:75df8f67-9973-4fbe-a900-df66cefecc5a";
+
+    /** Localized String used for the patient ID external identifier of a folder */
+    public static final String FOLDER_LOCALIZED_STRING_PATIENT_ID = "XDSFolder.patientId";
+
+    /** Localized String used for the unique ID external identifier of a folder */
+    public static final String FOLDER_LOCALIZED_STRING_UNIQUE_ID = "XDSFolder.uniqueId";
+
+    
+    
+    
+
+    /** XDSSubmissionSet classification node */
+    public static final String SUBMISSION_SET_CLASS_NODE = 
+        "urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd";
+    
+    /** Author External Classification Scheme of the Submission Set */
+    public static final String SUBMISSION_SET_AUTHOR_CLASS_SCHEME = 
+        "urn:uuid:a7058bb9-b4e4-4307-ba5b-e3f0ab85e12d";
+
+    /** contentTypeCode External Classification Scheme of the Submission Set */
+    public static final String SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME = 
+        "urn:uuid:aa543740-bdda-424e-8c96-df4873be8500";    
+
+    /** patientId ExternalIdentifier of the Submission Set */
+    public static final String SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID =
+        "urn:uuid:6b5aea1a-874d-4603-a4bc-96a0a7b38446";
+    
+    /** uniqueId ExternalIdentifier of the Submission Set */
+    public static final String SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID =
+        "urn:uuid:96fdda7c-d067-4183-912e-bf5ee74998a8";
+
+    /** sourceId ExternalIdentifier of the Submission Set */
+    public static final String SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID =
+        "urn:uuid:554ac39e-e3fe-47fe-b233-965d2a147832";
+
+    /** Localized String used for the patient ID external identifier of a submission set */
+    public static final String SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID = "XDSSubmissionSet.patientId";
+
+    /** Localized String used for the unique ID external identifier of a submission set */
+    public static final String SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID = "XDSSubmissionSet.uniqueId";
+
+    /** Localized String used for the source ID external identifier of a submission set */
+    public static final String SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID = "XDSSubmissionSet.sourceId";
+
+        
+    
     
     /** Name of the slot that is used for author persons */
     public static final String SLOT_NAME_AUTHOR_PERSON = "authorPerson";
@@ -94,6 +156,9 @@ public abstract class Vocabulary {
 
     /** Name of the slot that is used for the creation time */
     public static final String SLOT_NAME_CREATION_TIME = "creationTime";
+    
+    /** Name of the slot that is used for the last update time */
+    public static final String SLOT_NAME_LAST_UPDATE_TIME = "lastUpdateTime";
     
     /** Name of the slot that is used for the hash code */
     public static final String SLOT_NAME_HASH = "hash";    
@@ -122,7 +187,17 @@ public abstract class Vocabulary {
     /** Name of the slot that is used for the URI */
     public static final String SLOT_NAME_URI = "URI";
     
+    /** Name of the slot that is used for the intended recipients */
+    public static final String SLOT_NAME_INTENDED_RECIPIENT = "intendedRecipient";
     
+    /** Name of the slot that is used for the submission time */
+    public static final String SLOT_NAME_SUBMISSION_TIME = "submissionTime";
+    
+    
+    
+    /** Universal ID Type to be used for all HD data types used with XDS */
+    public static final String UNIVERSAL_ID_TYPE_OID = "ISO";
+
     
     
     /** Node representation for the author classification */
@@ -133,12 +208,4 @@ public abstract class Vocabulary {
 
     /** Node representation for the class code classification */
     public static final String NODE_REPRESENTATION_CONFIDENTIALITY_CODE = "confidentialityCode";
-    
-    
-
-    /** Localized String used for the patient ID external identifier */
-    public static final String LOCALIZED_STRING_PATIENT_ID = "XDSDocumentEntry.patientId";
-
-    /** Localized String used for the unique ID external identifier */
-    public static final String LOCALIZED_STRING_UNIQUE_ID = "XDSDocumentEntry.uniqueId";
 }

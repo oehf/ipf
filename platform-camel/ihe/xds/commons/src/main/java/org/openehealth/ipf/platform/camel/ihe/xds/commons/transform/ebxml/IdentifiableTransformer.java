@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 
 import java.util.List;
 
@@ -23,19 +23,19 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.AssigningAuthorityTransformer;
 
 /**
- * Transforms between an {@link Identifiable} and its ebXML 2.1 representation.
+ * Transforms between an {@link Identifiable} and its ebXML representation.
  * @author Jens Riemschneider
  */
 public class IdentifiableTransformer {
     private final AssigningAuthorityTransformer assigningAuthorityTransformer = new AssigningAuthorityTransformer();
     
     /**
-     * Transforms an {@link Identifiable} to its ebXML 2.1 representation.
+     * Transforms an {@link Identifiable} to its ebXML representation.
      * @param identifiable
      *          the identifiable instance.
-     * @return the ebXML 2.1 representation.
+     * @return the ebXML representation.
      */
-    public String toEbXML21(Identifiable identifiable) {
+    public String toEbXML(Identifiable identifiable) {
         if (identifiable == null) {
             return null;
         }
@@ -54,10 +54,10 @@ public class IdentifiableTransformer {
     /**
      * Transforms an ebXML string into an {@link Identifiable}.
      * @param ebXML
-     *          the ebXML 2.1 representation of the value.
+     *          the ebXML representation of the value.
      * @return the identifiable instance.
      */
-    public Identifiable fromEbXML21(String ebXML) {
+    public Identifiable fromEbXML(String ebXML) {
         if (ebXML == null) {
             return null;
         }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs30;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 
 import static org.junit.Assert.*;
 
@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21.IdentifiableTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.IdentifiableTransformer;
 
 /**
  * Tests for {@link IdentifiableTransformer}.
@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21.Ident
 public class IdentifiableTransformerTest {
     private IdentifiableTransformer transformer;
     private Identifiable identifiable;
-
+    
     @Before
     public void setUp() {
         transformer = new IdentifiableTransformer();
@@ -47,7 +47,7 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testToEbXML21SourcePatient() {
-        String result = transformer.toEbXML21(identifiable);
+        String result = transformer.toEbXML(identifiable);
         assertNotNull(result);
         
         assertEquals("21\\T\\3^^^namespace&uni&uniType", result);
@@ -55,12 +55,12 @@ public class IdentifiableTransformerTest {
 
     @Test
     public void testToEbXML21SourcePatientNull() {
-        assertNull(transformer.toEbXML21(null));
+        assertNull(transformer.toEbXML(null));
     }
 
     @Test
     public void testToEbXML21SourcePatientEmpty() {
-        String result = transformer.toEbXML21(new Identifiable());
+        String result = transformer.toEbXML(new Identifiable());
         assertNotNull(result);
         assertEquals("", result);
     }
@@ -69,8 +69,8 @@ public class IdentifiableTransformerTest {
 
     @Test
     public void testFromEbXML21SourcePatient() {
-        String ebXML = transformer.toEbXML21(identifiable);
-        Identifiable result = transformer.fromEbXML21(ebXML);       
+        String ebXML = transformer.toEbXML(identifiable);
+        Identifiable result = transformer.fromEbXML(ebXML);       
         assertNotNull(result);
         
         assertEquals("21&3", result.getId());
@@ -83,12 +83,12 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testFromEbXML21SourcePatientNull() {
-        assertNull(transformer.fromEbXML21(null));
+        assertNull(transformer.fromEbXML(null));
     }
     
     @Test
     public void testFromEbXML21SourcePatientEmpty() {
-        Identifiable result = transformer.fromEbXML21("");
+        Identifiable result = transformer.fromEbXML("");
         assertNotNull(result);
         assertNull(result.getId());
         assertNull(result.getAssigningAuthority());

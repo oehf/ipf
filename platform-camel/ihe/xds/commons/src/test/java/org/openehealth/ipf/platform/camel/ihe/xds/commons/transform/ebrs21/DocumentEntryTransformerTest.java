@@ -16,31 +16,20 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21;
 
 import static org.junit.Assert.*;
-
-import java.util.List;
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebrs21.Ebrs21TestUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Name;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.InternationalStringType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LocalizedStringType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotType1;
 
 /**
  * Tests for {@link DocumentEntryTransformer}.
@@ -49,7 +38,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.SlotTy
 public class DocumentEntryTransformerTest {
     private DocumentEntryTransformer transformer;
     private DocumentEntry documentEntry;
-    private StringBuilder veryLongUriString;
     
     @Before
     public void setUp() {
@@ -85,7 +73,7 @@ public class DocumentEntryTransformerTest {
         documentEntry.setAuthor(author);
         documentEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         documentEntry.setClassCode(createCode(1));
-        documentEntry.setComments(createLocalized(10));
+        documentEntry.setComments(createLocal(10));
         documentEntry.setCreationTime("123");
         documentEntry.setEntryUUID(new EntryUUID("uuid"));
         documentEntry.setFormatCode(createCode(2));
@@ -101,7 +89,7 @@ public class DocumentEntryTransformerTest {
         documentEntry.setSize(174L);
         documentEntry.setSourcePatientID(createIdentifiable(4));
         documentEntry.setSourcePatientInfo(sourcePatientInfo);
-        documentEntry.setTitle(createLocalized(11));
+        documentEntry.setTitle(createLocal(11));
         documentEntry.setTypeCode(createCode(5));
         documentEntry.setUniqueID(new UniqueID("uniqueId"));
         documentEntry.setUri("uri");
@@ -109,11 +97,6 @@ public class DocumentEntryTransformerTest {
         documentEntry.getConfidentialityCodes().add(createCode(7));
         documentEntry.getEventCodeList().add(createCode(8));
         documentEntry.getEventCodeList().add(createCode(9));
-        
-        veryLongUriString = new StringBuilder();
-        for (int idx = 0; idx < 1000; ++idx) {
-            veryLongUriString.append("1234567890");
-        }        
     }
 
     @Test
@@ -124,9 +107,10 @@ public class DocumentEntryTransformerTest {
         assertEquals("Approved", ebXML.getStatus());
         assertEquals("text/plain", ebXML.getMimeType());
         assertEquals("uuid", ebXML.getId());
+        assertEquals(Vocabulary.DOC_ENTRY_CLASS_NODE, ebXML.getObjectType());
         
-        assertLocalized(10, getSingleLocalized(ebXML.getDescription()));        
-        assertLocalized(11, getSingleLocalized(ebXML.getName()));
+        assertEquals(createLocal(10), toLocal(ebXML.getDescription()));        
+        assertEquals(createLocal(11), toLocal(ebXML.getName()));
         
         assertSlot(Vocabulary.SLOT_NAME_CREATION_TIME, ebXML.getSlot(), "123");
         assertSlot(Vocabulary.SLOT_NAME_HASH, ebXML.getSlot(), "hash");
@@ -179,10 +163,10 @@ public class DocumentEntryTransformerTest {
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlot(), "scheme 5");
         
         assertExternalIdentifier(Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, ebXML.getExternalIdentifier(), 
-                "id 3^^^namespace 3&uni 3&uniType 3", Vocabulary.LOCALIZED_STRING_PATIENT_ID);
+                "id 3^^^namespace 3&uni 3&uniType 3", Vocabulary.DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID);
 
         assertExternalIdentifier(Vocabulary.DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, ebXML.getExternalIdentifier(), 
-                "uniqueId", Vocabulary.LOCALIZED_STRING_UNIQUE_ID);
+                "uniqueId", Vocabulary.DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
         
         assertEquals(10, ebXML.getClassification().size());
         assertEquals(10, ebXML.getSlot().size());
@@ -211,25 +195,6 @@ public class DocumentEntryTransformerTest {
         assertEquals(0, ebXML.getExternalIdentifier().size());
     }
     
-    @Test
-    public void testToEbXML21WithURIThatFitsExactlyIntoOneSlot() {
-        String uri = veryLongUriString.substring(0, 126);
-        documentEntry.setUri(uri);
-        ExtrinsicObjectType ebXML = transformer.toEbXML21(documentEntry);
-        assertSlot(Vocabulary.SLOT_NAME_URI, ebXML.getSlot(), "1|" + uri);
-    }
-
-    @Test
-    public void testToEbXML21WithShortestUriUsingTwoSlots() {
-        String uri = veryLongUriString.substring(0, 127);
-        documentEntry.setUri(uri);
-        ExtrinsicObjectType ebXML = transformer.toEbXML21(documentEntry);
-        String uriPart1 = uri.substring(0, 126);
-        String uriPart2 = uri.substring(126, 127);
-        assertSlot(Vocabulary.SLOT_NAME_URI, ebXML.getSlot(), "1|" + uriPart1, "2|" + uriPart2);
-    }
-    
-    
     
     
     @Test
@@ -251,111 +216,4 @@ public class DocumentEntryTransformerTest {
         DocumentEntry result = transformer.fromEbXML21(new ExtrinsicObjectType());
         assertEquals(new DocumentEntry(), result);
     }
-    
-    @Test
-    public void testFromEbXML21WithUriInMultipleSlots() {
-        documentEntry.setUri(veryLongUriString.substring(0, 1000));
-        
-        ExtrinsicObjectType ebXML = transformer.toEbXML21(documentEntry);
-        DocumentEntry result = transformer.fromEbXML21(ebXML);
-
-        assertNotNull(result);
-        assertEquals(documentEntry, result);
-    }
-    
-    
-    
-    private void assertExternalIdentifier(String scheme, List<ExternalIdentifierType> identifiers, 
-            String expectedValue, String name) {
-        int found = 0; 
-        for (ExternalIdentifierType identifier : identifiers) {
-            if (identifier.getIdentificationScheme().equals(scheme)) {
-                ++found;
-                assertEquals(expectedValue, identifier.getValue());
-                LocalizedStringType localized = getSingleLocalized(identifier.getName());
-                assertEquals(name, localized.getValue());
-                assertEquals("UTF-8", localized.getCharset());
-                assertEquals("en-us", localized.getLang());
-            }
-        }
-        
-        assertEquals(1, found);
-    }
-
-    private ClassificationType assertClassification(String scheme, List<ClassificationType> classifications, int occurrence, Object classifiedObject, String nodeRepresentation, int localizedIdx) {
-        int found = 0;        
-        ClassificationType foundClassification = null;
-        for (ClassificationType classification : classifications) {
-            if (classification.getClassificationScheme().equals(scheme)) {
-                if (occurrence == 0) {
-                    assertSame(classifiedObject, classification.getClassifiedObject());
-                    assertEquals(nodeRepresentation, classification.getNodeRepresentation());
-                    if (localizedIdx > 0) {
-                        assertLocalized(localizedIdx, getSingleLocalized(classification.getName()));
-                    }
-                    foundClassification = classification;
-                    ++found;
-                }
-                --occurrence;
-            }
-        }
-        
-        assertEquals(1, found);
-        return foundClassification;
-    }
-
-    private void assertSlot(String slotName, List<SlotType1> slots, String... expectedSlotValues) {
-        int found = 0;
-        for (SlotType1 slot : slots) {
-            if (slot.getName().equals(slotName)) {
-                List<String> values = slot.getValueList().getValue();
-                for (String expectedValue : expectedSlotValues) {
-                    assertTrue("Not found: " + expectedValue + ", was: " + values, values.contains(expectedValue));
-                }
-                assertEquals(values.size(), expectedSlotValues.length);
-                ++found;
-            }
-        }
-        
-        assertEquals(1, found);
-    }
-
-    private LocalizedStringType getSingleLocalized(InternationalStringType value) {
-        List<LocalizedStringType> localizedList = value.getLocalizedString();
-        assertEquals(1, localizedList.size());
-        return localizedList.get(0);
-    }
-    
-    private void assertLocalized(int idx, LocalizedStringType localized) {
-        assertEquals("charset " + idx, localized.getCharset());
-        assertEquals("lang " + idx, localized.getLang());
-        assertEquals("value " + idx, localized.getValue());
-    }
-
-    private Person createPerson(int idx) {
-        Person person = new Person();
-        person.setId(createIdentifiable(idx));
-        person.setName(createName(idx));
-        return person;
-    }
-
-    private Name createName(int idx) {
-        return new Name("familyName " + idx, "givenName " + idx, "prefix " + idx, "second " + idx, "suffix " + idx);
-    }
-
-    private Identifiable createIdentifiable(int idx) {
-        return new Identifiable("id " + idx, createAssigningAuthority(idx));
-    }
-
-    private AssigningAuthority createAssigningAuthority(int idx) {
-        return new AssigningAuthority("namespace " + idx, "uni " + idx, "uniType " + idx);
-    }
-
-    private Code createCode(int idx) {
-        return new Code("code " + idx, createLocalized(idx), "scheme " + idx);
-    }
-
-    private LocalizedString createLocalized(int idx) {
-        return new LocalizedString("value " + idx, "lang " + idx, "charset " + idx);
-    }    
 }

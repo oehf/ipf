@@ -35,7 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.Registr
 public interface Iti16PortType {
 
     /**
-     * Provides and registers a set of documents according to the ITI-16 specification.
+     * Queries the registry according to the ITI-16 specification.
      * @param body
      *          the request.
      * @return the response.

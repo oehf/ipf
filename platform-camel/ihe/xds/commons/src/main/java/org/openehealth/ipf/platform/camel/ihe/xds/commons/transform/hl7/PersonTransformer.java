@@ -104,6 +104,12 @@ public class PersonTransformer {
         }
         
         Name name = person.getName();
+        if (name == null) {
+            return HL7.render(HL7Delimiter.COMPONENT,
+                    HL7.escape(idAsString), 
+                    null, null, null, null, null, null, null,
+                    assigningAuthority);
+        }
         
         return HL7.render(HL7Delimiter.COMPONENT,
                 HL7.escape(idAsString), 
