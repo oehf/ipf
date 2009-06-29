@@ -25,7 +25,7 @@
             <outputDirectory>/</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>/src/main/resources</directory>
+            <directory>${basedir}/src/main/resources</directory>
             <includes>
                 <include>CHANGES.txt</include>
                 <include>RELEASE.txt</include>
@@ -47,14 +47,14 @@
             <outputDirectory>doc/manuals</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>/src/main/resources/exported/html</directory>
+            <directory>${basedir}/src/main/resources/exported/html</directory>
             <includes>
                 <include>**/*</include>
             </includes>
             <outputDirectory>doc/manuals</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>/src/main/resources/exported/ipm</directory>
+            <directory>${basedir}/src/main/resources/exported/ipm</directory>
             <includes>
                 <include>**/*</include>
             </includes>
