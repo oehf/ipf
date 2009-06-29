@@ -44,6 +44,28 @@ custodianOrganization(schema:'infrastructureRoot', factory:'POCDMT000040_CUSTODI
     }
 }
 
+
+device(schema:'infrastructureRoot', factory:'POCDMT000040_DEVICE') {
+    properties {
+        code(schema:'ce')
+        manufacturerModelName(schema:'sc')
+        softwareName(schema:'sc')
+    }
+}
+
+
+entity(schema:'infrastructureRoot', factory:'POCDMT000040_ENTITY') {
+    properties {
+        code(schema:'ce')
+        desc(schema:'ed')
+    }
+    collections {
+  		ids(collection:'id') {
+  			id(schema:'ii')
+  		}
+    }
+}
+
 labeledDrug(schema:'infrastructureRoot', factory:'POCDMT000040_LABELED_DRUG') {
     properties {
        code(schema:'ce')

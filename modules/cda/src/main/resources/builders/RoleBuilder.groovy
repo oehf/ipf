@@ -39,7 +39,7 @@ assignedAuthor(schema:'role', factory:'POCDMT000040_ASSIGNED_AUTHOR') {
         assignedAuthoringDevice(schema:'authoringDevice')
         assignedPerson(schema:'person')
         representedOrganization(schema:'organization')
-        code(schema:'ce')
+        code(schema:'roleCode')
     }
 }
 
@@ -53,7 +53,7 @@ assignedEntity(schema:'role', factory:'POCDMT000040_ASSIGNED_ENTITY') {
     properties {
         assignedPerson(schema:'person')
         representedOrganization(schema:'organization')
-        code(schema:'ce')
+        code(schema:'roleCode')
     }
 }
 
@@ -61,7 +61,7 @@ associatedEntity(schema:'infrastructureRoot', factory:'POCDMT000040_ASSOCIATED_E
     properties {
         scopingOrganization(schema:'organization')
         associatedPerson(schema:'person')
-        code(schema:'ce')
+        code(schema:'roleCode')
         classCode(factory:'ROLE_CLASS_ASSOCIATIVE') // TODO
     }
 }
@@ -72,37 +72,18 @@ birthPlace(schema:'infrastructureRoot', factory:'POCDMT000040_BIRTH_PLACE') {
 	}
 }
 
-device(schema:'infrastructureRoot', factory:'POCDMT000040_DEVICE') {
-    properties {
-        code(schema:'ce')
-        manufacturerModelName(schema:'sc')
-        softwareName(schema:'sc')
-    }
-}
-
-entity(schema:'infrastructureRoot', factory:'POCDMT000040_ENTITY') {
-    properties {
-        code(schema:'ce')
-        desc(schema:'ed')
-    }
-    collections {
-  		ids(collection:'id') {
-  			id(schema:'ii')
-  		}
-    }
-}
 
 //TODO check that either person or organization is set
 guardian(schema:'role', factory:'POCDMT000040_GUARDIAN') {
 	properties {
-		code(schema:'ce')
+		code(schema:'roleCode')
 		guardianPerson(schema:'person')
 		guardianOrganization(schema:'organization')
 	}
 }
 healthCareFacility(schema:'infrastructureRoot', factory:'POCDMT000040_HEALTH_CARE_FACILITY') {
     properties {
-		code(schema:'ce')
+		code(schema:'roleCode')
 		location(schema:'place')
 		serviceProviderOrganization(schema:'organization')
     }
@@ -145,7 +126,7 @@ intendedRecipient(schema:'role', factory:'POCDMT000040_INTENDED_RECIPIENT') {
 
 organizationPartOf(schema:'infrastructureRoot', factory:'POCDMT000040_ORGANIZATION_PART_OF') {
     properties {
-        code(schema:'ce')
+        code(schema:'roleCode')
         effectiveTime(schema:'ivlts')
         statusCode(schema:'cs')
         wholeOrganization(schema:'organization')
@@ -159,7 +140,7 @@ organizationPartOf(schema:'infrastructureRoot', factory:'POCDMT000040_ORGANIZATI
 
 participantRole(schema:'role',  factory: 'POCDMT000040_PARTICIPANT_ROLE') {
 	properties {
-	    code(schema:'ce')
+	    code(schema:'roleCode')
 	    playingEntity(schema:'playingEntity')
 	    playingDevice(schema:'device')
 	    scopingEntity(schema:'entity')
@@ -177,7 +158,7 @@ relatedEntity(schema:'infrastructureRoot', factory:'POCDMT000040_RELATED_ENTITY'
     properties {
         relatedPerson(schema:'person')
         effectiveTime(schema:'ivlts')
-        code(schema:'ce')
+        code(schema:'roleCode')
         classCode(factory:'ROLE_CLASS_MUTUAL_RELATIONSHIP_MEMBER1')
     }
     collections {
@@ -193,7 +174,7 @@ relatedEntity(schema:'infrastructureRoot', factory:'POCDMT000040_RELATED_ENTITY'
 
 relatedSubject(schema:'infrastructureRoot', factory:'POCDMT000040_RELATED_SUBJECT') {
     properties {
-        code(schema:'ce')
+        code(schema:'roleCode')
         subject(schema:'subjectPerson')
         classCode(factory:'XDOCUMENT_SUBJECT')
     }

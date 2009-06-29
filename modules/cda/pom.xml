@@ -21,15 +21,17 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-core</artifactId>
             <version>${pom.version}</version>
-        </dependency>
+        </dependency>  
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
+         
        <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovytools-builder</artifactId>
         </dependency>
+        
        <dependency>
             <groupId>org.openhealthtools.ihe</groupId>
             <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>

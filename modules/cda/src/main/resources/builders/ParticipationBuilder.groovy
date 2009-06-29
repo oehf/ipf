@@ -37,7 +37,16 @@ clinicalStatementParticipant(schema:'infrastructureRoot', factory:'POCDMT000040_
         awarenessCode(schema:'ce')
         time(schema:'ivlts')
         participantRole(schema:'participantRole')
-        typeCode(factory:'TODO')
+        typeCode(factory:'PARTICIPATION_TYPE')
+    }
+}
+
+clinicalStatementPerformer(schema:'infrastructureRoot', factory:'POCDMT000040_PERFORMER2') {
+    properties {
+        modeCode(schema:'ce')
+        assignedEntity(schema:'assignedEntity')
+        time(schema:'ivlts')
+        typeCode(factory:'PARTICIPATION_PHYSICAL_PERFORMER')
     }
 }
 
@@ -112,7 +121,7 @@ performer(schema:'infrastructureRoot', factory:'POCDMT000040_PERFORMER1') {
         assignedEntity(schema:'assignedEntity')
         functionCode(schema:'ce')
         time(schema:'ivlts')
-        typeCode(factory:'TODO')   // TODO
+        typeCode(factory:'XSERVICE_EVENT_PERFORMER')
     }
 }
 

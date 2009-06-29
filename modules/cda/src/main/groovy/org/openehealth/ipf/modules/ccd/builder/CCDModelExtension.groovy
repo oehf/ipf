@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.ccd.builder
 import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.openhealthtools.ihe.common.cdar2.*
 import java.lang.Boolean
-
+import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryimport org.openhealthtools.ihe.common.cdar2.CDAR2Factoryimport org.openhealthtools.ihe.common.cdar2.XServiceEventPerformerimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Actimport org.openhealthtools.ihe.common.cdar2.POCDMT000040EntryRelationshipimport org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationshipimport org.openhealthtools.ihe.common.cdar2.XParticipationAuthorPerformerimport org.openhealthtools.ihe.common.cdar2.ParticipationAncillaryimport org.openhealthtools.ihe.common.cdar2.ParticipationIndirectTargetimport org.openhealthtools.ihe.common.cdar2.ParticipationPhysicalPerformer
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage
 import org.eclipse.emf.ecore.util.FeatureMap
 import org.eclipse.emf.ecore.util.FeatureMapUtil
@@ -48,7 +48,7 @@ public class CCDModelExtension{
              delegate.component.add(component)
           }
           getPurpose  { ->
-             delegate.component.find { it.section.code == '48764-5' } .section
+             delegate.component.find { it.section.code.code == '48764-5' } ?.section
           }
        }
 
@@ -84,7 +84,7 @@ public class CCDModelExtension{
           }
 
           getPurposeActivity { ->
-             delegate.entry.act.find { it.code == '23745001'}.entryRelationship[0]
+             delegate.entry.act.find { it.code.code == '23745001'}?.entryRelationship[0]
           }
        }
 
@@ -100,7 +100,7 @@ public class CCDModelExtension{
               delegate.component.add(component)
            }
            getPayers  { ->
-              delegate.component.find { it.section.code == '48768-6' } .section
+              delegate.component.find { it.section.code.code == '48768-6' } ?.section
            }           
         }
 
@@ -111,14 +111,31 @@ public class CCDModelExtension{
              entry.act = act
           }
           getCoverageActivity  { ->
-            delegate.entry.find { it.act.code == '48768-6' } .act
+            delegate.entry.find { it.act.code.code == '48768-6' } ?.act
           }
         }
 
         POCDMT000040Act.metaClass {
+            
+          setPolicyActivity {POCDMT000040Act act ->
+             POCDMT000040EntryRelationship rel = builder.build {
+                 entryRelationship {
+                     typeCode('COMP')
+                 }                 
+             }
+             delegate.entryRelationship.add(rel)
+             rel.act = act
+          }
+          
+          getPolicyActivity { ->
+              delegate.entryRelationship.find { 
+                  it.typeCode == XActRelationshipEntryRelationship.COMP_LITERAL 
+              }?.act
+          } 
+          
           setPayer  {POCDMT000040AssignedEntity assignedEntity ->
-             POCDMT000040Performer1 payer = builder.build {
-                performer {
+             POCDMT000040Performer2 payer = builder.build {
+                clinicalStatementPerformer {
                    typeCode('PRF')
                 }
              }
@@ -127,12 +144,14 @@ public class CCDModelExtension{
           }
 
           getPayer  { ->
-            delegate.performer.find { it.typeCode == 'PRF' } .assignedEntity
+            delegate.performer.find {
+                it.typeCode == ParticipationPhysicalPerformer.PRF_LITERAL  
+            }?.assignedEntity
           }
 
           setCoveredParty  {POCDMT000040ParticipantRole participantRole ->
              POCDMT000040Participant2 coveredParty = builder.build {
-                participant {
+                clinicalStatementParticipant {
                    typeCode('COV')
                 }
              }
@@ -141,12 +160,14 @@ public class CCDModelExtension{
           }
 
           getCoveredParty  { ->
-            delegate.participant.find { it.typeCode == 'COV' } .participantRole
+            delegate.participant.find {
+                it.typeCode == ParticipationIndirectTarget.COV_LITERAL 
+            }?.participantRole
           }
 
           setSubscriber  {POCDMT000040ParticipantRole participantRole ->
              POCDMT000040Participant2 subscriber = builder.build {
-                participant {
+                 clinicalStatementParticipant {
                    typeCode('HLD')
                 }
              }
@@ -155,7 +176,40 @@ public class CCDModelExtension{
           }
            
           getSubscriber  { ->
-            delegate.participant.find { it.typeCode == 'HLD' } .participantRole
+            delegate.participant.find {
+                it.typeCode == ParticipationIndirectTarget.HLD_LITERAL 
+            }?.participantRole
+          }
+          
+          setAuthorizationActivity { POCDMT000040Act act1 ->
+          POCDMT000040EntryRelationship rel1 = CDAR2Factory.eINSTANCE.createPOCDMT000040EntryRelationship()
+          rel1.typeCode = XActRelationshipEntryRelationship.REFR_LITERAL
+     /*         POCDMT000040EntryRelationship rel1 = builder.build {
+                  // CONF-66: The value for “Act / entryRelationship / @typeCode” 
+                  // in a policy activity SHALL be “REFR” 2.16.840.1.113883.5.1002 
+                  // ActRelationshipType STATIC.
+                  entryRelationship {
+                      typeCode('REFR')
+                  }
+              }
+     */         delegate.entryRelationship.add(rel1)
+              rel1.act = act1
+          }
+          
+          getAuthorizationActivity { ->
+              delegate.entryRelationship.find {
+                  it.typeCode == XActRelationshipEntryRelationship.REFR_LITERAL
+              }?.act
+          }
+          
+          setPromise { POCDMT000040EntryRelationship rel ->
+              delegate.entryRelationship.add(rel)              
+          }
+          
+          getPromise { ->
+              delegate.entryRelationship.find {
+                  it.typeCode == XActRelationshipEntryRelationship.SUBJ_LITERAL 
+              }        
           }
        }
     

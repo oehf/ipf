@@ -40,7 +40,7 @@ ccd_purpose(schema:'section') {
        // CONF-18: The purpose section SHALL contain Section / title.
        // CONF-19: (NOT ENFORCED) Section / title SHOULD be valued with a
        // case-insensitive language-insensitive text string containing “purpose”.
-        title(def: {
+        title(check: { it.text =~ /(?i)purpose/ }, def: {
 	        getMetaBuilder().build {
 	            st('Summary purpose')
 	        }

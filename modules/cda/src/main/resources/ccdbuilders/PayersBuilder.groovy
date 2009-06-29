@@ -16,7 +16,7 @@
 package ccdbuilders
 
 import groovytools.builder.*
-import org.openhealthtools.ihe.common.cdar2.*
+import org.openhealthtools.ihe.common.cdar2.*import org.openhealthtools.ihe.common.cdar2.XDocumentActMoodimport org.openhealthtools.ihe.common.cdar2.XActClassDocumentEntryActimport org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationship
 //Chapter 3.1 "Payers"
 
 // CONF-30: CCD SHOULD contain exactly one and SHALL NOT contain more than one Payers section
@@ -31,18 +31,22 @@ ccd_payers(schema:'section') {
         //          “Payment sources” 2.16.840.1.113883.6.1 LOINC STATIC.
        code(schema:'loincCode', def: {
            getMetaBuilder().build {
-               loincCode(code:'48764-6',
+               loincCode(code:'48768-6',
 		       displayName:'Payment sources')
            }
        })
        // CONF-33: The purpose section SHALL contain Section / title.
-       // CONF-34: (NOT ENFORCED) Section / title SHOULD be valued with a
-       // case-insensitive language-insensitive text string containing “purpose”.
-       title(def: {
+       // CONF-34: Section / title SHOULD be valued with a
+       // case-insensitive language-insensitive text string containing "insurance"
+       // or "payers".
+       title(check: { it.text =~ /(?i)payers|insurance/ }, def: {
            getMetaBuilder().build {
                st('Payers')
            }
        })
+       // Note: the CCD model extension adds coverageActivities to the 
+       // entryRelationships collection, so you can specify more than one
+       // coverageActivity without overwriting.
        coverageActivity(schema:'ccd_coverageActivity')
     }
 	collections {
@@ -62,9 +66,11 @@ ccd_coverageActivity(schema:'act') {
        //          “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.
        // CONF-37:	The value for “Act / @moodCode” in a coverage activity SHALL be
        //          “DEF” 2.16.840.1.113883.5.1001 ActMood STATIC.
+       classCode(factory:'XACT_CLASS_DOCUMENT_ENTRY_ACT',
+               def: XActClassDocumentEntryAct.ACT_LITERAL)
        moodCode(factory:'XDOCUMENT_ACT_MOOD',
                def: XDocumentActMood.DEF_LITERAL)
-               // CONF-39:	A coverage activity SHALL contain exactly one Act / statusCode.
+       // CONF-39:	A coverage activity SHALL contain exactly one Act / statusCode.
        // CONF-40:	The value for “Act / statusCode” in a coverage activity SHALL be
        //          “completed”  2.16.840.1.113883.5.14 ActStatus STATIC.
        statusCode(schema:'cs', def: {
@@ -77,7 +83,7 @@ ccd_coverageActivity(schema:'act') {
        //          “48768-6” “Payment sources” 2.16.840.1.113883.6.1 LOINC STATIC.
        code(schema:'loincCode', def: {
            getMetaBuilder().build {
-               loincCode(code:'48764-6',
+               loincCode(code:'48768-6',
 		                displayName:'Payment sources')
            }
        })
@@ -97,13 +103,17 @@ ccd_coverageActivity(schema:'act') {
 }
 
 // CONF-48:	A policy activity (templateId 2.16.840.1.113883.10.20.1.26)
-//       SHALL be represented with Act.   
+// SHALL be represented with Act.   
 ccd_policyActivity(schema:'act') {
-    // CONF-49:	The value for “Act / @classCode” in a policy activity SHALL be
-    //          “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.
-    // CONF-50:	The value for “Act / @moodCode” in a policy activity SHALL be
-    //          “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.
-    properties {
+   properties {
+        // CONF-49:	The value for “Act / @classCode” in a policy activity SHALL be
+        //          “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.
+        // CONF-50:	The value for “Act / @moodCode” in a policy activity SHALL be
+        //          “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.
+        classCode(factory:'XACT_CLASS_DOCUMENT_ENTRY_ACT',
+                def: XActClassDocumentEntryAct.ACT_LITERAL)
+        moodCode(factory:'XDOCUMENT_ACT_MOOD',
+                def: XDocumentActMood.EVN_LITERAL)
         // CONF-52:	A policy activity SHALL contain exactly one Act / statusCode.
         // CONF-53:	The value for “Act / statusCode” in a policy activity SHALL
         //          be “completed”  2.16.840.1.113883.5.14 ActStatus STATIC.
@@ -112,6 +122,7 @@ ccd_policyActivity(schema:'act') {
                cs('completed')
            }
        })
+       code(schema:'actCode')
 
        // CONF-56:	A policy activity SHALL contain exactly one Act / performer
        //          [@typeCode=”PRF”], representing the payer.
@@ -122,6 +133,14 @@ ccd_policyActivity(schema:'act') {
        // CONF-63:	A policy activity MAY contain exactly one Act / participant
        // [@typeCode=”HLD”], representing the subscriber.
        subscriber(schema:'participantRole')
+       // CONF-66: The value for “Act / entryRelationship / @typeCode” in a policy activity SHALL 
+       // be “REFR” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.
+       // CONF-67: The target of a policy activity with Act / entryRelationship / 
+       // @typeCode=”REFR” SHALL be an authorization activity 
+       // (templateId 2.16.840.1.113883.10.20.1.19) or an Act, 
+       // with Act [@classCode = “ACT”] and Act [@moodCode = “DEF”], 
+       // representing a description of the coverage plan.
+       authorizationActivity(schema:'ccd_authorizationActivity')
     }
     collections {
         // CONF-51:	A policy activity SHALL contain at least one Act / id,
@@ -141,16 +160,49 @@ ccd_policyActivity(schema:'act') {
 
 ccd_payerAssignedEntity(schema:'assignedEntity') {
     collections {
+        // CONF-57: A payer in a policy activity SHALL contain one or more 
+        // performer / assignedEntity / id, to represent the payer identification number. 
+        // For pharamacy benefit programs this can be valued using the RxBIN and RxPCN numbers 
+        // assigned by ANSI and NCPDP respectively. 
+        // When a nationally recognized payer identification number is available, 
+        // it would be placed here.        
 		ids(collection:'id', min:1) {
 			id(schema:'ii')
 		}
     }
 }
 
-//TODO rename, continue   
-ccd_authorizationActivity(schema:'entryRelationship') {
+
+// CONF-69: An authorization activity (templateId 2.16.840.1.113883.10.20.1.19) 
+// SHALL be represented with Act.
+ccd_authorizationActivity(schema:'act') {
+    properties {
+        // CONF-70: The value for “Act / @classCode” in an authorization activity SHALL be 
+        // “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.        
+        classCode(factory:'XACT_CLASS_DOCUMENT_ENTRY_ACT',
+                def: XActClassDocumentEntryAct.ACT_LITERAL)
+        // CONF-72: The value for “Act / @moodCode” in an authorization activity SHALL 
+        // be “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.                
+        moodCode(factory:'XDOCUMENT_ACT_MOOD',
+                def: XDocumentActMood.EVN_LITERAL)
+        promise(schema:'ccd_promise')
+    }
+    collections {
+        // CONF-71: An authorization activity SHALL contain at least one Act / id.
+        ids(collection:'id', min:1) {
+            id(schema:'ii')
+        }    
+ 	   templateIds(collection:'templateId', def: {
+ 		     getMetaBuilder().buildList {
+ 	           ii(root:'2.16.840.1.113883.10.20.1.19')
+ 	         }
+ 		   })
+    }
+}
+
+ccd_promise(schema:'entryRelationship') {
     properties {
         typeCode(factory:'XACT_RELATIONSHIP_ENTRY_RELATIONSHIP',
-              def: XActRelationshipEntryRelationship.REFR_LITERAL)
+                def:XActRelationshipEntryRelationship.SUBJ_LITERAL)
     }
 }

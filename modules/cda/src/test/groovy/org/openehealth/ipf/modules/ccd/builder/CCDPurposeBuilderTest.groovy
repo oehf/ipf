@@ -15,26 +15,17 @@
  */
 package org.openehealth.ipf.modules.ccd.builder
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.eclipse.emf.ecore.xmi.XMLResource
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
 
 /**
  * @author Christian Ohr
  */
-public class CCDBuilderTest extends GroovyTestCase{
+public class CCDPurposeBuilderTest extends AbstractCCDBuilderTest {
 
-     def builder
 
-     static {
-         ExpandoMetaClass.enableGlobally()
-     }
-
-     public void setUp() throws Exception {
-         builder = new CCDBuilder(getClass().getClassLoader())
-     }
-         
-     public void testBuildCCDMetaData() {
-
+     private POCDMT000040ClinicalDocument buildCCD() {
          def document = builder.build {
              continuityOfCareDocument {
                 id('db734647-fc99-424c-a864-7e3cda82e703')
@@ -107,7 +98,7 @@ public class CCDBuilderTest extends GroovyTestCase{
                    structuredBody {
                        // CCD Purpose (Chapter 2.8)
                        purpose {
-                          text('Transfer of Care')
+                          text('Transfer of Care!')
                           purposeActivity {
                               act {
                                  code(code:'308292007',
@@ -122,11 +113,28 @@ public class CCDBuilderTest extends GroovyTestCase{
             }
 
          }
-         def renderer = new CDAR2Renderer()
+         
+         document
+     }
+     
+     public void testDummy() {         
+     }
+     
+     public void xtestRenderCCDPurpose() {
+         POCDMT000040ClinicalDocument document = buildCCD()
          def opts = [:]
          opts[XMLResource.OPTION_DECLARE_XML] = true
          opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-         // println(renderer.render(document, opts))
+         println(renderer.render(document, opts))
+     }
+     
+     public void xtestExtractCCDPurpose() {
+         POCDMT000040ClinicalDocument document = buildCCD()
+         def body = document.component.structuredBody
+         assert POCDMT000040Section.class.isAssignableFrom(body.purpose.class)
+         assert body.purpose.title.text == 'Summary purpose'
+         assert body.purpose.text.text == 'Transfer of Care!'
+         assert body.purpose.purposeActivity.act.code.code == '308292007'
      }
     
 }

@@ -20,7 +20,13 @@ import groovytools.builder.*
 /*
  * These builder definitions preset code attributes
  */
- 
+
+actCode(schema:'ce') {
+     properties {
+         codeSystem(def:'2.16.840.1.113883.5.4')
+     }
+}
+
 administrativeGenderCode(schema:'ce') {
 	properties { 
 		codeSystem(def:'2.16.840.1.113883.5.1')                     
@@ -37,6 +43,12 @@ loincCode(schema:'ce') {
     properties {
         codeSystem(def:'2.16.840.1.113883.6.1') 
         codeSystemName(def:'LOINC')
+    }
+}
+
+roleCode(schema:'ce') {
+    properties {
+        codeSystem(def:'2.16.840.1.113883.5.111')
     }
 }
 

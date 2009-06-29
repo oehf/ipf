@@ -239,7 +239,7 @@ clinicalStatement(schema:'infrastructureRoot') {
 	        informant(schema:'informant')
 	    }
 		performers(collection:'performer') {
-		    performer(schema:'performer')
+		    performer(schema:'clinicalStatementPerformer')
 		}
 		specimens(collection:'specimen') {
 		    specimen(schema:'specimen')
