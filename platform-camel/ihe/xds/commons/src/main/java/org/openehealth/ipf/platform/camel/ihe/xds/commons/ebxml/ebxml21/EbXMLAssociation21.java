@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
 
@@ -39,8 +40,12 @@ public class EbXMLAssociation21 implements EbXMLAssociation {
         this.objectLibrary = objectLibrary;
     }
 
-    public static EbXMLAssociation create(ObjectLibrary objectLibrary) {        
+    static EbXMLAssociation create(ObjectLibrary objectLibrary) {        
         return new EbXMLAssociation21(rimFactory.createAssociationType1(), objectLibrary);
+    }
+
+    static EbXMLAssociation create(AssociationType1 association, ObjectLibrary objectLibrary) {        
+        return new EbXMLAssociation21(association, objectLibrary);
     }
 
     @Override
@@ -71,5 +76,9 @@ public class EbXMLAssociation21 implements EbXMLAssociation {
     @Override
     public void setAssociationType(String associationType) {
         association.setAssociationType(associationType);
+    }
+
+    AssociationType1 getInternal() {
+        return association;
     }
 }

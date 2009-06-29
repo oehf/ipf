@@ -35,4 +35,8 @@ public class RegistryPackage30 extends RegistryEntry30<RegistryPackageType> impl
         registryPackageType.setId(id);
         return new RegistryPackage30(registryPackageType);
     }
+
+    static RegistryPackage30 create(RegistryPackageType registryPackage) {
+        return new RegistryPackage30(registryPackage);
+    }
 }

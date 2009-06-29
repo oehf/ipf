@@ -23,6 +23,8 @@ import java.util.List;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.IdentifiableTransformer;
@@ -59,8 +61,8 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
     }
     
     @Override
-    protected ExtrinsicObject createEbXMLInstance(String id) {
-        return factory.createExtrinsic(id);
+    protected ExtrinsicObject createEbXMLInstance(String id, ObjectLibrary objectLibrary) {
+        return factory.createExtrinsic(id, objectLibrary);
     }
     
     @Override
@@ -75,8 +77,8 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
     }
 
     @Override
-    protected void addAttributes(DocumentEntry docEntry, ExtrinsicObject extrinsic) {
-        super.addAttributes(docEntry, extrinsic);
+    protected void addAttributes(DocumentEntry docEntry, ExtrinsicObject extrinsic, ObjectLibrary objectLibrary) {
+        super.addAttributes(docEntry, extrinsic, objectLibrary);
         extrinsic.setMimeType(docEntry.getMimeType());
         extrinsic.setObjectType(DOC_ENTRY_CLASS_NODE);
     }
@@ -106,8 +108,8 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
     }
     
     @Override
-    protected void addSlots(DocumentEntry docEntry, ExtrinsicObject extrinsic) {
-        super.addSlots(docEntry, extrinsic);
+    protected void addSlots(DocumentEntry docEntry, ExtrinsicObject extrinsic, ObjectLibrary objectLibrary) {
+        super.addSlots(docEntry, extrinsic, objectLibrary);
         
         extrinsic.addSlot(SLOT_NAME_CREATION_TIME, docEntry.getCreationTime());        
         extrinsic.addSlot(SLOT_NAME_HASH, docEntry.getHash());
@@ -132,9 +134,10 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
     @Override
     protected void addClassificationsFromEbXML(DocumentEntry docEntry, ExtrinsicObject extrinsic) {
         super.addClassificationsFromEbXML(docEntry, extrinsic);
-        
-        Classification author = extrinsic.getSingleClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME);
-        docEntry.setAuthor(authorTransformer.fromEbXML(author));
+
+        for (Classification author : extrinsic.getClassifications(DOC_ENTRY_AUTHOR_CLASS_SCHEME)) {
+            docEntry.getAuthors().add(authorTransformer.fromEbXML(author));
+        }
         
         Classification classCode = extrinsic.getSingleClassification(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
         docEntry.setClassCode(codeTransformer.fromEbXML(classCode));
@@ -163,34 +166,36 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
     }
 
     @Override
-    protected void addClassifications(DocumentEntry docEntry, ExtrinsicObject extrinsic) {
-        super.addClassifications(docEntry, extrinsic);
+    protected void addClassifications(DocumentEntry docEntry, ExtrinsicObject extrinsic, ObjectLibrary objectLibrary) {
+        super.addClassifications(docEntry, extrinsic, objectLibrary);
         
-        Classification author = authorTransformer.toEbXML(docEntry.getAuthor());
-        extrinsic.addClassification(author, DOC_ENTRY_AUTHOR_CLASS_SCHEME);
+        for (Author author : docEntry.getAuthors()) {
+            Classification authorClasification = authorTransformer.toEbXML(author, objectLibrary);
+            extrinsic.addClassification(authorClasification, DOC_ENTRY_AUTHOR_CLASS_SCHEME);
+        }
         
-        Classification classCode = codeTransformer.toEbXML(docEntry.getClassCode());
+        Classification classCode = codeTransformer.toEbXML(docEntry.getClassCode(), objectLibrary);
         extrinsic.addClassification(classCode, DOC_ENTRY_CLASS_CODE_CLASS_SCHEME);
         
-        Classification formatCode = codeTransformer.toEbXML(docEntry.getFormatCode());
+        Classification formatCode = codeTransformer.toEbXML(docEntry.getFormatCode(), objectLibrary);
         extrinsic.addClassification(formatCode, DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME);
 
-        Classification healthcareFacility = codeTransformer.toEbXML(docEntry.getHealthcareFacilityTypeCode());
+        Classification healthcareFacility = codeTransformer.toEbXML(docEntry.getHealthcareFacilityTypeCode(), objectLibrary);
         extrinsic.addClassification(healthcareFacility, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME);
         
-        Classification practiceSetting = codeTransformer.toEbXML(docEntry.getPracticeSettingCode());
+        Classification practiceSetting = codeTransformer.toEbXML(docEntry.getPracticeSettingCode(), objectLibrary);
         extrinsic.addClassification(practiceSetting, DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME);
         
-        Classification typeCode = codeTransformer.toEbXML(docEntry.getTypeCode());
+        Classification typeCode = codeTransformer.toEbXML(docEntry.getTypeCode(), objectLibrary);
         extrinsic.addClassification(typeCode, DOC_ENTRY_TYPE_CODE_CLASS_SCHEME);
         
         for (Code confCode : docEntry.getConfidentialityCodes()) {
-            Classification conf = codeTransformer.toEbXML(confCode);
+            Classification conf = codeTransformer.toEbXML(confCode, objectLibrary);
             extrinsic.addClassification(conf, DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME);
         }
         
         for (Code eventCode : docEntry.getEventCodeList()) {
-            Classification event = codeTransformer.toEbXML(eventCode);
+            Classification event = codeTransformer.toEbXML(eventCode, objectLibrary);
             extrinsic.addClassification(event, DOC_ENTRY_EVENT_CODE_CLASS_SCHEME);
         }
     }

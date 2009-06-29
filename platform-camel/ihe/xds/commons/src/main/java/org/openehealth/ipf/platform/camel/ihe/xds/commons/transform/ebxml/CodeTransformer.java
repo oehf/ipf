@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 
 /**
@@ -40,14 +41,16 @@ public class CodeTransformer {
      * Transforms a {@link Code} instance to a {@link Classification}. 
      * @param code
      *          the code instance to transform.
+     * @param objectLibrary 
+     *          the object library.
      * @return the {@link Classification}.
      */
-    public Classification toEbXML(Code code) {
+    public Classification toEbXML(Code code, ObjectLibrary objectLibrary) {
         if (code == null) {
             return null;
         }
         
-        Classification classification = factory.createClassification();
+        Classification classification = factory.createClassification(objectLibrary);
         classification.setNodeRepresentation(code.getCode());
         classification.setName(code.getDisplayName());
         

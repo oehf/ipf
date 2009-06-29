@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
 import java.util.Collection;
 import java.util.Collections;

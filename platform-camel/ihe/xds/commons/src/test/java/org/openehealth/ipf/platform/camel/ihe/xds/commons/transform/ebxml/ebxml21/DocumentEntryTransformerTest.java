@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.ebxml21;
 
-import org.junit.Before;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.DocumentEntryTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.DocumentEntryTransformerTestBase;
@@ -25,8 +25,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Docume
  * @author Jens Riemschneider
  */
 public class DocumentEntryTransformerTest extends DocumentEntryTransformerTestBase {
-    @Before
-    public void setUp() {
-        transformer = new DocumentEntryTransformer(new EbXMLFactory21());
+    @Override
+    public EbXMLFactory createFactory() {
+        return new EbXMLFactory21();
     }
 }

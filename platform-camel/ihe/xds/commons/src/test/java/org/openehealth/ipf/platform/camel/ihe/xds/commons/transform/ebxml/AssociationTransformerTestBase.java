@@ -20,6 +20,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AssociationTransformer;
@@ -28,12 +30,19 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Associ
  * Tests for {@link AssociationTransformer}.
  * @author Jens Riemschneider.
  */
-public abstract class AssociationTransformerTestBase {
-    protected AssociationTransformer transformer;
+public abstract class AssociationTransformerTestBase implements FactoryCreator {
+    private AssociationTransformer transformer;
+    private ObjectLibrary objectLibrary;
     private Association association;
     
     @Before
     public final void baseSetUp() {
+        EbXMLFactory factory = createFactory();
+        transformer = new AssociationTransformer(factory);
+        objectLibrary = factory.createObjectLibrary();
+        objectLibrary.put("id1", new Object());
+        objectLibrary.put("id2", new Object());
+        
         association = new Association();
         association.setAssociationType(AssociationType.REPLACE);
         association.setSourceUUID("id1");
@@ -42,7 +51,7 @@ public abstract class AssociationTransformerTestBase {
     
     @Test
     public void testToEbXML() {
-        EbXMLAssociation ebXML = transformer.toEbXML(association);
+        EbXMLAssociation ebXML = transformer.toEbXML(association, objectLibrary);
         assertNotNull(ebXML);
         
         assertEquals("RPLC", ebXML.getAssociationType());
@@ -52,12 +61,12 @@ public abstract class AssociationTransformerTestBase {
     
     @Test
     public void testToEbXMLNull() {
-        assertNull(transformer.toEbXML(null));
+        assertNull(transformer.toEbXML(null, objectLibrary));
     }
 
     @Test
     public void testToEbXMLEmpty() {
-        EbXMLAssociation ebXML = transformer.toEbXML(new Association());
+        EbXMLAssociation ebXML = transformer.toEbXML(new Association(), objectLibrary);
         
         assertNotNull(ebXML);
 
@@ -69,7 +78,7 @@ public abstract class AssociationTransformerTestBase {
     
     @Test
     public void testFromEbXML() {
-        EbXMLAssociation ebXML = transformer.toEbXML(association);
+        EbXMLAssociation ebXML = transformer.toEbXML(association, objectLibrary);
         assertEquals(association, transformer.fromEbXML(ebXML));
     }
     
@@ -80,7 +89,7 @@ public abstract class AssociationTransformerTestBase {
 
     @Test
     public void testFromEbXMLEmpty() {
-        EbXMLAssociation ebXML = transformer.toEbXML(new Association());
+        EbXMLAssociation ebXML = transformer.toEbXML(new Association(), objectLibrary);
         assertEquals(new Association(), transformer.fromEbXML(ebXML));
     }
 }

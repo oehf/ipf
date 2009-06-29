@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
@@ -51,8 +52,8 @@ public class FolderTransformer extends XDSMetaClassTransformer<RegistryPackage, 
     }
     
     @Override
-    protected RegistryPackage createEbXMLInstance(String id) {
-        return factory.createRegistryPackage(id);
+    protected RegistryPackage createEbXMLInstance(String id, ObjectLibrary objectLibrary) {
+        return factory.createRegistryPackage(id, objectLibrary);
     }
     
     @Override
@@ -68,8 +69,8 @@ public class FolderTransformer extends XDSMetaClassTransformer<RegistryPackage, 
     }
 
     @Override
-    protected void addSlots(Folder folder, RegistryPackage regPackage) {
-        super.addSlots(folder, regPackage);
+    protected void addSlots(Folder folder, RegistryPackage regPackage, ObjectLibrary objectLibrary) {
+        super.addSlots(folder, regPackage, objectLibrary);
         
         regPackage.addSlot(SLOT_NAME_LAST_UPDATE_TIME, folder.getLastUpdateTime());        
     }
@@ -85,11 +86,11 @@ public class FolderTransformer extends XDSMetaClassTransformer<RegistryPackage, 
     }
 
     @Override
-    protected void addClassifications(Folder folder, RegistryPackage regPackage) {
-        super.addClassifications(folder, regPackage);
+    protected void addClassifications(Folder folder, RegistryPackage regPackage, ObjectLibrary objectLibrary) {
+        super.addClassifications(folder, regPackage, objectLibrary);
         
         for (Code codeListElem : folder.getCodeList()) {
-            Classification code = codeTransformer.toEbXML(codeListElem);
+            Classification code = codeTransformer.toEbXML(codeListElem, objectLibrary);
             regPackage.addClassification(code, FOLDER_CODE_LIST_CLASS_SCHEME);
         }
     }

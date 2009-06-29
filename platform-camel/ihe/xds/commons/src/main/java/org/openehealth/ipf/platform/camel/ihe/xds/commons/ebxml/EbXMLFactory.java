@@ -15,13 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
+
 /**
  * Serves as a factory for ebXML objects.
  * @author Jens Riemschneider
  */
 public interface EbXMLFactory {
-    Classification createClassification();
-    ExtrinsicObject createExtrinsic(String id);
-    RegistryPackage createRegistryPackage(String id);
-    EbXMLAssociation createAssociation();
+    ObjectLibrary createObjectLibrary();
+
+    Classification createClassification(ObjectLibrary objectLibrary);
+    ExtrinsicObject createExtrinsic(String id, ObjectLibrary objectLibrary);
+    RegistryPackage createRegistryPackage(String id, ObjectLibrary objectLibrary);
+    EbXMLAssociation createAssociation(ObjectLibrary objectLibrary);
+    SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary);
 }

@@ -17,33 +17,24 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
-
 /**
- * Encapsulation of the ebXML classes for {@code ClassificationType}. 
+ * Encapsulation of the ebXML classes for {@code SubmitObjectsRequest}. 
  * <p>
  * This class contains convenience methods and provides a version independent
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface Classification {
-    List<Slot> getSlots();    
-    void addSlot(String slotName, String... slotValues);
-    List<String> getSlotValues(String slotName);
-    
-    String getClassifiedObject();
-    void setClassifiedObject(String classifiedObject);
-    
-    String getClassificationScheme();
-    void setClassificationScheme(String classificationScheme);
-    
-    String getNodeRepresentation();
-    void setNodeRepresentation(String nodeRepresentation);
-    
-    LocalizedString getName();
-    InternationalString getNameAsInternationalString();
-    void setName(LocalizedString name);
+public interface SubmitObjectsRequest {
+    void addExtrinsicObject(ExtrinsicObject extrinsic);
+    List<ExtrinsicObject> getExtrinsicObjects(String objectType);
+    List<ExtrinsicObject> getExtrinsicObjects();
 
-    void setClassificationNode(String classificationNode);
-    String getClassificationNode();
+    void addRegistryPackage(RegistryPackage ebXML);
+    List<RegistryPackage> getRegistryPackages(String classificationNode);
+    List<RegistryPackage> getRegistryPackages();
+
+    void addAssociation(EbXMLAssociation ebXML);
+    List<EbXMLAssociation> getAssociations();
+
+    void addClassification(Classification classification);
 }

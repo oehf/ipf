@@ -23,7 +23,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
@@ -39,20 +41,34 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Docume
  * Tests for {@link DocumentEntryTransformer}.
  * @author Jens Riemschneider
  */
-public abstract class DocumentEntryTransformerTestBase {
-    protected DocumentEntryTransformer transformer;
+public abstract class DocumentEntryTransformerTestBase implements FactoryCreator {
+    private DocumentEntryTransformer transformer;
     private DocumentEntry documentEntry;
+    private ObjectLibrary objectLibrary;
     
     @Before
     public final void baseSetUp() {
-        Author author = new Author();
-        author.setAuthorPerson(createPerson(1));
-        author.getAuthorInstitution().add("inst1");
-        author.getAuthorInstitution().add("inst2");
-        author.getAuthorRole().add("role1");
-        author.getAuthorRole().add("role2");
-        author.getAuthorSpecialty().add("spec1");
-        author.getAuthorSpecialty().add("spec2");
+        EbXMLFactory factory = createFactory();
+        transformer = new DocumentEntryTransformer(factory);
+        objectLibrary = factory.createObjectLibrary();
+        
+        Author author1 = new Author();
+        author1.setAuthorPerson(createPerson(1));
+        author1.getAuthorInstitution().add("inst1");
+        author1.getAuthorInstitution().add("inst2");
+        author1.getAuthorRole().add("role1");
+        author1.getAuthorRole().add("role2");
+        author1.getAuthorSpecialty().add("spec1");
+        author1.getAuthorSpecialty().add("spec2");
+        
+        Author author2 = new Author();
+        author2.setAuthorPerson(createPerson(30));
+        author2.getAuthorInstitution().add("inst3");
+        author2.getAuthorInstitution().add("inst4");
+        author2.getAuthorRole().add("role3");
+        author2.getAuthorRole().add("role4");
+        author2.getAuthorSpecialty().add("spec3");
+        author2.getAuthorSpecialty().add("spec4");
         
         Address address = new Address();
         address.setCity("city");
@@ -72,7 +88,8 @@ public abstract class DocumentEntryTransformerTestBase {
         sourcePatientInfo.getIds().add(createIdentifiable(6));
 
         documentEntry = new DocumentEntry();
-        documentEntry.setAuthor(author);
+        documentEntry.getAuthors().add(author1);
+        documentEntry.getAuthors().add(author2);
         documentEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         documentEntry.setClassCode(createCode(1));
         documentEntry.setComments(createLocal(10));
@@ -103,7 +120,7 @@ public abstract class DocumentEntryTransformerTestBase {
 
     @Test
     public void testToEbXML() {
-        ExtrinsicObject ebXML = transformer.toEbXML(documentEntry);        
+        ExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);        
         assertNotNull(ebXML);
         
         assertEquals("Approved", ebXML.getStatus());
@@ -138,6 +155,12 @@ public abstract class DocumentEntryTransformerTestBase {
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
         
+        classification = assertClassification(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
+        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^^^namespace 30&uni 30&uniType 30");
+        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
+        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
+        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");
+        
         classification = assertClassification(Vocabulary.DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, ebXML, 0, "code 1", 1);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 1");
         
@@ -171,23 +194,23 @@ public abstract class DocumentEntryTransformerTestBase {
         assertExternalIdentifier(Vocabulary.DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, ebXML, 
                 "uniqueId", Vocabulary.DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
         
-        assertEquals(10, ebXML.getClassifications().size());
+        assertEquals(11, ebXML.getClassifications().size());
         assertEquals(10, ebXML.getSlots().size());
         assertEquals(2, ebXML.getExternalIdentifiers().size());
     }
 
     @Test
     public void testToEbXMLNull() {
-        assertNull(transformer.toEbXML(null));
+        assertNull(transformer.toEbXML(null, objectLibrary));
     }
    
     @Test
     public void testToEbXMLEmpty() {
-        ExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry());        
+        ExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
-        assertNull(ebXML.getMimeType());
+        assertEquals("application/octet-stream", ebXML.getMimeType());
         assertNull(ebXML.getId());
         
         assertNull(ebXML.getDescription());        
@@ -202,7 +225,7 @@ public abstract class DocumentEntryTransformerTestBase {
     
     @Test
     public void testFromEbXML() {
-        ExtrinsicObject ebXML = transformer.toEbXML(documentEntry);
+        ExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);
         DocumentEntry result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
@@ -216,8 +239,11 @@ public abstract class DocumentEntryTransformerTestBase {
     
     @Test
     public void testFromEbXMLEmpty() {
-        ExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry());        
+        ExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
         DocumentEntry result = transformer.fromEbXML(ebXML);
-        assertEquals(new DocumentEntry(), result);
+        
+        DocumentEntry expected = new DocumentEntry();
+        expected.setMimeType("application/octet-stream");
+        assertEquals(expected, result);
     }
 }

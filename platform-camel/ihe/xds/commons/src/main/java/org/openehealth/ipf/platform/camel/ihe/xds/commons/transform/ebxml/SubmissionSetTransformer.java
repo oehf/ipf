@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Recipient;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
@@ -54,8 +55,8 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<RegistryPa
     }
 
     @Override
-    protected RegistryPackage createEbXMLInstance(String id) {
-        return factory.createRegistryPackage(id);
+    protected RegistryPackage createEbXMLInstance(String id, ObjectLibrary objectLibrary) {
+        return factory.createRegistryPackage(id, objectLibrary);
     }
 
     @Override
@@ -64,8 +65,8 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<RegistryPa
     }
     
     @Override
-    protected void addSlots(SubmissionSet metaData, RegistryPackage ebXML) {
-        super.addSlots(metaData, ebXML);
+    protected void addSlots(SubmissionSet metaData, RegistryPackage ebXML, ObjectLibrary objectLibrary) {
+        super.addSlots(metaData, ebXML, objectLibrary);
         
         List<String> slotValues = new ArrayList<String>();
         for (Recipient recipient : metaData.getIntendedRecipients()) {
@@ -100,19 +101,19 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<RegistryPa
     }
     
     @Override
-    protected void addClassifications(SubmissionSet set, RegistryPackage regPackage) {
-        super.addClassifications(set, regPackage);
+    protected void addClassifications(SubmissionSet set, RegistryPackage regPackage, ObjectLibrary objectLibrary) {
+        super.addClassifications(set, regPackage, objectLibrary);
         
-        Classification author = authorTransformer.toEbXML(set.getAuthor());
+        Classification author = authorTransformer.toEbXML(set.getAuthor(), objectLibrary);
         regPackage.addClassification(author, SUBMISSION_SET_AUTHOR_CLASS_SCHEME);
 
-        Classification contentType = codeTransformer.toEbXML(set.getContentTypeCode());
+        Classification contentType = codeTransformer.toEbXML(set.getContentTypeCode(), objectLibrary);
         regPackage.addClassification(contentType, SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
     }
     
     @Override
-    protected void addExternalIdentifiers(SubmissionSet metaData, RegistryPackage ebXML) {
-        super.addExternalIdentifiers(metaData, ebXML);
+    protected void addExternalIdentifiers(SubmissionSet metaData, RegistryPackage ebXML, ObjectLibrary objectLibrary) {
+        super.addExternalIdentifiers(metaData, ebXML, objectLibrary);
 
         ebXML.addExternalIdentifier(metaData.getSourceID(), 
                 SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID,

@@ -19,6 +19,7 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 
@@ -38,14 +39,17 @@ public class AssociationTransformer {
      * Transforms the given association to its ebXML representation.
      * @param association
      *          the association to transform.
+     * @param objectLibrary 
+     *          the object library.
      * @return the ebXML representation.
      */
-    public EbXMLAssociation toEbXML(Association association) {
+    public EbXMLAssociation toEbXML(Association association, ObjectLibrary objectLibrary) {
+        notNull(objectLibrary, "objectLibrary cannot be null");
         if (association == null) {
             return null;
         }
         
-        EbXMLAssociation result = factory.createAssociation();
+        EbXMLAssociation result = factory.createAssociation(objectLibrary);
         AssociationType type = association.getAssociationType();
         result.setAssociationType(type != null ? type.getRepresentation() : null);
         result.setSource(association.getSourceUUID());

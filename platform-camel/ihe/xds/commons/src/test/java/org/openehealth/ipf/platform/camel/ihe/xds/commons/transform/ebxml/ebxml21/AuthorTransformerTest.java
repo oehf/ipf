@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.ebxml21;
 
-import org.junit.Before;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AuthorTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AuthorTransformerTestBase;
@@ -25,8 +25,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Author
  * @author Jens Riemschneider
  */
 public class AuthorTransformerTest extends AuthorTransformerTestBase {
-    @Before
-    public void setUp() {
-        transformer = new AuthorTransformer(new EbXMLFactory21());
+    @Override
+    public EbXMLFactory createFactory() {
+        return new EbXMLFactory21();
     }
 }

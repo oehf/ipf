@@ -36,8 +36,12 @@ public class EbXMLAssociation30 implements EbXMLAssociation {
         this.association = association;
     }
 
-    public static EbXMLAssociation create() {
+    static EbXMLAssociation create() {
         return new EbXMLAssociation30(rimFactory.createAssociationType1());
+    }
+
+    static EbXMLAssociation create(AssociationType1 association) {
+        return new EbXMLAssociation30(association);
     }
 
     @Override
@@ -68,5 +72,9 @@ public class EbXMLAssociation30 implements EbXMLAssociation {
     @Override
     public void setAssociationType(String associationType) {
         association.setAssociationType(associationType);
+    }
+
+    AssociationType1 getInternal() {
+        return association;
     }
 }

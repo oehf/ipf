@@ -24,6 +24,7 @@ import java.util.List;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExternalIdentifier;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.InternationalString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;

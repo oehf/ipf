@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
@@ -34,5 +35,9 @@ public class RegistryPackage21 extends RegistryEntry21<RegistryPackageType> impl
         RegistryPackageType registryPackageType = rimFactory.createRegistryPackageType();
         registryPackageType.setId(id);
         return new RegistryPackage21(registryPackageType, objectLibrary);
+    }
+
+    static RegistryPackage21 create(RegistryPackageType registryPackage, ObjectLibrary objectLibrary) {
+        return new RegistryPackage21(registryPackage, objectLibrary);
     }
 }

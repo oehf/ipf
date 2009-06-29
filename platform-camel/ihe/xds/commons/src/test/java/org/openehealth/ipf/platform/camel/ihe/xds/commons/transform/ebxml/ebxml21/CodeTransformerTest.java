@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.ebxml21;
 
-import org.junit.Before;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.CodeTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.CodeTransformerTestBase;
@@ -25,8 +25,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.CodeTr
  * @author Jens Riemschneider
  */
 public class CodeTransformerTest extends CodeTransformerTestBase {
-    @Before
-    public void setUp() {
-        transformer = new CodeTransformer(new EbXMLFactory21());
+    @Override
+    public EbXMLFactory createFactory() {
+        return new EbXMLFactory21();
     }
 }

@@ -21,6 +21,8 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
@@ -33,12 +35,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Folder
  * Tests for {@link FolderTransformer}.
  * @author Jens Riemschneider
  */
-public abstract class FolderTransformerTestBase {
-    protected FolderTransformer transformer;
+public abstract class FolderTransformerTestBase implements FactoryCreator {
+    private FolderTransformer transformer;
     private Folder folder;
+    private ObjectLibrary objectLibrary;
     
     @Before
     public final void baseSetUp() {
+        EbXMLFactory factory = createFactory();
+        transformer = new FolderTransformer(factory);
+        objectLibrary = factory.createObjectLibrary();
+        
         folder = new Folder();
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.setComments(createLocal(10));
@@ -53,7 +60,7 @@ public abstract class FolderTransformerTestBase {
 
     @Test
     public void testToEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(folder);        
+        RegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);        
         assertNotNull(ebXML);
         
         assertEquals("Approved", ebXML.getStatus());
@@ -85,12 +92,12 @@ public abstract class FolderTransformerTestBase {
 
     @Test
     public void testToEbXMLNull() {
-        assertNull(transformer.toEbXML(null));
+        assertNull(transformer.toEbXML(null, objectLibrary));
     }
    
     @Test
     public void testToEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new Folder());        
+        RegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);        
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -109,7 +116,7 @@ public abstract class FolderTransformerTestBase {
     
     @Test
     public void testFromEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(folder);
+        RegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);
         Folder result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
@@ -123,7 +130,7 @@ public abstract class FolderTransformerTestBase {
     
     @Test
     public void testFromEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new Folder());
+        RegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);
         Folder result = transformer.fromEbXML(ebXML);
         assertEquals(new Folder(), result);
     }

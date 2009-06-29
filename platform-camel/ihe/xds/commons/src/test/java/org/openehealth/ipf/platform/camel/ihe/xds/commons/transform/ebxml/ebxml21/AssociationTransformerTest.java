@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.ebxml21;
 
-import org.junit.Before;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AssociationTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AssociationTransformerTestBase;
@@ -25,11 +25,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Associ
  * @author Jens Riemschneider.
  */
 public class AssociationTransformerTest extends AssociationTransformerTestBase {
-    @Before
-    public final void setUp() {
-        EbXMLFactory21 factory = new EbXMLFactory21();
-        factory.getObjectLibrary().put("id1", new Object());
-        factory.getObjectLibrary().put("id2", new Object());
-        transformer = new AssociationTransformer(factory);
+    @Override
+    public EbXMLFactory createFactory() {
+        return new EbXMLFactory21();
     }
 }

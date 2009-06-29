@@ -27,7 +27,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author Jens Riemschneider
  */
 public class DocumentEntry extends XDSMetaClass {
-    private Author author;
+    private final List<Author> authors = new ArrayList<Author>();
     private Code classCode;
     private final List<Code> confidentialityCodes = new ArrayList<Code>();
     private String creationTime;
@@ -48,19 +48,8 @@ public class DocumentEntry extends XDSMetaClass {
     private String uri;
     private String repositoryUniqueId; 
 
-    /**
-     * @return the author information. Can be <code>null</code>.
-     */
-    public Author getAuthor() {
-        return author;
-    }
-    
-    /**
-     * @param author
-     *          the author information. Can be <code>null</code>.
-     */
-    public void setAuthor(Author author) {
-        this.author = author;
+    public List<Author> getAuthors() {
+        return authors;
     }
     
     public Code getClassCode() {
@@ -211,7 +200,7 @@ public class DocumentEntry extends XDSMetaClass {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((author == null) ? 0 : author.hashCode());
+        result = prime * result + ((authors == null) ? 0 : authors.hashCode());
         result = prime * result + ((classCode == null) ? 0 : classCode.hashCode());
         result = prime * result
                 + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
@@ -249,10 +238,10 @@ public class DocumentEntry extends XDSMetaClass {
         if (getClass() != obj.getClass())
             return false;
         DocumentEntry other = (DocumentEntry) obj;
-        if (author == null) {
-            if (other.author != null)
+        if (authors == null) {
+            if (other.authors != null)
                 return false;
-        } else if (!author.equals(other.author))
+        } else if (!authors.equals(other.authors))
             return false;
         if (classCode == null) {
             if (other.classCode != null)

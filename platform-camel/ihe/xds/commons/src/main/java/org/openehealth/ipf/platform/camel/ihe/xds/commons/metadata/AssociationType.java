@@ -25,7 +25,7 @@ public enum AssociationType {
     REPLACE("RPLC"),
     TRANSFORM("XFRM"),
     TRANSFORM_AND_REPLACE("XFRM_RPLC"),
-    HAS_MEMBER(null),
+    HAS_MEMBER("HasMember"),
     SIGNS("signs");
 
     private final String representation;

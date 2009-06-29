@@ -135,4 +135,14 @@ public class Classification30 implements Classification {
     public void setName(LocalizedString name) {
         classification.setName(InternationalString30.create(name).getInternal());
     }
+    
+    @Override
+    public void setClassificationNode(String classificationNode) {
+        classification.setClassificationNode(classificationNode);
+    }
+    
+    @Override
+    public String getClassificationNode() {
+        return classification.getClassificationNode();
+    }
 }

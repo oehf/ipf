@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.ebxml30;
 
-import org.junit.Before;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.SubmissionSetTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.SubmissionSetTransformerTestBase;
 
@@ -25,8 +25,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Submis
  * @author Jens Riemschneider
  */
 public class SubmissionSetTransformerTest extends SubmissionSetTransformerTestBase {
-    @Before
-    public void setUp() {
-        transformer = new SubmissionSetTransformer(new EbXMLFactory21());
-    }
+    @Override
+    public EbXMLFactory createFactory() {
+        return new EbXMLFactory30();
+    }    
 }

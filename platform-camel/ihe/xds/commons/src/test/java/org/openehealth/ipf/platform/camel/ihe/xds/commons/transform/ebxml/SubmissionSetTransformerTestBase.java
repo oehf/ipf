@@ -21,6 +21,8 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
@@ -37,12 +39,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Submis
  * Tests for {@link SubmissionSetTransformer}.
  * @author Jens Riemschneider
  */
-public abstract class SubmissionSetTransformerTestBase {
-    protected SubmissionSetTransformer transformer;
+public abstract class SubmissionSetTransformerTestBase implements FactoryCreator {
+    private SubmissionSetTransformer transformer;
     private SubmissionSet set;
+    private ObjectLibrary objectLibrary;
     
     @Before
     public final void baseSetUp() {
+        EbXMLFactory factory = createFactory();
+        transformer = new SubmissionSetTransformer(factory);
+        objectLibrary = factory.createObjectLibrary();
+        
         Author author = new Author();
         author.setAuthorPerson(createPerson(1));
         author.getAuthorInstitution().add("inst1");
@@ -87,7 +94,7 @@ public abstract class SubmissionSetTransformerTestBase {
 
     @Test
     public void testToEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(set);        
+        RegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);        
         assertNotNull(ebXML);
         
         assertEquals("Approved", ebXML.getStatus());
@@ -131,12 +138,12 @@ public abstract class SubmissionSetTransformerTestBase {
 
     @Test
     public void testToEbXMLNull() {
-        assertNull(transformer.toEbXML(null));
+        assertNull(transformer.toEbXML(null, objectLibrary));
     }
    
     @Test
     public void testToEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new SubmissionSet());        
+        RegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);        
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -154,7 +161,7 @@ public abstract class SubmissionSetTransformerTestBase {
     
     @Test
     public void testFromEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(set);
+        RegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);
         SubmissionSet result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
@@ -168,7 +175,7 @@ public abstract class SubmissionSetTransformerTestBase {
     
     @Test
     public void testFromEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new SubmissionSet());
+        RegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);
         SubmissionSet result = transformer.fromEbXML(ebXML);
         assertEquals(new SubmissionSet(), result);
     }

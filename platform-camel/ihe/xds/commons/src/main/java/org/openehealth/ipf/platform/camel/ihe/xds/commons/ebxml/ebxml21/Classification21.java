@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
@@ -137,5 +138,15 @@ public class Classification21 implements Classification {
     @Override
     public void setName(LocalizedString name) {
         classification.setName(InternationalString21.create(name).getInternal());
+    }
+    
+    @Override
+    public void setClassificationNode(String classificationNode) {
+        classification.setClassificationNode(objectLibrary.getById(classificationNode));
+    }
+    
+    @Override
+    public String getClassificationNode() {
+        return objectLibrary.getByObj(classification.getClassificationNode());
     }
 }

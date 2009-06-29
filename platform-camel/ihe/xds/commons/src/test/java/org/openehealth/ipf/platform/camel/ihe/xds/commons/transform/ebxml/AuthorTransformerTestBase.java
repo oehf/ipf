@@ -23,6 +23,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
@@ -36,12 +38,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Author
  * Tests for {@link AuthorTransformer}.
  * @author Jens Riemschneider
  */
-public abstract class AuthorTransformerTestBase {
-    protected AuthorTransformer transformer;
+public abstract class AuthorTransformerTestBase implements FactoryCreator {
+    private AuthorTransformer transformer;
+    private ObjectLibrary objectLibrary;
     private Author author;
     
     @Before
     public final void baseSetUp() {
+        EbXMLFactory factory = createFactory();
+        transformer = new AuthorTransformer(factory);
+        objectLibrary = factory.createObjectLibrary();
+        
         Name name = new Name();
         name.setFamilyName("Adams");
 
@@ -72,7 +79,7 @@ public abstract class AuthorTransformerTestBase {
     
     @Test
     public void testToEbXML() {
-        Classification ebXML = transformer.toEbXML(author);        
+        Classification ebXML = transformer.toEbXML(author, objectLibrary);        
         assertNotNull(ebXML);
         assertNull(ebXML.getClassificationScheme());        
         assertEquals("", ebXML.getNodeRepresentation());
@@ -95,12 +102,12 @@ public abstract class AuthorTransformerTestBase {
     
     @Test
     public void testToEbXMLWithNull() {
-        assertNull(transformer.toEbXML(null));
+        assertNull(transformer.toEbXML(null, objectLibrary));
     }
     
     @Test
     public void testToEbXMLWithEmptyAuthor() {
-        Classification ebXML = transformer.toEbXML(new Author());
+        Classification ebXML = transformer.toEbXML(new Author(), objectLibrary);
         assertNotNull(ebXML);
         assertNull(ebXML.getClassificationScheme());        
         assertEquals("", ebXML.getNodeRepresentation());
@@ -112,7 +119,7 @@ public abstract class AuthorTransformerTestBase {
     
     @Test
     public void testFromEbXML() {
-        Classification classification = transformer.toEbXML(author);
+        Classification classification = transformer.toEbXML(author, objectLibrary);
         assertEquals(author, transformer.fromEbXML(classification));
     }
     
@@ -123,7 +130,7 @@ public abstract class AuthorTransformerTestBase {
     
     @Test
     public void testFromEbXMLEmpty() {
-        Classification ebXML = transformer.toEbXML(new Author());
+        Classification ebXML = transformer.toEbXML(new Author(), objectLibrary);
         assertEquals(new Author(), transformer.fromEbXML(ebXML));
     }
 }

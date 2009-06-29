@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
 
@@ -43,7 +44,9 @@ public class ExtrinsicObject21 extends RegistryEntry21<ExtrinsicObjectType> impl
 
     @Override
     public String getMimeType() {
-        return getInternal().getMimeType();
+        // For compatibility with ebXML 3.0, we return a default if the mime type wasn't set. 
+        String mimeType = getInternal().getMimeType();
+        return mimeType != null ? mimeType : "application/octet-stream";
     }
 
     @Override

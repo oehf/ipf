@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ExtrinsicObject30;
@@ -49,6 +50,7 @@ public class Ebrs30MarshalingTest {
     private SubmitObjectsRequest request;
     private ExtrinsicObject docEntry;
     private EbXMLFactory30 factory;
+    private ObjectLibrary objectLibrary;
 
     private static final QName EXTRINSIC_OBJECT_QNAME = 
         new QName("urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0", "ExtrinsicObject", "rim"); 
@@ -56,13 +58,14 @@ public class Ebrs30MarshalingTest {
     @Before
     public void setUp() {
         factory = new EbXMLFactory30();
+        objectLibrary = factory.createObjectLibrary();
         
         request = new SubmitObjectsRequest();
         RegistryObjectListType objListElement = new RegistryObjectListType();
         request.setRegistryObjectList(objListElement);
         List<JAXBElement<? extends IdentifiableType>> objList = objListElement.getIdentifiable();
 
-        docEntry = factory.createExtrinsic("Document01");
+        docEntry = factory.createExtrinsic("Document01", objectLibrary);
         docEntry.setObjectType(Vocabulary.DOC_ENTRY_CLASS_NODE);
         objList.add(getJaxbElement(EXTRINSIC_OBJECT_QNAME, ((ExtrinsicObject30)docEntry).getInternal()));
     }
@@ -74,7 +77,7 @@ public class Ebrs30MarshalingTest {
     
     @Test
     public void testCreateClassification() throws Exception {        
-        Classification classification = factory.createClassification();
+        Classification classification = factory.createClassification(objectLibrary);
         classification.setClassifiedObject(docEntry.getId());
         docEntry.addClassification(classification, Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         
@@ -102,7 +105,7 @@ public class Ebrs30MarshalingTest {
 
     @Test
     public void testAddSlot() throws Exception {
-        Classification classification = factory.createClassification();
+        Classification classification = factory.createClassification(objectLibrary);
         docEntry.addClassification(classification, Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         
         classification.addSlot("something", "a", "b", "c");

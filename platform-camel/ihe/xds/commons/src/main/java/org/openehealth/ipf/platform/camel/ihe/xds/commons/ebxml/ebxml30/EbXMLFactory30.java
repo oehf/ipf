@@ -19,7 +19,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
 
 /**
  * Factory for EbXML 2.1 objects.
@@ -27,22 +29,32 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
  */
 public class EbXMLFactory30 implements EbXMLFactory {
     @Override
-    public Classification createClassification() {
+    public Classification createClassification(ObjectLibrary objectLibrary) {
         return Classification30.create();
     }
 
     @Override
-    public ExtrinsicObject createExtrinsic(String id) {
+    public ExtrinsicObject createExtrinsic(String id, ObjectLibrary objectLibrary) {
         return ExtrinsicObject30.create(id);
     }
 
     @Override
-    public RegistryPackage createRegistryPackage(String id) {
+    public RegistryPackage createRegistryPackage(String id, ObjectLibrary objectLibrary) {
         return RegistryPackage30.create(id);
     }
 
     @Override
-    public EbXMLAssociation createAssociation() {
+    public EbXMLAssociation createAssociation(ObjectLibrary objectLibrary) {
         return EbXMLAssociation30.create();
+    }
+    
+    @Override
+    public SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary) {
+        return SubmitObjectsRequest30.create();
+    }
+
+    @Override
+    public ObjectLibrary createObjectLibrary() {
+        return new ObjectLibrary();
     }
 }

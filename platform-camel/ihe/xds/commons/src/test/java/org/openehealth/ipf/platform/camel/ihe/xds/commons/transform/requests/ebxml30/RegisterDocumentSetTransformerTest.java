@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.ebxml30;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.ebxml30;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.DocumentEntryTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.DocumentEntryTransformerTestBase;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.RegisterDocumentSetTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.RegisterDocumentSetTransformerTestBase;
 
 /**
- * Tests for {@link DocumentEntryTransformer}.
+ * Tests for {@link RegisterDocumentSetTransformer}.
  * @author Jens Riemschneider
  */
-public class DocumentEntryTransformerTest extends DocumentEntryTransformerTestBase {
+public class RegisterDocumentSetTransformerTest extends RegisterDocumentSetTransformerTestBase {
+
     @Override
     public EbXMLFactory createFactory() {
         return new EbXMLFactory30();
-    }    
+    }
 }

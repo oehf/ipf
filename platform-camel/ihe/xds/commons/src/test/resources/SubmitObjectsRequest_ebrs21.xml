@@ -60,8 +60,7 @@
                     <Value>PID-5|Doe^John^^^</Value>
                     <Value>PID-7|19560527</Value>
                     <Value>PID-8|M</Value>
-                    <Value>PID-11|100 Main St^^Metropolis^Il^44130^USA
-                    </Value>
+                    <Value>PID-11|100 Main St^^Metropolis^Il^44130^USA</Value>
                 </ValueList>
             </Slot>
             <rim:Slot name="size">
@@ -71,15 +70,12 @@
             </rim:Slot>
             <rim:Slot name="hash">
                 <rim:ValueList>
-                    <rim:Value>fbe2351a6a8ceba1a04ba3f832a12a53befeb04c
-                    </rim:Value>
+                    <rim:Value>fbe2351a6a8ceba1a04ba3f832a12a53befeb04c</rim:Value>
                 </rim:ValueList>
             </rim:Slot>
             <rim:Slot name="URI">
                 <rim:ValueList>
-                    <rim:Value>
-                        http://129.6.58.92:9080/Repository/129.6.58.92.3492.txt
-                    </rim:Value>
+                    <rim:Value>http://129.6.58.92:9080/Repository/129.6.58.92.3492.txt</rim:Value>
                 </rim:ValueList>
             </rim:Slot>
             <rim:Slot name="repositoryUniqueId">
@@ -94,8 +90,7 @@
                 </rim:Name>
                 <rim:Slot name="codingScheme">
                     <rim:ValueList>
-                        <rim:Value>Connect-a-thon eventCodeList
-                        </rim:Value>
+                        <rim:Value>Connect-a-thon eventCodeList</rim:Value>
                     </rim:ValueList>
                 </rim:Slot>
             </rim:Classification>
@@ -127,8 +122,7 @@
                 classifiedObject="Document01" nodeRepresentation="">
                 <Slot name="authorPerson">
                     <ValueList>
-                        <Value>^Dopplemeyer^Sherry^^^
-                        </Value>
+                        <Value>^Dopplemeyer^Sherry^^^</Value>
                     </ValueList>
                 </Slot>
                 <Slot name="authorInstitution">
@@ -166,8 +160,7 @@
                 </Name>
                 <Slot name="codingScheme">
                     <ValueList>
-                        <Value>Connect-a-thon confidentialityCodes
-                        </Value>
+                        <Value>Connect-a-thon confidentialityCodes</Value>
                     </ValueList>
                 </Slot>
             </Classification>
@@ -189,8 +182,7 @@
                 </Name>
                 <Slot name="codingScheme">
                     <ValueList>
-                        <Value>Connect-a-thon
-                            healthcareFacilityTypeCodes</Value>
+                        <Value>Connect-a-thon healthcareFacilityTypeCodes</Value>
                     </ValueList>
                 </Slot>
             </Classification>
@@ -201,8 +193,7 @@
                 </Name>
                 <Slot name="codingScheme">
                     <ValueList>
-                        <Value>Connect-a-thon practiceSettingCodes
-                        </Value>
+                        <Value>Connect-a-thon practiceSettingCodes</Value>
                     </ValueList>
                 </Slot>
             </Classification>
@@ -266,8 +257,7 @@
                 classifiedObject="SubmissionSet01" nodeRepresentation="">
                 <Slot name="authorPerson">
                     <ValueList>
-                        <Value>^Dopplemeyer^Sherry^^^
-                        </Value>
+                        <Value>^Dopplemeyer^Sherry^^^</Value>
                     </ValueList>
                 </Slot>
                 <Slot name="authorInstitution">
@@ -294,8 +284,7 @@
                 </Name>
                 <Slot name="codingScheme">
                     <ValueList>
-                        <Value>Connect-a-thon contentTypeCodes
-                        </Value>
+                        <Value>Connect-a-thon contentTypeCodes</Value>
                     </ValueList>
                 </Slot>
             </Classification>
