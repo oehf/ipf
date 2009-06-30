@@ -29,5 +29,7 @@ public interface EbXMLFactory {
     EbXMLAssociation createAssociation(ObjectLibrary objectLibrary);
     SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary);
     ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library);
+    RetrieveDocumentSetRequest createRetrieveDocumentSetRequest();
     RegistryResponse createRegistryResponse();
+    RetrieveDocumentSetResponse createRetrieveDocumentSetResponse();    
 }

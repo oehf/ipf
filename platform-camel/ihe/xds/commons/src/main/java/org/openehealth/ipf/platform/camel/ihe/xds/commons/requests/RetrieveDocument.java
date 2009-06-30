@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Contains a request for a single document.
  * @author Jens Riemschneider
@@ -46,5 +49,48 @@ public class RetrieveDocument {
 
     public void setHomeCommunityID(String homeCommunityID) {
         this.homeCommunityID = homeCommunityID;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((documentUniqueID == null) ? 0 : documentUniqueID.hashCode());
+        result = prime * result + ((homeCommunityID == null) ? 0 : homeCommunityID.hashCode());
+        result = prime * result
+                + ((repositoryUniqueID == null) ? 0 : repositoryUniqueID.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RetrieveDocument other = (RetrieveDocument) obj;
+        if (documentUniqueID == null) {
+            if (other.documentUniqueID != null)
+                return false;
+        } else if (!documentUniqueID.equals(other.documentUniqueID))
+            return false;
+        if (homeCommunityID == null) {
+            if (other.homeCommunityID != null)
+                return false;
+        } else if (!homeCommunityID.equals(other.homeCommunityID))
+            return false;
+        if (repositoryUniqueID == null) {
+            if (other.repositoryUniqueID != null)
+                return false;
+        } else if (!repositoryUniqueID.equals(other.repositoryUniqueID))
+            return false;
+        return true;
+    }
+    
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

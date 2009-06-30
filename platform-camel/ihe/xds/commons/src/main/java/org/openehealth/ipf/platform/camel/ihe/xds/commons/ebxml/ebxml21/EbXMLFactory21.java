@@ -23,6 +23,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
@@ -110,5 +112,15 @@ public class EbXMLFactory21 implements EbXMLFactory {
     @Override
     public RegistryResponse createRegistryResponse() {
         return RegistryResponse21.create();
+    }
+
+    @Override
+    public RetrieveDocumentSetRequest createRetrieveDocumentSetRequest() {
+        throw new UnsupportedOperationException("Only supported for ebXML 3.0");
+    }
+
+    @Override
+    public RetrieveDocumentSetResponse createRetrieveDocumentSetResponse() {
+        throw new UnsupportedOperationException("Only supported for ebXML 3.0");
     }
 }
