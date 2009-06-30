@@ -54,7 +54,7 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         EbXMLAssociation ebXML = transformer.toEbXML(association, objectLibrary);
         assertNotNull(ebXML);
         
-        assertEquals("RPLC", ebXML.getAssociationType());
+        assertEquals(AssociationType.REPLACE, ebXML.getAssociationType());
         assertEquals("id1", ebXML.getSource());
         assertEquals("id2", ebXML.getTarget());
     }

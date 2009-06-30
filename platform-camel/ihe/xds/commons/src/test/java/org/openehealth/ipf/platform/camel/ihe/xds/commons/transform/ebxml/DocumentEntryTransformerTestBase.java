@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 
 import static org.junit.Assert.*;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.EbrsTestUtils.*;
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.*;
 
 import java.util.List;
 
@@ -34,7 +35,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.DocumentEntryTransformer;
 
 /**
@@ -116,6 +116,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.getConfidentialityCodes().add(createCode(7));
         documentEntry.getEventCodeList().add(createCode(8));
         documentEntry.getEventCodeList().add(createCode(9));
+        documentEntry.setRepositoryUniqueId("repo1");
     }
 
     @Test
@@ -126,22 +127,23 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals("Approved", ebXML.getStatus());
         assertEquals("text/plain", ebXML.getMimeType());
         assertEquals("uuid", ebXML.getId());
-        assertEquals(Vocabulary.DOC_ENTRY_CLASS_NODE, ebXML.getObjectType());
+        assertEquals(DOC_ENTRY_CLASS_NODE, ebXML.getObjectType());
         
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());
         
         List<Slot> slots = ebXML.getSlots();
-        assertSlot(Vocabulary.SLOT_NAME_CREATION_TIME, slots, "123");
-        assertSlot(Vocabulary.SLOT_NAME_HASH, slots, "hash");
-        assertSlot(Vocabulary.SLOT_NAME_LANGUAGE_CODE, slots, "languageCode");
-        assertSlot(Vocabulary.SLOT_NAME_SERVICE_START_TIME, slots, "234");
-        assertSlot(Vocabulary.SLOT_NAME_SERVICE_STOP_TIME, slots, "345");
-        assertSlot(Vocabulary.SLOT_NAME_SIZE, slots, "174");
-        assertSlot(Vocabulary.SLOT_NAME_SOURCE_PATIENT_ID, slots, "id 4^^^namespace 4&uni 4&uniType 4");
-        assertSlot(Vocabulary.SLOT_NAME_URI, slots, "1|uri");
-        assertSlot(Vocabulary.SLOT_NAME_LEGAL_AUTHENTICATOR, slots, "id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^^^namespace 2&uni 2&uniType 2");
-        assertSlot(Vocabulary.SLOT_NAME_SOURCE_PATIENT_INFO, slots, 
+        assertSlot(SLOT_NAME_CREATION_TIME, slots, "123");
+        assertSlot(SLOT_NAME_HASH, slots, "hash");
+        assertSlot(SLOT_NAME_LANGUAGE_CODE, slots, "languageCode");
+        assertSlot(SLOT_NAME_SERVICE_START_TIME, slots, "234");
+        assertSlot(SLOT_NAME_SERVICE_STOP_TIME, slots, "345");
+        assertSlot(SLOT_NAME_SIZE, slots, "174");
+        assertSlot(SLOT_NAME_SOURCE_PATIENT_ID, slots, "id 4^^^namespace 4&uni 4&uniType 4");
+        assertSlot(SLOT_NAME_URI, slots, "1|uri");
+        assertSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, slots, "id 2^familyName 2^givenName 2^prefix 2^second 2^suffix 2^^^namespace 2&uni 2&uniType 2");
+        assertSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, slots, "repo1");
+        assertSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slots, 
                 "PID-3|id 5^^^namespace 5&uni 5&uniType 5~id 6^^^namespace 6&uni 6&uniType 6",
                 "PID-5|familyName 3^givenName 3^prefix 3^second 3^suffix 3",
                 "PID-7|dateOfBirth",
@@ -149,53 +151,53 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
                 "PID-11|streetAddress^otherDesignation^city^stateOrProvince^zipOrPostalCode^country^^^countyParishCode");
         
         
-        Classification classification = assertClassification(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
+        Classification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
+        assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
+        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
+        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^^^namespace 30&uni 30&uniType 30");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");
+        classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^^^namespace 30&uni 30&uniType 30");
+        assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
+        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
+        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, ebXML, 0, "code 1", 1);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 1");
+        classification = assertClassification(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, ebXML, 0, "code 1", 1);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 1");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, ebXML, 0, "code 6", 6);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
+        classification = assertClassification(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, ebXML, 0, "code 6", 6);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, ebXML, 1, "code 7", 7);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 7");
+        classification = assertClassification(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, ebXML, 1, "code 7", 7);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 7");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, ebXML, 0, "code 8", 8);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 8");
+        classification = assertClassification(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, ebXML, 0, "code 8", 8);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 8");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, ebXML, 1, "code 9", 9);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 9");
+        classification = assertClassification(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, ebXML, 1, "code 9", 9);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 9");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, ebXML, 0, "code 2", 2);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 2");
+        classification = assertClassification(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, ebXML, 0, "code 2", 2);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 2");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 3", 3);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 3");
+        classification = assertClassification(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 3", 3);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 3");
         
-        classification = assertClassification(Vocabulary.DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, ebXML, 0, "code 4", 4);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 4");
+        classification = assertClassification(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, ebXML, 0, "code 4", 4);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 4");
 
-        classification = assertClassification(Vocabulary.DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 5", 5);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 5");
+        classification = assertClassification(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 5", 5);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 5");
         
-        assertExternalIdentifier(Vocabulary.DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, ebXML, 
-                "id 3^^^namespace 3&uni 3&uniType 3", Vocabulary.DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID);
+        assertExternalIdentifier(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, ebXML, 
+                "id 3^^^namespace 3&uni 3&uniType 3", DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID);
 
-        assertExternalIdentifier(Vocabulary.DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, ebXML, 
-                "uniqueId", Vocabulary.DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
+        assertExternalIdentifier(DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID, ebXML, 
+                "uniqueId", DOC_ENTRY_LOCALIZED_STRING_UNIQUE_ID);
         
         assertEquals(11, ebXML.getClassifications().size());
-        assertEquals(10, ebXML.getSlots().size());
+        assertEquals(11, ebXML.getSlots().size());
         assertEquals(2, ebXML.getExternalIdentifiers().size());
     }
 

@@ -28,4 +28,6 @@ public interface EbXMLFactory {
     RegistryPackage createRegistryPackage(String id, ObjectLibrary objectLibrary);
     EbXMLAssociation createAssociation(ObjectLibrary objectLibrary);
     SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary);
+    ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library);
+    RegistryResponse createRegistryResponse();
 }

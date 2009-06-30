@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30;
 import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
 
@@ -65,13 +66,13 @@ public class EbXMLAssociation30 implements EbXMLAssociation {
     }
 
     @Override
-    public String getAssociationType() {
-        return association.getAssociationType();
+    public AssociationType getAssociationType() {
+        return AssociationType.valueOfOpcode(association.getAssociationType());
     }
 
     @Override
-    public void setAssociationType(String associationType) {
-        association.setAssociationType(associationType);
+    public void setAssociationType(AssociationType associationType) {
+        association.setAssociationType(AssociationType.getOpcode30(associationType));
     }
 
     AssociationType1 getInternal() {

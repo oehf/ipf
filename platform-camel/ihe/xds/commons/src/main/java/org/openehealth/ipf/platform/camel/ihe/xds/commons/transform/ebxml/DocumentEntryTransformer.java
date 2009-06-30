@@ -92,6 +92,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
         docEntry.setLanguageCode(extrinsic.getSingleSlotValue(SLOT_NAME_LANGUAGE_CODE));
         docEntry.setServiceStartTime(extrinsic.getSingleSlotValue(SLOT_NAME_SERVICE_START_TIME));
         docEntry.setServiceStopTime(extrinsic.getSingleSlotValue(SLOT_NAME_SERVICE_STOP_TIME));
+        docEntry.setRepositoryUniqueId(extrinsic.getSingleSlotValue(SLOT_NAME_REPOSITORY_UNIQUE_ID));
         docEntry.setUri(uriTransformer.fromEbXML(extrinsic.getSlotValues(SLOT_NAME_URI)));
         
         String size = extrinsic.getSingleSlotValue(SLOT_NAME_SIZE);
@@ -115,7 +116,8 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
         extrinsic.addSlot(SLOT_NAME_HASH, docEntry.getHash());
         extrinsic.addSlot(SLOT_NAME_LANGUAGE_CODE, docEntry.getLanguageCode());
         extrinsic.addSlot(SLOT_NAME_SERVICE_START_TIME, docEntry.getServiceStartTime());
-        extrinsic.addSlot(SLOT_NAME_SERVICE_STOP_TIME, docEntry.getServiceStopTime());        
+        extrinsic.addSlot(SLOT_NAME_SERVICE_STOP_TIME, docEntry.getServiceStopTime());
+        extrinsic.addSlot(SLOT_NAME_REPOSITORY_UNIQUE_ID, docEntry.getRepositoryUniqueId());
         extrinsic.addSlot(SLOT_NAME_URI, uriTransformer.toEbXML(docEntry.getUri()));
         
         Long size = docEntry.getSize();

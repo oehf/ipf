@@ -21,7 +21,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 
 /**
  * Transforms an {@link Association} to its ebXML representation.
@@ -50,8 +49,7 @@ public class AssociationTransformer {
         }
         
         EbXMLAssociation result = factory.createAssociation(objectLibrary);
-        AssociationType type = association.getAssociationType();
-        result.setAssociationType(type != null ? type.getRepresentation() : null);
+        result.setAssociationType(association.getAssociationType());
         result.setSource(association.getSourceUUID());
         result.setTarget(association.getTargetUUID());
         
@@ -70,7 +68,7 @@ public class AssociationTransformer {
         }
         
         Association result = new Association();
-        result.setAssociationType(AssociationType.valueOfRepresentation(association.getAssociationType()));
+        result.setAssociationType(association.getAssociationType());
         result.setTargetUUID(association.getTarget());
         result.setSourceUUID(association.getSource());
         

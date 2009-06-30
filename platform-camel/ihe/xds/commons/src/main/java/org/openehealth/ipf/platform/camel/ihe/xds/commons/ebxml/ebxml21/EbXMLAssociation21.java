@@ -19,6 +19,7 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
 
@@ -69,13 +70,13 @@ public class EbXMLAssociation21 implements EbXMLAssociation {
     }
 
     @Override
-    public String getAssociationType() {
-        return association.getAssociationType();
+    public AssociationType getAssociationType() {
+        return AssociationType.valueOfOpcode(association.getAssociationType());
     }
 
     @Override
-    public void setAssociationType(String associationType) {
-        association.setAssociationType(associationType);
+    public void setAssociationType(AssociationType associationType) {
+        association.setAssociationType(AssociationType.getOpcode21(associationType));
     }
 
     AssociationType1 getInternal() {

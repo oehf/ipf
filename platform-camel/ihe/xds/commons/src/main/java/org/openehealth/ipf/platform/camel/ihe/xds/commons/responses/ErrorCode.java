@@ -46,13 +46,46 @@ public enum ErrorCode {
     REGISTRY_DEPRECATED_DOCUMENT_ERROR("XDSRegistryDeprecatedDocumentError"),
     UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId");
     
-    private final String representation;
+    private final String opcode;
     
-    private ErrorCode(String representation) {
-        this.representation = representation;
+    private ErrorCode(String opcode) {
+        this.opcode = opcode;
     }
 
-    public String getRepresentation() {
-        return representation;
+    /**
+     * @return string representation for usage in ebXML values.
+     */
+    public String getOpcode() {
+        return opcode;
+    }
+
+    /**
+     * <code>null</code>-safe version of {@link #getOpcode()}.
+     * @param errorCode
+     *          the error code. Can be <code>null</code>.
+     * @return the string representation or <code>null</code> if errorCode was <code>null</code>.
+     */
+    public static String getOpcode(ErrorCode errorCode) {
+        return errorCode != null ? errorCode.getOpcode() : null;
+    }
+ 
+    /**
+     * Returns the error code that corresponds to the given opcode.
+     * @param opcode
+     *          the opcode. Can be <code>null</code>.
+     * @return the error code. <code>null</code> if the opcode was <code>null</code>.
+     */
+    public static ErrorCode valueOfOpcode(String opcode) {
+        if (opcode == null) {
+            return null;
+        }
+        
+        for (ErrorCode code : values()) {
+            if (opcode.equals(code.getOpcode())) {
+                return code;
+            }
+        }
+        
+        throw new IllegalArgumentException("Unknown upcode for error code: " + opcode);
     }
 }

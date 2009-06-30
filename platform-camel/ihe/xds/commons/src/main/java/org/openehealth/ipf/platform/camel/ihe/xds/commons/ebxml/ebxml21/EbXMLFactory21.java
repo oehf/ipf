@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
-import java.util.List;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
@@ -95,8 +95,20 @@ public class EbXMLFactory21 implements EbXMLFactory {
     @Override
     public SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary) {
         SubmitObjectsRequest21 request = SubmitObjectsRequest21.create(objectLibrary);
-        List<Object> list = request.getInternal().getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent();
-        list.addAll(objectLibrary.getObjects());
+        request.getContents().addAll(objectLibrary.getObjects());
         return request;
+    }
+
+    @Override
+    public ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary objectLibrary) {
+        ProvideAndRegisterDocumentSetRequest21 request = 
+            ProvideAndRegisterDocumentSetRequest21.create(objectLibrary);
+        request.getContents().addAll(objectLibrary.getObjects());
+        return request;
+    }
+
+    @Override
+    public RegistryResponse createRegistryResponse() {
+        return RegistryResponse21.create();
     }
 }

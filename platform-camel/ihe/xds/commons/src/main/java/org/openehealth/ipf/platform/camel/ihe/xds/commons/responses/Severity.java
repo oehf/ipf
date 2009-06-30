@@ -15,11 +15,97 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ErrorType;
+
 /**
  * Severities defined by the XDS specification.
  * @author Jens Riemschneider
  */
 public enum Severity {
-    ERROR,
-    WARNING
+    ERROR(ErrorType.ERROR, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),
+    WARNING(ErrorType.WARNING, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning");
+    
+    private final ErrorType ebXML21;
+    private final String opcode30;
+    
+    private Severity(ErrorType opcode21, String opcode30) {
+        this.ebXML21 = opcode21;
+        this.opcode30 = opcode30;
+    }
+
+    /**
+     * @return a representation in ebXML 2.1.
+     */
+    public ErrorType getEbXML21() {
+        return ebXML21;
+    }
+
+    /**
+     * @return a string representation in ebXML 3.1.
+     */
+    public String getOpcode30() {
+        return opcode30;
+    }
+    
+    /**
+     * <code>null</code>-safe version of {@link #getEbXML21()}.
+     * @param type
+     *          the type for which to get the ebXML representation. Can be <code>null</code>.
+     * @return the ebXML 2.1 representation or <code>null</code> if type was <code>null</code>.
+     */
+    public static ErrorType getEbXML21(Severity severity) {
+        return severity != null ? severity.getEbXML21() : null;
+    }
+
+    /**
+     * <code>null</code>-safe version of {@link #getOpcode30()}.
+     * @param type
+     *          the type for which to get the opcode. Can be <code>null</code>.
+     * @return the opcode or <code>null</code> if type was <code>null</code>.
+     */
+    public static String getOpcode30(Severity severity) {
+        return severity != null ? severity.getOpcode30() : null;
+    }
+    
+    /**
+     * Returns the severity that is represented by the given opcode.
+     * <p>
+     * This method looks up the opcode via the ebXML 3.0 representation.
+     * @param opcode30
+     *          the string representation. Can be <code>null</code>.
+     * @return the severity or <code>null</code> if the opcode was <code>null</code>.
+     */
+    public static Severity valueOfOpcode30(String opcode30) {
+        if (opcode30 == null) {
+            return null;
+        }
+        
+        for (Severity severity : values()) {
+            if (opcode30.equals(severity.getOpcode30())) {
+                return severity;
+            }
+        }
+        
+        throw new IllegalArgumentException("Unknown severity opcode: " + opcode30);
+    }
+
+    /**
+     * Returns the severity that is represented by the given ebXML 2.1.
+     * @param ebXML21
+     *          the ebXML 2.1 representation. Can be <code>null</code>.
+     * @return the severity or <code>null</code> if the opcode was <code>null</code>.
+     */
+    public static Severity valueOfEbXML21(ErrorType ebXML21) {
+        if (ebXML21 == null) {
+            return null;
+        }
+        
+        for (Severity severity : values()) {
+            if (ebXML21.equals(severity.getEbXML21())) {
+                return severity;
+            }
+        }
+        
+        throw new IllegalArgumentException("Unknown ebXML 2.1 severity type: " + ebXML21);
+    }
 }

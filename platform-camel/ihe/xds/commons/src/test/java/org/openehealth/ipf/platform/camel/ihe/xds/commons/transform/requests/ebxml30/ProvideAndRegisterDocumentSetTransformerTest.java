@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.ebxml30;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.ProvideAndRegisterDocumentSetTransformerTestBase;
 
 /**
- * Encapsulation of the ebXML classes for {@code AssociationType1}. 
- * <p>
- * This class contains convenience methods and provides a version independent
- * abstraction of the ebXML data structure.
+ * Tests for {@link ProvideAndRegisterDocumentSetTransformer}.
  * @author Jens Riemschneider
  */
-public interface EbXMLAssociation {
-    String getTarget();
-    void setTarget(String target);
+public class ProvideAndRegisterDocumentSetTransformerTest extends ProvideAndRegisterDocumentSetTransformerTestBase {
 
-    String getSource();
-    void setSource(String source);
-
-    AssociationType getAssociationType();
-    void setAssociationType(AssociationType associationType);
+    @Override
+    public EbXMLFactory createFactory() {
+        return new EbXMLFactory30();
+    }
 }

@@ -15,22 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
+import java.util.Map;
+
+import javax.activation.DataHandler;
 
 /**
- * Encapsulation of the ebXML classes for {@code AssociationType1}. 
+ * Encapsulation of the ebXML classes for {@code ProvideAndRegisterDocumentSetRequestType}. 
  * <p>
  * This class contains convenience methods and provides a version independent
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLAssociation {
-    String getTarget();
-    void setTarget(String target);
-
-    String getSource();
-    void setSource(String source);
-
-    AssociationType getAssociationType();
-    void setAssociationType(AssociationType associationType);
+public interface ProvideAndRegisterDocumentSetRequest extends SubmitObjectsRequest {
+    Map<String, DataHandler> getDocuments();
+    void addDocument(String id, DataHandler dataHandler);    
 }

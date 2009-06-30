@@ -21,43 +21,74 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
  * @author Jens Riemschneider
  */
 public enum AssociationType {
-    APPEND("APND"),
-    REPLACE("RPLC"),
-    TRANSFORM("XFRM"),
-    TRANSFORM_AND_REPLACE("XFRM_RPLC"),
-    HAS_MEMBER("HasMember"),
-    SIGNS("signs");
+    APPEND("APND", "urn:ihe:iti:2007:AssociationType:APND"),
+    REPLACE("RPLC", "urn:ihe:iti:2007:AssociationType:RPLC"),
+    TRANSFORM("XFRM", "urn:ihe:iti:2007:AssociationType:XFRM"),
+    TRANSFORM_AND_REPLACE("XFRM_RPLC", "urn:ihe:iti:2007:AssociationType:XFRM_RPLC"),
+    HAS_MEMBER("HasMember", "urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember"),
+    SIGNS("signs", "urn:ihe:iti:2007:AssociationType:signs");
 
-    private final String representation;
+    private final String opcode21;
+    private final String opcode30;
     
-    private AssociationType(String representation) {
-        this.representation = representation;
+    private AssociationType(String opcode21, String opcode30) {
+        this.opcode21 = opcode21;
+        this.opcode30 = opcode30;
     }
 
     /**
-     * @return a string representation.
+     * @return a string representation in ebXML 2.1.
      */
-    public String getRepresentation() {
-        return representation;
+    public String getOpcode21() {
+        return opcode21;
     }
     
     /**
-     * Returns the association type that is represented by the given string.
-     * @param representation
-     *          the string representation.
-     * @return the association type.
+     * @return a string representation in ebXML 3.0.
      */
-    public static AssociationType valueOfRepresentation(String representation) {
-        if (representation == null) {
+    public String getOpcode30() {
+        return opcode30;
+    }
+    
+    /**
+     * <code>null</code>-safe version of {@link #getOpcode21()}.
+     * @param type
+     *          the type for which to get the opcode. Can be <code>null</code>.
+     * @return the opcode or <code>null</code> if type was <code>null</code>.
+     */
+    public static String getOpcode21(AssociationType type) {
+        return type != null ? type.getOpcode21() : null;
+    }
+    
+    /**
+     * <code>null</code>-safe version of {@link #getOpcode30()}.
+     * @param type
+     *          the type for which to get the opcode. Can be <code>null</code>.
+     * @return the opcode or <code>null</code> if type was <code>null</code>.
+     */
+    public static String getOpcode30(AssociationType type) {
+        return type != null ? type.getOpcode30() : null;
+    }
+    
+    /**
+     * Returns the association type that is represented by the given opcode.
+     * <p>
+     * This method looks up the opcode via the ebXML 2.1 and 3.0 representations.
+     * @param opcode
+     *          the string representation. Can be <code>null</code>.
+     * @return the association type or <code>null</code> if the opcode was <code>null</code>.
+     */
+    public static AssociationType valueOfOpcode(String opcode) {
+        if (opcode == null) {
             return null;
         }
         
         for (AssociationType type : AssociationType.values()) {
-            if (representation.equals(type.getRepresentation())) {
+            if (opcode.equals(type.getOpcode21()) || opcode.equals(type.getOpcode30())) {
                 return type;
             }
         }
         
-        throw new IllegalArgumentException("Unsupported Association Type representation: " + representation);
+        throw new IllegalArgumentException("Unsupported Association Type opcode: " + opcode);
     }
 }

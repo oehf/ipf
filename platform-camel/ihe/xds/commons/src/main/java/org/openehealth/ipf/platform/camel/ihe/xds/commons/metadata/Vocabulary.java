@@ -187,6 +187,9 @@ public abstract class Vocabulary {
     /** Name of the slot that is used for the URI */
     public static final String SLOT_NAME_URI = "URI";
     
+    /** Name of the slot that is used for the unique ID of the repository (using only in XDS.b) */
+    public static final String SLOT_NAME_REPOSITORY_UNIQUE_ID = "RepositoryUniqueId";
+    
     /** Name of the slot that is used for the intended recipients */
     public static final String SLOT_NAME_INTENDED_RECIPIENT = "intendedRecipient";
     

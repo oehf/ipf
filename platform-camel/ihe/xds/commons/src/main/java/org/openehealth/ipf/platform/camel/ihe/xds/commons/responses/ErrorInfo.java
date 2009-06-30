@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Contains information about an error.
  * @author Jens Riemschneider
@@ -25,6 +28,15 @@ public class ErrorInfo {
     private Severity serverity;
     private String location;
     
+    public ErrorInfo() {}
+    
+    public ErrorInfo(ErrorCode errorCode, String codeContext, Severity serverity, String location) {
+        this.errorCode = errorCode;
+        this.codeContext = codeContext;
+        this.serverity = serverity;
+        this.location = location;
+    }
+
     public ErrorCode getErrorCode() {
         return errorCode;
     }
@@ -55,5 +67,54 @@ public class ErrorInfo {
     
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((codeContext == null) ? 0 : codeContext.hashCode());
+        result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
+        result = prime * result + ((location == null) ? 0 : location.hashCode());
+        result = prime * result + ((serverity == null) ? 0 : serverity.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ErrorInfo other = (ErrorInfo) obj;
+        if (codeContext == null) {
+            if (other.codeContext != null)
+                return false;
+        } else if (!codeContext.equals(other.codeContext))
+            return false;
+        if (errorCode == null) {
+            if (other.errorCode != null)
+                return false;
+        } else if (!errorCode.equals(other.errorCode))
+            return false;
+        if (location == null) {
+            if (other.location != null)
+                return false;
+        } else if (!location.equals(other.location))
+            return false;
+        if (serverity == null) {
+            if (other.serverity != null)
+                return false;
+        } else if (!serverity.equals(other.serverity))
+            return false;
+        return true;
+    }
+    
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

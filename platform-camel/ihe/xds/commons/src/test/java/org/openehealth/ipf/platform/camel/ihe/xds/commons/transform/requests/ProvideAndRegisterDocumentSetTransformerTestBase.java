@@ -17,38 +17,44 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests;
 
 import static org.junit.Assert.*;
 
+import java.net.URL;
 import java.util.List;
+import java.util.Map;
+
+import javax.activation.DataHandler;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.FactoryCreator;
 
 /**
- * Tests for {@link RegisterDocumentSetTransformer}.
+ * Tests for {@link ProvideAndRegisterDocumentSetTransformer}.
  * @author Jens Riemschneider
  */
-public abstract class RegisterDocumentSetTransformerTestBase implements FactoryCreator {
-    private RegisterDocumentSetTransformer transformer;
-    private RegisterDocumentSet request;    
+public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implements FactoryCreator {
+    private ProvideAndRegisterDocumentSetTransformer transformer;
+    private ProvideAndRegisterDocumentSet request;
+    private DataHandler dataHandler;    
     
     @Before
-    public void setUp() {        
+    public void setUp() throws Exception {        
         EbXMLFactory factory = createFactory();
-        transformer = new RegisterDocumentSetTransformer(factory);        
+        transformer = new ProvideAndRegisterDocumentSetTransformer(factory);        
 
         SubmissionSet submissionSet = new SubmissionSet();
         submissionSet.setEntryUUID(new EntryUUID("submissionSet01"));
@@ -78,9 +84,12 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
         docFolderAssociation.setSourceUUID("folder01");
         docFolderAssociation.setTargetUUID("document01");
         
-        request = new RegisterDocumentSet();
+        dataHandler = new DataHandler(new URL("http://file"));
+        Document doc = new Document(docEntry, dataHandler);
+        
+        request = new ProvideAndRegisterDocumentSet();
         request.setSubmissionSet(submissionSet);
-        request.getDocumentEntries().add(docEntry);
+        request.getDocuments().add(doc);
         request.getFolders().add(folder);
         request.getAssociations().add(docAssociation);
         request.getAssociations().add(folderAssociation);
@@ -89,7 +98,7 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     
     @Test
     public void testToEbXML() {
-        SubmitObjectsRequest ebXML = transformer.toEbXML(request);
+        ProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         assertEquals(1, ebXML.getExtrinsicObjects().size());
         assertEquals(2, ebXML.getRegistryPackages().size());
@@ -120,6 +129,10 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
         List<RegistryPackage> submissionSets = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         assertEquals(1, submissionSets.size());
         assertEquals("Submission Set 01", submissionSets.get(0).getName().getValue());
+        
+        Map<String, DataHandler> documents = ebXML.getDocuments();
+        assertEquals(1, documents.size());
+        assertSame(dataHandler, documents.get("document01"));
     }
     
     @Test
@@ -129,11 +142,12 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     
     @Test
     public void testToEbXMLEmpty() {
-        SubmitObjectsRequest result = transformer.toEbXML(new RegisterDocumentSet());
+        ProvideAndRegisterDocumentSetRequest result = transformer.toEbXML(new ProvideAndRegisterDocumentSet());
         assertNotNull(result);
         assertEquals(0, result.getAssociations().size());
         assertEquals(0, result.getExtrinsicObjects().size());
         assertEquals(0, result.getRegistryPackages().size());
+        assertEquals(0, result.getDocuments().size());
     }
     
 
@@ -141,8 +155,8 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     
     @Test
     public void testFromEbXML() {
-        SubmitObjectsRequest ebXML = transformer.toEbXML(request);
-        RegisterDocumentSet result = transformer.fromEbXML(ebXML);
+        ProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        ProvideAndRegisterDocumentSet result = transformer.fromEbXML(ebXML);
         
         assertEquals(request, result);
     }
@@ -154,7 +168,7 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     
     @Test
     public void testFromEbXMLEmpty() {
-        SubmitObjectsRequest ebXML = transformer.toEbXML(new RegisterDocumentSet());
-        assertEquals(new RegisterDocumentSet(), transformer.fromEbXML(ebXML));
+        ProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(new ProvideAndRegisterDocumentSet());
+        assertEquals(new ProvideAndRegisterDocumentSet(), transformer.fromEbXML(ebXML));
     }
 }

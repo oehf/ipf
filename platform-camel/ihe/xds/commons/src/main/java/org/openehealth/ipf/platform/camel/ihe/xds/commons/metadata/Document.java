@@ -27,7 +27,14 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class Document {
     private DocumentEntry documentEntry;
     private DataHandler dataHandler;
-     
+    
+    public Document() {}
+    
+    public Document(DocumentEntry documentEntry, DataHandler dataHandler) {
+        this.documentEntry = documentEntry;
+        this.dataHandler = dataHandler;
+    }
+
     public DataHandler getDataHandler() {
         return dataHandler;
     }
@@ -44,6 +51,37 @@ public class Document {
         this.documentEntry = documentEntry;
     }
     
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((dataHandler == null) ? 0 : dataHandler.hashCode());
+        result = prime * result + ((documentEntry == null) ? 0 : documentEntry.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Document other = (Document) obj;
+        if (dataHandler == null) {
+            if (other.dataHandler != null)
+                return false;
+        } else if (!dataHandler.equals(other.dataHandler))
+            return false;
+        if (documentEntry == null) {
+            if (other.documentEntry != null)
+                return false;
+        } else if (!documentEntry.equals(other.documentEntry))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

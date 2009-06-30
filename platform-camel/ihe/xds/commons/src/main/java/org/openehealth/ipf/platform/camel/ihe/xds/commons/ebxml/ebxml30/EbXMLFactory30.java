@@ -20,7 +20,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
 
 /**
@@ -54,7 +56,16 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
 
     @Override
+    public ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library) {
+        return ProvideAndRegisterDocumentSetRequest30.create();
+    }
+    @Override
     public ObjectLibrary createObjectLibrary() {
         return new ObjectLibrary();
+    }
+
+    @Override
+    public RegistryResponse createRegistryResponse() {
+        return RegistryResponse30.create();
     }
 }

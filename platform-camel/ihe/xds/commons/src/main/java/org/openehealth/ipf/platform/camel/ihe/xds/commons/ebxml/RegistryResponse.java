@@ -15,22 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
+import java.util.List;
+
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 
 /**
- * Encapsulation of the ebXML classes for {@code AssociationType1}. 
- * <p>
- * This class contains convenience methods and provides a version independent
- * abstraction of the ebXML data structure.
+ * Represents a ebXML {@code RegistryResponseType}.
  * @author Jens Riemschneider
  */
-public interface EbXMLAssociation {
-    String getTarget();
-    void setTarget(String target);
+public interface RegistryResponse {
+    void setStatus(Status status);
+    Status getStatus();
 
-    String getSource();
-    void setSource(String source);
-
-    AssociationType getAssociationType();
-    void setAssociationType(AssociationType associationType);
+    void setErrors(List<ErrorInfo> errors);
+    List<ErrorInfo> getErrors();
 }
