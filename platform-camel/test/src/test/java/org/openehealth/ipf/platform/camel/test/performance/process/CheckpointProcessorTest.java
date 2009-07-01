@@ -115,5 +115,11 @@ public class CheckpointProcessorTest extends MeasureProcessorTest {
         assertEquals(5, history.getMeasurements().size());
         assertEquals(3, historyOfCopiedMessage.getMeasurements().size());
     }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testProcessWithNoMeasurementHistoryInExchange() throws Exception {
+        processor.process(exchange);
+    }
+
 
 }

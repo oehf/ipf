@@ -47,7 +47,7 @@ public class FinishProcessor extends TimeProcessor {
     @Override
     public void process(Exchange exchange) throws Exception {
         Measurement measurement = new Measurement(getCurrentTimestamp(), name);
-        MeasurementHistory history = new MeasurementHistory(getMeasurementHistory(exchange));
+        MeasurementHistory history = getMeasurementHistory(exchange);
         history.add(measurement);
         getMeasurementDispatcher().dispatch(history);
     }

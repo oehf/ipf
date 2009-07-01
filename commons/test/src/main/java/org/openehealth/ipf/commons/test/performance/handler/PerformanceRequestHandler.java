@@ -26,17 +26,17 @@ import org.openehealth.ipf.commons.test.performance.StatisticsManager;
  * @author Mitko Kolev
  */
 public class PerformanceRequestHandler {
-    //TODO provide methods for rendering individual statistics
-    
+    // TODO provide methods for rendering individual statistics
+
     private StatisticsManager statisticsManager;
+
     public String onResetStatistics() {
         statisticsManager.resetStatistics();
         return "Statistics are now reset";
     }
 
-    
     public String onRenderHTMLStatisticalReports() {
-        StringBuffer buffer = new StringBuffer("<html><body>");
+        StringBuilder buffer = new StringBuilder("<html><body>");
         for (Statistics s : statisticsManager.getStatistics()) {
             String report = statisticsManager.getRenderer(s).render(s);
             buffer.append(report);
@@ -62,5 +62,4 @@ public class PerformanceRequestHandler {
 
         this.statisticsManager = statisticsManager;
     }
-
 }

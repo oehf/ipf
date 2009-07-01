@@ -72,7 +72,12 @@ public class FinishProcessorTest extends MeasureProcessorTest {
         assertEquals(initialDate, dispatcher.getLastMeasurementHistory()
                 .getReferenceDate());
     }
-
+    
+    @Test(expected = IllegalStateException.class)
+    public void testProcessWithNoMeasurementHistoryInExchange() throws Exception {
+        processor.process(exchange);
+    }
+    
     static class MeasurementDispatcherMock extends MeasurementDispatcher {
         private MeasurementHistory lastMeasurementHistory;
 

@@ -55,7 +55,6 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
 
         LOG.info(AsynchronousMeasurementDispatcher.class.getSimpleName()
                 + " started!");
-
     }
 
     /**
@@ -69,10 +68,9 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
         notNull(measurementHistory, "The measurementHistory must not be null!");
         try {
             queue.put(measurementHistory);
-            updatePerformanceMeasurementServer(measurementHistory);
 
         } catch (InterruptedException e) {
-            LOG.error("Inserting measurementHistory int the "
+            LOG.warn("Inserting a measurement history object in the "
                     + AsynchronousMeasurementDispatcher.class.getSimpleName()
                     + " queue interrupted!", e);
         }
@@ -88,15 +86,13 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
         try {
             while (true) {
                 MeasurementHistory measurementHistory = queue.take();
-                getStatisticsManager().updateStatistics(measurementHistory);
+                updateStatisticsManager(measurementHistory);
+                updatePerformanceMeasurementServer(measurementHistory);
             }
-
         } catch (InterruptedException e) {
             LOG.warn("Consumer of "
                     + AsynchronousMeasurementDispatcher.class.getSimpleName()
                     + " queue interrupted!", e);
         }
-
     }
-
 }

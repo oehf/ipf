@@ -25,7 +25,9 @@ import org.apache.camel.Exchange
  * @author Mitko Kolev
  */
 class MeasureRouteBuilder extends SpringRouteBuilder {
-    
+
+    //TODO add a test with a JMS queue
+     
     void configure() {
         errorHandler(noErrorHandler())
         

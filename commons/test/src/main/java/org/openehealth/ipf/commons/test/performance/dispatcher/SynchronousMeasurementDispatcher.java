@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.test.performance.dispatcher;
 
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
-import org.openehealth.ipf.commons.test.performance.StatisticsManager;
 
 /**
  * Extends the <code>MeasurementDispatcher</code> functionality providing
@@ -29,8 +28,7 @@ public class SynchronousMeasurementDispatcher extends MeasurementDispatcher {
 
     @Override
     public void dispatch(MeasurementHistory measurementHistory) {
-        StatisticsManager statisticsManager = getStatisticsManager();
-        statisticsManager.updateStatistics(measurementHistory);
+        updateStatisticsManager(measurementHistory);
         updatePerformanceMeasurementServer(measurementHistory);
     }
 }

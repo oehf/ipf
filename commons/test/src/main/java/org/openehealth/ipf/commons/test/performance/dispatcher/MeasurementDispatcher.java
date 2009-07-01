@@ -35,6 +35,10 @@ import org.springframework.beans.factory.InitializingBean;
 import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.marshall;
 
 /**
+ * Dispatches performance measurements to a <code>StatisticsManager</code>.
+ * Additionally dispatches to a performance measurement server, if such is
+ * configured with {@link #setPerformanceMeasurementServerURL(String)}
+ * 
  * @see StatisticsManager
  * @author Mitko Kolev
  */
@@ -44,6 +48,7 @@ public abstract class MeasurementDispatcher implements InitializingBean {
 
     // TODO 1 review the initial implementation with the test Client
     // TODO 2 write a test for the the setting with the performance server URL
+    // TODO 3 Expose the configuration of the test client
     private final static Log LOG = LogFactory
             .getLog(MeasurementDispatcher.class);
 
@@ -54,7 +59,7 @@ public abstract class MeasurementDispatcher implements InitializingBean {
      */
     private Client client;
 
-    private String performanceServerURL;
+    private String performanceMeasurementServerURL;
 
     /**
      * Dispatches the measurementHistory.
@@ -85,46 +90,66 @@ public abstract class MeasurementDispatcher implements InitializingBean {
     }
 
     /**
-     * The dispatcher uses the given <code>performanceServerURL</code> to
-     * dispatch the measurement history to the performance server as well.
+     * The dispatcher uses the given
+     * <code>performanceMeasurementServerURL</code> to dispatch the measurement
+     * history to the performance server, sending a HTTP post request to the
+     * given <code>performanceMeasurementServerURL</code>.
      * 
-     * @param performanceServerURL
-     *            the performanceServerURL to set
+     * @param performanceMeasurementServerURL
+     *            the performanceMeasurementServerURL to set
      */
-    public void setPerformanceServerURL(String performanceServerURL) {
-        this.performanceServerURL = performanceServerURL;
+    public void setPerformanceMeasurementServerURL(
+            String performanceMeasurementServerURL) {
+        this.performanceMeasurementServerURL = performanceMeasurementServerURL;
     }
 
     /**
-     * @return the performanceServerURL
+     * @return the performanceMeasurementServerURL
      */
-    public String getPerformanceServerURL() {
-        return performanceServerURL;
+    public String getPerformanceMeasurementServerURL() {
+        return performanceMeasurementServerURL;
     }
 
     /**
-     * If a performance measurement server is used, sends an HTTP POST request
-     * with body the given <code>measurementHistory</code> to that performance
-     * server.
+     * Updates the contained statistics manager with the given
+     * <code>measurmentHistory</code>
+     * 
+     * @param measurementHistory
+     *            a <code>MeasurementHistory</code> object.
+     */
+    protected void updateStatisticsManager(MeasurementHistory measurementHistory) {
+        notNull(measurementHistory, "The measurementHistory must not be null!");
+        this.statisticsManager.updateStatistics(measurementHistory);
+    }
+
+    /**
+     * If a performance measurement server is configured (with URL
+     * {@link #setPerformanceMeasurementServerURL(String)}), sends an HTTP POST
+     * request with body the given <code>measurementHistory</code> to that URL.
+     * 
+     * @param measurementHistory
+     *            a <code>MeasurementHistory</code> object.
      */
     protected void updatePerformanceMeasurementServer(
             MeasurementHistory measurementHistory) {
-        if (performanceServerURL == null)
+        notNull(measurementHistory, "The measurementHistory must not be null!");
+        if (!isUsingPerformanceMeasurementServer()) {
             return;
+        }
         try {
-            // marshall and send the current measurement history
+            // marshal and send the current measurement history
             String xml = marshall(measurementHistory);
 
             client.execute(new ByteArrayInputStream(xml
                     .getBytes(CONTENT_ENCODING)));
 
         } catch (JAXBException e) {
-            String msg = "Unable to marshall the measurement history to XML";
+            String msg = "Unable to marshal the measurement history to XML";
             LOG.error(msg, e);
             throw new MeasurementLostException(msg, e);
         } catch (Exception e) {
-            String msg = "Sending the performance measuerment to the server at "
-                    + performanceServerURL + " failed!";
+            String msg = "Failed to send performance measurement to a performance measurement server at "
+                    + performanceMeasurementServerURL;
             LOG.error(msg, e);
             throw new MeasurementLostException(msg, e);
 
@@ -132,7 +157,22 @@ public abstract class MeasurementDispatcher implements InitializingBean {
     }
 
     /**
-     * Checks if the single statisticsManager is initialized
+     * Returns true if a performance measurement server has been configured.
+     * 
+     * @return true if the {@link #getPerformanceMeasurementServerURL()} will
+     *         return a not null or empty URL String. Returns false otherwise.
+     */
+    public boolean isUsingPerformanceMeasurementServer() {
+        if (performanceMeasurementServerURL == null
+                || performanceMeasurementServerURL.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the single statisticsManager is set and initializes the HTTP
+     * client, if performance measurement server is used.
      */
     public void afterPropertiesSet() throws Exception {
         if (statisticsManager == null) {
@@ -141,13 +181,10 @@ public abstract class MeasurementDispatcher implements InitializingBean {
                     + " msut be configured with a "
                     + StatisticsManager.class.getName());
         }
-
-        // check the server client
-        if (performanceServerURL == null) {
-            LOG.info("Using no performance server");
-        } else {
+        // initialize the preformane measurement server client
+        if (isUsingPerformanceMeasurementServer()) {
             client = new Client();
-            client.setServerUrl(new URL(performanceServerURL));
+            client.setServerUrl(new URL(performanceMeasurementServerURL));
             client.setContentType("text/xml; charset=" + CONTENT_ENCODING);
             client.setHandler(new ResponseHandler() {
                 @Override
@@ -156,7 +193,14 @@ public abstract class MeasurementDispatcher implements InitializingBean {
                     // do nothing
                 }
             });
-            LOG.info("Using a performance server at " + performanceServerURL);
+            LOG
+                    .info(this.getClass().getSimpleName()
+                            + " is configured to use a performance measurement server with URL "
+                            + performanceMeasurementServerURL);
+        } else {
+            LOG.info("Performance measurement server will not be used, "
+                    + "because no URL is configured in "
+                    + this.getClass().getSimpleName());
         }
     }
 }
