@@ -31,6 +31,7 @@ public interface EbXMLFactory {
     ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library);
     RetrieveDocumentSetRequest createRetrieveDocumentSetRequest();
     AdhocQueryRequest createAdhocQueryRequest();
+    EbXMLQueryResponse createAdhocQueryResponse(ObjectLibrary objectLibrary);
     RegistryResponse createRegistryResponse();
     RetrieveDocumentSetResponse createRetrieveDocumentSetResponse();    
 }

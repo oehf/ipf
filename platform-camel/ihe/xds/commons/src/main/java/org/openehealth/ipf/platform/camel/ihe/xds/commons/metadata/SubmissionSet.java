@@ -32,6 +32,7 @@ public class SubmissionSet extends XDSMetaClass {
     private final List<Recipient> intendedRecipients = new ArrayList<Recipient>(); 
     private String sourceID;
     private String submissionTime;
+    private String homeCommunityId;
     
     public Author getAuthor() {
         return author;
@@ -69,12 +70,21 @@ public class SubmissionSet extends XDSMetaClass {
         return intendedRecipients;
     }
 
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((author == null) ? 0 : author.hashCode());
         result = prime * result + ((contentTypeCode == null) ? 0 : contentTypeCode.hashCode());
+        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result
                 + ((intendedRecipients == null) ? 0 : intendedRecipients.hashCode());
         result = prime * result + ((sourceID == null) ? 0 : sourceID.hashCode());
@@ -100,6 +110,11 @@ public class SubmissionSet extends XDSMetaClass {
             if (other.contentTypeCode != null)
                 return false;
         } else if (!contentTypeCode.equals(other.contentTypeCode))
+            return false;
+        if (homeCommunityId == null) {
+            if (other.homeCommunityId != null)
+                return false;
+        } else if (!homeCommunityId.equals(other.homeCommunityId))
             return false;
         if (intendedRecipients == null) {
             if (other.intendedRecipients != null)

@@ -41,6 +41,15 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     private SubmissionSetTransformer transformer;
     private SubmissionSet set;
     private ObjectLibrary objectLibrary;
+    private boolean homeAware = true;
+
+    /**
+     * @param homeAware
+     *          <code>true</code> to enable comparison of the homeCommunityId.
+     */
+    protected void setHomeAware(boolean homeAware) {
+        this.homeAware = homeAware;
+    }
     
     @Before
     public final void baseSetUp() {
@@ -88,6 +97,10 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.getIntendedRecipients().add(new Recipient(createOrganization(20), createPerson(22)));
         set.getIntendedRecipients().add(new Recipient(createOrganization(21), null));
         set.getIntendedRecipients().add(new Recipient(null, createPerson(23)));
+
+        if (homeAware) {
+            set.setHomeCommunityId("123.456");
+        }
     }
 
     @Test
@@ -98,7 +111,10 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertEquals("Approved", ebXML.getStatus());
         assertEquals("uuid", ebXML.getId());
         assertNull(ebXML.getObjectType());
-        
+        if (homeAware) {
+            assertEquals("123.456", ebXML.getHome());
+        }
+
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());
         

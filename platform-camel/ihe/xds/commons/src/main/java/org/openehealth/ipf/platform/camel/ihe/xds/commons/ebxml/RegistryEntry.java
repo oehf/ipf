@@ -53,6 +53,9 @@ public interface RegistryEntry {
     
     LocalizedString getName();
     void setName(LocalizedString name);
-    
+
+    String getHome();
+    void setHome(String home);
+
     String getId();
 }

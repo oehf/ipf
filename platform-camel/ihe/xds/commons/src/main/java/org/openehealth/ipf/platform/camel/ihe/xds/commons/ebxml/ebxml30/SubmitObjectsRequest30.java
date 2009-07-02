@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Regist
  * Encapsulation of {@link SubmitObjectsRequest}
  * @author Jens Riemschneider
  */
-public class SubmitObjectsRequest30 extends BaseProvideDocumentSetRequest30 {
+public class SubmitObjectsRequest30 extends BaseEbXMLObjectContainer30 implements org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest {
     private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory lcmFactory = 
         new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory();
     

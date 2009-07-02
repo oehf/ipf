@@ -26,6 +26,7 @@ import javax.xml.bind.JAXBElement;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
@@ -35,11 +36,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Identi
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryPackageType;
 
 /**
- * Base class for requests that provide documents.
+ * Base class for requests and responses that contain various ebXML 3.0
+ * objects.
  * @author Jens Riemschneider
  */
-public abstract class BaseProvideDocumentSetRequest30 implements org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest {
-    private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory rimFactory = 
+public abstract class BaseEbXMLObjectContainer30 implements EbXMLObjectContainer {
+    final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory rimFactory = 
         new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory();
 
     @Override
@@ -64,14 +66,6 @@ public abstract class BaseProvideDocumentSetRequest30 implements org.openehealth
             RegistryPackageType internal = ((RegistryPackage30)regPackage).getInternal();
             getContents().add(rimFactory.createRegistryPackage(internal));
         }        
-    }
-
-    @Override
-    public void addClassification(Classification classification) {
-        if (classification != null) {
-            ClassificationType internal = ((Classification30)classification).getInternal();
-            getContents().add(rimFactory.createClassification(internal));
-        }
     }
 
     @Override
@@ -145,6 +139,14 @@ public abstract class BaseProvideDocumentSetRequest30 implements org.openehealth
         return results;
     }
 
+    @Override
+    public void addClassification(Classification classification) {
+        if (classification != null) {
+            ClassificationType internal = ((Classification30)classification).getInternal();
+            getContents().add(rimFactory.createClassification(internal));
+        }
+    }
+
     private boolean matchesFilter(RegistryPackageType regPackage, Set<String> acceptedIds, String classificationNode) {
         if (regPackage == null) {
             return false;
@@ -186,7 +188,7 @@ public abstract class BaseProvideDocumentSetRequest30 implements org.openehealth
         }
         return null;
     }
-
+    
     /**
      * @return retrieves the list of contained objects.
      */

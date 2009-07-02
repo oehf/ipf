@@ -50,18 +50,16 @@ public class RegistryResponse21 implements RegistryResponse {
         return new RegistryResponse21(rsFactory.createRegistryResponse());
     }
 
+    @Override
     public void setStatus(Status status) {
         regResponse.setStatus(Status.getOpcode21(status));
     }
     
+    @Override
     public Status getStatus() {
         return Status.valueOfOpcode(regResponse.getStatus());
     }
     
-    public org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse getInternal() {
-        return regResponse;
-    }
-
     @Override
     public List<ErrorInfo> getErrors() {
         RegistryErrorList list = regResponse.getRegistryErrorList();
@@ -95,5 +93,9 @@ public class RegistryResponse21 implements RegistryResponse {
             regError.setLocation(error.getLocation());
             list.add(regError);
         }
+    }
+
+    public org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse getInternal() {
+        return regResponse;
     }
 }

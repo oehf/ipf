@@ -60,6 +60,18 @@ public class FolderTransformer extends XDSMetaClassTransformer<RegistryPackage, 
     protected Folder createMetaClassInstance() {
         return new Folder();
     }
+    
+    @Override
+    protected void addAttributes(Folder metaData, RegistryPackage ebXML, ObjectLibrary objectLibrary) {
+        super.addAttributes(metaData, ebXML, objectLibrary);
+        ebXML.setHome(metaData.getHomeCommunityId());
+    }
+    
+    @Override
+    protected void addAttributesFromEbXML(Folder metaData, RegistryPackage ebXML) {
+        super.addAttributesFromEbXML(metaData, ebXML);
+        metaData.setHomeCommunityId(ebXML.getHome());
+    }
 
     @Override
     protected void addSlotsFromEbXML(Folder folder, RegistryPackage regPackage) {

@@ -229,6 +229,18 @@ public abstract class RegistryEntry21<E extends RegistryEntryType> implements Re
         registryEntry.setStatus(status);
     }
     
+
+    @Override
+    public String getHome() {
+        // Not available in 2.1
+        return null;
+    }
+
+    @Override
+    public void setHome(String home) {
+        // Not available in 2.1
+    }
+
     // TODO: Should be package private once the higher level is implemented
     public E getInternal() {
         return registryEntry;

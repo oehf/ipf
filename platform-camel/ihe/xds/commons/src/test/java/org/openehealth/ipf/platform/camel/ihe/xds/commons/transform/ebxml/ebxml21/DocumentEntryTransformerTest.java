@@ -27,6 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Docume
 public class DocumentEntryTransformerTest extends DocumentEntryTransformerTestBase {
     @Override
     public EbXMLFactory createFactory() {
+        setHomeAware(false);
         return new EbXMLFactory21();
     }
 }

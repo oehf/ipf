@@ -15,13 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
+import java.util.List;
 
 /**
- * Encapsulation of the ebXML classes for {@code SubmitObjectsRequest}. 
- * <p>
- * This class contains convenience methods and provides a version independent
- * abstraction of the ebXML data structure.
+ * Provides functionality for containers of various ebXML objects.
  * @author Jens Riemschneider
  */
-public interface SubmitObjectsRequest extends EbXMLObjectContainer {
+public interface EbXMLObjectContainer {
+    void addExtrinsicObject(ExtrinsicObject extrinsic);
+    List<ExtrinsicObject> getExtrinsicObjects(String objectType);
+    List<ExtrinsicObject> getExtrinsicObjects();
+
+    void addRegistryPackage(RegistryPackage ebXML);
+    List<RegistryPackage> getRegistryPackages(String classificationNode);
+    List<RegistryPackage> getRegistryPackages();
+
+    void addAssociation(EbXMLAssociation ebXML);
+    List<EbXMLAssociation> getAssociations();
+
+    void addClassification(Classification classification);
 }

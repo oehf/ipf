@@ -27,6 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Folder
 public class FolderTransformerTest extends FolderTransformerTestBase {
     @Override
     public EbXMLFactory createFactory() {
+        setHomeAware(false);
         return new EbXMLFactory21();
     }
 }

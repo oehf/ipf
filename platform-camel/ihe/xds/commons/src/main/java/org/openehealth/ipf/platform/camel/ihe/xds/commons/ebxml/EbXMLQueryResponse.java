@@ -15,13 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference;
 
 /**
- * Encapsulation of the ebXML classes for {@code SubmitObjectsRequest}. 
+ * Encapsulation of the ebXML classes for {@code AdhocQueryResponse}. 
  * <p>
  * This class contains convenience methods and provides a version independent
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface SubmitObjectsRequest extends EbXMLObjectContainer {
+public interface EbXMLQueryResponse extends EbXMLObjectContainer, RegistryResponse {
+    void addReference(ObjectReference ref);
 }

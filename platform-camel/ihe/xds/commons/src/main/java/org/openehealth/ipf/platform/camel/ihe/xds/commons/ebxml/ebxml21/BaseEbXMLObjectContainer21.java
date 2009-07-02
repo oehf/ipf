@@ -24,30 +24,47 @@ import java.util.Set;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ClassificationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
 
 /**
- * Base class for requests that provide documents.
+ * Base class for requests and responses that contain various ebXML 2.1
+ * objects.
  * @author Jens Riemschneider
  */
-public abstract class BaseProvideDocumentSetRequest21 implements org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest {
+abstract class BaseEbXMLObjectContainer21 implements EbXMLObjectContainer {
 
     private final ObjectLibrary objectLibrary;
-    
+
     /**
-     * Constructs the request.
+     * Fills an object Library based on the given contents.
      * @param objectLibrary
-     *          the object library to use.
+     *          the object library to fill.
+     * @param contents
+     *          a list containing the potential objects.
      */
-    protected BaseProvideDocumentSetRequest21(ObjectLibrary objectLibrary) {
-        notNull(objectLibrary, "objLibrary cannot be null");
-        this.objectLibrary = objectLibrary;
+    protected static void fillObjectLibrary(ObjectLibrary objectLibrary, List<Object> contents) {
+        for (Object obj : contents) {
+            ExtrinsicObjectType extrinsic = cast(obj, ExtrinsicObjectType.class);
+            if (extrinsic != null) {
+                objectLibrary.put(extrinsic.getId(), extrinsic);
+            }
+            ObjectRefType objectRef = cast(obj, ObjectRefType.class);
+            if (objectRef != null) {
+                objectLibrary.put(objectRef.getId(), objectRef);
+            }
+            RegistryPackageType regPackage = cast(obj, RegistryPackageType.class);
+            if (regPackage != null) {
+                objectLibrary.put(regPackage.getId(), regPackage);
+            }
+        }
     }
 
     /**
@@ -65,6 +82,16 @@ public abstract class BaseProvideDocumentSetRequest21 implements org.openehealth
             return type.cast(obj);
         }
         return null;
+    }
+
+    /**
+     * Constructs the container.
+     * @param objectLibrary
+     *          the object library to use.
+     */
+    BaseEbXMLObjectContainer21(ObjectLibrary objectLibrary) {
+        notNull(objectLibrary, "objLibrary cannot be null");
+        this.objectLibrary = objectLibrary;
     }
 
     @Override
@@ -86,13 +113,6 @@ public abstract class BaseProvideDocumentSetRequest21 implements org.openehealth
         if (regPackage != null) {
             getContents().add(((RegistryPackage21)regPackage).getInternal());            
         }        
-    }
-
-    @Override
-    public void addClassification(Classification classification) {
-        if (classification != null) {
-            getContents().add(((Classification21)classification).getInternal());
-        }
     }
 
     @Override
@@ -166,7 +186,14 @@ public abstract class BaseProvideDocumentSetRequest21 implements org.openehealth
         return results;
     }
 
-    private boolean matchesFilter(RegistryPackageType regPackage, Set<String> acceptedIds, String classificationNode) {
+    @Override
+    public void addClassification(Classification classification) {
+        if (classification != null) {
+            getContents().add(((Classification21)classification).getInternal());
+        }
+    }
+    
+   private boolean matchesFilter(RegistryPackageType regPackage, Set<String> acceptedIds, String classificationNode) {
         if (regPackage == null) {
             return false;
         }

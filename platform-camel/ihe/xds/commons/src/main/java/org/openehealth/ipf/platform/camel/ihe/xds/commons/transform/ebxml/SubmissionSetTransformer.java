@@ -65,6 +65,18 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<RegistryPa
     }
     
     @Override
+    protected void addAttributes(SubmissionSet metaData, RegistryPackage ebXML, ObjectLibrary objectLibrary) {
+        super.addAttributes(metaData, ebXML, objectLibrary);
+        ebXML.setHome(metaData.getHomeCommunityId());
+    }
+    
+    @Override
+    protected void addAttributesFromEbXML(SubmissionSet metaData, RegistryPackage ebXML) {
+        super.addAttributesFromEbXML(metaData, ebXML);
+        metaData.setHomeCommunityId(ebXML.getHome());
+    }
+
+    @Override
     protected void addSlots(SubmissionSet metaData, RegistryPackage ebXML, ObjectLibrary objectLibrary) {
         super.addSlots(metaData, ebXML, objectLibrary);
         

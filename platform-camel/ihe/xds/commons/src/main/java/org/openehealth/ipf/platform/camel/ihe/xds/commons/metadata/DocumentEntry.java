@@ -46,7 +46,8 @@ public class DocumentEntry extends XDSMetaClass {
     private PatientInfo sourcePatientInfo;
     private Code typeCode;
     private String uri;
-    private String repositoryUniqueId; 
+    private String repositoryUniqueId;
+    private String homeCommunityId;
 
     public List<Author> getAuthors() {
         return authors;
@@ -195,7 +196,12 @@ public class DocumentEntry extends XDSMetaClass {
     public List<Code> getEventCodeList() {
         return eventCodeList;
     }
-    
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -211,6 +217,7 @@ public class DocumentEntry extends XDSMetaClass {
         result = prime
                 * result
                 + ((healthcareFacilityTypeCode == null) ? 0 : healthcareFacilityTypeCode.hashCode());
+        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result + ((languageCode == null) ? 0 : languageCode.hashCode());
         result = prime * result
                 + ((legalAuthenticator == null) ? 0 : legalAuthenticator.hashCode());
@@ -278,6 +285,11 @@ public class DocumentEntry extends XDSMetaClass {
                 return false;
         } else if (!healthcareFacilityTypeCode.equals(other.healthcareFacilityTypeCode))
             return false;
+        if (homeCommunityId == null) {
+            if (other.homeCommunityId != null)
+                return false;
+        } else if (!homeCommunityId.equals(other.homeCommunityId))
+            return false;
         if (languageCode == null) {
             if (other.languageCode != null)
                 return false;
@@ -341,8 +353,11 @@ public class DocumentEntry extends XDSMetaClass {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
     }
 }

@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.ebxml21;
+package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.reponses.ebxml21;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.SubmissionSetTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.SubmissionSetTransformerTestBase;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.reponses.QueryResponseTransformerTestBase;
 
 /**
- * Tests for {@link SubmissionSetTransformer}.
+ * Tests for {@link QueryResponseTransformer}.
  * @author Jens Riemschneider
  */
-public class SubmissionSetTransformerTest extends SubmissionSetTransformerTestBase {
+public class QueryResponseTransformerTest extends QueryResponseTransformerTestBase {
+
     @Override
     public EbXMLFactory createFactory() {
-        setHomeAware(false);
         return new EbXMLFactory21();
     }
 }

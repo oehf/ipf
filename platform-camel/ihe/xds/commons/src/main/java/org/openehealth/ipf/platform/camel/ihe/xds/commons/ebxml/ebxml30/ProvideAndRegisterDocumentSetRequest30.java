@@ -35,7 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Regist
  * Encapsulation of {@link ProvideAndRegisterDocumentSetRequestType}
  * @author Jens Riemschneider
  */
-public class ProvideAndRegisterDocumentSetRequest30 extends BaseProvideDocumentSetRequest30 implements ProvideAndRegisterDocumentSetRequest {
+public class ProvideAndRegisterDocumentSetRequest30 extends BaseEbXMLObjectContainer30 implements ProvideAndRegisterDocumentSetRequest {
     private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory lcmFactory = 
         new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory();
 

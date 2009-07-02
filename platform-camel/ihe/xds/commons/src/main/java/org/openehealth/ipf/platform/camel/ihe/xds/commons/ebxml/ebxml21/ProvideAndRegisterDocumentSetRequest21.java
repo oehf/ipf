@@ -37,7 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitO
  * Encapsulation of {@link ProvideAndRegisterDocumentSetRequestType}
  * @author Jens Riemschneider
  */
-public class ProvideAndRegisterDocumentSetRequest21 extends BaseProvideDocumentSetRequest21 implements ProvideAndRegisterDocumentSetRequest {
+public class ProvideAndRegisterDocumentSetRequest21 extends BaseEbXMLObjectContainer21 implements ProvideAndRegisterDocumentSetRequest {
     private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory rsFactory = 
         new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory();
 

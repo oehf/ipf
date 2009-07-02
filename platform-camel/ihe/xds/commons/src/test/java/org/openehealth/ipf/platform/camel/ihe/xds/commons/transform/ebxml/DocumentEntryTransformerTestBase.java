@@ -43,6 +43,15 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
     private DocumentEntryTransformer transformer;
     private DocumentEntry documentEntry;
     private ObjectLibrary objectLibrary;
+    private boolean homeAware = true;
+    
+    /**
+     * @param homeAware
+     *          <code>true</code> to enable comparison of the homeCommunityId.
+     */
+    protected void setHomeAware(boolean homeAware) {
+        this.homeAware = homeAware;
+    }
     
     @Before
     public final void baseSetUp() {
@@ -115,6 +124,10 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.getEventCodeList().add(createCode(8));
         documentEntry.getEventCodeList().add(createCode(9));
         documentEntry.setRepositoryUniqueId("repo1");
+        
+        if (homeAware) {
+            documentEntry.setHomeCommunityId("123.456");
+        }
     }
 
     @Test
@@ -126,6 +139,9 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals("text/plain", ebXML.getMimeType());
         assertEquals("uuid", ebXML.getId());
         assertEquals(DOC_ENTRY_CLASS_NODE, ebXML.getObjectType());
+        if (homeAware) {
+            assertEquals("123.456", ebXML.getHome());
+        }
         
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());

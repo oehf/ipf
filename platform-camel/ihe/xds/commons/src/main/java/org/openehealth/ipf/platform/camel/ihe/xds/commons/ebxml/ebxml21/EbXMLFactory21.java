@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
@@ -128,5 +129,10 @@ public class EbXMLFactory21 implements EbXMLFactory {
     @Override
     public AdhocQueryRequest createAdhocQueryRequest() {
         return AdhocQueryRequest21.create();
+    }
+
+    @Override
+    public EbXMLQueryResponse createAdhocQueryResponse(ObjectLibrary objectLibrary) {
+        return EbXMLQueryResponse21.create(objectLibrary);
     }
 }

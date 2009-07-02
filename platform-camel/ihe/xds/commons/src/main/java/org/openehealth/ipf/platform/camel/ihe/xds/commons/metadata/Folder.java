@@ -29,6 +29,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class Folder extends XDSMetaClass {
     private final List<Code> codeList = new ArrayList<Code>();
     private String lastUpdateTime;
+    private String homeCommunityId;
     
     public String getLastUpdateTime() {
         return lastUpdateTime;
@@ -42,11 +43,20 @@ public class Folder extends XDSMetaClass {
         return codeList;
     }
     
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((codeList == null) ? 0 : codeList.hashCode());
+        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result + ((lastUpdateTime == null) ? 0 : lastUpdateTime.hashCode());
         return result;
     }
@@ -64,6 +74,11 @@ public class Folder extends XDSMetaClass {
             if (other.codeList != null)
                 return false;
         } else if (!codeList.equals(other.codeList))
+            return false;
+        if (homeCommunityId == null) {
+            if (other.homeCommunityId != null)
+                return false;
+        } else if (!homeCommunityId.equals(other.homeCommunityId))
             return false;
         if (lastUpdateTime == null) {
             if (other.lastUpdateTime != null)

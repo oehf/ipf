@@ -37,6 +37,15 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     private FolderTransformer transformer;
     private Folder folder;
     private ObjectLibrary objectLibrary;
+    private boolean homeAware = true;
+
+    /**
+     * @param homeAware
+     *          <code>true</code> to enable comparison of the homeCommunityId.
+     */
+    protected void setHomeAware(boolean homeAware) {
+        this.homeAware = homeAware;
+    }
     
     @Before
     public final void baseSetUp() {
@@ -54,6 +63,10 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         folder.setUniqueID("uniqueId");
         folder.getCodeList().add(createCode(6));
         folder.getCodeList().add(createCode(7));
+
+        if (homeAware) {
+            folder.setHomeCommunityId("123.456");
+        }
     }
 
     @Test
@@ -64,6 +77,9 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         assertEquals("Approved", ebXML.getStatus());
         assertEquals("uuid", ebXML.getId());
         assertNull(ebXML.getObjectType());
+        if (homeAware) {
+            assertEquals("123.456", ebXML.getHome());
+        }
         
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());

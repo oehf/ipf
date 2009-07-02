@@ -222,6 +222,17 @@ public abstract class RegistryEntry30<E extends RegistryObjectType> implements R
         registryEntry.setStatus(status);
     }
     
+
+    @Override
+    public String getHome() {
+        return registryEntry.getHome();
+    }
+
+    @Override
+    public void setHome(String home) {
+        registryEntry.setHome(home);
+    }
+    
     // TODO: Must be package private as soon as the higher level objects are implemented
     public E getInternal() {
         return registryEntry;

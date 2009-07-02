@@ -74,6 +74,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
     protected void addAttributesFromEbXML(DocumentEntry docEntry, ExtrinsicObject extrinsic) {
         super.addAttributesFromEbXML(docEntry, extrinsic);
         docEntry.setMimeType(extrinsic.getMimeType());
+        docEntry.setHomeCommunityId(extrinsic.getHome());
     }
 
     @Override
@@ -81,6 +82,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<ExtrinsicO
         super.addAttributes(docEntry, extrinsic, objectLibrary);
         extrinsic.setMimeType(docEntry.getMimeType());
         extrinsic.setObjectType(DOC_ENTRY_CLASS_NODE);
+        extrinsic.setHome(docEntry.getHomeCommunityId());
     }
 
     @Override

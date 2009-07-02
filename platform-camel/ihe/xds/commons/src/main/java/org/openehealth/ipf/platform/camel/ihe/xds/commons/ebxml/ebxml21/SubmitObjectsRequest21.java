@@ -23,16 +23,13 @@ import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
 
 /**
  * Encapsulation of {@link SubmitObjectsRequest}
  * @author Jens Riemschneider
  */
-public class SubmitObjectsRequest21 extends BaseProvideDocumentSetRequest21 implements org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest {
+public class SubmitObjectsRequest21 extends BaseEbXMLObjectContainer21 implements org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest {
     private static final org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory rsFactory = 
         new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory();
     
@@ -61,23 +58,8 @@ public class SubmitObjectsRequest21 extends BaseProvideDocumentSetRequest21 impl
 
     public static SubmitObjectsRequest21 create(SubmitObjectsRequest submitObjectsRequest) {
         ObjectLibrary objectLibrary = new ObjectLibrary();
-        SubmitObjectsRequest21 submitObjectsRequest21 = new SubmitObjectsRequest21(submitObjectsRequest, objectLibrary);
-        
-        for (Object obj : submitObjectsRequest21.getContents()) {
-            ExtrinsicObjectType extrinsic = cast(obj, ExtrinsicObjectType.class);
-            if (extrinsic != null) {
-                objectLibrary.put(extrinsic.getId(), extrinsic);
-            }
-            ObjectRefType objectRef = cast(obj, ObjectRefType.class);
-            if (objectRef != null) {
-                objectLibrary.put(objectRef.getId(), objectRef);
-            }
-            RegistryPackageType regPackage = cast(obj, RegistryPackageType.class);
-            if (regPackage != null) {
-                objectLibrary.put(regPackage.getId(), regPackage);
-            }
-        }
-        
+        SubmitObjectsRequest21 submitObjectsRequest21 = new SubmitObjectsRequest21(submitObjectsRequest, objectLibrary);        
+        fillObjectLibrary(objectLibrary, submitObjectsRequest21.getContents());        
         return submitObjectsRequest21;
     }
 
