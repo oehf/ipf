@@ -15,30 +15,54 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryID;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Base class for queries that are defined by a list of UUIDs or unique IDs. 
  * @author Jens Riemschneider
  */
-public abstract class GetByIDQuery<T extends EntryID> extends StoredQuery {
-    private final QueryList<T> ids;
+public abstract class GetByIDQuery extends GetByUUIDQuery {
+    private final List<String> uniqueIDs = new ArrayList<String>();
 
-    private String homeCommunityID;
-
-    public GetByIDQuery(QueryList<T> ids) {
-        this.ids = new QueryList<T>(ids);
+    protected GetByIDQuery(QueryType type) {
+        super(type);
+    }
+    
+    public List<String> getUniqueIDs() {
+        return uniqueIDs;
     }
 
-    public String getHomeCommunityID() {
-        return homeCommunityID;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((uniqueIDs == null) ? 0 : uniqueIDs.hashCode());
+        return result;
     }
 
-    public void setHomeCommunityID(String homeCommunityID) {
-        this.homeCommunityID = homeCommunityID;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GetByIDQuery other = (GetByIDQuery) obj;
+        if (uniqueIDs == null) {
+            if (other.uniqueIDs != null)
+                return false;
+        } else if (!uniqueIDs.equals(other.uniqueIDs))
+            return false;
+        return true;
     }
 
-    public QueryList<T> getIds() {
-        return ids;
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -76,19 +76,6 @@ public abstract class RegistryEntry30<E extends RegistryObjectType> implements R
     }
 
     @Override
-    public void addSlot(String slotName, String... slotValues) {
-        if (slotValues == null || slotValues.length == 0) {
-            return;
-        }
-
-        Slot30 slot30 = Slot30.create(slotName, slotValues);
-        if (!slot30.getValueList().isEmpty()) {
-            List<SlotType1> slots = registryEntry.getSlot();
-            slots.add(slot30.getInternal());
-        }
-    }
-
-    @Override
     public List<Classification> getClassifications() {
         List<ClassificationType> classifications = registryEntry.getClassification();
         List<Classification> results = new ArrayList<Classification>(classifications.size());
@@ -164,6 +151,19 @@ public abstract class RegistryEntry30<E extends RegistryObjectType> implements R
         }
         
         return filtered.get(0);
+    }
+
+    @Override
+    public void addSlot(String slotName, String... slotValues) {
+        if (slotValues == null || slotValues.length == 0) {
+            return;
+        }
+
+        Slot30 slot30 = Slot30.create(slotName, slotValues);
+        if (!slot30.getValueList().isEmpty()) {
+            List<SlotType1> slots = registryEntry.getSlot();
+            slots.add(slot30.getInternal());
+        }
     }
 
     @Override

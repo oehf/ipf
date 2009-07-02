@@ -25,10 +25,10 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public abstract class XDSMetaClass {
     private AvailabilityStatus availabilityStatus;
     private LocalizedString comments;
-    private EntryUUID entryUUID;
+    private String entryUUID;
     private Identifiable patientID;
     private LocalizedString title;
-    private UniqueID uniqueID;
+    private String uniqueID;
 
     public AvailabilityStatus getAvailabilityStatus() {
         return availabilityStatus;
@@ -46,11 +46,11 @@ public abstract class XDSMetaClass {
         this.comments = comments;
     }
 
-    public EntryUUID getEntryUUID() {
+    public String getEntryUUID() {
         return entryUUID;
     }
 
-    public void setEntryUUID(EntryUUID entryUUID) {
+    public void setEntryUUID(String entryUUID) {
         this.entryUUID = entryUUID;
     }
 
@@ -70,11 +70,11 @@ public abstract class XDSMetaClass {
         this.title = title;
     }
 
-    public UniqueID getUniqueID() {
+    public String getUniqueID() {
         return uniqueID;
     }
 
-    public void setUniqueID(UniqueID uniqueID) {
+    public void setUniqueID(String uniqueID) {
         this.uniqueID = uniqueID;
     }
 

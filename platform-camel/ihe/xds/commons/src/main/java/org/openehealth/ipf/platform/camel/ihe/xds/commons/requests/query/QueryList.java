@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Represents a list of query parameters.
  * <p>
@@ -55,5 +58,35 @@ public class QueryList<T> {
 
     public List<List<T>> getOuterList() {
         return outerList;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((outerList == null) ? 0 : outerList.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        QueryList<?> other = (QueryList<?>) obj;
+        if (outerList == null) {
+            if (other.outerList != null)
+                return false;
+        } else if (!outerList.equals(other.outerList))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

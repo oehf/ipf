@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryID;
-
 /**
  * Represents a stored query for GetSubmissionSetAndContents.
  * @author Jens Riemschneider
  */
-public class GetSubmissionSetAndContentsQuery<T extends EntryID> extends GetByIDQuery<T> {
-    public GetSubmissionSetAndContentsQuery(T id) {
-        super(new QueryList<T>(id));
+public class GetSubmissionSetAndContentsQuery extends GetByIDAndCodesQuery {
+    public GetSubmissionSetAndContentsQuery() {
+        super(QueryType.GET_SUBMISSION_SET_AND_CONTENTS);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

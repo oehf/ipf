@@ -15,6 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
@@ -24,38 +29,36 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
  * @author Jens Riemschneider
  */
 public class GetAllQuery extends StoredQuery {
-    private final Identifiable patientId;
-    private final QueryList<AvailabilityStatus> statusDocuments;
-    private final QueryList<AvailabilityStatus> statusSubmissionSets;
-    private final QueryList<AvailabilityStatus> statusFolders;
+    private Identifiable patientId;
+    
+    private final List<AvailabilityStatus> statusDocuments = new ArrayList<AvailabilityStatus>();
+    private final List<AvailabilityStatus> statusSubmissionSets = new ArrayList<AvailabilityStatus>();
+    private final List<AvailabilityStatus> statusFolders = new ArrayList<AvailabilityStatus>();
 
     private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
-    private final QueryList<Code> formatCodes = new QueryList<Code>();
+    private final List<Code> formatCodes = new ArrayList<Code>();
     
-    public GetAllQuery(Identifiable patientId, 
-            QueryList<AvailabilityStatus> statusDocuments,
-            QueryList<AvailabilityStatus> statusSubmissionSets, 
-            QueryList<AvailabilityStatus> statusFolders) {
-        
-        this.patientId = patientId;
-        this.statusDocuments = new QueryList<AvailabilityStatus>(statusDocuments);
-        this.statusSubmissionSets = new QueryList<AvailabilityStatus>(statusSubmissionSets);
-        this.statusFolders = new QueryList<AvailabilityStatus>(statusFolders);
+    public GetAllQuery() {
+        super(QueryType.GET_ALL);
     }
 
     public Identifiable getPatientId() {
         return patientId;
     }
 
-    public QueryList<AvailabilityStatus> getStatusDocuments() {
+    public void setPatientId(Identifiable patientId) {
+        this.patientId = patientId;
+    }
+
+    public List<AvailabilityStatus> getStatusDocuments() {
         return statusDocuments;
     }
 
-    public QueryList<AvailabilityStatus> getStatusSubmissionSets() {
+    public List<AvailabilityStatus> getStatusSubmissionSets() {
         return statusSubmissionSets;
     }
 
-    public QueryList<AvailabilityStatus> getStatusFolders() {
+    public List<AvailabilityStatus> getStatusFolders() {
         return statusFolders;
     }
 
@@ -63,7 +66,74 @@ public class GetAllQuery extends StoredQuery {
         return confidentialityCodes;
     }
 
-    public QueryList<Code> getFormatCodes() {
+    public List<Code> getFormatCodes() {
         return formatCodes;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
+        result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
+        result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
+        result = prime * result + ((statusDocuments == null) ? 0 : statusDocuments.hashCode());
+        result = prime * result + ((statusFolders == null) ? 0 : statusFolders.hashCode());
+        result = prime * result
+                + ((statusSubmissionSets == null) ? 0 : statusSubmissionSets.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GetAllQuery other = (GetAllQuery) obj;
+        if (confidentialityCodes == null) {
+            if (other.confidentialityCodes != null)
+                return false;
+        } else if (!confidentialityCodes.equals(other.confidentialityCodes))
+            return false;
+        if (formatCodes == null) {
+            if (other.formatCodes != null)
+                return false;
+        } else if (!formatCodes.equals(other.formatCodes))
+            return false;
+        if (patientId == null) {
+            if (other.patientId != null)
+                return false;
+        } else if (!patientId.equals(other.patientId))
+            return false;
+        if (statusDocuments == null) {
+            if (other.statusDocuments != null)
+                return false;
+        } else if (!statusDocuments.equals(other.statusDocuments))
+            return false;
+        if (statusFolders == null) {
+            if (other.statusFolders != null)
+                return false;
+        } else if (!statusFolders.equals(other.statusFolders))
+            return false;
+        if (statusSubmissionSets == null) {
+            if (other.statusSubmissionSets != null)
+                return false;
+        } else if (!statusSubmissionSets.equals(other.statusSubmissionSets))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryID;
-
 /**
  * Represents a stored query for GetFoldersForDocument.
  * @author Jens Riemschneider
  */
-public class GetFoldersForDocumentQuery<T extends EntryID> extends GetByIDQuery<T> {
-    public GetFoldersForDocumentQuery(T id) {
-        super(new QueryList<T>(id));
+public class GetFoldersForDocumentQuery extends GetByIDQuery {
+    public GetFoldersForDocumentQuery() {
+        super(QueryType.GET_FOLDERS_FOR_DOCUMENT);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

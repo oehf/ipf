@@ -18,6 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Documents returned by the Retrieve Document Set transaction.
  * @author Jens Riemschneider
@@ -27,5 +30,36 @@ public class RetrievedDocumentSet extends Response {
 
     public List<RetrievedDocument> getDocuments() {
         return documents;
-    } 
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((documents == null) ? 0 : documents.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RetrievedDocumentSet other = (RetrievedDocumentSet) obj;
+        if (documents == null) {
+            if (other.documents != null)
+                return false;
+        } else if (!documents.equals(other.documents))
+            return false;
+        return true;
+    }
+    
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
 }

@@ -25,9 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.FolderTransformer;
 
@@ -49,11 +47,11 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         folder = new Folder();
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.setComments(createLocal(10));
-        folder.setEntryUUID(new EntryUUID("uuid"));
+        folder.setEntryUUID("uuid");
         folder.setLastUpdateTime("123");
         folder.setPatientID(createIdentifiable(3));
         folder.setTitle(createLocal(11));
-        folder.setUniqueID(new UniqueID("uniqueId"));
+        folder.setUniqueID("uniqueId");
         folder.getCodeList().add(createCode(6));
         folder.getCodeList().add(createCode(7));
     }

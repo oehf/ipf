@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
-
 /**
  * Represents a stored query for GetAssociations.
  * @author Jens Riemschneider
  */
-public class GetAssociationsQuery extends GetByIDQuery<EntryUUID> {
-    public GetAssociationsQuery(QueryList<EntryUUID> uuids) {
-        super(uuids);
+public class GetAssociationsQuery extends GetByUUIDQuery {
+    public GetAssociationsQuery() {
+        super(QueryType.GET_ASSOCIATIONS);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

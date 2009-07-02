@@ -19,5 +19,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
  * Base class for stored queries.
  * @author Jens Riemschneider
  */
-public class StoredQuery extends Query {
+public abstract class StoredQuery extends Query {
+    protected StoredQuery(QueryType type) {
+        super(type);
+    }
 }

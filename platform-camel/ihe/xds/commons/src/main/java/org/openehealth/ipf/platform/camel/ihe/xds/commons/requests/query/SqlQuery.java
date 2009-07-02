@@ -15,13 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import static org.apache.commons.lang.Validate.notNull;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * SQL based query for the Query Registry transaction.
  * @author Jens Riemschneider
  */
 public class SqlQuery extends Query {
+    public SqlQuery() {
+        super(QueryType.SQL);
+    }
+
     private String sql;
 
     public String getSql() {
@@ -29,7 +34,41 @@ public class SqlQuery extends Query {
     }
 
     public void setSql(String sql) {
-        notNull(sql, "sql cannot be null");
         this.sql = sql;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((sql == null) ? 0 : sql.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        SqlQuery other = (SqlQuery) obj;
+        if (sql == null) {
+            if (other.sql != null)
+                return false;
+        } else if (!sql.equals(other.sql))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

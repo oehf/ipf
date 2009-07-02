@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
 import javax.activation.DataHandler;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
 
 /**
@@ -41,5 +43,42 @@ public class RetrievedDocument {
 
     public void setRequestData(RetrieveDocument requestData) {
         this.requestData = requestData;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((dataHandler == null) ? 0 : dataHandler.hashCode());
+        result = prime * result + ((requestData == null) ? 0 : requestData.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RetrievedDocument other = (RetrievedDocument) obj;
+        if (dataHandler == null) {
+            if (other.dataHandler != null)
+                return false;
+        } else if (!dataHandler.equals(other.dataHandler))
+            return false;
+        if (requestData == null) {
+            if (other.requestData != null)
+                return false;
+        } else if (!requestData.equals(other.requestData))
+            return false;
+        return true;
+    }
+    
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

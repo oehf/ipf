@@ -28,7 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
@@ -73,13 +72,13 @@ public class RegisterDocumentSetTransformer {
         
         for (Folder folder : request.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUUID().getValue(), Vocabulary.FOLDER_CLASS_NODE, library);
+            addClassification(ebXML, folder.getEntryUUID(), Vocabulary.FOLDER_CLASS_NODE, library);
         }
         
         SubmissionSet submissionSet = request.getSubmissionSet();
         ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(submissionSet, library));
-        EntryUUID entryUUID = submissionSet != null ? submissionSet.getEntryUUID() : null;
-        addClassification(ebXML, entryUUID != null ? entryUUID.getValue() : null, Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
+        String entryUUID = submissionSet != null ? submissionSet.getEntryUUID() : null;
+        addClassification(ebXML, entryUUID, Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
         
         for (Association association : request.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));

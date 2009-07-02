@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
-
 /**
  * Represents a stored query for GetSubmissionSets.
  * @author Jens Riemschneider
  */
-public class GetSubmissionSetsQuery extends GetByIDQuery<EntryUUID> {
-    public GetSubmissionSetsQuery(QueryList<EntryUUID> uuids) {
-        super(uuids);
+public class GetSubmissionSetsQuery extends GetByUUIDQuery {
+    public GetSubmissionSetsQuery() {
+        super(QueryType.GET_SUBMISSION_SETS);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

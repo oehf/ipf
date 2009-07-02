@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryID;
-
 /**
  * Represents a stored query for GetDocumentsAndAssociations.
  * @author Jens Riemschneider
  */
-public class GetDocumentsAndAssociationsQuery<T extends EntryID> extends GetByIDQuery<T> {
-    public GetDocumentsAndAssociationsQuery(QueryList<T> ids) {
-        super(ids);
+public class GetDocumentsAndAssociationsQuery extends GetByIDQuery {
+    public GetDocumentsAndAssociationsQuery() {
+        super(QueryType.GET_DOCUMENTS_AND_ASSOCIATIONS);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

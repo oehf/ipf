@@ -34,7 +34,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
@@ -57,16 +56,16 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);        
 
         SubmissionSet submissionSet = new SubmissionSet();
-        submissionSet.setEntryUUID(new EntryUUID("submissionSet01"));
+        submissionSet.setEntryUUID("submissionSet01");
         submissionSet.setTitle(new LocalizedString("Submission Set 01", "en-US", "UTF8"));
         
         DocumentEntry docEntry = new DocumentEntry();
-        docEntry.setEntryUUID(new EntryUUID("document01"));
+        docEntry.setEntryUUID("document01");
         docEntry.setTitle(new LocalizedString("Document 01", "en-US", "UTF8"));
         docEntry.setMimeType("application/octet-stream");
         
         Folder folder = new Folder();
-        folder.setEntryUUID(new EntryUUID("folder01"));
+        folder.setEntryUUID("folder01");
         folder.setTitle(new LocalizedString("Folder 01", "en-US", "UTF8"));
         
         Association docAssociation = new Association();

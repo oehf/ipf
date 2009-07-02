@@ -15,10 +15,40 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import static org.apache.commons.lang.Validate.notNull;
+
 /**
  * Base class for all query requests.
  * @author Jens Riemschneider
  */
 public abstract class Query {
+    private final QueryType type;
+    
+    protected Query(QueryType type) {
+        notNull(type, "type cannot be null");
+        this.type = type;
+    }
 
+    public interface Visitor {
+        void visit(SqlQuery query);
+        void visit(FindDocumentsQuery query);
+        void visit(FindFoldersQuery query);
+        void visit(GetSubmissionSetsQuery query);
+        void visit(GetSubmissionSetAndContentsQuery query);
+        void visit(GetRelatedDocumentsQuery query);
+        void visit(GetFoldersQuery query);
+        void visit(GetFoldersForDocumentQuery query);
+        void visit(GetFolderAndContentsQuery query);
+        void visit(GetDocumentsQuery query);
+        void visit(GetDocumentsAndAssociationsQuery query);
+        void visit(GetAssociationsQuery query);
+        void visit(GetAllQuery query);
+        void visit(FindSubmissionSetsQuery query);
+    }
+    
+    public abstract void accept(Visitor visitor);
+
+    public QueryType getType() {
+        return type;
+    }
 }

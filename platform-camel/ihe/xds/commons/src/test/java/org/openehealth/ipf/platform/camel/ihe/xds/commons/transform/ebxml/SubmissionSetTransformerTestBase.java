@@ -27,11 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Recipient;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.SubmissionSetTransformer;
 
@@ -81,10 +79,10 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         set.setComments(createLocal(10));
         set.setSubmissionTime("123");
-        set.setEntryUUID(new EntryUUID("uuid"));
+        set.setEntryUUID("uuid");
         set.setPatientID(createIdentifiable(3));
         set.setTitle(createLocal(11));
-        set.setUniqueID(new UniqueID("uniqueId"));
+        set.setUniqueID("uniqueId");
         set.setContentTypeCode(createCode(6));
         set.setSourceID("sourceId");
         set.getIntendedRecipients().add(new Recipient(createOrganization(20), createPerson(22)));

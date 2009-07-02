@@ -32,9 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.DocumentEntryTransformer;
 
 /**
@@ -94,7 +92,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.setClassCode(createCode(1));
         documentEntry.setComments(createLocal(10));
         documentEntry.setCreationTime("123");
-        documentEntry.setEntryUUID(new EntryUUID("uuid"));
+        documentEntry.setEntryUUID("uuid");
         documentEntry.setFormatCode(createCode(2));
         documentEntry.setHash("hash");
         documentEntry.setHealthcareFacilityTypeCode(createCode(3));
@@ -110,7 +108,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         documentEntry.setSourcePatientInfo(sourcePatientInfo);
         documentEntry.setTitle(createLocal(11));
         documentEntry.setTypeCode(createCode(5));
-        documentEntry.setUniqueID(new UniqueID("uniqueId"));
+        documentEntry.setUniqueID("uniqueId");
         documentEntry.setUri("uri");
         documentEntry.getConfidentialityCodes().add(createCode(6));
         documentEntry.getConfidentialityCodes().add(createCode(7));

@@ -15,22 +15,28 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryID;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 
 /**
  * Represents a stored query for GetRelatedDocuments.
  * @author Jens Riemschneider
  */
-public class GetRelatedDocumentsQuery<T extends EntryID> extends GetByIDQuery<T> {
-    private final QueryList<AssociationType> associationTypes;
-    
-    public GetRelatedDocumentsQuery(QueryList<AssociationType> associationTypes, T id) {
-        super(new QueryList<T>(id));
-        this.associationTypes = new QueryList<AssociationType>(associationTypes);
+public class GetRelatedDocumentsQuery extends GetByIDQuery {
+    public GetRelatedDocumentsQuery() {
+        super(QueryType.GET_RELATED_DOCUMENTS);
     }
 
-    public QueryList<AssociationType> getAssociationTypes() {
+    private final List<AssociationType> associationTypes = new ArrayList<AssociationType>();
+    
+    public List<AssociationType> getAssociationTypes() {
         return associationTypes;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

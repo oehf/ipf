@@ -43,7 +43,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationTy
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
@@ -51,7 +50,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Name;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
@@ -208,10 +206,10 @@ public class Ebrs21MarshalingTest {
         docEntry.setSourcePatientID(new Identifiable("89765a87b", new AssigningAuthority("fj34r", null, null)));
         docEntry.setSourcePatientInfo(sourcePatientInfo);
         docEntry.setTypeCode(new Code("34108-1", new LocalizedString("Outpatient Evaluation And Management", "en-us", "UTF-8"), "LOINC"));
-        docEntry.setEntryUUID(new EntryUUID("Document01"));
+        docEntry.setEntryUUID("Document01");
         docEntry.setPatientID(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         docEntry.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
-        docEntry.setUniqueID(new UniqueID("Document01_uniqueid"));
+        docEntry.setUniqueID("Document01_uniqueid");
 
         SubmissionSet submissionSet = new SubmissionSet();
         submissionSet.setAuthor(author2);
@@ -219,16 +217,16 @@ public class Ebrs21MarshalingTest {
         submissionSet.setSourceID("129.6.58.92.1.1");
         submissionSet.setSubmissionTime("20041225235050");
         submissionSet.setComments(new LocalizedString("Annual physical", "en-us", "UTF-8"));
-        submissionSet.setEntryUUID(new EntryUUID("SubmissionSet01"));
+        submissionSet.setEntryUUID("SubmissionSet01");
         submissionSet.setPatientID(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         submissionSet.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
-        submissionSet.setUniqueID(new UniqueID("SubmissionSet01_uniqueid"));
+        submissionSet.setUniqueID("SubmissionSet01_uniqueid");
 
         Folder folder = new Folder();
         folder.setComments(new LocalizedString("comments go here", "en-us", "UTF-8"));
-        folder.setEntryUUID(new EntryUUID("Folder"));
+        folder.setEntryUUID("Folder");
         folder.setPatientID(new Identifiable("ST-1000", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
-        folder.setUniqueID(new UniqueID("folder_uniqueid"));
+        folder.setUniqueID("folder_uniqueid");
         folder.setTitle(new LocalizedString("FOLDER", "en-us", "UTF-8"));
         
         Association assoc1 = new Association();

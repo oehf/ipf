@@ -15,26 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryID;
-
 /**
  * Represents a stored query for GetFolders.
  * @author Jens Riemschneider
  */
-public class GetFoldersQuery<T extends EntryID> extends GetByIDQuery<T> {
-    private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
-    private final QueryList<Code> formatCodes = new QueryList<Code>();
-
-    public GetFoldersQuery(QueryList<T> ids) {
-        super(ids);
+public class GetFoldersQuery extends GetByIDQuery {
+    public GetFoldersQuery() {
+        super(QueryType.GET_FOLDERS);
     }
 
-    public QueryList<Code> getConfidentialityCodes() {
-        return confidentialityCodes;
-    }
-
-    public QueryList<Code> getFormatCodes() {
-        return formatCodes;
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

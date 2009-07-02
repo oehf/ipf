@@ -21,18 +21,24 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
  * @author Jens Riemschneider
  */
 public enum AvailabilityStatus {
-    APPROVED("Approved"),
-    DEPRECATED("Deprecated"),
-    SUBMITTED("Submitted");
+    APPROVED("Approved", "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"),
+    DEPRECATED("Deprecated", "urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated"),
+    SUBMITTED("Submitted", "urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted");
     
     private final String opcode;
+    private final String queryOpcode;
 
     public String getOpcode() {
         return opcode;
     }
+    
+    public String getQueryOpcode() {
+        return queryOpcode;
+    }
 
-    private AvailabilityStatus(String opcode) {        
+    private AvailabilityStatus(String opcode, String queryOpcode) {        
         this.opcode = opcode;
+        this.queryOpcode = queryOpcode;
     }
 
     public static AvailabilityStatus valueOfOpcode(String opcode) {
@@ -41,7 +47,7 @@ public enum AvailabilityStatus {
         }
         
         for (AvailabilityStatus status : AvailabilityStatus.values()) {
-            if (opcode.equals(status.getOpcode())) {
+            if (opcode.equals(status.getOpcode()) || opcode.equals(status.getQueryOpcode())) {
                 return status;
             }
         }
@@ -59,5 +65,17 @@ public enum AvailabilityStatus {
      */
     public static String toOpcode(AvailabilityStatus status) {
         return status != null ? status.getOpcode() : null;
+    }
+
+    /**
+     * Retrieves the query representation of a given status.
+     * <p>
+     * This is a <code>null</code>-safe version of {@link #getQueryOpcode()}.
+     * @param status
+     *          the status. Can be <code>null</code>.
+     * @return the representation or <code>null</code> if the status was <code>null</code>.
+     */
+    public static String toQueryOpcode(AvailabilityStatus status) {
+        return status != null ? status.getQueryOpcode() : null;
     }
 }

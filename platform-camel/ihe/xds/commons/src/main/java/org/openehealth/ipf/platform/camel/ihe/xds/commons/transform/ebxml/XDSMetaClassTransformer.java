@@ -20,8 +20,6 @@ import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.EntryUUID;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.UniqueID;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
 
@@ -78,8 +76,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
             return null;
         }
         
-        EntryUUID entryUUID = metaData.getEntryUUID();
-        E ebXML = createEbXMLInstance(entryUUID == null ? null : entryUUID.getValue(), objectLibrary);
+        E ebXML = createEbXMLInstance(metaData.getEntryUUID(), objectLibrary);
         
         addAttributes(metaData, ebXML, objectLibrary);        
         addClassifications(metaData, ebXML, objectLibrary);
@@ -152,7 +149,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
         metaData.setAvailabilityStatus(AvailabilityStatus.valueOfOpcode(ebXML.getStatus()));        
         metaData.setComments(ebXML.getDescription());
         metaData.setTitle(ebXML.getName());
-        metaData.setEntryUUID(ebXML.getId() != null ? new EntryUUID(ebXML.getId()) : null);
+        metaData.setEntryUUID(ebXML.getId());
     }
     
     /**
@@ -206,10 +203,8 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      */
     protected void addExternalIdentifiers(C metaData, E ebXML, ObjectLibrary objectLibrary) {
         String patientID = identifiableTransformer.toEbXML(metaData.getPatientID());
-        ebXML.addExternalIdentifier(patientID, patientIdExternalId, patientIdLocalizedString);
-        
-        String uniqueID = metaData.getUniqueID() != null ? metaData.getUniqueID().getValue() : null;
-        ebXML.addExternalIdentifier(uniqueID, uniqueIdExternalId, uniqueIdLocalizedString);
+        ebXML.addExternalIdentifier(patientID, patientIdExternalId, patientIdLocalizedString);        
+        ebXML.addExternalIdentifier(metaData.getUniqueID(), uniqueIdExternalId, uniqueIdLocalizedString);
     }
 
     /**
@@ -221,9 +216,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      */
     protected void addExternalIdentifiersFromEbXML(C metaData, E ebXML) {
         String patientID = ebXML.getExternalIdentifierValue(patientIdExternalId);
-        metaData.setPatientID(identifiableTransformer.fromEbXML(patientID));
-        
-        String uniqueID = ebXML.getExternalIdentifierValue(uniqueIdExternalId);
-        metaData.setUniqueID(uniqueID != null ? new UniqueID(uniqueID) : null);
+        metaData.setPatientID(identifiableTransformer.fromEbXML(patientID));        
+        metaData.setUniqueID(ebXML.getExternalIdentifierValue(uniqueIdExternalId));
     }
 }
