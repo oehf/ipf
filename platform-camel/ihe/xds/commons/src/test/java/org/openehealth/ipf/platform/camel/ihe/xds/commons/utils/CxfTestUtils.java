@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.utils;
 
-import org.apache.commons.io.IOUtils;
-
-import javax.activation.DataHandler;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
