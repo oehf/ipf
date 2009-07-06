@@ -23,6 +23,9 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
+
 /**
  * Provides the ITI-42 web-service interface.
  */
@@ -44,8 +47,8 @@ public interface Iti42PortType {
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")
     @Action(input = "urn:ihe:iti:2007:RegisterDocumentSet-b", output = "urn:ihe:iti:2007:RegisterDocumentSet-bResponse")
     @WebMethod(operationName = "DocumentRegistry_RegisterDocumentSet-b")
-    public org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType documentRegistryRegisterDocumentSetB(
+    public RegistryResponseType documentRegistryRegisterDocumentSetB(
         @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0")
-        org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest body
+        SubmitObjectsRequest body
     );
 }

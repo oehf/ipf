@@ -24,9 +24,9 @@ public class RouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from("xds-iti16:xds-iti16-service1")
-            .process(new QueryRegistryProcessor("service 1: "));
+            .process(new QueryRegistryProcessor("service 1"));
 
         from("xds-iti16:xds-iti16-service2")
-            .process(new QueryRegistryProcessor("service 2: "));
+            .process(new QueryRegistryProcessor("service 2"));
     }
 }

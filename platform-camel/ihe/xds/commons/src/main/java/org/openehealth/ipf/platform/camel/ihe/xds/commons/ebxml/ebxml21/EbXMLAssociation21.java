@@ -41,11 +41,11 @@ public class EbXMLAssociation21 implements EbXMLAssociation {
         this.objectLibrary = objectLibrary;
     }
 
-    static EbXMLAssociation create(ObjectLibrary objectLibrary) {        
+    static EbXMLAssociation21 create(ObjectLibrary objectLibrary) {        
         return new EbXMLAssociation21(rimFactory.createAssociationType1(), objectLibrary);
     }
 
-    static EbXMLAssociation create(AssociationType1 association, ObjectLibrary objectLibrary) {        
+    static EbXMLAssociation21 create(AssociationType1 association, ObjectLibrary objectLibrary) {        
         return new EbXMLAssociation21(association, objectLibrary);
     }
 

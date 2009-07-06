@@ -24,4 +24,5 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
  * @author Jens Riemschneider
  */
 public interface SubmitObjectsRequest extends EbXMLObjectContainer {
+    Object getInternal();
 }

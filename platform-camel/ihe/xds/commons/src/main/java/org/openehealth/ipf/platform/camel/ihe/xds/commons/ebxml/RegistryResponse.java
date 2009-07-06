@@ -30,4 +30,6 @@ public interface RegistryResponse {
 
     void setErrors(List<ErrorInfo> errors);
     List<ErrorInfo> getErrors();
+
+    Object getInternal();
 }

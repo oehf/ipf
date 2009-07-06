@@ -18,53 +18,45 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocument;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetResponseType;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
 
 /**
  * Processor for a RetrieveDocumentSet request used in Tests.
- * <p>
- * Sets the status field on the response with the text provided as document
- * unique ID of the first document in the request. Also adds the prefix to
- * the text that was configured in the constructor.
- * <p>
- * If the document unique ID in the request is {@code large} this processor
- * will provide a large stream in the first document of the response. This
- * is used to find out if the underlying infrastructure supports memory
- * efficient streaming.
  *
  * @author Jens Riemschneider
  */
 class RetrieveDocumentSetProcessor implements Processor {
-    private final String prefix;
+    private final String expectedValue;
 
     /**
      * Constructs the processor.
-     * @param prefix
-     *          text that should be prefixed when processing the request.
+     * @param expectedValue
+     *          text that is expected as the first document unique ID.
      */
-    public RetrieveDocumentSetProcessor(String prefix) {
-        this.prefix = prefix;
+    public RetrieveDocumentSetProcessor(String expectedValue) {
+        this.expectedValue = expectedValue;
     }
 
     public void process(Exchange exchange) throws Exception {
-        RetrieveDocumentSetRequestType request = exchange.getIn().getBody(RetrieveDocumentSetRequestType.class);
-        RetrieveDocumentSetResponseType response = new RetrieveDocumentSetResponseType();
-        RegistryResponseType registryResponse = new RegistryResponseType();
-        String value = request.getDocumentRequest().get(0).getDocumentUniqueId();
-        registryResponse.setStatus(prefix + value);
-        response.setRegistryResponse(registryResponse);
-        if (value.equals("large")) {
-            RetrieveDocumentSetResponseType.DocumentResponse documentResponse = new RetrieveDocumentSetResponseType.DocumentResponse();
-            DataSource dataSource = new LargeDataSource();
-            documentResponse.setDocument(new DataHandler(dataSource));
-            response.getDocumentResponse().add(documentResponse);
+        RetrieveDocumentSet request = exchange.getIn().getBody(RetrieveDocumentSet.class);
+        String value = request.getDocuments().get(0).getDocumentUniqueID();
+        RetrievedDocumentSet response = new RetrievedDocumentSet();
+        response.setStatus(Status.SUCCESS);
+        if (!expectedValue.equals(value)) {
+            response.setStatus(Status.FAILURE);
         }
+        else {
+            RetrievedDocument doc = new RetrievedDocument();
+            doc.setDataHandler(new DataHandler(new LargeDataSource()));
+            response.getDocuments().add(doc);
+        }
+        
         Exchanges.resultMessage(exchange).setBody(response);
     }
 }

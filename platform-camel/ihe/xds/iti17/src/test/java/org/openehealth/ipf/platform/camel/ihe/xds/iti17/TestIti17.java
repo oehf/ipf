@@ -23,14 +23,14 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet;
 
 /**
  * Tests the ITI-17 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-public class TestIti17 extends StandardTestWebContainer {
+public class TestIti17 extends StandardTestContainer {
 
     private static final String SERVICE1 = "xds-iti17://localhost:9091/xds-iti17-service1";
     private static final String SERVICE2 = "xds-iti17://localhost:9091/xds-iti17-service2";

@@ -27,7 +27,9 @@ import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.AfterClass;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.ServletServer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.TomcatServer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.UdpServer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.AuditTestFinalInterceptor;
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -38,11 +40,14 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * placed within the root of the test resources.
  * @author Jens Riemschneider
  */
-public class StandardTestWebContainer {
+public class StandardTestContainer {
     private static ProducerTemplate<?> producerTemplate;
     private static ServletServer servletServer;
     private static ApplicationContext appContext;
 
+    private static final int SYSLOG_PORT = 8888;
+    private static UdpServer syslog;
+    
     public static void startServer(Servlet servlet, String appContextName) throws Exception {
         File contextFile = new ClassPathResource(appContextName).getFile();
         
@@ -57,10 +62,19 @@ public class StandardTestWebContainer {
         ServletContext servletContext = servlet.getServletConfig().getServletContext();
         appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
         producerTemplate = (ProducerTemplate<?>)appContext.getBean("producerTemplate", ProducerTemplate.class);  
+
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
+        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(SYSLOG_PORT);
+
+        syslog = new UdpServer(SYSLOG_PORT);
+        syslog.start();
     }
 
     @AfterClass
     public static void stopServer() throws Exception {
+        syslog.cancel();
+        syslog.join();
+
         if (servletServer != null) {
             servletServer.stop();
         }
@@ -70,6 +84,13 @@ public class StandardTestWebContainer {
         return producerTemplate;
     }
     
+    public static UdpServer getSyslog() {
+        return syslog;
+    }
+
+    public static void setSyslog(UdpServer syslog) {
+        StandardTestContainer.syslog = syslog;
+    }
 
     /**
      * Installs transaction-specific audit test interceptors.

@@ -43,6 +43,10 @@ abstract class BaseEbXMLObjectContainer21 implements EbXMLObjectContainer {
 
     private final ObjectLibrary objectLibrary;
 
+    public ObjectLibrary getObjectLibrary() {
+        return objectLibrary;
+    }
+
     /**
      * Fills an object Library based on the given contents.
      * @param objectLibrary

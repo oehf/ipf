@@ -29,4 +29,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocum
 public interface RetrieveDocumentSetRequest {
     void setDocuments(List<RetrieveDocument> documents);
     List<RetrieveDocument> getDocuments();
+
+    Object getInternal();
 }

@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
@@ -37,10 +38,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.Re
 public abstract class ResponseTransformerTestBase implements FactoryCreator {
     private ResponseTransformer transformer;
     private Response response;
+    private EbXMLFactory factory;
     
     @Before
     public void baseSetUp() {
-        transformer = new ResponseTransformer(createFactory());
+        factory = createFactory();
+        transformer = new ResponseTransformer(factory);
         
         response = new Response();
         response.setStatus(Status.FAILURE);
@@ -50,8 +53,8 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXMLRegistryResponse() {
-        RegistryResponse ebXML = transformer.toEbXMLRegistryResponse(response);
-        assertNotNull(ebXML);
+        RegistryResponse ebXML = transformer.toEbXML(response);
+
         assertEquals(Status.FAILURE, ebXML.getStatus());
         List<ErrorInfo> errors = ebXML.getErrors();
         assertEquals(2, errors.size());
@@ -70,14 +73,8 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     }
     
     @Test
-    public void testToEbXMLRegistryResponseNull() {
-        assertNull(transformer.toEbXMLRegistryResponse(null));
-    }
-    
-    @Test
     public void testToEbXMLRegistryResponseEmpty() {
-        RegistryResponse ebXML = transformer.toEbXMLRegistryResponse(new Response());
-        assertNotNull(ebXML);
+        RegistryResponse ebXML = transformer.toEbXML(new Response());
         assertNull(ebXML.getStatus());
         assertEquals(0, ebXML.getErrors().size());
     }
@@ -85,19 +82,14 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        RegistryResponse ebXML = transformer.toEbXMLRegistryResponse(response);
+        RegistryResponse ebXML = transformer.toEbXML(response);
         Response result = transformer.fromEbXML(ebXML);
         assertEquals(response, result);
     }
     
     @Test
-    public void testFromEbXMLNull() {
-        assertNull(transformer.fromEbXML(null));
-    }
-    
-    @Test
     public void testFromEbXMLEmpty() {
-        RegistryResponse ebXML = transformer.toEbXMLRegistryResponse(new Response());
+        RegistryResponse ebXML = transformer.toEbXML(new Response());
         Response result = transformer.fromEbXML(ebXML);
         assertEquals(new Response(), result);
     }

@@ -42,11 +42,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Factor
  */
 public abstract class RegisterDocumentSetTransformerTestBase implements FactoryCreator {
     private RegisterDocumentSetTransformer transformer;
-    private RegisterDocumentSet request;    
+    private RegisterDocumentSet request;
+    private EbXMLFactory factory;
     
     @Before
     public void setUp() {        
-        EbXMLFactory factory = createFactory();
+        factory = createFactory();
         transformer = new RegisterDocumentSetTransformer(factory);        
 
         SubmissionSet submissionSet = new SubmissionSet();
@@ -89,7 +90,6 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     @Test
     public void testToEbXML() {
         SubmitObjectsRequest ebXML = transformer.toEbXML(request);
-        assertNotNull(ebXML);
         assertEquals(1, ebXML.getExtrinsicObjects().size());
         assertEquals(2, ebXML.getRegistryPackages().size());
 
@@ -122,17 +122,12 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     }
     
     @Test
-    public void testToEbXMLNull() {
-        assertNull(transformer.toEbXML(null));
-    }
-    
-    @Test
     public void testToEbXMLEmpty() {
-        SubmitObjectsRequest result = transformer.toEbXML(new RegisterDocumentSet());
-        assertNotNull(result);
-        assertEquals(0, result.getAssociations().size());
-        assertEquals(0, result.getExtrinsicObjects().size());
-        assertEquals(0, result.getRegistryPackages().size());
+        SubmitObjectsRequest ebXML = transformer.toEbXML(new RegisterDocumentSet());
+        
+        assertEquals(0, ebXML.getAssociations().size());
+        assertEquals(0, ebXML.getExtrinsicObjects().size());
+        assertEquals(0, ebXML.getRegistryPackages().size());
     }
     
 
@@ -142,18 +137,13 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
     public void testFromEbXML() {
         SubmitObjectsRequest ebXML = transformer.toEbXML(request);
         RegisterDocumentSet result = transformer.fromEbXML(ebXML);
-        
         assertEquals(request, result);
-    }
-    
-    @Test
-    public void testFromEbXMLNull() {
-        assertNull(transformer.toEbXML(null));
     }
     
     @Test
     public void testFromEbXMLEmpty() {
         SubmitObjectsRequest ebXML = transformer.toEbXML(new RegisterDocumentSet());
-        assertEquals(new RegisterDocumentSet(), transformer.fromEbXML(ebXML));
+        RegisterDocumentSet result = transformer.fromEbXML(ebXML);
+        assertEquals(new RegisterDocumentSet(), result);      
     }
 }

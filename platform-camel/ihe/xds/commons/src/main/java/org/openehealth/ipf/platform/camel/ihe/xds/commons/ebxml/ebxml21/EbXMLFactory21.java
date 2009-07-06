@@ -15,19 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
@@ -73,46 +64,41 @@ public class EbXMLFactory21 implements EbXMLFactory {
     }
     
     @Override
-    public Classification createClassification(ObjectLibrary objectLibrary) {
+    public Classification21 createClassification(ObjectLibrary objectLibrary) {
         return Classification21.create(objectLibrary);
     }
 
     @Override
-    public ExtrinsicObject createExtrinsic(String id, ObjectLibrary objectLibrary) {
+    public ExtrinsicObject21 createExtrinsic(String id, ObjectLibrary objectLibrary) {
         ExtrinsicObject21 obj = ExtrinsicObject21.create(objectLibrary, id);
         objectLibrary.put(id, obj.getInternal());
         return obj;
     }
 
     @Override
-    public RegistryPackage createRegistryPackage(String id, ObjectLibrary objectLibrary) {
+    public RegistryPackage21 createRegistryPackage(String id, ObjectLibrary objectLibrary) {
         RegistryPackage21 obj = RegistryPackage21.create(objectLibrary, id);
         objectLibrary.put(id, obj.getInternal());
         return obj;        
     }
 
     @Override
-    public EbXMLAssociation createAssociation(ObjectLibrary objectLibrary) {
+    public EbXMLAssociation21 createAssociation(ObjectLibrary objectLibrary) {
         return EbXMLAssociation21.create(objectLibrary);
     }
 
     @Override
-    public SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary) {
-        SubmitObjectsRequest21 request = SubmitObjectsRequest21.create(objectLibrary);
-        request.getContents().addAll(objectLibrary.getObjects());
-        return request;
+    public SubmitObjectsRequest21 createSubmitObjectsRequest() {
+        return SubmitObjectsRequest21.create(createObjectLibrary());
+    }
+
+    @Override    
+    public ProvideAndRegisterDocumentSetRequest21 createProvideAndRegisterDocumentSetRequest(ObjectLibrary objectLibrary) {
+        return ProvideAndRegisterDocumentSetRequest21.create(objectLibrary);
     }
 
     @Override
-    public ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary objectLibrary) {
-        ProvideAndRegisterDocumentSetRequest21 request = 
-            ProvideAndRegisterDocumentSetRequest21.create(objectLibrary);
-        request.getContents().addAll(objectLibrary.getObjects());
-        return request;
-    }
-
-    @Override
-    public RegistryResponse createRegistryResponse() {
+    public RegistryResponse21 createRegistryResponse() {
         return RegistryResponse21.create();
     }
 
@@ -127,12 +113,12 @@ public class EbXMLFactory21 implements EbXMLFactory {
     }
     
     @Override
-    public AdhocQueryRequest createAdhocQueryRequest() {
+    public AdhocQueryRequest21 createAdhocQueryRequest() {
         return AdhocQueryRequest21.create();
     }
 
     @Override
-    public EbXMLQueryResponse createAdhocQueryResponse(ObjectLibrary objectLibrary) {
+    public EbXMLQueryResponse21 createAdhocQueryResponse(ObjectLibrary objectLibrary) {
         return EbXMLQueryResponse21.create(objectLibrary);
     }
 }

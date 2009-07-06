@@ -20,10 +20,10 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit.Iti41ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41PortType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.ProvideAndRegisterDocumentSetRequestType;
 
 /**
  * The producer implementation for the ITI-41 component.

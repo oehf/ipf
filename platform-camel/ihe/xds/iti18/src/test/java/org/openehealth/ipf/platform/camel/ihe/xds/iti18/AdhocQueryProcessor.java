@@ -17,35 +17,34 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18;
 
 import org.apache.camel.Processor;
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
  * Processor for an AdhocQuery request used in Tests.
- * <p>
- * Simply sets the status field on the response with the text provided
- * as comment in the request. Also adds the prefix to the text that was
- * configured in the constructor.
  *
  * @author Jens Riemschneider
  */
 class AdhocQueryProcessor implements Processor {
-    private final String prefix;
+    private final String expectedValue;
 
     /**
      * Constructs the processor.
-     * @param prefix
+     * @param expectedValue
      *          text that should be prefixed when processing the request.
      */
-    public AdhocQueryProcessor(String prefix) {
-        this.prefix = prefix;
+    public AdhocQueryProcessor(String expectedValue) {
+        this.expectedValue = expectedValue;
     }
 
     public void process(Exchange exchange) throws Exception {
-        AdhocQueryRequest request = exchange.getIn().getBody(AdhocQueryRequest.class);
-        AdhocQueryResponse response = new AdhocQueryResponse();
-        response.setStatus(prefix + request.getComment());
+        FindDocumentsQuery query = (FindDocumentsQuery) exchange.getIn().getBody(QueryRegistry.class).getQuery();
+        String value = query.getAuthorPersons().get(0);        
+        QueryResponse response = new QueryResponse();
+        response.setStatus(expectedValue.equals(value) ? Status.SUCCESS : Status.FAILURE);
         Exchanges.resultMessage(exchange).setBody(response);
     }
 }

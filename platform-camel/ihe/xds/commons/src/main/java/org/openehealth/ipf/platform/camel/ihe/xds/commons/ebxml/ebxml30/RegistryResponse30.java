@@ -57,10 +57,21 @@ public class RegistryResponse30 implements RegistryResponse {
     }
 
     /**
+     * Creates a response containing a new ebXML. 
      * @return a new instance of this class.
      */
-    public static RegistryResponse create() {
+    public static RegistryResponse30 create() {
         return new RegistryResponse30(rsFactory.createRegistryResponseType());
+    }
+
+    /**
+     * Creates a response containing the given ebXML.
+     * @param regResponse
+     *          the ebXML to wrap. 
+     * @return a new instance of this class.
+     */
+    public static RegistryResponse30 create(RegistryResponseType regResponse) {
+        return new RegistryResponse30(regResponse);
     }
 
 

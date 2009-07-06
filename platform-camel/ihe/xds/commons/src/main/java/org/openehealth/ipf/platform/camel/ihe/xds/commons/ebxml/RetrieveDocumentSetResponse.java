@@ -29,4 +29,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDoc
 public interface RetrieveDocumentSetResponse extends RegistryResponse {
     void setDocuments(List<RetrievedDocument> documents);
     List<RetrievedDocument> getDocuments();
+    
+    Object getInternal();
 }

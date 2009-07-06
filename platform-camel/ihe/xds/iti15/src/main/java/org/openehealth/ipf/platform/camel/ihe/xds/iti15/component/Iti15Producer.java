@@ -29,11 +29,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti15.audit.Iti15ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.Iti15PortType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType.Document;
 
 /**
  * The producer implementation for the ITI-15 component.

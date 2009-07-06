@@ -18,54 +18,86 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti15;
 import static junit.framework.Assert.assertEquals;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
-
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.RegistryResponse21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml21TestUtils;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.ProvideAndRegisterDocumentSetTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.ResponseTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType.Document;
 
 /**
  * Tests the ITI-15 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-public class TestIti15 extends StandardTestWebContainer {
+public class TestIti15 extends StandardTestContainer {
     private static final String SERVICE1 = "xds-iti15://localhost:9091/xds-iti15-service1";
     private static final String SERVICE2 = "xds-iti15://localhost:9091/xds-iti15-service2";
     
+    private ProvideAndRegisterDocumentSet request;
+    private DocumentEntry docEntry;
+
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void classSetUp() throws Exception {
         startServer(new CXFServlet(), "iti-15.xml");
         installTestInterceptors(Iti15TestAuditFinalInterceptor.class);
+    }
+    
+    @Before
+    public void setUp() {
+        Identifiable patientID = new Identifiable("patient-id", new AssigningAuthority("1.2.3.4.5", "ISO"));
+        
+        SubmissionSet submissionSet = new SubmissionSet();
+        submissionSet.setPatientID(patientID);
+        submissionSet.setUniqueID("229.6.58.29.24.1235");
+
+        docEntry = new DocumentEntry();
+        docEntry.setPatientID(patientID);
+        docEntry.setComments(new LocalizedString("service 1"));
+        docEntry.setEntryUUID("document 01");
+        
+        Document doc = new Document();
+        doc.setDocumentEntry(docEntry);
+        doc.setDataHandler(new DataHandler(new LargeDataSource()));
+        
+        request = new ProvideAndRegisterDocumentSet();
+        request.setSubmissionSet(submissionSet);
+        request.getDocuments().add(doc);
     }
     
     /** Calls the route attached to the ITI-15 endpoint. */
     @Test
     public void testIti15() {
-        SubmitObjectsRequest submitObjectsRequest = Ebxml21TestUtils.createTestSubmitObjectRequest();
-        ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
-        request.setSubmitObjectsRequest(submitObjectsRequest);
+        Response response1 = send(SERVICE1, "service 1");
+        assertEquals(Status.SUCCESS, response1.getStatus());
+
+        Response response2 = send(SERVICE2, "service 2");
+        assertEquals(Status.SUCCESS, response2.getStatus());
+    }
+    
+    private Response send(String endpoint, String value) {
+        docEntry.setComments(new LocalizedString(value));
         
-        Document document = new Document();
-        DataSource dataSource = new LargeDataSource();
-        document.setId("testdoc");
-        document.setValue(new DataHandler(dataSource));
-        request.getDocument().add(document);
-        
-        RegistryResponse response1 =
-                (RegistryResponse)getProducerTemplate().requestBody(SERVICE1, request);
-
-        assertEquals("service 1: ok", response1.getStatus());
-
-        RegistryResponse response2 =
-                (RegistryResponse)getProducerTemplate().requestBody(SERVICE2, request);
-
-        assertEquals("service 2: ok", response2.getStatus());
+        EbXMLFactory21 factory = new EbXMLFactory21();
+        ProvideAndRegisterDocumentSetTransformer requestTransformer = new ProvideAndRegisterDocumentSetTransformer(factory);
+        ProvideAndRegisterDocumentSetRequest ebXMLRequest = requestTransformer.toEbXML(request);        
+        Object result = getProducerTemplate().requestBody(endpoint, ebXMLRequest.getInternal());        
+        RegistryResponse21 ebXMLResponse = RegistryResponse21.create((RegistryResponse) result);
+        ResponseTransformer responseTransformer = new ResponseTransformer(factory);
+        return responseTransformer.fromEbXML(ebXMLResponse);
     }
 }

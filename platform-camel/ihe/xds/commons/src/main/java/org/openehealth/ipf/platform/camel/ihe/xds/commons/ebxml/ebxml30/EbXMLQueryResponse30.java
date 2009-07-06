@@ -24,6 +24,7 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
@@ -38,7 +39,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.Registr
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryErrorList;
 
 /**
- * Encapsulation of {@link org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse}.
+ * Encapsulation of {@link AdhocQueryResponse}.
  * @author Jens Riemschneider
  */
 public class EbXMLQueryResponse30 extends BaseEbXMLObjectContainer30 implements EbXMLQueryResponse {
@@ -50,14 +51,15 @@ public class EbXMLQueryResponse30 extends BaseEbXMLObjectContainer30 implements 
     private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory rimFactory = 
         new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory();
 
-    private final org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse response;
+    private final AdhocQueryResponse response;
 
-    private EbXMLQueryResponse30(AdhocQueryResponse response) {
+    private EbXMLQueryResponse30(AdhocQueryResponse response, ObjectLibrary objectLibrary) {
+        super(objectLibrary);
         notNull(response, "response cannot be null");
         this.response = response;
     }
     
-    static EbXMLQueryResponse30 create() {
+    static EbXMLQueryResponse30 create(ObjectLibrary objectLibrary) {
         AdhocQueryResponse response = queryFactory.createAdhocQueryResponse();
         
         RegistryObjectListType list = response.getRegistryObjectList();
@@ -66,11 +68,11 @@ public class EbXMLQueryResponse30 extends BaseEbXMLObjectContainer30 implements 
             response.setRegistryObjectList(list);
         }
         
-        return new EbXMLQueryResponse30(response);        
+        return new EbXMLQueryResponse30(response, objectLibrary);        
     }
     
-    static EbXMLQueryResponse30 create(AdhocQueryResponse response) {
-        return new EbXMLQueryResponse30(response);
+    public static EbXMLQueryResponse30 create(AdhocQueryResponse response) {
+        return new EbXMLQueryResponse30(response, new ObjectLibrary());
     }
 
     @Override
@@ -135,5 +137,10 @@ public class EbXMLQueryResponse30 extends BaseEbXMLObjectContainer30 implements 
             objectRef.setHome(ref.getHome());
             getContents().add(rimFactory.createObjectRef(objectRef));
         }
+    }
+
+    @Override
+    public AdhocQueryResponse getInternal() {
+        return response;
     }
 }

@@ -57,14 +57,12 @@ public class RegisterDocumentSetTransformer {
         folderTransformer = new FolderTransformer(factory);
         associationTransformer = new AssociationTransformer(factory);
     }
-    
+
     public SubmitObjectsRequest toEbXML(RegisterDocumentSet request) {
-        if (request == null) {
-            return null;
-        }
-        
-        ObjectLibrary library = factory.createObjectLibrary();        
-        SubmitObjectsRequest ebXML = factory.createSubmitObjectsRequest(library);
+        notNull(request, "request cannot be null");
+                
+        SubmitObjectsRequest ebXML = factory.createSubmitObjectsRequest();
+        ObjectLibrary library = ebXML.getObjectLibrary();        
         
         for (DocumentEntry docEntry : request.getDocumentEntries()) {
             ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
@@ -95,11 +93,9 @@ public class RegisterDocumentSetTransformer {
     }
     
     public RegisterDocumentSet fromEbXML(SubmitObjectsRequest ebXML) {
-        if (ebXML == null) {
-            return null;
-        }
+        notNull(ebXML, "ebXML cannot be null");
         
-        RegisterDocumentSet request = new RegisterDocumentSet();
+        RegisterDocumentSet request = new RegisterDocumentSet();        
         
         for (ExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
             request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));

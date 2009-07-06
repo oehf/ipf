@@ -31,7 +31,6 @@ public class ExtrinsicObject21 extends RegistryEntry21<ExtrinsicObjectType> impl
         super(extrinsic, objectLibrary);
     }
 
-    // TODO: Should be package private once the higher level objects are implemented
     public static ExtrinsicObject21 create(ExtrinsicObjectType extrinsicObject, ObjectLibrary objectLibrary) {
         return new ExtrinsicObject21(extrinsicObject, objectLibrary);
     }

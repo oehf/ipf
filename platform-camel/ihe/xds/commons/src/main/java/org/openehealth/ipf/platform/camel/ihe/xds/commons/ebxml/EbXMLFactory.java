@@ -27,7 +27,7 @@ public interface EbXMLFactory {
     ExtrinsicObject createExtrinsic(String id, ObjectLibrary objectLibrary);
     RegistryPackage createRegistryPackage(String id, ObjectLibrary objectLibrary);
     EbXMLAssociation createAssociation(ObjectLibrary objectLibrary);
-    SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary);
+    SubmitObjectsRequest createSubmitObjectsRequest();
     ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library);
     RetrieveDocumentSetRequest createRetrieveDocumentSetRequest();
     AdhocQueryRequest createAdhocQueryRequest();

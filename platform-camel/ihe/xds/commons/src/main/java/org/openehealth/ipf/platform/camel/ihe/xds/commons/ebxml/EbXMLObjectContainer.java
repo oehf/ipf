@@ -34,4 +34,6 @@ public interface EbXMLObjectContainer {
     List<EbXMLAssociation> getAssociations();
 
     void addClassification(Classification classification);
+
+    ObjectLibrary getObjectLibrary();
 }

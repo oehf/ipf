@@ -40,7 +40,12 @@ public class RetrieveDocumentSetRequest30 implements RetrieveDocumentSetRequest 
         return new RetrieveDocumentSetRequest30(new RetrieveDocumentSetRequestType());
     }
     
-    RetrieveDocumentSetRequestType getInternal() {
+    public static RetrieveDocumentSetRequest30 create(RetrieveDocumentSetRequestType request) {
+        return new RetrieveDocumentSetRequest30(request);
+    }
+    
+    @Override
+    public RetrieveDocumentSetRequestType getInternal() {
         return request;
     }
 

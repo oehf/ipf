@@ -51,7 +51,7 @@ public class AdhocQueryRequest21 implements AdhocQueryRequest {
         return new AdhocQueryRequest21(request);
     }
     
-    static AdhocQueryRequest21 create(org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest request) {
+    public static AdhocQueryRequest21 create(org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest request) {
         return new AdhocQueryRequest21(request);
     }
 
@@ -124,5 +124,10 @@ public class AdhocQueryRequest21 implements AdhocQueryRequest {
     @Override
     public void setHome(String homeCommunityID) {
         // not supported in 2.1
+    }
+
+    @Override
+    public Object getInternal() {
+        return request;
     }
 }

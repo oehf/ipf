@@ -24,19 +24,18 @@ public class RouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from("xds-iti14:xds-iti14-service1")
-            .process(new RegisterDocumentSetProcessor("service 1: "));
+            .process(new RegisterDocumentSetProcessor("service 1"));
         
         from("xds-iti14:xds-iti14-service2")
-            .process(new RegisterDocumentSetProcessor("service 2: "));
+            .process(new RegisterDocumentSetProcessor("service 2"));
 
         from("xds-iti14:xds-iti14-service11")
-            .process(new RegisterDocumentSetProcessor("service 11: "));
+            .process(new RegisterDocumentSetProcessor("service 11"));
     
         from("xds-iti14:xds-iti14-service12?audit=false&allowIncompleteAudit=true")
-            .process(new RegisterDocumentSetProcessor("service 11: "));
+            .process(new RegisterDocumentSetProcessor("service 12"));
     
         from("xds-iti14:xds-iti14-service13?allowIncompleteAudit=true")
-            .process(new RegisterDocumentSetProcessor("service 13: "));
-
+            .process(new RegisterDocumentSetProcessor("service 13"));
     }
 }

@@ -53,7 +53,12 @@ public class RetrieveDocumentSetResponse30 implements RetrieveDocumentSetRespons
         return new RetrieveDocumentSetResponse30(response);
     }
     
-    RetrieveDocumentSetResponseType getInternal() {
+    public static RetrieveDocumentSetResponse30 create(RetrieveDocumentSetResponseType response) {
+        return new RetrieveDocumentSetResponse30(response);
+    }
+    
+    @Override
+    public RetrieveDocumentSetResponseType getInternal() {
         return response;
     }
 

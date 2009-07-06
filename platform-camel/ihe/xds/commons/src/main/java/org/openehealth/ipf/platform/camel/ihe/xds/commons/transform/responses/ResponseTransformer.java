@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
  */
 public class ResponseTransformer {    
     private final EbXMLFactory factory;
-
+    
     /**
      * Constructs the transformer.
      * @param factory
@@ -37,19 +37,20 @@ public class ResponseTransformer {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
     }
-
+    
     /**
      * Transforms a {@link Response} to a {@link RegistryResponse}.
      * @param response
-     *          the response.
-     * @return the ebXML representation.
+     *          the source of the transformation.
+     * @return 
+     * @return
+     *          the destination of the transformation. 
      */
-    public RegistryResponse toEbXMLRegistryResponse(Response response) {
-        if (response == null) {
-            return null;
-        }
+    public RegistryResponse toEbXML(Response response) {
+        notNull(response, "response cannot be null");
         
         RegistryResponse ebXML = factory.createRegistryResponse();
+        
         ebXML.setStatus(response.getStatus());
         ebXML.setErrors(response.getErrors());
         
@@ -59,15 +60,14 @@ public class ResponseTransformer {
     /**
      * Transforms a {@link RegistryResponse} to a {@link Response}.
      * @param ebXML
-     *          the ebXML representation.
-     * @return the response.
+     *          the source of the transformation.
+     * @return the destination of the transformation. 
      */
     public Response fromEbXML(RegistryResponse ebXML) {
-        if (ebXML == null) {
-            return null;
-        }
+        notNull(ebXML, "ebXML cannot be null");
         
         Response response = new Response();
+        
         response.setStatus(ebXML.getStatus());
         response.getErrors().addAll(ebXML.getErrors());
         

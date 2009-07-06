@@ -24,9 +24,9 @@ public class RouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from("xds-iti15:xds-iti15-service1")
-            .process(new ProvideAndRegisterDocumentSetProcessor("service 1: "));
+            .process(new ProvideAndRegisterDocumentSetProcessor("service 1"));
 
         from("xds-iti15:xds-iti15-service2")
-            .process(new ProvideAndRegisterDocumentSetProcessor("service 2: "));
+            .process(new ProvideAndRegisterDocumentSetProcessor("service 2"));
     }
 }

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41.service;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
 
 /**

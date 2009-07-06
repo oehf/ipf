@@ -20,10 +20,10 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit.Iti43ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.Iti43PortType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetResponseType;
 
 /**
  * The producer implementation for the ITI-42 component.

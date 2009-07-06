@@ -15,14 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15;
 
+import java.io.InputStream;
+
+import javax.activation.DataHandler;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegisterDocumentSetRequestType.Document;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource;
 
 /**
  * Processor for a ProvideAndRegisterDocumentSet request used in Tests.
@@ -33,37 +37,39 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.ProvideAndRegist
  * @author Jens Riemschneider
  */
 class ProvideAndRegisterDocumentSetProcessor implements Processor {
-    private final String prefix;
+    private final String expectedValue;
 
     /**
      * Constructs the processor.
-     * @param prefix
-     *          text that should be prefixed when processing the request.
+     * @param expectedValue
+     *          text that is expected to be send within the comment of the first
+     *          document entry.
      */
-    public ProvideAndRegisterDocumentSetProcessor(String prefix) {
-        this.prefix = prefix;
+    public ProvideAndRegisterDocumentSetProcessor(String expectedValue) {
+        this.expectedValue = expectedValue;
     }
 
     public void process(Exchange exchange) throws Exception {
-        ProvideAndRegisterDocumentSetRequestType request = exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
-        SubmitObjectsRequest objectsRequest = request.getSubmitObjectsRequest();
-        RegistryObjectType orgType = 
-            (RegistryObjectType) objectsRequest.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent().get(0);
-
-        String value = orgType.getObjectType();
-        
-        if (request.getDocument().size() != 1) {
-            value = "did not contain the correct amount of documents. Was: " + request.getDocument().size();
+        Document doc = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
+        String value = doc.getDocumentEntry().getComments().getValue();        
+        Response response = new Response();
+        Status status = Status.SUCCESS;
+        DataHandler dataHandler = doc.getDataHandler();
+        if (!expectedValue.equals(value) || dataHandler == null) {
+            status = Status.FAILURE;
         }
-        else {
-            Document document = request.getDocument().get(0);
-            if (!document.getId().equals("testdoc")) {
-                value = "wrong document id. Was: " + document.getId();
-            }            
+        else {            
+            InputStream inputStream = dataHandler.getInputStream();
+            int length = 0;
+            while (inputStream.read() != -1) {
+                ++length;
+            }
+            if (length != LargeDataSource.STREAM_SIZE) {
+                status = Status.FAILURE;
+            }
         }
         
-        RegistryResponse response = new RegistryResponse();
-        response.setStatus(prefix + value);
+        response.setStatus(status);
         Exchanges.resultMessage(exchange).setBody(response);
     }
 }

@@ -25,10 +25,10 @@ public class RouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from("xds-iti18:xds-iti18-service1?audit=false")
-            .process(new AdhocQueryProcessor("service 1: "));
+            .process(new AdhocQueryProcessor("service 1"));
 
         from("xds-iti18:xds-iti18-service2")
-            .process(new AdhocQueryProcessor("service 2: "));
+            .process(new AdhocQueryProcessor("service 2"));
     }
 
 }

@@ -19,8 +19,8 @@ import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetRequestType.DocumentRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType.DocumentRequest;
 
 /**
  * Audit strategy for ITI-43.

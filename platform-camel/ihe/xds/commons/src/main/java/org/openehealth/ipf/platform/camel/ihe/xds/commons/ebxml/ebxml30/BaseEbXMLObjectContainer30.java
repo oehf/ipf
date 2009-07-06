@@ -28,6 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ClassificationType;
@@ -41,9 +42,25 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Regist
  * @author Jens Riemschneider
  */
 public abstract class BaseEbXMLObjectContainer30 implements EbXMLObjectContainer {
-    final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory rimFactory = 
+    private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory rimFactory = 
         new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory();
+    
+    private final ObjectLibrary objectLibrary;
 
+    public ObjectLibrary getObjectLibrary() {
+        return objectLibrary;
+    }
+    
+    /**
+     * Constructs the container.
+     * @param objectLibrary
+     *          the object library to use.
+     */
+    BaseEbXMLObjectContainer30(ObjectLibrary objectLibrary) {
+        notNull(objectLibrary, "objLibrary cannot be null");
+        this.objectLibrary = objectLibrary;
+    }
+    
     @Override
     public void addAssociation(EbXMLAssociation association) {
         if (association != null) {

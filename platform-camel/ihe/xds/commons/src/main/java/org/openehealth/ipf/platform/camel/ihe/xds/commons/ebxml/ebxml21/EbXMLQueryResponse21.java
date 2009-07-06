@@ -67,7 +67,7 @@ public class EbXMLQueryResponse21 extends BaseEbXMLObjectContainer21 implements 
         return new EbXMLQueryResponse21(response, objectLibrary);        
     }
     
-    static EbXMLQueryResponse21 create(RegistryResponse regResponse) {
+    public static EbXMLQueryResponse21 create(RegistryResponse regResponse) {
         ObjectLibrary objectLibrary = new ObjectLibrary();
         EbXMLQueryResponse21 adhocQueryResponse = new EbXMLQueryResponse21(regResponse, objectLibrary);
         fillObjectLibrary(objectLibrary, adhocQueryResponse.getContents());        
@@ -140,5 +140,10 @@ public class EbXMLQueryResponse21 extends BaseEbXMLObjectContainer21 implements 
             // Home not supported in 2.1
             getContents().add(objectRef);
         }
+    }
+
+    @Override
+    public RegistryResponse getInternal() {
+        return regResponse;
     }
 }

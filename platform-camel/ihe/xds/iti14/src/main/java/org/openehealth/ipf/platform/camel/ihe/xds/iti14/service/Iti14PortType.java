@@ -44,7 +44,7 @@ public interface Iti14PortType {
     @Action(input = "urn:ihe:iti:2007:RegisterDocumentSet", output = "urn:ihe:iti:2007:RegisterDocumentSetResponse")
     @WebMethod(operationName = "DocumentRegistry_RegisterDocumentSet")
     RegistryResponse documentRegistryRegisterDocumentSet(
-            @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1")
+        @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1")
         SubmitObjectsRequest body
     );
 }

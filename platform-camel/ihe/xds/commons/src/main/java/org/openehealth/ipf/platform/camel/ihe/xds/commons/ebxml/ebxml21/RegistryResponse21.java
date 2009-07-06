@@ -44,10 +44,21 @@ public class RegistryResponse21 implements RegistryResponse {
     }
 
     /**
+     * Creates a response containing a new ebXML. 
      * @return a new instance of this class.
      */
-    public static RegistryResponse create() {
+    static RegistryResponse21 create() {
         return new RegistryResponse21(rsFactory.createRegistryResponse());
+    }
+
+    /**
+     * Creates a response containing the given ebXML.
+     * @param regResponse
+     *          the ebXML to wrap. 
+     * @return a new instance of this class.
+     */
+    public static RegistryResponse21 create(org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse regResponse) {
+        return new RegistryResponse21(regResponse);
     }
 
     @Override

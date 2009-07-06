@@ -18,46 +18,58 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti16;
 import static junit.framework.Assert.assertEquals;
 
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLQueryResponse21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryRegistryTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.QueryResponseTransformer;
 
 /**
  * Tests the ITI-16 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
-public class TestIti16 extends StandardTestWebContainer {
+public class TestIti16 extends StandardTestContainer {
 
     private static final String SERVICE1 = "xds-iti16://localhost:9091/xds-iti16-service1";
     private static final String SERVICE2 = "xds-iti16://localhost:9091/xds-iti16-service2";
 
+    private QueryRegistry request;
+    private SqlQuery query;
+    
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void classSetUp() throws Exception {
         startServer(new CXFServlet(), "iti-16.xml");
         installTestInterceptors(Iti16TestAuditFinalInterceptor.class);
+    }
+
+    @Before
+    public void setUp() {
+        query = new SqlQuery();
+        request = new QueryRegistry(query);        
     }
     
     /** Calls the route attached to the ITI-16 endpoint. */
     @Test
     public void testIti16() {
-        AdhocQueryRequest request = new AdhocQueryRequest();
-        request.setSQLQuery("ok");
+        assertEquals(Status.SUCCESS, send(SERVICE1, "service 1").getStatus());
+        assertEquals(Status.SUCCESS, send(SERVICE2, "service 2").getStatus());
+    }
 
-        RegistryResponse response1 =
-                (RegistryResponse)getProducerTemplate().requestBody(SERVICE1, request);
-
-        RegistryObjectType actual1 = 
-            (RegistryObjectType) response1.getAdhocQueryResponse().getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);
-        assertEquals("service 1: ok", actual1.getObjectType());
-
-        RegistryResponse response2 =
-                (RegistryResponse)getProducerTemplate().requestBody(SERVICE2, request);
-
-        RegistryObjectType actual2 = 
-            (RegistryObjectType) response2.getAdhocQueryResponse().getSQLQueryResult().getObjectRefOrAssociationOrAuditableEvent().get(0);
-        assertEquals("service 2: ok", actual2.getObjectType());
+    private QueryResponse send(String endpoint, String value) {
+        query.setSql(value);
+        
+        QueryRegistryTransformer requestTransformer = new QueryRegistryTransformer();
+        Object result = getProducerTemplate().requestBody(endpoint, requestTransformer.toEbXML(request).getInternal());        
+        EbXMLQueryResponse ebXMLResponse = EbXMLQueryResponse21.create((RegistryResponse) result);
+        return new QueryResponseTransformer(new EbXMLFactory21()).fromEbXML(ebXMLResponse);
     }
 }

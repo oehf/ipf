@@ -55,13 +55,13 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
     
     @Override
-    public SubmitObjectsRequest createSubmitObjectsRequest(ObjectLibrary objectLibrary) {
-        return SubmitObjectsRequest30.create();
+    public SubmitObjectsRequest createSubmitObjectsRequest() {
+        return SubmitObjectsRequest30.create(createObjectLibrary());
     }
 
     @Override
     public ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library) {
-        return ProvideAndRegisterDocumentSetRequest30.create();
+        return ProvideAndRegisterDocumentSetRequest30.create(library);
     }
     
     @Override
@@ -91,6 +91,6 @@ public class EbXMLFactory30 implements EbXMLFactory {
     
     @Override
     public EbXMLQueryResponse createAdhocQueryResponse(ObjectLibrary objectLibrary) {
-        return EbXMLQueryResponse30.create();
+        return EbXMLQueryResponse30.create(objectLibrary);
     }
 }

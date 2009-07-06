@@ -15,66 +15,72 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41;
 
+import java.io.InputStream;
+
+import javax.activation.DataHandler;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.CxfTestUtils;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.ProvideAndRegisterDocumentSetRequestType;
-
-import javax.activation.DataHandler;
-import java.util.List;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource;
 
 /**
  * Processor for a ProvideAndRegisterDocumentSet request used in Tests.
  * <p>
- * Sets the status field on the response with the text provided as comment in
- * the request. Also adds the prefix to the text that was configured in the
- * constructor.
- * <p>
- * If the comment in the request is {@code large} this processor will read the
- * whole content of the data source in each document. This is used to find out
- * if the underlying infrastructure supports memory efficient streaming.
- * <p>
- * The status field is set to {@code ok} prefixed with the given prefix value
- * if the content could be read completely. It is set to {@code Only read: NN}
- * if the content was not fully read.
+ * Sets the status field on the response with a text provided in the request. 
+ * Also adds the prefix to the text that was configured in the constructor.
  *
  * @author Jens Riemschneider
  */
 class ProvideAndRegisterDocumentSetProcessor implements Processor {
-    private final String prefix;
+    private final String expectedValue;
 
     /**
      * Constructs the processor.
-     * @param prefix
-     *          text that should be prefixed when processing the request.
+     * @param expectedValue
+     *          text that is expected to be send within the comment of the first
+     *          document entry.
      */
-    public ProvideAndRegisterDocumentSetProcessor(String prefix) {
-        this.prefix = prefix;
+    public ProvideAndRegisterDocumentSetProcessor(String expectedValue) {
+        this.expectedValue = expectedValue;
     }
 
     public void process(Exchange exchange) throws Exception {
-        ProvideAndRegisterDocumentSetRequestType request = exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
-        String value = request.getSubmitObjectsRequest().getComment();
-
-        if (value.equals("large")) {
-            // Note: Only check for MTOM if this was indeed a large content
-            // CXF might use SwA if the content is too small.
-            List<ProvideAndRegisterDocumentSetRequestType.Document> documents = request.getDocument();
-            for (ProvideAndRegisterDocumentSetRequestType.Document document : documents) {
-                DataHandler dataHandler = document.getValue();
-                if (!CxfTestUtils.isCxfUsingMtom(dataHandler)) {
-                    value = "Was not using MTOM";
+        Document doc = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
+        String value = doc.getDocumentEntry().getComments().getValue();        
+        Response response = new Response();
+        Status status = Status.SUCCESS;
+        DataHandler dataHandler = doc.getDataHandler();
+        if (!expectedValue.equals(value) || dataHandler == null) {
+            status = Status.FAILURE;
+        }
+        else {
+            InputStream inputStream = doc.getDataHandler().getInputStream();
+            try {
+                if (!CxfTestUtils.isCxfUsingMtom(inputStream)) {
+                    status = Status.FAILURE;
                 }
                 else {
-                    value = "ok";
+                    int length = 0;
+                    while (inputStream.read() != -1) {
+                        ++length;
+                    }
+                    if (length != LargeDataSource.STREAM_SIZE) {
+                        status = Status.FAILURE;
+                    }
                 }
             }
+            finally {
+                inputStream.close();
+            }
         }
-
-        RegistryResponseType response = new RegistryResponseType();
-        response.setStatus(prefix + value);
+        
+        response.setStatus(status);
         Exchanges.resultMessage(exchange).setBody(response);
     }
 }

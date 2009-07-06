@@ -33,21 +33,20 @@ public abstract class CxfTestUtils {
     /**
      * Determines if a data handler is using MTOM.
      * <p>
-     * The data handler must have been created using CXFs standard attachment
-     * interceptors.
+     * The input stream must have been retrieved using a data handler that was 
+     * created via CXFs standard attachment interceptors.
      * <p>
      * The implementation of this method uses internal knowledge of how MTOM is
      * supported within CXF. This is faster and safer than reading the whole
      * stream (assuming it wouldn't fit into memory if MTOM isn't used).
-     * @param dataHandler
-     *          the data handler to check.
+     * @param inputStream
+     *          the input stream to check. Must have been retrieved from a data
+     *          handler that was obtained via CXF marshaling.
      * @return {@code true} if the handler was created using the CXF MTOM support.
      */
-    public static boolean isCxfUsingMtom(DataHandler dataHandler) {
+    public static boolean isCxfUsingMtom(InputStream inputStream) {
         boolean isMtom = true;
-        InputStream inputStream = null;
         try {
-            inputStream = dataHandler.getInputStream();
             Class<? extends InputStream> aClass = inputStream.getClass();
             Field field = aClass.getDeclaredField("is");
             field.setAccessible(true);
@@ -58,9 +57,6 @@ public abstract class CxfTestUtils {
         }
         catch (Exception e) {
             isMtom = false;
-        }
-        finally {
-            IOUtils.closeQuietly(inputStream);
         }
         return isMtom;
     }

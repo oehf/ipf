@@ -16,32 +16,34 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertFalse;
-
 import org.junit.After;
-import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import org.apache.cxf.transport.servlet.CXFServlet;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.UdpServer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.RegistryResponse21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml21TestUtils;
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.RegisterDocumentSetTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.ResponseTransformer;
 
 /**
  * Tests the ITI-14 transaction with a webservice and client adapter defined via URIs.
  * 
  * @author Jens Riemschneider
  */
-@SuppressWarnings("unused")
-public class TestIti14 extends StandardTestWebContainer {
+public class TestIti14 extends StandardTestContainer {
     private static final String SERVICE1 = "xds-iti14://localhost:9091/xds-iti14-service1";
     private static final String SERVICE2 = "xds-iti14://localhost:9091/xds-iti14-service2";
 
@@ -49,57 +51,54 @@ public class TestIti14 extends StandardTestWebContainer {
     private static final String SERVICE_FT = "xds-iti14://localhost:9091/xds-iti14-service12?audit=false&allowIncompleteAudit=true";
     private static final String SERVICE_DT = "xds-iti14://localhost:9091/xds-iti14-service13?allowIncompleteAudit=true";
 
-    private static final int SYSLOG_PORT = 8888;
-    private static UdpServer syslog;
+    private RegisterDocumentSet request;
+    private DocumentEntry docEntry;
 
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUpClass() throws Exception {
         startServer(new CXFServlet(), "iti-14.xml");
-        // installTestInterceptors(Iti14TestAuditFinalInterceptor.class);
-
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
-        AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(SYSLOG_PORT);
-
-        syslog = new UdpServer(SYSLOG_PORT);
-        syslog.start();
     }
 
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-        syslog.cancel();
-        syslog.join();
-    }
+    @Before
+    public void setUp() {
+        Identifiable patientID = new Identifiable("patient-id", new AssigningAuthority("1.2.3.4.5", "ISO"));
+        
+        SubmissionSet submissionSet = new SubmissionSet();
+        submissionSet.setPatientID(patientID);
+        submissionSet.setUniqueID("229.6.58.29.24.1235");
 
+        docEntry = new DocumentEntry();
+        docEntry.setPatientID(patientID);
+        docEntry.setComments(new LocalizedString("service 1"));
+        
+        request = new RegisterDocumentSet();
+        request.setSubmissionSet(submissionSet);
+        request.getDocumentEntries().add(docEntry);
+    }
+    
     @After
     public void tearDown() {
-        syslog.reset();
+        getSyslog().reset();
     }
-
     
     /** Calls the route attached to the ITI-14 endpoint. */
     @Test
     public void testIti14() {
-        SubmitObjectsRequest request = Ebxml21TestUtils.createTestSubmitObjectRequest();
-        RegistryResponse response1 = 
-            (RegistryResponse)getProducerTemplate().requestBody(SERVICE1, request);
-        assertEquals("service 1: ok", response1.getStatus());
-        RegistryResponse response2 = 
-            (RegistryResponse)getProducerTemplate().requestBody(SERVICE2, request);
-        assertEquals("service 2: ok", response2.getStatus());
+        Response response1 = send(SERVICE1, "service 1");
+        assertEquals(Status.SUCCESS, response1.getStatus());
+
+        Response response2 = send(SERVICE2, "service 2");
+        assertEquals(Status.SUCCESS, response2.getStatus());
     }
 
-    /**
-     * normal request, auditing enabled --> should audit
-     */
+    /** normal request, auditing enabled --> should audit */
     @Test
     public void testIti14_NormalAudit() throws Exception {
-        syslog.expectedPacketCount(2);
-        SubmitObjectsRequest request = Ebxml21TestUtils.createTestSubmitObjectRequest();
-        RegistryResponse response = 
-            (RegistryResponse)getProducerTemplate().requestBody(SERVICE_DD, request);
-        syslog.assertIsSatisfied();
-        String packet1 = syslog.getPacket(0);
-        String packet2 = syslog.getPacket(1);
+        getSyslog().expectedPacketCount(2);
+        send(SERVICE_DD, "service 11");
+        getSyslog().assertIsSatisfied();
+        getSyslog().getPacket(0);
+        getSyslog().getPacket(1);
         // TODO: assert proper content of packet1
         // TODO: assert proper content of packet2
     }
@@ -110,11 +109,9 @@ public class TestIti14 extends StandardTestWebContainer {
      */
     @Test
     public void testIti14_AuditDisabled() throws Exception {
-        syslog.expectedPacketCount(0);
-        SubmitObjectsRequest request = Ebxml21TestUtils.createTestSubmitObjectRequest();
-        RegistryResponse response = 
-            (RegistryResponse) getProducerTemplate().requestBody(SERVICE_FT, request);
-        syslog.assertIsSatisfied();
+        getSyslog().expectedPacketCount(0);
+        send(SERVICE_FT, "service 12");
+        getSyslog().assertIsSatisfied();
     }
 
     /**
@@ -123,36 +120,34 @@ public class TestIti14 extends StandardTestWebContainer {
      */
     @Test
     public void testIti14_Incomplete_IncompleteAuditingNotAllowed() throws Exception  {
-        syslog.expectedPacketCount(0);
-        SubmitObjectsRequest request = createIncompleteRequest();
-        RegistryResponse response = (RegistryResponse) getProducerTemplate()
-                .requestBody(SERVICE_DD, request);
-        syslog.assertIsSatisfied();
+        getSyslog().expectedPacketCount(0);
+        request.setSubmissionSet(null);
+        send(SERVICE_DD, "service 11");
+        getSyslog().assertIsSatisfied();
     }
 
-    /**
-     * incomplete request, auditing enabled, incomplete audits 
-     * allowed --> should audit
-     */
+    /** incomplete request, auditing enabled, incomplete audits allowed --> should audit */
     @Test
     public void testIti14_Incomplete_IncompleteAuditingAllowed() throws Exception {
-        syslog.expectedPacketCount(2);
-        SubmitObjectsRequest request = createIncompleteRequest();
-        RegistryResponse response = (RegistryResponse) getProducerTemplate()
-                .requestBody(SERVICE_DT, request);
-        syslog.assertIsSatisfied();
-        String packet1 = syslog.getPacket(0);
-        String packet2 = syslog.getPacket(1);
+        getSyslog().expectedPacketCount(2);
+        request.setSubmissionSet(null);
+        send(SERVICE_DT, "service 13");
+        getSyslog().assertIsSatisfied();
+        getSyslog().getPacket(0);
+        getSyslog().getPacket(1);
         // TODO: assert proper content of packet1
         // TODO: assert proper content of packet2
     }
-
     
-    private SubmitObjectsRequest createIncompleteRequest() {
-        SubmitObjectsRequest submitObjectsRequest = Ebxml21TestUtils.createTestSubmitObjectRequest();
-        RegistryPackageType registryPackageType = (RegistryPackageType)
-            submitObjectsRequest.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent().get(0);
-        registryPackageType.getExternalIdentifier().clear();
-        return submitObjectsRequest;
+    private Response send(String endpoint, String value) {
+        docEntry.setComments(new LocalizedString(value));
+        
+        EbXMLFactory21 factory = new EbXMLFactory21();
+        RegisterDocumentSetTransformer requestTransformer = new RegisterDocumentSetTransformer(factory);
+        SubmitObjectsRequest ebXMLRequest = requestTransformer.toEbXML(request);        
+        Object result = getProducerTemplate().requestBody(endpoint, ebXMLRequest.getInternal());        
+        RegistryResponse21 ebXMLResponse = RegistryResponse21.create((RegistryResponse) result);
+        ResponseTransformer responseTransformer = new ResponseTransformer(factory);
+        return responseTransformer.fromEbXML(ebXMLResponse);
     }
 }

@@ -38,6 +38,10 @@ public class LocalizedString {
         this.charset = charset;
     }
 
+    public LocalizedString(String value) {
+        this.value = value;
+    }
+
     public String getLang() {
         return lang;
     }

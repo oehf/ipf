@@ -47,13 +47,16 @@ public class SubmitObjectsRequest21 extends BaseEbXMLObjectContainer21 implement
     }
 
     static SubmitObjectsRequest21 create(ObjectLibrary objectLibrary) {
-        SubmitObjectsRequest request = rsFactory.createSubmitObjectsRequest();
-        LeafRegistryObjectListType list = request.getLeafRegistryObjectList();
+        SubmitObjectsRequest raw = rsFactory.createSubmitObjectsRequest();
+        LeafRegistryObjectListType list = raw.getLeafRegistryObjectList();
         if (list == null) {
             list = rimFactory.createLeafRegistryObjectListType();
-            request.setLeafRegistryObjectList(list);
+            raw.setLeafRegistryObjectList(list);
         }
-        return new SubmitObjectsRequest21(request, objectLibrary);
+        
+        SubmitObjectsRequest21 wrapped = new SubmitObjectsRequest21(raw, objectLibrary);
+        wrapped.getContents().addAll(objectLibrary.getObjects());
+        return wrapped;
     }
 
     public static SubmitObjectsRequest21 create(SubmitObjectsRequest submitObjectsRequest) {

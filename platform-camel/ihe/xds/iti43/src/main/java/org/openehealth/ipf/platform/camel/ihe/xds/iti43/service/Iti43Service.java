@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.service;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 
 /**
  * Service implementation for the IHE ITI-34 transaction (Retrieve Document Set).

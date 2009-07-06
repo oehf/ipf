@@ -20,21 +20,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A data structure used to store information pieces collected 
- * by various auditing-related CXF interceptors.  
+ * A data structure used to store information pieces collected by various
+ * auditing-related CXF interceptors.
  * 
  * @author Dmytro Rud
  */
 public class AuditDataset {
 
-    // whether we audit on server (true) or on client (false) 
-    private final boolean serverSide; 
-    
+    // whether we audit on server (true) or on client (false)
+    private final boolean serverSide;
+
     // SOAP Body (XML) payload
     private String payload;
     // client user ID (WS-Addressing <Reply-To> header)
     private String userId;
-    // client user name (WS-Security <Username> header) 
+    // client user name (WS-Security <Username> header)
     private String userName;
     // client IP address
     private String clientIpAddress;
@@ -45,18 +45,17 @@ public class AuditDataset {
     // submission set unique ID
     private String submissionSetUuid;
 
-
     /**
      * Constructor.
      * 
      * @param isServerSide
-     *      specifies whether this audit dataset will be used on the server 
-     *      side (<code>true</code>) or on the client side (<code>false</code>) 
+     *            specifies whether this audit dataset will be used on the
+     *            server side (<code>true</code>) or on the client side (
+     *            <code>false</code>)
      */
     public AuditDataset(boolean isServerSide) {
         this.serverSide = isServerSide;
     }
-    
 
     public void setPayload(String payload) {
         this.payload = payload;
@@ -65,35 +64,35 @@ public class AuditDataset {
     public String getPayload() {
         return payload;
     }
-    
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    
+
     public String getUserId() {
         return userId;
     }
-    
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    
+
     public String getUserName() {
         return userName;
     }
-    
+
     public void setClientIpAddress(String clientIpAddress) {
         this.clientIpAddress = clientIpAddress;
     }
-    
+
     public String getClientIpAddress() {
         return clientIpAddress;
     }
-    
+
     public void setServiceEndpointUrl(String serviceEntpointUrl) {
         this.serviceEndpointUrl = serviceEntpointUrl;
     }
-    
+
     public String getServiceEndpointUrl() {
         return serviceEndpointUrl;
     }
@@ -118,79 +117,71 @@ public class AuditDataset {
         return serverSide;
     }
 
-    
     /**
-     * <i>"What you see is what I get"</i>&nbsp;&mdash; returns a string that consists 
-     * from all fields available through getter methods.
+     * <i>"What you see is what I get"</i>&nbsp;&mdash; returns a string that
+     * consists from all fields available through getter methods.
      * 
-     * @return
-     *      string representation of this audit dataset
+     * @return string representation of this audit dataset
      */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        
+
         try {
             Method[] methods = this.getClass().getMethods();
-            for(Method method : methods) {
+            for (Method method : methods) {
                 String methodName = method.getName();
                 Class<?> methodReturnType = method.getReturnType();
-                
-                if((methodName.startsWith("get") || methodName.startsWith("is")) && 
-                  (method.getParameterTypes().length == 0)) {
-                    sb
-                        .append("\n    ")
-                        .append(method.getName())
-                        .append(" -> ");
-                    
-                    if(methodReturnType == String[].class) {
-                        String[] result = (String[])method.invoke(this);
-                        for(int i = 0; i < result.length; ++i) {
-                            sb
-                                .append((i == 0) ? "{" : ", ")
-                                .append(result[i]);
+
+                if ((methodName.startsWith("get") || methodName.startsWith("is"))
+                        && (method.getParameterTypes().length == 0)) {
+                    sb.append("\n    ").append(method.getName()).append(" -> ");
+
+                    if (methodReturnType == String[].class) {
+                        String[] result = (String[]) method.invoke(this);
+                        for (int i = 0; i < result.length; ++i) {
+                            sb.append((i == 0) ? "{" : ", ").append(result[i]);
                         }
                         sb.append('}');
-                        
+
                     } else {
                         sb.append(method.invoke(this));
                     }
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return sb.append("\n]").toString();
     }
-    
-    
-    
+
     /**
-     * Checks whether this audit dataset contains non-null values in 
-     * the fields from the given list.
+     * Checks whether this audit dataset contains non-null values in the fields
+     * from the given list.
      * 
-     * @param fieldNames 
-     *      a list of field names with first letter capitalized, e.g. "Address"
+     * @param fieldNames
+     *            a list of field names with first letter capitalized, e.g.
+     *            "Address"
      * @param positiveCheck
-     *      <code>true</code> when the given fields must be present; 
-     *      <code>false</code> when they must be absent.
-     * @return
-     *      a set of names of the fields which do not match the given condition
-     *      (i.e. are absent when they must be present, and vice versa).
+     *            <code>true</code> when the given fields must be present;
+     *            <code>false</code> when they must be absent.
+     * @return a set of names of the fields which do not match the given
+     *         condition (i.e. are absent when they must be present, and vice
+     *         versa).
      * @throws Exception
-     *      on reflection errors
+     *             on reflection errors
      */
     public Set<String> checkFields(String[] fieldNames, boolean positiveCheck) throws Exception {
         Set<String> result = new HashSet<String>();
-        
-        for(String fieldName : fieldNames) {
+
+        for (String fieldName : fieldNames) {
             Method m = getClass().getMethod("get" + fieldName);
             Object o = m.invoke(this);
-            if((o == null) == positiveCheck) {
+            if ((o == null) == positiveCheck) {
                 result.add(fieldName);
             }
         }
-        
+
         return result;
     }
 }

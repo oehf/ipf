@@ -59,7 +59,7 @@ public class AdhocQueryRequest30 implements AdhocQueryRequest {
         return new AdhocQueryRequest30(request);        
     }
     
-    static AdhocQueryRequest30 create(org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest request) {
+    public static AdhocQueryRequest30 create(org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest request) {
         return new AdhocQueryRequest30(request);
     }
 
@@ -158,5 +158,10 @@ public class AdhocQueryRequest30 implements AdhocQueryRequest {
     @Override
     public void setHome(String homeCommunityID) {
         request.getAdhocQuery().setHome(homeCommunityID);
+    }
+
+    @Override
+    public Object getInternal() {
+        return request;
     }
 }

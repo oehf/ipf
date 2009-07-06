@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryObjectListType;
@@ -39,23 +40,24 @@ public class SubmitObjectsRequest30 extends BaseEbXMLObjectContainer30 implement
     
     private final SubmitObjectsRequest submitObjectsRequest;
 
-    private SubmitObjectsRequest30(SubmitObjectsRequest submitObjectsRequest) {
+    private SubmitObjectsRequest30(SubmitObjectsRequest submitObjectsRequest, ObjectLibrary objectLibrary) {
+        super(objectLibrary);
         notNull(submitObjectsRequest, "submitObjectsRequest cannot be null");
         this.submitObjectsRequest = submitObjectsRequest;
     }
 
-    static SubmitObjectsRequest30 create() {
+    static SubmitObjectsRequest30 create(ObjectLibrary objectLibrary) {
         SubmitObjectsRequest request = lcmFactory.createSubmitObjectsRequest();
         RegistryObjectListType list = request.getRegistryObjectList();
         if (list == null) {
             list = rimFactory.createRegistryObjectListType();
             request.setRegistryObjectList(list);
         }
-        return new SubmitObjectsRequest30(request);
+        return new SubmitObjectsRequest30(request, objectLibrary);
     }
     
     public static SubmitObjectsRequest30 create(SubmitObjectsRequest submitObjectsRequest) {
-        return new SubmitObjectsRequest30(submitObjectsRequest);
+        return new SubmitObjectsRequest30(submitObjectsRequest, new ObjectLibrary());
     }
 
     @Override
@@ -65,5 +67,10 @@ public class SubmitObjectsRequest30 extends BaseEbXMLObjectContainer30 implement
             return Collections.emptyList();
         }
         return list.getIdentifiable();
+    }
+
+    @Override
+    public SubmitObjectsRequest getInternal() {
+        return submitObjectsRequest;
     }
 }

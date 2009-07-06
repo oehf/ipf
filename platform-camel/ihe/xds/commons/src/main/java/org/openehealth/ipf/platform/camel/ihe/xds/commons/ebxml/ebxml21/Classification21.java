@@ -47,11 +47,11 @@ public class Classification21 implements Classification {
         this.objectLibrary = objectLibrary;
     }
     
-    public static Classification create(ObjectLibrary objectLibrary) {
+    static Classification21 create(ObjectLibrary objectLibrary) {
         return new Classification21(rimFactory.createClassificationType(), objectLibrary);
     }
     
-    public static Classification create(ClassificationType classification, ObjectLibrary objectLibrary) {
+    static Classification create(ClassificationType classification, ObjectLibrary objectLibrary) {
         return new Classification21(classification, objectLibrary);
     }
     

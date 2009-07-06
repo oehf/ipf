@@ -18,64 +18,82 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.cxf.transport.servlet.CXFServlet;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestWebContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponse30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.RetrieveDocumentSetRequestTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.RetrieveDocumentSetResponseTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.CxfTestUtils;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.RetrieveDocumentSetResponseType;
-import javax.activation.DataHandler;
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.
  * author Jens Riemschneider
  */
-public class TestIti43 extends StandardTestWebContainer {
+public class TestIti43 extends StandardTestContainer {
     private static final String SERVICE1 = "xds-iti43://localhost:9091/xds-iti43-service1";
     private static final String SERVICE2 = "xds-iti43://localhost:9091/xds-iti43-service2";
 
+    private RetrieveDocumentSet request;
+    private RetrieveDocument doc;
     
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void classSetUp() throws Exception {
         startServer(new CXFServlet(), "iti-43.xml");
         installTestInterceptors(Iti43TestAuditFinalInterceptor.class);        
     }
 
+    @Before
+    public void setUp() {
+        request = new RetrieveDocumentSet();
+        doc = new RetrieveDocument();
+        request.getDocuments().add(doc);
+    }
     
     /** Calls the route attached to the ITI-43 endpoint. */
     @Test
-    public void testIti43() {
-        RetrieveDocumentSetRequestType request = new RetrieveDocumentSetRequestType();
-        RetrieveDocumentSetRequestType.DocumentRequest documentRequest = new RetrieveDocumentSetRequestType.DocumentRequest();
-        documentRequest.setDocumentUniqueId("ok");
-        request.getDocumentRequest().add(documentRequest);
-
-        RetrieveDocumentSetResponseType response1 =
-                (RetrieveDocumentSetResponseType) getProducerTemplate().requestBody(SERVICE1, request);
-        assertEquals("service 1: ok", response1.getRegistryResponse().getStatus());
-
-        RetrieveDocumentSetResponseType response2 =
-                (RetrieveDocumentSetResponseType) getProducerTemplate().requestBody(SERVICE2, request);
-
-        assertEquals("service 2: ok", response2.getRegistryResponse().getStatus());
+    public void testIti43() throws Exception {
+        RetrievedDocumentSet response1 = send(SERVICE1, "service 1");
+        assertEquals(Status.SUCCESS, response1.getStatus());
+        checkForMTOM(response1);
+        
+        RetrievedDocumentSet response2 = send(SERVICE2, "service 2");
+        assertEquals(Status.SUCCESS, response2.getStatus());
+        checkForMTOM(response2);
     }
 
-    /** Calls the route attached to the ITI-43 endpoint with a large content stream to
-     *  check if the infrastructure is supporting MTOM with efficient memory usage */
-    @Test
-    public void testIti43LargeDocument() {
-        RetrieveDocumentSetRequestType request = new RetrieveDocumentSetRequestType();
-        RetrieveDocumentSetRequestType.DocumentRequest documentRequest = new RetrieveDocumentSetRequestType.DocumentRequest();
-        documentRequest.setDocumentUniqueId("large");
-        request.getDocumentRequest().add(documentRequest);
-        RetrieveDocumentSetResponseType response =
-                (RetrieveDocumentSetResponseType) getProducerTemplate().requestBody(SERVICE1, request);
+    private void checkForMTOM(RetrievedDocumentSet response1) throws IOException {
+        InputStream inputStream = response1.getDocuments().get(0).getDataHandler().getInputStream();
+        try {
+            assertTrue(CxfTestUtils.isCxfUsingMtom(inputStream));
+        }
+        finally {
+            inputStream.close();
+        }
+    }
 
-        DataHandler dataHandler = response.getDocumentResponse().get(0).getDocument();
-        assertTrue(CxfTestUtils.isCxfUsingMtom(dataHandler));
-
-        assertEquals("service 1: large", response.getRegistryResponse().getStatus());
+    private RetrievedDocumentSet send(String endpoint, String value) {
+        doc.setDocumentUniqueID(value);
+        
+        EbXMLFactory30 factory = new EbXMLFactory30();
+        RetrieveDocumentSetRequestTransformer requestTransformer = new RetrieveDocumentSetRequestTransformer(factory);
+        RetrieveDocumentSetRequest ebXMLRequest = requestTransformer.toEbXML(request);
+        Object result = getProducerTemplate().requestBody(endpoint, ebXMLRequest.getInternal());
+        RetrieveDocumentSetResponseTransformer responseTransformer = new RetrieveDocumentSetResponseTransformer(factory);
+        RetrieveDocumentSetResponse30 ebXMLResponse = RetrieveDocumentSetResponse30.create((RetrieveDocumentSetResponseType) result);
+        return responseTransformer.fromEbXML(ebXMLResponse);
     }
 }

@@ -42,4 +42,6 @@ public interface AdhocQueryRequest {
 
     void setHome(String homeCommunityID);
     String getHome();
+
+    Object getInternal();
 }

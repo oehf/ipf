@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml30Utils;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.ProvideAndRegisterDocumentSetRequestType;
 
 
 /**

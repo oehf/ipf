@@ -53,11 +53,11 @@ public class ProvideAndRegisterDocumentSetRequest21 extends BaseEbXMLObjectConta
     }
 
     static ProvideAndRegisterDocumentSetRequest21 create(ObjectLibrary objectLibrary) {
-        ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
-        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
+        ProvideAndRegisterDocumentSetRequestType raw = new ProvideAndRegisterDocumentSetRequestType();
+        SubmitObjectsRequest submitObjectsRequest = raw.getSubmitObjectsRequest();
         if (submitObjectsRequest == null) {
             submitObjectsRequest = rsFactory.createSubmitObjectsRequest();
-            request.setSubmitObjectsRequest(submitObjectsRequest);
+            raw.setSubmitObjectsRequest(submitObjectsRequest);
         }
         
         LeafRegistryObjectListType list = submitObjectsRequest.getLeafRegistryObjectList();
@@ -65,7 +65,10 @@ public class ProvideAndRegisterDocumentSetRequest21 extends BaseEbXMLObjectConta
             list = rimFactory.createLeafRegistryObjectListType();
             submitObjectsRequest.setLeafRegistryObjectList(list);
         }
-        return new ProvideAndRegisterDocumentSetRequest21(request, objectLibrary);
+        
+        ProvideAndRegisterDocumentSetRequest21 wrapped = new ProvideAndRegisterDocumentSetRequest21(raw, objectLibrary);
+        wrapped.getContents().addAll(objectLibrary.getObjects());
+        return wrapped;
     }
 
     public static ProvideAndRegisterDocumentSetRequest21 create(ProvideAndRegisterDocumentSetRequestType request) {

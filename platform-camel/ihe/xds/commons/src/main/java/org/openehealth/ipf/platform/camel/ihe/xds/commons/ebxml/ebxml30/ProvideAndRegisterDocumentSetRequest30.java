@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.xml.bind.JAXBElement;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
@@ -44,12 +45,13 @@ public class ProvideAndRegisterDocumentSetRequest30 extends BaseEbXMLObjectConta
     
     private final ProvideAndRegisterDocumentSetRequestType request;
 
-    private ProvideAndRegisterDocumentSetRequest30(ProvideAndRegisterDocumentSetRequestType request) {
+    private ProvideAndRegisterDocumentSetRequest30(ProvideAndRegisterDocumentSetRequestType request, ObjectLibrary objectLibrary) {
+        super(objectLibrary);
         notNull(request, "request cannot be null");                
         this.request = request;
     }
 
-    static ProvideAndRegisterDocumentSetRequest30 create() {
+    static ProvideAndRegisterDocumentSetRequest30 create(ObjectLibrary objectLibrary) {
         ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if (submitObjectsRequest == null) {
@@ -62,11 +64,11 @@ public class ProvideAndRegisterDocumentSetRequest30 extends BaseEbXMLObjectConta
             list = rimFactory.createRegistryObjectListType();
             submitObjectsRequest.setRegistryObjectList(list);
         }
-        return new ProvideAndRegisterDocumentSetRequest30(request);
+        return new ProvideAndRegisterDocumentSetRequest30(request, objectLibrary);
     }
 
     public static ProvideAndRegisterDocumentSetRequest30 create(ProvideAndRegisterDocumentSetRequestType request) {
-        return new ProvideAndRegisterDocumentSetRequest30(request);
+        return new ProvideAndRegisterDocumentSetRequest30(request, new ObjectLibrary());
     }
     
     @Override

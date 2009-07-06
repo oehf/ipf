@@ -263,12 +263,11 @@ public class Ebrs21MarshalingTest {
         RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(factory);;
         RegisterDocumentSet result = transformer.fromEbXML(SubmitObjectsRequest21.create(original));
         assertEquals(expected, result);
-        org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest ebXML = 
-            transformer.toEbXML(result);
+        SubmitObjectsRequest21 ebXML = (SubmitObjectsRequest21) transformer.toEbXML(result);
         
-        SubmitObjectsRequest transformed = ((SubmitObjectsRequest21)ebXML).getInternal();
+        SubmitObjectsRequest transformed = ebXML.getInternal();
         
         RegisterDocumentSet resultTransformed = transformer.fromEbXML(SubmitObjectsRequest21.create(transformed));        
-        assertEquals(expected, resultTransformed);
+        assertEquals(expected.toString(), resultTransformed.toString());
     }
 }
