@@ -24,15 +24,18 @@ import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuild
 /**
  * FactoryBean to be used if a DefaultValidationContext shall be initialized from a
  * Spring application context.
- * This factory bean retrieves all ValidationContextBuilder beans from the
+ * By default, this factory bean retrieves all ValidationContextBuilder beans from the
  * application context calls their configure() method in order to add the 
  * rules to the DefaultValidationContext.
+ * You can also set the ValidationContextBuilders directly to the <code>builders</code> 
+ * collection property to override autodetection.
  * 
  * @author Christian Ohr
  */
 public class ValidationContextFactoryBean extends AbstractFactoryBean implements ApplicationContextAware {
 
     private ApplicationContext applicationContext
+    private Collection<ValidationContextBuilder> builders
     
     public void setApplicationContext(ApplicationContext context) {
         this.applicationContext = context
@@ -50,11 +53,21 @@ public class ValidationContextFactoryBean extends AbstractFactoryBean implements
      */
     public Object createInstance(){
         def validationContext = new DefaultValidationContext()
-        Map builders = applicationContext.getBeansOfType(ValidationContextBuilder.class)
-        builders?.values().each { builder ->
+        if (builders == null || builders.size == 0) {
+            builders = applicationContext.getBeansOfType(ValidationContextBuilder.class)?.values()
+        }
+        builders?.each { builder ->
             builder.forContext(validationContext)
         }
         return validationContext
+    }
+
+    public void setBuilders(Collection<ValidationContextBuilder> builders) {
+        this.builders = builders
+    }
+    
+    public Collection<ValidationContextBuilder> getBuilders() {
+        return builders
     }
     
 }
