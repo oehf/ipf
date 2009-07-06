@@ -17,8 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
  *          the {@link XDSMetaClass} type.
  * @author Jens Riemschneider
  */
-public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends XDSMetaClass> {
+public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryEntry, C extends XDSMetaClass> {
     private final IdentifiableTransformer identifiableTransformer = new IdentifiableTransformer();
     private final String patientIdExternalId;
     private final String patientIdLocalizedString;
@@ -69,7 +69,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      *          the object library.
      * @return the ebXML representation.
      */
-    public E toEbXML(C metaData, ObjectLibrary objectLibrary) {
+    public E toEbXML(C metaData, EbXMLObjectLibrary objectLibrary) {
         notNull(objectLibrary, "objectLibrary cannot be null");
         
         if (metaData == null) {
@@ -115,7 +115,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      *          the object library. 
      * @return a new instance of the ebXML type.
      */
-    protected abstract E createEbXMLInstance(String id, ObjectLibrary objectLibrary);
+    protected abstract E createEbXMLInstance(String id, EbXMLObjectLibrary objectLibrary);
 
     /**
      * Called by the base class to create a new instance of the {@link XDSMetaClass}. 
@@ -132,7 +132,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      * @param objectLibrary 
      *          the object library.
      */
-    protected void addAttributes(C metaData, E ebXML, ObjectLibrary objectLibrary) {
+    protected void addAttributes(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
         ebXML.setStatus(AvailabilityStatus.toOpcode(metaData.getAvailabilityStatus()));                
         ebXML.setDescription(metaData.getComments());
         ebXML.setName(metaData.getTitle());
@@ -161,7 +161,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      * @param objectLibrary 
      *          the object library.
      */
-    protected void addSlots(C metaData, E ebXML, ObjectLibrary objectLibrary) {}
+    protected void addSlots(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {}
 
     /**
      * Called by the base class to add slots to the meta data.
@@ -181,7 +181,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      * @param objectLibrary 
      *          the object library.
      */
-    protected void addClassifications(C metaData, E ebXML, ObjectLibrary objectLibrary) {}
+    protected void addClassifications(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {}
 
     /**
      * Called by the base class to add classifications to the meta data.
@@ -201,7 +201,7 @@ public abstract class XDSMetaClassTransformer<E extends RegistryEntry, C extends
      * @param objectLibrary 
      *          the object library.
      */
-    protected void addExternalIdentifiers(C metaData, E ebXML, ObjectLibrary objectLibrary) {
+    protected void addExternalIdentifiers(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
         String patientID = identifiableTransformer.toEbXML(metaData.getPatientID());
         ebXML.addExternalIdentifier(patientID, patientIdExternalId, patientIdLocalizedString);        
         ebXML.addExternalIdentifier(metaData.getUniqueID(), uniqueIdExternalId, uniqueIdLocalizedString);

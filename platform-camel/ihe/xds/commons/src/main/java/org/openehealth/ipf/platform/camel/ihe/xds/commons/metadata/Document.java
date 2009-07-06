@@ -22,31 +22,57 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents the contents of a document and the describing entry.
+ * <p> 
+ * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class Document {
     private DocumentEntry documentEntry;
     private DataHandler dataHandler;
     
+    /**
+     * Constructs a document.
+     */
     public Document() {}
-    
+
+    /**
+     * Constructs a document.
+     * @param documentEntry
+     *          the document entry describing the meta data of the document.
+     * @param dataHandler
+     *          the data handler allowing access to the contents of the document.
+     */
     public Document(DocumentEntry documentEntry, DataHandler dataHandler) {
         this.documentEntry = documentEntry;
         this.dataHandler = dataHandler;
     }
 
+    /**
+     * @return the data handler allowing access to the contents of the document.
+     */
     public DataHandler getDataHandler() {
         return dataHandler;
     }
     
+    /**
+     * @param dataHandler
+     *          the data handler allowing access to the contents of the document.
+     */
     public void setDataHandler(DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
 
+    /**
+     * @return the document entry describing the meta data of the document.
+     */
     public DocumentEntry getDocumentEntry() {
         return documentEntry;
     }
 
+    /**
+     * @param documentEntry
+     *          the document entry describing the meta data of the document.
+     */
     public void setDocumentEntry(DocumentEntry documentEntry) {
         this.documentEntry = documentEntry;
     }

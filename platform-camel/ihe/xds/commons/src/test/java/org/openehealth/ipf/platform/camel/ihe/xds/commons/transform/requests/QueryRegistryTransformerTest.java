@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindFoldersQuery;
@@ -79,7 +79,7 @@ public class QueryRegistryTransformerTest {
 
     private void checkForQuery(Query query) {
         QueryRegistry request = new QueryRegistry(query);
-        AdhocQueryRequest ebXML = transformer.toEbXML(request);
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
         QueryRegistry result = transformer.fromEbXML(ebXML);
         assertEquals(request, result);
     }

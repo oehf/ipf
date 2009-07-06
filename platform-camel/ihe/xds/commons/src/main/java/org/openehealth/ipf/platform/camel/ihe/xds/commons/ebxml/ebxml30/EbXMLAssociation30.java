@@ -19,7 +19,6 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
 
 /**
@@ -27,22 +26,16 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Associ
  * @author Jens Riemschneider
  */
 public class EbXMLAssociation30 implements EbXMLAssociation {
-    private final static ObjectFactory rimFactory = new ObjectFactory();
-    
     private final AssociationType1 association;
 
-    private EbXMLAssociation30(AssociationType1 association) {
-        notNull(association, "association cannot be null");
-        
+    /**
+     * Constructs an association by wrapping the given ebXML 3.0 object.
+     * @param association
+     *          the object to wrap.
+     */
+    public EbXMLAssociation30(AssociationType1 association) {
+        notNull(association, "association cannot be null");        
         this.association = association;
-    }
-
-    static EbXMLAssociation create() {
-        return new EbXMLAssociation30(rimFactory.createAssociationType1());
-    }
-
-    static EbXMLAssociation create(AssociationType1 association) {
-        return new EbXMLAssociation30(association);
     }
 
     @Override
@@ -75,6 +68,9 @@ public class EbXMLAssociation30 implements EbXMLAssociation {
         association.setAssociationType(AssociationType.getOpcode30(associationType));
     }
 
+    /**
+     * @return the ebXML 3.0 representation of this object.
+     */
     AssociationType1 getInternal() {
         return association;
     }

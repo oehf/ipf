@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
@@ -41,7 +41,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.que
 public class GetAllQueryTransformerTest {
     private GetAllQueryTransformer transformer;
     private GetAllQuery query;
-    private AdhocQueryRequest ebXML;
+    private EbXMLAdhocQueryRequest ebXML;
     
     @Before
     public void setUp() {
@@ -70,7 +70,7 @@ public class GetAllQueryTransformerTest {
         assertEquals(Arrays.asList("'id1^^^name1&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.PATIENT_ID.getSlotName()));
         
-        List<Slot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
+        List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_CONFIDENTIALITY_CODE.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
         assertEquals(Arrays.asList("('code12^^scheme12')"), slots.get(1).getValueList());

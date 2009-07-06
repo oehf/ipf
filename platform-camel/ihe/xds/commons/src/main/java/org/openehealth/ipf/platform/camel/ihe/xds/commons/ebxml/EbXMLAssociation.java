@@ -25,12 +25,36 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationTy
  * @author Jens Riemschneider
  */
 public interface EbXMLAssociation {
+    /**
+     * @return the id of the target object of this association.
+     */
     String getTarget();
+    
+    /**
+     * @param target            
+     *          the id of the target object of this association.
+     */
     void setTarget(String target);
 
+    /**
+     * @return the id of the source object of this association.
+     */
     String getSource();
+    
+    /**
+     * @param source
+     *          the id of the source object of this association.
+     */
     void setSource(String source);
 
+    /**
+     * @return the type of this association.
+     */
     AssociationType getAssociationType();
+    
+    /**
+     * @param associationType
+     *          the type of this association.
+     */
     void setAssociationType(AssociationType associationType);
 }

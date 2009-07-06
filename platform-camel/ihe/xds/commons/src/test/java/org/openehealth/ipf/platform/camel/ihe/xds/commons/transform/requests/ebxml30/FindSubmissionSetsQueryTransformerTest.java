@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
@@ -38,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.que
 public class FindSubmissionSetsQueryTransformerTest {
     private FindSubmissionSetsQueryTransformer transformer;
     private FindSubmissionSetsQuery query;
-    private AdhocQueryRequest ebXML;
+    private EbXMLAdhocQueryRequest ebXML;
     
     @Before
     public void setUp() {

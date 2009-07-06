@@ -20,6 +20,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents an association between two documents.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class Association {
@@ -27,26 +29,47 @@ public class Association {
     private String sourceUUID;
     private AssociationType associationType;
 
+    /**
+     * @return the UUID of the target object.
+     */
     public String getTargetUUID() {
         return targetUUID;
     }
 
+    /**
+     * @param targetUUID
+     *          the UUID of the target object.
+     */
     public void setTargetUUID(String targetUUID) {
         this.targetUUID = targetUUID;
     }
 
+    /**
+     * @return the UUID of the source object.
+     */
     public String getSourceUUID() {
         return sourceUUID;
     }
     
+    /**
+     * @param sourceUUID
+     *          the UUID of the source object.
+     */
     public void setSourceUUID(String sourceUUID) {
         this.sourceUUID = sourceUUID;
     }
     
+    /**
+     * @return the type of this association.
+     */
     public AssociationType getAssociationType() {
         return associationType;
     }
 
+    /**
+     * @param associationType
+     *          the type of this association.
+     */
     public void setAssociationType(AssociationType associationType) {
         this.associationType = associationType;
     }

@@ -17,13 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
@@ -73,7 +73,7 @@ public class QueryResponseTransformer {
             return null;
         }
         
-        ObjectLibrary library = factory.createObjectLibrary();        
+        EbXMLObjectLibrary library = factory.createObjectLibrary();        
         EbXMLQueryResponse ebXML = factory.createAdhocQueryResponse(library);
         ebXML.setStatus(response.getStatus());
         ebXML.setErrors(response.getErrors());
@@ -104,7 +104,7 @@ public class QueryResponseTransformer {
     }
     
     /**
-     * Transforms a {@link RegistryResponse} to a {@link Response}.
+     * Transforms a {@link EbXMLRegistryResponse} to a {@link Response}.
      * @param ebXML
      *          the ebXML representation.
      * @return the response.
@@ -118,15 +118,15 @@ public class QueryResponseTransformer {
         response.setStatus(ebXML.getStatus());
         response.getErrors().addAll(ebXML.getErrors());
         
-        for (ExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
             response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
         }
 
-        for (RegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
+        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
             response.getFolders().add(folderTransformer.fromEbXML(regPackage));
         }
 
-        for (RegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE)) {
+        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE)) {
             response.getSubmissionSets().add(submissionSetTransformer.fromEbXML(regPackage));
         }
         
@@ -137,8 +137,8 @@ public class QueryResponseTransformer {
         return response;
     }
 
-    private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, ObjectLibrary library) {
-        Classification classification = factory.createClassification(library);
+    private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, EbXMLObjectLibrary library) {
+        EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
         ebXML.addClassification(classification);

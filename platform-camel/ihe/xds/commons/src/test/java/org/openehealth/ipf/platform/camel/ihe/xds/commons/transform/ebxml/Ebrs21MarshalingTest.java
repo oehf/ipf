@@ -29,13 +29,13 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.ExtrinsicObject21;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.SubmitObjectsRequest21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLExtrinsicObject21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
@@ -65,9 +65,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.Reg
  */
 public class Ebrs21MarshalingTest {
     private SubmitObjectsRequest request;
-    private ExtrinsicObject docEntry;
+    private EbXMLExtrinsicObject docEntry;
     private EbXMLFactory21 factory;
-    private ObjectLibrary objectLibrary;
+    private EbXMLObjectLibrary objectLibrary;
 
     @Before
     public void setUp() {        
@@ -83,20 +83,20 @@ public class Ebrs21MarshalingTest {
 
         docEntry = factory.createExtrinsic("Document01", objectLibrary);
         docEntry.setObjectType(Vocabulary.DOC_ENTRY_CLASS_NODE);
-        objList.add(((ExtrinsicObject21)docEntry).getInternal());
+        objList.add(docEntry.getInternal());
     }
     
     @Test
     public void testCreateClassification() throws Exception {        
-        Classification classification = factory.createClassification(objectLibrary);
+        EbXMLClassification classification = factory.createClassification(objectLibrary);
         classification.setClassifiedObject(docEntry.getId());
         docEntry.addClassification(classification, Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         
         SubmitObjectsRequest received = send();
         
-        ExtrinsicObject docEntryResult = getDocumentEntry(received);
+        EbXMLExtrinsicObject docEntryResult = getDocumentEntry(received);
         assertEquals(1, docEntryResult.getClassifications().size());
-        Classification classificationResult = docEntryResult.getClassifications().get(0);
+        EbXMLClassification classificationResult = docEntryResult.getClassifications().get(0);
         assertNotNull(classificationResult);
         
         assertEquals(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, classificationResult.getClassificationScheme());
@@ -104,8 +104,8 @@ public class Ebrs21MarshalingTest {
         assertSame(docEntryResult.getId(), classificationResult.getClassifiedObject());
     }
     
-    private ExtrinsicObject getDocumentEntry(SubmitObjectsRequest received) {
-        ObjectLibrary objectLibraryOfRequest = new ObjectLibrary();
+    private EbXMLExtrinsicObject getDocumentEntry(SubmitObjectsRequest received) {
+        EbXMLObjectLibrary objectLibraryOfRequest = new EbXMLObjectLibrary();
         
         for (Object obj : received.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent()) {
             if (obj instanceof ObjectRefType) {
@@ -116,7 +116,7 @@ public class Ebrs21MarshalingTest {
             }
             
             if (obj instanceof ExtrinsicObjectType) {                
-                return ExtrinsicObject21.create((ExtrinsicObjectType)obj, objectLibraryOfRequest);
+                return new EbXMLExtrinsicObject21((ExtrinsicObjectType)obj, objectLibraryOfRequest);
             }
         }
         fail("Document entry not found");
@@ -125,17 +125,17 @@ public class Ebrs21MarshalingTest {
 
     @Test
     public void testAddSlot() throws Exception {
-        Classification classification = factory.createClassification(objectLibrary);
+        EbXMLClassification classification = factory.createClassification(objectLibrary);
         docEntry.addClassification(classification, Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         
         classification.addSlot("something", "a", "b", "c");
 
         SubmitObjectsRequest received = send();        
-        ExtrinsicObject docEntryResult = getDocumentEntry(received);
-        List<Slot> slots = docEntryResult.getClassifications().get(0).getSlots();        
+        EbXMLExtrinsicObject docEntryResult = getDocumentEntry(received);
+        List<EbXMLSlot> slots = docEntryResult.getClassifications().get(0).getSlots();        
         assertEquals(1, slots.size());        
         
-        Slot slot = slots.get(0);
+        EbXMLSlot slot = slots.get(0);
         assertEquals("something", slot.getName());
         
         List<String> values = slot.getValueList();
@@ -261,13 +261,13 @@ public class Ebrs21MarshalingTest {
         SubmitObjectsRequest original = (SubmitObjectsRequest) unmarshalled;
         
         RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(factory);;
-        RegisterDocumentSet result = transformer.fromEbXML(SubmitObjectsRequest21.create(original));
+        RegisterDocumentSet result = transformer.fromEbXML(new EbXMLSubmitObjectsRequest21(original));
         assertEquals(expected, result);
-        SubmitObjectsRequest21 ebXML = (SubmitObjectsRequest21) transformer.toEbXML(result);
+        EbXMLSubmitObjectsRequest21 ebXML = (EbXMLSubmitObjectsRequest21) transformer.toEbXML(result);
         
         SubmitObjectsRequest transformed = ebXML.getInternal();
         
-        RegisterDocumentSet resultTransformed = transformer.fromEbXML(SubmitObjectsRequest21.create(transformed));        
+        RegisterDocumentSet resultTransformed = transformer.fromEbXML(new EbXMLSubmitObjectsRequest21(transformed));        
         assertEquals(expected.toString(), resultTransformed.toString());
     }
 }

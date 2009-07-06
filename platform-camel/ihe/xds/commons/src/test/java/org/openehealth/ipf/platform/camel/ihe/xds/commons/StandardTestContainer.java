@@ -21,10 +21,14 @@ import java.lang.reflect.Constructor;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.impl.DefaultExchange;
 import org.apache.cxf.bus.CXFBusImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.AfterClass;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.ServletServer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.TomcatServer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.UdpServer;
@@ -41,13 +45,15 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Jens Riemschneider
  */
 public class StandardTestContainer {
-    private static ProducerTemplate<?> producerTemplate;
+    private static ProducerTemplate<Exchange> producerTemplate;
     private static ServletServer servletServer;
     private static ApplicationContext appContext;
 
     private static final int SYSLOG_PORT = 8888;
     private static UdpServer syslog;
+    private static CamelContext camelContext;
     
+    @SuppressWarnings("unchecked")  // Because of getting beans of generified classes.
     public static void startServer(Servlet servlet, String appContextName) throws Exception {
         File contextFile = new ClassPathResource(appContextName).getFile();
         
@@ -61,7 +67,8 @@ public class StandardTestContainer {
         
         ServletContext servletContext = servlet.getServletConfig().getServletContext();
         appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-        producerTemplate = (ProducerTemplate<?>)appContext.getBean("producerTemplate", ProducerTemplate.class);  
+        producerTemplate = (ProducerTemplate<Exchange>)appContext.getBean("producerTemplate", ProducerTemplate.class);  
+        camelContext = (CamelContext)appContext.getBean("camelContext", CamelContext.class);  
 
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(SYSLOG_PORT);
@@ -80,10 +87,6 @@ public class StandardTestContainer {
         }
     }
 
-    public static ProducerTemplate<?> getProducerTemplate() {
-        return producerTemplate;
-    }
-    
     public static UdpServer getSyslog() {
         return syslog;
     }
@@ -114,5 +117,22 @@ public class StandardTestContainer {
         CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
         bus.getOutInterceptors().add(outboundInterceptor);
         bus.getInInterceptors().add(inboundInterceptor);
+    }
+
+    /**
+     * Sends the given object to the endpoint.
+     * @param endpoint
+     *          the endpoint to send the object to.
+     * @param in
+     *          the input object.
+     * @param outType
+     *          the type of the output object.
+     * @return the output object.
+     */
+    protected <T> T send(String endpoint, Object in, Class<T> outType) {
+        Exchange exchange = new DefaultExchange(camelContext);
+        exchange.getIn().setBody(in);        
+        Exchange result = producerTemplate.send(endpoint, exchange);
+        return Exchanges.resultMessage(result).getBody(outType);
     }
 }

@@ -18,20 +18,97 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
 /**
  * Serves as a factory for ebXML objects.
+ * <p>
+ * This factory is used to provide version independent creation of
+ * ebXML objects.
  * @author Jens Riemschneider
  */
 public interface EbXMLFactory {
-    ObjectLibrary createObjectLibrary();
+    /**
+     * @return a new instance of an object library filled with object references used
+     *          for ebXML requests/responses.
+     */
+    EbXMLObjectLibrary createObjectLibrary();
 
-    Classification createClassification(ObjectLibrary objectLibrary);
-    ExtrinsicObject createExtrinsic(String id, ObjectLibrary objectLibrary);
-    RegistryPackage createRegistryPackage(String id, ObjectLibrary objectLibrary);
-    EbXMLAssociation createAssociation(ObjectLibrary objectLibrary);
-    SubmitObjectsRequest createSubmitObjectsRequest();
-    ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library);
-    RetrieveDocumentSetRequest createRetrieveDocumentSetRequest();
-    AdhocQueryRequest createAdhocQueryRequest();
-    EbXMLQueryResponse createAdhocQueryResponse(ObjectLibrary objectLibrary);
-    RegistryResponse createRegistryResponse();
-    RetrieveDocumentSetResponse createRetrieveDocumentSetResponse();    
+    /**
+     * Creates a new classification.
+     * @param objectLibrary
+     *          the object library to use.
+     * @return the created object.
+     */
+    EbXMLClassification createClassification(EbXMLObjectLibrary objectLibrary);
+    
+    /**
+     * Creates a new extrinsic object and adds it to the object library.
+     * @param id
+     *          the id of the object within the object library.
+     * @param objectLibrary
+     *          the object library to use.
+     * @return the created object.
+     */
+    EbXMLExtrinsicObject createExtrinsic(String id, EbXMLObjectLibrary objectLibrary);
+
+    /**
+     * Creates a new registry package and adds it to the object library.
+     * @param id
+     *          the id of the object within the object library.
+     * @param objectLibrary
+     *          the object library to use.
+     * @return the created object.
+     */
+    EbXMLRegistryPackage createRegistryPackage(String id, EbXMLObjectLibrary objectLibrary);
+
+    /**
+     * Creates a new association.
+     * @param objectLibrary
+     *          the object library to use.
+     * @return the created object.
+     */
+    EbXMLAssociation createAssociation(EbXMLObjectLibrary objectLibrary);
+    
+    /**
+     * Creates a new request to submit objects.
+     * @return the created object.
+     */
+    EbXMLSubmitObjectsRequest createSubmitObjectsRequest();
+    
+    /**
+     * Creates a new request to provide and register documents.
+     * @param objectLibrary
+     *          the object library to use.
+     * @return the created object.
+     */
+    EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary library);
+    
+    /**
+     * Creates a new request to retrieve documents.
+     * @return the created object.
+     */
+    EbXMLRetrieveDocumentSetRequest createRetrieveDocumentSetRequest();
+
+    /**
+     * Creates a new request to query a registry.
+     * @return the created object.
+     */
+    EbXMLAdhocQueryRequest createAdhocQueryRequest();
+
+    /**
+     * Creates a new response for a query request.
+     * @param objectLibrary
+     *          the object library to use.
+     * @return the created object.
+     */
+    EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary);
+
+    /**
+     * Creates a new response for a registry request.
+     * @return the created object.
+     */
+    EbXMLRegistryResponse createRegistryResponse();
+
+    /**
+     * Creates a new response for a retrieve document request.
+     * @return the created object.
+     */
+    EbXMLRetrieveDocumentSetResponse createRetrieveDocumentSetResponse();    
 }

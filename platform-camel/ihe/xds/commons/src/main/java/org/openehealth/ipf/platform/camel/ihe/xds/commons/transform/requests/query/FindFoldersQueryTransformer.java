@@ -17,19 +17,19 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.*;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindFoldersQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.IdentifiableTransformer;
 
 /**
- * Transforms between a {@link FindFoldersQuery} and {@link AdhocQueryRequest}.
+ * Transforms between a {@link FindFoldersQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class FindFoldersQueryTransformer {
     private final IdentifiableTransformer identifiableTransformer = 
         new IdentifiableTransformer();
     
-    public void toEbXML(FindFoldersQuery query, AdhocQueryRequest ebXML) {
+    public void toEbXML(FindFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
@@ -49,7 +49,7 @@ public class FindFoldersQueryTransformer {
         slots.fromStatus(FOLDER_STATUS, query.getStatus());
     }
     
-    public void fromEbXML(FindFoldersQuery query, AdhocQueryRequest ebXML) {
+    public void fromEbXML(FindFoldersQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

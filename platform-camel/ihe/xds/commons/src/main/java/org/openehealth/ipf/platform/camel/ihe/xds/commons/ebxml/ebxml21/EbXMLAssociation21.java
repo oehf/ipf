@@ -18,35 +18,31 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.AssociationType1;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
 
 /**
  * Encapsulation of {@link AssociationType1}.
  * @author Jens Riemschneider
  */
 public class EbXMLAssociation21 implements EbXMLAssociation {
-    private final static ObjectFactory rimFactory = new ObjectFactory();
-
-    private final ObjectLibrary objectLibrary;    
+    private final EbXMLObjectLibrary objectLibrary;    
     private final AssociationType1 association;
 
-    private EbXMLAssociation21(AssociationType1 association, ObjectLibrary objectLibrary) {
+    /**
+     * Constructs an association by wrapping this given object.
+     * @param association
+     *          the association to wrap.
+     * @param objectLibrary
+     *          the object library to use.
+     */
+    public EbXMLAssociation21(AssociationType1 association, EbXMLObjectLibrary objectLibrary) {
         notNull(objectLibrary, "objectLibrary cannot be null");
         notNull(association, "association cannot be null");
         
         this.association = association;
         this.objectLibrary = objectLibrary;
-    }
-
-    static EbXMLAssociation21 create(ObjectLibrary objectLibrary) {        
-        return new EbXMLAssociation21(rimFactory.createAssociationType1(), objectLibrary);
-    }
-
-    static EbXMLAssociation21 create(AssociationType1 association, ObjectLibrary objectLibrary) {        
-        return new EbXMLAssociation21(association, objectLibrary);
     }
 
     @Override

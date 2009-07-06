@@ -30,12 +30,12 @@ import javax.xml.namespace.QName;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ExtrinsicObject30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLExtrinsicObject30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExtrinsicObjectType;
@@ -48,9 +48,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Regist
  */
 public class Ebrs30MarshalingTest {
     private SubmitObjectsRequest request;
-    private ExtrinsicObject docEntry;
+    private EbXMLExtrinsicObject docEntry;
     private EbXMLFactory30 factory;
-    private ObjectLibrary objectLibrary;
+    private EbXMLObjectLibrary objectLibrary;
 
     private static final QName EXTRINSIC_OBJECT_QNAME = 
         new QName("urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0", "ExtrinsicObject", "rim"); 
@@ -67,7 +67,7 @@ public class Ebrs30MarshalingTest {
 
         docEntry = factory.createExtrinsic("Document01", objectLibrary);
         docEntry.setObjectType(Vocabulary.DOC_ENTRY_CLASS_NODE);
-        objList.add(getJaxbElement(EXTRINSIC_OBJECT_QNAME, ((ExtrinsicObject30)docEntry).getInternal()));
+        objList.add(getJaxbElement(EXTRINSIC_OBJECT_QNAME, ((EbXMLExtrinsicObject30)docEntry).getInternal()));
     }
     
     @SuppressWarnings("unchecked")
@@ -77,15 +77,15 @@ public class Ebrs30MarshalingTest {
     
     @Test
     public void testCreateClassification() throws Exception {        
-        Classification classification = factory.createClassification(objectLibrary);
+        EbXMLClassification classification = factory.createClassification(objectLibrary);
         classification.setClassifiedObject(docEntry.getId());
         docEntry.addClassification(classification, Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         
         SubmitObjectsRequest received = send();
         
-        ExtrinsicObject docEntryResult = getDocumentEntry(received);
+        EbXMLExtrinsicObject docEntryResult = getDocumentEntry(received);
         assertEquals(1, docEntryResult.getClassifications().size());
-        Classification classificationResult = docEntryResult.getClassifications().get(0);
+        EbXMLClassification classificationResult = docEntryResult.getClassifications().get(0);
         assertNotNull(classificationResult);
         
         assertEquals(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, classificationResult.getClassificationScheme());
@@ -93,10 +93,10 @@ public class Ebrs30MarshalingTest {
         assertEquals(docEntryResult.getId(), classificationResult.getClassifiedObject());
     }
     
-    private ExtrinsicObject getDocumentEntry(SubmitObjectsRequest received) {
+    private EbXMLExtrinsicObject getDocumentEntry(SubmitObjectsRequest received) {
         for(JAXBElement<? extends IdentifiableType> obj : received.getRegistryObjectList().getIdentifiable()) {
             if(obj.getDeclaredType() == ExtrinsicObjectType.class) {
-                return ExtrinsicObject30.create((ExtrinsicObjectType)obj.getValue());
+                return new EbXMLExtrinsicObject30((ExtrinsicObjectType)obj.getValue());
             }
         }
         fail("Document entry not found");
@@ -105,17 +105,17 @@ public class Ebrs30MarshalingTest {
 
     @Test
     public void testAddSlot() throws Exception {
-        Classification classification = factory.createClassification(objectLibrary);
+        EbXMLClassification classification = factory.createClassification(objectLibrary);
         docEntry.addClassification(classification, Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME);
         
         classification.addSlot("something", "a", "b", "c");
 
         SubmitObjectsRequest received = send();        
-        ExtrinsicObject docEntryResult = getDocumentEntry(received);
-        List<Slot> slots = docEntryResult.getClassifications().get(0).getSlots();        
+        EbXMLExtrinsicObject docEntryResult = getDocumentEntry(received);
+        List<EbXMLSlot> slots = docEntryResult.getClassifications().get(0).getSlots();        
         assertEquals(1, slots.size());        
         
-        Slot slot = slots.get(0);
+        EbXMLSlot slot = slots.get(0);
         assertEquals("something", slot.getName());
         
         List<String> values = slot.getValueList();

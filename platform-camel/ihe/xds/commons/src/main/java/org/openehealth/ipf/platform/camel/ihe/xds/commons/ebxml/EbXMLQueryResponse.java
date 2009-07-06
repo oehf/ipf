@@ -24,6 +24,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReferen
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLQueryResponse extends EbXMLObjectContainer, RegistryResponse {
+public interface EbXMLQueryResponse extends EbXMLObjectContainer, EbXMLRegistryResponse {
+    /**
+     * Adds an object reference to the response.
+     * @param ref
+     *          the object reference.
+     */
     void addReference(ObjectReference ref);
 }

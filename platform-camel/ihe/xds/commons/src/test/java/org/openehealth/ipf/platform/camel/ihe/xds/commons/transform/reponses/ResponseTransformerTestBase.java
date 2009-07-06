@@ -21,8 +21,9 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
@@ -45,15 +46,12 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
         factory = createFactory();
         transformer = new ResponseTransformer(factory);
         
-        response = new Response();
-        response.setStatus(Status.FAILURE);
-        response.getErrors().add(new ErrorInfo(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, "context1", Severity.ERROR, "location1"));
-        response.getErrors().add(new ErrorInfo(ErrorCode.SQL_ERROR, "context2", Severity.WARNING, null));
+        response = SampleData.createResponse();
     }
-    
+
     @Test
     public void testToEbXMLRegistryResponse() {
-        RegistryResponse ebXML = transformer.toEbXML(response);
+        EbXMLRegistryResponse ebXML = transformer.toEbXML(response);
 
         assertEquals(Status.FAILURE, ebXML.getStatus());
         List<ErrorInfo> errors = ebXML.getErrors();
@@ -74,7 +72,7 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXMLRegistryResponseEmpty() {
-        RegistryResponse ebXML = transformer.toEbXML(new Response());
+        EbXMLRegistryResponse ebXML = transformer.toEbXML(new Response());
         assertNull(ebXML.getStatus());
         assertEquals(0, ebXML.getErrors().size());
     }
@@ -82,14 +80,14 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        RegistryResponse ebXML = transformer.toEbXML(response);
+        EbXMLRegistryResponse ebXML = transformer.toEbXML(response);
         Response result = transformer.fromEbXML(ebXML);
         assertEquals(response, result);
     }
     
     @Test
     public void testFromEbXMLEmpty() {
-        RegistryResponse ebXML = transformer.toEbXML(new Response());
+        EbXMLRegistryResponse ebXML = transformer.toEbXML(new Response());
         Response result = transformer.fromEbXML(ebXML);
         assertEquals(new Response(), result);
     }

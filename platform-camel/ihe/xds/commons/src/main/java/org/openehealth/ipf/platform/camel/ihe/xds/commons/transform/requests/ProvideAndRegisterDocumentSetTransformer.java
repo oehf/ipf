@@ -22,13 +22,13 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
@@ -62,13 +62,13 @@ public class ProvideAndRegisterDocumentSetTransformer {
         associationTransformer = new AssociationTransformer(factory);
     }
     
-    public ProvideAndRegisterDocumentSetRequest toEbXML(ProvideAndRegisterDocumentSet request) {
+    public EbXMLProvideAndRegisterDocumentSetRequest toEbXML(ProvideAndRegisterDocumentSet request) {
         if (request == null) {
             return null;
         }
         
-        ObjectLibrary library = factory.createObjectLibrary();        
-        ProvideAndRegisterDocumentSetRequest ebXML = factory.createProvideAndRegisterDocumentSetRequest(library);
+        EbXMLObjectLibrary library = factory.createObjectLibrary();        
+        EbXMLProvideAndRegisterDocumentSetRequest ebXML = factory.createProvideAndRegisterDocumentSetRequest(library);
         
         for (Document doc : request.getDocuments()) {
             DocumentEntry docEntry = doc.getDocumentEntry();
@@ -95,14 +95,14 @@ public class ProvideAndRegisterDocumentSetTransformer {
         return ebXML;
     }
 
-    private void addClassification(ProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, ObjectLibrary library) {
-        Classification classification = factory.createClassification(library);
+    private void addClassification(EbXMLProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
+        EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
         ebXML.addClassification(classification);
     }
     
-    public ProvideAndRegisterDocumentSet fromEbXML(ProvideAndRegisterDocumentSetRequest ebXML) {
+    public ProvideAndRegisterDocumentSet fromEbXML(EbXMLProvideAndRegisterDocumentSetRequest ebXML) {
         if (ebXML == null) {
             return null;
         }
@@ -110,7 +110,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
         ProvideAndRegisterDocumentSet request = new ProvideAndRegisterDocumentSet();
         
         Map<String, DataHandler> documents = ebXML.getDocuments();
-        for (ExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
             DocumentEntry docEntry = documentEntryTransformer.fromEbXML(extrinsic);
             if (docEntry != null) {
                 Document document = new Document();
@@ -123,11 +123,11 @@ public class ProvideAndRegisterDocumentSetTransformer {
             }
         }
 
-        for (RegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
+        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
             request.getFolders().add(folderTransformer.fromEbXML(regPackage));
         }
 
-        List<RegistryPackage> regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        List<EbXMLRegistryPackage> regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         if (regPackages.size() > 0) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }

@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.query;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery;
 
 /**
- * Transforms between a {@link FindDocumentsQuery} and {@link AdhocQueryRequest}.
+ * Transforms between a {@link FindDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class SqlQueryTransformer {
-    public void toEbXML(SqlQuery query, AdhocQueryRequest ebXML) {
+    public void toEbXML(SqlQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
@@ -32,7 +32,7 @@ public class SqlQueryTransformer {
         ebXML.setSql(query.getSql());
     }
     
-    public void fromEbXML(SqlQuery query, AdhocQueryRequest ebXML) {
+    public void fromEbXML(SqlQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

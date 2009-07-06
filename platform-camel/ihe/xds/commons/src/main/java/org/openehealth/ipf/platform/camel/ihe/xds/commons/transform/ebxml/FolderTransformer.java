@@ -20,10 +20,10 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabu
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 
@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
  * Transforms between a {@link Folder} and its ebXML 2.1 representation.
  * @author Jens Riemschneider
  */
-public class FolderTransformer extends XDSMetaClassTransformer<RegistryPackage, Folder> {
+public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPackage, Folder> {
     private final EbXMLFactory factory;
 
     private final CodeTransformer codeTransformer;
@@ -52,7 +52,7 @@ public class FolderTransformer extends XDSMetaClassTransformer<RegistryPackage, 
     }
     
     @Override
-    protected RegistryPackage createEbXMLInstance(String id, ObjectLibrary objectLibrary) {
+    protected EbXMLRegistryPackage createEbXMLInstance(String id, EbXMLObjectLibrary objectLibrary) {
         return factory.createRegistryPackage(id, objectLibrary);
     }
     
@@ -62,47 +62,47 @@ public class FolderTransformer extends XDSMetaClassTransformer<RegistryPackage, 
     }
     
     @Override
-    protected void addAttributes(Folder metaData, RegistryPackage ebXML, ObjectLibrary objectLibrary) {
+    protected void addAttributes(Folder metaData, EbXMLRegistryPackage ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addAttributes(metaData, ebXML, objectLibrary);
         ebXML.setHome(metaData.getHomeCommunityId());
     }
     
     @Override
-    protected void addAttributesFromEbXML(Folder metaData, RegistryPackage ebXML) {
+    protected void addAttributesFromEbXML(Folder metaData, EbXMLRegistryPackage ebXML) {
         super.addAttributesFromEbXML(metaData, ebXML);
         metaData.setHomeCommunityId(ebXML.getHome());
     }
 
     @Override
-    protected void addSlotsFromEbXML(Folder folder, RegistryPackage regPackage) {
+    protected void addSlotsFromEbXML(Folder folder, EbXMLRegistryPackage regPackage) {
         super.addSlotsFromEbXML(folder, regPackage);        
         
         folder.setLastUpdateTime(regPackage.getSingleSlotValue(SLOT_NAME_LAST_UPDATE_TIME));
     }
 
     @Override
-    protected void addSlots(Folder folder, RegistryPackage regPackage, ObjectLibrary objectLibrary) {
+    protected void addSlots(Folder folder, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addSlots(folder, regPackage, objectLibrary);
         
         regPackage.addSlot(SLOT_NAME_LAST_UPDATE_TIME, folder.getLastUpdateTime());        
     }
 
     @Override
-    protected void addClassificationsFromEbXML(Folder folder, RegistryPackage regPackage) {
+    protected void addClassificationsFromEbXML(Folder folder, EbXMLRegistryPackage regPackage) {
         super.addClassificationsFromEbXML(folder, regPackage);
         
         List<Code> codes = folder.getCodeList();
-        for (Classification code : regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME)) {
+        for (EbXMLClassification code : regPackage.getClassifications(FOLDER_CODE_LIST_CLASS_SCHEME)) {
             codes.add(codeTransformer.fromEbXML(code));
         }
     }
 
     @Override
-    protected void addClassifications(Folder folder, RegistryPackage regPackage, ObjectLibrary objectLibrary) {
+    protected void addClassifications(Folder folder, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(folder, regPackage, objectLibrary);
         
         for (Code codeListElem : folder.getCodeList()) {
-            Classification code = codeTransformer.toEbXML(codeListElem, objectLibrary);
+            EbXMLClassification code = codeTransformer.toEbXML(codeListElem, objectLibrary);
             regPackage.addClassification(code, FOLDER_CODE_LIST_CLASS_SCHEME);
         }
     }

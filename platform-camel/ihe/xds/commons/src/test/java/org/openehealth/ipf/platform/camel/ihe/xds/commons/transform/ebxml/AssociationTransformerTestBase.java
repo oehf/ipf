@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AssociationTransformer;
@@ -32,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Associ
  */
 public abstract class AssociationTransformerTestBase implements FactoryCreator {
     private AssociationTransformer transformer;
-    private ObjectLibrary objectLibrary;
+    private EbXMLObjectLibrary objectLibrary;
     private Association association;
     
     @Before

@@ -19,7 +19,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.query.SqlQueryTransformer;
@@ -31,18 +32,16 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.que
 public class SqlQueryTransformerTest {
     private SqlQueryTransformer transformer;
     private SqlQuery query;
-    private AdhocQueryRequest ebXML;
+    private EbXMLAdhocQueryRequest ebXML;
 
     @Before
     public void setUp() {
         transformer = new SqlQueryTransformer();
-        query = new SqlQuery();
-        
-        query.setSql("SELECT * FROM INTERNET");
+        query = (SqlQuery) SampleData.createSqlQuery().getQuery();
         
         ebXML = new EbXMLFactory21().createAdhocQueryRequest();
     }
-    
+
     @Test
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);

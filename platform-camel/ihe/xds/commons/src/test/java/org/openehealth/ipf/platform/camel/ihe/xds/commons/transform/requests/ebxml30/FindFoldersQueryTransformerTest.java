@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.que
 public class FindFoldersQueryTransformerTest {
     private FindFoldersQueryTransformer transformer;
     private FindFoldersQuery query;
-    private AdhocQueryRequest ebXML;
+    private EbXMLAdhocQueryRequest ebXML;
     
     @Before
     public void setUp() {
@@ -72,7 +72,7 @@ public class FindFoldersQueryTransformerTest {
         assertEquals(Arrays.asList("2"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_LAST_UPDATE_TIME_TO.getSlotName()));
 
-        List<Slot> slots = ebXML.getSlots(QueryParameter.FOLDER_CODES.getSlotName());
+        List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.FOLDER_CODES.getSlotName());
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), slots.get(0).getValueList());
         assertEquals(Arrays.asList("('code9^^scheme9')"), slots.get(1).getValueList());

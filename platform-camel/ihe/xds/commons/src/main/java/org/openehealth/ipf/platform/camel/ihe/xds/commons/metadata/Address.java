@@ -22,6 +22,10 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Represents the address of a patient.
  * <p>
  * This class contains a subset of the fields from the HL7v2.5 XAD data type.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>. When transforming
+ * to HL7 this indicates that the values are empty. Trailing empty values are 
+ * removed from the HL7 string.
  * @author Jens Riemschneider
  */
 public class Address {
@@ -33,58 +37,107 @@ public class Address {
     private String country;                     // XAD.6  
     private String countyParishCode;            // XAD.9  
     
+    /**
+     * @return the street address (XAD.1).
+     */
     public String getStreetAddress() {
         return streetAddress;
     }
     
+    /**
+     * @param streetAddress
+     *          the street address (XAD.1).
+     */
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
     }
     
+    /**
+     * @return the other designation (XAD.2).
+     */
     public String getOtherDesignation() {
         return otherDesignation;
     }
     
+    /**
+     * @param otherDesignation
+     *          the other designation (XAD.2).
+     */
     public void setOtherDesignation(String otherDesignation) {
         this.otherDesignation = otherDesignation;
     }
     
+    /**
+     * @return the city (XAD.3).
+     */
     public String getCity() {
         return city;
     }
     
+    /**
+     * @param city
+     *          the city (XAD.3).
+     */
     public void setCity(String city) {
         this.city = city;
     }
     
+    /**
+     * @return the state or province (XAD.4).
+     */
     public String getStateOrProvince() {
         return stateOrProvince;
     }
     
+    /**
+     * @param stateOrProvince
+     *          the state or province (XAD.4).
+     */
     public void setStateOrProvince(String stateOrProvince) {
         this.stateOrProvince = stateOrProvince;
     }
     
+    /**
+     * @return the zip or postal code (XAD.5).
+     */
     public String getZipOrPostalCode() {
         return zipOrPostalCode;
     }
     
+    /**
+     * @param zipOrPostalCode
+     *          the zip or postal code (XAD.5).
+     */
     public void setZipOrPostalCode(String zipOrPostalCode) {
         this.zipOrPostalCode = zipOrPostalCode;
     }
     
+    /**
+     * @return the country (XAD.6).
+     */
     public String getCountry() {
         return country;
     }
     
+    /**
+     * @param country
+     *          the country (XAD.6).
+     */
     public void setCountry(String country) {
         this.country = country;
     }
     
+    /**
+     * @return the county parish code (XAD.9).
+     */
     public String getCountyParishCode() {
         return countyParishCode;
     }
 
+    /**
+     * @param countyParishCode
+     *          the county parish code (XAD.9).
+     */
     public void setCountyParishCode(String countyParishCode) {
         this.countyParishCode = countyParishCode;
     }

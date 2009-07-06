@@ -17,19 +17,19 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.*;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.IdentifiableTransformer;
 
 /**
- * Transforms between a {@link FindDocumentsQuery} and {@link AdhocQueryRequest}.
+ * Transforms between a {@link FindDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class FindDocumentsQueryTransformer {
     private final IdentifiableTransformer identifiableTransformer = 
         new IdentifiableTransformer();
     
-    public void toEbXML(FindDocumentsQuery query, AdhocQueryRequest ebXML) {
+    public void toEbXML(FindDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
@@ -62,7 +62,7 @@ public class FindDocumentsQueryTransformer {
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
     }
     
-    public void fromEbXML(FindDocumentsQuery query, AdhocQueryRequest ebXML) {
+    public void fromEbXML(FindDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

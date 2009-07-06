@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFoldersQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryType;
@@ -34,7 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.que
 public class GetFoldersQueryTransformerTest {
     private GetFoldersQueryTransformer transformer;
     private GetFoldersQuery query;
-    private AdhocQueryRequest ebXML;
+    private EbXMLAdhocQueryRequest ebXML;
     
     @Before
     public void setUp() {

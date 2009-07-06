@@ -22,18 +22,70 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 public interface EbXMLObjectContainer {
-    void addExtrinsicObject(ExtrinsicObject extrinsic);
-    List<ExtrinsicObject> getExtrinsicObjects(String objectType);
-    List<ExtrinsicObject> getExtrinsicObjects();
+    /**
+     * Adds the given extrinsic object to this container.
+     * @param extrinsic
+     *          the object to add. If <code>null</code> nothing will be added.
+     */
+    void addExtrinsicObject(EbXMLExtrinsicObject extrinsic);
+    
+    /**
+     * Returns the list of extrinsic objects of a given type.
+     * @param objectType
+     *          the object type of the extrinsic objects to return.
+     * @return the extrinsic objects.
+     */
+    List<EbXMLExtrinsicObject> getExtrinsicObjects(String objectType);
+    
+    /**
+     * Returns the list of all extrinsic objects.
+     * @return the extrinsic objects of this container.
+     */
+    List<EbXMLExtrinsicObject> getExtrinsicObjects();
 
-    void addRegistryPackage(RegistryPackage ebXML);
-    List<RegistryPackage> getRegistryPackages(String classificationNode);
-    List<RegistryPackage> getRegistryPackages();
+    /**
+     * Adds a registry package to this container. 
+     * @param regPackage
+     *          the registry package to add.
+     */
+    void addRegistryPackage(EbXMLRegistryPackage regPackage);
+    
+    /**
+     * Returns the list of registry packages matching the classification node.
+     * @param classificationNode
+     *          the classification node.
+     * @return the list of packages that match the node.
+     */
+    List<EbXMLRegistryPackage> getRegistryPackages(String classificationNode);
+    
+    /**
+     * Returns all registry packages of this container.
+     * @return the list of packages.
+     */
+    List<EbXMLRegistryPackage> getRegistryPackages();
 
-    void addAssociation(EbXMLAssociation ebXML);
+    /**
+     * Adds an association to this container.
+     * @param association
+     *          the association to add.
+     */
+    void addAssociation(EbXMLAssociation association);
+    
+    /**
+     * Returns all associations of this container.
+     * @return the associations.
+     */
     List<EbXMLAssociation> getAssociations();
 
-    void addClassification(Classification classification);
+    /**
+     * Adds a classification to this container.
+     * @param classification
+     *          the classification to add.
+     */
+    void addClassification(EbXMLClassification classification);
 
-    ObjectLibrary getObjectLibrary();
+    /**
+     * @return the object library used by this container.
+     */
+    EbXMLObjectLibrary getObjectLibrary();
 }

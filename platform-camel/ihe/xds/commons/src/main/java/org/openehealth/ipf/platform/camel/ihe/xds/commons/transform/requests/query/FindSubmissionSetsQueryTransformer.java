@@ -17,19 +17,19 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.*;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindSubmissionSetsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.IdentifiableTransformer;
 
 /**
- * Transforms between {@link FindSubmissionSetsQuery} and {@link AdhocQueryRequest}.
+ * Transforms between {@link FindSubmissionSetsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class FindSubmissionSetsQueryTransformer {
     private final IdentifiableTransformer identifiableTransformer = 
         new IdentifiableTransformer();
 
-    public void toEbXML(FindSubmissionSetsQuery query, AdhocQueryRequest ebXML) {
+    public void toEbXML(FindSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
@@ -53,7 +53,7 @@ public class FindSubmissionSetsQueryTransformer {
         slots.fromStatus(SUBMISSION_SET_STATUS, query.getStatus());
     }
     
-    public void fromEbXML(FindSubmissionSetsQuery query, AdhocQueryRequest ebXML) {
+    public void fromEbXML(FindSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

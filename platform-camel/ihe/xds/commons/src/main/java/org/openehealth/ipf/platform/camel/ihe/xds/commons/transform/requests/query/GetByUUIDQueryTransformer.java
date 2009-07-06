@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 import static org.apache.commons.lang.Validate.notNull;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.HOME;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetByUUIDQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 
@@ -36,7 +36,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUUIDQuery> {
         this.uuidParam = uuidParam;
     }
 
-    public void toEbXML(T query, AdhocQueryRequest ebXML) {
+    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
@@ -51,7 +51,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUUIDQuery> {
         toEbXML(query, slots);
     }
 
-    public void fromEbXML(T query, AdhocQueryRequest ebXML) {
+    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

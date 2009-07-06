@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindFoldersQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindSubmissionSetsQuery;
@@ -53,9 +53,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.que
  * @author Jens Riemschneider
  */
 final class FromEbXMLVisitor implements Visitor {
-    private final AdhocQueryRequest ebXML;
+    private final EbXMLAdhocQueryRequest ebXML;
 
-    FromEbXMLVisitor(AdhocQueryRequest ebXML) {
+    FromEbXMLVisitor(EbXMLAdhocQueryRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
         this.ebXML = ebXML;
     }

@@ -22,16 +22,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLQueryResponse21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryRegistryTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.QueryResponseTransformer;
 
 /**
  * Tests the ITI-16 transaction with a webservice and client adapter defined via URIs.
@@ -66,10 +60,6 @@ public class TestIti16 extends StandardTestContainer {
 
     private QueryResponse send(String endpoint, String value) {
         query.setSql(value);
-        
-        QueryRegistryTransformer requestTransformer = new QueryRegistryTransformer();
-        Object result = getProducerTemplate().requestBody(endpoint, requestTransformer.toEbXML(request).getInternal());        
-        EbXMLQueryResponse ebXMLResponse = EbXMLQueryResponse21.create((RegistryResponse) result);
-        return new QueryResponseTransformer(new EbXMLFactory21()).fromEbXML(ebXMLResponse);
+        return send(endpoint, request, QueryResponse.class);
     }
 }

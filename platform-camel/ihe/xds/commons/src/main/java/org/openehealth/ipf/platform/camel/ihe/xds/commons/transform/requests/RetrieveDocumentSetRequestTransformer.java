@@ -18,11 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests;
 import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
 
 /**
- * Transforms between a {@link RetrieveDocumentSetRequest} and its ebXML representation. 
+ * Transforms between a {@link EbXMLRetrieveDocumentSetRequest} and its ebXML representation. 
  * @author Jens Riemschneider
  */
 public class RetrieveDocumentSetRequestTransformer {
@@ -33,17 +33,17 @@ public class RetrieveDocumentSetRequestTransformer {
         this.factory = factory;
     }
     
-    public RetrieveDocumentSetRequest toEbXML(RetrieveDocumentSet request) {
+    public EbXMLRetrieveDocumentSetRequest toEbXML(RetrieveDocumentSet request) {
         if (request == null) {
             return null;
         }
         
-        RetrieveDocumentSetRequest ebXML = factory.createRetrieveDocumentSetRequest();
+        EbXMLRetrieveDocumentSetRequest ebXML = factory.createRetrieveDocumentSetRequest();
         ebXML.setDocuments(request.getDocuments());        
         return ebXML;
     }
     
-    public RetrieveDocumentSet fromEbXML(RetrieveDocumentSetRequest ebXML) {
+    public RetrieveDocumentSet fromEbXML(EbXMLRetrieveDocumentSetRequest ebXML) {
         if (ebXML == null) {
             return null;
         }

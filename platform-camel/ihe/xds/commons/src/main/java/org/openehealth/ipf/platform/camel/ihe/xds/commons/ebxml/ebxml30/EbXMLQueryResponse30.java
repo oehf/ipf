@@ -24,7 +24,7 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
@@ -32,7 +32,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Severity;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectRefType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.ObjectFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryObjectListType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryError;
@@ -42,37 +41,29 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.Registr
  * Encapsulation of {@link AdhocQueryResponse}.
  * @author Jens Riemschneider
  */
-public class EbXMLQueryResponse30 extends BaseEbXMLObjectContainer30 implements EbXMLQueryResponse {
-    private final static ObjectFactory queryFactory = new ObjectFactory();
-
-    private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.ObjectFactory rsFactory = 
-        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.ObjectFactory();
-
-    private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory rimFactory = 
-        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory();
-
+public class EbXMLQueryResponse30 extends EbXMLBaseObjectContainer30 implements EbXMLQueryResponse {
     private final AdhocQueryResponse response;
 
-    private EbXMLQueryResponse30(AdhocQueryResponse response, ObjectLibrary objectLibrary) {
+    /**
+     * Constructs a query response by wrapping the given ebXML 3.0 object.
+     * @param response
+     *          the object to wrap.
+     * @param objectLibrary
+     *          the object library to use.
+     */
+    public EbXMLQueryResponse30(AdhocQueryResponse response, EbXMLObjectLibrary objectLibrary) {
         super(objectLibrary);
         notNull(response, "response cannot be null");
         this.response = response;
     }
     
-    static EbXMLQueryResponse30 create(ObjectLibrary objectLibrary) {
-        AdhocQueryResponse response = queryFactory.createAdhocQueryResponse();
-        
-        RegistryObjectListType list = response.getRegistryObjectList();
-        if (list == null) {
-            list = rimFactory.createRegistryObjectListType();
-            response.setRegistryObjectList(list);
-        }
-        
-        return new EbXMLQueryResponse30(response, objectLibrary);        
-    }
-    
-    public static EbXMLQueryResponse30 create(AdhocQueryResponse response) {
-        return new EbXMLQueryResponse30(response, new ObjectLibrary());
+    /**
+     * Constructs the response wrapper using a new {@link EbXMLObjectLibrary}.
+     * @param response
+     *          the object to wrap. 
+     */
+    public EbXMLQueryResponse30(AdhocQueryResponse response) {
+        this(response, new EbXMLObjectLibrary());
     }
 
     @Override
@@ -116,11 +107,11 @@ public class EbXMLQueryResponse30 extends BaseEbXMLObjectContainer30 implements 
 
     @Override
     public void setErrors(List<ErrorInfo> errors) {
-        RegistryErrorList value = rsFactory.createRegistryErrorList();
+        RegistryErrorList value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
         response.setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
         for (ErrorInfo error : errors) {
-            RegistryError regError = rsFactory.createRegistryError();
+            RegistryError regError = EbXMLFactory30.RS_FACTORY.createRegistryError();
             regError.setErrorCode(ErrorCode.getOpcode(error.getErrorCode()));
             regError.setCodeContext(error.getCodeContext());
             regError.setSeverity(Severity.getOpcode30(error.getServerity()));
@@ -132,10 +123,10 @@ public class EbXMLQueryResponse30 extends BaseEbXMLObjectContainer30 implements 
     @Override
     public void addReference(ObjectReference ref) {
         if (ref != null) {
-            ObjectRefType objectRef = rimFactory.createObjectRefType();
+            ObjectRefType objectRef = EbXMLFactory30.RIM_FACTORY.createObjectRefType();
             objectRef.setId(ref.getId());
             objectRef.setHome(ref.getHome());
-            getContents().add(rimFactory.createObjectRef(objectRef));
+            getContents().add(EbXMLFactory30.RIM_FACTORY.createObjectRef(objectRef));
         }
     }
 

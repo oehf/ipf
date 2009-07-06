@@ -20,9 +20,9 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabu
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 
 /**
@@ -38,19 +38,19 @@ public class CodeTransformer {
     }
 
     /**
-     * Transforms a {@link Code} instance to a {@link Classification}. 
+     * Transforms a {@link Code} instance to a {@link EbXMLClassification}. 
      * @param code
      *          the code instance to transform.
      * @param objectLibrary 
      *          the object library.
-     * @return the {@link Classification}.
+     * @return the {@link EbXMLClassification}.
      */
-    public Classification toEbXML(Code code, ObjectLibrary objectLibrary) {
+    public EbXMLClassification toEbXML(Code code, EbXMLObjectLibrary objectLibrary) {
         if (code == null) {
             return null;
         }
         
-        Classification classification = factory.createClassification(objectLibrary);
+        EbXMLClassification classification = factory.createClassification(objectLibrary);
         classification.setNodeRepresentation(code.getCode());
         classification.setName(code.getDisplayName());
         
@@ -62,12 +62,12 @@ public class CodeTransformer {
     }
     
     /**
-     * Transforms a {@link Classification} to a {@link Code} instance. 
+     * Transforms a {@link EbXMLClassification} to a {@link Code} instance. 
      * @param classification
-     *          {@link Classification}
+     *          {@link EbXMLClassification}
      * @return the code instance.
      */
-    public Code fromEbXML(Classification classification) {
+    public Code fromEbXML(EbXMLClassification classification) {
         if (classification == null) {
             return null;
         }

@@ -19,13 +19,13 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
@@ -58,11 +58,11 @@ public class RegisterDocumentSetTransformer {
         associationTransformer = new AssociationTransformer(factory);
     }
 
-    public SubmitObjectsRequest toEbXML(RegisterDocumentSet request) {
+    public EbXMLSubmitObjectsRequest toEbXML(RegisterDocumentSet request) {
         notNull(request, "request cannot be null");
                 
-        SubmitObjectsRequest ebXML = factory.createSubmitObjectsRequest();
-        ObjectLibrary library = ebXML.getObjectLibrary();        
+        EbXMLSubmitObjectsRequest ebXML = factory.createSubmitObjectsRequest();
+        EbXMLObjectLibrary library = ebXML.getObjectLibrary();        
         
         for (DocumentEntry docEntry : request.getDocumentEntries()) {
             ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
@@ -85,27 +85,27 @@ public class RegisterDocumentSetTransformer {
         return ebXML;
     }
 
-    private void addClassification(SubmitObjectsRequest ebXML, String classified, String node, ObjectLibrary library) {
-        Classification classification = factory.createClassification(library);
+    private void addClassification(EbXMLSubmitObjectsRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
+        EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
         ebXML.addClassification(classification);
     }
     
-    public RegisterDocumentSet fromEbXML(SubmitObjectsRequest ebXML) {
+    public RegisterDocumentSet fromEbXML(EbXMLSubmitObjectsRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
         
         RegisterDocumentSet request = new RegisterDocumentSet();        
         
-        for (ExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
             request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
         }
 
-        for (RegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
+        for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
             request.getFolders().add(folderTransformer.fromEbXML(regPackage));
         }
 
-        List<RegistryPackage> regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        List<EbXMLRegistryPackage> regPackages = ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         if (regPackages.size() > 0) {
             request.setSubmissionSet(submissionSetTransformer.fromEbXML(regPackages.get(0)));
         }

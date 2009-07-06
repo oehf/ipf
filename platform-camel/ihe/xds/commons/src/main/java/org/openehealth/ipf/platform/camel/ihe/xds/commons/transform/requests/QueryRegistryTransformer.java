@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.Query;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryType;
 
 /**
- * Transforms between a {@link QueryRegistry} and an {@link AdhocQueryRequest}. 
+ * Transforms between a {@link QueryRegistry} and an {@link EbXMLAdhocQueryRequest}. 
  * @author Jens Riemschneider
  */
 public class QueryRegistryTransformer {
@@ -34,13 +34,13 @@ public class QueryRegistryTransformer {
     private final EbXMLFactory factory30 = new EbXMLFactory30();
     private final EbXMLFactory factory21 = new EbXMLFactory21();
     
-    public AdhocQueryRequest toEbXML(QueryRegistry request) {
+    public EbXMLAdhocQueryRequest toEbXML(QueryRegistry request) {
         if (request == null) {
             return null;
         }
         
         Query query = request.getQuery();
-        AdhocQueryRequest ebXML = createAdhocQueryRequest(query);        
+        EbXMLAdhocQueryRequest ebXML = createAdhocQueryRequest(query);        
         query.accept(new ToEbXMLVisitor(ebXML));        
         
         ebXML.setReturnType(request.isReturnLeafObjects() ? LEAF_CLASS : OBJECT_REF);
@@ -48,12 +48,12 @@ public class QueryRegistryTransformer {
         return ebXML;        
     }
 
-    private AdhocQueryRequest createAdhocQueryRequest(Query query) {
+    private EbXMLAdhocQueryRequest createAdhocQueryRequest(Query query) {
         EbXMLFactory factory = query.getType() == QueryType.SQL ? factory21 : factory30;
         return factory.createAdhocQueryRequest();
     }
 
-    public QueryRegistry fromEbXML(AdhocQueryRequest ebXML) {
+    public QueryRegistry fromEbXML(EbXMLAdhocQueryRequest ebXML) {
         if (ebXML == null) {
             return null;
         }

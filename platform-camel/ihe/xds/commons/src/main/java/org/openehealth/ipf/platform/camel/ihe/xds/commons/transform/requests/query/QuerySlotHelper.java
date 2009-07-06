@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.hl7.HL7Delimiter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
@@ -37,9 +37,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.Que
  * @author Jens Riemschneider
  */
 class QuerySlotHelper {
-    private AdhocQueryRequest ebXML;
+    private EbXMLAdhocQueryRequest ebXML;
 
-    public QuerySlotHelper(AdhocQueryRequest ebXML) {
+    public QuerySlotHelper(EbXMLAdhocQueryRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
         this.ebXML = ebXML;
     }
@@ -209,8 +209,8 @@ class QuerySlotHelper {
     public void toCode(QueryParameter param, QueryList<Code> queryList) {
         queryList.getOuterList().clear();
 
-        List<Slot> slots = ebXML.getSlots(param.getSlotName());
-        for (Slot slot : slots) {
+        List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
+        for (EbXMLSlot slot : slots) {
             List<Code> innerList = new ArrayList<Code>();
             toCode(slot.getValueList(), innerList);
             queryList.getOuterList().add(innerList);

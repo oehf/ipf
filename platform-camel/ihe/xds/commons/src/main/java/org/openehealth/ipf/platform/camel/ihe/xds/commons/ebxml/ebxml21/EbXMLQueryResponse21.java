@@ -22,14 +22,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Severity;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.ObjectFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryObjectListType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryError;
@@ -37,45 +36,39 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.Registr
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 
 /**
- * Encapsulation of {@link org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse}.
+ * Encapsulation of {@link RegistryResponse}.
  * @author Jens Riemschneider
  */
-public class EbXMLQueryResponse21 extends BaseEbXMLObjectContainer21 implements EbXMLQueryResponse {
-    private final static ObjectFactory queryFactory = new ObjectFactory();
-    
-    private final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory rsFactory = 
-        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory();
-
-    private static final org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory rimFactory = 
-        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory();
-
+public class EbXMLQueryResponse21 extends EbXMLBaseObjectContainer21 implements EbXMLQueryResponse {
     private final RegistryResponse regResponse;
     
-    private EbXMLQueryResponse21(RegistryResponse regResponse, ObjectLibrary objectLibrary) {
+    /**
+     * Constructs the response wrapper.
+     * @param regResponse
+     *          the ebXML 2.1 response object to wrap. 
+     * @param objectLibrary
+     *          the object library to use.
+     */
+    public EbXMLQueryResponse21(RegistryResponse regResponse, EbXMLObjectLibrary objectLibrary) {
         super(objectLibrary);
         notNull(regResponse, "regResponse cannot be null");
         this.regResponse = regResponse;
     }
     
-    static EbXMLQueryResponse21 create(ObjectLibrary objectLibrary) {
-        AdhocQueryResponse adhocQueryResponse = queryFactory.createAdhocQueryResponse();
-        adhocQueryResponse.setSQLQueryResult(rimFactory.createRegistryObjectListType());
-
-        RegistryResponse response = rsFactory.createRegistryResponse();
-        response.setAdhocQueryResponse(adhocQueryResponse);
-        
-        return new EbXMLQueryResponse21(response, objectLibrary);        
-    }
-    
-    public static EbXMLQueryResponse21 create(RegistryResponse regResponse) {
-        ObjectLibrary objectLibrary = new ObjectLibrary();
-        EbXMLQueryResponse21 adhocQueryResponse = new EbXMLQueryResponse21(regResponse, objectLibrary);
-        fillObjectLibrary(objectLibrary, adhocQueryResponse.getContents());        
-        return adhocQueryResponse;
+    /**
+     * Constructs the response wrapper using a new {@link EbXMLObjectLibrary}.
+     * <p>
+     * The object library is filled with the objects from the given response.
+     * @param regResponse
+     *          the ebXML 2.1 response object to wrap. 
+     */
+    public EbXMLQueryResponse21(RegistryResponse regResponse) {
+        this(regResponse, new EbXMLObjectLibrary());
+        fillObjectLibrary();        
     }
 
     @Override
-    List<Object> getContents() {
+    protected List<Object> getContents() {
         AdhocQueryResponse adhocQueryResponse = regResponse.getAdhocQueryResponse();
         if (adhocQueryResponse == null) {
             return Collections.emptyList();
@@ -119,11 +112,11 @@ public class EbXMLQueryResponse21 extends BaseEbXMLObjectContainer21 implements 
 
     @Override
     public void setErrors(List<ErrorInfo> errors) {
-        RegistryErrorList value = rsFactory.createRegistryErrorList();
+        RegistryErrorList value = EbXMLFactory21.RS_FACTORY.createRegistryErrorList();
         regResponse.setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
         for (ErrorInfo error : errors) {
-            RegistryError regError = rsFactory.createRegistryError();
+            RegistryError regError = EbXMLFactory21.RS_FACTORY.createRegistryError();
             regError.setErrorCode(ErrorCode.getOpcode(error.getErrorCode()));
             regError.setCodeContext(error.getCodeContext());
             regError.setSeverity(Severity.getEbXML21(error.getServerity()));
@@ -135,7 +128,7 @@ public class EbXMLQueryResponse21 extends BaseEbXMLObjectContainer21 implements 
     @Override
     public void addReference(ObjectReference ref) {
         if (ref != null) {
-            ObjectRefType objectRef = rimFactory.createObjectRefType();
+            ObjectRefType objectRef = EbXMLFactory21.RIM_FACTORY.createObjectRefType();
             objectRef.setId(ref.getId());
             // Home not supported in 2.1
             getContents().add(objectRef);

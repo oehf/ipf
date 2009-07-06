@@ -27,16 +27,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponse30;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.RetrieveDocumentSetRequestTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.RetrieveDocumentSetResponseTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.CxfTestUtils;
 
 /**
@@ -87,13 +81,6 @@ public class TestIti43 extends StandardTestContainer {
 
     private RetrievedDocumentSet send(String endpoint, String value) {
         doc.setDocumentUniqueID(value);
-        
-        EbXMLFactory30 factory = new EbXMLFactory30();
-        RetrieveDocumentSetRequestTransformer requestTransformer = new RetrieveDocumentSetRequestTransformer(factory);
-        RetrieveDocumentSetRequest ebXMLRequest = requestTransformer.toEbXML(request);
-        Object result = getProducerTemplate().requestBody(endpoint, ebXMLRequest.getInternal());
-        RetrieveDocumentSetResponseTransformer responseTransformer = new RetrieveDocumentSetResponseTransformer(factory);
-        RetrieveDocumentSetResponse30 ebXMLResponse = RetrieveDocumentSetResponse30.create((RetrieveDocumentSetResponseType) result);
-        return responseTransformer.fromEbXML(ebXMLResponse);
+        return send(endpoint, request, RetrievedDocumentSet.class);
     }
 }

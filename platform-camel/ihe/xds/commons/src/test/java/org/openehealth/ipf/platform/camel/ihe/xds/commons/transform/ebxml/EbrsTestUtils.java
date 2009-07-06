@@ -21,11 +21,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExternalIdentifier;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.InternationalString;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExternalIdentifier;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLInternationalString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
@@ -56,12 +56,12 @@ public abstract class EbrsTestUtils {
      */
     public static void assertExternalIdentifier(
             String scheme, 
-            RegistryEntry regEntry, 
+            EbXMLRegistryEntry regEntry, 
             String expectedValue, 
             String expectedName) {
         
         int found = 0; 
-        for (ExternalIdentifier identifier : regEntry.getExternalIdentifiers()) {
+        for (EbXMLExternalIdentifier identifier : regEntry.getExternalIdentifiers()) {
             if (identifier.getIdentificationScheme().equals(scheme)) {
                 ++found;
                 assertEquals(expectedValue, identifier.getValue());
@@ -89,11 +89,11 @@ public abstract class EbrsTestUtils {
      *          the expected localized index of the name.
      * @return the classification that matched the assertion.
      */
-    public static Classification assertClassification(String scheme, RegistryEntry regEntry, int occurrence, String expectedNodeRepresentation, int expectedLocalizedIdxName) {
-        List<Classification> filtered = regEntry.getClassifications(scheme);
+    public static EbXMLClassification assertClassification(String scheme, EbXMLRegistryEntry regEntry, int occurrence, String expectedNodeRepresentation, int expectedLocalizedIdxName) {
+        List<EbXMLClassification> filtered = regEntry.getClassifications(scheme);
         assertTrue("Not enough classification matching the scheme: " + scheme, filtered.size() > occurrence);
 
-        Classification classification = filtered.get(occurrence);
+        EbXMLClassification classification = filtered.get(occurrence);
         assertSame(regEntry.getId(), classification.getClassifiedObject());
         assertEquals(expectedNodeRepresentation, classification.getNodeRepresentation());
         if (expectedLocalizedIdxName > 0) {
@@ -114,9 +114,9 @@ public abstract class EbrsTestUtils {
      * @param expectedSlotValues
      *          the expected values of the slot.
      */
-    public static void assertSlot(String slotName, List<Slot> slots, String... expectedSlotValues) {
+    public static void assertSlot(String slotName, List<EbXMLSlot> slots, String... expectedSlotValues) {
         int found = 0;
-        for (Slot slot : slots) {
+        for (EbXMLSlot slot : slots) {
             if (slot.getName().equals(slotName)) {
                 List<String> values = slot.getValueList();
                 for (String expectedValue : expectedSlotValues) {
@@ -137,7 +137,7 @@ public abstract class EbrsTestUtils {
      *          the international string.
      * @return the localized string.
      */
-    public static LocalizedString toLocal(InternationalString international) {
+    public static LocalizedString toLocal(EbXMLInternationalString international) {
         assertEquals(1, international.getLocalizedStrings().size());
         return international.getSingleLocalizedString();
     }

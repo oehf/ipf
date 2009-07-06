@@ -16,17 +16,17 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.converters;
 
 import org.apache.camel.Converter;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.AdhocQueryRequest30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLQueryResponse30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequest30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RegistryResponse30;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequest30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLRegistryResponse30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLRetrieveDocumentSetRequest30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponse30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.SubmitObjectsRequest30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet;
@@ -61,75 +61,158 @@ public class EbXML30Converters {
     private final static RetrieveDocumentSetRequestTransformer retrieveDocumentSetRequestTransformer = new RetrieveDocumentSetRequestTransformer(factory);
     private final static RetrieveDocumentSetResponseTransformer retrieveDocumentSetResponseTransformer = new RetrieveDocumentSetResponseTransformer(factory);
 
+    /**
+     * Standard Camel converter for the Provide and Register Document Set request.
+     * @param in
+     *          a version independent request object. 
+     * @return an ebXML 3.0 object.
+     */
     @Converter
-    public static SubmitObjectsRequest convert(ProvideAndRegisterDocumentSet in) {
-        return (SubmitObjectsRequest) provideAndRegisterDocumentSetTransformer.toEbXML(in).getInternal();                
+    public static ProvideAndRegisterDocumentSetRequestType convert(ProvideAndRegisterDocumentSet in) {
+        return (ProvideAndRegisterDocumentSetRequestType) provideAndRegisterDocumentSetTransformer.toEbXML(in).getInternal();                
     }
     
+    /**
+     * Standard Camel converter for the Provide and Register Document Set request.
+     * @param in
+     *          an ebXML 3.0 object.
+     * @return a version independent request object. 
+     */
     @Converter
     public static ProvideAndRegisterDocumentSet convert(ProvideAndRegisterDocumentSetRequestType in) {
-        return provideAndRegisterDocumentSetTransformer.fromEbXML(ProvideAndRegisterDocumentSetRequest30.create(in));        
+        return provideAndRegisterDocumentSetTransformer.fromEbXML(new EbXMLProvideAndRegisterDocumentSetRequest30(in));        
     }
 
+    /**
+     * Standard Camel converter for the Register Document Set request.
+     * @param in
+     *          a version independent request object. 
+     * @return an ebXML 3.0 object.
+     */
     @Converter
     public static SubmitObjectsRequest convert(RegisterDocumentSet in) {
         return (SubmitObjectsRequest) registerDocumentSetTransformer.toEbXML(in).getInternal();
     }
 
+    /**
+     * Standard Camel converter for the Register Document Set request.
+     * @param in
+     *          an ebXML 3.0 object.
+     * @return a version independent request object. 
+     */
     @Converter
     public static RegisterDocumentSet convert(SubmitObjectsRequest in) {
-        return registerDocumentSetTransformer.fromEbXML(SubmitObjectsRequest30.create(in));
+        return registerDocumentSetTransformer.fromEbXML(new EbXMLSubmitObjectsRequest30(in));
     }
 
+    /**
+     * Standard Camel converter for the Registry response.
+     * @param in
+     *          a version independent response object. 
+     * @return an ebXML 3.0 object.
+     */
     @Converter
     public static RegistryResponseType convert(Response in) {
         return (RegistryResponseType) responseTransformer.toEbXML(in).getInternal();
     }
 
+    /**
+     * Standard Camel converter for the Registry response.
+     * @param in
+     *          an ebXML 3.0 object. 
+     * @return a version independent response object.
+     */
     @Converter
     public static Response convert(RegistryResponseType in) {
-        return responseTransformer.fromEbXML(RegistryResponse30.create(in));
+        return responseTransformer.fromEbXML(new EbXMLRegistryResponse30(in));
     }
 
+    /**
+     * Standard Camel converter for the Query Registry request.
+     * @param in
+     *          a version independent request object. 
+     * @return an ebXML 3.0 object.
+     */
     @Converter
     public static AdhocQueryRequest convert(QueryRegistry in) {
         return (AdhocQueryRequest)queryRegistryTransformer.toEbXML(in).getInternal(); 
     }
     
+    /**
+     * Standard Camel converter for the Query Registry request.
+     * @param in
+     *          an ebXML 3.0 object. 
+     * @return a version independent request object.
+     */
     @Converter
     public static QueryRegistry convert(AdhocQueryRequest in) {
-        return queryRegistryTransformer.fromEbXML(AdhocQueryRequest30.create(in));
+        return queryRegistryTransformer.fromEbXML(new EbXMLAdhocQueryRequest30(in));
     }
     
+    /**
+     * Standard Camel converter for the Query response.
+     * @param in
+     *          a version independent response object. 
+     * @return an ebXML 3.0 object.
+     */
     @Converter
     public static AdhocQueryResponse convert(QueryResponse in) {
         return (AdhocQueryResponse) queryResponseTransformer.toEbXML(in).getInternal();
     }
     
+    /**
+     * Standard Camel converter for the Query response.
+     * @param in
+     *          an ebXML 3.0 object. 
+     * @return a version independent response object.
+     */
     @Converter
     public static QueryResponse convertToQueryResponse(AdhocQueryResponse in) {
-        return queryResponseTransformer.fromEbXML(EbXMLQueryResponse30.create(in));
+        return queryResponseTransformer.fromEbXML(new EbXMLQueryResponse30(in));
     }
     
+    /**
+     * Standard Camel converter for the Retrieve Document Set request.
+     * @param in
+     *          a version independent request object. 
+     * @return an ebXML 3.0 object.
+     */
     @Converter
     public static RetrieveDocumentSetRequestType convert(RetrieveDocumentSet in) {
         return (RetrieveDocumentSetRequestType) retrieveDocumentSetRequestTransformer.toEbXML(in).getInternal();
     }
     
+    /**
+     * Standard Camel converter for the Retrieve Document Set request.
+     * @param in
+     *          an ebXML 3.0 object. 
+     * @return a version independent request object.
+     */
     @Converter
     public static RetrieveDocumentSet convert(RetrieveDocumentSetRequestType in) {
-        return retrieveDocumentSetRequestTransformer.fromEbXML(RetrieveDocumentSetRequest30.create(in));
+        return retrieveDocumentSetRequestTransformer.fromEbXML(new EbXMLRetrieveDocumentSetRequest30(in));
     }
-
     
+    /**
+     * Standard Camel converter for the Retrieve Document Set response.
+     * @param in
+     *          a version independent response object. 
+     * @return an ebXML 3.0 object.
+     */
     @Converter
     public static RetrieveDocumentSetResponseType convert(RetrievedDocumentSet in) {
         return (RetrieveDocumentSetResponseType) retrieveDocumentSetResponseTransformer.toEbXML(in).getInternal();
     }
     
+    /**
+     * Standard Camel converter for the Retrieve Document Set response.
+     * @param in
+     *          an ebXML 3.0 object. 
+     * @return a version independent response object.
+     */
     @Converter
     public static RetrievedDocumentSet convert(RetrieveDocumentSetResponseType in) {
-        return retrieveDocumentSetResponseTransformer.fromEbXML(RetrieveDocumentSetResponse30.create(in));
+        return retrieveDocumentSetResponseTransformer.fromEbXML(new EbXMLRetrieveDocumentSetResponse30(in));
     }
 }
 

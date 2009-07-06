@@ -16,22 +16,46 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRetrieveDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.ResponseOptionType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
 
 /**
  * Factory for EbXML 2.1 objects.
  * @author Jens Riemschneider
  */
 public class EbXMLFactory21 implements EbXMLFactory {
-    private final static ObjectFactory rsFactory = new ObjectFactory();
+    /**
+     * The object factory for the ebXML 2.1 rim namespace.
+     */
+    public final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory RIM_FACTORY = 
+        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory();
     
-    public ObjectLibrary createObjectLibrary() {
-        ObjectLibrary lib = new ObjectLibrary(); 
+    /**
+     * The object factory for the ebXML 2.1 query namespace.
+     */
+    public final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.ObjectFactory QUERY_FACTORY = 
+        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.ObjectFactory();
+    
+    /**
+     * The object factory for the ebXML 2.1 rs namespace.
+     */
+    public final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory RS_FACTORY = 
+        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ObjectFactory();
+
+    @Override
+    public EbXMLObjectLibrary createObjectLibrary() {
+        EbXMLObjectLibrary lib = new EbXMLObjectLibrary(); 
         addObjToLib(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME, lib);
         addObjToLib(Vocabulary.DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, lib);
         addObjToLib(Vocabulary.DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, lib);
@@ -57,68 +81,107 @@ public class EbXMLFactory21 implements EbXMLFactory {
         return lib;
     }
 
-    private void addObjToLib(String id, ObjectLibrary objectLibrary) {
-        ObjectRefType objRef = rsFactory.createObjectRefType();
+    private void addObjToLib(String id, EbXMLObjectLibrary objectLibrary) {
+        ObjectRefType objRef = RIM_FACTORY.createObjectRefType();
         objRef.setId(id);
         objectLibrary.put(id, objRef);
     }
     
     @Override
-    public Classification21 createClassification(ObjectLibrary objectLibrary) {
-        return Classification21.create(objectLibrary);
+    public EbXMLClassification21 createClassification(EbXMLObjectLibrary objectLibrary) {
+        return new EbXMLClassification21(RIM_FACTORY.createClassificationType(), objectLibrary);
     }
 
     @Override
-    public ExtrinsicObject21 createExtrinsic(String id, ObjectLibrary objectLibrary) {
-        ExtrinsicObject21 obj = ExtrinsicObject21.create(objectLibrary, id);
-        objectLibrary.put(id, obj.getInternal());
-        return obj;
+    public EbXMLExtrinsicObject21 createExtrinsic(String id, EbXMLObjectLibrary objectLibrary) {
+        ExtrinsicObjectType extrinsicObjectType = RIM_FACTORY.createExtrinsicObjectType();
+        extrinsicObjectType.setId(id);
+        objectLibrary.put(id, extrinsicObjectType);
+        return new EbXMLExtrinsicObject21(extrinsicObjectType, objectLibrary);
     }
 
     @Override
-    public RegistryPackage21 createRegistryPackage(String id, ObjectLibrary objectLibrary) {
-        RegistryPackage21 obj = RegistryPackage21.create(objectLibrary, id);
-        objectLibrary.put(id, obj.getInternal());
-        return obj;        
+    public EbXMLRegistryPackage21 createRegistryPackage(String id, EbXMLObjectLibrary objectLibrary) {
+        RegistryPackageType registryPackageType = RIM_FACTORY.createRegistryPackageType();
+        registryPackageType.setId(id);
+        objectLibrary.put(id, registryPackageType);
+        return new EbXMLRegistryPackage21(registryPackageType, objectLibrary);
     }
 
     @Override
-    public EbXMLAssociation21 createAssociation(ObjectLibrary objectLibrary) {
-        return EbXMLAssociation21.create(objectLibrary);
+    public EbXMLAssociation21 createAssociation(EbXMLObjectLibrary objectLibrary) {
+        return new EbXMLAssociation21(RIM_FACTORY.createAssociationType1(), objectLibrary);
     }
 
     @Override
-    public SubmitObjectsRequest21 createSubmitObjectsRequest() {
-        return SubmitObjectsRequest21.create(createObjectLibrary());
+    public EbXMLSubmitObjectsRequest21 createSubmitObjectsRequest() {
+        SubmitObjectsRequest raw = RS_FACTORY.createSubmitObjectsRequest();
+        LeafRegistryObjectListType list = raw.getLeafRegistryObjectList();
+        if (list == null) {
+            list = RIM_FACTORY.createLeafRegistryObjectListType();
+            raw.setLeafRegistryObjectList(list);
+        }
+        
+        EbXMLObjectLibrary objectLibrary = createObjectLibrary();
+        EbXMLSubmitObjectsRequest21 wrapped = new EbXMLSubmitObjectsRequest21(raw, objectLibrary);
+        wrapped.getContents().addAll(objectLibrary.getObjects());
+        return wrapped;
     }
 
     @Override    
-    public ProvideAndRegisterDocumentSetRequest21 createProvideAndRegisterDocumentSetRequest(ObjectLibrary objectLibrary) {
-        return ProvideAndRegisterDocumentSetRequest21.create(objectLibrary);
+    public EbXMLProvideAndRegisterDocumentSetRequest21 createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary objectLibrary) {
+        ProvideAndRegisterDocumentSetRequestType raw = new ProvideAndRegisterDocumentSetRequestType();
+        SubmitObjectsRequest submitObjectsRequest = raw.getSubmitObjectsRequest();
+        if (submitObjectsRequest == null) {
+            submitObjectsRequest = RS_FACTORY.createSubmitObjectsRequest();
+            raw.setSubmitObjectsRequest(submitObjectsRequest);
+        }
+        
+        LeafRegistryObjectListType list = submitObjectsRequest.getLeafRegistryObjectList();
+        if (list == null) {
+            list = RIM_FACTORY.createLeafRegistryObjectListType();
+            submitObjectsRequest.setLeafRegistryObjectList(list);
+        }
+        
+        EbXMLProvideAndRegisterDocumentSetRequest21 wrapped = new EbXMLProvideAndRegisterDocumentSetRequest21(raw, objectLibrary);
+        wrapped.getContents().addAll(objectLibrary.getObjects());
+        return wrapped;
     }
 
     @Override
-    public RegistryResponse21 createRegistryResponse() {
-        return RegistryResponse21.create();
+    public EbXMLRegistryResponse21 createRegistryResponse() {
+        return new EbXMLRegistryResponse21(RS_FACTORY.createRegistryResponse());
     }
 
     @Override
-    public RetrieveDocumentSetRequest createRetrieveDocumentSetRequest() {
+    public EbXMLRetrieveDocumentSetRequest createRetrieveDocumentSetRequest() {
         throw new UnsupportedOperationException("Only supported for ebXML 3.0");
     }
 
     @Override
-    public RetrieveDocumentSetResponse createRetrieveDocumentSetResponse() {
+    public EbXMLRetrieveDocumentSetResponse createRetrieveDocumentSetResponse() {
         throw new UnsupportedOperationException("Only supported for ebXML 3.0");
     }
     
     @Override
-    public AdhocQueryRequest21 createAdhocQueryRequest() {
-        return AdhocQueryRequest21.create();
+    public EbXMLAdhocQueryRequest21 createAdhocQueryRequest() {
+        AdhocQueryRequest request = QUERY_FACTORY.createAdhocQueryRequest();
+        
+        ResponseOptionType responseOption = QUERY_FACTORY.createResponseOptionType();
+        responseOption.setReturnComposedObjects(true);
+        
+        request.setResponseOption(responseOption);
+        return new EbXMLAdhocQueryRequest21(request);
     }
 
     @Override
-    public EbXMLQueryResponse21 createAdhocQueryResponse(ObjectLibrary objectLibrary) {
-        return EbXMLQueryResponse21.create(objectLibrary);
+    public EbXMLQueryResponse21 createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary) {
+        AdhocQueryResponse adhocQueryResponse = QUERY_FACTORY.createAdhocQueryResponse();
+        adhocQueryResponse.setSQLQueryResult(RIM_FACTORY.createRegistryObjectListType());
+
+        RegistryResponse response = RS_FACTORY.createRegistryResponse();
+        response.setAdhocQueryResponse(adhocQueryResponse);
+        
+        return new EbXMLQueryResponse21(response, objectLibrary);        
     }
 }

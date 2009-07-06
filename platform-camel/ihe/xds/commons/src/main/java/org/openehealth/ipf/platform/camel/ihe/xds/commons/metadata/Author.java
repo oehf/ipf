@@ -23,6 +23,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents the human or machine that created an entry.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * 
  * @author Jens Riemschneider
  */

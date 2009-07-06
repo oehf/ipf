@@ -20,7 +20,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents a code.
- * 
+ * <p> 
+ * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class Code {
@@ -28,34 +29,67 @@ public class Code {
     private LocalizedString displayName;
     private String schemeName;
     
+    /**
+     * Constructs a code.
+     */
     public Code() {}
     
+    /**
+     * Constructs a code.
+     * @param code
+     *          the value of the code.
+     * @param displayName
+     *          the display name of the code.
+     * @param schemeName
+     *          the schema of the code.
+     */
     public Code(String code, LocalizedString displayName, String schemeName) {
         this.code = code;
         this.displayName = displayName;
         this.schemeName = schemeName;
     }
 
+    /**
+     * @return the value of this code.
+     */
     public String getCode() {
         return code;
     }
     
+    /**
+     * @param code 
+     *          the value of this code.
+     */
     public void setCode(String code) {
         this.code = code;
     }
     
+    /**
+     * @return the display name of this code.
+     */
     public LocalizedString getDisplayName() {
         return displayName;
     }
     
+    /**
+     * @param displayName
+     *          the display name of this code.
+     */
     public void setDisplayName(LocalizedString displayName) {
         this.displayName = displayName;
     }
     
+    /**
+     * @return the schema of this code.
+     */
     public String getSchemeName() {
         return schemeName;
     }
     
+    /**
+     * @param schemeName
+     *          the schema of this code.
+     */
     public void setSchemeName(String schemeName) {
         this.schemeName = schemeName;
     }

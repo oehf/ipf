@@ -18,11 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.DOC_ENTRY_UNIQUE_ID;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.DOC_ENTRY_UUID;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetDocumentsAndAssociationsQuery;
 
 /**
- * Transforms between a {@link GetDocumentsAndAssociationsQuery} and {@link AdhocQueryRequest}.
+ * Transforms between a {@link GetDocumentsAndAssociationsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetDocumentsAndAssociationsQueryTransformer extends GetByIDQueryTransformer<GetDocumentsAndAssociationsQuery> {

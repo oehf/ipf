@@ -17,12 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.*;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFolderAndContentsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubmissionSetAndContentsQuery;
 
 /**
- * Transforms between a {@link GetSubmissionSetAndContentsQuery} and {@link AdhocQueryRequest}.
+ * Transforms between a {@link GetSubmissionSetAndContentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTransformer<GetFolderAndContentsQuery> {

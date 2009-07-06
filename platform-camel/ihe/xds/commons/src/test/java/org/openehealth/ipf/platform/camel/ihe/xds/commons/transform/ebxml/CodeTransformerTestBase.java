@@ -22,10 +22,10 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
@@ -38,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.CodeTr
 public abstract class CodeTransformerTestBase implements FactoryCreator {
     private CodeTransformer transformer;
     private Code code;
-    private ObjectLibrary objectLibrary;
+    private EbXMLObjectLibrary objectLibrary;
     
     @Before
     public final void baseSetUp() {
@@ -59,15 +59,15 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testToEbXML() {
-        Classification ebXML = transformer.toEbXML(code, objectLibrary);
+        EbXMLClassification ebXML = transformer.toEbXML(code, objectLibrary);
         
         assertNotNull(ebXML);
         assertEquals("code", ebXML.getNodeRepresentation());
         
-        List<Slot> slots = ebXML.getSlots();
+        List<EbXMLSlot> slots = ebXML.getSlots();
         assertEquals(1, slots.size());
         
-        Slot slot = slots.get(0);
+        EbXMLSlot slot = slots.get(0);
         assertEquals(Vocabulary.SLOT_NAME_CODING_SCHEME, slot.getName());        
         assertEquals(Arrays.asList("schemeName"), slot.getValueList());
         
@@ -87,7 +87,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
 
     @Test
     public void testToEbXMLEmpty() {
-        Classification ebXML = transformer.toEbXML(new Code(), objectLibrary);
+        EbXMLClassification ebXML = transformer.toEbXML(new Code(), objectLibrary);
         assertNotNull(ebXML);
         
         assertNull(ebXML.getNodeRepresentation());
@@ -98,7 +98,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        Classification ebXML = transformer.toEbXML(code, objectLibrary);
+        EbXMLClassification ebXML = transformer.toEbXML(code, objectLibrary);
         assertEquals(code, transformer.fromEbXML(ebXML));
     }
     
@@ -109,7 +109,7 @@ public abstract class CodeTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXmlEmpty() {
-        Classification ebXML = transformer.toEbXML(new Code(), objectLibrary);
+        EbXMLClassification ebXML = transformer.toEbXML(new Code(), objectLibrary);
         assertEquals(new Code(), transformer.fromEbXML(ebXML));
     }
 }

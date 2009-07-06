@@ -28,10 +28,17 @@ public enum AvailabilityStatus {
     private final String opcode;
     private final String queryOpcode;
 
+    /**
+     * @return the opcode used as a string representation in non-query transformations.
+     */
     public String getOpcode() {
         return opcode;
     }
     
+    /**
+     * @return the opcode used as a string representation in transformations for query 
+     *          requests and responses.
+     */
     public String getQueryOpcode() {
         return queryOpcode;
     }
@@ -41,6 +48,13 @@ public enum AvailabilityStatus {
         this.queryOpcode = queryOpcode;
     }
 
+    /**
+     * Returns the availability status represented by the given opcode.
+     * This method takes standard opcodes and query opcodes into account.
+     * @param opcode
+     *          the opcode to look up. Can be <code>null</code>.
+     * @return the status. <code>null</code> if the opcode was <code>null</code>.
+     */
     public static AvailabilityStatus valueOfOpcode(String opcode) {
         if (opcode == null) {
             return null;

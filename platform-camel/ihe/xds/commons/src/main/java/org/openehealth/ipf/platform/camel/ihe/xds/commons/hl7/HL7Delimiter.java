@@ -34,11 +34,17 @@ public enum HL7Delimiter {
         this.substitude = substitude;
     }
 
+    /**
+     * @return the string representation of the delimiter.
+     */
     public String getValue() {
         return value;
     }
 
-    public String getSubstitude() {
+    /**
+     * @return the substitute used to escape the delimiter's string representation. 
+     */
+    public String getSubstitute() {
         return substitude;
     }
 }

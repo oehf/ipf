@@ -23,9 +23,6 @@ import org.junit.BeforeClass;
 import org.apache.cxf.transport.servlet.CXFServlet;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.RegistryResponse21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
@@ -34,9 +31,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.RegisterDocumentSetTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.ResponseTransformer;
 
 /**
  * Tests the ITI-14 transaction with a webservice and client adapter defined via URIs.
@@ -61,7 +55,7 @@ public class TestIti14 extends StandardTestContainer {
 
     @Before
     public void setUp() {
-        Identifiable patientID = new Identifiable("patient-id", new AssigningAuthority("1.2.3.4.5", "ISO"));
+        Identifiable patientID = new Identifiable("patient-id", new AssigningAuthority("1.2.3.4.5"));
         
         SubmissionSet submissionSet = new SubmissionSet();
         submissionSet.setPatientID(patientID);
@@ -141,13 +135,6 @@ public class TestIti14 extends StandardTestContainer {
     
     private Response send(String endpoint, String value) {
         docEntry.setComments(new LocalizedString(value));
-        
-        EbXMLFactory21 factory = new EbXMLFactory21();
-        RegisterDocumentSetTransformer requestTransformer = new RegisterDocumentSetTransformer(factory);
-        SubmitObjectsRequest ebXMLRequest = requestTransformer.toEbXML(request);        
-        Object result = getProducerTemplate().requestBody(endpoint, ebXMLRequest.getInternal());        
-        RegistryResponse21 ebXMLResponse = RegistryResponse21.create((RegistryResponse) result);
-        ResponseTransformer responseTransformer = new ResponseTransformer(factory);
-        return responseTransformer.fromEbXML(ebXMLResponse);
+        return send(endpoint, request, Response.class);
     }
 }

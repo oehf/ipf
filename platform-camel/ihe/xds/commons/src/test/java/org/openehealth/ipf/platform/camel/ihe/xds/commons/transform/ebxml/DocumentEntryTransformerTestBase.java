@@ -23,11 +23,11 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Slot;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
@@ -42,7 +42,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Docume
 public abstract class DocumentEntryTransformerTestBase implements FactoryCreator {
     private DocumentEntryTransformer transformer;
     private DocumentEntry documentEntry;
-    private ObjectLibrary objectLibrary;
+    private EbXMLObjectLibrary objectLibrary;
     private boolean homeAware = true;
     
     /**
@@ -132,7 +132,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
 
     @Test
     public void testToEbXML() {
-        ExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);        
+        EbXMLExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);        
         assertNotNull(ebXML);
         
         assertEquals("Approved", ebXML.getStatus());
@@ -146,7 +146,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());
         
-        List<Slot> slots = ebXML.getSlots();
+        List<EbXMLSlot> slots = ebXML.getSlots();
         assertSlot(SLOT_NAME_CREATION_TIME, slots, "123");
         assertSlot(SLOT_NAME_HASH, slots, "hash");
         assertSlot(SLOT_NAME_LANGUAGE_CODE, slots, "languageCode");
@@ -165,7 +165,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
                 "PID-11|streetAddress^otherDesignation^city^stateOrProvince^zipOrPostalCode^country^^^countyParishCode");
         
         
-        Classification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
+        EbXMLClassification classification = assertClassification(DOC_ENTRY_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
         assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
         assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
@@ -222,7 +222,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
    
     @Test
     public void testToEbXMLEmpty() {
-        ExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
+        EbXMLExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -241,7 +241,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXML() {
-        ExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);
+        EbXMLExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);
         DocumentEntry result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
@@ -255,7 +255,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXMLEmpty() {
-        ExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
+        EbXMLExtrinsicObject ebXML = transformer.toEbXML(new DocumentEntry(), objectLibrary);        
         DocumentEntry result = transformer.fromEbXML(ebXML);
         
         DocumentEntry expected = new DocumentEntry();

@@ -20,10 +20,10 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
@@ -36,7 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Folder
 public abstract class FolderTransformerTestBase implements FactoryCreator {
     private FolderTransformer transformer;
     private Folder folder;
-    private ObjectLibrary objectLibrary;
+    private EbXMLObjectLibrary objectLibrary;
     private boolean homeAware = true;
 
     /**
@@ -71,7 +71,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
 
     @Test
     public void testToEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);        
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);        
         assertNotNull(ebXML);
         
         assertEquals("Approved", ebXML.getStatus());
@@ -86,7 +86,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         
         assertSlot(Vocabulary.SLOT_NAME_LAST_UPDATE_TIME, ebXML.getSlots(), "123");
         
-        Classification classification = 
+        EbXMLClassification classification = 
             assertClassification(Vocabulary.FOLDER_CODE_LIST_CLASS_SCHEME, ebXML, 0, "code 6", 6);
         assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
 
@@ -111,7 +111,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
    
     @Test
     public void testToEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);        
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);        
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -130,7 +130,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);
         Folder result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
@@ -144,7 +144,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
     
     @Test
     public void testFromEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(new Folder(), objectLibrary);
         Folder result = transformer.fromEbXML(ebXML);
         assertEquals(new Folder(), result);
     }

@@ -17,19 +17,19 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.*;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetAllQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.IdentifiableTransformer;
 
 /**
- * Transforms between a {@link GetAllQuery} and {@link AdhocQueryRequest}.
+ * Transforms between a {@link GetAllQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetAllQueryTransformer {
     private final IdentifiableTransformer identifiableTransformer = 
         new IdentifiableTransformer();
     
-    public void toEbXML(GetAllQuery query, AdhocQueryRequest ebXML) {
+    public void toEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }
@@ -49,7 +49,7 @@ public class GetAllQueryTransformer {
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
     }
     
-    public void fromEbXML(GetAllQuery query, AdhocQueryRequest ebXML) {
+    public void fromEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

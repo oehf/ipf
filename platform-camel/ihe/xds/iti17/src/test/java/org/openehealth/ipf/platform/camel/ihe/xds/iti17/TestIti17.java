@@ -44,13 +44,13 @@ public class TestIti17 extends StandardTestContainer {
      * @throws Exception  any exception thrown */
     @Test
     public void testIti17() throws Exception {
-        InputStream response1 = (InputStream)getProducerTemplate().requestBody(SERVICE1, "?ok");
+        InputStream response1 = send(SERVICE1, "?ok", InputStream.class);
         String content1 = IOUtils.toString(response1);
         response1.close();
 
         assertEquals("service 1: ok", content1);
 
-        InputStream response2 = (InputStream)getProducerTemplate().requestBody(SERVICE2, "?ok");
+        InputStream response2 = send(SERVICE2, "?ok", InputStream.class);
         String content2 = IOUtils.toString(response2);
         response2.close();
 

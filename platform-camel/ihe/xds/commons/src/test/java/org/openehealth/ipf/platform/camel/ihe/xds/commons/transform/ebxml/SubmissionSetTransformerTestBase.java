@@ -20,10 +20,10 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.Submis
 public abstract class SubmissionSetTransformerTestBase implements FactoryCreator {
     private SubmissionSetTransformer transformer;
     private SubmissionSet set;
-    private ObjectLibrary objectLibrary;
+    private EbXMLObjectLibrary objectLibrary;
     private boolean homeAware = true;
 
     /**
@@ -105,7 +105,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
 
     @Test
     public void testToEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);        
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);        
         assertNotNull(ebXML);
         
         assertEquals("Approved", ebXML.getStatus());
@@ -126,7 +126,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
                 "|id 23^familyName 23^givenName 23^prefix 23^second 23^suffix 23^^^namespace 23&uni 23&uniType 23");
 
         
-        Classification classification = assertClassification(Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
+        EbXMLClassification classification = assertClassification(Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
         assertSlot(Vocabulary.SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
@@ -157,7 +157,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
    
     @Test
     public void testToEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);        
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);        
         assertNotNull(ebXML);
         
         assertNull(ebXML.getStatus());
@@ -175,7 +175,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXML() {
-        RegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);
         SubmissionSet result = transformer.fromEbXML(ebXML);
         
         assertNotNull(result);
@@ -189,7 +189,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
     
     @Test
     public void testFromEbXMLEmpty() {
-        RegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);
+        EbXMLRegistryPackage ebXML = transformer.toEbXML(new SubmissionSet(), objectLibrary);
         SubmissionSet result = transformer.fromEbXML(ebXML);
         assertEquals(new SubmissionSet(), result);
     }

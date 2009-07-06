@@ -15,82 +15,155 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ExtrinsicObject;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryPackage;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RegistryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRetrieveDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRetrieveDocumentSetResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.ResponseOptionType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AdhocQueryType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryPackageType;
 
 /**
  * Factory for EbXML 2.1 objects.
  * @author Jens Riemschneider
  */
 public class EbXMLFactory30 implements EbXMLFactory {
+    /**
+     * The factory to create objects of the query namespace.
+     */
+    public final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.ObjectFactory QUERY_FACTORY = 
+        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.ObjectFactory();
+
+    /**
+     * The factory to create objects of the rim namespace.
+     */
+    public final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory RIM_FACTORY = 
+        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory();
+
+    /**
+     * The factory to create objects of the rs namespace.
+     */
+    public final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.ObjectFactory RS_FACTORY = 
+        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.ObjectFactory();
+
+    /**
+     * The factory to create objects of the lcm namespace.
+     */
+    public final static org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory LCM_FACTORY = 
+        new org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory();
+
     @Override
-    public Classification createClassification(ObjectLibrary objectLibrary) {
-        return Classification30.create();
+    public EbXMLClassification createClassification(EbXMLObjectLibrary objectLibrary) {
+        return new EbXMLClassification30(RIM_FACTORY.createClassificationType());
     }
 
     @Override
-    public ExtrinsicObject createExtrinsic(String id, ObjectLibrary objectLibrary) {
-        return ExtrinsicObject30.create(id);
+    public EbXMLExtrinsicObject createExtrinsic(String id, EbXMLObjectLibrary objectLibrary) {
+        ExtrinsicObjectType extrinsicObjectType = RIM_FACTORY.createExtrinsicObjectType();
+        extrinsicObjectType.setId(id);
+        return new EbXMLExtrinsicObject30(extrinsicObjectType);
     }
 
     @Override
-    public RegistryPackage createRegistryPackage(String id, ObjectLibrary objectLibrary) {
-        return RegistryPackage30.create(id);
+    public EbXMLRegistryPackage createRegistryPackage(String id, EbXMLObjectLibrary objectLibrary) {
+        RegistryPackageType registryPackageType = RIM_FACTORY.createRegistryPackageType();
+        registryPackageType.setId(id);
+        return new EbXMLRegistryPackage30(registryPackageType);
     }
 
     @Override
-    public EbXMLAssociation createAssociation(ObjectLibrary objectLibrary) {
-        return EbXMLAssociation30.create();
+    public EbXMLAssociation createAssociation(EbXMLObjectLibrary objectLibrary) {
+        return new EbXMLAssociation30(RIM_FACTORY.createAssociationType1());
     }
     
     @Override
-    public SubmitObjectsRequest createSubmitObjectsRequest() {
-        return SubmitObjectsRequest30.create(createObjectLibrary());
+    public EbXMLSubmitObjectsRequest createSubmitObjectsRequest() {
+        SubmitObjectsRequest request = LCM_FACTORY.createSubmitObjectsRequest();
+        RegistryObjectListType list = request.getRegistryObjectList();
+        if (list == null) {
+            list = RIM_FACTORY.createRegistryObjectListType();
+            request.setRegistryObjectList(list);
+        }
+        return new EbXMLSubmitObjectsRequest30(request, createObjectLibrary());
     }
 
     @Override
-    public ProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(ObjectLibrary library) {
-        return ProvideAndRegisterDocumentSetRequest30.create(library);
+    public EbXMLProvideAndRegisterDocumentSetRequest createProvideAndRegisterDocumentSetRequest(EbXMLObjectLibrary objectLibrary) {
+        ProvideAndRegisterDocumentSetRequestType request = new ProvideAndRegisterDocumentSetRequestType();
+        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
+        if (submitObjectsRequest == null) {
+            submitObjectsRequest = LCM_FACTORY.createSubmitObjectsRequest();
+            request.setSubmitObjectsRequest(submitObjectsRequest);
+        }
+        
+        RegistryObjectListType list = submitObjectsRequest.getRegistryObjectList();
+        if (list == null) {
+            list = RIM_FACTORY.createRegistryObjectListType();
+            submitObjectsRequest.setRegistryObjectList(list);
+        }
+        return new EbXMLProvideAndRegisterDocumentSetRequest30(request, objectLibrary);
     }
     
     @Override
-    public RetrieveDocumentSetRequest createRetrieveDocumentSetRequest() {
-        return RetrieveDocumentSetRequest30.create();
+    public EbXMLRetrieveDocumentSetRequest createRetrieveDocumentSetRequest() {
+        return new EbXMLRetrieveDocumentSetRequest30(new RetrieveDocumentSetRequestType());
     }
     
     @Override
-    public ObjectLibrary createObjectLibrary() {
-        return new ObjectLibrary();
+    public EbXMLObjectLibrary createObjectLibrary() {
+        return new EbXMLObjectLibrary();
     }
 
     @Override
-    public RegistryResponse createRegistryResponse() {
-        return RegistryResponse30.create();
+    public EbXMLRegistryResponse createRegistryResponse() {
+        return new EbXMLRegistryResponse30(RS_FACTORY.createRegistryResponseType());
     }
 
     @Override
-    public RetrieveDocumentSetResponse createRetrieveDocumentSetResponse() {
-        return RetrieveDocumentSetResponse30.create();
+    public EbXMLRetrieveDocumentSetResponse createRetrieveDocumentSetResponse() {
+        RetrieveDocumentSetResponseType response = new RetrieveDocumentSetResponseType();
+        response.setRegistryResponse(RS_FACTORY.createRegistryResponseType());
+        return new EbXMLRetrieveDocumentSetResponse30(response);
     }
     
     @Override
-    public AdhocQueryRequest createAdhocQueryRequest() {
-        return AdhocQueryRequest30.create();
+    public EbXMLAdhocQueryRequest createAdhocQueryRequest() {
+        AdhocQueryRequest request = QUERY_FACTORY.createAdhocQueryRequest();
+        
+        AdhocQueryType query = RIM_FACTORY.createAdhocQueryType();                        
+        ResponseOptionType responseOption = QUERY_FACTORY.createResponseOptionType();
+        responseOption.setReturnComposedObjects(true);
+        
+        request.setResponseOption(responseOption);
+        request.setAdhocQuery(query);
+        
+        return new EbXMLAdhocQueryRequest30(request);        
     }
     
     @Override
-    public EbXMLQueryResponse createAdhocQueryResponse(ObjectLibrary objectLibrary) {
-        return EbXMLQueryResponse30.create(objectLibrary);
+    public EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary) {
+        AdhocQueryResponse response = QUERY_FACTORY.createAdhocQueryResponse();
+        
+        RegistryObjectListType list = response.getRegistryObjectList();
+        if (list == null) {
+            list = RIM_FACTORY.createRegistryObjectListType();
+            response.setRegistryObjectList(list);
+        }
+        
+        return new EbXMLQueryResponse30(response, objectLibrary);        
     }
 }

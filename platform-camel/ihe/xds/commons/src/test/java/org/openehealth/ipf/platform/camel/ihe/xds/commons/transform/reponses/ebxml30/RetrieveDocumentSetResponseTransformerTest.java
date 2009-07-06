@@ -17,14 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.reponses.eb
 
 import static org.junit.Assert.*;
 
-import java.net.URL;
-
 import javax.activation.DataHandler;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocument;
@@ -47,36 +46,14 @@ public class RetrieveDocumentSetResponseTransformerTest {
         factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         
-        RetrieveDocument requestData1 = new RetrieveDocument();
-        requestData1.setDocumentUniqueID("doc1");
-        requestData1.setHomeCommunityID("home1");
-        requestData1.setRepositoryUniqueID("repo1");
-        
-        dataHandler1 = new DataHandler(new URL("http://file"));
-        
-        RetrievedDocument doc1 = new RetrievedDocument();
-        doc1.setRequestData(requestData1);
-        doc1.setDataHandler(dataHandler1);
-
-        RetrieveDocument requestData2 = new RetrieveDocument();
-        requestData2.setDocumentUniqueID("doc2");
-        requestData2.setHomeCommunityID("home2");
-        requestData2.setRepositoryUniqueID("repo2");
-        
-        dataHandler2 = new DataHandler(new URL("http://file"));
-        
-        RetrievedDocument doc2 = new RetrievedDocument();
-        doc2.setRequestData(requestData2);
-        doc2.setDataHandler(dataHandler2);
-        
-        response = new RetrievedDocumentSet();
-        response.getDocuments().add(doc1);
-        response.getDocuments().add(doc2);
+        response = SampleData.createRetrievedDocumentSet();
+        dataHandler1 = response.getDocuments().get(0).getDataHandler();
+        dataHandler2 = response.getDocuments().get(1).getDataHandler();
     }
     
     @Test
     public void testToEbXML() {
-        RetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+        EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
         assertNotNull(ebXML);
         
         assertEquals(2, ebXML.getDocuments().size());
@@ -103,7 +80,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
 
      @Test
      public void testToEbXMLEmpty() {
-         RetrieveDocumentSetResponse ebXML = transformer.toEbXML(new RetrievedDocumentSet());
+         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(new RetrievedDocumentSet());
          assertNotNull(ebXML);
          assertEquals(0, ebXML.getDocuments().size());
      }
@@ -112,7 +89,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
      
      @Test
      public void testFromEbXML() {
-         RetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
          RetrievedDocumentSet result = transformer.fromEbXML(ebXML);
          assertEquals(response, result);
      }
@@ -124,7 +101,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
 
      @Test
      public void testFromEbXMLEmpty() {
-         RetrieveDocumentSetResponse ebXML = transformer.toEbXML(new RetrievedDocumentSet());
+         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(new RetrievedDocumentSet());
          RetrievedDocumentSet result = transformer.fromEbXML(ebXML);
          assertEquals(new RetrievedDocumentSet(), result);
      }

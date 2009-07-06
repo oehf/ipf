@@ -23,6 +23,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents an XDS document entry according to the IHE XDS specification.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * 
  * @author Jens Riemschneider
  */
@@ -49,152 +52,295 @@ public class DocumentEntry extends XDSMetaClass {
     private String repositoryUniqueId;
     private String homeCommunityId;
 
+    /**
+     * @return the list of authors of the document. Cannot be <code>null</code>.
+     */
     public List<Author> getAuthors() {
         return authors;
     }
     
+    /**
+     * @return the class code of the entry.
+     */
     public Code getClassCode() {
         return classCode;
     }
     
+    /**
+     * @param classCode
+     *          the class code of the entry.
+     */
     public void setClassCode(Code classCode) {
         this.classCode = classCode;
     }
     
+    /**
+     * @return the time of the document creation.
+     */
     public String getCreationTime() {
         return creationTime;
     }
     
+    /**
+     * @param creationTime
+     *          the time of the document creation.
+     */
     public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
     }
     
+    /**
+     * @return the code of the document's format.
+     */
     public Code getFormatCode() {
         return formatCode;
     }
     
+    /**
+     * @param formatCode
+     *          the code of the document's format.
+     */
     public void setFormatCode(Code formatCode) {
         this.formatCode = formatCode;
     }
     
+    /**
+     * @return the hash calculated via the document's content.
+     */
     public String getHash() {
         return hash;
     }
     
+    /**
+     * @param hash
+     *          the hash calculated via the document's content.
+     */
     public void setHash(String hash) {
         this.hash = hash;
     }
     
+    /**
+     * @return the code of the healthcare facility creating the document.
+     */
     public Code getHealthcareFacilityTypeCode() {
         return healthcareFacilityTypeCode;
     }
     
+    /**
+     * @param healthcareFacilityTypeCode
+     *          the code of the healthcare facility creating the document.
+     */
     public void setHealthcareFacilityTypeCode(Code healthcareFacilityTypeCode) {
         this.healthcareFacilityTypeCode = healthcareFacilityTypeCode;
     }
     
+    /**
+     * @return the language used within the document.
+     */
     public String getLanguageCode() {
         return languageCode;
     }
     
+    /**
+     * @param languageCode
+     *          the language used within the document.
+     */
     public void setLanguageCode(String languageCode) {
         this.languageCode = languageCode;
     }
     
+    /**
+     * @return the person that is the legal authenticator of the document.
+     */
     public Person getLegalAuthenticator() {
         return legalAuthenticator;
     }
     
+    /**
+     * @param legalAuthenticator
+     *          the person that is the legal authenticator of the document.
+     */
     public void setLegalAuthenticator(Person legalAuthenticator) {
         this.legalAuthenticator = legalAuthenticator;
     }
     
+    /**
+     * @return the mime type of the document.
+     */
     public String getMimeType() {
         return mimeType;
     }
     
+    /**
+     * @param mimeType
+     *          the mime type of the document.
+     */
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
     }
     
+    /**
+     * @return the code of the practice setting.
+     */
     public Code getPracticeSettingCode() {
         return practiceSettingCode;
     }
     
+    /**
+     * @param practiceSettingCode
+     *          the code of the practice setting.
+     */
     public void setPracticeSettingCode(Code practiceSettingCode) {
         this.practiceSettingCode = practiceSettingCode;
     }
     
+    /**
+     * @return the time the service was started.
+     */
     public String getServiceStartTime() {
         return serviceStartTime;
     }
     
+    /**
+     * @param serviceStartTime
+     *          the time the service was started.
+     */
     public void setServiceStartTime(String serviceStartTime) {
         this.serviceStartTime = serviceStartTime;
     }
     
+    /**
+     * @return the time the service was stopped.
+     */
     public String getServiceStopTime() {
         return serviceStopTime;
     }
     
+    /**
+     * @param serviceStopTime
+     *          the time the service was stopped.
+     */
     public void setServiceStopTime(String serviceStopTime) {
         this.serviceStopTime = serviceStopTime;
     }
     
+    /**
+     * @return the size of the document.
+     */
     public Long getSize() {
         return size;
     }
     
+    /**
+     * @param size
+     *          the size of the document.
+     */
     public void setSize(Long size) {
         this.size = size;
     }
     
+    /**
+     * @return information about the source patient that the document is created for.
+     */
     public PatientInfo getSourcePatientInfo() {
         return sourcePatientInfo;
     }
     
+    /**
+     * @param sourcePatientInfo
+     *          information about the source patient that the document is created for.
+     */
     public void setSourcePatientInfo(PatientInfo sourcePatientInfo) {
         this.sourcePatientInfo = sourcePatientInfo;
     }
     
+    /**
+     * @return the ID of the patient that the document is created for.
+     */
     public Identifiable getSourcePatientID() {
         return sourcePatientID;
     }
 
+    /**
+     * @param sourcePatientID
+     *          the ID of the patient that the document is created for.
+     */
     public void setSourcePatientID(Identifiable sourcePatientID) {
         this.sourcePatientID = sourcePatientID;
     }
 
+    /**
+     * @return the code of the type of the document.
+     */
     public Code getTypeCode() {
         return typeCode;
     }
     
+    /**
+     * @param typeCode
+     *          the code of the type of the document.
+     */
     public void setTypeCode(Code typeCode) {
         this.typeCode = typeCode;
     }
     
+    /**
+     * @return the URI of the document for downloads via XDS.a
+     */
     public String getUri() {
         return uri;
     }
     
+    /**
+     * @param uri
+     *          the URI of the document for downloads via XDS.a.
+     */
     public void setUri(String uri) {
         this.uri = uri;
     }
     
+    /**
+     * @return the ID of the repository that the document resides in.
+     */
     public String getRepositoryUniqueId() {
         return repositoryUniqueId;
     }
     
+    /**
+     * @param repositoryUniqueId
+     *          the ID of the repository that the document resides in.
+     */
     public void setRepositoryUniqueId(String repositoryUniqueId) {
         this.repositoryUniqueId = repositoryUniqueId;
     }
     
+    /**
+     * @return the codes describing the confidentiality of the document.
+     */
     public List<Code> getConfidentialityCodes() {
         return confidentialityCodes;
     }
 
+    /**
+     * @return the codes describing the event for which the document was created.
+     */
     public List<Code> getEventCodeList() {
         return eventCodeList;
+    }
+
+    /**
+     * @return the ID of the community that this document was created in.
+     */
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    /**
+     * @param homeCommunityId
+     *          the ID of the community that this document was created in.
+     */
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
     }
 
     @Override
@@ -351,13 +497,5 @@ public class DocumentEntry extends XDSMetaClass {
         } else if (!uri.equals(other.uri))
             return false;
         return true;
-    }
-
-    public String getHomeCommunityId() {
-        return homeCommunityId;
-    }
-
-    public void setHomeCommunityId(String homeCommunityId) {
-        this.homeCommunityId = homeCommunityId;
     }
 }

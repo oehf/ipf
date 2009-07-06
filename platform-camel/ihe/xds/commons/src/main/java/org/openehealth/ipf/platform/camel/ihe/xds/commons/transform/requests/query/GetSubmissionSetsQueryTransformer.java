@@ -17,12 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.*;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.AdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetAssociationsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubmissionSetsQuery;
 
 /**
- * Transforms between {@link GetAssociationsQuery} and {@link AdhocQueryRequest}.
+ * Transforms between {@link GetAssociationsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer<GetSubmissionSetsQuery> {

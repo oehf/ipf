@@ -86,7 +86,7 @@ public abstract class HL7 {
     }
 
     private static String escape(String text, HL7Delimiter delimiter) {
-        return text.replace(delimiter.getValue(), delimiter.getSubstitude());
+        return text.replace(delimiter.getValue(), delimiter.getSubstitute());
     }
     
     public static String unescape(String text) {
@@ -104,7 +104,7 @@ public abstract class HL7 {
     }
     
     private static String unescape(String text, HL7Delimiter separator) {
-        return text.replace(separator.getSubstitude(), separator.getValue());
+        return text.replace(separator.getSubstitute(), separator.getValue());
     }
     
     /**

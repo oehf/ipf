@@ -19,8 +19,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.RetrieveDocumentSetRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
@@ -40,24 +41,12 @@ public class RetrieveDocumentSetRequestTransformerTest {
         factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetRequestTransformer(factory);
         
-        RetrieveDocument doc1 = new RetrieveDocument();
-        doc1.setDocumentUniqueID("doc1");
-        doc1.setHomeCommunityID("home1");
-        doc1.setRepositoryUniqueID("repo1");
-
-        RetrieveDocument doc2 = new RetrieveDocument();
-        doc2.setDocumentUniqueID("doc2");
-        doc2.setHomeCommunityID("home2");
-        doc2.setRepositoryUniqueID("repo2");
-        
-        request = new RetrieveDocumentSet();
-        request.getDocuments().add(doc1);
-        request.getDocuments().add(doc2);
+        request = SampleData.createRetrieveDocumentSet();
     }
-    
+
     @Test
     public void testToEbXML() {
-        RetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
+        EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
         assertNotNull(ebXML);
         
         assertEquals(2, ebXML.getDocuments().size());
@@ -80,7 +69,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
 
      @Test
      public void testToEbXMLEmpty() {
-         RetrieveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
+         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
          assertNotNull(ebXML);
          assertEquals(0, ebXML.getDocuments().size());
      }
@@ -89,7 +78,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
      
      @Test
      public void testFromEbXML() {
-         RetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
+         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
          RetrieveDocumentSet result = transformer.fromEbXML(ebXML);
          assertEquals(request, result);
      }
@@ -101,7 +90,7 @@ public class RetrieveDocumentSetRequestTransformerTest {
 
      @Test
      public void testFromEbXMLEmpty() {
-         RetrieveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
+         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(new RetrieveDocumentSet());
          RetrieveDocumentSet result = transformer.fromEbXML(ebXML);
          assertEquals(new RetrieveDocumentSet(), result);
      }

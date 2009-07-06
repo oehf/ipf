@@ -22,16 +22,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLQueryResponse30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryRegistryTransformer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.QueryResponseTransformer;
 
 /**
  * Tests the ITI-18 component with the webservice and the client defined within the URI.
@@ -66,10 +60,6 @@ public class TestIti18 extends StandardTestContainer {
     private QueryResponse send(String endpoint, String value) {
         query.getAuthorPersons().clear();
         query.getAuthorPersons().add(value);
-        
-        QueryRegistryTransformer requestTransformer = new QueryRegistryTransformer();
-        Object result = getProducerTemplate().requestBody(endpoint, requestTransformer.toEbXML(request).getInternal());        
-        EbXMLQueryResponse ebXMLResponse = EbXMLQueryResponse30.create((AdhocQueryResponse) result);
-        return new QueryResponseTransformer(new EbXMLFactory30()).fromEbXML(ebXMLResponse);
+        return send(endpoint, request, QueryResponse.class);
     }
 }

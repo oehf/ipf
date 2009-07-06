@@ -20,9 +20,9 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabu
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.Classification;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer;
@@ -40,14 +40,14 @@ public class AuthorTransformer {
         this.factory = ebXMLFactory; 
     }
 
-    public Classification toEbXML(Author author, ObjectLibrary objectLibrary) {
+    public EbXMLClassification toEbXML(Author author, EbXMLObjectLibrary objectLibrary) {
         notNull(objectLibrary, "objectLibrary cannot be null");
         
         if (author == null) {
             return null;
         }
         
-        Classification classification = factory.createClassification(objectLibrary);
+        EbXMLClassification classification = factory.createClassification(objectLibrary);
         classification.setNodeRepresentation("");
 
         String hl7XCN = personTransformer.toHL7(author.getAuthorPerson());
@@ -67,7 +67,7 @@ public class AuthorTransformer {
         return classification;
     }
     
-    public Author fromEbXML(Classification classification) {
+    public Author fromEbXML(EbXMLClassification classification) {
         if (classification == null) {
             return null;        
         }
