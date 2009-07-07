@@ -39,6 +39,10 @@ import org.openhealthtools.ihe.common.cdar2.util.CDAR2ResourceFactoryImpl;
  */
 public class CDAR2Parser implements Parser<POCDMT000040ClinicalDocument> {
 
+    static {
+        @SuppressWarnings("unused")
+        CDAR2Package packageInstance = CDAR2Package.eINSTANCE;
+    }
 
     /* (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.lang.String, java.lang.Object[])
