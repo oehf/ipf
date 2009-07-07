@@ -41,6 +41,11 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
 
     private final RecipientTransformer recipientTransformer = new RecipientTransformer();
 
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public SubmissionSetTransformer(EbXMLFactory factory) {
         super(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID,
                 SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID,

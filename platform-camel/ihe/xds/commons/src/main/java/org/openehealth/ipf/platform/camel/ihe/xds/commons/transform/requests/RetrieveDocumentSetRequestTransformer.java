@@ -28,11 +28,22 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocum
 public class RetrieveDocumentSetRequestTransformer {
     private final EbXMLFactory factory;
     
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public RetrieveDocumentSetRequestTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
     }
     
+    /**
+     * Transforms the request into its ebXML representation.
+     * @param request
+     *          the request. Can be <code>null</code>.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
+     */
     public EbXMLRetrieveDocumentSetRequest toEbXML(RetrieveDocumentSet request) {
         if (request == null) {
             return null;
@@ -43,6 +54,12 @@ public class RetrieveDocumentSetRequestTransformer {
         return ebXML;
     }
     
+    /**
+     * Transforms the ebXML representation into a request.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     * @return the request. <code>null</code> if the input was <code>null</code>.
+     */
     public RetrieveDocumentSet fromEbXML(EbXMLRetrieveDocumentSetRequest ebXML) {
         if (ebXML == null) {
             return null;

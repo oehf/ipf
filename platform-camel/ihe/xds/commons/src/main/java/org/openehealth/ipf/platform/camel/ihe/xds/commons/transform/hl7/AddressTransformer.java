@@ -32,8 +32,9 @@ public class AddressTransformer {
     /**
      * Creates an address instance via an HL7 XAD string.
      * @param hl7XAD
-     *          the HL7 XAD string.
-     * @return the created Address instance.
+     *          the HL7 XAD string. Can be <code>null</code>.
+     * @return the created Address instance. <code>null</code> if no relevant 
+     *          data was found in the HL7 string.
      */
     public Address fromHL7(String hl7XAD) {
         List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7XAD);
@@ -67,8 +68,9 @@ public class AddressTransformer {
     /**
      * Transforms an address instance into an HL7v2 XAD string.
      * @param address
-     *          the address to transform.
-     * @return the HL7 representation.
+     *          the address to transform. Can be <code>null</code>.
+     * @return the HL7 representation. <code>null</code> if the input was <code>null</code> 
+     *          or the resulting HL7 string would be empty.
      */
     public String toHL7(Address address) {
         if (address == null) {

@@ -26,18 +26,32 @@ public class TimeRange {
     private String from;
     private String to;
     
+    /**
+     * @return the start time of the range.
+     */
     public String getFrom() {
         return from;
     }
     
+    /**
+     * @param from
+     *          the start time of the range.
+     */
     public void setFrom(String from) {
         this.from = from;
     }
     
+    /**
+     * @return the end time of the range.
+     */
     public String getTo() {
         return to;
     }
 
+    /**
+     * @param to
+     *          the end time of the range.
+     */
     public void setTo(String to) {
         this.to = to;
     }

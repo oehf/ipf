@@ -20,8 +20,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Representation of a localized string.<p>
- * Main purpose of this class is to have an implementation that is 
- * independent of the ebRS classes.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>.
  * 
  * @author Jens Riemschneider
  */
@@ -30,38 +30,76 @@ public class LocalizedString {
     private String charset;
     private String value;
     
+    /**
+     * Constructs a localized string.
+     */
     public LocalizedString() {}
 
+    /**
+     * Constructs a localized string.
+     * @param value
+     *          the value of the string.
+     * @param lang
+     *          the language that the string is in.
+     * @param charset
+     *          the charset used in the string.
+     */
     public LocalizedString(String value, String lang, String charset) {
         this.value = value;
         this.lang = lang;
         this.charset = charset;
     }
 
+    /**
+     * Constructs a localized string.
+     * @param value
+     *          the value of the string.
+     */
     public LocalizedString(String value) {
         this.value = value;
     }
 
+    /**
+     * @return the language that the string is in.
+     */
     public String getLang() {
         return lang;
     }
     
+    /**
+     * @param lang
+     *          the language that the string is in.
+     */
     public void setLang(String lang) {
         this.lang = lang;
     }
     
+    /**
+     * @return the charset used in the string.
+     */
     public String getCharset() {
         return charset;
     }
     
+    /**
+     * @param charset
+     *          the charset used in the string.
+     */
     public void setCharset(String charset) {
         this.charset = charset;
     }
     
+    /**
+     * @return the value of the string.
+     */
     public String getValue() {
         return value;
     }
     
+    /**
+     * @param value
+     *          the value of the string.
+     */
     public void setValue(String value) {
         this.value = value;
     }

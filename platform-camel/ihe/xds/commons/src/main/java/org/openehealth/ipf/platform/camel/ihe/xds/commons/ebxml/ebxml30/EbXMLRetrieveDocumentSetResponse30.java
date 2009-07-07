@@ -115,7 +115,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             error.setCodeContext(regError.getCodeContext());
             error.setLocation(regError.getLocation());
             error.setErrorCode(ErrorCode.valueOfOpcode(regError.getErrorCode()));
-            error.setServerity(Severity.valueOfOpcode30(regError.getSeverity()));
+            error.setSeverity(Severity.valueOfOpcode30(regError.getSeverity()));
             errors.add(error);
         }
         
@@ -131,7 +131,7 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             RegistryError regError = EbXMLFactory30.RS_FACTORY.createRegistryError();
             regError.setErrorCode(ErrorCode.getOpcode(error.getErrorCode()));
             regError.setCodeContext(error.getCodeContext());
-            regError.setSeverity(Severity.getOpcode30(error.getServerity()));
+            regError.setSeverity(Severity.getOpcode30(error.getSeverity()));
             regError.setLocation(error.getLocation());
             list.add(regError);
         }

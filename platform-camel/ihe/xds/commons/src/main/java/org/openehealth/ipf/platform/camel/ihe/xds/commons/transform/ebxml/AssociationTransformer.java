@@ -29,6 +29,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 public class AssociationTransformer {
     private final EbXMLFactory factory;
     
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public AssociationTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
@@ -37,10 +42,10 @@ public class AssociationTransformer {
     /**
      * Transforms the given association to its ebXML representation.
      * @param association
-     *          the association to transform.
+     *          the association to transform. Can be <code>null</code>.
      * @param objectLibrary 
      *          the object library.
-     * @return the ebXML representation.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public EbXMLAssociation toEbXML(Association association, EbXMLObjectLibrary objectLibrary) {
         notNull(objectLibrary, "objectLibrary cannot be null");
@@ -59,8 +64,9 @@ public class AssociationTransformer {
     /**
      * Transforms the given ebXML representation into an {@link Association}. 
      * @param association
-     *          the ebXML association.
-     * @return the created {@link Association} instance.
+     *          the ebXML association. Can be <code>null</code>.
+     * @return the created {@link Association} instance. <code>null</code> if the input 
+     *          was <code>null</code>.
      */
     public Association fromEbXML(EbXMLAssociation association) {
         if (association == null) {

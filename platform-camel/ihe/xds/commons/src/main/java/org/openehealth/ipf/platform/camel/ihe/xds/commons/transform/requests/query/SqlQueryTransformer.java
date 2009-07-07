@@ -24,6 +24,15 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuer
  * @author Jens Riemschneider
  */
 public class SqlQueryTransformer {
+    /**
+     * Transforms the query into its ebXML representation.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
     public void toEbXML(SqlQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -32,6 +41,15 @@ public class SqlQueryTransformer {
         ebXML.setSql(query.getSql());
     }
     
+    /**
+     * Transforms the ebXML representation of a query into a query object.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
     public void fromEbXML(SqlQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

@@ -22,41 +22,78 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Represents an organization.
  * <p>
  * This class contains members from the HL7v2 XON data type.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>. When transforming
+ * to HL7 this indicates that the values are empty. Trailing empty values are 
+ * removed from the HL7 string.
  * @author Jens Riemschneider
  */
 public class Organization {
     private String organizationName;                // XON.1
     private String idNumber;                        // XON.3
     private AssigningAuthority assigningAuthority;  // XON.4
-    
+
+    /**
+     * Constructs the organization.
+     */
     public Organization() {}
     
+    /**
+     * Constructs the organization.
+     * @param organizationName
+     *          the name of the organization (XON.1).
+     * @param idNumber
+     *          the id of the organization (XON.3).
+     * @param assigningAuthority
+     *          the assigning authority (XON.4).
+     */
     public Organization(String organizationName, String idNumber, AssigningAuthority assigningAuthority) {
         this.organizationName = organizationName;
         this.idNumber = idNumber;
         this.assigningAuthority = assigningAuthority;
     }
 
+    /**
+     * @return the assigning authority (XON.4).
+     */
     public AssigningAuthority getAssigningAuthority() {
         return assigningAuthority;
     }
     
+    /**
+     * @param assigningAuthority
+     *          the assigning authority (XON.4).
+     */
     public void setAssigningAuthority(AssigningAuthority assigningAuthority) {
         this.assigningAuthority = assigningAuthority;
     }
 
+    /**
+     * @return the name of the organization (XON.1).
+     */
     public String getOrganizationName() {
         return organizationName;
     }
 
+    /**
+     * @param organizationName
+     *          the name of the organization (XON.1).
+     */
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
     }
 
+    /**
+     * @return the id of the organization (XON.3).
+     */
     public String getIdNumber() {
         return idNumber;
     }
 
+    /**
+     * @param idNumber
+     *          the id of the organization (XON.3).
+     */
     public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
     }
@@ -98,8 +135,7 @@ public class Organization {
             return false;
         return true;
     }
-    
-    
+        
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

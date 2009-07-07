@@ -26,12 +26,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibra
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 
 /**
- * Transforms between {@link Code} and its ebXML 2.1 representation.
+ * Transforms between {@link Code} and its ebXML representation.
  * @author Jens Riemschneider
  */
 public class CodeTransformer {
     private final EbXMLFactory factory;
 
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public CodeTransformer(EbXMLFactory ebXMLFactory) {
         notNull(ebXMLFactory, "ebXMLFactory cannot be null");
         this.factory = ebXMLFactory; 
@@ -40,10 +45,11 @@ public class CodeTransformer {
     /**
      * Transforms a {@link Code} instance to a {@link EbXMLClassification}. 
      * @param code
-     *          the code instance to transform.
+     *          the code instance to transform. Can be <code>null</code>.
      * @param objectLibrary 
      *          the object library.
-     * @return the {@link EbXMLClassification}.
+     * @return the {@link EbXMLClassification}. <code>null</code> if the input 
+     *          was <code>null</code>.
      */
     public EbXMLClassification toEbXML(Code code, EbXMLObjectLibrary objectLibrary) {
         if (code == null) {
@@ -64,8 +70,8 @@ public class CodeTransformer {
     /**
      * Transforms a {@link EbXMLClassification} to a {@link Code} instance. 
      * @param classification
-     *          {@link EbXMLClassification}
-     * @return the code instance.
+     *          {@link EbXMLClassification}. Can be <code>null</code>.
+     * @return the code instance. <code>null</code> if the input was <code>null</code>.
      */
     public Code fromEbXML(EbXMLClassification classification) {
         if (classification == null) {

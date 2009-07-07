@@ -35,11 +35,24 @@ public class AuthorTransformer {
     private PersonTransformer personTransformer = new PersonTransformer();
     private final EbXMLFactory factory;
     
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public AuthorTransformer(EbXMLFactory ebXMLFactory) {
         notNull(ebXMLFactory, "ebXMLFactory cannot be null");
         this.factory = ebXMLFactory; 
     }
 
+    /**
+     * Transforms an {@link Author} to a {@link EbXMLClassification}.
+     * @param author
+     *          the author. Can be <code>null</code>.
+     * @param objectLibrary
+     *          the object library to use.
+     * @return the classification. <code>null</code> if the input was <code>null</code>.
+     */
     public EbXMLClassification toEbXML(Author author, EbXMLObjectLibrary objectLibrary) {
         notNull(objectLibrary, "objectLibrary cannot be null");
         
@@ -67,6 +80,12 @@ public class AuthorTransformer {
         return classification;
     }
     
+    /**
+     * Transforms an a {@link EbXMLClassification} to {@link Author}. 
+     * @param classification
+     *          the classification. Can be <code>null</code>.
+     * @return the author. <code>null</code> if the input was <code>null</code>.
+     */
     public Author fromEbXML(EbXMLClassification classification) {
         if (classification == null) {
             return null;        

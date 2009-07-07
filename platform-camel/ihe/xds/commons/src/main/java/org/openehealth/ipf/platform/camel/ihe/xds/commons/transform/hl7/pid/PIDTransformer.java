@@ -25,11 +25,9 @@ public interface PIDTransformer {
     /**
      * Transforms the given hl7 data into the patient info. 
      * @param hl7Data
-     *          hl7 text to transform.
+     *          hl7 text to transform. Can be <code>null</code>.
      * @param patientInfo
      *          patient info that receives the data.
-     * @throws XDSProfileViolationException
-     *          if a violation of the XDS profile has been detected.
      */
     void fromHL7(String hl7Data, PatientInfo patientInfo);
 
@@ -37,7 +35,8 @@ public interface PIDTransformer {
      * Transforms the given {@link PatientInfo} into HL7 data.
      * @param patientInfo
      *          the {@link PatientInfo} to transform.
-     * @return the HL7 data string.
+     * @return the HL7 data string. <code>null</code> if the resulting 
+     *          string would be empty.
      */
     String toHL7(PatientInfo patientInfo);
 }

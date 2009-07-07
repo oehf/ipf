@@ -20,18 +20,30 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by a list of UUIDs or unique IDs. 
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public abstract class GetByIDQuery extends GetByUUIDQuery {
     private final List<String> uniqueIDs = new ArrayList<String>();
 
+    /**
+     * Constructs the query.
+     * @param type
+     *          the type of the query.
+     */
     protected GetByIDQuery(QueryType type) {
         super(type);
     }
     
+    /**
+     * @return the IDs for filtering {@link XDSMetaClass#getUniqueID()}
+     */
     public List<String> getUniqueIDs() {
         return uniqueIDs;
     }

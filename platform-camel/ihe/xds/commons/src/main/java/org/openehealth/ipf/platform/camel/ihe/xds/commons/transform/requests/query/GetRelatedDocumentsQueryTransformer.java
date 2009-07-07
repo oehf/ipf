@@ -26,6 +26,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetRela
  * @author Jens Riemschneider
  */
 public class GetRelatedDocumentsQueryTransformer extends GetByIDQueryTransformer<GetRelatedDocumentsQuery> {
+    /**
+     * Constructs the transformer.
+     */
     public GetRelatedDocumentsQueryTransformer() {
         super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
     }

@@ -22,10 +22,16 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
 
 /**
  * Represents a stored query for GetAll.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class GetAllQuery extends StoredQuery {
@@ -37,35 +43,60 @@ public class GetAllQuery extends StoredQuery {
 
     private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
     private final List<Code> formatCodes = new ArrayList<Code>();
-    
+
+    /**
+     * Constructs the query.
+     */
     public GetAllQuery() {
         super(QueryType.GET_ALL);
     }
 
+    /**
+     * @return the patient ID to search for.
+     */
     public Identifiable getPatientId() {
         return patientId;
     }
 
+    /**
+     * @param patientId 
+     *          the patient ID to search for.
+     */
     public void setPatientId(Identifiable patientId) {
         this.patientId = patientId;
     }
 
+    /**
+     * @return the states for filtering {@link DocumentEntry#getAvailabilityStatus()}.
+     */
     public List<AvailabilityStatus> getStatusDocuments() {
         return statusDocuments;
     }
 
+    /**
+     * @return the states for filtering {@link SubmissionSet#getAvailabilityStatus()}.
+     */
     public List<AvailabilityStatus> getStatusSubmissionSets() {
         return statusSubmissionSets;
     }
 
+    /**
+     * @return the states for filtering {@link Folder#getAvailabilityStatus()}.
+     */
     public List<AvailabilityStatus> getStatusFolders() {
         return statusFolders;
     }
 
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
+     */
     public QueryList<Code> getConfidentialityCodes() {
         return confidentialityCodes;
     }
 
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
+     */
     public List<Code> getFormatCodes() {
         return formatCodes;
     }

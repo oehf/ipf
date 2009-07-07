@@ -30,19 +30,38 @@ public class QueryRegistry {
     
     private boolean returnLeafObjects;
 
+    /**
+     * Constructs the request.
+     * @param query
+     *          the query to use. Cannot be <code>null</code>.
+     */
     public QueryRegistry(Query query) {
         notNull(query, "query cannot be null");
         this.query = query;
     }
 
+    /**
+     * @return the query to use (never <code>null</code>).
+     */
     public Query getQuery() {
         return query;
     }
 
+    /**
+     * @return <code>true</code> if the objects data for any found object should be 
+     *          returned in the response. <code>false</code> if only an object reference
+     *          should be returned.  
+     */
     public boolean isReturnLeafObjects() {
         return returnLeafObjects;
     }
 
+    /**
+     * @param returnLeafObjects
+     *          <code>true</code> if the objects data for any found object should be 
+     *          returned in the response. <code>false</code> if only an object reference
+     *          should be returned.
+     */
     public void setReturnLeafObjects(boolean returnLeafObjects) {
         this.returnLeafObjects = returnLeafObjects;
     }
@@ -65,7 +84,7 @@ public class QueryRegistry {
         if (getClass() != obj.getClass())
             return false;
         QueryRegistry other = (QueryRegistry) obj;
-        if (query == null) {
+        if (query == null) { 
             if (other.query != null)
                 return false;
         } else if (!query.equals(other.query))

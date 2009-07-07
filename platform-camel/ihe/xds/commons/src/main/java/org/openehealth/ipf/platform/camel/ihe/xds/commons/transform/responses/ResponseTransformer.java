@@ -41,10 +41,8 @@ public class ResponseTransformer {
     /**
      * Transforms a {@link Response} to a {@link EbXMLRegistryResponse}.
      * @param response
-     *          the source of the transformation.
-     * @return 
-     * @return
-     *          the destination of the transformation. 
+     *          the response. Can be <code>null</code>.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public EbXMLRegistryResponse toEbXML(Response response) {
         notNull(response, "response cannot be null");
@@ -60,8 +58,8 @@ public class ResponseTransformer {
     /**
      * Transforms a {@link EbXMLRegistryResponse} to a {@link Response}.
      * @param ebXML
-     *          the source of the transformation.
-     * @return the destination of the transformation. 
+     *          the ebXML representation. Can be <code>null</code>.
+     * @return the response. <code>null</code> if the input was <code>null</code>.
      */
     public Response fromEbXML(EbXMLRegistryResponse ebXML) {
         notNull(ebXML, "ebXML cannot be null");

@@ -65,8 +65,8 @@ public class QueryResponseTransformer {
     /**
      * Transforms a {@link QueryResponse} to a {@link EbXMLQueryResponse}.
      * @param response
-     *          the response.
-     * @return the ebXML representation.
+     *          the response. Can be <code>null</code>.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public EbXMLQueryResponse toEbXML(QueryResponse response) {
         if (response == null) {
@@ -104,10 +104,10 @@ public class QueryResponseTransformer {
     }
     
     /**
-     * Transforms a {@link EbXMLRegistryResponse} to a {@link Response}.
+     * Transforms a {@link EbXMLQueryResponse} to a {@link QueryResponse}.
      * @param ebXML
-     *          the ebXML representation.
-     * @return the response.
+     *          the ebXML representation. Can be <code>null</code>.
+     * @return the response. <code>null</code> if the input was <code>null</code>.
      */
     public QueryResponse fromEbXML(EbXMLQueryResponse ebXML) {
         if (ebXML == null) {

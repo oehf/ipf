@@ -31,11 +31,25 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.Que
 public abstract class GetByUUIDQueryTransformer<T extends GetByUUIDQuery> {
     private final QueryParameter uuidParam;
     
+    /**
+     * Constructs the transformer.
+     * @param uuidParam
+     *          the parameter name of the UUID parameter.
+     */
     protected GetByUUIDQueryTransformer(QueryParameter uuidParam) {
         notNull(uuidParam, "uuidParam cannot be null");
         this.uuidParam = uuidParam;
     }
 
+    /**
+     * Transforms the query into its ebXML representation.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
     public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -51,7 +65,16 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUUIDQuery> {
         toEbXML(query, slots);
     }
 
-    public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
+    /**
+     * Transforms the ebXML representation of a query into a query object.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
+   public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
         }

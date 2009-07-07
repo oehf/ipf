@@ -25,6 +25,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFold
  * @author Jens Riemschneider
  */
 public class GetFoldersQueryTransformer extends GetByIDQueryTransformer<GetFoldersQuery> {
+    /**
+     * Constructs the transformer.
+     */
     public GetFoldersQueryTransformer() {
         super(FOLDER_UUID, FOLDER_UNIQUE_ID);
     }

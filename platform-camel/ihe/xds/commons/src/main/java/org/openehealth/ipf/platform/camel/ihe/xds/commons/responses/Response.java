@@ -23,20 +23,33 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Basic response information.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class Response {
     private Status status;
     private final List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
     
+    /**
+     * @return the status of the request execution.
+     */
     public Status getStatus() {
         return status;
     }
     
+    /**
+     * @param status
+     *          the status of the request execution.
+     */
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    /**
+     * @return the list of errors that occurred.
+     */
     public List<ErrorInfo> getErrors() {
         return errors;
     }
@@ -70,8 +83,7 @@ public class Response {
         } else if (!status.equals(other.status))
             return false;
         return true;
-    }
-    
+    }    
 
     @Override
     public String toString() {

@@ -17,9 +17,15 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
 /**
  * Represents a stored query for GetDocumentsAndAssociations.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class GetDocumentsAndAssociationsQuery extends GetByIDQuery {
+    /**
+     * Constructs the query.
+     */
     public GetDocumentsAndAssociationsQuery() {
         super(QueryType.GET_DOCUMENTS_AND_ASSOCIATIONS);
     }

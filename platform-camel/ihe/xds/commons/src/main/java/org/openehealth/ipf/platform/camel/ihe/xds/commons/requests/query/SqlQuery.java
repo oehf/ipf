@@ -20,19 +20,31 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * SQL based query for the Query Registry transaction.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class SqlQuery extends Query {
+    private String sql;
+
+    /**
+     * Constructs the query.
+     */
     public SqlQuery() {
         super(QueryType.SQL);
     }
 
-    private String sql;
-
+    /**
+     * @return the SQL string.
+     */
     public String getSql() {
         return sql;
     }
 
+    /**
+     * @param sql   
+     *          the SQL string.
+     */
     public void setSql(String sql) {
         this.sql = sql;
     }

@@ -26,6 +26,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubm
  * @author Jens Riemschneider
  */
 public class GetSubmissionSetsQueryTransformer extends GetByUUIDQueryTransformer<GetSubmissionSetsQuery> {
+    /**
+     * Constructs the transformer.
+     */
     public GetSubmissionSetsQueryTransformer() {
         super(UUID);
     }

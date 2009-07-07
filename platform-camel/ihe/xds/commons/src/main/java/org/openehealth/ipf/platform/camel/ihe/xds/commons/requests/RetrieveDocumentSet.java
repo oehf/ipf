@@ -23,11 +23,16 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Request object for the Retrieve Document Set transaction.
+ * <p>
+ * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class RetrieveDocumentSet {
     private final List<RetrieveDocument> documents = new ArrayList<RetrieveDocument>();
 
+    /**
+     * @return the list of documents to retrieve.
+     */
     public List<RetrieveDocument> getDocuments() {
         return documents;
     }
@@ -56,8 +61,7 @@ public class RetrieveDocumentSet {
             return false;
         return true;
     }
-    
-    
+        
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

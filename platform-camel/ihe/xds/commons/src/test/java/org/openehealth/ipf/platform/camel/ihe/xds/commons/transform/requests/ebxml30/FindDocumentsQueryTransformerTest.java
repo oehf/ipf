@@ -76,7 +76,7 @@ public class FindDocumentsQueryTransformerTest {
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_TO.getSlotName()));
         
         assertEquals(Arrays.asList("('code5^^scheme5')", "('code6^^scheme6')"),
-                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_HEALTH_CARE_FACILITY_TYPE_CODE.getSlotName()));
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE.getSlotName()));
 
         List<EbXMLSlot> slots = ebXML.getSlots(QueryParameter.DOC_ENTRY_EVENT_CODE.getSlotName());
         assertEquals(2, slots.size());

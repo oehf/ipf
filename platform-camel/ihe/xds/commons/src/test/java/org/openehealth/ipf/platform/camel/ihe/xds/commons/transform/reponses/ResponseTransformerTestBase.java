@@ -60,13 +60,13 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
         ErrorInfo error = errors.get(0);
         assertEquals("context1", error.getCodeContext());
         assertEquals(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, error.getErrorCode());
-        assertEquals(Severity.ERROR, error.getServerity());
+        assertEquals(Severity.ERROR, error.getSeverity());
         assertEquals("location1", error.getLocation());
 
         error = errors.get(1);
         assertEquals("context2", error.getCodeContext());
         assertEquals(ErrorCode.SQL_ERROR, error.getErrorCode());
-        assertEquals(Severity.WARNING, error.getServerity());
+        assertEquals(Severity.WARNING, error.getSeverity());
         assertEquals(null, error.getLocation());
     }
     

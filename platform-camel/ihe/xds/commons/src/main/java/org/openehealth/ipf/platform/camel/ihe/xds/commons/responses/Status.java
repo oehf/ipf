@@ -20,8 +20,11 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
  * @author Jens Riemschneider
  */
 public enum Status {
+    /** The request execution failed. */
     FAILURE("Failure", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure"),
+    /** The request execution succeeded. */
     SUCCESS("Success", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success"),
+    /** The request execution partially succeeded. */
     PARTIAL_SUCCESS("PartialSuccess", "urn:ihe:iti:2007:ResponseStatusType:PartialSuccess");
     
     private final String opcode21;

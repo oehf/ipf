@@ -33,28 +33,56 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryLi
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 
 /**
- * Base class of transformers for all queries.
+ * Wrapper class for ebXML query request to simplify access to slots.
+ * <p>
+ * This class ensures that the various encoding rules of query parameter
+ * values are met. 
  * @author Jens Riemschneider
  */
 class QuerySlotHelper {
     private EbXMLAdhocQueryRequest ebXML;
 
-    public QuerySlotHelper(EbXMLAdhocQueryRequest ebXML) {
+    /**
+     * Constructs the wrapper.
+     * @param ebXML
+     *          the wrapped object.
+     */
+    QuerySlotHelper(EbXMLAdhocQueryRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
         this.ebXML = ebXML;
     }
 
+    /**
+     * Retrieves a string-valued parameter from a slot.
+     * @param param
+     *          the parameter.
+     * @return the string value.
+     */
     String toString(QueryParameter param) {
         String value = ebXML.getSingleSlotValue(param.getSlotName());
         return decodeString(value);
     }
     
+    /**
+     * Stores a string-valued parameter into a slot.
+     * @param param
+     *          the parameter.
+     * @param value
+     *          the string value.
+     */
     void fromString(QueryParameter param, String value) {
         if (value != null) {
             ebXML.addSlot(param.getSlotName(), encodeAsString(value));
         }
     }
 
+    /**
+     * Stores a list of codes into a slot. 
+     * @param param
+     *          the parameter.
+     * @param codes
+     *          the list of codes.
+     */
     void fromCode(QueryParameter param, List<Code> codes) {
         List<String> slotValues = new ArrayList<String>();
         for (Code code : codes) {
@@ -62,6 +90,163 @@ class QuerySlotHelper {
             slotValues.add(encodeAsStringList(hl7CE));
         }
         ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
+    }
+
+    /**
+     * Retrieves a list of codes from a slot.
+     * @param param
+     *          the parameter.
+     * @param codes
+     *          the codes to be filled.
+     */
+    void toCode(QueryParameter param, List<Code> codes) {
+        toCode(ebXML.getSlotValues(param.getSlotName()), codes);
+    }
+
+    /**
+     * Stores a list of codes into a slot.
+     * @param param
+     *          the parameter.
+     * @param queryList
+     *          the list of codes.
+     */
+    void fromCode(QueryParameter param, QueryList<Code> queryList) {
+        for (List<Code> codes : queryList.getOuterList()) {
+            fromCode(param, codes);
+        }
+    }
+    
+    /**
+     * Retrieves a list of codes from a slot.
+     * @param param
+     *          the parameter.
+     * @param codes
+     *          the codes to be filled.
+     */
+    void toCode(QueryParameter param, QueryList<Code> queryList) {
+        queryList.getOuterList().clear();
+
+        List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
+        for (EbXMLSlot slot : slots) {
+            List<Code> innerList = new ArrayList<Code>();
+            toCode(slot.getValueList(), innerList);
+            queryList.getOuterList().add(innerList);
+        }
+    }
+    
+    /**
+     * Stores a list of strings into a slot.
+     * @param param
+     *          the parameter.
+     * @param values
+     *          the string list.
+     */
+    void fromStringList(QueryParameter param, List<String> values) {
+        List<String> slotValues = new ArrayList<String>();
+        for (String value : values) {
+            slotValues.add(encodeAsStringList(value));
+        }
+        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
+    }
+    
+    /**
+     * Retrieves a list of strings from a slot.
+     * @param param
+     *          the parameter.
+     * @param values
+     *          the string list to be filled.
+     */
+    void toStringList(QueryParameter param, List<String> values) {
+        values.clear();
+        List<String> slotValues = ebXML.getSlotValues(param.getSlotName());
+        for (String slotValue : slotValues) {            
+            values.addAll(decodeStringList(slotValue));
+        }
+    }
+
+    /**
+     * Stores a numbered parameter into a slot.
+     * @param param
+     *          the parameter.
+     * @param value
+     *          the value.
+     */
+    void fromNumber(QueryParameter param, String value) {
+        ebXML.addSlot(param.getSlotName(), value);
+    }
+    
+    /**
+     * Retrieves a numbered parameter from a slot.
+     * @param param
+     *          the parameter.
+     * @return the value.
+     */
+    String toNumber(QueryParameter param) {
+        return ebXML.getSingleSlotValue(param.getSlotName());
+    }
+
+    /**
+     * Stores a status parameter into a slot.
+     * @param param
+     *          the parameter.
+     * @param status
+     *          the list of status values.
+     */
+    void fromStatus(QueryParameter param, List<AvailabilityStatus> status) {
+        List<String> opcodes = new ArrayList<String>(status.size());
+        for (AvailabilityStatus statusValue : status) {
+            opcodes.add(AvailabilityStatus.toQueryOpcode(statusValue));
+        }
+        fromStringList(param, opcodes);
+    }
+
+    /**
+     * Retrieves a status parameter from a slot.
+     * @param param
+     *          the parameter.
+     * @param list
+     *          the list of status values to be filled.
+     */
+    void toStatus(QueryParameter param, List<AvailabilityStatus> list) {
+        List<String> opcodes = new ArrayList<String>(); 
+        toStringList(param, opcodes);
+
+        list.clear();
+        for (String opcode : opcodes) {
+            list.add(AvailabilityStatus.valueOfOpcode(opcode));
+        }
+    }
+
+    /**
+     * Stores an association parameter into a slot.
+     * @param param
+     *          the parameter.
+     * @param associationTypes
+     *          the list of association types.
+     */
+    void fromAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
+        List<String> opcodes = new ArrayList<String>(associationTypes.size());
+        for (AssociationType type : associationTypes) {
+            opcodes.add(AssociationType.getOpcode30(type));
+        }
+        fromStringList(param, opcodes);
+    }
+    
+    /**
+     * Retrieves an association parameter from a slot. 
+     * @param param
+     *          the parameter.
+     * @param list
+     *          the list of association types to be filled
+     */
+    void toAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
+        List<String> opcodes = new ArrayList<String>(); 
+        toStringList(param, opcodes);
+
+        associationTypes.clear();
+        for (String opcode : opcodes) {
+            associationTypes.add(AssociationType.valueOfOpcode(opcode));
+        }
     }
 
     private String fromCodeToHL7CE(Code code) {
@@ -79,82 +264,12 @@ class QuerySlotHelper {
                 HL7.get(parts, 3, true));
     }
 
-    void toCode(QueryParameter param, List<Code> codes) {
-        toCode(ebXML.getSlotValues(param.getSlotName()), codes);
-    }
-
     private void toCode(List<String> slotValues, List<Code> codes) {
         codes.clear();
         for (String slotValue : slotValues) {
             for (String hl7CE : decodeStringList(slotValue)) {
                 codes.add(toCodeFromHL7CE(hl7CE));
             }
-        }
-    }
-    
-    void fromStringList(QueryParameter param, List<String> values) {
-        List<String> slotValues = new ArrayList<String>();
-        for (String value : values) {
-            slotValues.add(encodeAsStringList(value));
-        }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
-    }
-    
-    void toStringList(QueryParameter param, List<String> values) {
-        values.clear();
-        List<String> slotValues = ebXML.getSlotValues(param.getSlotName());
-        for (String slotValue : slotValues) {            
-            values.addAll(decodeStringList(slotValue));
-        }
-    }
-
-    void fromNumber(QueryParameter param, String value) {
-        ebXML.addSlot(param.getSlotName(), value);
-    }
-    
-    String toNumber(QueryParameter param) {
-        return ebXML.getSingleSlotValue(param.getSlotName());
-    }
-
-    void fromStatus(QueryParameter param, List<AvailabilityStatus> status) {
-        List<String> opcodes = new ArrayList<String>(status.size());
-        for (AvailabilityStatus statusValue : status) {
-            opcodes.add(AvailabilityStatus.toQueryOpcode(statusValue));
-        }
-        fromStringList(param, opcodes);
-    }
-    
-    void fromAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
-        List<String> opcodes = new ArrayList<String>(associationTypes.size());
-        for (AssociationType type : associationTypes) {
-            opcodes.add(AssociationType.getOpcode30(type));
-        }
-        fromStringList(param, opcodes);
-    }
-    
-    void toStatus(QueryParameter param, List<AvailabilityStatus> list) {
-        List<String> opcodes = new ArrayList<String>(); 
-        toStringList(param, opcodes);
-
-        list.clear();
-        for (String opcode : opcodes) {
-            list.add(AvailabilityStatus.valueOfOpcode(opcode));
-        }
-    }
-
-    void toAssociationType(QueryParameter param, List<AssociationType> list) {
-        List<String> opcodes = new ArrayList<String>(); 
-        toStringList(param, opcodes);
-
-        list.clear();
-        for (String opcode : opcodes) {
-            list.add(AssociationType.valueOfOpcode(opcode));
-        }
-    }
-
-    void fromCode(QueryParameter param, QueryList<Code> queryList) {
-        for (List<Code> codes : queryList.getOuterList()) {
-            fromCode(param, codes);
         }
     }
     
@@ -205,16 +320,4 @@ class QuerySlotHelper {
         
         return values;
     }
-
-    public void toCode(QueryParameter param, QueryList<Code> queryList) {
-        queryList.getOuterList().clear();
-
-        List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
-        for (EbXMLSlot slot : slots) {
-            List<Code> innerList = new ArrayList<Code>();
-            toCode(slot.getValueList(), innerList);
-            queryList.getOuterList().add(innerList);
-        }
-    }
-
 }

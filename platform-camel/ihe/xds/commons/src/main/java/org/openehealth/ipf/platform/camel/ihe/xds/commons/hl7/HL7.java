@@ -46,7 +46,8 @@ public abstract class HL7 {
      *          an array of strings that are joined together to form
      *          the result. This array can contain <code>null</code>
      *          elements which are replaced by empty strings.
-     * @return the rendered string.
+     * @return the rendered string. <code>null</code> if the resulting 
+     *          string would be empty.
      */
     public static String render(HL7Delimiter separator, String... parts) {
         notNull(separator, "separator cannot be null");

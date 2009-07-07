@@ -37,7 +37,9 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
     private final CodeTransformer codeTransformer;
 
     /**
-     * Constructs the transformer.
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
      */
     public FolderTransformer(EbXMLFactory factory) {
         super(FOLDER_PATIENT_ID_EXTERNAL_ID, 

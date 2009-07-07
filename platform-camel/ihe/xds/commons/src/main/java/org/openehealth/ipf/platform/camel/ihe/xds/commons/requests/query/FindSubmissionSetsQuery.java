@@ -23,10 +23,14 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindSubmissionSets.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class FindSubmissionSetsQuery extends StoredQuery {
@@ -38,38 +42,67 @@ public class FindSubmissionSetsQuery extends StoredQuery {
     private final TimeRange submissionTime = new TimeRange();
     private String authorPerson;  // For some reason spec says this cannot be a list
 
+    /**
+     * Constructs the query.
+     */
     public FindSubmissionSetsQuery() {
         super(QueryType.FIND_SUBMISSION_SETS);
     }
 
+    /**
+     * @return the patient ID to search for.
+     */
     public Identifiable getPatientId() {
         return patientId;
     }
 
+    /**
+     * @param patientId 
+     *          the patient ID to search for.
+     */
     public void setPatientId(Identifiable patientId) {
         this.patientId = patientId;
     }
 
+    /**
+     * @return the states for filtering {@link SubmissionSet#getAvailabilityStatus()}.
+     */
     public List<AvailabilityStatus> getStatus() {
         return status;
     }
     
+    /**
+     * @return the time range for filtering {@link SubmissionSet#getSubmissionTime()}.
+     */
     public TimeRange getSubmissionTime() {
         return submissionTime;
     }
 
+    /**
+     * @return the author person text for filtering {@link SubmissionSet#getAuthors()}.
+     */
     public String getAuthorPerson() {
         return authorPerson;
     }
 
+    /**
+     * @param authorPerson
+     *          the author person text for filtering {@link SubmissionSet#getAuthors()}.
+     */
     public void setAuthorPerson(String authorPerson) {
         this.authorPerson = authorPerson;
     }
 
+    /**
+     * @return the IDs for filtering {@link SubmissionSet#getSourceID()}.
+     */
     public List<String> getSourceIds() {
         return sourceIds;
     }
 
+    /**
+     * @return the codes for filtering {@link SubmissionSet#getContentTypeCode()}.
+     */
     public List<Code> getContentTypeCodes() {
         return contentTypeCodes;
     }

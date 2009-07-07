@@ -26,18 +26,32 @@ public class ObjectReference {
     private String id;
     private String home;
 
+    /**
+     * @return the id of the referenced object.
+     */
     public String getId() {
         return id;
     }
     
+    /**
+     * @param id
+     *          the id of the referenced object.
+     */
     public void setId(String id) {
         this.id = id;
     }
-    
+        
+    /**
+     * @return the ID of the community that the object was created in.
+     */
     public String getHome() {
         return home;
     }
     
+    /**
+     * @param home
+     *          the ID of the community that the object was created in.
+     */
     public void setHome(String home) {
         this.home = home;
     }

@@ -54,10 +54,9 @@ public class PatientInfoTransformer {
     /**
      * Creates a {@link PatientInfo} instance via an HL7 XCN string.
      * @param hl7PID
-     *          the HL7 PID strings.
-     * @return the created {@link PatientInfo} instance.
-     * @throws XDSProfileViolationException
-     *          if a violation of the XDS profile has been detected.
+     *          the HL7 PID strings. Can be <code>null</code>.
+     * @return the created {@link PatientInfo} instance. <code>null</code> if no relevant 
+     *          data was found in the HL7 string or the input was <code>null</code>.
      */
     public PatientInfo fromHL7(List<String> hl7PID) {
         if (hl7PID == null || hl7PID.isEmpty()) {
@@ -84,8 +83,9 @@ public class PatientInfoTransformer {
     /**
      * Transforms a {@link PatientInfo} instance into the HL7 representation. 
      * @param patientInfo
-     *          the patient info to transform.
-     * @return the HL7 representation.
+     *          the patient info to transform. Can be <code>null</code>.
+     * @return the HL7 representation. <code>null</code> if the input was <code>null</code> 
+     *          or the resulting HL7 string would be empty.
      */
     public List<String> toHL7(PatientInfo patientInfo) {
         if (patientInfo == null) {

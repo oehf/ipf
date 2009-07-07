@@ -20,31 +20,60 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents a recipient containing a person and/or organization.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>.
+ * <p>
+ * If both, the person and the organization, are defined, the person is 
+ * expected to be a member of the specified organization.
  * @author Jens Riemschneider
  */
 public class Recipient {
     private Person person;
     private Organization organization;
-    
+
+    /**
+     * Constructs a recipient.
+     */
     public Recipient() {}
     
+    /**
+     * Constructs a recipient.
+     * @param organization
+     *          the organization.
+     * @param person
+     *          the person.
+     */
     public Recipient(Organization organization, Person person) {
         this.organization = organization;
         this.person = person;
     }
 
+    /**
+     * @return the person.
+     */
     public Person getPerson() {
         return person;
     }
 
+    /**
+     * @param person
+     *          the person.
+     */
     public void setPerson(Person person) {
         this.person = person;
     }
 
+    /**
+     * @return the organization.
+     */
     public Organization getOrganization() {
         return organization;
     }
 
+    /**
+     * @param organization
+     *          the organization.
+     */
     public void setOrganization(Organization organization) {
         this.organization = organization;
     }
@@ -78,8 +107,7 @@ public class Recipient {
         } else if (!person.equals(other.person))
             return false;
         return true;
-    }
-    
+    }    
 
     @Override
     public String toString() {

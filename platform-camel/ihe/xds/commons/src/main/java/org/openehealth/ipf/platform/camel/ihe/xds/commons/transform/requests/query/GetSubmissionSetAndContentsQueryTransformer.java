@@ -25,6 +25,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubm
  * @author Jens Riemschneider
  */
 public class GetSubmissionSetAndContentsQueryTransformer extends GetByIDAndCodesQueryTransformer<GetSubmissionSetAndContentsQuery> {
+    /**
+     * Constructs the transformer.
+     */
     public GetSubmissionSetAndContentsQueryTransformer() {
         super(SUBMISSION_SET_UUID, 
                 SUBMISSION_SET_UNIQUE_ID, 

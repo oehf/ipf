@@ -28,6 +28,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.Que
 public abstract class GetByIDQueryTransformer<T extends GetByIDQuery> extends GetByUUIDQueryTransformer<T> {
     private final QueryParameter uniqueIdParam;
 
+    /**
+     * Constructs the transformer.
+     * @param uuidParam
+     *          the parameter name of the UUID parameter.
+     * @param uniqueIdParam
+     *          the parameter name of the unique ID parameter.
+     */
     protected GetByIDQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam) {
         super(uuidParam);
         notNull(uniqueIdParam, "uniqueIdParam cannot be null");

@@ -23,12 +23,27 @@ import static org.apache.commons.lang.Validate.notNull;
  */
 public abstract class Query {
     private final QueryType type;
-    
+
+    /**
+     * Constructs the query.
+     * @param type
+     *          the type of the query.
+     */
     protected Query(QueryType type) {
         notNull(type, "type cannot be null");
         this.type = type;
     }
 
+    /**
+     * @return the type of the query.
+     */
+    public QueryType getType() {
+        return type;
+    }
+
+    /**
+     * Visitor interface used for this class to implement the visitor pattern.
+     */
     public interface Visitor {
         void visit(SqlQuery query);
         void visit(FindDocumentsQuery query);
@@ -46,9 +61,10 @@ public abstract class Query {
         void visit(FindSubmissionSetsQuery query);
     }
     
+    /**
+     * Accept a visitor to process an instance of this class.
+     * @param visitor
+     *          the visitor implementation.
+     */
     public abstract void accept(Visitor visitor);
-
-    public QueryType getType() {
-        return type;
-    }
 }

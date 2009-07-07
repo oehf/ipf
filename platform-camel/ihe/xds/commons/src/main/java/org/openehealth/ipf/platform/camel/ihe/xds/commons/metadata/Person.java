@@ -25,31 +25,58 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * imposes some limitations on the XCN type. Most notably the XCN.9
  * component has the same restrictions as the CX.4 component (as described
  * in {@link Identifiable}. 
+ * All of this class are allowed to be <code>null</code>. When transforming  
+ * to HL7 this indicates that the values are empty. Trailing empty  
+ * values are removed from the HL7 string.
  * @author Jens Riemschneider
  */
 public class Person {    
     private Identifiable id;        // XCN.1 and XCN.9
     private Name name;              // XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6
 
+    /**
+     * Constructs a person.
+     */
     public Person() {}
     
+    /**
+     * Constructs a person.
+     * @param id
+     *          the id of the person (XCN.1 and XCN.9).
+     * @param name
+     *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6).
+     */
     public Person(Identifiable id, Name name) {
         this.id = id;
         this.name = name;
     }
 
+    /**
+     * @return the id of the person (XCN.1 and XCN.9).
+     */
     public Identifiable getId() {
         return id;
     }
 
+    /**
+     * @param id
+     *          the id of the person (XCN.1 and XCN.9).
+     */
     public void setId(Identifiable id) {
         this.id = id;
     }
 
+    /**
+     * @return the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6).
+     */
     public Name getName() {
         return name;
     }
 
+    /**
+     * @param name
+     *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6).
+     */
     public void setName(Name name) {
         this.name = name;
     }

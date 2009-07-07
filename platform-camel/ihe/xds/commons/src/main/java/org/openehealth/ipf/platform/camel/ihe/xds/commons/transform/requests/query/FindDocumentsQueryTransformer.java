@@ -29,6 +29,15 @@ public class FindDocumentsQueryTransformer {
     private final IdentifiableTransformer identifiableTransformer = 
         new IdentifiableTransformer();
     
+    /**
+     * Transforms the query into its ebXML representation.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
     public void toEbXML(FindDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -56,12 +65,21 @@ public class FindDocumentsQueryTransformer {
         
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_CLASS_CODE, query.getClassCodes());
-        slots.fromCode(DOC_ENTRY_HEALTH_CARE_FACILITY_TYPE_CODE, query.getHealthCareFacilityTypeCodes());        
+        slots.fromCode(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, query.getHealthcareFacilityTypeCodes());        
         slots.fromCode(DOC_ENTRY_PRACTICE_SETTING_CODE, query.getPracticeSettingCodes());
         slots.fromCode(DOC_ENTRY_EVENT_CODE, query.getEventCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
     }
     
+    /**
+     * Transforms the ebXML representation of a query into a query object.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
     public void fromEbXML(FindDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -73,7 +91,7 @@ public class FindDocumentsQueryTransformer {
         
         slots.toCode(DOC_ENTRY_CLASS_CODE, query.getClassCodes());
         slots.toCode(DOC_ENTRY_PRACTICE_SETTING_CODE, query.getPracticeSettingCodes());
-        slots.toCode(DOC_ENTRY_HEALTH_CARE_FACILITY_TYPE_CODE, query.getHealthCareFacilityTypeCodes());
+        slots.toCode(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, query.getHealthcareFacilityTypeCodes());
         slots.toCode(DOC_ENTRY_EVENT_CODE, query.getEventCodes());
         slots.toCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
         slots.toCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());

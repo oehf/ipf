@@ -25,6 +25,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetAsso
  * @author Jens Riemschneider
  */
 public class GetAssociationsQueryTransformer extends GetByUUIDQueryTransformer<GetAssociationsQuery> {
+    /**
+     * Constructs the transformer.
+     */
     public GetAssociationsQueryTransformer() {
         super(UUID);
     }

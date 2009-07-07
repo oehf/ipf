@@ -22,7 +22,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.ErrorTy
  * @author Jens Riemschneider
  */
 public enum Severity {
+    /** An error. */
     ERROR(ErrorType.ERROR, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),
+    /** A warning. */
     WARNING(ErrorType.WARNING, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning");
     
     private final ErrorType ebXML21;

@@ -55,6 +55,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.que
 final class ToEbXMLVisitor implements Visitor {
     private final EbXMLAdhocQueryRequest ebXML;
 
+    /**
+     * Constructs the visitor.
+     * @param ebXML
+     *          the ebXML result.
+     */
     ToEbXMLVisitor(EbXMLAdhocQueryRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
         this.ebXML = ebXML;

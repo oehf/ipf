@@ -20,33 +20,56 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Contains a request for a single document.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class RetrieveDocument {
     private String repositoryUniqueID;
     private String documentUniqueID;
     private String homeCommunityID;
-    
+   
+    /**
+     * @return the unique ID of the repository containing the document.
+     */
     public String getRepositoryUniqueID() {
         return repositoryUniqueID;
     }
     
+    /**
+     * @param repositoryUniqueID
+     *          the unique ID of the repository containing the document.
+     */
     public void setRepositoryUniqueID(String repositoryUniqueID) {
         this.repositoryUniqueID = repositoryUniqueID;
     }
     
+    /**
+     * @return the unique ID of the document.
+     */
     public String getDocumentUniqueID() {
         return documentUniqueID;
     }
     
+    /**
+     * @param documentUniqueID
+     *          the unique ID of the document.
+     */
     public void setDocumentUniqueID(String documentUniqueID) {
         this.documentUniqueID = documentUniqueID;
     }
     
+    /**
+     * @return the home community ID.
+     */
     public String getHomeCommunityID() {
         return homeCommunityID;
     }
 
+    /**
+     * @param homeCommunityID
+     *          the home community ID.
+     */
     public void setHomeCommunityID(String homeCommunityID) {
         this.homeCommunityID = homeCommunityID;
     }

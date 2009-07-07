@@ -22,11 +22,15 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindDocuments.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class FindDocumentsQuery extends StoredQuery {
@@ -35,7 +39,7 @@ public class FindDocumentsQuery extends StoredQuery {
     private final List<AvailabilityStatus> status = new ArrayList<AvailabilityStatus>();    
     private final List<Code> classCodes = new ArrayList<Code>();
     private final List<Code> practiceSettingCodes = new ArrayList<Code>();
-    private final List<Code> healthCareFacilityTypeCodes = new ArrayList<Code>();
+    private final List<Code> healthcareFacilityTypeCodes = new ArrayList<Code>();
     private final QueryList<Code> eventCodes = new QueryList<Code>();
     private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
     private final List<Code> formatCodes = new ArrayList<Code>();
@@ -43,59 +47,102 @@ public class FindDocumentsQuery extends StoredQuery {
     private final TimeRange creationTime = new TimeRange();
     private final TimeRange serviceStartTime = new TimeRange();
     private final TimeRange serviceStopTime = new TimeRange();
-    
+
+    /**
+     * Constructs the query.
+     */
     public FindDocumentsQuery() {
         super(QueryType.FIND_DOCUMENTS);
     }
 
+    /**
+     * @return the patient ID to search for.
+     */
     public Identifiable getPatientId() {
         return patientId;
     }
     
+    /**
+     * @param patientId 
+     *          the patient ID to search for.
+     */
     public void setPatientId(Identifiable patientId) {
         this.patientId = patientId;
     }
 
+    /**
+     * @return the states for filtering {@link DocumentEntry#getAvailabilityStatus()}.
+     */
     public List<AvailabilityStatus> getStatus() {
         return status;
     }
     
+    /**
+     * @return the time range for filtering {@link DocumentEntry#getCreationTime()}.
+     */
     public TimeRange getCreationTime() {
         return creationTime;
     }
 
+    /**
+     * @return the time range for filtering {@link DocumentEntry#getServiceStartTime()}.
+     */
     public TimeRange getServiceStartTime() {
         return serviceStartTime;
     }
 
+    /**
+     * @return the time range for filtering {@link DocumentEntry#getServiceStopTime()}.
+     */
     public TimeRange getServiceStopTime() {
         return serviceStopTime;
     }
 
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getClassCode()}.
+     */
     public List<Code> getClassCodes() {
         return classCodes;
     }
-    
+
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getPracticeSettingCode()}.
+     */
     public List<Code> getPracticeSettingCodes() {
         return practiceSettingCodes;
     }
     
-    public List<Code> getHealthCareFacilityTypeCodes() {
-        return healthCareFacilityTypeCodes;
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getHealthcareFacilityTypeCode()}
+     */
+    public List<Code> getHealthcareFacilityTypeCodes() {
+        return healthcareFacilityTypeCodes;
     }
     
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getEventCodeList()}.
+     */
     public QueryList<Code> getEventCodes() {
         return eventCodes;
     }
 
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
+     */
     public QueryList<Code> getConfidentialityCodes() {
         return confidentialityCodes;
     }
 
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
+     */
     public List<Code> getFormatCodes() {
         return formatCodes;
     }
 
+    /**
+     * @return the author persons texts for filtering {@link DocumentEntry#getAuthors()}.
+     */
     public List<String> getAuthorPersons() {
         return authorPersons;
     }
@@ -118,7 +165,7 @@ public class FindDocumentsQuery extends StoredQuery {
         result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
         result = prime
                 * result
-                + ((healthCareFacilityTypeCodes == null) ? 0 : healthCareFacilityTypeCodes
+                + ((healthcareFacilityTypeCodes == null) ? 0 : healthcareFacilityTypeCodes
                         .hashCode());
         result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
         result = prime * result
@@ -168,10 +215,10 @@ public class FindDocumentsQuery extends StoredQuery {
                 return false;
         } else if (!formatCodes.equals(other.formatCodes))
             return false;
-        if (healthCareFacilityTypeCodes == null) {
-            if (other.healthCareFacilityTypeCodes != null)
+        if (healthcareFacilityTypeCodes == null) {
+            if (other.healthcareFacilityTypeCodes != null)
                 return false;
-        } else if (!healthCareFacilityTypeCodes.equals(other.healthCareFacilityTypeCodes))
+        } else if (!healthcareFacilityTypeCodes.equals(other.healthcareFacilityTypeCodes))
             return false;
         if (patientId == null) {
             if (other.patientId != null)

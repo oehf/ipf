@@ -52,6 +52,11 @@ public class ProvideAndRegisterDocumentSetTransformer {
     private final FolderTransformer folderTransformer;
     private final AssociationTransformer associationTransformer;
     
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public ProvideAndRegisterDocumentSetTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
@@ -62,6 +67,12 @@ public class ProvideAndRegisterDocumentSetTransformer {
         associationTransformer = new AssociationTransformer(factory);
     }
     
+    /**
+     * Transforms a request into its ebXML representation.
+     * @param request
+     *          the request. Can be <code>null</code>.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
+     */
     public EbXMLProvideAndRegisterDocumentSetRequest toEbXML(ProvideAndRegisterDocumentSet request) {
         if (request == null) {
             return null;
@@ -95,13 +106,12 @@ public class ProvideAndRegisterDocumentSetTransformer {
         return ebXML;
     }
 
-    private void addClassification(EbXMLProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
-        EbXMLClassification classification = factory.createClassification(library);
-        classification.setClassifiedObject(classified);
-        classification.setClassificationNode(node);
-        ebXML.addClassification(classification);
-    }
-    
+    /**
+     * Transforms an ebXML representation or a request.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     * @return the request. <code>null</code> if the input was <code>null</code>.
+     */
     public ProvideAndRegisterDocumentSet fromEbXML(EbXMLProvideAndRegisterDocumentSetRequest ebXML) {
         if (ebXML == null) {
             return null;
@@ -138,4 +148,11 @@ public class ProvideAndRegisterDocumentSetTransformer {
         
         return request;
     }
+
+    private void addClassification(EbXMLProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
+        EbXMLClassification classification = factory.createClassification(library);
+        classification.setClassifiedObject(classified);
+        classification.setClassificationNode(node);
+        ebXML.addClassification(classification);
+    }    
 }

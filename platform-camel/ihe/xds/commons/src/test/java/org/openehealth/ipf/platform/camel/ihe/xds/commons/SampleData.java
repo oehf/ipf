@@ -280,8 +280,8 @@ public abstract class SampleData {
         query.getServiceStartTime().setTo("4");
         query.getServiceStopTime().setFrom("5");
         query.getServiceStopTime().setTo("6");
-        query.getHealthCareFacilityTypeCodes().add(new Code("code5", null, "scheme5"));
-        query.getHealthCareFacilityTypeCodes().add(new Code("code6", null, "scheme6"));
+        query.getHealthcareFacilityTypeCodes().add(new Code("code5", null, "scheme5"));
+        query.getHealthcareFacilityTypeCodes().add(new Code("code6", null, "scheme6"));
         query.getEventCodes().getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
         query.getEventCodes().getOuterList().add(

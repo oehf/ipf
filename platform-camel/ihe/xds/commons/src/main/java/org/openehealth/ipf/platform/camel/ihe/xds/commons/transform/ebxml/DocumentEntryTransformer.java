@@ -47,6 +47,11 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
     private final PatientInfoTransformer patientInfoTransformer = new PatientInfoTransformer();
     private final UriTransformer uriTransformer = new UriTransformer();   
     
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public DocumentEntryTransformer(EbXMLFactory factory) {
         super(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, 
                 DOC_ENTRY_LOCALIZED_STRING_PATIENT_ID, 

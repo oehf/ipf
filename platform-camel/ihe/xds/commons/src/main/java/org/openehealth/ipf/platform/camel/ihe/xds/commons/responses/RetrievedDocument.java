@@ -23,24 +23,40 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocum
 
 /**
  * A single document retrieved from the repository.
+ * <p>
+ * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class RetrievedDocument {
     private DataHandler dataHandler;
     private RetrieveDocument requestData;
-    
+
+    /**
+     * @return the data handler allowing access to the content of the document.
+     */
     public DataHandler getDataHandler() {
         return dataHandler;
     }
     
+    /**
+     * @param dataHandler 
+     *          the data handler allowing access to the content of the document.
+     */
     public void setDataHandler(DataHandler dataHandler) {
         this.dataHandler = dataHandler;
     }
     
+    /**
+     * @return the data specified in the request.
+     */
     public RetrieveDocument getRequestData() {
         return requestData;
     }
 
+    /**
+     * @param requestData
+     *          the data specified in the request.
+     */
     public void setRequestData(RetrieveDocument requestData) {
         this.requestData = requestData;
     }
@@ -76,7 +92,6 @@ public class RetrievedDocument {
         return true;
     }
     
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

@@ -18,19 +18,29 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 
 /**
  * Represents a stored query for GetRelatedDocuments.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class GetRelatedDocumentsQuery extends GetByIDQuery {
+    private final List<AssociationType> associationTypes = new ArrayList<AssociationType>();
+
+    /**
+     * Constructs the query.
+     */
     public GetRelatedDocumentsQuery() {
         super(QueryType.GET_RELATED_DOCUMENTS);
     }
 
-    private final List<AssociationType> associationTypes = new ArrayList<AssociationType>();
-    
+    /**
+     * @return the types used for filtering {@link Association#getAssociationType()}.
+     */
     public List<AssociationType> getAssociationTypes() {
         return associationTypes;
     }

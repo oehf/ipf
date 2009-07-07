@@ -22,11 +22,15 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindFolders.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class FindFoldersQuery extends StoredQuery {
@@ -35,27 +39,46 @@ public class FindFoldersQuery extends StoredQuery {
     private final List<AvailabilityStatus> status = new ArrayList<AvailabilityStatus>();
     private final TimeRange lastUpdateTime = new TimeRange();
     private final QueryList<Code> codes = new QueryList<Code>();
-    
+
+    /**
+     * Constructs the query.
+     */
     public FindFoldersQuery() {
         super(QueryType.FIND_FOLDERS);
     }
 
+    /**
+     * @return the patient ID to search for.
+     */
     public Identifiable getPatientId() {
         return patientId;
     }
     
+    /**
+     * @param patientId 
+     *          the patient ID to search for.
+     */
     public void setPatientId(Identifiable patientId) {
         this.patientId = patientId;
     }
 
+    /**
+     * @return the states for filtering {@link Folder#getAvailabilityStatus()}.
+     */
     public List<AvailabilityStatus> getStatus() {
         return status;
     }
     
+    /**
+     * @return the time range for filtering {@link Folder#getLastUpdateTime()}.
+     */
     public TimeRange getLastUpdateTime() {
         return lastUpdateTime;
     }
 
+    /**
+     * @return the codes for filtering {@link Folder#getCodeList()}.
+     */
     public QueryList<Code> getCodes() {
         return codes;
     }

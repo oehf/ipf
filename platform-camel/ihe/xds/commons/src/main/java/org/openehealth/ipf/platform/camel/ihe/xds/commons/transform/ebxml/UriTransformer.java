@@ -27,7 +27,7 @@ public class UriTransformer {
      * Transforms the slot values into a URI string.
      * @param slotValues
      *          the slot values.
-     * @return the URI string.
+     * @return the URI string. <code>null</code> if the result would be an empty string.
      */
     public String fromEbXML(List<String> slotValues) {
         String[] uriParts = new String[10];
@@ -55,8 +55,8 @@ public class UriTransformer {
     /**
      * Transforms the URI into the slot values.
      * @param uri
-     *          the URI string.
-     * @return the slot values.
+     *          the URI string. Can be <code>null</code>.
+     * @return the slot values. Never <code>null</code>.
      */
     public String[] toEbXML(String uri) {
         if (uri == null) {

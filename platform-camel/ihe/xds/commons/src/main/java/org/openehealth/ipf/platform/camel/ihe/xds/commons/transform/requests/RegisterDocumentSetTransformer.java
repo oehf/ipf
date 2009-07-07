@@ -48,6 +48,11 @@ public class RegisterDocumentSetTransformer {
     private final FolderTransformer folderTransformer;
     private final AssociationTransformer associationTransformer;
     
+    /**
+     * Constructs the transformer
+     * @param factory
+     *          factory for version independent ebXML objects. 
+     */
     public RegisterDocumentSetTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
@@ -58,6 +63,12 @@ public class RegisterDocumentSetTransformer {
         associationTransformer = new AssociationTransformer(factory);
     }
 
+    /**
+     * Transforms the request into its ebXML representation.
+     * @param request
+     *          the request. Can be <code>null</code>.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
+     */
     public EbXMLSubmitObjectsRequest toEbXML(RegisterDocumentSet request) {
         notNull(request, "request cannot be null");
                 
@@ -85,13 +96,12 @@ public class RegisterDocumentSetTransformer {
         return ebXML;
     }
 
-    private void addClassification(EbXMLSubmitObjectsRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
-        EbXMLClassification classification = factory.createClassification(library);
-        classification.setClassifiedObject(classified);
-        classification.setClassificationNode(node);
-        ebXML.addClassification(classification);
-    }
-    
+    /**
+     * Transforms the ebXML representation into a request.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     * @return the request. <code>null</code> if the input was <code>null</code>.
+     */
     public RegisterDocumentSet fromEbXML(EbXMLSubmitObjectsRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
         
@@ -116,4 +126,11 @@ public class RegisterDocumentSetTransformer {
         
         return request;
     }
+
+    private void addClassification(EbXMLSubmitObjectsRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
+        EbXMLClassification classification = factory.createClassification(library);
+        classification.setClassifiedObject(classified);
+        classification.setClassificationNode(node);
+        ebXML.addClassification(classification);
+    }    
 }

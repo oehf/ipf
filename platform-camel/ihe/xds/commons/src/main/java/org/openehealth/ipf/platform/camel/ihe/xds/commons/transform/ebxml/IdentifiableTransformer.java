@@ -32,8 +32,8 @@ public class IdentifiableTransformer {
     /**
      * Transforms an {@link Identifiable} to its ebXML representation.
      * @param identifiable
-     *          the identifiable instance.
-     * @return the ebXML representation.
+     *          the identifiable instance. Can be <code>null</code>.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>. 
      */
     public String toEbXML(Identifiable identifiable) {
         if (identifiable == null) {
@@ -54,8 +54,8 @@ public class IdentifiableTransformer {
     /**
      * Transforms an ebXML string into an {@link Identifiable}.
      * @param ebXML
-     *          the ebXML representation of the value.
-     * @return the identifiable instance.
+     *          the ebXML representation of the value. Can be <code>null</code>.
+     * @return the identifiable instance. <code>null</code> if the input was <code>null</code>.
      */
     public Identifiable fromEbXML(String ebXML) {
         if (ebXML == null) {

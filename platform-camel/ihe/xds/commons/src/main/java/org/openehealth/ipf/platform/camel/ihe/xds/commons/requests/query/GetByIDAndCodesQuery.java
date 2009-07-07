@@ -21,26 +21,41 @@ import java.util.List;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
 
 /**
  * Base class for queries that are defined by:
  * <li> a list of UUIDs or unique IDs 
  * <li> a list of format codes
  * <li> a list of confidentiality codes
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public abstract class GetByIDAndCodesQuery extends GetByIDQuery {
     private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
     private final List<Code> formatCodes = new ArrayList<Code>();
 
+    /**
+     * Constructs the query.
+     * @param type
+     *          the type of query.
+     */
     protected GetByIDAndCodesQuery(QueryType type) {
         super(type);
     }
     
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
+     */
     public QueryList<Code> getConfidentialityCodes() {
         return confidentialityCodes;
     }
 
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
+     */
     public List<Code> getFormatCodes() {
         return formatCodes;
     }

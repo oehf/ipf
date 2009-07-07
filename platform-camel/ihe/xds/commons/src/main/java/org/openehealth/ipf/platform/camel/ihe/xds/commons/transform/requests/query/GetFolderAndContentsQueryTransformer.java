@@ -26,6 +26,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubm
  * @author Jens Riemschneider
  */
 public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTransformer<GetFolderAndContentsQuery> {
+    /**
+     * Constructs the transformer.
+     */
     public GetFolderAndContentsQueryTransformer() {
         super(FOLDER_UUID, 
                 FOLDER_UNIQUE_ID, 

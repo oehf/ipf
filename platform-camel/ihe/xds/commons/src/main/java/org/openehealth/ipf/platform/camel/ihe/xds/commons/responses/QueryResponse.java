@@ -25,9 +25,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
 
 /**
  * Contains the response data for a query.
+ * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class QueryResponse extends Response {
@@ -37,22 +39,38 @@ public class QueryResponse extends Response {
     private final List<SubmissionSet> submissionSets = new ArrayList<SubmissionSet>();
     private final List<Association> associations = new ArrayList<Association>();
     
+    /**
+     * @return the object references representing the results of a query using
+     *          a non-leaf-object return type {@link QueryRegistry#setReturnLeafObjects(boolean)}.
+     */
     public List<ObjectReference> getReferences() {
         return references;
     }
 
+    /**
+     * @return the document entries.
+     */
     public List<DocumentEntry> getDocumentEntries() {
         return documentEntries;
     }
 
+    /**
+     * @return the folders.
+     */
     public List<Folder> getFolders() {
         return folders;
     }
 
+    /**
+     * @return the submission sets.
+     */
     public List<SubmissionSet> getSubmissionSets() {
         return submissionSets;
     }
 
+    /**
+     * @return the associations.
+     */
     public List<Association> getAssociations() {
         return associations;
     }

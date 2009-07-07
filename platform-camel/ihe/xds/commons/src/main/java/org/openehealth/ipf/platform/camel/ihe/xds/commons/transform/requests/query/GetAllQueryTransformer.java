@@ -29,6 +29,15 @@ public class GetAllQueryTransformer {
     private final IdentifiableTransformer identifiableTransformer = 
         new IdentifiableTransformer();
     
+    /**
+     * Transforms the query into its ebXML representation.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
     public void toEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;
@@ -49,6 +58,15 @@ public class GetAllQueryTransformer {
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
     }
     
+    /**
+     * Transforms the ebXML representation of a query into a query object.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
     public void fromEbXML(GetAllQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

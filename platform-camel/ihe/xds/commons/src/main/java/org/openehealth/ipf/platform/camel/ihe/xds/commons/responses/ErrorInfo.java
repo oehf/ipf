@@ -20,51 +20,94 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Contains information about an error.
+ * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class ErrorInfo {
     private ErrorCode errorCode;
     private String codeContext;
-    private Severity serverity;
+    private Severity severity;
     private String location;
-    
+
+    /**
+     * Constructs an error info.
+     */
     public ErrorInfo() {}
     
-    public ErrorInfo(ErrorCode errorCode, String codeContext, Severity serverity, String location) {
+    /**
+     * Constructs an error info.
+     * @param errorCode
+     *          the error that occurred.
+     * @param codeContext
+     *          the context in which the error occurred.
+     * @param severity
+     *          the severity of the error.
+     * @param location
+     *          the location in which the error occurred.
+     */
+    public ErrorInfo(ErrorCode errorCode, String codeContext, Severity severity, String location) {
         this.errorCode = errorCode;
         this.codeContext = codeContext;
-        this.serverity = serverity;
+        this.severity = severity;
         this.location = location;
     }
 
+    /**
+     * @return the error that occurred.
+     */
     public ErrorCode getErrorCode() {
         return errorCode;
     }
     
+    /**
+     * @param errorCode
+     *          the error that occurred.
+     */
     public void setErrorCode(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
     
+    /**
+     * @return the context in which the error occurred.
+     */
     public String getCodeContext() {
         return codeContext;
     }
     
+    /**
+     * @param codeContext
+     *          the context in which the error occurred.
+     */
     public void setCodeContext(String codeContext) {
         this.codeContext = codeContext;
     }
     
-    public Severity getServerity() {
-        return serverity;
+    /**
+     * @return the severity of the error.
+     */
+    public Severity getSeverity() {
+        return severity;
     }
     
-    public void setServerity(Severity serverity) {
-        this.serverity = serverity;
+    /**
+     * @param severity
+     *          the severity of the error.
+     */
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
     }
     
+    /**
+     * @return the location in which the error occurred.
+     */
     public String getLocation() {
         return location;
     }
     
+    /**
+     * @param location
+     *          the location in which the error occurred.
+     */
     public void setLocation(String location) {
         this.location = location;
     }
@@ -76,7 +119,7 @@ public class ErrorInfo {
         result = prime * result + ((codeContext == null) ? 0 : codeContext.hashCode());
         result = prime * result + ((errorCode == null) ? 0 : errorCode.hashCode());
         result = prime * result + ((location == null) ? 0 : location.hashCode());
-        result = prime * result + ((serverity == null) ? 0 : serverity.hashCode());
+        result = prime * result + ((severity == null) ? 0 : severity.hashCode());
         return result;
     }
 
@@ -104,14 +147,13 @@ public class ErrorInfo {
                 return false;
         } else if (!location.equals(other.location))
             return false;
-        if (serverity == null) {
-            if (other.serverity != null)
+        if (severity == null) {
+            if (other.severity != null)
                 return false;
-        } else if (!serverity.equals(other.serverity))
+        } else if (!severity.equals(other.severity))
             return false;
         return true;
-    }
-    
+    }    
 
     @Override
     public String toString() {

@@ -36,8 +36,9 @@ public class OrganizationTransformer {
     /**
      * Creates an organization instance via an HL7 XON string.
      * @param hl7Value
-     *          the HL7 XON string.
-     * @return the created Organization instance.
+     *          the HL7 XON string. Can be <code>null</code>.
+     * @return the created Organization instance. <code>null</code> if no relevant 
+     *          data was found in the HL7 string.
      */
     public Organization fromHL7(String hl7XON) {
         List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7XON);
@@ -62,8 +63,9 @@ public class OrganizationTransformer {
     /**
      * Transforms an organization instance into an HL7v2 XON string.
      * @param organization
-     *          the organization to transform.
-     * @return the HL7 representation.
+     *          the organization to transform. Can be <code>null</code>.
+     * @return the HL7 representation. <code>null</code> if the input was <code>null</code> 
+     *          or the resulting HL7 string would be empty.
      */
     public String toHL7(Organization organization) {
         if (organization == null) {

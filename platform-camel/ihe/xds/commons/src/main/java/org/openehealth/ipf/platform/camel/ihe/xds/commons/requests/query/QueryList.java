@@ -39,9 +39,18 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class QueryList<T> {
     private final List<List<T>> outerList = new ArrayList<List<T>>();
     
-    public QueryList() {        
-    }
+    /**
+     * Constructs a query list.
+     */
+    public QueryList() {}
     
+    /**
+     * Constructs a query list using another list.
+     * <p>
+     * This constructor does not clone the objects in the list.
+     * @param other
+     *          the other list.
+     */
     public QueryList(QueryList<T> other) {
         notNull(other, "other cannot be null");
         noNullElements(other.getOuterList(), "other.getOuterList() cannot contain null elements");
@@ -51,11 +60,19 @@ public class QueryList<T> {
         }
     }
     
+    /**
+     * Constructs a query list.
+     * @param singleElement
+     *          the only initial element in the list.
+     */
     public QueryList(T singleElement) {
         notNull(singleElement, "singleElement cannot be null");
         outerList.add(Collections.singletonList(singleElement));
     }
 
+    /**
+     * @return the outer list.
+     */
     public List<List<T>> getOuterList() {
         return outerList;
     }

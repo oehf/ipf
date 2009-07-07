@@ -30,8 +30,9 @@ public class AssigningAuthorityTransformer {
     /**
      * Transforms from HL7 HD into {@link AssigningAuthority}.
      * @param hl7HD
-     *          the HD data.
-     * @return the assigning authority.
+     *          the HD data. Can be <code>null</code>.
+     * @return the assigning authority. <code>null</code> if no relevant 
+     *          data was found in the HL7 string. 
      */
     public AssigningAuthority fromHL7(String hl7HD) {
         List<String> parts = HL7.parse(HL7Delimiter.SUBCOMPONENT, hl7HD);
@@ -51,8 +52,9 @@ public class AssigningAuthorityTransformer {
     /**
      * Transforms from {@link AssigningAuthority} into HL7 HD.
      * @param assigningAuthority
-     *          the assigning authority.
-     * @return the HL7 HD string.
+     *          the assigning authority. Can be <code>null</code>.
+     * @return the HL7 HD string. <code>null</code> if the input was <code>null</code> 
+     *          or the resulting HL7 string would be empty.
      */
     public String toHL7(AssigningAuthority assigningAuthority) {
         if (assigningAuthority == null) {

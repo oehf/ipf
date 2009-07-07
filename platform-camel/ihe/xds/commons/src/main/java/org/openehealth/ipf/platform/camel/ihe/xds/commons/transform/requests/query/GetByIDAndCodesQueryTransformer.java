@@ -27,6 +27,17 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIDAndCodesQ
     private final QueryParameter formatCodeParam;
     private final QueryParameter confCodeParam; 
     
+    /**
+     * Constructs the transformer.
+     * @param uuidParam
+     *          the parameter name of the UUID parameter.
+     * @param uniqueIdParam
+     *          the parameter name of the unique ID parameter.
+     * @param formatCodeParam
+     *          the parameter name of the format code.
+     * @param confCodeParam
+     *          the parameter name of the confidentiality code.
+     */
     public GetByIDAndCodesQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam, QueryParameter formatCodeParam, QueryParameter confCodeParam) {
         super(uuidParam, uniqueIdParam);
         notNull(formatCodeParam, "formatCodeParam cannot be null");

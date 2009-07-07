@@ -33,8 +33,8 @@ public class RecipientTransformer {
     /**
      * Transforms a recipient into its ebXML representation (a slot value).
      * @param recipient
-     *          the recipient to transform.
-     * @return the slot value.
+     *          the recipient to transform. Can be <code>null</code>.
+     * @return the slot value. <code>null</code> if the input was <code>null</code>.
      */
     public String toEbXML(Recipient recipient) {
         if (recipient == null) {
@@ -58,8 +58,8 @@ public class RecipientTransformer {
     /**
      * Transforms an ebXML representation (a slot value) into a {@link Recipient}.
      * @param slotValue
-     *          the slot value.
-     * @return the recipient.
+     *          the slot value. Can be <code>null</code>.
+     * @return the recipient. <code>null</code> if the input was <code>null</code>.
      */
     public Recipient fromEbXML(String slotValue) {
         if (slotValue == null || slotValue.isEmpty()) {

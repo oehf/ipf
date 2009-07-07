@@ -70,7 +70,7 @@ public class EbXMLRegistryResponse21 implements EbXMLRegistryResponse {
             error.setCodeContext(regError.getCodeContext());
             error.setLocation(regError.getLocation());
             error.setErrorCode(ErrorCode.valueOfOpcode(regError.getErrorCode()));
-            error.setServerity(Severity.valueOfEbXML21(regError.getSeverity()));
+            error.setSeverity(Severity.valueOfEbXML21(regError.getSeverity()));
             errors.add(error);
         }
         
@@ -86,7 +86,7 @@ public class EbXMLRegistryResponse21 implements EbXMLRegistryResponse {
             RegistryError regError = EbXMLFactory21.RS_FACTORY.createRegistryError();
             regError.setErrorCode(ErrorCode.getOpcode(error.getErrorCode()));
             regError.setCodeContext(error.getCodeContext());
-            regError.setSeverity(Severity.getEbXML21(error.getServerity()));
+            regError.setSeverity(Severity.getEbXML21(error.getSeverity()));
             regError.setLocation(error.getLocation());
             list.add(regError);
         }

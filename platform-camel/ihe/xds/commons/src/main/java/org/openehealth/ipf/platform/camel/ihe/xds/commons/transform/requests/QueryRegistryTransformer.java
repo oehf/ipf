@@ -34,6 +34,12 @@ public class QueryRegistryTransformer {
     private final EbXMLFactory factory30 = new EbXMLFactory30();
     private final EbXMLFactory factory21 = new EbXMLFactory21();
     
+    /**
+     * Transforms the request into its ebXML representation.
+     * @param request
+     *          the request. Can be <code>null</code>.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
+     */
     public EbXMLAdhocQueryRequest toEbXML(QueryRegistry request) {
         if (request == null) {
             return null;
@@ -48,11 +54,12 @@ public class QueryRegistryTransformer {
         return ebXML;        
     }
 
-    private EbXMLAdhocQueryRequest createAdhocQueryRequest(Query query) {
-        EbXMLFactory factory = query.getType() == QueryType.SQL ? factory21 : factory30;
-        return factory.createAdhocQueryRequest();
-    }
-
+    /**
+     * Transforms the ebXML representation into a request.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     * @return the request. <code>null</code> if the input was <code>null</code>.
+     */
     public QueryRegistry fromEbXML(EbXMLAdhocQueryRequest ebXML) {
         if (ebXML == null) {
             return null;
@@ -81,5 +88,10 @@ public class QueryRegistryTransformer {
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Invalid query class for type: " + queryType, e);
         }
+    }
+
+    private EbXMLAdhocQueryRequest createAdhocQueryRequest(Query query) {
+        EbXMLFactory factory = query.getType() == QueryType.SQL ? factory21 : factory30;
+        return factory.createAdhocQueryRequest();
     }
 }

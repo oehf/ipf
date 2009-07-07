@@ -23,31 +23,59 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * <p>
  * This class is derived from an HL7v2 CX data type. The XDS profile
  * limits the data type to two of its components (CX.1 and CX.4).
+ * <p>
+ * All members of this class are allowed to be <code>null</code>. When transforming
+ * to HL7 this indicates that the values are empty. Trailing empty values are 
+ * removed from the HL7 string.
  * @author Jens Riemschneider
  */
 public class Identifiable {
     private String id;                                // CX.1
     private AssigningAuthority assigningAuthority;    // CX.4
 
+    /**
+     * Constructs an identifiable.
+     */
     public Identifiable() {}
     
+    /**
+     * Constructs an identifiable.
+     * @param id
+     *          the value of the id (CX.1).
+     * @param assigningAuthority
+     *          the assigning authority (CX.4).
+     */
     public Identifiable(String id, AssigningAuthority assigningAuthority) {
         this.id = id;
         this.assigningAuthority = assigningAuthority;
     }
 
+    /**
+     * @return the value of the id (CX.1).
+     */
     public String getId() {
         return id;
     }
     
+    /**
+     * @param id
+     *          the value of the id (CX.1).
+     */
     public void setId(String id) {
         this.id = id;
     }
     
+    /**
+     * @return the assigning authority (CX.4).
+     */
     public AssigningAuthority getAssigningAuthority() {
         return assigningAuthority;
     }
     
+    /**
+     * @param assigningAuthority
+     *          the assigning authority (CX.4).
+     */
     public void setAssigningAuthority(AssigningAuthority assigningAuthority) {
         this.assigningAuthority = assigningAuthority;
     }

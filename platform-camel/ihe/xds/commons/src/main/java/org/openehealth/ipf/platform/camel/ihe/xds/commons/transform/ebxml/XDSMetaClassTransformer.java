@@ -64,10 +64,10 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryEntry, C ex
     /**
      * Transforms the given {@link XDSMetaClass} into its ebXML representation.
      * @param metaData
-     *          the meta data to transform.
+     *          the meta data to transform. Can be <code>null</code>.
      * @param objectLibrary
      *          the object library.
-     * @return the ebXML representation.
+     * @return the ebXML representation. <code>null</code> if the input was <code>null</code>.
      */
     public E toEbXML(C metaData, EbXMLObjectLibrary objectLibrary) {
         notNull(objectLibrary, "objectLibrary cannot be null");
@@ -89,8 +89,8 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryEntry, C ex
     /**
      * Transforms an ebXML representation into its {@link XDSMetaClass}.
      * @param ebXML
-     *          the ebXML representation.
-     * @return the meta data.
+     *          the ebXML representation. Can be <code>null</code>.
+     * @return the meta data. <code>null</code> if the input was <code>null</code>.
      */
     public C fromEbXML(E ebXML) {
         if (ebXML == null) {

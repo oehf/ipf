@@ -23,6 +23,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents an XDS submission set according to the IHE XDS specification.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * 
  * @author Jens Riemschneider
  */
@@ -32,50 +35,73 @@ public class SubmissionSet extends XDSMetaClass {
     private final List<Recipient> intendedRecipients = new ArrayList<Recipient>(); 
     private String sourceID;
     private String submissionTime;
-    private String homeCommunityId;
-    
+
+    /**
+     * @return the author creating this submission set.
+     */
     public Author getAuthor() {
         return author;
     }
     
+    /**
+     * @param author
+     *          the author creating this submission set.
+     */
     public void setAuthor(Author author) {
         this.author = author;
     }
     
+    /**
+     * @return the code describing the content type.
+     */
     public Code getContentTypeCode() {
         return contentTypeCode;
     }
     
+    /**
+     * @param contentTypeCode
+     *          the code describing the content type.
+     */
     public void setContentTypeCode(Code contentTypeCode) {
         this.contentTypeCode = contentTypeCode;
     }
     
+    /**
+     * @return the ID of the source.
+     */
     public String getSourceID() {
         return sourceID;
     }
     
+    /**
+     * @param sourceID
+     *          the ID of the source.
+     */
     public void setSourceID(String sourceID) {
         this.sourceID = sourceID;
     }
     
+    /**
+     * @return the time this set was submitted.
+     */
     public String getSubmissionTime() {
         return submissionTime;
     }
     
+    /**
+     * @param submissionTime
+     *          the time this set was submitted.
+     */
     public void setSubmissionTime(String submissionTime) {
         this.submissionTime = submissionTime;
     }
     
+    /**
+     * @return the recipients that this submission set was created for. 
+     *          Never <code>null</code>.
+     */
     public List<Recipient> getIntendedRecipients() {
         return intendedRecipients;
-    }
-
-    public String getHomeCommunityId() {
-        return homeCommunityId;
-    }
-
-    public void setHomeCommunityId(String homeCommunityId) {
-        this.homeCommunityId = homeCommunityId;
     }
 
     @Override
@@ -84,7 +110,6 @@ public class SubmissionSet extends XDSMetaClass {
         int result = super.hashCode();
         result = prime * result + ((author == null) ? 0 : author.hashCode());
         result = prime * result + ((contentTypeCode == null) ? 0 : contentTypeCode.hashCode());
-        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result
                 + ((intendedRecipients == null) ? 0 : intendedRecipients.hashCode());
         result = prime * result + ((sourceID == null) ? 0 : sourceID.hashCode());
@@ -110,11 +135,6 @@ public class SubmissionSet extends XDSMetaClass {
             if (other.contentTypeCode != null)
                 return false;
         } else if (!contentTypeCode.equals(other.contentTypeCode))
-            return false;
-        if (homeCommunityId == null) {
-            if (other.homeCommunityId != null)
-                return false;
-        } else if (!homeCommunityId.equals(other.homeCommunityId))
             return false;
         if (intendedRecipients == null) {
             if (other.intendedRecipients != null)

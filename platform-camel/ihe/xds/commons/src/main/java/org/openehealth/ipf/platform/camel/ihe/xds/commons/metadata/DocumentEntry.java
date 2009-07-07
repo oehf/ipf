@@ -50,7 +50,6 @@ public class DocumentEntry extends XDSMetaClass {
     private Code typeCode;
     private String uri;
     private String repositoryUniqueId;
-    private String homeCommunityId;
 
     /**
      * @return the list of authors of the document. Cannot be <code>null</code>.
@@ -328,21 +327,6 @@ public class DocumentEntry extends XDSMetaClass {
         return eventCodeList;
     }
 
-    /**
-     * @return the ID of the community that this document was created in.
-     */
-    public String getHomeCommunityId() {
-        return homeCommunityId;
-    }
-
-    /**
-     * @param homeCommunityId
-     *          the ID of the community that this document was created in.
-     */
-    public void setHomeCommunityId(String homeCommunityId) {
-        this.homeCommunityId = homeCommunityId;
-    }
-
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -363,7 +347,6 @@ public class DocumentEntry extends XDSMetaClass {
         result = prime
                 * result
                 + ((healthcareFacilityTypeCode == null) ? 0 : healthcareFacilityTypeCode.hashCode());
-        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result + ((languageCode == null) ? 0 : languageCode.hashCode());
         result = prime * result
                 + ((legalAuthenticator == null) ? 0 : legalAuthenticator.hashCode());
@@ -430,11 +413,6 @@ public class DocumentEntry extends XDSMetaClass {
             if (other.healthcareFacilityTypeCode != null)
                 return false;
         } else if (!healthcareFacilityTypeCode.equals(other.healthcareFacilityTypeCode))
-            return false;
-        if (homeCommunityId == null) {
-            if (other.homeCommunityId != null)
-                return false;
-        } else if (!homeCommunityId.equals(other.homeCommunityId))
             return false;
         if (languageCode == null) {
             if (other.languageCode != null)

@@ -26,6 +26,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetDocu
  * @author Jens Riemschneider
  */
 public class GetDocumentsQueryTransformer extends GetByIDQueryTransformer<GetDocumentsQuery> {
+    /**
+     * Constructs the transformer.
+     */
     public GetDocumentsQueryTransformer() {
         super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
     }

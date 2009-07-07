@@ -26,6 +26,12 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * <p>
  * This class contains a subset of the HL7v2 PID segment. The XDS profile prohibits
  * the use of PID-2, PID-4, PID-12 and PID-19.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>. When 
+ * transforming to HL7 this indicates that the values are empty. Trailing empty  
+ * values are removed from the HL7 string.
+ * <p>
+ * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class PatientInfo {
@@ -35,38 +41,69 @@ public class PatientInfo {
     private String gender;                                                  // PID-8
     private Address address;                                                // PID-11
     
+    /**
+     * @return the name (PID-5).
+     */
     public Name getName() {
         return name;
     }
 
+    /**
+     * @param name
+     *          the name (PID-5).
+     */
     public void setName(Name name) {
         this.name = name;
     }
 
+    /**
+     * @return the IDs of the patient (PID-3).
+     */
     public List<Identifiable> getIds() {
         return ids;
     }
 
+    /**
+     * @return the date of birth (PID-7).
+     */
     public String getDateOfBirth() {
         return dateOfBirth;
     }
     
+    /**
+     * @param dateOfBirth
+     *          the date of birth (PID-7).
+     */
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
     
+    /**
+     * @return the gender (PID-8).
+     */
     public String getGender() {
         return gender;
     }
     
+    /**
+     * @param gender
+     *          the gender (PID-8).
+     */
     public void setGender(String gender) {
         this.gender = gender;
     }
     
+    /**
+     * @return the address (PID-11).
+     */
     public Address getAddress() {
         return address;
     }
     
+    /**
+     * @param address
+     *          the address (PID-11).
+     */
     public void setAddress(Address address) {
         this.address = address;
     }

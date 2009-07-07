@@ -27,6 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet
 
 /**
  * The data required for the Provide and register document set request.
+ * <p>
+ * All non-list members of this class are allowed to be <code>null</code>.
+ * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class ProvideAndRegisterDocumentSet {
@@ -35,22 +38,38 @@ public class ProvideAndRegisterDocumentSet {
     private final List<Document> documents = new ArrayList<Document>();
     private final List<Association> associations = new ArrayList<Association>();
     
+    /**
+     * @return the submission set.
+     */
     public SubmissionSet getSubmissionSet() {
         return submissionSet;
     }
     
+    /**
+     * @param submissionSet
+     *          the submission set.
+     */
     public void setSubmissionSet(SubmissionSet submissionSet) {
         this.submissionSet = submissionSet;
     }
     
+    /**
+     * @return the list of folders.
+     */
     public List<Folder> getFolders() {
         return folders;
     }
 
+    /**
+     * @return the list of documents.
+     */
     public List<Document> getDocuments() {
         return documents;
     }
 
+    /**
+     * @return the list of association.
+     */
     public List<Association> getAssociations() {
         return associations;
     }
