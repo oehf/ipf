@@ -84,7 +84,6 @@ public class CDAR2Builder extends MetaBuilder{
 
 	protected void actBuilder() {
 		define(getClass().getResource('/builders/ActBuilder.groovy'))
-		// define(getClass().getResource('/ccdbuilders/ContinuityOfCareDocumentBuilder.groovy'))
 	}
 
 	protected void narrativesBuilder() {

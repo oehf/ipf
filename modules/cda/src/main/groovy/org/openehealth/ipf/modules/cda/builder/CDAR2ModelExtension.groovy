@@ -207,7 +207,6 @@ public class CDAR2ModelExtension{
                  opts[XMLResource.OPTION_ENCODING] = 'utf-8'
                  renderer.render(delegate, writer, opts)
                  writer.flush()
-                 writer
              }
              
              setPatient { POCDMT000040PatientRole patient ->
