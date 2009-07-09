@@ -25,7 +25,6 @@
         <eclipse.supplement.bundle />
 
         <!-- Plugin version properties -->
-        <aspectj-plugin-version>1.1</aspectj-plugin-version>
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
         <bundle-plugin-version>1.4.3</bundle-plugin-version>
         <enforcer-plugin-version>1.0-beta-1</enforcer-plugin-version>
@@ -547,11 +546,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${enforcer-plugin-version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>aspectj-maven-plugin</artifactId>
-                    <version>${aspectj-plugin-version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.groovy.maven</groupId>
