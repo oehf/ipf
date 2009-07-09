@@ -16,7 +16,8 @@
 package org.openehealth.ipf.platform.camel.cda.extend
 
 
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.spring.SpringRouteBuilder
+import javax.xml.transform.stream.StreamSource
 /**
  * @author Christian Ohr
  */
@@ -30,6 +31,14 @@ class CDAR2RouteBuilder extends SpringRouteBuilder {
 
         from("direct:input2")
             .unmarshal().cdar2()
+            .to('mock:output') 
+            
+        from("direct:input3")
+            .onException(Exception.class)
+                .to('mock:error')
+                .end()
+            // .convertBodyTo(StreamSource.class)
+            .validate().cdar2()
             .to('mock:output')            
     }
     

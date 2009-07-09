@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--W3C Schema erstellt mit XMLSpy v2005 rel. 3 U (http://www.altova.com)-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://org.openehealth.ipf/subtest" targetNamespace="http://org.openehealth.ipf/subtest" elementFormDefault="qualified">
+	<xs:complexType name="d-type" mixed="true">
+		<xs:attribute name="attr2" type="xs:string" use="required"/>
+	</xs:complexType>
+</xs:schema>

@@ -113,7 +113,7 @@
 
 			<location>
 				<healthCareFacility classCode="DSDLOC">
-					<code code="GIM" codeSystem="2.16.840.1.113883.5.10588" displayName="General internal medicine clinic"/>
+					<code code="GIM" codeSystem="2.16.840.1.113883.5.111" displayName="General internal medicine clinic"/>
 				</healthCareFacility>
 			</location>
 		</encompassingEncounter>
@@ -151,7 +151,7 @@
 			<component>
 
 				<section>
-					<code code="10153-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+					<code code="11348-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
 					<title>Past Medical History</title>
 					<text>
 						<list>
@@ -290,8 +290,8 @@
 							<effectiveTime xsi:type="PIVL_TS" institutionSpecified="true">
 								<period value="6" unit="h"/>
 							</effectiveTime>
-							<priorityCode code="PRN"/>
-							<routeCode code="IPINHL" codeSystem="2.16.840.1.113883.5.112" codeSystemName="RouteOfAdministration" displayName="Inhalation, oral"/>
+							<priorityCode code="PRN" codeSystem="2.16.840.1.113883.5.7"/>
+							<routeCode code="ORINHL" codeSystem="2.16.840.1.113883.5.112" codeSystemName="RouteOfAdministration" displayName="Inhalation, oral"/>
 							<doseQuantity value="2"/>
 							<consumable>
 								<manufacturedProduct>
@@ -431,7 +431,7 @@
 			<component>
 				<section>
 
-					<code code="10157-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+					<code code="10157-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
 					<title>Family history</title>
 					<text>
 						<list>
@@ -757,7 +757,7 @@
 										<observation classCode="OBS" moodCode="EVN">
 											<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic BP"/>
 											<statusCode code="completed"/>
-											<effectiveTime value="200004071530"/>
+											<effectiveTime value="200004071430"/>
 											<value xsi:type="PQ" value="132" unit="mm[Hg]"/>
 										</observation>
 									</entryRelationship>
@@ -766,7 +766,7 @@
 										<observation classCode="OBS" moodCode="EVN">
 											<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic BP"/>
 											<statusCode code="completed"/>
-											<effectiveTime value="200004071530"/>
+											<effectiveTime value="200004071430"/>
 											<value xsi:type="PQ" value="86" unit="mm[Hg]"/>
 										</observation>
 									</entryRelationship>
@@ -891,7 +891,7 @@
           -->
 					<component>
 						<section>
-							<code code="10223-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+							<code code="10200-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
 							<title>Cardiac</title>
 
 							<text>RRR with no murmur, no S3, no S4.</text>
@@ -1122,7 +1122,6 @@
 					</text>
 					<entry>
 						<act classCode="ACT" moodCode="INT">
-							<id/>
 							<code code="23426006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Pulmonary function test"/>
 							<text>Complete PFTs with lung volumes.</text>
 							<entryRelationship typeCode="COMP">
@@ -1165,7 +1164,6 @@
 								<manufacturedProduct>
 									<manufacturedLabeledDrug>
 										<code code="10312003" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Prednisone preparation"/>
-
 									</manufacturedLabeledDrug>
 								</manufacturedProduct>
 							</consumable>

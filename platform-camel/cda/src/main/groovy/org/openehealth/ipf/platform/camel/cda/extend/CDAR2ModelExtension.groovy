@@ -30,8 +30,8 @@ public class CDAR2ModelExtension{
          // ----------------------------------------------------------------
          
          DataFormatClause.metaClass.cdar2 = { ->
-             CDAR2DataFormat dataFormat = new CDAR2DataFormat();
-             delegate.dataFormat(dataFormat);
+             CDAR2DataFormat dataFormat = new CDAR2DataFormat()
+             delegate.dataFormat(dataFormat)
          }         
      
          // ----------------------------------------------------------------
@@ -39,7 +39,7 @@ public class CDAR2ModelExtension{
          // ----------------------------------------------------------------
          
          ValidatorAdapterType.metaClass.cdar2 = {-> 
-             // to be implemented
+             delegate.xsd().staticProfile("schema/infrastructure/cda/CDA.xsd")
          }
      }
     

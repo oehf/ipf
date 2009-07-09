@@ -17,47 +17,91 @@ package org.openehealth.ipf.platform.camel.core.adapter;
 
 import static junit.framework.Assert.assertEquals;
 
+import java.io.IOException;
+
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.platform.camel.core.AbstractRouteTest;
-
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
 public class ValidatorRouteTest extends AbstractRouteTest {
 
-    @EndpointInject(uri="mock:error")
+    @EndpointInject(uri = "mock:error")
     protected MockEndpoint error;
-    
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
     @After
     public void tearDown() throws Exception {
         error.reset();
         super.tearDown();
     }
-    
+
     @Test
     public void testValidator1() throws InterruptedException {
-        String result = (String) producerTemplate.sendBody("direct:validator-test",
-                ExchangePattern.InOut, "correct");
+        String result = (String) producerTemplate.sendBody(
+                "direct:validator-test", ExchangePattern.InOut, "correct");
         assertEquals("correct", result);
     }
 
     @Test
     public void testValidator2() throws InterruptedException {
+        error.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:validator-test",
                 ExchangePattern.InOut, new Processor() {
                     public void process(Exchange exchange) {
                         exchange.getIn().setBody("incorrect");
                     }
-        });
-        assertEquals(ValidationException.class, exchange.getException().getClass());
+                });
+        assertEquals(ValidationException.class, exchange.getException()
+                .getClass());
+        error.assertIsSatisfied(2000);
+    }
+
+    @Test
+    public void testValidator3() throws InterruptedException, IOException {
+        final String xml = IOUtils.toString(new ClassPathResource("test.xml")
+                .getInputStream());
+        Exchange exchange = producerTemplate.send("direct:validator-xml-test",
+                ExchangePattern.InOut, new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody(xml);
+                    }
+                });
+        assertEquals(xml, exchange.getIn().getBody());
+     }
+
+    @Test
+    public void testValidator4() throws InterruptedException, IOException {
+        final String xml = IOUtils.toString(new ClassPathResource(
+                "invalidtest.xml").getInputStream());
+        error.expectedMessageCount(1);
+        Exchange exchange = producerTemplate.send("direct:validator-xml-test",
+                ExchangePattern.InOut, new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody(xml);
+                    }
+                });
+        assertEquals(ValidationException.class, exchange.getException()
+                .getClass());
+        ValidationException e = (ValidationException) exchange.getException();
+        assertEquals(5, e.getCauses().length);
+        error.assertIsSatisfied(2000);
+
     }
 
 }

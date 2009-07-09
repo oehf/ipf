@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
+import static org.apache.camel.builder.Builder.bodyAs;
 import groovy.lang.Closure;
+
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.camel.Expression;
 import org.apache.camel.spi.RouteContext;
@@ -23,9 +26,11 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
+import org.openehealth.ipf.platform.camel.core.xml.XsdValidator;
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
 public class ValidatorAdapterType extends ProcessorAdapterType {
 
@@ -72,6 +77,12 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
     public ProcessorAdapterType profile(Closure profileExpression) {
         this.profileExpression = new DelegatingExpression(profileExpression);
         return this;
+    }
+    
+    public ValidatorAdapterType xsd() {
+        this.validator = new XsdValidator();
+        /// return this;
+        return (ValidatorAdapterType)input(bodyAs(StreamSource.class));
     }
     
     @Override

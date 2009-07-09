@@ -20,7 +20,10 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.junit.After;
 import org.junit.Test;
 import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
@@ -35,6 +38,15 @@ import org.springframework.test.context.ContextConfiguration;
 public class CDAR2ExtensionTest extends AbstractExtensionTest {
 
     private String resource = "message/SampleCDADocument.xml";
+
+    @EndpointInject(uri="mock:error")
+    protected MockEndpoint mockError;
+    
+    @After
+    public void tearDown() throws Exception {
+        mockOutput.reset();
+        mockError.reset();
+    }
     
     @Test
     public void testMarshalDefault() throws Exception {
@@ -45,6 +57,12 @@ public class CDAR2ExtensionTest extends AbstractExtensionTest {
     public void testUnmarshalDefault() throws Exception {
         testUnmarshal("direct:input2");
     }    
+    
+    @Test
+    public void testValidateSuccess() throws Exception {
+        testValidate("direct:input3");
+    }
+    
 
     private void testMarshal(String endpoint) throws Exception {
         POCDMT000040ClinicalDocument message = inputMessage(resource);
@@ -60,6 +78,15 @@ public class CDAR2ExtensionTest extends AbstractExtensionTest {
         producerTemplate.sendBody(endpoint, stream);
         mockOutput.assertIsSatisfied();
         assertEquals(messageAsString(inputMessage(resource)), messageAsString(resultAdapter()));
+    }
+    
+    private void testValidate(String endpoint) throws Exception {
+        InputStream stream = inputStream(resource);
+        mockOutput.expectedMessageCount(1);
+        mockError.expectedMessageCount(0);
+        producerTemplate.sendBody(endpoint, stream);
+        mockOutput.assertIsSatisfied();
+        mockError.assertIsSatisfied();
     }
 
     private String resultString() {

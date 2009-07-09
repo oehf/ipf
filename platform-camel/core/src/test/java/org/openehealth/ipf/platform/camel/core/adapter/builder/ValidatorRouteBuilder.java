@@ -29,6 +29,10 @@ public class ValidatorRouteBuilder extends RouteBuilderSupport {
 
         from("direct:validator-test")
         .process(helper.validator("testValidator").staticProfile("correct"));
+        
+        from("direct:validator-xml-test")
+        .process(helper.xsdValidator().staticProfile("test.xsd"))
+        .setBody().constant("passed");
     }
 
 }

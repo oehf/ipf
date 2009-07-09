@@ -83,7 +83,7 @@ public class CDAR2ExtractorTest {
 
     // Use findIndexOf to return the index of the first item that matches the
     // condition specified in the closure.
-    assertEquals(1, components.findIndexOf { it.section.code.code == '10153-2' })
+    assertEquals(1, components.findIndexOf { it.section.code.code == '11348-0' })
 
     // Use collect to iterate through an object transforming each value into a
     // new value using the closure as a transformer, returning a list of transformed values. 
@@ -158,7 +158,7 @@ public class CDAR2ExtractorTest {
 
     // Use findIndexOf to return the index of the first item that matches
     // the condition specified in the closure.
-    assertEquals(1, components.findIndexOf { it.section.code.@code == '10153-2' })
+    assertEquals(1, components.findIndexOf { it.section.code.@code == '11348-0' })
 
     // Use collect to iterate through an object transforming each value into a
     // new value using the closure as a transformer, returning a list of transformed values.

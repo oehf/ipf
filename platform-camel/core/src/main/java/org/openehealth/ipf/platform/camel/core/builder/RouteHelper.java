@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.builder;
 
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.Processor;
+import org.apache.camel.builder.Builder;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.apache.camel.util.CamelContextHelper;
@@ -37,6 +40,7 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.core.process.Enricher;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
+import org.openehealth.ipf.platform.camel.core.xml.XsdValidator;
 
 /**
  * Helper class for creating IPF extensions in Java-based route definitions.
@@ -180,6 +184,20 @@ public class RouteHelper {
      */
     public ValidatorAdapter validator(Validator<?, ?> validator) {
         return new ValidatorAdapter(validator);
+    }
+    
+    /**
+     * Creates a new {@link ValidatorAdapter} that adapts the given
+     * <code>XsdValidator</code>.
+     * 
+     * @param validator
+     *            a validator.
+     * @return an adapted validator.
+     */
+    public ValidatorAdapter xsdValidator() {
+        ValidatorAdapter adapter = new ValidatorAdapter(new XsdValidator());
+        adapter.input(Builder.bodyAs(StreamSource.class));
+        return adapter;
     }
 
     /**
