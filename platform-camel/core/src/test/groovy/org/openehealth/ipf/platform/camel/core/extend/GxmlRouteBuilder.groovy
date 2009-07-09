@@ -39,7 +39,24 @@ class GxmlRouteBuilder extends SpringRouteBuilder {
             .marshal().gnode()
             .convertBodyTo(String.class)
             .to('mock:output')
-    
+
+        from('direct:input4')
+            .onException(Exception.class)
+                .handled(true)
+                .to('mock:error')
+                .end()        
+            .unmarshal().gnode('test.xsd', true)
+            .transmogrify { doc -> doc.c.text() }
+            .to('mock:output')
+        
+        from('direct:input5')
+            .onException(Exception.class)
+                .handled(true)
+                .to('mock:error')
+                .end()
+            .unmarshal().gpath('test.xsd', true)
+            .transmogrify { doc -> doc.c.text() }
+            .to('mock:output')
     }
     
 }

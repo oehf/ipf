@@ -24,42 +24,59 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.spi.DataFormat;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.util.xml.SimpleSaxErrorHandler;
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
-public class GnodeDataFormat implements DataFormat {
+public class GnodeDataFormat extends AbstractXmlDataFormat {
+
+    private static Log LOG = LogFactory.getLog(GnodeDataFormat.class);
 
     private boolean namespaceAware;
-    
+
     public GnodeDataFormat() {
-        this(true);
+        super();
     }
-    
+
     public GnodeDataFormat(boolean namespaceAware) {
-        this.namespaceAware = namespaceAware;
+        super(namespaceAware);
     }
-    
-    @Override
-    public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
-        printer(stream).print((Node)graph);
+
+    public GnodeDataFormat(String schemaResource) {
+        super(schemaResource);
+    }
+
+    public GnodeDataFormat(String schemaResource, boolean namespaceAware) {
+        super(schemaResource, namespaceAware);
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
+    public void marshal(Exchange exchange, Object graph, OutputStream stream)
+            throws Exception {
+        printer(stream).print((Node) graph);
+    }
+
+    @Override
+    public Object unmarshal(Exchange exchange, InputStream stream)
+            throws Exception {
         return parser().parse(stream);
     }
 
     private XmlParser parser() throws Exception {
-        XmlParser xmlParser = new XmlParser(false, namespaceAware);
+        XmlParser xmlParser = new XmlParser(saxParser());
+        xmlParser.setErrorHandler(new SimpleSaxErrorHandler(LOG));
         return xmlParser;
     }
-    
+
     private XmlNodePrinter printer(OutputStream stream) throws Exception {
-        XmlNodePrinter xmlNodePrinter = new XmlNodePrinter(new PrintWriter(stream));
+        XmlNodePrinter xmlNodePrinter = new XmlNodePrinter(new PrintWriter(
+                stream));
         xmlNodePrinter.setNamespaceAware(namespaceAware);
         return xmlNodePrinter;
     }
-    
+
 }

@@ -43,9 +43,13 @@ public abstract class AbstractExtensionTest {
     @EndpointInject(uri="mock:output")
     protected MockEndpoint mockOutput;
     
+    @EndpointInject(uri="mock:error")
+    protected MockEndpoint mockError;
+    
     @After
     public void tearDown() throws Exception {
         mockOutput.reset();
+        mockError.reset();
     }
 
 }

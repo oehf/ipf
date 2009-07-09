@@ -183,6 +183,10 @@ class CoreModelExtension {
          //  Platform DataFormatClause extensions
          // ----------------------------------------------------------------
          
+         DataFormatClause.metaClass.gnode = { String schemaResource, boolean namespaceAware ->
+             delegate.dataFormat(new GnodeDataFormat(schemaResource, namespaceAware))
+         }
+        
          DataFormatClause.metaClass.gnode = { boolean namespaceAware ->
              delegate.dataFormat(new GnodeDataFormat(namespaceAware))
          }
@@ -190,7 +194,11 @@ class CoreModelExtension {
          DataFormatClause.metaClass.gnode = { ->
              delegate.gnode(true)
          }
-     
+
+         DataFormatClause.metaClass.gpath = { String schemaResource, boolean namespaceAware ->
+             delegate.dataFormat(new GpathDataFormat(schemaResource, namespaceAware))
+         }       
+        
          DataFormatClause.metaClass.gpath = { boolean namespaceAware ->
              delegate.dataFormat(new GpathDataFormat(namespaceAware))
          }

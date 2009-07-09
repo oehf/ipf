@@ -29,9 +29,9 @@ import org.w3c.dom.ls.LSResourceResolver;
  * classpath. This enables to e.g. split a XML schema into several files that
  * depend on each other.
  * 
- * @author Ferry Syafei Sapei
+ * @author Christian Ohr
  */
-class LSResourceResolverImpl implements LSResourceResolver {
+public class LSResourceResolverImpl implements LSResourceResolver {
 
     private static Log LOG = LogFactory.getLog(LSResourceResolverImpl.class);
 

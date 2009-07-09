@@ -21,35 +21,51 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.spi.DataFormat;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.util.xml.SimpleSaxErrorHandler;
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
-public class GpathDataFormat implements DataFormat {
+public class GpathDataFormat extends AbstractXmlDataFormat {
 
-    private boolean namespaceAware;
-    
+    private static Log LOG = LogFactory.getLog(GnodeDataFormat.class);
+
     public GpathDataFormat() {
-        this(true);
+        super();
     }
-    
+
     public GpathDataFormat(boolean namespaceAware) {
-        this.namespaceAware = namespaceAware;
+        super(namespaceAware);
     }
-    
+
+    public GpathDataFormat(String schemaResource) {
+        super(schemaResource);
+    }
+
+    public GpathDataFormat(String schemaResource, boolean namespaceAware) {
+        super(schemaResource, namespaceAware);
+    }
+
     @Override
-    public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
+    public void marshal(Exchange exchange, Object graph, OutputStream stream)
+            throws Exception {
         throw new UnsupportedOperationException("marshalling not supported");
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
+    public Object unmarshal(Exchange exchange, InputStream stream)
+            throws Exception {
         return slurper().parse(stream);
     }
 
     private XmlSlurper slurper() throws Exception {
-        return new XmlSlurper(false, namespaceAware);
+        XmlSlurper slurper = new XmlSlurper(saxParser());
+        slurper.setErrorHandler(new SimpleSaxErrorHandler(LOG));
+        return slurper;
     }
-    
+
+
 }
