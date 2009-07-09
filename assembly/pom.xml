@@ -188,6 +188,11 @@
             <artifactId>platform-camel-ihe-xds-iti43</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-test</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
     </dependencies>
 
     <profiles>
@@ -241,7 +246,7 @@
 								<hr>
 								<META http-equiv="Content-Type" content="text/html; charset=UTF-8">]]>
                             </head>
-                            <pdf>${project.build.directory}/site/manual/ipf-manual-${pom.version}.pdf</pdf>
+                            <pdf>${project.build.directory}/site/manual/ipf-${pom.version}.pdf</pdf>
                         </configuration>
                     </plugin>
                 </plugins>

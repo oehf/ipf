@@ -60,5 +60,13 @@
             </includes>
             <outputDirectory>dist</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>../platform-camel/test</directory>
+            <includes>
+                <include>**/*.bat</include>
+                <include>**/*.sh</include>
+            </includes>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
     </fileSets>
 </component>
