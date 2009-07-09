@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.cda.extend
 
 import org.apache.camel.builder.DataFormatClause
 import org.openehealth.ipf.platform.camel.cda.dataformat.CDAR2DataFormatimport org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
-
+import org.openehealth.ipf.modules.cda.CDAR2Constants
 /**
  * @author Christian Ohr
  */
@@ -39,7 +39,7 @@ public class CDAR2ModelExtension{
          // ----------------------------------------------------------------
          
          ValidatorAdapterType.metaClass.cdar2 = {-> 
-             delegate.xsd().staticProfile("schema/infrastructure/cda/CDA.xsd")
+             delegate.xsd().staticProfile(CDAR2Constants.CDAR2_SCHEMA)
          }
      }
     
