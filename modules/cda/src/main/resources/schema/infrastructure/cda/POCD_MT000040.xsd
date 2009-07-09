@@ -699,7 +699,7 @@ StaticMifToXsd.xsl version 2.0</xs:documentation>
 			<xs:element name="templateId" type="II" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="id" type="II" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:choice>
-				<xs:element name="low" type="POCD_MT000040.LabeledDrug"/>
+				<xs:element name="manufacturedLabeledDrug" type="POCD_MT000040.LabeledDrug"/>
 				<xs:element name="manufacturedMaterial" type="POCD_MT000040.Material"/>
 			</xs:choice>
 			<xs:element name="manufacturerOrganization" type="POCD_MT000040.Organization" minOccurs="0"/>
