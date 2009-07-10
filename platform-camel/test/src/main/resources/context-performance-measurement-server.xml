@@ -31,8 +31,12 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <!-- Setup of the performance measurement server                    -->
     <!-- ============================================================== -->
 
-    <ctx:property-placeholder
-        location="classpath:/performance.measurement.server.properties"/>
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location"
+            value="classpath:/performance.measurement.server.properties"/>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+    </bean>
 
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true"/>
@@ -58,10 +62,14 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <!-- Configuration of the performance measurement component          -->
     <!-- =============================================================== -->
 
-
     <bean id="performanceMeasurmentRouteBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceRouteBuilder">
-        <property name="httpPort" value="${http.port}"/>
+        <property name="httpPort" value="${pms.http.port}"/>
+        
+        <property name="overrideMeasurementHistoryReferenceDate"
+            value="${pms.override.measurement.history.reference.date}"/>
+        <property name="queueSize" value="${pms.queue.size}"/>
+        <property name="jettyHttpClientOptions" value="${pms.jetty.http.client.options}"/>
     </bean>
 
     <bean id="performanceRequestHandler"

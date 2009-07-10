@@ -24,7 +24,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd
 http://activemq.apache.org/camel/schema/spring 
 http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
 
-    <!-- ================================================================== -->
+   <!-- ================================================================== -->
     <!--  Configuration the test application that uses the performance      -->
     <!--  measurement component                                             -->
     <!-- ================================================================== -->
@@ -67,7 +67,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     <bean id="performanceRouteBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.test.performance.route.PerformanceRouteBuilder">
         <property name="httpPort" value="8651"/>
-        <property name="statisticsPath" value="statistics"/>
+        <property name="requestHandlerBean" value="performanceRequestHandler"/>
     </bean>
 
     <bean id="performanceRequestHandler"

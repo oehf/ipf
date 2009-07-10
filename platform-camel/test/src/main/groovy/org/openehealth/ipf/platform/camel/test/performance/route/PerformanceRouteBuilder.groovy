@@ -49,14 +49,9 @@ public class PerformanceRouteBuilder extends SpringRouteBuilder {
     private final static Log LOG = LogFactory.getLog(PerformanceRouteBuilder.class.getName())
     
     /**
-     * The port on which the Jetty server should accept requests
-     */
-    int httpPort
-    
-    /**
      * The URI path to access statistcs related resources
      */
-    String statisticsPath = 'statistics'
+     String statisticsPath = 'statistics'
     
     /**
      * The bean name to handle the requests from the Jetty server
@@ -81,24 +76,47 @@ public class PerformanceRouteBuilder extends SpringRouteBuilder {
     String updateMethod = 'onMeasurementHistory'
     
     /**
-     * Confiuration for the HTTP client, used by the embedded Jetty server 
+     * Configures the queue size of the queue, that stores the measurement history it receives.
+     * The queue is used to provide asynchronous processing of the measurement history. Note that 
+     * if there is no memory for the incoming measurements (the throughput of the cluster 
+     * is much higher than the throughput of the performance measurement server), the server 
+     * may throw an OutOfMemoryError. In this case, the measurements made by the server must be 
+     * considered invalid 
+     * The property is optional.
+     * 
+     */
+    int queueSize = Integer.MAX_VALUE
+        
+    /**
+     * Confiuration for the HTTP client, used by the embedded Jetty server.
+     * The property is optional.
      */
     String jettyHttpClientOptions = 'httpClient.idleTimeout=30000'
     
     /**
-     * Configures the queue size of the queue, that stores the incoming messurements.
-     * The queue is used to provide asynchronous processing of the measurements.
-     * The default value of the queue size is Integer.MAX_VALUE  
+     * Configures if the performance measurement server should override the 
+     * reference date of the measurement history it receives. 
+     *
+     * Overriding the date removes the limitation that the tested nodes of the IPF cluster 
+     * must have the same time. However, when the throughput of the cluster is higher than 
+     * the throughput of the performance measurement server, the performance measurement 
+     * server will report it's throughtput rather than the cluster throughput. 
+     * 
+     * This behaviour can be turned off, when a synchronization server runs on the cluster nodes.
+     * The property is optional. 
+     * 
      */
-    int queueSize = Integer.MAX_VALUE
+    boolean overrideMeasurementHistoryReferenceDate = true
     
+    /**
+     * The port on which the Jetty server should accept requests.
+     * The property is required.
+     */
+    int httpPort
     
     void configure(){
-        if (httpPort == 0){
+        if (httpPort <= 0){
             throw new IllegalArgumentException('The  httpPort of PerformanceMeasurementRouteBuilder can not be null!'); 
-        }
-        if (statisticsPath == null){
-            throw new IllegalArgumentException('The  statisticsPath of PerformanceMeasurementRouteBuilder can not be null!'); 
         }
         from('jetty:http://' + LOCALHOST + ':' + httpPort + '/' + statisticsPath + '?'+ jettyHttpClientOptions )
                 .setHeader('requestTime'){ System.currentTimeMillis() }//store the time the message has arrived 
@@ -125,9 +143,11 @@ public class PerformanceRouteBuilder extends SpringRouteBuilder {
                     }finally{
                         closeQuietly(stream)
                     }
-                    //use the server date for a reference date of the measurements
-                    long time = exchange.in.getHeader('requestTime')
-                    history.setReferenceDate(new Date(time))
+                    //use the performance measuremetn server date for a reference date of the measurements
+                    if (overrideMeasurementHistoryReferenceDate){
+                        long time = exchange.in.getHeader('requestTime')
+                        history.setReferenceDate(new Date(time))
+                    }
                     history
                 }
                 .to('bean:' + requestHandlerBean + '?method=' +  updateMethod)

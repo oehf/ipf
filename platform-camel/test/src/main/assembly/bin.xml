@@ -24,21 +24,7 @@
             <includes>
                 <include>start*</include>
             </includes>
-        </fileSet>
-         <fileSet>
-            <directory>src/main/resources</directory>
-            <outputDirectory>conf</outputDirectory>
-            <includes>
-                <include>context-performance-measurement-server.xml</include>
-                <include>performance.measurement.server.properties</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>src/test/resources</directory>
-            <outputDirectory>conf</outputDirectory>
-            <includes>
-                <include>log4j.xml</include>
-            </includes>
+            <outputDirectory>bin</outputDirectory>
         </fileSet>
     </fileSets>
     <dependencySets>
