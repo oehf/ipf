@@ -16,6 +16,7 @@
 package ccdbuilders
 
 import groovytools.builder.*
+import org.openhealthtools.ihe.common.cdar2.*
 
 // The Continuity of Care document
 
@@ -27,13 +28,14 @@ continuityOfCareDocument(schema:'clinicalDocument') {
 	                   displayName:'Summarization of episode note')
          }
 	   })
+	  mainActivity(schema:'ccd_serviceEvent', req: true)
       component(schema:'ccd_component')
 	}
 
 	collections {
 	   templateIds(collection:'templateId', def: {
 	       getMetaBuilder().buildList {
-	         ii(root:'2.16.840.1.113883.3.27.1776')
+	         ii(root:'2.16.840.1.113883.10.20.1')
 	      }
 	   })
 	   {
@@ -42,6 +44,14 @@ continuityOfCareDocument(schema:'clinicalDocument') {
 	}
 }
 
+// Add main activity template
+ccd_serviceEvent(schema:'serviceEvent'){
+    properties {
+        classCode(def: ActClassRootMember7.PCPR_LITERAL)
+    }
+}
+
+// Add CCD component
 
 ccd_component(schema:'component') {
     properties {
@@ -55,6 +65,7 @@ ccd_component(schema:'component') {
     properties {
        purpose(schema:'ccd_purpose')
        payers(schema:'ccd_payers')
+       advanceDirectives(schema:'ccd_advanceDirectives')
        // ...
     }
  }

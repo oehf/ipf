@@ -37,7 +37,7 @@ clinicalStatementParticipant(schema:'infrastructureRoot', factory:'POCDMT000040_
         awarenessCode(schema:'ce')
         time(schema:'ivlts')
         participantRole(schema:'participantRole')
-        typeCode(factory:'PARTICIPATION_TYPE')
+        typeCode(factory:'PARTICIPATION_TYPE', req:true)
     }
 }
 

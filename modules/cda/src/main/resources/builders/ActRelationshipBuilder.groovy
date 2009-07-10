@@ -75,7 +75,7 @@ componentOf(schema:'infrastructureRoot', factory:'POCDMT000040_COMPONENT1') {
 documentationOf(schema:'infrastructureRoot', factory:'POCDMT000040_DOCUMENTATION_OF') {
     properties {
         // typeCode(factory:'ACT_RELATIONSHIP_TYPE')
-        order(schema:'serviceEvent')
+        serviceEvent(schema:'serviceEvent')
     }
 }
 

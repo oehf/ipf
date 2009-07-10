@@ -189,11 +189,13 @@ section(schema:'infrastructureRoot', factory:'POCDMT000040_SECTION') {
 
 serviceEvent(schema:'infrastructureRoot', factory:'POCDMT000040_SERVICE_EVENT') {
     properties {
-       code(schema:'ce')
-       effectiveTime(schema:'ivlts')
+        classCode(factory:'ACT_CLASS_ROOT',
+                  def: ActClassRootMember7.ACT_LITERAL)
+        code(schema:'ce')
+        effectiveTime(schema:'ivlts')
     }
     collections {
-		ids(collection:'id', min:1) {
+		ids(collection:'id') {
 			id(schema:'ii')
 		}
 		performers(collection:'performer') {
@@ -247,9 +249,9 @@ clinicalStatement(schema:'infrastructureRoot') {
 		participants(collection:'participant') {
 		    participant(schema:'clinicalStatementParticipant')
 		}
-      entryRelationships(collection:'entryRelationship') {
-          entryRelationship(schema:'entryRelationship')
-      }
+        entryRelationships(collection:'entryRelationship') {
+            entryRelationship(schema:'entryRelationship')
+        }
 		preconditions(collection:'precondition') {
 		    precondition(schema:'precondition')
 		}
@@ -319,7 +321,7 @@ observation(schema:'clinicalStatement',factory:'POCDMT000040_OBSERVATION'){
             id(schema:'ii')
         }
         values(collection:'value'){
-            value(schema:'cd') // TODO: ANY!
+            value(schema:'ce') // TODO: schema:'_any' with classifier (evtl. 'add' of collection may be usefull
         }
         interpretationCodes(collection:'interpretationCode'){
             interpretationCode(schema:'ce')

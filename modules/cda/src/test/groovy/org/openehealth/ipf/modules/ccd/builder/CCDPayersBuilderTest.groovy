@@ -17,7 +17,9 @@ package org.openehealth.ipf.modules.ccd.builder
 
 import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.eclipse.emf.ecore.xmi.XMLResource
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocumentimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+
 /**
  * @author Christian Ohr
  */
@@ -28,11 +30,11 @@ public class CCDPayersBuilderTest extends AbstractCCDBuilderTest {
          def document = builder.build {
              continuityOfCareDocument {
                 id('db734647-fc99-424c-a864-7e3cda82e703')
-             	title('Good Health Clinic Continuity of Care Document')
-             	effectiveTime('20000407130000+0500')
-             	confidentialityCode('N')
-             	languageCode('en-US')
-               	//recordTarget {
+                title('Good Health Clinic Continuity of Care Document')
+                effectiveTime('20000407130000+0500')
+                confidentialityCode('N')
+                languageCode('en-US')
+                //recordTarget {
                     patient {
                         id('996-756-495@2.16.840.1.113883.19.5') 
                         patient {
@@ -50,48 +52,53 @@ public class CCDPayersBuilderTest extends AbstractCCDBuilderTest {
                         }
                     }
                 // }
-             	author {
-             	    time('20000407130000+0500')
-             	    assignedAuthor {
-             	        id('20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
-             	        assignedPerson {
-             	            name {
+                author {
+                    time('20000407130000+0500')
+                    assignedAuthor {
+                        id('20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
+                        assignedPerson {
+                            name {
                                 prefix('Dr.')
-         						given('Robert')
-         						family('Dolin')
-             	            }
-             	        }
-             	        representedOrganization {
-             	            id(root:"2.16.840.1.113883.19.5")
+                                given('Robert')
+                                family('Dolin')
+                            }
+                        }
+                        representedOrganization {
+                            id(root:"2.16.840.1.113883.19.5")
                             name('Good Health Clinic')
-             	        }
-             	    }
-             	}
+                        }
+                    }
+                }
 
                 // informant
                 // participants
-                // documentationOf
-             	
-             	custodian {
-             	    assignedCustodian {
-             	        representedCustodianOrganization {
-             	           id(root:"2.16.840.1.113883.19.5")
-             	           name('Good Health Clinic')
-             	        }
-             	    }
-             	}
-             	legalAuthenticator {
-             	    time('20000407130000+0500')
-             	    signatureCode('S')
-             	    assignedEntity {
-             	        id {
+                // mainActivity (documentationOf)
+                mainActivity{
+                    effectiveTime{
+                        low(value:'19320924')
+                        high(value:'20000407')
+                    }
+                }
+                custodian {
+                    assignedCustodian {
+                        representedCustodianOrganization {
+                           id(root:"2.16.840.1.113883.19.5")
+                           name('Good Health Clinic')
+                        }
+                    }
+                }
+                legalAuthenticator {
+                    time('20000407130000+0500')
+                    signatureCode('S')
+                    assignedEntity {
+                        id {
                            nullFlavor('NI')
                        }
-             	        representedOrganization {
-             	            id(root:"2.16.840.1.113883.19.5")
-             	        }
-             	    }
-             	}
+                        representedOrganization {
+                            id(root:"2.16.840.1.113883.19.5")
+                        }
+                    }
+                }
 
                 component {
                    structuredBody {
@@ -160,22 +167,53 @@ public class CCDPayersBuilderTest extends AbstractCCDBuilderTest {
          
          document
      }
-     
+
+    public void testCoverageActivitySchemata(){
+        def ccd_coverageActivity = builder.getSchema('ccd_coverageActivity')
+        def ccd_policyActivity = builder.getSchema('ccd_policyActivity')
+        def payer =  builder.build {
+            ccd_payers{
+                text('empty')
+                coverageActivity(moodCode:'DEF'){
+                    id('1fe2cdd0-7aad-11db-9fe1-0800200c9a66')
+                    policyActivity{
+                        id('3e676a50-7aac-11db-9fe1-0800200c9a66')
+                        payer {
+                            id('329fcdf0-7ab3-11db-9fe1-0800200c9a66')
+                        }
+                        coveredParty {
+                            id('14d4a520-7aae-11db-9fe1-0800200c9a66')
+                            code('SELF')
+                        }
+                        authorizationActivity {
+                            id('f4dce790-8328-11db-9fe1-0800200c9a66')
+                            code(nullFlavor:'NA')
+                            promise()
+                        }
+                    }
+                }
+            }//payer section
+        }
+        CCDConformanceValidatorHelper.checkCCDPayersConformance(payer)
+    }
+
      public void testRenderCCDPayers() {
          POCDMT000040ClinicalDocument document = buildCCD()
          def opts = [:]
          opts[XMLResource.OPTION_DECLARE_XML] = true
          opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-         println(renderer.render(document, opts))
+         //println(renderer.render(document, opts))
      }
      
      public void testExtractCCDPayers() {
          POCDMT000040ClinicalDocument document = buildCCD()
          def body = document.component.structuredBody
+         assertTrue CCDConformanceValidatorHelper.checkCCDHeaderConformance(document)
+         assertTrue CCDConformanceValidatorHelper.checkCCDPayersConformance(body.payers)
          assert POCDMT000040Section.class.isAssignableFrom(body.payers.class)
          assert body.payers.title.text == 'Payers'
          // TODO check coverageactivity mood code, should be DEF
-         // assert body.payers.coverageActivity.moodCode.code == 'DEF'
-     }
+         //assert body.payers.coverageActivity.moodCode.code == 'DEF'
+      }
     
 }

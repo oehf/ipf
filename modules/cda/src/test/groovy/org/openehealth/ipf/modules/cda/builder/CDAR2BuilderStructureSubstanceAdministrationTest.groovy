@@ -56,7 +56,7 @@ public class CDAR2BuilderStructureSubstanceAdministrationTest extends AbstractCD
 			    }
 			}//entry
 		}
-		// println entry.substanceAdministration
+		// TODO add some assertions
 	}
 	
 	/**
@@ -80,18 +80,7 @@ public class CDAR2BuilderStructureSubstanceAdministrationTest extends AbstractCD
 			    }//substance administration
 			}//entry
 		}
-		// println entry.substanceAdministration
+		//TODO add some assertions
 	}	
-	
-//    <substanceAdministration classCode="SBADM" moodCode="RQO">
-//    <text>prednisone 20qOD alternating with 18qOD.</text>
-//    <routeCode code="PO" codeSystem="2.16.840.1.113883.5.112" codeSystemName="RouteOfAdministration"/>
-//    <consumable>
-//        <manufacturedProduct>
-//            <manufacturedLabeledDrug>
-//                <code code="10312003" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Prednisone preparation"/>
-//            </manufacturedLabeledDrug>
-//        </manufacturedProduct>
-//    </consumable>
-//    </substanceAdministration>
+
 }

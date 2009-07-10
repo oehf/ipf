@@ -45,7 +45,7 @@ public class CDAR2BuilderTest extends AbstractCDAR2BuilderTest{
                  }
              }
          }
-         // println  role
+         //TODO add assertions
 
      }
          
@@ -71,8 +71,7 @@ public class CDAR2BuilderTest extends AbstractCDAR2BuilderTest{
              clinicalDocument {
                 // templateId(root:'2.16.840.1.113883.3.27.1776')
                 id(root:'2.16.840.1.113883.19.4', extension:'c266')
-                code(
-                        code:'11488-4', 
+                code(code:'11488-4', 
                         codeSystem:'2.16.840.1.113883.6.1', 
                         codeSystemName:'LOINC',
                         displayName:'Consultation note'

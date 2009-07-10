@@ -155,7 +155,7 @@ public class CDAR2BuilderComponent2Test extends AbstractCDAR2BuilderTest {
     def opts = [:]
     opts[XMLResource.OPTION_DECLARE_XML] = true
     opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-    // System.out.println(renderer.render(document, opts))
+
     /* document is invalid actually */
     assertFalse(document.component.nonXMLBody == null ^ document.component.structuredBody == null)
   }

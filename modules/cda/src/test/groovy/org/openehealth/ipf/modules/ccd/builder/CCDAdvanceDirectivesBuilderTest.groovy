@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,14 @@
  */
 package org.openehealth.ipf.modules.ccd.builder
 
+import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.eclipse.emf.ecore.xmi.XMLResource
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+import org.openhealthtools.ihe.common.cdar2.*
 
 /**
  * @author Christian Ohr
  */
-public class CCDPurposeBuilderTest extends AbstractCCDBuilderTest {
-
+public class CCDAdvanceDirectivesBuilderTest extends AbstractCCDBuilderTest{
 
      private POCDMT000040ClinicalDocument buildCCD() {
          def document = builder.build {
@@ -35,10 +34,10 @@ public class CCDPurposeBuilderTest extends AbstractCCDBuilderTest {
              	languageCode('en-US')
                	//recordTarget {
                     patient {
-                        id('996-756-495@2.16.840.1.113883.19.5') 
+                        id('996-756-495@2.16.840.1.113883.19.5')
                         patient {
                             name {
-                                given('Henry') 
+                                given('Henry')
                                 family('Levin')
                                 suffix('the 7th')
                             }
@@ -98,47 +97,76 @@ public class CCDPurposeBuilderTest extends AbstractCCDBuilderTest {
              	        }
              	    }
              	}
-
                 component {
                    structuredBody {
-                       // CCD Purpose (Chapter 2.8)
-                       purpose {
-                          text('Transfer of Care!')
-                          purposeActivity {
-                              act {
-                                 code(code:'308292007',
-                                      codeSystem:'2.16.840.1.113883.6.96',
-                                      displayName:'Transfer of care')
-                                 statusCode('completed')
-                              }
-                          }
+                       // CCD Advance Directives (Chapter 3.2)
+                       advanceDirectives{
+                           text('Hey directives')
+                           observation{
+                               id(root:'9b54c3c9-1673-49c7-aef9-b037ed72ed27')
+                               code(code:'304251008', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resuscitation')
+                               observationStatus{
+                                   value(code:'15240007',
+                                           codeSystem:'2.16.840.1.113883.6.96',
+                                           displayName:'Current and verified')
+                               }
+                               verifier{
+                                    time('19991107')
+				                    participantRole{
+					                    id(root:'20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
+                                    }//participantRole
+                               }
+                           }//observation instance first
                        }
                    }
                 }
             }
 
          }
-         
+
          document
      }
-     
-     public void testRenderCCDPurpose() {
+
+
+    public void testAdvanceDirectiveSchema(){
+        assert builder.getSchema('ccd_advanceDirectives') != null
+        assert builder.getSchema('ccd_advanceDirectiveObservationStatus') != null
+
+        def advanceDirective = builder.build{
+            ccd_advanceDirectives{
+                text('Simple Advance Directives')
+                observation{
+                    id(root:'9b54c3c9-1673-49c7-aef9-b037ed72ed27')
+                    code(code:'304251008', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resuscitation')
+                    observationStatus{
+                        value(code:'15240007',
+                                           codeSystem:'2.16.840.1.113883.6.96',
+                                           displayName:'Current and verified')
+                    }//observation status
+                    verifier{
+                        time('19991107')
+                    }//verifier
+                    reference{
+    					id(root:'b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3')
+					    code(code:'371538006',
+                                codeSystem:'2.16.840.1.113883.6.96',
+                                displayName:'Advance directive')
+					    text(mediaType:'application/pdf'){
+                            reference(value:'AdvanceDirective.b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3.pdf')
+                        }
+                    }//reference to external document
+                }//advance directive observation
+            }//advance directive
+        }
+        CCDConformanceValidatorHelper.checkCCDAdvanceDirectivesConformance(advanceDirective)
+    }
+
+    public void testRenderCCDAdvanceDirectives() {
          POCDMT000040ClinicalDocument document = buildCCD()
          def opts = [:]
          opts[XMLResource.OPTION_DECLARE_XML] = true
          opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-//         println(renderer.render(document, opts))
+         //println(renderer.render(document, opts))
      }
-     
-     public void testExtractCCDPurpose() {
-         POCDMT000040ClinicalDocument document = buildCCD()
-         def body = document.component.structuredBody
-         assert POCDMT000040Section.class.isAssignableFrom(body.purpose.class)
-         assertTrue CCDConformanceValidatorHelper.checkCCDHeaderConformance(document)
-         //assertTrue CCDConformanceValidatorHelper.checkCCDPurposeConformance(document.component)
-         assert body.purpose.title.text == 'Summary purpose'
-         assert body.purpose.text.text == 'Transfer of Care!'
-         assert body.purpose.purposeActivity.act.code.code == '308292007'
-     }
-    
+
 }
