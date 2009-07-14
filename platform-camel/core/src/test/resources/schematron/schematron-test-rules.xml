@@ -1,0 +1,115 @@
+<schema xmlns="http://purl.oclc.org/dsdl/schematron"
+	queryBinding="xslt2">
+
+	<!-- ++++++ Important note about XML Schema type checks ++++++
+		Neither the "E instance of T" nor the "element(E,T)" XPATH 2.0 syntax can be used to check
+		the type of an element, as this function is not available in the cost-free version
+		of the Saxon XSLT processor. One workaround is checking for the presence of an xsi:type
+		attribute (although this is namespace-agnostic).
+	-->
+
+
+	<title>Schematron Schema for BloodPressure</title>
+	<ns prefix="ns1" uri="http://org.openehealth.ipf/ns1" />
+	<ns prefix="ns2" uri="http://org.openehealth.ipf/ns2" />
+	<ns prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance" />
+
+	<pattern id="bloodpressure_check_meta">
+
+		<rule context="//ns1:observationEvent">
+			<assert test="ns2:value[@xsi:type='ns1:BloodPressure']"
+				flag="error">
+				Observation value must be of type ns1:BloodPressure
+			</assert>
+			<assert test="ns2:effectiveTime/ns2:low" flag="warning">
+				effectiveTime/low should be present to specify the point
+				in time of the observation
+			</assert>
+			<assert test="ns2:targetSiteCode" flag="warning">
+				targetSiteCode should be specified
+			</assert>
+			<assert
+				test="ns2:targetSiteCode[@codeSystem='2.16.840.1.113883.6.24']"
+				flag="error">
+				targetSiteCode code system must be
+				2.16.840.1.113883.6.24 (MDC)
+			</assert>
+			<assert test="ns2:dataEnterer" flag="error">
+				dataEnterer information must be present
+			</assert>
+		</rule>
+
+		<rule
+			context="//ns1:observationEvent/ns2:dataEnterer/ns2:assignedDevice/ns2:device"
+			flag="error">
+			<assert
+				test="ns2:code[@codeSystem='2.16.840.1.113883.3.37.4.9.3']">
+				device code system must be 2.16.840.1.113883.3.37.4.9.3
+			</assert>
+			<assert test="ns2:code[@code='BP']" flag="error"
+				diagnostics="device_code">
+				the device code is not correct
+			</assert>
+		</rule>
+
+	</pattern>
+
+
+	<pattern id="bloodpressure_check_data">
+
+		<!-- To be added: 
+			systolic/diastolic must be same unit
+			systolic value must be greater than diastolic value
+		-->
+
+		<rule context="//ns1:systolicPressure/ns1:obs" flag="error">
+			<assert test="ns2:code[@codeSystem='2.16.840.1.113883.6.1']"
+				flag="error">
+				Observation code system must be 2.16.840.1.113883.6.1
+				(LOINC)
+			</assert>
+			<assert test="ns2:code[@code='8459-0']">
+				Code must be 8459-0 (systolic pressure)
+			</assert>
+			<assert test="ns1:value[@xsi:type='PQ']" flag="error">
+				Value must be a physical quantity (PQ)
+			</assert>
+		</rule>
+
+		<rule context="//ns1:diastolicPressure/ns1:obs" flag="error">
+			<assert test="ns2:code[@codeSystem='2.16.840.1.113883.6.1']"
+				flag="error">
+				Observation code system must be 2.16.840.1.113883.6.1
+				(LOINC)
+			</assert>
+			<assert test="ns2:code[@code='8453-3']">
+				Code must be 8453-3 (diastolic pressure)
+			</assert>
+			<assert test="ns1:value[@xsi:type='PQ']" flag="error">
+				Value must be a physical quantity (PQ)
+			</assert>
+		</rule>
+
+		<rule context="//ns1:pulse/ns1:obs">
+			<assert test="ns2:code[@codeSystem='2.16.840.1.113883.6.1']"
+				flag="error">
+				Observation code system must be 2.16.840.1.113883.6.1
+				(LOINC)
+			</assert>
+			<assert test="ns2:code[@code='8893-0']" flag="error">
+				Code must be 8893-0 (heart beat rate)
+			</assert>
+			<assert test="ns1:value[@xsi:type='PQ']" flag="error">
+				Value must be a physical quantity (PQ)
+			</assert>
+		</rule>
+
+		<diagnostics>
+			<diagnostic id="device_code">
+				The device code specifies the kind of observations the
+				device is able to take. For bloodpressure meters, the
+				code must be 'BP'
+			</diagnostic>
+		</diagnostics>
+	</pattern>
+</schema>

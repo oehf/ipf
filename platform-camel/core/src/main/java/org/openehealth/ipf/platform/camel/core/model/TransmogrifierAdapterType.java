@@ -15,8 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
+import static org.apache.camel.builder.Builder.bodyAs;
+
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
+import org.openehealth.ipf.commons.xml.SchematronTransmogrifier;
+import org.openehealth.ipf.commons.xml.XsdValidator;
+import org.openehealth.ipf.commons.xml.XsltTransmogrifier;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 
@@ -47,6 +54,16 @@ public class TransmogrifierAdapterType extends ProcessorAdapterType {
     @Override
     public String getShortName() {
         return "transmogrifierAdapter";
+    }
+    
+    public TransmogrifierAdapterType xslt() {
+        this.transmogrifier = new XsltTransmogrifier();
+        return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
+    }
+    
+    public TransmogrifierAdapterType schematron() {
+        this.transmogrifier = new SchematronTransmogrifier();
+        return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
     }
 
     @Override

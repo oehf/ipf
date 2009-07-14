@@ -45,7 +45,7 @@ class GxmlRouteBuilder extends SpringRouteBuilder {
                 .handled(true)
                 .to('mock:error')
                 .end()        
-            .unmarshal().gnode('test.xsd', true)
+            .unmarshal().gnode('xsd/test.xsd', true)
             .transmogrify { doc -> doc.c.text() }
             .to('mock:output')
         
@@ -54,7 +54,7 @@ class GxmlRouteBuilder extends SpringRouteBuilder {
                 .handled(true)
                 .to('mock:error')
                 .end()
-            .unmarshal().gpath('test.xsd', true)
+            .unmarshal().gpath('xsd/test.xsd', true)
             .transmogrify { doc -> doc.c.text() }
             .to('mock:output')
     }

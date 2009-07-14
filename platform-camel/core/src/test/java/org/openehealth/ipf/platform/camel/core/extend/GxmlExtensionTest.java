@@ -47,7 +47,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
 
     @Test
     public void testUnmarshalGnodeWithSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("test.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml").getInputStream());
         mockOutput.expectedBodiesReceived("blub");
         producerTemplate.sendBody("direct:input4", xml);
         mockOutput.assertIsSatisfied();
@@ -63,7 +63,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
     
     @Test
     public void testUnmarshalGnodeWithNonmatchingSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("invalidtest.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/invalidtest.xml").getInputStream());
         mockOutput.expectedMessageCount(0);
         mockError.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input4", xml);
@@ -73,7 +73,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
     
     @Test
     public void testUnmarshalGpathWithSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("test.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml").getInputStream());
         mockOutput.expectedBodiesReceived("blub");
         producerTemplate.sendBody("direct:input5", xml);
         mockOutput.assertIsSatisfied();
@@ -81,7 +81,7 @@ public class GxmlExtensionTest extends AbstractExtensionTest {
     
     @Test
     public void testUnmarshalGpathWithNonmatchingSchema() throws InterruptedException, IOException {
-        String xml = IOUtils.toString(new ClassPathResource("invalidtest.xml").getInputStream());
+        String xml = IOUtils.toString(new ClassPathResource("xsd/invalidtest.xml").getInputStream());
         mockOutput.expectedMessageCount(0);
         mockError.expectedMessageCount(1);
         producerTemplate.sendBody("direct:input5", xml);

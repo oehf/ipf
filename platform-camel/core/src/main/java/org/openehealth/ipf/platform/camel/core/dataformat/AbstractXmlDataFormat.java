@@ -28,7 +28,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.camel.spi.DataFormat;
-import org.openehealth.ipf.platform.camel.core.xml.LSResourceResolverImpl;
+import org.openehealth.ipf.commons.xml.LSResourceResolverImpl;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;

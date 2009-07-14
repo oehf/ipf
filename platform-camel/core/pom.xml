@@ -23,6 +23,11 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-xml</artifactId>
+            <version>${pom.version}</version>
+        </dependency>        
+        <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
         </dependency>

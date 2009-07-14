@@ -30,6 +30,8 @@ import org.openehealth.ipf.commons.core.modules.api.Predicate;
 import org.openehealth.ipf.commons.core.modules.api.Renderer;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.xml.SchematronValidator;
+import org.openehealth.ipf.commons.xml.XsdValidator;
 import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ConverterAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
@@ -40,7 +42,6 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.core.process.Enricher;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
-import org.openehealth.ipf.platform.camel.core.xml.XsdValidator;
 
 /**
  * Helper class for creating IPF extensions in Java-based route definitions.
@@ -199,6 +200,20 @@ public class RouteHelper {
         adapter.input(Builder.bodyAs(StreamSource.class));
         return adapter;
     }
+    
+    /**
+     * Creates a new {@link ValidatorAdapter} that adapts the given
+     * <code>SchematronValidator</code>.
+     * 
+     * @param validator
+     *            a validator.
+     * @return an adapted validator.
+     */
+    public ValidatorAdapter schematronValidator() {
+        ValidatorAdapter adapter = new ValidatorAdapter(new SchematronValidator());
+        adapter.input(Builder.bodyAs(StreamSource.class));
+        return adapter;
+    }    
 
     /**
      * Creates a new {@link AggregatorAdapter} that adapts the given

@@ -23,10 +23,11 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.camel.Expression;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.xml.SchematronValidator;
+import org.openehealth.ipf.commons.xml.XsdValidator;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
-import org.openehealth.ipf.platform.camel.core.xml.XsdValidator;
 
 /**
  * @author Martin Krasser
@@ -81,7 +82,11 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
     
     public ValidatorAdapterType xsd() {
         this.validator = new XsdValidator();
-        /// return this;
+        return (ValidatorAdapterType)input(bodyAs(StreamSource.class));
+    }
+    
+    public ValidatorAdapterType schematron() {
+        this.validator = new SchematronValidator();
         return (ValidatorAdapterType)input(bodyAs(StreamSource.class));
     }
     

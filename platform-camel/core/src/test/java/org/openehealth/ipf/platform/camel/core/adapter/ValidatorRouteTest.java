@@ -74,7 +74,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
 
     @Test
     public void testValidator3() throws InterruptedException, IOException {
-        final String xml = IOUtils.toString(new ClassPathResource("test.xml")
+        final String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml")
                 .getInputStream());
         Exchange exchange = producerTemplate.send("direct:validator-xml-test",
                 ExchangePattern.InOut, new Processor() {
@@ -88,7 +88,7 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     @Test
     public void testValidator4() throws InterruptedException, IOException {
         final String xml = IOUtils.toString(new ClassPathResource(
-                "invalidtest.xml").getInputStream());
+                "xsd/invalidtest.xml").getInputStream());
         error.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:validator-xml-test",
                 ExchangePattern.InOut, new Processor() {
@@ -101,7 +101,37 @@ public class ValidatorRouteTest extends AbstractRouteTest {
         ValidationException e = (ValidationException) exchange.getException();
         assertEquals(5, e.getCauses().length);
         error.assertIsSatisfied(2000);
-
     }
 
+    @Test
+    public void testValidator5() throws InterruptedException, IOException {
+        final String xml = IOUtils.toString(new ClassPathResource("schematron/schematron-test.xml")
+                .getInputStream());
+        Exchange exchange = producerTemplate.send("direct:validator-schematron-test",
+                ExchangePattern.InOut, new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody(xml);
+                    }
+                });
+        assertEquals(xml, exchange.getIn().getBody());
+     }
+
+    @Test
+    public void testValidator6() throws InterruptedException, IOException {
+        final String xml = IOUtils.toString(new ClassPathResource(
+                "schematron/schematron-test-fail.xml").getInputStream());
+        error.expectedMessageCount(1);
+        Exchange exchange = producerTemplate.send("direct:validator-schematron-test",
+                ExchangePattern.InOut, new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody(xml);
+                    }
+                });
+        assertEquals(ValidationException.class, exchange.getException()
+                .getClass());
+        ValidationException e = (ValidationException) exchange.getException();
+        assertEquals(3, e.getCauses().length);
+        error.assertIsSatisfied(2000);
+
+    }    
 }

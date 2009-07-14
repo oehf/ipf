@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:observationEvents xmlns:ns1="http://org.openehealth.ipf/ns1" 
+   xmlns="http://org.openehealth.ipf/ns2" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <ns1:observationEvent>
+      <effectiveTime>
+         <low>2007-07-02T10:30:00</low>
+         <width>0</width>
+      </effectiveTime>
+      <value xsi:type="ns1:BloodPressure">
+         <ns1:systolicPressure>
+            <ns1:obs>
+               <code code="8459-0" codeSystem="2.16.840.1.113883.6.1" displayName="BLOOD PRESSURE SYSTOLIC"/>
+               <ns1:value xsi:type="PQ" unit="MM[HG]" value="120"/>
+            </ns1:obs>
+         </ns1:systolicPressure>
+         <ns1:diastolicPressure>
+            <ns1:obs>
+               <code code="8453-3" codeSystem="2.16.840.1.113883.6.1" displayName="BLOOD PRESSURE DIASTOLIC"/>
+               <ns1:value xsi:type="PQ" unit="MM[HG]" value="80"/>
+            </ns1:obs>
+         </ns1:diastolicPressure>
+         <ns1:pulse>
+            <ns1:obs>
+               <code code="8893-0" codeSystem="2.16.840.1.113883.6.1" displayName="HEART BEAT"/>
+               <ns1:value xsi:type="PQ" unit="{H.B.}/MIN" value="70"/>
+            </ns1:obs>         
+         </ns1:pulse>
+      </value>
+      <targetSiteCode code="1769" codeSystem="2.16.840.1.113883.6.24" displayName="LEFT FOREARM"/>
+      <dataEnterer>
+         <assignedDevice>
+            <device version="1" timezone="+0200" language="de-DE">
+               <id root="2.16.840.1.113883.3.37.4.5.2" extension="F0ABCD"/>
+               <code code="BP" codeSystem="2.16.840.1.113883.3.37.4.9.3" displayName="BLOOD PRESSURE METER"/>
+               <name>
+                  <value>Beurer BC 09 Blood Pressure Meter</value>
+               </name>
+               <manufacturerName>
+                  <value>Beurer</value>
+               </manufacturerName>
+            </device>
+         </assignedDevice>
+      </dataEnterer>   
+   </ns1:observationEvent>   
+</ns1:observationEvents>

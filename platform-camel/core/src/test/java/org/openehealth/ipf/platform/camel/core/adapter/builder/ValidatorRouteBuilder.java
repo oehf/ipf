@@ -16,23 +16,30 @@
 package org.openehealth.ipf.platform.camel.core.adapter.builder;
 
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSupport;
 
 /**
  * @author Martin Krasser
  */
 public class ValidatorRouteBuilder extends RouteBuilderSupport {
-    
+
     @Override
     public void configure() throws Exception {
         onException(ValidationException.class).to("mock:error");
 
-        from("direct:validator-test")
-        .process(helper.validator("testValidator").staticProfile("correct"));
-        
-        from("direct:validator-xml-test")
-        .process(helper.xsdValidator().staticProfile("test.xsd"))
-        .setBody().constant("passed");
+        from("direct:validator-test").process(
+                helper.validator("testValidator").staticProfile("correct"));
+
+        from("direct:validator-xml-test").process(
+                helper.xsdValidator().staticProfile("xsd/test.xsd")).setBody()
+                .constant("passed");
+
+        from("direct:validator-schematron-test").process(
+                helper.schematronValidator().staticProfile(
+                        new SchematronProfile(
+                                "schematron/schematron-test-rules.xml")))
+                .setBody().constant("passed");
     }
 
 }
