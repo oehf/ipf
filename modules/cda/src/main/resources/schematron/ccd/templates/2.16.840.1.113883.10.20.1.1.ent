@@ -1,0 +1,35 @@
+<!--  Advance directives section: 2.16.840.1.113883.10.20.1.1 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.1-errors' see='#p-2.16.840.1.113883.10.20.1.1-errors'>
+	<title>Advance directives section - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.1"]'>
+	<assert test="self::cda:section">The root of an Advance Directives section shall be 'section' in the HL7 namespace.</assert>
+	<assert test="cda:text">The Advance Directives section SHALL contain a narrative block.</assert>
+	<assert test="cda:code[@code='42348-3'][@codeSystem='2.16.840.1.113883.6.1']">The value for Section / code SHALL be '42348-3' 'Advance directives' 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+	<assert test="cda:title">The Advance Directives section SHALL contain Section / title.</assert>
+	
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.1-warning' see='#p-2.16.840.1.113883.10.20.1.1-warning'>
+	<title>Advance directives section - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.1"]'>
+	<assert test='descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]'>The Purpose section SHOULD include one or more advance directive observations (templateId 2.16.840.1.113883.10.20.1.17)</assert>
+	<assert test='descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]/cda:code[@code="304251008"][@codeSystem="2.16.840.1.113883.6.96"]'>There SHOULD be an advance directive observation whos value for Observation / code is '304251008' 'Resuscitation status' 2.16.840.1.113883.6.96 SNOMED CT STATIC. </assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'advance directives')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “advance directives”.</assert>
+</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.1-manual' see='#p-2.16.840.1.113883.10.20.1.1-manual'>
+	<title>Advance directives section - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.1"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

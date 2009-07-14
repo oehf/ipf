@@ -1,0 +1,36 @@
+<!--  Result organizer: 2.16.840.1.113883.10.20.1.32 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.32-errors' see='#p-2.16.840.1.113883.10.20.1.32-errors'>
+	<title>Result organizer - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.32"]'>
+	<assert test="self::cda:organizer">A result organizer (templateId 2.16.840.1.113883.10.20.1.32) SHALL be represented with Organizer.</assert>
+	<assert test="@moodCode='EVN'">The value for Organizer / moodCode in a result organizer SHALL be EVN.</assert>
+	<assert test="cda:id">A result organizer SHALL contain at least one Organizer / id.</assert>
+	<assert test="count(cda:statusCode)=1">A result organizer SHALL contain exactly one Organizer / statusCode.</assert>
+	<assert test="count(cda:code)=1">A result organizer SHALL contain exactly one Organizer / code.</assert>
+	<assert test="cda:component">A result organizer SHALL contain one or more Organizer / component.</assert>
+	<assert test='.//cda:templateId[@root="2.16.840.1.113883.10.20.1.31"]'>Each result organizers SHALL contain one or more result observations (templateId  2.16.840.1.113883.10.20.1.31).</assert>
+	<assert test="cda:component/cda:observation[cda:templateId/@root='2.16.840.1.113883.10.20.1.31']">The target of one or more result organizer Organizer / component relationships SHALL be a result observation.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.32-warning' see='#p-2.16.840.1.113883.10.20.1.32-warning'>
+	<title>Result organizer - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.32"]'>
+	<assert test="cda:code[@codeSystem='2.16.840.1.113883.6.1' or @codeSystem='2.16.840.1.113883.6.96']">The value for Organizer / code in a result organizer SHOULD be selected from LOINC (codeSystem 2.16.840.1.113883.6.1) or SNOMED CT (codeSystem 2.16.840.1.113883.6.96)</assert>	
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.32-manual' see='#p-2.16.840.1.113883.10.20.1.32-manual'>
+	<title>Result organizer - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.32"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

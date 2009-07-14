@@ -1,0 +1,43 @@
+<!--  Alert observation: 2.16.840.1.113883.10.20.1.18 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.18-errors' see='#p-2.16.840.1.113883.10.20.1.18-errors'>
+	<title>Alert observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]'>
+    <assert test="self::cda:observation">An alert observation (templateId 2.16.840.1.113883.10.20.1.18) SHALL be represented with Observation.</assert>
+    <assert test="@moodCode='EVN'">The value for “Observation / moodCode” in an alert observation SHALL be “EVN”  2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="count(cda:statusCode)=1">An alert observation SHALL include exactly one Observation / statusCode.</assert>
+    <assert test="cda:statusCode[@code='completed']">The value for “Observation / statusCode” in an alert observation SHALL be “completed” 2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+    <assert test="count(cda:participant//cda:playingEntity)=1">An agent participation in an alert observation SHALL contain exactly one participant / participantRole / playingEntity.</assert>
+    <assert test="cda:participant[@typeCode='CSM']">value for Observation / participant / typeCode in an agent participation SHALL be “CSM” “Consumable” 2.16.840.1.113883.5.90 ParticipationType STATIC.</assert>
+    <assert test="cda:participant/cda:participantRole[@classCode='MANU']">The value for Observation / participant / participantRole / classCode in an agent participation SHALL be “MANU” “Manufactured” 2.16.840.1.113883.5.110 RoleClass STATIC.</assert>
+    <assert test="cda:participant /cda:participantRole/cda:playingEntity[@classCode='MMAT']">The value for Observation / participant / participantRole / playingEntity / classCode in an agent participation SHALL be “MMAT” “Manufactured material” 2.16.840.1.113883.5.41 EntityClass STATIC.</assert>
+    <assert test="count(cda:participant//cda:playingEntity//cda:code)=1">An agent participation in an alert observation SHALL contain exactly one participant / participantRole / playingEntity / code.</assert>
+	</rule>
+	
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.34"]//*[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]'>
+    <assert test="parent::*[cda:entryRelationship/@typeCode='MFST']">The value for “entryRelationship / typeCode” in a relationship between an alert observation and reaction observation SHALL be “MFST” “Is manifestation of” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+    </rule>
+	
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.18-warning' see='#p-2.16.840.1.113883.10.20.1.18-warning'>
+	<title>Alert observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]'>
+    <assert test="cda:participant">An alert observation SHOULD contain at least one Observation / participant, representing the agent that is the cause of the allergy or adverse reaction.</assert>
+    <assert test="cda:participant/cda:participantRole/cda:playingEntity/cda:code[@codeSystem='2.16.840.1.113883.6.88' or @codeSystem='2.16.840.1.113883.6.59' ]">The value for “participant / participantRole / playingEntity / code” in an agent participation SHOULD be selected from the RxNorm (2.16.840.1.113883.6.88) code system for medications, and from the CDC Vaccine Code (2.16.840.1.113883.6.59) code system for immunizations.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.18-manual' see='#p-2.16.840.1.113883.10.20.1.18-manual'>
+	<title>Alert observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.18"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

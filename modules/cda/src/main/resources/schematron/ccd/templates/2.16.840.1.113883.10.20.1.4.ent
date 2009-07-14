@@ -1,0 +1,33 @@
+<!--  Family history section: 2.16.840.1.113883.10.20.1.4 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.4-errors' see='#p-2.16.840.1.113883.10.20.1.4-errors'>
+	<title>Family history section - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.4"]'>
+    <assert test="cda:code[@code='10157-6'][@codeSystem='2.16.840.1.113883.6.1']">The family history section SHALL contain Section / code. The value for "Section / code" SHALL be "10157-6" 
+"History of family member diseases" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+	<assert test="cda:title">The family history section SHALL contain Section / title.</assert>
+	<assert test="not(cda:subject)">The family history section SHALL NOT contain Section / subject.</assert>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.4-warning' see='#p-2.16.840.1.113883.10.20.1.4-warning'>
+	<title>Family history section - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.4"]'>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'family history')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “family history”.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.4-manual' see='#p-2.16.840.1.113883.10.20.1.4-manual'>
+	<title>Family history section - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.4"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

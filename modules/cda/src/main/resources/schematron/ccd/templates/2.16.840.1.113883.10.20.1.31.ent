@@ -1,0 +1,44 @@
+<!--  Result observation: 2.16.840.1.113883.10.20.1.31 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.31-errors' see='#p-2.16.840.1.113883.10.20.1.31-errors'>
+	<title>Result observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]'>
+    <assert test="self::cda:observation">A result observation must be represented with the observation.</assert>
+    <assert test="@moodCode='EVN'">The value for "Observation / moodCode" in a result observation SHALL be EVN. </assert>
+    <assert test="cda:id">A result observation SHALL contain at least one Observation / id.</assert>
+    <assert test="count(cda:statusCode)=1">A result observation SHALL contain exactly one Observation / statusCode.</assert>
+    <assert test="count(cda:code)=1">A result observation SHALL contain exactly one Observation / code.</assert>
+    <assert test="count(cda:value)=1">A result observation SHALL contain exactly one Observation / value</assert>
+    <assert test="not(cda:referenceRange/cda:observationRange/cda:code)">A result observation SHALL NOT contain Observation / referenceRange / observationRange / code, as this attribute is not used by the HL7 Clinical Statement or Lab Committee models.</assert>        
+	</rule>
+
+<!-- next context -should- be xsi:type but xsi prefix not declared -->
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]/cda:value[*:type="PQ"]'>
+	<assert test="@codeSystem='2.16.840.1.113883.6.8'">Where Observation / value is a physical quantity, the unit of measure SHALL be expressed using a valid UCUM expression.</assert>
+	</rule>
+
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.31-warning' see='#p-2.16.840.1.113883.10.20.1.31-warning'>
+	<title>Result observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]'>
+    <assert test="cda:code[@codeSystem='2.16.840.1.113883.6.1' or @codeSystem='2.16.840.1.113883.6.96' ]">The value for “Observation / code” in a result observation SHOULD be selected from LOINC (codeSystem 2.16.840.1.113883.6.1) or SNOMED CT (codeSystem 2.16.840.1.113883.6.96).</assert>
+	<assert test="count(cda:effectiveTime)=1">A result observation SHOULD contain exactly one Observation / effectiveTime, which represents the biologically relevant time (e.g. time the specimen was obtained from the patient).</assert>
+    <assert test="count(cda:interpretationCode)=1">A result observation SHOULD contain exactly one Observation / interpretationCode.</assert>
+	<assert test="cda:referenceRange">A result observation SHOULD contain one or more Observation / referenceRange to show the normal range of values for the observation result.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.31-manual' see='#p-2.16.840.1.113883.10.20.1.31-manual'>
+	<title>Result observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

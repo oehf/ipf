@@ -1,0 +1,36 @@
+<!--  Advance directive observation: 2.16.840.1.113883.10.20.1.17 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.17-errors' see='#p-2.16.840.1.113883.10.20.1.17-errors'>
+	<title>Advance directive observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]'>
+	<assert test="self::cda:observation">An advance directive observation (templateId 2.16.840.1.113883.10.20.1.17) SHALL be represented with Observation.</assert>
+	<assert test="@classCode='OBS'">The value for Observation / classCode in an advance directive observation SHALL be 'OBS' 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+	<assert test="@moodCode='EVN'">The value for Observation / moodCode in an advance directive observation SHALL be 'EVN' 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="cda:id">An advance directive observation SHALL contain at least one Observation / id.</assert>
+	<assert test="cda:statusCode">An advance directive observation SHALL contain exactly one Observation / statusCode.</assert>
+	<assert test="cda:statusCode/@code='completed'">The value for Observation / statusCode in an advance directive observation SHALL be 'completed'  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	<assert test='count(descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.37"])=1'>An advance directive observation SHALL contain exactly one advance directive status observation.</assert>
+	<assert test='count(descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.36"])&lt;=1'>An advance directive observation MAY contain exactly one advance directive reference.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.17-warning' see='#p-2.16.840.1.113883.10.20.1.17-warning'>
+	<title>Advance directive observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.17-manual' see='#p-2.16.840.1.113883.10.20.1.17-manual'>
+	<title>Advance directive observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

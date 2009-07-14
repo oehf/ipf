@@ -1,0 +1,33 @@
+<!--  Age observation: 2.16.840.1.113883.10.20.1.38 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.38-errors' see='#p-2.16.840.1.113883.10.20.1.38-errors'>
+	<title>Age observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.38"]'>
+	<assert test="self::cda:observation[@classCode='OBS'][@moodCode='EVN']">An age observation (templateId 2.16.840.1.113883.10.20.1.38) SHALL be represented with Observation. The value for "Observation / classCode" in an age observation SHALL be "OBS" 2.16.840.1.113883.5.6 ActClass STATIC. The value for "Observation / moodCode" in an age observation SHALL be "EVN" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="cda:code/@code='397659008'">The value for "Observation / code" in an age observation SHALL be "397659008" "Age" 2.16.840.1.113883.6.96 SNOMED CT STATIC.</assert>
+	<assert test="count(cda:statusCode)=1 and cda:statusCode/@code='completed'">An age observation SHALL include exactly one Observation / statusCode. The value for "Observation / statusCode" in an age observation SHALL be "completed" 2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	<assert test="count(cda:value)=1">An age observation SHALL include exactly one Observation / value.</assert>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.38-warning' see='#p-2.16.840.1.113883.10.20.1.38-warning'>
+	<title>Age observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.38"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.38-manual' see='#p-2.16.840.1.113883.10.20.1.38-manual'>
+	<title>Age observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.38"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

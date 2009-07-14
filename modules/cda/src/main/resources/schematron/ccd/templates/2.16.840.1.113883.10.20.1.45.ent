@@ -1,0 +1,34 @@
+<!--  Location participation: 2.16.840.1.113883.10.20.1.45 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.45-errors' see='#p-2.16.840.1.113883.10.20.1.45-errors'>
+	<title>Location participation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.45"]'>
+	<assert test="self::cda:participant[@typeCode='LOC']">A location participation (templateId 2.16.840.1.113883.10.20.1.45) SHALL be represented with the participant participation.</assert>
+	<assert test="count(cda:participantRole) = 1">A location participation SHALL contain exactly one participant / participantRole.</assert>
+	<assert test="count(cda:participantRole/@code) &lt; 2">Participant / participantRole in a location participation MAY contain exactly one participant / participantRole / code.</assert>
+	<assert test="cda:participantRole/@classCode = 'SDLOC'">The value for “participant / participantRole / classCode” in a location participation SHALL be “SDLOC” “Service delivery location” 2.16.840.1.113883.5.110 RoleClass STATIC.</assert>
+	<assert test="count(cda:participantRole/playingEntity) &lt; 2">Participant / participantRole in a location participation MAY contain exactly one participant / participantRole / playingEntity.</assert>
+	<assert test="cda:participantRole/cda:playingEntity/@classCode = 'PLC'">The value for “participant / participantRole / playingEntity / classCode” in a location participation SHALL be “PLC” “Place” 2.16.840.1.113883.5.41 EntityClass STATIC.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.45-warning' see='#p-2.16.840.1.113883.10.20.1.45-warning'>
+	<title>Location participation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.45"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.45-manual' see='#p-2.16.840.1.113883.10.20.1.45-manual'>
+	<title>Location participation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.45"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

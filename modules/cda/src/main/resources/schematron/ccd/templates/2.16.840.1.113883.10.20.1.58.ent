@@ -1,0 +1,30 @@
+<!--  Verification of an advance directive observation: 2.16.840.1.113883.10.20.1.58 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.58-errors' see='#p-2.16.840.1.113883.10.20.1.58-errors'>
+	<title>Verification of an advance directive observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.58"]'>
+	<assert test="self::cda:participant">A verification of an advance directive observation (templateId 2.16.840.1.113883.10.20.1.58) SHALL be represented with Observation / participant.</assert>
+	<assert test="@typeCode='VRF'">The value for Observation / participant / typeCode in a verification SHALL be 'VRF' 'Verifier' 2.16.840.1.113883.5.90 ParticipationType STATIC.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.58-warning' see='#p-2.16.840.1.113883.10.20.1.58-warning'>
+	<title>Verification of an advance directive observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.58"]'>
+	<assert test="cda:time">A verification of an advance directive observation SHOULD contain Observation / participant / time.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.58-manual' see='#p-2.16.840.1.113883.10.20.1.58-manual'>
+	<title>Verification of an advance directive observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.58"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

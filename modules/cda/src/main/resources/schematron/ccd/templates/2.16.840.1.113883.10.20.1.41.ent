@@ -1,0 +1,30 @@
+<!--  Episode observation: 2.16.840.1.113883.10.20.1.41 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.41-errors' see='#p-2.16.840.1.113883.10.20.1.41-errors'>
+	<title>Episode observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.41"]'>
+	<assert test="self::cda:observation[@classCode='OBS' and @moodCode='EVN']">An episode observation (templateId 2.16.840.1.113883.10.20.1.41) SHALL be represented with Observation. The value for "Observation / classCode" in an episode observation SHALL be "OBS" 2.16.840.1.113883.5.6 ActClass STATIC. The value for "Observation / moodCode" in an episode observation SHALL be "EVN" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="count(cda:statusCode)=1 and cda:statusCode/@code='completed'">An episode observation SHALL include exactly one Observation / statusCode. The value for "Observation / statusCode" in an episode observation SHALL be "completed" 2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.41-warning' see='#p-2.16.840.1.113883.10.20.1.41-warning'>
+	<title>Episode observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.41"]'>
+	<assert test="cda:code/@code='ASSERTION'">The value for "Observation / Code" in an episode observation SHOULD be "ASSERTION"  2.16.840.1.113883.5.4 ActCode STATIC.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.41-manual' see='#p-2.16.840.1.113883.10.20.1.41-manual'>
+	<title>Episode observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.41"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

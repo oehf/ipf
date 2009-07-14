@@ -1,0 +1,29 @@
+<!--  Status of functional status observation: 2.16.840.1.113883.10.20.1.44 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.44-errors' see='#p-2.16.840.1.113883.10.20.1.44-errors'>
+	<title>Status of functional status observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.44"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.44-warning' see='#p-2.16.840.1.113883.10.20.1.44-warning'>
+	<title>Status of functional status observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.44"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.44-manual' see='#p-2.16.840.1.113883.10.20.1.44-manual'>
+	<title>Status of functional status observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.44"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

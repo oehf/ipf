@@ -1,0 +1,31 @@
+<!--  Advance directive reference: 2.16.840.1.113883.10.20.1.36 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.36-errors' see='#p-2.16.840.1.113883.10.20.1.36-errors'>
+	<title>Advance directive reference - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.36"]'>
+	<assert test="self::cda:externalDocument">An advance directive reference (templateId 2.16.840.1.113883.10.20.1.36) SHALL be represented with Observation / reference / ExternalDocument. </assert>
+	<assert test="parent::cda:reference/@typeCode='REFR'">The value for Observation / reference / typeCode in an advance directive reference SHALL be 'REFR'  2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+	<assert test="cda:id">ExternalDocument SHALL contain at least one ExternalDocument / id.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.36-warning' see='#p-2.16.840.1.113883.10.20.1.36-warning'>
+	<title>Advance directive reference - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.36"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.36-manual' see='#p-2.16.840.1.113883.10.20.1.36-manual'>
+	<title>Advance directive reference - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.36"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

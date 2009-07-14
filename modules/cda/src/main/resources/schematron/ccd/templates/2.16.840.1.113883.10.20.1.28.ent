@@ -1,0 +1,36 @@
+<!--  Problem observation: 2.16.840.1.113883.10.20.1.28 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.28-errors' see='#p-2.16.840.1.113883.10.20.1.28-errors'>
+	<title>Problem observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+	<assert test="self::cda:observation[@moodCode='EVN']">A problem observation (templateId 2.16.840.1.113883.10.20.1.28) SHALL be represented with Observation. The value for "Observation / moodCode" in a problem observation SHALL be "EVN"  2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="count(cda:statusCode)=1">A problem observation SHALL include exactly one Observation / statusCode.</assert>
+	<assert test="cda:statusCode/@code='completed'">The value for "Observation / statusCode" in a problem observation SHALL be "completed"  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	<assert test="count(cda:templateId[@root='2.16.840.1.113883.10.20.1.50']) &lt; 2">A problem observation MAY contain exactly one problem status observation. The template identifier for a problem status observation is 2.16.840.1.113883.10.20.1.50.</assert>
+	<assert test="count(cda:templateId[@root='2.16.840.1.113883.10.20.1.51']) &lt; 2">A problem observation MAY contain exactly one problem healthstatus observation. The template identifier for a problem healthstatus observation is 2.16.840.1.113883.10.20.1.51.</assert>
+	<assert test="count(cda:templateId[@root='2.16.840.1.113883.10.20.1.48']) &lt; 2">A problem observation MAY contain exactly one patient awareness.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.28-warning' see='#p-2.16.840.1.113883.10.20.1.28-warning'>
+	<title>Problem observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+	<assert test="count(cda:effectiveTime)=1">A problem observation SHOULD contain exactly one Observation / effectiveTime, to indicate the timing of condition (e.g. the time the condition started, the onset of the illness or symptom).</assert>
+
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.28-manual' see='#p-2.16.840.1.113883.10.20.1.28-manual'>
+	<title>Problem observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.28"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

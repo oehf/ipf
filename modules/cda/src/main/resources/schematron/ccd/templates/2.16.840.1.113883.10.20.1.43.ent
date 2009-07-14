@@ -1,0 +1,30 @@
+<!--  Fulfillment instruction: 2.16.840.1.113883.10.20.1.43 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.43-errors' see='#p-2.16.840.1.113883.10.20.1.43-errors'>
+	<title>Fulfillment instruction - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.43"]'>
+    <assert test="self::cda:act">A fulfillment instruction (templateId 2.16.840.1.113883.10.20.1.43) SHALL be represented with Act.</assert>
+    <assert test="@moodCode='INT'">The value for “Act / moodCode” in a fulfillment instruction SHALL be “INT” “Intent” 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.43-warning' see='#p-2.16.840.1.113883.10.20.1.43-warning'>
+	<title>Fulfillment instruction - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.43"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.43-manual' see='#p-2.16.840.1.113883.10.20.1.43-manual'>
+	<title>Fulfillment instruction - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.43"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

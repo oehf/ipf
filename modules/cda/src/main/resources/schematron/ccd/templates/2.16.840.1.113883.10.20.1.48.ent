@@ -1,0 +1,32 @@
+<!--  Patient awareness: 2.16.840.1.113883.10.20.1.48 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.48-errors' see='#p-2.16.840.1.113883.10.20.1.48-errors'>
+	<title>Patient awareness - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.48"]'>
+	<assert test="self::cda:participant[@typeCode='SBJ']">Patient awareness (templateId 2.16.840.1.113883.10.20.1.48) of a problem, observation, or other clinical statement SHALL be represented with participant. The value for “participant / typeCode” in a patient awareness SHALL be “SBJ” “Subject” 2.16.840.1.113883.5.90 ParticipationType STATIC.</assert>
+	<assert test="count(cda:awarenessCode)=1">Patient awareness SHALL contain exactly one participant / awarenessCode.</assert>
+	<assert test="count(cda:participantRole/cda:id)=1">Patient awareness SHALL contain exactly one participant / participantRole / id</assert>
+	<assert test="/cda:ClinicalDocument/cda:recordTarget/cda:patientRole//cda:id[@root=cda:participantRole/cda:id/@root]">(The value of the participant/participantRole/id) SHALL also be present in ClinicalDocument / recordTarget / patientRole / id.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.48-warning' see='#p-2.16.840.1.113883.10.20.1.48-warning'>
+	<title>Patient awareness - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.48"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.48-manual' see='#p-2.16.840.1.113883.10.20.1.48-manual'>
+	<title>Patient awareness - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.48"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

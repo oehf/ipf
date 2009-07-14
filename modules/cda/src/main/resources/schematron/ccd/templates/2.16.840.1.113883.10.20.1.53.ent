@@ -1,0 +1,29 @@
+<!--  Product: 2.16.840.1.113883.10.20.1.53 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.53-errors' see='#p-2.16.840.1.113883.10.20.1.53-errors'>
+	<title>Product - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.53"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.53-warning' see='#p-2.16.840.1.113883.10.20.1.53-warning'>
+	<title>Product - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.53"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.53-manual' see='#p-2.16.840.1.113883.10.20.1.53-manual'>
+	<title>Product - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.53"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

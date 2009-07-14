@@ -1,0 +1,42 @@
+<!--  Encounter activity: 2.16.840.1.113883.10.20.1.21 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.21-errors' see='#p-2.16.840.1.113883.10.20.1.21-errors'>
+	<title>Encounter activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]'>
+	<assert test="self::cda:encounter">An encounter activity (templateId 2.16.840.1.113883.10.20.1.21) SHALL be represented with Encounter.</assert>
+	<assert test="@classCode='ENC'">The value for "Encounter / classCode" in an encounter activity SHALL be “ENC” 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+	<assert test="@moodCode='EVN'">The value for "Encounter / moodCode" in an encounter activity SHALL be “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="count(cda:id) &gt;= 1">An encounter activity SHALL contain at least one Encounter / id.</assert>
+	<assert test="count(cda:effectiveTime) &lt; 2">An encounter activity MAY contain exactly one Encounter / effectiveTime, to indicate date, time, and/or duration of an encounter.</assert>
+
+	</rule>
+
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]/cda:entryRelationship'>
+	<assert test="@typeCode='RSON'">An encounter activity MAY contain one or more Encounter / entryRelationship, whose value for “entryRelationship / typeCode” SHALL be “RSON” “Has reason”  2.16.840.1.113883.5.1002 ActRelationshipType STATIC, where the target of the relationship represents the indication for the activity. </assert>
+	</rule>
+
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]/cda:performer'>
+	<assert test="count(./cda:assignedEntity/cda:code) &lt; 2">Encounter / performer MAY contain exactly one Encounter / performer / assignedEntity / code, to define the role of the practioner.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.21-warning' see='#p-2.16.840.1.113883.10.20.1.21-warning'>
+	<title>Encounter activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]'>
+	<assert test="count(cda:code) = 1">An encounter activity SHOULD contain exactly one Encounter / code.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.21-manual' see='#p-2.16.840.1.113883.10.20.1.21-manual'>
+	<title>Encounter activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

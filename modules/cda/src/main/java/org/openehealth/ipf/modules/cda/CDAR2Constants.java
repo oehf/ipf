@@ -15,8 +15,13 @@
  */
 package org.openehealth.ipf.modules.cda;
 
+/**
+ * @author Christian Ohr
+ */
 public interface CDAR2Constants {
 
     static final String CDAR2_SCHEMA = "schema/infrastructure/cda/CDA.xsd";
+    
+    static final String CCD_SCHEMATRON_RULES = "schematron/ccd/ccd.sch";
     
 }

@@ -1,0 +1,29 @@
+<!--  Advance directive status observation: 2.16.840.1.113883.10.20.1.37 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.37-errors' see='#p-2.16.840.1.113883.10.20.1.37-errors'>
+	<title>Advance directive status observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.37"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.37-warning' see='#p-2.16.840.1.113883.10.20.1.37-warning'>
+	<title>Advance directive status observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.37"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.37-manual' see='#p-2.16.840.1.113883.10.20.1.37-manual'>
+	<title>Advance directive status observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.37"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

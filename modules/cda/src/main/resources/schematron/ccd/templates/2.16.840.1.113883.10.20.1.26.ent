@@ -1,0 +1,64 @@
+<!--  Policy activity: 2.16.840.1.113883.10.20.1.26 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.26-errors' see='#p-2.16.840.1.113883.10.20.1.26-errors'>
+	<title>Policy activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]'>
+	<assert test="self::cda:act">A policy activity (templateId 2.16.840.1.113883.10.20.1.26) SHALL be represented with Act.</assert>
+	<assert test="self::cda:act[@classCode='ACT']">The value for Act / classCode in a policy activity SHALL be 'ACT' 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+	<assert test="self::cda:act[@moodCode='EVN']">The value for Act / moodCode in a policy activity SHALL be "EVN" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="cda:id">A policy activity SHALL contain at least one Act / id, which represents the group or contract number related to the insurance policy or program. </assert>
+	<assert test="count(cda:statusCode) = 1">A coverage policy SHALL contain exactly one Act / statusCode.</assert>
+	<assert test="cda:statusCode[@code='completed']">The value for Act / statusCode in a policy activity SHALL be 'completed'  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	<assert test="count(cda:performer[@typeCode='PRF'])=1">A policy activity SHALL contain exactly one Act / performer [@typeCode="PRF"], representing the payer.</assert>
+	<assert test="count(cda:participant[@typeCode='COV'])=1">A policy activity SHALL contain exactly one Act / participant [@typeCode="COV"], representing the covered party. </assert>
+	<assert test="cda:participant[@typeCode='COV']">A policy activity SHALL contain exactly one Act / participant [@typeCode="COV"], representing the covered party. </assert>
+	<assert test="count(cda:participant[@typeCode='HLD'])&lt;=1">A policy activity MAY contain exactly one Act / participant [@typeCode='HLD'], representing the subscriber.</assert>
+	<assert test="not(cda:entryRelationship[not(@typeCode='REFR')])">The value for Act / entryRelationship / typeCode in a policy activity SHALL be 'REFR'  2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+	</rule>
+	
+	<!-- covered party -->
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]/cda:participant[@typeCode="COV"]'>
+	<assert test="count(cda:time)&lt;=1">A covered party in a policy activity MAY contain exactly one participant / time, to represent the time period over which the patient is covered.</assert>
+	</rule>
+	
+	<rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.26']/cda:entryRelationship[@typeCode='REFR']">
+	<assert test="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.19'] | cda:act[@classCode='ACT'][@moodCode='DEF']">The target of a policy activity with Act / entryRelationship / @typeCode='REFR' SHALL be an authorization activity (templateId 2.16.840.1.113883.10.20.1.19) or an Act, with Act [@classCode = 'ACT'] and Act [@moodCode = 'DEF'], representing a description of the coverage plan. </assert>
+	</rule>
+	
+	<!-- description of coverage -->
+	<rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.26']/cda:entryRelationship[@typeCode='REFR']/cda:act[@classCode='ACT'][@moodCode='DEF']">
+	<assert test="cda:id">A description of the coverage plan SHALL contain one or more Act / Id, to represent the plan identifier.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.26-warning' see='#p-2.16.840.1.113883.10.20.1.26-warning'>
+	<title>Policy activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]'>
+	<assert test="cda:code">A policy activity SHOULD contain zero to one Act / code, which represents the type of coverage.</assert>
+	</rule>
+	
+	<!-- covered party -->
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]/cda:participant[@typeCode="COV"]'>
+	<assert test="cda:participantRole/cda:id">A covered party in a policy activity SHOULD contain one or more participant / participantRole / id, to represent the patient's member or subscriber identifier with respect to the payer.</assert>
+	<assert test="cda:participantRole/cda:code">A covered party in a policy activity SHOULD contain exactly one participant / participantRole / code, to represent the reason for coverage (e.g. Self, Family dependent, student).</assert>
+	</rule>
+	
+	<!-- subscriber -->
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]/cda:participant[@typeCode="HLD"]'>
+	<assert test="cda:participantRole/cda:id">A subscriber in a policy activity SHOULD contain one or more participant / participantRole / id, to represent the subscriber's identifier with respect to the payer.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.26-manual' see='#p-2.16.840.1.113883.10.20.1.26-manual'>
+	<title>Policy activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.26"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

@@ -37,9 +37,8 @@
 RoseTreeToMIFStaticModel.xsl version: 1.1
 StaticMifToXsd.xsl version 2.0</xs:documentation>
 	</xs:annotation>
-	<xs:include schemaLocation="../../processable/coreschemas/datatypes.xsd"/>
-	<xs:include schemaLocation="../../processable/coreschemas/voc.xsd"/>
-	<xs:include schemaLocation="../../processable/coreschemas/NarrativeBlock.xsd"/>
+	<xs:include schemaLocation="schema/processable/coreschemas/voc.xsd"/>
+	<xs:include schemaLocation="schema/processable/coreschemas/NarrativeBlock.xsd"/>
 	<xs:complexType name="POCD_MT000040.InfrastructureRoot.typeId">
 		<xs:complexContent>
 			<xs:restriction base="II">

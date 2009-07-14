@@ -1,0 +1,44 @@
+<!--  Coverage activity: 2.16.840.1.113883.10.20.1.20 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.20-errors' see='#p-2.16.840.1.113883.10.20.1.20-errors'>
+	<title>Coverage activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.20"]'>
+	<assert test="self::cda:act">A coverage activity (templateId 2.16.840.1.113883.10.20.1.20) SHALL be represented with Act.</assert>
+	<assert test="self::cda:act[@classCode='ACT']">The value for Act / classCode in a coverage activity SHALL be 'ACT' 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+	<assert test="self::cda:act[@moodCode='DEF']">The value for Act / moodCode in a coverage activity SHALL be "DEF" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="cda:id">A coverage activity SHALL contain at least one Act / id.</assert>
+	<assert test="count(cda:statusCode) = 1">A coverage activity SHALL contain exactly one Act / statusCode.</assert>
+	<assert test="cda:statusCode[@code='completed']">The value for Act / statusCode in a coverage activity SHALL be 'completed'  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	<assert test="cda:code[@code='48768-6'][@codeSystem='2.16.840.1.113883.6.1']">The value for Act / code in a coverage activity SHALL be "48768-6" "Payment sources" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+<!-- Replaced because contradicting the CCD specs --> 		
+<!--	<assert test="cda:code[@code='35525-5'][@codeSystem='2.16.840.1.113883.6.1']">The value for Act / code in a coverage activity SHALL be "35525-5" "Financing and insurance" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>  -->
+	<assert test="cda:entryRelationship">A coverage activity SHALL contain one or more Act / entryRelationship. </assert>
+	<assert test="not(cda:entryRelationship[cda:sequenceNumber[position()=2]])">An entryRelationship in a coverage activity MAY contain exactly one entryRelationship / sequenceNumber, which serves to order the payment sources.</assert>
+	<assert test="not(cda:entryRelationship[not(@typeCode='COMP')])">The value for Act / entryRelationship / typeCode in a coverage activity SHALL be "COMP"  2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+	</rule>
+	<!-- coverage activity entry relationship-->
+	<rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.20']/cda:entryRelationship[@typeCode='COMP']">
+	<assert test="*/cda:templateId[@root='2.16.840.1.113883.10.20.1.26']">The target of a coverage activity with Act / entryRelationship / @typeCode='COMP' SHALL be a policy activity (templateId 2.16.840.1.113883.10.20.1.26).</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.20-warning' see='#p-2.16.840.1.113883.10.20.1.20-warning'>
+	<title>Coverage activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.20"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.20-manual' see='#p-2.16.840.1.113883.10.20.1.20-manual'>
+	<title>Coverage activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.20"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

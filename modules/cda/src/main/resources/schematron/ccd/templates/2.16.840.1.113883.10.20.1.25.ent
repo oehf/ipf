@@ -1,0 +1,37 @@
+<!--  Plan of care activity: 2.16.840.1.113883.10.20.1.25 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.25-errors' see='#p-2.16.840.1.113883.10.20.1.25-errors'>
+	<title>Plan of care activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.25"]'>
+	<assert test="self::cda:act or self::cda:encounter or self::cda:observation or self::cda:procedure or self::cda:substanceAdministration or self::cda:supply">A plan of care activity (templateId 2.16.840.1.113883.10.20.1.25) SHALL be represented with Act, Encounter, Observation, Procedure, SubstanceAdministration, or Supply.</assert>
+	<assert test="cda:id">A plan of care activity SHALL contain at least one [Act | Encounter | Observation | Procedure | SubstanceAdministration | Supply] / id.</assert>
+	<assert test="count(@moodCode)=1">A plan of care activity SHALL contain exactly one [Act | Encounter | Observation | Procedure | SubstanceAdministration | Supply] / moodCode.</assert>
+    <assert test="self::cda:act or self::cda:encounter or self::cda:observation or self::cda:procedure or self::cda:substanceAdministration or self::cda:supply">A plan of care activity (templateId 2.16.840.1.113883.10.20.1.25) SHALL be represented with Act, Encounter, Observation, Procedure, SubstanceAdministration, or Supply.</assert>
+    <assert test="cda:id">A plan of care activity SHALL contain at least one [Act | Encounter | Observation | Procedure | SubstanceAdministration | Supply] / id.</assert>
+    <assert test="count(@moodCode)=1">A plan of care activity SHALL contain exactly one [Act | Encounter | Observation | Procedure | SubstanceAdministration | Supply] / moodCode.</assert>
+    <report test="(self::cda:act or self::cda:encounter or self::cda:procedure) and not (@moodCode='INT' or @moodCode='ARQ' or @moodCode='PRMS' or @moodCode='PRP' or @moodCode='RQO')">The value for “[Act | Encounter | Procedure] / moodCode” in a plan of care activity SHALL be  [“INT” (intent) | “ARQ” (appointment request) | “PRMS” (promise) | “PRP” (proposal) | “RQO” (request)]  2.16.840.1.113883.5.1001 ActMood STATIC.</report>
+    <report test="(self::cda:substanceAdministration or self::cda:supply) and not (@moodCode='INT' or @moodCode='PRMS' or @moodCode='PRP' or @moodCode='RQO')">The value for “[SubstanceAdministration | Supply] / moodCode” in a plan of care activity SHALL be  [“INT” (intent) | “PRMS” (promise) | “PRP” (proposal) | “RQO” (request)]  2.16.840.1.113883.5.1001 ActMood STATIC.</report>
+    <report test="(self::cda:observation) and not (@moodCode='INT' or @moodCode='PRMS'or @moodCode='PRP' or @moodCode='RQO' or @moodCode='GOL')">The value for “Observation / moodCode” in a plan of care activity SHALL be  [“INT” (intent) | “PRMS” (promise) | “PRP” (proposal) | “RQO” (request) | “GOL” (goal)]  2.16.840.1.113883.5.1001 ActMood STATIC.</report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.25-warning' see='#p-2.16.840.1.113883.10.20.1.25-warning'>
+	<title>Plan of care activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.25"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.25-manual' see='#p-2.16.840.1.113883.10.20.1.25-manual'>
+	<title>Plan of care activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.25"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

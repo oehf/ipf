@@ -1,0 +1,39 @@
+<!--  Medication activity: 2.16.840.1.113883.10.20.1.24 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.24-errors' see='#p-2.16.840.1.113883.10.20.1.24-errors'>
+	<title>Medication activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]'>
+    <assert test="self::cda:substanceAdministration">A medication activity (templateId 2.16.840.1.113883.10.20.1.24) SHALL be represented with SubstanceAdministration</assert>
+    <assert test="@moodCode='EVN' or @moodeCode='INT'">The value for “SubstanceAdministration / moodCode” in a medication activity SHALL be “EVN” or “INT”  2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="cda:id">A medication activity SHALL contain at least one SubstanceAdministration / id.</assert>
+	</rule>
+	
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]//*[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]'>
+    <assert test="parent::*[cda:entryRelationship/@typeCode='CAUS']">The value for “entryRelationship / typeCode” in a relationship between a medication activity and reaction observation SHALL be “CAUS” “Is etiology for” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+    </rule>
+	
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.24-warning' see='#p-2.16.840.1.113883.10.20.1.24-warning'>
+	<title>Medication activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]'>
+    <assert test="count(cda:statusCode)=1">A medication activity SHOULD contain exactly one SubstanceAdministration / statusCode.</assert>
+    <assert test="cda:effectiveTime">A medication activity SHOULD contain one or more SubstanceAdministration / effectiveTime elements, used to indicate the actual or intended start and stop date of a medication, and the frequency of administration.</assert>
+    <assert test="count(cda:routeCode)=1">A medication activity SHOULD contain exactly one SubstanceAdministration / routeCode.</assert>
+    <assert test="count(cda:doseQuantity)=1">A medication activity SHOULD contain exactly one SubstanceAdministration / doseQuantity.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.24-manual' see='#p-2.16.840.1.113883.10.20.1.24-manual'>
+	<title>Medication activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

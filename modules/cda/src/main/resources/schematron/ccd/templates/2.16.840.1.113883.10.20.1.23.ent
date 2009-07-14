@@ -1,0 +1,43 @@
+<!--  Family history organizer: 2.16.840.1.113883.10.20.1.23 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.23-errors' see='#p-2.16.840.1.113883.10.20.1.23-errors'>
+	<title>Family history organizer - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.23"]'>
+	<assert test="self::cda:organizer">A family history organizer (templateId 2.16.840.1.113883.10.20.1.23) SHALL be represented with Organizer.</assert>
+	<assert test="@classCode='CLUSTER'">The value for "Organizer / classCode" in a family history organizer SHALL be "CLUSTER" 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+	<assert test="@moodCode='EVN'">The value for "Organizer / moodCode" in a family history organizer SHALL be "EVN" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="count(cda:statusCode)=1">A family history organizer SHALL contain exactly one Organizer / statusCode.</assert>
+	<assert test="cda:statusCode/@code='completed'">The value for "Organizer / statusCode" in a family history organizer SHALL be "completed"  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	<assert test="cda:component">A family history organizer SHALL contain one or more Organizer / component.</assert>
+	<!-- participants -->
+	<assert test="count(cda:subject)=1">A family history organizer SHALL contain exactly one subject participant, representing the family member who is the subject of the family history observations.</assert>
+	<assert test="count(cda:subject/cda:relatedSubject)=1">A subject participant SHALL contain exactly one RelatedSubject, representing the relationship of the subject to the patient.</assert>
+	<assert test="cda:subject/cda:relatedSubject/@classCode='PRS'">The value for "RelatedSubject / classCode" SHALL be "PRS" "Personal relationship" 2.16.840.1.113883.5.110 RoleClass STATIC.</assert>
+	<assert test="count(cda:subject/cda:relatedSubject/cda:code)=1">RelatedSubject SHALL contain exactly one RelatedSubject / code.</assert>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.23-warning' see='#p-2.16.840.1.113883.10.20.1.23-warning'>
+	<title>Family history organizer - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.23"]'>
+	<assert test="cda:component[cda:observation/cda:templateId/@root='2.16.840.1.113883.10.20.1.22']">The target of a family history organizer Organizer / component relationship SHOULD be a family history observation, but MAY be some other clinical statement.</assert>
+	<assert test="count(cda:subject/cda:relatedSubject/cda:subject)=1">RelatedSubject SHOULD contain exactly one RelatedSubject / subject.</assert>	
+	<assert test="count(cda:subject/cda:relatedSubject/cda:subject/cda:administrativeGenderCode)=1">RelatedSubject / subject SHOULD contain exactly one RelatedSubject / subject / administrativeGenderCode.</assert>
+	<assert test="count(cda:subject/cda:relatedSubject/cda:subject/cda:birthTime)=1">RelatedSubject / subject SHOULD contain exactly one RelatedSubject / subject / birthTime.</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.23-manual' see='#p-2.16.840.1.113883.10.20.1.23-manual'>
+	<title>Family history organizer - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.23"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

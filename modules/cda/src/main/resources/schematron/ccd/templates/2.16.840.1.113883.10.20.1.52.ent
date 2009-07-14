@@ -1,0 +1,30 @@
+<!--  Product instance: 2.16.840.1.113883.10.20.1.52 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.52-errors' see='#p-2.16.840.1.113883.10.20.1.52-errors'>
+	<title>Product instance - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.52"]'>
+    <assert test="self::cda:participantRole">A product instance (templateId 2.16.840.1.113883.10.20.1.52) SHALL be represented with the ParticipantRole class.</assert>
+    <assert test="@classCode='MANU'">The value for "participantRole / classCode" in a product instance SHALL be "MANU" "Manufactured product" 2.16.840.1.113883.5.110 RoleClass STATIC.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.52-warning' see='#p-2.16.840.1.113883.10.20.1.52-warning'>
+	<title>Product instance - warning validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.52"]/cda:id'>
+    <assert test="cda:scopingEntity">If participantRole in a product instance contains participantRole / id, then participantRole SHOULD also contain participantRole / scopingEntity.</assert>
+    </rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.52-manual' see='#p-2.16.840.1.113883.10.20.1.52-manual'>
+	<title>Product instance - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.52"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

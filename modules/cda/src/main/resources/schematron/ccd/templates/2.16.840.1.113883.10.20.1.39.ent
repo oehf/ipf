@@ -1,0 +1,29 @@
+<!--  Alert status observation: 2.16.840.1.113883.10.20.1.39 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.39-errors' see='#p-2.16.840.1.113883.10.20.1.39-errors'>
+	<title>Alert status observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.39"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.39-warning' see='#p-2.16.840.1.113883.10.20.1.39-warning'>
+	<title>Alert status observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.39"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.39-manual' see='#p-2.16.840.1.113883.10.20.1.39-manual'>
+	<title>Alert status observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.39"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

@@ -1,0 +1,34 @@
+<!--  Procedure activity: 2.16.840.1.113883.10.20.1.29 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.29-errors' see='#p-2.16.840.1.113883.10.20.1.29-errors'>
+	<title>Procedure activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.29"]'>
+	<assert test="self::cda:procedure or self::cda:act or self::cda:observation">A procedure activity (templateId 2.16.840.1.113883.10.20.1.29) SHALL be represented with Act, Observation, or Procedure.</assert>
+	<assert test="@moodCode='EVN'">The value for "[Act | Observation | Procedure] / moodCode" in a procedure activity SHALL be "EVN" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="cda:id">A procedure activity SHALL contain at least one [Act | Observation | Procedure] / id.</assert>
+	<assert test="count(cda:statusCode)=1">A procedure activity SHALL contain exactly one [Act | Observation | Procedure] / statusCode.</assert>
+	<assert test="count(cda:code)=1">A procedure activity SHALL contain exactly one [Act | Observation | Procedure] / code.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.29-warning' see='#p-2.16.840.1.113883.10.20.1.29-warning'>
+	<title>Procedure activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.29"]'>
+	<assert test="count(cda:effectiveTime)=1">A procedure activity SHOULD contain exactly one [Act | Observation | Procedure] / effectiveTime.</assert>
+	<assert test="cda:code[@codeSystem='2.16.840.1.113883.6.1' or @codeSystem='2.16.840.1.113883.6.96']">The value for “[Act | Observation | Procedure] / code” in a procedure activity SHOULD be selected from LOINC (codeSystem 2.16.840.1.113883.6.1) or SNOMED CT (codeSystem 2.16.840.1.113883.6.96).</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.29-manual' see='#p-2.16.840.1.113883.10.20.1.29-manual'>
+	<title>Procedure activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.29"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

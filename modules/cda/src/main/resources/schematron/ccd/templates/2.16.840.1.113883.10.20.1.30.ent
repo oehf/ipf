@@ -1,0 +1,37 @@
+<!--  Purpose activity: 2.16.840.1.113883.10.20.1.30 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.30-errors' see='#p-2.16.840.1.113883.10.20.1.30-errors'>
+	<title>Purpose activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.30"]'>
+	<assert test="self::cda:act">A purpose activity (templateId 2.16.840.1.113883.10.20.1.30) SHALL be represented with Act. </assert>
+	<assert test="self::cda:act[@classCode='ACT']">The value for Act / classCode in a purpose activity SHALL be 'ACT' 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+	<assert test="self::cda:act[@moodCode='EVN']">The value for Act / moodCode in a purpose activity SHALL be 'EVN' 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="count(cda:statusCode) = 1">A purpose activity SHALL contain exactly one Act / statusCode.</assert>
+	<assert test="cda:statusCode[@code='completed']">The value for Act / statusCode in a purpose activity SHALL be 'completed'  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+	<assert test="cda:code[@code='23745001'][@codeSystem='2.16.840.1.113883.6.96']">A purpose activity SHALL contain exactly one Act / code, with a value of '23745001' 'Documentation procedure' 2.16.840.1.113883.6.96 SNOMED CT STATIC.</assert>
+	<assert test="count(cda:entryRelationship/@typeCode)=1">A purpose activity SHALL contain exactly one Act / entryRelationship / typeCode, with a value of 'RSON' 'Has reason' 2.16.840.1.113883.5.1002 ActRelationshipType STATIC, to indicate the reason or purpose for creating the CCD.</assert>
+	<assert test="cda:entryRelationship[@typeCode='RSON']">A purpose activity SHALL contain exactly one Act / entryRelationship / typeCode, with a value of 'RSON' 'Has reason' 2.16.840.1.113883.5.1002 ActRelationshipType STATIC, to indicate the reason or purpose for creating the CCD.</assert>
+	<assert test="cda:entryRelationship[@typeCode='RSON']/cda:act | cda:entryRelationship[@typeCode='RSON']/cda:encounter | cda:entryRelationship[@typeCode='RSON']/cda:observation | cda:entryRelationship[@typeCode='RSON']/cda:procedure | cda:entryRelationship[@typeCode='RSON']/cda:substanceAdministration | cda:entryRelationship[@typeCode='RSON']/cda:supply">The target of Act / entryRelationship / typeCode in a purpose activity SHALL be an Act, Encounter, Observation, Procedure, SubstanceAdministration, or Supply.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.30-warning' see='#p-2.16.840.1.113883.10.20.1.30-warning'>
+	<title>Purpose activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.30"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.30-manual' see='#p-2.16.840.1.113883.10.20.1.30-manual'>
+	<title>Purpose activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.30"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

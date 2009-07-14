@@ -1,0 +1,29 @@
+<!--  Medication status observation: 2.16.840.1.113883.10.20.1.47 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.47-errors' see='#p-2.16.840.1.113883.10.20.1.47-errors'>
+	<title>Medication status observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.47"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.47-warning' see='#p-2.16.840.1.113883.10.20.1.47-warning'>
+	<title>Medication status observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.47"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.47-manual' see='#p-2.16.840.1.113883.10.20.1.47-manual'>
+	<title>Medication status observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.47"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

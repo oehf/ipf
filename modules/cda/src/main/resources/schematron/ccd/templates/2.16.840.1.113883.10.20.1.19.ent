@@ -1,0 +1,39 @@
+<!--  Authorization activity: 2.16.840.1.113883.10.20.1.19 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.19-errors' see='#p-2.16.840.1.113883.10.20.1.19-errors'>
+	<title>Authorization activity - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.19"]'>
+	<assert test="self::cda:act">An authorization activity (templateId 2.16.840.1.113883.10.20.1.19) SHALL be represented with Act.</assert>
+	<assert test="@classCode='ACT'">The value for Act / classCode in an authorization activity SHALL be 'ACT' 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+	<assert test="cda:id">An authorization activity SHALL contain at least one Act / id.</assert>
+	<assert test="@moodCode='EVN'">The value for Act / moodCode in an authorization activity SHALL be 'EVN' 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+	<assert test="cda:entryRelationship">An authorization activity SHALL contain one or more Act / entryRelationship.</assert>
+	</rule>
+	
+	<!-- subject -->
+	<rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.19']/cda:entryRelationship">
+	<assert test="@typeCode='SUBJ'">The value for Act / entryRelationship / typeCode in an authorization activity SHALL be 'SUBJ'  2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+	<assert test="*[@moodCode='PRMS']">The target of an authorization activity with Act / entryRelationship / @typeCode='SUBJ' SHALL be a clinical statement with moodCode = 'PRMS' (Promise).</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.19-warning' see='#p-2.16.840.1.113883.10.20.1.19-warning'>
+	<title>Authorization activity - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.19"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.19-manual' see='#p-2.16.840.1.113883.10.20.1.19-manual'>
+	<title>Authorization activity - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.19"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

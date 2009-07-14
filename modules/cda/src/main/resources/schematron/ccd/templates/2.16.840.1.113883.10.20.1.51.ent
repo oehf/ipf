@@ -1,0 +1,29 @@
+<!--  Problem healthstatus observation: 2.16.840.1.113883.10.20.1.51 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.51-errors' see='#p-2.16.840.1.113883.10.20.1.51-errors'>
+	<title>Problem healthstatus observation - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.51"]'>
+	<assert test="cda:code/@code='11323-3'">... the value for "Observation / code" in a problem healthstatus observation SHALL be "11323-3" "Health status" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.51-warning' see='#p-2.16.840.1.113883.10.20.1.51-warning'>
+	<title>Problem healthstatus observation - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.51"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.51-manual' see='#p-2.16.840.1.113883.10.20.1.51-manual'>
+	<title>Problem healthstatus observation - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.51"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+

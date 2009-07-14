@@ -1,0 +1,37 @@
+<!--  Alerts section: 2.16.840.1.113883.10.20.1.2 -->
+
+<!-- errors -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.2-errors' see='#p-2.16.840.1.113883.10.20.1.2-errors'>
+	<title>Alerts section - errors validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.2"]'>
+    <assert test="self::cda:section">The root of a Alerts section shall be 'section' in the HL7 namespace.</assert>
+    <assert test="cda:text">The Alerts section SHALL contain a narrative block.</assert>
+    <assert test="cda:code">The alert section SHALL contain Section / code.</assert>
+    <assert test="cda:title">The alert section SHALL contain Section / title.</assert>
+	</rule>
+</pattern>
+
+<!-- warning -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.2-warning' see='#p-2.16.840.1.113883.10.20.1.2-warning'>
+	<title>Alerts section - warning validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.2"]'>
+    <assert test="descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.1.27']">The Alerts section SHOULD include one or more problem acts (templateId 2.16.840.1.113883.10.20.1.27).</assert>
+    <assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'alert') or contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'allergies and adverse reactions')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “alert” and/or “allergies and adverse reactions”.</assert>
+    </rule>
+    
+	<rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.27'][ancestor::*[cda:templateId/@root='2.16.840.1.113883.10.20.1.2']]">
+	<assert test="descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.1.18']">A problem act SHOULD include one or more alert observations (templateId 2.16.840.1.113883.10.20.1.18).</assert>
+	</rule>
+</pattern>
+
+<!-- manual -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1.2-manual' see='#p-2.16.840.1.113883.10.20.1.2-manual'>
+	<title>Alerts section - manual validation phase</title>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.2"]'>
+	<report test='.'></report>
+	</rule>
+</pattern>
+
