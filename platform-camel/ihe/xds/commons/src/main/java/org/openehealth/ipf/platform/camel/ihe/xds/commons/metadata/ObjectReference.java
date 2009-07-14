@@ -35,6 +35,15 @@ public class ObjectReference {
      * Constructs an object reference.
      * @param id
      *          the id of the referenced object.
+     */
+    public ObjectReference(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Constructs an object reference.
+     * @param id
+     *          the id of the referenced object.
      * @param home
      *          the ID of the community that the object was created in.
      */

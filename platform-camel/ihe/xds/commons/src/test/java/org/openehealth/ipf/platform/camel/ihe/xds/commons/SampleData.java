@@ -33,6 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Name;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
@@ -87,6 +88,21 @@ public abstract class SampleData {
         response.getAssociations().add(folderAssociation);
         response.getAssociations().add(docFolderAssociation);
         response.setStatus(Status.PARTIAL_SUCCESS);
+        
+        return response;
+    }   
+
+    /**
+     * @return a sample query response using object reference return type.
+     */
+    public static QueryResponse createQueryResponseWithObjRef() {
+        ObjectReference ref1 = new ObjectReference("ref1");
+        ObjectReference ref2 = new ObjectReference("ref2");
+
+        QueryResponse response = new QueryResponse();
+        response.setStatus(Status.SUCCESS);
+        response.getReferences().add(ref1);
+        response.getReferences().add(ref2);
         
         return response;
     }   

@@ -33,6 +33,20 @@ public class Response {
     private final List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
     
     /**
+     * Constructs the response.
+     */
+    public Response() {}
+    
+    /**
+     * Constructs the response.
+     * @param status
+     *          the status of the request execution.
+     */
+    public Response(Status status) {        
+        this.status = status;
+    }
+    
+    /**
      * @return the status of the request execution.
      */
     public Status getStatus() {

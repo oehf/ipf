@@ -31,6 +31,20 @@ public class RetrievedDocumentSet extends Response {
     private final List<RetrievedDocument> documents = new ArrayList<RetrievedDocument>();
 
     /**
+     * Constructs the response.
+     */
+    public RetrievedDocumentSet() {}
+    
+    /**
+     * Constructs the response.
+     * @param status
+     *          the status of the request execution.
+     */
+    public RetrievedDocumentSet(Status status) {        
+        super(status);
+    }
+    
+    /**
      * @return the documents.
      */
     public List<RetrievedDocument> getDocuments() {

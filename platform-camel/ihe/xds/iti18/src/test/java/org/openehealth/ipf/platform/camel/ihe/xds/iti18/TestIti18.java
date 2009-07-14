@@ -35,6 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 public class TestIti18 extends StandardTestContainer {
     private static final String SERVICE1 = "xds-iti18://localhost:9091/xds-iti18-service1?audit=false";
     private static final String SERVICE2 = "xds-iti18://localhost:9091/xds-iti18-service2";
+    private static final String SAMPLE_SERVICE = "xds-iti18://localhost:9091/myIti18Service";
 
     private QueryRegistry request;
     private FindDocumentsQuery query;
@@ -56,6 +57,19 @@ public class TestIti18 extends StandardTestContainer {
     public void testIti18() {
         assertEquals(Status.SUCCESS, send(SERVICE1, "service 1").getStatus());
         assertEquals(Status.SUCCESS, send(SERVICE2, "service 2").getStatus());
+    }
+    
+    @Test
+    public void testSample() {
+        QueryResponse response = 
+            send(SAMPLE_SERVICE, SampleData.createFindDocumentsQuery(), QueryResponse.class);
+        assertEquals(Status.SUCCESS, response.getStatus());
+        assertEquals(1, response.getReferences().size());
+        assertEquals("document01", response.getReferences().get(0).getId());
+
+        response = 
+            send(SAMPLE_SERVICE, SampleData.createGetDocumentsQuery(), QueryResponse.class);
+        assertEquals(Status.FAILURE, response.getStatus());
     }
 
     private QueryResponse send(String endpoint, String value) {

@@ -16,13 +16,17 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status
 
 /**
  * @author Jens Riemschneider
  */
-public class GroovyRouteBuilder extends SpringRouteBuilder {
-    @Override
-    public void configure() throws Exception {
+class GroovyRouteBuilder extends SpringRouteBuilder {
+    void configure() throws Exception {
         from('xds-iti18:xds-iti18-service1?audit=false')
             .validate().iti18Request()
             .process(new AdhocQueryProcessor('service 1'))
@@ -30,5 +34,21 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     
         from('xds-iti18:xds-iti18-service2')
             .process(new AdhocQueryProcessor('service 2'))
+
+        from('xds-iti18:myIti18Service')
+            .convertBodyTo(QueryRegistry.class)
+            .choice()
+                // Return an object reference for a find documents query
+                .when { it.in.body.query instanceof FindDocumentsQuery }                    
+                    .transform {                        
+                        def response = new QueryResponse(Status.SUCCESS)
+                        response.getReferences().add(new ObjectReference("document01"))
+                        response
+                    }
+                // Any other query else is a failure
+                .otherwise()
+                    .transform { 
+                        new QueryResponse(Status.FAILURE)
+                    }
    }
 }

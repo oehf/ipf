@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -38,7 +39,7 @@ public class DefaultItiWebService {
     protected Exchange process(Object body) {
         Validate.notNull(consumer);
 
-        Exchange exchange = consumer.getEndpoint().createExchange();
+        Exchange exchange = consumer.getEndpoint().createExchange(ExchangePattern.InOut);
         exchange.getIn().setBody(body);
         consumer.process(exchange);
         return exchange;

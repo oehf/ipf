@@ -40,6 +40,20 @@ public class QueryResponse extends Response {
     private final List<Association> associations = new ArrayList<Association>();
     
     /**
+     * Constructs the response.
+     */
+    public QueryResponse() {}
+    
+    /**
+     * Constructs the response.
+     * @param status
+     *          the status of the request execution.
+     */
+    public QueryResponse(Status status) {        
+        super(status);
+    }
+    
+    /**
      * @return the object references representing the results of a query using
      *          a non-leaf-object return type {@link QueryRegistry#setReturnLeafObjects(boolean)}.
      */

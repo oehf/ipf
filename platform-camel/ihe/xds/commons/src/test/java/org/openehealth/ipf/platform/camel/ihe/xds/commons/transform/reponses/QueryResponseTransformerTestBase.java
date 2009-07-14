@@ -39,19 +39,21 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.Qu
  */
 public abstract class QueryResponseTransformerTestBase implements FactoryCreator {
     private QueryResponseTransformer transformer;
-    private QueryResponse response;    
+    private QueryResponse responseLeafClass;    
+    private QueryResponse responseObjRef;    
     
     @Before
     public void setUp() {        
         EbXMLFactory factory = createFactory();
         transformer = new QueryResponseTransformer(factory);        
 
-        response = SampleData.createQueryResponseWithLeafClass();
+        responseLeafClass = SampleData.createQueryResponseWithLeafClass();
+        responseObjRef = SampleData.createQueryResponseWithObjRef();
     }
 
     @Test
-    public void testToEbXML() {
-        EbXMLQueryResponse ebXML = transformer.toEbXML(response);
+    public void testToEbXMLLeafClass() {
+        EbXMLQueryResponse ebXML = transformer.toEbXML(responseLeafClass);
         assertNotNull(ebXML);
         assertEquals(1, ebXML.getExtrinsicObjects().size());
         assertEquals(2, ebXML.getRegistryPackages().size());
@@ -85,6 +87,15 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
     }
     
     @Test
+    public void testToEbXMLObjRef() {
+        EbXMLQueryResponse ebXML = transformer.toEbXML(responseObjRef);
+        assertNotNull(ebXML);
+        assertEquals(2, ebXML.getReferences().size());
+        assertEquals("ref1", ebXML.getReferences().get(0).getId());
+        assertEquals("ref2", ebXML.getReferences().get(1).getId());        
+    }
+    
+    @Test
     public void testToEbXMLNull() {
         assertNull(transformer.toEbXML(null));
     }
@@ -102,11 +113,19 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
     
     
     @Test
-    public void testFromEbXML() {
-        EbXMLQueryResponse ebXML = transformer.toEbXML(response);
+    public void testFromEbXMLLeafClass() {
+        EbXMLQueryResponse ebXML = transformer.toEbXML(responseLeafClass);
         QueryResponse result = transformer.fromEbXML(ebXML);
         
-        assertEquals(response, result);
+        assertEquals(responseLeafClass, result);
+    }
+    
+    @Test
+    public void testFromEbXMLObjRef() {
+        EbXMLQueryResponse ebXML = transformer.toEbXML(responseObjRef);
+        QueryResponse result = transformer.fromEbXML(ebXML);
+        
+        assertEquals(responseObjRef, result);
     }
     
     @Test

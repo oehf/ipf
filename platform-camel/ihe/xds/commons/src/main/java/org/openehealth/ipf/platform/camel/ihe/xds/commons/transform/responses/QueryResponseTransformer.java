@@ -118,20 +118,35 @@ public class QueryResponseTransformer {
         response.setStatus(ebXML.getStatus());
         response.getErrors().addAll(ebXML.getErrors());
         
+        boolean foundNonObjRefs = false;
+        
         for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
             response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
+            foundNonObjRefs = true;
         }
 
         for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {
             response.getFolders().add(folderTransformer.fromEbXML(regPackage));
+            foundNonObjRefs = true;
         }
 
         for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE)) {
             response.getSubmissionSets().add(submissionSetTransformer.fromEbXML(regPackage));
+            foundNonObjRefs = true;
         }
         
         for (EbXMLAssociation association : ebXML.getAssociations()) {
             response.getAssociations().add(associationTransformer.fromEbXML(association));
+            foundNonObjRefs = true;
+        }
+
+        if (!foundNonObjRefs) {
+            EbXMLObjectLibrary standardLibrary = factory.createObjectLibrary();        
+            for (ObjectReference ref : ebXML.getReferences()) {
+                if (standardLibrary.getById(ref.getId()) == null) {
+                    response.getReferences().add(ref);
+                }
+            }
         }
         
         return response;
