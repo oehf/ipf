@@ -39,5 +39,12 @@ public interface EbXMLProvideAndRegisterDocumentSetRequest extends EbXMLSubmitOb
      * @param dataHandler
      *          the data handler allowing access and describing to the document contents.
      */
-    void addDocument(String id, DataHandler dataHandler);    
+    void addDocument(String id, DataHandler dataHandler);
+    
+    /**
+     * Removes a document from the request.
+     * @param id
+     *          the id of the document.
+     */
+    void removeDocument(String id);
 }

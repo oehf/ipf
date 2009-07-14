@@ -21,12 +21,10 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
@@ -50,19 +48,8 @@ public class TestIti42 extends StandardTestContainer {
 
     @Before
     public void setUp() {
-        Identifiable patientID = new Identifiable("patient-id", new AssigningAuthority("1.2.3.4.5"));
-        
-        SubmissionSet submissionSet = new SubmissionSet();
-        submissionSet.setPatientID(patientID);
-        submissionSet.setUniqueID("229.6.58.29.24.1235");
-
-        docEntry = new DocumentEntry();
-        docEntry.setPatientID(patientID);
-        docEntry.setComments(new LocalizedString("service 1"));
-        
-        request = new RegisterDocumentSet();
-        request.setSubmissionSet(submissionSet);
-        request.getDocumentEntries().add(docEntry);
+        request = SampleData.createRegisterDocumentSet();
+        docEntry = request.getDocumentEntries().get(0);
     }
         
     /** Calls the route attached to the ITI-42 endpoint. */

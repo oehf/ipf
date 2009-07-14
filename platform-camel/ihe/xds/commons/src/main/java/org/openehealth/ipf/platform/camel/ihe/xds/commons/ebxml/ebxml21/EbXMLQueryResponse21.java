@@ -39,7 +39,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.Registr
  * Encapsulation of {@link RegistryResponse}.
  * @author Jens Riemschneider
  */
-public class EbXMLQueryResponse21 extends EbXMLBaseObjectContainer21 implements EbXMLQueryResponse {
+public class EbXMLQueryResponse21 extends EbXMLObjectContainer21 implements EbXMLQueryResponse {
     private final RegistryResponse regResponse;
     
     /**
@@ -103,7 +103,7 @@ public class EbXMLQueryResponse21 extends EbXMLBaseObjectContainer21 implements 
             error.setCodeContext(regError.getCodeContext());
             error.setLocation(regError.getLocation());
             error.setErrorCode(ErrorCode.valueOfOpcode(regError.getErrorCode()));
-            error.setSeverity(Severity.valueOfEbXML21(regError.getSeverity()));
+            error.setSeverity(Severity.valueOfOpcode21(regError.getSeverity()));
             errors.add(error);
         }
         
@@ -133,6 +133,21 @@ public class EbXMLQueryResponse21 extends EbXMLBaseObjectContainer21 implements 
             // Home not supported in 2.1
             getContents().add(objectRef);
         }
+    }
+    
+    @Override
+    public List<ObjectReference> getReferences() {
+        List<ObjectReference> results = new ArrayList<ObjectReference>();
+        for (Object identifiable : getContents()) {
+            ObjectRefType objRefEbXML = cast(identifiable, ObjectRefType.class);            
+            if (objRefEbXML != null) {
+                ObjectReference objRef = new ObjectReference();
+                objRef.setId(objRefEbXML.getId());
+                results.add(objRef);
+            }
+        }
+        
+        return results;
     }
 
     @Override

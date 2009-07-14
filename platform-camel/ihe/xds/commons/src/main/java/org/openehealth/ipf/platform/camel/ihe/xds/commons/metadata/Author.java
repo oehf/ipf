@@ -31,7 +31,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class Author {
     private Person authorPerson;
-    private final List<String> authorInstitution = new ArrayList<String>();
+    private final List<Organization> authorInstitution = new ArrayList<Organization>();
     private final List<String> authorRole = new ArrayList<String>(); 
     private final List<String> authorSpecialty = new ArrayList<String>();
 
@@ -54,7 +54,7 @@ public class Author {
      * @return the list of author institutions. Never <code>null</code>, but
      *          can be empty. 
      */
-    public List<String> getAuthorInstitution() {
+    public List<Organization> getAuthorInstitution() {
         return authorInstitution;
     }
     

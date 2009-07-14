@@ -45,6 +45,15 @@ public class Name {
      * Constructs a name.
      * @param familyName
      *          the family name (XCN.2.1/XPN.1.1).
+     */
+    public Name(String familyName) {
+        this.familyName = familyName;
+    }
+
+    /**
+     * Constructs a name.
+     * @param familyName
+     *          the family name (XCN.2.1/XPN.1.1).
      * @param givenName
      *          the given name (XCN.3/XPN.2).
      * @param secondAndFurtherGivenNames

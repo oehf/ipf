@@ -70,7 +70,7 @@ public class EbXMLRegistryResponse21 implements EbXMLRegistryResponse {
             error.setCodeContext(regError.getCodeContext());
             error.setLocation(regError.getLocation());
             error.setErrorCode(ErrorCode.valueOfOpcode(regError.getErrorCode()));
-            error.setSeverity(Severity.valueOfEbXML21(regError.getSeverity()));
+            error.setSeverity(Severity.valueOfOpcode21(regError.getSeverity()));
             errors.add(error);
         }
         

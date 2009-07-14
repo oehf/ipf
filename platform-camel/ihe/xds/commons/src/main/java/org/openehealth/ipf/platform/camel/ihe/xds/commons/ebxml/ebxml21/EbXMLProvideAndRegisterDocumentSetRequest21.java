@@ -34,7 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitO
  * Encapsulation of {@link ProvideAndRegisterDocumentSetRequestType}
  * @author Jens Riemschneider
  */
-public class EbXMLProvideAndRegisterDocumentSetRequest21 extends EbXMLBaseObjectContainer21 implements EbXMLProvideAndRegisterDocumentSetRequest {
+public class EbXMLProvideAndRegisterDocumentSetRequest21 extends EbXMLObjectContainer21 implements EbXMLProvideAndRegisterDocumentSetRequest {
     private final ProvideAndRegisterDocumentSetRequestType request;
 
     /**
@@ -76,6 +76,16 @@ public class EbXMLProvideAndRegisterDocumentSetRequest21 extends EbXMLBaseObject
             document.setValue(dataHandler);
             documents.add(document);
         }
+    }
+    
+    @Override
+    public void removeDocument(String id) {
+        for (Document doc : request.getDocument()) {
+            if (doc.getId().equals(id)) {
+                request.getDocument().remove(doc);
+                return;
+            }
+        }        
     }
     
     @Override

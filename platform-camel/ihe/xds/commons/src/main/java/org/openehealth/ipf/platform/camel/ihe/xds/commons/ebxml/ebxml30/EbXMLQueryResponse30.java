@@ -41,7 +41,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.Registr
  * Encapsulation of {@link AdhocQueryResponse}.
  * @author Jens Riemschneider
  */
-public class EbXMLQueryResponse30 extends EbXMLBaseObjectContainer30 implements EbXMLQueryResponse {
+public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXMLQueryResponse {
     private final AdhocQueryResponse response;
 
     /**
@@ -64,6 +64,7 @@ public class EbXMLQueryResponse30 extends EbXMLBaseObjectContainer30 implements 
      */
     public EbXMLQueryResponse30(AdhocQueryResponse response) {
         this(response, new EbXMLObjectLibrary());
+        fillObjectLibrary();
     }
 
     @Override
@@ -128,6 +129,21 @@ public class EbXMLQueryResponse30 extends EbXMLBaseObjectContainer30 implements 
             objectRef.setHome(ref.getHome());
             getContents().add(EbXMLFactory30.RIM_FACTORY.createObjectRef(objectRef));
         }
+    }
+
+    @Override
+    public List<ObjectReference> getReferences() {
+        List<ObjectReference> results = new ArrayList<ObjectReference>();
+        for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
+            ObjectRefType objRefEbXML = cast(identifiable, ObjectRefType.class);            
+            if (objRefEbXML != null) {
+                ObjectReference objRef = new ObjectReference();
+                objRef.setId(objRefEbXML.getId());
+                results.add(objRef);
+            }
+        }
+        
+        return results;
     }
 
     @Override

@@ -39,6 +39,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLSub
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationLabel;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
@@ -47,6 +48,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Folder;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Name;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
@@ -161,15 +163,15 @@ public class Ebrs21MarshalingTest {
     public void testFromRealEbXML() throws Exception {
         Author author1 = new Author();
         author1.setAuthorPerson(new Person(null, new Name("Smitty", "Gerald", null, null, null)));
-        author1.getAuthorInstitution().add("Cleveland Clinic");
-        author1.getAuthorInstitution().add("Parma Community");
+        author1.getAuthorInstitution().add(new Organization("Cleveland Clinic"));
+        author1.getAuthorInstitution().add(new Organization("Parma Community"));
         author1.getAuthorRole().add("Attending");
         author1.getAuthorSpecialty().add("Orthopedic");
 
         Author author2 = new Author();
         author2.setAuthorPerson(new Person(null, new Name("Dopplemeyer", "Sherry", null, null, null)));
-        author2.getAuthorInstitution().add("Cleveland Clinic");
-        author2.getAuthorInstitution().add("Berea Community");
+        author2.getAuthorInstitution().add(new Organization("Cleveland Clinic"));
+        author2.getAuthorInstitution().add(new Organization("Berea Community"));
         author2.getAuthorRole().add("Primary Surgon");
         author2.getAuthorSpecialty().add("Orthopedic");
         
@@ -210,6 +212,7 @@ public class Ebrs21MarshalingTest {
         docEntry.setPatientID(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         docEntry.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
         docEntry.setUniqueID("Document01_uniqueid");
+        docEntry.setUri("http://129.6.58.92:9080/Repository/129.6.58.92.3492.txt");
 
         SubmissionSet submissionSet = new SubmissionSet();
         submissionSet.setAuthor(author2);
@@ -243,6 +246,7 @@ public class Ebrs21MarshalingTest {
         assoc3.setAssociationType(AssociationType.HAS_MEMBER);
         assoc3.setSourceUUID("SubmissionSet01");
         assoc3.setTargetUUID("Document01");
+        assoc3.setLabel(AssociationLabel.ORIGINAL);
         
         RegisterDocumentSet expected = new RegisterDocumentSet();
         expected.setSubmissionSet(submissionSet);
@@ -262,7 +266,7 @@ public class Ebrs21MarshalingTest {
         
         RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(factory);;
         RegisterDocumentSet result = transformer.fromEbXML(new EbXMLSubmitObjectsRequest21(original));
-        assertEquals(expected, result);
+        assertEquals(expected.toString(), result.toString());
         EbXMLSubmitObjectsRequest21 ebXML = (EbXMLSubmitObjectsRequest21) transformer.toEbXML(result);
         
         SubmitObjectsRequest transformed = ebXML.getInternal();

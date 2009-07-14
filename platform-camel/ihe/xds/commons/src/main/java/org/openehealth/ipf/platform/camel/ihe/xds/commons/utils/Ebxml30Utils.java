@@ -17,15 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.utils;
 
 import java.util.List;
 
-import javax.xml.bind.JAXBElement;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExternalIdentifierType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.IdentifiableType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.InternationalStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.LocalizedStringType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryPackageType;
 
 /**
  * ebXML version 3.0 specific constants and subroutines.  
@@ -76,33 +75,18 @@ public class Ebxml30Utils extends EbxmlUtils {
             SubmitObjectsRequest request, 
             AuditDataset auditDataset) 
     {
+        EbXMLSubmitObjectsRequest30 ebXML = new EbXMLSubmitObjectsRequest30(request);
+        List<EbXMLRegistryPackage> submissionSets = 
+            ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         
-        // TODO: consider potential NPEs
-        
-        List<JAXBElement<? extends IdentifiableType>> list = 
-            request.getRegistryObjectList().getIdentifiable();
-        
-        for(JAXBElement<? extends IdentifiableType> o : list) {
-            Class<? extends IdentifiableType> clazz = o.getDeclaredType();
-            if(clazz == RegistryPackageType.class) {
-                RegistryPackageType registryPackage = (RegistryPackageType) o.getValue(); 
-                List<ExternalIdentifierType> externalIdentifiers = 
-                    registryPackage.getExternalIdentifier();
-                
-                for(ExternalIdentifierType id : externalIdentifiers) {
-                    try {
-                        String name = id.getName().getLocalizedString().get(0).getValue();  
-                        if(XDS_UNIQUE_ID_ATTRIBUTE.equals(name)) {
-                            auditDataset.setSubmissionSetUuid(id.getValue());
-                        } else if(XDS_PATIENT_ID_ATTRIBUTE.equals(name)) {
-                            auditDataset.setPatientId(id.getValue());
-                        }
-                    } catch(NullPointerException npe) {
-                        // nop
-                    }
-                }
-                break;
-            }
+        for (EbXMLRegistryPackage submissionSet : submissionSets) {
+            String patientID = submissionSet.getExternalIdentifierValue(
+                    Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);            
+            auditDataset.setPatientId(patientID);
+            
+            String uniqueID = submissionSet.getExternalIdentifierValue(
+                    Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+            auditDataset.setSubmissionSetUniqueID(uniqueID);
         }
     }
     

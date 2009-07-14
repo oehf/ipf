@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
@@ -26,10 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.Associ
  * Encapsulation of {@link AssociationType1}.
  * @author Jens Riemschneider
  */
-public class EbXMLAssociation21 implements EbXMLAssociation {
-    private final EbXMLObjectLibrary objectLibrary;    
-    private final AssociationType1 association;
-
+public class EbXMLAssociation21 extends EbXMLRegistryObject21<AssociationType1> implements EbXMLAssociation {
     /**
      * Constructs an association by wrapping this given object.
      * @param association
@@ -38,44 +33,36 @@ public class EbXMLAssociation21 implements EbXMLAssociation {
      *          the object library to use.
      */
     public EbXMLAssociation21(AssociationType1 association, EbXMLObjectLibrary objectLibrary) {
-        notNull(objectLibrary, "objectLibrary cannot be null");
-        notNull(association, "association cannot be null");
-        
-        this.association = association;
-        this.objectLibrary = objectLibrary;
+        super(association, objectLibrary);
     }
 
     @Override
     public String getSource() {
-        return objectLibrary.getByObj(association.getSourceObject());
+        return getObjectLibrary().getByObj(getInternal().getSourceObject());
     }
 
     @Override
     public void setSource(String source) {
-        association.setSourceObject(objectLibrary.getById(source));
+        getInternal().setSourceObject(getObjectLibrary().getById(source));
     }
 
     @Override
     public String getTarget() {
-        return objectLibrary.getByObj(association.getTargetObject());
+        return getObjectLibrary().getByObj(getInternal().getTargetObject());
     }
 
     @Override
     public void setTarget(String target) {
-        association.setTargetObject(objectLibrary.getById(target));
+        getInternal().setTargetObject(getObjectLibrary().getById(target));
     }
 
     @Override
     public AssociationType getAssociationType() {
-        return AssociationType.valueOfOpcode(association.getAssociationType());
+        return AssociationType.valueOfOpcode21(getInternal().getAssociationType());
     }
 
     @Override
     public void setAssociationType(AssociationType associationType) {
-        association.setAssociationType(AssociationType.getOpcode21(associationType));
-    }
-
-    AssociationType1 getInternal() {
-        return association;
+        getInternal().setAssociationType(AssociationType.getOpcode21(associationType));
     }
 }

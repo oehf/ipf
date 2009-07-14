@@ -21,6 +21,7 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
@@ -46,8 +47,8 @@ public class TestIti18 extends StandardTestContainer {
     
     @Before
     public void setUp() {
-        query = new FindDocumentsQuery();
-        request = new QueryRegistry(query);        
+        request = SampleData.createFindDocumentsQuery();
+        query = (FindDocumentsQuery) request.getQuery();
     }
     
     /** Calls the route attached to the ITI-18 endpoint. */

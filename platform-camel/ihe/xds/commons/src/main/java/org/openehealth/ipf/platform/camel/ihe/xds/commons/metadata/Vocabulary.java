@@ -136,6 +136,12 @@ public abstract class Vocabulary {
     /** Localized String used for the source ID external identifier of a submission set */
     public static final String SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID = "XDSSubmissionSet.sourceId";
 
+    
+    
+    /** docCode External Classification Scheme of the Association */
+    public static final String ASSOCIATION_DOC_CODE_CLASS_SCHEME = 
+        "urn:uuid:abd807a3-4432-4053-87b4-fd82c643d1f3";    
+    
         
     
     
@@ -196,6 +202,8 @@ public abstract class Vocabulary {
     /** Name of the slot that is used for the submission time */
     public static final String SLOT_NAME_SUBMISSION_TIME = "submissionTime";
     
+    /** Name of the slot that is used for association labeling of the submission set */
+    public static final String SLOT_NAME_SUBMISSION_SET_STATUS = "SubmissionSetStatus";
     
     
     /** Universal ID Type to be used for all HD data types used with XDS */

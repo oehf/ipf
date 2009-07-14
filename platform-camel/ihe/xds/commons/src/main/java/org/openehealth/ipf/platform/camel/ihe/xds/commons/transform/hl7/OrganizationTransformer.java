@@ -44,9 +44,12 @@ public class OrganizationTransformer {
         List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7XON);
 
         String organizationName = HL7.get(parts, 1, true);
-        String idNumber = HL7.get(parts, 3, true);
+        String idNumber = HL7.get(parts, 10, true);
+        if (idNumber == null) {
+            idNumber = HL7.get(parts, 3, true);
+        }
         AssigningAuthority assigningAuthority = 
-            assigningAuthorityTransformer.fromHL7(HL7.get(parts, 4, false));
+            assigningAuthorityTransformer.fromHL7(HL7.get(parts, 6, false));
         
         if (organizationName == null && idNumber == null && assigningAuthority == null) {
             return null;
@@ -61,7 +64,7 @@ public class OrganizationTransformer {
     }
     
     /**
-     * Transforms an organization instance into an HL7v2 XON string.
+     * Transforms an organization instance into an HL7v2.5 XON string.
      * @param organization
      *          the organization to transform. Can be <code>null</code>.
      * @return the HL7 representation. <code>null</code> if the input was <code>null</code> 
@@ -76,8 +79,14 @@ public class OrganizationTransformer {
         
         return HL7.render(HL7Delimiter.COMPONENT,
                 HL7.escape(organization.getOrganizationName()), 
-                HL7.escape(null), 
-                HL7.escape(organization.getIdNumber()), 
-                assigningAuthority);
+                null, 
+                null,
+                null,
+                null,
+                assigningAuthority,
+                null,
+                null,
+                null,
+                HL7.escape(organization.getIdNumber()));
     }
 }

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
+import java.util.List;
+
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference;
 
 /**
@@ -31,4 +33,9 @@ public interface EbXMLQueryResponse extends EbXMLObjectContainer, EbXMLRegistryR
      *          the object reference.
      */
     void addReference(ObjectReference ref);
+    
+    /**
+     * @return all object references contained in the response.
+     */
+    List<ObjectReference> getReferences();
 }

@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocument;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet;
@@ -45,7 +46,8 @@ class RetrieveDocumentSetProcessor implements Processor {
 
     public void process(Exchange exchange) throws Exception {
         RetrieveDocumentSet request = exchange.getIn().getBody(RetrieveDocumentSet.class);
-        String value = request.getDocuments().get(0).getDocumentUniqueID();
+        RetrieveDocument retrieveDocument = request.getDocuments().get(0);
+        String value = retrieveDocument.getDocumentUniqueID();
         RetrievedDocumentSet response = new RetrievedDocumentSet();
         response.setStatus(Status.SUCCESS);
         if (!expectedValue.equals(value)) {
@@ -54,6 +56,7 @@ class RetrieveDocumentSetProcessor implements Processor {
         else {
             RetrievedDocument doc = new RetrievedDocument();
             doc.setDataHandler(new DataHandler(new LargeDataSource()));
+            doc.setRequestData(retrieveDocument);
             response.getDocuments().add(doc);
         }
         

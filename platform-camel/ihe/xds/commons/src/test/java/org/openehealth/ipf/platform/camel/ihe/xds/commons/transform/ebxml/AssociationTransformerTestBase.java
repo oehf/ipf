@@ -17,13 +17,20 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationLabel;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AssociationTransformer;
 
 /**
@@ -47,6 +54,9 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         association.setAssociationType(AssociationType.REPLACE);
         association.setSourceUUID("id1");
         association.setTargetUUID("id2");        
+        association.setLabel(AssociationLabel.ORIGINAL);
+        association.setEntryUUID("uuid");
+        association.setDocCode(new Code("code", new LocalizedString("display", "en-US", "UTF-8"), "scheme"));
     }
     
     @Test
@@ -57,6 +67,16 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         assertEquals(AssociationType.REPLACE, ebXML.getAssociationType());
         assertEquals("id1", ebXML.getSource());
         assertEquals("id2", ebXML.getTarget());
+        assertEquals("Original", ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS));
+        assertEquals("uuid", ebXML.getId());
+        
+        List<EbXMLClassification> classifications = ebXML.getClassifications(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
+        assertEquals(1, classifications.size());
+        EbXMLClassification classification = classifications.get(0);
+        assertEquals("uuid", classification.getClassifiedObject());
+        assertEquals("code", classification.getNodeRepresentation());
+        assertEquals("display", classification.getNameAsInternationalString().getSingleLocalizedString().getValue());
+        assertEquals("scheme", classification.getSingleSlotValue("codingScheme"));
     }
     
     @Test
@@ -67,12 +87,13 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
     @Test
     public void testToEbXMLEmpty() {
         EbXMLAssociation ebXML = transformer.toEbXML(new Association(), objectLibrary);
-        
         assertNotNull(ebXML);
-
         assertNull(ebXML.getAssociationType());
         assertNull(ebXML.getSource());
         assertNull(ebXML.getTarget());
+        assertNull(ebXML.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS));
+        assertNull(ebXML.getId());
+        assertEquals(0, ebXML.getClassifications().size());
     }
     
     

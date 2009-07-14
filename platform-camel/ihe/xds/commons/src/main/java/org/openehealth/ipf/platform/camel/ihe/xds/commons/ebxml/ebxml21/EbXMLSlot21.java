@@ -43,4 +43,9 @@ public class EbXMLSlot21 implements EbXMLSlot {
     public List<String> getValueList() {
         return slot.getValueList().getValue();
     }
+
+    @Override
+    public int getValueLengthLimit() {
+        return 64;
+    }
 }

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
+
 /**
  * Encapsulation of the ebXML classes for {@code RegistryPackageType}. 
  * <p>
@@ -22,4 +24,15 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLRegistryPackage extends EbXMLRegistryEntry {}
+public interface EbXMLRegistryPackage extends EbXMLRegistryObject {
+    /**
+     * @return the status of this entry.
+     */
+    AvailabilityStatus getStatus();
+    
+    /**
+     * @param status
+     *          the status of this entry.
+     */
+    void setStatus(AvailabilityStatus status);
+}

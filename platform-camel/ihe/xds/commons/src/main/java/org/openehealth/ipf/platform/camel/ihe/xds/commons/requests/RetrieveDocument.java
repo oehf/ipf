@@ -30,6 +30,26 @@ public class RetrieveDocument {
     private String homeCommunityID;
    
     /**
+     * Constructs the request.
+     */
+    public RetrieveDocument() {}
+    
+    /**
+     * Constructs the request.
+     * @param repositoryUniqueID
+     *          the unique ID of the repository containing the document.
+     * @param documentUniqueID
+     *          the unique ID of the document.
+     * @param homeCommunityID
+     *          the home community ID.
+     */
+    public RetrieveDocument(String repositoryUniqueID, String documentUniqueID, String homeCommunityID) {
+        this.repositoryUniqueID = repositoryUniqueID;
+        this.documentUniqueID = documentUniqueID;
+        this.homeCommunityID = homeCommunityID;
+    }
+
+    /**
      * @return the unique ID of the repository containing the document.
      */
     public String getRepositoryUniqueID() {

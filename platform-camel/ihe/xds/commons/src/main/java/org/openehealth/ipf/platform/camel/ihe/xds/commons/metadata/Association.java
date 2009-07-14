@@ -28,6 +28,9 @@ public class Association {
     private String targetUUID;
     private String sourceUUID;
     private AssociationType associationType;
+    private AssociationLabel label;
+    private String entryUUID;
+    private Code docCode;
 
     /**
      * @return the UUID of the target object.
@@ -74,11 +77,61 @@ public class Association {
         this.associationType = associationType;
     }
 
+    /**
+     * @return the label of the association.
+     */
+    public AssociationLabel getLabel() {
+        return label;
+    }
+
+    /**
+     * @param label
+     *          the label of the association.
+     */
+    public void setLabel(AssociationLabel label) {
+        this.label = label;
+    }
+
+    /**
+     * @return UUID of this association entry.
+     */
+    public String getEntryUUID() {
+        return entryUUID;
+    }
+
+    /**
+     * @param entryUUID
+     *          UUID of this association entry.
+     */
+    public void setEntryUUID(String entryUUID) {
+        this.entryUUID = entryUUID;
+    }
+
+    /**
+     * @return code describing the association (e.g. the type of transformation, 
+     *          reason for replacement).
+     */
+    public Code getDocCode() {
+        return docCode;
+    }
+
+    /**
+     * @param docCode
+     *          code describing the association (e.g. the type of transformation, 
+     *          reason for replacement).
+     */
+    public void setDocCode(Code docCode) {
+        this.docCode = docCode;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((associationType == null) ? 0 : associationType.hashCode());
+        result = prime * result + ((docCode == null) ? 0 : docCode.hashCode());
+        result = prime * result + ((entryUUID == null) ? 0 : entryUUID.hashCode());
+        result = prime * result + ((label == null) ? 0 : label.hashCode());
         result = prime * result + ((sourceUUID == null) ? 0 : sourceUUID.hashCode());
         result = prime * result + ((targetUUID == null) ? 0 : targetUUID.hashCode());
         return result;
@@ -98,6 +151,21 @@ public class Association {
                 return false;
         } else if (!associationType.equals(other.associationType))
             return false;
+        if (docCode == null) {
+            if (other.docCode != null)
+                return false;
+        } else if (!docCode.equals(other.docCode))
+            return false;
+        if (entryUUID == null) {
+            if (other.entryUUID != null)
+                return false;
+        } else if (!entryUUID.equals(other.entryUUID))
+            return false;
+        if (label == null) {
+            if (other.label != null)
+                return false;
+        } else if (!label.equals(other.label))
+            return false;
         if (sourceUUID == null) {
             if (other.sourceUUID != null)
                 return false;
@@ -110,7 +178,7 @@ public class Association {
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);

@@ -16,20 +16,24 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExtrinsicObjectType;
 
 /**
  * Encapsulation of {@link ExtrinsicObjectType}.
  * @author Jens Riemschneider
  */
-public class EbXMLExtrinsicObject30 extends EbXMLRegistryEntry30<ExtrinsicObjectType> implements EbXMLExtrinsicObject {
+public class EbXMLExtrinsicObject30 extends EbXMLRegistryObject30<ExtrinsicObjectType> implements EbXMLExtrinsicObject {
     /**
      * Constructs an extrinsic object by wrapping an ebXML 3.0 object.
      * @param extrinsic
      *          the object to wrap.
+     * @param objectLibrary
+     *          the object library to use.
      */
-    public EbXMLExtrinsicObject30(ExtrinsicObjectType extrinsic) {
-        super(extrinsic);
+    public EbXMLExtrinsicObject30(ExtrinsicObjectType extrinsic, EbXMLObjectLibrary objectLibrary) {
+        super(extrinsic, objectLibrary);
     }
     
     @Override
@@ -40,5 +44,15 @@ public class EbXMLExtrinsicObject30 extends EbXMLRegistryEntry30<ExtrinsicObject
     @Override
     public void setMimeType(String mimeType) {
         getInternal().setMimeType(mimeType);
+    }
+
+    @Override
+    public AvailabilityStatus getStatus() {
+        return AvailabilityStatus.valueOfOpcode(getInternal().getStatus());
+    }
+
+    @Override
+    public void setStatus(AvailabilityStatus status) {
+        getInternal().setStatus(AvailabilityStatus.toOpcode(status));
     }
 }

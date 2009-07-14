@@ -27,6 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPac
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Recipient;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
@@ -59,8 +60,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         
         Author author = new Author();
         author.setAuthorPerson(createPerson(1));
-        author.getAuthorInstitution().add("inst1");
-        author.getAuthorInstitution().add("inst2");
+        author.getAuthorInstitution().add(new Organization("inst1"));
+        author.getAuthorInstitution().add(new Organization("inst2"));
         author.getAuthorRole().add("role1");
         author.getAuthorRole().add("role2");
         author.getAuthorSpecialty().add("spec1");
@@ -108,7 +109,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         EbXMLRegistryPackage ebXML = transformer.toEbXML(set, objectLibrary);        
         assertNotNull(ebXML);
         
-        assertEquals("Approved", ebXML.getStatus());
+        assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
         assertEquals("uuid", ebXML.getId());
         assertNull(ebXML.getObjectType());
         if (homeAware) {
@@ -121,8 +122,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertSlot(Vocabulary.SLOT_NAME_SUBMISSION_TIME, ebXML.getSlots(), "123");
         
         assertSlot(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT, ebXML.getSlots(), 
-                "orgName 20^^id 20^namespace 20&uni 20&uniType 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^^^namespace 22&uni 22&uniType 22",
-                "orgName 21^^id 21^namespace 21&uni 21&uniType 21",
+                "orgName 20^^^^^namespace 20&uni 20&uniType 20^^^^id 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^^^namespace 22&uni 22&uniType 22",
+                "orgName 21^^^^^namespace 21&uni 21&uniType 21^^^^id 21",
                 "|id 23^familyName 23^givenName 23^prefix 23^second 23^suffix 23^^^namespace 23&uni 23&uniType 23");
 
         

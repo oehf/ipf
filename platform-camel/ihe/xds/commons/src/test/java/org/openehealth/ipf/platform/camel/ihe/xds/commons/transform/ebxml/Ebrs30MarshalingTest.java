@@ -96,7 +96,7 @@ public class Ebrs30MarshalingTest {
     private EbXMLExtrinsicObject getDocumentEntry(SubmitObjectsRequest received) {
         for(JAXBElement<? extends IdentifiableType> obj : received.getRegistryObjectList().getIdentifiable()) {
             if(obj.getDeclaredType() == ExtrinsicObjectType.class) {
-                return new EbXMLExtrinsicObject30((ExtrinsicObjectType)obj.getValue());
+                return new EbXMLExtrinsicObject30((ExtrinsicObjectType)obj.getValue(), objectLibrary);
             }
         }
         fail("Document entry not found");

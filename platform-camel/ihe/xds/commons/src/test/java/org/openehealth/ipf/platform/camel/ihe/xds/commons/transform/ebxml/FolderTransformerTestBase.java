@@ -74,7 +74,7 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         EbXMLRegistryPackage ebXML = transformer.toEbXML(folder, objectLibrary);        
         assertNotNull(ebXML);
         
-        assertEquals("Approved", ebXML.getStatus());
+        assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
         assertEquals("uuid", ebXML.getId());
         assertNull(ebXML.getObjectType());
         if (homeAware) {

@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
  * Base class for web services that are aware of a {@link DefaultItiConsumer}.
@@ -31,19 +30,18 @@ public class DefaultItiWebService {
      * Calls the consumer for processing via Camel.
      *
      * @param body
-     *          contents of the in-message body to be processed
+     *          contents of the in-message body to be processed.
      * @param resultType
-     *          expected type of the result message after the processing
-     * @return the contents of the result message body
+     *          expected type of the result message after the processing.
+     * @return the resulting exchange.
      */
-    protected <T> T process(Object body, Class<T> resultType) {
-        Validate.notNull(resultType, "resultType");
+    protected Exchange process(Object body) {
         Validate.notNull(consumer);
 
         Exchange exchange = consumer.getEndpoint().createExchange();
         exchange.getIn().setBody(body);
         consumer.process(exchange);
-        return Exchanges.resultMessage(exchange).getBody(resultType);
+        return exchange;
     }
 
     /**

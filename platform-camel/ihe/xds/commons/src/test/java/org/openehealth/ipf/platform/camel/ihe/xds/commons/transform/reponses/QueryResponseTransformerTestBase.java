@@ -46,7 +46,7 @@ public abstract class QueryResponseTransformerTestBase implements FactoryCreator
         EbXMLFactory factory = createFactory();
         transformer = new QueryResponseTransformer(factory);        
 
-        response = SampleData.createQueryResponse();
+        response = SampleData.createQueryResponseWithLeafClass();
     }
 
     @Test

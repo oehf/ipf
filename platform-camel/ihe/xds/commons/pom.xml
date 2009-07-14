@@ -57,11 +57,6 @@
             <artifactId>camel-jetty</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>xmlunit</groupId>
-            <artifactId>xmlunit</artifactId>
-            <version>1.2</version>
-        </dependency>
     </dependencies>
 
     <build>

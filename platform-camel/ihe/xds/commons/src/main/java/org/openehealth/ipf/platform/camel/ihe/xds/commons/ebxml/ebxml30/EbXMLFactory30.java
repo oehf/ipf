@@ -33,6 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.Adho
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.ResponseOptionType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AdhocQueryType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryObjectListType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.RegistryPackageType;
@@ -75,19 +76,24 @@ public class EbXMLFactory30 implements EbXMLFactory {
     public EbXMLExtrinsicObject createExtrinsic(String id, EbXMLObjectLibrary objectLibrary) {
         ExtrinsicObjectType extrinsicObjectType = RIM_FACTORY.createExtrinsicObjectType();
         extrinsicObjectType.setId(id);
-        return new EbXMLExtrinsicObject30(extrinsicObjectType);
+        objectLibrary.put(id, extrinsicObjectType);
+        return new EbXMLExtrinsicObject30(extrinsicObjectType, objectLibrary);
     }
 
     @Override
     public EbXMLRegistryPackage createRegistryPackage(String id, EbXMLObjectLibrary objectLibrary) {
         RegistryPackageType registryPackageType = RIM_FACTORY.createRegistryPackageType();
         registryPackageType.setId(id);
-        return new EbXMLRegistryPackage30(registryPackageType);
+        objectLibrary.put(id, registryPackageType);
+        return new EbXMLRegistryPackage30(registryPackageType, objectLibrary);
     }
 
     @Override
-    public EbXMLAssociation createAssociation(EbXMLObjectLibrary objectLibrary) {
-        return new EbXMLAssociation30(RIM_FACTORY.createAssociationType1());
+    public EbXMLAssociation createAssociation(String id, EbXMLObjectLibrary objectLibrary) {
+        AssociationType1 association = RIM_FACTORY.createAssociationType1();
+        association.setId(id);
+        objectLibrary.put(id, association);
+        return new EbXMLAssociation30(association, objectLibrary);
     }
     
     @Override
@@ -155,7 +161,7 @@ public class EbXMLFactory30 implements EbXMLFactory {
     }
     
     @Override
-    public EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary) {
+    public EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs) {
         AdhocQueryResponse response = QUERY_FACTORY.createAdhocQueryResponse();
         
         RegistryObjectListType list = response.getRegistryObjectList();

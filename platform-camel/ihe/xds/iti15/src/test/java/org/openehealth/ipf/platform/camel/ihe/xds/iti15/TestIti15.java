@@ -17,23 +17,17 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti15;
 
 import static junit.framework.Assert.assertEquals;
 
-import javax.activation.DataHandler;
-
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource;
 
 /**
  * Tests the ITI-15 transaction with a webservice and client adapter defined via URIs.
@@ -54,24 +48,8 @@ public class TestIti15 extends StandardTestContainer {
     
     @Before
     public void setUp() {
-        Identifiable patientID = new Identifiable("patient-id", new AssigningAuthority("1.2.3.4.5"));
-        
-        SubmissionSet submissionSet = new SubmissionSet();
-        submissionSet.setPatientID(patientID);
-        submissionSet.setUniqueID("229.6.58.29.24.1235");
-
-        docEntry = new DocumentEntry();
-        docEntry.setPatientID(patientID);
-        docEntry.setComments(new LocalizedString("service 1"));
-        docEntry.setEntryUUID("document 01");
-        
-        Document doc = new Document();
-        doc.setDocumentEntry(docEntry);
-        doc.setDataHandler(new DataHandler(new LargeDataSource()));
-        
-        request = new ProvideAndRegisterDocumentSet();
-        request.setSubmissionSet(submissionSet);
-        request.getDocuments().add(doc);
+        request = SampleData.createProvideAndRegisterDocumentSet();
+        docEntry = request.getDocuments().get(0).getDocumentEntry();
     }
     
     /** Calls the route attached to the ITI-15 endpoint. */

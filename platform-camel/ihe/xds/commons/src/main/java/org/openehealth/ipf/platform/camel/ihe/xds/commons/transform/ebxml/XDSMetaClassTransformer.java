@@ -18,8 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 import static org.apache.commons.lang.Validate.notNull;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
 
@@ -31,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
  *          the {@link XDSMetaClass} type.
  * @author Jens Riemschneider
  */
-public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryEntry, C extends XDSMetaClass> {
+public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C extends XDSMetaClass> {
     private final IdentifiableTransformer identifiableTransformer = new IdentifiableTransformer();
     private final String patientIdExternalId;
     private final String patientIdLocalizedString;
@@ -133,7 +132,6 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryEntry, C ex
      *          the object library.
      */
     protected void addAttributes(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
-        ebXML.setStatus(AvailabilityStatus.toOpcode(metaData.getAvailabilityStatus()));                
         ebXML.setDescription(metaData.getComments());
         ebXML.setName(metaData.getTitle());
     }
@@ -146,7 +144,6 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryEntry, C ex
      *          the ebXML instance containing the attributes.
      */
     protected void addAttributesFromEbXML(C metaData, E ebXML) {
-        metaData.setAvailabilityStatus(AvailabilityStatus.valueOfOpcode(ebXML.getStatus()));        
         metaData.setComments(ebXML.getDescription());
         metaData.setTitle(ebXML.getName());
         metaData.setEntryUUID(ebXML.getId());

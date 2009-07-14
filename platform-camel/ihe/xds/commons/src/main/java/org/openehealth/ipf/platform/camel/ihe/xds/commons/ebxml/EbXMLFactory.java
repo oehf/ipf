@@ -60,11 +60,13 @@ public interface EbXMLFactory {
 
     /**
      * Creates a new association.
+     * @param id
+     *          the id of the object within the object library.
      * @param objectLibrary
      *          the object library to use.
      * @return the created object.
      */
-    EbXMLAssociation createAssociation(EbXMLObjectLibrary objectLibrary);
+    EbXMLAssociation createAssociation(String id, EbXMLObjectLibrary objectLibrary);
     
     /**
      * Creates a new request to submit objects.
@@ -96,9 +98,16 @@ public interface EbXMLFactory {
      * Creates a new response for a query request.
      * @param objectLibrary
      *          the object library to use.
+     * @param returnsObjectRefs
+     *          <code>true</code> if the response is meant to return object references instead
+     *          of the real objects. 
+     *          This parameter should be <code>true</code> to ensure that an object library
+     *          is not included in the query result contains ObjectRefs. Those ObjectRefs 
+     *          cannot be distinguished from the ObjectRefs of the object library and
+     *          therefore the object library would produce unwanted query results. 
      * @return the created object.
      */
-    EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary);
+    EbXMLQueryResponse createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs);
 
     /**
      * Creates a new response for a registry request.

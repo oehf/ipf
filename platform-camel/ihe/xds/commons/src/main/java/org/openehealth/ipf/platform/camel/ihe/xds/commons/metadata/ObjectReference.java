@@ -25,6 +25,23 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class ObjectReference {
     private String id;
     private String home;
+    
+    /**
+     * Constructs an object reference.
+     */
+    public ObjectReference() {}
+    
+    /**
+     * Constructs an object reference.
+     * @param id
+     *          the id of the referenced object.
+     * @param home
+     *          the ID of the community that the object was created in.
+     */
+    public ObjectReference(String id, String home) {
+        this.id = id;
+        this.home = home;
+    }
 
     /**
      * @return the id of the referenced object.

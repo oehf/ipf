@@ -51,7 +51,7 @@ public class FindDocumentsQueryTransformerTest {
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.FIND_DOCUMENTS.getId(), ebXML.getId());
-        assertEquals(Arrays.asList("'id1^^^name1&uni1&uniType1'"),
+        assertEquals(Arrays.asList("'id1^^^&1.2&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
         
         assertEquals(Arrays.asList("('code1^^scheme1')", "('code2^^scheme2')"),
@@ -60,19 +60,19 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('code3^^scheme3')", "('code4^^scheme4')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE.getSlotName()));
         
-        assertEquals(Arrays.asList("1"),
+        assertEquals(Arrays.asList("1980"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("2"),
+        assertEquals(Arrays.asList("1981"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CREATION_TIME_TO.getSlotName()));
 
-        assertEquals(Arrays.asList("3"),
+        assertEquals(Arrays.asList("1982"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("4"),
+        assertEquals(Arrays.asList("1983"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_TO.getSlotName()));
 
-        assertEquals(Arrays.asList("5"),
+        assertEquals(Arrays.asList("1984"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_FROM.getSlotName()));
-        assertEquals(Arrays.asList("6"),
+        assertEquals(Arrays.asList("1985"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_TO.getSlotName()));
         
         assertEquals(Arrays.asList("('code5^^scheme5')", "('code6^^scheme6')"),
@@ -91,7 +91,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('per''son1')", "('person2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_AUTHOR_PERSON.getSlotName()));
 
-        assertEquals(Arrays.asList("('code13')", "('code14')"),
+        assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
         
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),

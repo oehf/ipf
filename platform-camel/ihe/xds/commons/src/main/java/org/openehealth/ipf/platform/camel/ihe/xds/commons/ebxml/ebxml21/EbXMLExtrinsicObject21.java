@@ -17,13 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 
 /**
  * Encapsulation of {@link ExtrinsicObjectType}.
  * @author Jens Riemschneider
  */
-public class EbXMLExtrinsicObject21 extends EbXMLRegistryEntry21<ExtrinsicObjectType> implements EbXMLExtrinsicObject {
+public class EbXMLExtrinsicObject21 extends EbXMLRegistryObject21<ExtrinsicObjectType> implements EbXMLExtrinsicObject {
     /**
      * Constructs an extrinsic object by wrapping the given ebXML 2.1 object.
      * @param extrinsic
@@ -33,6 +34,16 @@ public class EbXMLExtrinsicObject21 extends EbXMLRegistryEntry21<ExtrinsicObject
      */
     public EbXMLExtrinsicObject21(ExtrinsicObjectType extrinsic, EbXMLObjectLibrary objectLibrary) {
         super(extrinsic, objectLibrary);
+    }
+
+    @Override
+    public AvailabilityStatus getStatus() {
+        return AvailabilityStatus.valueOfOpcode(getInternal().getStatus());
+    }
+
+    @Override
+    public void setStatus(AvailabilityStatus status) {
+        getInternal().setStatus(AvailabilityStatus.toOpcode(status));
     }
 
     @Override

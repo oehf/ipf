@@ -15,9 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.service;
 
+import org.apache.camel.Exchange;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML30Converters;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 
 /**
  * Service implementation for the IHE ITI-34 transaction (Retrieve Document Set).
@@ -28,6 +35,20 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.Retrieve
  */
 public class Iti43Service extends DefaultItiWebService implements Iti43PortType {
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
-        return process(body, RetrieveDocumentSetResponseType.class);
+        Exchange result = process(body);
+        if (result.getException() != null) {
+            return EbXML30Converters.convert(createErrorResponse());
+        }
+        
+        return Exchanges.resultMessage(result).getBody(RetrieveDocumentSetResponseType.class);            
+    }
+
+    private RetrievedDocumentSet createErrorResponse() {
+        RetrievedDocumentSet errorResponse = new RetrievedDocumentSet();
+        errorResponse.setStatus(Status.FAILURE);
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setErrorCode(ErrorCode.REGISTRY_ERROR);
+        errorResponse.getErrors().add(errorInfo);
+        return errorResponse;
     }
 }

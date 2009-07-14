@@ -83,6 +83,11 @@ public interface EbXMLObjectContainer {
      *          the classification to add.
      */
     void addClassification(EbXMLClassification classification);
+    
+    /**
+     * @return all classifications contained in this entry.
+     */
+    List<EbXMLClassification> getClassifications();
 
     /**
      * @return the object library used by this container.

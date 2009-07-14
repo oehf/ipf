@@ -36,7 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Regist
  * Encapsulation of {@link ProvideAndRegisterDocumentSetRequestType}
  * @author Jens Riemschneider
  */
-public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLBaseObjectContainer30 implements EbXMLProvideAndRegisterDocumentSetRequest {
+public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLObjectContainer30 implements EbXMLProvideAndRegisterDocumentSetRequest {
     private final ProvideAndRegisterDocumentSetRequestType request;
 
     /**
@@ -59,6 +59,7 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLBaseObject
      */
     public EbXMLProvideAndRegisterDocumentSetRequest30(ProvideAndRegisterDocumentSetRequestType request) {
         this(request, new EbXMLObjectLibrary());
+        fillObjectLibrary();
     }
     
     @Override
@@ -72,6 +73,16 @@ public class EbXMLProvideAndRegisterDocumentSetRequest30 extends EbXMLBaseObject
         }
     }
 
+    @Override
+    public void removeDocument(String id) {
+        for (Document doc : request.getDocument()) {
+            if (doc.getId().equals(id)) {
+                request.getDocument().remove(doc);
+                return;
+            }
+        }        
+    }
+    
     @Override
     public Map<String, DataHandler> getDocuments() {
         Map<String, DataHandler> map = new HashMap<String, DataHandler>();

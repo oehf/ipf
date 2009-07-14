@@ -24,7 +24,7 @@ import java.util.List;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExternalIdentifier;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLInternationalString;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuthority;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
@@ -56,7 +56,7 @@ public abstract class EbrsTestUtils {
      */
     public static void assertExternalIdentifier(
             String scheme, 
-            EbXMLRegistryEntry regEntry, 
+            EbXMLRegistryObject regEntry, 
             String expectedValue, 
             String expectedName) {
         
@@ -89,7 +89,7 @@ public abstract class EbrsTestUtils {
      *          the expected localized index of the name.
      * @return the classification that matched the assertion.
      */
-    public static EbXMLClassification assertClassification(String scheme, EbXMLRegistryEntry regEntry, int occurrence, String expectedNodeRepresentation, int expectedLocalizedIdxName) {
+    public static EbXMLClassification assertClassification(String scheme, EbXMLRegistryObject regEntry, int occurrence, String expectedNodeRepresentation, int expectedLocalizedIdxName) {
         List<EbXMLClassification> filtered = regEntry.getClassifications(scheme);
         assertTrue("Not enough classification matching the scheme: " + scheme, filtered.size() > occurrence);
 

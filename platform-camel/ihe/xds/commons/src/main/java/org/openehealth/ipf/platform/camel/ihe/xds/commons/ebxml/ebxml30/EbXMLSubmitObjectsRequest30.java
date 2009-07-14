@@ -32,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.Regist
  * Encapsulation of {@link SubmitObjectsRequest}
  * @author Jens Riemschneider
  */
-public class EbXMLSubmitObjectsRequest30 extends EbXMLBaseObjectContainer30 implements EbXMLSubmitObjectsRequest {
+public class EbXMLSubmitObjectsRequest30 extends EbXMLObjectContainer30 implements EbXMLSubmitObjectsRequest {
     private final SubmitObjectsRequest submitObjectsRequest;
 
     /**
@@ -55,6 +55,7 @@ public class EbXMLSubmitObjectsRequest30 extends EbXMLBaseObjectContainer30 impl
      */
     public EbXMLSubmitObjectsRequest30(SubmitObjectsRequest submitObjectsRequest) {
         this(submitObjectsRequest, new EbXMLObjectLibrary());
+        fillObjectLibrary();
     }
 
     @Override

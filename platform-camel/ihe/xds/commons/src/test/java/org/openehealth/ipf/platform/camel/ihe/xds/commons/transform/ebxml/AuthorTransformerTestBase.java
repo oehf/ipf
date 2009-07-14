@@ -30,6 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssigningAuth
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Name;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.AuthorTransformer;
@@ -67,8 +68,8 @@ public abstract class AuthorTransformerTestBase implements FactoryCreator {
         author = new Author();
         author.setAuthorPerson(authorPerson);
         
-        author.getAuthorInstitution().add("inst1");
-        author.getAuthorInstitution().add("inst2");
+        author.getAuthorInstitution().add(new Organization("inst1"));
+        author.getAuthorInstitution().add(new Organization("inst2"));
         
         author.getAuthorRole().add("role1");
         author.getAuthorRole().add("role2");

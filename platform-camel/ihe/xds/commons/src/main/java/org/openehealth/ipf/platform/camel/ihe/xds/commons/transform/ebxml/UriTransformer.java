@@ -30,6 +30,13 @@ public class UriTransformer {
      * @return the URI string. <code>null</code> if the result would be an empty string.
      */
     public String fromEbXML(List<String> slotValues) {
+        if (slotValues.size() == 1) {
+            String slotValue = slotValues.get(0);
+            if (slotValue.indexOf('|') == -1) {
+                return slotValue;
+            }
+        }
+        
         String[] uriParts = new String[10];
         for (String slotValue : slotValues) {
             int separatorIdx = slotValue.indexOf('|');

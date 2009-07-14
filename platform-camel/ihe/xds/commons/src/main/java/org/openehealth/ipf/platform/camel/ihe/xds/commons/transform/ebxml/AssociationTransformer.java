@@ -16,11 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 
 import static org.apache.commons.lang.Validate.notNull;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationLabel;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 
 /**
  * Transforms an {@link Association} to its ebXML representation.
@@ -28,6 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
  */
 public class AssociationTransformer {
     private final EbXMLFactory factory;
+    private final CodeTransformer codeTransformer;
     
     /**
      * Constructs the transformer
@@ -37,6 +40,7 @@ public class AssociationTransformer {
     public AssociationTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
+        this.codeTransformer = new CodeTransformer(factory);
     }
     
     /**
@@ -53,10 +57,16 @@ public class AssociationTransformer {
             return null;
         }
         
-        EbXMLAssociation result = factory.createAssociation(objectLibrary);
+        EbXMLAssociation result = factory.createAssociation(association.getEntryUUID(), objectLibrary);
         result.setAssociationType(association.getAssociationType());
         result.setSource(association.getSourceUUID());
         result.setTarget(association.getTargetUUID());
+        
+        String label = AssociationLabel.toOpcode(association.getLabel());
+        result.addSlot(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS, label);
+        
+        EbXMLClassification contentType = codeTransformer.toEbXML(association.getDocCode(), objectLibrary);
+        result.addClassification(contentType, Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
         
         return result;
     }
@@ -77,6 +87,13 @@ public class AssociationTransformer {
         result.setAssociationType(association.getAssociationType());
         result.setTargetUUID(association.getTarget());
         result.setSourceUUID(association.getSource());
+        result.setEntryUUID(association.getId());
+        
+        String label = association.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS);
+        result.setLabel(AssociationLabel.fromOpcode(label));
+        
+        EbXMLClassification docCode = association.getSingleClassification(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME);
+        result.setDocCode(codeTransformer.fromEbXML(docCode));
         
         return result;
     }

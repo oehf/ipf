@@ -115,7 +115,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ProvideAndRegisterDocumentSet result = transformer.fromEbXML(ebXML);
         
-        assertEquals(request, result);
+        assertEquals(request.toString(), result.toString());
     }
     
     @Test

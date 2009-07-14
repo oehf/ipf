@@ -75,7 +75,8 @@ public enum Severity {
      * This method looks up the opcode via the ebXML 3.0 representation.
      * @param opcode30
      *          the string representation. Can be <code>null</code>.
-     * @return the severity or <code>null</code> if the opcode was <code>null</code>.
+     * @return the severity or <code>null</code> if the opcode was <code>null</code> or
+     *          the value was unknown.
      */
     public static Severity valueOfOpcode30(String opcode30) {
         if (opcode30 == null) {
@@ -88,26 +89,27 @@ public enum Severity {
             }
         }
         
-        throw new IllegalArgumentException("Unknown severity opcode: " + opcode30);
+        return null;        
     }
 
     /**
      * Returns the severity that is represented by the given ebXML 2.1.
-     * @param ebXML21
+     * @param opcode21
      *          the ebXML 2.1 representation. Can be <code>null</code>.
-     * @return the severity or <code>null</code> if the opcode was <code>null</code>.
+     * @return the severity or <code>null</code> if the opcode was <code>null</code> or
+     *          the value was unknown.
      */
-    public static Severity valueOfEbXML21(ErrorType ebXML21) {
-        if (ebXML21 == null) {
+    public static Severity valueOfOpcode21(ErrorType opcode21) {
+        if (opcode21 == null) {
             return null;
         }
         
         for (Severity severity : values()) {
-            if (ebXML21.equals(severity.getEbXML21())) {
+            if (opcode21.equals(severity.getEbXML21())) {
                 return severity;
             }
         }
         
-        throw new IllegalArgumentException("Unknown ebXML 2.1 severity type: " + ebXML21);
+        return null;
     }
 }

@@ -17,13 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
 
 /**
  * Encapsulation for {@link RegistryPackageType}.
  * @author Jens Riemschneider
  */
-public class EbXMLRegistryPackage21 extends EbXMLRegistryEntry21<RegistryPackageType> implements EbXMLRegistryPackage {
+public class EbXMLRegistryPackage21 extends EbXMLRegistryObject21<RegistryPackageType> implements EbXMLRegistryPackage {
     /**
      * Constructs a registry package by wrapping the given ebXML 2.1 object.
      * @param registryPackage
@@ -33,5 +34,15 @@ public class EbXMLRegistryPackage21 extends EbXMLRegistryEntry21<RegistryPackage
      */
     public EbXMLRegistryPackage21(RegistryPackageType registryPackage, EbXMLObjectLibrary objectLibrary) {
         super(registryPackage, objectLibrary);
+    }
+
+    @Override
+    public AvailabilityStatus getStatus() {
+        return AvailabilityStatus.valueOfOpcode(getInternal().getStatus());
+    }
+
+    @Override
+    public void setStatus(AvailabilityStatus status) {
+        getInternal().setStatus(AvailabilityStatus.toOpcode(status));
     }
 }

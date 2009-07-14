@@ -71,7 +71,7 @@ public class TestEbXML30Converters {
 
     @Test
     public void testConvertQueryResponse() {
-        QueryResponse org = SampleData.createQueryResponse();
+        QueryResponse org = SampleData.createQueryResponseWithLeafClass();
         AdhocQueryResponse converted = EbXML30Converters.convert(org);
         QueryResponse copy = EbXML30Converters.convertToQueryResponse(converted);
         assertEquals(org, copy);

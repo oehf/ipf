@@ -71,12 +71,17 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
         
         List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
         for (RegistryError regError : list.getRegistryError()) {
-            ErrorInfo error = new ErrorInfo();
-            error.setCodeContext(regError.getCodeContext());
-            error.setLocation(regError.getLocation());
-            error.setErrorCode(ErrorCode.valueOfOpcode(regError.getErrorCode()));
-            error.setSeverity(Severity.valueOfOpcode30(regError.getSeverity()));
-            errors.add(error);
+            if (regError != null) {
+                ErrorInfo error = new ErrorInfo();
+                error.setCodeContext(regError.getCodeContext());
+                error.setLocation(regError.getLocation());
+                error.setErrorCode(ErrorCode.valueOfOpcode(regError.getErrorCode()));
+                error.setSeverity(Severity.valueOfOpcode30(regError.getSeverity()));
+                errors.add(error);
+            }
+            else {
+                errors.add(null);
+            }
         }
         
         return errors;
@@ -88,12 +93,17 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse {
         regResponse.setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
         for (ErrorInfo error : errors) {
-            RegistryError regError = EbXMLFactory30.RS_FACTORY.createRegistryError();
-            regError.setErrorCode(ErrorCode.getOpcode(error.getErrorCode()));
-            regError.setCodeContext(error.getCodeContext());
-            regError.setSeverity(Severity.getOpcode30(error.getSeverity()));
-            regError.setLocation(error.getLocation());
-            list.add(regError);
+            if (error != null) {
+                RegistryError regError = EbXMLFactory30.RS_FACTORY.createRegistryError();
+                regError.setErrorCode(ErrorCode.getOpcode(error.getErrorCode()));
+                regError.setCodeContext(error.getCodeContext());
+                regError.setSeverity(Severity.getOpcode30(error.getSeverity()));
+                regError.setLocation(error.getLocation());
+                list.add(regError);
+            }
+            else {
+                list.add(null);
+            }
         }
     }
 }

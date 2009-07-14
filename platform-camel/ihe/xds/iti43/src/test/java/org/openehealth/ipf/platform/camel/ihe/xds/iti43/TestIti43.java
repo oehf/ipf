@@ -26,6 +26,7 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
@@ -52,9 +53,8 @@ public class TestIti43 extends StandardTestContainer {
 
     @Before
     public void setUp() {
-        request = new RetrieveDocumentSet();
-        doc = new RetrieveDocument();
-        request.getDocuments().add(doc);
+        request = SampleData.createRetrieveDocumentSet();
+        doc = request.getDocuments().get(0);
     }
     
     /** Calls the route attached to the ITI-43 endpoint. */

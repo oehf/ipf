@@ -18,13 +18,16 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 import static org.apache.commons.lang.Validate.notNull;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Person;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.OrganizationTransformer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer;
 
 /**
@@ -33,6 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTr
  */
 public class AuthorTransformer {
     private PersonTransformer personTransformer = new PersonTransformer();
+    private OrganizationTransformer organizationTransformer = new OrganizationTransformer();
     private final EbXMLFactory factory;
     
     /**
@@ -67,9 +71,17 @@ public class AuthorTransformer {
         if (hl7XCN != null) {
             classification.addSlot(SLOT_NAME_AUTHOR_PERSON, hl7XCN);
         }
+
+        List<String> hl7XONs = new ArrayList<String>();
+        for (Organization organization : author.getAuthorInstitution()) {
+            String hl7 = organizationTransformer.toHL7(organization);
+            if (hl7 != null) {
+                hl7XONs.add(hl7);
+            }
+        }
         
         classification.addSlot(SLOT_NAME_AUTHOR_INSTITUTION, 
-                author.getAuthorInstitution().toArray(new String[0]));
+                hl7XONs.toArray(new String[0]));
         
         classification.addSlot(SLOT_NAME_AUTHOR_ROLE, 
                 author.getAuthorRole().toArray(new String[0]));
@@ -103,7 +115,13 @@ public class AuthorTransformer {
         
         Author author = new Author();        
         author.setAuthorPerson(person);
-        author.getAuthorInstitution().addAll(institutions);
+        
+        for (String hl7XON : institutions) {
+            Organization org = organizationTransformer.fromHL7(hl7XON);
+            if (org != null) {
+                author.getAuthorInstitution().add(org);
+            }
+        }
         author.getAuthorRole().addAll(roles);
         author.getAuthorSpecialty().addAll(specialties);
         

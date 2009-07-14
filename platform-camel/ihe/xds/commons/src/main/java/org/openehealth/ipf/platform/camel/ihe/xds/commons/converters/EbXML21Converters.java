@@ -39,17 +39,18 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses.Re
 
 /**
  * Camel type converters for EbXML 2.1.
+ * <p>
+ * There are three types of classes for EbXML:
+ * <li> The version dependent classes from the schema files
+ * <li> The version independent classes
+ * <li> The meta data classes
+ * All of these can be converted into each other with the appropriate factories or constructors.
  * @author Jens Riemschneider
  */
 @Converter
 public class EbXML21Converters {
     private final static EbXMLFactory21 factory = new EbXMLFactory21();
-    private final static ProvideAndRegisterDocumentSetTransformer provideAndRegisterDocumentSetTransformer = new ProvideAndRegisterDocumentSetTransformer(factory);
-    private final static RegisterDocumentSetTransformer registerDocumentSetTransformer = new RegisterDocumentSetTransformer(factory);
-    private final static ResponseTransformer responseTransformer = new ResponseTransformer(factory);
-    private final static QueryRegistryTransformer queryRegistryTransformer = new QueryRegistryTransformer();
-    private final static QueryResponseTransformer queryResponseTransformer = new QueryResponseTransformer(factory);
-
+    
     /**
      * Standard Camel converter for the Provide and Register Document Set request.
      * @param in
@@ -58,7 +59,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static ProvideAndRegisterDocumentSetRequestType convert(ProvideAndRegisterDocumentSet in) {
-        return (ProvideAndRegisterDocumentSetRequestType) provideAndRegisterDocumentSetTransformer.toEbXML(in).getInternal();                
+        ProvideAndRegisterDocumentSetTransformer transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
+        return (ProvideAndRegisterDocumentSetRequestType) transformer.toEbXML(in).getInternal();                
     }
     
     /**
@@ -69,7 +71,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static ProvideAndRegisterDocumentSet convert(ProvideAndRegisterDocumentSetRequestType in) {
-        return provideAndRegisterDocumentSetTransformer.fromEbXML(new EbXMLProvideAndRegisterDocumentSetRequest21(in));        
+        ProvideAndRegisterDocumentSetTransformer transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
+        return transformer.fromEbXML(new EbXMLProvideAndRegisterDocumentSetRequest21(in));        
     }
 
     /**
@@ -80,7 +83,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static SubmitObjectsRequest convert(RegisterDocumentSet in) {
-        return (SubmitObjectsRequest) registerDocumentSetTransformer.toEbXML(in).getInternal();
+        RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(factory);
+        return (SubmitObjectsRequest) transformer.toEbXML(in).getInternal();
     }
 
     /**
@@ -91,7 +95,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static RegisterDocumentSet convert(SubmitObjectsRequest in) {
-        return registerDocumentSetTransformer.fromEbXML(new EbXMLSubmitObjectsRequest21(in));
+        RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(factory);
+        return transformer.fromEbXML(new EbXMLSubmitObjectsRequest21(in));
     }
 
     /**
@@ -102,7 +107,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static RegistryResponse convert(Response in) {
-        return (RegistryResponse) responseTransformer.toEbXML(in).getInternal();
+        ResponseTransformer transformer = new ResponseTransformer(factory);
+        return (RegistryResponse) transformer.toEbXML(in).getInternal();
     }
 
     /**
@@ -113,7 +119,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static Response convert(RegistryResponse in) {
-        return responseTransformer.fromEbXML(new EbXMLRegistryResponse21(in));
+        ResponseTransformer transformer = new ResponseTransformer(factory);
+        return transformer.fromEbXML(new EbXMLRegistryResponse21(in));
     }
     
     /**
@@ -124,7 +131,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static AdhocQueryRequest convert(QueryRegistry in) {
-        return (AdhocQueryRequest)queryRegistryTransformer.toEbXML(in).getInternal(); 
+        QueryRegistryTransformer transformer = new QueryRegistryTransformer();
+        return (AdhocQueryRequest)transformer.toEbXML(in).getInternal(); 
     }
     
     /**
@@ -135,7 +143,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static QueryRegistry convert(AdhocQueryRequest in) {
-        return queryRegistryTransformer.fromEbXML(new EbXMLAdhocQueryRequest21(in));
+        QueryRegistryTransformer transformer = new QueryRegistryTransformer();
+        return transformer.fromEbXML(new EbXMLAdhocQueryRequest21(in));
     }
     
     /**
@@ -146,7 +155,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static RegistryResponse convert(QueryResponse in) {
-        return (RegistryResponse) queryResponseTransformer.toEbXML(in).getInternal();
+        QueryResponseTransformer transformer = new QueryResponseTransformer(factory);
+        return (RegistryResponse) transformer.toEbXML(in).getInternal();
     }
     
     /**
@@ -157,7 +167,8 @@ public class EbXML21Converters {
      */
     @Converter
     public static QueryResponse convertToQueryResponse(RegistryResponse in) {
-        return queryResponseTransformer.fromEbXML(new EbXMLQueryResponse21(in));
+        QueryResponseTransformer transformer = new QueryResponseTransformer(factory);
+        return transformer.fromEbXML(new EbXMLQueryResponse21(in));
     }
 }
-    
+

@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class UriTransformerTest {
     }
 
     @Test
-    public void testToEbXML21WithShortestUriUsingTwoSlots() {
+    public void testToEbXMLWithShortestUriUsingTwoSlots() {
         String uri = veryLongUriString.substring(0, 127);
         String[] ebXML = transformer.toEbXML(uri);
         String uriPart1 = uri.substring(0, 126);
@@ -60,7 +61,13 @@ public class UriTransformerTest {
     }
 
     @Test
-    public void testFromEbXML21WithUriInMultipleSlots() {
+    public void testFromEbXMLWithSimpleUri() {
+        String uri = "http://localhost:8080";        
+        assertEquals(uri, transformer.fromEbXML(Collections.singletonList(uri)));
+    }
+
+    @Test
+    public void testFromEbXMLWithUriInMultipleSlots() {
         String uri = veryLongUriString.substring(0, 1000);
         
         String[] ebXML = transformer.toEbXML(uri);

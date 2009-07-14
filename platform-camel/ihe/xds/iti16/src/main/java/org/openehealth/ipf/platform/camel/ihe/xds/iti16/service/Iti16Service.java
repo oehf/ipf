@@ -15,7 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16.service;
 
+import org.apache.camel.Exchange;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML21Converters;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 
@@ -29,6 +36,20 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.Registr
 public class Iti16Service extends DefaultItiWebService implements Iti16PortType {
     @Override
     public RegistryResponse documentRegistryQueryRegistry(AdhocQueryRequest body) {
-        return process(body, RegistryResponse.class);
+        Exchange result = process(body);
+        if (result.getException() != null) {
+            return EbXML21Converters.convert(createErrorResponse());
+        }
+        
+        return Exchanges.resultMessage(result).getBody(RegistryResponse.class);            
+    }
+
+    private QueryResponse createErrorResponse() {
+        QueryResponse errorResponse = new QueryResponse();
+        errorResponse.setStatus(Status.FAILURE);
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setErrorCode(ErrorCode.REGISTRY_ERROR);
+        errorResponse.getErrors().add(errorInfo);
+        return errorResponse;
     }
 }

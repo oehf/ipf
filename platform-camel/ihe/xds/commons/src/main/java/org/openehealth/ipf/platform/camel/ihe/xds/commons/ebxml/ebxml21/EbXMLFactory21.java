@@ -23,6 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.ResponseOptionType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.AssociationType1;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExtrinsicObjectType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LeafRegistryObjectListType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectRefType;
@@ -78,6 +79,9 @@ public class EbXMLFactory21 implements EbXMLFactory {
         addObjToLib(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, lib);                 
         addObjToLib(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, lib);                 
         addObjToLib(Vocabulary.SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, lib);
+        
+        addObjToLib(Vocabulary.ASSOCIATION_DOC_CODE_CLASS_SCHEME, lib);
+        
         return lib;
     }
 
@@ -109,8 +113,11 @@ public class EbXMLFactory21 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLAssociation21 createAssociation(EbXMLObjectLibrary objectLibrary) {
-        return new EbXMLAssociation21(RIM_FACTORY.createAssociationType1(), objectLibrary);
+    public EbXMLAssociation21 createAssociation(String id, EbXMLObjectLibrary objectLibrary) {
+        AssociationType1 association = RIM_FACTORY.createAssociationType1();
+        association.setId(id);
+        objectLibrary.put(id, association);
+        return new EbXMLAssociation21(association, objectLibrary);
     }
 
     @Override
@@ -175,13 +182,18 @@ public class EbXMLFactory21 implements EbXMLFactory {
     }
 
     @Override
-    public EbXMLQueryResponse21 createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary) {
+    public EbXMLQueryResponse21 createAdhocQueryResponse(EbXMLObjectLibrary objectLibrary, boolean returnsObjectRefs) {
         AdhocQueryResponse adhocQueryResponse = QUERY_FACTORY.createAdhocQueryResponse();
         adhocQueryResponse.setSQLQueryResult(RIM_FACTORY.createRegistryObjectListType());
 
         RegistryResponse response = RS_FACTORY.createRegistryResponse();
         response.setAdhocQueryResponse(adhocQueryResponse);
         
-        return new EbXMLQueryResponse21(response, objectLibrary);        
+        EbXMLQueryResponse21 wrapped = new EbXMLQueryResponse21(response, objectLibrary);
+        if (!returnsObjectRefs) {
+            // Do not include object library if query results are object references!
+            wrapped.getContents().addAll(objectLibrary.getObjects());
+        }
+        return wrapped;        
     }
 }

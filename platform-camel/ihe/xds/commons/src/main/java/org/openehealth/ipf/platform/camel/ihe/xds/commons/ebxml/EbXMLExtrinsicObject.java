@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
+
 /**
  * Encapsulation of the ebXML classes for {@code ExtrinsicObjectType}.
  * <p>
@@ -22,7 +24,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml;
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLExtrinsicObject extends EbXMLRegistryEntry {
+public interface EbXMLExtrinsicObject extends EbXMLRegistryObject {
     /**
      * @return the mime type of this object.
      */
@@ -33,4 +35,15 @@ public interface EbXMLExtrinsicObject extends EbXMLRegistryEntry {
      *          the mime type of this object.
      */
     void setMimeType(String mimeType);
+
+    /**
+     * @return the status of this entry.
+     */
+    AvailabilityStatus getStatus();
+    
+    /**
+     * @param status
+     *          the status of this entry.
+     */
+    void setStatus(AvailabilityStatus status);
 }

@@ -34,4 +34,9 @@ public interface EbXMLSlot {
      * @return the list of values of the slot.
      */
     List<String> getValueList();
+
+    /**
+     * @return the length limit for slot values.
+     */
+    int getValueLengthLimit();
 }

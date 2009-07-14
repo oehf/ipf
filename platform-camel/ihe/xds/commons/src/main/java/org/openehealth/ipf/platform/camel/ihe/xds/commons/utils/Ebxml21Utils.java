@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.utils;
 import java.util.List;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ExternalIdentifierType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.InternationalStringType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.LocalizedStringType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.RegistryPackageType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
 
 /**
@@ -73,25 +75,18 @@ public class Ebxml21Utils extends EbxmlUtils {
             SubmitObjectsRequest request, 
             AuditDataset auditDataset) 
     {
-        List<Object> list = request.getLeafRegistryObjectList().getObjectRefOrAssociationOrAuditableEvent();
-        for(Object o : list) {
-            if(o instanceof RegistryPackageType) {
-                RegistryPackageType registryPackage = (RegistryPackageType) o;
-                List<ExternalIdentifierType> externalIdentifiers = registryPackage.getExternalIdentifier();
-                for(ExternalIdentifierType id : externalIdentifiers) {
-                    try {
-                        String name = id.getName().getLocalizedString().get(0).getValue();  
-                        if(XDS_UNIQUE_ID_ATTRIBUTE.equals(name)) {
-                            auditDataset.setSubmissionSetUuid(id.getValue());
-                        } else if(XDS_PATIENT_ID_ATTRIBUTE.equals(name)) {
-                            auditDataset.setPatientId(id.getValue());
-                        }
-                    } catch(NullPointerException npe) {
-                        // nop
-                    }
-                }
-                break;
-            }
+        EbXMLSubmitObjectsRequest21 ebXML = new EbXMLSubmitObjectsRequest21(request);
+        List<EbXMLRegistryPackage> submissionSets = 
+            ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        
+        for (EbXMLRegistryPackage submissionSet : submissionSets) {
+            String patientID = submissionSet.getExternalIdentifierValue(
+                    Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);            
+            auditDataset.setPatientId(patientID);
+            
+            String uniqueID = submissionSet.getExternalIdentifierValue(
+                    Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+            auditDataset.setSubmissionSetUniqueID(uniqueID);
         }
     }
     

@@ -28,11 +28,29 @@ public class EbXMLObjectLibrary {
     private final Map<String, Object> objLib = new HashMap<String, Object>();
     private final Map<Object, String> reverseLib = new HashMap<Object, String>();
     
+    /**
+     * Puts an object into the library.
+     * <p>
+     * The object will only be added if both parameters are non-<code>null</code>.
+     * @param id
+     *          the id of the object. Can be <code>null</code>.
+     * @param obj
+     *          the object. Can be <code>null</code>.
+     */
     public void put(String id, Object obj) {
-        objLib.put(id, obj);
-        reverseLib.put(obj, id);
+        if (id != null && obj != null) {
+            objLib.put(id, obj);
+            reverseLib.put(obj, id);
+        }
     }
     
+    /**
+     * Looks up an object via its ID.
+     * @param id
+     *          the id. Can be <code>null</code>.
+     * @return the object or <code>null</code> if the input was <code>null</code>
+     *          of if the library does not contain an object with the given id.
+     */
     public Object getById(String id) {
         if (id == null) {
             return null;
@@ -40,6 +58,13 @@ public class EbXMLObjectLibrary {
         return objLib.get(id);
     }
     
+    /**
+     * Looks up an ID via its object. 
+     * @param obj
+     *          the object. Can be <code>null</code>.
+     * @return the ID or <code>null</code> if the input was <code>null</code>
+     *          or if the library does not contain the object.
+     */
     public String getByObj(Object obj) {
         if (obj == null) {
             return null;
@@ -47,6 +72,9 @@ public class EbXMLObjectLibrary {
         return reverseLib.get(obj);
     }
     
+    /**
+     * @return a read-only collection of all objects in the library. 
+     */
     public Collection<Object> getObjects() {
         return Collections.unmodifiableCollection(objLib.values());
     }

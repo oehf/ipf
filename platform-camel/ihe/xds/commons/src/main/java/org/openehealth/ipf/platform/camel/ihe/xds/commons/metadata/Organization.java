@@ -21,7 +21,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 /**
  * Represents an organization.
  * <p>
- * This class contains members from the HL7v2 XON data type.
+ * This class contains members from the HL7v2.5 XON data type.
  * <p>
  * All members of this class are allowed to be <code>null</code>. When transforming
  * to HL7 this indicates that the values are empty. Trailing empty values are 
@@ -30,8 +30,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class Organization {
     private String organizationName;                // XON.1
-    private String idNumber;                        // XON.3
-    private AssigningAuthority assigningAuthority;  // XON.4
+    private AssigningAuthority assigningAuthority;  // XON.6
+    private String idNumber;                        // XON.10
 
     /**
      * Constructs the organization.
@@ -42,10 +42,19 @@ public class Organization {
      * Constructs the organization.
      * @param organizationName
      *          the name of the organization (XON.1).
+     */
+    public Organization(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    /**
+     * Constructs the organization.
+     * @param organizationName
+     *          the name of the organization (XON.1).
      * @param idNumber
-     *          the id of the organization (XON.3).
+     *          the id of the organization (XON.10).
      * @param assigningAuthority
-     *          the assigning authority (XON.4).
+     *          the assigning authority (XON.6).
      */
     public Organization(String organizationName, String idNumber, AssigningAuthority assigningAuthority) {
         this.organizationName = organizationName;
@@ -54,7 +63,7 @@ public class Organization {
     }
 
     /**
-     * @return the assigning authority (XON.4).
+     * @return the assigning authority (XON.6).
      */
     public AssigningAuthority getAssigningAuthority() {
         return assigningAuthority;
@@ -62,7 +71,7 @@ public class Organization {
     
     /**
      * @param assigningAuthority
-     *          the assigning authority (XON.4).
+     *          the assigning authority (XON.6).
      */
     public void setAssigningAuthority(AssigningAuthority assigningAuthority) {
         this.assigningAuthority = assigningAuthority;
@@ -84,7 +93,7 @@ public class Organization {
     }
 
     /**
-     * @return the id of the organization (XON.3).
+     * @return the id of the organization (XON.10).
      */
     public String getIdNumber() {
         return idNumber;
@@ -92,7 +101,7 @@ public class Organization {
 
     /**
      * @param idNumber
-     *          the id of the organization (XON.3).
+     *          the id of the organization (XON.10).
      */
     public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;

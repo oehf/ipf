@@ -66,12 +66,14 @@ public class FolderTransformer extends XDSMetaClassTransformer<EbXMLRegistryPack
     @Override
     protected void addAttributes(Folder metaData, EbXMLRegistryPackage ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addAttributes(metaData, ebXML, objectLibrary);
+        ebXML.setStatus(metaData.getAvailabilityStatus());                
         ebXML.setHome(metaData.getHomeCommunityId());
     }
     
     @Override
     protected void addAttributesFromEbXML(Folder metaData, EbXMLRegistryPackage ebXML) {
         super.addAttributesFromEbXML(metaData, ebXML);
+        metaData.setAvailabilityStatus(ebXML.getStatus());        
         metaData.setHomeCommunityId(ebXML.getHome());
     }
 

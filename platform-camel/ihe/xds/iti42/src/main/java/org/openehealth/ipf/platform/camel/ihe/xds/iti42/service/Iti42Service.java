@@ -16,7 +16,14 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42.service;
 
+import org.apache.camel.Exchange;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML30Converters;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
 
@@ -29,6 +36,20 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.Registr
  */
 public class Iti42Service extends DefaultItiWebService implements Iti42PortType {
     public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest body) {
-        return process(body, RegistryResponseType.class);
+        Exchange result = process(body);
+        if (result.getException() != null) {
+            return EbXML30Converters.convert(createErrorResponse());
+        }
+        
+        return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);            
+    }
+
+    private Response createErrorResponse() {
+        Response errorResponse = new Response();
+        errorResponse.setStatus(Status.FAILURE);
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setErrorCode(ErrorCode.REGISTRY_ERROR);
+        errorResponse.getErrors().add(errorInfo);
+        return errorResponse;
     }
 }

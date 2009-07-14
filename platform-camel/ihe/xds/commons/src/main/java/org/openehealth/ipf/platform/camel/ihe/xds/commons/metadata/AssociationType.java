@@ -73,22 +73,46 @@ public enum AssociationType {
     /**
      * Returns the association type that is represented by the given opcode.
      * <p>
-     * This method looks up the opcode via the ebXML 2.1 and 3.0 representations.
+     * This method looks up the opcode via the ebXML 2.1 representations.
      * @param opcode
      *          the string representation. Can be <code>null</code>.
-     * @return the association type or <code>null</code> if the opcode was <code>null</code>.
+     * @return the association type or <code>null</code> if the opcode was <code>null</code>
+     *          or not supported.
      */
-    public static AssociationType valueOfOpcode(String opcode) {
+    public static AssociationType valueOfOpcode21(String opcode) {
         if (opcode == null) {
             return null;
         }
         
         for (AssociationType type : AssociationType.values()) {
-            if (opcode.equals(type.getOpcode21()) || opcode.equals(type.getOpcode30())) {
+            if (opcode.equals(type.getOpcode21())) {
                 return type;
             }
         }
         
-        throw new IllegalArgumentException("Unsupported Association Type opcode: " + opcode);
+        return null;
+    }
+    
+    /**
+     * Returns the association type that is represented by the given opcode.
+     * <p>
+     * This method looks up the opcode via the ebXML 3.0 representations.
+     * @param opcode
+     *          the string representation. Can be <code>null</code>.
+     * @return the association type or <code>null</code> if the opcode was <code>null</code>
+     *          or not supported.
+     */
+    public static AssociationType valueOfOpcode30(String opcode) {
+        if (opcode == null) {
+            return null;
+        }
+        
+        for (AssociationType type : AssociationType.values()) {
+            if (opcode.equals(type.getOpcode30())) {
+                return type;
+            }
+        }
+        
+        return null;
     }
 }

@@ -32,6 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Address;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Author;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.PatientInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml.DocumentEntryTransformer;
 
@@ -61,8 +62,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         
         Author author1 = new Author();
         author1.setAuthorPerson(createPerson(1));
-        author1.getAuthorInstitution().add("inst1");
-        author1.getAuthorInstitution().add("inst2");
+        author1.getAuthorInstitution().add(new Organization("inst1"));
+        author1.getAuthorInstitution().add(new Organization("inst2"));
         author1.getAuthorRole().add("role1");
         author1.getAuthorRole().add("role2");
         author1.getAuthorSpecialty().add("spec1");
@@ -70,8 +71,8 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         
         Author author2 = new Author();
         author2.setAuthorPerson(createPerson(30));
-        author2.getAuthorInstitution().add("inst3");
-        author2.getAuthorInstitution().add("inst4");
+        author2.getAuthorInstitution().add(new Organization("inst3"));
+        author2.getAuthorInstitution().add(new Organization("inst4"));
         author2.getAuthorRole().add("role3");
         author2.getAuthorRole().add("role4");
         author2.getAuthorSpecialty().add("spec3");
@@ -135,7 +136,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         EbXMLExtrinsicObject ebXML = transformer.toEbXML(documentEntry, objectLibrary);        
         assertNotNull(ebXML);
         
-        assertEquals("Approved", ebXML.getStatus());
+        assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
         assertEquals("text/plain", ebXML.getMimeType());
         assertEquals("uuid", ebXML.getId());
         assertEquals(DOC_ENTRY_CLASS_NODE, ebXML.getObjectType());

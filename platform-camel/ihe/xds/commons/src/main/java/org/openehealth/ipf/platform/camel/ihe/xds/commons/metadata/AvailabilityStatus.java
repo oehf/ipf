@@ -53,7 +53,8 @@ public enum AvailabilityStatus {
      * This method takes standard opcodes and query opcodes into account.
      * @param opcode
      *          the opcode to look up. Can be <code>null</code>.
-     * @return the status. <code>null</code> if the opcode was <code>null</code>.
+     * @return the status. <code>null</code> if the opcode was <code>null</code>
+     *          or could not be found.
      */
     public static AvailabilityStatus valueOfOpcode(String opcode) {
         if (opcode == null) {
@@ -66,7 +67,7 @@ public enum AvailabilityStatus {
             }
         }
         
-        throw new IllegalArgumentException("Unknown status opcode: " + opcode);
+        return null;
     }
 
     /**

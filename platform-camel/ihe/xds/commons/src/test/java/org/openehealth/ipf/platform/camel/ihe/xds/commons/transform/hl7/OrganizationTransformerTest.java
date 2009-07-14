@@ -39,7 +39,7 @@ public class OrganizationTransformerTest {
         organization.setIdNumber("a|number");
         organization.setAssigningAuthority(assigningAuthority);
         
-        assertEquals("Untere\\T\\Klinik^^a\\F\\number^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ", 
+        assertEquals("Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number", 
                 new OrganizationTransformer().toHL7(organization));
     }
 
@@ -57,7 +57,7 @@ public class OrganizationTransformerTest {
     @Test
     public void testFromHL7() {
         Organization organization = new OrganizationTransformer().fromHL7(
-                "Untere\\T\\Klinik^^a\\F\\number^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ");
+                "Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number");
         
         assertEquals("Untere&Klinik", organization.getOrganizationName());
         assertEquals("a|number", organization.getIdNumber());

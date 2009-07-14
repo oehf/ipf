@@ -57,6 +57,8 @@ public class LocalizedString {
      */
     public LocalizedString(String value) {
         this.value = value;
+        this.lang = "en-US";
+        this.charset = "UTF8";
     }
 
     /**

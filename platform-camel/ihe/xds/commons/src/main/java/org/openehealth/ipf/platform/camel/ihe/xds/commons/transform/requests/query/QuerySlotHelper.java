@@ -36,10 +36,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.Que
  * Wrapper class for ebXML query request to simplify access to slots.
  * <p>
  * This class ensures that the various encoding rules of query parameter
- * values are met. 
+ * values are met.
+ * <p>
+ * Note that this class is only used for ebXML 3.0! 
  * @author Jens Riemschneider
  */
-class QuerySlotHelper {
+public class QuerySlotHelper {
     private EbXMLAdhocQueryRequest ebXML;
 
     /**
@@ -47,7 +49,7 @@ class QuerySlotHelper {
      * @param ebXML
      *          the wrapped object.
      */
-    QuerySlotHelper(EbXMLAdhocQueryRequest ebXML) {
+    public QuerySlotHelper(EbXMLAdhocQueryRequest ebXML) {
         notNull(ebXML, "ebXML cannot be null");
         this.ebXML = ebXML;
     }
@@ -58,7 +60,7 @@ class QuerySlotHelper {
      *          the parameter.
      * @return the string value.
      */
-    String toString(QueryParameter param) {
+    public String toString(QueryParameter param) {
         String value = ebXML.getSingleSlotValue(param.getSlotName());
         return decodeString(value);
     }
@@ -70,7 +72,7 @@ class QuerySlotHelper {
      * @param value
      *          the string value.
      */
-    void fromString(QueryParameter param, String value) {
+    public void fromString(QueryParameter param, String value) {
         if (value != null) {
             ebXML.addSlot(param.getSlotName(), encodeAsString(value));
         }
@@ -83,7 +85,7 @@ class QuerySlotHelper {
      * @param codes
      *          the list of codes.
      */
-    void fromCode(QueryParameter param, List<Code> codes) {
+    public void fromCode(QueryParameter param, List<Code> codes) {
         List<String> slotValues = new ArrayList<String>();
         for (Code code : codes) {
             String hl7CE = fromCodeToHL7CE(code);
@@ -99,7 +101,7 @@ class QuerySlotHelper {
      * @param codes
      *          the codes to be filled.
      */
-    void toCode(QueryParameter param, List<Code> codes) {
+    public void toCode(QueryParameter param, List<Code> codes) {
         toCode(ebXML.getSlotValues(param.getSlotName()), codes);
     }
 
@@ -110,7 +112,7 @@ class QuerySlotHelper {
      * @param queryList
      *          the list of codes.
      */
-    void fromCode(QueryParameter param, QueryList<Code> queryList) {
+    public void fromCode(QueryParameter param, QueryList<Code> queryList) {
         for (List<Code> codes : queryList.getOuterList()) {
             fromCode(param, codes);
         }
@@ -123,7 +125,7 @@ class QuerySlotHelper {
      * @param codes
      *          the codes to be filled.
      */
-    void toCode(QueryParameter param, QueryList<Code> queryList) {
+    public void toCode(QueryParameter param, QueryList<Code> queryList) {
         queryList.getOuterList().clear();
 
         List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
@@ -141,7 +143,7 @@ class QuerySlotHelper {
      * @param values
      *          the string list.
      */
-    void fromStringList(QueryParameter param, List<String> values) {
+    public void fromStringList(QueryParameter param, List<String> values) {
         List<String> slotValues = new ArrayList<String>();
         for (String value : values) {
             slotValues.add(encodeAsStringList(value));
@@ -156,7 +158,7 @@ class QuerySlotHelper {
      * @param values
      *          the string list to be filled.
      */
-    void toStringList(QueryParameter param, List<String> values) {
+    public void toStringList(QueryParameter param, List<String> values) {
         values.clear();
         List<String> slotValues = ebXML.getSlotValues(param.getSlotName());
         for (String slotValue : slotValues) {            
@@ -171,7 +173,7 @@ class QuerySlotHelper {
      * @param value
      *          the value.
      */
-    void fromNumber(QueryParameter param, String value) {
+    public void fromNumber(QueryParameter param, String value) {
         ebXML.addSlot(param.getSlotName(), value);
     }
     
@@ -181,7 +183,7 @@ class QuerySlotHelper {
      *          the parameter.
      * @return the value.
      */
-    String toNumber(QueryParameter param) {
+    public String toNumber(QueryParameter param) {
         return ebXML.getSingleSlotValue(param.getSlotName());
     }
 
@@ -192,7 +194,7 @@ class QuerySlotHelper {
      * @param status
      *          the list of status values.
      */
-    void fromStatus(QueryParameter param, List<AvailabilityStatus> status) {
+    public void fromStatus(QueryParameter param, List<AvailabilityStatus> status) {
         List<String> opcodes = new ArrayList<String>(status.size());
         for (AvailabilityStatus statusValue : status) {
             opcodes.add(AvailabilityStatus.toQueryOpcode(statusValue));
@@ -207,7 +209,7 @@ class QuerySlotHelper {
      * @param list
      *          the list of status values to be filled.
      */
-    void toStatus(QueryParameter param, List<AvailabilityStatus> list) {
+    public void toStatus(QueryParameter param, List<AvailabilityStatus> list) {
         List<String> opcodes = new ArrayList<String>(); 
         toStringList(param, opcodes);
 
@@ -224,7 +226,7 @@ class QuerySlotHelper {
      * @param associationTypes
      *          the list of association types.
      */
-    void fromAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
+    public void fromAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
         List<String> opcodes = new ArrayList<String>(associationTypes.size());
         for (AssociationType type : associationTypes) {
             opcodes.add(AssociationType.getOpcode30(type));
@@ -239,13 +241,13 @@ class QuerySlotHelper {
      * @param list
      *          the list of association types to be filled
      */
-    void toAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
+    public void toAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
         List<String> opcodes = new ArrayList<String>(); 
         toStringList(param, opcodes);
 
         associationTypes.clear();
         for (String opcode : opcodes) {
-            associationTypes.add(AssociationType.valueOfOpcode(opcode));
+            associationTypes.add(AssociationType.valueOfOpcode30(opcode));
         }
     }
 

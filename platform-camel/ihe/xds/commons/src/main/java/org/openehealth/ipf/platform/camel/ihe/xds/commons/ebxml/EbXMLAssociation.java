@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationTy
  * abstraction of the ebXML data structure.
  * @author Jens Riemschneider
  */
-public interface EbXMLAssociation {
+public interface EbXMLAssociation extends EbXMLRegistryObject {
     /**
      * @return the id of the target object of this association.
      */

@@ -68,9 +68,9 @@ public class TestEbXML21Converters {
 
     @Test
     public void testConvertQueryResponse() {
-        QueryResponse org = SampleData.createQueryResponse();
+        QueryResponse org = SampleData.createQueryResponseWithLeafClass();
         RegistryResponse converted = EbXML21Converters.convert(org);
         QueryResponse copy = EbXML21Converters.convertToQueryResponse(converted);
-        assertEquals(org, copy);
+        assertEquals(org.toString(), copy.toString());
     }
 }

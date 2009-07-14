@@ -74,7 +74,7 @@ public class QueryResponseTransformer {
         }
         
         EbXMLObjectLibrary library = factory.createObjectLibrary();        
-        EbXMLQueryResponse ebXML = factory.createAdhocQueryResponse(library);
+        EbXMLQueryResponse ebXML = factory.createAdhocQueryResponse(library, !response.getReferences().isEmpty());
         ebXML.setStatus(response.getStatus());
         ebXML.setErrors(response.getErrors());
         

@@ -21,6 +21,7 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery;
@@ -47,8 +48,8 @@ public class TestIti16 extends StandardTestContainer {
 
     @Before
     public void setUp() {
-        query = new SqlQuery();
-        request = new QueryRegistry(query);        
+        request = SampleData.createSqlQuery();        
+        query = (SqlQuery) request.getQuery();
     }
     
     /** Calls the route attached to the ITI-16 endpoint. */

@@ -50,13 +50,25 @@ public interface EbXMLAdhocQueryRequest extends EbXMLSlotList {
      *          the id of the query.
      */
     void setId(String id);
+    
     /**
      * @return the id of the query.
      */
     String getId();
     
+    /**
+     * @param homeCommunityID
+     *          home community ID.
+     */
     void setHome(String homeCommunityID);
+    
+    /**
+     * @return home community ID.
+     */
     String getHome();
 
+    /**
+     * @return the ebXML object wrapped by this object.
+     */
     Object getInternal();
 }

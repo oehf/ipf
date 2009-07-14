@@ -105,7 +105,7 @@ public class AuditDataset {
         return patientId;
     }
 
-    public void setSubmissionSetUuid(String submissionSetUuid) {
+    public void setSubmissionSetUniqueID(String submissionSetUuid) {
         this.submissionSetUuid = submissionSetUuid;
     }
 
