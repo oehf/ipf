@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.commons</groupId>
+    <artifactId>commons-xml</artifactId>
+    <name>commons-xml</name>
+    
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.commons.core.*</osgi.export.pkg>
+        <!--
+            Needed to load any class via
+            org.openehealth.ipf.commons.core.io.IOUtils.deserialize(byte[])
+         -->
+        <osgi.dynamic.import.pkg>
+            *
+        </osgi.dynamic.import.pkg>
+    </properties>
+
+    <parent>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>commons</artifactId>
+        <version>1.7-SNAPSHOT</version>
+    </parent>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>    
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon-dom</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+        </dependency>        
+    </dependencies>
+    
+     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+             <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>META-INF/**/*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+              <plugin>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>    
+
+</project>

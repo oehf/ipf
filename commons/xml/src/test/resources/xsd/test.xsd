@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--W3C Schema erstellt mit XMLSpy v2005 rel. 3 U (http://www.altova.com)-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sub="http://org.openehealth.ipf/subtest" xmlns="http://org.openehealth.ipf/test" targetNamespace="http://org.openehealth.ipf/test" elementFormDefault="qualified">
+	<xs:import namespace="http://org.openehealth.ipf/subtest" schemaLocation="subtest.xsd"/>
+	<xs:element name="a">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="b" type="b-type"/>
+				<xs:element ref="c"/>
+				<xs:element name="d" type="sub:d-type"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="b-type">
+		<xs:attribute name="attr1" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="blib"/>
+					<xs:enumeration value="blob"/>
+					<xs:enumeration value="blub"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:element name="c" type="xs:string"/>
+</xs:schema>

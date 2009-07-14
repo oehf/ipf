@@ -1,0 +1,3 @@
+#Mon Jul 13 14:23:51 CEST 2009
+eclipse.preferences.version=1
+org.eclipse.jdt.core.builder.resourceCopyExclusionFilter=*.launch,*.groovy

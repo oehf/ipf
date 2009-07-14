@@ -1,0 +1,8 @@
+<a xmlns="http://org.openehealth.ipf/test">
+	<b attr1="blib"/>
+	<c>blub</c>
+	<!-- d-type is defined in dependent schema file -->
+	<d attr2="blob">
+		blub
+	</d>
+</a>

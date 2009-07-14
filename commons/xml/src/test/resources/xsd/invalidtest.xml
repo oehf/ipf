@@ -1,0 +1,10 @@
+<a xmlns="http://org.openehealth.ipf/test">
+	<b attr1="blab"/>  <!-- blab is not contained in enumeration -->
+	<c>blub</c>
+	<!-- attr3 is not defined-->
+	<d attr3="blob">
+		blub
+	</d>
+	<!-- e is not defined -->
+	<e>unexpected</e>
+</a>
