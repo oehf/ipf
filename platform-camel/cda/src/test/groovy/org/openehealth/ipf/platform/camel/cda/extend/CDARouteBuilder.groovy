@@ -21,7 +21,7 @@ import javax.xml.transform.stream.StreamSource
 /**
  * @author Christian Ohr
  */
-class CDAR2RouteBuilder extends SpringRouteBuilder {
+class CDARouteBuilder extends SpringRouteBuilder {
       
     void configure() {
         
@@ -37,9 +37,15 @@ class CDAR2RouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .to('mock:error')
                 .end()
-            // .convertBodyTo(StreamSource.class)
             .validate().cdar2()
-            .to('mock:output')            
+            .to('mock:output')
+            
+        from("direct:input4")
+            .onException(Exception.class)
+                .to('mock:error')
+                .end()
+            .validate().ccd([phase:'errors','generate-fired-rule':'false']) // [phase:'errors']
+            .to('mock:output')             
     }
     
 }

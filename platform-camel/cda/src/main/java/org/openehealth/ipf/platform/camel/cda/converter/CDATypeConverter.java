@@ -23,7 +23,7 @@ import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument;
 
 @Converter
-public class CDAR2TypeConverter {
+public class CDATypeConverter {
 
     private static CDAR2Renderer renderer = new CDAR2Renderer();
 

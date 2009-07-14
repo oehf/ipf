@@ -24,12 +24,12 @@ import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument;
 
-public class CDAR2DataFormat implements DataFormat {
+public class CDADataFormat implements DataFormat {
 
     private CDAR2Renderer renderer;
     private CDAR2Parser parser;
 
-    public CDAR2DataFormat() {
+    public CDADataFormat() {
         this.renderer = new CDAR2Renderer();
         this.parser = new CDAR2Parser();
     }

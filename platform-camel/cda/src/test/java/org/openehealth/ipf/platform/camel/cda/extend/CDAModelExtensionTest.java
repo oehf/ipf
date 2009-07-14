@@ -23,7 +23,6 @@ import java.io.InputStream;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Message;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.junit.After;
 import org.junit.Test;
 import org.openehealth.ipf.modules.cda.CDAR2Parser;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
@@ -35,53 +34,63 @@ import org.springframework.test.context.ContextConfiguration;
  * @author Christian Ohr
  */
 @ContextConfiguration(locations = { "/config/context-extend.xml" })
-public class CDAR2ExtensionTest extends AbstractExtensionTest {
+public class CDAModelExtensionTest extends AbstractExtensionTest {
 
-    private String resource = "message/SampleCDADocument.xml";
+    private String cdaExample = "message/SampleCDADocument.xml";
+    private String ccdExample = "message/SampleCCDDocument.xml";
 
     @EndpointInject(uri="mock:error")
     protected MockEndpoint mockError;
     
-    @After
-    public void tearDown() throws Exception {
-        mockOutput.reset();
-        mockError.reset();
-    }
     
     @Test
     public void testMarshalDefault() throws Exception {
-        testMarshal("direct:input1");
+        testMarshalCDA("direct:input1", cdaExample);
+        testMarshalCDA("direct:input1", ccdExample);
     }
     
     @Test
     public void testUnmarshalDefault() throws Exception {
-        testUnmarshal("direct:input2");
+        testUnmarshalCDA("direct:input2", cdaExample);
+        testUnmarshalCDA("direct:input2", ccdExample);
     }    
     
     @Test
-    public void testValidateSuccess() throws Exception {
-        testValidate("direct:input3");
+    public void testXsdValidateSuccess() throws Exception {
+        testValidateCDA("direct:input3", cdaExample);
+        testValidateCDA("direct:input3", ccdExample);
     }
     
+    @Test
+    public void testSchematronValidateSuccess() throws Exception {
+        testValidateCDA("direct:input4", ccdExample);
+    }    
+    
 
-    private void testMarshal(String endpoint) throws Exception {
-        POCDMT000040ClinicalDocument message = inputMessage(resource);
+    private void testMarshalCDA(String endpoint, String file) throws Exception {
+        mockOutput.reset();
+        mockError.reset();
+        POCDMT000040ClinicalDocument message = inputMessage(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, message);
         mockOutput.assertIsSatisfied();
         assertEquals(messageAsString(message), resultString());
     }
     
-    private void testUnmarshal(String endpoint) throws Exception {
-        InputStream stream = inputStream(resource);
+    private void testUnmarshalCDA(String endpoint, String file) throws Exception {
+        mockOutput.reset();
+        mockError.reset();
+        InputStream stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, stream);
         mockOutput.assertIsSatisfied();
-        assertEquals(messageAsString(inputMessage(resource)), messageAsString(resultAdapter()));
+        assertEquals(messageAsString(inputMessage(file)), messageAsString(resultAdapter()));
     }
     
-    private void testValidate(String endpoint) throws Exception {
-        InputStream stream = inputStream(resource);
+    private void testValidateCDA(String endpoint, String file) throws Exception {
+        mockOutput.reset();
+        mockError.reset();
+        InputStream stream = inputStream(file);
         mockOutput.expectedMessageCount(1);
         mockError.expectedMessageCount(0);
         producerTemplate.sendBody(endpoint, stream);

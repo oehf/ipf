@@ -36,7 +36,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.cda.extend.CDAR2RouteBuilder">
+        class="org.openehealth.ipf.platform.camel.cda.extend.CDARouteBuilder">
     </bean>
 
     <bean id="coreModelExtension"
@@ -44,7 +44,7 @@ http://activemq.apache.org/camel/schema/spring/camel-spring.xsd">
     </bean>
 
     <bean id="cdaModelExtension"
-        class="org.openehealth.ipf.platform.camel.cda.extend.CDAR2ModelExtension">
+        class="org.openehealth.ipf.platform.camel.cda.extend.CDAModelExtension">
     </bean>
 
     <bean id="routeModelExtender" 
