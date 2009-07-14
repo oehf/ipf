@@ -67,4 +67,24 @@ public class EbXMLExternalIdentifier30 implements EbXMLExternalIdentifier {
     public void setValue(String value) {
         externalIdentifier.setValue(value);
     }
+
+    @Override
+    public String getRegistryObject() {
+        return externalIdentifier.getRegistryObject();
+    }
+
+    @Override
+    public void setRegistryObject(String registryObject) {
+        externalIdentifier.setRegistryObject(registryObject);
+    }
+
+    @Override
+    public String getId() {
+        return externalIdentifier.getId();
+    }
+
+    @Override
+    public void setId(String id) {
+        externalIdentifier.setId(id);
+    }
 }

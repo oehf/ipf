@@ -84,4 +84,15 @@ public interface EbXMLClassification extends EbXMLSlotList {
      * @return the classification node.
      */
     String getClassificationNode();
+    
+    /**
+     * @param id
+     *          the id of the classification.
+     */
+    void setId(String id);
+    
+    /**
+     * @return the id of the classification.
+     */
+    String getId();
 }

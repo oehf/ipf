@@ -131,4 +131,14 @@ public class EbXMLClassification30 implements EbXMLClassification {
     private EbXMLSlotList30 getSlotList() {
         return new EbXMLSlotList30(classification.getSlot());
     }
+
+    @Override
+    public String getId() {
+        return classification.getId();
+    }
+
+    @Override
+    public void setId(String id) {
+        classification.setId(id);
+    }
 }

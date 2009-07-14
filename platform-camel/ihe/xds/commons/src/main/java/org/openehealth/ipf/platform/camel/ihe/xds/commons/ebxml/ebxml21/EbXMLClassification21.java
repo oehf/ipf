@@ -138,4 +138,14 @@ public class EbXMLClassification21 implements EbXMLClassification {
     private EbXMLSlotList21 getSlotList() {
         return new EbXMLSlotList21(classification.getSlot());
     }
+
+    @Override
+    public String getId() {
+        return classification.getId();
+    }
+
+    @Override
+    public void setId(String id) {
+        classification.setId(id);
+    }
 }

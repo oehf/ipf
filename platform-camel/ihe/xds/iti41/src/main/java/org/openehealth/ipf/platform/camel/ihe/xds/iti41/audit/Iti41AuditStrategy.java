@@ -17,9 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.Ebxml30Utils;
 
 
 /**
@@ -38,7 +39,8 @@ abstract public class Iti41AuditStrategy extends AuditStrategy {
         ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if(submitObjectsRequest != null) {
-            Ebxml30Utils.enrichDatasetFromSubmitObjectsRequest(submitObjectsRequest, auditDataset);
+            EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
+            auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
         }
     }
 }

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.ebxml;
 
 import static org.apache.commons.lang.Validate.notNull;
+
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;

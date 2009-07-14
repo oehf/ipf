@@ -82,14 +82,15 @@ public class QueryResponseTransformer {
             ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
         }
         
+        int classId = 0;
         for (Folder folder : response.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUUID(), Vocabulary.FOLDER_CLASS_NODE, library);
+            addClassification(ebXML, folder.getEntryUUID(), Vocabulary.FOLDER_CLASS_NODE, library, ++classId);
         }
         
         for (SubmissionSet set : response.getSubmissionSets()) {
             ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(set, library));
-            addClassification(ebXML, set.getEntryUUID(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
+            addClassification(ebXML, set.getEntryUUID(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library, ++classId);
         }
         
         for (Association association : response.getAssociations()) {
@@ -152,10 +153,11 @@ public class QueryResponseTransformer {
         return response;
     }
 
-    private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, EbXMLObjectLibrary library) {
+    private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, EbXMLObjectLibrary library, int classId) {
         EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
+        classification.setId("class_id_" + classId);
         ebXML.addClassification(classification);
     }    
 }

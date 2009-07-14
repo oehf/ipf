@@ -51,7 +51,7 @@ public interface EbXMLRegistryObject extends EbXMLSlotList {
     EbXMLClassification getSingleClassification(String scheme);
     
     /**
-     * Adds a classification to this entry.
+     * Adds a classification to this entry with a random id.
      * @param classification
      *          the classification to add.
      * @param scheme

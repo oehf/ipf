@@ -17,7 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 
 /**
  * A data structure used to store information pieces collected by various
@@ -183,5 +188,27 @@ public class AuditDataset {
         }
 
         return result;
+    }
+
+    /**
+     * Enriches the set with fields extracted from a submit objects request POJO.
+     * 
+     * @param request
+     *      a {@link EbXMLSubmitObjectsRequest} as POJO 
+     */
+    public void enrichDatasetFromSubmitObjectsRequest(EbXMLSubmitObjectsRequest ebXML) 
+    {
+        List<EbXMLRegistryPackage> submissionSets = 
+            ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE);
+        
+        for (EbXMLRegistryPackage submissionSet : submissionSets) {
+            String patientID = submissionSet.getExternalIdentifierValue(
+                    Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);            
+            setPatientId(patientID);
+            
+            String uniqueID = submissionSet.getExternalIdentifierValue(
+                    Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+            setSubmissionSetUniqueID(uniqueID);
+        }
     }
 }

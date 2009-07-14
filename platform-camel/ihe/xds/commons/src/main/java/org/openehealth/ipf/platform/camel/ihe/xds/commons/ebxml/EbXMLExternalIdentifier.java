@@ -55,4 +55,26 @@ public interface EbXMLExternalIdentifier {
      *          the name of the identifier.
      */
     void setName(EbXMLInternationalString name);
+
+    /**
+     * @param registryObject
+     *          the registry object that this identifier belongs to.
+     */
+    void setRegistryObject(String registryObject);
+    
+    /**
+     * @return the registry object that this identifier belongs to.
+     */
+    String getRegistryObject();
+
+    /**
+     * @param id
+     *          the id of the identifier.
+     */
+    void setId(String id);
+    
+    /**
+     * @return the id of the identifier.
+     */
+    String getId();
 }
