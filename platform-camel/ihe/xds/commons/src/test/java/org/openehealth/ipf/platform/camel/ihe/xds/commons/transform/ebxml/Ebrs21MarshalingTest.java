@@ -213,6 +213,7 @@ public class Ebrs21MarshalingTest {
         docEntry.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
         docEntry.setUniqueID("Document01_uniqueid");
         docEntry.setUri("http://129.6.58.92:9080/Repository/129.6.58.92.3492.txt");
+        docEntry.setRepositoryUniqueId("42");
 
         SubmissionSet submissionSet = new SubmissionSet();
         submissionSet.setAuthor(author2);
