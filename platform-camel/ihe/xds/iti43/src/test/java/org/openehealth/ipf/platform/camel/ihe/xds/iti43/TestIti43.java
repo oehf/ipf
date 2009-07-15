@@ -80,7 +80,7 @@ public class TestIti43 extends StandardTestContainer {
     }
 
     private RetrievedDocumentSet send(String endpoint, String value) {
-        doc.setDocumentUniqueID(value);
+        doc.setDocumentUniqueId(value);
         return send(endpoint, request, RetrievedDocumentSet.class);
     }
 }

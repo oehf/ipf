@@ -47,7 +47,7 @@ class RetrieveDocumentSetProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         RetrieveDocumentSet request = exchange.getIn().getBody(RetrieveDocumentSet.class);
         RetrieveDocument retrieveDocument = request.getDocuments().get(0);
-        String value = retrieveDocument.getDocumentUniqueID();
+        String value = retrieveDocument.getDocumentUniqueId();
         RetrievedDocumentSet response = new RetrievedDocumentSet();
         response.setStatus(Status.SUCCESS);
         if (!expectedValue.equals(value)) {
