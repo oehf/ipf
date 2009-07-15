@@ -33,7 +33,7 @@ public class SubmissionSet extends XDSMetaClass {
     private Author author;
     private Code contentTypeCode;
     private final List<Recipient> intendedRecipients = new ArrayList<Recipient>(); 
-    private String sourceID;
+    private String sourceId;
     private String submissionTime;
 
     /**
@@ -69,16 +69,16 @@ public class SubmissionSet extends XDSMetaClass {
     /**
      * @return the ID of the source.
      */
-    public String getSourceID() {
-        return sourceID;
+    public String getSourceId() {
+        return sourceId;
     }
     
     /**
-     * @param sourceID
+     * @param sourceId
      *          the ID of the source.
      */
-    public void setSourceID(String sourceID) {
-        this.sourceID = sourceID;
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
     
     /**
@@ -112,7 +112,7 @@ public class SubmissionSet extends XDSMetaClass {
         result = prime * result + ((contentTypeCode == null) ? 0 : contentTypeCode.hashCode());
         result = prime * result
                 + ((intendedRecipients == null) ? 0 : intendedRecipients.hashCode());
-        result = prime * result + ((sourceID == null) ? 0 : sourceID.hashCode());
+        result = prime * result + ((sourceId == null) ? 0 : sourceId.hashCode());
         result = prime * result + ((submissionTime == null) ? 0 : submissionTime.hashCode());
         return result;
     }
@@ -141,10 +141,10 @@ public class SubmissionSet extends XDSMetaClass {
                 return false;
         } else if (!intendedRecipients.equals(other.intendedRecipients))
             return false;
-        if (sourceID == null) {
-            if (other.sourceID != null)
+        if (sourceId == null) {
+            if (other.sourceId != null)
                 return false;
-        } else if (!sourceID.equals(other.sourceID))
+        } else if (!sourceId.equals(other.sourceId))
             return false;
         if (submissionTime == null) {
             if (other.submissionTime != null)

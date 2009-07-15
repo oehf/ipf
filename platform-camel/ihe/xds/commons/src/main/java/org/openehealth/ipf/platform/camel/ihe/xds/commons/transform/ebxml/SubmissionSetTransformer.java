@@ -134,7 +134,7 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addExternalIdentifiers(SubmissionSet metaData, EbXMLRegistryPackage ebXML, EbXMLObjectLibrary objectLibrary) {
         super.addExternalIdentifiers(metaData, ebXML, objectLibrary);
 
-        ebXML.addExternalIdentifier(metaData.getSourceID(), 
+        ebXML.addExternalIdentifier(metaData.getSourceId(), 
                 SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID,
                 SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID);
     }
@@ -144,6 +144,6 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
         super.addExternalIdentifiersFromEbXML(metaData, ebXML);
 
         String sourceID = ebXML.getExternalIdentifierValue(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID);
-        metaData.setSourceID(sourceID);
+        metaData.setSourceId(sourceID);
     }
 }

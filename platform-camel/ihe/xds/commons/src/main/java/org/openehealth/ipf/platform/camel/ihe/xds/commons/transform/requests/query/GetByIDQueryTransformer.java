@@ -18,14 +18,14 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetByIDQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetByIdQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 
 /**
- * Base class of transformers for {@link GetByIDQuery}.
+ * Base class of transformers for {@link GetByIdQuery}.
  * @author Jens Riemschneider
  */
-public abstract class GetByIDQueryTransformer<T extends GetByIDQuery> extends GetByUUIDQueryTransformer<T> {
+public abstract class GetByIDQueryTransformer<T extends GetByIdQuery> extends GetByUUIDQueryTransformer<T> {
     private final QueryParameter uniqueIdParam;
 
     /**
@@ -44,12 +44,12 @@ public abstract class GetByIDQueryTransformer<T extends GetByIDQuery> extends Ge
     @Override
     protected void toEbXML(T query, QuerySlotHelper slots) {
         super.toEbXML(query, slots);
-        slots.fromStringList(uniqueIdParam, query.getUniqueIDs());
+        slots.fromStringList(uniqueIdParam, query.getUniqueIds());
     }
 
     @Override
     protected void fromEbXML(T query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
-        slots.toStringList(uniqueIdParam, query.getUniqueIDs());
+        slots.toStringList(uniqueIdParam, query.getUniqueIds());
     }
 }

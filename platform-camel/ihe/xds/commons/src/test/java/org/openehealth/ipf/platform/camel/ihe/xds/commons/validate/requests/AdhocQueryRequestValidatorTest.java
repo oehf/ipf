@@ -97,7 +97,7 @@ public class AdhocQueryRequestValidatorTest {
     @Test
     public void testQueryParametersCannotBeSetTogether() {
         request = SampleData.createGetDocumentsQuery();        
-        ((GetDocumentsQuery)request.getQuery()).getUniqueIDs().add("1.2.3");
+        ((GetDocumentsQuery)request.getQuery()).getUniqueIds().add("1.2.3");
         expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER);
     }
     

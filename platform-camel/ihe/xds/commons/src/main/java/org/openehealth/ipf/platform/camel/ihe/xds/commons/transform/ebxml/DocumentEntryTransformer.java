@@ -111,7 +111,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setLegalAuthenticator(personTransformer.fromHL7(hl7LegalAuthenticator));
         
         String sourcePatient = extrinsic.getSingleSlotValue(SLOT_NAME_SOURCE_PATIENT_ID);
-        docEntry.setSourcePatientID(identifiableTransformer.fromEbXML(sourcePatient));
+        docEntry.setSourcePatientId(identifiableTransformer.fromEbXML(sourcePatient));
         
         List<String> slotValues = extrinsic.getSlotValues(SLOT_NAME_SOURCE_PATIENT_INFO);        
         docEntry.setSourcePatientInfo(patientInfoTransformer.fromHL7(slotValues));
@@ -135,7 +135,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         String hl7LegalAuthenticator = personTransformer.toHL7(docEntry.getLegalAuthenticator());
         extrinsic.addSlot(SLOT_NAME_LEGAL_AUTHENTICATOR, hl7LegalAuthenticator);
         
-        String sourcePatient = identifiableTransformer.toEbXML(docEntry.getSourcePatientID());
+        String sourcePatient = identifiableTransformer.toEbXML(docEntry.getSourcePatientId());
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_ID, sourcePatient);
         
         List<String> slotValues = patientInfoTransformer.toHL7(docEntry.getSourcePatientInfo());

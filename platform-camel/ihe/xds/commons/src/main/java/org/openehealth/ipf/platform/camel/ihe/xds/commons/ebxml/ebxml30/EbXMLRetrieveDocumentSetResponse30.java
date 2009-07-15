@@ -63,9 +63,9 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             doc.setDataHandler(documentResponse.getDocument());
             RetrieveDocument requestData = new RetrieveDocument();
             doc.setRequestData(requestData);
-            requestData.setDocumentUniqueID(documentResponse.getDocumentUniqueId());
-            requestData.setHomeCommunityID(documentResponse.getHomeCommunityId());
-            requestData.setRepositoryUniqueID(documentResponse.getRepositoryUniqueId());
+            requestData.setDocumentUniqueId(documentResponse.getDocumentUniqueId());
+            requestData.setHomeCommunityId(documentResponse.getHomeCommunityId());
+            requestData.setRepositoryUniqueId(documentResponse.getRepositoryUniqueId());
             docs.add(doc);
         }
         return docs;
@@ -83,9 +83,9 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
                 }
                 RetrieveDocument requestData = doc.getRequestData();
                 if (requestData != null) {
-                    documentResponse.setDocumentUniqueId(requestData.getDocumentUniqueID());
-                    documentResponse.setHomeCommunityId(requestData.getHomeCommunityID());
-                    documentResponse.setRepositoryUniqueId(requestData.getRepositoryUniqueID());
+                    documentResponse.setDocumentUniqueId(requestData.getDocumentUniqueId());
+                    documentResponse.setHomeCommunityId(requestData.getHomeCommunityId());
+                    documentResponse.setRepositoryUniqueId(requestData.getRepositoryUniqueId());
                 }
                 response.getDocumentResponse().add(documentResponse);
             }

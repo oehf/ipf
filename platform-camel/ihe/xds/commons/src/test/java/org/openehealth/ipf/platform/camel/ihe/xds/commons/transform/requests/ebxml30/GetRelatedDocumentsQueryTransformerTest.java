@@ -43,11 +43,11 @@ public class GetRelatedDocumentsQueryTransformerTest {
         transformer = new GetRelatedDocumentsQueryTransformer();
         query = new GetRelatedDocumentsQuery();
 
-        query.getUUIDs().add("uuid1");
-        query.getUUIDs().add("uuid2");
-        query.getUniqueIDs().add("uniqueId1");
-        query.getUniqueIDs().add("uniqueId2");
-        query.setHomeCommunityID("home");
+        query.getUuids().add("uuid1");
+        query.getUuids().add("uuid2");
+        query.getUniqueIds().add("uniqueId1");
+        query.getUniqueIds().add("uniqueId2");
+        query.setHomeCommunityId("home");
         query.getAssociationTypes().add(AssociationType.HAS_MEMBER);
         query.getAssociationTypes().add(AssociationType.TRANSFORM_AND_REPLACE);
 

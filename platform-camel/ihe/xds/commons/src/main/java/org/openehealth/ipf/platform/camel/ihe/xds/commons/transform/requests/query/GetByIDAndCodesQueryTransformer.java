@@ -16,16 +16,21 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.query;
 
 import static org.apache.commons.lang.Validate.notNull;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetByIDAndCodesQuery;
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.HOME;
+
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetByIdAndCodesQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 
 /**
- * Base class of transformers for {@link GetByIDAndCodesQuery}.
+ * Base class of transformers for {@link GetByIdAndCodesQuery}.
  * @author Jens Riemschneider
  */
-public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIDAndCodesQuery> extends GetByIDQueryTransformer<T> {
+public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQuery> {
     private final QueryParameter formatCodeParam;
-    private final QueryParameter confCodeParam; 
+    private final QueryParameter confCodeParam;
+    private final QueryParameter uniqueIdParam;
+    private final QueryParameter uuidParam; 
     
     /**
      * Constructs the transformer.
@@ -39,27 +44,63 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIDAndCodesQ
      *          the parameter name of the confidentiality code.
      */
     public GetByIDAndCodesQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam, QueryParameter formatCodeParam, QueryParameter confCodeParam) {
-        super(uuidParam, uniqueIdParam);
+        notNull(uniqueIdParam, "uniqueIdParam cannot be null");
+        notNull(uuidParam, "uuidParam cannot be null");        
         notNull(formatCodeParam, "formatCodeParam cannot be null");
         notNull(confCodeParam, "confCodeParam cannot be null");
+        
         this.formatCodeParam = formatCodeParam;
         this.confCodeParam = confCodeParam;
+        this.uniqueIdParam = uniqueIdParam;
+        this.uuidParam = uuidParam;
     }
 
-    @Override
-    protected void toEbXML(T query, QuerySlotHelper slots) {
-        super.toEbXML(query, slots);
+    /**
+     * Transforms the query into its ebXML representation.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
+    public void toEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+        
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        
+        ebXML.setId(query.getType().getId());
         
         slots.fromCode(formatCodeParam, query.getFormatCodes());
         slots.fromCode(confCodeParam, query.getConfidentialityCodes());
+        slots.fromString(HOME, query.getHomeCommunityId());
+        slots.fromString(uuidParam, query.getUuid());
+        slots.fromString(uniqueIdParam, query.getUniqueId());
     }
 
-    @Override
-    protected void fromEbXML(T query, QuerySlotHelper slots) {
-        super.fromEbXML(query, slots);
-    
+    /**
+     * Transforms the ebXML representation of a query into a query object.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>. 
+     * @param query
+     *          the query. Can be <code>null</code>.
+     * @param ebXML
+     *          the ebXML representation. Can be <code>null</code>.
+     */
+   public void fromEbXML(T query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+        
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        
         slots.toCode(formatCodeParam, query.getFormatCodes());
         slots.toCode(confCodeParam, query.getConfidentialityCodes());
+        query.setUniqueId(slots.toString(uniqueIdParam));
+        query.setUuid(slots.toString(uuidParam));
+        query.setHomeCommunityId(slots.toString(HOME));
     }
 
 }

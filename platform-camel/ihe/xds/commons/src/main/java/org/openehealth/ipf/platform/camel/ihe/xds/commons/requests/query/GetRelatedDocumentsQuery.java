@@ -28,7 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationTy
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class GetRelatedDocumentsQuery extends GetByIDQuery {
+public class GetRelatedDocumentsQuery extends GetByIdQuery {
     private final List<AssociationType> associationTypes = new ArrayList<AssociationType>();
 
     /**

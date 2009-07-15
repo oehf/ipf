@@ -60,16 +60,16 @@ public class RetrieveDocumentSetResponseTransformerTest {
         
         RetrievedDocument doc = ebXML.getDocuments().get(0);        
         RetrieveDocument requestData = doc.getRequestData();
-        assertEquals("doc1", requestData.getDocumentUniqueID());
-        assertEquals("home1", requestData.getHomeCommunityID());
-        assertEquals("repo1", requestData.getRepositoryUniqueID());
+        assertEquals("doc1", requestData.getDocumentUniqueId());
+        assertEquals("home1", requestData.getHomeCommunityId());
+        assertEquals("repo1", requestData.getRepositoryUniqueId());
         assertSame(dataHandler1, doc.getDataHandler());
  
         doc = ebXML.getDocuments().get(1);
         requestData = doc.getRequestData();
-        assertEquals("doc2", requestData.getDocumentUniqueID());
-        assertEquals("home2", requestData.getHomeCommunityID());
-        assertEquals("repo2", requestData.getRepositoryUniqueID());
+        assertEquals("doc2", requestData.getDocumentUniqueId());
+        assertEquals("home2", requestData.getHomeCommunityId());
+        assertEquals("repo2", requestData.getRepositoryUniqueId());
         assertSame(dataHandler2, doc.getDataHandler());
      }
     

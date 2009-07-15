@@ -58,10 +58,10 @@ public class AssociationTransformer {
             return null;
         }
         
-        EbXMLAssociation result = factory.createAssociation(association.getEntryUUID(), objectLibrary);
+        EbXMLAssociation result = factory.createAssociation(association.getEntryUuid(), objectLibrary);
         result.setAssociationType(association.getAssociationType());
-        result.setSource(association.getSourceUUID());
-        result.setTarget(association.getTargetUUID());
+        result.setSource(association.getSourceUuid());
+        result.setTarget(association.getTargetUuid());
         
         String label = AssociationLabel.toOpcode(association.getLabel());
         result.addSlot(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS, label);
@@ -86,9 +86,9 @@ public class AssociationTransformer {
         
         Association result = new Association();
         result.setAssociationType(association.getAssociationType());
-        result.setTargetUUID(association.getTarget());
-        result.setSourceUUID(association.getSource());
-        result.setEntryUUID(association.getId());
+        result.setTargetUuid(association.getTarget());
+        result.setSourceUuid(association.getSource());
+        result.setEntryUuid(association.getId());
         
         String label = association.getSingleSlotValue(Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS);
         result.setLabel(AssociationLabel.fromOpcode(label));

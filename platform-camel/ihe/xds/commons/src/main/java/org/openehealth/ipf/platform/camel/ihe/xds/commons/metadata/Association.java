@@ -25,41 +25,41 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author Jens Riemschneider
  */
 public class Association {
-    private String targetUUID;
-    private String sourceUUID;
+    private String targetUuid;
+    private String sourceUuid;
     private AssociationType associationType;
     private AssociationLabel label;
-    private String entryUUID;
+    private String entryUuid;
     private Code docCode;
 
     /**
      * @return the UUID of the target object.
      */
-    public String getTargetUUID() {
-        return targetUUID;
+    public String getTargetUuid() {
+        return targetUuid;
     }
 
     /**
-     * @param targetUUID
+     * @param targetUuid
      *          the UUID of the target object.
      */
-    public void setTargetUUID(String targetUUID) {
-        this.targetUUID = targetUUID;
+    public void setTargetUuid(String targetUuid) {
+        this.targetUuid = targetUuid;
     }
 
     /**
      * @return the UUID of the source object.
      */
-    public String getSourceUUID() {
-        return sourceUUID;
+    public String getSourceUuid() {
+        return sourceUuid;
     }
     
     /**
-     * @param sourceUUID
+     * @param sourceUuid
      *          the UUID of the source object.
      */
-    public void setSourceUUID(String sourceUUID) {
-        this.sourceUUID = sourceUUID;
+    public void setSourceUuid(String sourceUuid) {
+        this.sourceUuid = sourceUuid;
     }
     
     /**
@@ -95,16 +95,16 @@ public class Association {
     /**
      * @return UUID of this association entry.
      */
-    public String getEntryUUID() {
-        return entryUUID;
+    public String getEntryUuid() {
+        return entryUuid;
     }
 
     /**
-     * @param entryUUID
+     * @param entryUuid
      *          UUID of this association entry.
      */
-    public void setEntryUUID(String entryUUID) {
-        this.entryUUID = entryUUID;
+    public void setEntryUuid(String entryUuid) {
+        this.entryUuid = entryUuid;
     }
 
     /**
@@ -130,10 +130,10 @@ public class Association {
         int result = 1;
         result = prime * result + ((associationType == null) ? 0 : associationType.hashCode());
         result = prime * result + ((docCode == null) ? 0 : docCode.hashCode());
-        result = prime * result + ((entryUUID == null) ? 0 : entryUUID.hashCode());
+        result = prime * result + ((entryUuid == null) ? 0 : entryUuid.hashCode());
         result = prime * result + ((label == null) ? 0 : label.hashCode());
-        result = prime * result + ((sourceUUID == null) ? 0 : sourceUUID.hashCode());
-        result = prime * result + ((targetUUID == null) ? 0 : targetUUID.hashCode());
+        result = prime * result + ((sourceUuid == null) ? 0 : sourceUuid.hashCode());
+        result = prime * result + ((targetUuid == null) ? 0 : targetUuid.hashCode());
         return result;
     }
 
@@ -156,25 +156,25 @@ public class Association {
                 return false;
         } else if (!docCode.equals(other.docCode))
             return false;
-        if (entryUUID == null) {
-            if (other.entryUUID != null)
+        if (entryUuid == null) {
+            if (other.entryUuid != null)
                 return false;
-        } else if (!entryUUID.equals(other.entryUUID))
+        } else if (!entryUuid.equals(other.entryUuid))
             return false;
         if (label == null) {
             if (other.label != null)
                 return false;
         } else if (!label.equals(other.label))
             return false;
-        if (sourceUUID == null) {
-            if (other.sourceUUID != null)
+        if (sourceUuid == null) {
+            if (other.sourceUuid != null)
                 return false;
-        } else if (!sourceUUID.equals(other.sourceUUID))
+        } else if (!sourceUuid.equals(other.sourceUuid))
             return false;
-        if (targetUUID == null) {
-            if (other.targetUUID != null)
+        if (targetUuid == null) {
+            if (other.targetUuid != null)
                 return false;
-        } else if (!targetUUID.equals(other.targetUUID))
+        } else if (!targetUuid.equals(other.targetUuid))
             return false;
         return true;
     }

@@ -45,7 +45,7 @@ public class DocumentEntry extends XDSMetaClass {
     private String serviceStartTime;
     private String serviceStopTime;
     private Long size;
-    private Identifiable sourcePatientID;
+    private Identifiable sourcePatientId;
     private PatientInfo sourcePatientInfo;
     private Code typeCode;
     private String uri;
@@ -256,16 +256,16 @@ public class DocumentEntry extends XDSMetaClass {
     /**
      * @return the ID of the patient that the document is created for.
      */
-    public Identifiable getSourcePatientID() {
-        return sourcePatientID;
+    public Identifiable getSourcePatientId() {
+        return sourcePatientId;
     }
 
     /**
-     * @param sourcePatientID
+     * @param sourcePatientId
      *          the ID of the patient that the document is created for.
      */
-    public void setSourcePatientID(Identifiable sourcePatientID) {
-        this.sourcePatientID = sourcePatientID;
+    public void setSourcePatientId(Identifiable sourcePatientId) {
+        this.sourcePatientId = sourcePatientId;
     }
 
     /**
@@ -358,7 +358,7 @@ public class DocumentEntry extends XDSMetaClass {
         result = prime * result + ((serviceStartTime == null) ? 0 : serviceStartTime.hashCode());
         result = prime * result + ((serviceStopTime == null) ? 0 : serviceStopTime.hashCode());
         result = prime * result + ((size == null) ? 0 : size.hashCode());
-        result = prime * result + ((sourcePatientID == null) ? 0 : sourcePatientID.hashCode());
+        result = prime * result + ((sourcePatientId == null) ? 0 : sourcePatientId.hashCode());
         result = prime * result + ((sourcePatientInfo == null) ? 0 : sourcePatientInfo.hashCode());
         result = prime * result + ((typeCode == null) ? 0 : typeCode.hashCode());
         result = prime * result + ((uri == null) ? 0 : uri.hashCode());
@@ -454,10 +454,10 @@ public class DocumentEntry extends XDSMetaClass {
                 return false;
         } else if (!size.equals(other.size))
             return false;
-        if (sourcePatientID == null) {
-            if (other.sourcePatientID != null)
+        if (sourcePatientId == null) {
+            if (other.sourcePatientId != null)
                 return false;
-        } else if (!sourcePatientID.equals(other.sourcePatientID))
+        } else if (!sourcePatientId.equals(other.sourcePatientId))
             return false;
         if (sourcePatientInfo == null) {
             if (other.sourcePatientInfo != null)

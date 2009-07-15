@@ -56,11 +56,11 @@ public abstract class FolderTransformerTestBase implements FactoryCreator {
         folder = new Folder();
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.setComments(createLocal(10));
-        folder.setEntryUUID("uuid");
+        folder.setEntryUuid("uuid");
         folder.setLastUpdateTime("123");
-        folder.setPatientID(createIdentifiable(3));
+        folder.setPatientId(createIdentifiable(3));
         folder.setTitle(createLocal(11));
-        folder.setUniqueID("uniqueId");
+        folder.setUniqueId("uniqueId");
         folder.getCodeList().add(createCode(6));
         folder.getCodeList().add(createCode(7));
 

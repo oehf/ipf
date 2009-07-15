@@ -124,9 +124,9 @@ public abstract class SampleData {
      */
     public static RetrievedDocumentSet createRetrievedDocumentSet() {
         RetrieveDocument requestData1 = new RetrieveDocument();
-        requestData1.setDocumentUniqueID("doc1");
-        requestData1.setHomeCommunityID("home1");
-        requestData1.setRepositoryUniqueID("repo1");
+        requestData1.setDocumentUniqueId("doc1");
+        requestData1.setHomeCommunityId("home1");
+        requestData1.setRepositoryUniqueId("repo1");
         
         DataHandler dataHandler1 = createDataHandler();
         
@@ -135,9 +135,9 @@ public abstract class SampleData {
         doc1.setDataHandler(dataHandler1);
 
         RetrieveDocument requestData2 = new RetrieveDocument();
-        requestData2.setDocumentUniqueID("doc2");
-        requestData2.setHomeCommunityID("home2");
-        requestData2.setRepositoryUniqueID("repo2");
+        requestData2.setDocumentUniqueId("doc2");
+        requestData2.setHomeCommunityId("home2");
+        requestData2.setRepositoryUniqueId("repo2");
         
         DataHandler dataHandler2 = createDataHandler();        
         RetrievedDocument doc2 = new RetrievedDocument();
@@ -191,31 +191,31 @@ public abstract class SampleData {
     private static Association createAssociationDocEntryToFolder() {
         Association docFolderAssociation = new Association();
         docFolderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
-        docFolderAssociation.setSourceUUID("folder01");
-        docFolderAssociation.setTargetUUID("document01");
+        docFolderAssociation.setSourceUuid("folder01");
+        docFolderAssociation.setTargetUuid("document01");
         docFolderAssociation.setDocCode(new Code("docCode3", new LocalizedString("docCode3"), "docScheme3"));
-        docFolderAssociation.setEntryUUID("docFolderAss");
+        docFolderAssociation.setEntryUuid("docFolderAss");
         return docFolderAssociation;
     }
 
     private static Association createAssociationFolderToSubmissionSet() {
         Association folderAssociation = new Association();
         folderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
-        folderAssociation.setSourceUUID("submissionSet01");
-        folderAssociation.setTargetUUID("folder01");
+        folderAssociation.setSourceUuid("submissionSet01");
+        folderAssociation.setTargetUuid("folder01");
         folderAssociation.setDocCode(new Code("docCode2", new LocalizedString("docCode2"), "docScheme2"));        
-        folderAssociation.setEntryUUID("folderAss");
+        folderAssociation.setEntryUuid("folderAss");
         return folderAssociation;
     }
 
     private static Association createAssociationDocEntryToSubmissionSet() {
         Association docAssociation = new Association();
         docAssociation.setAssociationType(AssociationType.HAS_MEMBER);
-        docAssociation.setSourceUUID("submissionSet01");
-        docAssociation.setTargetUUID("document01");
+        docAssociation.setSourceUuid("submissionSet01");
+        docAssociation.setTargetUuid("document01");
         docAssociation.setDocCode(new Code("docCode1", new LocalizedString("docCode1"), "docScheme1"));
         docAssociation.setLabel(AssociationLabel.ORIGINAL);
-        docAssociation.setEntryUUID("docAss");
+        docAssociation.setEntryUuid("docAss");
         return docAssociation;
     }
 
@@ -224,11 +224,11 @@ public abstract class SampleData {
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.getCodeList().add(new Code("code7", new LocalizedString("code7"), "scheme7"));
         folder.setComments(new LocalizedString("comments3"));
-        folder.setEntryUUID("folder01");
+        folder.setEntryUuid("folder01");
         folder.setLastUpdateTime("198209");
-        folder.setPatientID(patientID);
+        folder.setPatientId(patientID);
         folder.setTitle(new LocalizedString("Folder 01", "en-US", "UTF8"));
-        folder.setUniqueID("48574589");
+        folder.setUniqueId("48574589");
         return folder;
     }
 
@@ -250,13 +250,13 @@ public abstract class SampleData {
         submissionSet.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         submissionSet.setComments(new LocalizedString("comments1"));
         submissionSet.setContentTypeCode(new Code("code1", new LocalizedString("code1"), "scheme1"));
-        submissionSet.setEntryUUID("submissionSet01");
+        submissionSet.setEntryUuid("submissionSet01");
         submissionSet.getIntendedRecipients().add(recipient);
-        submissionSet.setPatientID(patientID);
-        submissionSet.setSourceID("1.2.3");
+        submissionSet.setPatientId(patientID);
+        submissionSet.setSourceId("1.2.3");
         submissionSet.setSubmissionTime("1980");
         submissionSet.setTitle(new LocalizedString("Submission Set 01", "en-US", "UTF8"));
-        submissionSet.setUniqueID("123");
+        submissionSet.setUniqueId("123");
         return submissionSet;
     }
 
@@ -281,7 +281,7 @@ public abstract class SampleData {
         docEntry.setComments(new LocalizedString("comment2"));
         docEntry.getConfidentialityCodes().add(new Code("code8", new LocalizedString("code8"), "scheme8"));
         docEntry.setCreationTime("1981");
-        docEntry.setEntryUUID("document01");
+        docEntry.setEntryUuid("document01");
         docEntry.getEventCodeList().add(new Code("code9", new LocalizedString("code9"), "scheme9"));
         docEntry.setFormatCode(new Code("code3", new LocalizedString("code3"), "scheme3"));
         docEntry.setHash("1234567890123456789012345678901234567890");
@@ -289,17 +289,17 @@ public abstract class SampleData {
         docEntry.setLanguageCode("en-US");
         docEntry.setLegalAuthenticator(new Person(new Identifiable("legal", new AssigningAuthority("1.7")), new Name("Gustav")));
         docEntry.setMimeType("application/octet-stream");
-        docEntry.setPatientID(patientID);
+        docEntry.setPatientId(patientID);
         docEntry.setPracticeSettingCode(new Code("code5", new LocalizedString("code5"), "scheme5"));
         docEntry.setRepositoryUniqueId("34978634");
         docEntry.setServiceStartTime("198012");
         docEntry.setServiceStopTime("198101");
         docEntry.setSize(123L);
-        docEntry.setSourcePatientID(new Identifiable("source", new AssigningAuthority("4.1")));
+        docEntry.setSourcePatientId(new Identifiable("source", new AssigningAuthority("4.1")));
         docEntry.setSourcePatientInfo(patientInfo);
         docEntry.setTitle(new LocalizedString("Document 01", "en-US", "UTF8"));
         docEntry.setTypeCode(new Code("code6", new LocalizedString("code6"), "scheme6"));
-        docEntry.setUniqueID("32848902348");
+        docEntry.setUniqueId("32848902348");
         docEntry.setUri("http://hierunten.com");
         return docEntry;
     }    
@@ -354,8 +354,8 @@ public abstract class SampleData {
      */
     public static QueryRegistry createGetDocumentsQuery() {
         GetDocumentsQuery query = new GetDocumentsQuery();
-        query.setHomeCommunityID("home1");
-        query.getUUIDs().add("document01");
+        query.setHomeCommunityId("home1");
+        query.getUuids().add("document01");
         
         return new QueryRegistry(query);
     }

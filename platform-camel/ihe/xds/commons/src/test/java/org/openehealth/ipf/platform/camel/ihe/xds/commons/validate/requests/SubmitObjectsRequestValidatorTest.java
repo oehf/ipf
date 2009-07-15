@@ -135,39 +135,39 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testUniqueIdMissing() {
-        request.getFolders().get(0).setUniqueID(null);
+        request.getFolders().get(0).setUniqueId(null);
         expectFailure(UNIQUE_ID_MISSING);
     }
 
     @Test
     public void testUniqueIdTooLong() {
-        request.getFolders().get(0).setUniqueID("12345678901234567890123456789012345678901234567890123456789012345");
+        request.getFolders().get(0).setUniqueId("12345678901234567890123456789012345678901234567890123456789012345");
         expectFailure(UNIQUE_ID_TOO_LONG);
     }
 
     @Test
     public void testUniqueIdNotUnique() {
-        request.getFolders().get(0).setUniqueID("id");
-        docEntry.setUniqueID("id");
+        request.getFolders().get(0).setUniqueId("id");
+        docEntry.setUniqueId("id");
         expectFailure(UNIQUE_ID_NOT_UNIQUE);
     }
 
     @Test
     public void testUUIDNotUnique() {
-        request.getFolders().get(0).setEntryUUID("id");
-        docEntry.setEntryUUID("id");
+        request.getFolders().get(0).setEntryUuid("id");
+        docEntry.setEntryUuid("id");
         expectFailure(UUID_NOT_UNIQUE);
     }
 
     @Test
     public void testDocEntryPatientIdWrong() {
-        docEntry.setPatientID(new Identifiable("lol", new AssigningAuthority("1.3")));
+        docEntry.setPatientId(new Identifiable("lol", new AssigningAuthority("1.3")));
         expectFailure(DOC_ENTRY_PATIENT_ID_WRONG);
     }
     
     @Test
     public void testFolderPatientIdWrong() {
-        request.getFolders().get(0).setPatientID(new Identifiable("lol", new AssigningAuthority("1.3")));
+        request.getFolders().get(0).setPatientId(new Identifiable("lol", new AssigningAuthority("1.3")));
         expectFailure(FOLDER_PATIENT_ID_WRONG);
     }
     
@@ -193,15 +193,15 @@ public class SubmitObjectsRequestValidatorTest {
     
     @Test
     public void testMissingOriginal() {
-        request.getAssociations().get(0).setTargetUUID("lol");
+        request.getAssociations().get(0).setTargetUuid("lol");
         expectFailure(MISSING_ORIGINAL);
     }
     
     @Test
     public void testSourceUUIDNotFound() {
         Association association = new Association();
-        association.setTargetUUID("blabla");
-        association.setSourceUUID("lol");
+        association.setTargetUuid("blabla");
+        association.setSourceUuid("lol");
         association.setAssociationType(AssociationType.TRANSFORM);
         request.getAssociations().add(association);       
         expectFailure(SOURCE_UUID_NOT_FOUND);
@@ -271,7 +271,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test    
     public void testMissingExternalIdentifier() {
-        request.getSubmissionSet().setSourceID(null);
+        request.getSubmissionSet().setSourceId(null);
         expectFailure(MISSING_EXTERNAL_IDENTIFIER);
     }
     
@@ -289,13 +289,13 @@ public class SubmitObjectsRequestValidatorTest {
     
     @Test    
     public void testOIDTooLong() {
-        request.getSubmissionSet().setSourceID("12345678901234567890123456789012345678901234567890123456789012345");
+        request.getSubmissionSet().setSourceId("12345678901234567890123456789012345678901234567890123456789012345");
         expectFailure(OID_TOO_LONG);
     }
     
     @Test    
     public void testInvalidOID() {
-        request.getSubmissionSet().setSourceID("lol");
+        request.getSubmissionSet().setSourceId("lol");
         expectFailure(INVALID_OID);
     }
         

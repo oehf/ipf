@@ -205,48 +205,48 @@ public class Ebrs21MarshalingTest {
         docEntry.setServiceStartTime("200412230800");
         docEntry.setServiceStopTime("200412241600");
         docEntry.setSize(36L);
-        docEntry.setSourcePatientID(new Identifiable("89765a87b", new AssigningAuthority("fj34r", null, null)));
+        docEntry.setSourcePatientId(new Identifiable("89765a87b", new AssigningAuthority("fj34r", null, null)));
         docEntry.setSourcePatientInfo(sourcePatientInfo);
         docEntry.setTypeCode(new Code("34108-1", new LocalizedString("Outpatient Evaluation And Management", "en-us", "UTF-8"), "LOINC"));
-        docEntry.setEntryUUID("Document01");
-        docEntry.setPatientID(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
+        docEntry.setEntryUuid("Document01");
+        docEntry.setPatientId(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         docEntry.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
-        docEntry.setUniqueID("Document01_uniqueid");
+        docEntry.setUniqueId("Document01_uniqueid");
         docEntry.setUri("http://129.6.58.92:9080/Repository/129.6.58.92.3492.txt");
         docEntry.setRepositoryUniqueId("42");
 
         SubmissionSet submissionSet = new SubmissionSet();
         submissionSet.setAuthor(author2);
         submissionSet.setContentTypeCode(new Code("History and Physical", new LocalizedString("History and Physical", "en-us", "UTF-8"), "Connect-a-thon contentTypeCodes"));
-        submissionSet.setSourceID("129.6.58.92.1.1");
+        submissionSet.setSourceId("129.6.58.92.1.1");
         submissionSet.setSubmissionTime("20041225235050");
         submissionSet.setComments(new LocalizedString("Annual physical", "en-us", "UTF-8"));
-        submissionSet.setEntryUUID("SubmissionSet01");
-        submissionSet.setPatientID(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
+        submissionSet.setEntryUuid("SubmissionSet01");
+        submissionSet.setPatientId(new Identifiable("SELF-5", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
         submissionSet.setTitle(new LocalizedString("Physical", "en-us", "UTF-8"));
-        submissionSet.setUniqueID("SubmissionSet01_uniqueid");
+        submissionSet.setUniqueId("SubmissionSet01_uniqueid");
 
         Folder folder = new Folder();
         folder.setComments(new LocalizedString("comments go here", "en-us", "UTF-8"));
-        folder.setEntryUUID("Folder");
-        folder.setPatientID(new Identifiable("ST-1000", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
-        folder.setUniqueID("folder_uniqueid");
+        folder.setEntryUuid("Folder");
+        folder.setPatientId(new Identifiable("ST-1000", new AssigningAuthority(null, "1.3.6.1.4.1.21367.2005.3.7", "ISO")));
+        folder.setUniqueId("folder_uniqueid");
         folder.setTitle(new LocalizedString("FOLDER", "en-us", "UTF-8"));
         
         Association assoc1 = new Association();
         assoc1.setAssociationType(AssociationType.HAS_MEMBER);
-        assoc1.setSourceUUID("SubmissionSet01");
-        assoc1.setTargetUUID("Folder");
+        assoc1.setSourceUuid("SubmissionSet01");
+        assoc1.setTargetUuid("Folder");
         
         Association assoc2 = new Association();
         assoc2.setAssociationType(AssociationType.HAS_MEMBER);
-        assoc2.setSourceUUID("Folder");
-        assoc2.setTargetUUID("Document01");
+        assoc2.setSourceUuid("Folder");
+        assoc2.setTargetUuid("Document01");
 
         Association assoc3 = new Association();
         assoc3.setAssociationType(AssociationType.HAS_MEMBER);
-        assoc3.setSourceUUID("SubmissionSet01");
-        assoc3.setTargetUUID("Document01");
+        assoc3.setSourceUuid("SubmissionSet01");
+        assoc3.setTargetUuid("Document01");
         assoc3.setLabel(AssociationLabel.ORIGINAL);
         
         RegisterDocumentSet expected = new RegisterDocumentSet();

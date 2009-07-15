@@ -27,10 +27,10 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public abstract class XDSMetaClass {
     private AvailabilityStatus availabilityStatus;
     private LocalizedString comments;
-    private String entryUUID;
-    private Identifiable patientID;
+    private String entryUuid;
+    private Identifiable patientId;
     private LocalizedString title;
-    private String uniqueID;
+    private String uniqueId;
     private String homeCommunityId;
 
     /**
@@ -66,31 +66,31 @@ public abstract class XDSMetaClass {
     /**
      * @return the UUID of the entry.
      */
-    public String getEntryUUID() {
-        return entryUUID;
+    public String getEntryUuid() {
+        return entryUuid;
     }
 
     /**
-     * @param entryUUID 
+     * @param entryUuid 
      *          the UUID of the entry.
      */
-    public void setEntryUUID(String entryUUID) {
-        this.entryUUID = entryUUID;
+    public void setEntryUuid(String entryUuid) {
+        this.entryUuid = entryUuid;
     }
 
     /**
      * @return the patient ID.
      */
-    public Identifiable getPatientID() {
-        return patientID;
+    public Identifiable getPatientId() {
+        return patientId;
     }
 
     /**
-     * @param patientID
+     * @param patientId
      *          the patient ID.
      */
-    public void setPatientID(Identifiable patientID) {
-        this.patientID = patientID;
+    public void setPatientId(Identifiable patientId) {
+        this.patientId = patientId;
     }
 
     /**
@@ -111,16 +111,16 @@ public abstract class XDSMetaClass {
     /**
      * @return the unique ID of the entry.
      */
-    public String getUniqueID() {
-        return uniqueID;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
     /**
-     * @param uniqueID
+     * @param uniqueId
      *          the unique ID of the entry.
      */
-    public void setUniqueID(String uniqueID) {
-        this.uniqueID = uniqueID;
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     /**
@@ -145,11 +145,11 @@ public abstract class XDSMetaClass {
         result = prime * result
                 + ((availabilityStatus == null) ? 0 : availabilityStatus.hashCode());
         result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-        result = prime * result + ((entryUUID == null) ? 0 : entryUUID.hashCode());
+        result = prime * result + ((entryUuid == null) ? 0 : entryUuid.hashCode());
         result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
-        result = prime * result + ((patientID == null) ? 0 : patientID.hashCode());
+        result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
-        result = prime * result + ((uniqueID == null) ? 0 : uniqueID.hashCode());
+        result = prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
         return result;
     }
 
@@ -172,30 +172,30 @@ public abstract class XDSMetaClass {
                 return false;
         } else if (!comments.equals(other.comments))
             return false;
-        if (entryUUID == null) {
-            if (other.entryUUID != null)
+        if (entryUuid == null) {
+            if (other.entryUuid != null)
                 return false;
-        } else if (!entryUUID.equals(other.entryUUID))
+        } else if (!entryUuid.equals(other.entryUuid))
             return false;
         if (homeCommunityId == null) {
             if (other.homeCommunityId != null)
                 return false;
         } else if (!homeCommunityId.equals(other.homeCommunityId))
             return false;
-        if (patientID == null) {
-            if (other.patientID != null)
+        if (patientId == null) {
+            if (other.patientId != null)
                 return false;
-        } else if (!patientID.equals(other.patientID))
+        } else if (!patientId.equals(other.patientId))
             return false;
         if (title == null) {
             if (other.title != null)
                 return false;
         } else if (!title.equals(other.title))
             return false;
-        if (uniqueID == null) {
-            if (other.uniqueID != null)
+        if (uniqueId == null) {
+            if (other.uniqueId != null)
                 return false;
-        } else if (!uniqueID.equals(other.uniqueID))
+        } else if (!uniqueId.equals(other.uniqueId))
             return false;
         return true;
     }

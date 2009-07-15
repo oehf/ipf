@@ -94,7 +94,7 @@ public class FindSubmissionSetsQuery extends StoredQuery {
     }
 
     /**
-     * @return the IDs for filtering {@link SubmissionSet#getSourceID()}.
+     * @return the IDs for filtering {@link SubmissionSet#getSourceId()}.
      */
     public List<String> getSourceIds() {
         return sourceIds;

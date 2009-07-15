@@ -29,30 +29,30 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public abstract class GetByIDQuery extends GetByUUIDQuery {
-    private final List<String> uniqueIDs = new ArrayList<String>();
+public abstract class GetByIdQuery extends GetByUuidQuery {
+    private final List<String> uniqueIds = new ArrayList<String>();
 
     /**
      * Constructs the query.
      * @param type
      *          the type of the query.
      */
-    protected GetByIDQuery(QueryType type) {
+    protected GetByIdQuery(QueryType type) {
         super(type);
     }
     
     /**
-     * @return the IDs for filtering {@link XDSMetaClass#getUniqueID()}
+     * @return the IDs for filtering {@link XDSMetaClass#getUniqueId()}
      */
-    public List<String> getUniqueIDs() {
-        return uniqueIDs;
+    public List<String> getUniqueIds() {
+        return uniqueIds;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((uniqueIDs == null) ? 0 : uniqueIDs.hashCode());
+        result = prime * result + ((uniqueIds == null) ? 0 : uniqueIds.hashCode());
         return result;
     }
 
@@ -64,11 +64,11 @@ public abstract class GetByIDQuery extends GetByUUIDQuery {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GetByIDQuery other = (GetByIDQuery) obj;
-        if (uniqueIDs == null) {
-            if (other.uniqueIDs != null)
+        GetByIdQuery other = (GetByIdQuery) obj;
+        if (uniqueIds == null) {
+            if (other.uniqueIds != null)
                 return false;
-        } else if (!uniqueIDs.equals(other.uniqueIDs))
+        } else if (!uniqueIds.equals(other.uniqueIds))
             return false;
         return true;
     }

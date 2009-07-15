@@ -37,10 +37,10 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
         regResponseValidator.validate(response, profile);
         
         for (RetrievedDocument doc : response.getDocuments()) {
-            String repoId = doc.getRequestData().getRepositoryUniqueID();
+            String repoId = doc.getRequestData().getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
             
-            String docId = doc.getRequestData().getDocumentUniqueID();
+            String docId = doc.getRequestData().getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
             
             metaDataAssert(doc.getDataHandler() != null, MISSING_DOCUMENT_FOR_DOC_ENTRY, docId);

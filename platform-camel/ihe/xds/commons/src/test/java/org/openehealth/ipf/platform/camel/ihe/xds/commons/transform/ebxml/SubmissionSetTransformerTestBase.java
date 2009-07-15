@@ -89,12 +89,12 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         set.setComments(createLocal(10));
         set.setSubmissionTime("123");
-        set.setEntryUUID("uuid");
-        set.setPatientID(createIdentifiable(3));
+        set.setEntryUuid("uuid");
+        set.setPatientId(createIdentifiable(3));
         set.setTitle(createLocal(11));
-        set.setUniqueID("uniqueId");
+        set.setUniqueId("uniqueId");
         set.setContentTypeCode(createCode(6));
-        set.setSourceID("sourceId");
+        set.setSourceId("sourceId");
         set.getIntendedRecipients().add(new Recipient(createOrganization(20), createPerson(22)));
         set.getIntendedRecipients().add(new Recipient(createOrganization(21), null));
         set.getIntendedRecipients().add(new Recipient(null, createPerson(23)));

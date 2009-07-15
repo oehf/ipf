@@ -41,9 +41,9 @@ public class GetAssociationsQueryTransformerTest {
         transformer = new GetAssociationsQueryTransformer();
         query = new GetAssociationsQuery();
 
-        query.getUUIDs().add("uuid1");
-        query.getUUIDs().add("uuid2");
-        query.setHomeCommunityID("home");
+        query.getUuids().add("uuid1");
+        query.getUuids().add("uuid2");
+        query.setHomeCommunityId("home");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }

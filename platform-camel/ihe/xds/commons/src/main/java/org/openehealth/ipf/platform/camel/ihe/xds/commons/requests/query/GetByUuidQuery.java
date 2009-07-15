@@ -29,38 +29,38 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public abstract class GetByUUIDQuery extends StoredQuery {
+public abstract class GetByUuidQuery extends StoredQuery {
     private final List<String> uuids = new ArrayList<String>();
-    private String homeCommunityID;
+    private String homeCommunityId;
 
     /**
      * Constructs the query.
      * @param type
      *          the type of the query.
      */
-    protected GetByUUIDQuery(QueryType type) {
+    protected GetByUuidQuery(QueryType type) {
         super(type);
     }
 
     /**
      * @return the home community ID.
      */
-    public String getHomeCommunityID() {
-        return homeCommunityID;
+    public String getHomeCommunityId() {
+        return homeCommunityId;
     }
 
     /**
-     * @param homeCommunityID   
+     * @param homeCommunityId   
      *          the home community ID.
      */
-    public void setHomeCommunityID(String homeCommunityID) {
-        this.homeCommunityID = homeCommunityID;
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
     }
 
     /**
-     * @return the UUIDs used for filtering of {@link XDSMetaClass#getUniqueID()}.
+     * @return the UUIDs used for filtering of {@link XDSMetaClass#getEntryUuid()}.
      */
-    public List<String> getUUIDs() {
+    public List<String> getUuids() {
         return uuids;
     }
 
@@ -68,7 +68,7 @@ public abstract class GetByUUIDQuery extends StoredQuery {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((homeCommunityID == null) ? 0 : homeCommunityID.hashCode());
+        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result + ((uuids == null) ? 0 : uuids.hashCode());
         return result;
     }
@@ -81,11 +81,11 @@ public abstract class GetByUUIDQuery extends StoredQuery {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GetByUUIDQuery other = (GetByUUIDQuery) obj;
-        if (homeCommunityID == null) {
-            if (other.homeCommunityID != null)
+        GetByUuidQuery other = (GetByUuidQuery) obj;
+        if (homeCommunityId == null) {
+            if (other.homeCommunityId != null)
                 return false;
-        } else if (!homeCommunityID.equals(other.homeCommunityID))
+        } else if (!homeCommunityId.equals(other.homeCommunityId))
             return false;
         if (uuids == null) {
             if (other.uuids != null)

@@ -75,7 +75,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
             return null;
         }
         
-        E ebXML = createEbXMLInstance(metaData.getEntryUUID(), objectLibrary);
+        E ebXML = createEbXMLInstance(metaData.getEntryUuid(), objectLibrary);
         
         addAttributes(metaData, ebXML, objectLibrary);        
         addClassifications(metaData, ebXML, objectLibrary);
@@ -146,7 +146,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     protected void addAttributesFromEbXML(C metaData, E ebXML) {
         metaData.setComments(ebXML.getDescription());
         metaData.setTitle(ebXML.getName());
-        metaData.setEntryUUID(ebXML.getId());
+        metaData.setEntryUuid(ebXML.getId());
     }
     
     /**
@@ -199,9 +199,9 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      *          the object library.
      */
     protected void addExternalIdentifiers(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
-        String patientID = identifiableTransformer.toEbXML(metaData.getPatientID());
+        String patientID = identifiableTransformer.toEbXML(metaData.getPatientId());
         ebXML.addExternalIdentifier(patientID, patientIdExternalId, patientIdLocalizedString);        
-        ebXML.addExternalIdentifier(metaData.getUniqueID(), uniqueIdExternalId, uniqueIdLocalizedString);
+        ebXML.addExternalIdentifier(metaData.getUniqueId(), uniqueIdExternalId, uniqueIdLocalizedString);
     }
 
     /**
@@ -213,7 +213,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      */
     protected void addExternalIdentifiersFromEbXML(C metaData, E ebXML) {
         String patientID = ebXML.getExternalIdentifierValue(patientIdExternalId);
-        metaData.setPatientID(identifiableTransformer.fromEbXML(patientID));        
-        metaData.setUniqueID(ebXML.getExternalIdentifierValue(uniqueIdExternalId));
+        metaData.setPatientId(identifiableTransformer.fromEbXML(patientID));        
+        metaData.setUniqueId(ebXML.getExternalIdentifierValue(uniqueIdExternalId));
     }
 }

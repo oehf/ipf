@@ -22,7 +22,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class GetDocumentsAndAssociationsQuery extends GetByIDQuery {
+public class GetDocumentsAndAssociationsQuery extends GetByIdQuery {
     /**
      * Constructs the query.
      */

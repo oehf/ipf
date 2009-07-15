@@ -33,10 +33,10 @@ public class RetrieveDocumentSetRequestValidator implements Validator<EbXMLRetri
         notNull(request, "request cannot be null");
         
         for (RetrieveDocument document : request.getDocuments()) {
-            String repoId = document.getRepositoryUniqueID();
+            String repoId = document.getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
             
-            String docId = document.getDocumentUniqueID();
+            String docId = document.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
         }
     }

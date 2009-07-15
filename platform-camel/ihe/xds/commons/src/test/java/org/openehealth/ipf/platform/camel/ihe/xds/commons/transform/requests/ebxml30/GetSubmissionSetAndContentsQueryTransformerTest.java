@@ -46,11 +46,9 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
         transformer = new GetSubmissionSetAndContentsQueryTransformer();
         query = new GetSubmissionSetAndContentsQuery();
 
-        query.getUUIDs().add("uuid1");
-        query.getUUIDs().add("uuid2");
-        query.getUniqueIDs().add("uniqueId1");
-        query.getUniqueIDs().add("uniqueId2");
-        query.setHomeCommunityID("home");
+        query.setUuid("uuid1");
+        query.setUniqueId("uniqueId1");
+        query.setHomeCommunityId("home");
         query.getConfidentialityCodes().getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         query.getConfidentialityCodes().getOuterList().add(
@@ -66,10 +64,10 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.GET_SUBMISSION_SET_AND_CONTENTS.getId(), ebXML.getId());
         
-        assertEquals(Arrays.asList("('uuid1')", "('uuid2')"),
+        assertEquals(Arrays.asList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_UUID.getSlotName()));
         
-        assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
+        assertEquals(Arrays.asList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_UNIQUE_ID.getSlotName()));
 
         assertEquals(Arrays.asList("'home'"),

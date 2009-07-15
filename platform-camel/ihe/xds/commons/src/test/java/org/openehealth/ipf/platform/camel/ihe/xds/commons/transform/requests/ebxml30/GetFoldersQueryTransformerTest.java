@@ -41,11 +41,11 @@ public class GetFoldersQueryTransformerTest {
         transformer = new GetFoldersQueryTransformer();
         query = new GetFoldersQuery();
 
-        query.getUUIDs().add("uuid1");
-        query.getUUIDs().add("uuid2");
-        query.getUniqueIDs().add("uniqueId1");
-        query.getUniqueIDs().add("uniqueId2");
-        query.setHomeCommunityID("home");
+        query.getUuids().add("uuid1");
+        query.getUuids().add("uuid2");
+        query.getUniqueIds().add("uniqueId1");
+        query.getUniqueIds().add("uniqueId2");
+        query.setHomeCommunityId("home");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }

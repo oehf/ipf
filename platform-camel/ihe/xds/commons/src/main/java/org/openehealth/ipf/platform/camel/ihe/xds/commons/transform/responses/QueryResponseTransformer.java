@@ -85,12 +85,12 @@ public class QueryResponseTransformer {
         int classId = 0;
         for (Folder folder : response.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUUID(), Vocabulary.FOLDER_CLASS_NODE, library, ++classId);
+            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library, ++classId);
         }
         
         for (SubmissionSet set : response.getSubmissionSets()) {
             ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(set, library));
-            addClassification(ebXML, set.getEntryUUID(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library, ++classId);
+            addClassification(ebXML, set.getEntryUuid(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library, ++classId);
         }
         
         for (Association association : response.getAssociations()) {

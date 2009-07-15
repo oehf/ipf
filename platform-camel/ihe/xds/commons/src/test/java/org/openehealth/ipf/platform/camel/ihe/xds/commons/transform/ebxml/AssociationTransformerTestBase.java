@@ -52,10 +52,10 @@ public abstract class AssociationTransformerTestBase implements FactoryCreator {
         
         association = new Association();
         association.setAssociationType(AssociationType.REPLACE);
-        association.setSourceUUID("id1");
-        association.setTargetUUID("id2");        
+        association.setSourceUuid("id1");
+        association.setTargetUuid("id2");        
         association.setLabel(AssociationLabel.ORIGINAL);
-        association.setEntryUUID("uuid");
+        association.setEntryUuid("uuid");
         association.setDocCode(new Code("code", new LocalizedString("display", "en-US", "UTF-8"), "scheme"));
     }
     

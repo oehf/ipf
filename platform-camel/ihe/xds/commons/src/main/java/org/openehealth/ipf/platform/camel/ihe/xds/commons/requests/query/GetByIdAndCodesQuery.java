@@ -22,10 +22,11 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by:
- * <li> a list of UUIDs or unique IDs 
+ * <li> a UUID or unique ID 
  * <li> a list of format codes
  * <li> a list of confidentiality codes
  * <p>
@@ -33,16 +34,20 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public abstract class GetByIDAndCodesQuery extends GetByIDQuery {
+public abstract class GetByIdAndCodesQuery extends StoredQuery {
     private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
     private final List<Code> formatCodes = new ArrayList<Code>();
+    
+    private String uuid;
+    private String uniqueId;
+    private String homeCommunityId;
 
     /**
      * Constructs the query.
      * @param type
      *          the type of query.
      */
-    protected GetByIDAndCodesQuery(QueryType type) {
+    protected GetByIdAndCodesQuery(QueryType type) {
         super(type);
     }
     
@@ -60,13 +65,61 @@ public abstract class GetByIDAndCodesQuery extends GetByIDQuery {
         return formatCodes;
     }
 
+    /**
+     * @return the uuid to filter {@link XDSMetaClass#getEntryUuid()}.
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * @param uuid
+     *          the uuid to filter {@link XDSMetaClass#getEntryUuid()}.
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    /**
+     * @return the unique ID to filter {@link XDSMetaClass#getUniqueId()}.
+     */
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    /**
+     * @param uniqueId
+     *          the unique ID to filter {@link XDSMetaClass#getUniqueId()}.
+     */
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    /**
+     * @return the home community ID.
+     */
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    /**
+     * @param homeCommunityId   
+     *          the home community ID.
+     */
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        int result = 1;
         result = prime * result
                 + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
         result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
+        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
+        result = prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
+        result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
         return result;
     }
 
@@ -74,11 +127,11 @@ public abstract class GetByIDAndCodesQuery extends GetByIDQuery {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!super.equals(obj))
+        if (obj == null)
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GetByIDAndCodesQuery other = (GetByIDAndCodesQuery) obj;
+        GetByIdAndCodesQuery other = (GetByIdAndCodesQuery) obj;
         if (confidentialityCodes == null) {
             if (other.confidentialityCodes != null)
                 return false;
@@ -88,6 +141,21 @@ public abstract class GetByIDAndCodesQuery extends GetByIDQuery {
             if (other.formatCodes != null)
                 return false;
         } else if (!formatCodes.equals(other.formatCodes))
+            return false;
+        if (homeCommunityId == null) {
+            if (other.homeCommunityId != null)
+                return false;
+        } else if (!homeCommunityId.equals(other.homeCommunityId))
+            return false;
+        if (uniqueId == null) {
+            if (other.uniqueId != null)
+                return false;
+        } else if (!uniqueId.equals(other.uniqueId))
+            return false;
+        if (uuid == null) {
+            if (other.uuid != null)
+                return false;
+        } else if (!uuid.equals(other.uuid))
             return false;
         return true;
     }

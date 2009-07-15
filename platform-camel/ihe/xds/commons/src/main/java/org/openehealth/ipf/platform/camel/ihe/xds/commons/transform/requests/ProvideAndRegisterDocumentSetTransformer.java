@@ -85,19 +85,19 @@ public class ProvideAndRegisterDocumentSetTransformer {
             DocumentEntry docEntry = doc.getDocumentEntry();
             if (docEntry != null) {
                 ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
-                ebXML.addDocument(docEntry.getEntryUUID(), doc.getDataHandler());
+                ebXML.addDocument(docEntry.getEntryUuid(), doc.getDataHandler());
             }
         }
         
         int classId = 0;
         for (Folder folder : request.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUUID(), Vocabulary.FOLDER_CLASS_NODE, library, ++classId);
+            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library, ++classId);
         }
         
         SubmissionSet submissionSet = request.getSubmissionSet();
         ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(submissionSet, library));
-        String entryUUID = submissionSet != null ? submissionSet.getEntryUUID() : null;
+        String entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
         addClassification(ebXML, entryUUID, Vocabulary.SUBMISSION_SET_CLASS_NODE, library, ++classId);
         
         for (Association association : request.getAssociations()) {
@@ -126,8 +126,8 @@ public class ProvideAndRegisterDocumentSetTransformer {
             if (docEntry != null) {
                 Document document = new Document();
                 document.setDocumentEntry(docEntry);
-                if (docEntry.getEntryUUID() != null) {
-                    String id = docEntry.getEntryUUID();
+                if (docEntry.getEntryUuid() != null) {
+                    String id = docEntry.getEntryUuid();
                     document.setDataHandler(documents.get(id));
                 }
                 request.getDocuments().add(document);

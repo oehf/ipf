@@ -51,9 +51,9 @@ public class EbXMLRetrieveDocumentSetRequest30 implements EbXMLRetrieveDocumentS
         List<RetrieveDocument> docs = new ArrayList<RetrieveDocument>();
         for (DocumentRequest documentRequest : request.getDocumentRequest()) {
             RetrieveDocument doc = new RetrieveDocument();
-            doc.setDocumentUniqueID(documentRequest.getDocumentUniqueId());
-            doc.setHomeCommunityID(documentRequest.getHomeCommunityId());
-            doc.setRepositoryUniqueID(documentRequest.getRepositoryUniqueId());
+            doc.setDocumentUniqueId(documentRequest.getDocumentUniqueId());
+            doc.setHomeCommunityId(documentRequest.getHomeCommunityId());
+            doc.setRepositoryUniqueId(documentRequest.getRepositoryUniqueId());
             docs.add(doc);
         }
         return docs;
@@ -65,9 +65,9 @@ public class EbXMLRetrieveDocumentSetRequest30 implements EbXMLRetrieveDocumentS
         if (documents != null) {
             for (RetrieveDocument doc : documents) {
                 DocumentRequest documentRequest = new DocumentRequest();
-                documentRequest.setDocumentUniqueId(doc.getDocumentUniqueID());
-                documentRequest.setHomeCommunityId(doc.getHomeCommunityID());
-                documentRequest.setRepositoryUniqueId(doc.getRepositoryUniqueID());
+                documentRequest.setDocumentUniqueId(doc.getDocumentUniqueId());
+                documentRequest.setHomeCommunityId(doc.getHomeCommunityId());
+                documentRequest.setRepositoryUniqueId(doc.getRepositoryUniqueId());
                 request.getDocumentRequest().add(documentRequest);
             }
         }

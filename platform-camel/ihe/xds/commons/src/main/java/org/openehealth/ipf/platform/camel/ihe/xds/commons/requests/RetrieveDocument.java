@@ -25,9 +25,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author Jens Riemschneider
  */
 public class RetrieveDocument {
-    private String repositoryUniqueID;
-    private String documentUniqueID;
-    private String homeCommunityID;
+    private String repositoryUniqueId;
+    private String documentUniqueId;
+    private String homeCommunityId;
    
     /**
      * Constructs the request.
@@ -36,72 +36,72 @@ public class RetrieveDocument {
     
     /**
      * Constructs the request.
-     * @param repositoryUniqueID
+     * @param repositoryUniqueId
      *          the unique ID of the repository containing the document.
-     * @param documentUniqueID
+     * @param documentUniqueId
      *          the unique ID of the document.
-     * @param homeCommunityID
+     * @param homeCommunityId
      *          the home community ID.
      */
-    public RetrieveDocument(String repositoryUniqueID, String documentUniqueID, String homeCommunityID) {
-        this.repositoryUniqueID = repositoryUniqueID;
-        this.documentUniqueID = documentUniqueID;
-        this.homeCommunityID = homeCommunityID;
+    public RetrieveDocument(String repositoryUniqueId, String documentUniqueId, String homeCommunityId) {
+        this.repositoryUniqueId = repositoryUniqueId;
+        this.documentUniqueId = documentUniqueId;
+        this.homeCommunityId = homeCommunityId;
     }
 
     /**
      * @return the unique ID of the repository containing the document.
      */
-    public String getRepositoryUniqueID() {
-        return repositoryUniqueID;
+    public String getRepositoryUniqueId() {
+        return repositoryUniqueId;
     }
     
     /**
-     * @param repositoryUniqueID
+     * @param repositoryUniqueId
      *          the unique ID of the repository containing the document.
      */
-    public void setRepositoryUniqueID(String repositoryUniqueID) {
-        this.repositoryUniqueID = repositoryUniqueID;
+    public void setRepositoryUniqueId(String repositoryUniqueId) {
+        this.repositoryUniqueId = repositoryUniqueId;
     }
     
     /**
      * @return the unique ID of the document.
      */
-    public String getDocumentUniqueID() {
-        return documentUniqueID;
+    public String getDocumentUniqueId() {
+        return documentUniqueId;
     }
     
     /**
-     * @param documentUniqueID
+     * @param documentUniqueId
      *          the unique ID of the document.
      */
-    public void setDocumentUniqueID(String documentUniqueID) {
-        this.documentUniqueID = documentUniqueID;
+    public void setDocumentUniqueId(String documentUniqueId) {
+        this.documentUniqueId = documentUniqueId;
     }
     
     /**
      * @return the home community ID.
      */
-    public String getHomeCommunityID() {
-        return homeCommunityID;
+    public String getHomeCommunityId() {
+        return homeCommunityId;
     }
 
     /**
-     * @param homeCommunityID
+     * @param homeCommunityId
      *          the home community ID.
      */
-    public void setHomeCommunityID(String homeCommunityID) {
-        this.homeCommunityID = homeCommunityID;
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((documentUniqueID == null) ? 0 : documentUniqueID.hashCode());
-        result = prime * result + ((homeCommunityID == null) ? 0 : homeCommunityID.hashCode());
+        result = prime * result + ((documentUniqueId == null) ? 0 : documentUniqueId.hashCode());
+        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result
-                + ((repositoryUniqueID == null) ? 0 : repositoryUniqueID.hashCode());
+                + ((repositoryUniqueId == null) ? 0 : repositoryUniqueId.hashCode());
         return result;
     }
 
@@ -114,20 +114,20 @@ public class RetrieveDocument {
         if (getClass() != obj.getClass())
             return false;
         RetrieveDocument other = (RetrieveDocument) obj;
-        if (documentUniqueID == null) {
-            if (other.documentUniqueID != null)
+        if (documentUniqueId == null) {
+            if (other.documentUniqueId != null)
                 return false;
-        } else if (!documentUniqueID.equals(other.documentUniqueID))
+        } else if (!documentUniqueId.equals(other.documentUniqueId))
             return false;
-        if (homeCommunityID == null) {
-            if (other.homeCommunityID != null)
+        if (homeCommunityId == null) {
+            if (other.homeCommunityId != null)
                 return false;
-        } else if (!homeCommunityID.equals(other.homeCommunityID))
+        } else if (!homeCommunityId.equals(other.homeCommunityId))
             return false;
-        if (repositoryUniqueID == null) {
-            if (other.repositoryUniqueID != null)
+        if (repositoryUniqueId == null) {
+            if (other.repositoryUniqueId != null)
                 return false;
-        } else if (!repositoryUniqueID.equals(other.repositoryUniqueID))
+        } else if (!repositoryUniqueId.equals(other.repositoryUniqueId))
             return false;
         return true;
     }

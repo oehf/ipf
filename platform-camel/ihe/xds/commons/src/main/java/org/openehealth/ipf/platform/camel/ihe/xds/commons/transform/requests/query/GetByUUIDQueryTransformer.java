@@ -19,16 +19,16 @@ import static org.apache.commons.lang.Validate.notNull;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.HOME;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetByUUIDQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetByUuidQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 
 /**
- * Base class of transformers for {@link GetByUUIDQuery}.
+ * Base class of transformers for {@link GetByUuidQuery}.
  * @param <T>
  *          type of the query.
  * @author Jens Riemschneider
  */
-public abstract class GetByUUIDQueryTransformer<T extends GetByUUIDQuery> {
+public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
     private final QueryParameter uuidParam;
     
     /**
@@ -59,8 +59,8 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUUIDQuery> {
         
         ebXML.setId(query.getType().getId());
         
-        slots.fromStringList(uuidParam, query.getUUIDs());
-        slots.fromString(HOME, query.getHomeCommunityID());
+        slots.fromStringList(uuidParam, query.getUuids());
+        slots.fromString(HOME, query.getHomeCommunityId());
 
         toEbXML(query, slots);
     }
@@ -81,8 +81,8 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUUIDQuery> {
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
-        slots.toStringList(uuidParam, query.getUUIDs());
-        query.setHomeCommunityID(slots.toString(HOME));
+        slots.toStringList(uuidParam, query.getUuids());
+        query.setHomeCommunityId(slots.toString(HOME));
 
         fromEbXML(query, slots);
     }
