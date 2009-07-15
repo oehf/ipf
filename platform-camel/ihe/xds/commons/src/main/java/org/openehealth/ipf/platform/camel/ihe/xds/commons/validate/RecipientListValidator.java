@@ -33,7 +33,8 @@ public class RecipientListValidator implements ValueListValidator {
     @Override
     public void validate(List<String> values) throws XDSMetaDataException {
         noNullElements(values, "values cannot contain null elements");
-        metaDataAssert(!values.isEmpty(), RECIPIENT_LIST_EMPTY);
+//        This check is disabled for compatibility with older versions.
+//        metaDataAssert(!values.isEmpty(), RECIPIENT_LIST_EMPTY);
         
         for (String value : values) {
             metaDataAssert(!value.isEmpty(), RECIPIENT_EMPTY);

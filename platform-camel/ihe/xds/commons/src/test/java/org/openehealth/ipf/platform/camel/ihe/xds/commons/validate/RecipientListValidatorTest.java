@@ -39,7 +39,8 @@ public class RecipientListValidatorTest {
     
     @Test 
     public void testValidateBadCases() throws XDSMetaDataException {
-        assertFails(Arrays.<String>asList());
+//      This check is disabled for compatibility with older versions.
+//        assertFails(Arrays.<String>asList());
         assertFails(Arrays.asList(""));
         assertFails(Arrays.asList("^LOL"));
         assertFails(Arrays.asList("|LOL"));

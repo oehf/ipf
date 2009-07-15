@@ -320,12 +320,13 @@ public class SubmitObjectsRequestValidatorTest {
         expectFailure(INVALID_NUMBER_FORMAT, ebXML);
     }
     
-    @Test    
-    public void testRecipientListEmpty() {
-        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
-        ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE).get(0).getSlots(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT).get(0).getValueList().clear();
-        expectFailure(RECIPIENT_LIST_EMPTY, ebXML);
-    }
+//  This check is disabled for compatibility with older versions.
+//    @Test    
+//    public void testRecipientListEmpty() {
+//        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+//        ebXML.getRegistryPackages(Vocabulary.SUBMISSION_SET_CLASS_NODE).get(0).getSlots(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT).get(0).getValueList().clear();
+//        expectFailure(RECIPIENT_LIST_EMPTY, ebXML);
+//    }
     
     @Test    
     public void testRecipientEmpty() {

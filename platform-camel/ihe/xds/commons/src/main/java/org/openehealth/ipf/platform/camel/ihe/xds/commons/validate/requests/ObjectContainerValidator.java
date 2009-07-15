@@ -188,7 +188,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             validateUniquenessOfUUIDs(container);
             validateUniquenessOfUniqueIds(container);
         }
-        validateAssociations(container);
+        validateAssociations(container, profile);
         validateDocumentEntries(container);
         validateFolders(container);
         if (!profile.isQuery()) {
@@ -306,7 +306,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateAssociations(EbXMLObjectContainer container) throws XDSMetaDataException {
+    private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> docEntryIds = new HashSet<String>();
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE)) {
             if (docEntry.getId() != null) {
@@ -322,12 +322,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 validateDocumentRelationship(association, docEntryIds);
             }
             else {
-                validateAssociation(association, docEntryIds);
+                validateAssociation(association, docEntryIds, profile);
             }
         }
     }
 
-    private void validateAssociation(EbXMLAssociation association, Set<String> docEntryIds) throws XDSMetaDataException {
+    private void validateAssociation(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile) throws XDSMetaDataException {
         List<String> slotValues = association.getSlotValues(SLOT_NAME_SUBMISSION_SET_STATUS);
         if (!slotValues.isEmpty()) {
             metaDataAssert(slotValues.size() == 1, TOO_MANY_SUBMISSION_SET_STATES);
@@ -335,7 +335,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             AssociationLabel status = AssociationLabel.fromOpcode(slotValues.get(0));
             metaDataAssert(status != null, INVALID_SUBMISSION_SET_STATUS);
     
-            if (status == AssociationLabel.ORIGINAL) {
+            if (status == AssociationLabel.ORIGINAL && !profile.isQuery()) {
                 metaDataAssert(docEntryIds.contains(association.getTarget()), MISSING_ORIGINAL);
             }
         }
