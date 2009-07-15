@@ -44,15 +44,16 @@ public class LSResourceResolverImpl implements LSResourceResolver {
      */
     public LSInput resolveResource(String type, String namespaceURI,
             String publicId, String systemId, String baseURI) {
-        
+
         ClassPathResource resource = new ClassPathResource(systemId);
         LSInput lsInput = null;
         try {
             InputStream is = resource.getInputStream();
             lsInput = new LSInputImpl(is);
         } catch (IOException e) {
-            LOG.warn("Referenced external file " + systemId
-                    + " could not be found");
+            LOG.info("Referenced external file " + systemId
+                    + " could not be found. Falling back to "
+                    + "default resolution.");
         }
         return lsInput;
     }
