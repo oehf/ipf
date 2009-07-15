@@ -17,6 +17,30 @@ package org.openehealth.ipf.commons.xml;
 
 import java.util.Map;
 
+/**
+ * Validation profile exclusively used by {@link SchematronValidator}. The
+ * following standard Schematron parameters can be passed in as Map parameter:
+ * <ul>
+ * <li>phase : NMTOKEN | "#ALL" (default) Select the phase for validation
+ * <li>allow-foreign : "true" | "false" (default) Pass non-Schematron elements
+ * and rich markup to the generated stylesheet
+ * <li>diagnose : "true" (default) | "false" Add the diagnostics to the
+ * assertion test in reports
+ * <li>property : "true" (default) | "false" Experimental: Add properties to the
+ * assertion test in reports
+ * <li>generate-paths : "true" (default) | "false" Generate the @location
+ * attribute with XPaths
+ * <li>sch.exslt.imports : semi-colon delimited string of filenames for some
+ * EXSLT implementations
+ * <li>optimize : "visit-no-attributes" Use only when the schema has no
+ * attributes as the context nodes
+ * <li>generate-fired-rule: "true" (default) | "false" Generate fired-rule
+ * elements
+ * </ul>
+ * 
+ * @author Christian Ohr
+ * @see SchematronValidator
+ */
 public class SchematronProfile {
 
     public SchematronProfile() {

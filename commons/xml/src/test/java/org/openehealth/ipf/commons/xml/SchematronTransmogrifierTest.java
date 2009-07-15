@@ -30,12 +30,11 @@ import org.springframework.core.io.ClassPathResource;
 
 public class SchematronTransmogrifierTest {
 
-    private SchematronTransmogrifier svi;
+    private SchematronTransmogrifier<String> svi;
 
     @Before
     public void setUp() throws Exception {
-        svi = new SchematronTransmogrifier();
-        // svi.setRules(new ClassPathResource("schematron-test-rules.xml"));
+        svi = new SchematronTransmogrifier<String>(String.class);
     }
 
     @After
@@ -46,8 +45,8 @@ public class SchematronTransmogrifierTest {
     public void testConvert() throws IOException {
         Source testXml = new StreamSource(new ClassPathResource(
                 "schematron/schematron-test.xml").getInputStream());
-        String result = svi.zapToString(testXml, new SchematronProfile(
-                "schematron/schematron-test-rules.xml"));
+        String result = svi
+                .zap(testXml, "schematron/schematron-test-rules.xml");
         assertFalse(result.contains("svrl:failed-assert"));
     }
 
@@ -55,8 +54,8 @@ public class SchematronTransmogrifierTest {
     public void testConvertFail() throws IOException {
         Source testXml = new StreamSource(new ClassPathResource(
                 "schematron/schematron-test-fail.xml").getInputStream());
-        String result = svi.zapToString(testXml, new SchematronProfile(
-                "schematron/schematron-test-rules.xml"));
+        String result = svi
+                .zap(testXml, "schematron/schematron-test-rules.xml");
         assertTrue(result.contains("<svrl:failed-assert")); // 3 occurrences
     }
 }

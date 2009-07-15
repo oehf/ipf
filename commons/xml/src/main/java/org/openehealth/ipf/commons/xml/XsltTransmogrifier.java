@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.xml;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,7 +27,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.logging.Log;
@@ -39,7 +37,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
- * Xslt Processor transforming a {@link Source} into a {@link Result}. The
+ * Xslt Processor transforming a {@link Source} into an object of type T. The
  * stylesheet to be used is passed with the {@link #zap(Source, Object...)}
  * call, however, the Xslt Template object is cached for subsequent
  * transformations using this stylesheet.
@@ -50,7 +48,7 @@ import org.springframework.core.io.ResourceLoader;
  * 
  * @author Christian Ohr
  */
-public class XsltTransmogrifier implements Transmogrifier<Source, Result> {
+public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
 
     private Map<Object, Templates> templateCache = new HashMap<Object, Templates>();
 
@@ -58,20 +56,40 @@ public class XsltTransmogrifier implements Transmogrifier<Source, Result> {
 
     private TransformerFactory factory;
     private URIResolver resolver;
+    private Class<T> outputFormat;
 
     private static ResourceLoader resourceLoader = new DefaultResourceLoader();
     private static Log LOG = LogFactory.getLog(XsltTransmogrifier.class);
 
+    private static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";
+
+    @SuppressWarnings("unchecked")
     public XsltTransmogrifier() {
+        this((Class<T>) String.class);
+    }
+
+    /**
+     * @param outputFormat
+     *            currently supported: String, Writer, OutputStream
+     */
+    public XsltTransmogrifier(Class<T> outputFormat) {
         super();
         factory = TransformerFactory.newInstance();
         // Wrap the default resolver
         resolver = new ClasspathUriResolver(factory);
         factory.setURIResolver(resolver);
+        this.outputFormat = outputFormat;
     }
 
-    public XsltTransmogrifier(Map<String, Object> staticParams) {
-        this();
+    /**
+     * @param outputFormat
+     *            currently supported: String, Writer, OutputStream
+     * @param staticParams
+     *            static Xslt parameters
+     */
+    public XsltTransmogrifier(Class<T> outputFormat,
+            Map<String, Object> staticParams) {
+        this(outputFormat);
         this.staticParams = staticParams;
     }
 
@@ -102,20 +120,11 @@ public class XsltTransmogrifier implements Transmogrifier<Source, Result> {
      *      java.lang.Object[])
      */
     @Override
-    public Result zap(Source source, Object... params) {
-        Result result = new StreamResult(new StringWriter());
+    public T zap(Source source, Object... params) {
+        ResultHolder<T> accessor = ResultHolderFactory.create(outputFormat);
+        Result result = accessor.createResult();
         doZap(source, result, params);
-        return result;
-    }
-
-    /**
-     * Package-private implementation that returns a String instead of a Result
-     */
-    String zapToString(Source source, Object... params) {
-        StringWriter writer = new StringWriter();
-        Result result = new StreamResult(writer);
-        doZap(source, result, params);
-        return writer.toString();
+        return accessor.getResult();
     }
 
     private void doZap(Source source, Result result, Object... params) {
@@ -166,22 +175,44 @@ public class XsltTransmogrifier implements Transmogrifier<Source, Result> {
      * @TODO use an external cache implementation?
      */
     synchronized protected Templates template(Object... params) {
-        Templates template = null;
-        String resourceLocation = (String) params[0];
-        if (!(templateCache.containsKey(resourceLocation))) {
-            LOG.debug("Create new template for " + resourceLocation);
-            try {
-                template = factory
-                        .newTemplates(stylesheetSource(resourceLocation));
-                templateCache.put(resourceLocation, template);
-            } catch (Exception e) {
-                throw new IllegalArgumentException("The stylesheet resource "
-                        + resourceLocation + " is not valid", e);
-            }
-        } else {
-            template = templateCache.get(resourceLocation);
+        if (!(templateCache.containsKey(resource(params)))) {
+            templateCache.put(resource(params), doCreateTemplate(params));
         }
-        return template;
+        return templateCache.get(resource(params));
+    }
+
+    /**
+     * Creates the Xslt template
+     * 
+     * @param resourceLocation
+     * @return the Xslt template
+     */
+    protected Templates doCreateTemplate(Object... params) {
+        String resourceLocation = resource(params);
+        LOG.debug("Create new template for " + resourceLocation);
+        try {
+            return factory.newTemplates(stylesheetSource(resourceLocation));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("The resource "
+                    + resourceLocation + " is not valid", e);
+        }
+    }
+
+    /**
+     * Retrieves the stylesheet resource from the parameters
+     * 
+     * @param params
+     * @return
+     */
+    protected String resource(Object... params) {
+        String resourceLocation = null;
+        if (params[0] instanceof String) {
+            resourceLocation = (String) params[0];
+        } else if (params[0] instanceof Map) {
+            resourceLocation = (String) ((Map) params[0])
+                    .get(RESOURCE_LOCATION);
+        }
+        return resourceLocation;
     }
 
     /**
@@ -192,7 +223,9 @@ public class XsltTransmogrifier implements Transmogrifier<Source, Result> {
      */
     @SuppressWarnings("unchecked")
     protected Map<String, Object> parameters(Object... params) {
-        if (params.length > 1 && params[1] instanceof Map) {
+        if (params[0] instanceof Map) {
+            return (Map<String, Object>) params[0];
+        } else if (params.length > 1 && params[1] instanceof Map) {
             return (Map<String, Object>) params[1];
         } else {
             return null;

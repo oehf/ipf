@@ -56,15 +56,26 @@ public class TransmogrifierAdapterType extends ProcessorAdapterType {
     }
     
     public TransmogrifierAdapterType xslt() {
-        this.transmogrifier = new XsltTransmogrifier();
+        this.transmogrifier = new XsltTransmogrifier(String.class);
+        return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
+    }
+    
+    public TransmogrifierAdapterType xslt(Class<?> clazz) {
+        this.transmogrifier = new XsltTransmogrifier(clazz);
         return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
     }
     
     public TransmogrifierAdapterType schematron() {
-        this.transmogrifier = new SchematronTransmogrifier();
+        this.transmogrifier = new SchematronTransmogrifier(String.class);
         return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
     }
 
+    public TransmogrifierAdapterType schematron(Class<?> clazz) {
+        this.transmogrifier = new SchematronTransmogrifier(clazz);
+        return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
+    }
+
+    
     @Override
     protected ProcessorAdapter doCreateProcessor(RouteContext routeContext) {
         if (transmogrifierBean != null) {

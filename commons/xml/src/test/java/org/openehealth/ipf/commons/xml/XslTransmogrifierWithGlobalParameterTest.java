@@ -37,14 +37,14 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class XslTransmogrifierWithGlobalParameterTest {
 
-    private XsltTransmogrifier transformer;
+    private XsltTransmogrifier<String> transformer;
     Map<String, Object> parameters;
 
     @Before
     public void setUp() throws Exception {
         parameters = new HashMap<String, Object>();
         parameters.put("service", new XsltTestService());
-        transformer = new XsltTransmogrifier();
+        transformer = new XsltTransmogrifier<String>(String.class);
     }
 
     /**
@@ -56,8 +56,7 @@ public class XslTransmogrifierWithGlobalParameterTest {
     public void testConvertString() throws IOException {
         Source content = new StreamSource(new ClassPathResource(
                 "xslt/parameterExample.xml").getInputStream());
-        String s = transformer.zapToString(content,
-                "xslt/parameter.xslt", parameters);
+        String s = transformer.zap(content, "xslt/parameter.xslt", parameters);
         assertTrue(s.contains("ein negeR mi tgaz ellezaG tim regeN niE"));
     }
 

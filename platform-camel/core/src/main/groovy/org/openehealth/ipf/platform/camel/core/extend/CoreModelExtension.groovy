@@ -258,7 +258,7 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
         //  Adapter Extensions for ProcessorType
         // ----------------------------------------------------------------
-    
+        
         ProcessorType.metaClass.transmogrify = { Transmogrifier transmogrifier ->
             TransmogrifierAdapterType answer = new TransmogrifierAdapterType(transmogrifier)
             delegate.addOutput(answer)
@@ -274,6 +274,12 @@ class CoreModelExtension {
         ProcessorType.metaClass.transmogrify = { Closure transmogrifierLogic ->
             delegate.transmogrify(new DelegatingTransmogrifier(transmogrifierLogic))
         }
+        
+        ProcessorType.metaClass.transmogrify = { ->
+            TransmogrifierAdapterType answer = new TransmogrifierAdapterType(null)
+            delegate.addOutput(answer)
+            return answer
+        }        
 
         ProcessorType.metaClass.validate = {->
             ValidatorAdapterType answer = new ValidatorAdapterType()

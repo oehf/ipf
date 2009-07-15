@@ -1,0 +1,78 @@
+<ns1:patientRegistration xmlns:ns1="http://org.openehealth.test/ns1" xmlns:ns2="http://org.openehealth.test/ns2" xmlns:xm="http://www.w3.org/2005/05/xmlmime" moodCode="EVN">
+	<!--Zero or more repetitions:-->
+	<ns2:id root="1.2.3" extension="456"/>
+	<ns2:statusCode code="active"/>
+	<ns2:effectiveTime>
+		<ns2:low>2007-10-18T10:42+00:01</ns2:low>
+	</ns2:effectiveTime>
+	<ns2:subject>
+		<ns2:patient>
+			<!--Zero or more repetitions:-->
+			<ns2:id root="1.2.3" extension="456"/>
+			<ns2:addr>
+				<ns2:streetAddressLine>Otto-Hahn-Straße 234</ns2:streetAddressLine>
+				<ns2:city>Walldorf</ns2:city>
+				<ns2:postalCode>69190</ns2:postalCode>
+				<ns2:country>DE</ns2:country>
+			</ns2:addr>
+			<!--Zero or more repetitions:-->
+			<ns2:telecom value="tel:+49622012345" use="HP"/>
+			<ns2:statusCode code="active"/>
+			<!--Optional:-->
+			<ns2:confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25">
+               </ns2:confidentialityCode>
+			<!--Optional:-->
+			<ns2:veryImportantPersonCode code="VIP" codeSystem="2.16.840.1.113883.5.1075">
+               </ns2:veryImportantPersonCode>
+			<ns2:person>
+				<ns2:name>
+					<ns2:family>Müller</ns2:family>
+					<ns2:family qualifier="BR">Meier</ns2:family>
+					<ns2:given>Heidi</ns2:given>
+					<ns2:prefix qualifier="AC">Dr.</ns2:prefix>
+					<!--ns2:suffix partType="SFX" qualifier="?">?</ns2:suffix>-->
+				</ns2:name>
+				<ns2:administrativeGenderCode code="F" codeSystem="2.16.840.1.113883.5.1">
+                  </ns2:administrativeGenderCode>
+				<ns2:birthTime value="1961-05-09"/>
+				<ns2:maritalStatusCode code="S" codeSystem="2.16.840.1.113883.5.2">
+                  </ns2:maritalStatusCode>
+				<!--Zero or more repetitions:-->
+				<ns2:asCitizen code="DE" codeSystem="?">
+                  </ns2:asCitizen>
+				<!--Optional:-->
+				<ns2:birthPlace>
+					<ns2:name>
+						<ns2:value>Stuttgart</ns2:value>
+					</ns2:name>
+				</ns2:birthPlace>
+				<!--Zero or more repetitions:-->
+				<ns2:contactParty>
+					<ns2:code code="NOK" codeSystem="2.16.840.1.113883.5.111">
+                     </ns2:code>
+					<!--Zero or more repetitions:-->
+					<ns2:addr>
+						<ns2:streedAddressLine>Otto-Hahn-Straße 234</ns2:streedAddressLine>
+						<ns2:city>Walldorf</ns2:city>
+						<ns2:postalCode>69190</ns2:postalCode>
+						<ns2:country>DE</ns2:country>
+					</ns2:addr>
+					<ns2:telecom value="tel:+49622012345" use="HP"/>
+					<ns2:statusCode code="active"/>
+					<ns2:person>
+						<ns2:name>
+							<ns2:family>Schmidt</ns2:family>
+							<ns2:given>Horscht</ns2:given>
+						</ns2:name>
+						<!--Optional:-->
+						<ns2:administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1">
+                        </ns2:administrativeGenderCode>
+					</ns2:person>
+				</ns2:contactParty>
+			</ns2:person>
+			<ns2:providerOrganization>
+				<ns2:id root="2.16.840.1.113883.3.37.1" extension="007"/>
+			</ns2:providerOrganization>
+		</ns2:patient>
+	</ns2:subject>
+</ns1:patientRegistration>

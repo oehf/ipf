@@ -31,18 +31,14 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
  */
 public class SchematronValidator implements Validator {
 	
-	private SchematronTransmogrifier schematronTransmogrifier
+	private SchematronTransmogrifier<String> schematronTransmogrifier
 	
 	public SchematronValidator() {
-	    this(new SchematronTransmogrifier())
+	    this.schematronTransmogrifier = new ValidatingSchematronTransmogrifier<String>(String.class)
 	}
-	
-	public SchematronValidator(SchematronTransmogrifier t) {
-	    this.schematronTransmogrifier = t
-	}
-	
+		
 	public void validate(Object message, Object profile) {
-		String s = schematronTransmogrifier.zapToString((Source)message, profile);
+		String s = schematronTransmogrifier.zap((Source)message, profile);
 		validateResult(s)
 	}
 	

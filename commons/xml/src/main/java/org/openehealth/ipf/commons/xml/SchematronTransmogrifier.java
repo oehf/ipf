@@ -54,68 +54,63 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Christian Ohr
  */
-public class SchematronTransmogrifier extends XsltTransmogrifier {
+public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
 
     private static Log LOG = LogFactory.getLog(SchematronTransmogrifier.class);
 
-    private XsltTransmogrifier xsltTransmogrifier;
+    private XsltTransmogrifier<String> xsltTransmogrifier;
 
+    @SuppressWarnings("unchecked")
     public SchematronTransmogrifier() {
-        this(new XsltTransmogrifier());
+        this((Class<T>) String.class);
     }
 
-    public SchematronTransmogrifier(XsltTransmogrifier t) {
-        super();
+    public SchematronTransmogrifier(Class<T> outputFormat) {
+        this(new XsltTransmogrifier<String>(String.class), outputFormat);
+    }
+    
+    public SchematronTransmogrifier(Class<T> outputFormat,
+            Map<String, Object> staticParams) {
+        this(new XsltTransmogrifier<String>(String.class), outputFormat, staticParams);
+    }
+
+    public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> clazz) {
+        super(clazz);
+        this.xsltTransmogrifier = t;
+    }
+    
+    public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> clazz, Map<String, Object> staticParams) {
+        super(clazz, staticParams);
         this.xsltTransmogrifier = t;
     }
 
-    /**
-     * Sets the schematron rules and automatically compiles a new stylesheet to
-     * be used when calling <code>zap</code>.
-     * 
-     * @param rules
-     * @throws Exception
-     */
     @Override
-    synchronized protected Templates template(Object... params) {
-        SchematronProfile p = (SchematronProfile) params[0];
-        if (!getTemplateCache().containsKey(p)) {
-            try {
-                LOG.debug("Creating new Schematron stylesheet");
-                Source rules = stylesheetSource(p.getRules());
-                Source source = step(xsltTransmogrifier, rules,
-                        "schematron/iso_dsdl_include.xsl", p.getParameters());
-                LOG.debug("step 1 of 3");
-                source = step(xsltTransmogrifier, source,
-                        "schematron/iso_abstract_expand.xsl", p.getParameters());
-                LOG.debug("step 2 of 3");
-                source = step(xsltTransmogrifier, source,
-                        "schematron/iso_svrl_for_xslt2.xsl", p.getParameters());
-                LOG.debug("step 3 of 3");
-                Templates template = getFactory().newTemplates(source);
-                LOG.debug("done!");
-                getTemplateCache().put(p, template);
-                return template;
-            } catch (Exception e) {
-                throw new IllegalArgumentException(
-                        "The schematron rules resource " + p.getRules()
-                                + " is not valid");
-            }
-        } else {
-            return getTemplateCache().get(p);
+    protected Templates doCreateTemplate(Object... params) {
+        try {
+            LOG.debug("Creating new Schematron stylesheet");
+            Source rules = stylesheetSource(resource(params));
+            Map<String, Object> parameters = parameters(params);
+            LOG.debug("step 1 of 3");
+            Source source = step(xsltTransmogrifier, rules,
+                    "schematron/iso_dsdl_include.xsl", parameters);
+            LOG.debug("step 2 of 3");
+            source = step(xsltTransmogrifier, source,
+                    "schematron/iso_abstract_expand.xsl", parameters);
+            LOG.debug("step 3 of 3");
+            source = step(xsltTransmogrifier, source,
+                    "schematron/iso_svrl_for_xslt2.xsl", parameters);
+            Templates template = getFactory().newTemplates(source);
+            LOG.debug("done!");
+            return template;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("The schematron rules resource "
+                    + resource(params) + " is not valid");
         }
     }
 
-    @Override
-    protected Map<String, Object> parameters(Object... params) {
-        SchematronProfile p = (SchematronProfile) params[0];
-        LOG.debug("Schematron parameters are : " + p.getParameters());
-        return p.getParameters();
-    }
-
-    private static Source step(XsltTransmogrifier t, Source input,
+    private static Source step(XsltTransmogrifier<String> t, Source input,
             String stylesheet, Map<String, Object> params) {
-        String s = t.zapToString(input, stylesheet, params);
+        String s = t.zap(input, stylesheet, params);
         return new StreamSource(new StringReader(s));
     }
 

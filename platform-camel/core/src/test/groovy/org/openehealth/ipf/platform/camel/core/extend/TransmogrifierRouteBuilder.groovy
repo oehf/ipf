@@ -16,14 +16,17 @@
 package org.openehealth.ipf.platform.camel.core.extend
 
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersAndBuilderExpression
-
+import java.io.InputStream
 import static org.apache.camel.builder.Builder.*
 
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
 import org.openehealth.ipf.platform.camel.core.transform.TestTransmogrifier
 import org.openehealth.ipf.platform.camel.core.support.transform.ext.StaticTransmogrifier
+import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 
 import org.apache.camel.spring.SpringRouteBuilder
+
+import javax.xml.transform.stream.StreamSource;
 
 /**
  * @author Martin Krasser
@@ -137,7 +140,55 @@ class TransmogrifierRouteBuilder extends SpringRouteBuilder {
             .transmogrify(new TestTransmogrifier())
             .params().builder()
             .to('mock:output')
+            
+        // XSLT transmogrification
+        
+        from('direct:input15') // using a dedicated XsltTransmogrifier bean
+            .convertBodyTo(StreamSource.class)
+            .transmogrify('xslt').staticParams('xslt/createPatient.xslt')
+            .to('mock:output')
+        
+        from('direct:input16') // using an anonymous XsltTransmogrifier
+            .transmogrify().xslt().staticParams('xslt/createPatient.xslt')
+            .to('mock:output')
+        
+        from('direct:input17') // using an anonymous XsltTransmogrifier with a different output format
+            .transmogrify().xslt(InputStream.class).staticParams('xslt/createPatient.xslt')
+            .to('mock:output')
+            
+        from('direct:input18') // passing in Xslt parameters
+            .transmogrify().xslt().staticParams('xslt/createPatient.xslt',
+                    [processingCodeParam:'D',processingModeCodeParam:'I'])
+            .to('mock:output')
 
+        from('direct:input19') // specify stylesheet as named parameter
+            .transmogrify().xslt().staticParams([(XsltTransmogrifier.RESOURCE_LOCATION) : 'xslt/createPatient.xslt',
+                                                 processingCodeParam:'D',
+                                                 processingModeCodeParam:'I'])
+            .to('mock:output')            
+            
+        from('direct:input20') // take stylesheet from message header
+            .setHeader('stylesheet', constant('xslt/createPatient.xslt'))
+            .transmogrify().xslt().params().header('stylesheet')
+            .to('mock:output')
+            
+        from('direct:input21') // take stylesheet and parameters from message headers
+            .setHeader(XsltTransmogrifier.RESOURCE_LOCATION, constant('xslt/createPatient.xslt'))
+            .setHeader('processingCodeParam', constant('D'))
+            .setHeader('processingModeCodeParam', constant('I'))
+            .transmogrify().xslt()
+            .to('mock:output')
+            
+        // Schematron transmogrification
+
+        from('direct:input22') // using a dedicated SchematronTransmogrifier bean
+            .convertBodyTo(StreamSource.class)
+            .transmogrify('schematron').staticParams('schematron/schematron-test-rules.xml')
+            .to('mock:output')
+
+        from('direct:input23') // using an anonymous SchematronTransmogrifier
+            .transmogrify().schematron().staticParams('schematron/schematron-test-rules.xml')
+            .to('mock:output')            
     }
 
     

@@ -33,11 +33,11 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class XsltTransmogrifierTest {
 
-    private XsltTransmogrifier transformer;
+    private XsltTransmogrifier<String> transformer;
 
     @Before
     public void setUp() throws Exception {
-        transformer = new XsltTransmogrifier();
+        transformer = new XsltTransmogrifier<String>(String.class);
     }
 
     @After
@@ -48,7 +48,7 @@ public class XsltTransmogrifierTest {
     public void testConvertString() throws IOException {
         Source source = new StreamSource(new ClassPathResource(
                 "xslt/createPatient.xml").getInputStream());
-        String result = transformer.zapToString(source,
+        String result = transformer.zap(source,
                 "xslt/createPatient.xslt");
         assertNotNull(result);
     }

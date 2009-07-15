@@ -20,6 +20,7 @@
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
+
     <bean id="testModelExtension" 
         class="org.openehealth.ipf.platform.camel.core.extend.EmptyModelExtension">
     </bean>
@@ -27,5 +28,17 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
     <bean id="routeBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.core.extend.TransmogrifierRouteBuilder">
     </bean>
+    
+    <bean id="xslt" class="org.openehealth.ipf.commons.xml.XsltTransmogrifier"/>
+
+    <bean id="xsltWithParams" class="org.openehealth.ipf.commons.xml.XsltTransmogrifier">
+    	<property name="staticParams">
+ 			<map>
+        		<entry key="processingCodeParam" value="P"/>
+        		<entry key="processingModeCodeParam" value="T"/>
+        	</map>
+		</property>
+    </bean>
+
 
 </beans>
