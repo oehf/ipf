@@ -129,10 +129,21 @@ public class StandardTestContainer {
      *          the type of the output object.
      * @return the output object.
      */
-    protected <T> T send(String endpoint, Object in, Class<T> outType) {
+    protected <T> T send(String endpoint, Object in, Class<T> outType) {        
+        return Exchanges.resultMessage(send(endpoint, in)).getBody(outType);
+    }
+
+    /**
+     * Sends the given object to the endpoint.
+     * @param endpoint
+     *          the endpoint to send the object to.
+     * @param in
+     *          the input object.
+     * @return the resulting exchange.
+     */
+    protected Exchange send(String endpoint, Object in) {
         Exchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(in);        
-        Exchange result = producerTemplate.send(endpoint, exchange);
-        return Exchanges.resultMessage(result).getBody(outType);
+        return producerTemplate.send(endpoint, exchange);        
     }
 }

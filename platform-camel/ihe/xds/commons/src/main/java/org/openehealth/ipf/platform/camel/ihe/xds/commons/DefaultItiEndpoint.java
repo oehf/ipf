@@ -60,7 +60,7 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      *          if the endpoint URI was not a valid URI.
      */
     protected DefaultItiEndpoint(String endpointUri, String address, Component<Exchange> component) throws URISyntaxException {
-        super(address, component);
+        super(endpointUri, component);
 
         if (isProducer(endpointUri)) {
             this.serviceUrl = ENDPOINT_PROTOCOL + address;
