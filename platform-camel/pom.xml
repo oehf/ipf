@@ -20,6 +20,7 @@
         <module>http</module>
         <module>event</module>
         <module>ihe</module>
+        <module>cda</module>
         <module>test</module>
     </modules>
 
