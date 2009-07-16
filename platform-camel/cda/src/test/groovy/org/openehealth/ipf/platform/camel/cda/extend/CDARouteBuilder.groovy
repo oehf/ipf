@@ -37,14 +37,14 @@ class CDARouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .to('mock:error')
                 .end()
-            .validate().cdar2()
+            .validate().xsd().cdar2()
             .to('mock:output')
             
         from("direct:input4")
             .onException(Exception.class)
                 .to('mock:error')
                 .end()
-            .validate().ccd([phase:'errors','generate-fired-rule':'false']) // [phase:'errors']
+            .validate().schematron().ccd([phase:'errors','generate-fired-rule':'false']) // [phase:'errors']
             .to('mock:output')             
     }
     

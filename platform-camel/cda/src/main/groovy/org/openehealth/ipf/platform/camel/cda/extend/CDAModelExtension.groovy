@@ -38,16 +38,20 @@ public class CDAModelExtension{
          //  IPF model class extensions
          // ----------------------------------------------------------------
          
+         // W3C Schema validation
+         
          ValidatorAdapterType.metaClass.cdar2 = {-> 
-             delegate.xsd().staticProfile(CDAR2Constants.CDAR2_SCHEMA)
+             delegate.staticProfile(CDAR2Constants.CDAR2_SCHEMA)
          }
 
+         // Schematron validation
+         
          ValidatorAdapterType.metaClass.ccd = { Map parameters ->
-             delegate.schematron().staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES, parameters))
+             delegate.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES, parameters))
          }
          
          ValidatorAdapterType.metaClass.ccd = {-> 
-             delegate.schematron().staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES))
+             delegate.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES))
          }
      }
     
