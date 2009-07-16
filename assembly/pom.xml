@@ -39,6 +39,11 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-xml</artifactId>
+            <version>${pom.version}</version>
+        </dependency>		
+        <dependency>
             <groupId>org.openehealth.ipf.archetypes</groupId>
             <artifactId>ipf-archetype-basic</artifactId>
             <version>${pom.version}</version>
