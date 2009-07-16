@@ -328,5 +328,91 @@ public class CCDBuilderFeaturesTest extends AbstractCCDBuilderTest{
         def section = component.structuredBody.component.get(0).section
         assertTrue CCDConformanceValidatorHelper.checkCCDAdvanceDirectivesConformance(section)
 	}
+	
+	/**
+	 * 
+	 */
+    public void testCCDSupport(){
+        def document = builder.build{
+            clinicalDocument {
+              templateId(root:'2.16.840.1.113883.10.20.1')
+                id(root:'db734647-fc99-424c-a864-7e3cda82e703')
+                code(
+                        code:'34133-9', 
+                        codeSystem:'2.16.840.1.113883.6.1', 
+                        codeSystemName:'LOINC',
+                        displayName:'Summarization of episode note'
+                )
+                title('Good Health Clinic Continuity of Care Document')
+                effectiveTime('20000407130000+0500')
+                confidentialityCode(code:'N')
+                languageCode(code:'en-US')
+                recordTarget {
+                    patientRole {
+                        id(extension:'12345', root:'2.16.840.1.113883.19.5')
+                        patient {
+                            name {
+                                given('Henry') 
+                                family('Levin')
+                                suffix('the 7th')
+                            }
+                            administrativeGenderCode (code:'M', codeSystem:'2.16.840.1.113883.5.1')
+                            birthTime('19320924')
+                            guardian{
+                                code(code:'guardian code', displayName:'Guardian Entry')
+                                guardianPerson{
+                                    name {
+                                        given('Guardian') 
+                                        family('Person')
+                                    }
+                                }
+                            }//guardian
+                        }
+                        providerOrganization {
+                            id(root:'2.16.840.1.113883.19.5')
+                        }
+                    }//patient role
+                }//record target
+
+                author {
+                    time('20000407130000+0500')
+                    assignedAuthor {
+                        id('20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
+                        assignedPerson {
+                            name {
+                                prefix('Dr.')
+                                given('Robert')
+                                family('Dolin')
+                            }
+                        }
+                        representedOrganization {
+                            id(root:"2.16.840.1.113883.19.5")
+                            name('Good Health Clinic')
+                        }
+                    }
+                }//author
+                author {
+                    time('20000407130000+0500')
+                    assignedAuthor {
+                        id('20cf14fb-b65c-4c8c-a54d-b0cca834c18d', nullFlavor:'NA')
+                        representedOrganization {
+                            id(root:"2.16.840.1.113883.19.5")
+                            name('Good Health Clinic')
+                        }
+                    }
+                }//author 2
+                documentationOf{
+                    serviceEvent(classCode:'PCPR'){
+                        effectiveTime{
+                            low(value:'19320924')
+                            high(value:'20000407')    
+                        }
+                    }
+                }//documentationof
+            }//ccd
+        }
+        assert document != null
+        println document.recordTarget.patientRole.patient.guardian
+	}
         
 }

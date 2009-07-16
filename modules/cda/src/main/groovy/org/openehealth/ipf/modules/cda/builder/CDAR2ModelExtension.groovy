@@ -208,17 +208,9 @@ public class CDAR2ModelExtension{
                  renderer.render(delegate, writer, opts)
                  writer.flush()
              }
-             
-             setPatient { POCDMT000040PatientRole patient ->
-                 POCDMT000040RecordTarget recordTarget = CDAR2Factory.eINSTANCE.createPOCDMT000040RecordTarget()
-                 delegate.recordTarget.add(recordTarget)
-                 recordTarget.patientRole = patient
-             }
-             
-             getPatient { -> delegate.recordTarget[0].patientRole }
-             
+                       
          }
-         
+        
          POCDMT000040RegionOfInterest.metaClass {
              setID { String s -> delegate.setID1(s)}
              getID { -> getID1()}

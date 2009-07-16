@@ -34,22 +34,24 @@ public class CCDHeaderBuilderTest extends AbstractCCDBuilderTest {
                 effectiveTime('20000407130000+0500')
                 confidentialityCode('N')
                 languageCode('en-US')
-				patient {
-					id('996-756-495@2.16.840.1.113883.19.5') 
-					patient {
-						name {
-							given('Henry') 
-							family('Levin')
-							suffix('the 7th')
-						}
-						administrativeGenderCode('M')
-						birthTime('19320924')
-					}
-					providerOrganization {
-						id('2.16.840.1.113883.19.5')
-						name('Good Health Clinic')
-					}
-				}
+				recordTarget {
+                    patientRole {
+    					id('996-756-495@2.16.840.1.113883.19.5') 
+    					patient {
+    						name {
+    							given('Henry') 
+    							family('Levin')
+    							suffix('the 7th')
+    						}
+    						administrativeGenderCode('M')
+    						birthTime('19320924')
+    					}
+    					providerOrganization {
+    						id('2.16.840.1.113883.19.5')
+    						name('Good Health Clinic')
+    					}
+                    }//patient role
+				}//record target
                 author {
                     time('20000407130000+0500')
                     assignedAuthor {

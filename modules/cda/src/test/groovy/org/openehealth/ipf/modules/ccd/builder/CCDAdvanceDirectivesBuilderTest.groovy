@@ -32,8 +32,8 @@ public class CCDAdvanceDirectivesBuilderTest extends AbstractCCDBuilderTest{
              	effectiveTime('20000407130000+0500')
              	confidentialityCode('N')
              	languageCode('en-US')
-               	//recordTarget {
-                    patient {
+               	recordTarget {
+                    patientRole {
                         id('996-756-495@2.16.840.1.113883.19.5')
                         patient {
                             name {
@@ -49,7 +49,7 @@ public class CCDAdvanceDirectivesBuilderTest extends AbstractCCDBuilderTest{
                             name('Good Health Clinic')
                         }
                     }
-                // }
+                }//record target
              	author {
              	    time('20000407130000+0500')
              	    assignedAuthor {
