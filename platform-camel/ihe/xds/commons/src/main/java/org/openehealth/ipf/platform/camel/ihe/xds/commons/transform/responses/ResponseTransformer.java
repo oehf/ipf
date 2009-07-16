@@ -50,7 +50,9 @@ public class ResponseTransformer {
         EbXMLRegistryResponse ebXML = factory.createRegistryResponse();
         
         ebXML.setStatus(response.getStatus());
-        ebXML.setErrors(response.getErrors());
+        if (!response.getErrors().isEmpty()) {
+            ebXML.setErrors(response.getErrors());
+        }
         
         return ebXML;
     }

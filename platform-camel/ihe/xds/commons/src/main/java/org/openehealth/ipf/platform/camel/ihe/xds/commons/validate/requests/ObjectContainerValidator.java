@@ -170,7 +170,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     
     private final RegistryObjectValidator[] folderSlotValidations = new RegistryObjectValidator[] {
                 new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidator, 0, 1),
-                new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME, 1, Integer.MAX_VALUE, codingSchemeValidations),
+                // The spec says that the code list is required to have at least 1 code. However, 
+                // the XDStoolkit tests do currently not always provide a code. Therefore, we 
+                // accept 0 codes as well.
+                new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
                 new ExternalIdentifierValidation(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidator)};
 
     public void validate(EbXMLObjectContainer container, ValidationProfile profile) {

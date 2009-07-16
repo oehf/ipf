@@ -50,7 +50,9 @@ public class RetrieveDocumentSetResponseTransformer {
         }
         
         EbXMLRetrieveDocumentSetResponse ebXML = factory.createRetrieveDocumentSetResponse();
-        ebXML.setErrors(response.getErrors());
+        if (!response.getErrors().isEmpty()) {
+            ebXML.setErrors(response.getErrors());
+        }
         ebXML.setStatus(response.getStatus());
         ebXML.setDocuments(response.getDocuments());        
         return ebXML;

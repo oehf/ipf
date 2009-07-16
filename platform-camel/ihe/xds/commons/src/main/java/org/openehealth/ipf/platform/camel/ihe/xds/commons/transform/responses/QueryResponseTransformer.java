@@ -76,7 +76,9 @@ public class QueryResponseTransformer {
         EbXMLObjectLibrary library = factory.createObjectLibrary();        
         EbXMLQueryResponse ebXML = factory.createAdhocQueryResponse(library, !response.getReferences().isEmpty());
         ebXML.setStatus(response.getStatus());
-        ebXML.setErrors(response.getErrors());
+        if (!response.getErrors().isEmpty()) {
+            ebXML.setErrors(response.getErrors());
+        }
         
         for (DocumentEntry docEntry : response.getDocumentEntries()) {
             ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));

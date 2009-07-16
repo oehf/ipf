@@ -45,6 +45,18 @@ public class RetrievedDocumentSet extends Response {
     }
     
     /**
+     * Constructs the response.
+     * @param status
+     *          the status of the request execution.
+     * @param documents
+     *          the documents to add to this set.
+     */
+    public RetrievedDocumentSet(Status status, List<RetrievedDocument> documents) {        
+        super(status);
+        this.documents.addAll(documents);
+    }
+    
+    /**
      * @return the documents.
      */
     public List<RetrievedDocument> getDocuments() {

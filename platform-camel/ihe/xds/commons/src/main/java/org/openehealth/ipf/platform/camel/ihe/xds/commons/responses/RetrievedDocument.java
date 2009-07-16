@@ -30,6 +30,23 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocum
 public class RetrievedDocument {
     private DataHandler dataHandler;
     private RetrieveDocument requestData;
+    
+    /**
+     * Constructs the retrieved document.
+     */
+    public RetrievedDocument() {}
+
+    /**
+     * Constructs the retrieved document.
+     * @param dataHandler
+     *          the data handler allowing access to the content of the document. 
+     * @param requestData
+     *          the data specified in the request.
+     */
+    public RetrievedDocument(DataHandler dataHandler, RetrieveDocument requestData) {
+        this.dataHandler = dataHandler;
+        this.requestData = requestData;
+    }
 
     /**
      * @return the data handler allowing access to the content of the document.
