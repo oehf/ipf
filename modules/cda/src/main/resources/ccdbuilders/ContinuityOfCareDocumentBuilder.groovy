@@ -21,53 +21,55 @@ import org.openhealthtools.ihe.common.cdar2.*
 // The Continuity of Care document
 
 continuityOfCareDocument(schema:'clinicalDocument') {
-   properties {
-      code(schema:'loincCode', def: {
-         getMetaBuilder().build {
-            loincCode(code:'34133-9',
-	                   displayName:'Summarization of episode note')
-         }
-	   })
-	  mainActivity(schema:'ccd_serviceEvent', req: true)
-      component(schema:'ccd_component')
+	properties {
+		code(schema:'loincCode', def: {
+			getMetaBuilder().build {
+				loincCode(code:'34133-9',
+				displayName:'Summarization of episode note')
+			}
+		})
+		mainActivity(schema:'ccd_serviceEvent', req: true)
+		component(schema:'ccd_component')
+		nextOfKin(schema:'ccd_nextOfKin')
+		emergencyContact(schema:'ccd_emergencyContact')
+		caregiver(schema:'ccd_caregiver')
 	}
-
 	collections {
-	   templateIds(collection:'templateId', def: {
-	       getMetaBuilder().buildList {
-	         ii(root:'2.16.840.1.113883.10.20.1')
-	      }
-	   })
-	   {
-	      templateId(schema:'ii')
-	   }
+		templateIds(collection:'templateId', def: {
+			getMetaBuilder().buildList {
+				ii(root:'2.16.840.1.113883.10.20.1')
+			}
+		})
+		{
+			templateId(schema:'ii')
+		}
 	}
 }
 
 // Add main activity template
 ccd_serviceEvent(schema:'serviceEvent'){
-    properties {
-        classCode(def: ActClassRootMember7.PCPR_LITERAL)
-    }
+	properties {
+		classCode(def: ActClassRootMember7.PCPR_LITERAL)
+	}
 }
 
 // Add CCD component
 
 ccd_component(schema:'component') {
-    properties {
-       structuredBody(schema:'ccd_structuredBody')
-    }
- }
+	properties {
+		structuredBody(schema:'ccd_structuredBody')
+	}
+}
 
 //  Add CCD sections as properties
 
- ccd_structuredBody(schema:'structuredBody') {
-    properties {
-       purpose(schema:'ccd_purpose')
-       payers(schema:'ccd_payers')
-       advanceDirectives(schema:'ccd_advanceDirectives')
-       // ...
-    }
- }
+ccd_structuredBody(schema:'structuredBody') {
+	properties {
+		purpose(schema:'ccd_purpose')
+		payers(schema:'ccd_payers')
+		advanceDirectives(schema:'ccd_advanceDirectives')
+		// ...
+	}
+}
 
 

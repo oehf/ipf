@@ -401,6 +401,19 @@ public class CCDBuilderFeaturesTest extends AbstractCCDBuilderTest{
                         }
                     }
                 }//author 2
+                participant(typeCode:'IND'){
+                    associatedEntity(classCode:'NOK'){
+                        id(root:'4ac71514-6a10-4164-9715-f8d96af48e6d')
+                        code(code:'65656005', codeSystem:'2.16.840.1.113883.6.96', displayName:'Biiological mother')
+                        telecom(value:'tel:(999)555-1212')
+                        associatedPerson{
+                            name{
+                                given('Henrietta')
+                                family('Levin')
+                            }//name
+                        }//associatedPerson
+                    }//associatedEntity>
+                }//participant
                 documentationOf{
                     serviceEvent(classCode:'PCPR'){
                         effectiveTime{
@@ -412,7 +425,6 @@ public class CCDBuilderFeaturesTest extends AbstractCCDBuilderTest{
             }//ccd
         }
         assert document != null
-        println document.recordTarget.patientRole.patient.guardian
 	}
         
 }

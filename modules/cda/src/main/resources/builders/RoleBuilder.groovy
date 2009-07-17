@@ -57,7 +57,7 @@ assignedEntity(schema:'role', factory:'POCDMT000040_ASSIGNED_ENTITY') {
     }
 }
 
-associatedEntity(schema:'infrastructureRoot', factory:'POCDMT000040_ASSOCIATED_ENTITY') {
+associatedEntity(schema:'role', factory:'POCDMT000040_ASSOCIATED_ENTITY') {
     properties {
         scopingOrganization(schema:'organization')
         associatedPerson(schema:'person')

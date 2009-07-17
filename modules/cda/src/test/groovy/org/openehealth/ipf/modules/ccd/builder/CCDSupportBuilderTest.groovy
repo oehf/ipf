@@ -43,7 +43,7 @@ public class CCDSupportBuilderTest extends AbstractCCDBuilderTest{
                             }
                             administrativeGenderCode('M')
                             birthTime('19320924')
-                            guardian{
+                            guardian{//support gardian
                                 code(code:'guardian code', displayName:'Guardian Entry')
                                 guardianPerson{
                                     name {
@@ -78,7 +78,46 @@ public class CCDSupportBuilderTest extends AbstractCCDBuilderTest{
 				}//author
 				
 				// informant
-				// participants
+				
+				// next of kin (participant)
+				nextOfKin{
+				    id(root:'4ac71514-6a10-4164-9715-f8d96af48e6d')
+		            code(code:'65656005', codeSystem:'2.16.840.1.113883.6.96', displayName:'Biiological mother')
+		            telecom(value:'tel:(999)555-1212')
+//		            associatedPerson{
+//		                name(given:'Henrietta', family:'levin')
+//		                    given>Henrietta</given>
+//		                    <family>Levin</family>
+//		                }//name>
+//				    }//associatedPerson				    
+				}//next of kin 1
+                nextOfKin{
+                    id(root:'4ac71514-6a10-4164-9715-f8d96af48e6e')
+                    code(code:'65656006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Biiological father')
+                    telecom(value:'tel:(999)555-1212')
+                    associatedPerson{
+                      name{//TODO this could be easier
+                          given('Kevin')
+                          family('Levin')
+                      }//name
+				    }//associatedPerson                 
+                }//next of kin 2
+                // emergency contact (participant)
+                emergencyContact{
+                    id(root:'4ac71514-6a10-4164-9715-f8d96af48e6f')
+                    associatedPerson{
+                        name{
+                            given('Baba')
+                            family('John')
+                        }//name
+                    }//associatedPerson 
+                }
+                //patient caregiver (participant)
+                caregiver{
+                    scopingOrganization{
+                        name('Very Good Health Clinic')
+                    }//scopingOrganization>
+                }//caregiver
 				// mainActivity (documentationOf)
 				mainActivity{
 					effectiveTime{
@@ -98,11 +137,9 @@ public class CCDSupportBuilderTest extends AbstractCCDBuilderTest{
 					time('20000407130000+0500')
 					signatureCode('S')
 					assignedEntity {
-						id {
-							nullFlavor('NI')
-						}
+						id(nullFlavor:'NI')
 						representedOrganization {
-							id(root:"2.16.840.1.113883.19.5")
+							id(root:'2.16.840.1.113883.19.5')
 						}
 					}
 				}
@@ -122,9 +159,11 @@ public class CCDSupportBuilderTest extends AbstractCCDBuilderTest{
 		//println(renderer.render(document, opts))
 	}
 	
-	public void NtestValidateCCDDocument() {
+	public void testExtractCCDDocument() {
 		POCDMT000040ClinicalDocument document = buildCCD()
 		assertTrue CCDConformanceValidatorHelper.checkCCDHeaderConformance(document)
-		assertTrue document.mainActivity instanceof POCDMT000040ServiceEvent
+		assert 2, document.nextOfKin.size
+		assert 1, document.emergencyContact.size
+		assert 1, document.caregiver.size
 	}
 }
