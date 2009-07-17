@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:sdtc"
+    xmlns:sdtc="urn:hl7-org:sdtc" targetNamespace="urn:hl7-org:sdtc"
+    xmlns:cda="urn:hl7-org:v3" elementFormDefault="qualified">
+    <xs:import namespace="urn:hl7-org:v3" schemaLocation="C32_POCD_MT000040.xsd"/>
+
+    <xs:include schemaLocation="../../processable/coreschemas/datatypes.xsd"/>
+
+    <xs:complexType name="SdtcAssignedEntity">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.AssignedEntity">
+                <xs:sequence>
+                    <xs:element name="patient" type="SdtcPatient" minOccurs="0"/>
+                </xs:sequence>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SdtcRelatedEntity">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.RelatedEntity">
+                <xs:sequence>
+                    <xs:element name="patient" type="SdtcPatient" minOccurs="0"/>
+                </xs:sequence>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="SdtcAssociatedEntity">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.AssociatedEntity">
+                <xs:sequence>
+                    <xs:element name="patient" type="SdtcPatient" minOccurs="0"/>
+                </xs:sequence>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SdtcPatient">
+        <xs:sequence>
+            <xs:element name="id" type="cda:II" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:element name="raceCode" type="cda:CE" />
+    <xs:element name="birthTime" type="cda:TS" />
+    
+</xs:schema>

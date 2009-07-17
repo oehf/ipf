@@ -1,0 +1,77 @@
+<!--  IHE PCC v3.0 Simple Observation: 1.3.6.1.4.1.19376.1.5.3.1.4.13 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13-errors">
+    <title>IHE PCC v3.0 Simple Observation - errors validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.13&quot;]">
+
+    <assert test='cda:id'>
+       Error: Each Simple Observation shall have an &lt;id&gt; identifier.
+    </assert>
+
+    <assert test='cda:code'>
+       Error: Simple Observations shall have a code describing what was measured.
+    </assert>
+
+    <assert test='cda:statusCode[@code = "completed"]'>
+       Error: The status code of all Simple Observations shall be completed.
+    </assert>
+
+    <assert test='cda:effectiveTime[@value or @nullFlavor]'>
+       Error: The &lt;effectiveTime&gt; element shall be present in
+       Simple Observations, and shall record the date and time when the measurement
+       was taken. This element should be precise to the day. If the date and
+       time is unknown, this element should record that using the nullFlavor attribute.
+    </assert>
+
+    <assert test='cda:value'>
+       Error: The value of the Simple Observation shall be recorded using a data
+       type appropriate to the observation.
+    </assert>
+
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13-warnings">
+    <title>IHE PCC v3.0 Simple Observation - warning validation phase</title>
+
+
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.13&quot;]">
+      <assert test="cda:text/cda:reference">
+         Warning: Each observation measurement entry may contain a &lt;text&gt;
+	 element providing the free text that provides the same information as
+	 the observation within the narrative portion of the document with a
+	 &lt;text&gt; element. For CDA based uses of Simple Observations, this element
+	 SHALL be present, and SHALL contain a &lt;reference&gt; element that points to
+	 the related string in the narrative portion of the document. For HL7
+	 Version 3 based uses, the &lt;text&gt; element MAY be included.
+      </assert>
+
+    <assert test='not(cda:effectiveTime[@value]) or
+                  string-length(cda:effectiveTime/@value) &gt;= 8'>
+      Warning: The effectiveTime element of a Simple Observation should be
+      precise to the day. If the date and time is unknown, this element
+      should record that using the nullFlavor attribute.
+    </assert>
+
+
+    </rule>
+
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13-manual">
+    <title>IHE PCC v3.0 Simple Observation - manual validation phase</title>
+
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.13&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

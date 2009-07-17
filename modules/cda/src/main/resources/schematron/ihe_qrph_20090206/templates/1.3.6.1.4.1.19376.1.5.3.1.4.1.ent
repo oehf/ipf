@@ -1,0 +1,85 @@
+<!--  IHE PCC v3.0 Severity: 1.3.6.1.4.1.19376.1.5.3.1.4.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.1-errors">
+    <title>IHE PCC v3.0 Severity - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.1"]'>
+    <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.55"]'>
+       Error: In Severity, the templateId for CCD Severity (2.16.840.1.113883.10.20.1.55) must be present.
+    </assert>
+    <assert test='cda:code[@code="SEV" and 
+                           @codeSystem="2.16.840.1.113883.5.4"]'>
+       Error: This observation is of Severity, as indicated by the code
+       element. This element is required. The code and codeSystem
+       attributes shall be recorded exactly as indicated. See: http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.1
+    </assert>
+
+    <assert test='cda:text'>
+       Error: In Severity, the &lt;observation&gt; element shall contain a &lt;text&gt; element. For
+       CDA, the &lt;text&gt; elements shall contain a &lt;reference&gt; element pointing
+       to the narrative where the severity is recorded, rather than duplicate
+       text to avoid ambiguity. For HL7 Version 3 Messages, the &lt;text&gt; element
+       should contain the full narrative text.
+    </assert>
+    
+    <assert test='cda:statusCode[@code = "completed"]'>
+       Error: The code attribute of &lt;statusCode&gt; for all Severity observations
+       shall be completed. While the &lt;statusCode&gt; element is required in all
+       acts to record the status of the act, the only sensible value of this
+       element in this context is completed.
+    </assert>
+
+
+    <assert test='cda:value[@xsi:type="CD"] and
+                  (((cda:value[@codeSystem="2.16.840.1.113883.5.1063" and
+                   (@code="H" or @code="M" or @code="L")])
+                  ) or (
+                   not(cda:value[@codeSystem])
+		  ))'>
+       Error: In Severity, the &gt;value&lt; element contains the level of severity. It is always
+       represented using t'he CD datatype (xsi:type='CD'), even though the
+       value may be a coded or uncoded string. If coded, it should use the HL7
+       SeverityObservation vocabulary (codeSystem='2.16.840.1.113883.5.1063')
+       containing three values (H, M, and L), representing high, moderate and
+       low severity depending upon whether the severity is life threatening,
+       presents noticeable adverse consequences, or is unlikely substantially
+       effect the situation of the subject.
+
+    </assert>
+
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.1-warnings">
+    <title>IHE PCC v3.0 Severity - warning validation phase</title>
+
+
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.1&quot;]">
+    <assert test='cda:text/cda:reference'>
+       Warning: In Severity, the &lt;observation&gt; element shall contain a
+       &lt;text&gt; element. For CDA, the &lt;text&gt; elements shall contain a &lt;reference&gt;
+       element pointing to the narrative where the severity is recorded, rather than duplicate
+       text to avoid ambiguity. For HL7 Version 3 Messages, the &lt;text&gt;
+       element should contain the full narrative text.
+    </assert>
+
+    </rule>
+
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.1-manual">
+    <title>IHE PCC v3.0 Severity - manual validation phase</title>
+
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.1&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

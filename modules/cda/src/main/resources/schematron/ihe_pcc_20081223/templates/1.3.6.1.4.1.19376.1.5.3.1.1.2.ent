@@ -1,0 +1,69 @@
+<!--  IHE PCC Medical Summary Specification: 1.3.6.1.4.1.19376.1.5.3.1.1.2 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.2-errors">
+    <title>IHE PCC Medical Summary Specification - errors validation phase</title>
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.2"]'>
+   <!-- Verify that the template id is used on the appropriate type of object -->
+   <assert test='../cda:ClinicalDocument'>
+     Error: The Medical Summary can only be used on Clinical Documents.
+   </assert> 
+   <!-- Verify that the parent templateId is also present. -->
+   <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.1"]'>
+     Error: The parent template identifier for Medical Summary is not present.
+   </assert> 
+   <!-- Verify the document type code -->
+<!--
+   <assert test='cda:code[@code = "{{{LOINC}}}"]'>
+     Error: The document type code of a Medical Summary must be {{{LOINC}}}
+   </assert>
+-->
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'>
+     Error: The document type code must come from the LOINC code 
+     system (2.16.840.1.113883.6.1).
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.5.2"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: The Medical Summary Document must contain a(n) Problem Concern Entry Entry.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.2
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.5.3"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: The Medical Summary Document must contain a(n) Allergy Concern Entry Entry.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.2
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.4.7"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: The Medical Summary Document must contain a(n) Medications Entry.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.2
+   </assert> 
+ </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.2-warnings">
+    <title>IHE PCC Medical Summary Specification - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.2"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.2-manual">
+    <title>IHE PCC Medical Summary Specification - manual validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.2"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

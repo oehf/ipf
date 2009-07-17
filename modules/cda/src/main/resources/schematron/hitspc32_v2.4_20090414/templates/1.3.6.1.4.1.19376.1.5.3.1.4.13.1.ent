@@ -1,0 +1,56 @@
+<!--  IHE PCC Vital Signs Organizer: 1.3.6.1.4.1.19376.1.5.3.1.4.13.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13.1-errors">
+    <title>IHE PCC Vital Signs Organizer - errors validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.13.1&quot;]">
+    <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.32"] and
+                  cda:templateId[@root="2.16.840.1.113883.10.20.1.35"]'>
+       Error: In IHE PCC Vital Signs Organizer (1.3.6.1.4.1.19376.1.5.3.1.4.13.1), the Vital Signs Organizer shall have template IDs
+       (2.16.840.1.113883.10.20.1.32 and 2.16.840.1.113883.10.20.1.35) to indicate that it inherits constraints from the ASTM/HL7
+       CCD Specification for Vital signs.
+    </assert>
+    <assert test='cda:id'>
+       Error: In IHE PCC Vital Signs Organizer (1.3.6.1.4.1.19376.1.5.3.1.4.13.1), the Vital Signs Organizer shall have an 
+       &lt;id&gt; element.
+    </assert>
+    <assert test='cda:code[@code="46680005" and 
+                           @displayName="Vital signs" and
+                           @codeSystem="2.16.840.1.113883.6.96" and
+			   @codeSystemName="SNOMED CT"]'>
+       Error: In IHE PCC Vital Signs Organizer (1.3.6.1.4.1.19376.1.5.3.1.4.13.1), the &lt;code&gt; element of Vital Signs 
+       Organizer shall be recorded as shown to indicate that this organizer captures information about patient vital signs. 
+       &lt;code code='46680005' displayName='Vital signs' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/&gt;
+    </assert>
+    <assert test='cda:statusCode[@code="completed"]'>
+       Error: In IHE PCC Vital Signs Organizer (1.3.6.1.4.1.19376.1.5.3.1.4.13.1), the Vital Signs Organizer observations shall 
+       have all been completed.
+    </assert>
+    <assert test='cda:effectiveTime'>
+       Error: In IHE PCC Vital Signs Organizer (1.3.6.1.4.1.19376.1.5.3.1.4.13.1), the effective time element shall be present 
+       in Vital Signs Organizer to indicate when the measurement was taken.
+    </assert>
+    <assert test='cda:component/cda:observation/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.13.2"]'>
+       Error: In IHE PCC Vital Signs Organizer (1.3.6.1.4.1.19376.1.5.3.1.4.13.1), the Vital Signs Organizer shall have one or more 
+       &lt;component&gt; elements that are &lt;observation&gt; elements using the Vital Signs Observation template 
+       (1.3.6.1.4.1.19376.1.5.3.1.4.13.2).
+    </assert>
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13.1-warnings">
+    <title>IHE PCC Vital Signs Organizer - warning validation phase</title>
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.13.1&quot;]">
+      <assert test='cda:author'>
+         Warning: For use with HL7 Version 3, Vital Sign organizers SHALL
+	 contain an &lt;author&gt; element to represent the person or device.
+
+      </assert>
+    </rule>
+-->
+
+  </pattern>

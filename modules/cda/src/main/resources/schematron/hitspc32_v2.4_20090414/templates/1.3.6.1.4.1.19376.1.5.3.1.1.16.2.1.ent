@@ -1,0 +1,35 @@
+<!--  IHE PCC Extremities: 1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1-errors">
+    <title>IHE PCC Extremities - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1"]'>
+    <assert test='../cda:section'> 
+       Error: In IHE PCC Extremities (1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1), the Extremities can only be used on sections. 
+    </assert> 
+    <!-- Verify the section type code --> 
+    <assert test='cda:code[@code = "10196-4"]'> 
+      Error: In IHE PCC Extremities (1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1), the section type code of a Extremities must be 10196-4 
+    </assert> 
+    <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+      Error: In IHE PCC Extremities (1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1), the section type code must come from the LOINC code  
+      system (2.16.840.1.113883.6.1). 
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1-warnings">
+    <title>IHE PCC Extremities - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.16.2.1"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

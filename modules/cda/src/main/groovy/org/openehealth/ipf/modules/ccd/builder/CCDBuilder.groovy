@@ -92,6 +92,7 @@ public class CCDBuilder extends CDAR2Builder{
 		define(getClass().getResource('/ccdbuilders/PurposeBuilder.groovy'))
 		define(getClass().getResource('/ccdbuilders/PayersBuilder.groovy'))
 		define(getClass().getResource('/ccdbuilders/AdvanceDirectivesBuilder.groovy'))
+		define(getClass().getResource('/ccdbuilders/FamilyHistoryBuilder.groovy'))
 		define(getClass().getResource('/ccdbuilders/SupportBuilder.groovy'))
 	}
 }

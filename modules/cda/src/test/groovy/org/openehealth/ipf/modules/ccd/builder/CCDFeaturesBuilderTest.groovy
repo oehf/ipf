@@ -22,7 +22,7 @@ import org.openhealthtools.ihe.common.cdar2.impl.*
  * Test the schema definitions pass to build a CCD construct
  * @author Stefan Ivanov
  */
-public class CCDBuilderFeaturesTest extends AbstractCCDBuilderTest{
+public class CCDFeaturesBuilderTest extends AbstractCCDBuilderTest{
 
   /**
    *
@@ -276,11 +276,14 @@ public class CCDBuilderFeaturesTest extends AbstractCCDBuilderTest{
                                     id(root:'9b54c3c9-1673-49c7-aef9-b037ed72ed27')
                                     code(code:'304251008', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resuscitation')
                                     statusCode(code:'completed')
-                                    value(code:'304253006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Do not resuscitate'){
-                                        originalText{
-                                            reference(value:'#AD1')
-                                        }//originalText
-                                    }//value
+                                    value(builder.build {
+                                        ce(code:'304253006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Do not resuscitate')
+                                        {
+                                            originalText{
+                                                reference(value:'#AD1')
+                                            }//originalText
+                                        }
+                                    })//value
                                     participant(typeCode:'VRF'){
                                         /* Verification of an advance directive observation template */
                                         templateId(root:'2.16.840.1.113883.10.20.1.58')
@@ -303,7 +306,9 @@ public class CCDBuilderFeaturesTest extends AbstractCCDBuilderTest{
                                             templateId(root:'2.16.840.1.113883.10.20.1.37')
                                             code(code:'33999-4', codeSystem:'2.16.840.1.113883.6.1', displayName:'Status')
                                             statusCode(code:'completed')
-                                            value(code:'15240007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Current and verified')
+                                            value(builder.build {
+                                                ce(code:'15240007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Current and verified')
+                                            })
                                         }//observation
                                     }//entryRelationship
                                     reference(typeCode:'REFR'){

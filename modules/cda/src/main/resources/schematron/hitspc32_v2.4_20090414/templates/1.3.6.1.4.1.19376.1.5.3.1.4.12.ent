@@ -1,0 +1,144 @@
+<!--  IHE PCC Immunizations: 1.3.6.1.4.1.19376.1.5.3.1.4.12 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.12-errors">
+    <title>IHE PCC Immunizations - errors validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.12&quot;]">
+
+    <assert test='@negationInd="true" or @negationInd="false"'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), an Immunization Entry may be a record of why a specific 
+       immunization was not performed. In this case, negationInd shall be set to true, otherwise, it shall be false.
+    </assert>
+
+    <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.24"]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), Immunization shall record its parent CCD template ID
+       (2.16.840.1.113883.10.20.1.24).
+    </assert>
+
+    <assert test='cda:id'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), an Immunization shall have an identifier (id).
+    </assert>
+
+    <assert test='cda:code[@code and @codeSystem]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), this required element records that the act was an
+       immunization. The substance administration act must have a &lt;code&gt; element with code and codeSystem attributes present. 
+       If no coding system is used by the source, then simply record the code exactly as shown: &lt;code code='IMMUNIZ' 
+       codeSystem='2.16.840.1.113883.5.4' codeSystemName='ActCode'/&gt;.
+    </assert>
+
+    <assert test='cda:statusCode[@code="completed"]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), the statusCode shall be set to "completed" for all 
+       Immunizations.
+    </assert>
+
+    <assert test='cda:effectiveTime[@value or @nullFlavor]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), the effectiveTime element shall be present and should 
+       contain a time value that indicates the date of the substance administration. If the date is unknown, this shall be 
+       recorded using the nullFlavor attribute, with the reason that the information is unknown being specified.
+    </assert>
+
+    <assert test='cda:consumable//cda:manufacturedProduct//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.7.2"]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), the &lt;consumable&gt; element shall be present, and
+       shall contain a &lt;manufacturedProduct&gt; entry conforming to the Product Entry template (1.3.6.1.4.1.19376.1.5.3.1.4.7.2).
+    </assert>
+
+    <assert test='not(cda:entryRelationship[@inversionInd="false" and @typeCode="CAUS"]) or
+    (cda:entryRelationship[@inversionInd="false" and @typeCode="CAUS"]//cda:observation/cda:id and
+     cda:entryRelationship[@inversionInd="false" and @typeCode="CAUS"]//cda:templateId[@root="2.16.840.1.113883.10.20.1.28"] and
+     cda:entryRelationship[@inversionInd="false" and @typeCode="CAUS"]//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.5"] and
+     cda:entryRelationship[@inversionInd="false" and @typeCode="CAUS"]//cda:templateId[@root="2.16.840.1.113883.10.20.1.54"])'>   
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), an entryRelationship should be used to identify adverse 
+       reactions caused by the immunization.  In that case, an observation is required, and provides a pointer to the the adverse
+       reaction caused by the immunization. An identifier (id) of the observation is required. It shall contain a conforming 
+       Problem Entry that also conforms to the CCD Reaction template.
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.12
+    </assert>
+
+    </rule>
+
+
+<!-- 
+    Note that this rule context is for the entire 2.16.840.1.113883.10.20.1.46 CCD
+    template Id.  "test" statements should take care to limit the tests to
+    only that template Id which takes place as a child of a
+    1.3.6.1.4.1.19376.1.5.3.1.4.12 object.
+-->
+    <rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.46']">
+<!--
+
+Not needed.  Already checked by CCD. 
+
+    <assert test='cda:code[@code="30973-2" and @codeSystem="2.16.840.1.113883.6.1"]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), in the optional entry relationship indicating
+       that position of this immunization in a series of immunizations, the
+       &lt;code&gt; element shall be present and must be recorded with
+       the code and codeSystem in the guidelines (code='30973-2'
+       displayName='Dose Number' codeSystem='2.16.840.1.113883.6.1'
+       codeSystemName='LOINC'). This element
+       indicates that the observation describes the dose number for
+       the immunization.  See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.12
+    </assert>
+-->
+    <assert test='not(ancestor::*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.12"]) or 
+                  cda:statusCode[@code="completed"]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), in the optional entry relationship indicating
+       that position of this immunization in a series of immunizations, the &lt;statusCode&gt; element shall be present, 
+       and must be recorded as completed.  
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.12
+    </assert>
+<!--
+ 
+Not needed.  Already checked by CCD.
+
+    <assert test='cda:value[@value]'>
+       Error: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), in the optional entry relationship indicating
+       that position of this immunization in a series of immunizations, the
+       value element shall be present, and shall indicate the immunization
+       series number in the value attribute.  See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.12
+    </assert>
+-->
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.12-warnings">
+    <title>IHE PCC Immunizations - warning validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.12&quot;]">
+    <assert test='cda:text/cda:reference'>
+       Warning: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), in a CDA document, the URI given in the value attribute 
+       of the &lt;reference&gt; element points to an element in the narrative content that contains the complete text describing 
+       the immunization activity. In an HL7 message, the content of the text element shall contain the complete text describing 
+       the immunization activity.
+    </assert>
+    <assert test='not(cda:effectiveTime/@value) or
+                  (string-length(cda:effectiveTime/@value) &gt;= 8)'>
+       Warning: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), the effectiveTime element shall be present and should 
+       contain a time value that indicates the date of the substance administration. If the date is unkown, this shall be recorded 
+       using the nullFlavor attribute, with the reason that the information is unknown being specified. Otherwise, the date shall 
+       be recorded, and should have precision of at least the day.
+    </assert>
+
+    <assert test='not(cda:routeCode[@code]) or cda:routeCode[@displayName]'>
+       Warning: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), the &lt;routeCode&gt; element specifies the route of 
+       administration using the HL7 RouteOfAdministration vocabulary. A code must be specified if the route is known, and the 
+       displayName attribute should be specified.
+    </assert>
+    <assert test='cda:approachSiteCode/cda:originalText/cda:reference'>
+       Warning: In IHE PCC Immunizations (1.3.6.1.4.1.19376.1.5.3.1.4.12), the &lt;approachSiteCode&gt; element describes the
+       site of medication administrion. It may be coded to a controlled vocabulary that lists such sites (e.g., SNOMED-CT). In 
+       CDA documents, this element contains a URI in the value attribute of the &lt;reference&gt; that points to the text in the 
+       narrative identifying the site. In a message, the &lt;originalText&gt; element shall contain the text identifying the site.
+    </assert>
+    <assert test='cda:doseQuantity'>
+       Warning: In Immunizations, the dose is specified in the &lt;doseQuantity&gt; element. If a dose range is given (e.g., 
+       1-2 tablets, or 325-750mg), then the &lt;low&gt; and &lt;high&gt; bounds are specified in their respective elements, 
+       otherwise both &lt;low&gt; and &lt;high&gt; have the same value. If the dose is in countable units (tablets, caplets,
+       "eaches"), then the unit attribute is not sent. Otherwise the units are sent. The unit attribute should be derived from 
+       the HL7 UnitsOfMeasureCaseSensitive vocabulary.
+    </assert>
+    </rule>
+
+
+  </pattern>

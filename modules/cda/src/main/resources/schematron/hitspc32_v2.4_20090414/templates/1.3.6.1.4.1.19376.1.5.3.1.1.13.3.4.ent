@@ -1,0 +1,56 @@
+<!--  IHE PCC Nursing Assessments Battery: 1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4-errors">
+    <title>IHE PCC Nursing Assessments Battery - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4"]'>
+    <assert test='self::cda:organizer[@classCode="BATTERY" and @moodCode="EVN"]'>
+       Error: In IHE PCC Nursing Assessments Battery (1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4), each row in the Nursing 
+       Interventions battery be [sic] represented by an organizer with the classCode of 'BATTERY' and the moodCode of 'EVN'.
+    </assert>
+
+    <assert test='cda:id'>
+       Error: In IHE PCC Nursing Assessments Battery (1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4), each Nursing Assessments 
+       battery SHALL have a globally unique identifier. 
+    </assert>
+
+    <assert test='cda:code[@code="X-ASSESS" and @codeSystem="2.16.840.1.113883.6.1"]'>
+       Error: In IHE PCC Nursing Assessments Battery (1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4), the &lt;code&gt; element 
+       specifies the Loinc code that represents the content of the Nursing Assessments Battery. The codeSystem 
+       attribute SHALL contain the value '2.16.840.1.113883.6.1'. The code attribute SHALL contain the value='X-ASSESS'.
+    </assert>
+
+    <assert test='cda:statusCode[@code="completed"]'>
+       Error: In IHE PCC Nursing Assessments Battery (1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4), the status code for all Nursing 
+       Assessments Batteries SHALL be 'completed'.
+    </assert>
+
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4-warnings">
+    <title>IHE PCC Nursing Assessments Battery - warning validation phase</title>
+
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4"]'>
+    <assert test='cda:code[@displayName and @codeSystemName]'>
+       Warning: In IHE PCC Nursing Assessments Battery (1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4), the &lt;code&gt; element 
+       specifies the Loinc code that represents the content of the Nursing Assessments Battery. It is good practice to 
+       include displayName and codeSystemName for clarity and debugging. The corresponding values are 'Nursing Assessments 
+       battery' and 'LOINC' respectively.
+    </assert>
+
+    <assert test='cda:component//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.13"]'>
+       Warning: In IHE PCC Nursing Assessments Battery (1.3.6.1.4.1.19376.1.5.3.1.1.13.3.4), the Nursing Assessments Battery 
+       is made of several component simple observations (1.3.6.1.4.1.19376.1.5.3.1.4.13).
+    </assert>
+
+    </rule>
+
+
+  </pattern>

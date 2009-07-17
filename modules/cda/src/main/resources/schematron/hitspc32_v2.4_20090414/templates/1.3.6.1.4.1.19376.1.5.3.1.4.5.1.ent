@@ -1,0 +1,71 @@
+<!--  IHE PCC Concern Entry: 1.3.6.1.4.1.19376.1.5.3.1.4.5.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.5.1-errors">
+    <title>IHE PCC Concern Entry - errors validation phase</title>
+     <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.5.1"]'>
+        <assert test='../cda:act'>
+           Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), the Concern Entry can only be used on acts.
+        </assert>
+        <assert test='../cda:act[@classCode="ACT"] and
+                      ../cda:act[@moodCode="EVN"]'>
+	   Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), all concerns reflect the act of recording 
+           (&lt;act classCode='ACT'&gt;) the event (moodCode='EVN') of being concerned about a problem, allergy or other 
+           issue about the patient condition.
+	</assert>
+	<assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.27"]'>
+	   Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), the required template identifiers indicates 
+           this Concern Entry conforms to the Concern Content module. This content module inherits constraints from the HL7 
+           CCD Template for problem acts, and so also includes that template identifier (2.16.840.1.113883.10.20.1.27).
+	</assert>
+	<assert test='cda:id'>
+	   Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), the Concern Entry requires id element.
+	</assert>
+	<assert test='cda:code[@nullFlavor="NA"]'>
+	   Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), the code is not applicable to a concern act 
+           (Concern Entry), and so shall be recorded as &lt;code nullFlavor='NA'/&gt;.
+	</assert>
+	<assert test='cda:statusCode[@code="active" or 
+                                     @code="suspended" or
+                                     @code="aborted" or
+                                     @code="completed"]'>
+	   Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), the statusCode associated with any concern must 
+           be one of the following values: active, suspended, aborted or completed.
+	</assert>
+	<assert test='cda:effectiveTime/cda:low'>
+	   Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), the &lt;effectiveTime&gt; element records the 
+           starting and ending times during which the concern (Concern Entry) was active. The &lt;low&gt; element shall be 
+           present.
+	</assert>
+
+
+        <assert test='(cda:statusCode[@code="completed" or @code="aborted"] and cda:effectiveTime/cda:high) or
+                      (cda:statusCode[@code="active" or @code="suspended"] and not(cda:effectiveTime/cda:high))'>
+           Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), the &lt;effectiveTime&gt; element records the 
+           starting and ending times during the concern (Concern Entry).  The &lt;high&gt; element shall be present for concerns 
+           in the completed or aborted state, and shall not be present otherwise.
+        </assert>
+
+	<assert test='(cda:entryRelationship[@typeCode="SUBJ"] and cda:entryRelationship/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.5" or @root="1.3.6.1.4.1.19376.1.5.3.1.4.6"]) or  
+	   (cda:sourceOf[@typeCode="SUBJ" and @inversionInd="false"] and cda:sourceOf/*/cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.5" or @root="1.3.6.1.4.1.19376.1.5.3.1.4.6"]) '>
+	   Error: In IHE PCC Concern Entry (1.3.6.1.4.1.19376.1.5.3.1.4.5.1), each concern (Concern Entry) is about one or more 
+           related problems or allergies. This entry shall contain one or more problem or allergy entries that conform to the 
+           specification in section Problem Entry or Allergies and Intolerances. This is how a series of related observations
+           can be grouped as a single concern.  For CDA this SHALL be represented with the &lt;entryRelationship&gt; element. 
+           For HL7 Version 3 Messages, this SHALL be represented as a &lt;sourceOf&gt; element. The typeCode SHALL be SUBJ for 
+           both HL7 Version 3 and CDA. HL7 Version 3 additionally requires that inversionInd SHALL be false. 
+	</assert>
+	</rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.5.1-warnings">
+    <title>IHE PCC Concern Entry - warning validation phase</title>
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.5.1&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>

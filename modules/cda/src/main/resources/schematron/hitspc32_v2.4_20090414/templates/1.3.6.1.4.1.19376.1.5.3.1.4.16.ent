@@ -1,0 +1,34 @@
+<!--  IHE PCC Update Entry: 1.3.6.1.4.1.19376.1.5.3.1.4.16 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.16-errors">
+    <title>IHE PCC v3.0 Update Entry - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.16"]'>
+    <assert test='cda:reference[@typeCode="RPLC"]'>
+       Error: In Update Entry, reference element shall be present
+       with typeCode RPLC.
+    </assert>
+    <assert test='cda:reference/cda:externalAct[@classCode="ACT" and @moodCode="EVN"]'>
+       Error: In Update Entry, &lt;externalAct classCode='ACT'
+       moodCode='EVN'&gt; must appear as shown.
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.16
+    </assert>
+
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.16-warnings">
+    <title>IHE PCC Update Entry - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.16"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

@@ -29,7 +29,7 @@ import org.openhealthtools.ihe.common.cdar2.POCDMT000040Participant1
 import org.openhealthtools.ihe.common.cdar2.ParticipationAncillary
 import org.openhealthtools.ihe.common.cdar2.ParticipationIndirectTarget
 import org.openhealthtools.ihe.common.cdar2.ParticipationPhysicalPerformer
-
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Organizerimport org.openhealthtools.ihe.common.cdar2.POCDMT000040RelatedSubjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Subjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Observation
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage
 import org.eclipse.emf.ecore.util.FeatureMap
 import org.eclipse.emf.ecore.util.FeatureMapUtil
@@ -216,12 +216,12 @@ public class CCDModelExtension{
             }
 
             setAuthorizationActivity { POCDMT000040Act act1 ->
+            // CONF-66: The value for “Act / entryRelationship / @typeCode”
+            // in a policy activity SHALL be “REFR” 2.16.840.1.113883.5.1002
+            // ActRelationshipType STATIC.
                 POCDMT000040EntryRelationship rel1 = CDAR2Factory.eINSTANCE.createPOCDMT000040EntryRelationship()
                 rel1.typeCode = XActRelationshipEntryRelationship.REFR_LITERAL
                 /*         POCDMT000040EntryRelationship rel1 = builder.build {
-                             // CONF-66: The value for “Act / entryRelationship / @typeCode”
-                             // in a policy activity SHALL be “REFR” 2.16.840.1.113883.5.1002
-                             // ActRelationshipType STATIC.
                              entryRelationship {
                                  typeCode('REFR')
                              }
@@ -250,6 +250,7 @@ public class CCDModelExtension{
         // --------------------------------------------------------------------------------------------
         // Chapter 3.2 "Advance Directives"
         // --------------------------------------------------------------------------------------------
+        
         POCDMT000040StructuredBody.metaClass {
             // We assume that this is a CCD Advance Directives section, enforced by the builder
             setAdvanceDirectives  {POCDMT000040Section section ->
@@ -317,6 +318,139 @@ public class CCDModelExtension{
                 delegate.reference
             }
         }// advance directives observations extensions
+        
+        // --------------------------------------------------------------------------------------------
+        // Chapter 3.6 "Family History"
+        // --------------------------------------------------------------------------------------------
+
+        POCDMT000040StructuredBody.metaClass {
+            // We assume that this is a CCD Family History section, enforced by the builder
+            setFamilyHistory  {POCDMT000040Section section ->
+                POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
+                component.section = section
+                delegate.component.add(component)
+            }
+            getFamilyHistory  { ->
+                delegate.component.find { it.section.code.code == '10157-6' } ?.section
+            }
+        }
+        
+        POCDMT000040Section.metaClass {
+            setObservation  {POCDMT000040Observation observation ->
+                POCDMT000040Entry entry = builder.build {
+                    entry {
+                        typeCode('DRIV')
+                    }
+                }
+                entry.observation = observation
+                delegate.entry.add(entry)
+            }
+
+            getObservation { ->
+                delegate.entry.observation
+            }
+            
+            setFamilyMember  {POCDMT000040Organizer organizer ->
+                POCDMT000040Entry entry = builder.build {
+                    entry {
+                        typeCode('DRIV')
+                    }
+                }
+                entry.organizer = organizer
+                delegate.entry.add(entry)
+            }
+
+            getFamilyMember { ->
+                delegate.entry.organizer
+            }
+            
+            setCauseOfDeath  {POCDMT000040Observation observation ->
+                POCDMT000040Entry entry = builder.build {
+                    entry {
+                        typeCode('DRIV')
+                    }
+                }
+                entry.observation = observation
+                delegate.entry.add(entry)
+            }
+
+            getCauseOfDeath { ->
+                delegate.entry.observation
+            }            
+        }
+        
+        POCDMT000040Observation.metaClass {
+            setFamilyMember  {POCDMT000040RelatedSubject relatedSubject ->
+                POCDMT000040Subject subject = CDAR2Factory.eINSTANCE.createPOCDMT000040Subject()
+                subject.relatedSubject = relatedSubject
+                delegate.subject = subject
+                relatedSubject
+            }
+            getFamilyMember { ->
+                delegate.subject.relatedSubject
+            } 
+            setCause  {POCDMT000040Observation observation ->
+                POCDMT000040EntryRelationship rel = builder.build {
+                    entryRelationship {
+                        typeCode('CAUS')
+                    }
+                }
+                rel.observation = observation
+                delegate.entryRelationship.add(rel)
+            }
+            getCause { ->
+            	delegate.entryRelationship.find { it.typeCode == 'CAUS' }.observation
+            }
+            
+            setAge {POCDMT000040Observation observation ->
+                POCDMT000040EntryRelationship rel = builder.build {
+                    entryRelationship(inversionInd:true, typeCode:'SUBJ')
+                }
+                rel.observation = observation
+                delegate.entryRelationship.add(rel)
+            }
+            getAge { ->
+        	    delegate.entryRelationship.find { it.typeCode == 'SUBJ' }.observation            
+            }
+        }
+        
+        POCDMT000040Organizer.metaClass {
+            setFamilyPerson  {POCDMT000040RelatedSubject relatedSubject ->
+                POCDMT000040Subject subject = CDAR2Factory.eINSTANCE.createPOCDMT000040Subject()
+                subject.relatedSubject = relatedSubject
+                delegate.subject = subject
+                relatedSubject
+            }
+            getFamilyPerson { ->
+                delegate.subject.relatedSubject
+            }   
+            
+            setCauseOfDeath { POCDMT000040Observation observation -> 
+                POCDMT000040Component4 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component4()
+                component.observation = observation
+                delegate.component.add(component)
+                observation                
+            }
+            getCauseOfDeath { ->
+                delegate.component.find { 
+                    it.observation?.templateId[0] == '2.16.840.1.113883.10.20.1.42' 
+                }.observation
+            }
+            
+            setObservation  {POCDMT000040Observation observation ->
+                POCDMT000040Component4 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component4()
+                component.observation = observation
+                delegate.component.add(component)
+                observation                
+            }
+
+        	getObservation { ->
+        	    delegate.component.find { 
+        	        it.observation?.templateId[0] == '2.16.840.1.113883.10.20.1.22' 
+        	    }.observation
+        	}
+        }
+        
         
         // --------------------------------------------------------------------------------------------
         // Chapter 3.3 "Support"

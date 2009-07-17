@@ -1,0 +1,36 @@
+<!--  IHE PCC Reason For Visit: 1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1-errors">
+    <title>IHE PCC Reason For Visit - errors validation phase</title>
+
+   <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1"]'> 
+   <!-- Verify that the template id is used on the appropriate type of object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Reason For Visit (1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1), the Reason For Visit can only be used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+   <assert test='cda:code[@code = "29299-6"]'> 
+     Error: In IHE PCC Reason For Visit (1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1), the section type code of a Reason For Visit 
+     must be 29299-6 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+     Error: In IHE PCC Reason For Visit (1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1), the section type code must come from the LOINC code 
+     system (2.16.840.1.113883.6.1). 
+   </assert> 
+   </rule> 
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1-warnings">
+    <title>IHE PCC Reason For Visit - warning validation phase</title>
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

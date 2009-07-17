@@ -1,0 +1,40 @@
+<!--  IHE PCC Hospital Studies Summary: 1.3.6.1.4.1.19376.1.5.3.1.3.29 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.3.29-errors">
+    <title>IHE PCC Hospital Studies Summary - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.29"]'>
+
+     <!-- Verify that the template id is used on the appropriate type of
+     object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Hospital Studies Summary (1.3.6.1.4.1.19376.1.5.3.1.3.29), the Hospital Studies Summary can only be 
+      used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+   <assert test='cda:code[@code = "11493-4"]'> 
+      Error: In IHE PCC Hospital Studies Summary (1.3.6.1.4.1.19376.1.5.3.1.3.29), the section type code of a Hospital Studies 
+      Summary must be 11493-4 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+      Error: In IHE PCC Hospital Studies Summary (1.3.6.1.4.1.19376.1.5.3.1.3.29), the section type code must come from the LOINC 
+      code system (2.16.840.1.113883.6.1). 
+   </assert> 
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.3.29-warnings">
+    <title>IHE PCC Hospital Studies Summary - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.29"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

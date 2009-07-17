@@ -1,0 +1,36 @@
+<!--  IHE PCC Transport Mode: 1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2-errors">
+    <title>IHE PCC Transport Mode - errors validation phase</title>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2"]'> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC Transport Mode (1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2), the Transport Mode can only be used on sections. 
+   </assert> 
+   <assert test='cda:code[@code = "11459-5"]'> 
+     Error: In IHE PCC Transport Mode (1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2), the section type code of a Transport Mode must be 11459-5 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+     Error: In IHE PCC Transport Mode (1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2), the section type code must come from the LOINC code  
+     system (2.16.840.1.113883.6.1). 
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1"]'> 
+     Error: In IHE PCC Transport Mode (1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2), a Transport Mode must contain a Transport Entry.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2 
+   </assert> 
+ </rule> 
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2-warnings">
+    <title>IHE PCC Transport Mode - warning validation phase</title>
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>

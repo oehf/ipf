@@ -1,0 +1,37 @@
+<!--  IHE PCC History of Present Illness Section: 1.3.6.1.4.1.19376.1.5.3.1.3.4 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.3.4-errors">
+    <title>IHE PCC History of Present Illness Section - errors validation phase</title>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.3.4"]'> 
+     <!-- Verify that the template id is used on the appropriate type of
+     object --> 
+   <assert test='../cda:section'> 
+      Error: In IHE PCC History of Present Illness Section (1.3.6.1.4.1.19376.1.5.3.1.3.4), the History of Present Illness can 
+      only be used on sections. 
+   </assert> 
+   <!-- Verify the section type code --> 
+   <assert test='cda:code[@code = "10164-2"]'> 
+      Error: In IHE PCC History of Present Illness Section (1.3.6.1.4.1.19376.1.5.3.1.3.4), the section type code of a History 
+      of Present Illness must be 10164-2 
+   </assert> 
+   <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'> 
+      Error: In IHE PCC History of Present Illness Section (1.3.6.1.4.1.19376.1.5.3.1.3.4), the section type code must come from 
+      the LOINC code system (2.16.840.1.113883.6.1). 
+   </assert> 
+ </rule> 
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.3.4-warnings">
+    <title>IHE PCC History of Present Illness Section - warning validation phase</title>
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.3.4&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>

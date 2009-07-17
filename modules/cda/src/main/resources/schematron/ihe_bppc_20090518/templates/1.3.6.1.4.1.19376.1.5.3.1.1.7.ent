@@ -1,0 +1,24 @@
+<!-- Schematron rules for Patient Privacy Consent Acknowledgement Document -->
+<!-- Template 1.3.6.1.4.1.19376.1.5.3.1.1.7 - With no Scanned Document Part -->
+            
+ <pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.7-errors'>
+ 
+   <rule context='/'>
+    <assert test='//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.7"]'>
+      Error: The BPPC Basic Patient Privacy Consents Acknowlegement Document requires template ID (1.3.6.1.4.1.19376.1.5.3.1.1.7).
+    </assert>
+    </rule>
+
+ 
+  <rule context="*[cda:templateId/@root = '1.3.6.1.4.1.19376.1.5.3.1.1.7']">
+   <assert test="cda:templateId/@root = '1.3.6.1.4.1.19376.1.5.3.1.1.1'">
+     Error: A BPPC Document is a medical document and must include the templateId (1.3.6.1.4.1.19376.1.5.3.1.1.1) for medical documents.
+   </assert>
+   <assert test="self::cda:ClinicalDocument">
+     Error: The template id 1.3.6.1.4.1.19376.1.5.3.1.1.7 for BPPC is a child element of ClinicalDocument.
+   </assert>
+   <assert test="cda:documentationOf/cda:serviceEvent/cda:templateId/@root ='1.3.6.1.4.1.19376.1.5.3.1.2.6'">
+     Error: A BPPC Document must document at least one consent service event. The ClinicalDocument/documentationOf/serviceEvent/templateId/@root='1.3.6.1.4.1.19376.1.5.3.1.2.6'.
+   </assert>
+   </rule>
+</pattern>

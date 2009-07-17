@@ -1,0 +1,28 @@
+<!-- Schematron rules Scanned Documents Content Module -->
+<!-- Template 1.3.6.1.4.1.19376.1.2.20.1 - XDS-SD Document ClinicalDocument/author -->
+            
+ <pattern id='p-1.3.6.1.4.1.19376.1.2.20.1-errors'>
+   <rule context="*[cda:templateId/@root ='1.3.6.1.4.1.19376.1.2.20.1']">
+     <assert test="parent::cda:ClinicalDocument and
+                   self::cda:author">
+        Error: The template id 1.3.6.1.4.1.19376.1.2.20.1 is a child element of ClinicalDocument/author. It indicates the original author of the XDS-SD document.
+     </assert>
+     
+     <assert test="not(cda:assignedAuthor/cda:id) or cda:assignedAuthor/cda:id[count(@root) = 1 and count(@extension) = 1]">
+        Error: An XDS-SD document shall have an assignedAuthor/id element if known. The author/assignedAuthor/id element shall include both the root and extension attributes.
+     </assert>
+ 
+     <assert test="not(cda:assignedAuthor/cda:representedOrganization/cda:id) or cda:assignedAuthor/cda:representedOrganization/cda:id[count(@root) = 1 and count(@extension) = 1]">
+        Error: An XDS-SD document shall hava an assignedAuthor/representedOrganization/id element if known. The assignedAuthor/representedOrganization element shall include both the root and extension attributes.
+     </assert>
+ 
+ </rule>
+</pattern>
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.2.20.1-note'>
+  <rule context="*[cda:templateId/@root = '1.3.6.1.4.1.19376.1.2.20.1']">
+    <assert test="not(cda:time)">
+     Note: An XDS-SD Document element author/time represents the day and time of the authoring of the original content.
+   </assert>
+  </rule>
+ </pattern>

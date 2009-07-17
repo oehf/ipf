@@ -116,7 +116,16 @@ public class CCDAdvanceDirectivesBuilderTest extends AbstractCCDBuilderTest{
 					                    id(root:'20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
                                     }//participantRole
                                }
-                           }//observation instance first
+                               reference{
+                                   id(root:'b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3')
+           					       code(code:'371538006',
+                                         codeSystem:'2.16.840.1.113883.6.96',
+                                         displayName:'Advance directive')
+                                   text(mediaType:'application/pdf'){
+                                       reference(value:'AdvanceDirective.b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3.pdf')
+                                   }
+                               }
+                           }
                        }
                    }
                 }
@@ -166,7 +175,7 @@ public class CCDAdvanceDirectivesBuilderTest extends AbstractCCDBuilderTest{
          def opts = [:]
          opts[XMLResource.OPTION_DECLARE_XML] = true
          opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-         //println(renderer.render(document, opts))
+         // println(renderer.render(document, opts))
      }
 
 }

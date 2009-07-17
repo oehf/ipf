@@ -1,0 +1,105 @@
+<!--  IHE PCC Vital Signs Observation: 1.3.6.1.4.1.19376.1.5.3.1.4.13.2 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13.2-errors">
+    <title>IHE PCC Vital Signs Observation - errors validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.13.2&quot;]">
+    <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.13"] and
+	          cda:templateId[@root="2.16.840.1.113883.10.20.1.31"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), Vital Signs Observation shall include 
+       parent template IDs to indicate that it inherits constraints from the ASTM/HL7 CCD Specification for Vital signs 
+       (2.16.840.1.113883.10.20.1.31), and the constraints of this specification (1.3.6.1.4.1.19376.1.5.3.1.4.13).
+    </assert>
+    <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a Vital Signs Observation shall use a LOINC 
+       code.
+    </assert>
+    <assert test='cda:code[@code = "9279-1" or 
+                           @code = "8867-4" or
+                           @code = "2710-2" or
+                           @code = "8480-6" or
+                           @code = "8462-4" or
+                           @code = "8310-5" or
+                           @code = "8302-2" or
+                           @code = "8306-3" or
+                           @code = "8287-5" or
+                           @code = "3141-9"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a Vital Signs Observation shall use a LOINC 
+       code from the table in the specification.
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='cda:value[@xsi:type="PQ"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), the &lt;value&gt; element shall be present in Vital Signs 
+       Observation, and shall be of the appropriate data type specified
+       for measure in the table.  See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+
+    <assert test='not(cda:code[@code="9279-1"]) or cda:value[@unit="/min"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 9279-1 shall use units = "/min".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="8867-4"]) or cda:value[@unit="/min"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 8867-4 shall use units = "/min".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="2710-2"]) or cda:value[@unit="%"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 2710-2 shall use units = "%".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="8480-6"]) or cda:value[@unit="mm[Hg]"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 8480-6 shall use units = "mm[Hg]".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="8462-4"]) or cda:value[@unit="mm[Hg]"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 8462-4 shall use units = "mm[Hg]".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="8310-5"]) or cda:value[@unit="Cel" or @unit="[degF]"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 8310-5 shall use units = "Cel" or 
+       "[degF]".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="8302-2"]) or cda:value[@unit="m" or
+       @unit="cm" or @unit="[in_us]" or @unit="[in_uk]"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 8302-2 shall use units = "m" or "cm" 
+       or "[in_us]" or "[in_uk]".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="8306-3"]) or cda:value[@unit="m" or
+       @unit="cm" or @unit="[in_us]" or @unit="[in_uk]"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 8306-3 shall use units = "m" or "cm" 
+       or "[in_us]" or "[in_uk]".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="8287-5"]) or cda:value[@unit="m" or
+       @unit="cm" or @unit="[in_us]" or @unit="[in_uk]"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 8287-5 shall use units = "m" or "cm" 
+       or "[in_us]" or "[in_uk]".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+    <assert test='not(cda:code[@code="3141-9"]) or cda:value[@unit="kg" or
+       @unit="g" or @unit="[lb_av]" or @unit="[oz_av]"]'>
+       Error: In IHE PCC Vital Signs Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13.2), a code of 3141-9 shall use units = "kg" or "g" 
+       or "[lb_av]" or "[oz_av]".
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+    </assert>
+
+
+
+
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.13.2-warnings">
+    <title>IHE PCC Vital Signs Observation - warning validation phase</title>
+
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.13.2&quot;]">
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>

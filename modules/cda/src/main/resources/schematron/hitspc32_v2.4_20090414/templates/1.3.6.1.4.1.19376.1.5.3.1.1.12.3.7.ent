@@ -1,0 +1,344 @@
+<!-- Template_1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 -->
+<!-- IHE PCC Functional Status Assessment (FSA), Version 3 January 2008 -->
+<!-- IHE FSA Survey Panel -->
+
+
+<pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7"]'> 
+
+     <!-- Verify that the template id is used on the appropriate type of object --> 
+   <assert test='self::cda:organizer'> 
+     Error: An FSA Survey Panel shall be a CDA Organizer element. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 
+   </assert> 
+
+   <!-- Verify that the parent templateId is also present. --> 
+   <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.32"]'> 
+     Error: An FSA Survey Panel shall carry the CCD organizer templateID (2.16.840.1.113883.10.20.1.32) to indicate that it inherits constraints from the ASTM/HL7 CCD specification for results organizers. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 
+   </assert>
+ 
+   <assert test='cda:id'> 
+     Error: An FSA Survey Panel shall have an id element. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 
+   </assert>
+ 
+   <assert test='cda:code'> 
+     Error: An FSA Survey Panel shall have a code element to identify a specific survey panel. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 
+   </assert>
+ 
+   <assert test='cda:statusCode/@code="completed"'> 
+     Error: An FSA Survey Panel shall have a statusCode indicating that the panel is completed.. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 
+   </assert>
+ 
+   <assert test='cda:effectiveTime'> 
+     Error: An FSA Survey Panel shall have an effectiveTime element to indicate when the survey panel was taken. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 
+   </assert>
+ 
+   <assert test='cda:component[@typeCode="COMP"]/cda:observation[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.12.3.6"]'> 
+     Error: An FSA Survey Panel shall have one or more component elements that are FSA observations with the FSA Survey Observation templateId (1.3.6.1.4.1.19376.1.5.3.1.1.12.3.6). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7 
+   </assert>
+
+ </rule>
+ 
+</pattern>
+
+
+
+<!-- Pattern for Warnings -->
+
+<pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7-warning'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7"]'> 
+ 
+   <assert test='cda:code[@code and @codeSystem="2.16.840.1.113883.6.1"]'> 
+     Warning: An FSA Survey Panel should have a LONIC code to identify a specific survey panel. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45588-1")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45588-1). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>  
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45589-9")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45589-9). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45590-7")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45590-7). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45591-5")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45591-5). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45592-3")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45592-3). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45593-1")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45593-1). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45594-9")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45594-9). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45595-6")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45595-6). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45596-4")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45596-4). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45597-2")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45597-2). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45598-0")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45598-0). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45599-8")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45599-8). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45600-4")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45600-4). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45601-2")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45601-2). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45602-0")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45602-0). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45603-8")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45603-8). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45604-6")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45604-6). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45605-3")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45605-3). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45606-1")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel panel (46007-1), then it should contain a LOINC YYY observation (45606-1). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46007-1") or (.//cda:observation/cda:code/@code="45607-9")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL self performance or support panel (46007-1), then it should contain a LOINC YYY observation (45607-9). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46008-9") or (.//cda:observation/cda:code/@code="45608-7")'> 
+     Warning: If an FSA Survey Panel is a LOINC Bathing panel (46008-9), then it should contain a LOINC YYY observation (45608-7). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46008-9") or (.//cda:observation/cda:code/@code="45609-5")'> 
+     Warning: If an FSA Survey Panel is a LOINC Bathing panel (46008-9), then it should contain a LOINC YYY observation (45609-5). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46009-7") or (.//cda:observation/cda:code/@code="45610-3")'> 
+     Warning: If an FSA Survey Panel is a LOINC Test for balance panel (46009-7), then it should contain a LOINC YYY observation (45610-3). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46009-7") or (.//cda:observation/cda:code/@code="45523-8")'> 
+     Warning: If an FSA Survey Panel is a LOINC Test for balance panel (46009-7), then it should contain a LOINC YYY observation (45523-8). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45524-6")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45524-6). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45525-3")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45525-3). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45526-1")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45526-1). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45527-9")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45527-9). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45528-7")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45528-7). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45529-5")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45529-5). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45530-3")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45530-3). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45531-1")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45531-1). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45532-9")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45532-9). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45533-7")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45533-7). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45534-5")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45534-5). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46010-5") or (.//cda:observation/cda:code/@code="45535-2")'> 
+     Warning: If an FSA Survey Panel is a LOINC Functional limitation in range of motion panel (46010-5), then it should contain a LOINC YYY observation (45535-2). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46011-3") or (.//cda:observation/cda:code/@code="45536-0")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of locomotion panel (46011-3), then it should contain a LOINC YYY observation (45536-0). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46011-3") or (.//cda:observation/cda:code/@code="45537-8")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of locomotion panel (46011-3), then it should contain a LOINC YYY observation (45537-8). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46011-3") or (.//cda:observation/cda:code/@code="45538-6")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of locomotion panel (46011-3), then it should contain a LOINC YYY observation (45538-6). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46011-3") or (.//cda:observation/cda:code/@code="45539-4")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of locomotion panel (46011-3), then it should contain a LOINC YYY observation (45539-4). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46011-3") or (.//cda:observation/cda:code/@code="45540-2")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of locomotion panel (46011-3), then it should contain a LOINC YYY observation (45540-2). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46012-1") or (.//cda:observation/cda:code/@code="45541-0")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of transfer panel (46012-1), then it should contain a LOINC YYY observation (45541-0). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert> 
+ 
+   <assert test='not(cda:code/@code="46012-1") or (.//cda:observation/cda:code/@code="45542-8")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of transfer panel (46012-1), then it should contain a LOINC YYY observation (45542-8). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46012-1") or (.//cda:observation/cda:code/@code="45543-6")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of transfer panel (46012-1), then it should contain a LOINC YYY observation (45543-6). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46012-1") or (.//cda:observation/cda:code/@code="45544-4")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of transfer panel (46012-1), then it should contain a LOINC YYY observation (45544-4). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46012-1") or (.//cda:observation/cda:code/@code="45545-1")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of transfer panel (46012-1), then it should contain a LOINC YYY observation (45545-1). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46012-1") or (.//cda:observation/cda:code/@code="45546-9")'> 
+     Warning: If an FSA Survey Panel is a LOINC Modes of transfer panel (46012-1), then it should contain a LOINC YYY observation (45546-9). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46013-9") or (.//cda:observation/cda:code/@code="45612-9")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL functional rehabilitation potential panel (46013-9), then it should contain a LOINC YYY observation (45612-9). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46013-9") or (.//cda:observation/cda:code/@code="45613-7")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL functional rehabilitation potential panel (46013-9), then it should contain a LOINC YYY observation (45613-7). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46013-9") or (.//cda:observation/cda:code/@code="45614-5")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL functional rehabilitation potential panel (46013-9), then it should contain a LOINC YYY observation (45614-5). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46013-9") or (.//cda:observation/cda:code/@code="45615-2")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL functional rehabilitation potential panel (46013-9), then it should contain a LOINC YYY observation (45615-2). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46013-9") or (.//cda:observation/cda:code/@code="45616-0")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL functional rehabilitation potential panel (46013-9), then it should contain a LOINC YYY observation (45616-0). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+ 
+   <assert test='not(cda:code/@code="46013-9") or (.//cda:observation/cda:code/@code="45617-8")'> 
+     Warning: If an FSA Survey Panel is a LOINC ADL functional rehabilitation potential panel (46013-9), then it should contain a LOINC YYY observation (45617-8). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.2.5 
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Pattern for Notes -->
+
+<pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7-note'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.12.3.7"]'>
+
+ </rule>
+
+</pattern>
+

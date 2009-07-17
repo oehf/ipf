@@ -1,0 +1,106 @@
+<!--  IHE PCC v3.0 Encounters: 1.3.6.1.4.1.19376.1.5.3.1.4.14 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.14-errors">
+    <title>IHE PCC v3.0 Encounters - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.14"]'>
+
+    <assert test='@classCode="ENC"'>
+       Error: In Encounters, the classCode shall be ENC.
+    </assert>
+
+    <assert test='not(@moodCode="EVN") or cda:templateId[@root="2.16.840.1.113883.10.20.1.21"]'>
+       Error: In Encounters, the templateId indicates that this encounter entry conforms to
+       the constraints of this content module. NOTE: When the encounter is in
+       event mood (moodCode='EVN'), this entry conforms to the CCD template
+       2.16.840.1.113883.10.20.1.21, and when in other moods, this entry conforms
+       to the CCD template 2.16.840.1.113883.10.20.1.25.
+    </assert>
+    <assert test='@moodCode="EVN" or cda:templateId[@root="2.16.840.1.113883.10.20.1.25"]'>
+       Error: In Encounters, the templateId indicates that this encounter
+       entry conforms to the constraints of this content module. NOTE: When
+       the encounter is in event mood (moodCode='EVN'), this entry conforms to
+       the CCD template 2.16.840.1.113883.10.20.1.21, and when in other moods,
+       this entry conforms to the CCD template 2.16.840.1.113883.10.20.1.25.
+    </assert>
+    <assert test='cda:id'>
+       Error: In Encounters, the id element is required.
+    </assert>
+    <assert test='cda:code[@codeSystem="2.16.840.1.113883.5.4"]'>
+       Error: In Encounters, code is a required element and shall contain a code
+       from the HL7 ActEncounterCode vocabulary describing the type of
+       encounter (e.g., inpatient, ambulatory, emergency, et cetera).
+    </assert>
+    <assert test='cda:text/cda:reference'>
+       Error: In Encounters, the text element shall contain a reference to
+       the narrative text describing the encounter.
+    </assert>
+    <assert test='not(@moodCode = "EVN" or @moodCode = "APT") or cda:effectiveTime'>
+       Error: In Encounters, the effectiveTime element records the time over which the encounter
+       occurred (in EVN mood), or the desired time of the encounter in ARQ or
+       APT mood. In EVN or APT mood, the effectiveTime element shall be
+       present. In ARQ mood, the effectiveTime element should be present, and
+       if not, the priorityCode shall be present to indicate that a callback
+       is required to schedule the appointment.
+    </assert>
+    <assert test='not(@moodCode="ARQ") or
+                  (not(cda:effectiveTime) or cda:priorityCode)'>
+       Error: In Encounters, when in ARQ mood, if the effectiveTime element is
+       not present, then priorityCode shall be present.
+    </assert>
+    <assert test='not(cda:participant[@typeCode="LOC"]) or 
+                  cda:participant[@typeCode="LOC"]/cda:participantRole[@classCode="SDLOC"]'>
+       Error: In Encounters, a participant with typeCode LOC may be present to
+       provide information about the location where the encounter is to be or
+       was performed. This element shall have a participantRole element with
+       classCode='SDLOC' that describes the service delivery location.
+    </assert>
+    <assert test='not(cda:particpant[@typeCode="LOC"]) or
+                  cda:participant[@typeCode="LOC"]/cda:playingEntity/cda:name'>
+       Error: In Encounters, in a participant with typeCode LOC there shall be
+       a playingEntity with a name.
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.14-warnings">
+    <title>IHE PCC v3.0 Encounters - warning validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.14"]'>
+    <assert test='not(@moodCode="ARQ") or cda:effectiveTime'>
+       Warning: In Encounters, in ARQ mood, the effectiveTime element should be present.
+    </assert>
+    <assert test='not(@moodCode="EVN") or cda:performer'>
+       Warning: In Encounters, when in EVN mood at least one performer should
+       be present that identifies the provider of the service given during the
+       encounter. More than one performer may be present.
+    </assert>
+    <assert test='not(cda:particpant[@typeCode="LOC"]) or
+                  cda:participant[@typeCode="LOC"]/cda:addr'>
+       Warning: In Encounters, an addr element should be present in a
+       participant with typeCode LOC.
+    </assert>
+    <assert test='not(cda:particpant[@typeCode="LOC"]) or
+                  cda:participant[@typeCode="LOC"]/cda:telecom'>
+       Warning: In Encounters, an telecom element should be present in a
+       participant with typeCode LOC.
+    </assert>
+    </rule>
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.14-manual">
+    <title>IHE PCC v3.0 Encounters - manual validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.14"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

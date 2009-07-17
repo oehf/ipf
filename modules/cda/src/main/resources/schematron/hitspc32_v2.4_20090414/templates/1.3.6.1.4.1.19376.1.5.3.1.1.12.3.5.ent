@@ -1,0 +1,452 @@
+<!-- Template_1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 -->
+<!-- IHE PCC Functional Status Assessment (FSA), Version 3 January 2008 -->
+<!-- IHE FSA Geriatric Depression Score Component -->
+
+
+<pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5"]'> 
+
+     <!-- Verify that the template id is used on the appropriate type of object --> 
+   <assert test='self::cda:observation'> 
+     Error: An FSA Geriatric Depression Score Component shall be a CDA Observation element. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert> 
+
+   <!-- Verify that the parent templateId is also present. --> 
+   <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.4.13"]'> 
+     Error: An FSA Geriatric Depression Score Component shall be an IHE Simple Observation (1.3.6.1.4.1.19376.1.5.3.1.4.13). 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert> 
+
+   <!-- Verify the allowed codes and code systems --> 
+   <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.1" and (@code="48512-8" or @code="48513-6" 
+                   or @code="48514-4" or @code="48515-1" or @code="48516-9" or @code="48517-7" 
+                   or @code="48518-5" or @code="48519-3" or @code="48520-1" or @code="48521-9" 
+                   or @code="48522-7" or @code="48523-5" or @code="48524-3" or @code="48525-0"
+                   or @code="48526-8" or @code="48527-6" or @code="48528-4" or @code="48529-2" 
+                   or @code="48530-0" or @code="48531-8" or @code="48532-6" or @code="48533-4" 
+                   or @code="48534-2" or @code="48535-9" or @code="48536-7" or @code="48537-5"
+                   or @code="48538-3" or @code="48539-1" or @code="48540-9" or @code="48541-7")]'> 
+     Error: An FSA Geriatric Depression Score Component shall have code taken from the LOINC code system (2.16.840.1.113883.6.1) with one of thirty specified codes to represent a specific yes/no question that could be asked. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='cda:value/@xsi:type = "INT"'>
+     Error: An FSA Geriatric Depression Score Component shall have a value element with data type INT (Integer).
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5
+   </assert>
+
+   <assert test='cda:value[@value="0" or @value="1"]'>
+     Error: The value element of an FSA Geriatric Depression Score Component shall be an integer with a value of 0 or 1. Depending on the question, this value represents either a Yes or a No response. The interpretationCode, if present, indicates if the value is Yes or No.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5
+   </assert>
+
+   <assert test='not(cda:code/@code="48512-8" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48512-8 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48512-8" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48512-8 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48513-6" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48513-6 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48513-6" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48513-6 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48514-4" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48514-4 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48514-4" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48514-4 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48515-1" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48515-1 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48515-1" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48515-1 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48516-9" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48516-9 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48516-9" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48516-9 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48517-7" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48517-7 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48517-7" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48517-7 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48518-5" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48518-5 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48518-5" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48518-5 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48519-3" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48519-3 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48519-3" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48519-3 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48520-1" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48520-1 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48520-1" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48520-1 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48521-9" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48521-9 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48521-9" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48521-9 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48522-7" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48522-7 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48522-7" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48522-7 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48523-5" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48523-5 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48523-5" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48523-5 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48524-3" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48524-3 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48524-3" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48524-3 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48525-0" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48525-0 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48525-0" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48525-0 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48526-8" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48526-8 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48526-8" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48526-8 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48527-6" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48527-6 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48527-6" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48527-6 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48528-4" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48528-4 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48528-4" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48528-4 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48529-2" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48529-2 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48529-2" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48529-2 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48530-0" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48530-0 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48530-0" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48530-0 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48531-8" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48531-8 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48531-8" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48531-8 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48532-6" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48532-6 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48532-6" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48532-6 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48533-4" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48533-4 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48533-4" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48533-4 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48534-2" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48534-2 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48534-2" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48534-2 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48535-9" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48535-9 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48535-9" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48535-9 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48536-7" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48536-7 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48536-7" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48536-7 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48537-5" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48537-5 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48537-5" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48537-5 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48538-3" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48538-3 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48538-3" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48538-3 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48539-1" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48539-1 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48539-1" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48539-1 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48540-9" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48540-9 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48540-9" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48540-9 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48541-7" and cda:value/@value="1" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373066001"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48541-7 and the value is 1, then the SNOMED CT interpretationCode, if present, shall be 373066001 (Yes).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:code/@code="48541-7" and cda:value/@value="0" and cda:interpretationCode) 
+                   or cda:interpretationCode/@code="373067005"'> 
+     Error: If the code element of an FSA Geriatric Depression Score Component is 48541-7 and the value is 0, then the SNOMED CT interpretationCode, if present, shall be 373067005 (No).  
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:methodCode)'>
+     Error: An FSA Geriatric Depression Score Component should not contain a methodCode element since the method is implicit in the observation code.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5
+   </assert>
+
+   <assert test='not(cda:targetSiteCode)'>
+     Error: An FSA Geriatric Depression Score Component should not contain a targetSiteCode element since the target site is either implicit in the observation code or is irrelevant.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5
+   </assert>
+
+ </rule>
+ 
+</pattern>
+
+
+
+<!-- Pattern for Warnings -->
+
+<pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5-warning'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5"]'> 
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Pattern for Notes -->
+
+<pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5-note'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5"]'> 
+
+   <assert test='cda:interpretationCode'> 
+     Note: An FSA Geriatric Depression Score Component may contain an interpretationCode element to indicate a Yes or No interpretation of the observation value. If present, it is coded with the SNOMED CT code system (2.16.840.1.113883.6.96) with code either 373066001 (Yes) or 373067005 (No). The displayName attribute may also be present to carry the Yes or No text.
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5 
+   </assert>
+
+   <assert test='not(cda:effectiveTime)'>
+     Note: An FSA Geriatric Depression Score Component need not contain an effectiveTime element as the effective time should already be recorded in the parent Geriatric Depression Score Observation. 
+     See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.5
+   </assert>
+
+ </rule>
+
+</pattern>
+

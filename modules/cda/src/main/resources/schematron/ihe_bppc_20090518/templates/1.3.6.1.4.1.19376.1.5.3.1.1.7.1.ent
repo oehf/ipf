@@ -1,0 +1,18 @@
+<!-- Schematron rules for Patient Privacy Consent Acknowledgement Document -->
+<!-- Template 1.3.6.1.4.1.19376.1.5.3.1.1.7.1 - With Scanned Document -->
+            
+ <pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.1.7.1-errors'>
+  <rule context="*[cda:templateId/@root='1.3.6.1.4.1.19376.1.5.3.1.1.7.1']">
+   
+   <assert test="cda:templateId[@root = '1.3.6.1.4.1.19376.1.5.3.1.1.7'] and
+                 cda:templateId[@root = '1.3.6.1.4.1.19376.1.2.20']">
+     Error: A BPPC Document with Scanned Document templateId 1.3.6.1.4.1.19376.1.5.3.1.1.7.1 must include templateId "1.3.6.1.4.1.19376.1.5.3.1.1.7" for the document requirements as stated in the BPPC specification 
+     and templateId "1.3.6.1.4.1.19376.1.2.20" for Scanned Document.
+   </assert>
+   
+   <assert test="self::cda:ClinicalDocument">
+     Error: The template id 1.3.6.1.4.1.19376.1.5.3.1.1.7.1  BPPC with Scanned Document is a child element of ClinicalDocument.
+   </assert>
+   
+  </rule>
+</pattern>

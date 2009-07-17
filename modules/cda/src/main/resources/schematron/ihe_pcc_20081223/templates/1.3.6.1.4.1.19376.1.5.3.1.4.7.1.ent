@@ -1,0 +1,42 @@
+<!--  IHE PCC v3.0 Normal Dosing: 1.3.6.1.4.1.19376.1.5.3.1.4.7.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.1-errors">
+    <title>IHE PCC v3.0 Normal Dosing - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.7.1"]'>
+    <report test='//cda:substanceAdministation'>
+       Error: Medications that use this template identifier shall not use
+       subordinate &lt;substanceAdministation&gt; acts.
+    </report>
+
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.1-warnings">
+    <title>IHE PCC v3.0 Normal Dosing - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.7.1"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.1-manual">
+    <title>IHE PCC v3.0 Normal Dosing - manual validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.7.1"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

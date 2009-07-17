@@ -68,8 +68,10 @@ ccd_structuredBody(schema:'structuredBody') {
 		purpose(schema:'ccd_purpose')
 		payers(schema:'ccd_payers')
 		advanceDirectives(schema:'ccd_advanceDirectives')
-		// ...
+        familyHistory(schema:'ccd_familyHistory')
+        // ...
 	}
 }
+
 
 

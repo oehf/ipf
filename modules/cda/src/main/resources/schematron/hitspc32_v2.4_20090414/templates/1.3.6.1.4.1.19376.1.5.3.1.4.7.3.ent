@@ -1,0 +1,168 @@
+<!--  IHE PCC Supply Entry: 1.3.6.1.4.1.19376.1.5.3.1.4.7.3 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.3-errors">
+    <title>IHE PCC Supply Entry - errors validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.7.3&quot;]">
+
+    <assert test='./@classCode="SPLY" and (./@moodCode="INT" or ./@moodCode="EVN")'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the moodCode attribute shall be INT to reflect 
+       that a medication has been prescribed, or EVN to indicate that the prescription has been filled.
+    </assert>
+
+    <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.34"]'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the parent CCD template ID 
+       (2.16.840.1.113883.10.20.1.34) shall be present.
+    </assert>
+
+    <assert test='cda:id'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), each supply entry shall have an identifier to 
+       uniquely identify the supply entry.
+    </assert>
+
+    <assert test='not(cda:quantity) or cda:quantity[@value]'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the value attribute of quantity shall be present 
+       if quantity exists.
+    </assert>
+
+    <assert test='not(cda:author) or cda:author/cda:time[@value or @nullFlavor="UNK"]'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the &lt;time&gt; element must be present if 
+       author exists to indicate when the author created the prescription.  If this information is unknown, it shall be 
+       recorded by setting the nullFlavor attribute to UNK.
+    </assert>
+
+    <assert test='not(cda:author) or cda:author/cda:assignedAuthor'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the &lt;assignedAuthor&gt; element shall be 
+       present if an author exists in Supply Entry, and identifies the author.
+    </assert>
+
+    <assert test='not(cda:author) or cda:author/cda:assignedAuthor/cda:id'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), an identifier element shall be present for an 
+       assigned author if an author exists in Supply Entry.
+    </assert>
+
+    <assert test='not(cda:author) or
+                  cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name or
+                  cda:author/cda:assignedAuthor/cda:representedOrganization/cda:name'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), an &lt;assignedPerson&gt;/&lt;name&gt; and/or 
+       &lt;representedOriganization&gt;/&lt;name&gt; element shall be present if an author exists in Supply Entry. This 
+       element shall identify the prescriber or their organization.
+    </assert>
+
+    <assert test='not(cda:performer) or
+                  not(./@moodCode="INT") or
+                  cda:performer/cda:time[@value or @nullFlavor="UNK"]'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the &lt;time&gt; element shall be present if 
+       there is a performer in Supply Entry to indicate when the prescription was filled (moodCode='EVN'). If this 
+       information is unknown, it shall be recorded by setting the nullFlavor attribute to UNK.
+    </assert>
+
+    <assert test='not(cda:performer) or
+		  cda:performer/cda:assignedEntity'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the &lt;assignedEntity&gt; element shall be 
+       present in a Supply Entry that contains a performer, and identifies the filler of the prescription.
+    </assert>
+
+    <assert test='not(cda:performer) or
+	          cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name or
+                  cda:performer/cda:assignedEntity/cda:representedOrganization/cda:name'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), an assignedPerson/name and/or 
+       representedOriganization/name element shall be present under the assignedEntity if a performer exists.
+    </assert>
+
+    <assert test='not(cda:entryRelationship[@typeCode="SUBJ"]) or
+                  cda:entryRelationship[@typeCode="SUBJ"]/cda:act[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.3.1"]'>
+       Error: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), an entry relationship may be present to provide 
+       the fulfillment instructions. When present, this entry relationship shall contain a Medication Fulfillment 
+       Instructions entry.
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.3.1
+    </assert>
+
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.3-warnings">
+    <title>IHE PCC Supply Entry - warning validation phase</title>
+
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.7.3&quot;]">
+    <assert test='not(./@moodCode = "EVN") or ../cda:sequenceNumber/@value'>
+       Warning: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the sequenceNumber should be present when 
+       the supply element has a moodCode attribute of EVN.
+    </assert>
+
+    <assert test='cda:repeatNumber[@value]'>
+       Warning: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), Supply Entry should have a &lt;repeatNumber&gt; 
+       element that indicates the number of times the prescription can be filled.
+    </assert>
+
+    <assert test='cda:quantity'>
+       Warning: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), Supply Entry should indicate the quantity 
+       supplied.
+    </assert>
+
+    <assert test='not(cda:quantity) or cda:quantity[@unit]'>
+       Warning: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), if the medication is supplied in dosing units 
+       (tablets or capsules), then the unit attribute need not be present (and should be set to 1 if present). Otherwise,
+       the unit element shall be present to indicate the quantity (e.g., volume or mass) of medication supplied.
+    </assert>
+
+    <assert test='not(cda:author) or cda:author/cda:assignedAuthor/cda:id'>
+       Warning: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), in author one or more id elements should be 
+       present.  These identifiers identify the author of the act. When the author is the prescribing physician they may 
+       include local identifiers or regional identifiers necessary for prescribing.
+    </assert>
+
+    <assert test='not(cda:performer) or
+                  not(./@moodCode="EVN") or
+                  cda:performer/cda:time'>
+       Warning: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the &lt;time&gt; element should be present if 
+       there is a performer to indicate when the prescription is intended to be filled (moodCode='INT').
+    </assert>
+
+    <assert test='not(cda:performer) or
+                  cda:performer/cda:assignedEntity/cda:id'>
+       Warning: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), one or more &lt;id&gt; elements should be 
+       present under the assignedEntity if a performer exists. These identify the performer.
+    </assert>
+
+
+    </rule>
+
+
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.3-notes">
+    <title>IHE PCC Supply Entry - manual validation phase</title>
+
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.7.3&quot;]">
+      <assert test='../cda:sequenceNumber'>
+         Note: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the prescription activity may have a 
+         sequenceNumber element to indicate the fill number. A value of 1, 2 or N indicates that it is the first, second, 
+         or Nth fill respectively of a specific prescription.
+      </assert>
+
+      <assert test='not(./@classCode="SPLY" and ./@moodCode="INT") or cda:author'>
+         Note: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), Supply Entry that describes an intent (&lt;supply 
+         classCode='SPLY' moodCode='INT'&gt;) may include an &lt;author&gt; element to identify the prescribing provider.
+      </assert>
+
+      <assert test='cda:performer'>
+         Note: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), the performer element may be present to indicate 
+         who is intended (moodCode='INT'), or actually filled (moodCode='EVN') the prescription.
+      </assert>
+
+      <assert test='cda:entryRelationship[@typeCode="SUBJ"]/cda:act[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.3.1"]'>
+         Note: In IHE PCC Supply Entry (1.3.6.1.4.1.19376.1.5.3.1.4.7.3), an entry relationship may be present to provide the 
+         fulfillment instructions. When present, this entry relationship shall contain a Medication Fulfillment Instructions 
+         entry.
+         See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.3.1
+      </assert>
+
+    </rule>
+  </pattern>
+

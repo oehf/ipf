@@ -1,0 +1,43 @@
+<!-- Schematron rules for Patient Privacy Consent Acknowledgement Documnent -->
+<!-- Template 1.3.6.1.4.1.19376.1.5.3.1.1.6 - Consent Service Events -->
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.5.3.1.2.6-errors'>
+  <rule context="*[cda:templateId/@root = '1.3.6.1.4.1.19376.1.5.3.1.2.6']">
+   <assert test="self::cda:serviceEvent">
+      Error: The consent service event template applies only to serviceEvent elements.
+   </assert>
+   <assert test="count(cda:id) = 1">
+      Error: The service event shall have one id element, providing an identifier for the serviceEvent. 
+   </assert>
+   <assert test="cda:id[count(@root) = 1 and count(@extension) = 0]">
+     Error: The root attribute of the consent service event id element shall be present, and shall be a GUID or OID. The extension attribute shall not be present. 
+   </assert>
+   <assert test="cda:code">
+     Error: The code element shall be present, and shall indicate the consent given.
+   </assert>
+   <assert test="cda:code[count(@code) = 1 and count(@codeSystem) = 1]">
+    Error: The code attribute indicates the consent given, and the codeSystem attribute indicates the code system from which this is given. 
+   </assert> 
+   <assert test="cda:effectiveTime">
+    Error: The effectiveTime element shall be present.
+   </assert>
+   <assert test="cda:effectiveTime/cda:low">
+    Error: The low element of the effectiveTime element shall be present.
+   </assert>  
+   <assert test="(cda:effectiveTime/cda:low/@value)">
+     Error: The effectiveTime/low element should have a value.
+   </assert>
+   
+  </rule>
+ </pattern>
+ 
+<pattern id = 'p-1.3.6.1.4.1.19376.1.5.3.1.2.6-note'>
+<rule context="*[cda:templateId/@root = '1.3.6.1.4.1.19376.1.5.3.1.2.6']">
+ <assert test="cda:code[count(@displayName) = 1 and count(@codeSystemName) = 1]">
+    Note: The code/displayName or code/codeSystemName for serviceEvent optional attribute is not present. 
+   </assert>
+   <assert test="cda:effectiveTime/cda:high">
+    Note: The high element of the effectiveTime optional element is not present for serviceEvent.
+   </assert>
+ </rule>
+</pattern>

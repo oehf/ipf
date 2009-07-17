@@ -1,0 +1,405 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    The purpose of this file is to provide supporting information
+    for validating that document instances conform to the Level 1 and
+    Level 2 CDA Implementation Guides for Care Record Summaries.
+    
+    The top level element of this file is systems, and it is made up
+    of one or more system elements. Each system element describes
+    a vocabulary or coding domain, and provides the name and root OID
+    for that domain.  Within the system element are code elements that
+    provide the code value and display name for a given coded value.
+-->
+<systems>
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.6.1'
+        group='LOINC Document Type Codes'>
+        <code value="34117-2" display_name="History &amp; Physical" setting="------" specialty="------">
+        </code>
+        <code value= "11492-6" display_name="History &amp; Physical" setting="Hospital" specialty="------">
+        </code>
+        <code value= "28626-0" display_name="History &amp; Physical" setting="------" specialty="Physician">
+        </code>
+        <code value= "34774-0" display_name="History &amp; Physical" setting="------" specialty="General surgery">
+        </code>
+        <code value= "34115-6" display_name="History &amp; Physical" setting="Hospital" specialty="Medical Student">
+        </code>
+        <code value= "34116-4" display_name="History &amp; Physical" setting="Nursing home" specialty="Physician">
+        </code>
+        <code value= "34095-0" display_name="Comprehensive History &amp; Physical" setting="------" specialty="------">
+        </code>
+        <code value= "34096-8" display_name="Comprehensive History &amp; Physical" setting="Nursing home" specialty="">
+        </code>
+        <code value="HPADMT-X" display_name="Admission History &amp; Physical" setting="------" specialty="------">
+        </code>
+        <code value="47039-3" display_name="Admission History &amp; Physical" setting="Inpatient" specialty="------">
+        </code>
+        <code value="34763-3" display_name="Admission History &amp; Physical" setting="" specialty="General medicine">
+        </code>
+        <code value="34094-3" display_name="Admission History &amp; Physical" setting="Hospital" specialty="Cardiology">
+        </code>
+        <code value="34138-8" display_name="Targeted History &amp; Physical" setting="------" specialty="------">
+        </code> 
+     </system>   
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.6.1'
+        group='LOINC Section Codes'>
+        <code value="29299-5" display_name="REASON FOR VISIT">
+        </code>
+        <code value="10154-3" display_name="CHIEF COMPLAINT">
+        </code>
+        <code value="46239-0" display_name="REASON FOR VISIT+CHIEF COMPLAINT">
+        </code>
+        <code value="10164-2" display_name="HISTORY OF PRESENT ILLNESS">
+        </code>
+        <code value="11348-0" display_name="HISTORY OF PAST ILLNESS">
+        </code>
+        <code value="10160-0" display_name="HISTORY OF MEDICATION USE">
+        </code>
+        <code value="48765-2" display_name="ALLERGIES, ADVERSE REACTIONS, ALERTS">
+        </code>
+        <code value="29762-2" display_name="SOCIAL HISTORY">
+        </code>
+        <code value="10157-6" display_name="HISTORY OF FAMILY MEMBER DISEASES">
+        </code>
+        <code value="8716-3" display_name="VITAL SIGNS (may be a subsection of Physical Examination)">
+        </code>
+        <code value="10187-3" display_name="REVIEW OF SYSTEMS">
+        </code>
+        <code value="29545-1" display_name="PHYSICAL FINDINGS">
+        </code>
+        <code value="10210-3" display_name="GENERAL STATUS, PHYSICAL FINDINGS (optional, must be subsection)">
+        </code>
+        <code value="30954-2" display_name="RELEVANT DIAGNOSTIC TESTS AND/OR LABORATORY DATA">
+        </code>
+        <code value="AAPLN-X" display_name="ASSESSMENT AND PLAN">
+        </code>
+        <code value="ASSMT-X" display_name="ASSESSMENT">
+        </code>
+        <code value="18776-5" display_name="PLAN">
+        </code>
+        <code value="10167-5" display_name="PROCEDURE HISTORY">
+        </code>
+        <code value="11369-6" display_name="HISTORY OF IMMUNIZATIONS">
+        </code>
+        <code value="11450-4" display_name="PROBLEM LIST">
+        </code>
+    </system>
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.5.111'
+        group='Administrative Contact Role Type'>
+        <code value="ECON" display_name="emergency contact" description="An individual designated for contact in emergent situations.">
+        </code>
+        <code value="NOK" display_name="next of kin" description="Played by an individual who is designated as the next of kin for another individual which scopes the role.">
+        </code>
+    </system>
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.5.1'
+        group='Administrative Gender'>
+        <code value="F" display_name="Female" description="Female">
+        </code>
+        <code value="M" display_name="Male" description="Male">
+        </code>
+        <code value="UN" display_name="Undifferentiated" description="The gender of a person could not be uniquely defined as male or female, such as hermaphrodite.">
+        </code>
+    </system>
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.5.50'
+        group='Ethnicity'>
+        <code value="2135-2" display_name="EthnicityHispanic">
+        </code>
+        <code value="2182-4" display_name="Cuban">
+        </code>
+        <code value="2184-0" display_name="Dominican">
+        </code>
+        <code value="2155-0" display_name="EthnicityHispanicCentralAmerican">
+        </code>
+        <code value="2163-4" display_name="Canal Zone">
+        </code>
+        <code value="2162-6" display_name="Central American Indian">
+        </code>
+        <code value="2156-8" display_name="Costa Rican">
+        </code>
+        <code value="2157-6" display_name="Guatemalan">
+        </code>
+        <code value="2158-4" display_name="Honduran">
+        </code>
+        <code value="2159-2" display_name="Nicaraguan">
+        </code>
+        <code value="2160-0" display_name="Panamanian">
+        </code>
+        <code value="2161-8" display_name="Salvadoran">
+        </code>
+        <code value="2148-5" display_name="EthnicityHispanicMexican">
+        </code>
+        <code value="2151-9" display_name="Chicano">
+        </code>
+        <code value="2152-7" display_name="La Raza">
+        </code>
+        <code value="2149-3" display_name="Mexican American">
+        </code>
+        <code value="2153-5" display_name="Mexican American Indian">
+        </code>
+        <code value="2150-1" display_name="Mexicano">
+        </code>
+        <code value="2165-9" display_name="EthnicityHispanicSouthAmerican">
+        </code>
+        <code value="2166-7" display_name="Argentinean">
+        </code>
+        <code value="2167-5" display_name="Bolivian">
+        </code>
+        <code value="2168-3" display_name="Chilean">
+        </code>
+        <code value="2169-1" display_name="Colombian">
+        </code>
+        <code value="2176-6" display_name="Criollo">
+        </code>
+        <code value="2170-9" display_name="Ecuadorian">
+        </code>
+        <code value="2171-7" display_name="Paraguayan">
+        </code>
+        <code value="2172-5" display_name="Peruvian">
+        </code>
+        <code value="2175-8" display_name="South American Indian">
+        </code>
+        <code value="2173-3" display_name="Uruguayan">
+        </code>
+        <code value="2174-1" display_name="Venezuelan">
+        </code>
+        <code value="2137-8" display_name="EthnicityHispanicSpaniard">
+        </code>
+        <code value="2138-6" display_name="Andalusian">
+        </code>
+        <code value="2139-4" display_name="Asturian">
+        </code>
+        <code value="2142-8" display_name="Belearic Islander">
+        </code>
+        <code value="2145-1" display_name="Canarian">
+        </code>
+        <code value="2140-2" display_name="Castillian">
+        </code>
+        <code value="2141-0" display_name="Catalonian">
+        </code>
+        <code value="2143-6" display_name="Gallego">
+        </code>
+        <code value="2146-9" display_name="Spanish Basque">
+        </code>
+        <code value="2144-4" display_name="Valencian">
+        </code>
+        <code value="2178-2" display_name="Latin American">
+        </code>
+        <code value="2180-8" display_name="Puerto Rican">
+        </code>
+        <code value="2186-5" display_name="Not Hispanic or Latino">
+        </code>
+    </system>
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.6.1'
+        group='LOINC Document Type Codes'>
+        <code value="34117-2" display_name="History &amp; Physical" setting="------" specialty="------">
+        </code>
+        <code value="11492-6" display_name="History &amp; Physical" setting="Hospital" specialty="------">
+        </code>
+        <code value="28626-0" display_name="History &amp; Physical" setting="------" specialty="Physician">
+        </code>
+        <code value="34774-0" display_name="History &amp; Physical" setting="------" specialty="General surgery">
+        </code>
+        <code value="34115-6" display_name="History &amp; Physical" setting="Hospital" specialty="Medical Student">
+        </code>
+        <code value="34116-4" display_name="History &amp; Physical" setting="Nursing home" specialty="Physician">
+        </code>
+        <code value="34095-0" display_name="Comprehensive History &amp; Physical" setting="------" specialty="------">
+        </code>
+        <code value="34096-8" display_name="Comprehensive History &amp; Physical" setting="Nursing home" specialty="">
+        </code>
+        <code value="HPADMT-X" display_name="Admission History &amp; Physical" setting="------" specialty="------">
+        </code>
+        <code value="47039-3" display_name="Admission History &amp; Physical" setting="Inpatient" specialty="------">
+        </code>
+        <code value="34763-3" display_name="Admission History &amp; Physical" setting="" specialty="General medicine">
+        </code>
+        <code value="34094-3" display_name="Admission History &amp; Physical" setting="Hospital" specialty="Cardiology">
+        </code>
+        <code value="34138-8" display_name="Targeted History &amp; Physical" setting="------" specialty="------">
+        </code>
+    </system>
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.5.2'
+        group='Marital Status'>
+        <code value="A" display_name="Annulled" description="Marriage contract has been declared null and to not have existed">
+        </code>
+        <code value="D" display_name="Divorced" description="Marriage contract has been declared dissolved and inactive">
+        </code>
+        <code value="T" display_name="Domestic partner" description="Person declares that a domestic partner relationship exists.">
+        </code>
+        <code value="I" display_name="Interlocutory" description="Subject to an Interlocutory Decree.">
+        </code>
+        <code value="L" display_name="Legally Separated" description="">
+        </code>
+        <code value="M" display_name="Married" description="A current marriage contract is active">
+        </code>
+        <code value="S" display_name="Never Married" description="No marriage contract has ever been entered">
+        </code>
+        <code value="P" display_name="Polygamous" description="More than 1 current spouse">
+        </code>
+        <code value="W" display_name="Widowed" description="The spouse has died">
+        </code>
+    </system>
+    <system 
+        group='Null Flavors'>
+        <code value="NI" display_name="NoInformation" description="No information whatsoever can be inferred from this exceptional value. This is the most general exceptional value. It is also the default exceptional value. ">
+        </code>
+        <code value="OTH" display_name="other" description="The actual value is not an element in the value domain of a variable. (e.g., concept not provided by required code system).">
+        </code>
+        <code value="NINF" display_name="negative infinity" description="Negative infinity of numbers.">
+        </code>
+        <code value="PINF" display_name="positive infinity" description="Positive infinity of numbers.">
+        </code>
+        <code value="UNK" display_name="unknown" description="A proper value is applicable, but not known.">
+        </code>
+        <code value="ASKU" display_name="asked but unknown" description="Information was sought but not found (e.g., patient was asked but did not know)">
+        </code>
+        <code value="NAV" display_name="temporarily unavailable" description="Information is not available at this time but it is expected that it will be available later.">
+        </code>
+        <code value="NASK" display_name="not asked" description="This information has not been sought (e.g., patient was not asked)">
+        </code>
+        <code value="TRC" display_name="trace" description="The content is greater than zero, but too small to be quantified.">
+        </code>
+        <code value="MSK" display_name="masked" description="There is information on this item available but it has not been provided by the sender due to security, privacy or other reasons. There may be an alternate mechanism for gaining access to this information.">
+        </code>
+        <code value="" display_name="" description="Note: using this null flavor does provide information that may be a breach of confidentiality, even though no detail data is provided. Its primary purpose is for those circumstances where it is necessary to inform the receiver that the information does exist without providing any detail. ">
+        </code>
+        <code value="NA" display_name="not applicable" description="No proper value is applicable in this context (e.g., last menstrual period for a male).">
+        </code>
+        <code value="NP" display_name="not present" description="Value is not present in a message. This is only defined in messages, never in application data! All values not present in the message must be replaced by the applicable default, or no-information (NI) as the default of all defaults. ">
+        </code>
+    </system>
+    <system codeSystemName='LOINC' root='2.16.840.1.113883.5.111'
+        group='Personal Relationship Role Type'>
+        <code value="CHILD" display_name="Child" description="The player of the role is a child of the scoping entity.">
+        </code>
+        <code value="CHLDADOPT" display_name="adopted child" description="The player of the role is a child taken into a family through legal means and raised by the scoping person (parent) as his or her own child. ">
+        </code>
+        <code value="DAUADOPT" display_name="adopted daughter" description="The player of the role is a female child taken into a family through legal means and raised by the scoping person (parent) as his or her own child. ">
+        </code>
+        <code value="SONADOPT" display_name="adopted son" description="The player of the role is a male child taken into a family through legal means and raised by the scoping person (parent) as his or her own child. ">
+        </code>
+        <code value="CHLDINLAW" display_name="child in-law" description="The player of the role is the spouse of scoping person&apos;s child.">
+        </code>
+        <code value="DAUINLAW" display_name="daughter in-law" description="The player of the role is the wife of scoping person&apos;s son.">
+        </code>
+        <code value="SONINLAW" display_name="son in-law" description="The player of the role is the husband of scoping person&apos;s daughter.">
+        </code>
+        <code value="CHLDFOST" display_name="foster child" description="The player of the role is a child receiving parental care and nurture from the scoping person (parent) but not related to him or her through legal or blood ties. ">
+        </code>
+        <code value="DAUFOST" display_name="foster daughter" description="The player of the role is a female child receiving parental care and nurture from the scoping person  but not related to him or her through legal or blood ties. ">
+        </code>
+        <code value="SONFOST" display_name="foster son" description="The player of the role is a male child receiving parental care and nurture from the scoping person (parent) but not related to him or her through legal or blood ties. ">
+        </code>
+        <code value="NCHILD" display_name="natural child" description="The player of the role is an offspring of the scoping entity as determined by birth.">
+        </code>
+        <code value="DAU" display_name="natural daughter" description="The player of the role is a female offspring of the scoping entity (parent).">
+        </code>
+        <code value="SON" display_name="natural son" description="The player of the role is a male offspring of the scoping entity (parent).">
+        </code>
+        <code value="STPCHLD" display_name="step child" description="The player of the role is a child of the scoping person&apos;s spouse by a previous union.">
+        </code>
+        <code value="STPDAU" display_name="stepdaughter" description="The player of the role is a daughter of the scoping person&apos;s spouse by a previous union.">
+        </code>
+        <code value="STPSON" display_name="stepson" description="The player of the role is a son of the scoping person&apos;s spouse by a previous union.">
+        </code>
+        <code value="GRNDCHILD" display_name="grandchild" description="The player of the role is a child of the scoping person&apos;s son or daughter.">
+        </code>
+        <code value="GRNDDAU" display_name="granddaughter" description="The player of the role is a daughter of the scoping person&apos;s son or daughter.">
+        </code>
+        <code value="GRNDSON" display_name="grandson" description="The player of the role is a son of the scoping person&apos;s son or daughter.">
+        </code>
+        <code value="GRPRN" display_name="Grandparent" description="The player of the role is a parent of the scoping person&apos;s mother or father.">
+        </code>
+        <code value="GRFTH" display_name="Grandfather" description="The player of the role is the father of the scoping person&apos;s mother or father.">
+        </code>
+        <code value="GRMTH" display_name="Grandmother" description="The player of the role is the mother of the scoping person&apos;s mother or father.">
+        </code>
+        <code value="GGRPRN" display_name="great grandparent" description="The player of the role is a parent of the scoping person&apos;s grandparent.">
+        </code>
+        <code value="GGRFTH" display_name="great grandfather" description="The player of the role is the father of the scoping person&apos;s grandparent.">
+        </code>
+        <code value="GGRMTH" display_name="great grandmother" description="The player of the role is the mother of the scoping person&apos;s grandparent.">
+        </code>
+        <code value="NIENEPH" display_name="niece/nephew" description="The player of the role is a child of scoping person&apos;s brother or sister or of the brother or sister of the scoping person&apos;s spouse. ">
+        </code>
+        <code value="NEPHEW" display_name="nephew" description="The player of the role is a son of the scoping person&apos;s brother or sister or of the brother or sister of the scoping person&apos;s spouse. ">
+        </code>
+        <code value="NIECE" display_name="niece" description="The player of the role is a daughter of the scoping person&apos;s brother or sister or of the brother or sister of the scoping person&apos;s spouse. ">
+        </code>
+        <code value="PRN" display_name="Parent" description="The player of the role is one who begets, gives birth to, or nurtures and raises the scoping entity (child).">
+        </code>
+        <code value="NPRN" display_name="natural parent" description="">
+        </code>
+        <code value="NFTH" display_name="natural father" description="The player of the role is a male who begets the scoping entity (child).">
+        </code>
+        <code value="NMTH" display_name="natural mother" description="The player of the role is a female who conceives or gives birth to the scoping entity (child).">
+        </code>
+        <code value="PRNINLAW" display_name="parent in-law" description="The player of the role is the parent of scoping person&apos;s husband or wife.">
+        </code>
+        <code value="FTHINLAW" display_name="father-in-law" description="The player of the role is the father of the scoping person&apos;s husband or wife.">
+        </code>
+        <code value="MTHINLOAW" display_name="mother-in-law" description="The player of the role is the mother of the scoping person&apos;s husband or wife.">
+        </code>
+        <code value="STPPRN" display_name="step parent" description="The player of the role is the spouse of the scoping person&apos;s parent and not the scoping person&apos;s natural parent.">
+        </code>
+        <code value="STPFTH" display_name="stepfather" description="The player of the role is the husband of scoping person&apos;s mother and not the scoping person&apos;s natural father.">
+        </code>
+        <code value="STPMTH" display_name="stepmother" description="The player of the role is the wife of scoping person&apos;s father and not the scoping person&apos;s natural mother.">
+        </code>
+        <code value="FTH" display_name="Father" description="The player of the role is a male who begets or raises or nurtures the scoping entity (child).">
+        </code>
+        <code value="MTH" display_name="Mother" description="The player of the role is a female who conceives, gives birth to, or raises and nurtures the scoping entity (child).">
+        </code>
+        <code value="SIB" display_name="Sibling" description="The player of the role shares one or both parents in common with the scoping entity.">
+        </code>
+        <code value="HSIB" display_name="half-sibling" description="The player of the role is related to the scoping entity by sharing only one biological parent.">
+        </code>
+        <code value="HBRO" display_name="half-brother" description="The player of the role is a male related to the scoping entity by sharing only one biological parent.">
+        </code>
+        <code value="HSIS" display_name="half-sister" description="The player of the role is a female related to the scoping entity by sharing only one biological parent.">
+        </code>
+        <code value="NSIB" display_name="natural sibling" description="The player of the role has both biological parents in common with the scoping entity.">
+        </code>
+        <code value="NBRO" display_name="natural brother" description="The player of the role is a male having the same biological parents as the scoping entity.">
+        </code>
+        <code value="NSIS" display_name="natural sister" description="The player of the role is a female having the same biological parents as the scoping entity.">
+        </code>
+        <code value="SIBINLAW" display_name="sibling in-law" description="The player of the role is: (1) a sibling of the scoping person&apos;s spouse, or (2) the spouse of the scoping person&apos;s sibling, or (3) the spouse of a sibling of the scoping person&apos;s spouse. ">
+        </code>
+        <code value="BROINLAW" display_name="brother-in-law" description="The player of the role is: (1) a brother of the scoping person&apos;s spouse, or (2) the husband of the scoping person&apos;s sister, or (3) the husband of a sister of the scoping person&apos;s spouse. ">
+        </code>
+        <code value="SISLINLAW" display_name="sister-in-law" description="The player of the role is: (1) a sister of the scoping person&apos;s spouse, or (2) the wife of the scoping person&apos;s brother, or (3) the wife of a brother of the scoping person&apos;s spouse. ">
+        </code>
+        <code value="STPSIB" display_name="step sibling" description="The player of the role is a child of the scoping person&apos;s stepparent.">
+        </code>
+        <code value="STPBRO" display_name="stepbrother" description="The player of the role is a son of the scoping person&apos;s stepparent.">
+        </code>
+        <code value="STPSIS" display_name="stepsister" description="The player of the role is a daughter of the scoping person&apos;s stepparent.">
+        </code>
+        <code value="BRO" display_name="Brother" description="The player of the role is a male sharing one or both parents in common with the scoping entity.">
+        </code>
+        <code value="SIS" display_name="Sister" description="The player of the role is a female sharing one or both parents in common with the scoping entity.">
+        </code>
+        <code value="SIGOTHR" display_name="significant other" description="A person who is important to one&apos;s well being; especially a spouse or one in a similar relationship. (The player is the one who is important)">
+        </code>
+        <code value="SPS" display_name="spouse" description="The player of the role is a marriage partner of the scoping person.">
+        </code>
+        <code value="HUSB" display_name="husband" description="The player of the role is a man joined to a woman (scoping person) in marriage.">
+        </code>
+        <code value="WIFE" display_name="wife" description="The player of the role is a woman joined to a man (scoping person) in marriage.">
+        </code>
+        <code value="AUNT" display_name="aunt" description="The player of the role is a sister of the scoping person&apos;s mother or father.">
+        </code>
+        <code value="COUSN" display_name="cousin" description="The player of the role is a relative of the scoping person descended from a common ancestor, such as a grandparent, by two or more steps in a diverging line.">
+        </code>
+        <code value="DOMPART" display_name="domestic partner" description="The player of the role cohabits with the scoping person but is not the scoping person&apos;s spouse.">
+        </code>
+        <code value="ROOM" display_name="Roomate" description="One who shares living quarters with the subject.">
+        </code>
+        <code value="UNCLE" display_name="uncle" description="The player of the role is a brother of the scoping person&apos;s mother or father.">
+        </code>
+        <code value="FRND" display_name="unrelated friend" description="The player of the role is a person who is known, liked, and trusted by the scoping person.">
+        </code>
+        <code value="NBOR" display_name="neighbor" description="The player of the role lives near or next to the scoping person.">
+        </code>
+    </system>
+</systems>

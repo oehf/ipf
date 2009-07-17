@@ -1,0 +1,54 @@
+<!--  IHE PCC Transport: 1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1-errors">
+    <title>IHE PCC Transport - errors validation phase</title>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1"]'> 
+
+   <!-- moodCode of Transport act shall be INT or EVN 
+   <assert test='@moodCode="INT" or @moodCode="EVN"'> 
+     Error: The moodCode of Transport act shall be INT or EVN 
+   </assert> 
+   Removing this rule because the specification is not specific as to
+   whether other moodCodes are disallowed.
+   -->   
+
+   <!-- The entry must have an identifier -->
+   <assert test='cda:id'>
+      Error: In IHE PCC Transport Entry (1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1), the Transport entry must have an identifier 
+    </assert>
+          
+    <assert test='cda:effectiveTime'>
+      Error: In IHE PCC Transport Entry (1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1), the effectiveTime element shall be sent. 
+    </assert>
+
+    <assert test='cda:effectiveTime/cda:low'>
+       Error: In IHE PCC Transport Entry (1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1), the effectiveTime/low element shall be sent using the TS
+       data type.
+    </assert>
+    
+    <assert test='cda:effectiveTime/cda:high[@value or @nullFlavor]'>
+      Error: In IHE PCC Transport Entry (1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1), the effectiveTime/high element records the time of
+      arrival. If unknown, it must be recorded using a flavor of null. This element shall be sent using the TS data type.
+    </assert>       
+ </rule> 
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1-warnings">
+    <title>IHE PCC Transport Mode - warning validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1"]'>
+
+      <assert test='cda:code[@codeSystem="2.16.840.1.113883.6.102.4.2"]'>
+         Warning: In IHE PCC Transport Entry (1.3.6.1.4.1.19376.1.5.3.1.1.10.4.1), the code describes the intented mode of 
+         transport. For transport between facilities, IHE recommends the use of a code system based on the DEEDS Mode of 
+         Transportation (4.2) data element value set. However, the vocabulary used within an affinity domain should be 
+         determined by a policy agreement within the domain.
+      </assert>
+    </rule>
+
+  </pattern>

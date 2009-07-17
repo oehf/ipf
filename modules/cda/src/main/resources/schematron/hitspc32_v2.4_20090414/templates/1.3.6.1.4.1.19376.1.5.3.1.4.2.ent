@@ -1,0 +1,57 @@
+<!--  IHE PCC Comments: 1.3.6.1.4.1.19376.1.5.3.1.4.2 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.2-errors">
+    <title>IHE PCC Comments - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.2"]'>
+
+    <assert test='cda:templateId[@root="2.16.840.1.113883.10.20.1.40"]'>
+       Error: In IHE PCC Comments (1.3.6.1.4.1.19376.1.5.3.1.4.2), the parent CCD templateId (2.16.840.1.113883.10.20.1.40) for
+       Comments must be included.
+    </assert>
+    <assert test='cda:code[@code="48767-8" and
+                           @codeSystem="2.16.840.1.113883.6.1"]'>
+       Error: In IHE PCC Comments (1.3.6.1.4.1.19376.1.5.3.1.4.2), the code element for Comments is required. The code and 
+       codeSystem attributes shall be recorded exactly as indicated. 
+       See: http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.2
+    </assert>
+    <assert test='cda:text/cda:reference'>
+       Error: In IHE PCC Comments (1.3.6.1.4.1.19376.1.5.3.1.4.2), the &lt;observation&gt; element shall contain a &lt;text&gt;
+       element. For CDA, the &lt;text&gt; elements shall contain a &lt;reference&gt;
+       element pointing to the narrative where the severity is recorded, rather than duplicate
+       text to avoid ambiguity.
+    </assert>
+    <assert test='cda:statusCode[@code = "completed"]'>
+       Error: In IHE PCC Comments (1.3.6.1.4.1.19376.1.5.3.1.4.2), the code attribute of &lt;statusCode&gt; for all Comments
+       shall be completed. 
+    </assert>
+    <assert test='not(cda:author) or (
+                  cda:author/cda:time and
+		  cda:author/cda:assignedAuthor/cda:id and
+		  cda:author/cda:assignedAuthor/cda:addr and
+		  cda:author/cda:assignedAuthor/cda:telecom and (
+		  cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name or
+		  cda:author/cda:assignedAuthor/cda:representedOrganization/cda:name))'>
+       Error: In IHE PCC Comments (1.3.6.1.4.1.19376.1.5.3.1.4.2), the Comment may have an author. The time of the comment 
+       creation shall be recorded in the &lt;time&gt; element when the &lt;author&gt; element is present. The identifier of 
+       the author, and their address and telephone number must be present inside the &lt;id&gt;, &lt;addr&gt; and 
+       &lt;telecom&gt; elements when the &lt;author&gt; element is present. The author's and/or the organization's name must 
+       be present when the &lt;author&gt; element is present.   
+    </assert>
+
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.2-warnings">
+    <title>IHE PCC Comments - warning validation phase</title>
+
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.2&quot;]">
+
+    </rule>
+-->
+
+  </pattern>

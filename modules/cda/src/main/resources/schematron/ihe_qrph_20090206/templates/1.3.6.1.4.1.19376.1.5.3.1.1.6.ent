@@ -1,0 +1,52 @@
+<!--  IHE PCC PHR Update: 1.3.6.1.4.1.19376.1.5.3.1.1.6 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.6-errors">
+    <title>IHE PCC PHR Update - errors validation phase</title>
+
+    <rule context='/'>
+    <assert test='//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.6"]'>
+       Error: The PHR Update requires the PHR Update
+       template ID (1.3.6.1.4.1.19376.1.5.3.1.1.6).
+    </assert>
+    </rule>
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.6"]'>
+    <assert test='cda:code[@code = "34133-9"]'>
+       Error: The document type code of a PHR Update must be 34133-9.
+    </assert>
+
+    <assert test='cda:code[@codeSystem = "2.16.840.1.113883.6.1"]'>
+       Error: The document type code must come from the LOINC code 
+       system (2.16.840.1.113883.6.1).
+    </assert>
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.6-warnings">
+    <title>IHE PCC PHR Update - warning validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.6"]'>
+      <report test="."/>
+    </rule>
+-->
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.6-manual">
+    <title>IHE PCC PHR Update - manual validation phase</title>
+
+<!--
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.1.6"]'>
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

@@ -1,0 +1,120 @@
+<!-- Schematron rules Scanned Documents Content Module -->
+<!-- Template 1.3.6.1.4.1.19376.1.2.20 - XDS-SD Document -->
+            
+ <pattern id='p-1.3.6.1.4.1.19376.1.2.20-errors'>
+   <rule context="*[cda:templateId/@root = '1.3.6.1.4.1.19376.1.2.20']">
+     
+     <assert test="self::cda:ClinicalDocument">
+        Error: The template id 1.3.6.1.4.1.19376.1.2.20 is a child element of ClinicalDocument. It indicates that this document is an XDS-SD document
+     </assert>
+     
+     <assert test="count(cda:id) = 1">
+        Error: An XDS-SD Document shall have one id element. 
+     </assert>
+ 
+     <assert test="cda:id[count(@root) = 1]">
+        Error: An XDS-SD Document id/@root attribute shall contain the OID for the document.
+     </assert>
+     <assert test="cda:code[count(@code) = 1 and count(@codeSystem) = 1]">
+        Error: An XDS-SD Document shall have attributes code/@code and code/@codeSystem.
+     </assert>
+  
+     <assert test="cda:effectiveTime">
+        Error: An XDS-SD Document shall have an effectiveTime element. This shall denote the time at which the original content was scanned.
+     </assert>
+     
+     <!-- assert test="not(cda:effectiveTime/@value) or (string-length(cda:effectiveTime/@value) &gt;= 8)">
+        Error: The effectiveTime/@value shall be precise to the day and shall include the time zone offset from GMT.
+     </assert -->
+     
+      <assert test="not(cda:effectiveTime/@value) or (string-length(cda:effectiveTime/@value) &gt;= 8) and (cda:effectiveTime[contains(string(@value), '+')] or cda:effectiveTime[contains(string(@value), '+')])">
+        Error: At a minimum, the effectiveTime shall be precise to the day and shall inculde the time zone offset from GMT.
+     </assert>
+     
+     <assert test="cda:confidentialityCode or (cda:confidentialityCode[count(@code) = 1 and count(@codeSystem) = 1])">
+        Error: An XDS-SD Document shall have a confidentialityCode element. The confidentialityCode/@code and confidentialityCode/@codeSystem attributes shall be present. 
+     </assert>
+   
+     <assert test="cda:languageCode or cda:languageCode[count(@code) = 1]">
+        Error: An XDS-SD Document shall have a languageCode element. The languageCode/@code attribute shall be present. 
+     </assert>
+   
+     <assert test="cda:recordTarget/cda:patientRole/cda:id[count(@root) = 1 and count(@extension) = 1]">
+        Error: An XDS-SD Document shall have attributes recordTarget/patientRole/id/@root and recordTarget/patientRole/id/@extension.
+     </assert>
+   
+     <assert test="cda:recordTarget/cda:patientRole/cda:addr/cda:country">
+        Error: An XDS-SD Document shall include the recordTarget/patientRole/addr/country element.
+     </assert>
+     
+     <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:name[count(cda:given) &gt;=1]">
+        Error: An XDS-SD Document shall have at least one recordTarget/patientRole/patient/name/given element.
+     </assert>
+     
+     <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:name[count(cda:family) &gt;=1]">
+        Error: An XDS-SD Document shall have at least one recordTarget/patientRole/patient/name/family element.
+     </assert>
+  
+     <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode">
+        Error: An XDS-SD Document shall have a recordTarget/patientRole/patient/adminstrativeGenderCode element.
+     </assert>
+  
+     <assert test="cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime">
+        Error: An XDS-SD Document shall have a recordTarget/patientRole/patient/birthTime element.
+     </assert>
+  
+     <assert test="not(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime) or (string-length(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) &gt;= 8)">
+        Error: An XDS-SD Document shall a recordTarget/patientRole/patient/birthTime element with precision to the year.
+     </assert> 
+     
+     <assert test="not(cda:author) or (cda:author/cda:templateId[@root='1.3.6.1.4.1.19376.1.2.20.1'] or cda:author/cda:templateId[@root='1.3.6.1.4.1.19376.1.2.20.2'])">
+        Error: An XDS-SD Document author element represents the author of the original content. 
+        The ClinicalDocument/author/templateId element shall be present with the attribute root equal to "1.3.6.1.4.1.19376.1.2.20.1" or "1.3.6.1.4.1.19376.1.2.20.2". 
+     </assert>
+     
+     <assert test="cda:custodian">
+        Error: An XDS-SD Document shall have a custodian element.
+     </assert>
+     
+     <assert test="cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:name">
+        Error: An XDS-SD Document shall have an custodian/assignedCustodian/representedOrganization/name element.
+     </assert>
+   
+    <assert test="cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr">
+        Error: An XDS-SD Document shall have an custodian/assignedCustodian/representedOrganization/addr element.
+     </assert> 
+   
+     <assert test="not(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr) or cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr[count(cda:country) &gt;= 1]">
+        Error: An XDS-SD Document shall include at least one custodian/assignedCustodian/representedOrganization/addr/country element.
+     </assert>
+   
+     <assert test="not(cda:legalAuthenticator/cda:assignedEntity/cda:id) or cda:legalAuthenticator/cda:assignedEntity/cda:id[count(@root) = 1 and count(@extension) = 1]">
+        Error: The legalAuthenticator/assignedEntity/id element shall include both the root and the extension attributes.    
+     </assert> 
+      
+      <!-- documentationOf will be checked by the CDA-R2 -->
+      
+      <assert test="cda:component/cda:nonXMLBody">
+         Error: The ClinicalDocument/component/nonXMLBody element shall be present and used to wrap the scanned content.
+      </assert>
+      
+      <assert test="cda:component/cda:nonXMLBody/cda:text[@mediaType='application/pdf'] or cda:component/cda:nonXMLBody/cda:text[@mediaType='text/plain']">
+         Error: ClinicalDocument/component/nonXMLBody/text/@mediaType attribute shall be set to "application/pdf" for PDF and "text/plain" for plaintext. 
+      </assert>
+      
+      <assert test="cda:component/cda:nonXMLBody/cda:text[@representation='B64']"> 
+         Error:ClinicalDocument/component/nonXMLBody/text@representation shall be present with a value of "B64" for both PDF and plaintext scanned content. 
+       </assert>
+       
+     </rule>
+</pattern>
+
+ <pattern id='p-1.3.6.1.4.1.19376.1.2.20-warning'>
+  <rule context="*[cda:templateId/@root='1.3.6.1.4.1.19376.1.2.20']">
+    
+    <assert test="cda:title">
+      Warning: An XDS-SD Document shall have a title element if known.
+   </assert>
+  
+  </rule>
+ </pattern>

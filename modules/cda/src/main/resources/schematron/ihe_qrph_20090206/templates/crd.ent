@@ -1,0 +1,80 @@
+<!--  IHE QRPH Clinical Research Data Capture (CCD Option)  -->
+<!--  Please note that there is currently no associated template identifier for this specification  -->
+
+<!-- errors -->
+
+  <pattern id="p-crd-errors">
+    <title>IHE QRPH Clinical Research Data Capture - errors validation phase</title>
+    <rule context='/'>
+       <assert test='//cda:templateId[@root="2.16.840.1.113883.10.20.1"]'>
+          Error: QRPH Clinical Research Data Capture (CCD Option) is a "valid CCD" document.
+          Conformance with the CCD specification is assert by the inclusion of a templateId
+          element with the root attribute set to 2.16.840.1.113883.10.20.1.  See CONF-8 (CCD)
+          and CCD Section 1.4.
+       </assert>
+       <assert test='/cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime'>
+          Error: Date of Birth is a required data element.
+       </assert>
+       <assert test='/cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode'>
+          Error: Gender is a required data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.6"]'> 
+          Error: Active Problems (1.3.6.1.4.1.19376.1.5.3.1.3.6) is a required data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.19"]'>
+          Error: Current Medications (1.3.6.1.4.1.19376.1.5.3.1.3.19) is a required data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.13"]'>
+          Error: Allergies and Other Adverse Reactions (1.3.6.1.4.1.19376.1.5.3.1.3.13) is a required data element.
+       </assert>
+
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-crd-warnings">
+    <title>IHE QRPH Clinical Research Data Capture - warning validation phase</title>
+
+    <rule context='/'>
+       <assert test='/cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:raceCode'>
+          Warning: Race is a required if known data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.8"]'>
+          Warning: Past Medical History (1.3.6.1.4.1.19376.1.5.3.1.3.8) is a required if known data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.11"]'>
+          Warning: Procedures and Interventions (1.3.6.1.4.1.19376.1.5.3.1.1.13.2.11) is a required if known data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.16"]'>
+          Warning: Social History (1.3.6.1.4.1.19376.1.5.3.1.3.16) is a required if known data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2"]'>
+          Warning: Vital Signs (1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2) is a required if known data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.9.15"]'>
+          Warning: Physical Exam (1.3.6.1.4.1.19376.1.5.3.1.1.9.15) is a required if known data element.
+       </assert>
+       <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.28"]'>
+          Warning: Coded Results (1.3.6.1.4.1.19376.1.5.3.1.3.28) is a required if known data element.
+       </assert>
+
+
+    </rule>
+
+  </pattern>
+
+  <!-- notes -->
+
+  <pattern id="p-crd-notes">
+    <title>IHE QRPH Clinical Research Data Capture - notes validation phase</title>
+
+    <rule context='/'>
+       <assert test='/cda:ClinicalDocument/cda:recordTarget/cda:patientRole/cda:patient/cda:ethnicGroupCode'>
+          Note: Ethnicity is an optional data element.
+       </assert>
+    </rule>
+  </pattern>
+

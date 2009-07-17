@@ -66,18 +66,21 @@ public class CDAR2BuilderStructureObservationTest extends AbstractCDAR2BuilderTe
           )//code
           statusCode(code: 'completed')
           effectiveTime(value: '200004071530')
-          value(nullFlavor: 'NP')
-          value(
+          value(builder.build {
+              ce(nullFlavor: 'NP')
+          })
+          value(builder.build {
+              ce(
                   code: '40275004',
                   codeSystem: '2.16.840.1.113883.6.96',
                   codeSystemName: 'SNOMED CT',
                   displayName: 'Contact dermatitis') {
-            translation(
-                    code: '692.9',
-                    codeSystem: '2.16.840.1.113883.6.2', codeSystemName: 'ICD9CM',
-                    displayName: 'Contact Dermatitis, NOS'
-            )//translation
-          }//value
+                      translation(
+                              code: '692.9',
+                              codeSystem: '2.16.840.1.113883.6.2', codeSystemName: 'ICD9CM',
+                              displayName: 'Contact Dermatitis, NOS'
+                      )}//translation
+              })//value
           methodCode(
                   code: '37931006',
                   codeSystem: '2.16.840.1.113883.6.96',
@@ -97,12 +100,14 @@ public class CDAR2BuilderStructureObservationTest extends AbstractCDAR2BuilderTe
                       codeSystemName: 'SNOMED CT',
                       displayName: 'with laterality'
               )//name
-              value(
+              value(builder.build {
+                  ce(
                       code: '7771000',
                       codeSystem: '2.16.840.1.113883.6.96',
                       codeSystemName: 'SNOMED CT',
                       displayName: 'left'
-              )//value
+                    )
+              })//value
             }//qualifier
           }//targetSiteCode
         }//observation

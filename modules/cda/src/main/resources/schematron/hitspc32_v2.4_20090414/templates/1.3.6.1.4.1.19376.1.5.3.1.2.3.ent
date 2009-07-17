@@ -1,0 +1,63 @@
+<!--  IHE PCC Healthcare Providers and Pharmacies: 1.3.6.1.4.1.19376.1.5.3.1.2.3 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.3-errors">
+    <title>IHE PCC Healthcare Providers and Pharmacies - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.3"]'>
+    <assert test='ancestor::cda:documentationOf/cda:serviceEvent[@classCode =
+    "PCPR"]'>
+       Error: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), the documentationOf element 
+       shall be present. The serviceEvent element shall be present, and shall have a classCode attribute of 'PCPR'.
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.2.3
+    </assert>
+    <assert test='preceding-sibling::cda:effectiveTime/cda:low and 
+                  preceding-sibling::cda:effectiveTime/cda:high'>
+       Error: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), in effectiveTime there shall 
+       be a low element which records the starting date of care provision, and a high element which records the ending date 
+       of care provision.
+    </assert>
+    <assert test='cda:time/cda:low and cda:time/cda:high'>
+       Error: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), the time element is used to 
+       show the time period over which the provider gave care to the patient. The low and high elements must be present, 
+       and indicate the time over which care was (or is to be) provided.
+    </assert>
+    <assert test='cda:assignedEntity'>
+       Error: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), the assignedEntity element 
+       contains elements that identify the individual provider, and shall be present.
+    </assert>
+    <assert test='cda:assignedEntity/cda:assignedPerson/cda:name or
+	          cda:assignedEntity/cda:representedOrganization'>
+       Error: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), the providers name should 
+       be present. If not present, then the representedOrganization shall be present.   
+       See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.2.3
+    </assert>
+
+    </rule>
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.2.3-warnings">
+    <title>IHE PCC Healthcare Providers and Pharmacies - warning validation phase</title>
+
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.2.3"]'>
+    <assert test='cda:functionCode'>
+       Warning: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), the function of the provider 
+       in the care of the patient should be present, and will be described in the functionCode element.
+    </assert>
+
+    <assert test='cda:assignedEntity/cda:assignedPerson/cda:name'>
+       Warning: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), the providers name should be 
+       present.
+    </assert>
+
+    <assert test='cda:assignedEntity/cda:representedOrganization/cda:name'>
+       Warning: In IHE PCC Healthcare Providers and Pharmacies (1.3.6.1.4.1.19376.1.5.3.1.2.3), the representedOrganization 
+       name should be present.
+    </assert>
+    </rule>
+
+
+  </pattern>

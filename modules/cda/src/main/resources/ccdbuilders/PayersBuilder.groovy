@@ -20,7 +20,8 @@ import org.openhealthtools.ihe.common.cdar2.*
 import org.openhealthtools.ihe.common.cdar2.XDocumentActMood
 import org.openhealthtools.ihe.common.cdar2.XActClassDocumentEntryAct
 import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationship
- //Chapter 3.1 "Payers"
+
+//Chapter 3.1 "Payers"
 
 // CONF-30: CCD SHOULD contain exactly one and SHALL NOT contain more than one Payers section
 //       (templateId 2.16.840.1.113883.10.20.1.9). The Payers section SHALL contain a
@@ -195,7 +196,7 @@ ccd_authorizationActivity(schema:'act') {
         ids(collection:'id', min:1) {
             id(schema:'ii')
         }    
- 	   templateIds(collection:'templateId', def: {
+ 	    templateIds(collection:'templateId', def: {
  		     getMetaBuilder().buildList {
  	           ii(root:'2.16.840.1.113883.10.20.1.19')
  	         }

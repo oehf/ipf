@@ -23,14 +23,14 @@ import org.eclipse.emf.ecore.impl.EClassImpl
 import org.eclipse.emf.ecore.impl.EAttributeImpl
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-
-
+import org.codehaus.groovy.runtime.InvokerHelper
 
 /**
  * Custom ObjectGraphBuilder. Resolves factories attributes as String
  * as key to a CDAR2Factory, not as class name like the base class
  *
  * @author Christian Ohr
+ * @author Stefan Ivanov
  */
 public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
 
@@ -55,6 +55,7 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
     }
     super.resolveFactory(name, attrs, value)
   }
+  
 
   /**
    * For EObject instances evaluate the value using the model factory
@@ -76,7 +77,7 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
           value = evaluateAttrValue(node, name, value, propertySchema)
         }
       }
-      super.setVariable(node, schema, name, value)
+			super.setVariable(node, schema, name, value)
     } else {
       super.setVariable(node, schema, name, value)
     }
@@ -145,5 +146,6 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
       return value
     }
   }
+  
 
 }

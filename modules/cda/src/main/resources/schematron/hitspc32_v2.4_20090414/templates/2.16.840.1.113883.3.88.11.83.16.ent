@@ -1,0 +1,86 @@
+<!-- Template_2.16.840.1.113883.3.88.11.83.16 -->
+<!-- HITSP/C83 Encounters Module -->
+
+
+<!-- Errors Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.16-errors'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+
+   <!-- Encounter Template ID Location -->
+   <assert test='self::cda:encounter[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]'>
+      Error: The HITSP/C83 templateId for Encounter entry (2.16.840.1.113883.3.88.11.83.16) is in the wrong 
+      location. A HITSP/C83 Encounter entry data element shall be represented as a CCD Encounter activity 
+      (2.16.840.1.113883.10.20.1.21).
+      See HITSP/C83 Section 2.2.2.16.
+   </assert>   
+
+   <assert test='cda:templateId/@root="1.3.6.1.4.1.19376.1.5.3.1.4.14"'>
+      Error: HITSP/C83 Encounter data elements SHALL declare conformance to the IHE Encounter entry by including a
+      templateIs element with the root attribute set to the value 1.3.6.1.4.1.19376.1.5.3.1.4.14.
+      See HITSP/C83 Section 2.2.2.16.1 Rule C83-[249].
+   </assert>
+   
+   <assert test='cda:id'>
+      Error: HITSP/C83 Encounter, Encounter ID is a required, repeatable data element.
+      See HITSP/C83 Table 2.2.2.16-2, Data Element 16.01.
+   </assert>
+
+   <assert test='not(cda:code) or count(cda:code/cda:originalText/cda:reference/@value) = 1'>
+      Error: HITSP/C83 Encounter, Encounter Free Text Type is a required, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.16-2, Data Element 16.03. 
+   </assert>
+
+   <assert test='count(cda:effectiveTime) = 1'>
+      Error: HITSP/C83 Encounter, Encounter Date / Time is a required, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.16-2, Data Element 16.04.
+   </assert>
+ 
+ </rule>
+
+</pattern>
+
+
+<!-- Warnings Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.16-warning'>
+
+ <rule context='*[cda:templateId/@root="2.16.840.1.113883.3.88.11.83.16"]'>
+
+   <assert test='cda:code'>
+      Warning: HITSP/C83 Encounter, Encounter Type is a required if known, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.16-2, Data Element 16.02.
+   </assert>
+
+   <assert test='cda:performer/cda:assignedEntity'>
+      Warning: HITSP/C83 Encounter, Encounter Provider is a required if known, repeatable data element.
+      See HITSP/C83 Table 2.2.2.16-2, Data Element 16.05.
+   </assert>  
+
+   <assert test='cda:code[@code and @codeSystem="2.16.840.1.113883.6.12"]'>
+      Warning: HITSP/C83 Encounter, Encounter Type SHOULD be coded as specified in HITSP/C80 Section 2.2.3.9.3 
+      Encounter Type.
+      See HITSP/C83 Section 2.2.2.16.2 Rule C83-[250]. 
+   </assert>
+
+ </rule>
+
+</pattern>
+
+
+
+<!-- Notes Pattern -->
+
+<pattern id='p-2.16.840.1.113883.3.88.11.83.16-note'> 
+
+ <rule context='*[ancestor::cda:section[cda:templateId/@root="2.16.840.1.113883.10.20.1.3"]
+             and self::cda:encounter[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]]'>
+ 
+ </rule>
+
+</pattern>
+
+

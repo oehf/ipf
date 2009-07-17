@@ -317,11 +317,11 @@ observation(schema:'clinicalStatement',factory:'POCDMT000040_OBSERVATION'){
         languageCode(schema:'cs')
     }
     collections {
-        ids(collection:'id') {
+        ids(collection:'id'){
             id(schema:'ii')
         }
         values(collection:'value'){
-            value(schema:'ce') // TODO: schema:'_any' with classifier (evtl. 'add' of collection may be usefull
+            value()
         }
         interpretationCodes(collection:'interpretationCode'){
             interpretationCode(schema:'ce')

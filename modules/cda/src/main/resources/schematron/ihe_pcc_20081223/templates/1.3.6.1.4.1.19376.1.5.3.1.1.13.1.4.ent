@@ -1,0 +1,293 @@
+<!--  IHE PCC v3.0 ED Physician Note Template Root: 1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4-errors">
+    <title>IHE PCC v3.0 ED Physician Note Referral Source - errors validation phase</title>
+
+    <rule context='/'>
+    <assert test='//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4"]'>
+       Error: The ED Physician Note requires the ED Physician Note template ID
+       (1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4).
+    </assert>
+    </rule>
+
+
+    <rule context="*[cda:templateId/@root='1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4']">
+
+      <!-- Verify that the template id is used on the appropriate type of
+      object -->
+      <assert test="../cda:ClinicalDocument">
+          Error: The ED Physician Note can only be used on Clinical Documents.
+      </assert>
+
+      <!-- Verify that the parent templateId is also present. -->
+      <assert test="cda:templateId[@root='1.3.6.1.4.1.19376.1.5.3.1.1.1']">
+        Error: The parent template identifier for ED Physician Note is not
+      present.
+      </assert>
+
+      <!-- Verify the document type code -->
+      <assert test="cda:code[@code = '28568-4']">
+        Error: The document type code of a ED Physician Note must be 28568-4
+      </assert>
+
+      <assert test="cda:code[@codeSystem = '2.16.840.1.113883.6.1']">
+        Error: The document type code must come from the LOINC code system
+        (2.16.840.1.113883.6.1).
+      </assert>
+
+      <assert test=".//cda:templateId[@root = '1.3.6.1.4.1.19376.1.5.3.1.1.13.2.3']">
+        Error: A ED Physician Note must contain Referral Source. See
+        http://www.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+      </assert>
+
+      <assert test=".//cda:templateId[@root = '1.3.6.1.4.1.19376.1.5.3.1.1.10.3.2']">
+        Error: A ED Physician Note must contain Mode of Arrival. See
+        http://www.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+      </assert>
+
+      <assert test=".//cda:templateId[@root = '1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1']">
+        Error: A ED Physician Note must contain Chief Complaint. See
+        http://www.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+      </assert>
+
+      <assert test=".//cda:templateId[@root = '1.3.6.1.4.1.19376.1.5.3.1.3.4']">
+        Error: A ED Physician Note must contain History of Present Illness. See
+        http://www.ihe.net/index.php/1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+      </assert>
+
+      <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.1.1"]'> 
+        Error: A(n) ED Physician Note must contain Reason for Visit. See
+        http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+      </assert> 
+
+      <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.4"]'> 
+        Error: A(n) ED Physician Note must contain History of Present Illness.
+        See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+      </assert> 
+
+      <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.34"]'> 
+        Error: A(n) ED Physician Note must contain Advanced Directives.
+        See http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+      </assert> 
+
+
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.19"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Current Medications.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.13"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Allergies.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.11"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain List of Surgeries.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.23"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Immunizations.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.14"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Family History.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.16"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Social History.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.5.3.2"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Vital Signs.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.9.15"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Physical Examination.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.11"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Procedures Performed.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.27"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Test Results Lab, ECG,
+     Radiology.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.8"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Consultations.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.7"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain Progress Note.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.9"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain ED Diagnoses.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.10"]'> 
+     <!-- Verify that all required data elements are present -->
+     Error: A(n) ED Physician Note must contain ED Disposition.
+     See
+   http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4 
+     The ED Disposition shall contain a mode of transport entry describing how
+   the patient departed.
+   </assert> 
+
+
+<!-- Replaces the three manual checks -->
+
+<assert test='((.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.4"])
+               and (.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.3.31"])
+                or (.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.5"]))
+             and
+               not((.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.4"])
+                and (.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.3.31"])
+                and (.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.5"]))
+             and
+               not((.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.5"])
+                and (.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.4"]))
+             and
+               not((.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.1.13.2.5"])
+                and (.//cda:templateId[@root="1.3.6.1.4.1.19376.1.5.3.1.3.31"]))
+'>
+   Error:  A(n) ED Physician Note shall contain either Assessments AND Care
+   Plan OR Assessment and Plan. See
+   http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+</assert>
+
+
+    </rule>
+
+
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4-warnings">
+    <title>IHE PCC v3.0 ED Physician Note Template Root - warning validation phase</title>
+    <rule context="*[cda:templateId/@root='1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4']">
+
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.6"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: A(n) ED Physician Note should contain Active Problems.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.8"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: A(n) ED Physician Note should contain Past Medical History.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root =
+     "1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: A(n) ED Physician Note should contain History of Pregnancies.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4 
+     This section should contain one entry containing the date (TS) of last
+     menstrual period for women of childbearing age, using LOINC Code 8665-2
+     DATE LAST MENSTRUAL PERIOD
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.18"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: A(n) ED Physician Note should contain Pertinent ROS.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.21"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: A(n) ED Physician Note should contain Medications Administered.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+   <assert test='.//cda:templateId[@root =
+     "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.6"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: A(n) ED Physician Note should contain Intravenous Fluids
+     Administered.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.22"]'> 
+     <!-- Alert on any missing required if known elements -->
+     Warning: A(n) ED Physician Note should contain Medications at Discharge.
+     See
+     http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4
+   </assert> 
+
+    </rule>
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4-manual">
+    <title>IHE PCC v3.0 ED Physician Note Template Root - manual validation phase</title>
+    <rule context="*[cda:templateId/@root='1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4']">
+
+
+
+<!--
+
+Replaced with additional rule in error section.
+
+
+         <assert test='.//cda:templateId[@root =
+    "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.4"]'> 
+     Manual: This ED Physician Note does not contain Assessements.
+     See
+    http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4 
+     This section shall be present when assessments and plans are recorded
+    separately.
+   </assert> 
+   <assert test='.//cda:templateId[@root = "1.3.6.1.4.1.19376.1.5.3.1.3.31"]'> 
+     Manual: This ED Physician Note does not contain Care Plan.
+     See
+    http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4 
+     This section shall be present when assessments and plans are recorded
+    separately.
+   </assert> 
+   <assert test='.//cda:templateId[@root =
+    "1.3.6.1.4.1.19376.1.5.3.1.1.13.2.5"]'> 
+     Manual: This ED Physician Note does not contain Assessment and Plan.
+     See
+    http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.13.1.4 
+     This section shall be present when assessments and plans are recorded
+    together.
+   </assert> 
+-->
+
+
+    </rule>
+  </pattern>
+

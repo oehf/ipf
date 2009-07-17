@@ -1,0 +1,129 @@
+<!--  IHE PCC v3.0 Supply Entry: 1.3.6.1.4.1.19376.1.5.3.1.4.7.3 -->
+
+<!-- errors -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.3-errors">
+    <title>IHE PCC v3.0 Supply Entry - errors validation phase</title>
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.7.3&quot;]">
+    <assert test='cda:supply[(@moodCode="INT" or @moodCode="EVN") and @classCode="SPLY"]'>
+       Error: The &lt;supply&gt; element shall be present. The moodCode attribute
+       shall be INT to reflect that a medication has been prescribed, or EVN
+       to indicate that the prescription has been filled.
+    </assert>
+    <assert test='cda:supply/cda:templateId[@root="2.16.840.1.113883.10.20.1.34"]'>
+       Error: The parent CCD template ID (2.16.840.1.113883.10.20.1.34) for
+       Supply Entry shall be present.
+    </assert>
+    <assert test='cda:supply/cda:id'>
+       Error: Each supply act shall have an identifier to uniquely identify
+       the supply entry.
+    </assert>
+    <assert test='not(cda:supply/cda:quantity) or cda:supply/cda:quantity[@value]'>
+       Error: The value attribute of quantity in Supply Entry shall be present
+       if quantity exists.
+    </assert>
+    <assert test='not(cda:supply/cda:author) or cda:supply/cda:author/cda:time[@value or @nullFlavor="UNK"]'>
+       Error: The &lt;time&gt; element in Supply Entry must be present if
+       author exists to indicate when the author created the prescription. 
+       If this information is unknown, it shall be recorded by setting the 
+       nullFlavor attribute to UNK.
+    </assert>
+    <assert test='not(cda:supply/cda:author) or cda:supply/cda:author/cda:assignedAuthor'>
+       Error: The &lt;assignedAuthor&gt; element shall be present if an author
+       exists in Supply Entry, and identifies the author.
+    </assert>
+    <assert test='not(cda:supply/cda:author) or cda:supply/cda:author/cda:assignedAuthor/cda:id'>
+       Error: An identifier element shall be present for an assigned author if
+       an author exists in Supply Entry.
+    </assert>
+    <assert test='not(cda:supply/cda:author) or
+                  cda:supply/cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name or
+                  cda:supply/cda:author/cda:assignedAuthor/cda:representedOrganization/cda:name'>
+       Error: An &lt;assignedPerson&gt;/&lt;name&gt; and/or &lt;representedOriganization&gt;/&lt;name&gt; element
+       shall be present if an author exists in Supply Entry. This element shall identify the prescriber or their organization.
+    </assert>
+    <assert test='not(cda:supply/cda:performer) or
+                  not(cda:supply[@moodCode="INT"]) or
+                  cda:supply/cda:performer/cda:time[@value or @nullFlavor="UNK"]'>
+       Error: The &lt;time&gt; element shall be present if there is a
+       performer in Supply Entry to indicate when the prescription was filled 
+       (moodCode='EVN'). If this information is unknown, it shall be recorded 
+       by setting the nullFlavor attribute to UNK.
+    </assert>
+
+    <assert test='not(cda:supply/cda:performer) or
+		  cda:supply/cda:performer/cda:assignedEntity'>
+       Error: The &lt;assignedEntity&gt; element shall be present in a Supply
+       Entry that contains a performer, and identifies the filler of the prescription.
+    </assert>
+
+    <assert test='not(cda:supply/cda:performer) or
+                  cda:supply/cda:performer/cda:assignedEntity/cda:id'>
+       Error: One or more &lt;id&gt; elements should be present under the
+                  assignedEntity if a performer exists in a Supply Entry. These identify the performer.
+    </assert>
+
+    <assert test='not(cda:supply/cda:performer) or
+	          cda:supply/cda:performer/cda:assignedEntity/cda:assignedPerson/cda:name or
+                  cda:supply/cda:performer/cda:assignedEntity/cda:representedOrganization/cda:name'>
+       Error: An assignedPerson/name and/or representedOriganization/name element
+       shall be present under the assignedEntity if a performer exists in a
+       Supply Entry.
+    </assert>
+
+    </rule>
+  </pattern>
+
+  <!-- warning -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.3-warnings">
+    <title>IHE PCC v3.0 Supply Entry - warning validation phase</title>
+
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.7.3&quot;]">
+    <assert test='not(cda:supply[@moodCode = "EVN"]) or cda:sequenceNumber[@value]'>
+       Warning: This sequenceNumber should be present in Supply Entry when the
+       embedded supply element has a moodCode attribute of EVN.
+    </assert>
+
+    <assert test='cda:supply/cda:repeatNumber[@value]'>
+       Warning: Each supply entry should have a &lt;repeatNumber&gt; element that
+       indicates the number of times the prescription can be filled.
+    </assert>
+
+    <assert test='cda:supply/cda:quantity'>
+       Warning: The supply entry should indicate the quantity supplied.
+    </assert>
+
+    <assert test='not(cda:supply/cda:quantity) or cda:supply/cda:quantity[@unit]'>
+       Warning: In Supply Entry quantity if the medication is supplied in
+       dosing units (tablets or capsules), then the unit attribute need not be
+       present (and should be set to 1 if present). Otherwise, the unit element
+       shall be present to indicate the quantity (e.g., volume or mass) of
+       medication supplied.
+    </assert>
+    <assert test='not(cda:supply/cda:performer) or
+                  not(cda:supply[@moodCode="EVN"]) or
+                  cda:supply/cda:performer/cda:time'>
+       Warning: The &lt;time&gt; element should be present if there is a
+       performer in Supply Entry to indicate when the prescription is intended
+       to be filled (moodCode='INT').
+    </assert>
+
+
+    </rule>
+
+
+  </pattern>
+
+  <!-- manual -->
+
+  <pattern id="p-1.3.6.1.4.1.19376.1.5.3.1.4.7.3-manual">
+    <title>IHE PCC v3.0 Supply Entry - manual validation phase</title>
+
+<!--
+    <rule context="*[cda:templateId/@root=&quot;1.3.6.1.4.1.19376.1.5.3.1.4.7.3&quot;]">
+      <report test="."/>
+    </rule>
+-->
+  </pattern>
+

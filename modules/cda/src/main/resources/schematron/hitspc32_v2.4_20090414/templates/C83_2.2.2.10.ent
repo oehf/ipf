@@ -1,0 +1,66 @@
+
+<!-- Pattern for Errors -->
+
+<pattern id='p-C83_2.2.2.10-errors'>
+
+ <rule context='*[self::cda:author]'>
+
+   <assert test='count(cda:time) = 1'>
+      Error: HITSP/C83 Information Source, Author Time is a required, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.10-2, Data Element 10.01.
+   </assert>
+
+   <assert test='count(cda:assignedAuthor/cda:assignedPerson/cda:name) = 1'>
+      Error: HITSP/C83 Information Source, Author Name is a required, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.10-2, Data Element 10.02 and Section 2.2.2.10.1 Rules C83-[217] and C83-[218].
+   </assert>
+
+ </rule>
+
+ <rule context='*[self::cda:externalDocument][parent::cda:reference]'>
+
+   <assert test='count(cda:id) = 1'>
+      Error: HITSP/C83 Information Source, Reference Document ID is a required, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.10-2, Data Element 10.04.
+   </assert>
+
+ </rule>
+
+ <rule context='*[self::cda:informant]'>
+<!--
+
+TODO: Need clarity from HITSP.  Does section 2.2.2.10.1 apply to 10.02 or to 10.06 (or both?).  Does name for informant
+go in cda:assignedEntity/cda:assignedPerson/cda:name or cda:relatedEntity/cda:relatedPerson/cda:name or both?
+
+   <assert test='cda:assignedEntity/cda:assignedPerson/cda:name'>
+      Error: HITSP/C83 Information Source, Information Source Name is a required, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.10-2, Data Element 10.06.
+   </assert>
+-->
+ </rule>
+
+
+</pattern>
+
+
+<!-- Pattern for Warnings -->
+
+<pattern id='p-C83_2.2.2.10-warning'>
+
+</pattern>
+
+
+
+<!-- Pattern for Notes -->
+
+<pattern id='p-C83_2.2.2.10-note'>
+
+ <rule context='*[self::cda:externalDocument][parent::cda:reference]'>
+   <assert test='cda:text/cda:reference/@value'>
+      Note: HITSP/C83 Information Source, Reference Document URL is an optional, non-repeating data element.
+      See HITSP/C83 Table 2.2.2.10-2, Data Element 10.05
+   </assert>
+
+ </rule>
+
+</pattern>

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.modules.cda.builder
 
 import org.codehaus.groovy.runtime.InvokerHelper
-
+import org.openhealthtools.ihe.common.cdar2.ANYimport org.openhealthtools.ihe.common.cdar2.impl.ANYImplimport org.openhealthtools.ihe.common.cdar2.impl.ANYNonNullImpl
 import groovytools.builder.PropertyException
 
 import org.openhealthtools.ihe.common.cdar2.CDAR2Package
@@ -48,7 +48,7 @@ public class CDAR2Factory extends AbstractFactory{
 	Object newInstance(FactoryBuilderSupport builder, Object name, Object value, Map attrs) {
 		// Use of a specific library
 		if (type == null) {
-			return super.newInstance(builder, name, value, attrs)
+		    return value
 		}
 		def object
 		// Create CDAR2 object directly from String if possible
