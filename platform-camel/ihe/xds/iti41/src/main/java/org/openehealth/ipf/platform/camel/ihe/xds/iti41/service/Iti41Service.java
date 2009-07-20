@@ -21,7 +21,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML30Converters;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
 
 /**
@@ -35,7 +35,7 @@ public class Iti41Service extends DefaultItiWebService implements Iti41PortType 
     public RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(ProvideAndRegisterDocumentSetRequestType body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            QueryResponse errorResponse = new QueryResponse();
+            Response errorResponse = new Response();
             configureError(errorResponse, result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR);
             return EbXML30Converters.convert(errorResponse);
         }
