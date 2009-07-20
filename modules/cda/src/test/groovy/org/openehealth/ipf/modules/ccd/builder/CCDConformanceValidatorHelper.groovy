@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.ccd.builder
 import org.openhealthtools.ihe.common.cdar2.*
 import org.openhealthtools.ihe.common.cdar2.impl.*
 import junit.framework.Assert
-
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Organizerimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Observation
 /**
  * Implements a subset of validation rules for CCD instance documents.
  * May be used for test purposes only
@@ -352,6 +352,109 @@ public static class CCDConformanceValidatorHelper{
 
         return true
     }
+    
+    /**
+     * Implements set of CCD Family History conformance rules
+     */
+    public static boolean checkCCDFamilyHistoryConformance(POCDMT000040Section section){
+        Assert.assertTrue section instanceof POCDMT000040Section
+        /* CONF-185: Section / code != null */
+        Assert.assertNotNull('CONF-185 Failed', section.code)
+        /* CONF-186: Section / code value is LOINC:2.16.840.1.113883.6.1:10157-6 */
+        Assert.assertEquals('CONF-186 Failed code', '10157-6',section.code.code)
+        Assert.assertEquals('CONF-186 Failed code system', '2.16.840.1.113883.6.1', section.code.codeSystem)
+        /* CONF-187: Section / title != null */
+        Assert.assertNotNull('CONF-187 Failed:', section.title)
+        /* CONF-188: Section / title contains 'advance directives' */
+        Assert.assertTrue('CONF-188 Failed', section.title.mixed[0].value.matches('(?i).*family history*.'))
+        /* CONF-189: No Section / subject */
+        Assert.assertNull('CONF-189 Failed', section.subject)
+        
+        /* check family history */
+        section.entry.each{ item ->
+            if (item.organizer) {
+              checkCCDFamilyHistoryOrganizerConformance(item.organizer)
+            } else if (item.observation) {
+                    if ('2.16.840.1.113883.10.20.1.22' in item.observation.templateId.root ) {
+                        checkCCDFamilyHistoryObservationConformance(obs)
+                    } else if ('2.16.840.1.113883.10.20.1.42' in item.observation.templateId.root) {
+                        checkCCDFamilyHistoryObservationOfDeathConformance(obs)
+                    } else {
+                        Assert.fail("Wrong kind of observation ${item.observation.templateId.root} in Family History")
+                    }
+            } else {
+                Assert.fail("Family History must have either Observations or Organizers")
+            }
+        }
+    }    
+
+    /**
+     * Implements set of CCD Family History Organizer conformance rules
+     */
+    public static boolean checkCCDFamilyHistoryOrganizerConformance(POCDMT000040Organizer organizer){
+        /* CONF-200: Family History Organizer (templateId 2.16.840.1.113883.10.20.1.23) */
+        Assert.assertTrue('CONF-200 Failed templateId', '2.16.840.1.113883.10.20.1.23' in organizer.templateId.root)
+        /* CONF-201: Organizer / @classCode value is 'CLUSTER' */
+        Assert.assertEquals('CONF-201 Failed', 'CLUSTER', organizer.classCode.name)
+        /* CONF-202: Organizer / @moodCode value is 'EVN' */
+        Assert.assertEquals('CONF-202 Failed', 'EVN', organizer.moodCode.name)
+        /* CONF-203: Organizer / statusCode != null */
+        Assert.assertNotNull('CONF-203 Failed', organizer.statusCode)   
+        /* CONF-204: Organizer / statusCode value is 'completed' */
+        Assert.assertEquals('CONF-204 Failed', 'completed', organizer.statusCode.code)
+        /* CONF-205: Organizer shall have components */
+        Assert.assertTrue('CONF-205 Failed', organizer.component.size > 0)  
+        organizer.component.each { comp->
+            def obs = comp.observation
+            if ('2.16.840.1.113883.10.20.1.22' in obs?.templateId.root ) {
+                checkCCDFamilyHistoryObservationConformance(obs)
+            } else if ('2.16.840.1.113883.10.20.1.42' in obs?.templateId.root) {
+                checkCCDFamilyHistoryObservationOfDeathConformance(obs)
+            } else {
+                Assert.fail("Wrong kind of observation ${obs?.templateId.root} in Family History Organizer")
+            }
+        }
+        
+        /* CONF-208: Organizer has one subject */
+        Assert.assertNotNull('CONF-208 Failed', organizer.subject)
+        /* CONF-212: Subject has relatedSubject */
+        Assert.assertNotNull('CONF-212 Failed', organizer.subject.relatedSubject)
+        /* CONF-213: RelatedSubject / @classCode is 'PRS' */
+        Assert.assertEquals('CONF-213 Failed', 'PRS', organizer.subject.relatedSubject.classCode.name)
+        /* CONF-214: One RelatedSubject / code  */
+        Assert.assertNotNull('CONF-214 Failed', organizer.subject.relatedSubject.code)        
+     }
+
+    
+    /**
+     * Implements set of CCD Family History Observation conformance rules
+     */
+    public static boolean checkCCDFamilyHistoryObservationConformance(POCDMT000040Observation observation){
+        /* CONF-190: Family History Observation (templateId 2.16.840.1.113883.10.20.1.22) */
+        Assert.assertTrue('CONF-190 Failed templateId', '2.16.840.1.113883.10.20.1.22' in observation.templateId.root)    
+        /* CONF-191: Observation / @moodCode value is 'EVN' */
+        Assert.assertEquals('CONF-191 Failed', 'EVN', observation.moodCode.name)
+        /* CONF-192: Observation / id. != null */
+        Assert.assertTrue('CONF-192 Failed', observation.id.size >= 1)
+        /* CONF-193: Observation / statusCode != null */
+        Assert.assertNotNull('CONF-193 Failed', observation.statusCode)   
+        /* CONF-194: Observation / statusCode value is 'completed' */
+        Assert.assertEquals('CONF-194 Failed', 'completed', observation.statusCode.code)
+        /* CONF-209: Observation has one subject if not in organizer */
+        // TODO Assert.assertTrue('CONF-209 Failed', organizer.subject)    
+    }
+    
+    /**
+     * Implements set of CCD Family History Observation conformance rules
+     */
+    public static boolean checkCCDFamilyHistoryObservationOfDeathConformance(POCDMT000040Observation observation){
+        /* CONF-196: Family History Observation (templateId 2.16.840.1.113883.10.20.1.42) */
+        Assert.assertTrue('CONF-196 Failed templateId', '2.16.840.1.113883.10.20.1.42' in observation.templateId.root)    
+        /* CONF-197: Observation / entryRelationship / @typeCode value is 'CAUS' */
+        Assert.assertTrue('CONF-197 Failed', observation.entryRelationship.any { it.typeCode.name == 'CAUS' })   
+    }
+
+    
 
     public static def retrievePayersPolicyActivity(POCDMT000040EntryRelationship entryRelationship){
         if (entryRelationship.eIsSet(CDAR2Package.POCDMT000040_ENTRY_RELATIONSHIP__ACT))

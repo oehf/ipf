@@ -314,7 +314,7 @@ public class CCDFamilyHistoryBuilderTest extends AbstractCCDBuilderTest{
                 }                           
             }
         }
-        // CCDConformanceValidatorHelper.checkCCDAdvanceDirectivesConformance(advanceDirective)
+        CCDConformanceValidatorHelper.checkCCDFamilyHistoryConformance(familyHistory)
     }
 
     public void testRenderCCDFamilyHistory() {
