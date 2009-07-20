@@ -150,7 +150,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, nopValidator, 0, 1),
                 new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator, 0, Integer.MAX_VALUE),
                 new SlotValidation(SLOT_NAME_URI, uriValidator),
-                new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, authorValidations),
+                new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 1, Integer.MAX_VALUE, authorValidations),
                 new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, codingSchemeValidations),
                 new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
                 new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
@@ -163,7 +163,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final RegistryObjectValidator[] submissionSetSlotValidations = new RegistryObjectValidator[] {
                 new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
                 new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
-                new ClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, authorValidations),
+                new ClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, 1, Integer.MAX_VALUE, authorValidations),
                 new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
                 new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidator),
                 new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator)};
@@ -240,7 +240,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             
             LocalizedString name = docEntry.getName();
             if (name != null && name.getValue() != null) {
-                metaDataAssert("UTF8".equals(name.getCharset()),
+                metaDataAssert("UTF8".equals(name.getCharset()) || "UTF-8".equals(name.getCharset()),
                         INVALID_TITLE_ENCODING, name.getCharset());
                 
                 metaDataAssert(name.getValue().length() <= 128,

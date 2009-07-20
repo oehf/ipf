@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.validate;
 
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
+
 /**
  * All error messages that can occur during validation.
  * @author Jens Riemschneider
@@ -71,8 +73,8 @@ public enum ValidationMessage {
     PERSON_HD_MISSING("If an id number is specified for a person, the assigning authority has to be specified as well: %1s"),
     ORGANIZATION_NAME_MISSING("An organization name has to be specified for an organization: %1s"),
     ORGANIZATION_TOO_MANY_COMPONENTS("An organization should not specify data other than its ID and name"),
-    MISSING_DOC_ENTRY_FOR_DOCUMENT("A document was provided without a corresponding document entry. UUID=%1s"),
-    MISSING_DOCUMENT_FOR_DOC_ENTRY("A document entry was provided without a corresponding document. UUID=%1s"),
+    MISSING_DOC_ENTRY_FOR_DOCUMENT("A document was provided without a corresponding document entry. UUID=%1s", ErrorCode.MISSING_DOCUMENT_METADATA),
+    MISSING_DOCUMENT_FOR_DOC_ENTRY("A document entry was provided without a corresponding document. UUID=%1s", ErrorCode.MISSING_DOCUMENT),
     UNKNOWN_QUERY_TYPE("Unknown query type: %1s"),
     MISSING_SQL_QUERY_TEXT("Missing SQL query text"),
     UNKNOWN_RETURN_TYPE("Unknown return type: %1s"),
@@ -89,15 +91,26 @@ public enum ValidationMessage {
     INVALID_ERROR_CODE_IN_RESPONSE("Invalid error code in response"),
     INVALID_SEVERITY_IN_RESPONSE("Invalid severity in response"),
     MISSING_OBJ_REF("Missing object reference"),
-    ;
+    DEPRECATED_OBJ_CANNOT_BE_TRANSFORMED("A deprecated entry cannot be transformed or appended", ErrorCode.REGISTRY_DEPRECATED_DOCUMENT_ERROR);
     
     private final String text;
+    private final ErrorCode errorCode;
     
+    private ValidationMessage(String text, ErrorCode errorCode) {
+        this.text = text;
+        this.errorCode = errorCode;
+    }
+
     private ValidationMessage(String text) {
         this.text = text;
+        this.errorCode = null;
     }
 
     public String getText() {
         return text;
+    }
+    
+    public ErrorCode getErrorCode() {
+        return errorCode;
     }
 }

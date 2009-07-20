@@ -60,9 +60,11 @@ public class StringValidation implements QueryParameterValidation {
         metaDataAssert(optional || slotValues.size() >= 1, MISSING_REQUIRED_QUERY_PARAMETER, param);
         metaDataAssert(optional || slotValues.size() == 1, TOO_MANY_VALUES_FOR_QUERY_PARAMETER, param);
         
-        String slotValue = slotValues.get(0);
-        metaDataAssert(slotValue != null || optional, MISSING_REQUIRED_QUERY_PARAMETER, param);
-        metaDataAssert(Pattern.matches("'.*'", slotValue), PARAMETER_VALUE_NOT_STRING, param);
+        if (slotValues.size() > 0) {
+            String slotValue = slotValues.get(0);
+            metaDataAssert(slotValue != null || optional, MISSING_REQUIRED_QUERY_PARAMETER, param);
+            metaDataAssert(Pattern.matches("'.*'", slotValue), PARAMETER_VALUE_NOT_STRING, param);
+        }
         
         QuerySlotHelper slots = new QuerySlotHelper(request);        
         String value = slots.toString(param);

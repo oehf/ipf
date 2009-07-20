@@ -18,6 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang.Validate;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException;
 
 /**
  * Base class for web services that are aware of a {@link DefaultItiConsumer}.
@@ -25,6 +32,8 @@ import org.apache.commons.lang.Validate;
  * @author Jens Riemschneider
  */
 public class DefaultItiWebService {
+    private static final Log log = LogFactory.getLog(DefaultItiWebService.class);
+    
     private DefaultItiConsumer consumer;
 
     /**
@@ -53,5 +62,38 @@ public class DefaultItiWebService {
     public void setConsumer(DefaultItiConsumer consumer) {
         Validate.notNull(consumer, "consumer");
         this.consumer = consumer;
+    }
+
+    /**
+     * Configures an error response object with the data from an exception.
+     * @param errorResponse
+     *          the response object to configure.
+     * @param throwable
+     *          the exception that occurred.
+     * @param defaultMetaDataError
+     *          the default error code for {@link XDSMetaDataException}.
+     * @param defaultError
+     *          the default error code for any other exception.
+     */
+    protected void configureError(Response errorResponse, Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
+        errorResponse.setStatus(Status.FAILURE);
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setCodeContext(throwable.getMessage());
+        errorResponse.getErrors().add(errorInfo);
+
+        if (throwable instanceof XDSMetaDataException)  {
+            XDSMetaDataException exception = (XDSMetaDataException) throwable;
+            if (exception.getValidationMessage().getErrorCode() == null) {
+                errorInfo.setErrorCode(defaultMetaDataError);
+            }
+            else {
+                errorInfo.setErrorCode(exception.getValidationMessage().getErrorCode());
+            }
+        }
+        else {
+            errorInfo.setErrorCode(defaultError);
+        }
+        
+        log.info("Configured error: " + throwable.getMessage());
     }
 }

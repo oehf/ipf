@@ -55,7 +55,6 @@
     <binding name="DocumentRepository_Binding_Soap12" type="ihe:DocumentRepository_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="DocumentRepository_ProvideAndRegisterDocumentSet-b">
-            <soap12:operation soapAction="urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b"/>
             <input>
                 <soap12:body use="literal"/>
             </input>
