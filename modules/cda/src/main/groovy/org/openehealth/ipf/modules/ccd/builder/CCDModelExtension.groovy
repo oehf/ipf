@@ -29,7 +29,7 @@ import org.openhealthtools.ihe.common.cdar2.POCDMT000040Participant1
 import org.openhealthtools.ihe.common.cdar2.ParticipationAncillary
 import org.openhealthtools.ihe.common.cdar2.ParticipationIndirectTarget
 import org.openhealthtools.ihe.common.cdar2.ParticipationPhysicalPerformer
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Organizerimport org.openhealthtools.ihe.common.cdar2.POCDMT000040RelatedSubjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Subjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Observation
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Organizerimport org.openhealthtools.ihe.common.cdar2.POCDMT000040RelatedSubjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Subjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Observationimport org.openehealth.ipf.modules.cda.builder.BaseModelExtension
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage
 import org.eclipse.emf.ecore.util.FeatureMap
 import org.eclipse.emf.ecore.util.FeatureMapUtil
@@ -42,9 +42,15 @@ import org.eclipse.emf.common.util.AbstractEnumerator
  * @author Christian Ohr
  * @deprecated
  */
-public class CCDModelExtension{
+public class CCDModelExtension extends BaseModelExtension{
 
-    def builder
+     CCDModelExtension() {
+         super()
+     }
+     
+     CCDModelExtension(builder) {
+         super(builder)
+     }
 
     def extensions = {
 
@@ -71,182 +77,6 @@ public class CCDModelExtension{
 
         }// ccd header extensions
 
-        // --------------------------------------------------------------------------------------------
-        // Chapter 2.8 "Purpose"
-        // --------------------------------------------------------------------------------------------
-
-        POCDMT000040StructuredBody.metaClass {
-            // We assume that this is a CCD Purpose section, enforced by the builder
-            setPurpose  {POCDMT000040Section section ->
-                POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
-                component.section = section
-                delegate.component.add(component)
-            }
-            getPurpose  { ->
-                delegate.component.find { it.section.code.code == '48764-5' } ?.section
-            }
-        } //purpose structured body extensions
-
-        POCDMT000040Section.metaClass {
-            setPurposeActivity  {POCDMT000040EntryRelationship relationship ->
-
-                POCDMT000040Entry entry = builder.build {
-                    // CONF-20: A purpose activity (templateId 2.16.840.1.113883.10.20.1.30)
-                    //          SHALL be represented with Act.
-                    // CONF-21: The value for “Act / @classCode” in a purpose activity SHALL
-                    //          be “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.
-                    // CONF-22: The value for “Act / @moodCode” in a purpose activity SHALL
-                    //          be “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.
-                    // CONF-23: A purpose activity SHALL contain exactly one Act / statusCode.
-                    // CONF-24: The value for “Act / statusCode” in a purpose activity SHALL
-                    //          be “completed” 2.16.840.1.113883.5.14 ActStatus STATIC.
-                    // CONF-25: A purpose activity SHALL contain exactly one Act / code,
-                    //          with a value of “23745001” “Documentation procedure” 2.16.840.1.113883.6.96
-                    //          SNOMED CT STATIC.
-                    entry {
-                        typeCode('DRIV')
-                        act  {
-                            templateId('2.16.840.1.113883.10.20.1.30')
-                            statusCode('completed')
-                            code(code:'23745001', codeSystem:'2.16.840.1.113883.6.96',
-                                    codeSystemName:'SNOMED CT', displayName:'Documentation procedure')
-                        }
-                    }
-                }
-
-                delegate.entry.add(entry)
-                entry.act.entryRelationship.add(relationship)
-            }
-
-            getPurposeActivity { ->
-                delegate.entry.act.find { it.code.code == '23745001'}?.entryRelationship[0]
-            }
-        }// purpose section extensions
-
-        // --------------------------------------------------------------------------------------------
-        // Chapter 3.1 "Payers"
-        // --------------------------------------------------------------------------------------------
-
-        POCDMT000040StructuredBody.metaClass {
-            // TODO: will be always the same
-            setPayers {POCDMT000040Section section ->
-                POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
-                component.section = section
-                delegate.component.add(component)
-            }
-            getPayers  { ->
-                delegate.component.find { it.section.code.code == '48768-6' } ?.section
-            }
-        }// payers structured body extensions
-
-        POCDMT000040Section.metaClass {
-            setCoverageActivity  {POCDMT000040Act act ->
-                POCDMT000040Entry entry = CDAR2Factory.eINSTANCE.createPOCDMT000040Entry()
-                delegate.entry.add(entry)
-                entry.act = act
-            }
-            getCoverageActivity  { ->
-                delegate.entry.find { it.act.code.code == '48768-6' } ?.act
-            }
-        }// payers section extensions
-
-        POCDMT000040Act.metaClass {
-
-            setPolicyActivity {POCDMT000040Act act ->
-                POCDMT000040EntryRelationship rel = builder.build {
-                    entryRelationship {
-                        typeCode('COMP')
-                    }
-                }
-                delegate.entryRelationship.add(rel)
-                rel.act = act
-            }
-
-            getPolicyActivity { ->
-                delegate.entryRelationship.find {
-                    it.typeCode == XActRelationshipEntryRelationship.COMP_LITERAL
-                }?.act
-            }
-
-            setPayer  {POCDMT000040AssignedEntity assignedEntity ->
-                POCDMT000040Performer2 payer = builder.build {
-                    clinicalStatementPerformer {
-                        typeCode('PRF')
-                    }
-                }
-                delegate.performer.add(payer)
-                payer.assignedEntity = assignedEntity
-            }
-
-            getPayer  { ->
-                delegate.performer.find {
-                    it.typeCode == ParticipationPhysicalPerformer.PRF_LITERAL
-                }?.assignedEntity
-            }
-
-            setCoveredParty  {POCDMT000040ParticipantRole participantRole ->
-                POCDMT000040Participant2 coveredParty = builder.build {
-                    clinicalStatementParticipant {
-                        typeCode('COV')
-                    }
-                }
-                delegate.participant.add(coveredParty)
-                coveredParty.participantRole = participantRole
-            }
-
-            getCoveredParty  { ->
-                delegate.participant.find {
-                    it.typeCode == ParticipationIndirectTarget.COV_LITERAL
-                }?.participantRole
-            }
-
-            setSubscriber  {POCDMT000040ParticipantRole participantRole ->
-                POCDMT000040Participant2 subscriber = builder.build {
-                    clinicalStatementParticipant {
-                        typeCode('HLD')
-                    }
-                }
-                delegate.participant.add(coveredParty)
-                coveredParty.participantRole = subscriber
-            }
-
-            getSubscriber  { ->
-                delegate.participant.find {
-                    it.typeCode == ParticipationIndirectTarget.HLD_LITERAL
-                }?.participantRole
-            }
-
-            setAuthorizationActivity { POCDMT000040Act act1 ->
-            // CONF-66: The value for “Act / entryRelationship / @typeCode”
-            // in a policy activity SHALL be “REFR” 2.16.840.1.113883.5.1002
-            // ActRelationshipType STATIC.
-                POCDMT000040EntryRelationship rel1 = CDAR2Factory.eINSTANCE.createPOCDMT000040EntryRelationship()
-                rel1.typeCode = XActRelationshipEntryRelationship.REFR_LITERAL
-                /*         POCDMT000040EntryRelationship rel1 = builder.build {
-                             entryRelationship {
-                                 typeCode('REFR')
-                             }
-                         }
-                */         delegate.entryRelationship.add(rel1)
-                rel1.act = act1
-            }
-
-            getAuthorizationActivity { ->
-                delegate.entryRelationship.find {
-                    it.typeCode == XActRelationshipEntryRelationship.REFR_LITERAL
-                }?.act
-            }
-
-            setPromise { POCDMT000040EntryRelationship rel ->
-                delegate.entryRelationship.add(rel)
-            }
-
-            getPromise { ->
-                delegate.entryRelationship.find {
-                    it.typeCode == XActRelationshipEntryRelationship.SUBJ_LITERAL
-                }
-            }
-        }//payers act extensions
 
         // --------------------------------------------------------------------------------------------
         // Chapter 3.2 "Advance Directives"
@@ -320,137 +150,6 @@ public class CCDModelExtension{
             }
         }// advance directives observations extensions
         
-        // --------------------------------------------------------------------------------------------
-        // Chapter 3.6 "Family History"
-        // --------------------------------------------------------------------------------------------
-
-        POCDMT000040StructuredBody.metaClass {
-            // We assume that this is a CCD Family History section, enforced by the builder
-            setFamilyHistory  {POCDMT000040Section section ->
-                POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
-                component.section = section
-                delegate.component.add(component)
-            }
-            getFamilyHistory  { ->
-                delegate.component.find { it.section.code.code == '10157-6' } ?.section
-            }
-        }
-        
-        POCDMT000040Section.metaClass {
-            setObservation  {POCDMT000040Observation observation ->
-                POCDMT000040Entry entry = builder.build {
-                    entry {
-                        typeCode('DRIV')
-                    }
-                }
-                entry.observation = observation
-                delegate.entry.add(entry)
-            }
-
-            getObservation { ->
-                delegate.entry.observation
-            }
-            
-            setFamilyMember  {POCDMT000040Organizer organizer ->
-                POCDMT000040Entry entry = builder.build {
-                    entry {
-                        typeCode('DRIV')
-                    }
-                }
-                entry.organizer = organizer
-                delegate.entry.add(entry)
-            }
-
-            getFamilyMember { ->
-                delegate.entry.organizer
-            }
-            
-            setCauseOfDeath  {POCDMT000040Observation observation ->
-                POCDMT000040Entry entry = builder.build {
-                    entry {
-                        typeCode('DRIV')
-                    }
-                }
-                entry.observation = observation
-                delegate.entry.add(entry)
-            }
-
-            getCauseOfDeath { ->
-                delegate.entry.observation
-            }            
-        }
-        
-        POCDMT000040Observation.metaClass {
-            setFamilyMember  {POCDMT000040RelatedSubject relatedSubject ->
-                POCDMT000040Subject subject = CDAR2Factory.eINSTANCE.createPOCDMT000040Subject()
-                subject.relatedSubject = relatedSubject
-                delegate.subject = subject
-                relatedSubject
-            }
-            getFamilyMember { ->
-                delegate.subject.relatedSubject
-            } 
-            setCause  {POCDMT000040Observation observation ->
-                POCDMT000040EntryRelationship rel = builder.build {
-                    entryRelationship {
-                        typeCode('CAUS')
-                    }
-                }
-                rel.observation = observation
-                delegate.entryRelationship.add(rel)
-            }
-            getCause { ->
-            	delegate.entryRelationship.find { it.typeCode == 'CAUS' }.observation
-            }
-            
-            setAge {POCDMT000040Observation observation ->
-                POCDMT000040EntryRelationship rel = builder.build {
-                    entryRelationship(inversionInd:true, typeCode:'SUBJ')
-                }
-                rel.observation = observation
-                delegate.entryRelationship.add(rel)
-            }
-            getAge { ->
-        	    delegate.entryRelationship.find { it.typeCode == 'SUBJ' }.observation            
-            }
-        }
-        
-        POCDMT000040Organizer.metaClass {
-            setFamilyPerson  {POCDMT000040RelatedSubject relatedSubject ->
-                POCDMT000040Subject subject = CDAR2Factory.eINSTANCE.createPOCDMT000040Subject()
-                subject.relatedSubject = relatedSubject
-                delegate.subject = subject
-                relatedSubject
-            }
-            getFamilyPerson { ->
-                delegate.subject.relatedSubject
-            }   
-            
-            setCauseOfDeath { POCDMT000040Observation observation -> 
-                POCDMT000040Component4 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component4()
-                component.observation = observation
-                delegate.component.add(component)
-                observation                
-            }
-            getCauseOfDeath { ->
-                delegate.component.find { 
-                    it.observation?.templateId[0] == '2.16.840.1.113883.10.20.1.42' 
-                }.observation
-            }
-            
-            setObservation  {POCDMT000040Observation observation ->
-                POCDMT000040Component4 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component4()
-                component.observation = observation
-                delegate.component.add(component)
-                observation                
-            }
-
-        	getObservation { ->
-        	    delegate.component.find { 
-        	        it.observation?.templateId[0] == '2.16.840.1.113883.10.20.1.22' 
-        	    }.observation
-        	}
-        }
         
         
         // --------------------------------------------------------------------------------------------
@@ -510,6 +209,16 @@ public class CCDModelExtension{
 
         }// ccd support extensions
         
+        return 1
         
     }//ccd extensions 
+    
+    
+    String templateId() {
+        '2.16.840.1.113883.10.20.1'
+    }
+    
+    String extensionName() {
+        "Continuity of Care Document (CCD)"
+    }    
 }

@@ -29,13 +29,7 @@ public class CCDPayersValidator extends AbstractValidator {
 	void validate(Object section, Object profile){
 		assertInstanceOf('CONF-31', POCDMT000040Section.class, section)
 	    assertContains('CONF-31', '2.16.840.1.113883.10.20.1.9', section.templateId.root)
-		doValidatePayers(section)
-		
-		section.entry.each { entry ->
-			def act = entry.act
-			assertInstanceOf('CONF-35 Failed', POCDMT000040Act.class, act)
-			doValidateCoverageActivity(act)            
-		}
+		doValidatePayers(section)		
 	}
 	
 	void doValidatePayers(POCDMT000040Section section) {
@@ -44,6 +38,11 @@ public class CCDPayersValidator extends AbstractValidator {
 		assertEquals('CONF-32', '2.16.840.1.113883.6.1', section.code.codeSystem)
 		assertNotNull('CONF-33',section.title)
 		assertMatches('CONF-34', '(?i).*(payers|insurance)*.', section.title.mixed[0].value)	    
+		section.entry.each { entry ->
+		    def act = entry.act
+		    assertInstanceOf('CONF-35 Failed', POCDMT000040Act.class, act)
+		    doValidateCoverageActivity(act)            
+		}
 	}
 	
 	

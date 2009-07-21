@@ -26,6 +26,6 @@ public class CCDExtensionTest extends GroovyTestCase {
          ExpandoMetaClass.enableGlobally()
          def ccdExtensions = new CCDExtension()
          int c = ccdExtensions.extensions.call()
-         assertEquals(2, c)
+         assertEquals(4, c)
      }
 }

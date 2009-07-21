@@ -29,23 +29,20 @@ public abstract class AbstractCCDBuilderTest extends GroovyTestCase {
 	
 	static def builder
 	static def renderer
-	static def ccdExtensions
 	
 	static {
+		if (!builder) {
+            builder = new CCDBuilder()
+		}
+		if (!renderer) {
+		    renderer = new CDAR2Renderer()
+		}
+		
 		ExpandoMetaClass.enableGlobally()
 		def cdaExtensions = new CDAR2ModelExtension()
 		cdaExtensions.extensions.call()
-		ccdExtensions = new CCDModelExtension()
+		def ccdExtensions = new CCDExtension(builder)
 		ccdExtensions.extensions.call()
-		
-	}
-	
-	public void setUp() throws Exception {
-		if (!builder)
-            builder = new CCDBuilder(getClass().getClassLoader())
-		    ccdExtensions.builder = builder
-		if (!renderer)
-		    renderer = new CDAR2Renderer()
 	}
 		
 }

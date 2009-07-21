@@ -26,6 +26,10 @@ import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openhea
  */
 public abstract class AbstractValidator implements Validator {
 	
+    static void fail(constraint, message) {
+        throw new ValidationException("$constraint violated. $message")
+    }
+    
 	static void assertTrue(constraint, condition) {
 		condition = resolve(condition)
 		if (!condition) {

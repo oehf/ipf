@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Sectionimport org.junit.BeforeClassimport org.junit.Testimport org.openehealth.ipf.modules.ccd.builder.CCDConformanceValidatorHelper
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Sectionimport org.junit.BeforeClassimport org.junit.Test
 import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
 
 /**

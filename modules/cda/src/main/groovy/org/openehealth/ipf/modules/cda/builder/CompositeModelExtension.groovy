@@ -27,7 +27,7 @@ import groovytools.builder.MetaBuilder
 abstract class CompositeModelExtension extends BaseModelExtension {
 
      protected static final Log LOG = LogFactory.getLog(CompositeModelExtension.class)
-          
+     
      def extensions = {
           LOG.info("Initializing composite extension ${extensionName()} (${templateId()})")
           int c = 0
@@ -42,12 +42,18 @@ abstract class CompositeModelExtension extends BaseModelExtension {
      CompositeModelExtension() {         
      }
      
-     CompositeModelExtension(MetaBuilder builder) {
+     CompositeModelExtension(builder) {
          super(builder)
      }
      
      List modelExtensions() {
          []
+     }
+     
+     void setBuilder(builder) {
+         modelExtensions?.each {
+             it.builder = builder
+         }
      }
     
     

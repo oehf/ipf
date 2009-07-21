@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ccdbuilders
+package builders.content.section
 
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.XActClassDocumentEntryOrganizerimport org.openhealthtools.ihe.common.cdar2.XDocumentSubject
+
 // Chapter 3.6 : Family History
 
 // CONF-184: CCD SHOULD contain exactly one and SHALL NOT contain more 
@@ -58,7 +58,7 @@ ccd_familyHistory(schema:'section') {
 	}
 	collections {
 		templateIds(collection:'templateId', def: {
-			getMetaBuilder().buildList { ii(root:'2.16.840.1.113883.10.20.1.1') }
+			getMetaBuilder().buildList { ii(root:'2.16.840.1.113883.10.20.1.4') }
 		})
 		
 	}

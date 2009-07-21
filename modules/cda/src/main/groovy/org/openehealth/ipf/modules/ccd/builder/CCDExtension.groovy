@@ -34,8 +34,10 @@ public class CCDExtension extends CompositeModelExtension{
     
     List modelExtensions() {
         [
-             new CCDPurposeExtension(),
-             new CCDPayersExtension()
+             new CCDPurposeExtension(builder),
+             new CCDPayersExtension(builder),
+             new CCDFamilyHistoryExtension(builder),
+             new CCDModelExtension(builder) // TODO remove when modularization is done
         ]
     }
     
