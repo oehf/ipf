@@ -40,6 +40,7 @@ import org.eclipse.emf.common.util.AbstractEnumerator
  * Make sure that the CDAModelExtensions are called before
  *
  * @author Christian Ohr
+ * @deprecated
  */
 public class CCDModelExtension{
 

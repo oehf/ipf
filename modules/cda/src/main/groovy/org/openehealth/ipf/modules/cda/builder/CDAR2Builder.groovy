@@ -25,12 +25,17 @@ import java.lang.ClassLoader
  * @author Christian Ohr
  */
 public class CDAR2Builder extends MetaBuilder{
-	
+
+ 	public CDAR2Builder() {
+	    super()
+		setDefaultBuildNodeFactory(new CDAR2Factory())
+		initializeBuilders()
+	}
+ 	
 	public CDAR2Builder(ClassLoader loader) {
 	    super(loader)
 		setDefaultBuildNodeFactory(new CDAR2Factory())
 		initializeBuilders()
-        new CDAR2ModelExtension().extensions.call()
 	}
 		
 	protected MetaObjectGraphBuilder createMetaObjectGraphBuilder(SchemaNode defaultSchema, Factory defaultNodeFactory, Closure objectVisitor) {

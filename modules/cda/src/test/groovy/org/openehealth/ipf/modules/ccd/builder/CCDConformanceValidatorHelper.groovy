@@ -24,6 +24,7 @@ import org.openhealthtools.ihe.common.cdar2.POCDMT000040Organizerimport org.ope
  * May be used for test purposes only
  *
  * @author Stefan Ivanov
+ * @deprecated
  */
 public static class CCDConformanceValidatorHelper{
 
@@ -99,13 +100,9 @@ public static class CCDConformanceValidatorHelper{
     /**
      * Implements a set of CCD Purpose conformance rules
      */
-    public static boolean checkCCDPurposeConformance(POCDMT000040Component2 ccdPurposeComponent){
-        Assert.assertTrue ccdPurposeComponent instanceof POCDMT000040Component2
-        Assert.assertTrue ccdPurposeComponent.structuredBody.component.get(0) instanceof POCDMT000040Component3
-        def section = ccdPurposeComponent.structuredBody.component.get(0).section
-        Assert.assertTrue section instanceof POCDMT000040Section
+    public static boolean checkCCDPurposeConformance(POCDMT000040Section section){
         /* CONF-15: Purpose section(templateId) */
-        Assert.assertEquals('CONF-15 Failed', '2.16.840.1.113883.10.20.1.13', ccdPurposeComponent.structuredBody.component.get(0).section.templateId.get(0).root)
+        Assert.assertTrue('CONF-15 Failed', '2.16.840.1.113883.10.20.1.13' in section.templateId.root)
         /* CONF-16,CONF-17: Purpose section/code */
         Assert.assertEquals('CONF-16 Failed', '48764-5',section.code.code)
         Assert.assertEquals('CONF-17 Failed', '2.16.840.1.113883.6.1', section.code.codeSystem)
@@ -113,7 +110,7 @@ public static class CCDConformanceValidatorHelper{
         Assert.assertNotNull('CONF-18 Failed:', section.title)
         Assert.assertTrue('CONF-19 Failed', section.title.mixed[0].value.matches('(?i).*purpose*.'))
         /* clinical statement conformance: purpose activity */
-        def act = ccdPurposeComponent.structuredBody.component.get(0).section.entry.get(0).act
+        def act = section.entry.get(0).act
         /* CONF-20: entry is act */
         Assert.assertTrue('CONF-20 Failed', act instanceof POCDMT000040Act)
         /* CONF-21: Act / @slassCode is 'ACT' */

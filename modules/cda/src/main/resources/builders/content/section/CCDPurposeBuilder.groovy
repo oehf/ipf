@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ccdbuilders
+package builders.content.section
 
-import groovytools.builder.*
-import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationship
+import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationshipimport org.openhealthtools.ihe.common.cdar2.XDocumentActMood
 // Chapter 2.8 : Purpose
 
 // CONF-15: CCD MAY contain exactly one and SHALL NOT contain more than

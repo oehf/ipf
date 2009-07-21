@@ -13,13 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ccdbuilders
+package builders.content.section
 
-import groovytools.builder.*
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.XDocumentActMood
-import org.openhealthtools.ihe.common.cdar2.XActClassDocumentEntryAct
-import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationship
 
 //Chapter 3.1 "Payers"
 

@@ -81,18 +81,25 @@ import org.openhealthtools.ihe.common.cdar2.*
 public class CCDBuilder extends CDAR2Builder{
 	
 	public CCDBuilder(ClassLoader loader) {
-	   super(loader)
-      new CCDModelExtension(builder:this).extensions.call()
+	    super(loader)
 	}
 
 
 	protected void actBuilder() {
         super.actBuilder()
 		define(getClass().getResource('/ccdbuilders/ContinuityOfCareDocumentBuilder.groovy'))
-		define(getClass().getResource('/ccdbuilders/PurposeBuilder.groovy'))
-		define(getClass().getResource('/ccdbuilders/PayersBuilder.groovy'))
+		//define(getClass().getResource('/ccdbuilders/PurposeBuilder.groovy'))
+		//define(getClass().getResource('/ccdbuilders/PayersBuilder.groovy'))
 		define(getClass().getResource('/ccdbuilders/AdvanceDirectivesBuilder.groovy'))
 		define(getClass().getResource('/ccdbuilders/FamilyHistoryBuilder.groovy'))
 		define(getClass().getResource('/ccdbuilders/SupportBuilder.groovy'))
+		
+		/* replace with: */
+		define(getClass().getResource('/builders/content/section/CCDPurposeBuilder.groovy'))
+		define(getClass().getResource('/builders/content/section/CCDPayersBuilder.groovy'))
+		// define(getClass().getResource('/builders/content/section/CCDAdvanceDirectivesBuilder.groovy'))
+		// define(getClass().getResource('/builders/content/section/CCDFamilyHistoryBuilder.groovy'))
+		// define(getClass().getResource('/builders/content/section/CCDSupportBuilder.groovy'))
+
 	}
 }
