@@ -4,10 +4,12 @@
 <schema xmlns = "http://www.w3.org/2001/XMLSchema"
 	 targetNamespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1"
 	 xmlns:tns = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1"
+	 xmlns:xml = "http://www.w3.org/XML/1998/namespace"
 	>
 	<annotation>
 		<documentation xml:lang = "en">The schema for OASIS ebXML Registry Information Model</documentation>
-	</annotation>	
+	</annotation>
+    <import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../xml.xsd"/>
 	
 	<!--Begin information model mapping from ebRIM.-->
 	
@@ -357,7 +359,7 @@ Mapping of the same named interface in ebRIM.
 	<element name = "InternationalString" type = "tns:InternationalStringType"/>
 
 	<complexType name = "LocalizedStringType">
-		<attribute name = "lang" default = "en-us" form = "qualified" type = "language"/>
+		<attribute ref = "xml:lang" default = "en-us" />
 		<attribute name = "charset" default = "UTF-8" />
 		<attribute name = "value" use = "required" type = "tns:FreeFormText"/>
 	</complexType>
