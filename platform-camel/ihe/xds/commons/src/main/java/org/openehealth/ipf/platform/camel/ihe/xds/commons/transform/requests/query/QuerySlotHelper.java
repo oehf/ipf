@@ -94,14 +94,7 @@ public class QuerySlotHelper {
         ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
     }
 
-    /**
-     * Retrieves a list of codes from a slot.
-     * @param param
-     *          the parameter.
-     * @param codes
-     *          the codes to be filled.
-     */
-    public void toCode(QueryParameter param, List<Code> codes) {
+    private void toCode(QueryParameter param, List<Code> codes) {
         toCode(ebXML.getSlotValues(param.getSlotName()), codes);
     }
 
@@ -118,20 +111,33 @@ public class QuerySlotHelper {
         }
     }
     
-    /**
-     * Retrieves a list of codes from a slot.
-     * @param param
-     *          the parameter.
-     * @param codes
-     *          the codes to be filled.
-     */
-    public void toCode(QueryParameter param, QueryList<Code> queryList) {
+    private void toCode(QueryParameter param, QueryList<Code> queryList) {
         queryList.getOuterList().clear();
 
         List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
         for (EbXMLSlot slot : slots) {
             List<Code> innerList = new ArrayList<Code>();
             toCode(slot.getValueList(), innerList);
+            queryList.getOuterList().add(innerList);
+        }
+    }
+    
+    /**
+     * Retrieves a list of strings from a slot.
+     * @param param
+     *          the parameter.
+     * @param queryList
+     *          the string list to be filled.
+     */
+    public void toStringList(QueryParameter param, QueryList<String> queryList) {
+        queryList.getOuterList().clear();
+
+        List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
+        for (EbXMLSlot slot : slots) {
+            List<String> innerList = new ArrayList<String>();
+            for (String slotValue : slot.getValueList()) {            
+                innerList.addAll(decodeStringList(slotValue));
+            }
             queryList.getOuterList().add(innerList);
         }
     }
@@ -166,6 +172,49 @@ public class QuerySlotHelper {
         }
     }
 
+    /**
+     * Retrieves a list of codes from a slot.
+     * @param param
+     *          the parameter.
+     * @param schemeParam
+     *          the code scheme parameter.
+     * @param codes
+     *          the codes to be filled.
+     */
+    public void toCodes(QueryParameter param, QueryParameter schemeParam, List<Code> codes) {
+        toCode(param, codes);
+        List<String> schemes = new ArrayList<String>();
+        toStringList(schemeParam, schemes);
+        for (int idx = 0; idx < schemes.size() && idx < codes.size(); ++idx) {
+            codes.get(idx).setSchemeName(schemes.get(idx));
+        }
+    }
+
+    /**
+     * Retrieves a list of codes from a slot.
+     * @param param
+     *          the parameter.
+     * @param schemeParam
+     *          the code scheme parameter.
+     * @param codes
+     *          the codes to be filled.
+     */
+    public void toCodes(QueryParameter param, QueryParameter schemeParam, QueryList<Code> codes) {
+        toCode(param, codes);
+        QueryList<String> schemes = new QueryList<String>();
+        toStringList(schemeParam, schemes);
+        
+        List<List<String>> schemesOuter = schemes.getOuterList();
+        List<List<Code>> codesOuter = codes.getOuterList();
+        for (int outer = 0; outer < schemesOuter.size() && outer < codesOuter.size(); ++outer) {
+            List<String> schemesInner = schemesOuter.get(outer);
+            List<Code> codesInner = codesOuter.get(outer);
+            for (int inner = 0; inner < schemesInner.size() && inner < codesInner.size(); ++inner) {
+                codesInner.get(inner).setSchemeName(schemesInner.get(inner));
+            }
+        }
+    }
+    
     /**
      * Stores a numbered parameter into a slot.
      * @param param
@@ -311,7 +360,7 @@ public class QuerySlotHelper {
         
         List<String> values = new ArrayList<String>();
 
-        Pattern pattern = Pattern.compile("\\s*,{0,1}\\s*'((?:[^']*(?:'')*[^']*)*)'(.*)");
+        Pattern pattern = Pattern.compile("\\s*,{0,1}\\s*'((?:[^']*(?:'')*[^']*)*)'(.*)", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(list);
         while (matcher.matches() && matcher.groupCount() == 2) {
             String value = matcher.group(1);

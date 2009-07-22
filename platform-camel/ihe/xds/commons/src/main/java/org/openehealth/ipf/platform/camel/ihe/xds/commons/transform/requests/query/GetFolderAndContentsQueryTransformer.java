@@ -33,6 +33,8 @@ public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTr
         super(FOLDER_UUID, 
                 FOLDER_UNIQUE_ID, 
                 DOC_ENTRY_FORMAT_CODE, 
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
+                DOC_ENTRY_FORMAT_CODE_SCHEME, 
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME);
     }
 }

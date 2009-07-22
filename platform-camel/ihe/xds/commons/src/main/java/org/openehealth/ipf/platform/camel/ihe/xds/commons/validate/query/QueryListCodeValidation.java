@@ -37,15 +37,21 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataEx
  */
 public class QueryListCodeValidation implements QueryParameterValidation {
     private final QueryParameter param;
+    private final QueryParameter schemeParam;
 
     /**
      * Constructs a validation object.
      * @param param
-     *          parameter to validate.
+     *          parameter of the code to validate.
+     * @param schemeParam
+     *          parameter of the scheme to validate.
      */
-    public QueryListCodeValidation(QueryParameter param) {
-        notNull(param, "param cannot be null");        
+    public QueryListCodeValidation(QueryParameter param, QueryParameter schemeParam) {
+        notNull(param, "param cannot be null");
+        notNull(schemeParam, "schemeParam cannot be null");
+        
         this.param = param;
+        this.schemeParam = schemeParam;
     }
 
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
@@ -58,11 +64,21 @@ public class QueryListCodeValidation implements QueryParameterValidation {
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
         QueryList<Code> codes = new QueryList<Code>();
-        slots.toCode(param, codes);
+        slots.toCodes(param, schemeParam, codes);
         
+        QueryList<String> schemes = new QueryList<String>();
+        slots.toStringList(schemeParam, schemes);
+        if (!schemes.getOuterList().isEmpty()) {
+            metaDataAssert(codes.getOuterList().size() == schemes.getOuterList().size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
+            for (int idx = 0; idx < codes.getOuterList().size(); ++idx) {
+                metaDataAssert(codes.getOuterList().get(idx).size() == schemes.getOuterList().get(idx).size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
+            }
+        }
+
         for (List<Code> innerList : codes.getOuterList()) {
             for (Code code : innerList) {
                 metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);
+                metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
             }
         }
     }

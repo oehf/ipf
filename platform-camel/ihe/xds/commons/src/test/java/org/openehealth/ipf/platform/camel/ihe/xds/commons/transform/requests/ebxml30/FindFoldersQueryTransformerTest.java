@@ -103,7 +103,18 @@ public class FindFoldersQueryTransformerTest {
         FindFoldersQuery result = new FindFoldersQuery();
         transformer.fromEbXML(result, ebXML);
         
-        assertEquals(query, result);
+        assertEquals(query.toString(), result.toString());
+    }
+    
+    @Test
+    public void testFromEbXMLLineBreakInAValueList() {
+        transformer.toEbXML(query, ebXML);
+        ebXML.getSlots().get(5).getValueList().clear();
+        ebXML.getSlots().get(5).getValueList().add("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved',\n'urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')");
+        FindFoldersQuery result = new FindFoldersQuery();
+        transformer.fromEbXML(result, ebXML);
+        
+        assertEquals(query.toString(), result.toString());
     }
     
     @Test

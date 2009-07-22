@@ -19,6 +19,7 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.activation.DataHandler;
 
@@ -89,16 +90,15 @@ public class ProvideAndRegisterDocumentSetTransformer {
             }
         }
         
-        int classId = 0;
         for (Folder folder : request.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library, ++classId);
+            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library);
         }
         
         SubmissionSet submissionSet = request.getSubmissionSet();
         ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(submissionSet, library));
         String entryUUID = submissionSet != null ? submissionSet.getEntryUuid() : null;
-        addClassification(ebXML, entryUUID, Vocabulary.SUBMISSION_SET_CLASS_NODE, library, ++classId);
+        addClassification(ebXML, entryUUID, Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
         
         for (Association association : request.getAssociations()) {
             ebXML.addAssociation(associationTransformer.toEbXML(association, library));
@@ -150,11 +150,11 @@ public class ProvideAndRegisterDocumentSetTransformer {
         return request;
     }
 
-    private void addClassification(EbXMLProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, EbXMLObjectLibrary library, int classId) {
+    private void addClassification(EbXMLProvideAndRegisterDocumentSetRequest ebXML, String classified, String node, EbXMLObjectLibrary library) {
         EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
-        classification.setId("class_id_" + classId);
+        classification.setId("urn:uuid" + UUID.randomUUID().toString());
         ebXML.addClassification(classification);
     }    
 }

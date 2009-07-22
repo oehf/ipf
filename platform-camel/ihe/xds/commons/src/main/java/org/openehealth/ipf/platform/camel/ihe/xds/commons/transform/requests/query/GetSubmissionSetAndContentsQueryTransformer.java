@@ -32,6 +32,8 @@ public class GetSubmissionSetAndContentsQueryTransformer extends GetByIDAndCodes
         super(SUBMISSION_SET_UUID, 
                 SUBMISSION_SET_UNIQUE_ID, 
                 DOC_ENTRY_FORMAT_CODE, 
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
+                DOC_ENTRY_FORMAT_CODE_SCHEME, 
+                DOC_ENTRY_CONFIDENTIALITY_CODE,
+                DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME);
     }
 }

@@ -80,7 +80,7 @@ public class GetAllQueryTransformer {
         slots.toStatus(FOLDER_STATUS, query.getStatusFolders());
         slots.toStatus(SUBMISSION_SET_STATUS, query.getStatusSubmissionSets());
         
-        slots.toCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
-        slots.toCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
+        slots.toCodes(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME, query.getConfidentialityCodes());
+        slots.toCodes(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME, query.getFormatCodes());
     }
 }

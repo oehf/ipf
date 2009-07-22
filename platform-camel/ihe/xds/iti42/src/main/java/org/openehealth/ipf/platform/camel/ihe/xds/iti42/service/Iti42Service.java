@@ -38,7 +38,8 @@ public class Iti42Service extends DefaultItiWebService implements Iti42PortType 
         if (result.getException() != null) {
             Response errorResponse = new Response();
             configureError(errorResponse, result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
-            return EbXML30Converters.convert(errorResponse);
+            RegistryResponseType ebXML = EbXML30Converters.convert(errorResponse);
+            return ebXML;
         }
         
         return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);            

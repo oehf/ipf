@@ -29,6 +29,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.Que
 public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQuery> {
     private final QueryParameter formatCodeParam;
     private final QueryParameter confCodeParam;
+    private final QueryParameter formatCodeSchemeParam;
+    private final QueryParameter confCodeSchemeParam;
     private final QueryParameter uniqueIdParam;
     private final QueryParameter uuidParam; 
     
@@ -40,17 +42,25 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
      *          the parameter name of the unique ID parameter.
      * @param formatCodeParam
      *          the parameter name of the format code.
+     * @param formatCodeSchemeParam
+     *          the parameter name of the format code scheme.
      * @param confCodeParam
      *          the parameter name of the confidentiality code.
+     * @param confCodeSchemeParam
+     *          the parameter name of the confidentiality code scheme.
      */
-    public GetByIDAndCodesQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam, QueryParameter formatCodeParam, QueryParameter confCodeParam) {
+    public GetByIDAndCodesQueryTransformer(QueryParameter uuidParam, QueryParameter uniqueIdParam, QueryParameter formatCodeParam, QueryParameter formatCodeSchemeParam, QueryParameter confCodeParam, QueryParameter confCodeSchemeParam) {
         notNull(uniqueIdParam, "uniqueIdParam cannot be null");
         notNull(uuidParam, "uuidParam cannot be null");        
         notNull(formatCodeParam, "formatCodeParam cannot be null");
+        notNull(formatCodeSchemeParam, "formatCodeSchemeParam cannot be null");        
         notNull(confCodeParam, "confCodeParam cannot be null");
+        notNull(confCodeSchemeParam, "confCodeSchemeParam cannot be null");
         
         this.formatCodeParam = formatCodeParam;
         this.confCodeParam = confCodeParam;
+        this.formatCodeSchemeParam = formatCodeSchemeParam;
+        this.confCodeSchemeParam = confCodeSchemeParam;
         this.uniqueIdParam = uniqueIdParam;
         this.uuidParam = uuidParam;
     }
@@ -96,8 +106,8 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
-        slots.toCode(formatCodeParam, query.getFormatCodes());
-        slots.toCode(confCodeParam, query.getConfidentialityCodes());
+        slots.toCodes(formatCodeParam, formatCodeSchemeParam, query.getFormatCodes());
+        slots.toCodes(confCodeParam, confCodeSchemeParam, query.getConfidentialityCodes());
         query.setUniqueId(slots.toString(uniqueIdParam));
         query.setUuid(slots.toString(uuidParam));
         query.setHomeCommunityId(slots.toString(HOME));

@@ -37,7 +37,8 @@ public class Iti41Service extends DefaultItiWebService implements Iti41PortType 
         if (result.getException() != null) {
             Response errorResponse = new Response();
             configureError(errorResponse, result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR);
-            return EbXML30Converters.convert(errorResponse);
+            RegistryResponseType ebXML = EbXML30Converters.convert(errorResponse);
+            return ebXML;
         }
         
         return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);            

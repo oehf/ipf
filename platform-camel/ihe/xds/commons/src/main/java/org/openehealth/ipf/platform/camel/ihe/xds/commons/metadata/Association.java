@@ -31,6 +31,29 @@ public class Association {
     private AssociationLabel label;
     private String entryUuid;
     private Code docCode;
+    
+    /**
+     * Constructs an association.
+     */
+    public Association() {}
+    
+    /**
+     * Constructs an association.
+     * @param associationType
+     *          the type of the association.
+     * @param entryUuid
+     *          UUID of the association entry.
+     * @param sourceUuid
+     *          the UUID of the source object.
+     * @param targetUuid
+     *          the UUID of the target object.
+     */
+    public Association(AssociationType associationType, String entryUuid, String sourceUuid, String targetUuid) {
+        this.associationType = associationType;
+        this.entryUuid = entryUuid;
+        this.sourceUuid = sourceUuid;
+        this.targetUuid = targetUuid;
+    }
 
     /**
      * @return the UUID of the target object.

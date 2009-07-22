@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.util.UUID;
+
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
@@ -84,15 +86,14 @@ public class QueryResponseTransformer {
             ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
         }
         
-        int classId = 0;
         for (Folder folder : response.getFolders()) {
             ebXML.addRegistryPackage(folderTransformer.toEbXML(folder, library));
-            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library, ++classId);
+            addClassification(ebXML, folder.getEntryUuid(), Vocabulary.FOLDER_CLASS_NODE, library);
         }
         
         for (SubmissionSet set : response.getSubmissionSets()) {
             ebXML.addRegistryPackage(submissionSetTransformer.toEbXML(set, library));
-            addClassification(ebXML, set.getEntryUuid(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library, ++classId);
+            addClassification(ebXML, set.getEntryUuid(), Vocabulary.SUBMISSION_SET_CLASS_NODE, library);
         }
         
         for (Association association : response.getAssociations()) {
@@ -155,11 +156,11 @@ public class QueryResponseTransformer {
         return response;
     }
 
-    private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, EbXMLObjectLibrary library, int classId) {
+    private void addClassification(EbXMLQueryResponse ebXML, String classified, String node, EbXMLObjectLibrary library) {
         EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
-        classification.setId("class_id_" + classId);
+        classification.setId("urn:uuid" + UUID.randomUUID().toString());
         ebXML.addClassification(classification);
     }    
 }

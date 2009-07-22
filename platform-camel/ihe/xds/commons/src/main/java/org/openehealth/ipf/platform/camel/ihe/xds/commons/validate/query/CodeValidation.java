@@ -37,15 +37,19 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataEx
  */
 public class CodeValidation implements QueryParameterValidation {
     private final QueryParameter param;
+    private final QueryParameter schemeParam;
 
     /**
      * Constructs a validation object.
      * @param param
      *          parameter to validate.
      */
-    public CodeValidation(QueryParameter param) {
-        notNull(param, "param cannot be null");        
+    public CodeValidation(QueryParameter param, QueryParameter schemeParam) {
+        notNull(param, "param cannot be null");
+        notNull(schemeParam, "schemeParam cannot be null");
+        
         this.param = param;
+        this.schemeParam = schemeParam;
     }
 
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
@@ -58,12 +62,15 @@ public class CodeValidation implements QueryParameterValidation {
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
         List<Code> codes = new ArrayList<Code>();
-        slots.toCode(param, codes);
+        slots.toCodes(param, schemeParam, codes);
+        
+        List<String> schemes = new ArrayList<String>();
+        slots.toStringList(schemeParam, schemes);
+        metaDataAssert(schemes.size() == 0 || codes.size() == schemes.size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
         
         for (Code code : codes) {
             metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);                
-            metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);                
-            metaDataAssert(code.getSchemeName() != null, INVALID_QUERY_PARAMETER_VALUE, param);                
+            metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
         }
     }
 }

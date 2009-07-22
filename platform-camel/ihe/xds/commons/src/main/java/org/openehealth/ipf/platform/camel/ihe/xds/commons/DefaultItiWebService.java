@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Severity;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException;
 
@@ -79,6 +80,7 @@ public class DefaultItiWebService {
         errorResponse.setStatus(Status.FAILURE);
         ErrorInfo errorInfo = new ErrorInfo();
         errorInfo.setCodeContext(throwable.getMessage());
+        errorInfo.setSeverity(Severity.ERROR);
         errorResponse.getErrors().add(errorInfo);
 
         if (throwable instanceof XDSMetaDataException)  {
@@ -94,6 +96,6 @@ public class DefaultItiWebService {
             errorInfo.setErrorCode(defaultError);
         }
         
-        log.info("Configured error: " + throwable.getMessage());
+        log.info("Configured error: " + errorResponse);
     }
 }

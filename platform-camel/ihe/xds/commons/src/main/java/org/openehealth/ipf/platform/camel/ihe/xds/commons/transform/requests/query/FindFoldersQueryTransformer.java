@@ -76,7 +76,7 @@ public class FindFoldersQueryTransformer {
         String patientId = slots.toString(FOLDER_PATIENT_ID);
         query.setPatientId(identifiableTransformer.fromEbXML(patientId));
         
-        slots.toCode(FOLDER_CODES, query.getCodes());
+        slots.toCodes(FOLDER_CODES, FOLDER_CODES_SCHEME, query.getCodes());
         
         query.getLastUpdateTime().setFrom(slots.toNumber(FOLDER_LAST_UPDATE_TIME_FROM));
         query.getLastUpdateTime().setTo(slots.toNumber(FOLDER_LAST_UPDATE_TIME_TO));

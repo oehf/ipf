@@ -30,6 +30,8 @@ public enum QueryParameter {
     DOC_ENTRY_PATIENT_ID("$XDSDocumentEntryPatientId"),
     /** Used to filter {@link DocumentEntry#getClassCode()}. */
     DOC_ENTRY_CLASS_CODE("$XDSDocumentEntryClassCode"),
+    /** Used to filter {@link DocumentEntry#getClassCode()}. */
+    DOC_ENTRY_CLASS_CODE_SCHEME("$XDSDocumentEntryClassCodeScheme"),
     /** Used to filter {@link DocumentEntry#getAuthors()}. */
     DOC_ENTRY_AUTHOR_PERSON("$XDSDocumentEntryAuthorPerson"),
     /** Used to filter {@link DocumentEntry#getCreationTime()}. */
@@ -38,10 +40,16 @@ public enum QueryParameter {
     DOC_ENTRY_CREATION_TIME_TO("$XDSDocumentEntryCreationTimeTo"),
     /** Used to filter {@link DocumentEntry#getFormatCode()}. */
     DOC_ENTRY_FORMAT_CODE("$XDSDocumentEntryFormatCode"),
+    /** Used to filter {@link DocumentEntry#getFormatCode()}. */
+    DOC_ENTRY_FORMAT_CODE_SCHEME("$XDSDocumentEntryFormatCodeScheme"),
     /** Used to filter {@link DocumentEntry#getHealthcareFacilityTypeCode()}. */
     DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE("$XDSDocumentEntryHealthcareFacilityTypeCode"),
+    /** Used to filter {@link DocumentEntry#getHealthcareFacilityTypeCode()}. */
+    DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_SCHEME("$XDSDocumentEntryHealthcareFacilityTypeCodeScheme"),
     /** Used to filter {@link DocumentEntry#getPracticeSettingCode()}. */
     DOC_ENTRY_PRACTICE_SETTING_CODE("$XDSDocumentEntryPracticeSettingCode"),
+    /** Used to filter {@link DocumentEntry#getPracticeSettingCode()}. */
+    DOC_ENTRY_PRACTICE_SETTING_CODE_SCHEME("$XDSDocumentEntryPracticeSettingCodeScheme"),
     /** Used to filter {@link DocumentEntry#getServiceStartTime()}. */
     DOC_ENTRY_SERVICE_START_TIME_FROM("$XDSDocumentEntryServiceStartTimeFrom"),
     /** Used to filter {@link DocumentEntry#getServiceStartTime()}. */
@@ -54,8 +62,12 @@ public enum QueryParameter {
     DOC_ENTRY_STATUS("$XDSDocumentEntryStatus"),
     /** Used to filter {@link DocumentEntry#getEventCodeList()}. */
     DOC_ENTRY_EVENT_CODE("$XDSDocumentEntryEventCodeList"),
+    /** Used to filter {@link DocumentEntry#getEventCodeList()}. */
+    DOC_ENTRY_EVENT_CODE_SCHEME("$XDSDocumentEntryEventCodeListScheme"),
     /** Used to filter {@link DocumentEntry#getConfidentialityCodes()}. */
     DOC_ENTRY_CONFIDENTIALITY_CODE("$XDSDocumentEntryConfidentialityCode"),
+    /** Used to filter {@link DocumentEntry#getConfidentialityCodes()}. */
+    DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME("$XDSDocumentEntryConfidentialityCodeScheme"),
     /** Used to filter {@link DocumentEntry#getEntryUUID()}. */
     DOC_ENTRY_UUID("$XDSDocumentEntryEntryUUID"),
     /** Used to filter {@link DocumentEntry#getUniqueID()}. */
@@ -63,6 +75,8 @@ public enum QueryParameter {
      
     /** Used to filter {@link Folder#getCodeList()}. */
     FOLDER_CODES("$XDSFolderCodeList"),
+    /** Used to filter {@link Folder#getCodeList()}. */
+    FOLDER_CODES_SCHEME("$XDSFolderCodeListScheme"),
     /** Used to filter {@link Folder#getLastUpdateTime()}. */
     FOLDER_LAST_UPDATE_TIME_FROM("$XDSFolderLastUpdateTimeFrom"),
     /** Used to filter {@link Folder#getLastUpdateTime()}. */
@@ -88,6 +102,8 @@ public enum QueryParameter {
     SUBMISSION_SET_AUTHOR_PERSON("$XDSSubmissionSetAuthorPerson"),
     /** Used to filter {@link SubmissionSet#getContentTypeCode()}. */
     SUBMISSION_SET_CONTENT_TYPE_CODE("$XDSSubmissionSetContentType"),
+    /** Used to filter {@link SubmissionSet#getContentTypeCode()}. */
+    SUBMISSION_SET_CONTENT_TYPE_CODE_SCHEME("$XDSSubmissionSetContentTypeScheme"),
     /** Used to filter {@link SubmissionSet#getAvailabilityStatus()}. */
     SUBMISSION_SET_STATUS("$XDSSubmissionSetStatus"),
     /** Used to filter {@link SubmissionSet#getEntryUUID()}. */

@@ -28,7 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryR
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.CXValidator;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.NopValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.OIDValidator;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.TimeValidator;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException;
@@ -55,35 +54,36 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     static {
         CXValidator cxValidator = new CXValidator();
         TimeValidator timeValidator = new TimeValidator();
-        OIDValidator oidValidator = new OIDValidator();
+        // OIDValidator oidValidator = new OIDValidator();
         NopValidator nopValidator = new NopValidator();  
 
         validations = new EnumMap<QueryType, QueryParameterValidation[]>(QueryType.class);
         validations.put(QueryType.FIND_DOCUMENTS, new QueryParameterValidation[] {
                 new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new CodeValidation(DOC_ENTRY_CLASS_CODE, DOC_ENTRY_CLASS_CODE_SCHEME),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE, DOC_ENTRY_PRACTICE_SETTING_CODE_SCHEME),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_SCHEME),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
                 new NumberValidation(DOC_ENTRY_CREATION_TIME_FROM, timeValidator),
                 new NumberValidation(DOC_ENTRY_CREATION_TIME_TO, timeValidator),
                 new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_FROM, timeValidator),
                 new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_TO, timeValidator),
                 new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM, timeValidator),
                 new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO, timeValidator),
-                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
+                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                 new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                 new StatusValidation(DOC_ENTRY_STATUS),
         });
         
         validations.put(QueryType.FIND_SUBMISSION_SETS, new QueryParameterValidation[] {
                 new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
-                new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
+                // Excluded to avoid validation errors for xdstest requests
+                // new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
                 new NumberValidation(SUBMISSION_SET_SUBMISSION_TIME_FROM, timeValidator),
                 new NumberValidation(SUBMISSION_SET_SUBMISSION_TIME_TO, timeValidator),
-                new StringListValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator),
-                new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
+                new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
+                new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE, SUBMISSION_SET_CONTENT_TYPE_CODE_SCHEME),
                 new StatusValidation(SUBMISSION_SET_STATUS)
         });
         
@@ -91,7 +91,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringValidation(FOLDER_PATIENT_ID, cxValidator, false),
                 new NumberValidation(FOLDER_LAST_UPDATE_TIME_FROM, timeValidator),
                 new NumberValidation(FOLDER_LAST_UPDATE_TIME_TO, timeValidator),
-                new QueryListCodeValidation(FOLDER_CODES),
+                new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
                 new StatusValidation(FOLDER_STATUS)
         });
         
@@ -100,7 +100,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StatusValidation(DOC_ENTRY_STATUS),
                 new StatusValidation(SUBMISSION_SET_STATUS),
                 new StatusValidation(FOLDER_STATUS),
-                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE)                
+                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME)                
         });
 
         QueryParameterValidation[] getDocumentsValidations = new QueryParameterValidation[] {
@@ -133,8 +133,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new ChoiceValidation(SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
                 new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
                 new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
-                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE),                
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),                
                 new StringValidation(HOME, nopValidator, true)                
         });
 
@@ -142,8 +142,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),
                 new StringValidation(FOLDER_UUID, nopValidator, true),
                 new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
-                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE),                
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),                
                 new StringValidation(HOME, nopValidator, true)                
         });
         

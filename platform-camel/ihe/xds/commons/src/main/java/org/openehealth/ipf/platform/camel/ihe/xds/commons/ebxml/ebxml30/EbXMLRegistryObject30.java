@@ -69,7 +69,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
         if (classification != null) {
             classification.setClassificationScheme(scheme);
             classification.setClassifiedObject(registryEntry.getId());
-            classification.setId(UUID.randomUUID().toString());
+            classification.setId("urn:uuid" + UUID.randomUUID().toString());
             List<ClassificationType> classifications = registryEntry.getClassification();
             classifications.add(((EbXMLClassification30)classification).getInternal());
         }
