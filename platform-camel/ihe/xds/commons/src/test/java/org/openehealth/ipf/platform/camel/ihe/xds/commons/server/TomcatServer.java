@@ -44,12 +44,10 @@ public class TomcatServer extends ServletServer {
     public void start() {
         embedded = new Embedded();
 
-        String base = getContextFile().getParentFile().getAbsolutePath();
-        
-        Context context = embedded.createContext(getContextPath(), base);
+        Context context = embedded.createContext(getContextPath(), "/");
         TomcatServletWrapper.setServlet(getServlet());
         context.setWrapperClass(TomcatServletWrapper.class.getName());
-        context.addParameter("contextConfigLocation", "/" + getContextFile().getName());
+        context.addParameter("contextConfigLocation", getContextResource());
         context.addApplicationListener(ContextLoaderListener.class.getName());
 
         wrapper = context.createWrapper();
@@ -63,7 +61,7 @@ public class TomcatServer extends ServletServer {
         loader.setVirtualClasspath(System.getProperty("java.class.path"));
         context.setLoader(loader);
         
-        Host host = embedded.createHost("localhost", base);
+        Host host = embedded.createHost("localhost", "/");
         host.addChild(context);
         
         Engine engine = embedded.createEngine();
@@ -71,7 +69,15 @@ public class TomcatServer extends ServletServer {
         engine.setDefaultHost(host.getName());
         embedded.addEngine(engine);
         
-        Connector connector = embedded.createConnector((InetAddress)null, getPort(), false);
+        Connector connector = embedded.createConnector((InetAddress)null, getPort(), isSecure());
+        if (isSecure()) {
+            connector.setScheme("https");
+            connector.setProperty("sslProtocol", "TLS");
+            connector.setProperty("keystoreFile", getKeystoreFile());
+            connector.setProperty("keystorePass", getKeystorePass());
+            connector.setProperty("truststoreFile", getTruststoreFile());
+            connector.setProperty("truststorePass", getTruststorePass());
+        }
         embedded.addConnector(connector);
 
         embedded.setAwait(true);

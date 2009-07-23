@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.server;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
+import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.springframework.web.context.ContextLoaderListener;
@@ -34,17 +35,16 @@ public class JettyServer extends ServletServer {
     @Override
     @SuppressWarnings("unchecked")  // Required by getInitParams implementation
     public void start() {
-        String base = getContextFile().getParentFile().getAbsolutePath();
-
-        Connector connector = new SelectChannelConnector();
+        Connector connector = isSecure() ? createSecureConnector() : new SelectChannelConnector(); 
+        
         server = new Server();
         server.addConnector(connector);
         connector.setPort(getPort());
         Context context = new Context(Context.NO_SESSIONS);
-        context.setResourceBase(base);
+        context.setResourceBase("/");
         ContextLoaderListener listener = new ContextLoaderListener();
 
-        context.getInitParams().put("contextConfigLocation", "/" + getContextFile().getName());
+        context.getInitParams().put("contextConfigLocation", getContextResource());
         context.addEventListener(listener);
 
         context.setContextPath(getContextPath());
@@ -58,6 +58,15 @@ public class JettyServer extends ServletServer {
         } catch (Exception e) {
             throw new AssertionError(e);
         }
+    }
+
+    private SslSocketConnector createSecureConnector() {
+        SslSocketConnector sslConnector = new SslSocketConnector();
+        sslConnector.setKeystore(getKeystoreFile());
+        sslConnector.setKeyPassword(getKeystorePass());
+        sslConnector.setTruststore(getTruststoreFile());
+        sslConnector.setTrustPassword(getTruststorePass());
+        return sslConnector;
     }
 
     @Override

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
 
 import javax.servlet.Servlet;
@@ -54,15 +53,20 @@ public class StandardTestContainer {
     private static CamelContext camelContext;
     
     @SuppressWarnings("unchecked")  // Because of getting beans of generified classes.
-    public static void startServer(Servlet servlet, String appContextName) throws Exception {
-        File contextFile = new ClassPathResource(appContextName).getFile();
+    public static void startServer(Servlet servlet, String appContextName, boolean secure) throws Exception {
+        ClassPathResource contextResource = new ClassPathResource(appContextName);
         
         servletServer = new TomcatServer();
-        servletServer.setContextFile(contextFile);
+        servletServer.setContextResource(contextResource.getURI().toString());
         servletServer.setPort(9091);
         servletServer.setContextPath("");
         servletServer.setServletPath("/*");
         servletServer.setServlet(servlet);
+        servletServer.setSecure(secure);
+        servletServer.setKeystoreFile("keystore");
+        servletServer.setKeystorePass("changeit");
+        servletServer.setTruststoreFile("keystore");
+        servletServer.setTruststorePass("changeit");
         servletServer.start();
         
         ServletContext servletContext = servlet.getServletConfig().getServletContext();
@@ -77,22 +81,27 @@ public class StandardTestContainer {
         syslog.start();
     }
 
+    public static void startServer(Servlet servlet, String appContextName) throws Exception {
+        startServer(servlet, appContextName, false);
+    }
+    
     @AfterClass
     public static void stopServer() throws Exception {
-        syslog.cancel();
-        syslog.join();
+        if (syslog != null) {
+            syslog.cancel();
+            syslog.join();
+        }
 
         if (servletServer != null) {
             servletServer.stop();
         }
     }
 
+    /**
+     * @return the sys-log server being used in this test.
+     */
     public static UdpServer getSyslog() {
         return syslog;
-    }
-
-    public static void setSyslog(UdpServer syslog) {
-        StandardTestContainer.syslog = syslog;
     }
 
     /**

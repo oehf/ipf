@@ -29,9 +29,13 @@ import java.net.URISyntaxException;
  */
 public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
     private static final String ENDPOINT_PROTOCOL = "http://";
+    private static final String ENDPOINT_PROTOCOL_SECURE = "https://";
 
-    private final String serviceAddress;
-    private final String serviceUrl;
+    private final String address;
+    
+    private String serviceAddress;
+    private String serviceUrl;    
+    private boolean secure;
     
     /**
      * Whether we should audit or not -- an URL parameter.  
@@ -47,7 +51,6 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      */
     private boolean allowIncompleteAudit = false;
 
-
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -61,9 +64,13 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      */
     protected DefaultItiEndpoint(String endpointUri, String address, Component<Exchange> component) throws URISyntaxException {
         super(endpointUri, component);
+        this.address = address;
+        configure();
+    }
 
-        if (isProducer(endpointUri)) {
-            this.serviceUrl = ENDPOINT_PROTOCOL + address;
+    private void configure() throws URISyntaxException {
+        if (isProducer(getEndpointUri())) {
+            this.serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
             this.serviceAddress = null;
         }
         else {
@@ -132,5 +139,21 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
 
     public boolean isAllowIncompleteAudit() {
         return allowIncompleteAudit;
+    }
+
+    /**
+     * @return <code>true</code> if https should be used instead of http.
+     */
+    public boolean isSecure() {
+        return secure;
+    }
+
+    /**
+     * @param secure
+     *          <code>true</code> if https should be used instead of http.
+     */
+    public void setSecure(boolean secure) throws URISyntaxException {
+        this.secure = secure;
+        configure();
     }
 }

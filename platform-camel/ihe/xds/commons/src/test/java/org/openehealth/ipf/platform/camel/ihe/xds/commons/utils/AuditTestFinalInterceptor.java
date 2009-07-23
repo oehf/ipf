@@ -102,7 +102,8 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
             assertEquals(isAddressing(), (auditDataset.getUserId() != null));
 
             assertTrue(IP_PATTERN.matcher(auditDataset.getClientIpAddress()).matches());
-            assertTrue(auditDataset.getServiceEndpointUrl().startsWith("http://"));
+            assertTrue(auditDataset.getServiceEndpointUrl().startsWith("http://") 
+                    || auditDataset.getServiceEndpointUrl().startsWith("https://"));
             
             checkTransactionSpecificFields(auditDataset, true);
         }

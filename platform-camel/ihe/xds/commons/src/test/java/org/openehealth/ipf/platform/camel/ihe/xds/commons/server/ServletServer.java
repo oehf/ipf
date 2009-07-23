@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.server;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import java.io.File;
-
 import javax.servlet.Servlet;
 
 /**
@@ -32,7 +30,12 @@ public abstract class ServletServer {
     private int port;
     private String contextPath;
     private String servletPath;
-    private File contextFile;
+    private String contextResource;
+    private boolean secure;
+    private String keystoreFile;
+    private String keystorePass;
+    private String truststoreFile;
+    private String truststorePass;
 
     /**
      * Starts the server.
@@ -113,18 +116,92 @@ public abstract class ServletServer {
     }
 
     /**
-     * @return the location of the context file.
+     * @return <code>true</code> to enable SSL.
      */
-    public File getContextFile() {
-        return contextFile;
+    public boolean isSecure() {
+        return secure;
     }
 
     /**
-     * @param contextFile
-     *          the location of the context file.
+     * @param secure
+     *          <code>true</code> to enable SSL.
      */
-    public void setContextFile(File contextFile) {
-        notNull(contextFile, "contextFile cannot be null");
-        this.contextFile = contextFile;
+    public void setSecure(boolean secure) {
+        this.secure = secure;
+    }
+
+    /**
+     * @return key store location.
+     */
+    public String getKeystoreFile() {
+        return keystoreFile;
+    }
+
+    /**
+     * @param keystoreFile
+     *          key store location.
+     */
+    public void setKeystoreFile(String keystoreFile) {
+        this.keystoreFile = keystoreFile;
+    }
+
+    /**
+     * @return key store password.
+     */
+    public String getKeystorePass() {
+        return keystorePass;
+    }
+
+    /**
+     * @param keystorePass
+     *          key store password.
+     */
+    public void setKeystorePass(String keystorePass) {
+        this.keystorePass = keystorePass;
+    }
+
+    /**
+     * @return trust store location.
+     */
+    public String getTruststoreFile() {
+        return truststoreFile;
+    }
+
+    /**
+     * @param truststoreFile
+     *          trust store location.
+     */
+    public void setTruststoreFile(String truststoreFile) {
+        this.truststoreFile = truststoreFile;
+    }
+
+    /**
+     * @return trust store password.
+     */
+    public String getTruststorePass() {
+        return truststorePass;
+    }
+
+    /**
+     * @param truststorePass
+     *          trust store password.
+     */
+    public void setTruststorePass(String truststorePass) {
+        this.truststorePass = truststorePass;
+    }
+
+    /**
+     * @return location of a spring application context to be started with the web-app.
+     */
+    public String getContextResource() {
+        return contextResource;
+    }
+
+    /**
+     * @param contextResource
+     *          location of a spring application context to be started with the web-app.
+     */
+    public void setContextResource(String contextResource) {
+        this.contextResource = contextResource;
     }
 }

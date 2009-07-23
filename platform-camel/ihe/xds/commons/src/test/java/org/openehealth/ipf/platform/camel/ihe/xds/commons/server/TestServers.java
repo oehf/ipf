@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -55,13 +54,13 @@ public class TestServers {
     }
 
     private void checkServer(ServletServer server) throws Exception {
-        File contextFile = new ClassPathResource("test.xml").getFile();
+        ClassPathResource contextResource = new ClassPathResource("test.xml");
 
         server.setServlet(new Servlet());
         server.setPort(9090);
         server.setContextPath("/testContext");
         server.setServletPath("/testServlet/*");
-        server.setContextFile(contextFile);
+        server.setContextResource(contextResource.getURI().toString());
         server.start();
         checkPostRequest();
         server.stop();
