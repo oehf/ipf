@@ -25,25 +25,28 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetRela
  * Transforms between a {@link GetDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class GetRelatedDocumentsQueryTransformer extends GetByIDQueryTransformer<GetRelatedDocumentsQuery> {
-    /**
-     * Constructs the transformer.
-     */
-    public GetRelatedDocumentsQueryTransformer() {
-        super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
-    }
-    
+public class GetRelatedDocumentsQueryTransformer extends GetFromDocumentQueryTransformer<GetRelatedDocumentsQuery> {
     @Override
-    protected void toEbXML(GetRelatedDocumentsQuery query, QuerySlotHelper slots) {
-        super.toEbXML(query, slots);
+    public void toEbXML(GetRelatedDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
         
+        super.toEbXML(query, ebXML);
+        
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         slots.fromAssociationType(ASSOCIATION_TYPE, query.getAssociationTypes());
     }
     
     @Override
-    protected void fromEbXML(GetRelatedDocumentsQuery query, QuerySlotHelper slots) {
-        super.fromEbXML(query, slots);
+    public void fromEbXML(GetRelatedDocumentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
         
-        slots.toAssociationType(ASSOCIATION_TYPE, query.getAssociationTypes());
+        super.fromEbXML(query, ebXML);
+        
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);        
+        query.setAssociationTypes(slots.toAssociationType(ASSOCIATION_TYPE));
     }
 }

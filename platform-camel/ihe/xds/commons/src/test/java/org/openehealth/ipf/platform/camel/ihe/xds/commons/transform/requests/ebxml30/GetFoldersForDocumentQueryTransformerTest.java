@@ -41,10 +41,8 @@ public class GetFoldersForDocumentQueryTransformerTest {
         transformer = new GetFoldersForDocumentQueryTransformer();
         query = new GetFoldersForDocumentQuery();
 
-        query.getUuids().add("uuid1");
-        query.getUuids().add("uuid2");
-        query.getUniqueIds().add("uniqueId1");
-        query.getUniqueIds().add("uniqueId2");
+        query.setUuid("uuid1");
+        query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
@@ -55,10 +53,10 @@ public class GetFoldersForDocumentQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.GET_FOLDERS_FOR_DOCUMENT.getId(), ebXML.getId());
         
-        assertEquals(Arrays.asList("('uuid1')", "('uuid2')"),
+        assertEquals(Arrays.asList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UUID.getSlotName()));
         
-        assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
+        assertEquals(Arrays.asList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
 
         assertEquals(Arrays.asList("'home'"),

@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18;
 
 import static junit.framework.Assert.assertEquals;
 
+import java.util.Arrays;
+
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -73,8 +75,7 @@ public class TestIti18 extends StandardTestContainer {
     }
 
     private QueryResponse send(String endpoint, String value) {
-        query.getAuthorPersons().clear();
-        query.getAuthorPersons().add(value);
+        query.setAuthorPersons(Arrays.asList(value));
         return send(endpoint, request, QueryResponse.class);
     }
 }

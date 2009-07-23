@@ -106,8 +106,8 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
-        slots.toCodes(formatCodeParam, formatCodeSchemeParam, query.getFormatCodes());
-        slots.toCodes(confCodeParam, confCodeSchemeParam, query.getConfidentialityCodes());
+        query.setFormatCodes(slots.toCodeList(formatCodeParam, formatCodeSchemeParam));
+        query.setConfidentialityCodes(slots.toCodeQueryList(confCodeParam, confCodeSchemeParam));
         query.setUniqueId(slots.toString(uniqueIdParam));
         query.setUuid(slots.toString(uuidParam));
         query.setHomeCommunityId(slots.toString(HOME));

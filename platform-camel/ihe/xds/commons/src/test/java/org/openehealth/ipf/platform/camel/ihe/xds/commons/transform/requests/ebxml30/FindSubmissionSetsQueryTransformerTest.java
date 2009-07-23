@@ -46,13 +46,11 @@ public class FindSubmissionSetsQueryTransformerTest {
         query = new FindSubmissionSetsQuery();
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("name1", "uni1", "uniType1")));
-        query.getContentTypeCodes().add(new Code("code1", null, null));
-        query.getContentTypeCodes().add(new Code("code2", null, null));
+        query.setContentTypeCodes(Arrays.asList(new Code("code1", null, null), new Code("code2", null, null)));
         query.getSubmissionTime().setFrom("1");
         query.getSubmissionTime().setTo("2");
         query.setAuthorPerson("per'son1");
-        query.getStatus().add(AvailabilityStatus.APPROVED);
-        query.getStatus().add(AvailabilityStatus.SUBMITTED);
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }

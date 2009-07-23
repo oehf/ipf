@@ -43,13 +43,10 @@ public class GetRelatedDocumentsQueryTransformerTest {
         transformer = new GetRelatedDocumentsQueryTransformer();
         query = new GetRelatedDocumentsQuery();
 
-        query.getUuids().add("uuid1");
-        query.getUuids().add("uuid2");
-        query.getUniqueIds().add("uniqueId1");
-        query.getUniqueIds().add("uniqueId2");
+        query.setUuid("uuid1");
+        query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
-        query.getAssociationTypes().add(AssociationType.HAS_MEMBER);
-        query.getAssociationTypes().add(AssociationType.TRANSFORM_AND_REPLACE);
+        query.setAssociationTypes(Arrays.asList(AssociationType.HAS_MEMBER, AssociationType.TRANSFORM_AND_REPLACE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -59,10 +56,10 @@ public class GetRelatedDocumentsQueryTransformerTest {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.GET_RELATED_DOCUMENTS.getId(), ebXML.getId());
         
-        assertEquals(Arrays.asList("('uuid1')", "('uuid2')"),
+        assertEquals(Arrays.asList("'uuid1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UUID.getSlotName()));
         
-        assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
+        assertEquals(Arrays.asList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
 
         assertEquals(Arrays.asList("'home'"),

@@ -27,6 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubmissionSetAndContentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryList;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.query.GetDocumentsQueryTransformer;
@@ -49,12 +50,13 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
         query.setUuid("uuid1");
         query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
-        query.getConfidentialityCodes().getOuterList().add(
+        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
-        query.getConfidentialityCodes().getOuterList().add(
+        confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
-        query.getFormatCodes().add(new Code("code13", null, null));
-        query.getFormatCodes().add(new Code("code14", null, null));
+        query.setConfidentialityCodes(confidentialityCodes);
+        query.setFormatCodes(Arrays.asList(new Code("code13", null, null), new Code("code14", null, null)));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }

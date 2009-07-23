@@ -18,8 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests;
 import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLFactory;
@@ -132,7 +130,7 @@ public class RegisterDocumentSetTransformer {
         EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
-        classification.setId("urn:uuid" + UUID.randomUUID().toString());
+        classification.assignUniqueId();
         ebXML.addClassification(classification);
     }    
 }

@@ -72,15 +72,15 @@ public class FindSubmissionSetsQueryTransformer {
         String patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
         query.setPatientId(identifiableTransformer.fromEbXML(patientId));
         
-        slots.toStringList(SUBMISSION_SET_SOURCE_ID, query.getSourceIds());
+        query.setSourceIds(slots.toStringList(SUBMISSION_SET_SOURCE_ID));
         
         query.getSubmissionTime().setFrom(slots.toNumber(SUBMISSION_SET_SUBMISSION_TIME_FROM));
         query.getSubmissionTime().setTo(slots.toNumber(SUBMISSION_SET_SUBMISSION_TIME_TO));
         
         query.setAuthorPerson(slots.toString(SUBMISSION_SET_AUTHOR_PERSON));
         
-        slots.toCodes(SUBMISSION_SET_CONTENT_TYPE_CODE, SUBMISSION_SET_CONTENT_TYPE_CODE_SCHEME, query.getContentTypeCodes());
+        query.setContentTypeCodes(slots.toCodeList(SUBMISSION_SET_CONTENT_TYPE_CODE, SUBMISSION_SET_CONTENT_TYPE_CODE_SCHEME));
         
-        slots.toStatus(SUBMISSION_SET_STATUS, query.getStatus());
+        query.setStatus(slots.toStatus(SUBMISSION_SET_STATUS));
     }
 }

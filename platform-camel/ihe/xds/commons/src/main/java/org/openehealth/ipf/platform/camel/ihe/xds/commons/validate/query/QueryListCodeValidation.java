@@ -63,23 +63,27 @@ public class QueryListCodeValidation implements QueryParameterValidation {
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
-        QueryList<Code> codes = new QueryList<Code>();
-        slots.toCodes(param, schemeParam, codes);
+        QueryList<Code> codes = slots.toCodeQueryList(param, schemeParam);
         
-        QueryList<String> schemes = new QueryList<String>();
-        slots.toStringList(schemeParam, schemes);
-        if (!schemes.getOuterList().isEmpty()) {
-            metaDataAssert(codes.getOuterList().size() == schemes.getOuterList().size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
-            for (int idx = 0; idx < codes.getOuterList().size(); ++idx) {
-                metaDataAssert(codes.getOuterList().get(idx).size() == schemes.getOuterList().get(idx).size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
+        if (codes != null) {
+            QueryList<String> schemes = slots.toStringQueryList(schemeParam);
+            if (schemes != null) {
+                metaDataAssert(codes.getOuterList().size() == schemes.getOuterList().size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
+                for (int idx = 0; idx < codes.getOuterList().size(); ++idx) {
+                    metaDataAssert(codes.getOuterList().get(idx).size() == schemes.getOuterList().get(idx).size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
+                }
+            }
+
+            for (List<Code> innerList : codes.getOuterList()) {
+                for (Code code : innerList) {
+                    metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);
+                    metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
+                }
             }
         }
-
-        for (List<Code> innerList : codes.getOuterList()) {
-            for (Code code : innerList) {
-                metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);
-                metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
-            }
+        else {
+            QueryList<String> schemes = slots.toStringQueryList(schemeParam);
+            metaDataAssert(schemes == null, INVALID_QUERY_PARAMETER_VALUE, schemeParam);
         }
     }
 }

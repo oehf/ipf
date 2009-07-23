@@ -41,8 +41,7 @@ public class GetSubmissionSetsQueryTransformerTest {
         transformer = new GetSubmissionSetsQueryTransformer();
         query = new GetSubmissionSetsQuery();
 
-        query.getUuids().add("uuid1");
-        query.getUuids().add("uuid2");
+        query.setUuids(Arrays.asList("uuid1", "uuid2"));
         query.setHomeCommunityId("home");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();

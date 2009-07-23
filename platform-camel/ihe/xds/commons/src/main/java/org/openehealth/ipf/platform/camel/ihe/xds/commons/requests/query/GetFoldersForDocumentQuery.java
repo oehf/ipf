@@ -15,20 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+
 /**
  * Represents a stored query for GetFoldersForDocument.
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>.
- * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class GetFoldersForDocumentQuery extends GetByIdQuery {
+public class GetFoldersForDocumentQuery extends GetFromDocumentQuery {
     /**
      * Constructs the query.
      */
     public GetFoldersForDocumentQuery() {
         super(QueryType.GET_FOLDERS_FOR_DOCUMENT);
-    }
+    }    
 
     @Override
     public void accept(Visitor visitor) {

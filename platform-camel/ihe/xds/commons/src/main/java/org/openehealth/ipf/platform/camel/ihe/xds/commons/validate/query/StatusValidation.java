@@ -21,7 +21,6 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Valida
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidatorAssertions.metaDataAssert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -57,8 +56,7 @@ public class StatusValidation implements QueryParameterValidation {
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
-        List<AvailabilityStatus> list = new ArrayList<AvailabilityStatus>();
-        slots.toStatus(param, list);
+        List<AvailabilityStatus> list = slots.toStatus(param);
         
         metaDataAssert(!list.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, param);
         

@@ -112,7 +112,12 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         
         validations.put(QueryType.GET_DOCUMENTS, getDocumentsValidations);
         validations.put(QueryType.GET_DOCUMENTS_AND_ASSOCIATIONS, getDocumentsValidations);
-        validations.put(QueryType.GET_FOLDERS_FOR_DOCUMENT, getDocumentsValidations);
+        validations.put(QueryType.GET_FOLDERS_FOR_DOCUMENT, new QueryParameterValidation[] {
+                new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
+                new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
+                new StringValidation(HOME, nopValidator, true)                
+        });
         
         validations.put(QueryType.GET_FOLDERS, new QueryParameterValidation[] {
                 new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),

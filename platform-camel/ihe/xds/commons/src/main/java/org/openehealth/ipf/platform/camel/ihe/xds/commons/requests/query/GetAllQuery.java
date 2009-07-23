@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -29,20 +28,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet
 
 /**
  * Represents a stored query for GetAll.
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>.
- * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class GetAllQuery extends StoredQuery {
     private Identifiable patientId;
     
-    private final List<AvailabilityStatus> statusDocuments = new ArrayList<AvailabilityStatus>();
-    private final List<AvailabilityStatus> statusSubmissionSets = new ArrayList<AvailabilityStatus>();
-    private final List<AvailabilityStatus> statusFolders = new ArrayList<AvailabilityStatus>();
+    private List<AvailabilityStatus> statusDocuments;
+    private List<AvailabilityStatus> statusSubmissionSets;
+    private List<AvailabilityStatus> statusFolders;
 
-    private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
-    private final List<Code> formatCodes = new ArrayList<Code>();
+    private QueryList<Code> confidentialityCodes;
+    private List<Code> formatCodes;
 
     /**
      * Constructs the query.
@@ -74,10 +70,26 @@ public class GetAllQuery extends StoredQuery {
     }
 
     /**
+     * @param statusDocuments
+     *          the states for filtering {@link DocumentEntry#getAvailabilityStatus()}.
+     */
+    public void setStatusDocuments(List<AvailabilityStatus> statusDocuments) {
+        this.statusDocuments = statusDocuments;
+    }
+
+    /**
      * @return the states for filtering {@link SubmissionSet#getAvailabilityStatus()}.
      */
     public List<AvailabilityStatus> getStatusSubmissionSets() {
         return statusSubmissionSets;
+    }
+
+    /**
+     * @param statusSubmissionSets
+     *          the states for filtering {@link SubmissionSet#getAvailabilityStatus()}.
+     */
+    public void setStatusSubmissionSets(List<AvailabilityStatus> statusSubmissionSets) {
+        this.statusSubmissionSets = statusSubmissionSets;
     }
 
     /**
@@ -88,6 +100,14 @@ public class GetAllQuery extends StoredQuery {
     }
 
     /**
+     * @param statusFolders
+     *          the states for filtering {@link Folder#getAvailabilityStatus()}.
+     */
+    public void setStatusFolders(List<AvailabilityStatus> statusFolders) {
+        this.statusFolders = statusFolders;
+    }
+
+    /**
      * @return the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
      */
     public QueryList<Code> getConfidentialityCodes() {
@@ -95,10 +115,26 @@ public class GetAllQuery extends StoredQuery {
     }
 
     /**
+     * @param confidentialityCodes
+     *          the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
+     */
+    public void setConfidentialityCodes(QueryList<Code> confidentialityCodes) {
+        this.confidentialityCodes = confidentialityCodes;
+    }
+
+    /**
      * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
      */
     public List<Code> getFormatCodes() {
         return formatCodes;
+    }
+
+    /**
+     * @param formatCodes
+     *          the codes for filtering {@link DocumentEntry#getFormatCode()}.
+     */
+    public void setFormatCodes(List<Code> formatCodes) {
+        this.formatCodes = formatCodes;
     }
 
     @Override

@@ -29,6 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityS
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindFoldersQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryList;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.query.FindFoldersQueryTransformer;
@@ -50,12 +51,13 @@ public class FindFoldersQueryTransformerTest {
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("name1", "uni1", "uniType1")));
         query.getLastUpdateTime().setFrom("1");
         query.getLastUpdateTime().setTo("2");
-        query.getCodes().getOuterList().add(
+        QueryList<Code> codes = new QueryList<Code>();
+        codes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
-        query.getCodes().getOuterList().add(
+        codes.getOuterList().add(
                 Arrays.asList(new Code("code9", null, "scheme9")));
-        query.getStatus().add(AvailabilityStatus.APPROVED);
-        query.getStatus().add(AvailabilityStatus.SUBMITTED);
+        query.setCodes(codes);
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -128,6 +130,6 @@ public class FindFoldersQueryTransformerTest {
     public void testFromEbXMLEmpty() {
         FindFoldersQuery result = new FindFoldersQuery();
         transformer.fromEbXML(result, ebXML);        
-        assertEquals(new FindFoldersQuery(), result);
+        assertEquals(new FindFoldersQuery().toString(), result.toString());
     }
 }

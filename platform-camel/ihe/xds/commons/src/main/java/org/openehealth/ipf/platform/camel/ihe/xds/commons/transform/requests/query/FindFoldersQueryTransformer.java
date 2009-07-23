@@ -76,11 +76,11 @@ public class FindFoldersQueryTransformer {
         String patientId = slots.toString(FOLDER_PATIENT_ID);
         query.setPatientId(identifiableTransformer.fromEbXML(patientId));
         
-        slots.toCodes(FOLDER_CODES, FOLDER_CODES_SCHEME, query.getCodes());
+        query.setCodes(slots.toCodeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME));
         
         query.getLastUpdateTime().setFrom(slots.toNumber(FOLDER_LAST_UPDATE_TIME_FROM));
         query.getLastUpdateTime().setTo(slots.toNumber(FOLDER_LAST_UPDATE_TIME_TO));
         
-        slots.toStatus(FOLDER_STATUS, query.getStatus());
+        query.setStatus(slots.toStatus(FOLDER_STATUS));
     }
 }

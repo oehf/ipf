@@ -15,21 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 
 /**
  * Represents a stored query for GetRelatedDocuments.
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>.
- * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class GetRelatedDocumentsQuery extends GetByIdQuery {
-    private final List<AssociationType> associationTypes = new ArrayList<AssociationType>();
+public class GetRelatedDocumentsQuery extends GetFromDocumentQuery {
+    private List<AssociationType> associationTypes;
 
     /**
      * Constructs the query.
@@ -45,8 +43,46 @@ public class GetRelatedDocumentsQuery extends GetByIdQuery {
         return associationTypes;
     }
 
+    /**
+     * @param associationTypes
+     *          the types used for filtering {@link Association#getAssociationType()}.
+     */
+    public void setAssociationTypes(List<AssociationType> associationTypes) {
+        this.associationTypes = associationTypes;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((associationTypes == null) ? 0 : associationTypes.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GetRelatedDocumentsQuery other = (GetRelatedDocumentsQuery) obj;
+        if (associationTypes == null) {
+            if (other.associationTypes != null)
+                return false;
+        } else if (!associationTypes.equals(other.associationTypes))
+            return false;
+        return true;
+    }
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

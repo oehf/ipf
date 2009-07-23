@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.responses;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import java.util.UUID;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLQueryResponse;
@@ -160,7 +158,7 @@ public class QueryResponseTransformer {
         EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
-        classification.setId("urn:uuid" + UUID.randomUUID().toString());
+        classification.assignUniqueId();
         ebXML.addClassification(classification);
     }    
 }

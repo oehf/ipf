@@ -21,7 +21,6 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Valida
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidatorAssertions.metaDataAssert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -61,16 +60,20 @@ public class CodeValidation implements QueryParameterValidation {
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
-        List<Code> codes = new ArrayList<Code>();
-        slots.toCodes(param, schemeParam, codes);
+        List<Code> codes = slots.toCodeList(param, schemeParam);
         
-        List<String> schemes = new ArrayList<String>();
-        slots.toStringList(schemeParam, schemes);
-        metaDataAssert(schemes.size() == 0 || codes.size() == schemes.size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
-        
-        for (Code code : codes) {
-            metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);                
-            metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
+        if (codes != null) {
+            List<String> schemes = slots.toStringList(schemeParam);
+            metaDataAssert(schemes == null || codes.size() == schemes.size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
+            
+            for (Code code : codes) {
+                metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);                
+                metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
+            }
+        }
+        else {
+            List<String> schemes = slots.toStringList(schemeParam);
+            metaDataAssert(schemes == null, INVALID_QUERY_PARAMETER_VALUE, schemeParam);
         }
     }
 }

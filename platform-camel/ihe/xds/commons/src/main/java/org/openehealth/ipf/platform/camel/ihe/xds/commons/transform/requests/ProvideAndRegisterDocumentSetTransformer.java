@@ -19,8 +19,6 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 import javax.activation.DataHandler;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
@@ -154,7 +152,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
         EbXMLClassification classification = factory.createClassification(library);
         classification.setClassifiedObject(classified);
         classification.setClassificationNode(node);
-        classification.setId("urn:uuid" + UUID.randomUUID().toString());
+        classification.assignUniqueId();
         ebXML.addClassification(classification);
     }    
 }

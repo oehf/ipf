@@ -81,7 +81,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
-        slots.toStringList(uuidParam, query.getUuids());
+        query.setUuids(slots.toStringList(uuidParam));
         query.setHomeCommunityId(slots.toString(HOME));
 
         fromEbXML(query, slots);

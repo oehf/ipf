@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -28,19 +27,17 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindSubmissionSets.
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>.
- * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class FindSubmissionSetsQuery extends StoredQuery {
     private Identifiable patientId;
     
-    private final List<AvailabilityStatus> status = new ArrayList<AvailabilityStatus>();
-    private final List<String> sourceIds = new ArrayList<String>();
-    private final List<Code> contentTypeCodes = new ArrayList<Code>();
+    private List<AvailabilityStatus> status;
+    private List<String> sourceIds;
+    private List<Code> contentTypeCodes;
+    private String authorPerson;
+    
     private final TimeRange submissionTime = new TimeRange();
-    private String authorPerson;  // For some reason spec says this cannot be a list
 
     /**
      * Constructs the query.
@@ -72,6 +69,14 @@ public class FindSubmissionSetsQuery extends StoredQuery {
     }
     
     /**
+     * @param status
+     *          the states for filtering {@link SubmissionSet#getAvailabilityStatus()}.
+     */
+    public void setStatus(List<AvailabilityStatus> status) {
+        this.status = status;
+    }
+
+    /**
      * @return the time range for filtering {@link SubmissionSet#getSubmissionTime()}.
      */
     public TimeRange getSubmissionTime() {
@@ -99,12 +104,28 @@ public class FindSubmissionSetsQuery extends StoredQuery {
     public List<String> getSourceIds() {
         return sourceIds;
     }
+    
+    /**
+     * @param sourceIds
+     *          the IDs for filtering {@link SubmissionSet#getSourceId()}.
+     */
+    public void setSourceIds(List<String> sourceIds) {
+        this.sourceIds = sourceIds;
+    }
 
     /**
      * @return the codes for filtering {@link SubmissionSet#getContentTypeCode()}.
      */
     public List<Code> getContentTypeCodes() {
         return contentTypeCodes;
+    }
+
+    /**
+     * @param contentTypeCodes
+     *          the codes for filtering {@link SubmissionSet#getContentTypeCode()}.
+     */
+    public void setContentTypeCodes(List<Code> contentTypeCodes) {
+        this.contentTypeCodes = contentTypeCodes;
     }
 
     @Override

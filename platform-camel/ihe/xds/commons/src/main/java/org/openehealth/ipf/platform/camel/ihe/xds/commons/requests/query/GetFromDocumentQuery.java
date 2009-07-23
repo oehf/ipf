@@ -15,25 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import java.util.List;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
 
 /**
- * Base class for queries that are defined by:
- * <li> a UUID or unique ID 
- * <li> a list of format codes
- * <li> a list of confidentiality codes
+ * Base class for queries that retrieve results via a document entry.
  * @author Jens Riemschneider
  */
-public abstract class GetByIdAndCodesQuery extends StoredQuery {
-    private QueryList<Code> confidentialityCodes;
-    private List<Code> formatCodes;
-    
+public abstract class GetFromDocumentQuery extends StoredQuery {
     private String uuid;
     private String uniqueId;
     private String homeCommunityId;
@@ -41,44 +30,14 @@ public abstract class GetByIdAndCodesQuery extends StoredQuery {
     /**
      * Constructs the query.
      * @param type
-     *          the type of query.
+     *          the type of the query.
      */
-    protected GetByIdAndCodesQuery(QueryType type) {
+    protected GetFromDocumentQuery(QueryType type) {
         super(type);
     }
-    
-    /**
-     * @return the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
-     */
-    public QueryList<Code> getConfidentialityCodes() {
-        return confidentialityCodes;
-    }
 
     /**
-     * @param confidentialityCodes
-     *          the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
-     */
-    public void setConfidentialityCodes(QueryList<Code> confidentialityCodes) {
-        this.confidentialityCodes = confidentialityCodes;
-    }
-
-    /**
-     * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
-     */
-    public List<Code> getFormatCodes() {
-        return formatCodes;
-    }
-
-    /**
-     * @param formatCodes
-     *          the codes for filtering {@link DocumentEntry#getFormatCode()}.
-     */
-    public void setFormatCodes(List<Code> formatCodes) {
-        this.formatCodes = formatCodes;
-    }
-
-    /**
-     * @return the uuid to filter {@link XDSMetaClass#getEntryUuid()}.
+     * @return the uuid to filter {@link DocumentEntry#getEntryUuid()}.
      */
     public String getUuid() {
         return uuid;
@@ -86,14 +45,14 @@ public abstract class GetByIdAndCodesQuery extends StoredQuery {
 
     /**
      * @param uuid
-     *          the uuid to filter {@link XDSMetaClass#getEntryUuid()}.
+     *          the uuid to filter {@link DocumentEntry#getEntryUuid()}.
      */
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
     /**
-     * @return the unique ID to filter {@link XDSMetaClass#getUniqueId()}.
+     * @return the unique ID to filter {@link DocumentEntry#getUniqueId()}.
      */
     public String getUniqueId() {
         return uniqueId;
@@ -101,7 +60,7 @@ public abstract class GetByIdAndCodesQuery extends StoredQuery {
 
     /**
      * @param uniqueId
-     *          the unique ID to filter {@link XDSMetaClass#getUniqueId()}.
+     *          the unique ID to filter {@link DocumentEntry#getUniqueId()}.
      */
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
@@ -121,14 +80,11 @@ public abstract class GetByIdAndCodesQuery extends StoredQuery {
     public void setHomeCommunityId(String homeCommunityId) {
         this.homeCommunityId = homeCommunityId;
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
-        result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
         result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
         result = prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
         result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
@@ -143,17 +99,7 @@ public abstract class GetByIdAndCodesQuery extends StoredQuery {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        GetByIdAndCodesQuery other = (GetByIdAndCodesQuery) obj;
-        if (confidentialityCodes == null) {
-            if (other.confidentialityCodes != null)
-                return false;
-        } else if (!confidentialityCodes.equals(other.confidentialityCodes))
-            return false;
-        if (formatCodes == null) {
-            if (other.formatCodes != null)
-                return false;
-        } else if (!formatCodes.equals(other.formatCodes))
-            return false;
+        GetFromDocumentQuery other = (GetFromDocumentQuery) obj;
         if (homeCommunityId == null) {
             if (other.homeCommunityId != null)
                 return false;

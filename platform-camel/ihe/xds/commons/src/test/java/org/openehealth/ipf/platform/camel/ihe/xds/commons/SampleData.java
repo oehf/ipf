@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import javax.activation.DataHandler;
 
@@ -46,6 +47,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocum
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetDocumentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryList;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
@@ -355,7 +357,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetDocumentsQuery() {
         GetDocumentsQuery query = new GetDocumentsQuery();
         query.setHomeCommunityId("home1");
-        query.getUuids().add("document01");
+        query.setUuids(Collections.singletonList("document01"));
         
         return new QueryRegistry(query);
     }
@@ -367,32 +369,30 @@ public abstract class SampleData {
         FindDocumentsQuery query = new FindDocumentsQuery();
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
-        query.getClassCodes().add(new Code("code1", null, "scheme1"));
-        query.getClassCodes().add(new Code("code2", null, "scheme2"));
-        query.getPracticeSettingCodes().add(new Code("code3", null, "scheme3"));
-        query.getPracticeSettingCodes().add(new Code("code4", null, "scheme4"));
+        query.setClassCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
+        query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.getCreationTime().setFrom("1980");
         query.getCreationTime().setTo("1981");
         query.getServiceStartTime().setFrom("1982");
         query.getServiceStartTime().setTo("1983");
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
-        query.getHealthcareFacilityTypeCodes().add(new Code("code5", null, "scheme5"));
-        query.getHealthcareFacilityTypeCodes().add(new Code("code6", null, "scheme6"));
-        query.getEventCodes().getOuterList().add(
+        query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
+        QueryList<Code> eventCodes = new QueryList<Code>();
+        eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
-        query.getEventCodes().getOuterList().add(
+        eventCodes.getOuterList().add(
                 Arrays.asList(new Code("code9", null, "scheme9")));
-        query.getConfidentialityCodes().getOuterList().add(
+        query.setEventCodes(eventCodes);
+        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
-        query.getConfidentialityCodes().getOuterList().add(
+        confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
-        query.getAuthorPersons().add("per'son1");
-        query.getAuthorPersons().add("person2");
-        query.getFormatCodes().add(new Code("code13", null, "scheme13"));
-        query.getFormatCodes().add(new Code("code14", null, "scheme14"));
-        query.getStatus().add(AvailabilityStatus.APPROVED);
-        query.getStatus().add(AvailabilityStatus.SUBMITTED);
+        query.setConfidentialityCodes(confidentialityCodes);
+        query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
+        query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         
         return new QueryRegistry(query);
     }

@@ -19,7 +19,6 @@ import static org.apache.commons.lang.Validate.notNull;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationMessage.*;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidatorAssertions.metaDataAssert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -54,8 +53,7 @@ public class AssociationValidation implements QueryParameterValidation {
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
-        List<AssociationType> associationTypes = new ArrayList<AssociationType>();
-        slots.toAssociationType(param, associationTypes);
+        List<AssociationType> associationTypes = slots.toAssociationType(param);
         
         for (AssociationType type : associationTypes) {
             metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);

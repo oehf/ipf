@@ -89,15 +89,15 @@ public class FindDocumentsQueryTransformer {
         String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(identifiableTransformer.fromEbXML(patientId));
         
-        slots.toCodes(DOC_ENTRY_CLASS_CODE, DOC_ENTRY_CLASS_CODE_SCHEME, query.getClassCodes());
-        slots.toCodes(DOC_ENTRY_PRACTICE_SETTING_CODE, DOC_ENTRY_PRACTICE_SETTING_CODE_SCHEME, query.getPracticeSettingCodes());
-        slots.toCodes(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_SCHEME, query.getHealthcareFacilityTypeCodes());
-        slots.toCodes(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME, query.getFormatCodes());
+        query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE, DOC_ENTRY_CLASS_CODE_SCHEME));
+        query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE, DOC_ENTRY_PRACTICE_SETTING_CODE_SCHEME));
+        query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_SCHEME));
+        query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME));
 
-        slots.toCodes(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME, query.getEventCodes());
-        slots.toCodes(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME, query.getConfidentialityCodes());
+        query.setEventCodes(slots.toCodeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME));
+        query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
         
-        slots.toStringList(DOC_ENTRY_AUTHOR_PERSON, query.getAuthorPersons());
+        query.setAuthorPersons(slots.toStringList(DOC_ENTRY_AUTHOR_PERSON));
         
         query.getCreationTime().setFrom(slots.toNumber(DOC_ENTRY_CREATION_TIME_FROM));
         query.getCreationTime().setTo(slots.toNumber(DOC_ENTRY_CREATION_TIME_TO));
@@ -108,6 +108,6 @@ public class FindDocumentsQueryTransformer {
         query.getServiceStopTime().setFrom(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_FROM));
         query.getServiceStopTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO));
         
-        slots.toStatus(DOC_ENTRY_STATUS, query.getStatus());
+        query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
     }
 }

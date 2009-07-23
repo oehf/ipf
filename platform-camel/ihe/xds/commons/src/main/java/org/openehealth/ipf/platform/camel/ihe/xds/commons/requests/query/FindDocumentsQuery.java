@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -28,22 +27,20 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindDocuments.
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>.
- * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class FindDocumentsQuery extends StoredQuery {
     private Identifiable patientId;
     
-    private final List<AvailabilityStatus> status = new ArrayList<AvailabilityStatus>();    
-    private final List<Code> classCodes = new ArrayList<Code>();
-    private final List<Code> practiceSettingCodes = new ArrayList<Code>();
-    private final List<Code> healthcareFacilityTypeCodes = new ArrayList<Code>();
-    private final QueryList<Code> eventCodes = new QueryList<Code>();
-    private final QueryList<Code> confidentialityCodes = new QueryList<Code>();
-    private final List<Code> formatCodes = new ArrayList<Code>();
-    private final List<String> authorPersons = new ArrayList<String>();
+    private List<AvailabilityStatus> status;    
+    private List<Code> classCodes;
+    private List<Code> practiceSettingCodes;
+    private List<Code> healthcareFacilityTypeCodes;
+    private QueryList<Code> eventCodes;
+    private QueryList<Code> confidentialityCodes;
+    private List<Code> formatCodes;
+    private List<String> authorPersons;
+    
     private final TimeRange creationTime = new TimeRange();
     private final TimeRange serviceStartTime = new TimeRange();
     private final TimeRange serviceStopTime = new TimeRange();
@@ -78,6 +75,14 @@ public class FindDocumentsQuery extends StoredQuery {
     }
     
     /**
+     * @param status    
+     *          the states for filtering {@link DocumentEntry#getAvailabilityStatus()}.
+     */
+    public void setStatus(List<AvailabilityStatus> status) {
+        this.status = status;
+    }
+
+    /**
      * @return the time range for filtering {@link DocumentEntry#getCreationTime()}.
      */
     public TimeRange getCreationTime() {
@@ -106,6 +111,14 @@ public class FindDocumentsQuery extends StoredQuery {
     }
 
     /**
+     * @param classCodes
+     *          the codes for filtering {@link DocumentEntry#getClassCode()}.
+     */
+    public void setClassCodes(List<Code> classCodes) {
+        this.classCodes = classCodes;
+    }
+
+    /**
      * @return the codes for filtering {@link DocumentEntry#getPracticeSettingCode()}.
      */
     public List<Code> getPracticeSettingCodes() {
@@ -113,17 +126,41 @@ public class FindDocumentsQuery extends StoredQuery {
     }
     
     /**
-     * @return the codes for filtering {@link DocumentEntry#getHealthcareFacilityTypeCode()}
+     * @param practiceSettingCodes
+     *          the codes for filtering {@link DocumentEntry#getPracticeSettingCode()}.
+     */
+    public void setPracticeSettingCodes(List<Code> practiceSettingCodes) {
+        this.practiceSettingCodes = practiceSettingCodes;
+    }
+
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getHealthcareFacilityTypeCode()}.
      */
     public List<Code> getHealthcareFacilityTypeCodes() {
         return healthcareFacilityTypeCodes;
     }
     
     /**
+     * @param healthcareFacilityTypeCodes
+     *          the codes for filtering {@link DocumentEntry#getHealthcareFacilityTypeCode()}.
+     */
+    public void setHealthcareFacilityTypeCodes(List<Code> healthcareFacilityTypeCodes) {
+        this.healthcareFacilityTypeCodes = healthcareFacilityTypeCodes;
+    }
+
+    /**
      * @return the codes for filtering {@link DocumentEntry#getEventCodeList()}.
      */
     public QueryList<Code> getEventCodes() {
         return eventCodes;
+    }
+
+    /**
+     * @param eventCodes
+     *          the codes for filtering {@link DocumentEntry#getEventCodeList()}.
+     */
+    public void setEventCodes(QueryList<Code> eventCodes) {
+        this.eventCodes = eventCodes;
     }
 
     /**
@@ -134,10 +171,26 @@ public class FindDocumentsQuery extends StoredQuery {
     }
 
     /**
+     * @param confidentialityCodes
+     *          the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
+     */
+    public void setConfidentialityCodes(QueryList<Code> confidentialityCodes) {
+        this.confidentialityCodes = confidentialityCodes;
+    }
+
+    /**
      * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
      */
     public List<Code> getFormatCodes() {
         return formatCodes;
+    }
+    
+    /**
+     * @param formatCodes
+     *          the codes for filtering {@link DocumentEntry#getFormatCode()}.
+     */
+    public void setFormatCodes(List<Code> formatCodes) {
+        this.formatCodes = formatCodes;
     }
 
     /**
@@ -147,11 +200,19 @@ public class FindDocumentsQuery extends StoredQuery {
         return authorPersons;
     }
 
+    /**
+     * @param authorPersons
+     *          the author persons texts for filtering {@link DocumentEntry#getAuthors()}.
+     */
+    public void setAuthorPersons(List<String> authorPersons) {
+        this.authorPersons = authorPersons;
+    }
+
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;

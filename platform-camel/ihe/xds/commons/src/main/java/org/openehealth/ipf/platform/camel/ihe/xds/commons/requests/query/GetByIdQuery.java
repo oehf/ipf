@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -24,13 +23,10 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by a list of UUIDs or unique IDs. 
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>.
- * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public abstract class GetByIdQuery extends GetByUuidQuery {
-    private final List<String> uniqueIds = new ArrayList<String>();
+    private List<String> uniqueIds;
 
     /**
      * Constructs the query.
@@ -42,10 +38,18 @@ public abstract class GetByIdQuery extends GetByUuidQuery {
     }
     
     /**
-     * @return the IDs for filtering {@link XDSMetaClass#getUniqueId()}
+     * @return the IDs for filtering {@link XDSMetaClass#getUniqueId()}.
      */
     public List<String> getUniqueIds() {
         return uniqueIds;
+    }
+
+    /**
+     * @param uniqueIds
+     *          the IDs for filtering {@link XDSMetaClass#getUniqueId()}.
+     */
+    public void setUniqueIds(List<String> uniqueIds) {
+        this.uniqueIds = uniqueIds;
     }
 
     @Override

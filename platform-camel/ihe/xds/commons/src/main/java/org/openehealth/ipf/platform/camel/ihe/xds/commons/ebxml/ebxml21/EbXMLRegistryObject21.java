@@ -19,8 +19,6 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLExternalIdentifier;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLInternationalString;
@@ -70,7 +68,6 @@ public abstract class EbXMLRegistryObject21<E extends RegistryObjectType> implem
         if (classification != null) {
             classification.setClassificationScheme(scheme);
             classification.setClassifiedObject(registryEntry.getId());
-            classification.setId("urn:uuid" + UUID.randomUUID().toString());
             List<ClassificationType> classifications = registryEntry.getClassification();
             classifications.add(((EbXMLClassification21)classification).getInternal());
         }

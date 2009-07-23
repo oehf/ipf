@@ -41,10 +41,8 @@ public class GetDocumentsQueryTransformerTest {
         transformer = new GetDocumentsQueryTransformer();
         query = new GetDocumentsQuery();
 
-        query.getUuids().add("uuid1");
-        query.getUuids().add("uuid2");
-        query.getUniqueIds().add("uniqueId1");
-        query.getUniqueIds().add("uniqueId2");
+        query.setUuids(Arrays.asList("uuid1", "uuid2"));
+        query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setHomeCommunityId("home");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();

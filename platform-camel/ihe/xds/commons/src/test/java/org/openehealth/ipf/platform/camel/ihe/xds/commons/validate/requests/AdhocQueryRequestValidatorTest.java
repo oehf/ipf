@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationMessage.*;
 
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
@@ -97,7 +99,7 @@ public class AdhocQueryRequestValidatorTest {
     @Test
     public void testQueryParametersCannotBeSetTogether() {
         request = SampleData.createGetDocumentsQuery();        
-        ((GetDocumentsQuery)request.getQuery()).getUniqueIds().add("1.2.3");
+        ((GetDocumentsQuery)request.getQuery()).setUniqueIds(Collections.singletonList("1.2.3"));
         expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER);
     }
     

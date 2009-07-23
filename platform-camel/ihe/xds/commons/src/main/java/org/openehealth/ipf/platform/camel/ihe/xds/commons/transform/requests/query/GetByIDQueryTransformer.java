@@ -50,6 +50,6 @@ public abstract class GetByIDQueryTransformer<T extends GetByIdQuery> extends Ge
     @Override
     protected void fromEbXML(T query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
-        slots.toStringList(uniqueIdParam, query.getUniqueIds());
+        query.setUniqueIds(slots.toStringList(uniqueIdParam));
     }
 }

@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21;
 import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.List;
-
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLClassification;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlot;
@@ -140,12 +139,7 @@ public class EbXMLClassification21 implements EbXMLClassification {
     }
 
     @Override
-    public String getId() {
-        return classification.getId();
-    }
-
-    @Override
-    public void setId(String id) {
-        classification.setId(id);
+    public void assignUniqueId() {
+        // Not supported/required in 2.1
     }
 }

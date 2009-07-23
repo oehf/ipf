@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.qu
 
 import static org.apache.commons.lang.Validate.notNull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,6 +85,10 @@ public class QuerySlotHelper {
      *          the list of codes.
      */
     public void fromCode(QueryParameter param, List<Code> codes) {
+        if (codes == null) {
+            return;
+        }
+        
         List<String> slotValues = new ArrayList<String>();
         for (Code code : codes) {
             String hl7CE = fromCodeToHL7CE(code);
@@ -94,8 +97,8 @@ public class QuerySlotHelper {
         ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
     }
 
-    private void toCode(QueryParameter param, List<Code> codes) {
-        toCode(ebXML.getSlotValues(param.getSlotName()), codes);
+    private List<Code> toCodeList(QueryParameter param) {
+        return toCode(ebXML.getSlotValues(param.getSlotName()));
     }
 
     /**
@@ -106,33 +109,42 @@ public class QuerySlotHelper {
      *          the list of codes.
      */
     public void fromCode(QueryParameter param, QueryList<Code> queryList) {
+        if (queryList == null) {
+            return;
+        }
+        
         for (List<Code> codes : queryList.getOuterList()) {
             fromCode(param, codes);
         }
     }
     
-    private void toCode(QueryParameter param, QueryList<Code> queryList) {
-        queryList.getOuterList().clear();
-
+    private QueryList<Code> toCodeQueryList(QueryParameter param) {
         List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
+        if (slots.isEmpty()) {
+            return null;
+        }
+        
+        QueryList<Code> queryList = new QueryList<Code>(); 
         for (EbXMLSlot slot : slots) {
-            List<Code> innerList = new ArrayList<Code>();
-            toCode(slot.getValueList(), innerList);
+            List<Code> innerList = toCode(slot.getValueList());
             queryList.getOuterList().add(innerList);
         }
+        return queryList;
     }
     
     /**
      * Retrieves a list of strings from a slot.
      * @param param
      *          the parameter.
-     * @param queryList
-     *          the string list to be filled.
+     * @return the string list.
      */
-    public void toStringList(QueryParameter param, QueryList<String> queryList) {
-        queryList.getOuterList().clear();
-
+    public QueryList<String> toStringQueryList(QueryParameter param) {
         List<EbXMLSlot> slots = ebXML.getSlots(param.getSlotName());
+        if (slots.isEmpty()) {
+            return null;
+        }
+        
+        QueryList<String> queryList = new QueryList<String>();
         for (EbXMLSlot slot : slots) {
             List<String> innerList = new ArrayList<String>();
             for (String slotValue : slot.getValueList()) {            
@@ -140,6 +152,7 @@ public class QuerySlotHelper {
             }
             queryList.getOuterList().add(innerList);
         }
+        return queryList;
     }
     
     /**
@@ -150,6 +163,10 @@ public class QuerySlotHelper {
      *          the string list.
      */
     public void fromStringList(QueryParameter param, List<String> values) {
+        if (values == null) {
+            return;
+        }
+        
         List<String> slotValues = new ArrayList<String>();
         for (String value : values) {
             slotValues.add(encodeAsStringList(value));
@@ -161,15 +178,19 @@ public class QuerySlotHelper {
      * Retrieves a list of strings from a slot.
      * @param param
      *          the parameter.
-     * @param values
-     *          the string list to be filled.
+     * @return the string list.
      */
-    public void toStringList(QueryParameter param, List<String> values) {
-        values.clear();
+    public List<String> toStringList(QueryParameter param) {
         List<String> slotValues = ebXML.getSlotValues(param.getSlotName());
+        if (slotValues.isEmpty()) {
+            return null;
+        }
+        
+        List<String> values = new ArrayList<String>();
         for (String slotValue : slotValues) {            
             values.addAll(decodeStringList(slotValue));
         }
+        return values;
     }
 
     /**
@@ -178,41 +199,50 @@ public class QuerySlotHelper {
      *          the parameter.
      * @param schemeParam
      *          the code scheme parameter.
-     * @param codes
-     *          the codes to be filled.
+     * @return the codes.
      */
-    public void toCodes(QueryParameter param, QueryParameter schemeParam, List<Code> codes) {
-        toCode(param, codes);
-        List<String> schemes = new ArrayList<String>();
-        toStringList(schemeParam, schemes);
-        for (int idx = 0; idx < schemes.size() && idx < codes.size(); ++idx) {
-            codes.get(idx).setSchemeName(schemes.get(idx));
+    public List<Code> toCodeList(QueryParameter param, QueryParameter schemeParam) {
+        List<Code> codes = toCodeList(param);
+        if (codes == null) {
+            return null;
         }
-    }
-
-    /**
-     * Retrieves a list of codes from a slot.
-     * @param param
-     *          the parameter.
-     * @param schemeParam
-     *          the code scheme parameter.
-     * @param codes
-     *          the codes to be filled.
-     */
-    public void toCodes(QueryParameter param, QueryParameter schemeParam, QueryList<Code> codes) {
-        toCode(param, codes);
-        QueryList<String> schemes = new QueryList<String>();
-        toStringList(schemeParam, schemes);
         
-        List<List<String>> schemesOuter = schemes.getOuterList();
-        List<List<Code>> codesOuter = codes.getOuterList();
-        for (int outer = 0; outer < schemesOuter.size() && outer < codesOuter.size(); ++outer) {
-            List<String> schemesInner = schemesOuter.get(outer);
-            List<Code> codesInner = codesOuter.get(outer);
-            for (int inner = 0; inner < schemesInner.size() && inner < codesInner.size(); ++inner) {
-                codesInner.get(inner).setSchemeName(schemesInner.get(inner));
+        List<String> schemes = toStringList(schemeParam);
+        if (schemes != null) {
+            for (int idx = 0; idx < schemes.size() && idx < codes.size(); ++idx) {
+                codes.get(idx).setSchemeName(schemes.get(idx));
             }
         }
+        return codes;
+    }
+
+    /**
+     * Retrieves a list of codes from a slot.
+     * @param param
+     *          the parameter.
+     * @param schemeParam
+     *          the code scheme parameter.
+     * @return the codes.
+     */
+    public QueryList<Code> toCodeQueryList(QueryParameter param, QueryParameter schemeParam) {
+        QueryList<Code> codes = toCodeQueryList(param);
+        if (codes == null) {
+            return null;            
+        }
+        
+        QueryList<String> schemes = toStringQueryList(schemeParam);
+        if (schemes != null) {
+            List<List<String>> schemesOuter = schemes.getOuterList();
+            List<List<Code>> codesOuter = codes.getOuterList();
+            for (int outer = 0; outer < schemesOuter.size() && outer < codesOuter.size(); ++outer) {
+                List<String> schemesInner = schemesOuter.get(outer);
+                List<Code> codesInner = codesOuter.get(outer);
+                for (int inner = 0; inner < schemesInner.size() && inner < codesInner.size(); ++inner) {
+                    codesInner.get(inner).setSchemeName(schemesInner.get(inner));
+                }
+            }
+        }
+        return codes;
     }
     
     /**
@@ -244,6 +274,10 @@ public class QuerySlotHelper {
      *          the list of status values.
      */
     public void fromStatus(QueryParameter param, List<AvailabilityStatus> status) {
+        if (status == null) {
+            return;
+        }
+        
         List<String> opcodes = new ArrayList<String>(status.size());
         for (AvailabilityStatus statusValue : status) {
             opcodes.add(AvailabilityStatus.toQueryOpcode(statusValue));
@@ -255,17 +289,19 @@ public class QuerySlotHelper {
      * Retrieves a status parameter from a slot.
      * @param param
      *          the parameter.
-     * @param list
-     *          the list of status values to be filled.
+     * @return the list of status values.
      */
-    public void toStatus(QueryParameter param, List<AvailabilityStatus> list) {
-        List<String> opcodes = new ArrayList<String>(); 
-        toStringList(param, opcodes);
+    public List<AvailabilityStatus> toStatus(QueryParameter param) {
+        List<String> opcodes = toStringList(param);
+        if (opcodes == null) {
+            return null;
+        }
 
-        list.clear();
+        List<AvailabilityStatus> list = new ArrayList<AvailabilityStatus>();
         for (String opcode : opcodes) {
             list.add(AvailabilityStatus.valueOfOpcode(opcode));
         }
+        return list;
     }
 
     /**
@@ -276,6 +312,10 @@ public class QuerySlotHelper {
      *          the list of association types.
      */
     public void fromAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
+        if (associationTypes == null) {
+            return;
+        }
+        
         List<String> opcodes = new ArrayList<String>(associationTypes.size());
         for (AssociationType type : associationTypes) {
             opcodes.add(AssociationType.getOpcode30(type));
@@ -287,20 +327,25 @@ public class QuerySlotHelper {
      * Retrieves an association parameter from a slot. 
      * @param param
      *          the parameter.
-     * @param list
-     *          the list of association types to be filled
+     * @return the list of association types.
      */
-    public void toAssociationType(QueryParameter param, List<AssociationType> associationTypes) {
-        List<String> opcodes = new ArrayList<String>(); 
-        toStringList(param, opcodes);
+    public List<AssociationType> toAssociationType(QueryParameter param) {
+        List<String> opcodes = toStringList(param);
+        if (opcodes == null) {
+            return null;
+        }
 
-        associationTypes.clear();
+        List<AssociationType> associationTypes = new ArrayList<AssociationType>();
         for (String opcode : opcodes) {
             associationTypes.add(AssociationType.valueOfOpcode30(opcode));
         }
+        return associationTypes;
     }
 
     private String fromCodeToHL7CE(Code code) {
+        if (code == null) {
+            return null;
+        }
         return HL7.render(HL7Delimiter.COMPONENT, 
                 HL7.escape(code.getCode()),
                 null,
@@ -308,6 +353,9 @@ public class QuerySlotHelper {
     }
     
     private Code toCodeFromHL7CE(String hl7CE) {
+        if (hl7CE == null) {
+            return null;
+        }
         List<String> parts = HL7.parse(HL7Delimiter.COMPONENT, hl7CE);
         return new Code(
                 HL7.get(parts, 1, true), 
@@ -315,13 +363,18 @@ public class QuerySlotHelper {
                 HL7.get(parts, 3, true));
     }
 
-    private void toCode(List<String> slotValues, List<Code> codes) {
-        codes.clear();
+    private List<Code> toCode(List<String> slotValues) {
+        if (slotValues.isEmpty()) {
+            return null;
+        }
+        
+        List<Code> codes = new ArrayList<Code>();
         for (String slotValue : slotValues) {
             for (String hl7CE : decodeStringList(slotValue)) {
                 codes.add(toCodeFromHL7CE(hl7CE));
             }
         }
+        return codes;
     }
     
     private String encodeAsString(String value) {
@@ -351,7 +404,7 @@ public class QuerySlotHelper {
 
     private List<String> decodeStringList(String list) {
         if (list == null) {
-            return Collections.emptyList();
+            return null;
         }
         
         if (list.startsWith("(") && list.endsWith(")")) {

@@ -30,6 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityS
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Code;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetAllQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryList;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.query.GetAllQueryTransformer;
@@ -49,16 +50,16 @@ public class GetAllQueryTransformerTest {
         query = new GetAllQuery();
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("name1", "uni1", "uniType1")));
-        query.getConfidentialityCodes().getOuterList().add(
+        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
-        query.getConfidentialityCodes().getOuterList().add(
+        confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
-        query.getFormatCodes().add(new Code("code13", null, null));
-        query.getFormatCodes().add(new Code("code14", null, null));
-        query.getStatusDocuments().add(AvailabilityStatus.APPROVED);
-        query.getStatusDocuments().add(AvailabilityStatus.SUBMITTED);
-        query.getStatusFolders().add(AvailabilityStatus.DEPRECATED);
-        query.getStatusSubmissionSets().add(AvailabilityStatus.SUBMITTED);
+        query.setConfidentialityCodes(confidentialityCodes);
+        query.setFormatCodes(Arrays.asList(new Code("code13", null, null), new Code("code14", null, null)));
+        query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatusFolders(Arrays.asList(AvailabilityStatus.DEPRECATED));
+        query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.SUBMITTED));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }

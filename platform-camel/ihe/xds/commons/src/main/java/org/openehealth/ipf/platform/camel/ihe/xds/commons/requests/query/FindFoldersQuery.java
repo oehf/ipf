@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -28,17 +27,15 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindFolders.
- * <p>
- * All non-list members of this class are allowed to be <code>null</code>.
- * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
 public class FindFoldersQuery extends StoredQuery {
     private Identifiable patientId;
     
-    private final List<AvailabilityStatus> status = new ArrayList<AvailabilityStatus>();
+    private List<AvailabilityStatus> status;
+    private QueryList<Code> codes;
+    
     private final TimeRange lastUpdateTime = new TimeRange();
-    private final QueryList<Code> codes = new QueryList<Code>();
 
     /**
      * Constructs the query.
@@ -70,6 +67,14 @@ public class FindFoldersQuery extends StoredQuery {
     }
     
     /**
+     * @param status
+     *          the states for filtering {@link Folder#getAvailabilityStatus()}.
+     */
+    public void setStatus(List<AvailabilityStatus> status) {
+        this.status = status;
+    }
+
+    /**
      * @return the time range for filtering {@link Folder#getLastUpdateTime()}.
      */
     public TimeRange getLastUpdateTime() {
@@ -81,6 +86,14 @@ public class FindFoldersQuery extends StoredQuery {
      */
     public QueryList<Code> getCodes() {
         return codes;
+    }
+
+    /**
+     * @param codes
+     *          the codes for filtering {@link Folder#getCodeList()}.
+     */
+    public void setCodes(QueryList<Code> codes) {
+        this.codes = codes;
     }
 
     @Override

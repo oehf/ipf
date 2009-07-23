@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.query;
 
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.DOC_ENTRY_UNIQUE_ID;
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.QueryParameter.DOC_ENTRY_UUID;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFoldersForDocumentQuery;
@@ -25,11 +23,5 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFold
  * Transforms between a {@link GetFoldersForDocumentQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
-public class GetFoldersForDocumentQueryTransformer extends GetByIDQueryTransformer<GetFoldersForDocumentQuery> {
-    /**
-     * Constructs the transformer.
-     */
-    public GetFoldersForDocumentQueryTransformer() {
-        super(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
-    }
+public class GetFoldersForDocumentQueryTransformer extends GetFromDocumentQueryTransformer<GetFoldersForDocumentQuery> {
 }
