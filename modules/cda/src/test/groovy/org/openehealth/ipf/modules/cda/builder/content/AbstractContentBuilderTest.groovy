@@ -17,6 +17,7 @@ package org.openehealth.ipf.modules.cda.builder.content
 
 import org.openehealth.ipf.modules.cda.builder.CDAR2Builder
 import org.junit.BeforeClass
+import org.junit.AfterClass
 import org.junit.Before
 
 import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
@@ -41,6 +42,13 @@ public abstract class AbstractContentBuilderTest  {
 		    builder = new CDAR2Builder()
 		}
     }
+	
+	@AfterClass
+	static void destroy(){
+	    if (builder) {
+            builder = null
+        }
+	}
 
 	protected static def builder() {
 	    builder

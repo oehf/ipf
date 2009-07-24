@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ccdbuilders
+package builders.content.section
 
 import org.openhealthtools.ihe.common.cdar2.*
 
@@ -86,7 +86,7 @@ ccd_advanceDirectivesObservation(schema:'observation') {
                 cs('completed')
             }
         })
-        observationStatus(schema:'ccd_advanceDirectiveObservationStatus', req:true)
+        advanceDirectiveStatus(schema:'ccd_advanceDirectiveObservationStatus', req:true)
         verifier(schema:'ccd_advanceDirectiveVerifier')
         reference(schema:'ccd_advanceDirectiveObservationReference')
     }
@@ -106,11 +106,11 @@ ccd_advanceDirectivesObservation(schema:'observation') {
 // CCD Advance Directive Observation Verifier
 // CONF-92: A verification of an advance directive observation (templateId 2.16.840.1.113883.10.20.1.58) SHALL be
 //          represented with Observation / participant.
-// CONF-94: The value for “Observation / participant / @typeCode” in a verification SHALL be
-//          “VRF” “Verifier” 2.16.840.1.113883.5.90 ParticipationType STATIC.
 ccd_advanceDirectiveVerifier(schema:'clinicalStatementParticipant'){
     properties{
-       typeCode(factory:'PARTICIPATION_TYPE', def:ParticipationVerifier.VRF_LITERAL)
+        // CONF-94: The value for “Observation / participant / @typeCode” in a verification SHALL be
+        //          “VRF” “Verifier” 2.16.840.1.113883.5.90 ParticipationType STATIC.
+        typeCode(factory:'PARTICIPATION_TYPE', def:ParticipationVerifier.VRF_LITERAL)
     }
     collections{
         templateIds(collection:'templateId', def: {
@@ -148,7 +148,7 @@ ccd_advanceDirectiveObservationReference(schema:'externalDocument'){
 //          (as defined in section 5.1 “Type” and “Status” values).
 // CONF-100: The value for “Observation / value” in an advance directive status observation SHALL be
 //          selected from ValueSet 2.16.840.1.113883.1.11.20.1 AdvanceDirectiveStatusCode STATIC 20061017.
-ccd_advanceDirectiveObservationStatus(schema:'ccd_statusValue'){
+ccd_advanceDirectiveObservationStatus(schema:'ccd_statusObservation'){
     collections{
         templateIds(collection:'templateId', def: {
             getMetaBuilder().buildList {
@@ -158,43 +158,3 @@ ccd_advanceDirectiveObservationStatus(schema:'ccd_statusValue'){
     }
 }
 
-// CONF-508: A status observation (templateId 2.16.840.1.113883.10.20.1.57) SHALL be
-//           represented with Observation.
-// CONF-509: A status observation SHALL be the target of an entryRelationship whose value for
-//           “entryRelationship / @typeCode” SHALL be “REFR” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.
-// CONF-510: The value for “Observation / @classCode” in a status observation SHALL be
-//           “OBS” 2.16.840.1.113883.5.6 ActClass STATIC.
-// CONF-511: The value for “Observation / @moodCode” in a status observation SHALL be
-//           “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.
-ccd_statusValue(schema:'observation'){
-    properties{
-        // CONF-512: A status observation SHALL contain exactly one Observation / code.
-        // CONF-513: The value for “Observation / code” in a status observation SHALL be
-        //           “33999-4” “Status” 2.16.840.1.113883.6.1 LOINC STATIC.
-        code(def: {
-            getMetaBuilder().build{
-                loincCode(code:'33999-4',
-                        displayName:'Status')
-            }
-        })
-        // CONF-515: The value for “Observation / statusCode” in a status observation SHALL be
-        //           “completed” 2.16.840.1.113883.5.14 ActStatus STATIC.
-        statusCode(req:true, def: {
-            getMetaBuilder().build {
-                cs('completed')
-            }
-        })
-    }
-    collections{
-        // CONF-516: A status observation SHALL contain exactly one Observation / value,
-        //           which SHALL be of datatype “CE”.
-        values(collection:'value', min:1, max:1){
-            value(schema:'ce')
-        }
-        templateIds(collection:'templateId', def: {
-            getMetaBuilder().buildList {
-                ii(root:'2.16.840.1.113883.10.20.1.57')
-            }
-        })
-    }
-}

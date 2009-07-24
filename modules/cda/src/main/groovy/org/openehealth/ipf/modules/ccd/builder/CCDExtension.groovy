@@ -16,6 +16,7 @@
 package org.openehealth.ipf.modules.ccd.builder
 
 import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
 import org.openehealth.ipf.modules.cda.builder.content.section.*
 
 /**
@@ -34,10 +35,13 @@ public class CCDExtension extends CompositeModelExtension{
     
     List modelExtensions() {
         [
+             new CCDMainActivityExtension(builder),
              new CCDPurposeExtension(builder),
              new CCDPayersExtension(builder),
+             new CCDAdvanceDirectivesExtension(builder),
+             new CCDSupportExtension(builder),
              new CCDFamilyHistoryExtension(builder),
-             new CCDModelExtension(builder) // TODO remove when modularization is done
+             new CCDProblemsExtension(builder)
         ]
     }
     
@@ -48,8 +52,5 @@ public class CCDExtension extends CompositeModelExtension{
     String extensionName() {
         "Continuity of Care Document (CCD)"
     }
-    
-    
-    
     
 }

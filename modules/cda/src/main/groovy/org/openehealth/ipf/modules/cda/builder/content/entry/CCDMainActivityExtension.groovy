@@ -13,42 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.ccd.builder
+package org.openehealth.ipf.modules.cda.builder.content.entry
 
 import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.openhealthtools.ihe.common.cdar2.*
-import java.lang.Boolean
-import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntry
-import org.openhealthtools.ihe.common.cdar2.CDAR2Factory
-import org.openhealthtools.ihe.common.cdar2.XServiceEventPerformer
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Act
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040EntryRelationship
-import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationship
-import org.openhealthtools.ihe.common.cdar2.XParticipationAuthorPerformer
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Participant1
-import org.openhealthtools.ihe.common.cdar2.ParticipationAncillary
-import org.openhealthtools.ihe.common.cdar2.ParticipationIndirectTarget
-import org.openhealthtools.ihe.common.cdar2.ParticipationPhysicalPerformer
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Organizerimport org.openhealthtools.ihe.common.cdar2.POCDMT000040RelatedSubjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Subjectimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Observationimport org.openehealth.ipf.modules.cda.builder.BaseModelExtension
-import org.eclipse.emf.ecore.xml.type.XMLTypePackage
-import org.eclipse.emf.ecore.util.FeatureMap
-import org.eclipse.emf.ecore.util.FeatureMapUtil
-import org.eclipse.emf.ecore.xmi.XMLResource
-import org.eclipse.emf.common.util.AbstractEnumerator
+import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
 
 /**
- * Make sure that the CDAModelExtensions are called before
  *
- * @author Christian Ohr
- * @deprecated
+ * @author Stefan Ivanov
  */
-public class CCDModelExtension extends BaseModelExtension{
+public class CCDMainActivityExtension extends BaseModelExtension{
 
-     CCDModelExtension() {
+     CCDMainActivityExtension() {
          super()
      }
      
-     CCDModelExtension(builder) {
+     CCDMainActivityExtension(builder) {
          super(builder)
      }
 
@@ -88,5 +69,5 @@ public class CCDModelExtension extends BaseModelExtension{
     
     String extensionName() {
         "Continuity of Care Document (CCD)"
-    }    
+    }   
 }

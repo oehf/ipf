@@ -111,13 +111,12 @@ public class CCDHeaderBuilderTest extends AbstractCCDBuilderTest {
          def opts = [:]
          opts[XMLResource.OPTION_DECLARE_XML] = true
          opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-//         println(renderer.render(document, opts))
+         // println(renderer.render(document, opts))
      }
      
      public void testValidateCCDDocument() {
          POCDMT000040ClinicalDocument document = buildCCD()
-         assertTrue CCDConformanceValidatorHelper.checkCCDHeaderConformance(document)
-         assertTrue document.mainActivity instanceof POCDMT000040ServiceEvent
+         new CCDHeaderValidator().validate(document, null)
       }
     
 }

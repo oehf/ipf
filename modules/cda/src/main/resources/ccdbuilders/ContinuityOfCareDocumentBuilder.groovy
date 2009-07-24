@@ -29,10 +29,10 @@ continuityOfCareDocument(schema:'clinicalDocument') {
 			}
 		})
 		mainActivity(schema:'ccd_serviceEvent', req: true)
-		component(schema:'ccd_component')
 		nextOfKin(schema:'ccd_nextOfKin')
 		emergencyContact(schema:'ccd_emergencyContact')
 		caregiver(schema:'ccd_caregiver')
+		component(schema:'ccd_component')
 	}
 	collections {
 		templateIds(collection:'templateId', def: {
@@ -43,13 +43,6 @@ continuityOfCareDocument(schema:'clinicalDocument') {
 		{
 			templateId(schema:'ii')
 		}
-	}
-}
-
-// Add main activity template
-ccd_serviceEvent(schema:'serviceEvent'){
-	properties {
-		classCode(def: ActClassRootMember7.PCPR_LITERAL)
 	}
 }
 
@@ -69,6 +62,7 @@ ccd_structuredBody(schema:'structuredBody') {
 		payers(schema:'ccd_payers')
 		advanceDirectives(schema:'ccd_advanceDirectives')
         familyHistory(schema:'ccd_familyHistory')
+        problems(schema:'ccd_problems')
         // ...
 	}
 }
