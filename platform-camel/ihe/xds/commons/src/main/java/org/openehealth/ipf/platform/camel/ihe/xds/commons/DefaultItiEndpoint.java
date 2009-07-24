@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 /**
  * Camel endpoint used to create producers and consumers based on webservice calls.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
 public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
     private static final String ENDPOINT_PROTOCOL = "http://";
@@ -50,6 +51,15 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      * defaults to <code>false</code>. 
      */
     private boolean allowIncompleteAudit = false;
+    
+    /**
+     * Whether SOAP 1.1 should be used instead of SOAP 1.2
+     * for XDS.b transactions.  Default is <code>false</code>.
+     * <p>
+     * Does not have any meaning for XDS.a transactions,
+     * because they use only SOAP 1.1. 
+     */
+    private boolean soap11 = false;
 
     /**
      * Constructs the endpoint.
@@ -122,7 +132,6 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
     }
 
 
-
     /* ----- automatically generated getters and setters ----- */
     
     public boolean isAudit() {
@@ -139,6 +148,14 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
 
     public boolean isAllowIncompleteAudit() {
         return allowIncompleteAudit;
+    }
+    
+    public boolean isSoap11() {
+        return soap11;
+    }
+
+    public void setSoap11(boolean soap11) {
+        this.soap11 = soap11;
     }
 
     /**

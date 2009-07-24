@@ -122,12 +122,21 @@ public class StandardTestContainer {
         T inboundInterceptor = constructor.newInstance(false);
         T outboundInterceptor = constructor.newInstance(true);
         
-        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
-        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
-        bus.getOutInterceptors().add(outboundInterceptor);
-        bus.getInInterceptors().add(inboundInterceptor);
+        getCxfBus().getOutInterceptors().add(outboundInterceptor);
+        getCxfBus().getInInterceptors().add(inboundInterceptor);
     }
 
+    /**
+     * Returns a CXF bus where interceptors can be installed.
+     * @return
+     *      the bus instance
+     */
+    public static CXFBusImpl getCxfBus() {
+        JaxWsServerFactoryBean jaxwsBean = new JaxWsServerFactoryBean();
+        CXFBusImpl bus = (CXFBusImpl)jaxwsBean.getBus();
+        return bus;
+    }
+    
     /**
      * Sends the given object to the endpoint.
      * @param endpoint

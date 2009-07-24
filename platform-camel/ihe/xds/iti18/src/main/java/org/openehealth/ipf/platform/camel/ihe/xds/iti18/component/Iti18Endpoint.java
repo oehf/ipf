@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18.component;
 
 import org.apache.camel.Consumer;
@@ -35,6 +34,8 @@ public class Iti18Endpoint extends DefaultItiEndpoint {
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti18PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap12", "ihe"),
             false,
             "wsdl/iti18.wsdl",
             true);

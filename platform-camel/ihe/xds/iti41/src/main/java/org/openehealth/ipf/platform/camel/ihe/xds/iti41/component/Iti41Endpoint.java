@@ -34,6 +34,8 @@ public class Iti41Endpoint extends DefaultItiEndpoint {
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
             Iti41PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap12", "ihe"),
             true,
             "wsdl/iti41.wsdl",
             true);

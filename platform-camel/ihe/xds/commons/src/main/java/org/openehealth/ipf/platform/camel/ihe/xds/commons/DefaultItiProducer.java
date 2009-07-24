@@ -98,7 +98,13 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> im
         if (threadLocalPort.get() == null) {
             URL wsdlURL = getClass().getClassLoader().getResource(serviceInfo.getWsdlLocation());
             Service service = Service.create(wsdlURL, serviceInfo.getServiceName());
-            T port = service.getPort(serviceInfo.getServiceClass());
+            
+            QName portName = 
+                ((serviceInfo.getPortName12() == null) || endpoint.isSoap11()) ?
+                    serviceInfo.getPortName11() : 
+                    serviceInfo.getPortName12();
+
+            T port = service.getPort(portName, serviceInfo.getServiceClass());
             configureBinding(port);
             configureInterceptors(port);
 

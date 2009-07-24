@@ -34,6 +34,8 @@ public class Iti16Endpoint extends DefaultItiEndpoint {
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti16PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Port_Soap11", "ihe"),
+            null,
             false,
             "wsdl/iti16.wsdl",
             false);

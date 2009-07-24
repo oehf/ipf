@@ -35,6 +35,15 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
         from('xds-iti18:xds-iti18-service2')
             .process(new AdhocQueryProcessor('service 2'))
 
+        // three endpoints intended for SOAP version check
+        from('xds-iti18:xds-iti18-service21')
+            .process(new AdhocQueryProcessor('implicit SOAP 1.2'))
+        from('xds-iti18:xds-iti18-service22')
+            .process(new AdhocQueryProcessor('SOAP 1.2'))
+        from('xds-iti18:xds-iti18-service23')
+            .process(new AdhocQueryProcessor('SOAP 1.1'))
+           
+            
         from('xds-iti18:myIti18Service')
             .convertBodyTo(QueryRegistry.class)
             .choice()

@@ -34,6 +34,8 @@ public class Iti15Endpoint extends DefaultItiEndpoint {
             new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Service", "ihe"),
             Iti15PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Binding_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Port_Soap11", "ihe"),
+            null,
             false,
             "wsdl/iti15.wsdl",
             false);
