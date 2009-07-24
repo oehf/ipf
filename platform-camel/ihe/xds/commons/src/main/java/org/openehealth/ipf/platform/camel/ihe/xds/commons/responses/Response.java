@@ -30,7 +30,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public class Response {
     private Status status;
-    private final List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
+    private List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
     
     /**
      * Constructs the response.
@@ -66,6 +66,14 @@ public class Response {
      */
     public List<ErrorInfo> getErrors() {
         return errors;
+    }
+
+    /**
+     * @param errors
+     *          the list of errors that occurred.
+     */
+    public void setErrors(List<ErrorInfo> errors) {
+        this.errors = errors;
     }
 
     @Override

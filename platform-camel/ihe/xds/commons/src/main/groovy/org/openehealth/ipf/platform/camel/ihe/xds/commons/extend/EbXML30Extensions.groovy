@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.extend
 
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.AdhocQueryRequestValidator
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.RetrieveDocumentSetRequestValidator;
@@ -51,7 +53,8 @@ class EbXML30Extensions {
             delegate.setValidator(new SubmitObjectsRequestValidator())
             delegate.input {
                 new EbXMLSubmitObjectsRequest30(it.in.getBody(SubmitObjectsRequest.class))
-            }            
+            }
+            delegate.staticProfile(new ValidationProfile(false, true, Actor.REGISTRY)) 
         }        
 
         ValidatorAdapterType.metaClass.iti42Response = { -> 
@@ -59,6 +62,7 @@ class EbXML30Extensions {
             delegate.input {
                 new EbXMLRegistryResponse30(it.in.getBody(RegistryResponseType.class))
             }            
+            delegate.staticProfile(new ValidationProfile(false, true, Actor.REGISTRY)) 
         }
         
         ValidatorAdapterType.metaClass.iti41Request = { -> 
@@ -66,6 +70,7 @@ class EbXML30Extensions {
             delegate.input {
                 new EbXMLProvideAndRegisterDocumentSetRequest30(it.in.getBody(ProvideAndRegisterDocumentSetRequestType.class))
             }            
+            delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY)) 
         }        
 
         ValidatorAdapterType.metaClass.iti41Response = { -> 
@@ -73,6 +78,7 @@ class EbXML30Extensions {
             delegate.input {
                 new EbXMLRegistryResponse30(it.in.getBody(RegistryResponseType.class))
             }            
+            delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY)) 
         }    
         
         ValidatorAdapterType.metaClass.iti43Request = { -> 
@@ -80,6 +86,7 @@ class EbXML30Extensions {
             delegate.input {
                 new EbXMLRetrieveDocumentSetRequest30(it.in.getBody(RetrieveDocumentSetRequestType.class))
             }            
+            delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY)) 
         }        
 
         ValidatorAdapterType.metaClass.iti43Response = { -> 
@@ -87,6 +94,7 @@ class EbXML30Extensions {
             delegate.input {
                 new EbXMLRetrieveDocumentSetResponse30(it.in.getBody(RetrieveDocumentSetResponseType.class))
             }            
+            delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY))
         }    
         
         ValidatorAdapterType.metaClass.iti18Request = { -> 
@@ -94,6 +102,7 @@ class EbXML30Extensions {
             delegate.input {
                 new EbXMLAdhocQueryRequest30(it.in.getBody(AdhocQueryRequest.class))
             }            
+            delegate.staticProfile(new ValidationProfile(true, true, Actor.REGISTRY)) 
         }        
 
         ValidatorAdapterType.metaClass.iti18Response = { -> 
@@ -101,6 +110,7 @@ class EbXML30Extensions {
             delegate.input {
                 new EbXMLQueryResponse30(it.in.getBody(AdhocQueryResponse.class))
             }            
+            delegate.staticProfile(new ValidationProfile(true, true, Actor.REGISTRY)) 
         }    
     }        
 }

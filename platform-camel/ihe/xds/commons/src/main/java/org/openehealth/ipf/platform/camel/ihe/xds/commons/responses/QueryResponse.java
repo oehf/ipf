@@ -33,11 +33,11 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
  * @author Jens Riemschneider
  */
 public class QueryResponse extends Response {
-    private final List<ObjectReference> references = new ArrayList<ObjectReference>();
-    private final List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();
-    private final List<Folder> folders = new ArrayList<Folder>();
-    private final List<SubmissionSet> submissionSets = new ArrayList<SubmissionSet>();
-    private final List<Association> associations = new ArrayList<Association>();
+    private List<ObjectReference> references = new ArrayList<ObjectReference>();
+    private List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();
+    private List<Folder> folders = new ArrayList<Folder>();
+    private List<SubmissionSet> submissionSets = new ArrayList<SubmissionSet>();
+    private List<Association> associations = new ArrayList<Association>();
     
     /**
      * Constructs the response.
@@ -62,10 +62,27 @@ public class QueryResponse extends Response {
     }
 
     /**
+     * @param references
+     *          the object references representing the results of a query using
+     *          a non-leaf-object return type {@link QueryRegistry#setReturnLeafObjects(boolean)}.
+     */
+    public void setReferences(List<ObjectReference> references) {
+        this.references = references;
+    }
+
+    /**
      * @return the document entries.
      */
     public List<DocumentEntry> getDocumentEntries() {
         return documentEntries;
+    }
+
+    /**
+     * @param documentEntries
+     *          the document entries.
+     */
+    public void setDocumentEntries(List<DocumentEntry> documentEntries) {
+        this.documentEntries = documentEntries;
     }
 
     /**
@@ -76,6 +93,14 @@ public class QueryResponse extends Response {
     }
 
     /**
+     * @param folders
+     *          the folders.
+     */
+    public void setFolders(List<Folder> folders) {
+        this.folders = folders;
+    }
+
+    /**
      * @return the submission sets.
      */
     public List<SubmissionSet> getSubmissionSets() {
@@ -83,12 +108,28 @@ public class QueryResponse extends Response {
     }
 
     /**
+     * @param submissionSets
+     *          the submission sets.
+     */
+    public void setSubmissionSets(List<SubmissionSet> submissionSets) {
+        this.submissionSets = submissionSets;
+    }
+    
+    /**
      * @return the associations.
      */
     public List<Association> getAssociations() {
         return associations;
     }
 
+    /**
+     * @param associations
+     *          the associations.
+     */
+    public void setAssociations(List<Association> associations) {
+        this.associations = associations;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;

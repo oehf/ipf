@@ -293,7 +293,7 @@ public abstract class SampleData {
         docEntry.setMimeType("application/octet-stream");
         docEntry.setPatientId(patientID);
         docEntry.setPracticeSettingCode(new Code("code5", new LocalizedString("code5"), "scheme5"));
-        docEntry.setRepositoryUniqueId("34978634");
+        docEntry.setRepositoryUniqueId("1.2.3.4");
         docEntry.setServiceStartTime("198012");
         docEntry.setServiceStopTime("198101");
         docEntry.setSize(123L);

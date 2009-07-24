@@ -39,7 +39,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.ProvideAndRegisterDocumentSetTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationMessage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSValidationException;
 
@@ -438,13 +440,27 @@ public class SubmitObjectsRequestValidatorTest {
         expectFailure(ORGANIZATION_TOO_MANY_COMPONENTS, ebXML);
     }
 
+    @Test
+    public void testRepositoryUniqueIdIsNecessaryInXDSB() {
+        docEntry.setRepositoryUniqueId(null);
+        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, new ValidationProfile(false, true, Actor.REGISTRY));
+    }
+    
     private void expectFailure(ValidationMessage expectedMessage) {
-        expectFailure(expectedMessage, transformer.toEbXML(request));
+        expectFailure(expectedMessage, transformer.toEbXML(request), null);
+    }
+
+    private void expectFailure(ValidationMessage expectedMessage, ValidationProfile profile) {
+        expectFailure(expectedMessage, transformer.toEbXML(request), profile);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML) {
+        expectFailure(expectedMessage, ebXML, null);
+    }
+    
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML, ValidationProfile profile) {
         try {
-            validator.validate(ebXML, null);
+            validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

@@ -50,6 +50,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabu
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.SLOT_NAME_SUBMISSION_TIME;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.SLOT_NAME_URI;
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.SLOT_NAME_REPOSITORY_UNIQUE_ID;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.SUBMISSION_SET_CLASS_NODE;
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME;
@@ -89,6 +90,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationLa
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.LocalizedString;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.CXValidator;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ClassificationValidation;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ExternalIdentifierValidation;
@@ -131,51 +133,55 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final CXValidator cxValidator = new CXValidator();
     
     private final SlotValueValidation[] authorValidations = new SlotValueValidation[] {
-                new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator),
-                new SlotValueValidation(SLOT_NAME_AUTHOR_INSTITUTION, xonValidator, 0, Integer.MAX_VALUE),
-                new SlotValueValidation(SLOT_NAME_AUTHOR_ROLE, nopValidator, 0, Integer.MAX_VALUE),
-                new SlotValueValidation(SLOT_NAME_AUTHOR_SPECIALTY, nopValidator, 0, Integer.MAX_VALUE)};
+        new SlotValueValidation(SLOT_NAME_AUTHOR_PERSON, xcnValidator),
+        new SlotValueValidation(SLOT_NAME_AUTHOR_INSTITUTION, xonValidator, 0, Integer.MAX_VALUE),
+        new SlotValueValidation(SLOT_NAME_AUTHOR_ROLE, nopValidator, 0, Integer.MAX_VALUE),
+        new SlotValueValidation(SLOT_NAME_AUTHOR_SPECIALTY, nopValidator, 0, Integer.MAX_VALUE)};
     
     private final SlotValueValidation[] codingSchemeValidations = new SlotValueValidation[] {
-                new SlotValueValidation(SLOT_NAME_CODING_SCHEME, nopValidator)};
+        new SlotValueValidation(SLOT_NAME_CODING_SCHEME, nopValidator)};
     
     private final RegistryObjectValidator[] docEntrySlotValidations = new RegistryObjectValidator[] {
-                new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator),
-                new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
-                new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
-                new SlotValueValidation(SLOT_NAME_HASH, hashValidator, 0, 1),
-                new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
-                new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, 1),
-                new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator, 0, 1),
-                new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, nopValidator, 0, 1),
-                new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator, 0, Integer.MAX_VALUE),
-                new SlotValidation(SLOT_NAME_URI, uriValidator),
-                new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 1, Integer.MAX_VALUE, authorValidations),
-                new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, codingSchemeValidations),
-                new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
-                new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
-                new ClassificationValidation(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, codingSchemeValidations),
-                new ClassificationValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
-                new ClassificationValidation(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, codingSchemeValidations),
-                new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
-                new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidator)};
+        new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator),
+        new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
+        new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
+        new SlotValueValidation(SLOT_NAME_HASH, hashValidator, 0, 1),
+        new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
+        new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, 1),
+        new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator, 0, 1),
+        new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, nopValidator, 0, 1),
+        new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator, 0, Integer.MAX_VALUE),
+        new SlotValidation(SLOT_NAME_URI, uriValidator),
+        new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 1, Integer.MAX_VALUE, authorValidations),
+        new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, codingSchemeValidations),
+        new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
+        new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
+        new ClassificationValidation(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, codingSchemeValidations),
+        new ClassificationValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
+        new ClassificationValidation(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, codingSchemeValidations),
+        new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
+        new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidator)};
+
+    private final RegistryObjectValidator[] docEntrySlotValidations30 = new RegistryObjectValidator[] {
+        new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator)};
     
     private final RegistryObjectValidator[] submissionSetSlotValidations = new RegistryObjectValidator[] {
-                new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
-                new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
-                new ClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, 1, Integer.MAX_VALUE, authorValidations),
-                new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
-                new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidator),
-                new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator)};
+        new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
+        new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
+        new ClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, 1, Integer.MAX_VALUE, authorValidations),
+        new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
+        new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidator),
+        new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator)};
     
     private final RegistryObjectValidator[] folderSlotValidations = new RegistryObjectValidator[] {
-                new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidator, 0, 1),
-                // The spec says that the code list is required to have at least 1 code. However, 
-                // the XDStoolkit tests do currently not always provide a code. Therefore, we 
-                // accept 0 codes as well.
-                new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
-                new ExternalIdentifierValidation(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidator)};
+        new SlotValueValidation(SLOT_NAME_LAST_UPDATE_TIME, timeValidator, 0, 1),
+        // The spec says that the code list is required to have at least 1 code. However, 
+        // the XDStoolkit tests do currently not always provide a code. Therefore, we 
+        // accept 0 codes as well.
+        new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
+        new ExternalIdentifierValidation(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidator)};
 
+    @Override
     public void validate(EbXMLObjectContainer container, ValidationProfile profile) {
         notNull(container, "container cannot be null");
         
@@ -192,7 +198,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             validateUniquenessOfUniqueIds(container);
         }
         validateAssociations(container, profile);
-        validateDocumentEntries(container);
+        validateDocumentEntries(container, profile);
         validateFolders(container);
         if (!profile.isQuery()) {
             validatePatientIdsAreIdentical(container);
@@ -228,9 +234,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateDocumentEntries(EbXMLObjectContainer container) throws XDSMetaDataException {
+    private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE)) {
             runValidations(docEntry, docEntrySlotValidations);
+            if (profile.isXdsb() && profile.getActor() == Actor.REGISTRY) {
+                runValidations(docEntry, docEntrySlotValidations30);
+            }
             
             AvailabilityStatus status = docEntry.getStatus();
             if (status != null) {

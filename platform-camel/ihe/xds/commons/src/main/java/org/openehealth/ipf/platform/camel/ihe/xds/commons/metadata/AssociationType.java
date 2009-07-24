@@ -115,4 +115,11 @@ public enum AssociationType {
         
         return null;
     }
+    
+    /**
+     * @return <code>true</code> if the association contains a replacement.
+     */
+    public boolean isReplace() {
+        return this == REPLACE || this == TRANSFORM_AND_REPLACE;
+    }
 }

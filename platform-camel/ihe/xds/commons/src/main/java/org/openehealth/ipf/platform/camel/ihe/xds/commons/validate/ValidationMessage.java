@@ -91,7 +91,9 @@ public enum ValidationMessage {
     INVALID_ERROR_CODE_IN_RESPONSE("Invalid error code in response"),
     INVALID_SEVERITY_IN_RESPONSE("Invalid severity in response"),
     MISSING_OBJ_REF("Missing object reference"),
-    DEPRECATED_OBJ_CANNOT_BE_TRANSFORMED("A deprecated entry cannot be transformed or appended", ErrorCode.REGISTRY_DEPRECATED_DOCUMENT_ERROR);
+    DEPRECATED_OBJ_CANNOT_BE_TRANSFORMED("A deprecated entry cannot be transformed or appended", ErrorCode.REGISTRY_DEPRECATED_DOCUMENT_ERROR),
+    DIFFERENT_HASH_CODE_IN_RESUBMISSION("A document was resubmitted with a different hash code", ErrorCode.NON_IDENTICAL_HASH),
+    UNKNOWN_PATIENT_ID("Patient Id is unknown", ErrorCode.UNKNOWN_PATIENT_ID);
     
     private final String text;
     private final ErrorCode errorCode;

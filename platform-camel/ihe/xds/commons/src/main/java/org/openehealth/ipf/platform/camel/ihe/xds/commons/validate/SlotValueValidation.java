@@ -23,12 +23,27 @@ import java.util.List;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSlotList;
 
+/**
+ * Performs a validation of a slot value.
+ * @author Jens Riemschneider
+ */
 public class SlotValueValidation implements RegistryObjectValidator {
     private final String slotName;
     private final ValueValidator validator;
     private final int min;
     private final int max;
 
+    /**
+     * Constructs the validation.
+     * @param slotName
+     *          the name of the slot.
+     * @param validator
+     *          the validator to use.
+     * @param min
+     *          the minimum number of values that the slot must have.
+     * @param max
+     *          the maximum number of values that the slot must have.
+     */
     public SlotValueValidation(String slotName, ValueValidator validator, int min, int max) {
         this.slotName = slotName;
         this.validator = validator;
@@ -36,6 +51,13 @@ public class SlotValueValidation implements RegistryObjectValidator {
         this.max = max;
     }
 
+    /**
+     * Constructs the validation.
+     * @param slotName
+     *          the name of the slot.
+     * @param validator
+     *          the validator to use.
+     */
     public SlotValueValidation(String slotName, ValueValidator validator) {
         this.slotName = slotName;
         this.validator = validator;

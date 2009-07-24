@@ -22,11 +22,30 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.validate;
  */
 public class ValidationProfile {
     private boolean query;
+    private boolean xdsb;
+    private Actor actor;
     
     /**
      * Constructs a profile.
      */
     public ValidationProfile() {}
+
+
+    /**
+     * Constructs a profile.
+     * @param query
+     *          <code>true</code> if checks are done for query transactions.
+     * @param xdsb
+     *          <code>true</code> if XDS.b is validated.
+     * @param actor
+     *          defines the actor that validates messages.
+     */
+    public ValidationProfile(boolean query, boolean xdsb, Actor actor) {
+        this.query = query;
+        this.xdsb = xdsb;
+        this.actor = actor;
+    }
+
 
     /**
      * Copy constructor.
@@ -36,11 +55,13 @@ public class ValidationProfile {
     public ValidationProfile(ValidationProfile profile) {
         if (profile != null) {
             this.query = profile.query;
+            this.xdsb = profile.xdsb;
+            this.actor = profile.actor;
         }
     }
 
     /**
-     * @return <code>true</code> if this checks are done for query transactions.
+     * @return <code>true</code> if checks are done for query transactions.
      */
     public boolean isQuery() {
         return query;
@@ -52,5 +73,35 @@ public class ValidationProfile {
      */
     public void setQuery(boolean query) {
         this.query = query;
+    }
+
+    /**
+     * @return <code>true</code> if XDS.b is validated.
+     */
+    public boolean isXdsb() {
+        return xdsb;
+    }
+
+    /**
+     * @param xdsb
+     *          <code>true</code> if XDS.b is validated.
+     */
+    public void setXdsb(boolean xdsb) {
+        this.xdsb = xdsb;
+    }
+
+    /**
+     * @return defines the actor that validates messages.
+     */
+    public Actor getActor() {
+        return actor;
+    }
+
+    /**
+     * @param actor
+     *          defines the actor that validates messages.
+     */
+    public void setActor(Actor actor) {
+        this.actor = actor;
     }
 }

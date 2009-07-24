@@ -28,7 +28,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Organization;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.requests.ProvideAndRegisterDocumentSetTransformer;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationMessage;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSValidationException;
 
@@ -81,13 +83,23 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
         expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML);
     }
     
+    @Test
+    public void testRepositoryUniqueIdIsNotNecessary() {
+        docEntry.setRepositoryUniqueId(null);
+        validator.validate(transformer.toEbXML(request), new ValidationProfile(false, true, Actor.REPOSITORY));
+    }
+    
     private void expectFailure(ValidationMessage expectedMessage) {
-        expectFailure(expectedMessage, transformer.toEbXML(request));
+        expectFailure(expectedMessage, transformer.toEbXML(request), null);
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest ebXML) {
+        expectFailure(expectedMessage, ebXML, null);
+    }
+    
+    private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest ebXML, ValidationProfile profile) {
         try {
-            validator.validate(ebXML, null);
+            validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {
