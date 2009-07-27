@@ -16,7 +16,7 @@
 package builders
 
 import org.openhealthtools.ihe.common.cdar2.*
-
+import org.openehealth.ipf.modules.cda.support.DateTimeUtils
 authoringDevice(schema:'infrastructureRoot', factory:'POCDMT000040_AUTHORING_DEVICE') {
      properties {
        code(schema:'ce')
@@ -90,7 +90,9 @@ patient(schema:'person', factory:'POCDMT000040_PATIENT') {
 	properties {
 		id(schema:'ii')
 		administrativeGenderCode(schema:'administrativeGenderCode')
-		birthTime(schema:'ts')
+		birthTime(schema:'ts', check: {
+		    DateTimeUtils.isValidDateTime(it.value, DateTimeUtils.YEAR_PRECISION, DateTimeUtils.DATE_PRECISION)
+		})
 		maritalStatusCode(schema:'ce')
 		religiousAffiliationCode(schema:'ce')
 		raceCode(schema:'ce')

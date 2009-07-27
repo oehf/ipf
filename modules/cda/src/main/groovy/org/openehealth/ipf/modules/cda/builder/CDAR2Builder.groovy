@@ -17,7 +17,7 @@ package org.openehealth.ipf.modules.cda.builder
 
 import groovytools.builder.*
 import java.lang.ClassLoader
-
+import org.openehealth.ipf.modules.cda.builder.support.MetaBuilderUtils
 
 /**
  * CDAR2Builder uses the CDAR2Factory as default factory
@@ -59,7 +59,7 @@ public class CDAR2Builder extends MetaBuilder{
 	
 	protected void anyBuilder() {
 		define {
-			_any(factory:'ANY') {
+			_any(factory:'ANY', check: { false }) {
 				properties {
                   nullFlavor(factory:'NULL_FLAVOR')
                 }

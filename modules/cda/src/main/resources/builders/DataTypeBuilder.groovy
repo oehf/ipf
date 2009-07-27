@@ -16,7 +16,7 @@
 package builders
 
 import groovytools.builder.*
-
+import org.openehealth.ipf.modules.cda.support.DateTimeUtilsimport org.openehealth.ipf.modules.cda.builder.support.MetaBuilderUtils
 adxp(schema:'_any', factory:'ADXP') {
 	properties { 
 		partType()                      
@@ -112,19 +112,19 @@ bin(schema:'_any', factory:'BIN1') {
 		representation(factory:'BINARY_DATA_ENCODING')
 	}
 }
-bl(schema:'_any', factory:'BL1'){
+bl(schema:'_any', factory:'BL1', check: { MetaBuilderUtils.checkNullFlavor(it, 'value')}){
     properties{
         value()
     }
 }
-ce(schema:'cv', factory:'CE') {
+ce(schema:'cv', factory:'CE', check: { MetaBuilderUtils.checkNullFlavor(it, 'code')}) {
 	collections { 
 		translations(collection:'translation') {
 			translation(schema:'cd') 
 		}
 	}
 }
-cd(schema:'ce', factory:'CD') {
+cd(schema:'ce', factory:'CD', check: { MetaBuilderUtils.checkNullFlavor(it, 'code')}) {
 	collections { 
 		qualifiers(collection:'qualifier') {
 			qualifier(schema:'cr')  
@@ -138,12 +138,12 @@ cr(schema:'_any', factory:'CR') {
 		inverted()
 	}
 }
-cs(schema:'_any', factory:'CS1') {
+cs(schema:'_any', factory:'CS1', check: { MetaBuilderUtils.checkNullFlavor(it, 'code')}) {
 	properties { 
 		code()
 	}
 }
-cv(schema:'cs', factory:'CV') {
+cv(schema:'cs', factory:'CV', check: { MetaBuilderUtils.checkNullFlavor(it, 'code')}) {
 	properties {
 		// TODO: enforce OID or UUID format for codeSystem
 		codeSystem()
@@ -162,7 +162,7 @@ ed(schema:'bin', factory:'ED') {
 		language()
 		mediaType()
 		reference(schema:'tel')
-		thumbnail() //TODO
+		thumbnail(schema:'thumbnail')
 	}	    
 }	
 enxp(schema:'_any', factory:'ENXP') {
@@ -175,32 +175,17 @@ enxp(schema:'_any', factory:'ENXP') {
 		}
 	}
 }
-en(schema:'_any', factory:'EN') {
-	properties { 
-	    validTime(schema:'ivlts') 
-	}
+en(schema:'on', factory:'EN') {
 	collections {
-		uses(collection:'use') {
-			_use()
-		}
-		delimiters(collection:'delimiter') {
-			delimiter(schema:'enxp', factory:'EN_DELIMITER')
-		}
 		families(collection:'family') {
 			family(schema:'enxp', factory:'EN_FAMILY')
 		}
 		givens(collection:'given') {
 			given(schema:'enxp', factory:'EN_GIVEN')
 		}
-		prefixes(collection:'prefix') {
-			prefix(schema:'enxp', factory:'EN_PREFIX')
-		}
-		suffixes(collection:'suffix') {
-			suffix(schema:'enxp', factory:'EN_SUFFIX')
-		}
 	}
 }
-ii(schema:'_any', factory:'II') {
+ii(schema:'_any', factory:'II', check: { MetaBuilderUtils.checkNullFlavor(it, 'root')}) {
 	properties {
 		// TODO: enforce OID or UUID format for root
 		root()
@@ -209,7 +194,7 @@ ii(schema:'_any', factory:'II') {
 		isDisplayable()
 	}
 }
-_int(schema:'_any', factory:'INT1') {
+_int(schema:'_any', factory:'INT1', check: { MetaBuilderUtils.checkNullFlavor(it, 'value')}) {
 	properties { 
 		value() 
 	}
@@ -262,13 +247,29 @@ ivlpq(schema:'sxcmpq',factory:'IVLPQ'){//TODO complicated choice rools
         /* TODO optional width */
     }
 }
-on(schema:'en', factory:'ON') {
-	// TODO: no family/given names allowed
+on(schema:'_any', factory:'ON') {
+	properties { 
+	    validTime(schema:'ivlts') 
+	}
+	collections {
+		uses(collection:'use') {
+			_use()
+		}
+		delimiters(collection:'delimiter') {
+			delimiter(schema:'enxp', factory:'EN_DELIMITER')
+		}
+		prefixes(collection:'prefix') {
+			prefix(schema:'enxp', factory:'EN_PREFIX')
+		}
+		suffixes(collection:'suffix') {
+			suffix(schema:'enxp', factory:'EN_SUFFIX')
+		}
+	}
 }
 pn(schema:'en', factory:'PN') {
 	// TODO: only person ENXP qualifiers allowed
 }
-pq(schema:'_any', factory:'PQ') {
+pq(schema:'_any', factory:'PQ', check: { MetaBuilderUtils.checkNullFlavor(it, 'value')}) {
 	properties {
 		unit(def:1)
 		value()
@@ -286,11 +287,11 @@ pqr(schema:'cv', factory:'PQR'){
 }
 rtopqpq(schema:'_any', factory:'RTOPQPQ'){
     properties{
-        numerator(schema:'pq', min:1, max:1)
-        denominator(schema:'pq', min:1, max:1)
+        numerator(schema:'pq', def:1)
+        denominator(schema:'pq', def:1)
     }
 }
-sc(schema:'st', factory:'SC') {	
+sc(schema:'st', factory:'SC', check: { MetaBuilderUtils.checkNullFlavor(it, 'code')}) {	
     properties {
         code()
         codeSystem()
@@ -316,7 +317,7 @@ sxcmpq(schema:'pq',factory:'SXCMPQ'){
         operator(factory:'SET_OPERATOR')
     }
 }
-tel(schema:'url', factory:'TEL') {
+tel(schema:'url', factory:'TEL', check: { MetaBuilderUtils.checkNullFlavor(it, 'value')}) {
     properties { 
         usablePeriod() // TODO                     
     }
@@ -326,11 +327,17 @@ tel(schema:'url', factory:'TEL') {
         }
     }
 }
-ts(schema:'_any', factory:'TS1') {
-	properties { // TODO: enforce time string format
-		value() }
+thumbnail(schema:'ed', factory:'THUMBNAIL') {    
 }
-url(schema:'_any', factory:'URL') {
+
+ts(schema:'_any', factory:'TS1', check: { 
+    MetaBuilderUtils.checkNullFlavor(it, 'value')
+}) {
+	properties {
+		value(check: { return DateTimeUtils.isValidDateTime(it) })
+	}
+}
+url(schema:'_any', factory:'URL', check: { MetaBuilderUtils.checkNullFlavor(it, 'value')}) {
 	properties { 
 	    value()
 	}
