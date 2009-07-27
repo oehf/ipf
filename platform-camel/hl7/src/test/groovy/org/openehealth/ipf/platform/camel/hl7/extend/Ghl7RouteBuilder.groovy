@@ -47,7 +47,6 @@ class Ghl7RouteBuilder extends SpringRouteBuilder {
         from("direct:input5")
             .unmarshal().ghl7('UTF-8')
             .marshal().ghl7('ISO-8859-1')
-            .to('file:test')
             .to('mock:output')            
     }
     
