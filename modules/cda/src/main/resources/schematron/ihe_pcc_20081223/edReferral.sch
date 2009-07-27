@@ -89,7 +89,7 @@
     
 
 -->
-<schema xmlns="http://www.ascc.net/xml/schematron" xmlns:cda="urn:hl7-org:v3"
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" xmlns:cda="urn:hl7-org:v3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <title>Schematron schema for validating ED Referral Specification Module</title>
     <ns prefix="cda" uri="urn:hl7-org:v3"/>

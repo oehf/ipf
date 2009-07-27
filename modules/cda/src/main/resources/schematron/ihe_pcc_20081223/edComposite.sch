@@ -95,7 +95,7 @@
     
 
 -->
-<schema xmlns="http://www.ascc.net/xml/schematron" xmlns:cda="urn:hl7-org:v3"
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" xmlns:cda="urn:hl7-org:v3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <title>Schematron schema for validating IHE PCC v3.0 ED Composite Triage and Nursing Note Module</title>
     <ns prefix="cda" uri="urn:hl7-org:v3"/>
