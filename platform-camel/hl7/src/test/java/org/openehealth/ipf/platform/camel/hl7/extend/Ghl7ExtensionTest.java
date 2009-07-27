@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.hl7.extend;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class Ghl7ExtensionTest extends AbstractExtensionTest {
 
     private String resource = "message/msg-01.hl7";
+    private String resourceUTF8 = "message/msg-01-utf8.hl7";
     
     @Test
     public void testMarshalDefault() throws Exception {
@@ -53,6 +55,20 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
     @Test
     public void testValidateDefault() throws Exception {
         testUnmarshal("direct:input4");
+    }
+    
+    @Test
+    public void testUnmarshalMarshalOtherEncoding() throws Exception {
+        InputStream stream = inputStream(resourceUTF8);
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input5", stream);
+        mockOutput.assertIsSatisfied();
+        Message result = resultMessage();
+        // We expect an ByteArray
+        assertEquals("[B", result.getBody().getClass().getName());
+        String s = new String(((byte[])result.getBody()), "ISO-8859-1");
+        assertTrue(s.contains("Nächname"));
+        assertTrue(s.contains("Vörname"));
     }
 
     private void testMarshal(String endpoint) throws Exception {
