@@ -20,7 +20,7 @@ import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.eclipse.emf.ecore.xmi.XMLResource
 import org.openhealthtools.ihe.common.cdar2.*
 import org.openhealthtools.ihe.common.cdar2.impl.*
-
+import groovytools.builder.NodeException
 /**
  * @author Christian Ohr
  */
@@ -76,11 +76,17 @@ public class CDAR2BuilderComponent2Test extends AbstractCDAR2BuilderTest {
         nonXMLBody()
       }
     }
-    assert !componentValid.nonXMLBody ^ !componentValid.structuredBody
+    assert componentValid.nonXMLBody
     assert componentValid instanceof POCDMT000040Component2
-    shouldFail {
-      builder.build {
-        component {nonXMLBody() structuredBody()}
+    shouldFail(NodeException) { builder.build {
+        component {
+          nonXMLBody()
+          structuredBody {
+              component {
+                  section()
+              }
+          }
+        }
       }
     }
   }
@@ -125,7 +131,7 @@ public class CDAR2BuilderComponent2Test extends AbstractCDAR2BuilderTest {
           }
           structuredBody {
             component {
-              section() {
+              section {
                 code(
                         code: '10164-2',
                         codeSystem: '2.16.840.1.113883.6.1',

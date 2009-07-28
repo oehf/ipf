@@ -41,6 +41,17 @@ public class CDAR2DataTypeTest extends AbstractCDAR2BuilderTest {
           assert e.message.contains('ce')
       }
     }
+  
+  public void testCDWithNoNullFlavor() {
+      try {
+          CD cd = builder.build {
+              cd(codeSystem:'bla')
+          }
+          fail('Building cd without code must fail')
+      } catch (NodeException e) {
+          assert e.message.contains('cd')
+      }
+    }  
 
 
 
