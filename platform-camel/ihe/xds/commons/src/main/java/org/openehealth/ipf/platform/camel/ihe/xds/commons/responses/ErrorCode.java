@@ -82,7 +82,16 @@ public enum ErrorCode {
     REGISTRY_DEPRECATED_DOCUMENT_ERROR("XDSRegistryDeprecatedDocumentError"),
     /** The unique ID of a repository could not be resolved to a valid document repository 
      *  or the value does not match that of the document repository. */
-    UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId");
+    UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId"),
+    
+    /** Some additional error codes from XCA, dealing with homeCommunityIDs */
+    
+    /** A value for the homeCommunityId is not recognized */
+    UNKNOWN_COMMUNITY("XDSUnknownCommunity"),
+    /** A value for the homeCommunityId is required and has not been specified */
+    MISSING_HOME_COMMUNITY_ID("XDSMissingHomeCommunityId"),
+    /** A community which would have been contacted was not available */
+    UNAVAILABLE_COMMUNITY("XDSUnavailableCommunity");
     
     private final String opcode;
     
