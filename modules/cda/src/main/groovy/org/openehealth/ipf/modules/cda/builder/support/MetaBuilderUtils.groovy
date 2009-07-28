@@ -47,17 +47,45 @@ public class MetaBuilderUtils{
                 }
             } else {
                 // Check if required property is set
-                def p = data.metaClass.getProperty(data, requiredProp)
-                if (p != null) {
-                    if (p instanceof Collection) {
-                        return !p.isEmpty()
-                    }
-                } else {
-                    return false
-                }
+                return requireAnyOf(data, [requiredProp])
             }
         }
         return true
     }
+    
+    /*
+     * Checks that at least one of the passed properties is
+     * not NULL or an empty collection 
+     */
+    static boolean requireAnyOf(data, List elements) {
+        elements.any() { 
+            attributeIsNotEmpty(data, it) 
+        }
+    }
+        
+    /*
+     * Checks that exactly one of the passed properties is
+     * not NULL or an empty collection 
+     */
+    static boolean requireChoiceOf(data, List elements) {
+        def notEmpty = elements.findAll { 
+            attributeIsNotEmpty(data, it) 
+        }
+        notEmpty.size() == 1
+    }
+    
+    private static boolean attributeIsNotEmpty(data, name) {
+        def p = data.metaClass.getProperty(data, name.toString())
+    	if (p != null) {
+    	    if (p instanceof Collection) {
+    	        return !p.isEmpty()
+    	    } else {
+    	        return true
+    	    }
+    	} else {
+    	    return false
+    	}
+    }
+            
     
 }

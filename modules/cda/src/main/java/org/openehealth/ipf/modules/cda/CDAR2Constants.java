@@ -34,7 +34,36 @@ public interface CDAR2Constants {
 
     static final String CDA4CDT_SCHEMATRON_RULES = "schematron/cda4cdt_20090206/HandP.sch";
 
-    static final String IHE_BPPC_SCHEMATRON_RULES = "schematron/cihe_bppc_20090518/BPPC.sch";
+    static final String IHE_BPPC_SCHEMATRON_RULES = "schematron/ihe_bppc_20090518/BPPC.sch";
 
-    // ...
+    static final String IHE_PCC_ANTEPARTUM_EDUCATION_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/ape.sch";
+
+    static final String IHE_PCC_ANTEPARTUM_H_AND_P_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/aphp.sch";
+
+    static final String IHE_PCC_ANTEPARTUM_SUMMARY_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/aps.sch";
+
+    static final String IHE_PCC_ED_COMPOSITE_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/edComposite.sch";
+
+    static final String IHE_PCC_ED_NURSING_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/edNursingNote.sch";
+
+    static final String IHE_PCC_ED_PHYSICIAN_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/edPhysicianNote.sch";
+
+    static final String IHE_PCC_ED_REFERRAL_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/edReferral.sch";
+
+    static final String IHE_PCC_ED_TRIAGE_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/edTriageNote.sch";
+
+    static final String IHE_PCC_FSA_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/fsa.sch";
+
+    static final String IHE_PCC_IMMUNIZATION_DETAIL_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/immunizationDetail.sch";
+
+    static final String IHE_PCC_XDSMS_DISCHARGE_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/xdsMsDischarge.sch";
+
+    static final String IHE_PCC_XDSMS_REFERRAL_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/xdsMsReferral.sch";
+
+    static final String IHE_PCC_XPHR_EXTRACT_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/xphrExtract.sch";
+
+    static final String IHE_PCC_XPHR_UPDATE_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/xphrUpdate.sch";
+
+    static final String IHE_QRPH_CRD_SCHEMATRON_RULES = "schematron/ihe_qrph_20090206/crd.sch";
+
 }

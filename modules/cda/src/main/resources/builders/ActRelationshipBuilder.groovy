@@ -16,9 +16,13 @@
 package builders
 
 import org.openhealthtools.ihe.common.cdar2.*
+import org.openehealth.ipf.modules.cda.builder.support.MetaBuilderUtils
 
-
-clinicalStatementChoice(schema:'infrastructureRoot') {
+clinicalStatementChoice(schema:'infrastructureRoot', check: {
+     MetaBuilderUtils.requireChoiceOf(it, ['act', 'encounter', 'observation', 'observationMedia',
+                                           'organizer', 'procedure', 'regionOfInterest',
+                                           'substanceAdministration', 'supply'])
+ }) {
     properties {
         contextConductionInd(def:true)
         /* One of */
@@ -34,7 +38,10 @@ clinicalStatementChoice(schema:'infrastructureRoot') {
     }
 }
 
-externalActChoice(schema:'infrastructureRoot') {
+externalActChoice(schema:'infrastructureRoot', check: {
+    MetaBuilderUtils.requireChoiceOf(it, ['externalAct', 'externalObservation',
+                                          'externalProcedure', 'externalDocument'])
+}) {
   properties {
       /* One of */
       externalAct(schema:'externalAct')
@@ -55,7 +62,9 @@ authorization(schema:'infrastructureRoot', factory:'POCDMT000040_AUTHORIZATION')
 component(
         schema:'infrastructureRoot', 
         factory:'POCDMT000040_COMPONENT2', 
-        check: {it.nonXMLBody == null ^ it.structuredBody == null}) { 
+        check: {
+            MetaBuilderUtils.requireChoiceOf(it, ['structuredBody', 'nonXMLBody']) 
+        }) {
     properties {
         contextConductionInd()
         // typeCode(factory:'ACT_RELATIONSHIP_HAS_COMPONENT')
