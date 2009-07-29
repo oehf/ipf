@@ -63,6 +63,7 @@ ccd_structuredBody(schema:'structuredBody') {
 		advanceDirectives(schema:'ccd_advanceDirectives')
         familyHistory(schema:'ccd_familyHistory')
         problems(schema:'ccd_problems')
+        alerts(schema:'ccd_alerts')
         // ...
 	}
 }
