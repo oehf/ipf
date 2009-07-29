@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Sectionimport org.junit.BeforeClassimport org.junit.Test
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+import org.junit.BeforeClass
+import org.junit.Test
+
 import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
 
 /**
@@ -25,8 +28,8 @@ public class CCDAdvanceDirectivesBuilderTest extends AbstractContentBuilderTest 
 	
 	@BeforeClass
 	static void initialize() throws Exception {
-		builder().define(getClass().getResource('/builders/content/section/CCDStatusObservation.groovy'))
 		builder().define(getClass().getResource('/builders/content/section/CCDAdvanceDirectivesBuilder.groovy'))
+		builder().define(getClass().getResource('/builders/content/section/CCDStatusObservation.groovy'))
 		def extension = new CCDAdvanceDirectivesExtension(builder())
 		extension.extensions.call()
 	}
@@ -34,15 +37,15 @@ public class CCDAdvanceDirectivesBuilderTest extends AbstractContentBuilderTest 
 	@Test
 	public void testCCDAdvanceDirectives() {
 		def POCDMT000040Section advanceDirective = builder.build{
-			ccd_advanceDirectives{
+	        ccd_advanceDirectives{
 				text('Simple Advance Directives')
 				observation{
 					id(root:'9b54c3c9-1673-49c7-aef9-b037ed72ed27')
 					code(code:'304251008', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resuscitation')
 					advanceDirectiveStatus{
-						value(code:'15240007',
-						codeSystem:'2.16.840.1.113883.6.96',
-						displayName:'Current and verified')
+					    value(code:'15240007',
+					            codeSystem:'2.16.840.1.113883.6.96',
+					            displayName:'Current and verified')
 					}//observation status
 					verifier{ 
 					    time('19991107')

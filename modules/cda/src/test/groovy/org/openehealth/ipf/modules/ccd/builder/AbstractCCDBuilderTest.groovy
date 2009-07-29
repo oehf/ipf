@@ -41,7 +41,7 @@ public abstract class AbstractCCDBuilderTest extends GroovyTestCase {
 		ExpandoMetaClass.enableGlobally()
 		def cdaExtensions = new CDAR2ModelExtension()
 		cdaExtensions.extensions.call()
-		def ccdExtensions = new CCDExtension(builder)
+		def ccdExtensions = new CCDModelExtension(builder)
 		ccdExtensions.extensions.call()
 	}
 		

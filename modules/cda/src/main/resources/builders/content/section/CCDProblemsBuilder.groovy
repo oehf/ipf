@@ -57,38 +57,6 @@ ccd_problems(schema:'section'){
     
 }
 
-// CONF-145: A problem act (templateId 2.16.840.1.113883.10.20.1.27) SHALL be represented with Act.
-ccd_problemAct(schema:'act'){
-    properties{
-        // CONF-146: The value for “Act / @classCode” in a problem act SHALL be 
-        //           “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.
-        classCode(factory:'XACT_CLASS_DOCUMENT_ENTRY_ACT', def:XActClassDocumentEntryAct.ACT_LITERAL)
-        // CONF-147: The value for “Act / @moodCode” in a problem act SHALL be 
-        //           “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.
-        moodCode(factory:'XDOCUMENT_ACT_MOOD', def: XDocumentActMood.EVN_LITERAL)
-        // CONF-149: The value for “Act / code / @NullFlavor” in a problem act SHALL be
-        //           “NA” “Not applicable” 2.16.840.1.113883.5.1008 NullFlavor STATIC.
-        code(def:{
-            getMetaBuilder().build{
-                cd(nullFlavor:'NA')
-            }
-        })
-        problemObservation(schema:'ccd_problemObservation')
-        // CONF-168: A problem act MAY contain exactly one episode observation.
-        episodeObservation(schema:'ccd_episodeObservation')
-        //CONF-179: A problem act MAY contain exactly one patient awareness.
-        patientAwareness(schema:'ccd_patientAwareness')
-    }
-    collections{
-        templateIds(collection:'templateId', def: {
-            getMetaBuilder().buildList {
-                ii(root:'2.16.840.1.113883.10.20.1.27')
-            }
-        })
-        entryRelationships(collection:'entryRelationship', min:1)
-    }
-}
-
 // CONF-154: A problem observation (templateId 2.16.840.1.113883.10.20.1.28) SHALL 
 //           be represented with Observation.
 ccd_problemObservation(schema:'observation'){
@@ -230,7 +198,7 @@ ccd_patientAwareness(schema:'clinicalStatementParticipant'){
 //           ClinicalDocument / recordTarget / patientRole / id.
 ccd_problemsParticipantRole(schema:'participantRole'){
     collections{
-        ids(collection:'id', min:1) {
+        ids(collection:'id', min:1, max:1) {
             id(schema:'ii')
         }
     }

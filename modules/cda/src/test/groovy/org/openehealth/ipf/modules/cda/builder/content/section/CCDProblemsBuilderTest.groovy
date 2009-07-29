@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Sectionimport org.junit.BeforeClassimport org.junit.Test
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+import org.junit.BeforeClass
+import org.junit.Test
+
 import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
 
 /**
@@ -26,14 +29,17 @@ public class CCDProblemsBuilderTest extends AbstractContentBuilderTest {
 	@BeforeClass
 	static void initialize() throws Exception {
 		builder().define(getClass().getResource('/builders/content/section/CCDStatusObservation.groovy'))
+		builder().define(getClass().getResource('/builders/content/section/CCDProblemAct.groovy'))
 		builder().define(getClass().getResource('/builders/content/section/CCDProblemsBuilder.groovy'))
+		def extensionAct = new CCDProblemActExtension(builder())
+        extensionAct.extensions.call()
 		def extension = new CCDProblemsExtension(builder())
 		extension.extensions.call()
 	}
 	
 	@Test
 	public void testCCDProblems() {
-		def POCDMT000040Section problems = builder.build {
+		POCDMT000040Section problems = builder.build {
 		    ccd_problems{
                 text('Patient Problems Acts')
                 problemAct{

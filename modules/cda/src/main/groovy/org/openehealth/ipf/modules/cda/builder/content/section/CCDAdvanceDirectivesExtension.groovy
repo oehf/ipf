@@ -16,7 +16,9 @@
 package org.openehealth.ipf.modules.cda.builder.content.section
 
 import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.openhealthtools.ihe.common.cdar2.*import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+import org.openhealthtools.ihe.common.cdar2.*
+import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+
 
 /**
  * Make sure that the CDAModelExtensions are called before
@@ -85,13 +87,15 @@ public class CCDAdvanceDirectivesExtension extends BaseModelExtension {
 					entryRelationship {
 						typeCode('REFR')
 					}
-				} 
+				}
 				rell.observation = observationStatus
 				delegate.entryRelationship.add(rell)
 			}
 			
 			getAdvanceDirectiveStatus { ->
-				delegate.entryRelationship   //TODO add find with template id
+			    delegate.entryRelationship.find {
+			        '2.16.840.1.113883.10.20.1.37' in it.observation.templateId.root
+			    }?.observation
 			}
 			
 			// CONF-101: An advance directive reference (templateId 2.16.840.1.113883.10.20.1.36) SHALL be

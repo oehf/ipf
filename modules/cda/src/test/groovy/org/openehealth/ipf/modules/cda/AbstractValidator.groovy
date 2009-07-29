@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.modules.cda
 
-import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Actimport org.openehealth.ipf.commons.core.modules.api.ValidationException
+import org.openehealth.ipf.commons.core.modules.api.Validator
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Act
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
+
 
 /**
  * Abstract validator class from which the CDA validators should inherit from.
@@ -128,7 +131,7 @@ public abstract class AbstractValidator implements Validator {
 	
 	static void assertSize(constraint, size, List object) {
 		size = resolve(size, object)
-		if (object.size == size) {
+		if (object.size != size) {
 			throw new ValidationException("$constraint violated. Object must have $size element(s), but has ${object.size}")            
 		}
 	}    

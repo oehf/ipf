@@ -17,12 +17,13 @@ package org.openehealth.ipf.modules.ccd.builder
 
 import org.openhealthtools.ihe.common.cdar2.*
 import org.openhealthtools.ihe.common.cdar2.impl.*
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
 
 /**
  * Test the schema definitions pass to build a CCD construct
  * @author Stefan Ivanov
  */
-public class CCDFeaturesBuilderTest extends AbstractCCDBuilderTest{
+public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 	
 	/**
 	 *

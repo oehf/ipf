@@ -15,17 +15,18 @@
  */
 package org.openehealth.ipf.modules.ccd.builder
 
-import groovy.util.GroovyTestCase
+import groovy.util.GroovyTestCase
+
 
 /**
  * @author Christian Ohr
  */
-public class CCDExtensionTest extends GroovyTestCase {
+public class CCDModelExtensionTest extends GroovyTestCase {
     
      void testCCDExtension() {
          ExpandoMetaClass.enableGlobally()
-         def ccdExtensions = new CCDExtension()
+         def ccdExtensions = new CCDModelExtension()
          int c = ccdExtensions.extensions.call()
-         assertEquals(7, c)
+         assertEquals(9, c)
      }
 }

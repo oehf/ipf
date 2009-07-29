@@ -15,10 +15,13 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Observation
+import org.openehealth.ipf.commons.core.modules.api.Validator
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Observation
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Participant2
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Referenceimport org.openehealth.ipf.modules.cda.AbstractValidator
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Reference
+import org.openehealth.ipf.modules.cda.AbstractValidator
+
 
 /**
  * Validates the CCD Advance Directive content section module (2.16.840.1.113883.10.20.1.1)

@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Sectionimport org.junit.BeforeClassimport org.junit.Test
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+import org.junit.BeforeClass
+import org.junit.Test
+
 import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
 
 /**
@@ -32,7 +35,7 @@ public class CCDPurposeBuilderTest extends AbstractContentBuilderTest {
 	
     @Test
 	public void testCCDPurpose() {
-		def POCDMT000040Section purpose = builder().build {
+		POCDMT000040Section purpose = builder().build {
 			ccd_purpose {
 				text('Transfer of Care!')
 				purposeActivity {

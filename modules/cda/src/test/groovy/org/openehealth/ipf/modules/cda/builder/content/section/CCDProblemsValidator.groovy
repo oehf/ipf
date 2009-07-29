@@ -22,7 +22,7 @@ import org.openhealthtools.ihe.common.cdar2.POCDMT000040Participant2
 import org.openehealth.ipf.modules.cda.AbstractValidator
 
 /**
- * Validates the CCD Advance Directive content section module (2.16.840.1.113883.10.20.1.11)
+ * Validates the CCD Problems content section module (2.16.840.1.113883.10.20.1.11)
  * 
  * @author Stefan Ivanov
  * @author Christian Ohr
@@ -96,14 +96,14 @@ public class CCDProblemsValidator extends AbstractValidator {
          *           as defined in section 5.2 Source. 
          */
          //TODO check source
-        def statusObservations = obs.entryRelationship.findAll{
+        def problemStatusObservations = obs.entryRelationship.findAll{
             '2.16.840.1.113883.10.20.1.50' in it.observation.templateId.root
         }
-        assertMaxSize('CONF-162', 1, statusObservations)
-        statusObservations.each{ entry ->
+        assertMaxSize('CONF-162', 1, problemStatusObservations)
+        problemStatusObservations.each{ entry ->
             assertNotNull('CONF-163', entry.observation)
             assertInstanceOf('CONF-163', POCDMT000040Observation.class, entry.observation)
-            doValidateProblemsStatusObservation(entry.observation)
+            doValidateProblemStatusObservation(entry.observation)
         }
         def healthStatusObservations = obs.entryRelationship.findAll{
             '2.16.840.1.113883.10.20.1.51' in it.observation.templateId.root
@@ -119,7 +119,7 @@ public class CCDProblemsValidator extends AbstractValidator {
 	/**
 	 * Implements set of CCD Problems conformance rules : status observation
 	 */
-	void doValidateProblemsStatusObservation(POCDMT000040Observation obs){
+	void doValidateProblemStatusObservation(POCDMT000040Observation obs){
 		assertContains('CONF-163', '2.16.840.1.113883.10.20.1.50', obs.templateId.root)
 		new CCDStatusObservationValidator().validate(obs, null)
 		/* CONF-164: The value for “Observation / value” in a problem status observation

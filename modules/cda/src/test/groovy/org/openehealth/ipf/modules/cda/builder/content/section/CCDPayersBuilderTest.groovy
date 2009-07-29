@@ -17,9 +17,11 @@ package org.openehealth.ipf.modules.cda.builder.content.section
 
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
-import org.junit.BeforeClassimport org.junit.Test
+import org.junit.BeforeClass
+import org.junit.Test
 
-import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
+import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
+
 /**
  * @author Christian Ohr
  * @author Stefan Ivanov
@@ -37,7 +39,7 @@ public class CCDPayersBuilderTest extends AbstractContentBuilderTest {
      
      @Test
      void testCCDPayers() {
-         def POCDMT000040Section payers = builder().build {
+         POCDMT000040Section payers = builder().build {
              ccd_payers {
                  text {
                      paragraph('Payer information')
