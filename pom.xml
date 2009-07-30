@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
     <artifactId>ipf</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.7-m2</version>
     <name>ipf</name>
     <packaging>pom</packaging>
 
@@ -187,9 +187,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</connection>
-        <developerConnection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</developerConnection>
-        <url>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</url>
+        <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/tags/ipf-1.7-m2</connection>
+        <developerConnection>scm:svn:http://gforge.openehealth.org/svn/ipf/tags/ipf-1.7-m2</developerConnection>
+        <url>scm:svn:http://gforge.openehealth.org/svn/ipf/tags/ipf-1.7-m2</url>
     </scm>
 
     <modules>
