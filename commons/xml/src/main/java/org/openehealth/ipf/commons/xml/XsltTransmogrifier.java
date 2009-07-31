@@ -209,7 +209,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
         if (params[0] instanceof String) {
             resourceLocation = (String) params[0];
         } else if (params[0] instanceof Map) {
-            resourceLocation = (String) ((Map) params[0])
+            resourceLocation = (String) ((Map<?, ?>) params[0])
                     .get(RESOURCE_LOCATION);
         }
         return resourceLocation;

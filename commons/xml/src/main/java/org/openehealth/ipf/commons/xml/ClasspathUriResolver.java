@@ -23,8 +23,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
 
 /**
@@ -38,9 +36,6 @@ class ClasspathUriResolver implements URIResolver {
 
     private URIResolver standardResolver;
     
-    private static Log LOG = LogFactory.getLog(ClasspathUriResolver.class);
-    
-
     public ClasspathUriResolver(TransformerFactory factory) {
         super();
         standardResolver = factory.getURIResolver();
