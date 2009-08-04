@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import org.apache.camel.model.ProcessorType
+import org.apache.camel.model.ProcessorDefinition
 
 /**
  * @author Martin Krasser
@@ -24,7 +24,7 @@ class ProcessorModelExtension {
     
     static extensions = {
             
-        ProcessorType.metaClass.mock = { String endpointName ->
+        ProcessorDefinition.metaClass.mock = { String endpointName ->
             delegate.to('mock:' + endpointName)
         }
             

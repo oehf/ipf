@@ -80,7 +80,7 @@ public class RouteHelper {
      * @return an adapted {@link Predicate} bean.
      */
     public PredicateAdapter predicate(String predicateBeanName) {
-        return new PredicateAdapter(routeBuilder.bean(Predicate.class, predicateBeanName));
+        return new PredicateAdapter(routeBuilder.lookup(predicateBeanName, Predicate.class));
     }
     
     /**
@@ -93,7 +93,7 @@ public class RouteHelper {
      * @return an adapted {@link Converter} bean.
      */
     public ConverterAdapter converter(String converterBeanName) {
-        return new ConverterAdapter(routeBuilder.bean(Converter.class, converterBeanName));
+        return new ConverterAdapter(routeBuilder.lookup(converterBeanName, Converter.class));
     }
 
     /**
@@ -106,7 +106,7 @@ public class RouteHelper {
      * @return an adapted {@link Parser} bean.
      */
     public ParserAdapter parser(String parserBeanName) {
-        return new ParserAdapter(routeBuilder.bean(Parser.class, parserBeanName));
+        return new ParserAdapter(routeBuilder.lookup(parserBeanName, Parser.class));
     }
 
     public ParserAdapter parser(Parser<?> parser) {
@@ -123,7 +123,7 @@ public class RouteHelper {
      * @return an adapted {@link Renderer} bean.
      */
     public RendererAdapter renderer(String rendererBeanName) {
-        return new RendererAdapter(routeBuilder.bean(Renderer.class, rendererBeanName));
+        return new RendererAdapter(routeBuilder.lookup(rendererBeanName, Renderer.class));
     }
 
     /**
@@ -147,7 +147,7 @@ public class RouteHelper {
      * @return an adapted {@link Transmogrifier} bean.
      */
     public TransmogrifierAdapter transmogrifier(String transmogrifierBeanName) {
-        return new TransmogrifierAdapter(routeBuilder.bean(Transmogrifier.class, transmogrifierBeanName));
+        return new TransmogrifierAdapter(routeBuilder.lookup(transmogrifierBeanName, Transmogrifier.class));
     }
  
     /**
@@ -172,7 +172,7 @@ public class RouteHelper {
      * @return an adapted {@link Validator} bean.
      */
     public ValidatorAdapter validator(String validatorBeanName) {
-        return new ValidatorAdapter(routeBuilder.bean(Validator.class, validatorBeanName));
+        return new ValidatorAdapter(routeBuilder.lookup(validatorBeanName, Validator.class));
     }
 
     /**
@@ -237,7 +237,7 @@ public class RouteHelper {
      * @return an adapted {@link Aggregator} bean.
      */
     public AggregatorAdapter aggregationStrategy(String aggregatorBeanName) {
-        return new AggregatorAdapter(routeBuilder.bean(Aggregator.class, aggregatorBeanName));
+        return new AggregatorAdapter(routeBuilder.lookup(aggregatorBeanName, Aggregator.class));
     }
     
     public DataFormatAdapter dataFormatParser(Parser<?> parser) {
@@ -245,7 +245,7 @@ public class RouteHelper {
     }
     
     public DataFormatAdapter dataFormatParser(String parserBeanName) {
-        return new DataFormatAdapter(routeBuilder.bean(Parser.class, parserBeanName));
+        return new DataFormatAdapter(routeBuilder.lookup(parserBeanName, Parser.class));
     }
     
     public DataFormatAdapter dataFormatRenderer(Renderer<?> renderer) {
@@ -253,7 +253,7 @@ public class RouteHelper {
     }
     
     public DataFormatAdapter dataFormatRenderer(String rendererBeanName) {
-        return new DataFormatAdapter(routeBuilder.bean(Renderer.class, rendererBeanName));
+        return new DataFormatAdapter(routeBuilder.lookup(rendererBeanName, Renderer.class));
     }
     
     // ----------------------------------------------------------------

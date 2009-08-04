@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.apache.camel.builder.Builder.outBody;
+import static org.apache.camel.builder.Builder.body;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResult;
 
 import groovy.lang.Closure;
@@ -47,7 +47,7 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      *            an aggregator.
      */
     public AggregatorAdapter(Aggregator aggregator) {
-        this.aggregationInputExpression = outBody();
+        this.aggregationInputExpression = body();
         this.aggregator = aggregator;
     }
     
@@ -137,7 +137,7 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
         if (aggregationInputExpression == null) {
             return null;
         }
-        return aggregationInputExpression.evaluate(exchange);
+        return aggregationInputExpression.evaluate(exchange, Object.class);
     }
 
 }

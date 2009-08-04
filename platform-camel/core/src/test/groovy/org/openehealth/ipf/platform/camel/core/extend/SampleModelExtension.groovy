@@ -20,9 +20,10 @@ import static org.apache.camel.builder.Builder.*
 import org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension
 
 import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.model.FilterType
-import org.apache.camel.model.ProcessorType
-import org.apache.camel.model.RouteType
+import org.apache.camel.model.FilterDefinition
+import org.apache.camel.model.ProcessorDefinition
+import org.apache.camel.model.RouteDefinition
+
 /**
  * @author Martin Krasser
  */
@@ -34,15 +35,15 @@ class SampleModelExtension {
             delegate.from(endpointUri)
         }
         
-        ProcessorType.metaClass.output = {String endpointUri ->
+        ProcessorDefinition.metaClass.output = {String endpointUri ->
             delegate.to(endpointUri)
         }
         
-        ProcessorType.metaClass.filter = { String msgBody ->
+        ProcessorDefinition.metaClass.filter = { String msgBody ->
             delegate.filter(body().isNotEqualTo(msgBody))
         }
         
-        ProcessorType.metaClass.transmogrifyAndFilter = { String bean, String body ->
+        ProcessorDefinition.metaClass.transmogrifyAndFilter = { String bean, String body ->
             delegate
                 .transmogrify(bean) // also an extension (core)
                 .filter(body)     // also an extension (sample)

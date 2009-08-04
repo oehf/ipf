@@ -26,19 +26,16 @@ import org.openehealth.ipf.platform.camel.core.xml.MarkupBuilder;
  */
 public class Expressions {
 
-    private static String HANDLED_EXCEPTION_PROPERTY = 
-        "org.apache.camel.processor.DeadLetterChannel.FAILURE_HANDLED";
-    
     /**
      * Returns an {@link Expression} for the headers map of an {@link Exchange}'s
      * in-message.
      * 
      * @return an expression object which will return the headers map.
      */
-    public static <E extends Exchange> Expression<E> headersExpression() {
-        return new Expression<E>() {
-            public Object evaluate(E exchange) {
-                return exchange.getIn().getHeaders();
+    public static <E extends Exchange> Expression headersExpression() {
+        return new Expression() {
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                return (T)exchange.getIn().getHeaders();
             }
 
             @Override
@@ -48,10 +45,10 @@ public class Expressions {
         };
     }
     
-    public static <E extends Exchange> Expression<E> builderExpression() {
-        return new Expression<E>() {
-            public Object evaluate(E exchange) {
-                return MarkupBuilder.newInstance();
+    public static Expression builderExpression() {
+        return new Expression() {
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                return (T)MarkupBuilder.newInstance();
             }
 
             @Override
@@ -61,13 +58,13 @@ public class Expressions {
         };
     }
 
-    public static <E extends Exchange> Expression<E> headersAndBuilderExpression() {
-        return new Expression<E>() {
-            public Object evaluate(E exchange) {
+    public static <E extends Exchange> Expression headersAndBuilderExpression() {
+        return new Expression() {
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
                 Object[] result = new Object[2];
                 result [0] = exchange.getIn().getHeaders();
                 result [1] = MarkupBuilder.newInstance();
-                return result;
+                return (T)result;
             }
 
             @Override
@@ -77,19 +74,19 @@ public class Expressions {
         };
     }
 
-    public static Expression<Exchange> exceptionObjectExpression() {
-        return new Expression<Exchange>() {
-            public Object evaluate(Exchange exchange) {
-                return exception(exchange);
+    public static Expression exceptionObjectExpression() {
+        return new Expression() {
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                return (T)exception(exchange);
             }
         };
     }
     
-    public static Expression<Exchange> exceptionMessageExpression() {
-        return new Expression<Exchange>() {
-            public Object evaluate(Exchange exchange) {
+    public static Expression exceptionMessageExpression() {
+        return new Expression() {
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
                 Throwable throwable = exception(exchange);
-                return throwable == null ? null : throwable.getMessage();
+                return (T)(throwable == null ? null : throwable.getMessage());
             }
         };
     }
@@ -99,7 +96,7 @@ public class Expressions {
         if (throwable != null) {
             return throwable;
         }
-        return (Throwable)exchange.getProperty(HANDLED_EXCEPTION_PROPERTY);
+        return (Throwable)exchange.getProperty(Exchange.EXCEPTION_CAUGHT);
     }
     
 }

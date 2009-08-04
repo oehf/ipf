@@ -103,14 +103,13 @@ public class ValidatorAdapter extends ProcessorAdapter {
      */
     @Override
     protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) throws IOException {
-        
         prepareResult(exchange);
         validator.validate(inputData, getProfile(exchange));
     }
 
     private Object getProfile(Exchange exchange) {
         if (profileExpression != null) {
-            return profileExpression.evaluate(exchange);
+            return profileExpression.evaluate(exchange, Object.class);
         } else {
             return profile;
         }

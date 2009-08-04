@@ -19,13 +19,11 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.model.ProcessorType;
 import org.apache.camel.processor.DelegateProcessor;
 
 /**
- * Implements a response generation process to be used in combination with
- * {@link ProcessorType#intercept(DelegateProcessor)}. For generating a response
- * the incoming {@link Exchange} is sent to a
+ * Implements a response generation process. For generating a response the
+ * incoming {@link Exchange} is sent to a
  * <code>responseGeneratorProcessor</code> (set at construction time) that is
  * generating a response message from the original {@link Exchange}. The
  * response is then communicated back to the initiator and the original exchange

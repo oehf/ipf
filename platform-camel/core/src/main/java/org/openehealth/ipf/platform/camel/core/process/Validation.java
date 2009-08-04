@@ -18,19 +18,15 @@ package org.openehealth.ipf.platform.camel.core.process;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.camel.model.ProcessorType;
-import org.apache.camel.processor.DelegateProcessor;
 
 /**
- * Implements a validation process to be used in combination with
- * {@link ProcessorType#intercept(DelegateProcessor)}. The incoming
- * {@link Exchange} is validated against a <code>validator</code> (a {#link
- * Processor}) set at construction time. If validation succeeds the validation
- * result is returned to the initiator and the in-message of the incoming
- * {@link Exchange} is forwarded to the next processor using an in-only
- * {@link Exchange}. If validation fails (validator returned fault or exception)
- * then the validation fault or exception is returned to the initiator and
- * processing stops.
+ * Implements a validation process. The incoming {@link Exchange} is validated
+ * against a <code>validator</code> (a {#link Processor}) set at construction
+ * time. If validation succeeds the validation result is returned to the
+ * initiator and the in-message of the incoming {@link Exchange} is forwarded to
+ * the next processor using an in-only {@link Exchange}. If validation fails
+ * (validator returned fault or exception) then the validation fault or
+ * exception is returned to the initiator and processing stops.
  * 
  * @author Martin Krasser
  */

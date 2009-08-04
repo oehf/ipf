@@ -186,7 +186,7 @@ public class Splitter extends DelegateProcessor {
     }
 
     private Iterable evaluateSplitRule(Exchange origExchange) {
-        final Object splitResult = splitRule.evaluate(origExchange);
+        final Object splitResult = splitRule.evaluate(origExchange, Object.class);
         
         if (null == splitResult) {
             return Collections.EMPTY_SET;

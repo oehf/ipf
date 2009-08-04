@@ -16,17 +16,25 @@
 package org.openehealth.ipf.platform.camel.core.extend
 
 import static org.apache.camel.builder.Builder.*
-
-import org.openehealth.ipf.platform.camel.core.support.transformer.ConstantTransformer;
-import org.openehealth.ipf.platform.camel.core.support.transformer.FailureTransformer;
+import org.apache.camel.Processor
 
 import org.apache.camel.spring.SpringRouteBuilder
+
+import org.openehealth.ipf.platform.camel.core.builder.RouteHelper
+import org.openehealth.ipf.platform.camel.core.support.transformer.ConstantTransformer;
+import org.openehealth.ipf.platform.camel.core.support.transformer.FailureTransformer;
 
 /**
  * @author Martin Krasser
  */
 class ValidationRouteBuilder extends SpringRouteBuilder {
     
+	RouteHelper helper
+
+	ValidationRouteBuilder() {
+		helper = new RouteHelper(this)
+	}
+	
     void configure() {
         
        errorHandler(noErrorHandler())
@@ -86,6 +94,35 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
            .validation {throw new RuntimeException('failed')}
            .to('mock:output')
       
+       // -------------------------------------------------------------
+       // Use in combination with intercept() extension
+       // -------------------------------------------------------------
+
+        from('direct:validation-test-1')
+        .intercept(helper.validation('direct:positive-validator'))
+        .to('mock:output');
+
+        from('direct:validation-test-2')
+        .intercept(helper.validation('direct:fault-validator'))
+        .to('mock:output');
+
+        from('direct:validation-test-3')
+        .errorHandler(noErrorHandler())
+        .intercept(helper.validation('direct:error-validator'))
+        .to('mock:output');
+
+        from('direct:positive-validator').errorHandler(noErrorHandler()).process(successValidator());
+        from('direct:fault-validator').errorHandler(noErrorHandler()).process(failureValidator(false));
+        from('direct:error-validator').errorHandler(noErrorHandler()).process(failureValidator(true));
+           
     }
 
+    private Processor successValidator() {
+        return new ConstantTransformer('blah');
+    }
+    
+    private Processor failureValidator(boolean error) {
+        return new FailureTransformer(error);
+    }
+    
 }

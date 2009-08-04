@@ -31,8 +31,9 @@ public class DelegatingExpression extends ClosureAdapter implements Expression {
         super(closure);
     }
 
-    public Object evaluate(Exchange exchange) {
-        return call(exchange);
-    }
+	@Override
+	public <T> T evaluate(Exchange exchange, Class<T> type) {
+        return (T)call(exchange);
+	}
     
 }

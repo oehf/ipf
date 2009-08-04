@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.core.modules.api.Predicate;
  * 
  * @author Martin Krasser
  */
-public class PredicateAdapter extends AdapterSupport implements org.apache.camel.Predicate<Exchange> {
+public class PredicateAdapter extends AdapterSupport implements org.apache.camel.Predicate {
 
     private Predicate predicate;
     

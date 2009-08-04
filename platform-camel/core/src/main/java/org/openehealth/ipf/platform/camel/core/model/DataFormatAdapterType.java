@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
-import org.apache.camel.model.dataformat.DataFormatType;
+import org.apache.camel.model.DataFormatDefinition;
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
 /**
  * @author Martin Krasser
  */
-public class DataFormatAdapterType extends DataFormatType {
+public class DataFormatAdapterType extends DataFormatDefinition {
 
     private String parserBeanName;
     private String rendererBeanName;

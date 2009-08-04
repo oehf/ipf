@@ -26,7 +26,7 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.model.ProcessorType;
+import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.DataFormat;
 import org.openehealth.ipf.commons.flow.FlowManager;
@@ -41,7 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * A base class for processors that trigger {@link FlowManager} operations.
  * 
- * @see ProcessorType#intercept(DelegateProcessor)
+ * @see ProcessorDefinition#intercept(DelegateProcessor)
  * 
  * @author Martin Krasser
  */

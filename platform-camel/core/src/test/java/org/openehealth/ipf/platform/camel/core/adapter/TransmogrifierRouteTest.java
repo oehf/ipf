@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.core.adapter;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
@@ -48,7 +48,7 @@ public class TransmogrifierRouteTest extends AbstractRouteTest {
 
     @Test
     public void testTransmogrifier3() throws InterruptedException {
-        Cat cat = (Cat) producerTemplate.sendBodyAndHeader("direct:transmogrifier-test-3", "wrong", "foo",
+        Cat cat = (Cat) producerTemplate.requestBodyAndHeader("direct:transmogrifier-test-3", "wrong", "foo",
                 new Dog("Fritz"));
         assertEquals(new Cat("Fritz likes fish"), cat);
     }
@@ -62,8 +62,8 @@ public class TransmogrifierRouteTest extends AbstractRouteTest {
                 exchange.getIn().setBody(new Dog("Willi"));
             }
         });
-        assertNotNull(exchange.getOut(false));
-        assertEquals("y", exchange.getOut(false).getHeader("x"));
+        assertTrue(exchange.hasOut());
+        assertEquals("y", exchange.getOut().getHeader("x"));
     }
 
 }

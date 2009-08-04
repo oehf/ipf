@@ -75,7 +75,7 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
             .initFlow("test-5")
                 .application("test")
                 .outType(String.class)
-            .throwFault("unhandled fault")
+            .throwException(new Exception('unhandled'))
             .to("mock:mock")
 
         from("direct:flow-test-6")
@@ -83,7 +83,7 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
                 .replayErrorHandler("mock:error")
                 .application("test")
                 .outType(String.class)
-            .throwFault("handled fault")
+            .throwException(new Exception('handled'))
             .to("mock:mock")
                      
         from("direct:flow-test-7")

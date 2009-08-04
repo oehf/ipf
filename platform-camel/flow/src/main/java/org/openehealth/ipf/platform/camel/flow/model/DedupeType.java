@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.flow.model;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.model.FilterType;
-import org.apache.camel.model.language.ExpressionType;
+import org.apache.camel.model.FilterDefinition;
+import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.processor.FilterProcessor;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.flow.FlowManager;
@@ -27,11 +27,11 @@ import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
 /**
  * @author Martin Krasser
  */
-public class DedupeType extends FilterType {
+public class DedupeType extends FilterDefinition {
 
     @Override
     public FilterProcessor createProcessor(RouteContext routeContext) throws Exception {
-        setExpression(new ExpressionType(createDedupe(routeContext)));
+        setExpression(new ExpressionDefinition(createDedupe(routeContext)));
         return super.createProcessor(routeContext);
     }
 

@@ -58,7 +58,8 @@ public class SplitterCopyAspectTest {
         splitter = new Splitter(
                 new TestExpression(),
                 new TestProcessor(),
-                new UseLatestAggregationStrategy());
+                new UseLatestAggregationStrategy(),
+                false, null, false);
     }
 
     @After
@@ -92,9 +93,9 @@ public class SplitterCopyAspectTest {
         }
     }
     
-    private static class TestExpression implements Expression<Exchange> {
-        public Object evaluate(Exchange exchange) {
-            return new String[] {"a", "b", "c"};
+    private static class TestExpression implements Expression {
+        public <T> T evaluate(Exchange exchange, Class<T> type) {
+            return (T)new String[] {"a", "b", "c"};
         }
     }
 

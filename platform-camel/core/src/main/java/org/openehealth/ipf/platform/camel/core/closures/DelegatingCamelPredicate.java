@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.closures;
 
+import org.apache.camel.Exchange;
+
 import groovy.lang.Closure;
 
 /**
@@ -32,8 +34,9 @@ public class DelegatingCamelPredicate extends ClosureAdapter implements org.apac
         throw new UnsupportedOperationException("not implemented");
     }
 
-    public boolean matches(Object exchange) {
+	@Override
+	public boolean matches(Exchange exchange) {
         return (Boolean)call(exchange);
-    }
+	}
     
 }

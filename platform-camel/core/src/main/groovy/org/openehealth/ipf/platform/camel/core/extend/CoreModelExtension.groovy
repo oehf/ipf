@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.core.extend
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionMessageExpression
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionObjectExpression
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersExpression
+import java.lang.IllegalArgumentException
 
 import static org.apache.camel.builder.DataFormatClause.Operation.Marshal;
 import static org.apache.camel.builder.DataFormatClause.Operation.Unmarshal;
@@ -45,7 +46,8 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator
 import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat
 import org.openehealth.ipf.platform.camel.core.dataformat.GpathDataFormat
 import org.openehealth.ipf.platform.camel.core.model.AuditType
-import org.openehealth.ipf.platform.camel.core.model.EnricherType
+import org.openehealth.ipf.platform.camel.core.model.InterceptType
+import org.openehealth.ipf.platform.camel.core.model.IpfType
 import org.openehealth.ipf.platform.camel.core.model.SplitterType
 import org.openehealth.ipf.platform.camel.core.model.ParserAdapterType
 import org.openehealth.ipf.platform.camel.core.model.RendererAdapterType
@@ -59,10 +61,11 @@ import org.apache.camel.Processor
 import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.builder.ExpressionClause
 import org.apache.camel.builder.NoErrorHandlerBuilder
-import org.apache.camel.model.ChoiceType
-import org.apache.camel.model.ExceptionType
-import org.apache.camel.model.ProcessorType
-import org.apache.camel.model.dataformat.DataFormatType
+import org.apache.camel.model.ChoiceDefinition
+import org.apache.camel.model.OnExceptionDefinition
+import org.apache.camel.model.ProcessorDefinition
+import org.apache.camel.model.DataFormatDefinition
+import org.apache.camel.processor.DelegateProcessor
 import org.apache.camel.processor.aggregate.AggregationStrategy
 import org.apache.camel.spi.DataFormat
 
@@ -79,52 +82,58 @@ class CoreModelExtension {
         //  Core Extensions
         // ----------------------------------------------------------------
 
-        ProcessorType.metaClass.process = { String processorBeanName ->
+        ProcessorDefinition.metaClass.process = { String processorBeanName ->
             delegate.addOutput(new org.openehealth.ipf.platform.camel.core.model.ProcessorType(processorBeanName))
             return delegate
         }
 
-        ProcessorType.metaClass.process = { Closure processorLogic ->
+        ProcessorDefinition.metaClass.process = { Closure processorLogic ->
             delegate.process(new DelegatingProcessor(processorLogic))
         }
             
-        ProcessorType.metaClass.intercept = { Closure interceptorLogic ->
+        ProcessorDefinition.metaClass.intercept = {DelegateProcessor delegateProcessor ->
+	        InterceptType answer = new InterceptType(delegateProcessor)
+	        delegate.addOutput(answer)
+	        return answer
+        }
+
+        ProcessorDefinition.metaClass.intercept = { Closure interceptorLogic ->
             delegate.intercept(new DelegatingInterceptor(interceptorLogic))
         }
         
-        ProcessorType.metaClass.unhandled = { ProcessorType processorType ->
+        ProcessorDefinition.metaClass.unhandled = { ProcessorDefinition processorDefinition ->
             delegate.errorHandler(new NoErrorHandlerBuilder())
         }
         
-        ProcessorType.metaClass.filter = { Closure predicateLogic ->
+        ProcessorDefinition.metaClass.filter = { Closure predicateLogic ->
             delegate.filter(new DelegatingCamelPredicate(predicateLogic))
         }
         
-        ProcessorType.metaClass.transform = { Closure transformExpression ->
+        ProcessorDefinition.metaClass.transform = { Closure transformExpression ->
             delegate.transform(new DelegatingExpression(transformExpression))
         }
     
-        ProcessorType.metaClass.setProperty = { String name, Closure propertyExpression ->
+        ProcessorDefinition.metaClass.setProperty = { String name, Closure propertyExpression ->
             delegate.setProperty(name, new DelegatingExpression(propertyExpression))
         }
 
-        ProcessorType.metaClass.setHeader = { String name, Closure headerExpression ->
+        ProcessorDefinition.metaClass.setHeader = { String name, Closure headerExpression ->
             delegate.setHeader(name, new DelegatingExpression(headerExpression))
         }
 
-        ProcessorType.metaClass.setOutHeader = { String name, Closure headerExpression ->
+        ProcessorDefinition.metaClass.setOutHeader = { String name, Closure headerExpression ->
             delegate.setOutHeader(name, new DelegatingExpression(headerExpression))
         }
 
-        ProcessorType.metaClass.setFaultHeader = { String name, Closure headerExpression ->
+        ProcessorDefinition.metaClass.setFaultHeader = { String name, Closure headerExpression ->
             delegate.setFaultHeader(name, new DelegatingExpression(headerExpression))
         }
 
-        ProcessorType.metaClass.setBody = {Closure bodyExpression ->
+        ProcessorDefinition.metaClass.setBody = {Closure bodyExpression ->
             delegate.setBody(new DelegatingExpression(bodyExpression))
         }
-
-        ChoiceType.metaClass.when = { Closure predicateLogic ->
+        
+        ChoiceDefinition.metaClass.when = { Closure predicateLogic ->
             delegate.when(new DelegatingCamelPredicate(predicateLogic))
         }
     
@@ -132,48 +141,31 @@ class CoreModelExtension {
         //  Platform Processor Extensions
         // ----------------------------------------------------------------
         
-        ProcessorType.metaClass.validation = { Processor validator ->
+        ProcessorDefinition.metaClass.validation = { Processor validator ->
             ValidationType answer = new ValidationType(validator)
             delegate.addOutput(answer)
             return answer
         }
 
-        ProcessorType.metaClass.validation = { String validationUri ->
+        ProcessorDefinition.metaClass.validation = { String validationUri ->
             ValidationType answer = new ValidationType(validationUri)
             delegate.addOutput(answer)
             return answer
         }
         
-        ProcessorType.metaClass.validation = { Closure validatorLogic ->
+        ProcessorDefinition.metaClass.validation = { Closure validatorLogic ->
             delegate.validation(new DelegatingProcessor(validatorLogic))
         }
-    
-        ProcessorType.metaClass.enrich = {String resourceUri, AggregationStrategy aggregationStrategy ->
-            delegate.addOutput(new EnricherType(aggregationStrategy, resourceUri))
-            return delegate
-        }
-        
-        ProcessorType.metaClass.enrich = { String resourceUri, Closure aggregationLogic ->
+            
+        ProcessorDefinition.metaClass.enrich = { String resourceUri, Closure aggregationLogic ->
             delegate.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic))
         }
     
-        ProcessorType.metaClass.split = { Expression splitExpression -> 
-            SplitterType answer = new SplitterType(splitExpression)        
-            delegate.addOutput(answer)
-            return answer
-        }
-    
-        ProcessorType.metaClass.split = { String splitExpressionBeanName -> 
-            SplitterType answer = new SplitterType(splitExpressionBeanName)        
-            delegate.addOutput(answer)
-            return answer
-        }
-
-        ProcessorType.metaClass.split = { Closure splitLogic -> 
-            delegate.split(new DelegatingExpression(splitLogic))        
-        }
-        
-        ProcessorType.metaClass.audit = {-> 
+        ProcessorDefinition.metaClass.ipf = { ->
+            new IpfType(delegate)
+	    }
+                
+        ProcessorDefinition.metaClass.audit = {-> 
             AuditType answer = new AuditType()        
             delegate.addOutput(answer)
             return answer
@@ -223,7 +215,7 @@ class CoreModelExtension {
         //  Platform ExceptionType extensions
         // ----------------------------------------------------------------
         
-        ExceptionType.metaClass.onWhen = { Closure predicate ->
+        OnExceptionDefinition.metaClass.onWhen = { Closure predicate ->
             delegate.onWhen(new DelegatingCamelPredicate(predicate))
         }
 
@@ -236,7 +228,7 @@ class CoreModelExtension {
         }
 
         org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { String aggregatorBeanName ->
-            delegate.aggregationStrategy(delegate.bean(Aggregator.class, aggregatorBeanName))
+            delegate.aggregationStrategy(delegate.lookup(aggregatorBeanName, Aggregator.class))
         }
 
         org.apache.camel.spring.SpringRouteBuilder.metaClass.aggregationStrategy = { Closure aggregationLogic ->
@@ -248,7 +240,7 @@ class CoreModelExtension {
         }
 
         org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { String predicateBeanName ->
-            delegate.predicate(delegate.bean(Predicate.class, predicateBeanName))
+            delegate.predicate(delegate.lookup(predicateBeanName, Predicate.class))
         }
 
         org.apache.camel.spring.SpringRouteBuilder.metaClass.predicate = { Closure predicateLogic ->
@@ -256,72 +248,72 @@ class CoreModelExtension {
         }
     
         // ----------------------------------------------------------------
-        //  Adapter Extensions for ProcessorType
+        //  Adapter Extensions for ProcessorDefinition
         // ----------------------------------------------------------------
         
-        ProcessorType.metaClass.transmogrify = { Transmogrifier transmogrifier ->
+        ProcessorDefinition.metaClass.transmogrify = { Transmogrifier transmogrifier ->
             TransmogrifierAdapterType answer = new TransmogrifierAdapterType(transmogrifier)
             delegate.addOutput(answer)
             return answer
         }
 
-        ProcessorType.metaClass.transmogrify = { String transmogrifierBeanName ->
+        ProcessorDefinition.metaClass.transmogrify = { String transmogrifierBeanName ->
             TransmogrifierAdapterType answer = new TransmogrifierAdapterType(transmogrifierBeanName)
             delegate.addOutput(answer)
             return answer
         }
 
-        ProcessorType.metaClass.transmogrify = { Closure transmogrifierLogic ->
+        ProcessorDefinition.metaClass.transmogrify = { Closure transmogrifierLogic ->
             delegate.transmogrify(new DelegatingTransmogrifier(transmogrifierLogic))
         }
         
-        ProcessorType.metaClass.transmogrify = { ->
+        ProcessorDefinition.metaClass.transmogrify = { ->
             TransmogrifierAdapterType answer = new TransmogrifierAdapterType(null)
             delegate.addOutput(answer)
             return answer
         }        
 
-        ProcessorType.metaClass.validate = {->
+        ProcessorDefinition.metaClass.validate = {->
             ValidatorAdapterType answer = new ValidatorAdapterType()
             delegate.addOutput(answer)
             return answer
         }
     
-        ProcessorType.metaClass.validate = { Validator validator ->
+        ProcessorDefinition.metaClass.validate = { Validator validator ->
             ValidatorAdapterType answer = new ValidatorAdapterType(validator)
             delegate.addOutput(answer)
             return answer
         }
         
-        ProcessorType.metaClass.validate = { String validatorBeanName ->
+        ProcessorDefinition.metaClass.validate = { String validatorBeanName ->
             ValidatorAdapterType answer = new ValidatorAdapterType(validatorBeanName)
             delegate.addOutput(answer)
             return answer
         }
     
-        ProcessorType.metaClass.validate = { Closure validatorLogic ->
+        ProcessorDefinition.metaClass.validate = { Closure validatorLogic ->
             delegate.validate(new DelegatingValidator(validatorLogic))
         }
     
-        ProcessorType.metaClass.parse = { Parser parser ->
+        ProcessorDefinition.metaClass.parse = { Parser parser ->
             ParserAdapterType answer = new ParserAdapterType(parser)
             delegate.addOutput(answer)
             return answer
         }
         
-        ProcessorType.metaClass.parse = { String parserBeanName ->
+        ProcessorDefinition.metaClass.parse = { String parserBeanName ->
             ParserAdapterType answer = new ParserAdapterType(parserBeanName)
             delegate.addOutput(answer)
             return answer
         }
     
-        ProcessorType.metaClass.render = { Renderer renderer ->
+        ProcessorDefinition.metaClass.render = { Renderer renderer ->
             RendererAdapterType answer = new RendererAdapterType(renderer)
             delegate.addOutput(answer)
             return answer
         }
         
-        ProcessorType.metaClass.render = { String rendererBeanName ->
+        ProcessorDefinition.metaClass.render = { String rendererBeanName ->
             RendererAdapterType answer = new RendererAdapterType(rendererBeanName)
             delegate.addOutput(answer)
             return answer
@@ -340,11 +332,11 @@ class CoreModelExtension {
         }
     
         DataFormatClause.metaClass.parse = { String parserBeanName ->
-            delegate.processorType.unmarshal((DataFormatType)DataFormatAdapterType.forParserBean(parserBeanName))
+            delegate.processorType.unmarshal((DataFormatDefinition)DataFormatAdapterType.forParserBean(parserBeanName))
         }
     
         DataFormatClause.metaClass.render = { String rendererBeanName ->
-            delegate.processorType.marshal((DataFormatType)DataFormatAdapterType.forRendererBean(rendererBeanName))
+            delegate.processorType.marshal((DataFormatDefinition)DataFormatAdapterType.forRendererBean(rendererBeanName))
         }
 
         // ----------------------------------------------------------------

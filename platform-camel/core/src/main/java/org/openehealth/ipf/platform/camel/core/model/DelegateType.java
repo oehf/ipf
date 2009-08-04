@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.camel.Processor;
-import org.apache.camel.model.OutputType;
-import org.apache.camel.model.ProcessorType;
+import org.apache.camel.model.OutputDefinition;
+import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.Pipeline;
 import org.apache.camel.spi.RouteContext;
@@ -36,7 +36,7 @@ import org.apache.camel.spi.RouteContext;
  * 
  * @author Martin Krasser
  */
-public abstract class DelegateType extends OutputType<ProcessorType> {
+public abstract class DelegateType extends OutputDefinition<ProcessorDefinition> {
 
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {

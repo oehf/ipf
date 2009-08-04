@@ -24,7 +24,7 @@ import org.apache.camel.Expression;
  * 
  * @author Martin Krasser
  */
-public class StaticParams implements Expression<Exchange> {
+public class StaticParams implements Expression {
 
     private Object[] params;
 
@@ -43,9 +43,12 @@ public class StaticParams implements Expression<Exchange> {
      * 
      * @param exchange
      *            ignored.
+     * @param type
+     *            ignored.
      */
-    public Object evaluate(Exchange exchange) {
-        return params;
-    }
+	@Override
+	public <T> T evaluate(Exchange exchange, Class<T> type) {
+		return (T)params;
+	}
 
 }

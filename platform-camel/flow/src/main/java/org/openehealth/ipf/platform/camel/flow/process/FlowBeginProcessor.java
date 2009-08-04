@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.flow.process;
 
-import static org.apache.camel.processor.DeadLetterChannel.setFailureHandled;
-
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -226,4 +224,10 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
         return endpoint;
     }
 
+    private static void setFailureHandled(Exchange exchange) {
+    	exchange.setProperty(Exchange.EXCEPTION_CAUGHT, exchange.getException());
+    	exchange.setProperty(Exchange.ERRORHANDLER_HANDLED, Boolean.TRUE);
+    	exchange.setException(null);
+    }
+    
 }

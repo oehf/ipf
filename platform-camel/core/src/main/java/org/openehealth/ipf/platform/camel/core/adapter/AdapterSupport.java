@@ -98,7 +98,7 @@ public abstract class AdapterSupport implements Adapter {
         if (inputExpression == null) {
             return null;
         }
-        return inputExpression.evaluate(exchange);
+        return inputExpression.evaluate(exchange, Object.class);
     }
 
     /**
@@ -115,7 +115,7 @@ public abstract class AdapterSupport implements Adapter {
         if (paramsExpression == null) {
             return null;
         }
-        return paramsExpression.evaluate(exchange);
+        return paramsExpression.evaluate(exchange, Object.class);
     }
 
 }

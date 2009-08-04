@@ -35,7 +35,7 @@ public class Exchanges {
      * @param exchange message exchange.
      * @return a producer template.
      */
-    public static ProducerTemplate<Exchange> producerTemplate(Exchange exchange) {
+    public static ProducerTemplate producerTemplate(Exchange exchange) {
         return exchange.getContext().createProducerTemplate();
     }
     
@@ -144,16 +144,14 @@ public class Exchanges {
         target.getIn().copyFrom(m);
     
         // copy out message
-        m = source.getOut(false);
-        if (m != null) {
-            // exchange pattern sensitive
-            resultMessage(target).copyFrom(m);
+        if (source.hasOut()) {
+            resultMessage(target).copyFrom(source.getOut());
         }
         
         // copy fault message
-        m = source.getFault(false);
-        if (m != null) {
-            faultMessage(target).copyFrom(m);
+        if (source.hasFault()) {
+            faultMessage(target).copyFrom(source.getFault());
+        	
         }
         
         // copy exception

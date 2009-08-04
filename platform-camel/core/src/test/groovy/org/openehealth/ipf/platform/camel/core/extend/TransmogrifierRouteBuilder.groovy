@@ -16,7 +16,8 @@
 package org.openehealth.ipf.platform.camel.core.extend
 
 import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersAndBuilderExpression
-import java.io.InputStream
+import java.io.InputStream
+
 import static org.apache.camel.builder.Builder.*
 
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
@@ -97,7 +98,7 @@ class TransmogrifierRouteBuilder extends SpringRouteBuilder {
             .to('mock:output')
 
        from('direct:input9b') 
-            .transmogrify(bean(Transmogrifier.class, 'sampleTransmogrifier'))
+            .transmogrify(lookup('sampleTransmogrifier', Transmogrifier.class))
             .to('mock:output')
 
        from('direct:input10') 

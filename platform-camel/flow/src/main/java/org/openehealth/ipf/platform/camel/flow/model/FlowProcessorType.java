@@ -15,12 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.flow.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.camel.Processor;
-import org.apache.camel.model.OutputType;
-import org.apache.camel.model.ProcessorType;
+import org.apache.camel.model.OutputDefinition;
+import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessageRenderer;
@@ -29,10 +26,8 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 /**
  * @author Martin Krasser
  */
-public abstract class FlowProcessorType extends OutputType<ProcessorType> {
+public abstract class FlowProcessorType extends OutputDefinition<ProcessorDefinition> {
 
-    private List outputs = new ArrayList();
-    
     private PlatformMessageRenderer messageRenderer; 
     
     private String messageRendererBeanName;
@@ -45,11 +40,6 @@ public abstract class FlowProcessorType extends OutputType<ProcessorType> {
     
     private boolean outConversion = true;
     
-    @Override
-    public List getOutputs() {
-        return outputs;
-    }
-
     public FlowProcessorType inType(Class<?> inType) {
         this.inType = inType;
         return this;

@@ -135,8 +135,6 @@ public class SplitterExtensionTest extends AbstractExtensionTest {
             }
             writer.close();
             
-            System.out.println("Test file written");
-            
             checkSuccess("direct:split_huge_file", file.getAbsolutePath(), "some other text");
             mockOutput.assertIsSatisfied();
         }
@@ -155,6 +153,6 @@ public class SplitterExtensionTest extends AbstractExtensionTest {
             }
         });
         assertNotNull(result);
-        assertEquals(expectedResult, result.getOut(false).getBody());
+        assertEquals(expectedResult, result.getOut().getBody());
     }
 }

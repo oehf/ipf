@@ -26,7 +26,7 @@ class GroovyRenderRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
     
-        def dlc = deadLetterChannel('direct:err').maximumRedeliveries(0)
+        def dlc = deadLetterChannel('direct:err').maximumRedeliveries(0).handled(false)
         
         // --------------------------
         //  Default route

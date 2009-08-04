@@ -38,21 +38,13 @@ public class ErrorHandlingRouteBuilder extends SpringRouteBuilder {
         .to("mock:output"); // inherits global error handler (step in pipeline)
         
         from("direct:input-2")
-        // defines local error handler
-        .errorHandler(deadLetterChannel("mock:error").maximumRedeliveries(2))
+        // defines local error handler (placed before every node in this route)
+        .errorHandler(deadLetterChannel("mock:error").maximumRedeliveries(2).handled(false))
+        .to("mock:inter")   // no redeliveries here
+        .to("direct:temp"); // the error handler of this node redelivers
         
-        // ------------------------------------------------------------------
-        //  IMPORTANT: We have to multicast() here, otherwise we have a 
-        //             pipeline where each step has its own error handler
-        //             (dead letter channel) and mock:inter won't receive
-        //             messages on redelivery
-        // ------------------------------------------------------------------
-        
-        .multicast()
-        .to("mock:inter")   // no error handler here (installed before multicast)
-        .to("direct:temp"); // no error handler here (installed before multicast)
-        
-        from("direct:temp") 
+        from("direct:temp")
+        .to("mock:check")    // inherits global error handler (step in pipeline)
         .process(failure)    // inherits global error handler (step in pipeline)
         .to("mock:output");  // inherits global error handler (step in pipeline)
     }

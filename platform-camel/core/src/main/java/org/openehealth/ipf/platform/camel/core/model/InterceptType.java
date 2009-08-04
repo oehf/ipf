@@ -18,22 +18,24 @@ package org.openehealth.ipf.platform.camel.core.model;
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.RouteContext;
 
 /**
  * @author Martin Krasser
  */
-public class ProcessorType extends OutputDefinition<ProcessorDefinition> {
+public class InterceptType extends OutputDefinition<ProcessorDefinition> {
 
-    private String processorBeanName;
+    private DelegateProcessor delegateProcessor;
     
-    public ProcessorType(String processorBeanName) {
-        this.processorBeanName = processorBeanName;
+    public InterceptType(DelegateProcessor delegateProcessor) {
+        this.delegateProcessor = delegateProcessor;
     }
     
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
-        return routeContext.lookup(processorBeanName, Processor.class);
+    	delegateProcessor.setProcessor(routeContext.createProcessor(this));
+    	return delegateProcessor;
     }
-
+    
 }

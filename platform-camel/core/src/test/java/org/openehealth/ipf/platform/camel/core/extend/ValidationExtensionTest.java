@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.core.extend;
 import static org.junit.Assert.*;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
@@ -80,7 +81,7 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
                 exchange.getIn().setBody("blah");
             }
         });
-        assertEquals("result", result.getOut(false).getBody());
+        assertEquals("result", result.getOut().getBody());
         mockOutput.assertIsSatisfied();
     }
 
@@ -91,7 +92,7 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
                 exchange.getIn().setBody("blah");
             }
         });
-        assertEquals("failed", result.getFault(false).getBody());
+        assertEquals("failed", result.getFault().getBody());
         mockOutput.assertIsSatisfied();
     }
     
@@ -104,6 +105,110 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
         });
         assertEquals("failed", result.getException().getMessage());
         mockOutput.assertIsSatisfied();
+    }
+    
+    @Test
+    public void testValidInOnly() throws InterruptedException {
+        mockOutput.expectedBodiesReceived("test");
+        Exchange exchange = producerTemplate.send("direct:validation-test-1",
+                new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody("test");
+                    }
+                });
+
+        mockOutput.assertIsSatisfied();
+        assertEquals("blah", exchange.getIn().getBody());
+        assertFalse(exchange.hasOut());
+        assertFalse(exchange.hasFault());
+        assertNull(exchange.getException());
+    }
+
+    @Test
+    public void testValidInOut() throws InterruptedException {
+        mockOutput.expectedBodiesReceived("test");
+        Exchange exchange = producerTemplate.send("direct:validation-test-1",
+                ExchangePattern.InOut, new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody("test");
+                    }
+                });
+
+        mockOutput.assertIsSatisfied();
+        assertEquals("test", exchange.getIn().getBody());
+        assertEquals("blah", exchange.getOut().getBody());
+        assertFalse(exchange.hasFault());
+        assertNull(exchange.getException());
+    }
+
+    @Test
+    public void testFaultInOnly() throws InterruptedException {
+        mockOutput.expectedMessageCount(0);
+        Exchange exchange = producerTemplate.send("direct:validation-test-2",
+                new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody("test");
+                    }
+                });
+
+        mockOutput.assertIsSatisfied();
+        assertEquals("test", exchange.getIn().getBody());
+        assertEquals("failed", exchange.getFault().getBody());
+        assertFalse(exchange.hasOut());
+        assertNull(exchange.getException());
+    }
+
+    @Test
+    public void testFaultInOut() throws InterruptedException {
+        mockOutput.expectedMessageCount(0);
+        Exchange exchange = producerTemplate.send("direct:validation-test-2",
+                ExchangePattern.InOut, new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody("test");
+                    }
+                });
+
+        mockOutput.assertIsSatisfied();
+        assertEquals("test", exchange.getIn().getBody());
+        assertEquals("failed", exchange.getFault().getBody());
+        assertFalse(exchange.hasOut());
+        assertNull(exchange.getException());
+    }
+
+    @Test
+    public void testErrorInOnly() throws InterruptedException {
+        mockOutput.expectedMessageCount(0);
+        Exchange exchange = producerTemplate.send("direct:validation-test-3",
+                new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody("test");
+                    }
+                });
+
+        mockOutput.assertIsSatisfied();
+        assertEquals("test", exchange.getIn().getBody());
+        assertEquals("failed", exchange.getException().getMessage());
+        // Strange: Camel sets an out message on an in-only exchange if 
+        //          the default error handler (dead letter channel) is set
+        assertFalse(exchange.hasOut()); // no error handler set
+        assertFalse(exchange.hasFault());
+    }
+
+    @Test
+    public void testErrorInOut() throws InterruptedException {
+        mockOutput.expectedMessageCount(0);
+        Exchange exchange = producerTemplate.send("direct:validation-test-3",
+                ExchangePattern.InOut, new Processor() {
+                    public void process(Exchange exchange) {
+                        exchange.getIn().setBody("test");
+                    }
+                });
+
+        mockOutput.assertIsSatisfied();
+        assertEquals("test", exchange.getIn().getBody());
+        assertEquals("failed", exchange.getException().getMessage());
+        assertFalse(exchange.hasOut());
+        assertFalse(exchange.hasFault());
     }
     
 }

@@ -39,7 +39,7 @@ class EnricherRouteBuilder extends SpringRouteBuilder {
             originalInBody + ':' + resourceInBody
         } 
         .input            {exchange -> exchange.in.body * 2}
-        .aggregationInput {exchange -> exchange.out.body.substring(0, 2)}
+        .aggregationInput {exchange -> exchange.in.body.substring(0, 2)}
         
         from('direct:input1')
             .enrich('direct:resource', aggregationStrategy1)
@@ -59,14 +59,14 @@ class EnricherRouteBuilder extends SpringRouteBuilder {
             
         from('direct:input5')
             .enrich('direct:resource') {originalExchange, resourceExchange ->
-                originalExchange.in.body += ':' + resourceExchange.out.body 
+                originalExchange.in.body += ':' + resourceExchange.in.body 
                 originalExchange // return value is optional (see direct:input6)
             }
             .to('mock:output')
             
         from('direct:input6')
             .enrich('direct:resource') {originalExchange, resourceExchange ->
-                originalExchange.in.body += ':' + resourceExchange.out.body 
+                originalExchange.in.body += ':' + resourceExchange.in.body 
             }
             .to('mock:output')
             

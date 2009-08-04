@@ -34,25 +34,25 @@ class SplitterRouteBuilder extends SpringRouteBuilder {
          errorHandler(noErrorHandler())
           
           from('direct:split_rule_as_closure') 
-              .split { exchange -> new SplitterTest.TestSplitRule().evaluate(exchange) }
+              .ipf().split { exchange -> new SplitterTest.TestSplitRule().evaluate(exchange, Object.class) }
               .aggregate { oldExchange, newExchange -> 
                   new SplitterTest.TestAggregationStrategy().aggregate(oldExchange, newExchange) }  
               .to('mock:output')
 
           from('direct:split_rule_returns_array') 
-              .split { exchange -> exchange.in.body.split(',') }
+              .ipf().split { exchange -> exchange.in.body.split(',') }
               .aggregate { oldExchange, newExchange -> 
                   new SplitterTest.TestAggregationStrategy().aggregate(oldExchange, newExchange) }  
               .to('mock:output')
               
           from('direct:split_rule_as_type') 
-              .split( new SplitterTest.TestSplitRule() )
+              .ipf().split( new SplitterTest.TestSplitRule() )
               .aggregate { oldExchange, newExchange -> 
                   new SplitterTest.TestAggregationStrategy().aggregate(oldExchange, newExchange) }  
               .to('mock:output')
 
           from('direct:aggregation_via_closure') 
-              .split { exchange -> new SplitterTest.TestSplitRule().evaluate(exchange) }
+              .ipf().split { exchange -> new SplitterTest.TestSplitRule().evaluate(exchange, Object.class) }
               .aggregate { oldExchange, newExchange ->
                   String oldContent = oldExchange.in.body
                   String newContent = newExchange.in.body
@@ -63,29 +63,29 @@ class SplitterRouteBuilder extends SpringRouteBuilder {
               .to('mock:output')
               
           from('direct:split_rule_via_bean')
-              .split('sampleSplitRule')
+              .ipf().split('sampleSplitRule')
               .to('mock:output')
               
           from('direct:split_default_aggr') 
-              .split( new SplitterTest.TestSplitRule() )
+              .ipf().split( new SplitterTest.TestSplitRule() )
               .to('mock:output')
               
           from('direct:split_only_once_iterator') 
-              .split( new SplitterTest.TestSplitRuleSingleUse() )
+              .ipf().split( new SplitterTest.TestSplitRuleSingleUse() )
               .to('mock:output')
               
           from('direct:split_default_update') 
-              .split( new SplitterTest.TestSplitRuleSingleUse() )
+              .ipf().split( new SplitterTest.TestSplitRuleSingleUse() )
               .to('mock:output')
               
           from('direct:split_read_file_lines')
-              .split { exchange -> 
+              .ipf().split { exchange -> 
                   return new TextFileIterator(exchange.in.body);
               }
               .to('mock:output')
 
           from('direct:split_huge_file')
-              .split { exchange -> 
+              .ipf().split { exchange -> 
                   String filename = exchange.in.body;
                   return new TextFileIterator(filename, new SplitStringLineSplitterLogic(','));
               }
@@ -93,10 +93,10 @@ class SplitterRouteBuilder extends SpringRouteBuilder {
               .to('mock:output')
               
           from('direct:split_complex_route') 
-              .split( new SplitterTest.TestSplitRule() )              
+              .ipf().split( new SplitterTest.TestSplitRule() )              
               .filter { exchange -> exchange.in.body == 'blu' }
-              .setHeader("foo", "bar")
-              .setHeader("smurf", "blue")
+              .setHeader('foo', constant('bar'))
+              .setHeader('smurf', constant('blue'))
               .to('mock:output')
               
      }

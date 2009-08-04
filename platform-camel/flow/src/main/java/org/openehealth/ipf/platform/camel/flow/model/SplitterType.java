@@ -17,11 +17,11 @@ package org.openehealth.ipf.platform.camel.flow.model;
 
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
-import org.apache.camel.model.ProcessorType;
+import org.apache.camel.model.ProcessorDefinition;
 import org.openehealth.ipf.platform.camel.flow.process.Splitter;
 
 /**
- * {@link ProcessorType} for the {@link Splitter} processor of the flow manager
+ * {@link ProcessorDefinition} for the {@link Splitter} processor of the flow manager
  * This class is needed to create a {@link Splitter} that hands on the
  * sub exchanges to a specified processor. The {@link Splitter} requires 
  * explicit definition of this processor because it has to send multiple 

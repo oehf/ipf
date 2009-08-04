@@ -50,7 +50,7 @@ public class RouteHelper {
      * @return a new {@link FlowBeginProcessor}.
      */
     public FlowBeginProcessor flowBegin(String identifier) {
-        FlowBeginProcessor processor = routeBuilder.bean(FlowBeginProcessor.class);
+        FlowBeginProcessor processor = routeBuilder.lookup(FlowBeginProcessor.class);
         processor.identifier(identifier).register();
         return processor;
     }
@@ -61,7 +61,7 @@ public class RouteHelper {
      * @return a new {@link FlowEndProcessor}.
      */
     public FlowEndProcessor flowEnd() {
-        return routeBuilder.bean(FlowEndProcessor.class);
+        return routeBuilder.lookup(FlowEndProcessor.class);
     }
 
     /**
@@ -70,7 +70,7 @@ public class RouteHelper {
      * @return a new {@link FlowErrorProcessor}.
      */
     public FlowErrorProcessor flowError() {
-        return routeBuilder.bean(FlowErrorProcessor.class);
+        return routeBuilder.lookup(FlowErrorProcessor.class);
     }
 
     /**
@@ -79,7 +79,7 @@ public class RouteHelper {
      * @return a new {@link Dedupe}.
      */
     public Dedupe dedupe() {
-        return routeBuilder.bean(Dedupe.class);
+        return routeBuilder.lookup(Dedupe.class);
     }
     
     // ----------------------------------------------------------------

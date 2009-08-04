@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.flow.extend
 
 import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder
 import org.openehealth.ipf.platform.camel.flow.model.DedupeType
+import org.openehealth.ipf.platform.camel.flow.model.IpfType
 import org.openehealth.ipf.platform.camel.flow.model.FlowBeginProcessorType
 import org.openehealth.ipf.platform.camel.flow.model.FlowEndProcessorType
 import org.openehealth.ipf.platform.camel.flow.model.FlowErrorProcessorType
@@ -24,7 +25,7 @@ import org.openehealth.ipf.platform.camel.flow.model.SplitterType
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression
 import org.apache.camel.Expression
 
-import org.apache.camel.model.ProcessorType
+import org.apache.camel.model.ProcessorDefinition
 import org.apache.camel.spi.DataFormat
 
 /**
@@ -36,52 +37,40 @@ class FlowModelExtension {
      
     static extensions = {
 
-        ProcessorType.metaClass.initFlow = { ->
+        ProcessorDefinition.metaClass.initFlow = { ->
             FlowBeginProcessorType answer = new FlowBeginProcessorType();
             delegate.addOutput(answer);
             return answer;
         }
         
-        ProcessorType.metaClass.initFlow = { String identifier ->
+        ProcessorDefinition.metaClass.initFlow = { String identifier ->
             FlowBeginProcessorType answer = new FlowBeginProcessorType(identifier);
             delegate.addOutput(answer);
             return answer;
         }
         
-        ProcessorType.metaClass.ackFlow = {
+        ProcessorDefinition.metaClass.ackFlow = {
             FlowEndProcessorType answer = new FlowEndProcessorType();
             delegate.addOutput(answer);
             return answer;
         }
     
-        ProcessorType.metaClass.nakFlow = {
+        ProcessorDefinition.metaClass.nakFlow = {
             FlowErrorProcessorType answer = new FlowErrorProcessorType();
             delegate.addOutput(answer);
             return answer;
         }
         
-        ProcessorType.metaClass.dedupeFlow = {
+        ProcessorDefinition.metaClass.dedupeFlow = {
             DedupeType answer = new DedupeType()
             delegate.addOutput(answer);
             return answer;
         }
         
-        // ----------------------------------------------------------------
-        //  ProcessorType Extensions
-        // ----------------------------------------------------------------
-
-        ProcessorType.metaClass.split = { Closure expressionLogic -> 
-            SplitterType answer = new SplitterType(new DelegatingExpression(expressionLogic))        
-            delegate.addOutput(answer)
-            answer
-        }
-        
-        ProcessorType.metaClass.split = { Expression expression -> 
-            SplitterType answer = new SplitterType(expression)        
-            delegate.addOutput(answer)
-            answer
-        }
-        
+        ProcessorDefinition.metaClass.ipf = { ->
+            new IpfType(delegate)
+	    }
+                
    }   
    
 }

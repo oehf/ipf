@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 
  * @author Martin Krasser
  */
-public class Dedupe implements Predicate<Exchange> {
+public class Dedupe implements Predicate {
 
     private static final Log LOG = LogFactory.getLog(Dedupe.class);
     
@@ -68,15 +68,6 @@ public class Dedupe implements Predicate<Exchange> {
             LOG.error(e);
         }
         return true;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.camel.Predicate#assertMatches(java.lang.String, java.lang.Object)
-     */
-    public void assertMatches(String text, Exchange exchange) throws AssertionError {
-        if (!matches(exchange)) {
-            throw new AssertionError(text);
-        }
     }
 
 }

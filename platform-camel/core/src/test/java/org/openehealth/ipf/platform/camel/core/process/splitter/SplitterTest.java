@@ -103,8 +103,8 @@ public class SplitterTest {
         origExchange.getIn().setBody("bla,blu");
         Splitter splitterWithArrayResult = new Splitter(new Expression() {
             @Override
-            public Object evaluate(Exchange exchange) {
-                return getContent(exchange).split(",");            
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                return (T)getContent(exchange).split(",");            
             }}, dest);
         splitterWithArrayResult.aggregate(new TestAggregationStrategy());
 
@@ -123,8 +123,8 @@ public class SplitterTest {
     public void testSplitRuleWithNonIterableResult() throws Exception {
         Splitter splitterSimpleRule = new Splitter(new Expression() {
             @Override
-            public Object evaluate(Exchange exchange) {
-                return "smurf:" + exchange.getIn().getBody();
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                return (T)("smurf:" + exchange.getIn().getBody());
             }}, dest);
 
         Exchange origExchange = createTestExchange();
@@ -140,7 +140,7 @@ public class SplitterTest {
     public void testSplitRuleResultsInNothing() throws Exception {
         Splitter splitterEmptyRule = new Splitter(new Expression() {
             @Override
-            public Object evaluate(Exchange exchange) {
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return null;
             }}, dest);
 
@@ -158,8 +158,8 @@ public class SplitterTest {
         
         Splitter splitterIteratorRule = new Splitter(new Expression() {
             @Override
-            public Object evaluate(Exchange exchange) {
-                return results.iterator();
+            public <T> T evaluate(Exchange exchange, Class<T> type) {
+                return (T)results.iterator();
             }}, dest);
 
         Exchange origExchange = createTestExchange();
@@ -189,10 +189,10 @@ public class SplitterTest {
      */
     public static class TestSplitRule implements Expression {
         @Override
-        public Object evaluate(Exchange exchange) {
+        public <T> T evaluate(Exchange exchange, Class<T> type) {
             String[] parts = getContent(exchange).split(",");            
-            return Arrays.asList(parts);
-        }        
+            return (T)Arrays.asList(parts);
+        }
     }
     
     /**
@@ -223,14 +223,14 @@ public class SplitterTest {
     
     public static class TestSplitRuleSingleUse implements Expression {
         @Override
-        public Object evaluate(Exchange exchange) {
+        public <T> T evaluate(Exchange exchange, Class<T> type) {
             if (evaluateCalled) {
                 throw new IllegalStateException("evaluate() can only be called once");
             }
             evaluateCalled = true;
             
             String[] parts = getContent(exchange).split(",");
-            return new OneTimeUsageIterable<String>(Arrays.asList(parts)); 
+            return (T)new OneTimeUsageIterable<String>(Arrays.asList(parts)); 
         }
 
         private boolean evaluateCalled;
@@ -238,10 +238,10 @@ public class SplitterTest {
     
     public static class TestSplitFileRule implements Expression {
         @Override
-        public Object evaluate(Exchange exchange) {
+        public <T> T evaluate(Exchange exchange, Class<T> type) {
             String filename = (String)exchange.getIn().getBody();
             try {
-                return new TextFileIterator(filename);
+                return (T)new TextFileIterator(filename);
             } catch (IOException e) {
                 fail("Caught exception: " + e);
             }

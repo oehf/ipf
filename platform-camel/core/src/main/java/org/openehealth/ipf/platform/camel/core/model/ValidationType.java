@@ -16,14 +16,14 @@
 package org.openehealth.ipf.platform.camel.core.model;
 
 import org.apache.camel.Processor;
-import org.apache.camel.model.OutputType;
+import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.process.Validation;
 
 /**
  * @author Martin Krasser
  */
-public class ValidationType extends OutputType<ValidationType>{
+public class ValidationType extends OutputDefinition<ValidationType>{
 
     private Processor responseGeneratorProcessor;
     

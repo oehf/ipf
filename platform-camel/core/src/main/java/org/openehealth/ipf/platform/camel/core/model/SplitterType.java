@@ -18,14 +18,11 @@ package org.openehealth.ipf.platform.camel.core.model;
 import static org.apache.camel.util.ObjectHelper.notNull;
 import groovy.lang.Closure;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
-import org.apache.camel.model.OutputType;
-import org.apache.camel.model.ProcessorType;
-import org.apache.camel.model.language.ExpressionType;
+import org.apache.camel.model.OutputDefinition;
+import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
 import org.apache.camel.spi.RouteContext;
@@ -43,12 +40,11 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  * @author Jens Riemschneider
  * @author Martin Krasser
  */
-public class SplitterType extends OutputType<ProcessorType> {
+public class SplitterType extends OutputDefinition<ProcessorDefinition> {
 
     private AggregationStrategy aggregationStrategy;
-    private ExpressionType expressionType;
+    private ExpressionDefinition expressionDefinition;
     private String expressionBean;
-    private List<ProcessorType<?>> outputs = new ArrayList<ProcessorType<?>>();
 
     /**
      * Creates a split type, i.e. a builder for {@link Splitter}
@@ -58,7 +54,7 @@ public class SplitterType extends OutputType<ProcessorType> {
      */
     public SplitterType(Expression expression) {
         notNull(expression, "expression");
-        this.expressionType = new ExpressionType(expression);
+        this.expressionDefinition = new ExpressionDefinition(expression);
     }
 
     public SplitterType(String expressionBean) {
@@ -77,9 +73,9 @@ public class SplitterType extends OutputType<ProcessorType> {
             aggregationStrategy = new UseLatestAggregationStrategy();
         }
         if (expressionBean != null) {
-            expressionType = new ExpressionType(routeContext.lookup(expressionBean, Expression.class));
+            expressionDefinition = new ExpressionDefinition(routeContext.lookup(expressionBean, Expression.class));
         }
-        Expression expression = expressionType.createExpression(routeContext);
+        Expression expression = expressionDefinition.createExpression(routeContext);
         Splitter splitter = createSplitterInstance(expression, childProcessor);
         
         splitter.aggregate(aggregationStrategy);
@@ -104,7 +100,7 @@ public class SplitterType extends OutputType<ProcessorType> {
      */
     @Override
     public String toString() {
-        return "Splitter[" + expressionType + " -> " + getOutputs() + "]";
+        return "Splitter[" + expressionDefinition + " -> " + getOutputs() + "]";
     }
 
     /**
@@ -115,7 +111,7 @@ public class SplitterType extends OutputType<ProcessorType> {
      * @return this instance for chaining other calls
      */
     public SplitterType aggregate(Closure aggregationStrategy) {
-        return aggregate(new DelegatingAggregationStrategy(aggregationStrategy));
+        return RENAMED_aggregate_RENAMED(new DelegatingAggregationStrategy(aggregationStrategy));
     }
     
     /**
@@ -126,18 +122,11 @@ public class SplitterType extends OutputType<ProcessorType> {
      *          created by {@link #createProcessor(RouteContext)}
      * @return this instance for chaining other calls
      */
-    public SplitterType aggregate(AggregationStrategy aggregationStrategy) {
+    // FIXME: after resolving compiler errors
+    public SplitterType RENAMED_aggregate_RENAMED(AggregationStrategy aggregationStrategy) {
         notNull(aggregationStrategy, "aggregationStrategy");
         this.aggregationStrategy = aggregationStrategy;
         return this;
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.camel.model.ProcessorType#getOutputs()
-     */
-    @Override
-    public List<ProcessorType<?>> getOutputs() {
-        return outputs;
-    }
-
 }

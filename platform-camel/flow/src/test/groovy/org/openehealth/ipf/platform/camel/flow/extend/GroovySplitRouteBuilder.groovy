@@ -18,7 +18,8 @@ package org.openehealth.ipf.platform.camel.flow.extend
 import static org.apache.camel.builder.Builder.*
 
 import org.apache.camel.Exchange
-import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.spring.SpringRouteBuilder
+
 /**
  * @author Jens Riemschneider
  */
@@ -36,7 +37,7 @@ class GroovySplitRouteBuilder extends SpringRouteBuilder {
             .initFlow("test-ipfsplit")
                 .application("test")
                 .outType(String.class)
-            .split { Exchange exchange -> 
+            .ipf().split { Exchange exchange -> 
                 exchange.in.body.split(',') as List
             }
             .to("mock:mock-1")
@@ -48,7 +49,7 @@ class GroovySplitRouteBuilder extends SpringRouteBuilder {
             .to("direct:out-4")
         
         from("direct:out-3")
-            .split { Exchange exchange -> 
+            .ipf().split { Exchange exchange -> 
                 exchange.in.body.split(',') as List
             }
             .to("mock:mock-1")

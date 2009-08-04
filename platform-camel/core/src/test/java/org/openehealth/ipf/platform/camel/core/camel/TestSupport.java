@@ -39,7 +39,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public abstract class TestSupport {
 
     @Autowired
-    protected ProducerTemplate<Exchange> producerTemplate;
+    protected ProducerTemplate producerTemplate;
     
     @Before
     public void setUp() throws Exception {
