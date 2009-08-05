@@ -13,9 +13,9 @@
     <documentation xml:lang="en">The schema for OASIS ebXML Registry Services</documentation>
   </annotation>
   <!-- Import the rim.xsd file with XML schema mappaing from RIM -->
-  <import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="rim.xsd"/>
+  <import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rim.xsd"/>
   <!-- Import the rs.xsd file with XML schema for base rs related schema -->
-  <import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" schemaLocation="rs.xsd"/>
+  <import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rs.xsd"/>
   <element name="SubmitObjectsRequest">
     <annotation>
       <documentation xml:lang="en">The SubmitObjectsRequest allows one to submit a list of RegistryObject elements. Each RegistryEntry element provides metadata for a single submitted object.  Note that the repository item being submitted is in a separate document that is not in this DTD. The ebXML Messaging Services Specfication defines packaging, for submission, of the metadata of a repository item with the repository item itself. The value of the id attribute of the ExtrinsicObject element must be the same as the xlink:href attribute within the Reference element within the Manifest element of the MessageHeader.</documentation>

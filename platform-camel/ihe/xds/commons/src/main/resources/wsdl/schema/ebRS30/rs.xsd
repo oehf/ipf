@@ -12,7 +12,7 @@
     <documentation xml:lang="en">The schema for OASIS ebXML Registry Services</documentation>
   </annotation>
   <!-- Import the rim.xsd file with XML schema mappaing from RIM -->
-  <import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="rim.xsd"/>
+  <import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rim.xsd"/>
   <complexType name="RegistryRequestType">
     <annotation>
       <documentation xml:lang="en">Base type for all ebXML Registry requests</documentation>

@@ -32,7 +32,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 /**
  * The producer implementation for the ITI-17 component.
  */
-public class Iti17Producer extends DefaultProducer<Exchange> implements Auditable {
+public class Iti17Producer extends DefaultProducer implements Auditable {
     private Iti17Endpoint endpoint;
     
     /**

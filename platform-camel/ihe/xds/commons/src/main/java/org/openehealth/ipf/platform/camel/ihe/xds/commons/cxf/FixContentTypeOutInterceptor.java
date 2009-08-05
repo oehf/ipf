@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf;
 
-import org.apache.commons.lang.Validate;
 import org.apache.cxf.attachment.AttachmentSerializer;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
@@ -45,7 +44,8 @@ public class FixContentTypeOutInterceptor extends AbstractSoapInterceptor {
     public void handleMessage(SoapMessage message) throws Fault {
         // Cool stuff for Axis 0.9
         String ct  = (String) message.get(Message.CONTENT_TYPE);
-        Validate.isTrue(!ct.contains("type="));
-        message.put(Message.CONTENT_TYPE, ct + "; type=\"text/xml\"");
+        if (!ct.contains("type=")) {
+            message.put(Message.CONTENT_TYPE, ct + "; type=\"text/xml\"");
+        }
     }
 }

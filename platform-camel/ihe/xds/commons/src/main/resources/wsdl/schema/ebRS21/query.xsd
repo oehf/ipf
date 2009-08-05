@@ -7,7 +7,7 @@
 	 xmlns:rim = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1">
 
 	<!-- Import the rim.xsd file with XML schema mappaing from RIM -->
-	<import namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1" schemaLocation = "rim.xsd"/>
+	<import namespace = "urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1" schemaLocation = "classpath:wsdl/schema/ebRS21/rim.xsd"/>
 	
 	<complexType name = "ResponseOptionType">
 		<attribute name = "returnType" default="RegistryObject">

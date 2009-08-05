@@ -28,7 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrateg
 /**
  * The Camel consumer for the ITI-17 transaction.
  */
-public class Iti17Consumer extends DefaultConsumer<Exchange> implements Auditable {
+public class Iti17Consumer extends DefaultConsumer implements Auditable {
     
     private final Iti17Endpoint endpoint;
     

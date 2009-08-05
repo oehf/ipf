@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
 import org.apache.camel.Component;
-import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.camel.util.UnsafeUriCharactersEncoder;
 
@@ -28,7 +27,7 @@ import java.net.URISyntaxException;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
+public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     private static final String ENDPOINT_PROTOCOL = "http://";
     private static final String ENDPOINT_PROTOCOL_SECURE = "https://";
 
@@ -72,31 +71,19 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      * @throws URISyntaxException
      *          if the endpoint URI was not a valid URI.
      */
-    protected DefaultItiEndpoint(String endpointUri, String address, Component<Exchange> component) throws URISyntaxException {
+    protected DefaultItiEndpoint(String endpointUri, String address, Component component) throws URISyntaxException {
         super(endpointUri, component);
         this.address = address;
         configure();
     }
 
     private void configure() throws URISyntaxException {
-        if (isProducer(getEndpointUri())) {
-            this.serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
-            this.serviceAddress = null;
-        }
-        else {
-            this.serviceUrl = null;
-            this.serviceAddress = "/" + address;
-        }
+        this.serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
+        this.serviceAddress = "/" + address;
     }
 
     public boolean isSingleton() {
         return true;
-    }
-
-    private static boolean isProducer(String endpointUri) throws URISyntaxException {
-        URI u = new URI(UnsafeUriCharactersEncoder.encode(endpointUri));
-        String path = u.getSchemeSpecificPart();
-        return path.startsWith("//");
     }
 
     /**
@@ -105,13 +92,8 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      * The URL is derived from the endpoint URI defined in the constructor. If the
      * URI does not represent a producer, this method throws an exception.
      * @return the service URL.
-     * @throws IllegalStateException
-     *          if the endpoint only supports consuming messages.
      */
     public String getServiceUrl() {
-        if (serviceUrl == null) {
-            throw new IllegalStateException("Endpoint does not support calling a service. Endpoint URI = " + getEndpointUri());
-        }
         return serviceUrl;
     }
 
@@ -121,13 +103,8 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint<Exchange> {
      * The address is derived from the endpoint URI defined in the constructor. If the
      * URI does not represent a consumer, this method throws an exception.
      * @return the service address.
-     * @throws IllegalStateException
-     *          if the endpoint only supports producing messages.
      */
     public String getServiceAddress() {
-        if (serviceAddress == null) {
-            throw new IllegalStateException("Endpoint does not support publishing a service. Endpoint URI = " + getEndpointUri());
-        }
         return serviceAddress;
     }
 

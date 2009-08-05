@@ -51,7 +51,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.SoapUtils;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiProducer<T> extends DefaultProducer<Exchange> implements Auditable {
+public abstract class DefaultItiProducer<T> extends DefaultProducer implements Auditable {
     private static final Log log = LogFactory.getLog(DefaultItiProducer.class);
 
     private final ThreadLocal<T> threadLocalPort = new ThreadLocal<T>();

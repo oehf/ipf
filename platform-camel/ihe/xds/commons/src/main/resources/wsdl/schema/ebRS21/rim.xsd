@@ -9,7 +9,7 @@
 	<annotation>
 		<documentation xml:lang = "en">The schema for OASIS ebXML Registry Information Model</documentation>
 	</annotation>
-    <import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../xml.xsd"/>
+    <import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="classpath:wsdl/schema/xml.xsd"/>
 	
 	<!--Begin information model mapping from ebRIM.-->
 	

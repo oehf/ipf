@@ -13,7 +13,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:lang="http://www.springframework.org/schema/lang"
-    xmlns:camel="http://activemq.apache.org/camel/schema/spring"
+    xmlns:camel="http://camel.apache.org/schema/spring"
     xmlns:cxf="http://activemq.apache.org/camel/schema/cxfEndpoint"
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:http="http://cxf.apache.org/transports/http/configuration" 
@@ -27,8 +27,8 @@ http://www.springframework.org/schema/lang
 http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
 http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-2.5.xsd
-http://activemq.apache.org/camel/schema/spring
-http://activemq.apache.org/camel/schema/spring/camel-spring.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd 
 http://cxf.apache.org/transports/http/configuration 
 http://cxf.apache.org/schemas/configuration/http-conf.xsd 
 http://cxf.apache.org/configuration/security 
@@ -52,6 +52,7 @@ http://cxf.apache.org/schemas/configuration/security.xsd
       
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
+        <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
     <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate" />

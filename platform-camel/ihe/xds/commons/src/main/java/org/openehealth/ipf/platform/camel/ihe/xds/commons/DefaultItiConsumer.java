@@ -38,7 +38,7 @@ import java.util.Collections;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiConsumer extends DefaultConsumer<Exchange> implements Auditable {
+public abstract class DefaultItiConsumer extends DefaultConsumer implements Auditable {
     private static final Log log = LogFactory.getLog(DefaultItiConsumer.class);
 
     private final DefaultItiEndpoint endpoint;

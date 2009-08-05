@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14.component;
 
 import org.apache.camel.Consumer;
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiEndpoint;
@@ -55,11 +54,11 @@ public class Iti14Endpoint extends DefaultItiEndpoint {
         super(endpointUri, address, iti14Component);
     }
 
-    public Producer<Exchange> createProducer() throws Exception {
+    public Producer createProducer() throws Exception {
         return new Iti14Producer(this, SERVICE_INFO);
     }
 
-    public Consumer<Exchange> createConsumer(Processor processor) throws Exception {
+    public Consumer createConsumer(Processor processor) throws Exception {
         return new Iti14Consumer(this, processor, SERVICE_INFO);
     }
 }

@@ -44,7 +44,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Jens Riemschneider
  */
 public class StandardTestContainer {
-    private static ProducerTemplate<Exchange> producerTemplate;
+    private static ProducerTemplate producerTemplate;
     private static ServletServer servletServer;
     private static ApplicationContext appContext;
 
@@ -52,7 +52,6 @@ public class StandardTestContainer {
     private static UdpServer syslog;
     private static CamelContext camelContext;
     
-    @SuppressWarnings("unchecked")  // Because of getting beans of generified classes.
     public static void startServer(Servlet servlet, String appContextName, boolean secure) throws Exception {
         ClassPathResource contextResource = new ClassPathResource(appContextName);
         
@@ -71,7 +70,7 @@ public class StandardTestContainer {
         
         ServletContext servletContext = servlet.getServletConfig().getServletContext();
         appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-        producerTemplate = (ProducerTemplate<Exchange>)appContext.getBean("producerTemplate", ProducerTemplate.class);  
+        producerTemplate = (ProducerTemplate)appContext.getBean("producerTemplate", ProducerTemplate.class);  
         camelContext = (CamelContext)appContext.getBean("camelContext", CamelContext.class);  
 
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryHost("localhost");

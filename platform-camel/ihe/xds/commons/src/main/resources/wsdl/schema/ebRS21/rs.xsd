@@ -12,10 +12,10 @@
 	</annotation>
 
 	<!-- Import the rim.xsd file with XML schema mappaing from RIM -->
-	<import namespace="urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1" schemaLocation="rim.xsd"/>
+	<import namespace="urn:oasis:names:tc:ebxml-regrep:rim:xsd:2.1" schemaLocation="classpath:wsdl/schema/ebRS21/rim.xsd"/>
 
 	<!-- Import the query.xsd file with XML schema for query related schema -->
-	<import namespace="urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1" schemaLocation="query.xsd"/>
+	<import namespace="urn:oasis:names:tc:ebxml-regrep:query:xsd:2.1" schemaLocation="classpath:wsdl/schema/ebRS21/query.xsd"/>
 
 	
 	<element name = "RequestAcceptedResponse">

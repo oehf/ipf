@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14.component;
 
 import org.apache.camel.Endpoint;
-import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultComponent;
 
 import java.util.Map;
@@ -24,10 +23,10 @@ import java.util.Map;
 /**
  * The Camel component for the ITI-14 transaction.
  */
-public class Iti14Component extends DefaultComponent<Exchange> {
+public class Iti14Component extends DefaultComponent {
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
-    protected Endpoint<Exchange> createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Iti14Endpoint(uri, remaining, this);
     }
 }
