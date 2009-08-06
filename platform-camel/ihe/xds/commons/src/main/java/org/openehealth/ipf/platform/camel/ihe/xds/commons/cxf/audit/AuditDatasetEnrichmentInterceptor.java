@@ -68,8 +68,10 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
         Exchange exchange = message.getExchange();
         Message wrappedMessage = ((AbstractWrappedMessage)message).getMessage();
         boolean isInboundMessage = 
-            ((wrappedMessage == exchange.getInMessage()) ||
-             (wrappedMessage == exchange.getInFaultMessage()));
+            wrappedMessage == exchange.getInMessage() ||
+            wrappedMessage == exchange.getInFaultMessage() ||
+            message == exchange.getInMessage() ||
+            message == exchange.getInFaultMessage();
         
         // retrieve WS-Addressing headers
         AddressingPropertiesImpl wsaProperties = 

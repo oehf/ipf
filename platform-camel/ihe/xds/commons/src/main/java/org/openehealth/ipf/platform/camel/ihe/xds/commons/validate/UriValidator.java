@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.kohsuke.rngom.util.Uri;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Validates a value list for compliance with a URI (RFC 2616).
@@ -35,7 +36,12 @@ public class UriValidator implements ValueListValidator {
             String uri = getUri(values);
             metaDataAssert(uri != null, NULL_URI);
             metaDataAssert(!uri.isEmpty(), EMPTY_URI);
-            metaDataAssert(Uri.isValid(uri), INVALID_URI, uri);
+            try {
+                new URI(uri);
+            }
+            catch (URISyntaxException e) {
+                throw new XDSMetaDataException(INVALID_URI, uri);
+            }
         }
     }
     

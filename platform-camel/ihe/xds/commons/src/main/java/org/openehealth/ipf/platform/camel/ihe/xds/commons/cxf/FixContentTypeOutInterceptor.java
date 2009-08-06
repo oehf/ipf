@@ -49,3 +49,4 @@ public class FixContentTypeOutInterceptor extends AbstractSoapInterceptor {
         }
     }
 }
+

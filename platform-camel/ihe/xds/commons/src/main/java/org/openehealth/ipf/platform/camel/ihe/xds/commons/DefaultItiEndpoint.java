@@ -17,9 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
 import org.apache.camel.Component;
 import org.apache.camel.impl.DefaultEndpoint;
-import org.apache.camel.util.UnsafeUriCharactersEncoder;
-
-import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
