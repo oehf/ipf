@@ -39,8 +39,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.CxfTestUtils;
  * author Jens Riemschneider
  */
 public class TestIti43 extends StandardTestContainer {
-    private static final String SERVICE1 = "xds-iti43://localhost:9091/xds-iti43-service1";
-    private static final String SERVICE2 = "xds-iti43://localhost:9091/xds-iti43-service2";
+    private final String SERVICE1 = "xds-iti43://localhost:" + getPort() + "/xds-iti43-service1";
+    private final String SERVICE2 = "xds-iti43://localhost:" + getPort() + "/xds-iti43-service2";
 
     private RetrieveDocumentSet request;
     private RetrieveDocument doc;

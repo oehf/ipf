@@ -34,8 +34,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
  * @author Jens Riemschneider
  */
 public class TestIti42 extends StandardTestContainer {
-    private static final String SERVICE1 = "xds-iti42://localhost:9091/xds-iti42-service1";
-    private static final String SERVICE2 = "xds-iti42://localhost:9091/xds-iti42-service2";
+    private final String SERVICE1 = "xds-iti42://localhost:" + getPort() + "/xds-iti42-service1";
+    private final String SERVICE2 = "xds-iti42://localhost:" + getPort() + "/xds-iti42-service2";
 
     private RegisterDocumentSet request;
     private DocumentEntry docEntry;

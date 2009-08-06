@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Validates a value list for compliance with a URI (RFC 2616).
@@ -36,11 +38,20 @@ public class UriValidator implements ValueListValidator {
             String uri = getUri(values);
             metaDataAssert(uri != null, NULL_URI);
             metaDataAssert(!uri.isEmpty(), EMPTY_URI);
+            
+            // Accept anything that the classes URI or URL accept. This is done to
+            // avoid e.g. "http://" to fail. The XDSToolKit is using this URI
+            // for some tests and the RFCs do not clearly state if this is a valid
+            // URI or not. The URL class seems to accept it, the URI class doesn't.
             try {
                 new URI(uri);
             }
-            catch (URISyntaxException e) {
-                throw new XDSMetaDataException(INVALID_URI, uri);
+            catch (URISyntaxException eUri) {
+                try {
+                    new URL(uri);
+                } catch (MalformedURLException eUrl) {
+                    throw new XDSMetaDataException(INVALID_URI, uri);
+                }
             }
         }
     }

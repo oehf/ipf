@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.net.ServerSocket;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -24,6 +26,9 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultExchange;
+import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.bus.CXFBusImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.AfterClass;
@@ -44,6 +49,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Jens Riemschneider
  */
 public class StandardTestContainer {
+    private static final Log log = LogFactory.getLog(StandardTestContainer.class);
+    
     private static ProducerTemplate producerTemplate;
     private static ServletServer servletServer;
     private static ApplicationContext appContext;
@@ -52,12 +59,54 @@ public class StandardTestContainer {
     private static UdpServer syslog;
     private static CamelContext camelContext;
     
+    private static int port;
+    
+    /**
+     * @return the port used by the servlet.
+     */
+    protected int getPort() {
+        return port;
+    }
+
+    private static int getFreePort() {
+        int port = 8000;
+        boolean portFree = false;
+        while (!portFree) {
+            port = 8000 + RandomUtils.nextInt(2000);
+            portFree = isPortFree(port);
+        };
+        return port;
+    }
+    
+    private static boolean isPortFree(int port) {
+        ServerSocket socket = null;
+        try {
+            socket = new ServerSocket(port);
+            return true;
+        } 
+        catch (IOException e) {
+            return false;
+        } 
+        finally { 
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    throw new AssertionError(e);
+                } 
+            }
+        }
+    }
+    
     public static void startServer(Servlet servlet, String appContextName, boolean secure) throws Exception {
         ClassPathResource contextResource = new ClassPathResource(appContextName);
         
+        port = getFreePort();
+        log.info("Publishing services on port: " + port);
+        
         servletServer = new TomcatServer();
         servletServer.setContextResource(contextResource.getURI().toString());
-        servletServer.setPort(9091);
+        servletServer.setPort(port);
         servletServer.setContextPath("");
         servletServer.setServletPath("/*");
         servletServer.setServlet(servlet);

@@ -32,8 +32,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet;
  */
 public class TestIti17 extends StandardTestContainer {
 
-    private static final String SERVICE1 = "xds-iti17://localhost:9091/xds-iti17-service1";
-    private static final String SERVICE2 = "xds-iti17://localhost:9091/xds-iti17-service2";
+    private final String SERVICE1 = "xds-iti17://localhost:" + getPort() + "/xds-iti17-service1";
+    private final String SERVICE2 = "xds-iti17://localhost:" + getPort() + "/xds-iti17-service2";
     
     @BeforeClass
     public static void setUp() throws Exception {

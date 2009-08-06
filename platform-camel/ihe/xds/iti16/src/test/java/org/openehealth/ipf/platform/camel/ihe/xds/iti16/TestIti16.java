@@ -34,8 +34,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
  */
 public class TestIti16 extends StandardTestContainer {
 
-    private static final String SERVICE1 = "xds-iti16://localhost:9091/xds-iti16-service1";
-    private static final String SERVICE2 = "xds-iti16://localhost:9091/xds-iti16-service2";
+    private final String SERVICE1 = "xds-iti16://localhost:" + getPort() + "/xds-iti16-service1";
+    private final String SERVICE2 = "xds-iti16://localhost:" + getPort() + "/xds-iti16-service2";
 
     private QueryRegistry request;
     private SqlQuery query;

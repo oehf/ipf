@@ -36,13 +36,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.SoapVersionTestI
  * @author Jens Riemschneider
  */
 public class TestIti18 extends StandardTestContainer {
-    private static final String SERVICE1 = "xds-iti18://localhost:9091/xds-iti18-service1";
-    private static final String SERVICE2 = "xds-iti18://localhost:9091/xds-iti18-service2";
-    private static final String SAMPLE_SERVICE = "xds-iti18://localhost:9091/myIti18Service";
+    private final String SERVICE1 = "xds-iti18://localhost:" + getPort() + "/xds-iti18-service1";
+    private final String SERVICE2 = "xds-iti18://localhost:" + getPort() + "/xds-iti18-service2";
+    private final String SAMPLE_SERVICE = "xds-iti18://localhost:" + getPort() + "/myIti18Service";
     
-    private static final String SERVICE_SOAPDEFAULT = "xds-iti18://localhost:9091/xds-iti18-service21";
-    private static final String SERVICE_SOAP12 = "xds-iti18://localhost:9091/xds-iti18-service22?soap11=false";
-    private static final String SERVICE_SOAP11 = "xds-iti18://localhost:9091/xds-iti18-service23?soap11=true";
+    private final String SERVICE_SOAPDEFAULT = "xds-iti18://localhost:" + getPort() + "/xds-iti18-service21";
+    private final String SERVICE_SOAP12 = "xds-iti18://localhost:" + getPort() + "/xds-iti18-service22?soap11=false";
+    private final String SERVICE_SOAP11 = "xds-iti18://localhost:" + getPort() + "/xds-iti18-service23?soap11=true";
 
     private QueryRegistry request;
     private FindDocumentsQuery query;

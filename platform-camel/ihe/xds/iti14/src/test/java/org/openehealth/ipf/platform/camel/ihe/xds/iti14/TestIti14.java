@@ -36,12 +36,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
  * @author Jens Riemschneider
  */
 public class TestIti14 extends StandardTestContainer {
-    private static final String SERVICE1 = "xds-iti14://localhost:9091/xds-iti14-service1";
-    private static final String SERVICE2 = "xds-iti14://localhost:9091/xds-iti14-service2";
+    private final String SERVICE1 = "xds-iti14://localhost:" + getPort() + "/xds-iti14-service1";
+    private final String SERVICE2 = "xds-iti14://localhost:" + getPort() + "/xds-iti14-service2";
 
-    private static final String SERVICE_DD = "xds-iti14://localhost:9091/xds-iti14-service11";
-    private static final String SERVICE_FT = "xds-iti14://localhost:9091/xds-iti14-service12?audit=false&allowIncompleteAudit=true";
-    private static final String SERVICE_DT = "xds-iti14://localhost:9091/xds-iti14-service13?allowIncompleteAudit=true";
+    private final String SERVICE_DD = "xds-iti14://localhost:" + getPort() + "/xds-iti14-service11";
+    private final String SERVICE_FT = "xds-iti14://localhost:" + getPort() + "/xds-iti14-service12?audit=false&allowIncompleteAudit=true";
+    private final String SERVICE_DT = "xds-iti14://localhost:" + getPort() + "/xds-iti14-service13?allowIncompleteAudit=true";
 
     private RegisterDocumentSet request;
     private DocumentEntry docEntry;
