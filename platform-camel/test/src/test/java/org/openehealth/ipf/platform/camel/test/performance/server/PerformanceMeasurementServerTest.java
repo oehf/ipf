@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.test.performance.server;
 
 import static org.apache.camel.component.http.HttpMethods.DELETE;
 import static org.apache.camel.component.http.HttpMethods.GET;
-import static org.apache.camel.component.http.HttpMethods.HTTP_METHOD;
 
 import static org.apache.commons.lang.Validate.notNull;
 
@@ -32,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.ProducerTemplate;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -207,13 +208,13 @@ public class PerformanceMeasurementServerTest {
     }
 
     private void sendStatisticsDELETERequest() {
-        producerTemplate.sendBodyAndHeader(buildURL(), EMPTY_BODY, HTTP_METHOD,
-                DELETE);
+        producerTemplate.sendBodyAndHeader(buildURL(), EMPTY_BODY, 
+                Exchange.HTTP_METHOD, DELETE);
     }
 
     private String sendStatisticsGETRequest() throws IOException {
-        Object response = producerTemplate.sendBodyAndHeader(buildURL(),
-                EMPTY_BODY, HTTP_METHOD, GET);
+        Object response = producerTemplate.sendBodyAndHeader(buildURL(), 
+                ExchangePattern.InOut, EMPTY_BODY, Exchange.HTTP_METHOD, GET);
         return IOUtils.toString((InputStream) response);
     }
 

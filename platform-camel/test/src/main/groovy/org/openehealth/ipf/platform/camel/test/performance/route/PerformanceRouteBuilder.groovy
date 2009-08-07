@@ -24,11 +24,11 @@ import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 
-import static org.apache.camel.component.http.HttpMethods.HTTP_METHOD
+import static org.apache.camel.Exchange.HTTP_METHOD
+import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE
 import static org.apache.camel.component.http.HttpMethods.GET
 import static org.apache.camel.component.http.HttpMethods.DELETE
 import static org.apache.camel.component.http.HttpMethods.POST
-import static org.apache.camel.component.http.HttpProducer.HTTP_RESPONSE_CODE
 import static org.apache.commons.httpclient.HttpStatus.SC_METHOD_NOT_ALLOWED
 
 import static org.apache.commons.io.IOUtils.closeQuietly

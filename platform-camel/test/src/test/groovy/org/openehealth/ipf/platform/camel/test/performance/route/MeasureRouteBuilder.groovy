@@ -48,7 +48,7 @@ class MeasureRouteBuilder extends SpringRouteBuilder {
         
         from('direct:split') 
                 .measure().time()
-                .split { Exchange exchange -> 
+                .ipf().split { Exchange exchange -> 
                     exchange.in.body.split(',') 
                 }
                 .measure().finish('finish')

@@ -30,17 +30,10 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
-<<<<<<< .mine
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
         </dependency>
         <dependency>
-=======
-
-
-
-
->>>>>>> .theirs
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty</artifactId>
         </dependency>

@@ -18,11 +18,10 @@
         <module>ihe</module>
         <module>event</module>
         <module>hl7</module>
+        <module>test</module>
         <!--
         <module>lbs</module>
-        <module>http</module>
         <module>cda</module>
-        <module>test</module>
         -->
     </modules>
 
