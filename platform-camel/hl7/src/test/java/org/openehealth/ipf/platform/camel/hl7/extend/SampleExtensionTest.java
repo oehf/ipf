@@ -47,7 +47,7 @@ public class SampleExtensionTest extends AbstractExtensionTest {
     private String resource = "message/msg-01.hl7";
     
     @After
-    public void tearDown() throws Exception {
+    public void myTearDown() throws Exception {
         mockOutput1.reset();
         mockOutput2.reset();
     }
