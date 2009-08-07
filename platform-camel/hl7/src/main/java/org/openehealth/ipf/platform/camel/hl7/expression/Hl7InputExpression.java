@@ -22,12 +22,12 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 /**
  * @author Martin Krasser
  */
-public class Hl7InputExpression implements Expression<Exchange> {
+public class Hl7InputExpression implements Expression {
 
     @Override
-    public Object evaluate(Exchange exchange) {
+    public <T> T evaluate(Exchange exchange, Class<T> type) {
         MessageAdapter adapter = (MessageAdapter)exchange.getIn().getBody();
-        return adapter.getTarget();
+        return type.cast(adapter.getTarget());
     }
 
 }

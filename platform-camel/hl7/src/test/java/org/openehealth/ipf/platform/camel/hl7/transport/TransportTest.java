@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.hl7.transport;
 
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
@@ -41,7 +40,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public class TransportTest {
 
     @Autowired
-    protected ProducerTemplate<Exchange> producerTemplate;
+    protected ProducerTemplate producerTemplate;
     
     @EndpointInject(uri="mock:output")
     protected MockEndpoint mockOutput;
@@ -56,7 +55,7 @@ public class TransportTest {
         String message = inputMessage("message/msg-02.hl7").toString();
         String content = IOUtils.toString(new ClassPathResource("message/msg-02.content").getInputStream());
         mockOutput.expectedBodiesReceived(content);
-        producerTemplate.sendBody("mina:tcp://127.0.0.1:8888?sync=true&codec=hl7Codec", message);
+        producerTemplate.sendBody("mina:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec", message);
         mockOutput.assertIsSatisfied();
     }
 
@@ -64,7 +63,7 @@ public class TransportTest {
     public void testMessage03() throws Exception {
         String message = inputMessage("message/msg-03.hl7").toString();
         mockOutput.expectedBodiesReceived(message);
-        producerTemplate.sendBody("mina:tcp://127.0.0.1:8889?sync=true&codec=hl7Codec", message);
+        producerTemplate.sendBody("mina:tcp://127.0.0.1:8889?sync=true&codec=#hl7Codec", message);
         mockOutput.assertIsSatisfied();
     }
 

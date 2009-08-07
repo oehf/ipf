@@ -11,7 +11,7 @@
 -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:lang="http://www.springframework.org/schema/lang"
     xmlns:camel="http://camel.apache.org/schema/spring"
     xmlns:cxf="http://activemq.apache.org/camel/schema/cxfEndpoint"

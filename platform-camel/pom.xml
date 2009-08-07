@@ -16,11 +16,11 @@
         <module>core</module>
         <module>flow</module>
         <module>ihe</module>
-        <!--
+        <module>event</module>
         <module>hl7</module>
+        <!--
         <module>lbs</module>
         <module>http</module>
-        <module>event</module>
         <module>cda</module>
         <module>test</module>
         -->

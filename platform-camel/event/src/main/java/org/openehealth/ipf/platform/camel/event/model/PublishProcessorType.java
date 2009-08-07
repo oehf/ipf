@@ -20,8 +20,7 @@ import static org.apache.commons.lang.Validate.notNull;
 import groovy.lang.Closure;
 
 import org.apache.camel.Processor;
-import org.apache.camel.model.OutputType;
-import org.apache.camel.model.ProcessorType;
+import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.event.EventEngine;
 import org.openehealth.ipf.platform.camel.event.process.Publisher;
@@ -32,7 +31,7 @@ import org.openehealth.ipf.platform.camel.event.process.Publisher;
  * This processor type provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
  */
-public class PublishProcessorType extends OutputType<ProcessorType<?>> {
+public class PublishProcessorType extends OutputDefinition<PublishProcessorType> {
     /** The default name of the event engine bean */
     public static final String DEFAULT_EVENT_ENGINE_BEAN = "eventEngine";
     

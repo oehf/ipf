@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.event.MyEventImpl2
 class EventRouteBuilder extends SpringRouteBuilder {
      
     void configure() {
-        errorHandler(deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
+        errorHandler(defaultErrorHandler().maximumRedeliveries(2).redeliverDelay(0));
         
         from('direct:start_simple')
             .publish { new MyEventImpl1('hello world') }

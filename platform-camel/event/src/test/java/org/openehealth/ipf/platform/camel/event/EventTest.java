@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultExchange;
@@ -39,7 +38,7 @@ public class EventTest {
     private CamelContext context;
     
     @Autowired
-    private ProducerTemplate<Exchange> template;
+    private ProducerTemplate template;
     
     @EndpointInject(uri="mock:mock")
     protected MockEndpoint mock;

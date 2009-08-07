@@ -23,13 +23,13 @@ class TransportRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
 
-        from('mina:tcp://127.0.0.1:8888?sync=true&codec=hl7Codec')
+        from('mina:tcp://127.0.0.1:8888?sync=true&codec=#hl7Codec')
             .unmarshal().ghl7()
             .transmogrify {it.OBXNTE.OBX[5][5]}
             .to('mock:output')
             .transmogrify {''}
 
-        from('mina:tcp://127.0.0.1:8889?sync=true&codec=hl7Codec')
+        from('mina:tcp://127.0.0.1:8889?sync=true&codec=#hl7Codec')
             .unmarshal().ghl7()
             .to('mock:output')
             .transmogrify {''}

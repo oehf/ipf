@@ -2,7 +2,6 @@ package org.openehealth.ipf.platform.camel.event;
 
 import static org.junit.Assert.*;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.junit.Before;
@@ -13,7 +12,7 @@ import org.openehealth.ipf.platform.camel.event.adapter.RoutingChannelAdapter;
 
 public class DirectRoutingChannelAdapterTest extends BaseCamelRoutingChannelAdapterTest {
     private MyHandler1 handler;
-    private ProducerTemplate<Exchange> producerTemplate;
+    private ProducerTemplate producerTemplate;
     private EventEngine eventEngine;
 
     @Before
