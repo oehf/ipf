@@ -41,7 +41,7 @@ public class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset auditDataset) {
         AuditorManager.getRegistryAuditor().auditRegistryQueryEvent(
                 eventOutcome,
-                auditDataset.getUserId(),
+                auditDataset.getClientIpAddress(), // Must be set to something, otherwise schema is broken
                 auditDataset.getUserName(),
                 auditDataset.getClientIpAddress(),
                 auditDataset.getServiceEndpointUrl(),

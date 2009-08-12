@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit;
 
+import java.net.InetAddress;
+
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
@@ -40,7 +42,7 @@ public class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset auditDataset) throws Exception {
         AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetEvent(
                 eventOutcome,
-                auditDataset.getUserId(),
+                InetAddress.getLocalHost().getHostAddress(),   
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getSubmissionSetUuid(),
                 auditDataset.getPatientId());

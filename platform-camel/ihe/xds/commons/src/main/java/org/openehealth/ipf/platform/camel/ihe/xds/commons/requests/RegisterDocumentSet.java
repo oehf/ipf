@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class RegisterDocumentSet {
+public class RegisterDocumentSet implements Serializable {
+    private static final long serialVersionUID = 4029172072096691799L;
+    
     private SubmissionSet submissionSet;
     private final List<Folder> folders = new ArrayList<Folder>();
     private final List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();

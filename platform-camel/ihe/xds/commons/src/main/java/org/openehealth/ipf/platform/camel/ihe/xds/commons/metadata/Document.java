@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import javax.activation.DataHandler;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -26,9 +28,11 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class Document {
+public class Document implements Serializable {
+    private static final long serialVersionUID = 5206884085835642756L;
+    
     private DocumentEntry documentEntry;
-    private DataHandler dataHandler;
+    private transient DataHandler dataHandler;
     
     /**
      * Constructs a document.

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -27,7 +29,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * expected to be a member of the specified organization.
  * @author Jens Riemschneider
  */
-public class Recipient {
+public class Recipient implements Serializable {
+    private static final long serialVersionUID = -8192511869759795939L;
+    
     private Person person;
     private Organization organization;
 

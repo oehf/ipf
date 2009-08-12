@@ -15,7 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+
 import org.apache.camel.spring.SpringRouteBuilder
+
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
  * @author Jens Riemschneider
@@ -25,19 +31,21 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti14:xds-iti14-service1')
             .validate().iti14Request()
-            .process(new RegisterDocumentSetProcessor('service 1'))
+            .process { checkValue(it, 'service 1') }
             .validate().iti14Response()
         
         from('xds-iti14:xds-iti14-service2')
-            .process(new RegisterDocumentSetProcessor('service 2'))
+            .process { checkValue(it, 'service 2') }
 
-        from('xds-iti14:xds-iti14-service11')
-            .process(new RegisterDocumentSetProcessor('service 11'))
-    
         from('xds-iti14:xds-iti14-service12?audit=false&allowIncompleteAudit=true')
-            .process(new RegisterDocumentSetProcessor('service 12'))
+            .process { checkValue(it, 'service 12') }
     
         from('xds-iti14:xds-iti14-service13?allowIncompleteAudit=true')
-            .process(new RegisterDocumentSetProcessor('service 13'))
+            .process { checkValue(it, 'service 13') }
+    }
+
+    def checkValue(exchange, expected) { 
+        def actual = exchange.in.getBody(RegisterDocumentSet.class).documentEntries[0].comments.value        
+        Exchanges.resultMessage(exchange).body = new Response(expected == actual ? SUCCESS : FAILURE)
     }
 }

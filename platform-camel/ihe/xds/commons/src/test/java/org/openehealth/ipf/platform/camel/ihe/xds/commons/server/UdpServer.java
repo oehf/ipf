@@ -71,8 +71,8 @@ public class UdpServer extends Thread {
         this.latch = null;
     }
 
-    public String getPacket(int index) {
-        return packets.get(index);
+    public List<String> getPackets() {
+        return packets;
     }
 
     @Override

@@ -17,11 +17,15 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.io.Serializable;
+
 /**
  * Base class for all query requests.
  * @author Jens Riemschneider
  */
-public abstract class Query {
+public abstract class Query implements Serializable {
+    private static final long serialVersionUID = 7597105342752455732L;
+    
     private final QueryType type;
 
     /**

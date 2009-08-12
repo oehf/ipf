@@ -15,11 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
+
 /**
  * Base class for stored queries.
  * @author Jens Riemschneider
  */
-public abstract class StoredQuery extends Query {
+public abstract class StoredQuery extends Query implements Serializable {
+    private static final long serialVersionUID = -8296981156625412818L;
+
     /**
      * Constructs the query.
      * @param type

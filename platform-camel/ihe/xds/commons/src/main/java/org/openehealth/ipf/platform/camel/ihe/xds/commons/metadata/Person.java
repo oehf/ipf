@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -30,7 +32,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * values are removed from the HL7 string.
  * @author Jens Riemschneider
  */
-public class Person {    
+public class Person implements Serializable {    
+    private static final long serialVersionUID = 1775227207521668959L;
+    
     private Identifiable id;        // XCN.1 and XCN.9
     private Name name;              // XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6
 

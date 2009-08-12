@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -23,7 +25,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class ErrorInfo {
+public class ErrorInfo implements Serializable {
+    private static final long serialVersionUID = 7615868122051414551L;
+    
     private ErrorCode errorCode;
     private String codeContext;
     private Severity severity;

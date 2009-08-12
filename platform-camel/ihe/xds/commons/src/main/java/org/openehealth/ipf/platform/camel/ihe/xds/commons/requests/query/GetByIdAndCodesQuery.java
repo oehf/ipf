@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -29,7 +30,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry
  * <li> a list of confidentiality codes
  * @author Jens Riemschneider
  */
-public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery {
+public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery implements Serializable {
+    private static final long serialVersionUID = -8311996966550912396L;
+    
     private QueryList<Code> confidentialityCodes;
     private List<Code> formatCodes;
     

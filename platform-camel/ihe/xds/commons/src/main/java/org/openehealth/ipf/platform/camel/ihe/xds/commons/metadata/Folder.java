@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author Jens Riemschneider
  */
-public class Folder extends XDSMetaClass {
+public class Folder extends XDSMetaClass implements Serializable {
+    private static final long serialVersionUID = -1923451867453561796L;
+    
     private final List<Code> codeList = new ArrayList<Code>();
     private String lastUpdateTime;
 

@@ -41,7 +41,7 @@ public class Iti15ServerAuditStrategy extends Iti15AuditStrategy {
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset auditDataset) {
         AuditorManager.getRepositoryAuditor().auditProvideAndRegisterDocumentSetEvent(
                 eventOutcome,
-                auditDataset.getUserId(),
+                auditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
                 auditDataset.getClientIpAddress(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getSubmissionSetUuid(),

@@ -15,11 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
+
 /**
  * Represents a stored query for GetFolders.
  * @author Jens Riemschneider
  */
-public class GetFoldersQuery extends GetByIdQuery {
+public class GetFoldersQuery extends GetByIdQuery implements Serializable {
+    private static final long serialVersionUID = 854601731250203237L;
+
     /**
      * Constructs the query.
      */

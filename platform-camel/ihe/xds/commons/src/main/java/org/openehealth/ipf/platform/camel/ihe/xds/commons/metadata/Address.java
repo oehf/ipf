@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -28,7 +30,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * removed from the HL7 string.
  * @author Jens Riemschneider
  */
-public class Address {
+public class Address implements Serializable {
+    private static final long serialVersionUID = -5050715144917393181L;
+    
     private String streetAddress;               // XAD.1  
     private String otherDesignation;            // XAD.2  
     private String city;                        // XAD.3  

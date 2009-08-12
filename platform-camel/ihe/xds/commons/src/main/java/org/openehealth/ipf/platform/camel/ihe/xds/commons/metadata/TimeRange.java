@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -22,7 +24,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Represents a date and time range used in queries.
  * @author Jens Riemschneider
  */
-public class TimeRange {
+public class TimeRange implements Serializable {
+    private static final long serialVersionUID = -5468726370729209318L;
+    
     private String from;
     private String to;
     

@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 import static org.apache.commons.lang.Validate.noNullElements;
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +37,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author Jens Riemschneider
  */
-public class QueryList<T> {
+public class QueryList<T> implements Serializable {
+    private static final long serialVersionUID = -2729640243221349924L;
+    
     private final List<List<T>> outerList = new ArrayList<List<T>>();
     
     /**

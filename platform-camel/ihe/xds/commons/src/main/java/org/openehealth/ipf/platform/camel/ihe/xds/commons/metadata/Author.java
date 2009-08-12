@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author Jens Riemschneider
  */
-public class Author {
+public class Author implements Serializable {
+    private static final long serialVersionUID = 6731221295927724760L;
+    
     private Person authorPerson;
     private final List<Organization> authorInstitution = new ArrayList<Organization>();
     private final List<String> authorRole = new ArrayList<String>(); 

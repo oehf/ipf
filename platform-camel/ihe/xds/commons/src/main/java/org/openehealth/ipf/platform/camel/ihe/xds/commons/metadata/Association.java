@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -24,7 +26,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class Association {
+public class Association implements Serializable {
+    private static final long serialVersionUID = -4556980177483609469L;
+    
     private String targetUuid;
     private String sourceUuid;
     private AssociationType associationType;

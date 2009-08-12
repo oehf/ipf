@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class QueryResponse extends Response {
+public class QueryResponse extends Response implements Serializable {
+    private static final long serialVersionUID = -435462523350768903L;
+    
     private List<ObjectReference> references = new ArrayList<ObjectReference>();
     private List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();
     private List<Folder> folders = new ArrayList<Folder>();

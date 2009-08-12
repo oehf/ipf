@@ -15,11 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
+
 /**
  * Represents a stored query for GetAssociations.
  * @author Jens Riemschneider
  */
-public class GetAssociationsQuery extends GetByUuidQuery {
+public class GetAssociationsQuery extends GetByUuidQuery implements Serializable {
+    private static final long serialVersionUID = 5623733746377113397L;
+
     /**
      * Constructs the query.
      */

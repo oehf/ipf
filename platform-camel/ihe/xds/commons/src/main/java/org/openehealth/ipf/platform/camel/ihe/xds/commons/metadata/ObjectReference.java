@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -22,7 +24,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Represents an object reference.
  * @author Jens Riemschneider
  */
-public class ObjectReference {
+public class ObjectReference implements Serializable {
+    private static final long serialVersionUID = 5442558815484966722L;
+    
     private String id;
     private String home;
     

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -25,7 +27,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author Jens Riemschneider
  */
-public class LocalizedString {
+public class LocalizedString implements Serializable {
+    private static final long serialVersionUID = 4876325465142358849L;
+    
     private String lang;
     private String charset;
     private String value;

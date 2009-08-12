@@ -87,13 +87,4 @@ public class WrappedOutputStream extends FilterOutputStream {
             payloadCollector.append(new String(b, off, len));
         }
     }
-
-    @Override
-    public void write(int b) throws IOException {
-        super.write(b);
-        // TODO: is that of any use at all?
-        if (isActive) {
-            payloadCollector.append((char) (b & 0xFF));
-        }
-    }
 }

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class PatientInfo {
+public class PatientInfo implements Serializable {
+    private static final long serialVersionUID = 7202574584233259959L;
+    
     private final List<Identifiable> ids = new ArrayList<Identifiable>();   // PID-3
     private Name name;                                                      // PID-5
     private String dateOfBirth;                                             // PID-7

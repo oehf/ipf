@@ -138,7 +138,7 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
         String payload = auditDataset.getPayload();
         assertNotNull(payload);
         assertTrue(payload.startsWith("<"));
-        assertTrue(payload.endsWith("Envelope>"));
+        assertTrue(payload.endsWith(">"));
     }
 
 

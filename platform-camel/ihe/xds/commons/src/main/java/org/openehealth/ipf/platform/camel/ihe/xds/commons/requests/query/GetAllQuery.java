@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -30,7 +31,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.SubmissionSet
  * Represents a stored query for GetAll.
  * @author Jens Riemschneider
  */
-public class GetAllQuery extends StoredQuery {
+public class GetAllQuery extends StoredQuery implements Serializable {
+    private static final long serialVersionUID = -4161172318244319631L;
+
     private Identifiable patientId;
     
     private List<AvailabilityStatus> statusDocuments;

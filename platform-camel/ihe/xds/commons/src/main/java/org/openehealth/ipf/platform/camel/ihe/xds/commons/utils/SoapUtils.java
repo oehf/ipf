@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -28,6 +30,8 @@ import org.w3c.dom.Node;
  * @author Dmytro Rud
  */
 public abstract class SoapUtils {
+    private static final transient Log LOG = LogFactory.getLog(SoapUtils.class);
+    
     private SoapUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
@@ -142,6 +146,51 @@ public abstract class SoapUtils {
         }
         
         return element;
+    }
+    
+    
+    /**
+     * Extracts the proper body (for example, a Query) from the 
+     * SOAP envelope, both represented as Strings.
+     * @param soapEnvelope
+     *      The SOAP Envelope (XML document) as String.
+     * @return
+     *      Extracted SOAP Body contents as String, or <tt>null</tt> when
+     *      the parameter does not represent a valid SOAP Envelope.      
+     */
+    public static String extractSoapBody(String soapEnvelope) {
+        try {
+            /*   
+             * We search for following positions (variables posXX):
+             * <pre>
+             * <S:Envelope>
+             *    <S:Header>...</S:Header> ?
+             *    <S:Body>the required information</S:Body>
+             *    ^3     ^4                       ^1 ^2
+             *                                       
+             * <S:Envelope>
+             * <pre>
+             */ 
+            int pos1, pos2, pos3, pos4;
+            pos1 = soapEnvelope.lastIndexOf("<");
+            pos1 = soapEnvelope.lastIndexOf("<", pos1 - 1);
+            pos2 = soapEnvelope.indexOf(":", pos1);
+            String soapPrefix = soapEnvelope.substring(pos1 + 2, pos2);
+            String bodyElementStart = new StringBuilder()
+                .append('<')
+                .append(soapPrefix)
+                .append(':')
+                .append("Body")
+                .toString(); 
+            pos3 = soapEnvelope.indexOf(bodyElementStart);
+            pos4 = soapEnvelope.indexOf(">", pos3);
+            String body = soapEnvelope.substring(pos4 + 1, pos1);
+            return body;
+            
+        } catch(Exception e) {
+            LOG.error("Invalid contents, probably not a SOAP Envelope in the parameter", e);
+            return null;
+        }
     }
     
 }

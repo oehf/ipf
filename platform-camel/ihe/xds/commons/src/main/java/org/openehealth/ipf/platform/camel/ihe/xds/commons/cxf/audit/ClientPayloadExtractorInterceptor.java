@@ -24,6 +24,7 @@ import org.apache.cxf.binding.soap.SoapVersion;
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.SoapUtils;
 
 
 /**
@@ -66,7 +67,8 @@ public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
 
         // get the payload and store it in the audit dataset
         WrappedOutputStream wrapper = (WrappedOutputStream)message.getContent(OutputStream.class);
-        String payload = wrapper.getCollectedPayloadAndDeactivate(soapEnvelopePrefix); 
+        String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate(soapEnvelopePrefix);
+        String payload = SoapUtils.extractSoapBody(soapEnvelope);
         auditDataset.setPayload(payload);
     }
 }

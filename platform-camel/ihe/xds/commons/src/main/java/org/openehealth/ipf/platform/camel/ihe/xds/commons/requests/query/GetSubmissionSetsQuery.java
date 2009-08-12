@@ -15,11 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
+
 /**
  * Represents a stored query for GetSubmissionSets.
  * @author Jens Riemschneider
  */
-public class GetSubmissionSetsQuery extends GetByUuidQuery {
+public class GetSubmissionSetsQuery extends GetByUuidQuery implements Serializable {
+    private static final long serialVersionUID = 2089514690641582428L;
+
     /**
      * Constructs the query.
      */

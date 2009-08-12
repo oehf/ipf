@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -25,7 +26,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.XDSMetaClass;
  * Base class for queries that are defined by a list of UUIDs. 
  * @author Jens Riemschneider
  */
-public abstract class GetByUuidQuery extends StoredQuery {
+public abstract class GetByUuidQuery extends StoredQuery implements Serializable {
+    private static final long serialVersionUID = -7962722576557371093L;
+    
     private List<String> uuids;
     private String homeCommunityId;
 

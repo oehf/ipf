@@ -15,7 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response
+import org.apache.commons.io.IOUtils
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet
+
 
 /**
  * @author Jens Riemschneider
@@ -25,10 +33,31 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti15:xds-iti15-service1')
             .validate().iti15Request()
-            .process(new ProvideAndRegisterDocumentSetProcessor('service 1'))
+            .process { checkValue(it, 'service 1') }
             .validate().iti15Response()
     
         from('xds-iti15:xds-iti15-service2')
-            .process(new ProvideAndRegisterDocumentSetProcessor('service 2'));
+            .process { checkValue(it, 'service 2') }
    }
+
+    def checkValue(exchange, expected) {
+        def doc = exchange.in.getBody(ProvideAndRegisterDocumentSet.class).documents[0]
+        def value = doc.documentEntry.comments.value
+        def status = FAILURE
+        if (expected == value && doc.dataHandler != null) {
+            def length = 0
+            def inputStream = doc.dataHandler.inputStream
+            while (inputStream.read() != -1) {
+                ++length
+            }
+            IOUtils.closeQuietly(inputStream)
+            if (length == LargeDataSource.STREAM_SIZE) {
+                status = SUCCESS
+            }
+        }
+        
+        def response = new Response(status)
+        Exchanges.resultMessage(exchange).body = response
+    }
 }
+

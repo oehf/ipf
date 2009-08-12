@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
-import org.apache.cxf.message.Message;
-import org.apache.cxf.phase.Phase;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.interceptor.AttachmentInInterceptor;
 import org.apache.cxf.interceptor.StaxInInterceptor;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.SoapUtils;
 
 
 /**
@@ -59,7 +60,7 @@ public class ServerPayloadExtractorInterceptor extends AuditInterceptor {
         // extract XML body bytes and save them into the AuditDataset
         InputStream stream = message.getContent(InputStream.class);
         byte[] streamBytes = IOUtils.readBytesFromStream(stream);
-        String payload = new String(streamBytes);
+        String payload = SoapUtils.extractSoapBody(new String(streamBytes));
         auditDataset.setPayload(payload);
 
         // restore the stream

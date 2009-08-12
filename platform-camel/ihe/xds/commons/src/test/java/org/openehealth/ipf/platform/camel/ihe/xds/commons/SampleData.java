@@ -46,7 +46,18 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocum
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindFoldersQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindSubmissionSetsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetAllQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetAssociationsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetDocumentsAndAssociationsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetDocumentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFolderAndContentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFoldersForDocumentQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetFoldersQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetRelatedDocumentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubmissionSetAndContentsQuery;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.GetSubmissionSetsQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.QueryList;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
@@ -394,6 +405,184 @@ public abstract class SampleData {
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for find folders.
+     */
+    public static QueryRegistry createFindFoldersQuery() {
+        FindFoldersQuery query = new FindFoldersQuery();
+        
+        query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
+        query.getLastUpdateTime().setFrom("1980");
+        query.getLastUpdateTime().setTo("1981");
+        QueryList<Code> codes = new QueryList<Code>();
+        codes.getOuterList().add(
+                Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
+        codes.getOuterList().add(
+                Arrays.asList(new Code("code9", null, "scheme9")));
+        query.setCodes(codes);
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for find submission sets.
+     */
+    public static QueryRegistry createFindSubmissionSetsQuery() {
+        FindSubmissionSetsQuery query = new FindSubmissionSetsQuery();
+        
+        query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
+        query.getSubmissionTime().setFrom("1980");
+        query.getSubmissionTime().setTo("1981");
+        query.setAuthorPerson("person1");
+        query.setSourceIds(Arrays.asList("1.2.3", "3.2.1"));
+        query.setContentTypeCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting data from all types.
+     */
+    public static QueryRegistry createGetAllQuery() {
+        GetAllQuery query = new GetAllQuery();
+        
+        query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
+        QueryList<Code> codes = new QueryList<Code>();
+        codes.getOuterList().add(
+                Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
+        codes.getOuterList().add(
+                Arrays.asList(new Code("code9", null, "scheme9")));
+        query.setConfidentialityCodes(codes);
+        query.setFormatCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
+        query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatusFolders(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting associations.
+     */
+    public static QueryRegistry createGetAssociationsQuery() {
+        GetAssociationsQuery query = new GetAssociationsQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting associations and documents.
+     */
+    public static QueryRegistry createGetDocumentsAndAssociationsQuery() {
+        GetDocumentsAndAssociationsQuery query = new GetDocumentsAndAssociationsQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
+        query.setUniqueIds(Arrays.asList("12.21.34", "43.56.89"));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting folders and their content.
+     */
+    public static QueryRegistry createGetFolderAndContentsQuery() {
+        GetFolderAndContentsQuery query = new GetFolderAndContentsQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuid("urn:uuid:1.2.3.4");
+        query.setUniqueId("12.21.34");
+        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code12", null, "scheme12")));
+        query.setConfidentialityCodes(confidentialityCodes);
+        query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting folders based on their documents.
+     */
+    public static QueryRegistry createGetFoldersForDocumentQuery() {
+        GetFoldersForDocumentQuery query = new GetFoldersForDocumentQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuid("urn:uuid:1.2.3.4");
+        query.setUniqueId("12.21.34");
+        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code12", null, "scheme12")));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting folders.
+     */
+    public static QueryRegistry createGetFoldersQuery() {
+        GetFoldersQuery query = new GetFoldersQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
+        query.setUniqueIds(Arrays.asList("12.21.34", "43.56.89"));
+        
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting documents related to some other object.
+     */
+    public static QueryRegistry createGetRelatedDocumentsQuery() {
+        GetRelatedDocumentsQuery query = new GetRelatedDocumentsQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuid("urn:uuid:1.2.3.4");
+        query.setUniqueId("12.21.34");
+        query.setAssociationTypes(Arrays.asList(AssociationType.APPEND, AssociationType.TRANSFORM));
+                
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting submission sets and their contents.
+     */
+    public static QueryRegistry createGetSubmissionSetAndContentsQuery() {
+        GetSubmissionSetAndContentsQuery query = new GetSubmissionSetAndContentsQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuid("urn:uuid:1.2.3.4");
+        query.setUniqueId("12.21.34");
+        QueryList<Code> confidentialityCodes = new QueryList<Code>();
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
+        confidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code12", null, "scheme12")));
+                
+        return new QueryRegistry(query);
+    }
+
+    /**
+     * @return a sample stored query for getting submission sets.
+     */
+    public static QueryRegistry createGetSubmissionSetsQuery() {
+        GetSubmissionSetsQuery query = new GetSubmissionSetsQuery();
+        
+        query.setHomeCommunityId("12.21.41");
+        query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
+                
         return new QueryRegistry(query);
     }
 }

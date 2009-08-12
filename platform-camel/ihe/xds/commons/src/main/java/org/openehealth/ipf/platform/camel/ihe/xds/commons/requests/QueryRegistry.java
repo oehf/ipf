@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.Query;
@@ -25,7 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.Query;
  * Request object for the Query Registry and Registry Stored Query transactions.
  * @author Jens Riemschneider
  */
-public class QueryRegistry {
+public class QueryRegistry implements Serializable {
+    private static final long serialVersionUID = -7089029668323133489L;
+
     private final Query query;
     
     private boolean returnLeafObjects;

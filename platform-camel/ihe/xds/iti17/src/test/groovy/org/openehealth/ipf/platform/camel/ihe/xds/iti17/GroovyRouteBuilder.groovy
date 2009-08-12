@@ -16,6 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17
 
 import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.commons.io.IOUtils
+
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
  * @author Jens Riemschneider
@@ -24,9 +27,18 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti17:xds-iti17-service1')
-            .process(new RetrieveDocumentProcessor('service 1: '))
+            .process { checkValue(it, 'service1') }
 
         from('xds-iti17:xds-iti17-service2')
-            .process(new RetrieveDocumentProcessor('service 2: '))
+            .process { checkValue(it, 'service2') }
    }
+
+    def checkValue(exchange, expected) {
+        def requestUri = exchange.in.getBody(String.class)
+        def queryStart = requestUri.indexOf('?') + 1        
+        def content = requestUri.substring(queryStart)
+        if (content != expected)
+            throw new AssertionError(content)
+        Exchanges.resultMessage(exchange).body = IOUtils.toInputStream(content)
+    }
 }

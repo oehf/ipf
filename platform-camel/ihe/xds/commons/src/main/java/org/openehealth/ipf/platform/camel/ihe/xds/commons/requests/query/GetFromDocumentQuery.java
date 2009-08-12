@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -22,7 +24,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Base class for queries that retrieve results via a document entry.
  * @author Jens Riemschneider
  */
-public abstract class GetFromDocumentQuery extends StoredQuery {
+public abstract class GetFromDocumentQuery extends StoredQuery implements Serializable {
+    private static final long serialVersionUID = 627720659958894242L;
+    
     private String uuid;
     private String uniqueId;
     private String homeCommunityId;

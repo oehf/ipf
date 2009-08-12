@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class RetrievedDocumentSet extends Response {
+public class RetrievedDocumentSet extends Response implements Serializable {    
+    private static final long serialVersionUID = 4389321453383292730L;
+    
     private final List<RetrievedDocument> documents = new ArrayList<RetrievedDocument>();
 
     /**

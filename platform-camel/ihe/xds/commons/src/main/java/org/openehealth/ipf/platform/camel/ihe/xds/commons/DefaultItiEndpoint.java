@@ -33,28 +33,8 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     private String serviceAddress;
     private String serviceUrl;    
     private boolean secure;
-    
-    /**
-     * Whether we should audit or not -- an URL parameter.  
-     * Equals to <code>true</code> per default.
-     */
     private boolean audit = true;
-    
-    /**
-     * Whether the system is allowed to write down audit items
-     * even if if was not able to collect all necessary data --
-     * an URL parameter, targeted on debug purposes only,
-     * defaults to <code>false</code>. 
-     */
     private boolean allowIncompleteAudit = false;
-    
-    /**
-     * Whether SOAP 1.1 should be used instead of SOAP 1.2
-     * for XDS.b transactions.  Default is <code>false</code>.
-     * <p>
-     * Does not have any meaning for XDS.a transactions,
-     * because they use only SOAP 1.1. 
-     */
     private boolean soap11 = false;
 
     /**
@@ -106,34 +86,60 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     }
 
 
-    /* ----- automatically generated getters and setters ----- */
-    
+    /**
+     * @return <code>true</code> if auditing is turned on. <code>true</code> by default.
+     */
     public boolean isAudit() {
         return audit;
     }
     
+    /**
+     * @param audit
+     *          <code>true</code> if auditing is turned on.
+     */
     public void setAudit(boolean audit) {
         this.audit = audit;
     }
 
+    /**
+     * @param allowIncompleteAudit
+     *          <code>true</code> if audit entries are logged even not all 
+     *          necessary data was available.
+     */
     public void setAllowIncompleteAudit(boolean allowIncompleteAudit) {
         this.allowIncompleteAudit = allowIncompleteAudit;
     }
 
+    /**
+     * @return <code>true</code> if audit entries are logged even not all 
+     *          necessary data was available. Defaults to <code>false</code>.
+     */
     public boolean isAllowIncompleteAudit() {
         return allowIncompleteAudit;
     }
-    
+
+    /**
+     * @return Whether SOAP 1.1 should be used instead of SOAP 1.2 for XDS.b 
+     *          transactions. Default is <code>false</code>. Does not have any 
+     *          meaning for XDS.a transactions.
+     */
     public boolean isSoap11() {
         return soap11;
     }
 
+    /**
+     * @param soap11
+     *          Whether SOAP 1.1 should be used instead of SOAP 1.2 for XDS.b 
+     *          transactions. Does not have any meaning for XDS.a transactions.
+     */
     public void setSoap11(boolean soap11) {
         this.soap11 = soap11;
     }
 
     /**
-     * @return <code>true</code> if https should be used instead of http.
+     * @return <code>true</code> if https should be used instead of http. Defaults
+     *          to <code>false</code>.
+     *          
      */
     public boolean isSecure() {
         return secure;

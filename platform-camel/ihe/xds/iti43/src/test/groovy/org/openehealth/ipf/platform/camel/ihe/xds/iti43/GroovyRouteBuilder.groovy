@@ -15,7 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocument
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource
+
+import javax.activation.DataHandler;
 
 /**
  * @author Jens Riemschneider
@@ -25,10 +35,28 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti43:xds-iti43-service1')
             .validate().iti43Request()
-            .process(new RetrieveDocumentSetProcessor('service 1'))
+            .process { checkValue(it, 'service 1') } 
             .validate().iti43Response()
     
         from('xds-iti43:xds-iti43-service2')
-            .process(new RetrieveDocumentSetProcessor('service 2'))
-   }
+            .process { checkValue(it, 'service 2') } 
+    }
+
+    void checkValue(exchange, expected) {
+        def request = exchange.in.getBody(RetrieveDocumentSet.class)
+        def retrieveDocument = request.documents[0]
+        def value = retrieveDocument.documentUniqueId
+        def response = new RetrievedDocumentSet(SUCCESS)
+        if (expected != value) {
+            response.setStatus(FAILURE)
+        }
+        else {
+            def doc = new RetrievedDocument()
+            doc.dataHandler = new DataHandler(new LargeDataSource())
+            doc.requestData = retrieveDocument
+            response.documents.add(doc)
+        }
+        
+        Exchanges.resultMessage(exchange).body = response
+    }
 }

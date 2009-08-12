@@ -75,14 +75,20 @@ public class Iti17Servlet extends HttpServlet {
             audit(false, req.getRemoteAddr(), fullRequestURI);
             return;
         }
-
-        try {
-            resp.setStatus(200);
-            IOUtils.copy(inputStream, resp.getOutputStream());
+        
+        if (inputStream != null) {
+            try {
+                resp.setStatus(200);
+                IOUtils.copy(inputStream, resp.getOutputStream());
+            }
+            finally {
+                IOUtils.closeQuietly(inputStream);
+                audit(true, req.getRemoteAddr(), fullRequestURI);
+            }
         }
-        finally {
-            inputStream.close();
-            audit(true, req.getRemoteAddr(), fullRequestURI);
+        else {
+            resp.setStatus(404);
+            audit(false, req.getRemoteAddr(), fullRequestURI);
         }
     }
 

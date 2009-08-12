@@ -15,7 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response
 
 /**
  * @author Jens Riemschneider
@@ -25,10 +30,16 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti42:xds-iti42-service1')
             .validate().iti42Request()
-            .process(new RegisterDocumentSetProcessor('service 1'))
+            .process { checkValue(it, 'service 1') }
             .validate().iti42Response()
     
         from('xds-iti42:xds-iti42-service2')
-            .process(new RegisterDocumentSetProcessor('service 2'))
-   }
+            .process { checkValue(it, 'service 2') }
+    }
+
+    void checkValue(exchange, expected) {
+        def value = exchange.in.getBody(RegisterDocumentSet.class).documentEntries[0].comments.value        
+        def response = new Response(expected == value ? SUCCESS : FAILURE)
+        Exchanges.resultMessage(exchange).body = response
+    }
 }

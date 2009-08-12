@@ -15,7 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.CxfTestUtils
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.LargeDataSource
+import org.apache.commons.io.IOUtils
 
 /**
  * @author Jens Riemschneider
@@ -25,10 +33,36 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti41:xds-iti41-service1')
             .validate().iti41Request()
-            .process(new ProvideAndRegisterDocumentSetProcessor('service 1'))
+            .process { checkValue(it, 'service 1') }
             .validate().iti41Response()
     
         from('xds-iti41:xds-iti41-service2')
-            .process(new ProvideAndRegisterDocumentSetProcessor('service 2'))
+            .process { checkValue(it, 'service 2') }
    }
+
+    void checkValue(exchange, expected) {
+        def doc = exchange.in.getBody(ProvideAndRegisterDocumentSet.class).documents[0]
+        def value = doc.documentEntry.comments.value        
+        def status = FAILURE;
+        if (expected == value && doc.dataHandler != null) {
+            def inputStream = doc.dataHandler.inputStream
+            try {
+                if (CxfTestUtils.isCxfUsingMtom(inputStream)) {
+                    def length = 0
+                    while (inputStream.read() != -1) {
+                        ++length
+                    }
+                    if (length == LargeDataSource.STREAM_SIZE) {
+                        status = SUCCESS
+                    }
+                }
+            }
+            finally {
+                IOUtils.closeQuietly(inputStream)
+            }
+        }
+        
+        def response = new Response(status)
+        Exchanges.resultMessage(exchange).body = response
+    }
 }

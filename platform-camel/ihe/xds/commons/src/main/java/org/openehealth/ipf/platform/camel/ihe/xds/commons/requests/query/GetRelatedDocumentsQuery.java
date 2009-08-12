@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -26,7 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationTy
  * Represents a stored query for GetRelatedDocuments.
  * @author Jens Riemschneider
  */
-public class GetRelatedDocumentsQuery extends GetFromDocumentQuery {
+public class GetRelatedDocumentsQuery extends GetFromDocumentQuery implements Serializable {
+    private static final long serialVersionUID = -8768793068458839362L;
+    
     private List<AssociationType> associationTypes;
 
     /**

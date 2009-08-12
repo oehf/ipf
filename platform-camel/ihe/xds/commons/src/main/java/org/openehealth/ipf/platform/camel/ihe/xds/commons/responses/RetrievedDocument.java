@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
+import java.io.Serializable;
+
 import javax.activation.DataHandler;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -27,8 +29,10 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocum
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class RetrievedDocument {
-    private DataHandler dataHandler;
+public class RetrievedDocument implements Serializable {
+    private static final long serialVersionUID = -3950026651885804263L;
+    
+    private transient DataHandler dataHandler;
     private RetrieveDocument requestData;
     
     /**

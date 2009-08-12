@@ -15,7 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
 
 /**
  * @author Jens Riemschneider
@@ -25,10 +30,16 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti16:xds-iti16-service1')
             .validate().iti16Request()
-            .process(new QueryRegistryProcessor('service 1'))
+            .process { checkValue(it, 'service 1') }
             .validate().iti16Response()
     
         from('xds-iti16:xds-iti16-service2')
-            .process(new QueryRegistryProcessor('service 2'))
+            .process { checkValue(it, 'service 2') }
    }
+
+    void checkValue(exchange, expected) {
+        def value = exchange.in.getBody(QueryRegistry.class).query.sql        
+        def response = new QueryResponse(expected == value ? SUCCESS : FAILURE)
+        Exchanges.resultMessage(exchange).body = response
+    }
 }

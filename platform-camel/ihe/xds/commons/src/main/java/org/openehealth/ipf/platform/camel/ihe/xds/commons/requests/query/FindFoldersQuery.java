@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -29,7 +30,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.TimeRange;
  * Represents a stored query for FindFolders.
  * @author Jens Riemschneider
  */
-public class FindFoldersQuery extends StoredQuery {
+public class FindFoldersQuery extends StoredQuery implements Serializable {
+    private static final long serialVersionUID = 4156643982985304259L;
+
     private Identifiable patientId;
     
     private List<AvailabilityStatus> status;

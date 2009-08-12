@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.responses;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
-public class Response {
+public class Response implements Serializable {
+    private static final long serialVersionUID = -6370795461214680771L;
+    
     private Status status;
     private List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
     

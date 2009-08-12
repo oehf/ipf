@@ -15,33 +15,35 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
  * @author Jens Riemschneider
  */
 class GroovyRouteBuilder extends SpringRouteBuilder {
     void configure() throws Exception {
-        from('xds-iti18:xds-iti18-service1?audit=false')
+        from('xds-iti18:xds-iti18-service1')
             .validate().iti18Request()
-            .process(new AdhocQueryProcessor('service 1'))
+            .process { checkValue(it, 'service 1') }
             .validate().iti18Response()
     
         from('xds-iti18:xds-iti18-service2')
-            .process(new AdhocQueryProcessor('service 2'))
+            .process { checkValue(it, 'service 2') }
 
         // three endpoints intended for SOAP version check
         from('xds-iti18:xds-iti18-service21')
-            .process(new AdhocQueryProcessor('implicit SOAP 1.2'))
+            .process { checkValue(it, 'implicit SOAP 1.2') }
         from('xds-iti18:xds-iti18-service22')
-            .process(new AdhocQueryProcessor('SOAP 1.2'))
+            .process { checkValue(it, 'SOAP 1.2') }
         from('xds-iti18:xds-iti18-service23')
-            .process(new AdhocQueryProcessor('SOAP 1.1'))
+            .process { checkValue(it, 'SOAP 1.1') }
            
             
         from('xds-iti18:myIti18Service')
@@ -50,14 +52,19 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 // Return an object reference for a find documents query
                 .when { it.in.body.query instanceof FindDocumentsQuery }                    
                     .transform {                        
-                        def response = new QueryResponse(Status.SUCCESS)
-                        response.getReferences().add(new ObjectReference("document01"))
+                        def response = new QueryResponse(SUCCESS)
+                        response.references.add(new ObjectReference('document01'))
                         response
                     }
                 // Any other query else is a failure
                 .otherwise()
-                    .transform { 
-                        new QueryResponse(Status.FAILURE)
-                    }
+                    .transform { new QueryResponse(FAILURE) }
    }
+
+    def checkValue(exchange, expected) {
+        def query = exchange.in.getBody(QueryRegistry.class).query
+        def value = query.authorPersons[0]        
+        def response = new QueryResponse(expected == value ? SUCCESS : FAILURE)
+        Exchanges.resultMessage(exchange).body = response
+    }
 }
