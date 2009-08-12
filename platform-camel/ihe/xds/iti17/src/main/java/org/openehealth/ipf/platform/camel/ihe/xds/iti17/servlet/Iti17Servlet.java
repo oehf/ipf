@@ -70,7 +70,7 @@ public class Iti17Servlet extends HttpServlet {
         try {
             inputStream = consumer.process(fullRequestURI);
         }        
-        catch (Exception e) {
+        catch (Throwable e) {
             resp.setStatus(500);
             audit(false, req.getRemoteAddr(), fullRequestURI);
             return;

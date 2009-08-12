@@ -52,10 +52,13 @@ public class Iti17Consumer extends DefaultConsumer implements Auditable {
      * @throws Exception 
      *          any exception that occurred while processing the request.
      */
-    public InputStream process(String requestURI) throws Exception {
+    public InputStream process(String requestURI) throws Throwable {
         Exchange exchange = Exchanges.createExchange(getEndpoint().getCamelContext(), ExchangePattern.InOut);
         exchange.getIn().setBody(requestURI);
         getProcessor().process(exchange);
+        if (exchange.getException() != null) {
+            throw exchange.getException();
+        }
         return Exchanges.resultMessage(exchange).getBody(InputStream.class);
     }
     
