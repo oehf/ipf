@@ -200,7 +200,7 @@
         <module>osgi</module>
         <module>platform-camel</module>
         <!--<module>platform-manager</module>-->
-        <!--<module>tutorials</module>-->
+        <module>tutorials</module>
     </modules>
 
     <dependencyManagement>

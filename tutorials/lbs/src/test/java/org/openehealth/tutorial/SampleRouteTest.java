@@ -66,14 +66,14 @@ public class SampleRouteTest {
         post.setRequestEntity(requestEntity);
         
         // Call the HTTP endpoint and trigger the upload part of the route
-        client.executeMethod(post);
+        assertEquals(200, client.executeMethod(post));
         String handle = post.getResponseBodyAsString();
         post.releaseConnection();
         
         // Call the HTTP endpoint and trigger the download part of the route
         GetMethod get = new GetMethod("http://localhost:8412/imagebin");
         get.setQueryString("handle=" + handle);
-        client.executeMethod(get);      
+        assertEquals(200, client.executeMethod(get));      
         String imageAsString = get.getResponseBodyAsString();
         get.releaseConnection();
 
