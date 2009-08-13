@@ -30,38 +30,38 @@ public class LbsCxfRouteBuilderJava extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        List<ResourceHandler> handlers = bean(List.class, "resourceHandlers");
+        List<ResourceHandler> handlers = lookup("resourceHandlers", List.class);
         
         from("cxf:bean:soapEndpointNoExtract?dataFormat=POJO") 
-            .to("bean:serviceBean?methodName=processSOAP");
+            .to("bean:serviceBean?method=processSOAP");
         
         from("cxf:bean:soapEndpointExtract?dataFormat=POJO")
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handlers))
-            .to("bean:serviceBean?methodName=processSOAP")
-            .intercept(store().with(handlers));
+            .process(store().with(handlers))
+            .to("bean:serviceBean?method=processSOAP")
+            .process(store().with(handlers))
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource());
         
         from("cxf:bean:soapEndpointExtractRouter?dataFormat=POJO")
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handlers))
-            .to("cxf:bean:soapEndpointExtract?dataFormat=POJO")
-            .intercept(store().with(handlers));
+            .process(store().with(handlers))
+            .to("cxf:bean:soapEndpointExtract?dataFormat=POJO&headerFilterStrategy=#routerHeaderFilterStrategy")
+            .process(store().with(handlers))
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource());
 
         from("cxf:bean:soapEndpointExtractRouterRealServer?dataFormat=POJO")
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handlers))
-            .to("cxf:bean:soapEndpointRealServer?dataFormat=POJO")
-            .intercept(store().with(handlers));
+            .process(store().with(handlers))
+            .to("cxf:bean:soapEndpointRealServer?dataFormat=POJO&headerFilterStrategy=#routerHeaderFilterStrategy")
+            .process(store().with(handlers))
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource());
         
         from("direct:cxflbs")
-            .intercept(store().with(handlers))
+            .process(store().with(handlers))
             .to("mock:mock")
-            .intercept(store().with(handlers));
+            .process(store().with(handlers));
 
         from("cxf:bean:soapEndpointExtractSwA?dataFormat=POJO")
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
-            .intercept(store().with(handlers))
-            .to("bean:serviceBean?methodName=processSOAP")
-            .intercept(store().with(handlers));
+            .process(store().with(handlers))
+            .to("bean:serviceBean?method=processSOAP")
+            .process(store().with(handlers))
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource());
     }
 }

@@ -24,28 +24,28 @@ public class LbsMinaRouteBuilder extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        errorHandler(deadLetterChannel().maximumRedeliveries(2).initialRedeliveryDelay(0));
+        errorHandler(defaultErrorHandler().maximumRedeliveries(2).redeliverDelay(0));
         
         from("mina:tcp://localhost:6123?textline=true&sync=true")
             .to("mock:mock");
 
-        from("mina:tcp://localhost:6124?sync=true")
+        from("mina:tcp://localhost:6124?textline=true&sync=true")
             .unmarshal().hl7()
             .to("mock:mock");
         
-        from("mina:tcp://localhost:6125?sync=true&codec=mllpStoreCodec")
+        from("mina:tcp://localhost:6125?sync=true&codec=#mllpStoreCodec")
         	.to("mock:mock");
 
-        from("mina:tcp://localhost:6126?sync=true&codec=mllpStoreCodec")
+        from("mina:tcp://localhost:6126?sync=true&codec=#mllpStoreCodec")
             .unmarshal().hl7()
             .to("mock:mock");
         
-        from("mina:tcp://localhost:6127?sync=true&codec=mllpStoreCodec")
+        from("mina:tcp://localhost:6127?sync=true&codec=#mllpStoreCodec")
             .unmarshal().hl7()
             .marshal().hl7()
-            .to("mina:tcp://localhost:6126?sync=true&codec=mllpStoreCodec");
+            .to("mina:tcp://localhost:6126?sync=true&codec=#mllpStoreCodec");
 
-        from("mina:tcp://localhost:6128?sync=true&codec=mllpStoreCodec")
-            .to("mina:tcp://localhost:6126?sync=true&codec=mllpStoreCodec");
+        from("mina:tcp://localhost:6128?sync=true&codec=#mllpStoreCodec")
+            .to("mina:tcp://localhost:6126?sync=true&codec=#mllpStoreCodec");
     }
 }

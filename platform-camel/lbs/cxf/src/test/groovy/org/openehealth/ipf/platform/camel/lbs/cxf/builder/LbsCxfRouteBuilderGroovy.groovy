@@ -46,37 +46,37 @@ class LbsCxfRouteBuilderGroovy extends SpringRouteBuilder {
         errorHandler(noErrorHandler())
         
         from('cxf:bean:soapEndpointNoExtract') 
-            .to('bean:serviceBean?methodName=processSOAP')
+            .to('bean:serviceBean?method=processSOAP')
         
         from('cxf:bean:soapEndpointExtract?dataFormat=POJO')
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
             .store().with('resourceHandlers')
-            .to('bean:serviceBean?methodName=processSOAP')
+            .to('bean:serviceBean?method=processSOAP')
             .store().with('resourceHandlers')
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource())
         
         from('cxf:bean:soapEndpointExtractRouter?dataFormat=POJO')
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
             .store().with('resourceHandlers')
-            .to('cxf:bean:soapEndpointExtract?dataFormat=POJO')
+            .to('cxf:bean:soapEndpointExtract?dataFormat=POJO&headerFilterStrategy=#routerHeaderFilterStrategy')
             .store().with('resourceHandlers')
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource())
 
         from('cxf:bean:soapEndpointExtractRouterRealServer?dataFormat=POJO')
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
             .store().with('resourceHandlers')
-            .to('cxf:bean:soapEndpointRealServer?dataFormat=POJO')
+            .to('cxf:bean:soapEndpointRealServer?dataFormat=POJO&headerFilterStrategy=#routerHeaderFilterStrategy')
             .store().with('resourceHandlers')
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource())
         
         from('direct:cxflbs')
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
             .store().with('resourceHandlers')
             .to('mock:mock')
             .store().with('resourceHandlers')
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource())
 
         from('cxf:bean:soapEndpointExtractSwA?dataFormat=POJO')
-            .intercept(new AbstractLbsCxfTest.CheckOutputDataSource())
             .store().with('resourceHandlers')
-            .to("bean:serviceBean?methodName=processSOAP")
+            .to("bean:serviceBean?method=processSOAP")
             .store().with('resourceHandlers')
+            .process(new AbstractLbsCxfTest.CheckOutputDataSource())
             
         from('cxf:bean:soapEndpointExample1')
             // Store the binaries of the operation paremeters
@@ -103,13 +103,13 @@ class LbsCxfRouteBuilderGroovy extends SpringRouteBuilder {
                     reader.close()
                 }
             }
-            .to('bean:serviceBean?methodName=processSOAP')
+            .to('bean:serviceBean?method=processSOAP')
 
         from('direct:start')
             // Custom processor to manually create a SOAP call
             .process { Exchange exchange ->
                 // The resource factory can be used to create resources manually
-                def resourceFactory = bean(ResourceFactory.class, 'resourceFactory') 
+                def resourceFactory = lookup('resourceFactory', ResourceFactory.class) 
                 def inputStream1 = new ByteArrayInputStream('hello world'.bytes)
             
                 // Using the unit of work from the original exchange we can ensure that the

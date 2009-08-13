@@ -45,6 +45,7 @@ import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -153,7 +154,7 @@ public class LbsMllpViaMinaTest {
             public void process(Exchange exchange) throws Exception {
                 Message msg = exchange.getIn().getBody(Message.class);
                 assertNotNull(msg);
-                exchange.getOut().setBody("OK");
+                Exchanges.resultMessage(exchange).setBody("OK");
             }
         });
         
@@ -162,7 +163,7 @@ public class LbsMllpViaMinaTest {
         try {
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             writer.write("MSH|^~\\&|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.4\r\n");
-            writer.write("QRD|200612211200|R|I|GetPatient|||1^RD|0101701234|DEM||\r\n");
+            writer.write("QRD|200612211200|R|I|GetPatient|||1^RD|0101701234|DEM||");
             writer.flush();
             assertStreamStartsWith("OK", socket.getInputStream());
         }

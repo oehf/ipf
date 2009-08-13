@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.camel.Processor;
-import org.apache.camel.model.OutputType;
-import org.apache.camel.model.ProcessorType;
+import org.apache.camel.model.OutputDefinition;
+import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.lbs.core.process.FetchProcessor;
 import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
@@ -33,9 +33,9 @@ import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
  * This processor type provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
  */
-public class FetchProcessorType extends OutputType<ProcessorType> {
+public class FetchProcessorType extends OutputDefinition<FetchProcessorType> {
 
-    private List<ProcessorType<?>> outputs = new ArrayList<ProcessorType<?>>();
+    private List<ProcessorDefinition<?>> outputs = new ArrayList<ProcessorDefinition<?>>();
 
     private String resourceHandlersBeanName;
     

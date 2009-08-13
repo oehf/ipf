@@ -45,11 +45,5 @@
             <artifactId>camel-jms</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-http</artifactId>
-            <version>${pom.version}</version>
-            <scope>test</scope>            
-        </dependency>
     </dependencies>
 </project>

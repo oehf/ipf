@@ -28,8 +28,8 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.xml.ws.Holder;
 
+import org.apache.camel.InvalidPayloadException;
 import org.apache.camel.Message;
-import org.apache.camel.NoTypeConversionAvailableException;
 import org.apache.cxf.message.MessageContentsList;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
@@ -72,13 +72,13 @@ public class CxfPojoResourceHandler implements ResourceHandler {
 
 	private List<Object> getParams(Message message) {
         try {
-            MessageContentsList params = message.getBody(MessageContentsList.class);
+            MessageContentsList params = message.getMandatoryBody(MessageContentsList.class);
             if (params == null) {
                 return Collections.emptyList();
             }
             return params;            
         }
-        catch (NoTypeConversionAvailableException e) {
+        catch (InvalidPayloadException e) {
             // This is ok. This message is not intended to be processed by this handler
             // TODO: Find a way to do this without exception handling
         }

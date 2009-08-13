@@ -41,22 +41,19 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
     
     void configure() {
         
-        errorHandler(deadLetterChannel().maximumRedeliveries(0).initialRedeliveryDelay(0));
+        errorHandler(defaultErrorHandler().maximumRedeliveries(0).redeliverDelay(0));
 
         // --------------------------------------------------------------
         //  LBS routes
         // --------------------------------------------------------------
         from('jetty:http://localhost:9452/lbstest_no_extract')
-            .disableStreamCaching()
             .to('mock:mock')
 
         from('jetty:http://localhost:9452/lbstest_extract')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
         from('jetty:http://localhost:9452/lbstest_ping')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 def dataSource = exchange.in.getBody(ResourceDataSource.class)
@@ -65,43 +62,37 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .to('mock:mock');
             
         from('jetty:http://localhost:9452/lbstest_extract_factory_via_bean')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
         from('jetty:http://localhost:9452/lbstest_extract_router')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .setHeader('tag').constant('I was here')
             .fetch().with('resourceHandlers')
+            .removeHeader(Exchange.HTTP_PATH)
+            .removeHeader(Exchange.HTTP_URI)
             .to('http://localhost:9452/lbstest_receiver')
 
         from('direct:lbstest_send_only')
-            .disableStreamCaching()
             .fetch().with('resourceHandlers')
             .to('http://localhost:9452/lbstest_receiver')
             
         from('direct:lbstest_non_http')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_receiver')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_jms')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .to('jms:temp:queue:lbstest')
             
         from('direct:lbstest_download')
-            .disableStreamCaching()
             .to('http://localhost:9452/lbstest_download')
             
         from('jetty:http://localhost:9452/lbstest_download')
-            .disableStreamCaching()
             .transform().constant(new org.openehealth.ipf.platform.camel.lbs.http.process.GroovyLbsHttpTest.HugeContentInputStream())
             
         from('jms:temp:queue:lbstest')
@@ -109,8 +100,6 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             
         // Example routes only tested with groovy
         from('jetty:http://localhost:9452/lbstest_example1')
-            // Turn it off, otherwise Camel reads the stream into memory
-            .disableStreamCaching()
             // Replace the message content with a data source
             .store().with('resourceHandlers') 
             // Custom processing to find a token
@@ -136,8 +125,6 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_example2')
-            // Turn it off, otherwise Camel reads the stream into memory
-            .disableStreamCaching()
             // Replace the message content with data sources
             .store().with('resourceHandlers')
             // Custom processing to look for text resources
@@ -152,11 +139,10 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .to('mock:mock')
             
         from('jetty:http://localhost:9452/lbstest_example3')
-            .disableStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 // The resource factory can be used to create resources manually
-                def resourceFactory = bean(ResourceFactory.class, 'resourceFactory') 
+                def resourceFactory = lookup('resourceFactory', ResourceFactory.class) 
                 def inputStream = new ByteArrayInputStream('hello world'.bytes)
                 
                 // Using the unit of work from the original exchange we can ensure that the
@@ -167,6 +153,8 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             }
             // Create a POST request with the resources
             .fetch().with('resourceHandlers')
+            .removeHeader(Exchange.HTTP_PATH)
+            .removeHeader(Exchange.HTTP_URI)
             .to('http://localhost:9452/lbstest_receiver')
     }    
 }

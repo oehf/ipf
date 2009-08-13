@@ -29,7 +29,7 @@ import java.util.Arrays;
 import javax.activation.DataSource;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.RuntimeCamelException;
+import org.apache.camel.InvalidPayloadException;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.commons.io.IOUtils;
@@ -53,7 +53,7 @@ public class LbsConverterTest {
         CamelContext camelContext = new DefaultCamelContext();
         DefaultExchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(dataSource);
-        InputStream resultInputStream = exchange.getIn().getBody(InputStream.class);
+        InputStream resultInputStream = exchange.getIn().getMandatoryBody(InputStream.class);
         assertFalse(inputStream.isClosed());
         assertEquals("Hello World", IOUtils.toString(resultInputStream));
         
@@ -70,14 +70,14 @@ public class LbsConverterTest {
         CamelContext camelContext = new DefaultCamelContext();
         DefaultExchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(dataSource);
-        String result = exchange.getIn().getBody(String.class);
+        String result = exchange.getIn().getMandatoryBody(String.class);
         assertTrue(inputStream.isClosed());
         assertEquals("Hello World", result);
 
         verify(dataSource);
     }
 
-    @Test(expected = RuntimeCamelException.class)
+    @Test(expected = InvalidPayloadException.class)
     public void testConversionDataSource2StringThrowsException() throws Exception {
         CorruptedInputStream inputStream = new CorruptedInputStream();        
         DataSource dataSource = createMock(DataSource.class);
@@ -88,7 +88,7 @@ public class LbsConverterTest {
         DefaultExchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(dataSource);
         try {
-            exchange.getIn().getBody(String.class);
+            exchange.getIn().getMandatoryBody(String.class);
         }
         finally {
             assertTrue(inputStream.isClosed());
@@ -106,13 +106,13 @@ public class LbsConverterTest {
         CamelContext camelContext = new DefaultCamelContext();
         DefaultExchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(dataSource);
-        byte[] result = exchange.getIn().getBody(byte[].class);
+        byte[] result = exchange.getIn().getMandatoryBody(byte[].class);
         assertTrue(inputStream.isClosed());
         assertTrue(Arrays.equals("Hello World".getBytes(), result));
         verify(dataSource);
     }
 
-    @Test(expected = RuntimeCamelException.class)
+    @Test(expected = InvalidPayloadException.class)
     public void testConversionDataSource2ByteArrayThrowsException() throws Exception {
         CorruptedInputStream inputStream = new CorruptedInputStream();        
         DataSource dataSource = createMock(DataSource.class);
@@ -123,7 +123,7 @@ public class LbsConverterTest {
         DefaultExchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(dataSource);
         try {
-            exchange.getIn().getBody(byte[].class);
+            exchange.getIn().getMandatoryBody(byte[].class);
         }
         finally {
             assertTrue(inputStream.isClosed());

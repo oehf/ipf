@@ -26,6 +26,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.InvalidPayloadException;
 import org.apache.camel.Message;
 import org.apache.camel.NoTypeConversionAvailableException;
 import org.apache.camel.component.http.HttpMethods;
@@ -92,12 +94,12 @@ public class HttpResourceHandler implements ResourceHandler {
     @Override
     public void integrate(Message message) throws Exception {
         try {
-            ResourceList resourceList = message.getBody(ResourceList.class);
+            ResourceList resourceList = message.getMandatoryBody(ResourceList.class);
             if (resourceList != null) {
                 integrate(message, resourceList);
             }
         }
-        catch (NoTypeConversionAvailableException e) {
+        catch (InvalidPayloadException e) {
             // This is ok. This message is not intended to be processed by this handler
             // TODO: Find a way to do this without exception handling
         }
@@ -192,7 +194,7 @@ public class HttpResourceHandler implements ResourceHandler {
     }
 
     private void integrateToMultipart(Message message, ResourceList resourceList) {
-        message.setHeader(HttpMethods.HTTP_METHOD, HttpMethods.POST);
+        message.setHeader(Exchange.HTTP_METHOD, HttpMethods.POST);
         
         PostMethod method = new PostMethod();
         Part[] parts = new Part[resourceList.size()];
@@ -284,9 +286,9 @@ public class HttpResourceHandler implements ResourceHandler {
     @Override
     public Collection<? extends ResourceDataSource> getRequiredResources(Message message) {
         try {
-            return Collections.singletonList(message.getBody(ResourceDataSource.class));
+            return Collections.singletonList(message.getMandatoryBody(ResourceDataSource.class));
         }
-        catch (NoTypeConversionAvailableException e) {
+        catch (InvalidPayloadException e) {
             // This is ok. This message is not intended to be processed by this handler
             // TODO: Find a way to do this without exception handling
         }

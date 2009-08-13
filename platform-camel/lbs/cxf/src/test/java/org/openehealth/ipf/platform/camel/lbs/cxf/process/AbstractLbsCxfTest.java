@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.util.Collection;
-
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -40,16 +38,11 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.cxf.CxfConstants;
-import org.apache.camel.component.cxf.CxfExchange;
-import org.apache.camel.component.cxf.CxfMessage;
 import org.apache.camel.component.cxf.spring.CxfEndpointBean;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.cxf.helpers.IOUtils;
-import org.apache.cxf.message.Attachment;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageContentsList;
 import org.junit.After;
 import org.junit.Before;
@@ -152,18 +145,6 @@ public abstract class AbstractLbsCxfTest {
     public void testStandardSOAPCallWithoutResourceExtract() throws Exception {
         enableMTOM(); 
         setEndpoint(endpointNoExtract);
-        serviceBean.setCheckProcessor(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                assertTrue(exchange instanceof CxfExchange);
-                CxfExchange cxfExchange = (CxfExchange) exchange;
-                CxfMessage cxfMessage = cxfExchange.getIn();
-                Message inMessage = cxfMessage.getMessage();
-                Collection<Attachment> attachments = inMessage.getAttachments();
-                assertEquals(0, attachments.size());
-            }
-        });
-        
         String response = greeter.greetMe("Hello Camel!!");
         assertEquals("Greetings from Apache Camel!!!! Request was Hello Camel!!", response);
     }
@@ -172,22 +153,6 @@ public abstract class AbstractLbsCxfTest {
     public void testAttachmentSOAPCallWithoutResourceExtract() throws Exception {        
         enableMTOM(); 
         setEndpoint(endpointNoExtract);
-        serviceBean.setCheckProcessor(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                assertTrue(exchange instanceof CxfExchange);
-                CxfExchange cxfExchange = (CxfExchange) exchange;
-                CxfMessage cxfMessage = cxfExchange.getIn();
-                Message inMessage = cxfMessage.getMessage();
-                Collection<Attachment> attachments = inMessage.getAttachments();
-                assertEquals(2, attachments.size());
-                Attachment attachment = inMessage.getAttachments().iterator().next();
-                InputStream inputStream = attachment.getDataHandler().getInputStream();
-                assertEquals(FILE_CONTENT, IOUtils.toString(inputStream));
-                inputStream.close();
-            }
-        });        
-        
         Holder<String> nameHolder = new Holder("Hello Camel!!");
         Holder<DataHandler> handlerHolder = new Holder(inputDataHandler);
         greeter.postMe(nameHolder, handlerHolder, onewayDataHandler);
@@ -371,11 +336,15 @@ public abstract class AbstractLbsCxfTest {
         @Override
         protected void processNext(Exchange exchange) throws Exception {
             super.processNext(exchange);
-            if (exchange.getIn().getHeader(CxfConstants.OPERATION_NAME).equals("postMe")) {
-                MessageContentsList outParams = exchange.getOut().getBody(MessageContentsList.class);
-                Holder<DataHandler> handler = (Holder<DataHandler>) outParams.get(2);
-                if (!(handler.value.getDataSource() instanceof ResourceDataSource)) {
-                    throw new AssertionError("Output was not replaced with stored resource");
+            MessageContentsList params = exchange.getIn().getBody(MessageContentsList.class);
+            for (Object param : params) {
+                if (param instanceof Holder) {
+                    Holder<?> holder = (Holder<?>) param;
+                    if (holder.value instanceof DataHandler) {
+                        DataHandler handler = (DataHandler) holder.value;
+                        assertEquals("Output was not replaced with stored resource",
+                                ResourceDataSource.class, handler.getDataSource().getClass());
+                    }
                 }
             }
         }

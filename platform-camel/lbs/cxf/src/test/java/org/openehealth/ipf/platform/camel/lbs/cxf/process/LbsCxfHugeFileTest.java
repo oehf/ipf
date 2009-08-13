@@ -127,7 +127,7 @@ public class LbsCxfHugeFileTest {
             @Override
             public void configure() throws Exception {
                 from("cxf:bean:soapEndpointHugeFile?dataFormat=POJO")
-                    .intercept(store().with(handlers))
+                    .process(store().with(handlers))
                     .process(new Processor() {
                         @Override
                         public void process(Exchange exchange) throws Exception {                            
