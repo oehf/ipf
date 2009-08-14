@@ -57,20 +57,24 @@ public class AuditFinalInterceptor extends AuditInterceptor {
         List<?> list = message.getContent(List.class);
         Object pojo = ((list != null) && (list.size() > 0)) ? list.get(0) : null;
         
-        // calculate outcome code
-        // TODO: possibly use MINOR_FAILURE and SERIOUS_FAILURE as well, especially  
-        //       on the client side where we could analyze HTTP response codes...
+        // determine event outcome code
         Exchange exchange = message.getExchange();
         Message wrappedMessage = ((AbstractWrappedMessage)message).getMessage();
-        RFC3881EventOutcomeCodes eventOutcome = 
-            ((wrappedMessage == exchange.getInFaultMessage()) ||
-             (wrappedMessage == exchange.getOutFaultMessage()) ||
-             (pojo == null)) ? 
-                    RFC3881EventOutcomeCodes.MAJOR_FAILURE : 
-                    RFC3881EventOutcomeCodes.SUCCESS;
+        
+        RFC3881EventOutcomeCodes eventOutcomeCode;
+        if((message == exchange.getInFaultMessage()) ||
+           (message == exchange.getOutFaultMessage()) ||
+           (wrappedMessage == exchange.getInFaultMessage()) ||
+           (wrappedMessage == exchange.getOutFaultMessage()) ||
+           (pojo == null)) 
+        {
+            eventOutcomeCode = RFC3881EventOutcomeCodes.SERIOUS_FAILURE; 
+        } else {
+            eventOutcomeCode = getAuditStrategy().getEventOutcomeCode(pojo); 
+        }
 
         // perform transaction-specific auditing
-        getAuditStrategy().audit(eventOutcome, auditDataset);
+        getAuditStrategy().audit(eventOutcomeCode, auditDataset);
     }
     
 }

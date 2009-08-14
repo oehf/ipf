@@ -15,10 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Severity;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
@@ -102,13 +107,13 @@ public abstract class ItiAuditStrategy {
      * Performs transaction-specific auditing using 
      * information containing in the dataset.
      *   
-     * @param eventOutcome
+     * @param eventOutcomeCode
      *      event outcome code as defined in RFC 3881
      * @param auditDataset
      *      audit dataset with all the information needed 
      * @throws Exception
      */
-    public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset)
+    public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcomeCode, ItiAuditDataset auditDataset)
         throws Exception;
 
     
@@ -120,13 +125,13 @@ public abstract class ItiAuditStrategy {
      * when the user allows us to audit with incomplete data,
      * @see #allowIncompleteAudit.
      * 
-     * @param eventOutcome
+     * @param eventOutcomeCode
      *      event outcome code as defined in RFC 3881
      * @param auditDataset
      *      audit dataset  
      * @throws Exception
      */
-    public void audit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) throws Exception {
+    public void audit(RFC3881EventOutcomeCodes eventOutcomeCode, ItiAuditDataset auditDataset) throws Exception {
         Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
         if(! missing.isEmpty()) {
             StringBuilder sb = new StringBuilder("Missing audit fields: ");
@@ -139,7 +144,7 @@ public abstract class ItiAuditStrategy {
             LOG.error(sb.toString());
         }
         if(missing.isEmpty() || isAllowIncompleteAudit()) {
-            doAudit(eventOutcome, auditDataset);
+            doAudit(eventOutcomeCode, auditDataset);
         }
     }
         
@@ -152,6 +157,44 @@ public abstract class ItiAuditStrategy {
      *      list of field names as a string array
      */
     public abstract String[] getNecessaryAuditFieldNames();
+    
+    
+    /**
+     * Determines which RFC 3881 event outcome code corresponds to the
+     * given response POJO.  
+     * @param pojo
+     *      ebXML object.
+     * @return
+     *      RFC 3881 event outcome code.
+     */
+    public abstract RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo);
+
+    
+    /**
+     * A helper method that analyzes the given registry response and 
+     * determines the corresponding RFC 3881 event outcome code. 
+     */
+    public static RFC3881EventOutcomeCodes getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
+        if(response.getStatus() == Status.SUCCESS) {
+            return RFC3881EventOutcomeCodes.SUCCESS; 
+        }
+
+        List<ErrorInfo> errors = response.getErrors();
+        
+        // error list is empty
+        if((errors == null) || errors.isEmpty()) {
+            return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+        }
+        
+        // determine the highest severity 
+        for(ErrorInfo error : errors) {
+            if(error.getSeverity() == Severity.ERROR) {
+                return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+            }
+        }
+        return RFC3881EventOutcomeCodes.MINOR_FAILURE;
+    }
+
     
 
     /* ----- automatically generated getters and setters ----- */

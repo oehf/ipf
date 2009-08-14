@@ -80,7 +80,7 @@ class TestIti43 extends StandardTestContainer {
         assert FAILURE == response2.status
         syslog.assertIsSatisfied()
         
-        checkAudit('0', 'falsch')
+        checkAudit('8', 'falsch')
     }
      
     def checkAudit(outcome, docIdValue) {

@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
 
 /**
  * Provides the ITI-41 web-service interface.
@@ -46,7 +47,7 @@ public interface Iti41PortType {
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")
     @Action(input = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b", output = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse")
     @WebMethod(operationName = "DocumentRepository_ProvideAndRegisterDocumentSet-b")
-    public org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(
+    public RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(
         @WebParam(partName = "body", name = "ProvideAndRegisterDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
         ProvideAndRegisterDocumentSetRequestType body
     );

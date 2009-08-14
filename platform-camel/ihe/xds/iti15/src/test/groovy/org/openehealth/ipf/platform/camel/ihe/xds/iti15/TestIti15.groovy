@@ -68,7 +68,7 @@ class TestIti15 extends StandardTestContainer {
         syslog.expectedPacketCount(2)
         assert FAILURE == sendIt(SERVICE2, 'service falsch').status
         syslog.assertIsSatisfied()
-        checkAudit('0')
+        checkAudit('8')
     }
     
     void checkAudit(outcome) {        

@@ -69,7 +69,7 @@ class TestIti42 extends StandardTestContainer {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         syslog.assertIsSatisfied()
         
-        checkAudit('0')
+        checkAudit('8')
     }
      
     void checkAudit(outcome) {

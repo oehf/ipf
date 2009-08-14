@@ -74,7 +74,7 @@ class TestIti18 extends StandardTestContainer {
         syslog.expectedPacketCount(2)
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         syslog.assertIsSatisfied()        
-        checkAudit('0')
+        checkAudit('8')
     }
     
     def checkAudit(outcome) {    

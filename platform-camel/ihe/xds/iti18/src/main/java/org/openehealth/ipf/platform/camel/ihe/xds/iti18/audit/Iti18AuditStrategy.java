@@ -17,8 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.AdhocQueryType;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Base audit strategy for ITI-18.
@@ -50,5 +54,12 @@ abstract public class Iti18AuditStrategy extends ItiAuditStrategy {
     @Override
     public ItiAuditDataset createAuditDataset() {
         return new Iti18AuditDataset(isServerSide());
+    }
+
+    @Override
+    public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
+        RegistryResponseType response = (RegistryResponseType) pojo;
+        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response); 
+        return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 }

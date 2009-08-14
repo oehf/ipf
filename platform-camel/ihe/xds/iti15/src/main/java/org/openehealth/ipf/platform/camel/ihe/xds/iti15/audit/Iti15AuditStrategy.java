@@ -17,9 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti15.audit;
 
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLRegistryResponse21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Audit strategy for ITI-15.
@@ -37,5 +41,12 @@ abstract public class Iti15AuditStrategy extends ItiAuditStrategy {
         SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest21(request);
         genericAuditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
+    }
+
+    @Override
+    public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
+        RegistryResponse response = (RegistryResponse) pojo;
+        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse21(response); 
+        return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 }
