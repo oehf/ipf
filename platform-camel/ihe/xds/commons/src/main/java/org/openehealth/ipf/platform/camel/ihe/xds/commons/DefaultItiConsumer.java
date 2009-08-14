@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.WsSecurityUndersta
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ServerPayloadExtractorInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import java.util.Collections;
 
 /**
@@ -121,7 +121,7 @@ public abstract class DefaultItiConsumer extends DefaultConsumer implements Audi
     private void configureInterceptors(ServerFactoryBean svrFactory) {
         // install auditing-related interceptors if the user has not switched auditing off
         if (endpoint.isAudit()) {
-            AuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
+            ItiAuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
             svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor(auditStrategy));
             svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
     

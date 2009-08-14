@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.server;
+package org.openehealth.ipf.commons.ihe.atna;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -71,8 +71,8 @@ public class UdpServer extends Thread {
         this.latch = null;
     }
 
-    public List<String> getPackets() {
-        return packets;
+    public String getPacket(int index) {
+        return packets.get(index);
     }
 
     @Override

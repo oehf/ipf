@@ -44,14 +44,14 @@ public class AuditFinalInterceptor extends AuditInterceptor {
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    public AuditFinalInterceptor(AuditStrategy auditStrategy, boolean isServerSide) {
+    public AuditFinalInterceptor(ItiAuditStrategy auditStrategy, boolean isServerSide) {
         super(isServerSide ? Phase.PREPARE_SEND : Phase.PRE_LOGICAL, auditStrategy);
     }
 
     
     @Override
     public void process(Message message) throws Exception {
-        AuditDataset auditDataset = getAuditDataset(message);
+        ItiAuditDataset auditDataset = getAuditDataset(message);
 
         // try to extract response as POJO 
         List<?> list = message.getContent(List.class);

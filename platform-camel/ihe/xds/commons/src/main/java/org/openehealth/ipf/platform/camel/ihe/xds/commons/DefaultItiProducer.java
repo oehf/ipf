@@ -37,7 +37,7 @@ import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.MustUnderstandDecoratorInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditFinalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ClientOutputStreamSubstituteInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ClientPayloadExtractorInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.SoapUtils;
@@ -142,7 +142,7 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer implements A
         // install auditing-related interceptors if the user has not switched
         // auditing off
         if (endpoint.isAudit()) {
-            AuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
+            ItiAuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
             client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
             client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor(auditStrategy));
             client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor(auditStrategy));

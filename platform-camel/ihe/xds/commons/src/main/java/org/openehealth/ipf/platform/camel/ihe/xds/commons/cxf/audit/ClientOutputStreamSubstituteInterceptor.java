@@ -38,7 +38,7 @@ public class ClientOutputStreamSubstituteInterceptor extends AuditInterceptor {
      * @param auditStrategy
      *      an audit strategy instance
      */
-    public ClientOutputStreamSubstituteInterceptor(AuditStrategy auditStrategy) {
+    public ClientOutputStreamSubstituteInterceptor(ItiAuditStrategy auditStrategy) {
         super(Phase.PREPARE_SEND, auditStrategy);
         addAfter(MessageSenderInterceptor.class.getName());
     }

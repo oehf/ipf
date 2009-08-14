@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti14.component;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit.Iti14ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14Service;
 
@@ -40,7 +40,7 @@ public class Iti14Consumer extends DefaultItiConsumer {
     }
 
     @Override
-    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
+    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
         return new Iti14ServerAuditStrategy(allowIncompleteAudit);
     }
 }

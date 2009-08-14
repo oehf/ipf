@@ -15,22 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16.audit;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 
 /**
  * Audit strategy for ITI-16.
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti16AuditStrategy extends AuditStrategy {
+abstract public class Iti16AuditStrategy extends ItiAuditStrategy {
 
     public Iti16AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, ItiAuditDataset genericAuditDataset) {
         // no additional steps necessary
     }
 

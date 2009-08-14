@@ -17,8 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit;
 
 import java.util.List;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType.DocumentRequest;
 
@@ -27,14 +27,14 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.Retrieve
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti43AuditStrategy extends AuditStrategy {
+abstract public class Iti43AuditStrategy extends ItiAuditStrategy {
 
     public Iti43AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, ItiAuditDataset genericAuditDataset) {
         RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
         Iti43AuditDataset auditDataset = (Iti43AuditDataset) genericAuditDataset;
 
@@ -60,7 +60,7 @@ abstract public class Iti43AuditStrategy extends AuditStrategy {
     }
     
     @Override
-    public AuditDataset createAuditDataset() {
+    public ItiAuditDataset createAuditDataset() {
         return new Iti43AuditDataset(isServerSide());
     }
 }

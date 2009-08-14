@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18.component;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit.Iti18ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18Service;
 
@@ -42,7 +42,7 @@ public class Iti18Consumer extends DefaultItiConsumer {
     
     
     @Override
-    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
+    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
         return new Iti18ServerAuditStrategy(allowIncompleteAudit);
     }
 }

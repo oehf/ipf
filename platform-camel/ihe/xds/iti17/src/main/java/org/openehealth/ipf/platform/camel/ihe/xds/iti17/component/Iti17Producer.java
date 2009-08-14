@@ -23,16 +23,14 @@ import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.Auditable;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * The producer implementation for the ITI-17 component.
  */
-public class Iti17Producer extends DefaultProducer implements Auditable {
+public class Iti17Producer extends DefaultProducer {
     private Iti17Endpoint endpoint;
     
     /**
@@ -97,11 +95,5 @@ public class Iti17Producer extends DefaultProducer implements Auditable {
                 get.releaseConnection();
             }
         };
-    }
-
-    @Override
-    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        // audit strategies are used in Web Service-based transactions only  
-        return null;
     }
 }

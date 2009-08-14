@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 
 /**
  * Provides access to an audit strategy for classes that support ATNA auditing. 
@@ -26,5 +26,5 @@ public interface Auditable {
      * Creates a transaction-specific audit strategy.
      * @return a newly created audit strategy instance
      */
-    AuditStrategy createAuditStrategy(boolean allowIncompleteAudit);
+    ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit);
 }

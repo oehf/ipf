@@ -28,7 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.ProvidedAttachmentOutInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
@@ -78,7 +78,7 @@ public class Iti15Producer extends DefaultItiProducer<Iti15PortType> {
     }
 
     @Override
-    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
+    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
         return new Iti15ClientAuditStrategy(allowIncompleteAudit);
     }
 }

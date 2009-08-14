@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
+package org.openehealth.ipf.commons.ihe.atna;
 
+import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
+import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDSRepositoryAuditor;
@@ -25,6 +27,10 @@ import org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor;
  */
 public class AuditorManager {
     private static final Object sync = new Object();
+    
+    private AuditorManager() {
+        throw new IllegalStateException("Static helper class cannot be instantiated");
+    }
     
     public static XDSRegistryAuditor getRegistryAuditor() {
         synchronized (sync) {
@@ -47,6 +53,18 @@ public class AuditorManager {
     public static XDSSourceAuditor getSourceAuditor() {
         synchronized (sync) {
             return XDSSourceAuditor.getAuditor();
+        }
+    }
+    
+    public static PIXManagerAuditor getPIXManagerAuditor() {
+        synchronized (sync) {
+            return PIXManagerAuditor.getAuditor();
+        }
+    }
+    
+    public static PIXSourceAuditor getPIXSourceAuditor() {
+        synchronized (sync) {
+            return PIXSourceAuditor.getAuditor();
         }
     }
 }

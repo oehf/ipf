@@ -42,7 +42,7 @@ public class ServerPayloadExtractorInterceptor extends AuditInterceptor {
      * @param auditStrategy
      *      an audit strategy instance
      */
-    public ServerPayloadExtractorInterceptor(AuditStrategy auditStrategy) {
+    public ServerPayloadExtractorInterceptor(ItiAuditStrategy auditStrategy) {
         super(Phase.PRE_STREAM, auditStrategy);
         addAfter(AttachmentInInterceptor.class.getName());
         addBefore(StaxInInterceptor.class.getName());
@@ -55,7 +55,7 @@ public class ServerPayloadExtractorInterceptor extends AuditInterceptor {
         if( ! getAuditStrategy().needSavePayload()) {
             return;
         }
-        AuditDataset auditDataset = getAuditDataset(message);
+        ItiAuditDataset auditDataset = getAuditDataset(message);
         
         // extract XML body bytes and save them into the AuditDataset
         InputStream stream = message.getContent(InputStream.class);

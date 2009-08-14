@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest;
@@ -26,14 +26,14 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitO
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti14AuditStrategy extends AuditStrategy {
+abstract public class Iti14AuditStrategy extends ItiAuditStrategy {
 
     public Iti14AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDataset(Object pojo, AuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, ItiAuditDataset genericAuditDataset) {
         SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest21(request);
         genericAuditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);

@@ -19,7 +19,7 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti42.audit.Iti42ClientAuditStrategy;
@@ -52,7 +52,7 @@ public class Iti42Producer extends DefaultItiProducer<Iti42PortType> {
 
     
     @Override
-    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
+    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
         return new Iti42ClientAuditStrategy(allowIncompleteAudit);
     }
 }

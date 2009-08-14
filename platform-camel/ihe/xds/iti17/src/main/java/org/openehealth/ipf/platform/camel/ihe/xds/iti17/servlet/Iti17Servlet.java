@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.camel.CamelContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditorManager;
+import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Consumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Endpoint;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;

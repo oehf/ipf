@@ -27,9 +27,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * 
  * @author Dmytro Rud
  */
-public abstract class AuditStrategy {
+public abstract class ItiAuditStrategy {
     
-    private static final transient Log LOG = LogFactory.getLog(AuditStrategy.class);
+    private static final transient Log LOG = LogFactory.getLog(ItiAuditStrategy.class);
     
     // TODO: externalize constant
     public static final String HOME_COMMUNITY_ID = "";
@@ -54,7 +54,7 @@ public abstract class AuditStrategy {
      *      whether this strategy should allow incomplete audit records
      *      (parameter initially configurable via endpoint URL).
      */
-    public AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    public ItiAuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         this.setServerSide(serverSide);
         this.setAllowIncompleteAudit(allowIncompleteAudit);
     }
@@ -66,8 +66,8 @@ public abstract class AuditStrategy {
      * @return
      *      newly created audit dataset
      */
-    public AuditDataset createAuditDataset() {
-        return new AuditDataset(isServerSide());
+    public ItiAuditDataset createAuditDataset() {
+        return new ItiAuditDataset(isServerSide());
     }
 
     
@@ -94,7 +94,7 @@ public abstract class AuditStrategy {
      *      audit dataset to be enriched
      * @throws Exception
      */
-    public abstract void enrichDataset(Object pojo, AuditDataset auditDataset) 
+    public abstract void enrichDataset(Object pojo, ItiAuditDataset auditDataset) 
         throws Exception;
     
     
@@ -108,7 +108,7 @@ public abstract class AuditStrategy {
      *      audit dataset with all the information needed 
      * @throws Exception
      */
-    public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset auditDataset)
+    public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset)
         throws Exception;
 
     
@@ -126,7 +126,7 @@ public abstract class AuditStrategy {
      *      audit dataset  
      * @throws Exception
      */
-    public void audit(RFC3881EventOutcomeCodes eventOutcome, AuditDataset auditDataset) throws Exception {
+    public void audit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) throws Exception {
         Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
         if(! missing.isEmpty()) {
             StringBuilder sb = new StringBuilder("Missing audit fields: ");

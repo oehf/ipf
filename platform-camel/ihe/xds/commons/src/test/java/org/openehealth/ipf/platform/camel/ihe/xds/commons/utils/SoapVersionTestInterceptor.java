@@ -24,7 +24,7 @@ import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.phase.Phase;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditInterceptor;
 
@@ -76,7 +76,7 @@ public class SoapVersionTestInterceptor extends AbstractSoapInterceptor {
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
         Exchange exchange = message.getExchange();
-        AuditDataset auditDataset = (AuditDataset)exchange.get(AuditInterceptor.CXF_EXCHANGE_KEY);
+        ItiAuditDataset auditDataset = (ItiAuditDataset)exchange.get(AuditInterceptor.CXF_EXCHANGE_KEY);
         if(auditDataset == null) {
             // This will be the case either on server side
             // or on the client side, when auditing is disabled. 

@@ -43,7 +43,7 @@ public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
      * @param auditStrategy
      *      an audit strategy instance
      */
-    public ClientPayloadExtractorInterceptor(AuditStrategy auditStrategy) {
+    public ClientPayloadExtractorInterceptor(ItiAuditStrategy auditStrategy) {
         super(Phase.WRITE_ENDING, auditStrategy);
         addAfter(SoapOutEndingInterceptor.class.getName());
     }
@@ -55,7 +55,7 @@ public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
         if( ! getAuditStrategy().needSavePayload()) {
             return;
         }
-        AuditDataset auditDataset = getAuditDataset(message);
+        ItiAuditDataset auditDataset = getAuditDataset(message);
 
         // determine what is the actual SOAP Envelope prefix
         // (we need it to extract SOAP document from the collected payload, 

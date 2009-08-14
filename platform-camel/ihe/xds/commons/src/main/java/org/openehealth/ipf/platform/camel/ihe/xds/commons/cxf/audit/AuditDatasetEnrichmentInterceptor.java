@@ -43,7 +43,6 @@ import javax.servlet.http.HttpServletRequest;
  * @author Dmytro Rud
  */
 public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
-
     private static final transient Log LOG = LogFactory.getLog(AuditDatasetEnrichmentInterceptor.class);
     
     /**
@@ -55,14 +54,14 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    public AuditDatasetEnrichmentInterceptor(AuditStrategy auditStrategy, boolean isServerSide) {
+    public AuditDatasetEnrichmentInterceptor(ItiAuditStrategy auditStrategy, boolean isServerSide) {
         super(isServerSide ? Phase.PRE_INVOKE : Phase.WRITE, auditStrategy); 
     }
 
     
     @Override
     public void process(Message message) throws Exception {
-        AuditDataset auditDataset = getAuditDataset(message);
+        ItiAuditDataset auditDataset = getAuditDataset(message);
 
         // determine what direction do we handle
         Exchange exchange = message.getExchange();

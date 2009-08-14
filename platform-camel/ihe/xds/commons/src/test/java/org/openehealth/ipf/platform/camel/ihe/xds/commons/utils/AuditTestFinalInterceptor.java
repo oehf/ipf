@@ -29,7 +29,7 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.interceptor.Fault;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditInterceptor;
 
@@ -73,7 +73,7 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
     @Override
     public void handleMessage(Message message) throws Fault {
         Exchange exchange = message.getExchange();
-        AuditDataset auditDataset = (AuditDataset)exchange.get(AuditInterceptor.CXF_EXCHANGE_KEY);
+        ItiAuditDataset auditDataset = (ItiAuditDataset)exchange.get(AuditInterceptor.CXF_EXCHANGE_KEY);
         if(auditDataset == null) {
             LOG.warn("audit dataset not found");
             return;
@@ -125,7 +125,7 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    abstract public void checkTransactionSpecificFields(AuditDataset auditDataset, boolean isServerSide);
+    abstract public void checkTransactionSpecificFields(ItiAuditDataset auditDataset, boolean isServerSide);
     
     
     /**
@@ -134,7 +134,7 @@ abstract public class AuditTestFinalInterceptor extends AbstractPhaseInterceptor
      *  
      * @param auditDataset
      */
-    protected void testPayload(AuditDataset auditDataset) {
+    protected void testPayload(ItiAuditDataset auditDataset) {
         String payload = auditDataset.getPayload();
         assertNotNull(payload);
         assertTrue(payload.startsWith("<"));

@@ -22,13 +22,11 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.Auditable;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditStrategy;
 
 /**
  * The Camel consumer for the ITI-17 transaction.
  */
-public class Iti17Consumer extends DefaultConsumer implements Auditable {
+public class Iti17Consumer extends DefaultConsumer {
     
     private final Iti17Endpoint endpoint;
     
@@ -72,11 +70,5 @@ public class Iti17Consumer extends DefaultConsumer implements Auditable {
     protected void doStop() throws Exception {
         endpoint.setActiveConsumer(null);
         super.doStop();
-    }
-
-    @Override
-    public AuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        // audit strategies are used in Web Service-based transactions only  
-        return null;
     }
 }

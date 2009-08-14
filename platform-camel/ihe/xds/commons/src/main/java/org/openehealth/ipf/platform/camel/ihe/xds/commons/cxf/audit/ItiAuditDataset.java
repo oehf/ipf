@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
-import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
@@ -30,10 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Vocabulary;
  * 
  * @author Dmytro Rud
  */
-public class AuditDataset {
-
-    // whether we audit on server (true) or on client (false)
-    private final boolean serverSide;
+public class ItiAuditDataset extends AuditDataset {
 
     // SOAP Body (XML) payload
     private String payload;
@@ -58,8 +53,8 @@ public class AuditDataset {
      *            server side (<code>true</code>) or on the client side (
      *            <code>false</code>)
      */
-    public AuditDataset(boolean isServerSide) {
-        this.serverSide = isServerSide;
+    public ItiAuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 
     public void setPayload(String payload) {
@@ -116,78 +111,6 @@ public class AuditDataset {
 
     public String getSubmissionSetUuid() {
         return submissionSetUuid;
-    }
-
-    public boolean isServerSide() {
-        return serverSide;
-    }
-
-    /**
-     * <i>"What you see is what I get"</i>&nbsp;&mdash; returns a string that
-     * consists from all fields available through getter methods.
-     * 
-     * @return string representation of this audit dataset
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-
-        try {
-            Method[] methods = this.getClass().getMethods();
-            for (Method method : methods) {
-                String methodName = method.getName();
-                Class<?> methodReturnType = method.getReturnType();
-
-                if ((methodName.startsWith("get") || methodName.startsWith("is"))
-                        && (method.getParameterTypes().length == 0)) {
-                    sb.append("\n    ").append(method.getName()).append(" -> ");
-
-                    if (methodReturnType == String[].class) {
-                        String[] result = (String[]) method.invoke(this);
-                        for (int i = 0; i < result.length; ++i) {
-                            sb.append((i == 0) ? "{" : ", ").append(result[i]);
-                        }
-                        sb.append('}');
-
-                    } else {
-                        sb.append(method.invoke(this));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sb.append("\n]").toString();
-    }
-
-    /**
-     * Checks whether this audit dataset contains non-null values in the fields
-     * from the given list.
-     * 
-     * @param fieldNames
-     *            a list of field names with first letter capitalized, e.g.
-     *            "Address"
-     * @param positiveCheck
-     *            <code>true</code> when the given fields must be present;
-     *            <code>false</code> when they must be absent.
-     * @return a set of names of the fields which do not match the given
-     *         condition (i.e. are absent when they must be present, and vice
-     *         versa).
-     * @throws Exception
-     *             on reflection errors
-     */
-    public Set<String> checkFields(String[] fieldNames, boolean positiveCheck) throws Exception {
-        Set<String> result = new HashSet<String>();
-
-        for (String fieldName : fieldNames) {
-            Method m = getClass().getMethod("get" + fieldName);
-            Object o = m.invoke(this);
-            if ((o == null) == positiveCheck) {
-                result.add(fieldName);
-            }
-        }
-
-        return result;
     }
 
     /**

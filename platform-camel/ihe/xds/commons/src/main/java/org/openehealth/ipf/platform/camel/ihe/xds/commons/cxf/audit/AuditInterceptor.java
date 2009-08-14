@@ -41,7 +41,7 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
     /**
      * Audit strategy associated with this interceptor.  
      */
-    private AuditStrategy auditStrategy; 
+    private ItiAuditStrategy auditStrategy; 
 
     
     /**
@@ -51,7 +51,7 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
      *      an audit strategy instance.  
      *      <p><code>null</code> values are explicitly prohibited. 
      */
-    public AuditInterceptor(String phase, AuditStrategy auditStrategy) {
+    public AuditInterceptor(String phase, ItiAuditStrategy auditStrategy) {
         super(phase);
         Validate.notNull(auditStrategy);
         this.auditStrategy = auditStrategy;
@@ -62,7 +62,7 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
      * Returns an audit dataset instance which corresponds to the given message.
      * <p>
      * When no such instance is currently associated with the message, a new one 
-     * will be created by means of the corresponding {@link AuditStrategy} 
+     * will be created by means of the corresponding {@link ItiAuditStrategy} 
      * and registered in the message's exchange.
      * 
      * @param message
@@ -71,8 +71,8 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
      *      an audit dataset instance, or <code>null</code> when this instance   
      *      could be neither obtained nor created from scratch
      */
-    protected AuditDataset getAuditDataset(Message message) {
-        AuditDataset auditDataset = (AuditDataset)message.getExchange().get(CXF_EXCHANGE_KEY);
+    protected ItiAuditDataset getAuditDataset(Message message) {
+        ItiAuditDataset auditDataset = (ItiAuditDataset)message.getExchange().get(CXF_EXCHANGE_KEY);
         if(auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if(auditDataset == null) {
@@ -91,7 +91,7 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
      * @return
      *      an audit strategy instance or <code>null</code> when none configured
      */
-    public AuditStrategy getAuditStrategy() {
+    public ItiAuditStrategy getAuditStrategy() {
         if(this.auditStrategy == null) {
             LOG.warn("Audit strategy not set, NPE is pending");
         }

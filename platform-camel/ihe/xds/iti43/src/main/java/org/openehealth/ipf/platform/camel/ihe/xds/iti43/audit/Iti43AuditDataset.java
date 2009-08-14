@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
 
 
 /**
@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset
  * 
  * @author Dmytro Rud
  */
-public class Iti43AuditDataset extends AuditDataset {
+public class Iti43AuditDataset extends ItiAuditDataset {
     
     private String[] documentUuids;
     private String[] repositoryUuids;

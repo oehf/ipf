@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
 
 /**
  * ITI-18 specific Audit Dataset.
  * 
  * @author Dmytro Rud
  */
-public class Iti18AuditDataset extends AuditDataset {
+public class Iti18AuditDataset extends ItiAuditDataset {
 
     private String queryUuid;
 

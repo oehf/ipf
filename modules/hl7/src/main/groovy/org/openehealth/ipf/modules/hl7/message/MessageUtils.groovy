@@ -114,19 +114,32 @@ class MessageUtils {
 	}
 	
 	/** 
-	 *  @return a negative ACK response message from scratch using a String cause
+	 *  @return a negative ACK response message constructed from scratch
 	 */
-    static def defaultNak = { AbstractHL7v2Exception e, AckTypeCode ackType, String version ->
+    static def defaultNak(
+            AbstractHL7v2Exception e, 
+            AckTypeCode ackType, 
+            String version,
+            String sendingApplication,
+            String sendingFacility) 
+	{
     	def cause = encodeHL7String(e.message, null)
     	def now = hl7Now()
     	
-		def cannedNak = "MSH|^~\\&|unknown|unknown|unknown|unknown|$now||ACK|unknown|T|$version|\r" +
+		def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||ACK|unknown|T|$version|\r" +
 						"MSA|AE|MsgIdUnknown|$cause|\r"
 		def nak = new GenericParser().parse(cannedNak)
 		e.populateMessage(nak, ackType)
 		nak
     }
-	
+
+    /** 
+     *  @return a negative ACK response message constructed from scratch
+     */
+    static def defaultNak(AbstractHL7v2Exception e, AckTypeCode ackType, String version) {
+        defaultNak(e, ackType, version, 'unknown', 'unknown')
+    }
+
 	/** 
 	 *  @return a response message with the basic MSH fields already populated
 	 */
