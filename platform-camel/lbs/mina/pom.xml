@@ -40,6 +40,11 @@
             <artifactId>camel-hl7</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v24</artifactId>
+            <scope>test</scope>
+        </dependency>        
         
     </dependencies>
 </project>

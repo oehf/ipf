@@ -49,7 +49,7 @@
         <easymock-version>2.4</easymock-version> 
         <gmaven-version>1.0-rc-5</gmaven-version>
         <groovy-version>1.6.3</groovy-version>
-        <hapi-version>0.5.1</hapi-version>
+        <hapi-version>0.6</hapi-version>
         <hibernate-version>3.2.6.ga</hibernate-version>
         <hibernate-annotations-version>3.3.0.ga</hibernate-annotations-version>
         <hibernate-search-version>3.0.1.GA</hibernate-search-version>
@@ -283,10 +283,45 @@
                 <version>${metabuilder-version}</version>
             </dependency>
 			      <dependency>
-                <groupId>org.hl7</groupId>
-                <artifactId>hapi</artifactId>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-base</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
+			      <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v22</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+			      <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v23</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+			      <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v231</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+			      <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v24</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+			      <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v25</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>                                                
+			      <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v251</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>
+			      <dependency>
+                <groupId>ca.uhn.hapi</groupId>
+                <artifactId>hapi-structures-v26</artifactId>
+                <version>${hapi-version}</version>
+            </dependency>            
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-core</artifactId>
@@ -308,6 +343,12 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-hl7</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+            	     <exclusion>
+            		      <groupId>org.hl7</groupId>
+            		      <artifactId>hapi</artifactId>
+            	     </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -789,6 +830,11 @@
             <name>JBoss Maven Repository</name>
             <url>http://repository.jboss.com/maven2</url>
         </repository>
+        <repository>
+            <id>hapi-sf</id>
+            <name>HAPI Sourceforge Repository</name>
+            <url>http://hl7api.sourceforge.net/m2</url>
+        </repository>        
     </repositories>
     
 </project>

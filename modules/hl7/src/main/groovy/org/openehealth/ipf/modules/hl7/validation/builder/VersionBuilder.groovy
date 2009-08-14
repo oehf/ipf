@@ -25,7 +25,7 @@ public class VersionBuilder extends RuleBuilder{
 	
 	String version
 	Rule rule
-	static def versions = [ '2.1', '2.2', '2.3', '2.3.1', '2.4', '2.5', '2.6']
+	static def versions = [ '2.1', '2.2', '2.3', '2.3.1', '2.4', '2.5', '2.5.1', '2.6']
 	
 	VersionBuilder(ValidationContext context) {
 		super(context)	    

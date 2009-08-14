@@ -103,6 +103,11 @@ http://maven.apache.org/maven-v4_0_0.xsd">
             <name>JBoss Maven Repository</name>
             <url>http://repository.jboss.com/maven2</url>
         </repository>
+        <repository>
+            <id>hapi-sf</id>
+            <name>HAPI Sourceforge Repository</name>
+            <url>http://hl7api.sourceforge.net/m2</url>
+        </repository>        
     </repositories>
     
 </project>

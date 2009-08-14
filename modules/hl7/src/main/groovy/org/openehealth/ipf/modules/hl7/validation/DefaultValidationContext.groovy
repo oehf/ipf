@@ -61,6 +61,7 @@ public class DefaultValidationContext implements ValidationContext{
 	'2.3.1' : [:],
 	'2.4'   : [:],
 	'2.5'   : [:],
+	'2.5.1' : [:],
 	'2.6'   : [:]
 	]
 	
