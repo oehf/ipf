@@ -48,7 +48,7 @@ public class ItiAuditDataset extends AuditDataset {
     /**
      * Constructor.
      * 
-     * @param isServerSide
+     * @param serverSide
      *            specifies whether this audit dataset will be used on the
      *            server side (<code>true</code>) or on the client side (
      *            <code>false</code>)

@@ -162,24 +162,25 @@ public abstract class SoapUtils {
         try {
             /*   
              * We search for following positions (variables posXX):
-             * <pre>
+             * 
              * <S:Envelope>
              *    <S:Header>...</S:Header> ?
              *    <S:Body>the required information</S:Body>
-             *    ^3     ^4                       ^1 ^2
+             *    ^3     ^4                       ^1 ^2   ^5
              *                                       
              * <S:Envelope>
-             * <pre>
+             * 
              */ 
-            int pos1, pos2, pos3, pos4;
+            int pos1, pos2, pos3, pos4, pos5;
             pos1 = soapEnvelope.lastIndexOf("<");
             pos1 = soapEnvelope.lastIndexOf("<", pos1 - 1);
             pos2 = soapEnvelope.indexOf(":", pos1);
-            String soapPrefix = soapEnvelope.substring(pos1 + 2, pos2);
+            pos5 = soapEnvelope.indexOf(">", pos1);
+            String soapPrefix = ((pos2 == -1) || (pos5 < pos2)) ? 
+                    "" : soapEnvelope.substring(pos1 + 2, pos2) + ":";
             String bodyElementStart = new StringBuilder()
                 .append('<')
                 .append(soapPrefix)
-                .append(':')
                 .append("Body")
                 .toString(); 
             pos3 = soapEnvelope.indexOf(bodyElementStart);

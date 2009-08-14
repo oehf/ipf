@@ -26,8 +26,8 @@ public class Iti18AuditDataset extends ItiAuditDataset {
 
     private String queryUuid;
 
-    public Iti18AuditDataset(boolean isServerSide) {
-        super(isServerSide);
+    public Iti18AuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 
     public void setQueryUuid(String queryUuid) {

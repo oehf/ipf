@@ -62,10 +62,6 @@ public class SoapVersionTestInterceptor extends AbstractSoapInterceptor {
     
     /**
      * Constructor.
-     * 
-     * @param isServerSide
-     *      whether this interceptor is being used on the server side 
-     *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
     public SoapVersionTestInterceptor() {
         super(Phase.WRITE);

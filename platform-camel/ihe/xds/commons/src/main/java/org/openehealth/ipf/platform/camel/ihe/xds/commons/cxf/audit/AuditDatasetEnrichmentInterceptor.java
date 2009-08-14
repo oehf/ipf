@@ -50,12 +50,12 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
      * 
      * @param auditStrategy
      *      an audit strategy instance
-     * @param isServerSide
+     * @param serverSide
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    public AuditDatasetEnrichmentInterceptor(ItiAuditStrategy auditStrategy, boolean isServerSide) {
-        super(isServerSide ? Phase.PRE_INVOKE : Phase.WRITE, auditStrategy); 
+    public AuditDatasetEnrichmentInterceptor(ItiAuditStrategy auditStrategy, boolean serverSide) {
+        super(serverSide ? Phase.PRE_INVOKE : Phase.WRITE, auditStrategy); 
     }
 
     

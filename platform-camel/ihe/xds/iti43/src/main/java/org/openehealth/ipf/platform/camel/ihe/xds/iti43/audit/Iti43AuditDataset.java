@@ -29,8 +29,8 @@ public class Iti43AuditDataset extends ItiAuditDataset {
     private String[] repositoryUuids;
     private String[] homeCommunityUuids;
 
-    public Iti43AuditDataset(boolean isServerSide) {
-        super(isServerSide);
+    public Iti43AuditDataset(boolean serverSide) {
+        super(serverSide);
     }
 
     public void setDocumentUuids(String[] documentUuids) {
