@@ -46,28 +46,13 @@ public class WrappedOutputStream extends FilterOutputStream {
     }
 
     /**
-     * Returns the collected message payload and deactivates any further data
-     * collecting.
-     * 
-     * @param soapEnvelopePrefix
-     *            current XML namespace prefix of SOAP Envelope element, can
-     *            depend on SOAP version and other factors
+     * Returns the collected message payload and deactivates 
+     * any further data collecting.
      * @return SOAP payload as a <code>String</code>
      */
-    public String getCollectedPayloadAndDeactivate(String soapEnvelopePrefix) {
-        // deactivate payload collecting
+    public String getCollectedPayloadAndDeactivate() {
         isActive = false;
-
-        // cut the piece from "<soap:Envelope>" to "</soap:Envelope>"
-        // from the collected message payload
-        StringBuilder tag = new StringBuilder("<");
-        if ((soapEnvelopePrefix != null) && (soapEnvelopePrefix.length() > 0)) {
-            tag.append(soapEnvelopePrefix).append(':');
-        }
-        tag.append("Envelope");
-        int pos1 = payloadCollector.indexOf(tag.toString());
-
-        return payloadCollector.substring(pos1);
+        return payloadCollector.toString();
     }
 
     /* ----- implementation of standard OutputStream methods ----- */

@@ -152,23 +152,28 @@ public abstract class SoapUtils {
     /**
      * Extracts the proper body (for example, a Query) from the 
      * SOAP envelope, both represented as Strings.
+     * <p>
+     * Does really suppose that the given String contains  
+     * a SOAP envelope and not check it thoroughly.
+     * 
      * @param soapEnvelope
      *      The SOAP Envelope (XML document) as String.
      * @return
-     *      Extracted SOAP Body contents as String, or <tt>null</tt> when
-     *      the parameter does not represent a valid SOAP Envelope.      
+     *      Extracted SOAP Body contents as String, or the original 
+     *      parameter when it does not seem to represent a valid 
+     *      SOAP envelope.      
      */
     public static String extractSoapBody(String soapEnvelope) {
         try {
             /*   
              * We search for following positions (variables posXX):
              * 
-             * <S:Envelope>
-             *    <S:Header>...</S:Header> ?
-             *    <S:Body>the required information</S:Body>
-             *    ^3     ^4                       ^1 ^2   ^5
+             *    <S:Envelope><S:Body>the required information</S:Body><S:Envelope>
+             *                3      4                        1  2    5
+             *         
              *                                       
-             * <S:Envelope>
+             *    <Envelope><Body>the required information</Body><Envelope>
+             *   2                                        1     5 
              * 
              */ 
             int pos1, pos2, pos3, pos4, pos5;
@@ -184,13 +189,13 @@ public abstract class SoapUtils {
                 .append("Body")
                 .toString(); 
             pos3 = soapEnvelope.indexOf(bodyElementStart);
-            pos4 = soapEnvelope.indexOf(">", pos3);
+            pos4 = pos3 + bodyElementStart.length();
             String body = soapEnvelope.substring(pos4 + 1, pos1);
             return body;
             
         } catch(Exception e) {
             LOG.error("Invalid contents, probably not a SOAP Envelope in the parameter", e);
-            return null;
+            return soapEnvelope;
         }
     }
     

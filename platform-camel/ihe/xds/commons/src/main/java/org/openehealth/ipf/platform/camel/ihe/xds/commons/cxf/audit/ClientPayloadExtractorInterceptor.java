@@ -17,10 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit;
 
 import java.io.OutputStream;
 
-import javax.xml.stream.XMLStreamWriter;
-
-import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.binding.soap.SoapVersion;
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
@@ -57,17 +53,9 @@ public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
         }
         ItiAuditDataset auditDataset = getAuditDataset(message);
 
-        // determine what is the actual SOAP Envelope prefix
-        // (we need it to extract SOAP document from the collected payload, 
-        // as the latter can contain parts of MIME markup as well)
-        String soapEnvelopePrefix;
-        SoapVersion soapVersion = ((SoapMessage)message).getVersion();
-        XMLStreamWriter xmlWriter = message.getContent(XMLStreamWriter.class);
-        soapEnvelopePrefix = xmlWriter.getPrefix(soapVersion.getNamespace());
-
         // get the payload and store it in the audit dataset
         WrappedOutputStream wrapper = (WrappedOutputStream)message.getContent(OutputStream.class);
-        String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate(soapEnvelopePrefix);
+        String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate();
         String payload = SoapUtils.extractSoapBody(soapEnvelope);
         auditDataset.setPayload(payload);
     }
