@@ -17,6 +17,7 @@ package org.openehealth.ipf.tutorials.hl7.route
 
 import ca.uhn.hl7v2.validation.ValidationContext
 
+import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
 /**
  * @author Martin Krasser
@@ -28,7 +29,7 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
         from('direct:input')
             .unmarshal().ghl7()
             .validate().ghl7()
-                .profile(bean(ValidationContext.class))
+                .profile(lookup(ValidationContext.class))
             .transmogrify { msg ->
                 msg.PV1[3][2] = '' // clear room nr.
                 msg.PV1[3][3] = '' // clear bed nr.
@@ -36,11 +37,11 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
                 msg.PID[8]    = msg.PID[8].mapGender()              // map gender
                 msg
             }
-            .setHeader('org.apache.camel.file.name') {exchange -> 
+            .setHeader(Exchange.FILE_NAME) {exchange -> 
                 exchange.in.body.MSH[4].value + '.hl7'
             }
             .marshal().ghl7()
-            .to('file:target/output?append=false')
+            .to('file:target/output?fileExist=Append')
             
     }
     

@@ -15,7 +15,7 @@
     <modules>
         <module>basic</module>
         <!--<module>flow</module>-->
-        <!--<module>hl7</module>-->
+        <module>hl7</module>
         <!--<module>ref</module>-->
         <!--<module>osgi</module>-->
         <module>lbs</module>

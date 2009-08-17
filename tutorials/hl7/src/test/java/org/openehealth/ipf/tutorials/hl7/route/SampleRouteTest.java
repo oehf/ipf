@@ -17,7 +17,6 @@ package org.openehealth.ipf.tutorials.hl7.route;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +41,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public class SampleRouteTest {
 
     @Autowired
-    private ProducerTemplate<Exchange> producerTemplate;
+    private ProducerTemplate producerTemplate;
     
     @Before
     public void setUp() throws Exception {
