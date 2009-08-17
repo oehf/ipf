@@ -29,7 +29,7 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
         from('direct:input1')
             .transmogrify { it * 2 }
             .setFileHeaderFrom('destination')
-            .to('file:target/output?append=false')
+            .to('file:target/output?fileExist=Append')
 
         from('direct:input2')
             .reverse()

@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.basic.extend
 
-import org.apache.camel.model.ProcessorType
+import org.apache.camel.Exchange
+import org.apache.camel.model.ProcessorDefinition
 /**
  * @author Martin Krasser
  */
@@ -23,12 +24,12 @@ public class SampleModelExtension {
 
      static extensions = {
          
-         ProcessorType.metaClass.reverse = {
+         ProcessorDefinition.metaClass.reverse = {
              delegate.transmogrify { it.reverse() }
          }
       
-         ProcessorType.metaClass.setFileHeaderFrom = { String sourceHeader ->  
-             delegate.setHeader('org.apache.camel.file.name') { exchange -> 
+         ProcessorDefinition.metaClass.setFileHeaderFrom = { String sourceHeader ->  
+             delegate.setHeader(Exchange.FILE_NAME) { exchange -> 
                  def destination = exchange.in.headers."$sourceHeader"
                  destination ? "${destination}.txt" : 'default.txt'
              }

@@ -13,7 +13,7 @@
     </parent>
 
     <modules>
-        <!--<module>basic</module>-->
+        <module>basic</module>
         <!--<module>flow</module>-->
         <!--<module>hl7</module>-->
         <!--<module>ref</module>-->
