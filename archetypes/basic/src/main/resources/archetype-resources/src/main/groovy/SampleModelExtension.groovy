@@ -3,12 +3,12 @@
 #set( $symbol_escape = '\' )
 package ${package}
 
-import org.apache.camel.model.ProcessorType
+import org.apache.camel.model.ProcessorDefinition
 class SampleModelExtension {
 
      static extensions = {
          
-         ProcessorType.metaClass.reverse = {
+         ProcessorDefinition.metaClass.reverse = {
              delegate.transmogrify { it.reverse() }
          }
          

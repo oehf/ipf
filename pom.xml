@@ -194,7 +194,7 @@
     </scm>
 
     <modules>
-        <!--<module>archetypes</module>-->
+        <module>archetypes</module>
         <!--<module>assembly</module>-->
         <module>commons</module>
         <module>modules</module>

@@ -23,7 +23,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public class SampleRouteTest {
 
     @Autowired
-    private ProducerTemplate<Exchange> producerTemplate;
+    private ProducerTemplate producerTemplate;
     
     @Before
     public void setUp() throws Exception {
