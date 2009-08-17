@@ -15,7 +15,7 @@
     <modules>
         <module>hl7dsl</module>
         <module>hl7</module>
-        <module>cda</module>
+        <!--<module>cda</module>-->
     </modules>
     
     <build>
