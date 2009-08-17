@@ -50,6 +50,7 @@ public class FlowLifecycleTask extends FlowTaskSupport {
         this.transactionManager = transactionManager;
     }
 
+    @Override
     public void doRun() {
         // start a new flow
         long id = getFlowManager().beginFlow(getMessage(), "test");

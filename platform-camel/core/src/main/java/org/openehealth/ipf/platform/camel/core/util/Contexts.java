@@ -39,7 +39,7 @@ public class Contexts {
         String[] names = springContext.getBeanNamesForType(type, true, true);
         int count = names == null ? 0 : names.length;
         if (count == 1) {
-            return (T)springContext.getBean(names[0]);
+            return type.cast(springContext.getBean(names[0]));
         } else if (count == 0) {
             return null; 
         } else {

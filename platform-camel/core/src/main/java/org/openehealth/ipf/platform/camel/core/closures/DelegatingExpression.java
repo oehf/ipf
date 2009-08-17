@@ -33,7 +33,7 @@ public class DelegatingExpression extends ClosureAdapter implements Expression {
 
 	@Override
 	public <T> T evaluate(Exchange exchange, Class<T> type) {
-        return (T)call(exchange);
+        return type.cast(call(exchange));
 	}
     
 }

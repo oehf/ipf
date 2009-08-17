@@ -57,6 +57,7 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
         flowSearchCallback = new DefaultSearchCallback();
     }
     
+    @Override
     public void initDao() throws Exception {
         super.initDao();
         if (sequenceRepository == null) {

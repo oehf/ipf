@@ -46,12 +46,14 @@ public class ErrorHandlingTest extends TestSupport {
     @EndpointInject(uri="mock:error")
     private MockEndpoint error;
     
+    @Override
     @After
     public void tearDown() throws Exception {
         output.reset();
         inter.reset();
         check.reset();
         error.reset();
+        super.tearDown();
     }
 
     @Test @Ignore

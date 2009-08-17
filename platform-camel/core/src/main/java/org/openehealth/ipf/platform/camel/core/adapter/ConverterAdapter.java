@@ -72,6 +72,7 @@ public class ConverterAdapter extends ProcessorAdapter {
      * @see #doProcess(Source, Result, Object...)
      * @see #doProcess(String, Object...)
      */
+    @Override
     protected void doProcess(Exchange exchange, Object inputData, 
             Object... inputParams) throws Exception {
         

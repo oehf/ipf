@@ -33,6 +33,7 @@ public class WhenExtensionTest extends AbstractExtensionTest {
     @EndpointInject(uri="mock:output2")
     protected MockEndpoint mockOutput2;
     
+    @Override
     @After
     public void tearDown() throws Exception {
         mockOutput1.reset();

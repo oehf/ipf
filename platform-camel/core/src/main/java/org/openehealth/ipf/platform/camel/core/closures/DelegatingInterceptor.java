@@ -37,6 +37,7 @@ public class DelegatingInterceptor extends DelegateProcessor {
         return closure;
     }
     
+    @Override
     public void proceed(Exchange exchange) throws Exception {
         super.processNext(exchange);
     }

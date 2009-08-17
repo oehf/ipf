@@ -22,7 +22,6 @@ import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSuppo
 /**
  * @author Martin Krasser
  */
-@SuppressWarnings("unchecked")
 public class PredicateRouteBuilder extends RouteBuilderSupport {
 
     @Override

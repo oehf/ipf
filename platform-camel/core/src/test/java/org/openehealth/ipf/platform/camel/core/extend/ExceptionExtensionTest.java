@@ -33,6 +33,7 @@ public class ExceptionExtensionTest extends AbstractExtensionTest {
     @EndpointInject(uri="mock:error2")
     protected MockEndpoint mockError2;
     
+    @Override
     @After
     public void tearDown() throws Exception {
         mockError1.reset();

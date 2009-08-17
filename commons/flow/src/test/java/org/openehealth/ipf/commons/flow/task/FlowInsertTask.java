@@ -25,6 +25,7 @@ public class FlowInsertTask extends FlowTaskSupport {
 
     private static final Log LOG = LogFactory.getLog(FlowInsertTask.class);
     
+    @Override
     protected void doRun() {
         long id = getFlowManager().beginFlow(getMessage(), "test");
         getMessage().setFlowId(null); // do not pretend replay

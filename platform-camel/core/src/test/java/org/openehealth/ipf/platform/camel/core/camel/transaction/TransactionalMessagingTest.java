@@ -47,6 +47,7 @@ public class TransactionalMessagingTest extends TestSupport {
     @EndpointInject(uri="mock:error")
     private MockEndpoint errorMock;
     
+    @Override
     @After
     public void tearDown() throws Exception {
         txmMock.reset();

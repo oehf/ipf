@@ -48,7 +48,7 @@ public class StaticParams implements Expression {
      */
 	@Override
 	public <T> T evaluate(Exchange exchange, Class<T> type) {
-		return (T)params;
+		return type.cast(params);
 	}
 
 }

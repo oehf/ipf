@@ -56,22 +56,22 @@ public class TransmogrifierAdapterType extends ProcessorAdapterType {
     }
     
     public TransmogrifierAdapterType xslt() {
-        this.transmogrifier = new XsltTransmogrifier(String.class);
+        this.transmogrifier = new XsltTransmogrifier<String>(String.class);
         return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
     }
     
-    public TransmogrifierAdapterType xslt(Class<?> clazz) {
-        this.transmogrifier = new XsltTransmogrifier(clazz);
+    public <T> TransmogrifierAdapterType xslt(Class<T> clazz) {
+        this.transmogrifier = new XsltTransmogrifier<T>(clazz);
         return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
     }
     
     public TransmogrifierAdapterType schematron() {
-        this.transmogrifier = new SchematronTransmogrifier(String.class);
+        this.transmogrifier = new SchematronTransmogrifier<String>(String.class);
         return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
     }
 
-    public TransmogrifierAdapterType schematron(Class<?> clazz) {
-        this.transmogrifier = new SchematronTransmogrifier(clazz);
+    public <T> TransmogrifierAdapterType schematron(Class<T> clazz) {
+        this.transmogrifier = new SchematronTransmogrifier<T>(clazz);
         return (TransmogrifierAdapterType)input(bodyAs(StreamSource.class));
     }
 

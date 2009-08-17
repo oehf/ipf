@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.tutorials.ref.extend
 
-import static org.apache.camel.component.http.HttpProducer.HTTP_RESPONSE_CODE;
+import static org.apache.camel.Exchange.HTTP_RESPONSE_CODE
 import static org.openehealth.ipf.tutorials.ref.util.Expressions.filenameExpression
 
-import org.apache.camel.model.ProcessorType
-import org.apache.camel.model.RouteType
+import org.apache.camel.model.ProcessorDefinition
 
 /**
  * @author Martin Krasser
@@ -32,7 +31,7 @@ class TutorialModelExtension {
         //  Flow management extensions
         // ------------------------------------------------------------
         
-        ProcessorType.metaClass.initFlow = { identifier, errorUri -> 
+        ProcessorDefinition.metaClass.initFlow = { identifier, errorUri -> 
             delegate.initFlow(identifier)
                 .replayErrorHandler(errorUri)
                 .application('tutorial')
@@ -45,7 +44,7 @@ class TutorialModelExtension {
         //  File endpoint extensions
         // ------------------------------------------------------------
         
-        ProcessorType.metaClass.toFile = { String dir, String filePrefix, String fileExtension ->
+        ProcessorDefinition.metaClass.toFile = { String dir, String filePrefix, String fileExtension ->
             def header = 'org.apache.camel.file.name'
             def expression = filenameExpression(filePrefix, fileExtension) 
             delegate.setHeader(header, expression).to('file:' + dir);
@@ -55,7 +54,7 @@ class TutorialModelExtension {
         //  HTTP endpoint extensions
         // ------------------------------------------------------------
         
-        ProcessorType.metaClass.responseCode = { ->
+        ProcessorDefinition.metaClass.responseCode = { ->
             delegate.setHeader(HTTP_RESPONSE_CODE)
         }
 

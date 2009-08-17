@@ -25,5 +25,4 @@ package org.openehealth.ipf.commons.core.modules.api;
 public interface Predicate<T> {
 
     boolean matches(T source, Object... params);
-
 }

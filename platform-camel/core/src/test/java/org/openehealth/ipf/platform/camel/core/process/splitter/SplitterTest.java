@@ -104,7 +104,7 @@ public class SplitterTest {
         Splitter splitterWithArrayResult = new Splitter(new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
-                return (T)getContent(exchange).split(",");            
+                return type.cast(getContent(exchange).split(","));            
             }}, dest);
         splitterWithArrayResult.aggregate(new TestAggregationStrategy());
 
@@ -124,7 +124,7 @@ public class SplitterTest {
         Splitter splitterSimpleRule = new Splitter(new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
-                return (T)("smurf:" + exchange.getIn().getBody());
+                return type.cast("smurf:" + exchange.getIn().getBody());
             }}, dest);
 
         Exchange origExchange = createTestExchange();
@@ -159,7 +159,7 @@ public class SplitterTest {
         Splitter splitterIteratorRule = new Splitter(new Expression() {
             @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
-                return (T)results.iterator();
+                return type.cast(results.iterator());
             }}, dest);
 
         Exchange origExchange = createTestExchange();
@@ -191,7 +191,7 @@ public class SplitterTest {
         @Override
         public <T> T evaluate(Exchange exchange, Class<T> type) {
             String[] parts = getContent(exchange).split(",");            
-            return (T)Arrays.asList(parts);
+            return type.cast(Arrays.asList(parts));
         }
     }
     
@@ -230,7 +230,7 @@ public class SplitterTest {
             evaluateCalled = true;
             
             String[] parts = getContent(exchange).split(",");
-            return (T)new OneTimeUsageIterable<String>(Arrays.asList(parts)); 
+            return type.cast(new OneTimeUsageIterable<String>(Arrays.asList(parts))); 
         }
 
         private boolean evaluateCalled;
@@ -241,7 +241,7 @@ public class SplitterTest {
         public <T> T evaluate(Exchange exchange, Class<T> type) {
             String filename = (String)exchange.getIn().getBody();
             try {
-                return (T)new TextFileIterator(filename);
+                return type.cast(new TextFileIterator(filename));
             } catch (IOException e) {
                 fail("Caught exception: " + e);
             }
