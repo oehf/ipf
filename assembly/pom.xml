@@ -125,11 +125,6 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-http</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-lbs-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
