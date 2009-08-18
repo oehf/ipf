@@ -41,7 +41,7 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
                 exchange.in.body.MSH[4].value + '.hl7'
             }
             .marshal().ghl7()
-            .to('file:target/output?fileExist=Append')
+            .to('file:target/output')
             
     }
     
