@@ -153,16 +153,19 @@ public abstract class AbstractLbsHttpTest {
         method.setRequestEntity(new StringRequestEntity("testtext", "text/plain", null));
 
         mock.expectedMessageCount(1);
+        mock.whenAnyExchangeReceived(new Processor() {
+            @Override
+            public void process(Exchange received) throws Exception {
+                // Must be done in here because the connection is only valid during
+                // processing
+                String body = received.getIn().getBody(String.class);
+                assertEquals("testtext", body);
+            }            
+        });
         httpClient.executeMethod(method);
         method.getResponseBody();
         method.releaseConnection();
         mock.assertIsSatisfied();
-        
-        List<Exchange> receivedExchanges = mock.getExchanges();
-        Exchange received = receivedExchanges.get(0);
-        
-        String body = received.getIn().getBody(String.class);
-        assertEquals("testtext", body);
     }
 
     @Test
