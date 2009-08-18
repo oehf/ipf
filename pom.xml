@@ -54,7 +54,7 @@
         <hibernate-annotations-version>3.3.0.ga</hibernate-annotations-version>
         <hibernate-search-version>3.0.1.GA</hibernate-search-version>
         <jasypt-version>1.5</jasypt-version>
-        <jetty-version>6.1.11</jetty-version>
+        <jetty-version>6.1.16</jetty-version>
        	<joda-time-version>1.5.2</joda-time-version>
         <junit-version>4.4</junit-version>
         <junitperf-version>1.8</junitperf-version>
