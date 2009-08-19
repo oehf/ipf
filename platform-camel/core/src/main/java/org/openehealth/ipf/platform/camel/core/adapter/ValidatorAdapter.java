@@ -89,8 +89,7 @@ public class ValidatorAdapter extends ProcessorAdapter {
     
     /**
      * Delegates validation of input data against a profile to a
-     * {@link Validator} object. Validation errors messages are written
-     * to body of the message returned by {@link #faultMessage(Exchange)}.
+     * {@link Validator} object. 
      * 
      * @param exchange
      *            message exchange where to write processing results.

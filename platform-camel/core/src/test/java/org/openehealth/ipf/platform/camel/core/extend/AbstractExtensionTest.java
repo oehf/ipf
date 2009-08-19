@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -37,6 +38,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public abstract class AbstractExtensionTest {
 
+    @Autowired
+    protected CamelContext cc;
+    
     @Autowired
     protected ProducerTemplate producerTemplate;
     

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.core.bridge;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
@@ -60,7 +60,7 @@ public class InOnlyBridgeTest {
         
         assertEquals(ExchangePattern.InOnly, target.getPattern());
         assertEquals("out-body", target.getIn().getBody());
-        assertNull(target.getOut(false));
+        assertFalse(target.hasOut());
     }
     
     @Test
@@ -74,7 +74,7 @@ public class InOnlyBridgeTest {
         
         assertEquals(ExchangePattern.InOnly, target.getPattern());
         assertEquals("in-body", target.getIn().getBody());
-        assertNull(target.getOut(false));
+        assertFalse(target.hasOut());
     }
     
     private class NextProcessor implements Processor {

@@ -33,11 +33,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
       <camel:jmxAgent id="agent" disabled="true" />
   </camel:camelContext>
 
-  <bean id="producerTemplate" 
-      factory-bean="camelContext"
-      factory-method="createProducerTemplate">
-  </bean>
-
   <bean id="coreModelExtension" 
       class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
   </bean>

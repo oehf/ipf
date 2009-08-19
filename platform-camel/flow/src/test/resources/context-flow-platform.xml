@@ -24,19 +24,6 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd">
 
   <!-- ================================================================== -->
-  <!--  Camel Setup                                                       -->
-  <!-- ================================================================== -->
-
-  <camel:camelContext id="camelContext">
-      <camel:jmxAgent id="agent" disabled="true" />
-  </camel:camelContext>
-
-  <bean id="producerTemplate" 
-      factory-bean="camelContext"
-      factory-method="createProducerTemplate">
-  </bean>
-
-  <!-- ================================================================== -->
   <!--  Flow Manager                                                      -->
   <!-- ================================================================== -->
 

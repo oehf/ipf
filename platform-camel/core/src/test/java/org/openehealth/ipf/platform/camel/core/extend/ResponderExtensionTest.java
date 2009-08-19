@@ -63,7 +63,6 @@ public class ResponderExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
         assertEquals("blah", exchange.getIn().getBody());
         assertFalse(exchange.hasOut());
-        assertFalse(exchange.hasFault());
         assertNull(exchange.getException());
     }
 
@@ -79,7 +78,7 @@ public class ResponderExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
         assertEquals("test", exchange.getIn().getBody());
         assertEquals("blah", exchange.getOut().getBody());
-        assertFalse(exchange.hasFault());
+        assertFalse(exchange.getOut().isFault());
         assertNull(exchange.getException());
     }
 

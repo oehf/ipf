@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.process;
 
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.copyExchange;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -74,7 +76,7 @@ public class Responder extends DelegateProcessor {
         getResponseGenerator().process(serviceExchange);
         // copy service exchange over to original exchange
         // (sends response back to exchange initiator)
-        exchange.copyFrom(serviceExchange);
+        copyExchange(serviceExchange, exchange);
         
         if (process(exchange, serviceExchange)) {
             super.processNext(delegateExchange);

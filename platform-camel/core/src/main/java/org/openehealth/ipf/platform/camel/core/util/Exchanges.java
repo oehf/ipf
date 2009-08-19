@@ -69,16 +69,6 @@ public class Exchanges {
     }
     
     /**
-     * Returns the message where to write faults.
-     * 
-     * @param exchange message exchange.
-     * @return fault message.
-     */
-    public static Message faultMessage(Exchange exchange) {
-        return exchange.getFault();
-    }
-
-    /**
      * Creates a new {@link Exchange} instance from the given
      * <code>exchange</code>. The resulting exchange's pattern is defined by
      * <code>pattern</code>.
@@ -91,7 +81,7 @@ public class Exchanges {
      */
     public static Exchange createExchange(Exchange source, ExchangePattern pattern) {
         DefaultExchange target = new DefaultExchange(source.getContext());
-        target.copyFrom(source);
+        copyExchange(source, target);
         target.setPattern(pattern);
         return target;
     }
@@ -131,7 +121,6 @@ public class Exchanges {
      * @param target target exchange.
      * 
      * @see #resultMessage(Exchange)
-     * @see #faultMessage(Exchange)
      */
     public static void copyExchange(Exchange source, Exchange target) {
         if (source == target) {
@@ -140,22 +129,19 @@ public class Exchanges {
         }
         
         // copy in message
-        Message m = source.getIn();
-        target.getIn().copyFrom(m);
+        target.getIn().copyFrom(source.getIn());
     
         // copy out message
         if (source.hasOut()) {
             resultMessage(target).copyFrom(source.getOut());
         }
         
-        // copy fault message
-        if (source.hasFault()) {
-            faultMessage(target).copyFrom(source.getFault());
-        	
-        }
-        
         // copy exception
         target.setException(source.getException());
+
+        // copy properties
+        target.getProperties().putAll(source.getProperties());
+        
     }
 
 }

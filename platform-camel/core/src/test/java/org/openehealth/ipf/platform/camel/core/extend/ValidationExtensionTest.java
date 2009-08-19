@@ -92,7 +92,8 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
                 exchange.getIn().setBody("blah");
             }
         });
-        assertEquals("failed", result.getFault().getBody());
+        assertEquals("failed", result.getOut().getBody());
+        assertTrue(result.getOut().isFault());
         mockOutput.assertIsSatisfied();
     }
     
@@ -120,7 +121,6 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
         assertEquals("blah", exchange.getIn().getBody());
         assertFalse(exchange.hasOut());
-        assertFalse(exchange.hasFault());
         assertNull(exchange.getException());
     }
 
@@ -137,7 +137,7 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
         assertEquals("test", exchange.getIn().getBody());
         assertEquals("blah", exchange.getOut().getBody());
-        assertFalse(exchange.hasFault());
+        assertFalse(exchange.getOut().isFault());
         assertNull(exchange.getException());
     }
 
@@ -152,9 +152,9 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
                 });
 
         mockOutput.assertIsSatisfied();
-        assertEquals("test", exchange.getIn().getBody());
-        assertEquals("failed", exchange.getFault().getBody());
-        assertFalse(exchange.hasOut());
+        assertEquals("failed", exchange.getIn().getBody());
+        assertFalse(exchange.hasOut()); // as per definition of an in-only exchange
+        assertTrue(exchange.getIn().isFault());
         assertNull(exchange.getException());
     }
 
@@ -170,8 +170,8 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
 
         mockOutput.assertIsSatisfied();
         assertEquals("test", exchange.getIn().getBody());
-        assertEquals("failed", exchange.getFault().getBody());
-        assertFalse(exchange.hasOut());
+        assertEquals("failed", exchange.getOut().getBody());
+        assertTrue(exchange.getOut().isFault());
         assertNull(exchange.getException());
     }
 
@@ -191,7 +191,6 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
         // Strange: Camel sets an out message on an in-only exchange if 
         //          the default error handler (dead letter channel) is set
         assertFalse(exchange.hasOut()); // no error handler set
-        assertFalse(exchange.hasFault());
     }
 
     @Test
@@ -208,7 +207,6 @@ public class ValidationExtensionTest extends AbstractExtensionTest {
         assertEquals("test", exchange.getIn().getBody());
         assertEquals("failed", exchange.getException().getMessage());
         assertFalse(exchange.hasOut());
-        assertFalse(exchange.hasFault());
     }
     
 }

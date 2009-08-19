@@ -37,7 +37,8 @@ public class FailureTransformer implements Processor {
         if (error) {
             throw new RuntimeException("failed");
         } else {
-            exchange.getFault().setBody("failed");
+            exchange.getOut().setBody("failed");
+            exchange.getOut().setFault(true);
         }
     }
 

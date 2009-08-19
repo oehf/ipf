@@ -35,7 +35,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.1.0</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
-        <camel-version>2.0-M3</camel-version>
+        <camel-version>2.0.0</camel-version>
         <commons-codec-version>1.3</commons-codec-version>
         <commons-dbcp-version>1.2.2</commons-dbcp-version>
         <commons-fileupload-version>1.2.1</commons-fileupload-version>        
@@ -200,8 +200,10 @@
         <module>modules</module>
         <module>osgi</module>
         <module>platform-camel</module>
+        <!--
         <module>platform-manager</module>
         <module>tutorials</module>
+        -->
     </modules>
 
     <dependencyManagement>
@@ -834,7 +836,17 @@
             <id>hapi-sf</id>
             <name>HAPI Sourceforge Repository</name>
             <url>http://hl7api.sourceforge.net/m2</url>
+        </repository>
+
+        <!-- 
+            TEMPORARY (will be removed once Camel 2.0.0 is out)
+        -->        
+        <repository>
+            <id>apache-staging</id>
+            <name>Apache Staging Repository</name>
+            <url>https://repository.apache.org/content/groups/staging</url>
         </repository>        
+                
     </repositories>
     
 </project>

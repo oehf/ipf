@@ -87,7 +87,7 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
            .to('mock:output')
        
        from('direct:input8') 
-           .validation {exchange -> exchange.fault.body = 'failed'}
+           .validation {exchange -> exchange.out.body = 'failed'; exchange.out.fault = true}
            .to('mock:output')
            
        from('direct:input9') 
