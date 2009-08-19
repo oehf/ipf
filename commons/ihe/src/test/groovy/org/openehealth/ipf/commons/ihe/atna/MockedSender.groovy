@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.commons
+package org.openehealth.ipf.commons.ihe.atna
 
 import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
 import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
 
 
 /**
- * Mocked sender implementation for ATNA messages. Records the messages
- * to allow verification in tests.
+ * Mocked sender implementation for ATNA messages. 
+ * Records the messages to allow verification in tests.
  * @author Jens Riemschneider
  */
-public class MockedSender implements AuditMessageSender{
+class MockedSender implements AuditMessageSender{
     def messages = []
      
-    public void sendAuditEvent(AuditEventMessage[] msg) {
+    void sendAuditEvent(AuditEventMessage[] msg) {
         messages += Arrays.asList(msg)
     }
     
-    public void sendAuditEvent(AuditEventMessage[] msg, InetAddress destination, int port) {
+    void sendAuditEvent(AuditEventMessage[] msg, InetAddress destination, int port) {
         messages += Arrays.asList(msg)
     }
 }

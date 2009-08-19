@@ -36,7 +36,7 @@ import org.junit.After
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.ServletServer
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.server.TomcatServer
-import org.openehealth.ipf.commons.ihe.atna.UdpServer
+import org.openehealth.ipf.commons.ihe.atna.MockedSender
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
