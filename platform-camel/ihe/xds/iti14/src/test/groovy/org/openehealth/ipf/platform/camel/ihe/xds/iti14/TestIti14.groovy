@@ -59,18 +59,16 @@ class TestIti14 extends StandardTestContainer {
      
      @Test
      void testIti14() {
-         syslog.expectedPacketCount(4)
          assert SUCCESS == sendIt(SERVICE1, 'service 1').status
          assert SUCCESS == sendIt(SERVICE2, 'service 2').status
-         syslog.assertIsSatisfied()         
+         assert auditSender.messages.size() == 4
          checkPackets('0')
      }
 
      @Test
      void testIti14_FailureAudit() {
-         syslog.expectedPacketCount(2)
          assert FAILURE == sendIt(SERVICE2, 'service falsch').status
-         syslog.assertIsSatisfied()         
+         assert auditSender.messages.size() == 2
          checkPackets('8')
      }
      
@@ -106,25 +104,22 @@ class TestIti14 extends StandardTestContainer {
      
      @Test
      void testIti14_AuditDisabled() {
-         getSyslog().expectedPacketCount(0)
          sendIt(SERVICE_FT, 'service 12')
-         syslog.assertIsSatisfied()
+         assert auditSender.messages.size() == 0
      }
 
      @Test
      void testIti14_Incomplete_IncompleteAuditingNotAllowed()  {
-         syslog.expectedPacketCount(0)
          request.submissionSet = null
          sendIt(SERVICE2, 'service 2')
-         syslog.assertIsSatisfied()
+         assert auditSender.messages.size() == 0
      }
 
      @Test
      void testIti14_Incomplete_IncompleteAuditingAllowed() {
-         syslog.expectedPacketCount(2)
          request.submissionSet = null
          sendIt(SERVICE_DT, 'service 13')
-         syslog.assertIsSatisfied()
+         assert auditSender.messages.size() == 2
          
          // No assumption on what is actually logged, as it is faulty anyway and highly 
          // depends on what OHT does.

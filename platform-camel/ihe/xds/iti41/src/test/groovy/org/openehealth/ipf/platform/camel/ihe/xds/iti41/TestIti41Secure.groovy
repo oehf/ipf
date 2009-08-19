@@ -54,10 +54,9 @@ class TestIti41Secure extends StandardTestContainer {
     
     @Test
     void testIti41() {
-        syslog.expectedPacketCount(4)
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
-        syslog.assertIsSatisfied()
+        assert auditSender.messages.size() == 4
     }
 
     def sendIt(endpoint, value) {

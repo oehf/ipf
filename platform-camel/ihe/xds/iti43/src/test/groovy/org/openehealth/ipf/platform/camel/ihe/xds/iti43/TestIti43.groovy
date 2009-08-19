@@ -60,7 +60,6 @@ class TestIti43 extends StandardTestContainer {
     
     @Test
     void testIti43() {
-        syslog.expectedPacketCount(4)
         def response1 = sendIt(SERVICE1, 'service 1')
         assert SUCCESS == response1.status
         checkForMTOM(response1)
@@ -68,17 +67,16 @@ class TestIti43 extends StandardTestContainer {
         def response2 = sendIt(SERVICE2, 'service 2')
         assert SUCCESS == response2.status
         checkForMTOM(response2)
-        syslog.assertIsSatisfied()
+        assert auditSender.messages.size() == 4
         
         checkAudit('0', 'service 2')
     }
      
     @Test
     void testIti43FailureAudit() {
-        syslog.expectedPacketCount(2)
         def response2 = sendIt(SERVICE2, 'falsch')
         assert FAILURE == response2.status
-        syslog.assertIsSatisfied()
+        assert auditSender.messages.size() == 2
         
         checkAudit('8', 'falsch')
     }

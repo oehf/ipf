@@ -56,18 +56,18 @@ import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor
  * placed within the root of the test resources.
  * @author Jens Riemschneider
  */
-class StandardTestContainer{
+class StandardTestContainer {
      def static log = LogFactory.getLog(StandardTestContainer.class)
      
      def static producerTemplate
      def static servletServer
      def static appContext
 
-     def static SYSLOG_PORT = 8888
-     def static syslog
+     def static auditSender
      def static camelContext
      
      def static port
+    
      
      static void startServer(servlet, appContextName, secure) {
          def contextResource = new ClassPathResource(appContextName)
@@ -97,33 +97,29 @@ class StandardTestContainer{
          XDSRegistryAuditor.auditor.config = new AuditorModuleConfig()
          XDSRegistryAuditor.auditor.config.auditSourceId = 'registryId'
          XDSRegistryAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSRegistryAuditor.auditor.config.auditRepositoryPort = SYSLOG_PORT
          XDSRegistryAuditor.auditor.config.systemUserId = 'registryUserId'
          XDSRegistryAuditor.auditor.config.systemAltUserId = 'registryAltUserId'
 
          XDSSourceAuditor.auditor.config = new AuditorModuleConfig()
          XDSSourceAuditor.auditor.config.auditSourceId = 'sourceId'
          XDSSourceAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSSourceAuditor.auditor.config.auditRepositoryPort = SYSLOG_PORT
          XDSSourceAuditor.auditor.config.systemUserId = 'sourceUserId'
          XDSSourceAuditor.auditor.config.systemAltUserId = 'sourceAltUserId'
 
          XDSConsumerAuditor.auditor.config = new AuditorModuleConfig()
          XDSConsumerAuditor.auditor.config.auditSourceId = 'consumerId'
          XDSConsumerAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSConsumerAuditor.auditor.config.auditRepositoryPort = SYSLOG_PORT
          XDSConsumerAuditor.auditor.config.systemUserId = 'consumerUserId'
          XDSConsumerAuditor.auditor.config.systemAltUserId = 'consumerAltUserId'
 
          XDSRepositoryAuditor.auditor.config = new AuditorModuleConfig()
          XDSRepositoryAuditor.auditor.config.auditSourceId = 'repositoryId'
          XDSRepositoryAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSRepositoryAuditor.auditor.config.auditRepositoryPort = SYSLOG_PORT
          XDSRepositoryAuditor.auditor.config.systemUserId = 'repositoryUserId'
          XDSRepositoryAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
-
-         syslog = new UdpServer(SYSLOG_PORT)
-         syslog.start()
+         
+         auditSender = new MockedSender()
+         AuditorModuleContext.context.sender = auditSender
      }
 
      static void startServer(servlet, appContextName) {
@@ -132,11 +128,6 @@ class StandardTestContainer{
      
      @AfterClass
      static void stopServer() {
-         if (syslog != null) {
-             syslog.cancel()
-             syslog.join()
-         }
-
          if (servletServer != null) {
              servletServer.stop()
          }
@@ -144,7 +135,7 @@ class StandardTestContainer{
 
      @After
      void tearDown() {
-         syslog.reset()
+         auditSender.messages.clear()
      }
           
      /**
@@ -202,7 +193,7 @@ class StandardTestContainer{
      }
      
      def getAudit(actionCode, addr) {
-         syslog.packets.collect { getMessage(it) }.findAll {
+         auditSender.messages.collect { getMessage(it) }.findAll {
              it.EventIdentification.@EventActionCode == actionCode
          }.findAll {
              it.ActiveParticipant.any { obj -> obj.@UserID == addr } ||
@@ -210,8 +201,9 @@ class StandardTestContainer{
          }
      }
      
-     def getMessage(packet) {
-         new XmlSlurper().parseText(packet.substring(packet.indexOf('<?')))         
+     def getMessage(rawMessage) {
+         def xmlText = rawMessage.auditMessage.toString()
+         new XmlSlurper().parseText(xmlText)         
      }
      
      def checkCode(actual, code, scheme) {

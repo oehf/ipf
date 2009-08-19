@@ -44,8 +44,6 @@ class TestIti17 extends StandardTestContainer {
     
     @Test
     void testIti17() {
-        syslog.expectedPacketCount(4)
-        
         def response1 = send(SERVICE1, '?service1', InputStream.class)
         def content1 = IOUtils.toString(response1)
         response1.close()
@@ -56,20 +54,18 @@ class TestIti17 extends StandardTestContainer {
         response2.close()
         assertEquals('service2', content2)
 
-        syslog.assertIsSatisfied()
+        assert auditSender.messages.size() == 4
         
         checkAudit('0', SERVICE2_ADDR)
     }
     
     @Test
     void testIti17FailureAudit() {
-        syslog.expectedPacketCount(2)
-        
         def response = send(SERVICE2, '?falsch', InputStream.class)
         def content = IOUtils.toString(response)
         response.close()
 
-        syslog.assertIsSatisfied()
+        assert auditSender.messages.size() == 2
         
         checkAudit('12', SERVICE2_FALSCH_ADDR)
     }
