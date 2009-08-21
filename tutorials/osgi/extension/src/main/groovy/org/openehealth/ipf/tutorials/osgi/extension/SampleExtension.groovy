@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.tutorials.osgi.extension
 
-import org.apache.camel.model.ProcessorType/**
+import org.apache.camel.model.ProcessorDefinition
+/**
  * @author Martin Krasser
  */
 public class SampleExtension {
 
      static extensions = {
          
-         ProcessorType.metaClass.setFilename = {String filename ->
+         ProcessorDefinition.metaClass.setFilename = {String filename ->
              delegate.setHeader('org.apache.camel.file.name') {filename}
          }
          
