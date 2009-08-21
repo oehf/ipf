@@ -44,6 +44,7 @@ public class MessageRuleBuilder extends VersionBuilder{
 		} else {
 			rule.testClosure = c
 		}
+		this
 	}
 	
 	/**
@@ -54,6 +55,7 @@ public class MessageRuleBuilder extends VersionBuilder{
 	 */
 	RuleBuilder conformsToProfile(String profileID) {
 	     addMessageRule(new ConformanceProfileRule(profileID))
+	     this
 	}
 	 
 	/**

@@ -36,7 +36,8 @@ public class EncodingRuleBuilder extends VersionBuilder{
 	 * Adds an existing HAPI {@link XmlSchemaRule} to the set of rules.
 	 */
 	RuleBuilder isValidXML() {
-	     context.addEncodingRule(version, "XML", new XMLSchemaRule())
+	    context.addEncodingRule(version, "XML", new XMLSchemaRule())
+	    this
 	}
 	 
 	RuleBuilder checkIf(Closure c) {
@@ -46,6 +47,7 @@ public class EncodingRuleBuilder extends VersionBuilder{
 		} else {
 			rule.testClosure = c
 		}
+		this
 	}
 	
 }
