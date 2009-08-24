@@ -37,7 +37,7 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
              
          from('jms:queue:delivery-web')
              .setFilename('output.hl7')
-             .to('file:workspace/output?append=false&autoCreate=false')
+             .to('file:workspace/output')
              .ackFlow().renderer('ackRenderer')
 
      }

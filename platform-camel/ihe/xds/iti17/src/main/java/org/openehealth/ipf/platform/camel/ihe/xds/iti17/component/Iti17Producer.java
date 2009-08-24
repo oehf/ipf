@@ -83,7 +83,7 @@ public class Iti17Producer extends DefaultProducer {
             return true;
         }
 
-        Exchanges.faultMessage(exchange).setBody(get.getStatusCode());
+        Exchanges.resultMessage(exchange).setBody(get.getStatusCode());
         return false;
     }
 

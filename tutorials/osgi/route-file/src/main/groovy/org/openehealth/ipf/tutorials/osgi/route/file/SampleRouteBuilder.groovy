@@ -33,7 +33,7 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
              .to('jms:queue:delivery-file')
              
          from('jms:queue:delivery-file')
-             .to('file:workspace/output?append=false&autoCreate=false')
+             .to('file:workspace/output')
              .ackFlow()
 
      }

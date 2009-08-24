@@ -108,9 +108,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <bean id="serviceBean"
         class="org.openehealth.ipf.platform.camel.lbs.cxf.process.ServiceBean" />
 
-    <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate">
-    </bean>
-
     <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.MemoryStore" />
 
     <bean id="resourceFactory" class="org.openehealth.ipf.commons.lbs.resource.ResourceFactory">

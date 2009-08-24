@@ -33,9 +33,4 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
       <camel:routeBuilder ref="routeBuilder"/>        
   </camel:camelContext>
 
-  <bean id="producerTemplate" 
-      factory-bean="camelContext"
-      factory-method="createProducerTemplate">
-  </bean>
-
 </beans>

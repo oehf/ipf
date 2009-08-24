@@ -29,11 +29,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
-    <bean id="producerTemplate" 
-        factory-bean="camelContext"
-        factory-method="createProducerTemplate">
-    </bean>
-
     <bean id="routeBuilder" depends-on="routeModelExtender" 
         class="org.openehealth.ipf.tutorials.hl7.route.SampleRouteBuilder">
     </bean>

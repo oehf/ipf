@@ -62,8 +62,6 @@ class TestIti17 extends StandardTestContainer {
     @Test
     void testIti17FailureAudit() {
         def response = send(SERVICE2, '?falsch', InputStream.class)
-        def content = IOUtils.toString(response)
-        response.close()
 
         assert auditSender.messages.size() == 2
         

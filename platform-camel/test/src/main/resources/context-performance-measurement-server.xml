@@ -44,9 +44,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:routeBuilder ref="performanceMeasurmentRouteBuilder"/>        
     </camel:camelContext>
 
-    <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate">
-    </bean>
-
     <bean id="coreModelExtension"
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>

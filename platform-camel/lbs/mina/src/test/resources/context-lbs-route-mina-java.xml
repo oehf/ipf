@@ -32,9 +32,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <constructor-arg ref="camelContext" />
     </bean>
 
-    <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate">
-    </bean>
-
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.lbs.mina.builder.LbsMinaRouteBuilder" />
 

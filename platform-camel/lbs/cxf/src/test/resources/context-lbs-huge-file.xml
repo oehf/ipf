@@ -47,10 +47,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 		<camel:jmxAgent id="agent" disabled="true" />
 	</camel:camelContext>
 
-	<bean id="producerTemplate" factory-bean="camelContext"
-		factory-method="createProducerTemplate">
-	</bean>
-
     <bean id="largeBinaryStore" class="org.openehealth.ipf.commons.lbs.store.DiskStore">
         <constructor-arg value="target/store"/>
     </bean>
