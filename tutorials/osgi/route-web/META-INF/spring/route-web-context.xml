@@ -1,20 +1,23 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:camel="http://camel.apache.org/schema/osgi" 
+    xmlns:camel-osgi="http://camel.apache.org/schema/osgi" 
+    xmlns:camel-spring="http://camel.apache.org/schema/spring" 
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://camel.apache.org/schema/osgi 
 http://camel.apache.org/schema/osgi/camel-osgi.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
     <context:annotation-config />
     
-    <camel:camelContext id="camelContext">
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
+    <camel-osgi:camelContext id="camelContext">
+        <camel-spring:routeBuilder ref="routeBuilder"/>
+    </camel-osgi:camelContext>
 
     <bean id="routeBuilder" 
         class="org.openehealth.ipf.tutorials.osgi.route.web.SampleRouteBuilder">

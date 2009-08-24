@@ -23,7 +23,7 @@ public class SampleRouteBuilder extends SpringRouteBuilder {
 
      void configure() {
 
-         from('file:workspace/input?lock=false')
+         from('file:workspace/input')
              .initFlow(this.class.package.name).application('osgi-file')
              .unmarshal().ghl7()
              .validate().ghl7()
