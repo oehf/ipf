@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -78,12 +79,15 @@ public class Iti17Producer extends DefaultProducer {
     }
 
     private boolean handleResponse(Exchange exchange, final GetMethod get) throws IOException {
+        Message out = Exchanges.resultMessage(exchange);
         if (get.getStatusCode() == 200) {                
-            Exchanges.resultMessage(exchange).setBody(createWrappedStream(get));
+            out.setBody(createWrappedStream(get));
             return true;
         }
 
-        Exchanges.resultMessage(exchange).setBody(get.getStatusCode());
+        out.setBody(get.getStatusCode());
+        out.setFault(true);
+        
         return false;
     }
 
