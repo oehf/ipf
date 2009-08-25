@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.flow.repository;
 
+import java.util.List;
+
 import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -23,16 +25,25 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  */
 public class ConfigRepositoryImpl extends HibernateDaoSupport implements ConfigRepository {
 
-    public ApplicationConfig findApplicationConfig(String application) {
+    @SuppressWarnings("unchecked")
+    public List<ApplicationConfig> find() {
+        return getHibernateTemplate().loadAll(ApplicationConfig.class);
+    }
+
+    public ApplicationConfig find(String application) {
         return (ApplicationConfig)getHibernateTemplate().get(
                 ApplicationConfig.class, application);
     }
 
-    public void persistApplicationConfig(ApplicationConfig applicationConfig) {
+    public void persist(ApplicationConfig applicationConfig) {
         getHibernateTemplate().persist(applicationConfig);
     }
 
-    public void removeApplicationConfig(ApplicationConfig applicationConfig) {
+    public void merge(ApplicationConfig applicationConfig) {
+        getHibernateTemplate().merge(applicationConfig);
+    }
+
+    public void remove(ApplicationConfig applicationConfig) {
         getHibernateTemplate().delete(applicationConfig);
     }
 

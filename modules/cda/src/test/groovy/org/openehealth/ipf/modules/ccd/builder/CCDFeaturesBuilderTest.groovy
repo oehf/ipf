@@ -18,26 +18,25 @@ package org.openehealth.ipf.modules.ccd.builder
 import org.openhealthtools.ihe.common.cdar2.*
 import org.openhealthtools.ihe.common.cdar2.impl.*
 import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
-
+import org.junit.Test
+import org.junit.Assert
 /**
  * Test the schema definitions pass to build a CCD construct
  * @author Stefan Ivanov
  */
 public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 	
-	/**
-	 *
-	 */
+	@Test
 	public void testCCDHeader(){
 		def document = builder.build{
 			clinicalDocument {
 				templateId(root:'2.16.840.1.113883.10.20.1')
 				id(root:'db734647-fc99-424c-a864-7e3cda82e703')
 				code(code:'34133-9', 
-				        codeSystem:'2.16.840.1.113883.6.1', 
+						codeSystem:'2.16.840.1.113883.6.1', 
 						codeSystemName:'LOINC',
 						displayName:'Summarization of episode note'
-				)
+						)
 				title('Good Health Clinic Continuity of Care Document')
 				effectiveTime('20000407130000+0500')
 				confidentialityCode(code:'N')
@@ -98,12 +97,13 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 			}//ccd
 		}
 		
-		assertNotNull document
+		Assert.assertNotNull document
 	}
 	
 	/**
 	 * 
 	 */
+	@Test
 	public void testCCDPurposeSection(){
 		def component = builder.build{
 			component {
@@ -136,12 +136,13 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 			}//component
 		}
 		
-		assertNotNull component
+		Assert.assertNotNull component
 	}
-
+	
 	/**
 	 * 
 	 */
+	@Test
 	public void testCCDPayersSection(){
 		def component = builder.build{
 			component {
@@ -190,9 +191,7 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 											performer(typeCode:'PRF'){
 												assignedEntity{
 													id(root:'329fcdf0-7ab3-11db-9fe1-0800200c9a66')
-													representedOrganization{
-														name('Good Health Insurance')
-													}//representedOrganization
+													representedOrganization{ name('Good Health Insurance') }//representedOrganization
 												}//assignedEntity
 											}//performer
 											participant(typeCode:'COV'){
@@ -223,119 +222,108 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 				}//structuredBody
 			}//component
 		}
-		assertTrue component instanceof POCDMT000040Component2
+		Assert.assertTrue component instanceof POCDMT000040Component2
 		def section = component.structuredBody.component.get(0).section
-		assertNotNull section
+		Assert.assertNotNull section
 	}
-
+	
 	/*
-     * @deprecated move to separate test class
-     */
-    public void testCCDAdvanceDirectivesSection(){
-        def component = builder.build{
-            component {
-                structuredBody {
-                    /* CCD Advance Directives Section */
-                    component{
-                        section{
-                            /*  Advance directives section template */
-                            templateId(root:'2.16.840.1.113883.10.20.1.1')
-                            code(code:'42348-3', codeSystem:'2.16.840.1.113883.6.1')
-                            title('Advance Directives')
-                            text{
-                                table(border:'1', width:'100%'){
-                                    thead{
-                                    tr{
-                                        th('Directive')
-                                        th('Description')
-                                        th('Verification')
-                                        th('Supporting Document(s)')
-                                    }//tr
-                                    }//thead
-                                    tbody{
-                                        tr{
-                                            td('Resuscitation status')
-                                            td{
-                                                content(ID:'AD1'){
-                                                    'Do not resuscitate' 
-                                                }
-                                            }
-                                            td('Dr. Robert Dolin, Nov 07, 1999')
-                                            td{
-                                                linkHtml(href:'AdvanceDirective.b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3.pdf'){
-                                                    'Advance directive'
-                                                }
-                                            }//td
-                                        }//tr
-                                    }//tbody
-                                }//table
-                            }//text
-                            entry(typeCode:'DRIV'){
-                                observation(classCode:'OBS', moodCode:'EVN'){
-                                    /*  Advance directive observation template */
-                                    templateId(root:'2.16.840.1.113883.10.20.1.17')
-                                    id(root:'9b54c3c9-1673-49c7-aef9-b037ed72ed27')
-                                    code(code:'304251008', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resuscitation')
-                                    statusCode(code:'completed')
-                                    value(builder.build {
-                                        ce(code:'304253006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Do not resuscitate')
-                                        {
-                                            originalText{
-                                                reference(value:'#AD1')
-                                            }//originalText
-                                        }
-                                    })//value
-                                    participant(typeCode:'VRF'){
-                                        /* Verification of an advance directive observation template */
-                                        templateId(root:'2.16.840.1.113883.10.20.1.58')
-                                        time(value:'19991107')
-                                        participantRole{
-                                            id(root:'20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
-                                        }//participantRole
-                                    }//participant
-                                    participant(typeCode:'VRF'){
-                                        /* Verification of an advance directive observation template */
-                                        templateId(root:'2.16.840.1.113883.10.20.1.58')
-                                        time(value:'19991107')
-                                        participantRole{
-                                            id(root:'20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
-                                        }//participantRole
-                                    }//participant 2
-                                    entryRelationship(typeCode:'REFR'){
-                                        observation(classCode:'OBS', moodCode:'EVN'){
-                                            /* Advance directive status observation template */
-                                            templateId(root:'2.16.840.1.113883.10.20.1.37')
-                                            code(code:'33999-4', codeSystem:'2.16.840.1.113883.6.1', displayName:'Status')
-                                            statusCode(code:'completed')
-                                            value(builder.build {
-                                                ce(code:'15240007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Current and verified')
-                                            })
-                                        }//observation
-                                    }//entryRelationship
-                                    reference(typeCode:'REFR'){
-                                        externalDocument{
-                                            /* Advance directive reference template */
-                                            templateId(root:'2.16.840.1.113883.10.20.1.36')
-                                            id(root:'b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3')
-                                            code(code:'371538006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Advance directive')
-                                            text(mediaType:'application/pdf'){
-                                                reference(value:'AdvanceDirective.b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3.pdf')
-                                            }//text
-                                        }//externalDocument
-                                    }//reference
-                                }//observation
-                            }//entry
-                        }//section
-                    }//component
-                }//structuredBody
-            }//component
-        }
-        assertNotNull component
+	 * @deprecated move to separate test class
+	 */
+	@Test
+	public void testCCDAdvanceDirectivesSection(){
+		def component = builder.build{
+			component {
+				structuredBody {
+					/* CCD Advance Directives Section */
+					component{
+						section{
+							/*  Advance directives section template */
+							templateId(root:'2.16.840.1.113883.10.20.1.1')
+							code(code:'42348-3', codeSystem:'2.16.840.1.113883.6.1')
+							title('Advance Directives')
+							text{
+								table(border:'1', width:'100%'){
+									thead{
+										tr{
+											th('Directive')
+											th('Description')
+											th('Verification')
+											th('Supporting Document(s)')
+										}//tr
+									}//thead
+									tbody{
+										tr{
+											td('Resuscitation status')
+											td{
+												content(ID:'AD1'){ 'Do not resuscitate'  }
+											}
+											td('Dr. Robert Dolin, Nov 07, 1999')
+											td{
+												linkHtml(href:'AdvanceDirective.b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3.pdf'){ 'Advance directive' }
+											}//td
+										}//tr
+									}//tbody
+								}//table
+							}//text
+							entry(typeCode:'DRIV'){
+								observation(classCode:'OBS', moodCode:'EVN'){
+									/*  Advance directive observation template */
+									templateId(root:'2.16.840.1.113883.10.20.1.17')
+									id(root:'9b54c3c9-1673-49c7-aef9-b037ed72ed27')
+									code(code:'304251008', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resuscitation')
+									statusCode(code:'completed')
+									value(builder.build {
+										ce(code:'304253006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Do not resuscitate') {
+											originalText{ reference(value:'#AD1') }//originalText
+										}
+									})//value
+									participant(typeCode:'VRF'){
+										/* Verification of an advance directive observation template */
+										templateId(root:'2.16.840.1.113883.10.20.1.58')
+										time(value:'19991107')
+										participantRole{ id(root:'20cf14fb-b65c-4c8c-a54d-b0cca834c18c') }//participantRole
+									}//participant
+									participant(typeCode:'VRF'){
+										/* Verification of an advance directive observation template */
+										templateId(root:'2.16.840.1.113883.10.20.1.58')
+										time(value:'19991107')
+										participantRole{ id(root:'20cf14fb-b65c-4c8c-a54d-b0cca834c18c') }//participantRole
+									}//participant 2
+									entryRelationship(typeCode:'REFR'){
+										observation(classCode:'OBS', moodCode:'EVN'){
+											/* Advance directive status observation template */
+											templateId(root:'2.16.840.1.113883.10.20.1.37')
+											code(code:'33999-4', codeSystem:'2.16.840.1.113883.6.1', displayName:'Status')
+											statusCode(code:'completed')
+											value(builder.build {
+												ce(code:'15240007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Current and verified')
+											})
+										}//observation
+									}//entryRelationship
+									reference(typeCode:'REFR'){
+										externalDocument{
+											/* Advance directive reference template */
+											templateId(root:'2.16.840.1.113883.10.20.1.36')
+											id(root:'b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3')
+											code(code:'371538006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Advance directive')
+											text(mediaType:'application/pdf'){ reference(value:'AdvanceDirective.b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3.pdf') }//text
+										}//externalDocument
+									}//reference
+								}//observation
+							}//entry
+						}//section
+					}//component
+				}//structuredBody
+			}//component
+		}
+		Assert.assertNotNull component
 	}
 	
 	/**
 	 * 
 	 */
+	@Test
 	public void testCCDSupport(){
 		def document = builder.build{
 			clinicalDocument {
@@ -372,9 +360,7 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 								}
 							}//guardian
 						}
-						providerOrganization {
-							id(root:'2.16.840.1.113883.19.5')
-						}
+						providerOrganization { id(root:'2.16.840.1.113883.19.5') }
 					}//patient role
 				}//record target
 				
@@ -428,12 +414,13 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 				}//documentationof
 			}//ccd
 		}
-		assert document != null
+		Assert.assertNotNull document
 	}
 	
 	/**
 	 * Section 3.5 Problems
 	 */
+	@Test
 	public void testCCDProblems(){
 		def component = builder.build{
 			component {
@@ -491,14 +478,12 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 											id(root:'d11275e7-67ae-11db-bd13-0800200c9a66')
 											code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')                 
 											statusCode(code:'completed') 
-											effectiveTime{
-												low(value:'1950')
-											}//effectiveTime
+											effectiveTime{ low(value:'1950') }//effectiveTime
 											value(
-											    builder.build {
-													cd(code:'195967001', codeSystem:'2.16.840.1.113883.6.96', displayName:'Asthma')
-											    }
-											)//value
+													builder.build {
+														cd(code:'195967001', codeSystem:'2.16.840.1.113883.6.96', displayName:'Asthma')
+													}
+													)//value
 											entryRelationship(typeCode:'REFR'){
 												observation(classCode:'OBS',  moodCode:'EVN'){
 													/* Problem status observation template */
@@ -506,10 +491,10 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 													code(code:'33999-4', codeSystem:'2.16.840.1.113883.6.1', displayName:'Status')
 													statusCode(code:'completed')
 													value(
-														builder.build {
-															ce(code:'55561003', codeSystem:'2.16.840.1.113883.6.96', displayName:'Active')
-														}
-													)//value
+															builder.build {
+																ce(code:'55561003', codeSystem:'2.16.840.1.113883.6.96', displayName:'Active')
+															}
+															)//value
 												}//observation
 											}//entryRelationship
 										}//observation
@@ -529,14 +514,12 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 											id(root:'ab1791b0-5c71-11db-b0de-0800200c9a66')
 											code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
 											statusCode(code:'completed')
-											effectiveTime{
-												low(value:'199701')
-											}//effectiveTime
+											effectiveTime{ low(value:'199701') }//effectiveTime
 											value(
-												builder.build { 
-													cd(code:'233604007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Pneumonia') 
-												}
-											)//value
+													builder.build { 
+														cd(code:'233604007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Pneumonia') 
+													}
+													)//value
 											entryRelationship(typeCode:'REFR'){
 												observation(classCode:'OBS',  moodCode:'EVN'){
 													/* Problem status observation template */
@@ -544,10 +527,10 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 													code(code:'33999-4', codeSystem:'2.16.840.1.113883.6.1', displayName:'Status')
 													statusCode(code:'completed')
 													value(
-														builder.build{
-															ce(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
-														}
-													)//value
+															builder.build{
+																ce(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
+															}
+															)//value
 												}//observation
 											}//entryRelationship
 										}//observation
@@ -567,14 +550,12 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 											id(root:'9d3d416d-45ab-4da1-912f-4583e0632000')
 											code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
 											statusCode(code:'completed') 
-											effectiveTime{
-												low(value:'199903')
-											}//effectiveTime
+											effectiveTime{ low(value:'199903') }//effectiveTime
 											value(
-												builder.build {
-													cd(code:'233604007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Pneumonia')    
-												}
-											)//value
+													builder.build {
+														cd(code:'233604007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Pneumonia')    
+													}
+													)//value
 											entryRelationship(typeCode:'REFR'){
 												observation(classCode:'OBS',  moodCode:'EVN'){
 													/* Problem status observation template */
@@ -582,10 +563,10 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 													code(code:'33999-4', codeSystem:'2.16.840.1.113883.6.1', displayName:'Status')
 													statusCode(code:'completed')
 													value(
-														builder.build {
-															ce(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
-														}
-													)//value
+															builder.build {
+																ce(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
+															}
+															)//value
 												}//observation
 											}//entryRelationship
 										}//observation
@@ -597,15 +578,15 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 											code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
 											statusCode(code:'completed')
 											value(
-												builder.build{
-												    cd(code:'404684003', codeSystem:'2.16.840.1.113883.6.96', displayName:'Clinical finding'){
-			                                              qualifier{
-			                                                  name(code:'246456000', displayName:'Episodicity')
-			                                                  value(code:'288527008', displayName:'New episode')
-			                                              }//qualifier
-												    }//cd
-												}
-											)//value
+													builder.build{
+														cd(code:'404684003', codeSystem:'2.16.840.1.113883.6.96', displayName:'Clinical finding'){
+															qualifier{
+																name(code:'246456000', displayName:'Episodicity')
+																value(code:'288527008', displayName:'New episode')
+															}//qualifier
+														}//cd
+													}
+													)//value
 											entryRelationship(typeCode:'SAS'){
 												act(classCode:'ACT', moodCode:'EVN'){
 													id(root:'ec8a6ff8-ed4b-4f7e-82c3-e98e58b45de7')
@@ -628,14 +609,12 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 											templateId(root:'2.16.840.1.113883.10.20.1.28') 
 											code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
 											statusCode(code:'completed') 
-											effectiveTime{
-												low(value:'199701')
-											}//effectiveTime
+											effectiveTime{ low(value:'199701') }//effectiveTime
 											value(
-												builder.build{
-													cd(code:'22298006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Myocardial infarction')
-												}
-											)//value
+													builder.build{
+														cd(code:'22298006', codeSystem:'2.16.840.1.113883.6.96', displayName:'Myocardial infarction')
+													}
+													)//value
 											entryRelationship(typeCode:'REFR'){
 												observation(classCode:'OBS', moodCode:'EVN'){
 													/* Problem status observation template */
@@ -643,10 +622,10 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 													code(code:'33999-4', codeSystem:'2.16.840.1.113883.6.1', displayName:'Status')
 													statusCode(code:'completed')
 													value(
-														builder.build{
-															ce(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
-														}
-													)//value
+															builder.build{
+																ce(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
+															}
+															)//value
 												}//observation
 											}//entryRelationship
 										}//observation
@@ -658,9 +637,9 @@ public class CCDFeaturesBuilderTest extends AbstractCDAR2BuilderTest{
 				}//structured body
 			}//component
 		}
-		assertTrue component instanceof POCDMT000040Component2
+		Assert.assertTrue component instanceof POCDMT000040Component2
 		def section = component.structuredBody.component.get(0).section
-		assertNotNull section
+		Assert.assertNotNull section
 	}
 	
 }

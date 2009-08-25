@@ -6,12 +6,12 @@
 	<title>Medication activity - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]'>
     <assert test="self::cda:substanceAdministration">A medication activity (templateId 2.16.840.1.113883.10.20.1.24) SHALL be represented with SubstanceAdministration</assert>
-    <assert test="@moodCode='EVN' or @moodeCode='INT'">The value for “SubstanceAdministration / moodCode” in a medication activity SHALL be “EVN” or “INT”  2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="@moodCode='EVN' or @moodCode='INT'">The value for "SubstanceAdministration / moodCode" in a medication activity SHALL be "EVN" or "INT"  2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
     <assert test="cda:id">A medication activity SHALL contain at least one SubstanceAdministration / id.</assert>
 	</rule>
 	
-	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]//*[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]'>
-    <assert test="parent::*[cda:entryRelationship/@typeCode='CAUS']">The value for “entryRelationship / typeCode” in a relationship between a medication activity and reaction observation SHALL be “CAUS” “Is etiology for” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.24"]/cda:entryRelationship[cda:observation/cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]'>
+    <assert test="@typeCode='CAUS'">The value for "entryRelationship / typeCode" in a relationship between a medication activity and reaction observation SHALL be "CAUS" "Is etiology for" 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
     </rule>
 	
 </pattern>

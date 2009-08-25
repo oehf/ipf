@@ -19,7 +19,7 @@
         <module>ref</module>
         <module>osgi</module>
         <module>lbs</module>
-        <!--<module>xds</module>-->
+        <module>xds</module>
     </modules>
 
     <dependencies>

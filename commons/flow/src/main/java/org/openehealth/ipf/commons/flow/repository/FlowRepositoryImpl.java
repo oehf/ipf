@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.flow.repository;
 
+import static org.hibernate.criterion.Restrictions.*;
+
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -31,6 +34,7 @@ import org.hibernate.criterion.Restrictions;
 import org.openehealth.ipf.commons.flow.FlowException;
 import org.openehealth.ipf.commons.flow.domain.Flow;
 import org.openehealth.ipf.commons.flow.domain.FlowStatus;
+import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria.PurgeMode;
 import org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback;
 import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCallback;
 import org.openehealth.ipf.commons.flow.repository.search.FlowSearchCriteria;
@@ -82,6 +86,10 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
         getHibernateTemplate().delete(flow);
     }
 
+    void removeAll(Collection<Flow> flows) {
+        getHibernateTemplate().deleteAll(flows);
+    }
+
     public Flow find(Long id) {
         Flow flow = (Flow) getHibernateTemplate().get(Flow.class, id);
         if (flow == null) {
@@ -96,6 +104,14 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
         } catch (HibernateObjectRetrievalFailureException e) {
             throw new FlowException("no flow with id " + id);
         }
+    }
+
+    @Override
+    public int purgeFlows(FlowPurgeCriteria purgeCriteria) {
+        List<Flow> purgeCandidates = findPurgeCandidates(purgeCriteria);
+        getHibernateTemplate().deleteAll(findPurgeCandidates(purgeCriteria));
+        getHibernateTemplate().flush();
+        return purgeCandidates.size();
     }
 
     @SuppressWarnings("unchecked")
@@ -152,6 +168,15 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
         });
     }
 
+    @SuppressWarnings("unchecked")
+    private List<Flow> findPurgeCandidates(final FlowPurgeCriteria purgeCriteria) {
+        return getHibernateTemplate().executeFind(new HibernateCallback() {
+            public Object doInHibernate(Session session) throws HibernateException {
+                return execute(purgeCriteria, createPurgeCriteria(purgeCriteria), session);
+            }
+        });
+    }
+
     private Object execute(FlowFinderCriteria flowFinderCriteria,
             DetachedCriteria flowStatusCriteria, Session session,
             boolean idProjection) {
@@ -178,16 +203,27 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
         }
     }
 
+    private Object execute(FlowPurgeCriteria flowPurgeCriteria,
+            DetachedCriteria flowStatusCriteria, Session session) {
+        Criteria criteria = flowStatusCriteria.getExecutableCriteria(session);
+
+        int purgeCount = flowPurgeCriteria.getMaxPurgeCount();
+        if (purgeCount != FlowPurgeCriteria.DEFAULT_MAX_PURGE_COUNT) {
+            criteria.setMaxResults(purgeCount);
+        }
+        return criteria.list();
+    }
+    
     private static DetachedCriteria createFlowsCriteria(FlowFinderCriteria finderCriteria) {
         DetachedCriteria criteria = DetachedCriteria.forClass(Flow.class)
                 .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .setFetchMode("parts", FetchMode.JOIN) // eager
-                .add(Restrictions.ge("creationTime", finderCriteria.getFrom()))
+                .add(ge("creationTime", finderCriteria.getFrom()))
                 .addOrder(Order.desc("identifier"));
 
         if (finderCriteria.getApplication() != null) {
             // constrain query to a certain application name
-            criteria.add(Restrictions.eq("application", finderCriteria
+            criteria.add(eq("application", finderCriteria
                     .getApplication()));
         }
         if (finderCriteria.getTo() != null) {
@@ -201,12 +237,37 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
 
     private static DetachedCriteria createErrorFlowsCriteria(FlowFinderCriteria finderCriteria) {
         return createFlowsCriteria(finderCriteria).createAlias("parts", "p").add(
-                Restrictions.eq("p.status", FlowStatus.ERROR));
+                eq("p.status", FlowStatus.ERROR));
     }
 
     private static DetachedCriteria createUnackFlowsCriteria(FlowFinderCriteria finderCriteria) {
         return createFlowsCriteria(finderCriteria).add(
-                Restrictions.isEmpty("parts"));
+                isEmpty("parts"));
+    }
+
+    private static DetachedCriteria createPurgeCriteria(FlowPurgeCriteria purgeCriteria) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Flow.class)
+            .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+            // purge all flows with a creation time older than time limit
+            .add(lt("creationTime", purgeCriteria.getTimeLimit()))
+            // purge oldest flows first
+            .addOrder(Order.asc("creationTime"));
+
+        if (purgeCriteria.getApplication() != null) {
+            criteria.add(eq("application", purgeCriteria.getApplication()));
+        }
+        
+        if (purgeCriteria.getPurgeMode() == PurgeMode.CLEAN) {
+            // omit flows with error status
+            criteria.add(
+                or(
+                    eq("derivedStatus", FlowStatus.CLEAN),
+                    isNull("derivedStatus") // old flows (both CLEAN and ERROR)
+                ) 
+            );
+            
+        }
+        return criteria;
     }
 
 }

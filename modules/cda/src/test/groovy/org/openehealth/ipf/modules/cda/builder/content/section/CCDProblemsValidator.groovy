@@ -28,7 +28,10 @@ import org.openehealth.ipf.modules.cda.AbstractValidator
  * @author Christian Ohr
  */
 public class CCDProblemsValidator extends AbstractValidator {
-	
+     CCDProblemsValidator() {
+         super('/schematron/ccd/voc.xml')
+     }
+     
 	void validate(Object section, Object profile){
 		assertInstanceOf('CONF-140', POCDMT000040Section.class, section)
 		assertContains('CONF-140', '2.16.840.1.113883.10.20.1.11', section.templateId.root)
@@ -44,14 +47,14 @@ public class CCDProblemsValidator extends AbstractValidator {
         section.entry.each{ entry ->
             assertNotNull('CONF-145', entry.act)
             assertInstanceOf('CONF-145', POCDMT000040Act.class, entry.act)
-            doValidateProblemsAct(entry.act)
+            doValidateProblemAct(entry.act)
         }            
 	}
 	
 	/**
 	 * Implements set of CCD Problems : problems act
 	 */
-	void doValidateProblemsAct(POCDMT000040Act act){
+	void doValidateProblemAct(POCDMT000040Act act){
 		assertContains('CONF-145', '2.16.840.1.113883.10.20.1.27', act.templateId.root)
 		assertEquals('CONF-146', 'ACT', act.classCode.name)
 		assertEquals('CONF-147', 'EVN', act.moodCode.name)
@@ -122,11 +125,7 @@ public class CCDProblemsValidator extends AbstractValidator {
 	void doValidateProblemStatusObservation(POCDMT000040Observation obs){
 		assertContains('CONF-163', '2.16.840.1.113883.10.20.1.50', obs.templateId.root)
 		new CCDStatusObservationValidator().validate(obs, null)
-		/* CONF-164: The value for “Observation / value” in a problem status observation
-		 *           SHALL be selected from ValueSet 2.16.840.1.113883.1.11.20.13 
-		 *           ProblemStatusCode STATIC 20061017. 
-		 */
-		 //TODO
+		assertCode('CONF-164', '2.16.840.1.113883.1.11.20.13', obs.value[0])
 	}
 	
 	   /**
@@ -143,6 +142,7 @@ public class CCDProblemsValidator extends AbstractValidator {
         assertEquals('CONF-515', 'completed', obs.statusCode.code)
         assertMinSize('CONF-516', 1, obs.value)
         assertMaxSize('CONF-516', 1, obs.value)
+		assertCode('CONF-167', '2.16.840.1.113883.1.11.20.12', obs.value[0])
     }
 		
     /**

@@ -5,7 +5,7 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.42-errors' see='#p-2.16.840.1.113883.10.20.1.42-errors'>
 	<title>Family history cause of death observation - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.42"]'>
-	<assert test="cda:entryRelationship[@typeCode='CAUS']">A family history cause of death observation SHALL contain one or more  entryRelationship / typeCode. The value for at least one “entryRelationship / typeCode” in a family history cause of death observation SHALL be "CAUS" "is etiology for" 2.16.840.1.113883.5.1002 ActRelationshipType STATIC, with a target family history observation of death.
+	<assert test="cda:entryRelationship[@typeCode='CAUS']">A family history cause of death observation SHALL contain one or more  entryRelationship / typeCode. The value for at least one "entryRelationship / typeCode" in a family history cause of death observation SHALL be "CAUS" "is etiology for" 2.16.840.1.113883.5.1002 ActRelationshipType STATIC, with a target family history observation of death.
 </assert>
 	<report test='.'></report>
 	</rule>

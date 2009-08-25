@@ -19,6 +19,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptTypes
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentOriginalValue
 
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.DataTypeException
@@ -66,5 +67,14 @@ class CompositeAdapter extends TypeAdapter {
     def getValue() {
         componentValue(this)
     }
+    
+    def getOriginalValue() {
+        componentOriginalValue(this)
+    }
+    
+    boolean isNullValue() {
+        componentOriginalValue(this) == '""'
+    }
+
 
 }

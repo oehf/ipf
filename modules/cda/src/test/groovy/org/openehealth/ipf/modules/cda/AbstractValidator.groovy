@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.cda
 import org.openehealth.ipf.commons.core.modules.api.Validator
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Act
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-
+import groovy.util.slurpersupport.GPathResultimport groovy.util.XmlSlurper
 
 /**
  * Abstract validator class from which the CDA validators should inherit from.
@@ -29,6 +29,15 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException
  */
 public abstract class AbstractValidator implements Validator {
 	
+    GPathResult vocabulary
+    
+    AbstractValidator() {        
+    }
+    
+    AbstractValidator(String vocabularyURL) {
+        this.vocabulary = new XmlSlurper().parse(getClass().getResourceAsStream(vocabularyURL))
+    }
+    
     static void fail(constraint, message) {
         throw new ValidationException("$constraint violated. $message")
     }
@@ -141,6 +150,19 @@ public abstract class AbstractValidator implements Validator {
 		if (object.class.isAssignableFrom(condition)) {
 			throw new ValidationException("$constraint violated. Object must be of type $condition, but was ${object.class}")            
 		}
+	}
+	
+	void assertCode(constraint, root, code) {
+	    def codeSystem = vocabulary.system.find { 
+	        it.@root == root
+	    }
+	    def found = codeSystem?.code.findAll {
+	        it.@value == code.code && 
+	        it.@codeSystem == code.codeSystem
+	    }.size()
+	    if (found == 0) {
+	        throw new ValidationException("$constraint violated. Code ${code.code} is not in ValueSet ${codeSystem.@root}")
+	    }
 	}
 	
 	

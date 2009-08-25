@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.commons.flow.jmx;
 
-import java.text.DateFormat;
+import static org.openehealth.ipf.commons.flow.jmx.MBeanUtils.formatDate;
+import static org.openehealth.ipf.commons.flow.jmx.MBeanUtils.parseDate;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -309,14 +311,6 @@ public class FlowManagerMBean {
             return null;
         }
         return searchExpression.trim();
-    }
-
-    private static Date parseDate(String s) throws ParseException {
-        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).parse(s);
-    }
-    
-    private static String formatDate(Date d) {
-        return DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM).format(d);
     }
 
 }

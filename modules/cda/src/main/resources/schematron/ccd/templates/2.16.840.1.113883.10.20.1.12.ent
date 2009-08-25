@@ -22,7 +22,7 @@
 	<title>Procedures section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.12"]'>
 	<assert test=".//cda:templateId[@root='2.16.840.1.113883.10.20.1.29']">The procedure section SHOULD contain clinical statements, which SHOULD include one or more procedure activities (templateId 2.16.840.1.113883.10.20.1.29).</assert>
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'procedures')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “procedures”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'procedures')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "procedures".</assert>
 	</rule>
 </pattern>
 

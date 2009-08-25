@@ -15,75 +15,27 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
+import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader
+import org.openehealth.ipf.modules.cda.builder.content.entry.* 
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
-import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
-
-import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
-
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest;
 /**
  * @author Stefan Ivanov
  */
-public class CCDAlertsBuilderTest extends AbstractContentBuilderTest {
+public class CCDAlertsBuilderTest extends AbstractCDAR2BuilderTest {
 	
-	@BeforeClass
-	static void initialize() throws Exception {
-	    builder().define(getClass().getResource('/builders/content/section/CCDStatusObservation.groovy'))
-	    builder().define(getClass().getResource('/builders/content/section/CCDReactionObservation.groovy'))
-	    builder().define(getClass().getResource('/builders/content/section/CCDProblemAct.groovy'))
-		builder().define(getClass().getResource('/builders/content/section/CCDAlertsBuilder.groovy'))
-		def extensionAct = new CCDProblemActExtension(builder())
-        extensionAct.extensions.call()
-		def extension = new CCDAlertsExtension(builder())
-		extension.extensions.call()
+	@Before
+	void initialize() throws Exception {
+	    new CCDDefinitionLoader(builder).loadAlerts(loaded)
+        new CCDAlertsExtension(builder).register(registered)
 	}
 	
 	@Test
 	public void testCCDAlerts() {
-		POCDMT000040Section alerts = builder.build {
-		    ccd_alerts{
-                text('Patient Alerts')
-                problemAct{
-                    id(root:'d11275e9-67ae-11db-bd13-0800200c9a66')
-                    alertObservation{
-                        id(root:'9d3d416d-45ab-4da1-912f-4583e0632000')
-                        code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
-                        effectiveTime('20000328')
-                        alertStatus{
-                            value(code:'55561003', 
-                                    codeSystem:'2.16.840.1.113883.6.96', 
-                                    displayName:'Active')
-                        }
-                        participantAgent{
-                            playingEntity{
-                                code(code:'70618', 
-                                        codeSystem:'2.16.840.1.113883.6.88',  
-                                        displayName:'Penicillin')
-                            }
-                        }//participant agent
-                        reactionObservation{
-                            code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
-                            value(
-                                builder.build{
-                                    cd(code:'247472004', 
-                                            codeSystem:'2.16.840.1.113883.6.96', 
-                                            displayName:'Hives')
-                                }
-                            )
-                            severityObservation{
-                                value(
-                                        builder.build{
-                                            cd(code:'247472004', 
-                                                    codeSystem:'2.16.840.1.113883.6.96', 
-                                                    displayName:'Hives')
-                                        }
-                                    )
-                            }
-                        }//reaction observation
-                    }//alert observation
-                }//problem act
-            }//alerts section
-		}
+		POCDMT000040Section alerts = builder.build(
+		        getClass().getResource('/builders/content/section/CCDAlertsExample.groovy'))
 		new CCDAlertsValidator().validate(alerts, null)
 	}
 	

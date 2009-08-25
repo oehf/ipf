@@ -40,7 +40,7 @@ public class CDAR2ParserTest {
     @Test
     public void testParseSampleDocument() throws IOException {
         InputStream is = getClass().getResourceAsStream(
-                "/SampleCDADocument.xml");
+                "/builders/content/document/SampleCDADocument.xml");
         POCDMT000040ClinicalDocument clinicalDocument = parser.parse(is);
         Assert.assertNotNull(clinicalDocument);
     }

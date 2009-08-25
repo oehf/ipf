@@ -16,7 +16,9 @@
 package builders
 
 import groovytools.builder.*
-import org.openehealth.ipf.modules.cda.support.DateTimeUtilsimport org.openehealth.ipf.modules.cda.builder.support.MetaBuilderUtils
+import org.openehealth.ipf.modules.cda.support.DateTimeUtils
+import org.openehealth.ipf.modules.cda.builder.support.MetaBuilderUtils
+
 adxp(schema:'_any', factory:'ADXP') {
 	properties { 
 		partType()                      
@@ -206,7 +208,7 @@ ivxbts(schema:'ts', factory:'IVXBTS') {
 }
 ivlts(schema:'_any', factory:'IVLTS') {
 	properties {
-        value(schema:'ts')
+      value(schema:'ts')
 		center(schema:'ts')
 		low(schema:'ivxbts')
 		width(schema:'pq')
@@ -266,12 +268,20 @@ on(schema:'_any', factory:'ON') {
 		}
 	}
 }
+pivlts(schema:'sxcmts', factory:'PIVLTS') {
+   properties {
+      phase(schema:'ivlts')
+      period(schema:'pq')
+      alignment()  // TODO: correct factory/schema
+      institutionSpecified()
+   }
+}
 pn(schema:'en', factory:'PN') {
 	// TODO: only person ENXP qualifiers allowed
 }
-pq(schema:'_any', factory:'PQ', check: { MetaBuilderUtils.checkNullFlavor(it, 'value')}) {
+pq(schema:'_any', factory:'PQ') {
 	properties {
-		unit(def:1)
+		unit()
 		value()
 	}
 	collections {
@@ -330,9 +340,7 @@ tel(schema:'url', factory:'TEL', check: { MetaBuilderUtils.checkNullFlavor(it, '
 thumbnail(schema:'ed', factory:'THUMBNAIL') {    
 }
 
-ts(schema:'_any', factory:'TS1', check: { 
-    MetaBuilderUtils.checkNullFlavor(it, 'value')
-}) {
+ts(schema:'_any', factory:'TS1') {
 	properties {
 		value(check: { return DateTimeUtils.isValidDateTime(it) })
 	}

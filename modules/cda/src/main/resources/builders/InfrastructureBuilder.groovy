@@ -20,7 +20,7 @@ import groovytools.builder.*
 infrastructureRoot() {
 	properties { 
 	    nullFlavor()
-	    typeId(schema:'ii', factory:'POCDMT000040_INFRASTRUCTURE_ROOT_TYPE_ID') 
+	    typeId(schema:'typeId') 
 	}
 	collections {
 	    templateIds(collection:'templateId') {
@@ -31,3 +31,5 @@ infrastructureRoot() {
 	    }
 	}
 }
+
+typeId(schema:'ii', factory:'POCDMT000040_INFRASTRUCTURE_ROOT_TYPE_ID')

@@ -17,51 +17,55 @@ package org.openehealth.ipf.modules.cda.builder
 
 import org.openhealthtools.ihe.common.cdar2.*
 import org.openhealthtools.ihe.common.cdar2.impl.*
+import org.junit.Test
+import org.junit.Assert
+
 
 /**
  * @author Christian Ohr
  */
 public class CDAR2FactoryTest extends GroovyTestCase {
-
-  /* (non-Javadoc)
-  * @see org.openehealth.ipf.modules.cda.factory.oht.CDAR2#factoryFor(java.lang.String)
-  */
-
-  void testFactoryForClass() {
-    /* Test for correct init */
-    CDAR2Factory factory = CDAR2Factory.factoryFor('CD')
-    def code = factory.newInstance(null, 'code', null, null)
-    assert code instanceof CDImpl
-
-    /* Test for reusing the preinitialized factory */
-    CDAR2Factory factory2 = CDAR2Factory.factoryFor('CD')
-    assert factory == factory2
-  }
-
-  void testFactoryForAttribute() {
-    CDAR2Factory factory = CDAR2Factory.factoryFor('ED')
-    new CDAR2ModelExtension().extensions.call()
-    def iEd = factory.newInstance(null, 'text', 'replace with encoded value', [mediaType: 'application/pdf', representation: 'B64'])
-    assert iEd.getText() == 'replace with encoded value';
-    // assert iEd.getRepresentation().toString() == 'B64'
-  }
-
-  /**
-   * Attributes cann't be applied using the newInstance method!
-   */
-  void testNewInstanceWithAttributes() {
-
-    CDAR2Factory factory = CDAR2Factory.factoryFor('CD')
-    def code2 = factory.newInstance(null, 'code', null, [code: "suspended"])
-    assert code2 instanceof CDImpl
-    assertNull code2.code
-  }
-
-  void testNewInstanceWithValue() {
-    CDAR2Factory factory = CDAR2Factory.factoryFor('ST')
-    def code = factory.newInstance(null, 'code', 'some string', null)
-    assert code instanceof String
-    assert code == "some string"
-  }
-
+	
+	/* (non-Javadoc)
+	 * @see org.openehealth.ipf.modules.cda.factory.oht.CDAR2#factoryFor(java.lang.String)
+	 */
+	@Test
+	void testFactoryForClass() {
+		/* Test for correct init */
+		CDAR2Factory factory = CDAR2Factory.factoryFor('CD')
+		def code = factory.newInstance(null, 'code', null, null)
+		Assert.assertTrue code instanceof CDImpl
+		
+		/* Test for reusing the preinitialized factory */
+		CDAR2Factory factory2 = CDAR2Factory.factoryFor('CD')
+		Assert.assertTrue factory == factory2
+	}
+	@Test
+	void testFactoryForAttribute() {
+		CDAR2Factory factory = CDAR2Factory.factoryFor('ED')
+		new CDAR2ModelExtension().extensions.call()
+		def iEd = factory.newInstance(null, 'text', 'replace with encoded value', [mediaType: 'application/pdf', representation: 'B64'])
+		Assert.assertEquals 'replace with encoded value', iEd.getText()
+		// assert iEd.getRepresentation().toString() == 'B64'
+	}
+	
+	/**
+	 * Attributes cann't be applied using the newInstance method!
+	 */
+	@Test
+	void testNewInstanceWithAttributes() {		
+		CDAR2Factory factory = CDAR2Factory.factoryFor('CD')
+		def code2 = factory.newInstance(null, 'code', null, [code: "suspended"])
+		Assert.assertTrue code2 instanceof CDImpl
+		Assert.assertNull code2.code
+	}
+	
+	@Test
+	void testNewInstanceWithValue() {
+		CDAR2Factory factory = CDAR2Factory.factoryFor('ST')
+		def code = factory.newInstance(null, 'code', 'some string', null)
+		Assert.assertTrue code instanceof String
+		Assert.assertEquals "some string", code 
+	}
+	
 }

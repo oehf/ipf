@@ -23,6 +23,7 @@
             org.springframework.jmx.export.naming,
             org.springframework.transaction,
             org.openehealth.ipf.commons.flow,
+            org.openehealth.ipf.commons.flow.config,
             org.openehealth.ipf.commons.flow.jmx,
             org.openehealth.ipf.commons.flow.repository,
             org.openehealth.ipf.commons.flow.transfer

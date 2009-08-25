@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.flow.domain.Flow;
 import org.openehealth.ipf.commons.flow.domain.FlowPart;
 import org.openehealth.ipf.commons.flow.repository.ConfigRepository;
 import org.openehealth.ipf.commons.flow.repository.FlowFinderCriteria;
+import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria;
 import org.openehealth.ipf.commons.flow.repository.FlowRepository;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfoFinderCriteria;
@@ -95,6 +96,10 @@ public class FlowManagerBase implements FlowManager {
         return textString(part.getFlowPartMessageText());
     }
     
+    public int purgeFlows(FlowPurgeCriteria purgeCriteria) {
+        return flowRepository.purgeFlows(purgeCriteria);
+    }
+
     public int replayFlows(FlowInfoFinderCriteria finderCriteria) {
         return replayFlows(findFlowIds(finderCriteria));
     }
@@ -119,7 +124,6 @@ public class FlowManagerBase implements FlowManager {
         Flow flow = lockFlow(managedMessage);
         String path = managedMessage.getSplitHistory().indexPathString();
         flow.invalidate(path, managedMessage.render());
-        
     }
 
     public boolean filterFlow(final ManagedMessage managedMessage) {
@@ -172,7 +176,7 @@ public class FlowManagerBase implements FlowManager {
     }
 
     public boolean isFlowFilterEnabled(String application) {
-        ApplicationConfig config = configRepository.findApplicationConfig(application);
+        ApplicationConfig config = configRepository.find(application);
         if (config == null) {
             return ApplicationConfig.FLOW_FILTER_ENABLED_DEFAULT;
         }
@@ -180,9 +184,9 @@ public class FlowManagerBase implements FlowManager {
     }
 
     public void setFlowFilterEnabled(String application, boolean flowFilterEnabled) {
-        ApplicationConfig config = configRepository.findApplicationConfig(application);
+        ApplicationConfig config = configRepository.find(application);
         if (config == null) {
-            persistApplicationConfig(application, 
+            mergeApplicationConfig(application, 
                     flowFilterEnabled, 
                     ApplicationConfig.FLOW_CLEANUP_ENABLED_DEFAULT);
         } else {
@@ -191,7 +195,7 @@ public class FlowManagerBase implements FlowManager {
     }
 
     public boolean isFlowCleanupEnabled(String application) {
-        ApplicationConfig config = configRepository.findApplicationConfig(application);
+        ApplicationConfig config = configRepository.find(application);
         if (config == null) {
             return ApplicationConfig.FLOW_CLEANUP_ENABLED_DEFAULT;
         }
@@ -199,9 +203,9 @@ public class FlowManagerBase implements FlowManager {
     }
     
     public void setFlowCleanupEnabled(String application, boolean flowCleanupEnabled) {
-        ApplicationConfig config = configRepository.findApplicationConfig(application);
+        ApplicationConfig config = configRepository.find(application);
         if (config == null) {
-            persistApplicationConfig(application, 
+            mergeApplicationConfig(application, 
                     ApplicationConfig.FLOW_FILTER_ENABLED_DEFAULT,
                     flowCleanupEnabled);
         } else {
@@ -209,14 +213,30 @@ public class FlowManagerBase implements FlowManager {
         }
     }
     
-    private void persistApplicationConfig(String application, 
+    public List<ApplicationConfig> findApplicationConfigs() {
+        return configRepository.find();
+    }
+
+    public ApplicationConfig getApplicationConfig(String application) {
+        ApplicationConfig applicationConfig = configRepository.find(application);
+        if (applicationConfig == null) {
+            applicationConfig = new ApplicationConfig(application);
+        }
+        return applicationConfig;
+    }
+
+    public void mergeApplicationConfig(ApplicationConfig applicationConfig) {
+        configRepository.merge(applicationConfig);
+    }
+        
+    private void mergeApplicationConfig(String application, 
             boolean flowFilterEnabled, 
             boolean flowCleanupEnabled) {
         ApplicationConfig config = new ApplicationConfig();
         config.setApplication(application);
         config.setFlowFilterEnabled(flowFilterEnabled);
         config.setFlowCleanupEnabled(flowCleanupEnabled);
-        configRepository.persistApplicationConfig(config);
+        configRepository.merge(config);
     }
     
     protected byte[] replayFlow(byte[] packet) throws Exception {

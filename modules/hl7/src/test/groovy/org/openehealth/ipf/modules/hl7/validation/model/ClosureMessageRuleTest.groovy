@@ -33,26 +33,26 @@ public class ClosureMessageRuleTest extends GroovyTestCase{
 		def msg = new GenericParser().parse(msgText)        
 		
 		// Event time must start with '20'
-		def rule = new ClosureMessageRule() {
+		def rule = new ClosureMessageRule( {
 		    if (!it.EVN.dateTimeOfEvent.timeOfAnEvent.value.startsWith('20')) {
 		        def e = new ValidationException("baah")
 		        return [e] as ValidationException[]
 		    } else {
 		        return [] as ValidationException[]
 		    }
-		}
+		})
 		ValidationException[] ve = rule.test(msg)
 		assert ve.size() == 0
 		
 		// Event time must start with '30' - fails.
-		rule = new ClosureMessageRule() {  
+		rule = new ClosureMessageRule( {  
 		    if (!it.EVN.dateTimeOfEvent.timeOfAnEvent.value.startsWith('30')) {
 		        def e = new ValidationException("baah")
 		        return [e] as ValidationException[]		        
 		    } else {
 		        return [] as ValidationException[]
 		    }
-		}		
+		})
 		ve = rule.test(msg)
 		assert ve.size() == 1
 		assert ve[0].message == "baah"

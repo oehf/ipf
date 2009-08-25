@@ -5,7 +5,7 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.39-errors' see='#p-2.16.840.1.113883.10.20.1.39-errors'>
 	<title>Alert status observation - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.39"]'>
-	<report test='.'></report>
+	<assert test= "document('schematron/ccd/voc.xml')/systems/system[@codeSystemName='SNOMED CT'][@group='AlertStatusCode']/code[@value = current()/cda:value/@code]">The value for "Observation / value" in an alert status observation SHALL be selected from ValueSet 2.16.840.1.113883.1.11.20.3 AlertStatusCode STATIC 20061017.</assert>
 	</rule>
 </pattern>
 

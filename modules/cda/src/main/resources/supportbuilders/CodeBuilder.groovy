@@ -46,10 +46,31 @@ loincCode(schema:'ce') {
     }
 }
 
+icd9cmCode(schema:'ce') {
+    properties {
+         codeSystem(def:'2.16.840.1.113883.6.2')
+         codeSystemName(def:'ICD9GM')      
+    }
+}
+
+icd10Code(schema:'ce') {
+    properties {
+         codeSystem(def:'2.16.840.1.113883.6.3')
+         codeSystemName(def:'ICD10')      
+    }
+}
+
 roleCode(schema:'ce') {
     properties {
         codeSystem(def:'2.16.840.1.113883.5.111')
     }
+}
+
+routeCode(schema:'ce') {
+   properties {
+      codeSystem(def:'2.16.840.1.113883.5.112')
+      codeSystemName(def:'RouteOfAdministration')
+   }
 }
 
 snomedCode(schema:'ce') {
@@ -58,5 +79,7 @@ snomedCode(schema:'ce') {
         codeSystemName(def:'SNOMED CT')      
    }
 }
+
+
 
 // ...

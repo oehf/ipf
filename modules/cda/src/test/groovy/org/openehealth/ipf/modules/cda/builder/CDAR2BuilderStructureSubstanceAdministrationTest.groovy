@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.eclipse.emf.ecore.xmi.XMLResource
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.impl.*
+import org.junit.Test
+import org.junit.Assert
 
 /**
  * @author Stefan Ivanov
@@ -30,57 +28,19 @@ public class CDAR2BuilderStructureSubstanceAdministrationTest extends AbstractCD
 	/**
 	 * Test simple SubstanceAdministration
 	 */
+	@Test
 	public void testSubstanceAdministration() {
-		def entry = builder.build {
-			entry{
-			    substanceAdministration(classCode:'SBADM', moodCode:'EVN'){
-                    id(root:'2.16.840.1.113883.19.8.1')
-                    text('Prednisone 20mg qd')
-                    routeCode( 
-                        code:'PO',
-                        codeSystem:'2.16.840.1.113883.5.112',
-                        codeSystemName:'RouteOfAdministration'
-                    )//route code
-                    doseQuantity(value:'20',unit:'mg')
-                    consumable{
-                        manufacturedProduct{
-                            manufacturedLabeledDrug{
-                                code(
-                                    code:'10312003',
-                                    codeSystem:'2.16.840.1.113883.6.96' ,
-                                    codeSystemName:'SNOMED CT',
-                                    displayName:'Prednisone preparation')
-                            }
-                        }
-			        }//consumable
-			    }
-			}//entry
-		}
+		def entry = builder.build(getClass().getResource('/builders/content/entry/SubstanceAdministrationExample1.groovy'))		
 		// TODO add some assertions
 	}
 	
 	/**
 	 * Test substanceAdministration defaults
 	 */
+	@Test
 	public void testSubstanceAdministrationDefaultValues() {
-		def entry = builder.build {
-			entry{
-			    substanceAdministration(classCode:'PROC', moodCode:'EVN'){
-			        consumable{
-			            manufacturedProduct{
-			                manufacturedLabeledDrug{
-			                    code(
-	                                code:'10312003',
-	                                codeSystem:'2.16.840.1.113883.6.96' ,
-	                                codeSystemName:'SNOMED CT',
-	                                displayName:'Prednisone preparation')
-			                }
-			            }
-			        }//consumable
-			    }//substance administration
-			}//entry
-		}
+		def entry = builder.build(getClass().getResource('/builders/content/entry/SubstanceAdministrationExample2.groovy'))		
 		//TODO add some assertions
 	}	
-
+	
 }

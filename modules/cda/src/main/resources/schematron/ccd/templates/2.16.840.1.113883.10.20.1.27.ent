@@ -21,9 +21,8 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.27-warning' see='#p-2.16.840.1.113883.10.20.1.27-warning'>
 	<title>Problem act - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.27"]'>
-	<assert test=".//cda:templateId[@root='2.16.840.1.113883.10.20.1.28']">A problem act SHOULD include one or more problem observations (templateId 2.16.840.1.113883.10.20.1.28). </assert>
 	<assert test="cda:entryRelationship[@typeCode='SUBJ']/cda:observation/cda:templateId[@root='2.16.840.1.113883.10.20.1.28'] 
-               or cda:entryRelationship[@typeCode='SUBJ']/cda:observation/cda:templateId[@root='2.16.840.1.113883.10.20.1.18']">The target of a problem act with Act / entryRelationship / @typeCode=”SUBJ” SHOULD be a problem observation (in the Problem section) or alert observation (in the Alert section, see section 3.9 Alerts), but MAY be some other clinical statement.</assert>
+               or cda:entryRelationship[@typeCode='SUBJ']/cda:observation/cda:templateId[@root='2.16.840.1.113883.10.20.1.18']">The target of a problem act with Act / entryRelationship / @typeCode="SUBJ" SHOULD be a problem observation (in the Problem section) or alert observation (in the Alert section, see section 3.9 Alerts), but MAY be some other clinical statement.</assert>
 
 	<report test='.'></report>
 	</rule>

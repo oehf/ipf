@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.commons.flow.domain;
 
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
+import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
+import static org.openehealth.ipf.commons.flow.transfer.FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED;
+
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,10 +45,6 @@ import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import org.openehealth.ipf.commons.flow.hibernate.HibernateUtils;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
-
-import static org.openehealth.ipf.commons.flow.domain.FlowStatus.CLEAN;
-import static org.openehealth.ipf.commons.flow.domain.FlowStatus.ERROR;
-import static org.openehealth.ipf.commons.flow.transfer.FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED;
 
 /**
  * @author Martin Krasser
@@ -102,7 +102,11 @@ public class Flow {
     @Column(name="C_ACK_COUNT_EXPECTED")
     private Integer ackCountExpected;
     
-  
+    // Derived status for query optimization
+    // (set on insert and update)
+    @Column(name="C_DERIVED_STATUS")
+    private FlowStatus derivedStatus;
+
     @OneToMany(fetch=FetchType.LAZY)
     @JoinColumn(name = "C_FLOW_ID")
     @Cascade({CascadeType.ALL, CascadeType.DELETE_ORPHAN })
@@ -119,6 +123,7 @@ public class Flow {
      */
     public Flow() {
         this.replayCount = 0;
+        this.derivedStatus = CLEAN;
         this.ackCountExpected = ACK_COUNT_EXPECTED_UNDEFINED; 
     }
     
@@ -130,6 +135,7 @@ public class Flow {
     public Flow(String application) {
         this.application = application;
         this.creationTime = currentTime();
+        this.derivedStatus = CLEAN;
         this.replayCount = 0;
     }
     
@@ -207,6 +213,18 @@ public class Flow {
 
     public void setAckCountExpected(int ackCountExpected) {
         this.ackCountExpected = ackCountExpected;
+    }
+
+    public FlowStatus getDerivedStatus() {
+        // Support DB schema upgrade
+        if (derivedStatus == null) {
+            return CLEAN;
+        }
+        return derivedStatus;
+    }
+
+    public void setDerivedStatus(FlowStatus derivedStatus) {
+        this.derivedStatus = derivedStatus;
     }
 
     public Set<FlowPart> getParts() {
@@ -291,15 +309,18 @@ public class Flow {
     }
     
     public FlowStatus getStatus() {
-        for (FlowPart part : parts) {
-            if (part.getStatus() == ERROR) {
-                return ERROR;
+        if (parts != null) {
+            for (FlowPart part : parts) {
+                if (part.getStatus() == ERROR) {
+                    return ERROR;
+                }
             }
         }
         return CLEAN;
     }
     
     public void clearErrorStatus() {
+        setDerivedStatus(CLEAN);
         for (Iterator<FlowPart> iter = parts.iterator(); iter.hasNext();) {
             FlowPart part = iter.next();
             if (part.getStatus() == ERROR) {
@@ -386,7 +407,7 @@ public class Flow {
     
     
     /**
-     *Invalidates this flow for the given path. The flow part representing this
+     * Invalidates this flow for the given path. The flow part representing this
      * path is set to status {@link FlowStatus#ERROR}. Clears the flowPart message
      * text.
      * 
@@ -414,6 +435,7 @@ public class Flow {
     public void invalidate(String path, String partTextMessage) {
         FlowPart part = update(path, ERROR);
         part.setFlowPartMessageText(partTextMessage);
+        setDerivedStatus(ERROR); // query optimization
 
     }
     

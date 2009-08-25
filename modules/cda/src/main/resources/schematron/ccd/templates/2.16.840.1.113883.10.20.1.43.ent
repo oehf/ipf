@@ -6,7 +6,7 @@
 	<title>Fulfillment instruction - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.43"]'>
     <assert test="self::cda:act">A fulfillment instruction (templateId 2.16.840.1.113883.10.20.1.43) SHALL be represented with Act.</assert>
-    <assert test="@moodCode='INT'">The value for “Act / moodCode” in a fulfillment instruction SHALL be “INT” “Intent” 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="@moodCode='INT'">The value for "Act / moodCode" in a fulfillment instruction SHALL be "INT" "Intent" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
 	</rule>
 </pattern>
 

@@ -18,7 +18,7 @@
 	<title>Alerts section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.2"]'>
     <assert test="descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.1.27']">The Alerts section SHOULD include one or more problem acts (templateId 2.16.840.1.113883.10.20.1.27).</assert>
-    <assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'alert') or contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'allergies and adverse reactions')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “alert” and/or “allergies and adverse reactions”.</assert>
+    <assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'alert') or contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'allergies and adverse reactions')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "alert" and/or "allergies and adverse reactions".</assert>
     </rule>
     
 	<rule context="*[cda:templateId/@root='2.16.840.1.113883.10.20.1.27'][ancestor::*[cda:templateId/@root='2.16.840.1.113883.10.20.1.2']]">

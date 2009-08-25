@@ -16,7 +16,10 @@
 package org.openehealth.ipf.modules.cda.builder
 
 import org.codehaus.groovy.runtime.InvokerHelper
-import org.openhealthtools.ihe.common.cdar2.ANYimport org.openhealthtools.ihe.common.cdar2.impl.ANYImplimport org.openhealthtools.ihe.common.cdar2.impl.ANYNonNullImpl
+import org.openhealthtools.ihe.common.cdar2.ANY
+import org.openhealthtools.ihe.common.cdar2.impl.ANYImpl
+import org.openhealthtools.ihe.common.cdar2.impl.ANYNonNullImpl
+
 import groovytools.builder.PropertyException
 
 import org.openhealthtools.ihe.common.cdar2.CDAR2Package

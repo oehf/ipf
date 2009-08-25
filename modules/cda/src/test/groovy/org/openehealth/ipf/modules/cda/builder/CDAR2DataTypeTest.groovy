@@ -15,44 +15,55 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openhealthtools.ihe.common.cdar2.*import groovytools.builder.NodeException
+import org.openhealthtools.ihe.common.cdar2.*
+import org.junit.Test
+import org.junit.Assert
+import groovytools.builder.NodeException
 /**
  * @author Christian Ohr
  */
 public class CDAR2DataTypeTest extends AbstractCDAR2BuilderTest {
-
-
-  public void testCEWithNullFlavor() {
-    CE ce = builder.build {
-      ce(nullFlavor:'UNK', code:'bla')
-    }
-    assert ce != null
-    assert ce.nullFlavor != null
-    assert ce.code == null
-  }
-  
-  public void testCEWithNoNullFlavor() {
-      try {
-          CE ce = builder.build {
-              ce(codeSystem:'bla')
-          }
-          fail('Building ce without code must fail')
-      } catch (NodeException e) {
-          assert e.message.contains('ce')
-      }
-    }
-  
-  public void testCDWithNoNullFlavor() {
-      try {
-          CD cd = builder.build {
-              cd(codeSystem:'bla')
-          }
-          fail('Building cd without code must fail')
-      } catch (NodeException e) {
-          assert e.message.contains('cd')
-      }
-    }  
-
-
-
+	
+	@Test
+	public void testCEWithNullFlavor() {
+		CE ce = builder.build {
+			ce(nullFlavor:'UNK', code:'bla')
+		}
+		assert ce != null
+		assert ce.nullFlavor != null
+		assert ce.code == null
+	}
+	
+	@Test
+	public void testIIWithNullFlavor() {
+		II ii = builder.build {
+			ii(nullFlavor:'UNK', root:'1.2.3')
+		}
+		assert ii != null
+		assert ii.nullFlavor != null
+		assert ii.root == null
+	}
+	
+	@Test
+	public void testCEWithNoNullFlavor() {
+		try {
+			CE ce = builder.build { ce(codeSystem:'bla') }
+			fail('Building ce without code must fail')
+		} catch (NodeException e) {
+			assert e.message.contains('ce')
+		}
+	}
+	
+	@Test
+	public void testCDWithNoNullFlavor() {
+		try {
+			CD cd = builder.build { cd(codeSystem:'bla') }
+			fail('Building cd without code must fail')
+		} catch (NodeException e) {
+			assert e.message.contains('cd')
+		}
+	}  
+	
+	
+	
 }

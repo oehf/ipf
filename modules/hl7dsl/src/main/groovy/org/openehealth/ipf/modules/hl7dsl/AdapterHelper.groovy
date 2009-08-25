@@ -80,8 +80,16 @@ class AdapterHelper {
     
     static String stringValue(def object) {
         switch (object) {
-            case PrimitiveAdapter : return object.target.value
+            case PrimitiveAdapter : return object.value
             case VariesAdapter    : return stringValue(adapt(object.target.data))
+            default               : return object.toString()
+        }
+    }
+    
+    static String originalStringValue(def object) {
+        switch (object) {
+            case PrimitiveAdapter : return object.originalValue
+            case VariesAdapter    : return originalStringValue(adapt(object.target.data))
             default               : return object.toString()
         }
     }
@@ -91,6 +99,13 @@ class AdapterHelper {
         firstElement instanceof SelectorClosure ? 
                 firstElement(0).value : 
                 firstElement.value
+    }
+    
+    static def componentOriginalValue(def c) {
+        def firstElement = c[1]
+        firstElement instanceof SelectorClosure ? 
+                firstElement(0).originalValue : 
+                firstElement.originalValue
     }
 
 }

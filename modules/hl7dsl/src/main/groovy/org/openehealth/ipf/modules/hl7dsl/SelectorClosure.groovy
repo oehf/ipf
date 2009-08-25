@@ -47,6 +47,10 @@ class SelectorClosure extends Closure{
 	    call(0)?.getProperty(property)
     }
 	
+	public isNullValue() {
+	    call(0)?.isNullValue()
+	}
+	
 	protected Object doCall(Object argument) {
 		argument != null ? 
 				(elements.size <= argument ? 

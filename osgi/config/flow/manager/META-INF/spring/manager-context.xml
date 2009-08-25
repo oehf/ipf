@@ -43,12 +43,19 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         <entry
             key="org.openehealth.ipf.platform:type=service,name=FlowManager"
             value-ref="flowManagerMBean" />
+        <entry
+            key="org.openehealth.ipf.platform:type=service,name=FlowPurger"
+            value-ref="flowPurgerMBean" />
       </map>
     </property>
   </bean>
 
   <bean id="flowManagerMBean" class="org.openehealth.ipf.commons.flow.jmx.FlowManagerMBean">
     <property name="application" value="default" />
+  </bean>
+
+  <bean id="flowPurgerMBean" class="org.openehealth.ipf.commons.flow.jmx.FlowPurgerMBean">
+    <property name="application" value="tutorial" />
   </bean>
 
   <!-- ================================================================= -->

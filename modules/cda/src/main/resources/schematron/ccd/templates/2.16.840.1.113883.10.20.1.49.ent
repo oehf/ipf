@@ -6,8 +6,8 @@
 	<title>Patient instruction - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.49"]'>
     <assert test="self::cda:act">A patient instruction (templateId 2.16.840.1.113883.10.20.1.49) SHALL be represented with Act.</assert>
-    <assert test="@moodCode='INT'">The value for “Act / moodCode” in a patient instruction SHALL be “INT” “Intent” 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
-    <assert test="parent::*[cda:entryRelationship/@typeCode='SUBJ']">The value for “entryRelationship / typeCode” in a relationship to a patient instruction SHALL be “SUBJ” “Subject” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+    <assert test="@moodCode='INT'">The value for "Act / moodCode" in a patient instruction SHALL be "INT" "Intent" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="parent::cda:entryRelationship/@typeCode='SUBJ'">The value for "entryRelationship / typeCode" in a relationship to a patient instruction SHALL be "SUBJ" "Subject" 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
 	</rule>
 </pattern>
 

@@ -15,43 +15,30 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
-import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
-
-import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
 
 /**
  * @author Christian Ohr
  */
-public class CCDPurposeBuilderTest extends AbstractContentBuilderTest {
+public class CCDPurposeBuilderTest extends AbstractCDAR2BuilderTest {
 	
-    @BeforeClass
-	static void initialize() throws Exception {
-		builder().define(getClass().getResource('/builders/content/section/CCDPurposeBuilder.groovy'))
-		def extension = new CCDPurposeExtension(builder())
-	    extension.extensions.call()
+	@Before
+	void initialize() throws Exception {
+	    new CCDDefinitionLoader(builder).loadPurpose(loaded)
+		new CCDPurposeExtension(builder).register(registered)
 	}
 	
-    @Test
+	@Test
 	public void testCCDPurpose() {
-		POCDMT000040Section purpose = builder().build {
-			ccd_purpose {
-				text('Transfer of Care!')
-				purposeActivity {
-					act(moodCode:'EVN') {
-						code(
-						        code:'308292007',
-								codeSystem:'2.16.840.1.113883.6.96',
-								displayName:'Transfer of care')
-						statusCode('completed')
-					}
-				}
-			}
-		}
+		POCDMT000040Section purpose = builder.build(
+	        getClass().getResource('/builders/content/section/CCDPurposeExample.groovy'))
 		new CCDPurposeValidator().validate(purpose, null)
 	}
-    
-    
+	
+	
 	
 }

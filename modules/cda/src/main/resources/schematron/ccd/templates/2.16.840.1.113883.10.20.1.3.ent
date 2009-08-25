@@ -6,7 +6,7 @@
 	<title>Encounters section - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.3"]'>
     <assert test="cda:text">The Encounters section SHALL contain a narrative block.</assert>
-    <assert test="cda:code[@code='46240-8'][@codeSystem='2.16.840.1.113883.6.1']">The value for “Section / code” SHALL be “46240-4” “History of encounters” 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+    <assert test="cda:code[@code='46240-8'][@codeSystem='2.16.840.1.113883.6.1']">The value for "Section / code" SHALL be "46240-8" "History of encounters" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
     <assert test="cda:title">encounters section SHALL contain Section / title.</assert>
 	</rule>
 </pattern>
@@ -17,7 +17,7 @@
 	<title>Encounters section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.3"]'>
     <assert test=".//cda:templateId[@root='2.16.840.1.113883.10.20.1.21']">The Encounters SHOULD  include one or more encounter activities (templateId 2.16.840.1.113883.10.20.1.21).</assert>
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'encounters')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “encounters”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'encounters')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "encounters".</assert>
 	</rule>
 </pattern>
 

@@ -5,9 +5,7 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.35-errors' see='#p-2.16.840.1.113883.10.20.1.35-errors'>
 	<title>Vital signs organizer - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.35"]'>
-	<!-- CONF 383 needs clarification, since the codes system in the prose does not match the sample instance. 
-	<assert test="code/@code='46680005' or code/translator/@code='46680005'">Organizer / code in a vital signs organizer SHALL contain the value “46680005” “Vital signs” from ValueSet 2.16.840.1.113883.1.11.20.16 ResultTypeCode STATIC, either in Organizer / code / @code or in Organizer / code / translation / @code.</assert>
-	-->
+	<assert test='cda:component/cda:observation[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]'>Each vital signs organizers SHALL contain one or more result observations (templateId 2.16.840.1.113883.10.20.1.31)</assert>
 	<report test='.'></report>
 	</rule>
 </pattern>

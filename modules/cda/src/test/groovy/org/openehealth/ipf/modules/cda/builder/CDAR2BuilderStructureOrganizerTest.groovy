@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.eclipse.emf.ecore.xmi.XMLResource
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.impl.*
+import org.junit.Test
+import org.junit.Assert
 
 /**
  * @author Stefan Ivanov
@@ -30,12 +28,11 @@ public class CDAR2BuilderStructureOrganizerTest extends AbstractCDAR2BuilderTest
 	/**
 	 * Test simple Organizer
 	 */
+	@Test
 	public void testOrganizer() {
 		def entry = builder.build {
 			entry{
-			    organizer(moodCode:'EVN'){
-			        statusCode(code:'completed')
-			    }
+				organizer(moodCode:'EVN'){ statusCode(code:'completed') }
 			}//entry
 		}
 		// println entry.organizer
@@ -44,12 +41,11 @@ public class CDAR2BuilderStructureOrganizerTest extends AbstractCDAR2BuilderTest
 	/**
 	 * Test organizer defaults
 	 */
+	@Test
 	public void testOrganizertDefaultValues() {
 		def entry = builder.build {
 			entry{
-				organizer(moodCode:'EVN'){
-				    statusCode(code:'completed')
-				}
+				organizer(moodCode:'EVN'){ statusCode(code:'completed') }
 			}//entry
 		}
 		// println entry.organizer

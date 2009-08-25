@@ -141,6 +141,7 @@ organizationPartOf(schema:'infrastructureRoot', factory:'POCDMT000040_ORGANIZATI
 participantRole(schema:'role',  factory: 'POCDMT000040_PARTICIPANT_ROLE') {
 	properties {
 	    code(schema:'roleCode')
+	    //TODO one of playingEntity|playingDevice
 	    playingEntity(schema:'playingEntity')
 	    playingDevice(schema:'device')
 	    scopingEntity(schema:'entity')

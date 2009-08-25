@@ -25,13 +25,17 @@ import org.openehealth.ipf.modules.cda.AbstractValidator
 
 
 /**
- * Validates the CCD Advance Directive content section module (2.16.840.1.113883.10.20.1.11)
+ * Validates the CCD Alerts content section module (2.16.840.1.113883.10.20.1.11)
  * 
  * @author Stefan Ivanov
  * @author Christian Ohr
  */
 public class CCDAlertsValidator extends AbstractValidator {
-	
+
+     CCDAlertsValidator() {
+         super('/schematron/ccd/voc.xml')
+     }     
+     
 	void validate(Object section, Object profile){
 		assertInstanceOf('CONF-256', POCDMT000040Section.class, section)
 		assertContains('CONF-256', '2.16.840.1.113883.10.20.1.2', section.templateId.root)
@@ -39,8 +43,8 @@ public class CCDAlertsValidator extends AbstractValidator {
 	}
 	
 	void doValidateAlerts(POCDMT000040Section section) {
-        assertNotNull('CONF-258', section.code)
-        assertEquals('CONF-259', '48765-2', section.code.code)
+	    assertNotNull('CONF-258', section.code)
+	    assertEquals('CONF-259', '48765-2', section.code.code)
         assertEquals('CONF-259', '2.16.840.1.113883.6.1', section.code.codeSystem)
         assertNotNull('CONF-261', section.title)
         assertMatches('CONF-262', '(?i).*(alert|allergies and adverse reactions)*.', section.title.mixed[0].value)
@@ -117,7 +121,7 @@ public class CCDAlertsValidator extends AbstractValidator {
 		/* CONF-272: The value for “Observation / value” in an alert status observation SHALL be
 		 *           selected from ValueSet 2.16.840.1.113883.1.11.20.3 AlertStatusCode STATIC 20061017. 
 		 */
-		 //TODO
+		assertCode('CONF-272', '2.16.840.1.113883.1.11.20.3', obs.value[0])
 	}
 		
 	/**

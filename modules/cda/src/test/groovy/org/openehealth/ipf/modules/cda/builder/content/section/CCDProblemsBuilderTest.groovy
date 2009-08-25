@@ -16,100 +16,34 @@
 package org.openehealth.ipf.modules.cda.builder.content.section
 
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
-import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
-
-import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
+import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
 
 /**
+ * Tests CCD Problems Section
  * @author Stefan Ivanov
  */
-public class CCDProblemsBuilderTest extends AbstractContentBuilderTest {
+public class CCDProblemsBuilderTest extends AbstractCDAR2BuilderTest {
 	
-	@BeforeClass
-	static void initialize() throws Exception {
-		builder().define(getClass().getResource('/builders/content/section/CCDStatusObservation.groovy'))
-		builder().define(getClass().getResource('/builders/content/section/CCDProblemAct.groovy'))
-		builder().define(getClass().getResource('/builders/content/section/CCDProblemsBuilder.groovy'))
-		def extensionAct = new CCDProblemActExtension(builder())
-        extensionAct.extensions.call()
-		def extension = new CCDProblemsExtension(builder())
-		extension.extensions.call()
+	@Before
+	void initialize() throws Exception {
+		new CCDDefinitionLoader(builder).loadProblems(loaded)
+        new CCDProblemsExtension(builder).register(registered)
 	}
 	
 	@Test
 	public void testCCDProblems() {
-		POCDMT000040Section problems = builder.build {
-		    ccd_problems{
-                text('Patient Problems Acts')
-                problemAct{
-                    id(root:'d11275e9-67ae-11db-bd13-0800200c9a66')
-                    problemObservation{
-                        id(root:'9d3d416d-45ab-4da1-912f-4583e0632000')
-                        code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
-                        value(
-                                builder.build{
-                                    cd(code:'233604007',
-                                            codeSystem:'2.16.840.1.113883.6.96',
-                                            displayName:'Pneumonia')
-                                }
-                        ) 
-                        problemStatus{
-                            value(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
-                        }
-                        problemHealthstatus{
-                            value(code:'413322009', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resolved')
-                        }
-                    }//problem observation
-                    episodeObservation{
-                        code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
-                        value(
-                            builder.build{
-                                cd(code:'404684003', codeSystem:'2.16.840.1.113883.6.96', displayName:'Clinical finding')
-                            }
-                        )
-                        entryRelationship(typeCode:'SAS'){
-                            act(classCode:'ACT', moodCode:'EVN'){
-                                id(root:'ec8a6ff8-ed4b-4f7e-82c3-e98e58b45de7')
-                                code(nullFlavor:'NA')
-                            }//act
-                        }//entryRelationship
-                    }//episode observation
-                    patientAwareness{
-                        awarenessCode(code:'TEST', codeSystem:'2.16.840.1.113883.5.4')
-                        participantRole{
-                            id(root:'c8a6ff8-ed4b-4f7e-82c3-e98e58b45de8')
-                        }
-                    }
-                }//problem act
-                problemAct{
-                    id(root:'d11275e9-67ae-11db-bd13-0800200c9a66')
-                    problemObservation{
-                        id(root:'9d3d416d-45ab-4da1-912f-4583e0632000')
-                        code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
-                        value(
-                            builder.build{
-                                cd(code:'233604007',
-                                    codeSystem:'2.16.840.1.113883.6.96',
-                                    displayName:'Pneumonia')
-                            }
-                        )
-                        patientAwareness{
-                            awarenessCode(code:'TEST', codeSystem:'2.16.840.1.113883.5.4')
-                            participantRole{
-                                id(root:'c8a6ff8-ed4b-4f7e-82c3-e98e58b45de8')
-                            }
-                        }
-                    }//problem observation
-                }//problem act
-            }//problems section
-		}
+		POCDMT000040Section problems = builder.build(
+	        getClass().getResource('/builders/content/section/CCDProblemsExample.groovy'))
 		new CCDProblemsValidator().validate(problems, null)
 		assert problems.problemAct.size == 2
-        assert problems.problemAct[0].problemObservation.size == 1
-        assert problems.problemAct[0].problemObservation[0].problemHealthstatus.size == 1
-        assert problems.problemAct[0].patientAwareness != null
-        assert problems.problemAct[1].problemObservation[0].patientAwareness != null
+		assert problems.problemAct[0].problemObservation.size == 1
+		assert problems.problemAct[0].problemObservation[0].problemHealthstatus != null
+		assert problems.problemAct[0].patientAwareness != null
+		assert problems.problemAct[1].problemObservation[0].patientAwareness != null
 	}
 	
 }

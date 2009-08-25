@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-import groovytools.builder.MetaBuilder
+
+import groovytools.builder.MetaBuilder
+
 /**
  * ModelExtension that recursively calls other extension classes. Overwrite the
  * modelExtensions() method to include the other extension classes
@@ -25,19 +25,6 @@ import groovytools.builder.MetaBuilder
  * @author Christian Ohr
  */
 abstract class CompositeModelExtension extends BaseModelExtension {
-
-     protected static final Log LOG = LogFactory.getLog(CompositeModelExtension.class)
-     
-     def extensions = {
-          LOG.info("Initializing composite extension ${extensionName()} (${templateId()})")
-          int c = 0
-          modelExtensions().each {
-              LOG.info("Initializing extension ${it.extensionName()} (${it.templateId()})")
-              it.builder = builder
-              c += it.extensions.call()
-          }
-          return c
-     }
      
      CompositeModelExtension() {         
      }
@@ -45,16 +32,21 @@ abstract class CompositeModelExtension extends BaseModelExtension {
      CompositeModelExtension(builder) {
          super(builder)
      }
-     
-     List modelExtensions() {
-         []
-     }
-     
-     void setBuilder(builder) {
-         modelExtensions?.each {
-             it.builder = builder
+
+     def register(Collection registered) {
+         super.register(registered)
+         modelExtensions().each {
+             if (registered.contains(it.templateId())) {
+                 LOG.debug("Skip ${it.templateId()}")
+             } else {
+                 it.builder = builder
+                 it.register(registered)
+             }
          }
      }
-    
+     
+     Collection modelExtensions() {
+         []
+     }   
     
  }

@@ -6,12 +6,12 @@
 	<title>Supply activity - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.34"]'>
     <assert test="self::cda:supply">A supply activity (templateId 2.16.840.1.113883.10.20.1.34) SHALL be represented with Supply.</assert>
-    <assert test="@moodCode='EVN' or @moodCode='INT'">The value for “Supply / moodCode” in a medication activity SHALL be “EVN” or “INT” 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="@moodCode='EVN' or @moodCode='INT'">The value for "Supply / moodCode" in a medication activity SHALL be "EVN" or "INT" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
     <assert test="cda:id">A supply activity SHALL contain at least one Supply / id.</assert>
 	</rule>
 
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.34"]//*[cda:templateId/@root="2.16.840.1.113883.10.20.1.43"]'>
-    <assert test="parent::*[cda:entryRelationship/@typeCode='SUBJ']">The value for “entryRelationship / typeCode” in a relationship between a supply activity and fulfillment instruction SHALL be “SUBJ” “Subject” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
+    <assert test="parent::cda:entryRelationship/@typeCode='SUBJ'">The value for "entryRelationship / typeCode" in a relationship between a supply activity and fulfillment instruction SHALL be "SUBJ" "Subject" 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
     </rule>
 	
 </pattern>

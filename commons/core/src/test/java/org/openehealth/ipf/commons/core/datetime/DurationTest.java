@@ -30,6 +30,7 @@ public class DurationTest {
         assertEquals(4 * 1000L, Duration.parse("4s").getValue());
         assertEquals(4 * 60 * 1000L, Duration.parse("4m").getValue());
         assertEquals(4 * 60 * 60 * 1000L, Duration.parse("4h").getValue());
+        assertEquals(4 * 60 * 60 * 1000L * 24L, Duration.parse("4d").getValue());
     }
     
     @Test(expected=DurationFormatException.class)

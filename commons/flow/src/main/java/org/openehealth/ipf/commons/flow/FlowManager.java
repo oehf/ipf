@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.flow;
 
 import java.util.List;
 
+import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
+import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfoFinderCriteria;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +62,9 @@ public interface FlowManager {
     String findFlowPartMessageText(Long flowId, String flowPath);
     
     @Transactional
+    int purgeFlows(FlowPurgeCriteria purgeCriteria);
+    
+    @Transactional
     int replayFlows(FlowInfoFinderCriteria finderCriteria);
     
     @Transactional
@@ -97,5 +102,36 @@ public interface FlowManager {
     
     @Transactional(readOnly=true)
     boolean isFlowCleanupEnabled(String application);
+
+    /**
+     * Returns all stored application configurations.
+     * 
+     * @return a list of application configurations.
+     */
+    @Transactional(readOnly=true)
+    List<ApplicationConfig> findApplicationConfigs();
+
+    /**
+     * Return the configuration for given application. If the configuration is
+     * not stored a new {@link ApplicationConfig} object is created and returned
+     * (but not stored).
+     * 
+     * @param application
+     *            application name.
+     * @return an application configuration.
+     */
+    @Transactional(readOnly=true)
+    ApplicationConfig getApplicationConfig(String application);
+
+    /**
+     * Persists the given configuration application. If a configuration object
+     * is already stored under a given application name that configuration is
+     * updated.
+     * 
+     * @param applicationConfig
+     *            the application configuration to persist.
+     */
+    @Transactional()
+    void mergeApplicationConfig(ApplicationConfig applicationConfig);
     
 }

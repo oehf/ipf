@@ -156,7 +156,7 @@ reference(schema:'externalActChoice', factory:'POCDMT000040_REFERENCE'){
   }
 }
 
-referenceRange(schema:'infrastructureRoot') {
+referenceRange(schema:'infrastructureRoot', factory:'POCDMT000040_REFERENCE_RANGE') {
    properties {
       // typeCode(factory:'ACT_RELATIONSHIP_TYPE')
       observationRange(schema:'observationRange')

@@ -5,7 +5,9 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.53-errors' see='#p-2.16.840.1.113883.10.20.1.53-errors'>
 	<title>Product - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.53"]'>
-	<report test='.'></report>
+	<assert test="self::cda:manufacturedProduct">A product (templateId 2.16.840.1.113883.10.20.1.53) SHALL be represented with the ManufacturedProduct class.</assert>
+	<assert test="count(cda:manufacturedMaterial/cda:code) = 1">A ManufacturedProduct in a product template SHALL contain exactly one manufacturedMaterial/code.</assert>
+	<assert test="count(cda:manufacturedMaterial/cda:code/cda:originalText) = 1">A manufacturedMaterial in a product template SHALL contain exactly one Material / code / originalText, which represents the generic name of the product.</assert>
 	</rule>
 </pattern>
 
@@ -14,7 +16,18 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.53-warning' see='#p-2.16.840.1.113883.10.20.1.53-warning'>
 	<title>Product - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.53"]'>
-	<report test='.'></report>
+	<assert test="
+		cda:manufacturedMaterial/cda:code/@codeSystem = '2.16.840.1.113883.6.88' 
+		or cda:manufacturedMaterial/cda:code/@codeSystem = '2.16.840.1.113883.6.59'
+		or cda:manufacturedMaterial/cda:code/@codeSystem = '2.16.840.1.113883.6.96'"
+	>
+	
+	<!-- Just checking that the code system is SNOMED for the MedicationTypeCode part of the test -->
+	The value for manufacturedMaterial / code in a product template SHOULD be 
+	selected from the RxNorm (2.16.840.1.113883.6.88) code system for medications, and from the 
+	CDC Vaccine Code (2.16.840.1.113883.6.59) code system for immunizations, or MAY be selected 
+	from ValueSet 2.16.840.1.113883.1.11.20.8 MedicationTypeCode STATIC 20061017.
+	</assert>
 	</rule>
 </pattern>
 

@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.eclipse.emf.ecore.xmi.XMLResource
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.impl.*
+import org.junit.Test
+import org.junit.Assert
 
 /**
  * @author Stefan Ivanov
@@ -30,40 +28,23 @@ public class CDAR2BuilderStructureProcedureTest extends AbstractCDAR2BuilderTest
 	/**
 	 * Test simple Procedure
 	 */
+	@Test
 	public void testProcedure() {
-		def entry = builder.build {
-			entry{
-			    procedure(classCode:'PROC', moodCode:'EVN'){
-                    code(
-                        code:'30549001', 
-                        codeSystem:'2.16.840.1.113883.6.96', 
-                        codeSystemName:'SNOMED CT' ,
-                        displayName:'Suture removal'
-                    )
-                    statusCode(code:'completed')
-                    effectiveTime(value:'200004071430')
-                    targetSiteCode(
-                        code:'66480008',
-                        codeSystem:'2.16.840.1.113883.6.96',
-                        codeSystemName:'SNOMED CT',
-                        displayName:'Left forearm'
-                    )
-			    }//procedure
-			}//entry
-		}
+		def entry = builder.build(getClass().getResource('/builders/content/entry/ProcedureExample1.groovy'))		
 		// println entry.procedure
 	}
 	
 	/**
 	 * Test procedure defaults
 	 */
+	@Test
 	public void testProcedureDefaultValues() {
 		def entry = builder.build {
 			entry{
-			    procedure(moodCode:'EVN') {
-                // classCode('PROC')
-                // moodCode('EVN')
-             }
+				procedure(moodCode:'EVN') {
+					// classCode('PROC')
+					// moodCode('EVN')
+				}
 			}//entry
 		}
 		// println entry.procedure

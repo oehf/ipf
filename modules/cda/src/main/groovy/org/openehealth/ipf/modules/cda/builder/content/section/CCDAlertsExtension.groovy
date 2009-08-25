@@ -15,18 +15,27 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
-
+import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
 
 /**
- * Make sure that the CDAModelExtensions are called before
- *
+ * Chapter 3.8 "Alerts"
+ * 
+ * Templates included:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.2 Alerts
+ * </ul>
+ * Dependent templates:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.27 Problem Act            
+ * <li>2.16.840.1.113883.10.20.1.40 Comment 
+ * </ul>
+ * 
  * @author Stefan Ivanov
  * @author Christian Ohr
  */
-public class CCDAlertsExtension extends BaseModelExtension {
+public class CCDAlertsExtension extends CompositeModelExtension {
 	
      CCDAlertsExtension() {
 		super()
@@ -36,12 +45,35 @@ public class CCDAlertsExtension extends BaseModelExtension {
 		super(builder)
 	}
 	
-	def extensions = {
-		// --------------------------------------------------------------------------------------------
-		// Chapter 3.5 "Alerts"
-		// --------------------------------------------------------------------------------------------
+	def register(Collection registered) {
+	    
+	    super.register(registered)
+
+        POCDMT000040ClinicalDocument.metaClass {
+            setAlerts { POCDMT000040Section section ->
+                if (delegate.component?.structuredBody){
+                    delegate.component.structuredBody.component.add(builder.build {
+                        sections(section:section)
+                    })
+                } else {
+                    delegate.component = builder.build {
+                        ccd_component{
+                            structuredBody {
+                                component(section:section)
+                            }
+                        }
+                    }
+                }
+            }
+            getAlerts { ->
+                delegate.component?.structuredBody?.component.find {
+                    it.section?.code?.code == '48765-2'
+                } ?.section
+            }
+        }
+
 		POCDMT000040StructuredBody.metaClass {
-			// We assume that this is a CCD Alerts section, enforced by the builder
+			
 			setAlerts  {POCDMT000040Section section ->
 				POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
 				component.section = section
@@ -53,119 +85,7 @@ public class CCDAlertsExtension extends BaseModelExtension {
 				} ?.section
 			}
 		}//alerts body extensions
-		
-		POCDMT000040Section.metaClass {
-			setProblemAct  {POCDMT000040Act act ->
-				POCDMT000040Entry entry = builder.build {
-					entry (typeCode:'DRIV')
-				}
-				entry.act = act
-				delegate.entry.add(entry)
-			}
-			
-			getProblemAct { ->
-				delegate.entry.findAll{ 
-					'2.16.840.1.113883.10.20.1.27' in it.act.templateId.root
-				}?.act
-			}
-		}//alerts section extensions
-		
-		POCDMT000040Act.metaClass {
-			setAlertObservation{ POCDMT000040Observation observation ->
 				
-				POCDMT000040EntryRelationship entryRelation = builder.build {
-					entryRelationship(typeCode:'SUBJ')
-				}
-				entryRelation.observation = observation
-				delegate.entryRelationship.add(entryRelation)
-			}
-			
-			getAlertObservation {
-				delegate.entryRelationship.findAll{ 
-					'2.16.840.1.113883.10.20.1.18' in it.observation.templateId.root 
-				}?.observation
-			}
-			
-		}//alerts act extensions
-		
-		POCDMT000040Observation.metaClass {
-			
-			setAlertStatus{ POCDMT000040Observation observation ->           
-				POCDMT000040EntryRelationship entryRelation = builder.build {
-					entryRelationship(typeCode:'REFR')
-				}
-				entryRelation.observation = observation
-				delegate.entryRelationship.add(entryRelation)
-			}
-			
-			getAlertStatus { ->
-				delegate.entryRelationship.find {
-					'2.16.840.1.113883.10.20.1.39' in it.observation.templateId.root
-				}?.observation
-			}
-			
-			setReactionObservation { POCDMT000040Observation observation ->
-                POCDMT000040EntryRelationship entryRelation = builder.build {
-                    entryRelationship(typeCode:'MFST')
-                }
-                entryRelation.observation = observation
-                delegate.entryRelationship.add(entryRelation)
-			}
-        
-			getReactionObservation{ ->
-                delegate.entryRelationship.findAll {
-                    '2.16.840.1.113883.10.20.1.51' in it.observation.templateId.root
-                }?.observation
-			}
-			
-			setParticipantAgent{ POCDMT000040ParticipantRole participantRole ->
-			    POCDMT000040Participant2 participant = builder.build{
-			        clinicalStatementParticipant{
-			            typeCode('CSM')
-			        }
-			    }
-			    participant.participantRole = participantRole
-			    delegate.participant.add(participant)                
-			}
-    
-			getParticipantAgent { ->
-			    delegate.participant.find {
-			        it.typeCode == 'CSM'
-			    }?.participantRole
-			}
-			
-			setSeverityObservation{ POCDMT000040Observation observation ->
-                POCDMT000040EntryRelationship entryRelation = builder.build {
-                    entryRelationship(typeCode:'SUBJ')
-                }
-                entryRelation.observation = observation
-                delegate.entryRelationship.add(entryRelation)
-			}
-			
-			getSeverityObservation { ->
-			    delegate.entryRelationship.findAll {
-			        '2.16.840.1.113883.10.20.1.55' in it.observation.templateId.root
-			    }?.observation
-			}
-
-			setReactionIntervention{ POCDMT000040Observation observation ->
-                POCDMT000040EntryRelationship entryRelation = builder.build {
-                    entryRelationship(typeCode:'SUBJ')
-                }
-                entryRelation.observation = observation
-                delegate.entryRelationship.add(entryRelation)
-			}
-
-			getReactionIntervention { ->
-			    delegate.entryRelationship.findAll {
-			        '2.16.840.1.113883.10.20.1.55' in it.observation.templateId.root
-			    }?.observation
-			}
-			
-		}//alerts observation extensions
-		
-		
-		return 1
 		
 	}//ccd extensions 
 	
@@ -176,5 +96,12 @@ public class CCDAlertsExtension extends BaseModelExtension {
 	
 	String templateId() {
 		'2.16.840.1.113883.10.20.1.2'
-	}	
+	}
+	
+	Collection modelExtensions() {
+        [ new CCDProblemActExtension(),
+          new CCDCommentsExtension()]
+    }
+        
+    
 }

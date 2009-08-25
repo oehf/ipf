@@ -19,7 +19,7 @@
 	<title>Procedure activity - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.29"]'>
 	<assert test="count(cda:effectiveTime)=1">A procedure activity SHOULD contain exactly one [Act | Observation | Procedure] / effectiveTime.</assert>
-	<assert test="cda:code[@codeSystem='2.16.840.1.113883.6.1' or @codeSystem='2.16.840.1.113883.6.96']">The value for “[Act | Observation | Procedure] / code” in a procedure activity SHOULD be selected from LOINC (codeSystem 2.16.840.1.113883.6.1) or SNOMED CT (codeSystem 2.16.840.1.113883.6.96).</assert>
+	<assert test="cda:code[@codeSystem='2.16.840.1.113883.6.1' or @codeSystem='2.16.840.1.113883.6.96']">The value for "[Act | Observation | Procedure] / code" in a procedure activity SHOULD be selected from LOINC (codeSystem 2.16.840.1.113883.6.1) or SNOMED CT (codeSystem 2.16.840.1.113883.6.96).</assert>
 	</rule>
 </pattern>
 

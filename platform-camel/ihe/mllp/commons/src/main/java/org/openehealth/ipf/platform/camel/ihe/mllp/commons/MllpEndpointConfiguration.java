@@ -34,6 +34,7 @@ public class MllpEndpointConfiguration {
     
     private final String allowedMessageType;
     private final String[] allowedTriggerEvents;
+    private final String[] allowedStructureMaps;
     
 
     /**
@@ -55,6 +56,8 @@ public class MllpEndpointConfiguration {
      *      Valid value of MSH-9-1 (for acceptance checks).
      * @param allowedTriggerEvents
      *      Array of valid values of MSH-9-2 (for acceptance checks).
+     * @param allowedStructureNames
+     *      Array of valid values of MSH-9-3 (for acceptance checks).
      */
     public MllpEndpointConfiguration(
             String hl7Version,
@@ -64,7 +67,8 @@ public class MllpEndpointConfiguration {
             AckTypeCode requestErrorDefaultAckTypeCode,
             int responseErrorDefaultErrorCode,
             String allowedMesasgeType,
-            String[] allowedTriggerEvents)
+            String[] allowedTriggerEvents,
+            String[] allowedStructureMaps)
     {
         this.hl7Version = hl7Version;
         this.sendingApplication = sendingApplication;
@@ -76,6 +80,7 @@ public class MllpEndpointConfiguration {
         
         this.allowedMessageType = allowedMesasgeType;
         this.allowedTriggerEvents = allowedTriggerEvents;
+        this.allowedStructureMaps = allowedStructureMaps;
     }
 
     
@@ -111,5 +116,9 @@ public class MllpEndpointConfiguration {
 
     public String[] getAllowedTriggerEvents() {
         return allowedTriggerEvents;
+    }
+
+    public String[] getAllowedStructureMaps() {
+        return allowedStructureMaps;
     }
 }

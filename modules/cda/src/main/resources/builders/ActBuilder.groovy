@@ -444,7 +444,7 @@ substanceAdministration(schema:'clinicalStatement',factory:'POCDMT000040_SUBSTAN
             id(schema:'ii')
         }
         effectiveTimes(collection:'effectiveTime'){
-            effectiveTime(schema:'sxcmts')
+            effectiveTime(schema:'sxcmts')  // TODO any of type SXCMTS
         }
         approachSiteCodes(collection:'approachSiteCode'){
             approachSiteCode(schema:'cd')
@@ -455,7 +455,7 @@ substanceAdministration(schema:'clinicalStatement',factory:'POCDMT000040_SUBSTAN
 supply(schema:'clinicalStatement',factory:'POCDMT000040_SUPPLY'){
     properties{
         classCode(factory:'ACT_CLASS_SUPPLY', def: ActClassSupply.PLY_LITERAL)
-        moodCode(factory:'XDOCUMENT_SUBSTANCE_MOOD')
+        moodCode(factory:'XDOCUMENT_SUBSTANCE_MOOD', def:'EVN')
         code(schema:'cd')
         text(schema:'ed')
         statusCode(schema:'cs')
@@ -467,7 +467,7 @@ supply(schema:'clinicalStatement',factory:'POCDMT000040_SUPPLY'){
             id(schema:'ii')
         }
         effectiveTimes(collection:'effectiveTime'){
-            effectiveTime(schema:'sxcmts')    
+            effectiveTime(schema:'sxcmts') // todo any of sxcmts    
         }
         priorityCodes(collection:'priorityCode'){
                 priorityCode(schema:'ce')

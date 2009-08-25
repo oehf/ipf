@@ -18,7 +18,6 @@
     
     <modules>
         <module>commons</module>
-        <module>iti8</module>
     </modules>
 
     <dependencies>

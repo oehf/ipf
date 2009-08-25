@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.flow.repository;
 
+import java.util.List;
+
 import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
 
 /**
@@ -22,10 +24,14 @@ import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
  */
 public interface ConfigRepository {
 
-    ApplicationConfig findApplicationConfig(String application);
+    List<ApplicationConfig> find();
     
-    void persistApplicationConfig(ApplicationConfig applicationConfig); 
+    ApplicationConfig find(String application);
     
-    void removeApplicationConfig(ApplicationConfig applicationConfig);
+    void persist(ApplicationConfig applicationConfig); 
+
+    void merge(ApplicationConfig applicationConfig); 
+    
+    void remove(ApplicationConfig applicationConfig);
 
 }

@@ -15,15 +15,29 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.openhealthtools.ihe.common.cdar2.*import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+import org.openhealthtools.ihe.common.cdar2.*
+import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
 
 /**
- * Make sure that the CDAModelExtensions are called before
+ * Chapter 3.1 "Payers"
+ * 
+ * Templates included:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.9  Payers Section
+ * <li>2.16.840.1.113883.10.20.1.20 Coverage Activity
+ * <li>2.16.840.1.113883.10.20.1.26 Policy Activity
+ * <li>2.16.840.1.113883.10.20.1.19 Authorization Activity
+ * </ul>
+ * Dependent templates:
+ * <ul>
+ * <li>                             Information Source
+ * <li>2.16.840.1.113883.10.20.1.40 Comment 
+ * </ul>
  *
  * @author Christian Ohr
  */
-public class CCDPayersExtension extends BaseModelExtension {
+public class CCDPayersExtension extends CompositeModelExtension {
 	
 	CCDPayersExtension() {
 		super()
@@ -33,33 +47,59 @@ public class CCDPayersExtension extends BaseModelExtension {
 		super(builder)
 	}
 	
-	def extensions = {
-		
-		// --------------------------------------------------------------------------------------------
-		// Chapter 3.1 "Payers"
-		// --------------------------------------------------------------------------------------------
-		
+	def register(Collection registered) {
+	    
+	    super.register(registered)
+	    
+	    POCDMT000040ClinicalDocument.metaClass {
+	        setPayers { POCDMT000040Section section ->
+                if (delegate.component?.structuredBody){
+                    delegate.component.structuredBody.component.add(builder.build {
+                        sections(section:section)
+                    })
+                } else {
+                    delegate.component = builder.build {
+                        ccd_component{
+                            structuredBody {
+                                component(section:section)
+                            }
+                        }
+                    }
+                }
+            }
+            
+	        getPayers{ ->
+                delegate.component?.structuredBody?.component.find { 
+                    it.section?.code?.code == '48768-6'
+                } ?.section
+            }
+            
+        }
+				
 		POCDMT000040StructuredBody.metaClass {
-			// TODO: will be always the same
+
 			setPayers {POCDMT000040Section section ->
 				POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
 				component.section = section
 				delegate.component.add(component)
 			}
 			getPayers  { ->
-				delegate.component.find { it.section.code.code == '48768-6'
+				delegate.component.find { 
+				    it.section?.code?.code == '48768-6'
 				} ?.section
 			}
+			
 		}// payers structured body extensions
 		
 		POCDMT000040Section.metaClass {
 			setCoverageActivity  {POCDMT000040Act act ->
-				POCDMT000040Entry entry = CDAR2Factory.eINSTANCE.createPOCDMT000040Entry()
-				delegate.entry.add(entry)
-				entry.act = act
+				delegate.entry.add(builder.build {
+				    ccd_entry(act:act)
+				})
 			}
 			getCoverageActivity  { ->
-				delegate.entry.find { it.act.code.code == '48768-6'
+				delegate.entry.findAll { 
+				    '2.16.840.1.113883.10.20.1.20' in it.act?.templateId?.root
 				} ?.act
 			}
 		}// payers section extensions
@@ -67,29 +107,21 @@ public class CCDPayersExtension extends BaseModelExtension {
 		POCDMT000040Act.metaClass {
 			
 			setPolicyActivity {POCDMT000040Act act ->
-				POCDMT000040EntryRelationship rel = builder.build {
-					entryRelationship {
-						typeCode('COMP')
-					}
-				}
-				delegate.entryRelationship.add(rel)
-				rel.act = act
+				delegate.entryRelationship.add(builder.build {
+					ccd_entryRelationship(typeCode:'COMP', act:act)
+				})
 			}
 			
 			getPolicyActivity { ->
-				delegate.entryRelationship.find {
-					it.typeCode == XActRelationshipEntryRelationship.COMP_LITERAL
+				delegate.entryRelationship.findAll {
+				    '2.16.840.1.113883.10.20.1.26' in it.act?.templateId?.root
 				}?.act
 			}
 			
-			setPayer  {POCDMT000040AssignedEntity assignedEntity ->
-				POCDMT000040Performer2 payer = builder.build {
-					clinicalStatementPerformer {
-						typeCode('PRF')
-					}
-				}
-				delegate.performer.add(payer)
-				payer.assignedEntity = assignedEntity
+			setPayer {POCDMT000040AssignedEntity assignedEntity ->
+				delegate.performer.add(builder.build {
+					clinicalStatementPerformer(typeCode:'PRF', assignedEntity:assignedEntity)
+				})
 			}
 			
 			getPayer  { ->
@@ -99,13 +131,10 @@ public class CCDPayersExtension extends BaseModelExtension {
 			}
 			
 			setCoveredParty  {POCDMT000040ParticipantRole participantRole ->
-				POCDMT000040Participant2 coveredParty = builder.build {
-					clinicalStatementParticipant {
-						typeCode('COV')
-					}
-				}
-				delegate.participant.add(coveredParty)
-				coveredParty.participantRole = participantRole
+				delegate.participant.add(builder.build {
+					clinicalStatementParticipant (typeCode:'COV', 
+					        participantRole:participantRole)
+				})
 			}
 			
 			getCoveredParty  { ->
@@ -115,13 +144,10 @@ public class CCDPayersExtension extends BaseModelExtension {
 			}
 			
 			setSubscriber  {POCDMT000040ParticipantRole participantRole ->
-				POCDMT000040Participant2 subscriber = builder.build {
-					clinicalStatementParticipant {
-						typeCode('HLD')
-					}
-				}
-				delegate.participant.add(coveredParty)
-				coveredParty.participantRole = subscriber
+				delegate.participant.add(builder.build {
+					clinicalStatementParticipant (typeCode:'HLD',
+					        participantRole:participantRole)
+				})
 			}
 			
 			getSubscriber  { ->
@@ -130,28 +156,23 @@ public class CCDPayersExtension extends BaseModelExtension {
 				}?.participantRole
 			}
 			
-			setAuthorizationActivity { POCDMT000040Act act1 ->
+			setAuthorizationActivity { POCDMT000040Act act ->
 				// CONF-66: The value for “Act / entryRelationship / @typeCode”
 				// in a policy activity SHALL be “REFR” 2.16.840.1.113883.5.1002
 				// ActRelationshipType STATIC.
-				POCDMT000040EntryRelationship rel1 = CDAR2Factory.eINSTANCE.createPOCDMT000040EntryRelationship()
-				rel1.typeCode = XActRelationshipEntryRelationship.REFR_LITERAL
-				/*         POCDMT000040EntryRelationship rel1 = builder.build {
-				 entryRelationship {
-				 typeCode('REFR')
-				 }
-				 }
-				 */         delegate.entryRelationship.add(rel1)
-				rel1.act = act1
+				delegate.entryRelationship.add(builder.build {
+				    ccd_entryRelationship (typeCode:'REFR', act:act)
+				})
 			}
 			
 			getAuthorizationActivity { ->
-				delegate.entryRelationship.find {
-					it.typeCode == XActRelationshipEntryRelationship.REFR_LITERAL
+				delegate.entryRelationship.findAll {
+				    '2.16.840.1.113883.10.20.1.19' in it.act?.templateId?.root
 				}?.act
 			}
 			
 			setPromise { POCDMT000040EntryRelationship rel ->
+                rel.typeCode = XActRelationshipEntryRelationship.SUBJ_LITERAL
 				delegate.entryRelationship.add(rel)
 			}
 			
@@ -162,7 +183,6 @@ public class CCDPayersExtension extends BaseModelExtension {
 			}
 		}//payers act extensions
 		
-		return 1
 		
 	}//ccd extensions 
 	
@@ -173,5 +193,10 @@ public class CCDPayersExtension extends BaseModelExtension {
 	
 	String templateId() {
 		'2.16.840.1.113883.10.20.1.9'
+	}	
+	
+	Collection modelExtensions() {
+        [ new CCDSourceExtension(),
+          new CCDCommentsExtension()]
 	}	
 }

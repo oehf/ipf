@@ -19,7 +19,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.ValidationUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AcceptanceCheckUtils;
 
 
 /**
@@ -38,7 +38,7 @@ public class MllpConsumerAcceptanceInterceptor extends AbstractMllpConsumerInter
      * does not check the response (yet). 
      */
     public void process(Exchange exchange) throws Exception {
-        ValidationUtils.checkRequestAcceptance(
+        AcceptanceCheckUtils.checkRequestAcceptance(
                 exchange.getIn().getBody(MessageAdapter.class), 
                 getMllpEndpoint().getEndpointConfiguration());
         

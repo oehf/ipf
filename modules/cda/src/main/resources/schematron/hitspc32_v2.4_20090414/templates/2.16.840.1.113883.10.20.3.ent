@@ -130,33 +130,33 @@
                 (
                 string-length(current()/@code) = 2
                 and
-                substring( current()/@code , 1, 2 ) = document("languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                substring( current()/@code , 1, 2 ) = document("schematron/hitsp32_v2.4_20090414/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
                 )
                 or
                 (
                 string-length(current()/@code) = 3
                 and
-                substring( current()/@code , 1, 3 ) = document("languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                substring( current()/@code , 1, 3 ) = document("schematron/hitsp32_v2.4_20090414/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
                 )
                 or
                 (
                 string-length(current()/@code) = 5
                 and
-                substring( current()/@code , 1, 2 ) = document("languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                substring( current()/@code , 1, 2 ) = document("schematron/hitsp32_v2.4_20090414/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
                 and
                 substring( current()/@code , 3, 1 ) = "-"
                 and
-                substring( current()/@code, 4, 2) = document("languageCode.xml")/systems/system[@root="2.16.1"]/code/@value
+                substring( current()/@code, 4, 2) = document("schematron/hitsp32_v2.4_20090414/languageCode.xml")/systems/system[@root="2.16.1"]/code/@value
                 )
                 or
                 (
                 string-length(current()/@code) = 6
                 and
-                substring( current()/@code , 1, 3 ) = document("languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
+                substring( current()/@code , 1, 3 ) = document("schematron/hitsp32_v2.4_20090414/languageCode.xml")/systems/system[@root="2.16.840.1.113883.6.121"]/code/@value
                 and
                 substring( current()/@code , 4, 1 ) = "-"
                 and
-                substring( current()/@code, 5, 2) = document("languageCode.xml")/systems/system[@root="2.16.1"]/code/@value
+                substring( current()/@code, 5, 2) = document("schematron/hitsp32_v2.4_20090414/languageCode.xml")/systems/system[@root="2.16.1"]/code/@value
                 )
                 ' >
     CONF-HP-25, CONF-HP-26, CONF-HP-27: ClinicalDocument / languageCode SHALL be in the
@@ -242,7 +242,7 @@
     </rule>
 
     <rule context="//*[self::cda:addr/@nullFlavor or self::cda:name/@nullFlavor or self::cda:telecom/@nullFlavor]">
-    <assert test="document('voc.xml')/systems/system[@group='Null Flavors']/code[@value = current()/@nullFlavor]">
+    <assert test="document('schematron/hitsp32_v2.4_20090414/voc.xml')/systems/system[@group='Null Flavors']/code[@value = current()/@nullFlavor]">
     CONF-HP-9: When name, addr, telecom information is unknown and where these elements 
     are required to be present, the fact that the information is unknown SHALL be represented 
     using an appropriate value for the nullFlavor attribute on the element.  Legal values 
@@ -285,7 +285,7 @@
     relatedEntity/relatedPerson element SHALL be present.
     </assert>
 
-    <assert test="not(cda:relatedEntity/@classCode='PRS') or document('voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Personal Relationship Role Type']/code[@value = current()/cda:relatedEntity/cda:code/@code] or current()/cda:relatedEntity/cda:code/@codeSystem='2.16.840.1.113883.6.96'">
+    <assert test="not(cda:relatedEntity/@classCode='PRS') or document('schematron/hitsp32_v2.4_20090414/voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Personal Relationship Role Type']/code[@value = current()/cda:relatedEntity/cda:code/@code] or current()/cda:relatedEntity/cda:code/@codeSystem='2.16.840.1.113883.6.96'">
     CONF-HP-46: When relatedEntity/@classCode is PRS, values in relatedEntity/code SHALL come
     from the HL7 PersonalRelationshipRoleType vocabulary or from SNOMED, any subtype of“
     Person in the family” (303071001).
@@ -412,13 +412,13 @@
     CONF-HP-32: The patient/birthTime element SHOULD be precise at least to the day.
     </assert>
 
-    <assert test="document('voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Administrative Gender']/code[@value = current()/cda:administrativeGenderCode/@code]">
+    <assert test="document('schematron/hitsp32_v2.4_20090414/voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Administrative Gender']/code[@value = current()/cda:administrativeGenderCode/@code]">
     CONF-HP-33: Administrative Gender codes used to describe the gender of the patient
     SHOULD come from the HL7 AdministrativeGender vocabulary. The OID for this 
     vocabulary domain is 2.16.840.1.113883.5.1.
     </assert>
 
-    <assert test="not(current()/cda:maritalStatusCode) or document('voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Marital Status']/code[@value = current()/cda:maritalStatusCode/@code]">
+    <assert test="not(current()/cda:maritalStatusCode) or document('schematron/hitsp32_v2.4_20090414/voc.xml')/systems/system[@codeSystemName='LOINC'][@group='Marital Status']/code[@value = current()/cda:maritalStatusCode/@code]">
     CONF-HP-34: Marital status codes used to describe the marital status of the patient 
     SHOULD come from the HL7 MaritalStatus vocabulary. The OID for this vocabulary 
     domain is 2.16.840.1.113883.5.2.

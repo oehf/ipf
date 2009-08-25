@@ -6,8 +6,8 @@
 	<title>Comment - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.40"]'>
     <assert test="self::cda:act">A comment (templateId 2.16.840.1.113883.10.20.1.40) SHALL be represented with Act.</assert>
-    <assert test="@classCode='ACT'">The value for “Act / classCode” in a comment SHALL be “ACT”  2.16.840.1.113883.5.6 ActClass STATIC.</assert>
-    <assert test="@moodCode='EVN'">The value for “Act / moodCode” in a comment SHALL be “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="@classCode='ACT'">The value for "Act / classCode" in a comment SHALL be "ACT"  2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+    <assert test="@moodCode='EVN'">The value for "Act / moodCode" in a comment SHALL be "EVN" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
     <assert test="count(cda:code)=1">A comment SHALL contain exactly one Act / code.</assert>
 	</rule>
 </pattern>

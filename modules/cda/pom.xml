@@ -45,4 +45,18 @@
         </dependency>
     </dependencies>
     
+    <!-- We require some more memory for the tests, because the
+         builder is cached and accumulates memory. -->
+    <build>
+        <plugins>
+            <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <forkMode>once</forkMode>
+                    <argLine>-Xmx128m</argLine>
+                </configuration>
+            </plugin> 
+        </plugins>
+    </build>
 </project>

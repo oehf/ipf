@@ -36,9 +36,9 @@ public class ClosurePrimitiveTypeRuleTest extends GroovyTestCase{
     
     @Test
     void testTest(){
-        def rule = new ClosurePrimitiveTypeRule() {
+        def rule = new ClosurePrimitiveTypeRule( {
             it.size() < 10
-        }
+        })
         rule.omitLeadingWhitespace = true
         rule.omitTrailingWhitespace = true
         assert rule.test('       \ntrimmed')

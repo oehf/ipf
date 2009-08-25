@@ -30,6 +30,10 @@ import org.openehealth.ipf.modules.cda.AbstractValidator
  * @author Christian Ohr
  */
 public class CCDAdvanceDirectivesValidator extends AbstractValidator {
+     
+    CCDAdvanceDirectivesValidator() {
+        super('/schematron/ccd/voc.xml')
+    }
 	
 	void validate(Object section, Object profile){
 		assertInstanceOf('CONF-78', POCDMT000040Section.class, section)
@@ -99,6 +103,7 @@ public class CCDAdvanceDirectivesValidator extends AbstractValidator {
 		 *           SHALL be selected from ValueSet 2.16.840.1.113883.1.11.20.1 
 		 *           AdvanceDirectiveStatusCode STATIC 20061017. 
 		 */
+		 assertCode('CONF-100', '2.16.840.1.113883.1.11.20.1', obs.value[0])
 	}
 	
 	/**

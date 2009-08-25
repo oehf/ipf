@@ -15,27 +15,38 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import groovytools.builder.MetaBuilder
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+
 /**
  * @author Christian Ohr
  */
 
- abstract class BaseModelExtension{
-     
-     def builder
-     
-     BaseModelExtension() {         
-     }
-     
-     BaseModelExtension(builder) {
-         this.builder = builder
-     }
-     
-     abstract String templateId()
-     
-     abstract String extensionName()
-     
+abstract class BaseModelExtension {
 
-    
-    
+   protected static final Log LOG = LogFactory.getLog(BaseModelExtension.class)
+
+   def builder
+
+   def extensions = {
+      register([])
+   }
+
+   BaseModelExtension() {
+   }
+
+   BaseModelExtension(builder) {
+      this.builder = builder
+   }
+
+   abstract String templateId()
+
+   abstract String extensionName()
+
+   def register(Collection registered) {
+      LOG.debug("Initializing extension ${extensionName()} (${templateId()})")
+      registered.add(templateId())
+   }
+
+
 }

@@ -16,8 +16,19 @@
 package builders.content.section
 
 import org.openhealthtools.ihe.common.cdar2.*
-
-// Chapter 3.6 : Family History
+
+/**
+ * Chapter 3.6 : Family History
+ *
+ *  Template Definitions:
+ *      Alert Section (2.16.840.1.113883.10.20.1.2)
+ *
+ *  Dependecies:
+ *      Age Observation (ccd_ageObservation)
+ *      Spurce
+ *      Comments
+ */
+
 
 // CONF-184: CCD SHOULD contain exactly one and SHALL NOT contain more 
 //           than one Family history section (templateId 2.16.840.1.113883.10.20.1.4). 
@@ -31,7 +42,7 @@ import org.openhealthtools.ihe.common.cdar2.*
 // Note: Some constraints can not be automatically enforced at this point:
 //       CONF-210, 211, 225
 
-ccd_familyHistory(schema:'section') {
+ccd_familyHistory(schema:'ccd_section') {
 	properties {
 		// CONF-185: The advance directive section SHALL contain Section / code.
 		// CONF-186 : The value for “Section / code” SHALL be “10157-6”
@@ -46,13 +57,13 @@ ccd_familyHistory(schema:'section') {
 		// CONF-187: The advance directive section SHALL contain Section / title.
 		// CONF-188: Section / title SHOULD be valued with a case-insensitive 
 		//           language-insensitive text string containing “family history”.
-		title(req:true, def: {
+		title(schema:'st', check: { it.text =~ /(?i)family history/ }, req:true, def: {
 			getMetaBuilder().build { st('Family History') }
 		})
 		// CONF-189: The family history section SHALL NOT contain Section / subject.
 		// TODO subject(check:{})
 		text(schema:'strucDocText', req:true)
-		observation(schema:'ccd_familyHistoryObservationNotWithinAnOrganizer')
+		familyHistoryObservation(schema:'ccd_familyHistoryObservationNotWithinAnOrganizer')
 		familyMember(schema:'ccd_familyHistoryOrganizer')
 		causeOfDeath(schema:'ccd_familyHistoryCauseOfDeathObservation')
 	}
@@ -151,7 +162,7 @@ ccd_familyHistoryOrganizer(schema:'organizer') {
         // participant, representing the family member who is the subject of the 
         // family history observations.
         familyPerson(req:true, schema:'ccd_familyMemberRelatedSubject')        
-		observation(schema:'ccd_familyHistoryObservationNotWithinAnOrganizer')
+		familyHistoryObservation(schema:'ccd_familyHistoryObservationNotWithinAnOrganizer')
 		causeOfDeath(schema:'ccd_familyHistoryCauseOfDeathObservation')
     }
     
@@ -182,25 +193,6 @@ ccd_familyMemberRelatedSubject(schema:'relatedSubject') {
         // CONF-214: RelatedSubject SHALL contain exactly one RelatedSubject / code.        
         code(schema:'roleCode', req:true)
         subject(schema:'subjectPerson') // ccd_familyHistorySubjectPerson
-    }
-}
-
-ccd_ageObservation(schema:'observation') {
-    properties {
-        code(schema:'ce', def: {
-            getMetaBuilder().build { snomedCode(code:'397659008', displayName:'Age') }
-        })
-	    statusCode(schema:'cs', req:true, def: {
-            getMetaBuilder().build {
-                cs('completed')
-            }
-        })
-
-    }
-    collections {
-		templateIds(collection:'templateId', def: {
-			getMetaBuilder().buildList { ii(root:'2.16.840.1.113883.10.20.1.38') }
-		})
     }
 }
 

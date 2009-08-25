@@ -16,7 +16,8 @@
 package org.openehealth.ipf.modules.cda.builder.content.section
 
 import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openhealthtools.ihe.common.cdar2.POCDMT000040Act
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Sectionimport org.openehealth.ipf.modules.cda.AbstractValidator
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
+import org.openhealthtools.ihe.common.cdar2.ParticipationIndirectTargetimport org.openehealth.ipf.modules.cda.AbstractValidator
 
 /**
  * Validates the Payers content section module (2.16.840.1.113883.10.20.1.9)
@@ -80,9 +81,13 @@ public class CCDPayersValidator extends AbstractValidator {
 			assertEquals('CONF-56', 'PRF', performer.typeCode.name)
 			assertMinSize('CONF-57', 1, performer.assignedEntity.id)
 		}
-		policyActivity.participant.each { participant ->
-			assertEquals('CONF-58', 'COV', participant.typeCode.name)
-		}
+		//validate covered party
+		def coveredParty = policyActivity.participant.findAll {
+                it.typeCode == ParticipationIndirectTarget.COV_LITERAL
+            }
+		assertSize('CONF-58', 1, coveredParty)
+		assertEquals('CONF-58', 'COV', coveredParty[0].typeCode.name)
+
 		/* CONF-66: Act / entryRelationship / @typeCode is 'REFR' */
 		policyActivity.entryRelationship.eachWithIndex { rel, index->
 			assertEquals('CONF-66', 'REFR', rel.typeCode.name)

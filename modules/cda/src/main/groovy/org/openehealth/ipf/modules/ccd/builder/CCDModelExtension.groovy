@@ -18,9 +18,11 @@ package org.openehealth.ipf.modules.ccd.builder
 import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
 import org.openehealth.ipf.modules.cda.builder.content.entry.*
 import org.openehealth.ipf.modules.cda.builder.content.section.*
-
+import org.openehealth.ipf.modules.cda.builder.content.header.*
+import org.openehealth.ipf.modules.cda.builder.*
+import org.openehealth.ipf.modules.cda.builder.content.section.CCDEncountersExtensionimport org.openehealth.ipf.modules.cda.builder.content.section.CCDFunctionalStatusExtension
 /**
- * Make sure that the CDAModelExtensions are called before
+ * Metaclass model extensions for CCD documents
  *
  * @author Christian Ohr
  */
@@ -29,21 +31,30 @@ public class CCDModelExtension extends CompositeModelExtension{
     CCDModelExtension() {
     }
 
-    CCDModelExtension(CCDBuilder builder) {
+    CCDModelExtension(builder) {
         super(builder)
     }
     
-    List modelExtensions() {
-        [
-             new CCDMainActivityExtension(builder),
-             new CCDPurposeExtension(builder),
-             new CCDPayersExtension(builder),
-             new CCDAdvanceDirectivesExtension(builder),
-             new CCDSupportExtension(builder),
-             new CCDFamilyHistoryExtension(builder),
-             new CCDProblemActExtension(builder),
-             new CCDProblemsExtension(builder),
-             new CCDAlertsExtension(builder)
+    Collection modelExtensions() {
+        [   new CDAR2ModelExtension(),
+            new CCDMainActivityExtension(builder),
+            new CCDPurposeExtension(builder),
+            new CCDPayersExtension(builder),
+            new CCDSupportExtension(builder),
+            new CCDAdvanceDirectivesExtension(builder),
+            new CCDFunctionalStatusExtension(builder),
+            new CCDProblemsExtension(builder),
+            new CCDFamilyHistoryExtension(builder),
+            new CCDSocialHistoryExtension(builder),
+            new CCDAlertsExtension(builder),
+            new CCDMedicationsExtension(builder),
+            new CCDMedicalEquipmentExtension(builder),
+            new CCDImmunizationsExtension(builder),
+            new CCDVitalSignsExtension(builder),
+            new CCDResultsExtension(builder),
+            new CCDProceduresExtension(builder),
+            new CCDEncountersExtension(builder),
+            new CCDPlanOfCareExtension(builder)
         ]
     }
 

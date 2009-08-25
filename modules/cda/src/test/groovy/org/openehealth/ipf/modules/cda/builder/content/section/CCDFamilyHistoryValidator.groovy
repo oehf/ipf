@@ -109,5 +109,20 @@ public class CCDFamilyHistoryValidator extends AbstractValidator {
 		assertContains('CONF-196', '2.16.840.1.113883.10.20.1.42', observation.templateId.root)    
 		assertContains('CONF-197', 'CAUS', observation.entryRelationship.typeCode.name)   
 	}
+	
+	/**
+     * Implements set of CCD Family History Age Observation
+     */
+    public boolean doValidateFamilyAgeObservation(POCDMT000040Observation observation){
+        assertContains('CONF-225', '2.16.840.1.113883.10.20.1.38', observation.templateId.root) 
+        assertEquals('CONF-226', 'OBS', observation.classCode.name)
+        assertEquals('CONF-227', 'EVN', observation.moodCode.name)
+        assertNotNull('CONF-185', section.code)
+        assertEquals('CONF-228', '397659008', observation.code.code)
+        assertEquals('CONF-228', '2.16.840.1.113883.6.96', observation.code.codeSystem)
+        assertNotNull('CONF-229', observation.statusCode)   
+        assertEquals('CONF-230', 'completed', observation.statusCode.code)
+        assertSize('CONF-231', 1, observation.value)
+    }
 }
 

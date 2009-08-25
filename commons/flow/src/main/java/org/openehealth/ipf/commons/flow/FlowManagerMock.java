@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.flow;
 
 import java.util.List;
 
+import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
+import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfoFinderCriteria;
 
@@ -66,6 +68,10 @@ public class FlowManagerMock implements FlowManager {
     }
 
     public String findFlowPartMessageText(Long flowId, String flowPartPath) {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    public int purgeFlows(FlowPurgeCriteria purgeCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
@@ -120,4 +126,17 @@ public class FlowManagerMock implements FlowManager {
     public void setFlowCleanupEnabled(String application, boolean flowCleanupEnabled) {
         throw new UnsupportedOperationException("not implemented");
     }
+
+    public List<ApplicationConfig> findApplicationConfigs() {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    public ApplicationConfig getApplicationConfig(String application) {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    public void mergeApplicationConfig(ApplicationConfig applicationConfig) {
+        throw new UnsupportedOperationException("not implemented");
+    }
+    
 }

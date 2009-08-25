@@ -15,15 +15,27 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
+import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
+
 /**
- * Make sure that the CDAModelExtensions are called before
+ * Chapter 2.8 "Purpose"
+ * 
+ * Templates included:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.30 Purpose Activity
+ * </ul>
+ * Dependent templates:
+ * <ul>
+ * <li>                             Information Source
+ * <li>2.16.840.1.113883.10.20.1.40 Comment 
+ * </ul>
+ * 
  *
  * @author Christian Ohr
  */
-public class CCDPurposeExtension extends BaseModelExtension{
+public class CCDPurposeExtension extends CompositeModelExtension{
 
     CCDPurposeExtension() {
         super()
@@ -33,21 +45,46 @@ public class CCDPurposeExtension extends BaseModelExtension{
         super(builder)
     }
     
-    def extensions = {
-
-        // --------------------------------------------------------------------------------------------
-        // Chapter 2.8 "Purpose"
-        // --------------------------------------------------------------------------------------------
+	def register(Collection registered) {
+	    
+	    super.register(registered)
+	    	    
+	    POCDMT000040ClinicalDocument.metaClass {
+            setPurpose { POCDMT000040Section section ->
+                if (delegate.component?.structuredBody){
+                    delegate.component.structuredBody.component.add(builder.build {
+                        sections(section:section)
+                    })
+                } else {
+                    delegate.component = builder.build {
+                        ccd_component{
+                            structuredBody {
+                                component(section:section)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            getPurpose{ ->
+                delegate.component?.structuredBody?.component.find { 
+                    it.section?.code?.code == '48764-5'
+                } ?.section
+            }
+            
+        }
 
         POCDMT000040StructuredBody.metaClass {
-            // We assume that this is a CCD Purpose section, enforced by the builder
-            setPurpose  {POCDMT000040Section section ->
+
+	        setPurpose  {POCDMT000040Section section ->
                 POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
                 component.section = section
                 delegate.component.add(component)
             }
             getPurpose  { ->
-                delegate.component.find { it.section.code.code == '48764-5' } ?.section
+                delegate.component.find { 
+                    it.section?.code?.code == '48764-5' 
+                }?.section
             }
         } //purpose structured body extensions
 
@@ -67,9 +104,8 @@ public class CCDPurposeExtension extends BaseModelExtension{
                     // CONF-25: A purpose activity SHALL contain exactly one Act / code,
                     //          with a value of “23745001” “Documentation procedure” 2.16.840.1.113883.6.96
                     //          SNOMED CT STATIC.
-                    entry {
-                        typeCode('DRIV')
-                        act(moodCode:'EVN')  {
+                    ccd_entry(typeCode:'DRIV') {
+                        act(moodCode:'EVN', classCode:'ACT')  {
                             templateId('2.16.840.1.113883.10.20.1.30')
                             statusCode('completed')
                             code(code:'23745001', codeSystem:'2.16.840.1.113883.6.96',
@@ -83,11 +119,12 @@ public class CCDPurposeExtension extends BaseModelExtension{
             }
 
             getPurposeActivity { ->
-                delegate.entry.act.find { it.code.code == '23745001'}?.entryRelationship[0]
+                delegate.entry?.act?.findAll { 
+                    '2.16.840.1.113883.10.20.1.30' in it.templateId.root
+                }?.entryRelationship[0]
             }
         }// purpose section extensions
         
-        return 1
         
     }//ccd purpose extensions 
     
@@ -99,5 +136,11 @@ public class CCDPurposeExtension extends BaseModelExtension{
     String templateId() {
         '2.16.840.1.113883.10.20.1.13'
     }
+    
+	Collection modelExtensions() {
+		[ new CCDSourceExtension(),
+		  new CCDCommentsExtension()
+		]
+	}    
     
 }

@@ -34,6 +34,8 @@ public interface FlowRepository {
     
     Flow lock(Long id);
 
+    int purgeFlows(FlowPurgeCriteria purgeCriteria);
+    
     List<Flow> findFlows(FlowFinderCriteria finderCriteria);
     
     List<Flow> findErrorFlows(FlowFinderCriteria finderCriteria);

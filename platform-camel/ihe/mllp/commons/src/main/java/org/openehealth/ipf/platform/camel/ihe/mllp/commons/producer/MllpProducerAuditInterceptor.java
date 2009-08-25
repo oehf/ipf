@@ -21,6 +21,7 @@ import org.apache.camel.component.mina.MinaExchange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
@@ -81,7 +82,7 @@ public class MllpProducerAuditInterceptor extends AbstractMllpProducerIntercepto
             
             failed = exchange.isFailed();
             if( ! failed) {
-                MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
+                MessageAdapter msg = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
                 failed = AuditUtils.isErrorMessage(msg);
             }
         } catch (Exception e) {

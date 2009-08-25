@@ -36,7 +36,9 @@ public class MetaBuilderUtils{
                 .each { p ->
                     // ... either set to NULL ...
                     if (p.setter) {
-                        p.setProperty(data, null)
+                        if (!p.type.isPrimitive()) {                    
+                            p.setProperty(data, null)
+                        }
                     // ... or clean the collection
                     } else {
                         def prop = p.getProperty(data)

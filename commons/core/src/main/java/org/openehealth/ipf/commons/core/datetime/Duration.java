@@ -23,13 +23,14 @@ import java.util.Date;
 public class Duration {
 
     private static final String EMPTY = "";
-    private static final String PATTERN = "^[0-9]+[smh]?$";
-    private static final String PATTERN_UNIT = "[smh]";
+    private static final String PATTERN = "^[0-9]+[smhd]?$";
+    private static final String PATTERN_UNIT = "[smhd]";
     private static final String PATTERN_NUMBER = "[0-9]+";
     
     private static final String SECOND = "s";
     private static final String MINUTE = "m";
     private static final String HOUR = "h";
+    private static final String DAY = "d";
     
     
     private long milliseconds;
@@ -60,6 +61,7 @@ public class Duration {
      * <li><code>s</code>: second</li>
      * <li><code>m</code>: minute</li>
      * <li><code>h</code>: hour</li>
+     * <li><code>d</code>: day</li>
      * </ul>
      * 
      * If no unit is given it defaults to milliseconds.
@@ -83,6 +85,8 @@ public class Duration {
             v = v * 1000L * 60L;
         } else if (u.equals(HOUR)) {
             v = v * 1000L * 60L * 60L;
+        } else if (u.equals(DAY)) {
+            v = v * 1000L * 60L * 60L * 24L;
         } 
         return new Duration(v);
     }

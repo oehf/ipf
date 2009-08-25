@@ -15,15 +15,30 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.openhealthtools.ihe.common.cdar2.*import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+import org.openhealthtools.ihe.common.cdar2.*
+import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
+
 
 /**
- * Make sure that the CDAModelExtensions are called before
- *
+ * Chapter 3.6 "Family History"
+ *  
+ * Templates included:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.22 Family History Observation
+ * <li>2.16.840.1.113883.10.20.1.23 Family History Organizer
+ * <li>2.16.840.1.113883.10.20.1.42 Family History Cause Of Death Observation
+ * </ul>
+ * Dependent templates:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.38 Age Observation
+ * <li>2.16.840.1.113883.10.20.1.40 Comment
+ * <li>                             Information Source 
+ * </ul>
+ * 
  * @author Christian Ohr
  */
-public class CCDFamilyHistoryExtension extends BaseModelExtension {
+public class CCDFamilyHistoryExtension extends CompositeModelExtension {
 	
 	CCDFamilyHistoryExtension() {
 		super()
@@ -33,141 +48,138 @@ public class CCDFamilyHistoryExtension extends BaseModelExtension {
 		super(builder)
 	}
 	
-	def extensions = {
+	def register(Collection registered) {
 		
-	        // --------------------------------------------------------------------------------------------
-	        // Chapter 3.6 "Family History"
-	        // --------------------------------------------------------------------------------------------
+		super.register(registered)
 
-	        POCDMT000040StructuredBody.metaClass {
-	            // We assume that this is a CCD Family History section, enforced by the builder
-	            setFamilyHistory  {POCDMT000040Section section ->
-	                POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
-	                component.section = section
-	                delegate.component.add(component)
-	            }
-	            getFamilyHistory  { ->
-	                delegate.component.find { it.section.code.code == '10157-6' } ?.section
-	            }
-	        }
-	        
-	        POCDMT000040Section.metaClass {
-	            setObservation  {POCDMT000040Observation observation ->
-	                POCDMT000040Entry entry = builder.build {
-	                    entry {
-	                        typeCode('DRIV')
-	                    }
-	                }
-	                entry.observation = observation
-	                delegate.entry.add(entry)
-	            }
+        POCDMT000040ClinicalDocument.metaClass {
+            setFamilyHistory { POCDMT000040Section section ->
+                if (delegate.component?.structuredBody){
+                    delegate.component.structuredBody.component.add(builder.build {
+                        sections(section:section)
+                    })
+                } else {
+                    delegate.component = builder.build {
+                        ccd_component{
+                            structuredBody {
+                                component(section:section)
+                            }
+                        }
+                    }
+                }
+            }
+            getFamilyHistory { ->
+                delegate.component?.structuredBody?.component.find {
+                    it.section?.code?.code == '10157-6'
+                } ?.section
+            }
+        }
+		
+		POCDMT000040StructuredBody.metaClass {
+			setFamilyHistory  {POCDMT000040Section section ->
+				POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
+				component.section = section
+				delegate.component.add(component)
+			}
+			getFamilyHistory  { ->
+				delegate.component.find { 
+				    it.section?.code?.code == '10157-6' 
+				} ?.section
+			}
+		}
+		
+		POCDMT000040Section.metaClass {
+			setFamilyHistoryObservation  {POCDMT000040Observation observation ->
+			    delegate.entry.add(builder.build {
+					ccd_entry(typeCode:'DRIV', observation:observation)
+				})
+			}
+			
+			getFamilyHistoryObservation { ->
+				delegate.entry?.observation?.findAll{
+                    '2.16.840.1.113883.10.20.1.22' in it.templateId.root
+                }?.observation
 
-	            getObservation { ->
-	                delegate.entry.observation
-	            }
-	            
-	            setFamilyMember  {POCDMT000040Organizer organizer ->
-	                POCDMT000040Entry entry = builder.build {
-	                    entry {
-	                        typeCode('DRIV')
-	                    }
-	                }
-	                entry.organizer = organizer
-	                delegate.entry.add(entry)
-	            }
-
-	            getFamilyMember { ->
-	                delegate.entry.organizer
-	            }
-	            
-	            setCauseOfDeath  {POCDMT000040Observation observation ->
-	                POCDMT000040Entry entry = builder.build {
-	                    entry {
-	                        typeCode('DRIV')
-	                    }
-	                }
-	                entry.observation = observation
-	                delegate.entry.add(entry)
-	            }
-
-	            getCauseOfDeath { ->
-	                delegate.entry.observation
-	            }            
-	        }
-	        
-	        POCDMT000040Observation.metaClass {
-	            setFamilyMember  {POCDMT000040RelatedSubject relatedSubject ->
-	                POCDMT000040Subject subject = CDAR2Factory.eINSTANCE.createPOCDMT000040Subject()
-	                subject.relatedSubject = relatedSubject
-	                delegate.subject = subject
-	                relatedSubject
-	            }
-	            getFamilyMember { ->
-	                delegate.subject.relatedSubject
-	            } 
-	            setCause  {POCDMT000040Observation observation ->
-	                POCDMT000040EntryRelationship rel = builder.build {
-	                    entryRelationship {
-	                        typeCode('CAUS')
-	                    }
-	                }
-	                rel.observation = observation
-	                delegate.entryRelationship.add(rel)
-	            }
-	            getCause { ->
-	            	delegate.entryRelationship.find { it.typeCode == 'CAUS' }.observation
-	            }
-	            
-	            setAge {POCDMT000040Observation observation ->
-	                POCDMT000040EntryRelationship rel = builder.build {
-	                    entryRelationship(inversionInd:true, typeCode:'SUBJ')
-	                }
-	                rel.observation = observation
-	                delegate.entryRelationship.add(rel)
-	            }
-	            getAge { ->
-	        	    delegate.entryRelationship.find { it.typeCode == 'SUBJ' }.observation            
-	            }
-	        }
-	        
-	        POCDMT000040Organizer.metaClass {
-	            setFamilyPerson  {POCDMT000040RelatedSubject relatedSubject ->
-	                POCDMT000040Subject subject = CDAR2Factory.eINSTANCE.createPOCDMT000040Subject()
-	                subject.relatedSubject = relatedSubject
-	                delegate.subject = subject
-	                relatedSubject
-	            }
-	            getFamilyPerson { ->
-	                delegate.subject.relatedSubject
-	            }   
-	            
-	            setCauseOfDeath { POCDMT000040Observation observation -> 
-	                POCDMT000040Component4 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component4()
-	                component.observation = observation
-	                delegate.component.add(component)
-	                observation                
-	            }
-	            getCauseOfDeath { ->
-	                delegate.component.find { 
-	                    it.observation?.templateId[0] == '2.16.840.1.113883.10.20.1.42' 
-	                }.observation
-	            }
-	            
-	            setObservation  {POCDMT000040Observation observation ->
-	                POCDMT000040Component4 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component4()
-	                component.observation = observation
-	                delegate.component.add(component)
-	                observation                
-	            }
-
-	        	getObservation { ->
-	        	    delegate.component.find { 
-	        	        it.observation?.templateId[0] == '2.16.840.1.113883.10.20.1.22' 
-	        	    }.observation
-	        	}
-	        }
-	        
-	        return 1
+			}
+			
+			setFamilyMember  {POCDMT000040Organizer organizer ->
+			    delegate.entry.add(builder.build {
+					ccd_entry(typeCode:'DRIV', organizer:organizer)
+				})
+			}
+			
+			getFamilyMember { ->
+				delegate.entry?.organizer?.findAll{
+                    '2.16.840.1.113883.10.20.1.23' in  it.templateId.root
+                }
+			}
+			
+			setCauseOfDeath  {POCDMT000040Observation observation ->
+			    delegate.entry.add(builder.build {
+					ccd_entry (typeCode:'DRIV', observation:observation)
+				})
+			}
+			
+			getCauseOfDeath { ->
+				delegate.entry?.observation
+			}            
+		}
+		
+		POCDMT000040Observation.metaClass {
+			setFamilyMember  {POCDMT000040RelatedSubject relatedSubject ->
+			    delegate.subject = builder.build {
+			        subject(relatedSubject:relatedSubject)
+			    }
+			}
+			getFamilyMember { ->
+				delegate.subject?.relatedSubject
+			} 
+			setCause  {POCDMT000040Observation observation ->
+			    delegate.entryRelationship.add(builder.build {
+					ccd_entryRelationship (typeCode:'CAUS', observation:observation)
+				})
+			}
+			getCause { ->
+				delegate.entryRelationship.findAll {
+				    it.typeCode.name == 'CAUS'
+				}?.observation
+			}
+		}
+		
+		POCDMT000040Organizer.metaClass {
+			setFamilyPerson  {POCDMT000040RelatedSubject relatedSubject ->
+		        delegate.subject = builder.build {
+		            subject(relatedSubject:relatedSubject)
+		    	}
+			}
+			getFamilyPerson { ->
+				delegate.subject?.relatedSubject
+			}   
+			
+			setCauseOfDeath { POCDMT000040Observation observation -> 
+				delegate.component.add(builder.build {
+				    ccd_organizerComponents(observation:observation)				
+				})               
+			}
+			getCauseOfDeath { ->
+				delegate.component.findAll {
+					'2.16.840.1.113883.10.20.1.42' in it.observation?.templateId.root
+				}?.observation
+			}
+			
+			setFamilyHistoryObservation  {POCDMT000040Observation observation ->
+				delegate.component.add(builder.build {
+				    ccd_organizerComponents(observation:observation)				
+				})               
+			}
+			
+			getFamilyHistoryObservation { ->
+				delegate.component.find { 
+					'2.16.840.1.113883.10.20.1.22' in it.observation?.templateId.root  
+				}?.observation
+			}
+		}
+		
 	}
 	
 	
@@ -177,5 +189,12 @@ public class CCDFamilyHistoryExtension extends BaseModelExtension {
 	
 	String templateId() {
 		'2.16.840.1.113883.10.20.1.4'
-	}	
+	}
+	
+	Collection modelExtensions() {
+		[ new CCDAgeObservationExtension(),
+		  new CCDCommentsExtension(),
+		  new CCDSourceExtension()
+		]
+	}
 }

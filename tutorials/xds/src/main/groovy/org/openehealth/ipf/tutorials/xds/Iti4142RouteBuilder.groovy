@@ -1,0 +1,209 @@
+/*
+ * Copyright 2009 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.openehealth.ipf.tutorials.xds
+
+import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationMessage.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType.*
+
+import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Association
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.*
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.*
+
+/**
+ * Route builder for ITI-41 and -42.
+ * @author Jens Riemschneider
+ */
+class Iti4142RouteBuilder extends SpringRouteBuilder {
+	private final static Log log = LogFactory.getLog(Iti4142RouteBuilder.class);
+	
+	@Override
+	public void configure() throws Exception {
+		errorHandler(noErrorHandler())
+		
+		// Entry point for Provide and Register Document Set
+		from('xds-iti41:xds-iti41?audit=false')
+            .log(log) { 'received iti41: ' + it.in.getBody(ProvideAndRegisterDocumentSet.class) }
+		    // Validate and convert the request
+    		.validate().iti41Request()
+            .transform { 
+                [ 'req': it.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ] 
+            }
+		    // Further validation based on the registry content
+    		.to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds')
+		    // Store the individual entries contained in the request		    
+    		.multicast().to(
+    		    'direct:storeDocs',
+    			'direct:storeDocEntriesFromProvide',
+    			'direct:storeFolders',
+    			'direct:storeSubmissionSet',
+    			'direct:storeAssociations')
+    		.end()
+    		// Create success response
+    		.transform { new Response(Status.SUCCESS) }
+		    
+		// Entry point for Register Document Set
+		from('xds-iti42:xds-iti42')
+            .log(log) { 'received iti42: ' + it.in.getBody(RegisterDocumentSet.class) }
+		    // Validate and convert the request
+			.validate().iti42Request()
+            .transform { 
+                [ 'req': it.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ] 
+            }
+            // Further validation based on the registry content
+			.to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds', 'direct:checkHash')
+            // Store the individual entries contained in the request 
+			.multicast().to(
+			    'direct:storeDocEntriesFromRegister',
+				'direct:storeFolders',
+				'direct:storeSubmissionSet',
+				'direct:storeAssociations')
+			.end()
+            // Create success response
+			.transform { new Response(Status.SUCCESS) }
+			
+        // Deprecated documents should not be transformed any further
+        from('direct:checkForAssociationToDeprecatedObject')
+            .splitEntries { 
+                it.req.associations.findAll { assoc -> 
+                    assoc.associationType == APPEND || assoc.associationType == TRANSFORM
+                } 
+            }
+            .search(DOC_ENTRY).uuid('entry.targetUuid').status(DEPRECATED).into('deprecatedDocs')
+            .splitEntries { it.deprecatedDocs }
+            .fail(DEPRECATED_OBJ_CANNOT_BE_TRANSFORMED)
+
+        // All entries in the request must have the same patient ID, no matter if
+        // they are only referenced or contained in the request itself. Also check
+        // for a patient ID that we shouldn't store documents for.
+        from('direct:checkPatientIds')
+            .choice().when { it.in.body.req.submissionSet.patientId.id == '1111111' }
+                .fail(UNKNOWN_PATIENT_ID)
+                .otherwise()
+            .end()
+            .search([DOC_ENTRY, FOLDER])
+                .referenced('req.associations')
+                .withoutPatientId('req.submissionSet.patientId')
+                .into('otherPatientsEntries')
+            .splitEntries { it.otherPatientsEntries }
+            .fail(FOLDER_PATIENT_ID_WRONG)
+        
+        // Resubmitted documents must have the same hash code as the version already in the store
+        from('direct:checkHash')
+            .splitEntries { it.req.documentEntries }
+            .search(DOC_ENTRY).uniqueId('entry.uniqueId').withoutHash('entry.hash').into('docsWithOtherHash')
+            .splitEntries { it.docsWithOtherHash }
+            .fail(DIFFERENT_HASH_CODE_IN_RESUBMISSION)
+
+    	// Put all documents in the store
+		from('direct:storeDocs')
+			.splitEntries { it.req.documents }
+    	    .store()
+		
+		// Put all document entries in the store
+		from('direct:storeDocEntriesFromProvide')
+    	    .splitEntries { it.req.documents }
+			// Calculate some additional meta data values
+			.updateWithRepositoryData()
+            .processBody { it.entry = it.entry.documentEntry }
+			.to('direct:store')
+					
+        // Put all document entries in the store
+        from('direct:storeDocEntriesFromRegister')
+			.splitEntries { it.req.documentEntries }
+            .to('direct:store')
+            
+        // Put all folders in the store
+		from('direct:storeFolders')
+			.splitEntries { it.req.folders }
+			.updateTimeStamp()
+			.to('direct:store')
+			
+		// Put the submission set in the store
+		from('direct:storeSubmissionSet')
+			.processBody { it.entry = it.req.submissionSet }
+			.to('direct:store')
+
+        // Finalizes the new entry and stores it
+        from('direct:store')
+            .status(APPROVED)
+            .assignUuid()
+            .store()
+        			
+		// Put all associations in the store
+		from('direct:storeAssociations')
+			.splitEntries { it.req.associations }
+            .assignUuid()
+            .changeAssociationUuids()
+			.store()
+			.multicast().to('direct:checkReplace', 'direct:updateTime')
+			
+        // Replace associations must deprecate the replaced document and copy   
+        // the new document into all folders of the original one
+		from('direct:checkReplace')		    
+			.choice().when { it.in.body.entry.associationType.isReplace() }
+			    .multicast().to('direct:copyFolderMembership', 'direct:deprecateTargetDocs').end()
+				.otherwise()
+			.end()
+			
+	    // Copy the new document into all folders of the original one
+		from('direct:copyFolderMembership')
+			.search(ASSOC_SOURCE).hasMember().targetUuid('entry.targetUuid').into('containers')
+			.search(FOLDER).uuids('containers').into('foldersContainingTarget')
+			.processBody { it.assoc = it.entry }
+			.splitEntries { it.foldersContainingTarget }
+			.updateTimeStamp()
+            .processBody {
+			    it.entry = new Association(HAS_MEMBER, 
+                        'urn:uuid:' + UUID.randomUUID(), 
+                        it.entry.entryUuid, 
+                        it.assoc.sourceUuid)
+            }
+            .store()
+    		
+    	// Deprecate all replaced documents
+		from('direct:deprecateTargetDocs')
+            .search(DOC_ENTRY).uuid('entry.targetUuid').into('targetDocs')
+            .splitEntries { it.targetDocs }
+			.to('direct:deprecateDocEntry')		
+			
+		// Deprecate a single replaced document
+		from('direct:deprecateDocEntry')
+			.log(log) { 'deprecating: ' + it.in.body.entry.entryUuid }
+			.status(DEPRECATED)
+			// Any other transformation or addendum to the deprecated document must 
+			// be deprecated as well. Clear fields from previous usage.
+            .processBody { it.targetUuidsOfDeprecated = [] }
+            .processBody { it.targetsOfDeprecated = [] }
+			.search(ASSOC_SOURCE)
+			    .targetUuid('entry.entryUuid')
+			    .isOfTypes([TRANSFORM, APPEND])    
+			    .into('targetUuidsOfDeprecated')
+			.search(DOC_ENTRY).uuids('targetUuidsOfDeprecated').into('targetsOfDeprecated')
+			.splitEntries { it.targetsOfDeprecated }
+            .to('direct:deprecateDocEntry')
+
+        // Any folders that are related to the association need an update of their time stamp
+        from('direct:updateTime')
+            .search(FOLDER).uuid('entry.sourceUuid').into('folders')
+            .splitEntries { it.folders }
+            .updateTimeStamp()
+	}
+}

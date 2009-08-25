@@ -1,0 +1,85 @@
+<!--
+    Copyright 2009 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:lang="http://www.springframework.org/schema/lang" 
+    xmlns:camel="http://activemq.apache.org/camel/schema/spring"
+    xmlns:cxf="http://activemq.apache.org/camel/schema/cxfEndpoint" 
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+    xsi:schemaLocation="
+http://activemq.apache.org/camel/schema/cxfEndpoint
+http://activemq.apache.org/camel/schema/cxfEndpoint/camel-cxf.xsd
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/lang
+http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-2.5.xsd
+http://activemq.apache.org/camel/schema/spring 
+http://activemq.apache.org/camel/schema/spring/camel-spring.xsd
+http://cxf.apache.org/transports/http/configuration
+http://cxf.apache.org/schemas/configuration/http-conf.xsd
+">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+    <camel:camelContext id="camelContext">
+        <camel:jmxAgent id="agent" disabled="true" />
+    </camel:camelContext>
+    
+    <!--http-conf:conduit name="*.http-conduit">
+        <http-conf:client ProxyServer="localhost" ProxyServerPort="8888" ProxyServerType="HTTP" AllowChunking="false"/>
+    </http-conf:conduit-->
+
+    <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate"/>
+
+    <bean id="iti4142RouteBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.ipf.tutorials.xds.Iti4142RouteBuilder">
+    </bean>
+
+    <bean id="iti43RouteBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.ipf.tutorials.xds.Iti43RouteBuilder">
+    </bean>
+
+    <bean id="iti18RouteBuilder" depends-on="routeModelExtender"
+        class="org.openehealth.ipf.tutorials.xds.Iti18RouteBuilder">
+    </bean>
+
+    <bean id="coreModelExtension"
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+    </bean>
+
+    <bean id="xdsModelExtension"
+        class="org.openehealth.ipf.platform.camel.ihe.xds.commons.extend.XDSModelExtension">
+    </bean>
+    
+    <bean id="regRepModelExtension" class="org.openehealth.ipf.tutorials.xds.RegRepModelExtension">
+        <property name="dataStore" ref="dataStore"/>
+    </bean>
+
+    <bean id="routeModelExtender" 
+        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
+            <list>
+                <ref bean="coreModelExtension" />
+                <ref bean="xdsModelExtension" />
+                <ref bean="regRepModelExtension" />
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="dataStore" class="org.openehealth.ipf.tutorials.xds.DataStore" />
+</beans>
+        

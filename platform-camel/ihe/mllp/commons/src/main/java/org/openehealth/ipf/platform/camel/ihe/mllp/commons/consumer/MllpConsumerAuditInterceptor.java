@@ -15,16 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer;
 
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.mina.MinaExchange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoSession;
+import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
@@ -67,7 +70,7 @@ public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerIntercepto
         boolean failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            Object body = exchange.getIn().getBody();
+            Object body = resultMessage(exchange).getBody();
             
             /*
              * The transaction is considered failed when either:
@@ -76,10 +79,10 @@ public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerIntercepto
              *   c) the type of the exchange body is not supported
              *      and the "magic header" does not denote success.
              */
-            String header = (String) exchange.getIn().getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
+            Object header = resultMessage(exchange).getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
             failed = exchange.isFailed() || 
                      (body instanceof Exception) ||
-                     ( ! (MllpMarshalUtils.typeSupported(body) || "AA".equals(header)));
+                     ( ! (MllpMarshalUtils.typeSupported(body) || (header == AckTypeCode.AA)));
             
         } catch (Exception e) {
             failed = true;

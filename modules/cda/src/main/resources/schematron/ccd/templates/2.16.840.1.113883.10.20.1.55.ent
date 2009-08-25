@@ -6,14 +6,16 @@
 	<title>Severity observation - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.55"]'>
     <assert test="self::cda:observation">A severity observation (templateId 2.16.840.1.113883.10.20.1.55) SHALL be represented with Observation.</assert>
-    <assert test="ancestor::*[cda:templateId/@root='2.16.840.1.113883.10.20.1.55' ][//*[cda:entryRelationship/@typeCode='SUBJ']]">The value for “entryRelationship / typeCode” in a relationship between a reaction observation and severity observation SHALL be “SUBJ” “Has subject” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
-    <assert test="@classCode='OBS'">The value for “Observation / classCode” in a severity observation SHALL be “OBS” 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
-    <assert test="@moodCode='EVN'">The value for “Observation / moodCode” in a severity observation SHALL be “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
+    <assert test="@classCode='OBS'">The value for "Observation / classCode" in a severity observation SHALL be "OBS" 2.16.840.1.113883.5.6 ActClass STATIC.</assert>
+    <assert test="@moodCode='EVN'">The value for "Observation / moodCode" in a severity observation SHALL be "EVN" 2.16.840.1.113883.5.1001 ActMood STATIC.</assert>
     <assert test="count(cda:statusCode)=1">A severity observation SHALL include exactly one Observation / statusCode.</assert>
-    <assert test="cda:statusCode[@code='completed']">The value for “Observation / statusCode” in a severity observation SHALL be “completed”  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
+    <assert test="cda:statusCode[@code='completed']">The value for "Observation / statusCode" in a severity observation SHALL be "completed"  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
     <assert test="count(cda:code)=1">A severity observation SHALL contain exactly one Observation / code.</assert>
-    <assert test="cda:code[@code='SEV']">The value for “Observation / code” in a severity observation SHALL be “SEV” “Severity observation” 2.16.840.1.113883.5.4 ActCode STATIC.</assert>
+    <assert test="cda:code[@code='SEV']">The value for "Observation / code" in a severity observation SHALL be "SEV" "Severity observation" 2.16.840.1.113883.5.4 ActCode STATIC.</assert>
     <assert test="count(cda:value)=1">A severity observation SHALL contain exactly one Observation / value.</assert>
+	</rule>
+	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.54"]/cda:entryRelationship[cda:observation/cda:templateId/@root="2.16.840.1.113883.10.20.1.55"]'>
+	<assert test="@typeCode='SUBJ'">The value for "entryRelationship / typeCode" in a relationship between a reaction observation and severity observation SHALL be "SUBJ" "Has subject" 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>
 	</rule>
 </pattern>
 

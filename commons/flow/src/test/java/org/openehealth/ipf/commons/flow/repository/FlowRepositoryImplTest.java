@@ -36,6 +36,8 @@ import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.FlowException;
 import org.openehealth.ipf.commons.flow.domain.Flow;
 import org.openehealth.ipf.commons.flow.domain.FlowPart;
+import org.openehealth.ipf.commons.flow.domain.FlowStatus;
+import org.openehealth.ipf.commons.flow.repository.FlowPurgeCriteria.PurgeMode;
 import org.openehealth.ipf.commons.flow.tx.TestTransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -55,7 +57,13 @@ public class FlowRepositoryImplTest {
     private TestTransactionManager testTransactionManager;
     
     @Autowired
-    private FlowRepository flowRepository;
+    private FlowRepositoryImpl flowRepository;
+    
+    private FlowFinderCriteria allFlows; 
+    
+    public FlowRepositoryImplTest() {
+        allFlows = new FlowFinderCriteria(new Date(0), null, "test"); 
+    }
     
     @Before
     public void setUp() throws Exception {
@@ -64,6 +72,7 @@ public class FlowRepositoryImplTest {
 
     @After
     public void tearDown() throws Exception {
+        flowRepository.removeAll(flowRepository.findFlows(allFlows));
         testTransactionManager.endTransaction();
     }
 
@@ -284,7 +293,6 @@ public class FlowRepositoryImplTest {
     
     @Test
     public void testFindMaxResults() throws Exception {
-        Thread.sleep(2L); // isolate from other tests
         Date since = new Date();
         persistFlow("blah");
         persistFlow("blah");
@@ -299,7 +307,6 @@ public class FlowRepositoryImplTest {
 
     @Test
     public void testFindFlowsVarSince() throws Exception {
-        Thread.sleep(2L); // isolate from other tests
         Flow flow = persistFlow("blah");
         Date d1 = flow.getCreationTime();
         Date d2 = new Date(d1.getTime() + 1L);
@@ -316,7 +323,6 @@ public class FlowRepositoryImplTest {
     
     @Test
     public void testFindErrorUnackFlows() throws Exception {
-        Thread.sleep(2L); // isolate from other tests
         Date since = new Date();
         Flow flow1 = persistFlow("blah");
         Flow flow2 = persistFlow("blah");
@@ -342,6 +348,69 @@ public class FlowRepositoryImplTest {
         assertTrue(flows.contains(flow1));
         assertTrue(flows.contains(flow2));
         assertTrue(flows.contains(flow3));
+    }
+    
+    @Test
+    public void testPurgeAllFlows() throws IOException {
+        FlowFinderCriteria finderCriteria = new FlowFinderCriteria(new Date(0), new Date(5), "test"); 
+        FlowPurgeCriteria purgeCriteria = new FlowPurgeCriteria(PurgeMode.ALL, new Date(5), null, 2);
+        persistFlowHistory();
+        assertEquals(2, flowRepository.purgeFlows(purgeCriteria));
+        assertEquals(3, flowRepository.findFlows(finderCriteria).size());
+        assertEquals(2, flowRepository.purgeFlows(purgeCriteria));
+        assertEquals(1, flowRepository.findFlows(finderCriteria).size());
+        assertEquals(0, flowRepository.purgeFlows(purgeCriteria));
+        assertEquals(1, flowRepository.findFlows(finderCriteria).size());
+        Flow flow = flowRepository.findFlows(finderCriteria).get(0);
+        assertEquals(5, flow.getCreationTime().getTime());
+        assertEquals("f5", new String(flow.getPacket()));
+    }
+    
+    @Test
+    public void testPurgeCleanFlows() throws IOException {
+        FlowFinderCriteria finderCriteria = new FlowFinderCriteria(new Date(0), new Date(5), "test"); 
+        FlowFinderCriteria errorCriteria = new FlowFinderCriteria(new Date(3), new Date(3), "test"); 
+        FlowPurgeCriteria purgeCriteria = new FlowPurgeCriteria(PurgeMode.CLEAN, new Date(5), "test", 2);
+        persistFlowHistory();
+        assertEquals(2, flowRepository.purgeFlows(purgeCriteria));
+        assertEquals(3, flowRepository.findFlows(finderCriteria).size());
+        assertEquals(1, flowRepository.purgeFlows(purgeCriteria));
+        assertEquals(2, flowRepository.findFlows(finderCriteria).size());
+        assertEquals(0, flowRepository.purgeFlows(purgeCriteria));
+        assertEquals(2, flowRepository.findFlows(finderCriteria).size());
+        Flow errorFlow = flowRepository.findFlows(errorCriteria).get(0);
+        assertEquals(FlowStatus.ERROR, errorFlow.getStatus());
+    }
+    
+    @Test
+    public void testPurgeFlowsWrongApp() throws IOException {
+        FlowFinderCriteria finderCriteria = new FlowFinderCriteria(new Date(0), new Date(5), "test"); 
+        FlowPurgeCriteria purgeCriteria = new FlowPurgeCriteria(PurgeMode.ALL, new Date(5), "blah", 5);
+        persistFlowHistory();
+        assertEquals(0, flowRepository.purgeFlows(purgeCriteria));
+        assertEquals(5, flowRepository.findFlows(finderCriteria).size());
+    }
+    
+    private void persistFlowHistory() throws IOException {
+        Flow flow1 = createFlow("f1");
+        Flow flow2 = createFlow("f2");
+        Flow flow3 = createFlow("f3");
+        Flow flow4 = createFlow("f4");
+        Flow flow5 = createFlow("f5");
+        flow1.setCreationTime(new Date(1));
+        flow2.setCreationTime(new Date(2));
+        flow3.setCreationTime(new Date(3));
+        flow4.setCreationTime(new Date(4));
+        flow5.setCreationTime(new Date(5));
+        flow3.getPart("0.0").setStatus(FlowStatus.ERROR);
+        flow3.setDerivedStatus(FlowStatus.ERROR);
+        flowRepository.persist(flow1);
+        flowRepository.persist(flow2);
+        flowRepository.persist(flow3);
+        flowRepository.persist(flow4);
+        flowRepository.persist(flow5);
+        testTransactionManager.commitTransaction();
+        testTransactionManager.beginTransaction();
     }
     
     private Flow persistFlow(String packet) throws IOException {

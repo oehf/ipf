@@ -20,7 +20,7 @@
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.1"]'>
 	<assert test='descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]'>The Purpose section SHOULD include one or more advance directive observations (templateId 2.16.840.1.113883.10.20.1.17)</assert>
 	<assert test='descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.17"]/cda:code[@code="304251008"][@codeSystem="2.16.840.1.113883.6.96"]'>There SHOULD be an advance directive observation whos value for Observation / code is '304251008' 'Resuscitation status' 2.16.840.1.113883.6.96 SNOMED CT STATIC. </assert>
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'advance directives')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “advance directives”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'advance directives')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "advance directives".</assert>
 </rule>
 </pattern>
 

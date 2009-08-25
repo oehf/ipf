@@ -25,11 +25,12 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil
 import org.eclipse.emf.ecore.xmi.XMLResource
 import org.eclipse.emf.common.util.AbstractEnumerator
 import org.openhealthtools.ihe.common.cdar2.CDAR2Factory
+import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
 
 /**
  * @author Christian Ohr
  */
-public class CDAR2ModelExtension{
+public class CDAR2ModelExtension extends BaseModelExtension {
 
      static private void setLiteralText(FeatureMap mixed, String s) {
          FeatureMapUtil.addText(mixed, s)
@@ -44,7 +45,9 @@ public class CDAR2ModelExtension{
          mixed.get(XMLTypePackage.eINSTANCE.getXMLTypeDocumentRoot_Text(), true).get(index)
      }
      
-     def extensions = {
+	def register(List registered) {
+	    
+	    super.register(registered)
          
          // ----------------------------------------------------
          // Extensions for conveniently working with data types
@@ -77,11 +80,11 @@ public class CDAR2ModelExtension{
 
          II.metaClass {
              setText { String s ->
-                 def tokens = s.tokenize('@')
-                 if (tokens.size() > 1) {
+                 def tokens = s?.tokenize('@')
+                 if (tokens?.size() > 1) {
                    delegate.extension = tokens[0]
                    delegate.root = tokens[1]
-                 } else if (tokens.size() == 1) {
+                 } else if (tokens?.size() == 1) {
                    delegate.root = tokens[0]
                  }
              }
@@ -101,14 +104,22 @@ public class CDAR2ModelExtension{
 
          PQ.metaClass {
              setText { String s	->
-                 def tokens = s.tokenize()
-                 delegate.value = tokens[0]
-                 delegate.unit = tokens[1]
+                 def tokens = s?.tokenize()
+                 if (tokens?.size() > 1) {
+                     delegate.value = Double.valueOf(tokens[0])
+                     delegate.unit = tokens[1]
+                 } else if (tokens?.size() == 1) {
+                     delegate.value = Double.valueOf(tokens[0])
+                     delegate.unit = '1'
+                 }
              }
              getText {			->
                  "${delegate.value} ${delegate.unit}"
              }
+             setNumber  { Number n	-> delegate.value = n.doubleValue() }
+             getNumber	{           -> delegate.value }
          }
+         
 
          TS1.metaClass {
              setText { String s	-> delegate.value = s }
@@ -215,7 +226,16 @@ public class CDAR2ModelExtension{
              setID { String s -> delegate.setID1(s)}
              getID { -> getID1()}
          }
-         
+
      }    
+
+
+    String templateId() {
+        extensionName()
+    }
+
+    String extensionName() {
+        'Clinical Document Architecture (CDA)'
+    }
     
 }

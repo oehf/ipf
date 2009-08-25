@@ -15,114 +15,56 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.eclipse.emf.ecore.xmi.XMLResource
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.impl.*
+import org.junit.Test
+import org.junit.Assert
 
 /**
  * @author Stefan Ivanov
  */
 public class CDAR2BuilderStructureObservationMediaTest extends AbstractCDAR2BuilderTest {
-
-
-  /**
-   * Test observation media defaults
-   */
-  public void testObservationMediaDefaultValues() {
-    def entry = builder.build {
-      entry {
-        observationMedia() {
-          value(mediaType: 'image/gif') {
-            reference(value: 'lefthand.gif')
-          }//value
-        }//observation media
-      }//entry
-    }
-
-    assertEquals 'EVN', entry.observationMedia.moodCode.name
-    assertEquals null, entry.observationMedia.classCode
-    assertEquals 0, entry.observationMedia.entryRelationship.size
-    assertEquals 'image/gif', entry.observationMedia.value.mediaType
-  }
-
-
-  /**
-   * Test simple ObservationMedia
-   */
-  public void testSimpleObservationMedia() {
-    def entry = builder.build {
-      entry {
-        observationMedia(classCode: 'OBS', moodCode: 'EVN') {
-          id()
-          value(mediaType: 'image/gif') { reference(value: 'lefthand.gif') }
-        }//observation media
-      }//entry
-    }
-    assertEquals 'OBS', entry.observationMedia.classCode.name
-    assertEquals 'EVN', entry.observationMedia.moodCode.name
-    assertNotNull entry.observationMedia.id
-  }
-
-  /**
-   *
-   */
-  public void testObservationMediaAsEntryRelationship() {
-    def entry = builder.build {
-      entry {
-        observation(classCode: 'OBS', moodCode: 'EVN') {
-          code(code: '271807003',
-                  codeSystem: '2.16.840.1.113883.6.96',
-                  codeSystemName: 'SNOMED CT',
-                  displayName: 'Rash')
-          statusCode(code: 'completed')
-          methodCode(code: '32750006',
-                  codeSystem: '2.16.840.1.113883.6.96',
-                  codeSystemName: 'SNOMED CT',
-                  displayName: 'Inspection')
-          targetSiteCode(code: '48856004',
-                  codeSystem: '2.16.840.1.113883.6.96',
-                  codeSystemName: 'SNOMED CT',
-                  displayName: 'Skin of palmer surface of index finger') {
-            qualifier {
-              name(code: '78615007',
-                      codeSystem: '2.16.840.1.113883.6.96',
-                      codeSystemName: 'SNOMED CT',
-                      displayName: 'with laterality')
-              value(code: '7771000',
-                      codeSystem: '2.16.840.1.113883.6.96',
-                      codeSystemName: 'SNOMED CT',
-                      displayName: 'left')
-            }//qualifier
-          }//target site code
-          entryRelationship(typeCode: 'SPRT') {
-            regionOfInterest(classCode: 'ROIOVL', moodCode: 'EVN', ID: 'MM1') {
-              id(root: '2.16.840.1.113883.19.3.1')
-              code(code: 'ELLIPSE')
-              value(value: '3')
-              value(value: '1')
-              value(value: '3')
-              value(value: '7')
-              value(value: '2')
-              value(value: '4')
-              value(value: '4')
-              value(value: '4')
-              entryRelationship(typeCode: 'SUBJ') {
-                observationMedia(classCode: 'OBS', moodCode: 'EVN') {
-                  id(root: '2.16.840.1.113883.19.2.1')
-                  value(mediaType: 'image/gif') { reference(value: 'lefthand.gif') }//value
-                }//observation media
-              }//entry relationship embedded
-            }//region of interest
-          }//entry relationship
-        }//observation
-      }//entry
-    }
-
-    assertNotNull entry.observation
-    assertNotNull entry.observation.entryRelationship
-    assertEquals 1, entry.observation.entryRelationship.size
-    assertEquals 8, entry.observation.entryRelationship.get(0).regionOfInterest.value.size
-  }
+	
+	
+	/**
+	 * Test observation media defaults
+	 */
+	@Test
+	public void testObservationMediaDefaultValues() {
+		def entry = builder.build {
+			entry {
+				observationMedia {
+					value(mediaType: 'image/gif') { reference(value: 'lefthand.gif') }//value
+				}//observation media
+			}//entry
+		}
+		
+		Assert.assertEquals 'EVN', entry.observationMedia.moodCode.name
+		Assert.assertEquals null, entry.observationMedia.classCode
+		Assert.assertEquals 0, entry.observationMedia.entryRelationship.size
+		Assert.assertEquals 'image/gif', entry.observationMedia.value.mediaType
+	}
+	
+	
+	/**
+	 * Test simple ObservationMedia
+	 */
+	@Test
+	public void testSimpleObservationMedia() {
+		def entry = builder.build(getClass().getResource('/builders/content/entry/ObservationMediaExample1.groovy'))		
+		Assert.assertEquals 'OBS', entry.observationMedia.classCode.name
+		Assert.assertEquals 'EVN', entry.observationMedia.moodCode.name
+		Assert.assertNotNull entry.observationMedia.id
+	}
+	
+	/**
+	 *
+	 */
+	@Test
+	public void testObservationMediaAsEntryRelationship() {
+		def entry = builder.build(getClass().getResource('/builders/content/entry/ObservationMediaExample2.groovy'))		
+		Assert.assertNotNull entry.observation
+		Assert.assertNotNull entry.observation.entryRelationship
+		Assert.assertEquals 1, entry.observation.entryRelationship.size
+		Assert.assertEquals 8, entry.observation.entryRelationship.get(0).regionOfInterest.value.size
+	}
 }

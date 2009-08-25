@@ -29,13 +29,13 @@
             <artifactId>platform-camel-ihe-xds-commons</artifactId>
             <version>${pom.version}</version>
             <scope>test</scope>
-            <classifier>tests</classifier>
+            <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
             <version>${pom.version}</version>
-            <classifier>tests</classifier>
+            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
     </dependencies>

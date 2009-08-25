@@ -62,12 +62,12 @@ public class ConfigRepositoryImplTest {
     public void testValidApplicationConfig() {
         ApplicationConfig config = new ApplicationConfig();
         config.setApplication("test");
-        configRepository.persistApplicationConfig(config);
+        configRepository.merge(config);
         testTransactionManager.commitTransaction();
         testTransactionManager.beginTransaction();
-        config = configRepository.findApplicationConfig("wrong");
+        config = configRepository.find("wrong");
         assertNull(config);
-        config = configRepository.findApplicationConfig("test");
+        config = configRepository.find("test");
         assertNotNull(config);
         assertTrue(config.isFlowFilterEnabled());
         assertFalse(config.isFlowCleanupEnabled());
@@ -75,7 +75,7 @@ public class ConfigRepositoryImplTest {
         config.setFlowCleanupEnabled(true);
         testTransactionManager.commitTransaction();
         testTransactionManager.beginTransaction();
-        config = configRepository.findApplicationConfig("test");
+        config = configRepository.find("test");
         assertFalse(config.isFlowFilterEnabled());
         assertTrue(config.isFlowCleanupEnabled());
     }
@@ -84,7 +84,7 @@ public class ConfigRepositoryImplTest {
     public void testInvalidApplicationConfig() {
         ApplicationConfig config = new ApplicationConfig();
         try {
-            configRepository.persistApplicationConfig(config);
+            configRepository.merge(config);
             fail("persisted config without application name");
         } catch (RuntimeException e) {
             // test passed
@@ -95,12 +95,12 @@ public class ConfigRepositoryImplTest {
     public void testDuplicateApplicationConfig() {
         ApplicationConfig config = new ApplicationConfig();
         config.setApplication("blah");
-        configRepository.persistApplicationConfig(config);
+        configRepository.merge(config);
         testTransactionManager.commitTransaction();
         testTransactionManager.beginTransaction();
         config = new ApplicationConfig();
         config.setApplication("blah");
-        configRepository.persistApplicationConfig(config);
+        configRepository.persist(config);
         try {
             testTransactionManager.commitTransaction();
             fail("persisted equal config twice");

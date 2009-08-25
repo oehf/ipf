@@ -37,6 +37,7 @@
         <aspectj-version>1.6.2</aspectj-version>
         <camel-version>2.0.0</camel-version>
         <commons-codec-version>1.3</commons-codec-version>
+        <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.2.2</commons-dbcp-version>
         <commons-fileupload-version>1.2.1</commons-fileupload-version>        
         <commons-httpclient-version>3.1</commons-httpclient-version>
@@ -59,11 +60,12 @@
         <junit-version>4.4</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.14</log4j-version>
-        <metabuilder-version>1.1.5-p2</metabuilder-version>
+        <metabuilder-version>1.1.6</metabuilder-version>
         <mina-version>1.1.7</mina-version>
         <oht-version>1.0.0-rc1</oht-version>
         <osgi-api-version>1.2.0</osgi-api-version>
         <persistence-api-version>1.0</persistence-api-version>
+        <quartz-version>1.6.1</quartz-version>
         <saxon-version>9.1.0.1</saxon-version>
         <slf4j-version>1.5.6</slf4j-version>
         <spring-version>2.5.6</spring-version>
@@ -220,6 +222,11 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec-version}</version>
+            </dependency> 
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections-version}</version>
             </dependency> 
             <dependency>
                 <groupId>commons-dbcp</groupId>
@@ -416,6 +423,16 @@
                 <version>${cxf-version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.mina</groupId>
+                <artifactId>mina-core</artifactId>
+                <version>${mina-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.mina</groupId>
+                <artifactId>mina-filter-ssl</artifactId>
+                <version>${mina-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j-version}</version>
@@ -530,6 +547,11 @@
                 <groupId>org.jasypt</groupId>
                 <artifactId>jasypt</artifactId>
                 <version>${jasypt-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.opensymphony.quartz</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz-version}</version>
             </dependency>
             <dependency>
                 <groupId>joda-time</groupId>

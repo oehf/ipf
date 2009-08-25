@@ -26,7 +26,7 @@ import org.openhealthtools.ihe.common.cdar2.*
 //           problem acts (templateId 2.16.840.1.113883.10.20.1.27). A problem act 
 //           SHOULD include one or more problem observations 
 //           (templateId 2.16.840.1.113883.10.20.1.28).
-ccd_problems(schema:'section'){
+ccd_problems(schema:'ccd_section'){
     properties{
         //CONF-141: The problem section SHALL contain Section / code.
         //CONF-142: The value for “Section / code” SHALL be “11450-4” “Problem list”
@@ -45,6 +45,7 @@ ccd_problems(schema:'section'){
                st('Problems')
            }
        })
+       text(schema:'strucDocText', req:true)       
        problemAct(schema:'ccd_problemAct')
     }
     collections{
@@ -55,151 +56,4 @@ ccd_problems(schema:'section'){
           })
     }
     
-}
-
-// CONF-154: A problem observation (templateId 2.16.840.1.113883.10.20.1.28) SHALL 
-//           be represented with Observation.
-ccd_problemObservation(schema:'observation'){
-    properties{
-        //CONF-155: The value for “Observation / @moodCode” in a problem observation SHALL be 
-        //          “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.
-        moodCode(factory:'XACT_MOOD_DOCUMENT_OBSERVATION', 
-                def: XActMoodDocumentObservation.EVN_LITERAL)
-        // CONF-156: A problem observation SHALL include exactly one Observation / statusCode.
-        // CONF-157: The value for “Observation / statusCode” in a problem observation
-        //           SHALL be “completed” 2.16.840.1.113883.5.14 ActStatus STATIC.        
-        statusCode(schema:'cs', req:true, def: {
-            getMetaBuilder().build {
-                cs('completed')
-            }
-        })
-        // CONF-162: A problem observation MAY contain exactly one problem status observation.
-        problemStatus(schema:'ccd_problemObservationStatus')
-        // CONF-165: A problem observation MAY contain exactly one problem healthstatus observation.
-        problemHealthstatus(schema:'ccd_problemObservationHealthstatus')
-        // CONF-180: A problem observation MAY contain exactly one patient awareness.
-        patientAwareness(schema:'ccd_patientAwareness')
-    }
-    collections{
-        templateIds(collection:'templateId', def: {
-            getMetaBuilder().buildList {
-                ii(root:'2.16.840.1.113883.10.20.1.28')
-            }
-        })
-    }
-}
-
-// CONF-163: A problem status observation (templateId 2.16.840.1.113883.10.20.1.50) SHALL be
-//           a conformant status observation (templateId 2.16.840.1.113883.10.20.1.57) 
-//           (as defined in section 5.1 “Type” and “Status” values).
-// CONF-164: The value for “Observation / value” in a problem status observation SHALL be selected
-//           from ValueSet 2.16.840.1.113883.1.11.20.13 ProblemStatusCode STATIC 20061017.
-ccd_problemObservationStatus(schema:'ccd_statusObservation'){
-    collections{
-        templateIds(collection:'templateId', def: {
-            getMetaBuilder().buildList {
-                ii(root:'2.16.840.1.113883.10.20.1.50')
-            }
-        })
-    }
-}
-
-// CONF-166: A problem healthstatus observation (templateId 2.16.840.1.113883.10.20.1.51) SHALL be
-//           a conformant status observation (templateId 2.16.840.1.113883.10.20.1.57) 
-//           (as defined in section 5.1 “Type” and “Status” values), except that the value for 
-//           “Observation / code” in a problem healthstatus observation SHALL be “11323-3” 
-//           “Health status” 2.16.840.1.113883.6.1 LOINC STATIC.
-// CONF-167: The value for “Observation / value” in a problem healthstatus observation SHALL be selected
-//           from ValueSet 2.16.840.1.113883.1.11.20.12 ProblemHealthStatusCode STATIC 20061017.
-ccd_problemObservationHealthstatus(schema:'ccd_statusObservation'){
-    properties{
-        code(def: {
-            getMetaBuilder().build{
-                loincCode(code:'11323-3',
-                        displayName:'Health status')
-            }
-        })
-    }
-    collections{
-        templateIds(collection:'templateId', def: {
-            getMetaBuilder().buildList {
-                ii(root:'2.16.840.1.113883.10.20.1.51')
-            }
-        })
-    }
-}
-
-// CONF-169: An episode observation (templateId 2.16.840.1.113883.10.20.1.41) SHALL be represented with Observation.
-ccd_episodeObservation(schema:'observation'){
-    properties{
-        // CONF-170: The value for “Observation / @classCode” in an episode observation SHALL
-        //           be “OBS” 2.16.840.1.113883.5.6 ActClass STATIC.
-        classCode(factory:'ACT_CLASS_OBSERVATION',
-                def:ActClassObservationMember3.OBS_LITERAL)
-        // CONF-171: The value for “Observation / @moodCode” in an episode observation SHALL
-        //           be “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC.
-        moodCode(factory:'XACT_MOOD_DOCUMENT_OBSERVATION',
-                def:XActMoodDocumentObservation.EVN_LITERAL)                
-        // CONF-172: An episode observation SHALL include exactly one Observation / statusCode.
-        // CONF-173: The value for “Observation / statusCode” in an episode observation SHALL
-        //           be “completed” 2.16.840.1.113883.5.14 ActStatus STATIC.
-        statusCode(req:true, def: {
-            getMetaBuilder().build {
-                cs('completed')
-            }
-        })
-    }
-    collections{
-        templateIds(collection:'templateId', def: {
-            getMetaBuilder().buildList {
-                ii(root:'2.16.840.1.113883.10.20.1.41')
-            }
-        })
-        // CONF-175: “Observation / value” in an episode observation SHOULD be the following SNOMED CT expression:
-        values(collection:'value', min:1, max:1, def:{
-            getMetaBuilder().buildList {
-                cd(code:'404684003', codeSystem:'2.16.840.1.113883.6.96', displayName:'Clinical finding'){
-                    qualifier{
-                        name(code:'246456000', displayName:'Episodicity')
-                        value(code:'288527008', displayName:'New episode')
-                    }//qualifier
-                }//cd
-            }
-        })
-    }
-}
-
-//CONF-178: Patient awareness (templateId 2.16.840.1.113883.10.20.1.48) of a problem,
-//          observation, or other clinical statement SHALL be represented with participant.
-ccd_patientAwareness(schema:'clinicalStatementParticipant'){
-    properties{
-        // CONF-181: The value for “participant / @typeCode” in a patient awareness SHALL
-        //           be “SBJ” “Subject” 2.16.840.1.113883.5.90 ParticipationType STATIC.
-        typeCode(factory:'PARTICIPATION_TYPE', def:ParticipationTargetSubject.SBJ_LITERAL)
-        // CONF-182: Patient awareness SHALL contain exactly one participant / awarenessCode.
-        awarenessCode(schema:'ce', req:true)
-        // CONF-183: Patient awareness SHALL contain exactly one participant / participantRole / id,
-        //           which SHALL have exactly one value, which SHALL also be present in 
-        //           ClinicalDocument / recordTarget / patientRole / id.
-        participantRole(schema:'ccd_problemsParticipantRole')
-    }
-    collections{
-        templateIds(collection:'templateId', def: {
-            getMetaBuilder().buildList {
-                ii(root:'2.16.840.1.113883.10.20.1.48')
-            }
-        })
-    }
-    
-}
-
-//CONF-183: Patient awareness SHALL contain exactly one participant / participantRole / id,
-//           which SHALL have exactly one value, which SHALL also be present in 
-//           ClinicalDocument / recordTarget / patientRole / id.
-ccd_problemsParticipantRole(schema:'participantRole'){
-    collections{
-        ids(collection:'id', min:1, max:1) {
-            id(schema:'ii')
-        }
-    }
 }

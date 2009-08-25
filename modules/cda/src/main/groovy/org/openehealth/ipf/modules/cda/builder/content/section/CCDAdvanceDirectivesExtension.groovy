@@ -15,33 +15,68 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
 
 
 /**
- * Make sure that the CDAModelExtensions are called before
+ * Chapter 3.2 "Advance Directives".
+ *
+ * Templates included:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.1 Advance Directives
+ * </ul>
+ * Dependent templates:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.17 Advance Directive Observation
+ * <li>                             Information Source
+ * <li>2.16.840.1.113883.10.20.1.40 Comment 
+ * </ul>
+ *
  *
  * @author Stefan Ivanov
  * @author Christian Ohr
  */
-public class CCDAdvanceDirectivesExtension extends BaseModelExtension {
+public class CCDAdvanceDirectivesExtension extends CompositeModelExtension {
 	
-	CCDAdvanceDirectivesExtension() {
+    CCDAdvanceDirectivesExtension() {
 		super()
 	}
 	
-	CCDAdvanceDirectivesExtension(builder) {
+    CCDAdvanceDirectivesExtension(builder) {
 		super(builder)
 	}
 	
-	def extensions = {
+	def register(Collection registered) {
+	    
+	    super.register(registered)
 		
-		// --------------------------------------------------------------------------------------------
-		// Chapter 3.2 "Advance Directives"
-		// --------------------------------------------------------------------------------------------
-		
+	    POCDMT000040ClinicalDocument.metaClass {
+	        setAdvanceDirectives { POCDMT000040Section section ->
+	            if (delegate.component?.structuredBody){
+	                delegate.component.structuredBody.component.add(builder.build {
+                        sections(section:section)
+                    })
+	            } else {
+	                delegate.component = builder.build {
+	                    ccd_component{
+	                        structuredBody {
+	                            component(section:section)
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	        
+	        getAdvanceDirectives{ ->
+	            delegate.component?.structuredBody?.component.find { 
+	                it.section.code.code == '42348-3'
+	            } ?.section
+	        }
+	        
+	    }
+	    
 		POCDMT000040StructuredBody.metaClass {
 			setAdvanceDirectives { POCDMT000040Section section ->
 				POCDMT000040Component3 component = CDAR2Factory.eINSTANCE.createPOCDMT000040Component3()
@@ -53,71 +88,7 @@ public class CCDAdvanceDirectivesExtension extends BaseModelExtension {
 				delegate.component.find { it.section.code.code == '42348-3'
 				} ?.section
 			}
-		} //advance directives body extensions
-		
-		POCDMT000040Section.metaClass {
-			setObservation { POCDMT000040Observation observation ->
-				POCDMT000040Entry entry = builder.build {
-					entry {
-						typeCode('DRIV')
-					}
-				}
-				entry.observation = observation
-				delegate.entry.add(entry)
-			}
-			
-			getObservation { ->
-				delegate.entry.observation
-			}
-		}// advance directives extensions
-		
-		POCDMT000040Observation.metaClass {
-			setVerifier  { POCDMT000040Participant2 participant ->
-				delegate.participant.add(participant)
-			}
-			getVerifier { ->
-				delegate.participant
-			}
-			
-			// CONF-509: A status observation SHALL be the target of an entryRelationship whose value for
-			//           “entryRelationship / @typeCode” SHALL be “REFR” 2.16.840.1.113883.5.1002
-			//           ActRelationshipType STATIC.
-			setAdvanceDirectiveStatus { POCDMT000040Observation observationStatus ->
-				POCDMT000040EntryRelationship rell = builder.build {
-					entryRelationship {
-						typeCode('REFR')
-					}
-				}
-				rell.observation = observationStatus
-				delegate.entryRelationship.add(rell)
-			}
-			
-			getAdvanceDirectiveStatus { ->
-			    delegate.entryRelationship.find {
-			        '2.16.840.1.113883.10.20.1.37' in it.observation.templateId.root
-			    }?.observation
-			}
-			
-			// CONF-101: An advance directive reference (templateId 2.16.840.1.113883.10.20.1.36) SHALL be
-			//           represented with Observation / reference / ExternalDocument.
-			// CONF-103: The value for “Observation / reference / @typeCode” in an advance directive reference SHALL be
-			//           “REFR” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC.
-			setReference{ POCDMT000040ExternalDocument document ->
-				POCDMT000040Reference ref = builder.build {
-					reference {
-						typeCode('REFR')
-					}
-				} 
-				ref.externalDocument = document
-				delegate.reference.add(ref)
-			}
-			
-			getReference { ->
-				delegate.reference
-			}
-		}// advance directives observations extensions
-		
-		return 1
+		} //advance directives extensions
 		
 	}//ccd extensions 
 	
@@ -128,5 +99,12 @@ public class CCDAdvanceDirectivesExtension extends BaseModelExtension {
 	
 	String templateId() {
 		'2.16.840.1.113883.10.20.1.1'
-	}	
+	}
+	
+    Collection modelExtensions() {
+	    [ new CCDAdvanceDirectiveObservationExtension(),
+	      new CCDSourceExtension(),
+	      new CCDCommentsExtension()
+	    ]
+    }
 }

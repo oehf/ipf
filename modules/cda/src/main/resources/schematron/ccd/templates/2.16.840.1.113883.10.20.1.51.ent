@@ -6,6 +6,7 @@
 	<title>Problem healthstatus observation - errors validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.51"]'>
 	<assert test="cda:code/@code='11323-3'">... the value for "Observation / code" in a problem healthstatus observation SHALL be "11323-3" "Health status" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+	<assert test= "document('schematron/ccd/voc.xml')/systems/system[@codeSystemName='SNOMED CT'][@group='ProblemHealthStatusCode']/code[@value = current()/cda:value/@code]">The value for "Observation / value" in a problem healthstatus observation SHALL be selected from ValueSet 2.16.840.1.113883.1.11.20.12 ProblemHealthStatusCode STATIC 20061017.</assert>
 	</rule>
 </pattern>
 

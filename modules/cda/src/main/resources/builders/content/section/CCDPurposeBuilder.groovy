@@ -16,15 +16,22 @@
 package builders.content.section
 
 import org.openhealthtools.ihe.common.cdar2.XActRelationshipEntryRelationshipimport org.openhealthtools.ihe.common.cdar2.XDocumentActMood
-// Chapter 2.8 : Purpose
-
+/**
+ * Chapter 2.8 : Purpose
+ * 
+ * Template Definitions:
+ *      Purpose Section (2.16.840.1.113883.10.20.1.13)
+ *      
+ * Dependencies:
+ *      
+ */
+ 
 // CONF-15: CCD MAY contain exactly one and SHALL NOT contain more than
 // one Purpose section (templateId 2.16.840.1.113883.10.20.1.13).
 // The Purpose section SHALL contain a narrative block, and SHOULD contain
 // clinical statements. Clinical statements SHOULD include one or more purpose activities
 // (templateId 2.16.840.1.113883.10.20.1.30).
-
-ccd_purpose(schema:'section') {
+ccd_purpose(schema:'ccd_section') {
 	properties {
 	    // CONF-16: The purpose section SHALL contain Section / code.
 	    // CONF-17: The value for “Section / code” SHALL be “48764-5”
@@ -60,12 +67,11 @@ ccd_purpose(schema:'section') {
 
 // CONF-20 - CONF-25: Implemented by MetaClass extension
 // CONF-26: A purpose activity SHALL contain exactly one Act / entryRelationship /
-// @typeCode, with a value of “RSON” “Has reason” 2.16.840.1.113883.5.1002
-// ActRelationshipType STATIC, to indicate the reason or purpose for creating the CCD.
-
-ccd_purposeActivity(schema:'entryRelationship') {
- properties {
-     typeCode(factory:'XACT_RELATIONSHIP_ENTRY_RELATIONSHIP',
+//          @typeCode, with a value of “RSON” “Has reason” 2.16.840.1.113883.5.1002
+//          ActRelationshipType STATIC, to indicate the reason or purpose for creating the CCD.
+ccd_purposeActivity(schema:'ccd_entryRelationship') {
+    properties {
+        typeCode(factory:'XACT_RELATIONSHIP_ENTRY_RELATIONSHIP',
               def: XActRelationshipEntryRelationship.RSON_LITERAL)
- }
+    }
 }

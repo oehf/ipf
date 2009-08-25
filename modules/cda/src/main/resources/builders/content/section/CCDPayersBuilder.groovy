@@ -17,22 +17,22 @@ package builders.content.section
 
 import org.openhealthtools.ihe.common.cdar2.*
 
-//Chapter 3.1 "Payers"
+// Chapter 3.1: "Payers"
+// Depends on :  
 
 // CONF-30: CCD SHOULD contain exactly one and SHALL NOT contain more than one Payers section
 //       (templateId 2.16.840.1.113883.10.20.1.9). The Payers section SHALL contain a
 //       narrative block, and SHOULD contain clinical statements. Clinical statements
 //       SHOULD include one or more coverage activities (templateId 2.16.840.1.113883.10.20.1.20).
 
-ccd_payers(schema:'section') {
+ccd_payers(schema:'ccd_section') {
     properties {
         // CONF-31:	The payer section SHALL contain Section / code.
         // CONF-32:	The value for “Section / code” SHALL be “48768-6”
         //          “Payment sources” 2.16.840.1.113883.6.1 LOINC STATIC.
        code(schema:'loincCode', def: {
            getMetaBuilder().build {
-               loincCode(code:'48768-6',
-		       displayName:'Payment sources')
+               loincCode(code:'48768-6', displayName:'Payment sources')
            }
        })
        // CONF-33: The purpose section SHALL contain Section / title.
@@ -44,9 +44,7 @@ ccd_payers(schema:'section') {
                st('Payers')
            }
        })
-       // Note: the CCD model extension adds coverageActivities to the 
-       // entryRelationships collection, so you can specify more than one
-       // coverageActivity without overwriting.
+	   text(schema:'strucDocText', req:true)                     
        coverageActivity(schema:'ccd_coverageActivity')
     }
 	collections {
@@ -60,7 +58,7 @@ ccd_payers(schema:'section') {
 
 // CONF-35:	A coverage activity (templateId 2.16.840.1.113883.10.20.1.20)
 //       SHALL be represented with Act.   
-ccd_coverageActivity(schema:'act') {
+ccd_coverageActivity(schema:'ccd_act') {
     properties {
        // CONF-36: The value for “Act / @classCode” in a coverage activity SHALL be
        //          “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.
@@ -83,8 +81,7 @@ ccd_coverageActivity(schema:'act') {
        //          “48768-6” “Payment sources” 2.16.840.1.113883.6.1 LOINC STATIC.
        code(schema:'loincCode', def: {
            getMetaBuilder().build {
-               loincCode(code:'48768-6',
-		                displayName:'Payment sources')
+               loincCode(code:'48768-6', displayName:'Payment sources')
            }
        })
        policyActivity(schema:'ccd_policyActivity')
@@ -104,7 +101,7 @@ ccd_coverageActivity(schema:'act') {
 
 // CONF-48:	A policy activity (templateId 2.16.840.1.113883.10.20.1.26)
 // SHALL be represented with Act.   
-ccd_policyActivity(schema:'act') {
+ccd_policyActivity(schema:'ccd_act') {
    properties {
         // CONF-49:	The value for “Act / @classCode” in a policy activity SHALL be
         //          “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.
@@ -175,7 +172,7 @@ ccd_payerAssignedEntity(schema:'assignedEntity') {
 
 // CONF-69: An authorization activity (templateId 2.16.840.1.113883.10.20.1.19) 
 // SHALL be represented with Act.
-ccd_authorizationActivity(schema:'act') {
+ccd_authorizationActivity(schema:'ccd_act') {
     properties {
         // CONF-70: The value for “Act / @classCode” in an authorization activity SHALL be 
         // “ACT” 2.16.840.1.113883.5.6 ActClass STATIC.        

@@ -8,9 +8,8 @@
 	<assert test="self::cda:section">The root of a Vital Signs section shall be 'section' in the HL7 namespace.</assert>
 	<assert test="cda:text">The Vital Signs section SHALL contain a narrative block.</assert>
 	<assert test="cda:code">The vital signs section SHALL contain Section / code.</assert>
-	<assert test="cda:code[@code='8716-3'][@codeSystem='2.16.840.1.113883.6.1']">The value for “Section / code” SHALL be “8716-3” “Vital signs” 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+	<assert test="cda:code[@code='8716-3'][@codeSystem='2.16.840.1.113883.6.1']">The value for "Section / code" SHALL be "8716-3" "Vital signs" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
 	<assert test="cda:title">The vital signs section SHALL contain Section / title.</assert>
-	<assert test='descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.35"]/descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.31"]'>Each vital signs organizers SHALL contain one or more result observations (templateId 2.16.840.1.113883.10.20.1.31)</assert>
 	</rule>
 </pattern>
 
@@ -20,7 +19,7 @@
 	<title>Vital signs section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.16"]'>
 	<assert test='descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.35"]'>The Vital Signs section SHOULD include one or more vital signs organizers (templateId 2.16.840.1.113883.10.20.1.35) </assert>	
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'vital signs')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “vital signs”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'vital signs')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "vital signs".</assert>
 	</rule>
 </pattern>
 

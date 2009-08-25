@@ -15,57 +15,29 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest;
+import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
 import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
-import org.junit.BeforeClass
+import org.junit.Before
 import org.junit.Test
-
-import org.openehealth.ipf.modules.cda.builder.content.AbstractContentBuilderTest
 
 /**
  * @author Stefan Ivanov
  */
-public class CCDAdvanceDirectivesBuilderTest extends AbstractContentBuilderTest {
+public class CCDAdvanceDirectivesBuilderTest extends AbstractCDAR2BuilderTest {
 	
-	@BeforeClass
-	static void initialize() throws Exception {
-		builder().define(getClass().getResource('/builders/content/section/CCDAdvanceDirectivesBuilder.groovy'))
-		builder().define(getClass().getResource('/builders/content/section/CCDStatusObservation.groovy'))
-		def extension = new CCDAdvanceDirectivesExtension(builder())
-		extension.extensions.call()
+	@Before
+	void initialize() throws Exception {
+        new CCDDefinitionLoader(builder).loadAdvanceDirectives(loaded)
+        new CCDAdvanceDirectivesExtension(builder).register(registered)
 	}
 	
 	@Test
 	public void testCCDAdvanceDirectives() {
-		def POCDMT000040Section advanceDirective = builder.build{
-	        ccd_advanceDirectives{
-				text('Simple Advance Directives')
-				observation{
-					id(root:'9b54c3c9-1673-49c7-aef9-b037ed72ed27')
-					code(code:'304251008', codeSystem:'2.16.840.1.113883.6.96', displayName:'Resuscitation')
-					advanceDirectiveStatus{
-					    value(code:'15240007',
-					            codeSystem:'2.16.840.1.113883.6.96',
-					            displayName:'Current and verified')
-					}//observation status
-					verifier{ 
-					    time('19991107')
-					    participantRole{
-					        id(root:'20cf14fb-b65c-4c8c-a54d-b0cca834c18c')
-					    }
-					}//verifier
-					reference{
-						id(root:'b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3')
-						code(code:'371538006',
-								codeSystem:'2.16.840.1.113883.6.96',
-								displayName:'Advance directive')
-						text(mediaType:'application/pdf'){ 
-						    reference(value:'AdvanceDirective.b50b7910-7ffb-4f4c-bbe4-177ed68cbbf3.pdf') 
-						}
-					}//reference to external document
-				}//advance directive observation
-			}//advance directive
-		}
-		new CCDAdvanceDirectivesValidator().validate(advanceDirective, null)
+		def POCDMT000040Section advanceDirectives = builder.build(
+		        getClass().getResource('/builders/content/section/CCDAdvanceDirectivesExample.groovy'))
+		new CCDAdvanceDirectivesValidator().validate(advanceDirectives, null)
 	}
 	
 	

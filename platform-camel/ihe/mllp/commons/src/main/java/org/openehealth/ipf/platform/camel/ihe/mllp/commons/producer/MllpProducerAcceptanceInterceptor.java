@@ -19,8 +19,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
 import org.apache.camel.component.mina.MinaExchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.ValidationUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AcceptanceCheckUtils;
 
 
 /**
@@ -42,11 +43,11 @@ public class MllpProducerAcceptanceInterceptor extends AbstractMllpProducerInter
      */
     public void process(Exchange exchange) throws Exception {
         MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
-        ValidationUtils.checkRequestAcceptance(msg, getMllpEndpoint().getEndpointConfiguration());
-        
+        AcceptanceCheckUtils.checkRequestAcceptance(msg, getMllpEndpoint().getEndpointConfiguration());
+
         getWrappedProducer().process(exchange);
 
-        msg = exchange.getIn().getBody(MessageAdapter.class);
-        ValidationUtils.checkResponseAcceptance(msg);
+        msg = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
+        AcceptanceCheckUtils.checkResponseAcceptance(msg);
     }
 }

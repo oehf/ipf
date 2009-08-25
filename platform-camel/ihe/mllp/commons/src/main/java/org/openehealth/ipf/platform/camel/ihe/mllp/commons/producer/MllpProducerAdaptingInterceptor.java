@@ -16,15 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.Producer;
 import org.apache.camel.component.mina.MinaExchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
-
-import ca.uhn.hl7v2.parser.PipeParser;
 
 
 /**
@@ -41,26 +38,17 @@ public class MllpProducerAdaptingInterceptor extends AbstractMllpProducerInterce
     
     
     /**
-     * Converts outgoing request to a {@link MessageAdapter},
-     * does nothing with incoming response.
+     * Converts outgoing request to a {@link MessageAdapter}  
+     * and performs some exchange configuration.
      */
     public void process(Exchange exchange) throws Exception {
-        Message message = exchange.getIn();
-        Object body = message.getBody(); 
-        if(body instanceof MessageAdapter) {
-            // already o.k.
-        } else if(body instanceof ca.uhn.hl7v2.model.Message) {
-            body = new MessageAdapter(new PipeParser(), (ca.uhn.hl7v2.model.Message) body);
-        } else {
-            // process all other types (String, File, InputStream, ByteBuffer, byte[])
-            // by means of the standard routine.  An exception here will be o.k.
-            String s = MllpMarshalUtils.marshalStandardTypes(
-                    exchange, 
-                    getMllpEndpoint().getCharsetName());
-            s = s.replace('\n', '\r');
-            body = MessageAdapters.make(new PipeParser(), s);
-        } 
-        exchange.getIn().setBody(body);
+        exchange.setPattern(ExchangePattern.InOut);
+        
+        MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
+                exchange.getIn(), 
+                getMllpEndpoint().getCharsetName());
+        exchange.getIn().setBody(msg);
+        
         getWrappedProducer().process(exchange);
     }
 }

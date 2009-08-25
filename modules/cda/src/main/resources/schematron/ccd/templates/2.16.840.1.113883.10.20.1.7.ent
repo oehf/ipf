@@ -19,7 +19,7 @@
 	<title>Medical equipment section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.7"]'>
 	<assert test='descendant::*[cda:templateId/@root="2.16.840.1.113883.10.20.1.34"]'>The medical equipment section SHOULD include one or more supply activities (templateId 2.16.840.1.113883.10.20.1.34) </assert>
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'equipment')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “equipment”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'equipment')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "equipment".</assert>
 	</rule>
 </pattern>
 

@@ -15,25 +15,16 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.eclipse.emf.ecore.xmi.XMLResource
-import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.impl.*
-
+import org.openehealth.ipf.modules.cda.AbstractCDAR2Testimport org.junit.Before
 /**
  * @author Christian Ohr
  */
-public abstract class AbstractCDAR2BuilderTest extends GroovyTestCase {
+public abstract class AbstractCDAR2BuilderTest extends AbstractCDAR2Test {
 	
 	static def builder
+	static def loaded = []
 	
-	static {
-		ExpandoMetaClass.enableGlobally()
-		def extensions = new CDAR2ModelExtension()
-		extensions.extensions.call()
-	}
-	
+	@Before
 	public void setUp() throws Exception {
 		if (!builder)
             builder = new CDAR2Builder(getClass().getClassLoader()) 

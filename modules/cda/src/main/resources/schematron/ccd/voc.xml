@@ -1,0 +1,857 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- 
+The purpose of this file is to provide supporting information
+for validating that document instances conform to the Level 1 and
+Level 2 CDA Implementation Guides for Care Record Summaries.
+
+The top level element of this file is systems, and it is made up
+of one or more system elements. Each system element describes
+a vocabulary or coding domain, and provides the name and root OID
+for that domain.  Within the system element are code elements that
+provide the code value and display name for a given coded value.
+-->
+<systems>
+  <system codeSystemName='LOINC' root='2.16.840.1.113883.6.1'>
+    <code value='34133-9' displayName='SUMMARIZATION OF EPISODE NOTE'/>
+    <code value='18842-5' displayName='DISCHARGE SUMMARIZATION NOTE'/>
+    <code value='11490-0' displayName='DISCHARGE SUMMARIZATION NOTE'/>
+    <code value='28655-9' displayName='DISCHARGE SUMMARIZATION NOTE'/>
+    <code value='29761-4' displayName='DISCHARGE SUMMARIZATION NOTE'/>
+    <code value='34745-0' displayName='DISCHARGE SUMMARIZATION NOTE'/>
+    <code value='34105-7' displayName='DISCHARGE SUMMARIZATION NOTE'/>
+    <code value='34106-5' displayName='DISCHARGE SUMMARIZATION NOTE'/>
+    <code value='18761-7' displayName='TRANSFER SUMMARIZATION NOTE'/>
+    <code value='28616-1' displayName='TRANSFER SUMMARIZATION NOTE'/>
+    <code value='28651-8' displayName='TRANSFER SUMMARIZATION NOTE'/>
+    <code value='34755-9' displayName='TRANSFER SUMMARIZATION NOTE'/>
+    <code value='34770-8' displayName='TRANSFER SUMMARIZATION NOTE'/>
+  </system>
+  <system codeSystemName='ISO639-1' root='2.16.840.1.113883.6.99'>
+    <code value='aa' displayName='Afar'/>
+    <code value='ab' displayName='Abkhazian'/>
+    <code value='ae' displayName='Avestan'/>
+    <code value='af' displayName='Afrikaans'/>
+    <code value='ak' displayName='Akan'/>
+    <code value='am' displayName='Amharic'/>
+    <code value='an' displayName='Aragonese'/>
+    <code value='ar' displayName='Arabic'/>
+    <code value='as' displayName='Assamese'/>
+    <code value='av' displayName='Avaric'/>
+    <code value='ay' displayName='Aymara'/>
+    <code value='az' displayName='Azerbaijani'/>
+    <code value='ba' displayName='Bashkir'/>
+    <code value='be' displayName='Belarusian'/>
+    <code value='bg' displayName='Bulgarian'/>
+    <code value='bh' displayName='Bihari'/>
+    <code value='bi' displayName='Bislama'/>
+    <code value='bm' displayName='Bambara'/>
+    <code value='bn' displayName='Bengali'/>
+    <code value='bo' displayName='Tibetan'/>
+    <code value='bo' displayName='Tibetan'/>
+    <code value='br' displayName='Breton'/>
+    <code value='bs' displayName='Bosnian'/>
+    <code value='ca' displayName='Catalan'/>
+    <code value='ce' displayName='Chechen'/>
+    <code value='ch' displayName='Chamorro'/>
+    <code value='co' displayName='Corsican'/>
+    <code value='cr' displayName='Cree'/>
+    <code value='cs' displayName='Czech'/>
+    <code value='cs' displayName='Czech'/>
+    <code value='cu' displayName='Church Slavic'/>
+    <code value='cv' displayName='Chuvash'/>
+    <code value='cy' displayName='Welsh'/>
+    <code value='cy' displayName='Welsh'/>
+    <code value='da' displayName='Danish'/>
+    <code value='de' displayName='German'/>
+    <code value='de' displayName='German'/>
+    <code value='dv' displayName='Divehi'/>
+    <code value='dz' displayName='Dzongkha'/>
+    <code value='ee' displayName='Ewe'/>
+    <code value='el' displayName='Greek'/>
+    <code value='en' displayName='English'/>
+    <code value='eo' displayName='Esperanto'/>
+    <code value='es' displayName='Spanish'/>
+    <code value='et' displayName='Estonian'/>
+    <code value='eu' displayName='Basque'/>
+    <code value='eu' displayName='Basque'/>
+    <code value='fa' displayName='Persian'/>
+    <code value='fa' displayName='Persian'/>
+    <code value='ff' displayName='Fulah'/>
+    <code value='fi' displayName='Finnish'/>
+    <code value='fj' displayName='Fijian'/>
+    <code value='fo' displayName='Faroese'/>
+    <code value='fr' displayName='French'/>
+    <code value='fy' displayName='Frisian'/>
+    <code value='ga' displayName='Irish'/>
+    <code value='gd' displayName='Gaelic'/>
+    <code value='gl' displayName='Gallegan'/>
+    <code value='gn' displayName='Guarani'/>
+    <code value='gu' displayName='Gujarati'/>
+    <code value='gv' displayName='Manx'/>
+    <code value='ha' displayName='Hausa'/>
+    <code value='he' displayName='Hebrew'/>
+    <code value='hi' displayName='Hindi'/>
+    <code value='ho' displayName='Hiri Motu'/>
+    <code value='hr' displayName='Croatian'/>
+    <code value='hr' displayName='Croatian'/>
+    <code value='ht' displayName='Haitian'/>
+    <code value='hu' displayName='Hungarian'/>
+    <code value='hy' displayName='Armenian'/>
+    <code value='hz' displayName='Herero'/>
+    <code value='ia' displayName='Interlingua '/>
+    <code value='id' displayName='Indonesian'/>
+    <code value='ie' displayName='Interlingue'/>
+    <code value='ig' displayName='Igbo'/>
+    <code value='ii' displayName='Sichuan Yi'/>
+    <code value='ik' displayName='Inupiaq'/>
+    <code value='io' displayName='Ido'/>
+    <code value='is' displayName='Icelandic'/>
+    <code value='is' displayName='Icelandic'/>
+    <code value='it' displayName='Italian'/>
+    <code value='iu' displayName='Inuktitut'/>
+    <code value='ja' displayName='Japanese'/>
+    <code value='jv' displayName='Javanese'/>
+    <code value='ka' displayName='Georgian'/>
+    <code value='ka' displayName='Georgian'/>
+    <code value='kg' displayName='Kongo'/>
+    <code value='ki' displayName='Kikuyu'/>
+    <code value='kj' displayName='Kuanyama'/>
+    <code value='kk' displayName='Kazakh'/>
+    <code value='kl' displayName='Kalaallisut'/>
+    <code value='km' displayName='Khmer'/>
+    <code value='kn' displayName='Kannada'/>
+    <code value='ko' displayName='Korean'/>
+    <code value='kr' displayName='Kanuri'/>
+    <code value='ks' displayName='Kashmiri'/>
+    <code value='ku' displayName='Kurdish'/>
+    <code value='kv' displayName='Komi'/>
+    <code value='kw' displayName='Cornish'/>
+    <code value='ky' displayName='Kirghiz'/>
+    <code value='la' displayName='Latin'/>
+    <code value='lb' displayName='Luxembourgish'/>
+    <code value='lg' displayName='Ganda'/>
+    <code value='li' displayName='Limburgan'/>
+    <code value='ln' displayName='Lingala'/>
+    <code value='lo' displayName='Lao'/>
+    <code value='lt' displayName='Lithuanian'/>
+    <code value='lu' displayName='Luba-Katanga'/>
+    <code value='lv' displayName='Latvian'/>
+    <code value='mg' displayName='Malagasy'/>
+    <code value='mh' displayName='Marshallese'/>
+    <code value='mi' displayName='Maori'/>
+    <code value='mi' displayName='Maori'/>
+    <code value='mk' displayName='Macedonian'/>
+    <code value='mk' displayName='Macedonian'/>
+    <code value='ml' displayName='Malayalam'/>
+    <code value='mn' displayName='Mongolian'/>
+    <code value='mo' displayName='Moldavian'/>
+    <code value='mr' displayName='Marathi'/>
+    <code value='ms' displayName='Malay'/>
+    <code value='ms' displayName='Malay'/>
+    <code value='mt' displayName='Maltese'/>
+    <code value='my' displayName='Burmese'/>
+    <code value='my' displayName='Burmese'/>
+    <code value='na' displayName='Nauru'/>
+    <code value='nb' displayName='Norwegian'/>
+    <code value='nd' displayName='Ndebele'/>
+    <code value='ne' displayName='Nepali'/>
+    <code value='ng' displayName='Ndonga'/>
+    <code value='nl' displayName='Dutch'/>
+    <code value='nn' displayName='Norwegian '/>
+    <code value='no' displayName='Norwegian'/>
+    <code value='nr' displayName='Ndebele'/>
+    <code value='nv' displayName='Navajo'/>
+    <code value='ny' displayName='Chichewa'/>
+    <code value='oc' displayName='Occitan'/>
+    <code value='oj' displayName='Ojibwa'/>
+    <code value='om' displayName='Oromo'/>
+    <code value='or' displayName='Oriya'/>
+    <code value='os' displayName='Ossetian'/>
+    <code value='pa' displayName='Panjabi'/>
+    <code value='pi' displayName='Pali'/>
+    <code value='pl' displayName='Polish'/>
+    <code value='ps' displayName='Pushto'/>
+    <code value='pt' displayName='Portuguese'/>
+    <code value='qu' displayName='Quechua'/>
+    <code value='rm' displayName='Raeto-Romance'/>
+    <code value='rn' displayName='Rundi'/>
+    <code value='ro' displayName='Romanian'/>
+    <code value='ru' displayName='Russian'/>
+    <code value='rw' displayName='Kinyarwanda'/>
+    <code value='sa' displayName='Sanskrit'/>
+    <code value='sc' displayName='Sardinian'/>
+    <code value='sd' displayName='Sindhi'/>
+    <code value='se' displayName='Northern Sami'/>
+    <code value='sg' displayName='Sango'/>
+    <code value='si' displayName='Sinhala'/>
+    <code value='sk' displayName='Slovak'/>
+    <code value='sl' displayName='Slovenian'/>
+    <code value='sm' displayName='Samoan'/>
+    <code value='sn' displayName='Shona'/>
+    <code value='so' displayName='Somali'/>
+    <code value='sq' displayName='Albanian'/>
+    <code value='sq' displayName='Albanian'/>
+    <code value='sr' displayName='Serbian'/>
+    <code value='sr' displayName='Serbian'/>
+    <code value='ss' displayName='Swati'/>
+    <code value='st' displayName='Sotho'/>
+    <code value='su' displayName='Sundanese'/>
+    <code value='sv' displayName='Swedish'/>
+    <code value='sw' displayName='Swahili'/>
+    <code value='ta' displayName='Tamil'/>
+    <code value='te' displayName='Telugu'/>
+    <code value='tg' displayName='Tajik'/>
+    <code value='th' displayName='Thai'/>
+    <code value='ti' displayName='Tigrinya'/>
+    <code value='tk' displayName='Turkmen'/>
+    <code value='tl' displayName='Tagalog'/>
+    <code value='tn' displayName='Tswana'/>
+    <code value='to' displayName='Tonga'/>
+    <code value='tr' displayName='Turkish'/>
+    <code value='ts' displayName='Tsonga'/>
+    <code value='tt' displayName='Tatar'/>
+    <code value='tw' displayName='Twi'/>
+    <code value='ty' displayName='Tahitian'/>
+    <code value='ug' displayName='Uighur'/>
+    <code value='uk' displayName='Ukrainian'/>
+    <code value='ur' displayName='Urdu'/>
+    <code value='uz' displayName='Uzbek'/>
+    <code value='ve' displayName='Venda'/>
+    <code value='vi' displayName='Vietnamese'/>
+    <code value='vo' displayName='Volap&#252;k'/>
+    <code value='wa' displayName='Walloon'/>
+    <code value='wo' displayName='Wolof'/>
+    <code value='xh' displayName='Xhosa'/>
+    <code value='yi' displayName='Yiddish'/>
+    <code value='yo' displayName='Yoruba'/>
+    <code value='za' displayName='Zhuang'/>
+    <code value='zh' displayName='Chinese'/>
+    <code value='zh' displayName='Chinese'/>
+    <code value='zu' displayName='Zulu'/>
+  </system>
+  <system codeSystemName='ISO3166-1' root='2.16.1'>
+    <code value="AF" displayName="Afghanistan"/>
+    <code value="AX" displayName="&#197;land Islands"/>
+    <code value="AL" displayName="Albania"/>
+    <code value="DZ" displayName="Algeria"/>
+    <code value="AS" displayName="American Samoa"/>
+    <code value="AD" displayName="Andorra"/>
+    <code value="AO" displayName="Angola"/>
+    <code value="AI" displayName="Anguilla"/>
+    <code value="AQ" displayName="Antarctica"/>
+    <code value="AG" displayName="Antigua and Barbuda"/>
+    <code value="AR" displayName="Argentina"/>
+    <code value="AM" displayName="Armenia"/>
+    <code value="AW" displayName="Aruba"/>
+    <code value="AU" displayName="Australia"/>
+    <code value="AT" displayName="Austria"/>
+    <code value="AZ" displayName="Azerbaijan"/>
+    <code value="BS" displayName="Bahamas"/>
+    <code value="BH" displayName="Bahrain"/>
+    <code value="BD" displayName="Bangladesh"/>
+    <code value="BB" displayName="Barbados"/>
+    <code value="BY" displayName="Belarus"/>
+    <code value="BE" displayName="Belgium"/>
+    <code value="BZ" displayName="Belize"/>
+    <code value="BJ" displayName="Benin"/>
+    <code value="BM" displayName="Bermuda"/>
+    <code value="BT" displayName="Bhutan"/>
+    <code value="BO" displayName="Bolivia"/>
+    <code value="BA" displayName="Bosnia and Herzegovina"/>
+    <code value="BW" displayName="Botswana"/>
+    <code value="BV" displayName="Bouvet Island"/>
+    <code value="BR" displayName="Brazil"/>
+    <code value="IO" displayName="British Indian Ocean Territory"/>
+    <code value="BN" displayName="Brunei Darussalam"/>
+    <code value="BG" displayName="Bulgaria"/>
+    <code value="BF" displayName="Burkina Faso"/>
+    <code value="BI" displayName="Burundi"/>
+    <code value="KH" displayName="Cambodia"/>
+    <code value="CM" displayName="Cameroon"/>
+    <code value="CA" displayName="Canada"/>
+    <code value="CV" displayName="Cape Verde"/>
+    <code value="KY" displayName="Cayman Islands"/>
+    <code value="CF" displayName="Central African Republic"/>
+    <code value="TD" displayName="Chad"/>
+    <code value="CL" displayName="Chile"/>
+    <code value="CN" displayName="China"/>
+    <code value="CX" displayName="Christmas Island"/>
+    <code value="CC" displayName="Cocos (Keeling) Islands"/>
+    <code value="CO" displayName="Colombia"/>
+    <code value="KM" displayName="Comoros"/>
+    <code value="CG" displayName="Congo"/>
+    <code value="CD" displayName="Congo, the  Democratic Republic of the "/>
+    <code value="CK" displayName="Cook Islands"/>
+    <code value="CR" displayName="Costa Rica"/>
+    <code value="CI" displayName="Cote D'Ivoire"/>
+    <code value="HR" displayName="Croatia"/>
+    <code value="CU" displayName="Cuba"/>
+    <code value="CY" displayName="Cyprus"/>
+    <code value="CZ" displayName="Czech Republic"/>
+    <code value="DK" displayName="Denmark"/>
+    <code value="DJ" displayName="Djibouti"/>
+    <code value="DM" displayName="Dominica"/>
+    <code value="DO" displayName="Dominican Republic"/>
+    <code value="EC" displayName="Ecuador"/>
+    <code value="EG" displayName="Egypt"/>
+    <code value="SV" displayName="El Salvador"/>
+    <code value="GQ" displayName="Equatorial Guinea"/>
+    <code value="ER" displayName="Eritrea"/>
+    <code value="EE" displayName="Estonia"/>
+    <code value="ET" displayName="Ethiopia"/>
+    <code value="FK" displayName="Falkland Islands (Malvinas)"/>
+    <code value="FO" displayName="Faroe Islands"/>
+    <code value="FJ" displayName="Fiji"/>
+    <code value="FI" displayName="Finland"/>
+    <code value="FR" displayName="France"/>
+    <code value="GF" displayName="French Guiana"/>
+    <code value="PF" displayName="French Polynesia"/>
+    <code value="TF" displayName="French Southern Territories"/>
+    <code value="GA" displayName="Gabon"/>
+    <code value="GM" displayName="Gambia"/>
+    <code value="GE" displayName="Georgia"/>
+    <code value="DE" displayName="Germany"/>
+    <code value="GH" displayName="Ghana"/>
+    <code value="GI" displayName="Gibraltar"/>
+    <code value="GR" displayName="Greece"/>
+    <code value="GL" displayName="Greenland"/>
+    <code value="GD" displayName="Grenada"/>
+    <code value="GP" displayName="Guadeloupe"/>
+    <code value="GU" displayName="Guam"/>
+    <code value="GT" displayName="Guatemala"/>
+    <code value="GN" displayName="Guinea"/>
+    <code value="GW" displayName="Guinea-Bissau"/>
+    <code value="GY" displayName="Guyana"/>
+    <code value="HT" displayName="Haiti"/>
+    <code value="HM" displayName="Heard Island and Mcdonald Islands"/>
+    <code value="VA" displayName="Holy See (Vatican City State)"/>
+    <code value="HN" displayName="Honduras"/>
+    <code value="HK" displayName="Hong Kong"/>
+    <code value="HU" displayName="Hungary"/>
+    <code value="IS" displayName="Iceland"/>
+    <code value="IN" displayName="India"/>
+    <code value="ID" displayName="Indonesia"/>
+    <code value="IR" displayName="Iran, Islamic Republic of"/>
+    <code value="IQ" displayName="Iraq"/>
+    <code value="IE" displayName="Ireland"/>
+    <code value="IL" displayName="Israel"/>
+    <code value="IT" displayName="Italy"/>
+    <code value="JM" displayName="Jamaica"/>
+    <code value="JP" displayName="Japan"/>
+    <code value="JO" displayName="Jordan"/>
+    <code value="KZ" displayName="Kazakhstan"/>
+    <code value="KE" displayName="Kenya"/>
+    <code value="KI" displayName="Kiribati"/>
+    <code value="KP" displayName="Korea, Democratic People's Republic of"/>
+    <code value="KR" displayName="Korea, Republic of"/>
+    <code value="KW" displayName="Kuwait"/>
+    <code value="KG" displayName="Kyrgyzstan"/>
+    <code value="LA" displayName="Lao People's Democratic Republic"/>
+    <code value="LV" displayName="Latvia"/>
+    <code value="LB" displayName="Lebanon"/>
+    <code value="LS" displayName="Lesotho"/>
+    <code value="LR" displayName="Liberia"/>
+    <code value="LY" displayName="Libyan Arab Jamahiriya"/>
+    <code value="LI" displayName="Liechtenstein"/>
+    <code value="LT" displayName="Lithuania"/>
+    <code value="LU" displayName="Luxembourg"/>
+    <code value="MO" displayName="Macao"/>
+    <code value="MK" displayName="Macedonia, the Former Yugoslav Republic of"/>
+    <code value="MG" displayName="Madagascar"/>
+    <code value="MW" displayName="Malawi"/>
+    <code value="MY" displayName="Malaysia"/>
+    <code value="MV" displayName="Maldives"/>
+    <code value="ML" displayName="Mali"/>
+    <code value="MT" displayName="Malta"/>
+    <code value="MH" displayName="Marshall Islands"/>
+    <code value="MQ" displayName="Martinique"/>
+    <code value="MR" displayName="Mauritania"/>
+    <code value="MU" displayName="Mauritius"/>
+    <code value="YT" displayName="Mayotte"/>
+    <code value="MX" displayName="Mexico"/>
+    <code value="FM" displayName="Micronesia, Federated States of"/>
+    <code value="MD" displayName="Moldova, Republic of"/>
+    <code value="MC" displayName="Monaco"/>
+    <code value="MN" displayName="Mongolia"/>
+    <code value="MS" displayName="Montserrat"/>
+    <code value="MA" displayName="Morocco"/>
+    <code value="MZ" displayName="Mozambique"/>
+    <code value="MM" displayName="Myanmar"/>
+    <code value="NA" displayName="Namibia"/>
+    <code value="NR" displayName="Nauru"/>
+    <code value="NP" displayName="Nepal"/>
+    <code value="NL" displayName="Netherlands"/>
+    <code value="AN" displayName="Netherlands Antilles"/>
+    <code value="NC" displayName="New Caledonia"/>
+    <code value="NZ" displayName="New Zealand"/>
+    <code value="NI" displayName="Nicaragua"/>
+    <code value="NE" displayName="Niger"/>
+    <code value="NG" displayName="Nigeria"/>
+    <code value="NU" displayName="Niue"/>
+    <code value="NF" displayName="Norfolk Island"/>
+    <code value="MP" displayName="Northern Mariana Islands"/>
+    <code value="NO" displayName="Norway"/>
+    <code value="OM" displayName="Oman"/>
+    <code value="PK" displayName="Pakistan"/>
+    <code value="PW" displayName="Palau"/>
+    <code value="PS" displayName="Palestinian Territory, Occupied"/>
+    <code value="PA" displayName="Panama"/>
+    <code value="PG" displayName="Papua New Guinea"/>
+    <code value="PY" displayName="Paraguay"/>
+    <code value="PE" displayName="Peru"/>
+    <code value="PH" displayName="Philippines"/>
+    <code value="PN" displayName="Pitcairn"/>
+    <code value="PL" displayName="Poland"/>
+    <code value="PT" displayName="Portugal"/>
+    <code value="PR" displayName="Puerto Rico"/>
+    <code value="QA" displayName="Qatar"/>
+    <code value="RE" displayName="Reunion"/>
+    <code value="RO" displayName="Romania"/>
+    <code value="RU" displayName="Russian Federation"/>
+    <code value="RW" displayName="Rwanda"/>
+    <code value="SH" displayName="Saint Helena"/>
+    <code value="KN" displayName="Saint Kitts and Nevis"/>
+    <code value="LC" displayName="Saint Lucia"/>
+    <code value="PM" displayName="Saint Pierre and Miquelon"/>
+    <code value="VC" displayName="Saint Vincent and the  Grenadines"/>
+    <code value="WS" displayName="Samoa"/>
+    <code value="SM" displayName="San Marino"/>
+    <code value="ST" displayName="Sao Tome and Principe"/>
+    <code value="SA" displayName="Saudi Arabia"/>
+    <code value="SN" displayName="Senegal"/>
+    <code value="CS" displayName="Serbia and Montenegro"/>
+    <code value="SC" displayName="Seychelles"/>
+    <code value="SL" displayName="Sierra Leone"/>
+    <code value="SG" displayName="Singapore"/>
+    <code value="SK" displayName="Slovakia"/>
+    <code value="SI" displayName="Slovenia"/>
+    <code value="SB" displayName="Solomon Islands"/>
+    <code value="SO" displayName="Somalia"/>
+    <code value="ZA" displayName="South Africa"/>
+    <code value="GS" displayName="South Georgia and the South Sandwich Islands"/>
+    <code value="ES" displayName="Spain"/>
+    <code value="LK" displayName="Sri Lanka"/>
+    <code value="SD" displayName="Sudan"/>
+    <code value="SR" displayName="Suriname"/>
+    <code value="SJ" displayName="Svalbard and Jan Mayen"/>
+    <code value="SZ" displayName="Swaziland"/>
+    <code value="SE" displayName="Sweden"/>
+    <code value="CH" displayName="Switzerland"/>
+    <code value="SY" displayName="Syrian Arab Republic"/>
+    <code value="TW" displayName="Taiwan, Province of China"/>
+    <code value="TJ" displayName="Tajikistan"/>
+    <code value="TZ" displayName="Tanzania, United Republic of"/>
+    <code value="TH" displayName="Thailand"/>
+    <code value="TL" displayName="Timor-Leste"/>
+    <code value="TG" displayName="Togo"/>
+    <code value="TK" displayName="Tokelau"/>
+    <code value="TO" displayName="Tonga"/>
+    <code value="TT" displayName="Trinidad and Tobago"/>
+    <code value="TN" displayName="Tunisia"/>
+    <code value="TR" displayName="Turkey"/>
+    <code value="TM" displayName="Turkmenistan"/>
+    <code value="TC" displayName="Turks and Caicos Islands"/>
+    <code value="TV" displayName="Tuvalu"/>
+    <code value="UG" displayName="Uganda"/>
+    <code value="UA" displayName="Ukraine"/>
+    <code value="AE" displayName="United Arab Emirates"/>
+    <code value="GB" displayName="United Kingdom"/>
+    <code value="US" displayName="United States"/>
+    <code value="UM" displayName="United States Minor Outlying Islands"/>
+    <code value="UY" displayName="Uruguay"/>
+    <code value="UZ" displayName="Uzbekistan"/>
+    <code value="VU" displayName="Vanuatu"/>
+    <code value="VE" displayName="Venezuela"/>
+    <code value="VN" displayName="Viet Nam"/>
+    <code value="VG" displayName="Virgin Islands, British"/>
+    <code value="VI" displayName="Virgin Islands, U.S."/>
+    <code value="WF" displayName="Wallis and Futuna"/>
+    <code value="EH" displayName="Western Sahara"/>
+    <code value="YE" displayName="Yemen"/>
+    <code value="ZM" displayName="Zambia"/>
+    <code value="ZW" displayName="Zimbabwe"/>
+  </system>
+  <system codeSystemName='PolicyHolderRole' root='2.16.840.1.113883.5.1095'>
+    <code value='PHFAMDEP' displayName='Policy holder for a family dependent'/>
+    <code value='PHFSTUD' displayName=' Policy holder for a full-time student'/>
+    <code value='PHHANDIC' displayName='Policy holder for a handicapped dependent'/>
+    <code value='PHINJ' displayName='Policy holder for an injured plaintiff'/>
+    <code value='PHPSTUD' displayName='Policy holder for a part-time student'/>
+    <code value='PHSPON' displayName='Policy holder for a sponsored dependent'/>
+    <code value='PHSTUD' displayName='Policy holder for a student'/>
+  </system>
+  <system codeSystemName='PersonalRelationshipRoleType' root='2.16.840.1.113883.5.111'>
+    <code value='CHILD' displayName='Child'/>
+    <code value='CHLDADOPT' displayName='adopted child'/>
+    <code value='DAUADOPT' displayName='adopted daughter'/>
+    <code value='SONADOPT' displayName='adopted son'/>
+    <code value='CHLDINLAW' displayName='child in-law'/>
+    <code value='DAUINLAW' displayName='daughter in-law'/>
+    <code value='SONINLAW' displayName='son in-law'/>
+    <code value='CHLDFOST' displayName='foster child'/>
+    <code value='DAUFOST foster daughter'/>
+    <code value='SONFOST foster son'/>
+    <code value='NCHILD' displayName='natural child'/>
+    <code value='DAU' displayName='natural daughter'/>
+    <code value='SON' displayName='natural son'/>
+    <code value='STPCHLD' displayName='step child'/>
+    <code value='STPDAU' displayName='stepdaughter'/>
+    <code value='STPSON' displayName='stepson'/>
+    <code value='GRNDCHILD' displayName='grandchild'/>
+    <code value='GRNDDAU granddaughter'/>
+    <code value='GRNDSON grandson'/>
+    <code value='GRPRN' displayName='Grandparent'/>
+    <code value='GRFTH' displayName='Grandfather'/>
+    <code value='GRMTH' displayName='Grandmother'/>
+    <code value='GGRPRN' displayName='great grandparent'/>
+    <code value='GGRFTH' displayName='great grandfather'/>
+    <code value='GGRMTH' displayName='great grandmother'/>
+    <code value='NIENEPH' displayName='niece/nephew'/>
+    <code value='NEPHEW' displayName='nephew'/>
+    <code value='NIECE' displayName='niece'/>
+    <code value='PRN' displayName='Parent'/>
+    <code value='NPRN' displayName='natural parent'/>
+    <code value='NFTH' displayName='natural father'/>
+    <code value='NMTH' displayName='natural mother'/>
+    <code value='PRNINLAW' displayName='parent in-law'/>
+    <code value='FTHINLAW' displayName='father-in-law'/>
+    <code value='MTHINLOAW' displayName='mother-in-law'/>
+    <code value='STPPRN' displayName='step parent'/>
+    <code value='STPFTH' displayName='stepfather'/>
+    <code value='STPMTH' displayName='stepmother'/>
+    <code value='FTH' displayName='Father'/>
+    <code value='MTH' displayName='Mother'/>
+    <code value='SIB' displayName='Sibling'/>
+    <code value='HSIB' displayName='half-sibling'/>
+    <code value='HBRO' displayName='half-brother'/>
+    <code value='HSIS' displayName='half-sister'/>
+    <code value='NSIB' displayName='natural sibling'/>
+    <code value='NBRO' displayName='natural brother'/>
+    <code value='NSIS' displayName='natural sister'/>
+    <code value='SIBINLAW' displayName='sibling in-law'/>
+    <code value='BROINLAW' displayName='brother-in-law'/>
+    <code value='SISLINLAW' displayName='sister-in-law'/>
+    <code value='STPSIB' displayName='step sibling'/>
+    <code value='STPBRO' displayName='stepbrother'/>
+    <code value='STPSIS' displayName='stepsister'/>
+    <code value='BRO' displayName='Brother'/>
+    <code value='SIS' displayName='Sister'/>
+    <code value='SIGOTHR' displayName='significant other'/>
+    <code value='SPS' displayName='spouse'/>
+    <code value='HUSB' displayName='husband'/>
+    <code value='WIFE' displayName='wife'/>
+    <code value='AUNT' displayName='aunt'/>
+    <code value='COUSN' displayName='cousin'/>
+    <code value='DOMPART' displayName='domestic partner'/>
+    <code value='ROOM' displayName='Roomate'/>
+    <code value='UNCLE' displayName='uncle'/>
+    <code value='FRND' displayName='unrelated friend'/>
+    <code value='NBOR' displayName='neighbor'/>
+  </system>
+  <system codeSystemName='HealthcareProfessionals' root='2.16.840.1.113883.6.96'>
+    <code value='223366009' displayName='Healthcare Professionals'/>
+    <code value='59058001' displayName='General Physician'/>
+  </system>
+  <system codeSystemName='ParticipatingFunction' root='2.16.840.1.113883.5.88'>
+    <code value='ADMPHYS' displayName='admitting physician'/>
+    <code value='ANRS' displayName='anesthesia nurse'/>
+    <code value='ANEST' displayName='anesthesist'/>
+    <code value='ATTPHYS' displayName='attending physician'/>
+    <code value='DISPHYS' displayName='discharging physician'/>
+    <code value='FASST' displayName='first assistant surgeon'/>
+    <code value='MDWF' displayName='midwife'/>
+    <code value='NASST' displayName='nurse assistant'/>
+    <code value='PCP' displayName='primary care physician'/>
+    <code value='PRISURG' displayName='primary surgeon'/>
+    <code value='RNDPHYS' displayName='rounding physician'/>
+    <code value='SNRS' displayName='scrub nurse'/>
+    <code value='SASST' displayName='second assistant surgeon'/>
+    <code value='TASST' displayName='third assistant'/>
+  </system>
+ 
+  
+  <!-- More Value Sets as defined in CCD specification -->
+  
+  <!-- TODO: 2.16.840.1.113883.1.11.19832 (ActCoverageType) -->
+  <!-- TODO: 2.16.840.1.113883.1.11.13955 (ActEncounterCode) -->
+  <!-- TODO: 2.16.840.1.113883.1.11.20.21 (FamilyHistoryPersonCode) -->
+    
+  <system codeSystemName='SNOMED CT' group='AdvanceDirectiveStatusCode' root='2.16.840.1.113883.1.11.20.1'>
+  	<code value="15240007" displayName="Current and Verified" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 
+  	<code value="425392003" displayName="Current and Verified" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="425394002" displayName="Supported By Healthcare Will" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="425393008" displayName="Supported By Durable Power of Attorney for Healthcare" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="425396000" displayName="Verified With Family Only" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="310305009" displayName="Verified By Medical Record Only" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>  	
+  </system>
+  <system codeSystemName='SNOMED CT' group='AdvanceDirectiveTypeCode' root='2.16.840.1.113883.1.11.20.2'>
+  	<code value="304251008" displayName="Resuscitation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="52765003" displayName="Intubation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="225204009" displayName="IV Fluid and Support" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="89666000" displayName="CPR" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="281789004" displayName="Antibiotics" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="78823007" displayName="Life Support" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="61420007" displayName="Tube Feedings" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="71388002" displayName="Other Directive" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>  		
+  </system>  
+  <system codeSystemName='SNOMED CT' group='AlertStatusCode' root='2.16.840.1.113883.1.11.20.3'>
+  	<code value="55561003" displayName="Active" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="392521001" displayName="Prior History" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="73425007" displayName="No Longer Active" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  </system>  
+  <system codeSystemName='SNOMED CT' group='AlertTypeCode' root='2.16.840.1.113883.1.11.20.4'>
+  	<code value="106190000" displayName="Allergy" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="281647001" displayName="Adverse Reaction" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  </system> 
+  <system codeSystemName='EncounterCode' root='2.16.840.1.113883.1.11.13955'>
+  	<code value="AMB" displayName="Ambulatory"/>
+  	<code value="EMER" displayName="Emergency"/> 		
+  	<code value="FLD" displayName="Field"/>
+  	<code value="HH" displayName="Home Health"/> 		
+  	<code value="SS" displayName=""/>
+  	<code value="VR" displayName=""/> 		
+  	<code value="IMP" displayName="Inpatient"/>
+  	<code value="ACUTE" displayName="Acute"/>
+  	<code value="NONAC" displayName="Non-acute"/>
+  	<code value="ALC" displayName="Alternative Level of Care"/> 		
+  	<code value="CARD" displayName="Cardialogy"/>
+  	<code value="CHR" displayName="Chronic"/> 		
+  	<code value="DNTL" displayName="Dental"/>
+  	<code value="DRGRHB" displayName="Drug Rehab"/> 		
+  	<code value="GENRL" displayName="General"/>
+  	<code value="MED" displayName="Medical"/> 		
+  	<code value="OBS" displayName="Obstetrics"/>
+  	<code value="ONC" displayName="Oncology"/>
+  	<code value="PALL" displayName="Palliative"/>
+  	<code value="PED" displayName="Pediatrics"/> 		
+  	<code value="PHAR" displayName="Pharmaceutical"/>
+  	<code value="PHYRHB" displayName="Physical Rehab"/> 		
+  	<code value="PSYCH" displayName="Psychatric"/>
+  	<code value="SURG" displayName="Surgical"/> 			
+  </system>
+  <system codeSystemName='SNOMED CT' group='FunctionalStatusTypeCode' root='2.16.840.1.113883.1.11.20.6'>
+  	<code value="363871006" displayName="Mental Status" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="129025006" displayName="Activities of Daily Living" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="4683004" displayName="Home/Living Situation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="284773001" displayName="Ability to Care for Self" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  </system>  
+  <system codeSystemName='SNOMED CT' group='MedicationStatusCode' root='2.16.840.1.113883.1.11.20.7'>
+  	<code value="55561003" displayName="Active" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="421139008" displayName="On Hold" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="392521001" displayName="Prior History" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="73425007" displayName="No Longer Active" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  </system>
+  <system codeSystemName='SNOMED CT' group='MedicationTypeCode' root='2.16.840.1.113883.1.11.20.8'>
+  	<code value="354078009" displayName="IV Fluid" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="327838005" displayName="Parenteral Nutrition" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="108961000" displayName="Supplemental Nutrition" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="350326008" displayName="Immunization" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  	<code value="425398004" displayName="Supplies" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="49062001" displayName="Device" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="40388003" displayName="Implantable Device" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="425399007" displayName="Durable Medical Equipment" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>  
+  </system>
+  <system codeSystemName='SNOMED CT' group='OrderRequestTypeCode' root='2.16.840.1.113883.1.11.20.9'>
+  	<code value="308335008" displayName="Encounter" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="71388002" displayName="Procedure" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="127777001" displayName="Service" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="260787004" displayName="Product" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  	<code value="127785005" displayName="Immunization" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="416118004" displayName="Medication" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="386336002" displayName="Authorization" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="3457005" displayName="Referral" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="11429006" displayName="Consultation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 	  
+  </system>
+  <system codeSystemName='ActStatus' group='PlanOfCareStatusCode' root='2.16.840.1.113883.1.11.20.10'>
+  	<code value="new" displayName="Ordered/Requested"/>
+   	<code value="active" displayName="Pending/In Process"/>
+  	<code value="held" displayName="On Hold"/> 		
+  	<code value="cancelled" displayName="Cancelled"/>		
+  	<code value="Aborted" displayName="No Show"/> 	  
+  </system>
+  <system codeSystemName='SNOMED CT' group='PlanOfCareTypeCode' root='2.16.840.1.113883.1.11.20.11'>
+  	<code value="223452003" displayName="Reminder" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="71388002" displayName="Order" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="416118004" displayName="Prescription" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="386336002" displayName="Authorization" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  	<code value="3457005" displayName="Referral" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="11429006" displayName="Request For Consultation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="391157003" displayName="Treatment Recommendation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		 	  
+  </system> 
+  <system codeSystemName='RoleCode' group='PolicyOrProgramCoverageRoleType' root='2.16.840.1.113883.1.11.19809'>
+  	<code value="FAMDEP" displayName="family dependent"/>
+   	<code value="HANDIC" displayName="handicapped dependent"/>
+  	<code value="INJ" displayName="injured"/> 		
+  	<code value="SELF" displayName="self"/>		
+  	<code value="SPON" displayName="sponsored dependent"/> 	  
+  	<code value="CRIMEVIC" displayName="crime victim"/>
+  	<code value="INJWKR" displayName="injured worker"/> 		
+  	<code value="COCBEN" displayName="continuity of coverage beneficiary"/>		
+  	<code value="DIFFABL" displayName="differently abled"/>
+  	<code value="WARD" displayName="ward"/>
+   	<code value="RETIREE" displayName="retiree"/>
+  	<code value="STUD" displayName="student"/> 		
+  	<code value="FSTUD" displayName="full-time student"/>		
+  	<code value="PSTUD" displayName="part-time student"/> 	  
+   	<code value="INDIG" displayName="member of an indigenous people"/>
+  	<code value="MIL" displayName="military"/> 		
+  	<code value="ACTMIL" displayName="active duty military"/>		
+  	<code value="RETMIL" displayName="retired military"/>
+  	<code value="VET" displayName="veteran"/>
+  </system>
+  <system codeSystemName="SNOMED CT" group='ProblemHealthStatusCode' root='2.16.840.1.113883.1.11.20.12'>
+  	<code value='81323004' displayName='Alive and well' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='313386006' displayName='In remission' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='162467007' displayName='Symptom free' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>	
+	<code value='161901003' displayName='Chronically ill' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='271593001' displayName='Severely ill' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>	
+	<code value='21134002' displayName='Disabled' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>	
+	<code value='161045001' displayName='Severely disabled' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='419099009' displayName='Deceased' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>	
+  </system>  
+  <system codeSystemName="SNOMED CT" group='ProblemStatusCode' root='2.16.840.1.113883.1.11.20.13'>
+	<code value='55561003' displayName='Active' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='73425007' displayName='Inactive' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='90734009' displayName='Chronic' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='7087005' displayName='Intermittent' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='255227004' displayName='Recurrent' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='415684004' displayName='Rule out' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='410516002' displayName='Ruled out' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='413322009' displayName='Resolved' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  </system>    
+  <system codeSystemName='SNOMED CT' group='ProblemTypeCode' root='2.16.840.1.113883.1.11.20.14'>
+  	<code value="64572001" displayName="Condition" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="418799008" displayName="Symptom" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="404684003" displayName="Complaint" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="248536006" displayName="Functional limitation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  	<code value="55607006" displayName="Problem" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="282291009" displayName="Diagnosis" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  </system>
+  <system codeSystemName='ActStatus' group='ProblemStatusCode' root='2.16.840.1.113883.1.11.20.15'>
+  	<code value="cancelled" displayName="Cancelled"/>
+   	<code value="Held" displayName="On Hold"/>
+  	<code value="Active" displayName="In Progress"/> 		
+  	<code value="Aborted" displayName="Not Completed"/>		
+  	<code value="completed" displayName="Completed"/>
+  </system>
+  <system codeSystemName='SNOMED CT' group='ResultTypeCode' root='2.16.840.1.113883.1.11.20.16'>
+  	<code value="252275004" displayName="Hematology" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="275711006" displayName="Chemistry" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="68793005" displayName="Serology" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="395124008" displayName="Virology" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  	<code value="69200006" displayName="Toxicology" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="19851009" displayName="Microbiology" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="363679005" displayName="Imaging" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="363680008" displayName="X-ray" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="16310003" displayName="Ultrasound" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  	<code value="77477000" displayName="CT" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 
+   	<code value="113091000" displayName="MRI" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="77343006" displayName="Angiography" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="40701008" displayName="Cardiac Echo" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>		
+  	<code value="371572003" displayName="Nuclear Medicine" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="108257001" displayName="Pathology" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="71388002" displayName="Procedure" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="46680005" displayName="Vital Sign" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  </system> 
+<system codeSystemName='RouteOfAdministration' group='RouteOfAdministration' root='2.16.840.1.113883.1.11.14581'>
+  	<code value="GARGLE" displayName=""/>
+   	<code value="SOAK" displayName=""/>
+  	<code value="INSUF" displayName=""/> 		
+  	<code value="SHAMPOO" displayName=""/>		
+  	<code value="SUCK" displayName=""/>
+  	<code value="PO" displayName=""/>
+   	<code value="TRNSLING" displayName=""/>
+  	<code value="CHEW" displayName=""/> 		
+  	<code value="EXTCORPDIF" displayName=""/>		
+  	<code value="HEMODIFF" displayName=""/> 
+  	<code value="TRNSDERMD" displayName=""/>
+   	<code value="DISSOLVE" displayName=""/>
+  	<code value="SL" displayName=""/> 		
+  	<code value="DOUCHE" displayName=""/>		
+  	<code value="ELECTOSMOS" displayName=""/>
+  	<code value="ENEMA" displayName=""/>
+   	<code value="RETENEMA" displayName=""/>
+  	<code value="IVFLUSH" displayName=""/> 		
+  	<code value="IDIMPLNT" displayName=""/>		
+  	<code value="IVITIMPLNT" displayName=""/>
+  	<code value="SQIMPLNT" displayName=""/>
+   	<code value="EPI" displayName=""/>
+  	<code value="IA" displayName=""/> 		
+  	<code value="IC" displayName=""/>		
+  	<code value="ICOR" displayName=""/>
+  	<code value="IOSSC" displayName=""/>
+   	<code value="IT" displayName=""/>
+  	<code value="IVASCINFUS" displayName=""/> 		
+  	<code value="SQINFUS" displayName=""/>		
+  	<code value="IV" displayName=""/> 
+  	<code value="IVC" displayName=""/>
+   	<code value="IVCC" displayName=""/>
+  	<code value="IVCI" displayName=""/> 		
+  	<code value="PCA" displayName=""/>		
+  	<code value="IPPB" displayName=""/>
+  	<code value="TRACH" displayName=""/>
+   	<code value="VENT" displayName=""/>
+  	<code value="VENTMASK" displayName=""/> 		
+  	<code value="NEB" displayName=""/>		
+  	<code value="NASNEB" displayName=""/> 
+  	<code value="ORNEB" displayName=""/>
+   	<code value="AMNINJ" displayName=""/>
+  	<code value="BILINJ" displayName=""/> 		
+  	<code value="CERVINJ" displayName=""/>		
+  	<code value="ENDOSININJ" displayName=""/>
+  	<code value="EPIDURINJ" displayName=""/>
+   	<code value="EPIINJ" displayName=""/>
+  	<code value="EPINJSP" displayName=""/> 		
+  	<code value="EXTRAMNINJ" displayName=""/>		
+  	<code value="EXTCORPINJ" displayName=""/> 
+  	<code value="CHOLINJ" displayName=""/>
+   	<code value="GBINJ" displayName=""/>
+  	<code value="GINGINJ" displayName=""/> 		
+  	<code value="HEMOPORT" displayName=""/>		
+  	<code value="IPUMPINJ" displayName=""/>
+  	<code value="INTERMENINJ" displayName=""/>
+   	<code value="INTERSTITINJ" displayName=""/>
+  	<code value="IABDINJ" displayName=""/> 		
+  	<code value="IARTINJ" displayName=""/>		
+  	<!-- ... --> 
+  </system>
+  <system codeSystemName='RoleCode' group='ServiceDeliveryLocation' root='2.16.840.1.113883.1.11.17660'>
+  	<code value="CVDX" displayName=""/>
+  	<!-- ... -->
+  </system>
+  <system codeSystemName="SNOMED CT" group='SocialHistoryStatusCode' root='2.16.840.1.113883.1.11.20.17'>
+  	<code value='55561003' displayName='Active' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='392521001' displayName='Prior History' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+	<code value='73425007' displayName='No Longer Active' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>	
+	<code value='261665006' displayName='Unknown' codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  </system>  
+  <system codeSystemName='SNOMED CT' group='SocialHistoryTypeCode' root='2.16.840.1.113883.1.11.20.17'>
+  	<code value="125680007" displayName="Marital Status" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="160538000" displayName="Religion" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="364699009" displayName="Ethnicity" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="103579009" displayName="Race" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="61909002" displayName="Language" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="229819007" displayName="Smoking" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="256235009" displayName="Exercise" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="364393001" displayName="Diet" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 	
+  	<code value="364703007" displayName="Employment" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="425400000" displayName="Toxic Exposure" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="160573003" displayName="ETOH Use" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="363908000" displayName="Drug Use" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="228272008" displayName="Other Social History" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  </system>
+  <system codeSystemName='SNOMED CT' group='StatusOfFunctionalStatusCode' root='2.16.840.1.113883.1.11.20.5'>
+  	<code value="55561003" displayName="Active" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="90734009" displayName="Chronic" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  	<code value="14803004" displayName="Temporary" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/> 		
+  	<code value="370996005" displayName="Resolved" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  </system>
+  <system codeSystemName='SNOMED CT' group='TestStatusCode' root='2.16.840.1.113883.1.11.20.19'>
+  	<code value="active" displayName="Pending/In Progress" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="completed" displayName="Final/Corrected Results" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  </system> 
+  <system codeSystemName='SNOMED CT' group='TestTypeCode' root='2.16.840.1.113883.1.11.20.20'>
+  	<code value="71388002" displayName="Observation" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+   	<code value="404684003" displayName="Result" codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+  </system> 
+</systems>

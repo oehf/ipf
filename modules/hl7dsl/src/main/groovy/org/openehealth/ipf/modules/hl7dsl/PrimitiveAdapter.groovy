@@ -17,6 +17,10 @@ package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.stringValue
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.originalStringValue
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
+
+import org.codehaus.groovy.runtime.InvokerHelper
 
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Type
@@ -36,11 +40,23 @@ class PrimitiveAdapter extends TypeAdapter {
         if (value instanceof PrimitiveAdapter) {
             DeepCopy.copy((Type)value.target, (Type)this.target)
         } else {
-            target.value = stringValue(value) 
+            target.value = originalStringValue(value) 
         }
     }
     
     String toString() {
+        this.value
+    }
+    
+    boolean isNullValue() {
+        target.value == '""'
+    }
+    
+    def getValue() {
+        target.value == '""' ? '' : target.value
+    }
+    
+    def getOriginalValue() {
         target.value
     }
     

@@ -11,9 +11,7 @@
 	<assert test="cda:id">A coverage activity SHALL contain at least one Act / id.</assert>
 	<assert test="count(cda:statusCode) = 1">A coverage activity SHALL contain exactly one Act / statusCode.</assert>
 	<assert test="cda:statusCode[@code='completed']">The value for Act / statusCode in a coverage activity SHALL be 'completed'  2.16.840.1.113883.5.14 ActStatus STATIC.</assert>
-	<assert test="cda:code[@code='48768-6'][@codeSystem='2.16.840.1.113883.6.1']">The value for Act / code in a coverage activity SHALL be "48768-6" "Payment sources" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
-<!-- Replaced because contradicting the CCD specs --> 		
-<!--	<assert test="cda:code[@code='35525-5'][@codeSystem='2.16.840.1.113883.6.1']">The value for Act / code in a coverage activity SHALL be "35525-5" "Financing and insurance" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>  -->
+	<assert test="cda:code[@code='48768-6'][@codeSystem='2.16.840.1.113883.6.1']">The value for 'Act / code' in a coverage activity SHALL be '48768-6' 'Payment sources' 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
 	<assert test="cda:entryRelationship">A coverage activity SHALL contain one or more Act / entryRelationship. </assert>
 	<assert test="not(cda:entryRelationship[cda:sequenceNumber[position()=2]])">An entryRelationship in a coverage activity MAY contain exactly one entryRelationship / sequenceNumber, which serves to order the payment sources.</assert>
 	<assert test="not(cda:entryRelationship[not(@typeCode='COMP')])">The value for Act / entryRelationship / typeCode in a coverage activity SHALL be "COMP"  2.16.840.1.113883.5.1002 ActRelationshipType STATIC.</assert>

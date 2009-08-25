@@ -18,7 +18,7 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.4-warning' see='#p-2.16.840.1.113883.10.20.1.4-warning'>
 	<title>Family history section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.4"]'>
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'family history')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “family history”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'family history')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "family history".</assert>
 	</rule>
 </pattern>
 

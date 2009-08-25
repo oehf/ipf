@@ -63,6 +63,14 @@ class VariesAdapter extends TypeAdapter {
         target.data.value
     }
     
+    String getOriginalValue() {
+        target.data.originalValue
+    }
+    
+    boolean isNullValue() {
+        target.data.originalValue == '""'
+    }
+    
     String toString() {
         target.data.value
     }

@@ -33,7 +33,7 @@
             <artifactId>platform-camel-ihe-xds-commons</artifactId>
             <version>${pom.version}</version>
             <scope>test</scope>
-            <classifier>tests</classifier>
+            <type>test-jar</type>
         </dependency>
         <dependency>                        
             <groupId>org.apache.tomcat</groupId>

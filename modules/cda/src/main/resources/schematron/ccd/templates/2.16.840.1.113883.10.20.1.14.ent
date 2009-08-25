@@ -21,7 +21,7 @@
 	<title>Results section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.14"]'>
 	<assert test='.//cda:templateId[@root="2.16.840.1.113883.10.20.1.32"]'>The Results section SHOULD include one or more result organizers (templateId 2.16.840.1.113883.10.20.1.32).</assert>	
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'results')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “results”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'results')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "results".</assert>
 	</rule>
 </pattern>
 

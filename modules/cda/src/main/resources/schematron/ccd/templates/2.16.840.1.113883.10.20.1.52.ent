@@ -15,7 +15,7 @@
 <pattern id='p-2.16.840.1.113883.10.20.1.52-warning' see='#p-2.16.840.1.113883.10.20.1.52-warning'>
 	<title>Product instance - warning validation phase</title>
     <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.52"]/cda:id'>
-    <assert test="cda:scopingEntity">If participantRole in a product instance contains participantRole / id, then participantRole SHOULD also contain participantRole / scopingEntity.</assert>
+    <assert test="../cda:scopingEntity">If participantRole in a product instance contains participantRole / id, then participantRole SHOULD also contain participantRole / scopingEntity.</assert>
     </rule>
 </pattern>
 

@@ -15,53 +15,34 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.builder.CDAR2ModelExtension
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.eclipse.emf.ecore.xmi.XMLResource
-import org.openhealthtools.ihe.common.cdar2.*
-import org.openhealthtools.ihe.common.cdar2.impl.*
-
+import org.junit.Test
+import org.junit.Assert
 /**
  * @author Stefan Ivanov
  */
 public class CDAR2BuilderStructureEncounterTest extends AbstractCDAR2BuilderTest {
-
-  /**
-   * Test encounter defaults
-   */
-  public void testEncountertDefaultValues() {
-    def entry = builder.build {
-      entry {
-        encounter()
-      }//entry
-    }
-
-    assertFalse entry.encounter.isSetMoodCode()
-    assertEquals 'INT', entry.encounter.moodCode.name
-    assertEquals 'ENC', entry.encounter.classCode.name
-    assertEquals 0, entry.encounter.entryRelationship.size
-  }
-
-  /**
-   * Test simple Encounter
-   */
-  public void testSimpleEncounter() {
-    def entry = builder.build {
-      entry {
-        encounter(classCode: 'ENC', moodCode: 'RQO') {
-          code(
-                  code: '185389009',
-                  codeSystem: '2.16.840.1.113883.6.96',
-                  codeSystemName: 'SNOMED CT',
-                  displayName: 'Follow-up visit'
-          )
-          effectiveTime {
-            low(value: '20000412')
-            high(value: '20000417')
-          }
-        }
-      }//entry
-    }
-    assertNotNull entry.encounter
-  }
+	
+	/**
+	 * Test encounter defaults
+	 */
+	@Test
+	public void testEncounterDefaultValues() {
+		def entry = builder.build {
+			entry { encounter() }
+		}
+		
+		Assert.assertFalse entry.encounter.isSetMoodCode()
+		Assert.assertEquals 'INT', entry.encounter.moodCode.name
+		Assert.assertEquals 'ENC', entry.encounter.classCode.name
+		Assert.assertEquals 0, entry.encounter.entryRelationship.size
+	}
+	
+	/**
+	 * Test simple Encounter
+	 */
+	@Test
+	public void testSimpleEncounter() {
+	    def entry = builder.build(getClass().getResource('/builders/content/entry/EncounterExample1.groovy'))
+		Assert.assertNotNull entry.encounter
+	}
 }

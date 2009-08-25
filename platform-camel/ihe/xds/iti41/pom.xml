@@ -28,7 +28,7 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-xds-commons</artifactId>
             <version>${pom.version}</version>
-            <classifier>tests</classifier>
+            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
     </dependencies>    

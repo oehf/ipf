@@ -7,7 +7,7 @@
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.10"]'>
 	<assert test="self::cda:section">The root of a Plan of care section shall be 'section' in the HL7 namespace.</assert>
 	<assert test="cda:text">The Plan of Care section SHALL contain a narrative block.</assert>
-	<assert test="cda:code[@code='18776-5'][@codeSystem='2.16.840.1.113883.6.1']">The plan of care section SHALL contain Section / code. The value for “Section / code” SHALL be “18776-5” “Treatment plan” 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
+	<assert test="cda:code[@code='18776-5'][@codeSystem='2.16.840.1.113883.6.1']">The plan of care section SHALL contain Section / code. The value for "Section / code" SHALL be "18776-5" "Treatment plan" 2.16.840.1.113883.6.1 LOINC STATIC.</assert>
 	<assert test="cda:title">The plan of care section SHALL contain Section / title.</assert>	
 	</rule>
 </pattern>
@@ -18,7 +18,7 @@
 	<title>Plan of care section - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.10"]'>
 	<assert test="descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.1.25']">The Plan of Care SHOULD contain clinical statements. Clinical statements SHALL include one or more plan of care activities (templateId 2.16.840.1.113883.10.20.1.25)</assert>
-	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'plan')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing “plan”.</assert>
+	<assert test="contains(translate(cda:title,'QWERTYUIOPASDFGHJKLZXCVBNM','qwertyuiopasdfghjklzxcvbnm'),'plan')">Section / title SHOULD be valued with a case-insensitive language-insensitive text string containing "plan".</assert>
 	</rule>
 </pattern>
 

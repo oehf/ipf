@@ -15,20 +15,28 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.openhealthtools.ihe.common.cdar2.*
-import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
+import org.openehealth.ipf.modules.cda.builder.content.entry.*
 
 
 /**
- * Make sure that the folloing extensions are called before:
- *      CDAModelExtensions
- *      CCDProblemActExtension are called before
+ * Chapter 3.5 "Problems"
+ *  
+ * Templates included:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.11 Problems
+ * </ul>
+ * Dependent templates:
+ * <ul>
+ * <li>2.16.840.1.113883.10.20.1.27 Problem Act            
+ * <li>2.16.840.1.113883.10.20.1.40 Comment 
+ * </ul>
  *
  * @author Stefan Ivanov
  * @author Christian Ohr
  */
-public class CCDProblemsExtension extends BaseModelExtension {
+public class CCDProblemsExtension extends CompositeModelExtension {
 	
 	CCDProblemsExtension() {
 		super()
@@ -38,10 +46,35 @@ public class CCDProblemsExtension extends BaseModelExtension {
 		super(builder)
 	}
 	
-	def extensions = {
-		// --------------------------------------------------------------------------------------------
-		// Chapter 3.5 "Problems"
-		// --------------------------------------------------------------------------------------------
+	def register(Collection registered) {
+		
+	    super.register(registered)
+
+        POCDMT000040ClinicalDocument.metaClass {
+            setProblems { POCDMT000040Section section ->
+                if (delegate.component?.structuredBody){
+                    delegate.component.structuredBody.component.add(builder.build {
+                        sections(section:section)
+                    })
+                } else {
+                    delegate.component = builder.build {
+                        ccd_component{
+                            structuredBody {
+                                component(section:section)
+                            }
+                        }
+                    }
+                }
+            }
+
+            getProblems { ->
+                delegate.component?.structuredBody?.component.find {
+                    it.section?.code?.code == '11450-4'
+                } ?.section
+            }
+
+        }
+		
 		POCDMT000040StructuredBody.metaClass {
 			// We assume that this is a CCD Family History section, enforced by the builder
 			setProblems  {POCDMT000040Section section ->
@@ -50,14 +83,14 @@ public class CCDProblemsExtension extends BaseModelExtension {
 				delegate.component.add(component)
 			}
 			getProblems  { ->
-				delegate.component.find { it.section.code.code == '11450-4'
+				delegate.component.find {
+					it.section.code.code == '11450-4'
 				} ?.section
 			}
 		}//problems body extensions
 		
-		return 1
 		
-	}//ccd extensions 
+	}//ccd problems extensions 
 	
 	
 	String extensionName() {
@@ -66,5 +99,10 @@ public class CCDProblemsExtension extends BaseModelExtension {
 	
 	String templateId() {
 		'2.16.840.1.113883.10.20.1.11'
-	}	
+	}
+	
+	Collection modelExtensions() {
+		[ new CCDProblemActExtension(),
+		  new CCDCommentsExtension()]
+	}
 }
