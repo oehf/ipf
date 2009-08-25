@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.cda.extend;
 
 import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
@@ -34,7 +33,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public abstract class AbstractExtensionTest {
 
     @Autowired
-    protected ProducerTemplate<Exchange> producerTemplate;
+    protected ProducerTemplate producerTemplate;
     
     @EndpointInject(uri="mock:output")
     protected MockEndpoint mockOutput;
