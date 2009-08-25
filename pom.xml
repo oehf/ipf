@@ -835,16 +835,6 @@
             <name>HAPI Sourceforge Repository</name>
             <url>http://hl7api.sourceforge.net/m2</url>
         </repository>
-
-        <!-- 
-            TEMPORARY (will be removed once Camel 2.0.0 is out)
-        -->        
-        <repository>
-            <id>apache-staging</id>
-            <name>Apache Staging Repository</name>
-            <url>https://repository.apache.org/content/groups/staging</url>
-        </repository>        
-                
     </repositories>
     
 </project>
