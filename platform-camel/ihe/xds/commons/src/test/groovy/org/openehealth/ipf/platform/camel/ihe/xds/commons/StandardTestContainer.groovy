@@ -91,7 +91,7 @@ class StandardTestContainer {
          
          def servletContext = servlet.servletConfig.servletContext
          appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
-         producerTemplate = appContext.getBean('producerTemplate')  
+         producerTemplate = appContext.getBean('template')  
          camelContext = appContext.getBean('camelContext')  
 
          XDSRegistryAuditor.auditor.config = new AuditorModuleConfig()

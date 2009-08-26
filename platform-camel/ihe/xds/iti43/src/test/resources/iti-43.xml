@@ -41,9 +41,6 @@ http://cxf.apache.org/schemas/jaxws.xsd
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
-    <bean id="producerTemplate" factory-bean="camelContext" factory-method="createProducerTemplate" />
-
-
     <bean id="routeBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti43.GroovyRouteBuilder">
     </bean>
