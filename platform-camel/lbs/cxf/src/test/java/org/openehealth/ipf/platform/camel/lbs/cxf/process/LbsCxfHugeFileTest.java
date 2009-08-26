@@ -196,10 +196,6 @@ public class LbsCxfHugeFileTest {
             return (int) sizeToRead;
         }
         
-        public long getReadBytes() {
-            return readBytes;
-        }
-        
         @Override
         public void close() throws IOException {
             super.close();

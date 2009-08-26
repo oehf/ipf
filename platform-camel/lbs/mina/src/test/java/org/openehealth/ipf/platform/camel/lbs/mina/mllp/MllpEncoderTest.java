@@ -184,10 +184,6 @@ public class MllpEncoderTest {
             return writtenBuffers;
         }
         
-        public void throwException() {
-            this.throwsException = true;
-        }
-
         @Override
         public void mergeAll() {}
 
