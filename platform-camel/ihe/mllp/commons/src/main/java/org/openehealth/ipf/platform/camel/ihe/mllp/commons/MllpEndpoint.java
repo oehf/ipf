@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons;
 
 import java.net.SocketAddress;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.camel.CamelContext;
@@ -27,8 +28,8 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.PollingConsumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.component.mina.MinaConfiguration;
 import org.apache.camel.component.mina.MinaEndpoint;
-import org.apache.camel.component.mina.MinaExchange;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang.Validate;
 import org.apache.mina.common.IoAcceptor;
@@ -51,7 +52,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducer
  *  
  * @author Dmytro Rud
  */
-public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
+public class MllpEndpoint extends DefaultEndpoint {
 
     private final MinaEndpoint wrappedEndpoint;
     private final boolean audit;
@@ -102,7 +103,7 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
      * @param processor
      *      The original consumer processor.  
      */
-    public Consumer<MinaExchange> createConsumer(Processor processor) throws Exception {
+    public Consumer createConsumer(Processor processor) throws Exception {
         Processor x = processor;
         if(isAudit()) {
             x = new MllpConsumerAuditInterceptor(this, x);
@@ -117,8 +118,8 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
      * Wraps the original camel-mina producer  
      * into a set of PIX/PDQ-specific ones.
      */
-    public Producer<MinaExchange> createProducer() throws Exception {
-        Producer<MinaExchange> x = this.wrappedEndpoint.createProducer();
+    public Producer createProducer() throws Exception {
+        Producer x = this.wrappedEndpoint.createProducer();
         x = new MllpProducerMarshalInterceptor(this, x);
         if(isAudit()) {
             x = new MllpProducerAuditInterceptor(this, x);
@@ -162,41 +163,8 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
     public MllpEndpointConfiguration getEndpointConfiguration() {
         return endpointConfiguration;
     }
-    
+
     // ----- dumb delegation, nothing interesting below -----
-
-    @Override
-    public MinaExchange createExchange(ExchangePattern pattern) {
-        return wrappedEndpoint.createExchange(pattern);
-    }
-
-    public MinaExchange createExchange(IoSession session, Object payload) {
-        return wrappedEndpoint.createExchange(session, payload);
-    }
-
-    public IoAcceptor getAcceptor() {
-        return wrappedEndpoint.getAcceptor();
-    }
-
-    public SocketAddress getAddress() {
-        return wrappedEndpoint.getAddress();
-    }
-
-    public IoConnector getConnector() {
-        return wrappedEndpoint.getConnector();
-    }
-
-    public boolean isLazySessionCreation() {
-        return wrappedEndpoint.isLazySessionCreation();
-    }
-
-    public IoAcceptorConfig getAcceptorConfig() {
-        return wrappedEndpoint.getAcceptorConfig();
-    }
-
-    public IoConnectorConfig getConnectorConfig() {
-        return wrappedEndpoint.getConnectorConfig();
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -205,23 +173,44 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
     }
 
     @Override
-    public MinaExchange convertTo(Class<MinaExchange> type, Exchange exchange) {
-        return wrappedEndpoint.convertTo(type, exchange);
-    }
-
-    @Override
-    public MinaExchange createExchange() {
+    public Exchange createExchange() {
         return wrappedEndpoint.createExchange();
     }
 
     @Override
-    public MinaExchange createExchange(Exchange exchange) {
+    public Exchange createExchange(Exchange exchange) {
         return wrappedEndpoint.createExchange(exchange);
     }
 
     @Override
-    public PollingConsumer<MinaExchange> createPollingConsumer() throws Exception {
+    public Exchange createExchange(ExchangePattern pattern) {
+        return wrappedEndpoint.createExchange(pattern);
+    }
+
+    public Exchange createExchange(IoSession session, Object payload) {
+        return wrappedEndpoint.createExchange(session, payload);
+    }
+
+    @Override
+    public PollingConsumer createPollingConsumer() throws Exception {
         return wrappedEndpoint.createPollingConsumer();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return wrappedEndpoint.equals(object);
+    }
+
+    public IoAcceptor getAcceptor() {
+        return wrappedEndpoint.getAcceptor();
+    }
+
+    public IoAcceptorConfig getAcceptorConfig() {
+        return wrappedEndpoint.getAcceptorConfig();
+    }
+
+    public SocketAddress getAddress() {
+        return wrappedEndpoint.getAddress();
     }
 
     @Override
@@ -229,16 +218,26 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
         return wrappedEndpoint.getCamelContext();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Component getComponent() {
         return wrappedEndpoint.getComponent();
     }
 
-    @SuppressWarnings("deprecation")
+    public MinaConfiguration getConfiguration() {
+        return wrappedEndpoint.getConfiguration();
+    }
+
+    public IoConnector getConnector() {
+        return wrappedEndpoint.getConnector();
+    }
+
+    public IoConnectorConfig getConnectorConfig() {
+        return wrappedEndpoint.getConnectorConfig();
+    }
+
     @Override
-    public CamelContext getContext() {
-        return wrappedEndpoint.getContext();
+    public String getEndpointKey() {
+        return wrappedEndpoint.getEndpointKey();
     }
 
     @Override
@@ -252,13 +251,18 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
     }
 
     @Override
-    public Class<MinaExchange> getExchangeType() {
+    public Class<Exchange> getExchangeType() {
         return wrappedEndpoint.getExchangeType();
     }
 
     @Override
-    public synchronized ScheduledExecutorService getExecutorService() {
+    public ExecutorService getExecutorService() {
         return wrappedEndpoint.getExecutorService();
+    }
+
+    @Override
+    public ScheduledExecutorService getScheduledExecutorService() {
+        return wrappedEndpoint.getScheduledExecutorService();
     }
 
     @Override
@@ -272,14 +276,42 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
     }
 
     @Override
+    public boolean isSingleton() {
+        return wrappedEndpoint.isSingleton();
+    }
+
+    public void setAcceptor(IoAcceptor acceptor) {
+        wrappedEndpoint.setAcceptor(acceptor);
+    }
+
+    public void setAcceptorConfig(IoAcceptorConfig acceptorConfig) {
+        wrappedEndpoint.setAcceptorConfig(acceptorConfig);
+    }
+
+    public void setAddress(SocketAddress address) {
+        wrappedEndpoint.setAddress(address);
+    }
+
+    @Override
     public void setCamelContext(CamelContext camelContext) {
         wrappedEndpoint.setCamelContext(camelContext);
     }
 
-    @SuppressWarnings("deprecation")
+    public void setConfiguration(MinaConfiguration configuration) {
+        wrappedEndpoint.setConfiguration(configuration);
+    }
+
+    public void setConnector(IoConnector connector) {
+        wrappedEndpoint.setConnector(connector);
+    }
+
+    public void setConnectorConfig(IoConnectorConfig connectorConfig) {
+        wrappedEndpoint.setConnectorConfig(connectorConfig);
+    }
+
     @Override
-    public void setContext(CamelContext context) {
-        wrappedEndpoint.setContext(context);
+    public void setEndpointUriIfNotSpecified(String value) {
+        wrappedEndpoint.setEndpointUriIfNotSpecified(value);
     }
 
     @Override
@@ -288,36 +320,12 @@ public class MllpEndpoint extends DefaultEndpoint<MinaExchange> {
     }
 
     @Override
-    public synchronized void setExecutorService(ScheduledExecutorService executorService) {
+    public void setExecutorService(ExecutorService executorService) {
         wrappedEndpoint.setExecutorService(executorService);
     }
 
     @Override
     public String toString() {
         return wrappedEndpoint.toString();
-    }
-
-    public boolean isSingleton() {
-        return wrappedEndpoint.isSingleton();
-    }
-
-    public long getTimeout() {
-        return wrappedEndpoint.getTimeout();
-    }
-
-    public boolean isTransferExchange() {
-        return wrappedEndpoint.isTransferExchange();
-    }
-
-    public boolean isSync() {
-        return wrappedEndpoint.isSync();
-    }
-
-    public void setCharsetName(String charset) {
-        wrappedEndpoint.setCharsetName(charset);
-    }
-
-    public String getCharsetName() {
-        return wrappedEndpoint.getCharsetName();
     }
 }

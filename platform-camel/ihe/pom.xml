@@ -34,7 +34,7 @@
 
     <modules>
         <module>xds</module> 
-        <!--<module>mllp</module>-->
+        <module>mllp</module>
         <!--<module>pix</module>-->
     </modules>
 

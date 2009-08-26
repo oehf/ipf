@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
-import org.apache.camel.component.mina.MinaExchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
@@ -30,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
  */
 public class MllpProducerMarshalInterceptor extends AbstractMllpProducerInterceptor {
 
-    public MllpProducerMarshalInterceptor(MllpEndpoint endpoint, Producer<MinaExchange> wrappedProducer) {
+    public MllpProducerMarshalInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
         super(endpoint, wrappedProducer);
     }
 
@@ -39,7 +38,7 @@ public class MllpProducerMarshalInterceptor extends AbstractMllpProducerIntercep
      * Marshals the request, sends it, and unmarshals the response. 
      */
     public void process(Exchange exchange) throws Exception {
-        String charset = getMllpEndpoint().getCharsetName();
+        String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         marshal(exchange, charset);
         getWrappedProducer().process(exchange);
         MllpMarshalUtils.unmarshal(Exchanges.resultMessage(exchange), charset);
@@ -53,7 +52,7 @@ public class MllpProducerMarshalInterceptor extends AbstractMllpProducerIntercep
     private void marshal(Exchange exchange, String charset) throws Exception {
         String s = MllpMarshalUtils.marshalStandardTypes(
                 exchange.getIn(), 
-                getMllpEndpoint().getCharsetName());
+                getMllpEndpoint().getConfiguration().getCharsetName());
         
         exchange.getIn().setBody(s);
     }

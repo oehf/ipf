@@ -19,10 +19,8 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.component.mina.MinaExchange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.IoSession;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtils;
@@ -55,8 +53,7 @@ public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerIntercepto
             auditDataset = strategy.createAuditDataset();
             
             // transaction-agnostic enrichment
-            IoSession session = ((MinaExchange) exchange).getSession();
-            AuditUtils.enrichGenericAuditDatasetFromSession(auditDataset, session);
+            AuditUtils.enrichGenericAuditDatasetFromSession(auditDataset);
             AuditUtils.enrichGenericAuditDatasetFromMessage(auditDataset, msg);
             // transaction-specific enrichment
             strategy.enrichAuditDataset(auditDataset, msg);

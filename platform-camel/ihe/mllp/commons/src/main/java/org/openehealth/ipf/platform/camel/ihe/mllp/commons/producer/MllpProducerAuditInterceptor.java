@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
-import org.apache.camel.component.mina.MinaExchange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -39,7 +38,7 @@ public class MllpProducerAuditInterceptor extends AbstractMllpProducerIntercepto
     /**
      * Constructor.
      */
-    public MllpProducerAuditInterceptor(MllpEndpoint endpoint, Producer<MinaExchange> wrappedProducer) {
+    public MllpProducerAuditInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
         super(endpoint, wrappedProducer);
     }
     

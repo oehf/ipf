@@ -238,11 +238,11 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testAlterativeHl7CodecFactory() {
-        def endpointUri1 = 'pix-iti8://fake.address.no.uri:80?codec=alternativeCodec'
+        def endpointUri1 = 'pix-iti8://fake.address.no.uri:80?codec=#alternativeCodec'
         def endpointUri2 = 'xds-iti8://localhost:8891'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)
-        assertEquals('UTF-8', endpoint1.charsetName)
-        assertEquals('ISO-8859-1', endpoint2.charsetName)
+        assertEquals('UTF-8', endpoint1.configuration.charsetName)
+        assertEquals('ISO-8859-1', endpoint2.configuration.charsetName)
     }
 }

@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
-import org.apache.camel.component.mina.MinaExchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
@@ -31,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AcceptanceCheckUtils;
  */
 public class MllpProducerAcceptanceInterceptor extends AbstractMllpProducerInterceptor {
 
-    public MllpProducerAcceptanceInterceptor(MllpEndpoint endpoint, Producer<MinaExchange> wrappedProducer) {
+    public MllpProducerAcceptanceInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
         super(endpoint, wrappedProducer);
     }
     

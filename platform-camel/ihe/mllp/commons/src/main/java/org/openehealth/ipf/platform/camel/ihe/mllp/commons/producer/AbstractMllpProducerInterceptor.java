@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer;
 
 import org.apache.camel.Endpoint;
+import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Producer;
-import org.apache.camel.component.mina.MinaExchange;
 import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 
@@ -28,10 +28,10 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
  *  
  * @author Dmytro Rud
  */
-public abstract class AbstractMllpProducerInterceptor implements Producer<MinaExchange> {
+public abstract class AbstractMllpProducerInterceptor implements Producer {
 
     private final MllpEndpoint endpoint;
-    private final Producer<MinaExchange> wrappedProducer;
+    private final Producer wrappedProducer;
 
 
     /**
@@ -41,7 +41,7 @@ public abstract class AbstractMllpProducerInterceptor implements Producer<MinaEx
      * @param wrappedProducer
      *      The producer to be wrapped.
      */
-    public AbstractMllpProducerInterceptor(MllpEndpoint endpoint, Producer<MinaExchange> wrappedProducer) 
+    public AbstractMllpProducerInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) 
     {
         Validate.notNull(endpoint);
         Validate.notNull(wrappedProducer);
@@ -51,11 +51,11 @@ public abstract class AbstractMllpProducerInterceptor implements Producer<MinaEx
     }
 
 
-    public Producer<MinaExchange> getWrappedProducer() {
+    public Producer getWrappedProducer() {
         return wrappedProducer;
     }
 
-    public Endpoint<MinaExchange> getEndpoint() {
+    public Endpoint getEndpoint() {
         return endpoint;
     }
     
@@ -65,23 +65,30 @@ public abstract class AbstractMllpProducerInterceptor implements Producer<MinaEx
     
     // ----- dumb delegation, nothing interesting below -----
     
-    public MinaExchange createExchange() {
+    public Exchange createExchange() {
         return getWrappedProducer().createExchange();
     }
 
-    public MinaExchange createExchange(ExchangePattern pattern) {
+    public Exchange createExchange(ExchangePattern pattern) {
         return getWrappedProducer().createExchange(pattern);
     }
 
-    public MinaExchange createExchange(MinaExchange exchange) {
+    public Exchange createExchange(Exchange exchange) {
         return getWrappedProducer().createExchange(exchange);
     }
 
+    @Override
     public void start() throws Exception {
         getWrappedProducer().start();
     }
 
+    @Override
     public void stop() throws Exception {
         getWrappedProducer().stop();
+    }
+    
+    @Override
+    public boolean isSingleton() {
+        return getWrappedProducer().isSingleton();
     }
 }

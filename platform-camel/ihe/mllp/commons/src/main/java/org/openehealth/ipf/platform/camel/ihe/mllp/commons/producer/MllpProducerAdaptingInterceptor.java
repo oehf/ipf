@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Producer;
-import org.apache.camel.component.mina.MinaExchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
@@ -32,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
  */
 public class MllpProducerAdaptingInterceptor extends AbstractMllpProducerInterceptor {
 
-    public MllpProducerAdaptingInterceptor(MllpEndpoint endpoint, Producer<MinaExchange> wrappedProducer) {
+    public MllpProducerAdaptingInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
         super(endpoint, wrappedProducer);
     }
     
@@ -46,7 +45,7 @@ public class MllpProducerAdaptingInterceptor extends AbstractMllpProducerInterce
         
         MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
                 exchange.getIn(), 
-                getMllpEndpoint().getCharsetName());
+                getMllpEndpoint().getConfiguration().getCharsetName());
         exchange.getIn().setBody(msg);
         
         getWrappedProducer().process(exchange);

@@ -27,7 +27,6 @@ import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
 import org.apache.camel.component.mina.MinaComponent;
 import org.apache.camel.component.mina.MinaEndpoint;
-import org.apache.camel.component.mina.MinaExchange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.filter.SSLFilter;
@@ -44,8 +43,7 @@ public abstract class MllpComponent extends MinaComponent {
     
     public static final String ACK_TYPE_CODE_HEADER = "pixpdqAckTypeCode"; 
     
-    // TODO: add leading '#' in Camel 2.0 !!!
-    private static final String DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME = "hl7codec";
+    private static final String DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME = "#hl7codec";
     
     /**
      * Default constructor.
@@ -69,7 +67,7 @@ public abstract class MllpComponent extends MinaComponent {
      */
     @SuppressWarnings("unchecked")
     @Override
-    protected Endpoint<MinaExchange> createEndpoint(
+    protected Endpoint createEndpoint(
             String uri,
             String remaining, 
             Map parameters) throws Exception 
@@ -97,8 +95,12 @@ public abstract class MllpComponent extends MinaComponent {
         }
 
         // adopt character set configured for the HL7 codec
+        String codecBean = (String) parameters.get("codec");
+        if (codecBean.startsWith("#")) {
+            codecBean = codecBean.substring(1);
+        }
         ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookup(
-                    (String) parameters.get("codec"), 
+                    codecBean, 
                     ProtocolCodecFactory.class);
         Charset charset = null;
         try {
@@ -112,7 +114,7 @@ public abstract class MllpComponent extends MinaComponent {
         parameters.put("encoding", charset.name());
         
         // construct the endpoint
-        Endpoint<MinaExchange> endpoint = super.createEndpoint(uri, remaining, parameters);
+        Endpoint endpoint = super.createEndpoint(uri, remaining, parameters);
         MinaEndpoint minaEndpoint = (MinaEndpoint) endpoint;
         
         // configure SSL filters if necessary

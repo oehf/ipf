@@ -56,7 +56,7 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
     public void process(Exchange exchange) throws Exception {
         MessageAdapter originalAdapter = null;
         Message originalMessage = null;
-        String charset = getMllpEndpoint().getCharsetName();
+        String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         
         // unmarshal
         boolean unmarshallingFailed = false;
@@ -108,8 +108,8 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
                 t = exchange.getException();
                 exchange.setException(null);
             } else {
-                t = (Throwable) exchange.getFault().getBody();
-                exchange.getFault().setBody(null);
+                t = exchange.getOut().getBody(Throwable.class);
+                exchange.getOut().setBody(null);
             }
             LOG.error("Message processing failed", t);
             resultMessage(exchange).setBody(createNak(t, original));
@@ -175,7 +175,7 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
         // try standard data types first
         String s = MllpMarshalUtils.marshalStandardTypes(
                 message, 
-                getMllpEndpoint().getCharsetName());
+                getMllpEndpoint().getConfiguration().getCharsetName());
         
         // additionally: an Exception in the body?
         if(s == null) {

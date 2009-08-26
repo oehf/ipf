@@ -47,7 +47,7 @@ class MllpTestContainer {
       */
      def static init(String descriptorFile) { 
          def appContext = new ClassPathXmlApplicationContext(descriptorFile)
-         producerTemplate = appContext.getBean('producerTemplate', ProducerTemplate.class)
+         producerTemplate = appContext.getBean('template', ProducerTemplate.class)
          camelContext = appContext.getBean('camelContext', CamelContext.class)
 
          auditSender = new MockedSender()

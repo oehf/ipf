@@ -51,11 +51,12 @@ class AuditUtils {
      * information common for all PIX/PDQ transactions.
      */
     static void enrichGenericAuditDatasetFromSession(
-            MllpAuditDataset auditDataset, 
-            IoSession session) 
+            MllpAuditDataset auditDataset) 
     {
-        auditDataset.localAddress  = formatMachineAddress(session.localAddress)
-        auditDataset.remoteAddress = formatMachineAddress(session.remoteAddress)
+        // TODO: Make this work again with real addresses. In Camel 2.0 we cannot
+        // 		 access the IoSession anymore.
+        auditDataset.localAddress  = 'local'
+        auditDataset.remoteAddress = 'remote'
     }
 
     
