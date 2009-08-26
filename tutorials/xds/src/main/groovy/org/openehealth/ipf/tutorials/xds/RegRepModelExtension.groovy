@@ -17,7 +17,7 @@ package org.openehealth.ipf.tutorials.xds
  
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 
-import org.apache.camel.model.ProcessorType
+import org.apache.camel.model.ProcessorDefinition
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference
 import org.openehealth.ipf.tutorials.xds.SearchDefinition
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException
@@ -34,33 +34,33 @@ class RegRepModelExtension {
     def dataStore
      
     def extensions = {
-        ProcessorType.metaClass.log = { log, closure -> delegate.process { log.info(closure.call(it)) } }
+        ProcessorDefinition.metaClass.log = { log, closure -> delegate.process { log.info(closure.call(it)) } }
 
-        ProcessorType.metaClass.store = {
+        ProcessorDefinition.metaClass.store = {
             delegate.process {
                 dataStore.store(it.in.body.entry)
             }
         }
         
-        ProcessorType.metaClass.retrieve = {
+        ProcessorDefinition.metaClass.retrieve = {
             delegate.transform {
                 [ new RetrievedDocument(dataStore.get(it.in.body.documentUniqueId), it.in.body) ]            
             }
         }
         
-        ProcessorType.metaClass.search = { resultTypes ->
+        ProcessorDefinition.metaClass.search = { resultTypes ->
             def answer = new SearchDefinition(resultTypes)
             delegate.addOutput(answer)
             answer
         }
         
-        ProcessorType.metaClass.fail = { message ->
+        ProcessorDefinition.metaClass.fail = { message ->
             delegate.process { 
                 throw new XDSMetaDataException(message)
             }
         }
 
-        ProcessorType.metaClass.updateWithRepositoryData = {
+        ProcessorDefinition.metaClass.updateWithRepositoryData = {
             delegate.process {
                 def documentEntry = it.in.body.entry.documentEntry
                 documentEntry.hash = ContentUtils.sha1(it.in.body.entry.dataHandler)
@@ -69,12 +69,12 @@ class RegRepModelExtension {
             }
         }
         
-        ProcessorType.metaClass.processBody = { closure ->  
+        ProcessorDefinition.metaClass.processBody = { closure ->  
             delegate.process { closure(it.in.body) }
         }
         
-        ProcessorType.metaClass.splitEntries = { entriesClosure ->
-            delegate.split { exchange ->
+        ProcessorDefinition.metaClass.splitEntries = { entriesClosure ->
+            delegate.ipf().split { exchange ->
                 def body = exchange.in.body
                 def entries = entriesClosure(body) 
                 entries.collect { entry -> body.clone() + [entry: entry] }
@@ -82,7 +82,7 @@ class RegRepModelExtension {
         }
         
         // Assigns a new UUID. New entries might define this UUID already
-        ProcessorType.metaClass.assignUuid = {
+        ProcessorDefinition.metaClass.assignUuid = {
             delegate.process {
                 def entry = it.in.body.entry
                 if (!entry.entryUuid.startsWith('urn:uuid:')) {
@@ -94,7 +94,7 @@ class RegRepModelExtension {
         }
         
         // Changes the source and target UUIDs based on the UUID map
-        ProcessorType.metaClass.changeAssociationUuids = {
+        ProcessorDefinition.metaClass.changeAssociationUuids = {
             delegate.process {
                 def assoc = it.in.body.entry
                 def uuidMap = it.in.body.uuidMap
@@ -106,14 +106,14 @@ class RegRepModelExtension {
         }
         
         // Sets the availability status of an entry
-        ProcessorType.metaClass.status = { status ->
+        ProcessorDefinition.metaClass.status = { status ->
             delegate.process {
                 it.in.body.entry.availabilityStatus = status
             }
         }
         
         // Updates the last update time and ensures that the time is actually changed
-        ProcessorType.metaClass.updateTimeStamp = {
+        ProcessorDefinition.metaClass.updateTimeStamp = {
             delegate.process {
                 def formatter = new SimpleDateFormat('yyyyMMddHHmmss')
                 def newTime = formatter.format(new Date())
@@ -126,7 +126,7 @@ class RegRepModelExtension {
         }
         
         // Converts entries to ObjectReferences
-        ProcessorType.metaClass.convertToObjectRefs = { closure ->
+        ProcessorDefinition.metaClass.convertToObjectRefs = { closure ->
             delegate.process { 
                 def entries = closure.call(it.in.body)
                 it.in.body.resp.references.addAll(entries.collect { 

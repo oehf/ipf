@@ -18,7 +18,7 @@ package org.openehealth.ipf.tutorials.xds
 import static org.openehealth.ipf.tutorials.xds.Comparators.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType.*
 
-import org.apache.camel.model.OutputType
+import org.apache.camel.model.OutputDefinition
 import org.apache.camel.spi.RouteContext
 import org.apache.camel.Processor
 import org.openehealth.ipf.tutorials.xds.DataStore
@@ -28,7 +28,7 @@ import org.openehealth.ipf.tutorials.xds.DataStore
  * Model class to add the Search processor to route implementations.
  * @author Jens Riemschneider
  */
-class SearchDefinition extends OutputType<SearchDefinition> {
+class SearchDefinition extends OutputDefinition<SearchDefinition> {
 	def containerClosure
 	def resultTypes
 	def filters = []
