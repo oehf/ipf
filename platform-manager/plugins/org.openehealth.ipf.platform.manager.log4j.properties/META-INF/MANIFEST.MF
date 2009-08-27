@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Log4J Properties Fragment
-Bundle-SymbolicName: org.openehealth.ipf.platform.manager.log4j.properties
-Bundle-Version: 1.6.0
-Bundle-Vendor: Open eHealth Foundation
-Fragment-Host: org.apache.log4j;bundle-version="1.2.15"

@@ -21,7 +21,6 @@
   <moduleSets>
     <moduleSet>
       <excludes>
-        <exclude>org.openehealth.ipf.platform-manager:*</exclude>
         <exclude>org.openehealth.ipf.tutorials:*</exclude>
       </excludes>
       <binaries>
