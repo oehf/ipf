@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.cxf.process;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.openehealth.ipf.platform.camel.lbs.core.builder.RouteHelper.store;
 
 import java.io.File;
@@ -81,7 +80,7 @@ public class LbsCxfHugeFileTest {
     private Greeter greeter;
     private BindingProvider provider;
 
-    public static final long CONTENT_SIZE = 1024 * 1024 * 100 + 5;
+    public static final long CONTENT_SIZE = 1024 * 1024 * 10;
     private File baseDir;
 
     @Autowired    
@@ -148,23 +147,31 @@ public class LbsCxfHugeFileTest {
 
     @Test
     public void testHugeFile() throws Exception {
-        DataSource dataSourceAttachInfo = new ByteArrayDataSource("Smaller content", "application/octet-stream");
-        DataHandler dataHandlerAttachInfo = new DataHandler(dataSourceAttachInfo);
-        Holder<DataHandler> handlerHolderAttachInfo = new Holder(dataHandlerAttachInfo);
-
-        DataSource dataSourceOneWay = new InputStreamDataSource();
-        DataHandler dataHandlerOneWay = new DataHandler(dataSourceOneWay);
-        
-        Holder<String> nameHolder = new Holder("Hello Camel!!");
-        greeter.postMe(nameHolder, handlerHolderAttachInfo, dataHandlerOneWay);
-        
-        assertEquals("resultText", nameHolder.value);
-        InputStream resultInputStream = handlerHolderAttachInfo.value.getInputStream();
+        TrackMemThread memTracker = new TrackMemThread();
+        memTracker.start();
         try {
-            assertTrue(IOUtils.contentEquals(new HugeContentInputStream(), resultInputStream));
+            DataSource dataSourceAttachInfo = new ByteArrayDataSource("Smaller content", "application/octet-stream");
+            DataHandler dataHandlerAttachInfo = new DataHandler(dataSourceAttachInfo);
+            Holder<DataHandler> handlerHolderAttachInfo = new Holder(dataHandlerAttachInfo);
+    
+            DataSource dataSourceOneWay = new InputStreamDataSource();
+            DataHandler dataHandlerOneWay = new DataHandler(dataSourceOneWay);
+            
+            Holder<String> nameHolder = new Holder("Hello Camel!!");
+            greeter.postMe(nameHolder, handlerHolderAttachInfo, dataHandlerOneWay);
+            
+            assertEquals("resultText", nameHolder.value);
+            InputStream resultInputStream = handlerHolderAttachInfo.value.getInputStream();
+            try {
+                assertTrue(IOUtils.contentEquals(new HugeContentInputStream(), resultInputStream));
+            }
+            finally {
+                resultInputStream.close();
+            }
         }
         finally {
-            resultInputStream.close();
+            memTracker.waitForStop();
+            assertTrue("Memory consumption not constant. Difference was: " + memTracker.getDiff(), memTracker.getDiff() < 10000);
         }
     }
 
@@ -223,6 +230,33 @@ public class LbsCxfHugeFileTest {
         @Override
         public OutputStream getOutputStream() throws IOException {
             throw new UnsupportedOperationException();
+        }
+    }
+
+    private static class TrackMemThread extends Thread {
+        private boolean stopped;
+        private long min = Long.MAX_VALUE;
+        private long max = Long.MIN_VALUE;
+        
+        @Override
+        public void run() {
+            while (!stopped) {
+                try {
+                    long currentMem = Runtime.getRuntime().totalMemory();
+                    min = Math.min(min, currentMem);
+                    max = Math.max(max, currentMem);
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {}
+            }
+        }
+
+        public void waitForStop() throws InterruptedException {
+            stopped = true;
+            join();
+        }
+
+        public long getDiff() {
+            return max - min;
         }
     }
 }
