@@ -28,12 +28,12 @@ import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
 import org.openehealth.ipf.platform.camel.lbs.core.process.StoreProcessor;
 
 /**
- * Processor type for {@link StoreProcessor}
+ * Processor definition for {@link StoreProcessor}
  * <p>
- * This processor type provides the fluent API configuration of the processor.
+ * This processor definition provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
  */
-public class StoreProcessorType extends OutputDefinition<StoreProcessorType> {
+public class StoreProcessorDefinition extends OutputDefinition<StoreProcessorDefinition> {
 
     private List<ProcessorDefinition<?>> outputs = new ArrayList<ProcessorDefinition<?>>();
     
@@ -55,17 +55,14 @@ public class StoreProcessorType extends OutputDefinition<StoreProcessorType> {
      * This method can be called multiple times to add multiple handlers.
      * @param handlerBeanName
      *          the bean name of the handler for integrating resources
-     * @return this type instance for usage with a fluent API
+     * @return this definition instance for usage with a fluent API
      */
-    public StoreProcessorType with(String resourceHandlersBeanName) {
+    public StoreProcessorDefinition with(String resourceHandlersBeanName) {
         notNull(resourceHandlersBeanName, "resourceHandlersBeanName cannot be null");
         this.resourceHandlersBeanName = resourceHandlersBeanName;
         return this;
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.camel.model.ProcessorType#createProcessor(org.apache.camel.spi.RouteContext)
-     */
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
         StoreProcessor storer = new StoreProcessor();
@@ -81,17 +78,11 @@ public class StoreProcessorType extends OutputDefinition<StoreProcessorType> {
         return storer;
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.camel.model.ProcessorType#getOutputs()
-     */
     @Override
     public List getOutputs() {
         return outputs;
     }
     
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return String.format("{%1$s: resourceHandlersBeanName=%2$s}",

@@ -24,11 +24,11 @@ import org.apache.camel.spi.RouteContext;
 /**
  * @author Martin Krasser
  */
-public class InterceptType extends OutputDefinition<ProcessorDefinition> {
+public class InterceptDefinition extends OutputDefinition<ProcessorDefinition> {
 
     private DelegateProcessor delegateProcessor;
     
-    public InterceptType(DelegateProcessor delegateProcessor) {
+    public InterceptDefinition(DelegateProcessor delegateProcessor) {
         this.delegateProcessor = delegateProcessor;
     }
     

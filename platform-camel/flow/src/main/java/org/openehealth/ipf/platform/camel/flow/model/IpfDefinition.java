@@ -33,19 +33,19 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  * 
  * @author Martin Krasser
  */
-public class IpfType extends org.openehealth.ipf.platform.camel.core.model.IpfType {
+public class IpfDefinition extends org.openehealth.ipf.platform.camel.core.model.IpfDefinition {
 
-	public IpfType(ProcessorDefinition<ProcessorDefinition> processorDefinition) {
+	public IpfDefinition(ProcessorDefinition<ProcessorDefinition> processorDefinition) {
 		super(processorDefinition);
 	}
 	
-	public SplitterType split(Expression splitExpression) {
-        SplitterType answer = new SplitterType(splitExpression);        
+	public SplitterDefinition split(Expression splitExpression) {
+        SplitterDefinition answer = new SplitterDefinition(splitExpression);        
         getProcessorDefinition().addOutput(answer);
         return answer;
     }
 	
-	public SplitterType split(Closure splitLogic) {
+	public SplitterDefinition split(Closure splitLogic) {
     	return split(new DelegatingExpression(splitLogic));
     }
 	

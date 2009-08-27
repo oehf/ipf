@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 /**
  * @author Martin Krasser
  */
-public abstract class FlowProcessorType extends OutputDefinition<ProcessorDefinition> {
+public abstract class FlowProcessorDefinition extends OutputDefinition<ProcessorDefinition> {
 
     private PlatformMessageRenderer messageRenderer; 
     
@@ -40,37 +40,37 @@ public abstract class FlowProcessorType extends OutputDefinition<ProcessorDefini
     
     private boolean outConversion = true;
     
-    public FlowProcessorType inType(Class<?> inType) {
+    public FlowProcessorDefinition inType(Class<?> inType) {
         this.inType = inType;
         return this;
     }
     
-    public FlowProcessorType outType(Class<?> outType) {
+    public FlowProcessorDefinition outType(Class<?> outType) {
         this.outType = outType;
         return this;
     }
     
-    public FlowProcessorType inFormat(DataFormat inFormat) {
+    public FlowProcessorDefinition inFormat(DataFormat inFormat) {
         this.inFormat = inFormat;
         return this;
     }
     
-    public FlowProcessorType outFormat(DataFormat outFormat) {
+    public FlowProcessorDefinition outFormat(DataFormat outFormat) {
         this.outFormat = outFormat;
         return this;
     }
     
-    public FlowProcessorType outConversion(boolean outConversion) {
+    public FlowProcessorDefinition outConversion(boolean outConversion) {
         this.outConversion = outConversion;
         return this;
     }
     
-    public FlowProcessorType renderer(PlatformMessageRenderer messageRenderer) {
+    public FlowProcessorDefinition renderer(PlatformMessageRenderer messageRenderer) {
         this.messageRenderer = messageRenderer;
         return this;
     }
     
-    public FlowProcessorType renderer(String messageRendererBeanName) {
+    public FlowProcessorDefinition renderer(String messageRendererBeanName) {
         this.messageRendererBeanName = messageRendererBeanName;
         return this;
     }

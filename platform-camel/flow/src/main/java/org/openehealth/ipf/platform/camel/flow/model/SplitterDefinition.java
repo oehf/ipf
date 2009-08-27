@@ -27,14 +27,14 @@ import org.openehealth.ipf.platform.camel.flow.process.Splitter;
  * explicit definition of this processor because it has to send multiple 
  * exchanges to the processor. Usually processors only send a single exchange
  * to the next processor in the route, which is done automatically by Camel.
- * This class extends the core model {@link org.openehealth.ipf.platform.camel.core.model.SplitterType}
+ * This class extends the core model {@link org.openehealth.ipf.platform.camel.core.model.SplitterDefinition}
  * with flow manager specific functionality, especially bookkeeping of the
  * split history.
  * 
  * @author Jens Riemschneider
  */
-public class SplitterType extends
-        org.openehealth.ipf.platform.camel.core.model.SplitterType {
+public class SplitterDefinition extends
+        org.openehealth.ipf.platform.camel.core.model.SplitterDefinition {
 
     /**
      * Creates a split type, i.e. a builder for {@link Splitter}
@@ -42,13 +42,10 @@ public class SplitterType extends
      *          The expression to be passed to the {@link Splitter} upon 
      *          creation
      */
-    public SplitterType(Expression expression) {
+    public SplitterDefinition(Expression expression) {
         super(expression);
     }
     
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.platform.camel.core.model.SplitterType#createSplitterInstance(org.apache.camel.Expression, org.apache.camel.Processor)
-     */
     @Override
     protected Splitter createSplitterInstance(Expression expression, Processor processor) {
         return new Splitter(expression, processor);

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.extend
 
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.AdhocQueryRequestValidator
@@ -42,7 +42,7 @@ class EbXML21Extensions {
      
     static void install() { 
         
-        ValidatorAdapterType.metaClass.iti14Request = { -> 
+        ValidatorAdapterDefinition.metaClass.iti14Request = { -> 
             delegate.setValidator(new SubmitObjectsRequestValidator())
             delegate.input {
                 new EbXMLSubmitObjectsRequest21(it.in.getBody(SubmitObjectsRequest.class))
@@ -50,7 +50,7 @@ class EbXML21Extensions {
             delegate.staticProfile(new ValidationProfile(false, false, Actor.REGISTRY)) 
         }        
 
-        ValidatorAdapterType.metaClass.iti14Response = { -> 
+        ValidatorAdapterDefinition.metaClass.iti14Response = { -> 
             delegate.setValidator(new RegistryResponseValidator())
             delegate.input {
                 new EbXMLRegistryResponse21(it.in.getBody(RegistryResponse.class))
@@ -58,7 +58,7 @@ class EbXML21Extensions {
             delegate.staticProfile(new ValidationProfile(false, false, Actor.REGISTRY)) 
         }
         
-        ValidatorAdapterType.metaClass.iti15Request = { -> 
+        ValidatorAdapterDefinition.metaClass.iti15Request = { -> 
             delegate.setValidator(new ProvideAndRegisterDocumentSetRequestValidator())
             delegate.input {
                 new EbXMLProvideAndRegisterDocumentSetRequest21(it.in.getBody(ProvideAndRegisterDocumentSetRequestType.class))
@@ -66,7 +66,7 @@ class EbXML21Extensions {
             delegate.staticProfile(new ValidationProfile(false, false, Actor.REPOSITORY)) 
         }        
 
-        ValidatorAdapterType.metaClass.iti15Response = { -> 
+        ValidatorAdapterDefinition.metaClass.iti15Response = { -> 
             delegate.setValidator(new RegistryResponseValidator())
             delegate.input {
                 new EbXMLRegistryResponse21(it.in.getBody(RegistryResponse.class))
@@ -74,7 +74,7 @@ class EbXML21Extensions {
             delegate.staticProfile(new ValidationProfile(false, false, Actor.REPOSITORY)) 
         }    
         
-        ValidatorAdapterType.metaClass.iti16Request = { -> 
+        ValidatorAdapterDefinition.metaClass.iti16Request = { -> 
             delegate.setValidator(new AdhocQueryRequestValidator())
             delegate.input {
                 new EbXMLAdhocQueryRequest21(it.in.getBody(AdhocQueryRequest.class))
@@ -82,7 +82,7 @@ class EbXML21Extensions {
             delegate.staticProfile(new ValidationProfile(true, false, Actor.REGISTRY)) 
         }        
 
-        ValidatorAdapterType.metaClass.iti16Response = { -> 
+        ValidatorAdapterDefinition.metaClass.iti16Response = { -> 
             delegate.setValidator(new QueryResponseValidator())
             delegate.input {
                 new EbXMLQueryResponse21(it.in.getBody(RegistryResponse.class))

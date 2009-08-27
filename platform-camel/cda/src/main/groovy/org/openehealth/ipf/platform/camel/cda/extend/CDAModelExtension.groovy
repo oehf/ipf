@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.cda.extend
 
 import org.apache.camel.builder.DataFormatClause
-import org.openehealth.ipf.platform.camel.cda.dataformat.CDADataFormatimport org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
+import org.openehealth.ipf.platform.camel.cda.dataformat.CDADataFormatimport org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.modules.cda.CDAR2Constantsimport org.openehealth.ipf.commons.xml.SchematronProfile
 /**
  * @author Christian Ohr
@@ -40,17 +40,17 @@ public class CDAModelExtension{
          
          // W3C Schema validation
          
-         ValidatorAdapterType.metaClass.cdar2 = {-> 
+         ValidatorAdapterDefinition.metaClass.cdar2 = {-> 
              delegate.staticProfile(CDAR2Constants.CDAR2_SCHEMA)
          }
 
          // Schematron validation
          
-         ValidatorAdapterType.metaClass.ccd = { Map parameters ->
+         ValidatorAdapterDefinition.metaClass.ccd = { Map parameters ->
              delegate.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES, parameters))
          }
          
-         ValidatorAdapterType.metaClass.ccd = {-> 
+         ValidatorAdapterDefinition.metaClass.ccd = {-> 
              delegate.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES))
          }
      }

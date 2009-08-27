@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 /**
  * @author Martin Krasser
  */
-public class FlowBeginProcessorType extends FlowProcessorType {
+public class FlowBeginProcessorDefinition extends FlowProcessorDefinition {
 
     private String identifier;
     private String application;
@@ -36,21 +36,21 @@ public class FlowBeginProcessorType extends FlowProcessorType {
     private int expectedAckCount = FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED;
     
     
-    public FlowBeginProcessorType(String identifier) {
+    public FlowBeginProcessorDefinition(String identifier) {
         this.identifier = identifier;
     }
 
-    public FlowProcessorType application(String application) {
+    public FlowProcessorDefinition application(String application) {
         this.application = application;
         return this;
     }
     
-    public FlowBeginProcessorType replayErrorHandler(String replayErrorUri) {
+    public FlowBeginProcessorDefinition replayErrorHandler(String replayErrorUri) {
         this.replayErrorUri = replayErrorUri;
         return this;
     }
     
-    public FlowBeginProcessorType expectedAckCount(int expectedAckCount) {
+    public FlowBeginProcessorDefinition expectedAckCount(int expectedAckCount) {
         this.expectedAckCount = expectedAckCount;
         return this;
     }

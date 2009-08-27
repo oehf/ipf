@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.extend
 
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.AdhocQueryRequestValidator
@@ -49,7 +49,7 @@ class EbXML30Extensions {
      
     static void install() { 
         
-        ValidatorAdapterType.metaClass.iti42Request = { -> 
+        ValidatorAdapterDefinition.metaClass.iti42Request = { -> 
             delegate.setValidator(new SubmitObjectsRequestValidator())
             delegate.input {
                 new EbXMLSubmitObjectsRequest30(it.in.getBody(SubmitObjectsRequest.class))
@@ -57,7 +57,7 @@ class EbXML30Extensions {
             delegate.staticProfile(new ValidationProfile(false, true, Actor.REGISTRY)) 
         }        
 
-        ValidatorAdapterType.metaClass.iti42Response = { -> 
+        ValidatorAdapterDefinition.metaClass.iti42Response = { -> 
             delegate.setValidator(new RegistryResponseValidator())
             delegate.input {
                 new EbXMLRegistryResponse30(it.in.getBody(RegistryResponseType.class))
@@ -65,7 +65,7 @@ class EbXML30Extensions {
             delegate.staticProfile(new ValidationProfile(false, true, Actor.REGISTRY)) 
         }
         
-        ValidatorAdapterType.metaClass.iti41Request = { -> 
+        ValidatorAdapterDefinition.metaClass.iti41Request = { -> 
             delegate.setValidator(new ProvideAndRegisterDocumentSetRequestValidator())
             delegate.input {
                 new EbXMLProvideAndRegisterDocumentSetRequest30(it.in.getBody(ProvideAndRegisterDocumentSetRequestType.class))
@@ -73,7 +73,7 @@ class EbXML30Extensions {
             delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY)) 
         }        
 
-        ValidatorAdapterType.metaClass.iti41Response = { -> 
+        ValidatorAdapterDefinition.metaClass.iti41Response = { -> 
             delegate.setValidator(new RegistryResponseValidator())
             delegate.input {
                 new EbXMLRegistryResponse30(it.in.getBody(RegistryResponseType.class))
@@ -81,7 +81,7 @@ class EbXML30Extensions {
             delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY)) 
         }    
         
-        ValidatorAdapterType.metaClass.iti43Request = { -> 
+        ValidatorAdapterDefinition.metaClass.iti43Request = { -> 
             delegate.setValidator(new RetrieveDocumentSetRequestValidator())
             delegate.input {
                 new EbXMLRetrieveDocumentSetRequest30(it.in.getBody(RetrieveDocumentSetRequestType.class))
@@ -89,7 +89,7 @@ class EbXML30Extensions {
             delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY)) 
         }        
 
-        ValidatorAdapterType.metaClass.iti43Response = { -> 
+        ValidatorAdapterDefinition.metaClass.iti43Response = { -> 
             delegate.setValidator(new RetrieveDocumentSetResponseValidator())
             delegate.input {
                 new EbXMLRetrieveDocumentSetResponse30(it.in.getBody(RetrieveDocumentSetResponseType.class))
@@ -97,7 +97,7 @@ class EbXML30Extensions {
             delegate.staticProfile(new ValidationProfile(false, true, Actor.REPOSITORY))
         }    
         
-        ValidatorAdapterType.metaClass.iti18Request = { -> 
+        ValidatorAdapterDefinition.metaClass.iti18Request = { -> 
             delegate.setValidator(new AdhocQueryRequestValidator())
             delegate.input {
                 new EbXMLAdhocQueryRequest30(it.in.getBody(AdhocQueryRequest.class))
@@ -105,7 +105,7 @@ class EbXML30Extensions {
             delegate.staticProfile(new ValidationProfile(true, true, Actor.REGISTRY)) 
         }        
 
-        ValidatorAdapterType.metaClass.iti18Response = { -> 
+        ValidatorAdapterDefinition.metaClass.iti18Response = { -> 
             delegate.setValidator(new QueryResponseValidator())
             delegate.input {
                 new EbXMLQueryResponse30(it.in.getBody(AdhocQueryResponse.class))

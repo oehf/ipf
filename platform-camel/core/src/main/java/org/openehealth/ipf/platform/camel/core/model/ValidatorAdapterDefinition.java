@@ -33,7 +33,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  * @author Martin Krasser
  * @author Christian Ohr
  */
-public class ValidatorAdapterType extends ProcessorAdapterType {
+public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
 
     private Validator validator;
 
@@ -43,15 +43,15 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
 
     private Expression profileExpression;
     
-    public ValidatorAdapterType() {
+    public ValidatorAdapterDefinition() {
         this(new AlwaysValid());
     }
     
-    public ValidatorAdapterType(Validator validator) {
+    public ValidatorAdapterDefinition(Validator validator) {
         this.validator = validator;
     }
     
-    public ValidatorAdapterType(String validatorBean) {
+    public ValidatorAdapterDefinition(String validatorBean) {
         this.validatorBean = validatorBean;
     }
     
@@ -59,35 +59,35 @@ public class ValidatorAdapterType extends ProcessorAdapterType {
         this.validator = validator;
     }
     
-    public ValidatorAdapterType staticProfile(Object profile) {
+    public ValidatorAdapterDefinition staticProfile(Object profile) {
         this.profile = profile;
         return this;
     }
     
     @Deprecated
-    public ValidatorAdapterType profile(Object profile) {
+    public ValidatorAdapterDefinition profile(Object profile) {
         this.profile = profile;
         return this;
     }
     
-    public ValidatorAdapterType profile(Expression profileExpression) {
+    public ValidatorAdapterDefinition profile(Expression profileExpression) {
         this.profileExpression = profileExpression;
         return this;
     }
     
-    public ProcessorAdapterType profile(Closure profileExpression) {
+    public ProcessorAdapterDefinition profile(Closure profileExpression) {
         this.profileExpression = new DelegatingExpression(profileExpression);
         return this;
     }
     
-    public ValidatorAdapterType xsd() {
+    public ValidatorAdapterDefinition xsd() {
         this.validator = new XsdValidator();
-        return (ValidatorAdapterType)input(bodyAs(StreamSource.class));
+        return (ValidatorAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
-    public ValidatorAdapterType schematron() {
+    public ValidatorAdapterDefinition schematron() {
         this.validator = new SchematronValidator();
-        return (ValidatorAdapterType)input(bodyAs(StreamSource.class));
+        return (ValidatorAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
     @Override

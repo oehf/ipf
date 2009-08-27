@@ -21,7 +21,7 @@ import org.apache.camel.builder.DataFormatClause
 
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.support.HL7Validator
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.platform.camel.hl7.dataformat.Hl7DataFormat
 import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression
 
@@ -63,7 +63,7 @@ class Hl7ModelExtension {
         //  IPF model class extensions
         // ----------------------------------------------------------------
         
-        ValidatorAdapterType.metaClass.ghl7 = {-> 
+        ValidatorAdapterDefinition.metaClass.ghl7 = {-> 
             delegate.setValidator(new HL7Validator())
             delegate.staticProfile(new DefaultValidationContext()) 
             delegate.input(new Hl7InputExpression())

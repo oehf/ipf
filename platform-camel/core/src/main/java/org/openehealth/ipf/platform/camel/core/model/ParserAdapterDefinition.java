@@ -23,17 +23,17 @@ import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 /**
  * @author Martin Krasser
  */
-public class ParserAdapterType extends ProcessorAdapterType {
+public class ParserAdapterDefinition extends ProcessorAdapterDefinition {
 
     private Parser parser;
     
     private String parserBean;
     
-    public ParserAdapterType(Parser parser) {
+    public ParserAdapterDefinition(Parser parser) {
         this.parser = parser;
     }
     
-    public ParserAdapterType(String parserBean) {
+    public ParserAdapterDefinition(String parserBean) {
         this.parserBean = parserBean;
     }
     

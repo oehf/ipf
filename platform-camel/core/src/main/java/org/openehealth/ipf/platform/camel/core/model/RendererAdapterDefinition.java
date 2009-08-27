@@ -23,17 +23,17 @@ import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
 /**
  * @author Martin Krasser
  */
-public class RendererAdapterType extends ProcessorAdapterType {
+public class RendererAdapterDefinition extends ProcessorAdapterDefinition {
 
     private Renderer renderer;
     
     private String rendererBean;
     
-    public RendererAdapterType(Renderer renderer) {
+    public RendererAdapterDefinition(Renderer renderer) {
         this.renderer = renderer;
     }
     
-    public RendererAdapterType(String rendererBean) {
+    public RendererAdapterDefinition(String rendererBean) {
         this.rendererBean = rendererBean;
     }
     

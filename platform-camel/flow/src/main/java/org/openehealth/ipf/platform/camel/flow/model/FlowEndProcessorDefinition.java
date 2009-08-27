@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 /**
  * @author Martin Krasser
  */
-public class FlowEndProcessorType extends FlowProcessorType {
+public class FlowEndProcessorDefinition extends FlowProcessorDefinition {
 
     @Override
     public String toString() {

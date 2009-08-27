@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.core.extend
 
-import org.openehealth.ipf.platform.camel.lbs.core.model.FetchProcessorType
-import org.openehealth.ipf.platform.camel.lbs.core.model.StoreProcessorType
+import org.openehealth.ipf.platform.camel.lbs.core.model.FetchProcessorDefinition
+import org.openehealth.ipf.platform.camel.lbs.core.model.StoreProcessorDefinition
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression
 import org.apache.camel.Expression
 
@@ -31,13 +31,13 @@ class LbsModelExtension {
     def extensions = {
             
         ProcessorDefinition.metaClass.store = {
-            def answer = new StoreProcessorType()
+            def answer = new StoreProcessorDefinition()
             delegate.addOutput(answer)
             answer
         }        
 
         ProcessorDefinition.metaClass.fetch = {
-            def answer = new FetchProcessorType()
+            def answer = new FetchProcessorDefinition()
             delegate.addOutput(answer)
             answer
         }        

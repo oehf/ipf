@@ -22,13 +22,13 @@ import org.apache.camel.spi.RouteContext;
 /**
  * @author Martin Krasser
  */
-public class AuditType extends DelegateType {
+public class AuditDefinition extends DelegateDefinition {
 
     private Processor auditProcessor;
     
     private String auditProcessorBeanName;
     
-    public AuditType() {
+    public AuditDefinition() {
         this.auditProcessor = new Noop();
     }
     

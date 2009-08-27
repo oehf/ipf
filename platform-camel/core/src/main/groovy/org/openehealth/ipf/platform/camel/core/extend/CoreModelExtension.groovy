@@ -45,16 +45,16 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingTransmogrifier
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator 
 import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat
 import org.openehealth.ipf.platform.camel.core.dataformat.GpathDataFormat
-import org.openehealth.ipf.platform.camel.core.model.AuditType
-import org.openehealth.ipf.platform.camel.core.model.InterceptType
-import org.openehealth.ipf.platform.camel.core.model.IpfType
-import org.openehealth.ipf.platform.camel.core.model.SplitterType
-import org.openehealth.ipf.platform.camel.core.model.ParserAdapterType
-import org.openehealth.ipf.platform.camel.core.model.RendererAdapterType
-import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterType
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
-import org.openehealth.ipf.platform.camel.core.model.DataFormatAdapterType
-import org.openehealth.ipf.platform.camel.core.model.ValidationType
+import org.openehealth.ipf.platform.camel.core.model.AuditDefinition
+import org.openehealth.ipf.platform.camel.core.model.InterceptDefinition
+import org.openehealth.ipf.platform.camel.core.model.IpfDefinition
+import org.openehealth.ipf.platform.camel.core.model.SplitterDefinition
+import org.openehealth.ipf.platform.camel.core.model.ParserAdapterDefinition
+import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition
+import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
+import org.openehealth.ipf.platform.camel.core.model.DataFormatAdapterDefinition
+import org.openehealth.ipf.platform.camel.core.model.ValidationDefinition
 
 import org.apache.camel.Expression
 import org.apache.camel.Processor
@@ -83,8 +83,7 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
 
         ProcessorDefinition.metaClass.process = { String processorBeanName ->
-            delegate.addOutput(new org.openehealth.ipf.platform.camel.core.model.ProcessorType(processorBeanName))
-            return delegate
+            delegate.processRef(processorBeanName)
         }
 
         ProcessorDefinition.metaClass.process = { Closure processorLogic ->
@@ -92,7 +91,7 @@ class CoreModelExtension {
         }
             
         ProcessorDefinition.metaClass.intercept = {DelegateProcessor delegateProcessor ->
-	        InterceptType answer = new InterceptType(delegateProcessor)
+	        InterceptDefinition answer = new InterceptDefinition(delegateProcessor)
 	        delegate.addOutput(answer)
 	        return answer
         }
@@ -142,13 +141,13 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
         
         ProcessorDefinition.metaClass.validation = { Processor validator ->
-            ValidationType answer = new ValidationType(validator)
+            ValidationDefinition answer = new ValidationDefinition(validator)
             delegate.addOutput(answer)
             return answer
         }
 
         ProcessorDefinition.metaClass.validation = { String validationUri ->
-            ValidationType answer = new ValidationType(validationUri)
+            ValidationDefinition answer = new ValidationDefinition(validationUri)
             delegate.addOutput(answer)
             return answer
         }
@@ -162,11 +161,11 @@ class CoreModelExtension {
         }
     
         ProcessorDefinition.metaClass.ipf = { ->
-            new IpfType(delegate)
+            new IpfDefinition(delegate)
 	    }
                 
         ProcessorDefinition.metaClass.audit = {-> 
-            AuditType answer = new AuditType()        
+            AuditDefinition answer = new AuditDefinition()        
             delegate.addOutput(answer)
             return answer
         }
@@ -212,7 +211,7 @@ class CoreModelExtension {
          }
   
         // ----------------------------------------------------------------
-        //  Platform ExceptionType extensions
+        //  Platform ExceptionDefinition extensions
         // ----------------------------------------------------------------
         
         OnExceptionDefinition.metaClass.onWhen = { Closure predicate ->
@@ -252,13 +251,13 @@ class CoreModelExtension {
         // ----------------------------------------------------------------
         
         ProcessorDefinition.metaClass.transmogrify = { Transmogrifier transmogrifier ->
-            TransmogrifierAdapterType answer = new TransmogrifierAdapterType(transmogrifier)
+            TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifier)
             delegate.addOutput(answer)
             return answer
         }
 
         ProcessorDefinition.metaClass.transmogrify = { String transmogrifierBeanName ->
-            TransmogrifierAdapterType answer = new TransmogrifierAdapterType(transmogrifierBeanName)
+            TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifierBeanName)
             delegate.addOutput(answer)
             return answer
         }
@@ -268,25 +267,25 @@ class CoreModelExtension {
         }
         
         ProcessorDefinition.metaClass.transmogrify = { ->
-            TransmogrifierAdapterType answer = new TransmogrifierAdapterType(null)
+            TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(null)
             delegate.addOutput(answer)
             return answer
         }        
 
         ProcessorDefinition.metaClass.validate = {->
-            ValidatorAdapterType answer = new ValidatorAdapterType()
+            ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition()
             delegate.addOutput(answer)
             return answer
         }
     
         ProcessorDefinition.metaClass.validate = { Validator validator ->
-            ValidatorAdapterType answer = new ValidatorAdapterType(validator)
+            ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validator)
             delegate.addOutput(answer)
             return answer
         }
         
         ProcessorDefinition.metaClass.validate = { String validatorBeanName ->
-            ValidatorAdapterType answer = new ValidatorAdapterType(validatorBeanName)
+            ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validatorBeanName)
             delegate.addOutput(answer)
             return answer
         }
@@ -296,25 +295,25 @@ class CoreModelExtension {
         }
     
         ProcessorDefinition.metaClass.parse = { Parser parser ->
-            ParserAdapterType answer = new ParserAdapterType(parser)
+            ParserAdapterDefinition answer = new ParserAdapterDefinition(parser)
             delegate.addOutput(answer)
             return answer
         }
         
         ProcessorDefinition.metaClass.parse = { String parserBeanName ->
-            ParserAdapterType answer = new ParserAdapterType(parserBeanName)
+            ParserAdapterDefinition answer = new ParserAdapterDefinition(parserBeanName)
             delegate.addOutput(answer)
             return answer
         }
     
         ProcessorDefinition.metaClass.render = { Renderer renderer ->
-            RendererAdapterType answer = new RendererAdapterType(renderer)
+            RendererAdapterDefinition answer = new RendererAdapterDefinition(renderer)
             delegate.addOutput(answer)
             return answer
         }
         
         ProcessorDefinition.metaClass.render = { String rendererBeanName ->
-            RendererAdapterType answer = new RendererAdapterType(rendererBeanName)
+            RendererAdapterDefinition answer = new RendererAdapterDefinition(rendererBeanName)
             delegate.addOutput(answer)
             return answer
         }
@@ -332,11 +331,11 @@ class CoreModelExtension {
         }
     
         DataFormatClause.metaClass.parse = { String parserBeanName ->
-            delegate.processorType.unmarshal((DataFormatDefinition)DataFormatAdapterType.forParserBean(parserBeanName))
+            delegate.processorType.unmarshal((DataFormatDefinition)DataFormatAdapterDefinition.forParserBean(parserBeanName))
         }
     
         DataFormatClause.metaClass.render = { String rendererBeanName ->
-            delegate.processorType.marshal((DataFormatDefinition)DataFormatAdapterType.forRendererBean(rendererBeanName))
+            delegate.processorType.marshal((DataFormatDefinition)DataFormatAdapterDefinition.forRendererBean(rendererBeanName))
         }
 
         // ----------------------------------------------------------------

@@ -28,12 +28,12 @@ import org.openehealth.ipf.platform.camel.lbs.core.process.FetchProcessor;
 import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
 
 /**
- * Processor type for {@link FetchProcessor}.
+ * Processor definition for {@link FetchProcessor}.
  * <p>
- * This processor type provides the fluent API configuration of the processor.
+ * This processor definition provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
  */
-public class FetchProcessorType extends OutputDefinition<FetchProcessorType> {
+public class FetchProcessorDefinition extends OutputDefinition<FetchProcessorDefinition> {
 
     private List<ProcessorDefinition<?>> outputs = new ArrayList<ProcessorDefinition<?>>();
 
@@ -55,17 +55,14 @@ public class FetchProcessorType extends OutputDefinition<FetchProcessorType> {
      * This method can be called multiple times to add multiple handlers.
      * @param handlerBeanName
      *          the bean name of the handler for integrating resources
-     * @return this type instance for usage with a fluent API
+     * @return this definition instance for usage with a fluent API
      */
-    public FetchProcessorType with(String resourceHandlersBeanName) {
+    public FetchProcessorDefinition with(String resourceHandlersBeanName) {
         notNull(resourceHandlersBeanName, "resourceHandlersBeanName cannot be null");
         this.resourceHandlersBeanName = resourceHandlersBeanName;
         return this;
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.camel.model.ProcessorType#createProcessor(org.apache.camel.spi.RouteContext)
-     */
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
         FetchProcessor fetcher = new FetchProcessor();
@@ -81,9 +78,6 @@ public class FetchProcessorType extends OutputDefinition<FetchProcessorType> {
         return fetcher;
     }
     
-    /* (non-Javadoc)
-     * @see org.apache.camel.model.ProcessorType#getOutputs()
-     */
     @Override
     public List getOutputs() {
         return outputs;

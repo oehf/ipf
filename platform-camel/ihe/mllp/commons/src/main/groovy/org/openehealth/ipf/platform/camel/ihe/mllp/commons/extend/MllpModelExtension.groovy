@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.commons.extend
 
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterType
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MessageAdapterValidatorimport org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtilsimport org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.apache.camel.Exchangeimport org.apache.camel.Messageimport org.openehealth.ipf.platform.camel.core.util.Exchanges
 
@@ -36,7 +36,7 @@ class MllpModelExtension {
 
     
     static extensions = {
-        ValidatorAdapterType.metaClass.iti8Request  = validationClosure 
-        ValidatorAdapterType.metaClass.iti8Response = validationClosure
+        ValidatorAdapterDefinition.metaClass.iti8Request  = validationClosure 
+        ValidatorAdapterDefinition.metaClass.iti8Response = validationClosure
     }
 }

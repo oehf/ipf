@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
 /**
  * @author Martin Krasser
  */
-public class DedupeType extends FilterDefinition {
+public class DedupeDefinition extends FilterDefinition {
 
     @Override
     public FilterProcessor createProcessor(RouteContext routeContext) throws Exception {

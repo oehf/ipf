@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 /**
  * @author Martin Krasser
  */
-public class FlowErrorProcessorType extends FlowProcessorType {
+public class FlowErrorProcessorDefinition extends FlowProcessorDefinition {
 
     @Override
     public String toString() {

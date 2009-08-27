@@ -26,12 +26,12 @@ import org.openehealth.ipf.commons.event.EventEngine;
 import org.openehealth.ipf.platform.camel.event.process.Publisher;
 
 /**
- * Processor type for {@link Publisher}
+ * Processor definition for {@link Publisher}
  * <p>
- * This processor type provides the fluent API configuration of the processor.
+ * This processor definition provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
  */
-public class PublishProcessorType extends OutputDefinition<PublishProcessorType> {
+public class PublishProcessorDefinition extends OutputDefinition<PublishProcessorDefinition> {
     /** The default name of the event engine bean */
     public static final String DEFAULT_EVENT_ENGINE_BEAN = "eventEngine";
     
@@ -48,7 +48,7 @@ public class PublishProcessorType extends OutputDefinition<PublishProcessorType>
      *          the topic
      * @return this instance to allow chaining
      */
-    public PublishProcessorType toTopic(String topic) {
+    public PublishProcessorDefinition toTopic(String topic) {
         notNull(topic, "topic cannot be null");
         this.topic = topic;
         return this;
@@ -60,7 +60,7 @@ public class PublishProcessorType extends OutputDefinition<PublishProcessorType>
      *          the closure to use
      * @return this instance to allow chaining
      */
-    public PublishProcessorType eventFactoryClosure(Closure closure) {
+    public PublishProcessorDefinition eventFactoryClosure(Closure closure) {
         notNull(closure, "closure cannot be null");
         this.closure = closure;
         return this;
@@ -73,7 +73,7 @@ public class PublishProcessorType extends OutputDefinition<PublishProcessorType>
      *       usually not necessary.
      * @return this instance to allow chaining
      */
-    public PublishProcessorType synchronous() {
+    public PublishProcessorDefinition synchronous() {
         this.sync = true;
         return this;
     }
@@ -82,7 +82,7 @@ public class PublishProcessorType extends OutputDefinition<PublishProcessorType>
      * Configures asynchronous event object delivery
      * @return this instance to allow chaining
      */
-    public PublishProcessorType asynchronous() {
+    public PublishProcessorDefinition asynchronous() {
         this.sync = false;
         return this;
     }
@@ -94,7 +94,7 @@ public class PublishProcessorType extends OutputDefinition<PublishProcessorType>
      *          event engine
      * @return this instance to allow chaining
      */
-    public PublishProcessorType with(String eventEngineBean) {
+    public PublishProcessorDefinition with(String eventEngineBean) {
         notNull(eventEngineBean, "eventEngineBean cannot be null");
         this.eventEngineBean = eventEngineBean;
         return this;

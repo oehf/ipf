@@ -23,28 +23,28 @@ import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersEx
 /**
  * @author Martin Krasser
  */
-public class ParamsType {
+public class ParamsDefinition {
 
-    private ProcessorAdapterType processorAdapterType;
+    private ProcessorAdapterDefinition processorAdapterDefinition;
     
-    public ParamsType(ProcessorAdapterType processorAdapterType) {
-        this.processorAdapterType = processorAdapterType;
+    public ParamsDefinition(ProcessorAdapterDefinition processorAdapterDefinition) {
+        this.processorAdapterDefinition = processorAdapterDefinition;
     }
     
-    public ProcessorAdapterType builder() {
-        return processorAdapterType.params(builderExpression());
+    public ProcessorAdapterDefinition builder() {
+        return processorAdapterDefinition.params(builderExpression());
     }
 
-    public ProcessorAdapterType headers() {
-        return processorAdapterType.params(headersExpression());
+    public ProcessorAdapterDefinition headers() {
+        return processorAdapterDefinition.params(headersExpression());
     }
 
-    public ProcessorAdapterType header(String name) {
-        return processorAdapterType.params(headerExpression(name));
+    public ProcessorAdapterDefinition header(String name) {
+        return processorAdapterDefinition.params(headerExpression(name));
     }
 
-    public ProcessorAdapterType headersAndBuilder() {
-        return processorAdapterType.params(headersAndBuilderExpression());
+    public ProcessorAdapterDefinition headersAndBuilder() {
+        return processorAdapterDefinition.params(headersAndBuilderExpression());
     }
 
 }

@@ -27,38 +27,38 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 /**
  * @author Martin Krasser
  */
-public abstract class ProcessorAdapterType extends DelegateType {
+public abstract class ProcessorAdapterDefinition extends DelegateDefinition {
 
     private Expression inputExpression;
     private Expression paramsExpression;
     
-    public ProcessorAdapterType input(Expression inputExpression) {
+    public ProcessorAdapterDefinition input(Expression inputExpression) {
         this.inputExpression = inputExpression;
         return this;
     }
     
-    public ProcessorAdapterType input(Closure inputExpression) {
+    public ProcessorAdapterDefinition input(Closure inputExpression) {
         this.inputExpression = new DelegatingExpression(inputExpression);
         return this;
     }
     
-    public ProcessorAdapterType params(Expression paramsExpression) {
+    public ProcessorAdapterDefinition params(Expression paramsExpression) {
         this.paramsExpression = paramsExpression;
         return this;
     }
     
-    public ProcessorAdapterType params(Closure paramsExpression) {
+    public ProcessorAdapterDefinition params(Closure paramsExpression) {
         this.paramsExpression = new DelegatingExpression(paramsExpression);
         return this;
     }
     
-    public ProcessorAdapterType staticParams(Object... params) {
+    public ProcessorAdapterDefinition staticParams(Object... params) {
         this.paramsExpression = new StaticParams(params);
         return this;
     }
     
-    public ParamsType params() {
-        return new ParamsType(this);
+    public ParamsDefinition params() {
+        return new ParamsDefinition(this);
     }
     
     @Override

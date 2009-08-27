@@ -40,7 +40,7 @@ class Iti43RouteBuilder extends SpringRouteBuilder {
     		.convertBodyTo(RetrieveDocumentSet.class)
     		// Retrieve each requested document and aggregate them in a list
     		.ipf().split { it.in.body.documents }
-    		.aggregate { target, next -> target.out.body.addAll(next.out.body) }
+    		.aggregationStrategy { target, next -> target.out.body.addAll(next.out.body) }
     		.retrieve()    		
     		.end()
             // Create success response

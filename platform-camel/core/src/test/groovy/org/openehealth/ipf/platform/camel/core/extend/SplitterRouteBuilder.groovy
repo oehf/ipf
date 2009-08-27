@@ -35,25 +35,25 @@ class SplitterRouteBuilder extends SpringRouteBuilder {
           
           from('direct:split_rule_as_closure') 
               .ipf().split { exchange -> new SplitterTest.TestSplitRule().evaluate(exchange, Object.class) }
-              .aggregate { oldExchange, newExchange -> 
+              .aggregationStrategy { oldExchange, newExchange -> 
                   new SplitterTest.TestAggregationStrategy().aggregate(oldExchange, newExchange) }  
               .to('mock:output')
 
           from('direct:split_rule_returns_array') 
               .ipf().split { exchange -> exchange.in.body.split(',') }
-              .aggregate { oldExchange, newExchange -> 
+              .aggregationStrategy { oldExchange, newExchange -> 
                   new SplitterTest.TestAggregationStrategy().aggregate(oldExchange, newExchange) }  
               .to('mock:output')
               
           from('direct:split_rule_as_type') 
               .ipf().split( new SplitterTest.TestSplitRule() )
-              .aggregate { oldExchange, newExchange -> 
+              .aggregationStrategy { oldExchange, newExchange -> 
                   new SplitterTest.TestAggregationStrategy().aggregate(oldExchange, newExchange) }  
               .to('mock:output')
 
           from('direct:aggregation_via_closure') 
               .ipf().split { exchange -> new SplitterTest.TestSplitRule().evaluate(exchange, Object.class) }
-              .aggregate { oldExchange, newExchange ->
+              .aggregationStrategy { oldExchange, newExchange ->
                   String oldContent = oldExchange.in.body
                   String newContent = newExchange.in.body
                   Exchange aggregate = oldExchange.copy()

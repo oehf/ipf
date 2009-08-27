@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.event.extend
 
 import org.apache.camel.model.ProcessorDefinition
 
-import org.openehealth.ipf.platform.camel.event.model.PublishProcessorType
+import org.openehealth.ipf.platform.camel.event.model.PublishProcessorDefinition
 
 /**
  * Extension that defines the DSL elements related to the IPF event infrastructure.
@@ -29,7 +29,7 @@ class EventModelExtension {
     static extensions = {
         
         ProcessorDefinition.metaClass.publish = { Closure publishingLogic ->
-            PublishProcessorType answer = new PublishProcessorType()
+            PublishProcessorDefinition answer = new PublishProcessorDefinition()
             answer.eventFactoryClosure(publishingLogic)
             delegate.addOutput(answer)
             answer
