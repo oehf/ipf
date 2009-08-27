@@ -61,8 +61,8 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
     public static final String ENDPOINT_JMS_QUEUE = 
         "http://localhost:9452/lbstest_jms";
 
-    public static final long CONTENT_SIZE = 1024 * 1024 * 100 + 5;
-
+    private final static long CONTENT_SIZE = 1024 * 1024 * 10;
+    
     /**
      * Test to verify that example code works 
      */
@@ -137,16 +137,59 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
             }
         });
 
-        httpClient.executeMethod(method);
-        mock.assertIsSatisfied();
-        assertEquals(CONTENT_SIZE, count[0]);
+        TrackMemThread memTracker = new TrackMemThread();
+        memTracker.start();
+        try {
+            httpClient.executeMethod(method);
+            mock.assertIsSatisfied();
+            assertEquals(CONTENT_SIZE, count[0]);
+        }
+        finally {
+            memTracker.waitForStop();
+            assertTrue("Memory consumption not constant. Difference was: " + memTracker.getDiff(), memTracker.getDiff() < 10000);
+        }
+    }
+    
+    private static class TrackMemThread extends Thread {
+        private boolean stopped;
+        private long min = Long.MAX_VALUE;
+        private long max = Long.MIN_VALUE;
+        
+        @Override
+        public void run() {
+            while (!stopped) {
+                try {
+                    long currentMem = Runtime.getRuntime().totalMemory();
+                    min = Math.min(min, currentMem);
+                    max = Math.max(max, currentMem);
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {}
+            }
+        }
+
+        public void waitForStop() throws InterruptedException {
+            stopped = true;
+            join();
+        }
+
+        public long getDiff() {
+            return max - min;
+        }
     }
     
     @Test
     public void testHugeFileDownload() throws Exception {
-        Object result = producerTemplate.requestBody("direct:lbstest_download", "bla");
-        assertTrue(result instanceof InputStream);
-        assertEquals(CONTENT_SIZE, getLength((InputStream) result));
+        TrackMemThread memTracker = new TrackMemThread();
+        memTracker.start();
+        try {
+            Object result = producerTemplate.requestBody("direct:lbstest_download", "bla");
+            assertTrue(result instanceof InputStream);
+            assertEquals(CONTENT_SIZE, getLength((InputStream) result));
+        }
+        finally {
+            memTracker.waitForStop();
+            assertTrue("Memory consumption not constant. Difference was: " + memTracker.getDiff(), memTracker.getDiff() < 10000);
+        }
     }
 
     public static int getLength(InputStream inputStream) throws IOException {
@@ -171,7 +214,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
     }
 
     public static final class HugeContentInputStream extends InputStream {
-        private long readBytes;
+        private long readBytes;       
         private int count;
         
         @Override
