@@ -23,7 +23,7 @@ import org.apache.camel.spi.RouteContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher;
-import org.openehealth.ipf.platform.camel.core.model.DelegateType;
+import org.openehealth.ipf.platform.camel.core.model.DelegateDefinition;
 import org.openehealth.ipf.platform.camel.core.util.Contexts;
 import org.openehealth.ipf.platform.camel.test.performance.process.CheckpointProcessor;
 import org.openehealth.ipf.platform.camel.test.performance.process.FinishProcessor;
@@ -34,8 +34,8 @@ import org.openehealth.ipf.platform.camel.test.performance.process.TimeProcessor
  * 
  * @author Mitko Kolev
  */
-public class MeasureType extends DelegateType {
-    private final static Log LOG = LogFactory.getLog(MeasureType.class);
+public class MeasureDefinition extends DelegateDefinition {
+    private final static Log LOG = LogFactory.getLog(MeasureDefinition.class);
 
     private TimeProcessor delegate;
 
@@ -64,7 +64,7 @@ public class MeasureType extends DelegateType {
      * 
      * @return
      */
-    public MeasureType time() {
+    public MeasureDefinition time() {
         this.delegate = new TimeProcessor();
         LOG.debug("Using " + TimeProcessor.class.getName());
         return this;
@@ -76,7 +76,7 @@ public class MeasureType extends DelegateType {
      * 
      * @return
      */
-    public MeasureType checkpoint(String name) {
+    public MeasureDefinition checkpoint(String name) {
         notNull(name, "The name must not be null!");
         this.delegate = new CheckpointProcessor(name);
         LOG.debug("Using " + CheckpointProcessor.class.getName() + " with name "
@@ -90,7 +90,7 @@ public class MeasureType extends DelegateType {
      * 
      * @return
      */
-    public MeasureType finish(String name) {
+    public MeasureDefinition finish(String name) {
         notNull(name, "The name must not be null!");
         this.delegate = new FinishProcessor(name);
         LOG.debug("Using " + FinishProcessor.class.getName() + " with name "
