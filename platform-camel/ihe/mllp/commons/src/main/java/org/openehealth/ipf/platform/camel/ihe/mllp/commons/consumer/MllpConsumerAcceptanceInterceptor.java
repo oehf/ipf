@@ -40,7 +40,8 @@ public class MllpConsumerAcceptanceInterceptor extends AbstractMllpConsumerInter
     public void process(Exchange exchange) throws Exception {
         AcceptanceCheckUtils.checkRequestAcceptance(
                 exchange.getIn().getBody(MessageAdapter.class), 
-                getMllpEndpoint().getEndpointConfiguration());
+                getMllpEndpoint().getTransactionConfiguration(),
+                getMllpEndpoint().getParser());
         
         getWrappedProcessor().process(exchange);
     }

@@ -18,11 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 
 /**
- * Holder for transaction-specific endpoint parameters.
- * 
+ * Endpoint-agnostic parameters of an MLLP-based transaction.
  * @author Dmytro Rud
  */
-public class MllpEndpointConfiguration {
+public class MllpTransactionConfiguration {
     private final String hl7Version;
     private final String sendingApplication;
     private final String sendingFacility;
@@ -34,7 +33,6 @@ public class MllpEndpointConfiguration {
     
     private final String allowedMessageType;
     private final String[] allowedTriggerEvents;
-    private final String[] allowedStructureMaps;
     
 
     /**
@@ -52,23 +50,20 @@ public class MllpEndpointConfiguration {
      *      Default ack type code for request-related NAKs.
      * @param responseErrorDefaultErrorCode
      *      Default error code for response-related NAKs.
-     * @param allowedMesasgeType
+     * @param allowedMessageType
      *      Valid value of MSH-9-1 (for acceptance checks).
      * @param allowedTriggerEvents
      *      Array of valid values of MSH-9-2 (for acceptance checks).
-     * @param allowedStructureNames
-     *      Array of valid values of MSH-9-3 (for acceptance checks).
      */
-    public MllpEndpointConfiguration(
+    public MllpTransactionConfiguration(
             String hl7Version,
             String sendingApplication,
             String sendingFacility,
             int requestErrorDefaultErrorCode,
             AckTypeCode requestErrorDefaultAckTypeCode,
             int responseErrorDefaultErrorCode,
-            String allowedMesasgeType,
-            String[] allowedTriggerEvents,
-            String[] allowedStructureMaps)
+            String allowedMessageType,
+            String[] allowedTriggerEvents)
     {
         this.hl7Version = hl7Version;
         this.sendingApplication = sendingApplication;
@@ -78,9 +73,8 @@ public class MllpEndpointConfiguration {
         this.requestErrorDefaultAckTypeCode = requestErrorDefaultAckTypeCode;
         this.responseErrorDefaultErrorCode = responseErrorDefaultErrorCode;
         
-        this.allowedMessageType = allowedMesasgeType;
+        this.allowedMessageType = allowedMessageType;
         this.allowedTriggerEvents = allowedTriggerEvents;
-        this.allowedStructureMaps = allowedStructureMaps;
     }
 
     
@@ -116,9 +110,5 @@ public class MllpEndpointConfiguration {
 
     public String[] getAllowedTriggerEvents() {
         return allowedTriggerEvents;
-    }
-
-    public String[] getAllowedStructureMaps() {
-        return allowedStructureMaps;
     }
 }

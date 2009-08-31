@@ -40,7 +40,6 @@ class TestValidation extends MllpTestContainer {
     static void setUpClass() {
         init('iti-8-validation.xml')
     }
-
     
     @Test
     void testHappyCase() {
@@ -49,7 +48,6 @@ class TestValidation extends MllpTestContainer {
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
-
     
     @Test
     void testUnknownSegments() {
@@ -68,6 +66,14 @@ class TestValidation extends MllpTestContainer {
         def msg = send(endpointUri, body)
         assertNAK(msg)
         assertTrue(msg.toString().contains('Missing patient name'))
+    }
+
+    @Test
+    void testHandledError() {
+        def endpointUri = 'pix-iti8://localhost:9998?audit=false'
+        def body = getMessageString('ADT^A01', '2.3.1', false)
+        def msg = send(endpointUri, body)
+        assertACK(msg)
     }
 
 

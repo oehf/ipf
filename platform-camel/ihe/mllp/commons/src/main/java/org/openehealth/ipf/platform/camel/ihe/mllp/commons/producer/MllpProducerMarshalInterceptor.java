@@ -41,7 +41,10 @@ public class MllpProducerMarshalInterceptor extends AbstractMllpProducerIntercep
         String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         marshal(exchange, charset);
         getWrappedProducer().process(exchange);
-        MllpMarshalUtils.unmarshal(Exchanges.resultMessage(exchange), charset);
+        MllpMarshalUtils.unmarshal(
+                Exchanges.resultMessage(exchange),
+                charset,
+                getMllpEndpoint().getParser());
         exchange.setProperty(Exchange.CHARSET_NAME, charset);
     }
     
@@ -52,7 +55,8 @@ public class MllpProducerMarshalInterceptor extends AbstractMllpProducerIntercep
     private void marshal(Exchange exchange, String charset) throws Exception {
         String s = MllpMarshalUtils.marshalStandardTypes(
                 exchange.getIn(), 
-                getMllpEndpoint().getConfiguration().getCharsetName());
+                getMllpEndpoint().getConfiguration().getCharsetName(),
+                getMllpEndpoint().getParser());
         
         exchange.getIn().setBody(s);
     }

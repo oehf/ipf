@@ -45,6 +45,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducer
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducerMarshalInterceptor;
 
+import ca.uhn.hl7v2.parser.Parser;
+
 
 /**
  * A wrapper for standard camel-mina endpoint 
@@ -59,7 +61,8 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final boolean allowIncompleteAudit;
     private final MllpAuditStrategy serverStrategy;
     private final MllpAuditStrategy clientStrategy;
-    private final MllpEndpointConfiguration endpointConfiguration;
+    private final MllpTransactionConfiguration transactionConfiguration;
+    private final Parser parser;
     
     
     /**
@@ -81,19 +84,22 @@ public class MllpEndpoint extends DefaultEndpoint {
             boolean allowIncompleteAudit,
             MllpAuditStrategy serverStrategy,
             MllpAuditStrategy clientStrategy,
-            MllpEndpointConfiguration endpointConfiguration) 
+            MllpTransactionConfiguration transactionConfiguration,
+            Parser parser) 
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
         Validate.notNull(clientStrategy);
-        Validate.notNull(endpointConfiguration);
+        Validate.notNull(transactionConfiguration);
+        Validate.notNull(parser);
         
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
         this.allowIncompleteAudit = allowIncompleteAudit;
         this.serverStrategy = serverStrategy;
         this.clientStrategy = clientStrategy;
-        this.endpointConfiguration = endpointConfiguration;
+        this.transactionConfiguration = transactionConfiguration;
+        this.parser = parser;
     }
 
 
@@ -160,10 +166,21 @@ public class MllpEndpoint extends DefaultEndpoint {
         return serverStrategy;
     }
     
-    public MllpEndpointConfiguration getEndpointConfiguration() {
-        return endpointConfiguration;
+    /**
+     * Returns transaction configuration.
+     */
+    public MllpTransactionConfiguration getTransactionConfiguration() {
+        return transactionConfiguration;
     }
 
+    /**
+     * Returns HL7 parser instance.
+     */
+    public Parser getParser() {
+        return parser;
+    }
+
+    
     // ----- dumb delegation, nothing interesting below -----
 
     @SuppressWarnings("unchecked")

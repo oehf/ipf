@@ -17,9 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.pix.iti8;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
+import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpointConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
+
+import ca.uhn.hl7v2.parser.Parser;
 
 /**
  * Camel component for ITI-8 (PIX Feed).
@@ -27,8 +30,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpointConfigura
  * @author Dmytro Rud
  */
 public class Iti8Component extends MllpComponent {
-    private final MllpEndpointConfiguration ENDPOINT_CONFIGURATION =
-        new MllpEndpointConfiguration(
+    private static final MllpTransactionConfiguration CONFIGURATION =
+        new MllpTransactionConfiguration(
                 "2.3.1", 
                 "PIX adapter", 
                 "IPF", 
@@ -36,9 +39,11 @@ public class Iti8Component extends MllpComponent {
                 AckTypeCode.AR, 
                 207, 
                 "ADT",
-                new String[] {"A01",     "A04",     "A05",     "A08",     "A40"},
-                new String[] {"ADT_A01", "ADT_A01", "ADT_A01", "ADT_A01", "ADT_A39"}); 
+                new String[] {"A01", "A04", "A05", "A08", "A40"}); 
   
+    private static final MllpAuditStrategy clientAuditStrategy = new Iti8ClientAuditStrategy();
+    private static final MllpAuditStrategy serverAuditStrategy = new Iti8ServerAuditStrategy();
+    private static final Parser parser = new PipeParser();
     
     public Iti8Component() {
         super();
@@ -50,16 +55,21 @@ public class Iti8Component extends MllpComponent {
     
     @Override
     public MllpAuditStrategy getClientAuditStrategy() {
-        return new Iti8ClientAuditStrategy();
+        return clientAuditStrategy;
     }
 
     @Override
     public MllpAuditStrategy getServerAuditStrategy() {
-        return new Iti8ServerAuditStrategy();
+        return serverAuditStrategy;
     }
     
     @Override
-    public MllpEndpointConfiguration getErrorHandlingConfiguration() {
-        return ENDPOINT_CONFIGURATION;
+    public MllpTransactionConfiguration getTransactionConfiguration() {
+        return CONFIGURATION;
+    }
+
+    @Override
+    public Parser getParser() {
+        return parser;
     }
 }

@@ -25,7 +25,7 @@ import org.apache.camel.converter.IOConverter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 
-import ca.uhn.hl7v2.parser.PipeParser;
+import ca.uhn.hl7v2.parser.Parser;
 
 
 /**
@@ -43,16 +43,18 @@ public class MllpMarshalUtils {
     /**
      * Converts a set of some standard PIX/PDQ-related data types to String.
      * @param message
-     *      The Camel message containing the data to be converted. 
+     *      Camel message containing the data to be converted. 
      * @param charset
-     *      Character set. 
+     *      character set. 
+     * @param parser 
+     *      HL7 parser. 
      * @return
      *      String representing the original exchange or <tt>null</tt>
      *      when the data type is unknown. 
      * @throws Exception
-     *      On parsing and marshaling errors.
+     *      nn parsing and marshaling errors.
      */
-    public static String marshalStandardTypes(Message message, String charset) throws Exception {
+    public static String marshalStandardTypes(Message message, String charset, Parser parser) throws Exception {
         Object body = message.getBody();
         if( ! typeSupported(body)) {
             return null;
@@ -64,7 +66,7 @@ public class MllpMarshalUtils {
         } else if(body instanceof MessageAdapter) {
             s = body.toString();
         } else if(body instanceof ca.uhn.hl7v2.model.Message) {
-            s = new PipeParser().encode((ca.uhn.hl7v2.model.Message) body);
+            s = parser.encode((ca.uhn.hl7v2.model.Message) body);
         } else if(body instanceof File) {
             s = IOConverter.toString((File) body).replace('\n', '\r');
         } else {
@@ -118,13 +120,15 @@ public class MllpMarshalUtils {
      * {@link InputStream} to {@link MessageAdapter}.
      *   
      * @param message
-     *      Camel message containing the data to be unmarshalled.
+     *      camel message containing the data to be unmarshalled.
      * @param charset
-     *      Character set name for HL7 transformation. 
+     *      character set name for HL7 transformation. 
+     * @param parser 
+     *      HL7 parser. 
      */
-    public static void unmarshal(Message message, String charset) throws Exception {
+    public static void unmarshal(Message message, String charset, Parser parser) throws Exception {
         String s = convertBodyToString(message, charset);
-        MessageAdapter msg = MessageAdapters.make(new PipeParser(), s);
+        MessageAdapter msg = MessageAdapters.make(parser, s);
         message.setBody(msg);
     }
 
@@ -147,25 +151,31 @@ public class MllpMarshalUtils {
      * @param message
      *      Camel message to be converted.
      * @param charset
-     *      charater set.
+     *      character set.
      * @return
      *      a {@link MessageAdapter} or <code>null</code> when it was impossible
      *      to get or create one.
+     * @param parser 
+     *      HL7 parser. 
      * @throws Exception
      */
-    public static MessageAdapter extractMessageAdapter(Message message, String charset) throws Exception {
+    public static MessageAdapter extractMessageAdapter(
+            Message message, 
+            String charset, 
+            Parser parser) throws Exception 
+    {
         Object body = message.getBody();
         MessageAdapter msg = null;
         if(body instanceof MessageAdapter) {
             msg = (MessageAdapter) body;
         } else if(body instanceof ca.uhn.hl7v2.model.Message) {
-            msg = new MessageAdapter(new PipeParser(), (ca.uhn.hl7v2.model.Message) body);
+            msg = new MessageAdapter(parser, (ca.uhn.hl7v2.model.Message) body);
         } else {
             // process all other types (String, File, InputStream, ByteBuffer, byte[])
             // by means of the standard routine.  An exception here will be o.k.
-            String s = marshalStandardTypes(message, charset); 
+            String s = marshalStandardTypes(message, charset, parser); 
             s = s.replace('\n', '\r');
-            msg = MessageAdapters.make(new PipeParser(), s);
+            msg = MessageAdapters.make(parser, s);
         } 
         return msg;
     }

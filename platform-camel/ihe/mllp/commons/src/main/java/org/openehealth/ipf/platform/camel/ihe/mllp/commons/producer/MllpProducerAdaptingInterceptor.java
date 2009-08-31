@@ -45,7 +45,8 @@ public class MllpProducerAdaptingInterceptor extends AbstractMllpProducerInterce
         
         MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
                 exchange.getIn(), 
-                getMllpEndpoint().getConfiguration().getCharsetName());
+                getMllpEndpoint().getConfiguration().getCharsetName(),
+                getMllpEndpoint().getParser());
         exchange.getIn().setBody(msg);
         
         getWrappedProducer().process(exchange);

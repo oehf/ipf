@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.pix.iti8
 
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditDataset
-
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
@@ -37,11 +37,7 @@ abstract class Iti8AuditStrategy implements MllpAuditStrategy {
 
     
     void enrichAuditDataset(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        auditDataset.patientId = 
-            msg.PID[3]()
-                .collect{ MessageUtils.pipeEncode(it.target) }
-                .join(msg.MSH[2].value[1]) ?: null
-                
+        auditDataset.patientId = AuditUtils.pidList(msg.PID[3])?.join(msg.MSH[2].value[1])        
         if(msg.MSH[9][2].value == 'A40') {
             auditDataset.oldPatientId = msg.MRG[1].value ?: null
         }

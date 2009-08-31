@@ -17,26 +17,55 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons.extend
 
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MessageAdapterValidatorimport org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtilsimport org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.apache.camel.Exchangeimport org.apache.camel.Messageimport org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.apache.camel.Exchangeimport org.apache.camel.Messageimport org.openehealth.ipf.platform.camel.core.util.Exchangesimport org.openehealth.ipf.modules.hl7.parser.PipeParser
 
 /**
- * DSL extensions for MLLP PIX/PDQ components
+ * DSL extensions for MLLP PIX/PDQ components.
  * @author Dmytro Rud
  */
 class MllpModelExtension {
 
-    static validationClosure = { ->
-        delegate.setValidator(new MessageAdapterValidator())
-        delegate.input { 
-            MllpMarshalUtils.extractMessageAdapter(
-                it.in,
-                it.getProperty(Exchange.CHARSET_NAME))
+    // This is an interim and monolithic implementation, which 
+    // should be completely changed in subsequent versions.
+
+    
+    def static final classMap = 
+        [
+              8 : 'org.openehealth.ipf.platform.camel.ihe.pix.iti8.Iti8Component', 
+              9 : 'org.openehealth.ipf.platform.camel.ihe.pix.iti9.Iti9Component', 
+             10 : 'org.openehealth.ipf.platform.camel.ihe.pix.iti10.Iti10Component', 
+             21 : 'org.openehealth.ipf.platform.camel.ihe.pdq.iti21.Iti21Component', 
+             22 : 'org.openehealth.ipf.platform.camel.ihe.pdq.iti22.Iti22Component', 
+        ] 
+     
+    
+    static Closure getValidationClosure(parser) {
+        { ->
+            delegate.setValidator(new MessageAdapterValidator())
+            delegate.input { 
+                MllpMarshalUtils.extractMessageAdapter(
+                    it.in,
+                    it.getProperty(Exchange.CHARSET_NAME),
+                    parser)
+            }
         }
     }
 
     
     static extensions = {
-        ValidatorAdapterDefinition.metaClass.iti8Request  = validationClosure 
-        ValidatorAdapterDefinition.metaClass.iti8Response = validationClosure
+        [8, 9, 10, 21, 22].each { transaction ->
+            try {
+                def parser = Class.forName(classMap[transaction]).newInstance().parser
+                def closure = getValidationClosure(parser)
+                ValidatorAdapterDefinition.metaClass."iti${transaction}Request"  = closure
+                ValidatorAdapterDefinition.metaClass."iti${transaction}Response" = closure
+            } catch(Exception e) {
+                /* 
+                 * Actually, in many cases there will be only one transaction 
+                 * configured, i.e. there will be only one successful iteration 
+                 * of this try-catch block.  All others will end here. 
+                 */
+            }
+        }
     }
 }

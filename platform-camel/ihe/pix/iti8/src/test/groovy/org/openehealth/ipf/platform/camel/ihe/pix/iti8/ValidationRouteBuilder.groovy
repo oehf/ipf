@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.pix.iti8
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessageimport org.openehealth.ipf.commons.core.modules.api.ValidationExceptionimport org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTestContainerimport org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 
 /**
  * Camel route for validation-related unit tests.
@@ -29,13 +29,29 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
 
      void configure() throws Exception {
 
+         // no error handling
          from('xds-iti8://0.0.0.0:9999?audit=false')
-             .onException(Exception.class)
+             .onException(ValidationException.class)
                  .maximumRedeliveries(0)
                  .end()
              .validate().iti8Request()
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+             }
+             .validate().iti8Response()
+             
+             
+         // manual ACK generation on error
+         from('xds-iti8://0.0.0.0:9998?audit=false')
+             .onException(ValidationException.class)
+                 .handled(true)
+                 .process {
+                     resultMessage(it).body = MessageUtils.ack(it.in.body.target) 
+                 }
+                 .end()
+             .validate().iti8Request()
+             .process {
+                 throw new RuntimeException('SHOULD NOT BE THROWN')
              }
              .validate().iti8Response()
              

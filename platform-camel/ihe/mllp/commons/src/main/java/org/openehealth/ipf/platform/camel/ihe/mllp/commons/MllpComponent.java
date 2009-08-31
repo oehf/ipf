@@ -32,6 +32,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.mina.filter.SSLFilter;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 
+import ca.uhn.hl7v2.parser.Parser;
+
 
 /**
  * Generic Camel component for IHE PIX/PDQ transactions.
@@ -131,7 +133,8 @@ public abstract class MllpComponent extends MinaComponent {
                 allowIncompleteAudit,
                 getServerAuditStrategy(), 
                 getClientAuditStrategy(),
-                getErrorHandlingConfiguration());
+                getTransactionConfiguration(),
+                getParser());
     }
 
 
@@ -148,9 +151,13 @@ public abstract class MllpComponent extends MinaComponent {
     public abstract MllpAuditStrategy getClientAuditStrategy();
 
     /**
-     * Returns error handling configuration. 
+     * Returns component configuration. 
      */
-    public abstract MllpEndpointConfiguration getErrorHandlingConfiguration();
+    public abstract MllpTransactionConfiguration getTransactionConfiguration();
     
+    /**
+     * Returns HL7 parser. 
+     */
+    public abstract Parser getParser();
 
 }

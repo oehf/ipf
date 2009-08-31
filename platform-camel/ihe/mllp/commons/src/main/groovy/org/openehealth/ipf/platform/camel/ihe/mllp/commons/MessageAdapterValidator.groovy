@@ -20,9 +20,10 @@ import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
 import java.util.Map
 import ca.uhn.hl7v2.model.Groupimport ca.uhn.hl7v2.model.GenericSegment
-import ca.uhn.hl7v2.validation.MessageValidator
+
 
 /**
+ * HL7 message validator for PIX/PDQ transactions. 
  * @author Dmytro Rud
  */
 class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
@@ -32,11 +33,12 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
       */
      def static final RULES =
          [
-          'ADT' : ['A01 A04 A05 A08' : ['MSH', 'EVN', 'PID', 'PV1'],
-                   'A40'             : ['MSH', 'EVN', 'PID', 'MRG'],
-                  ],
-          'ACK' : ['*'               : ['MSH', 'MSA'],
-                  ],
+          'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PID PV1',
+                   'A31'             : 'MSH EVN PID PV1',
+                   'A40'             : 'MSH EVN PID MRG'],
+          'QPD' : ['Q23'             : 'MSH QPD RCP'], 
+          'RSP' : ['K23'             : 'MSH MSA QAK QPD'], 
+          'ACK' : ['*'               : 'MSH MSA'],
          ]
 
      
@@ -70,14 +72,16 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
          }
      }
 
-         
+     
+     // --------------- Highest-level validation objects ---------------
+      
      /**
       * Validates a message.
       */
      static def checkMessage(msg, segmentNames) {
          def exceptions = []
          exceptions += checkUnrecognizedSegments(msg.group)
-         for(segmentName in segmentNames) {
+         for(segmentName in segmentNames.tokenize()) {
              exceptions += "check${segmentName}"(msg)
          }
          exceptions
@@ -98,73 +102,6 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
      }
 
      /**
-      * Validates segment MSH.
-      */
-     static def checkMSH(msg) {
-         checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12])
-     }
-
-     /**
-      * Validates segment EVN.
-      */
-     static def checkEVN(msg) {
-         checkSegmentStructure(msg, 'EVN', [2])
-     }
-
-     /*
-      * Validates segment PV1.
-      */
-     static def checkPV1(msg) {
-         checkSegmentStructure(msg, 'PV1', [2])
-     }
-
-     /**
-      * Validates segment MSA.
-      */
-     static def checkMSA(msg) {
-         checkSegmentStructure(msg, 'MSA', [1, 2])
-     }
-
-     /**
-      * Validates segment PID.
-      */
-     static def checkPID(msg) {
-         def exceptions = []
-         exceptions += checkPatientName(msg.PID[5])
-         exceptions += checkPatientId(msg.PID[3])
-         exceptions
-     }
-
-     /**
-      * Validates segment MRG.
-      */
-     static def checkMRG(msg) {
-         checkPatientId(msg.MRG[1])
-     }
-
-     /**
-      * Validates patient name (datatype XPN).
-      */
-     static def checkPatientName(xpn) {
-         def exceptions = []
-         if( ! (xpn[1].value || xpn[2].value)) {
-             exceptions += new Exception('Missing patient name')
-         }
-         exceptions
-     }
-     
-     /**
-      * Validates patient ID (datatype CX).
-      */
-     static def checkPatientId(cx) {
-         def exceptions = []
-         if( ! (cx[1].value && (cx[4][1].value || (cx[4][2].value && (cx[4][3].value == 'ISO'))))) {
-             exceptions += new Exception('Patient ID assigning authority not specified')
-         }
-         exceptions
-     }
-
-     /**
       * Searches for unrecognized segments in a Group.
       */
      static def checkUnrecognizedSegments(Group group) {
@@ -180,8 +117,114 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
          exceptions
      }
      
+     
+     // --------------- Segments, ordered alphabetically ---------------
+
+     /**
+      * Validates segment EVN.
+      */
+     static def checkEVN(msg) {
+         checkSegmentStructure(msg, 'EVN', [2])
+     }
+
+     /**
+      * Validates segment MRG.
+      */
+     static def checkMRG(msg) {
+         checkPatientIdList(msg.MRG[1])
+     }
+
+     /**
+      * Validates segment MSA.
+      */
+     static def checkMSA(msg) {
+         checkSegmentStructure(msg, 'MSA', [1, 2])
+     }
+
+     /**
+      * Validates segment MSH.
+      */
+     static def checkMSH(msg) {
+         checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12])
+     }
+
+     /**
+      * Validates segment PID.
+      */
+     static def checkPID(msg) {
+         def exceptions = []
+         exceptions += checkPatientName(msg.PID[5])
+         exceptions += checkPatientIdList(msg.PID[3])
+         exceptions
+     }
+
+     /**
+      * Validates segment PV1.
+      */
+     static def checkPV1(msg) {
+         checkSegmentStructure(msg, 'PV1', [2])
+     }
+
+     /**
+      * Validates segment QAK.
+      */
+     static def checkQAK(msg) {
+         checkSegmentStructure(msg, 'QAK', [1, 2])
+     }
+         
+     /**
+      * Validates segment QPD.
+      */
+     static def checkQPD(msg) {
+         def exceptions = []
+         //exceptions += checkSegmentStructure(msg, 'QPD', [1, 2])
+         //exceptions += checkPatientId(msg.QPD[3](0))
+         exceptions
+     }
+     
+     /**
+      * Validates segment RCP.
+      */
+     static def checkRCP(msg) {
+         msg.RCP ? [] : [new Exception('Missing segment RCP')]
+     }
+
+     
+     
+     // --------------- Fine grained validation of particular fields ---------------
+
+     /**
+      * Validates patient name (datatype XPN).
+      */
+     static def checkPatientName(xpn) {
+         def exceptions = []
+         if( ! (xpn[1].value || xpn[2].value)) {
+             exceptions += new Exception('Missing patient name')
+         }
+         exceptions
+     }
+     
+     /**
+      * Validates a single patient ID (datatype CX).
+      */
+     static def checkPatientId(cx) {
+         def exceptions = []
+         if( ! (cx[1].value && (cx[4][1].value || (cx[4][2].value && (cx[4][3].value == 'ISO'))))) {
+             exceptions += new Exception('Incomplete patient ID')
+         }
+         exceptions
+     }
+     
+     /**
+      * Validates patient ID list (datatype repeatable CX).
+      */
+     static def checkPatientIdList(repeatableCX) {
+         def exceptions = []
+         repeatableCX().each { cx -> 
+             exceptions += checkPatientId(cx) 
+         }
+         exceptions
+     }
+     
 }
-
-
-
 

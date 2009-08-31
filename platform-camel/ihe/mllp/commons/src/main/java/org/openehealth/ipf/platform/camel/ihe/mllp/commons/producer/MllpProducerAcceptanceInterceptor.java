@@ -42,7 +42,10 @@ public class MllpProducerAcceptanceInterceptor extends AbstractMllpProducerInter
      */
     public void process(Exchange exchange) throws Exception {
         MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
-        AcceptanceCheckUtils.checkRequestAcceptance(msg, getMllpEndpoint().getEndpointConfiguration());
+        AcceptanceCheckUtils.checkRequestAcceptance(
+                msg, 
+                getMllpEndpoint().getTransactionConfiguration(),
+                getMllpEndpoint().getParser());
 
         getWrappedProducer().process(exchange);
 

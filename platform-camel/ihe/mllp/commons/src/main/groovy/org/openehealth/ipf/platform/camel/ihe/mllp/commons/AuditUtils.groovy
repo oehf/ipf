@@ -18,17 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
-
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoSession
 import java.net.SocketAddress
+import java.util.List
 
 
 /**
@@ -192,5 +190,14 @@ class AuditUtils {
      */
     static boolean isErrorMessage(MessageAdapter msg) {
         msg.MSA[1]?.value != 'AA'
+    }
+     
+
+    /**
+     * Returns a list of patient IDs from the given repeatable field 
+     * or <code>null</code>, when there are no patient IDs.
+     */
+    static List pidList(repeatable) {
+        repeatable().collect { cx -> MessageUtils.pipeEncode(cx.target) } ?: null
     }
 }

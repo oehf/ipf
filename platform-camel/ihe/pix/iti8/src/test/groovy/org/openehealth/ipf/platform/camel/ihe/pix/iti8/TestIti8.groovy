@@ -39,7 +39,7 @@ import ca.uhn.hl7v2.parser.PipeParser;
 
 
 /**
- * Unit tests for the PIX Feed transaction a.k.a. ITI-8
+ * Unit tests for the PIX Feed transaction a.k.a. ITI-8.
  * @author Dmytro Rud
  */
 class TestIti8 extends MllpTestContainer {

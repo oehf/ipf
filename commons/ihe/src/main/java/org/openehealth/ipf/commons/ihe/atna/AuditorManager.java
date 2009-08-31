@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.atna;
 
+import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
+import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor;
@@ -65,6 +67,18 @@ public class AuditorManager {
     public static PIXSourceAuditor getPIXSourceAuditor() {
         synchronized (sync) {
             return PIXSourceAuditor.getAuditor();
+        }
+    }
+    
+    public static PIXConsumerAuditor getPIXConsumerAuditor() {
+        synchronized (sync) {
+            return PIXConsumerAuditor.getAuditor();
+        }
+    }
+
+    public static PDQConsumerAuditor getPDQConsumerAuditor() {
+        synchronized (sync) {
+            return PDQConsumerAuditor.getAuditor();
         }
     }
 }

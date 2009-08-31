@@ -18,5 +18,7 @@
     
     <modules>
         <module>iti8</module>
+        <module>iti9</module>
+        <module>iti10</module>
     </modules>
 </project>

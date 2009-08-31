@@ -29,11 +29,11 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpointConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
 
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.PipeParser;
+import ca.uhn.hl7v2.parser.Parser;
 
 
 /**
@@ -61,7 +61,7 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
         // unmarshal
         boolean unmarshallingFailed = false;
         try {
-            MllpMarshalUtils.unmarshal(exchange.getIn(), charset); 
+            MllpMarshalUtils.unmarshal(exchange.getIn(), charset, getMllpEndpoint().getParser()); 
 
             // save a copy of the request message 
             originalAdapter = exchange.getIn().getBody(MessageAdapter.class).copy();
@@ -122,7 +122,7 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
      * and stores it into the exchange.
      */
     private void processUnmarshallingException(Exchange exchange, Throwable t) {
-        MllpEndpointConfiguration config = getMllpEndpoint().getEndpointConfiguration();
+        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
         
         HL7v2Exception hl7e = new HL7v2Exception(
                 formatErrorMessage(t),
@@ -145,7 +145,7 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
      * of the original request message. 
      */
     private Message createNak(Throwable t, Message original) throws Exception {
-        MllpEndpointConfiguration config = getMllpEndpoint().getEndpointConfiguration();
+        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
         
         AbstractHL7v2Exception hl7Exception;
         if(t instanceof AbstractHL7v2Exception) {
@@ -170,19 +170,21 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
      * Marshals the contents of the exchange.
      */
     private String marshal(Exchange exchange, Message original) throws Exception {
-        org.apache.camel.Message message = resultMessage(exchange); 
+        org.apache.camel.Message message = resultMessage(exchange);
+        Parser parser = getMllpEndpoint().getParser();
         
         // try standard data types first
         String s = MllpMarshalUtils.marshalStandardTypes(
                 message, 
-                getMllpEndpoint().getConfiguration().getCharsetName());
+                getMllpEndpoint().getConfiguration().getCharsetName(),
+                parser);
         
         // additionally: an Exception in the body?
         if(s == null) {
             Object body = message.getBody();
             if(body instanceof Exception) {
                 Message nak = createNak((Exception) body, original);
-                s = new PipeParser().encode(nak);
+                s = parser.encode(nak);
             }
         }
         
@@ -191,13 +193,13 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
             Object header = message.getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
             if(header == AckTypeCode.AA) {
                 Message ack = (Message) MessageUtils.ack(original); 
-                s = new PipeParser().encode(ack);
+                s = parser.encode(ack);
             } else if((header == AckTypeCode.AE) || (header == AckTypeCode.AR)) {
                 HL7v2Exception exception = new HL7v2Exception(
                         "Error in PIX/PDQ route, output type not supported", 
-                        getMllpEndpoint().getEndpointConfiguration().getResponseErrorDefaultErrorCode());
+                        getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
                 Message nak = (Message) MessageUtils.nak(original, exception, (AckTypeCode) header);
-                s = new PipeParser().encode(nak);
+                s = parser.encode(nak);
             }
         }
 
@@ -218,6 +220,9 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
      */
     private String formatErrorMessage(Throwable t) { 
         String s = t.getMessage();
+        if(s == null) {
+            s = t.getClass().getName();
+        }
         s = s.replace('\n', ';'); 
         s = s.replace('\r', ';');
         return s;

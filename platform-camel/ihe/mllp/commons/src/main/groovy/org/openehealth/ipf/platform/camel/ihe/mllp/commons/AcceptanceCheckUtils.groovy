@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons
 
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-
+import ca.uhn.hl7v2.parser.Parser
 
 /**
  * Groovy subroutines for HL7 message acceptance checks.
@@ -31,38 +31,42 @@ class AcceptanceCheckUtils {
      * @param msg
      *          {@link MessageAdapter} representing the message.
      * @param config
-     *          transaction-specific endpoint configuration.
+     *          transaction-specific parameters.
      * @throws MllpAcceptanceException
      *          when the message cannot be accepted.
      */
      static void checkRequestAcceptance(
              MessageAdapter msg, 
-             MllpEndpointConfiguration config) throws MllpAcceptanceException 
+             MllpTransactionConfiguration config,
+             Parser parser) throws MllpAcceptanceException 
      {
-         def s = msg.MSH[9][1].value
-         if(s != config.allowedMessageType) {
-             throw new MllpAcceptanceException("Invalid message type ${s}", 200)
+         def version = msg.MSH[12].value 
+         if(version != config.hl7Version) {
+             throw new MllpAcceptanceException("Invalid HL7 version ${version}", 203)
+         }
+         
+         def msgType = msg.MSH[9][1].value
+         if(msgType != config.allowedMessageType) {
+             throw new MllpAcceptanceException("Invalid message type ${msgType}", 200)
          }
 
-         s = msg.MSH[9][2].value
+         def triggerEvent = msg.MSH[9][2].value
          def found = false
          for(int i = 0; i < config.allowedTriggerEvents.length; ++i) {
-             if(config.allowedTriggerEvents[i] == s) {
-                 def s1 = msg.MSH[9][3].value
-                 if(s1 && (s1 != config.allowedStructureMaps[i])) {
-                     throw new MllpAcceptanceException("Invalid structure map ${s1}", 204)
+             if(config.allowedTriggerEvents[i] == triggerEvent) {
+                 def structure = msg.MSH[9][3].value
+                 if(structure) {
+                     def expected = parser.getMessageStructureForEvent("${msgType}_${triggerEvent}", version)
+                     if(structure != expected) {
+                         throw new MllpAcceptanceException("Invalid structure map ${structure}", 204)
+                     }
                  }
                  found = true
                  break
              }
          }
          if( ! found) {
-             throw new MllpAcceptanceException("Invalid trigger event ${s}", 201)
-         }
-
-         s = msg.MSH[12].value 
-         if(s != config.hl7Version) {
-             throw new MllpAcceptanceException("Invalid HL7 version ${s}", 203)
+             throw new MllpAcceptanceException("Invalid trigger event ${triggerEvent}", 201)
          }
      }
      
