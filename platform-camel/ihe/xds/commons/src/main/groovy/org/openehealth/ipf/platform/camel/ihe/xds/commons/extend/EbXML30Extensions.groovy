@@ -16,31 +16,31 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.extend
 
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.AdhocQueryRequestValidator
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.RetrieveDocumentSetRequestValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.SubmitObjectsRequestValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.responses.QueryResponseValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.responses.RegistryResponseValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.responses.RetrieveDocumentSetResponseValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.ValidationProfile
+import org.openehealth.ipf.commons.ihe.xds.validate.Actor
+import org.openehealth.ipf.commons.ihe.xds.validate.requests.AdhocQueryRequestValidator
+import org.openehealth.ipf.commons.ihe.xds.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.requests.RetrieveDocumentSetRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.requests.SubmitObjectsRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.responses.QueryResponseValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.responses.RegistryResponseValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.responses.RetrieveDocumentSetResponseValidator;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLRegistryResponse30
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLSubmitObjectsRequest30
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLAdhocQueryRequest30
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLQueryResponse30
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLRetrieveDocumentSetRequest30
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLRegistryResponse30
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLSubmitObjectsRequest30
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLAdhocQueryRequest30
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLQueryResponse30
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLRetrieveDocumentSetRequest30
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetResponseType
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.SubmitObjectsRequest
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryResponse
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetRequestType
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetResponseType
 
 /**
  * @author Jens Riemschneider

@@ -1,61 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-ihe</artifactId>
     <name>commons-ihe</name>
-    
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.*</osgi.export.pkg>
-        <osgi.dynamic.import.pkg>
-            *
-        </osgi.dynamic.import.pkg>
-    </properties>
-
+    <packaging>pom</packaging>
+     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>commons</artifactId>
         <version>2.0-SNAPSHOT</version>
     </parent>
     
-    <dependencies>
-        <dependency>
-            <groupId>org.openhealthtools.ihe</groupId>
-            <artifactId>org.openhealthtools.ihe.atna.auditor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openhealthtools.ihe</groupId>
-            <artifactId>org.openhealthtools.ihe.atna.nodeauth</artifactId>
-        </dependency>
-    </dependencies>
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.*</osgi.export.pkg>
+    </properties>
+    
+    <modules>
+        <module>atna</module> 
+        <module>xds</module> 
+    </modules>
 
-    <build>
-        <plugins>
-              <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generateStubs</goal>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

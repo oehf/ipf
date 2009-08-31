@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 
 
 /**

@@ -17,13 +17,13 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18.service;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.ihe.xds.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML30Converters;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
 
 /**
  * Service implementation for the IHE ITI-18 transaction (Registry Stored Query).

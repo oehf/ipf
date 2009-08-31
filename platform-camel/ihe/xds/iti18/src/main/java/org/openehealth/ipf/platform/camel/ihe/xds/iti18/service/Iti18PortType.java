@@ -16,8 +16,8 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18.service;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryResponse;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -32,10 +32,10 @@ import javax.xml.ws.Action;
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRegistry_PortType")
 @XmlSeeAlso({
-        org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory.class,
-        org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory.class,
-        org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.ObjectFactory.class,
-        org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.ObjectFactory.class
+        org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rim.ObjectFactory.class,
+        org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.ObjectFactory.class,
+        org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.ObjectFactory.class,
+        org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.ObjectFactory.class
 })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti18PortType {

@@ -6,17 +6,17 @@ import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData
+import org.openehealth.ipf.commons.ihe.xds.SampleData
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.*
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status
+import org.openehealth.ipf.commons.ihe.xds.metadata.AvailabilityStatus
+import org.openehealth.ipf.commons.ihe.xds.metadata.DocumentEntry
+import org.openehealth.ipf.commons.ihe.xds.metadata.Identifiable
+import org.openehealth.ipf.commons.ihe.xds.requests.*
+import org.openehealth.ipf.commons.ihe.xds.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse
+import org.openehealth.ipf.commons.ihe.xds.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.responses.RetrievedDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.responses.Status
 
 import javax.activation.DataHandler
 import java.io.IOException

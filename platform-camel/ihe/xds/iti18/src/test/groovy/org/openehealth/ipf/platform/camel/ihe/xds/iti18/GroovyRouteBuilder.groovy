@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference
+import org.openehealth.ipf.commons.ihe.xds.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse
+import org.openehealth.ipf.commons.ihe.xds.metadata.ObjectReference
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**

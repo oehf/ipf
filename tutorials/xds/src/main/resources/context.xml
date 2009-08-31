@@ -9,16 +9,14 @@
     language governing permissions and limitations under the License.
 -->
 
+<!-- We can add more CXF related namespaces here if we need to add something to
+     the default CXF configuration. -->
 <beans xmlns="http://www.springframework.org/schema/beans" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:lang="http://www.springframework.org/schema/lang" 
        xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:cxf="http://activemq.apache.org/camel/schema/cxfEndpoint" 
     xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
     xsi:schemaLocation="
-http://activemq.apache.org/camel/schema/cxfEndpoint
-http://activemq.apache.org/camel/schema/cxfEndpoint/camel-cxf.xsd
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://www.springframework.org/schema/lang
@@ -27,14 +25,17 @@ http://www.springframework.org/schema/util
 http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd 
-http://cxf.apache.org/transports/http/configuration
-http://cxf.apache.org/schemas/configuration/http-conf.xsd
 ">
 
+    <!-- The following imports are required to configure CXF. cxf-servlet
+         is imported to configure CXF to run with servlet support. This 
+         allows us to use Tomcat with the CXFServlet instead of using CXF 
+         with a standalone Jetty server. -->
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
+    <!-- Camel context and producer -->
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="iti4142RouteBuilder"/>        
@@ -42,6 +43,7 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd
         <camel:routeBuilder ref="iti18RouteBuilder"/>        
     </camel:camelContext>
     
+    <!-- Our route builders for the ITI transactions -->
     <bean id="iti4142RouteBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.tutorials.xds.Iti4142RouteBuilder">
     </bean>
@@ -54,6 +56,8 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd
         class="org.openehealth.ipf.tutorials.xds.Iti18RouteBuilder">
     </bean>
 
+    <!-- The DSL extensions. We use the core extension of the IPF and the ones 
+         that come with the XDS components. In addition, we also define our own. -->
     <bean id="coreModelExtension"
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
@@ -76,7 +80,13 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd
             </list>
         </property>
     </bean>
-    
+
+    <!-- The store that contains all the in-memory documents and their meta data -->    
     <bean id="dataStore" class="org.openehealth.ipf.tutorials.xds.DataStore" />
 </beans>
+        
+    <!--http-conf:conduit name="*.http-conduit">
+        <http-conf:client ProxyServer="localhost" ProxyServerPort="8888" ProxyServerType="HTTP" AllowChunking="false"/>
+    </http-conf:conduit-->
+
         

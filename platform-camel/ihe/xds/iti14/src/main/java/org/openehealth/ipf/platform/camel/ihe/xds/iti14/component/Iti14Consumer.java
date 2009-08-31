@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14.component;
 
 import org.apache.camel.Processor;
+import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit.Iti14ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14Service;
 

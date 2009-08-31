@@ -25,11 +25,13 @@ import org.apache.cxf.binding.soap.SoapBindingConfiguration;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.WsSecurityUnderstandingInInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditFinalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ServerPayloadExtractorInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.Auditable;
+import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.cxf.WsSecurityUnderstandingInInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditDatasetEnrichmentInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditFinalInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ServerPayloadExtractorInterceptor;
 import java.util.Collections;
 
 /**

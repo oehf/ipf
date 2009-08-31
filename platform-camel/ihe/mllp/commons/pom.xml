@@ -19,7 +19,7 @@
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe</artifactId>
+		    <artifactId>commons-ihe-atna</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -69,7 +69,7 @@
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe</artifactId>
+		    <artifactId>commons-ihe-atna</artifactId>
             <version>${pom.version}</version>
             <scope>test</scope>
             <type>test-jar</type>

@@ -16,11 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18.component;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit.Iti18ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;

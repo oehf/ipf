@@ -18,10 +18,10 @@ package org.openehealth.ipf.tutorials.xds
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 
 import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.ObjectReference
+import org.openehealth.ipf.commons.ihe.xds.metadata.ObjectReference
 import org.openehealth.ipf.tutorials.xds.SearchDefinition
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.*
+import org.openehealth.ipf.commons.ihe.xds.validate.XDSMetaDataException
+import org.openehealth.ipf.commons.ihe.xds.responses.*
 import org.openehealth.ipf.tutorials.xds.ContentUtils
 
 import java.text.SimpleDateFormat
@@ -34,8 +34,6 @@ class RegRepModelExtension {
     def dataStore
      
     def extensions = {
-        ProcessorDefinition.metaClass.log = { log, closure -> delegate.process { log.info(closure.call(it)) } }
-
         ProcessorDefinition.metaClass.store = {
             delegate.process {
                 dataStore.store(it.in.body.entry)
@@ -67,10 +65,6 @@ class RegRepModelExtension {
                 documentEntry.size = ContentUtils.size(it.in.body.entry.dataHandler)
                 documentEntry.repositoryUniqueId = '1.19.6.24.109.42.1'
             }
-        }
-        
-        ProcessorDefinition.metaClass.processBody = { closure ->  
-            delegate.process { closure(it.in.body) }
         }
         
         ProcessorDefinition.metaClass.splitEntries = { entriesClosure ->
@@ -135,5 +129,11 @@ class RegRepModelExtension {
                 entries.clear()
             }
         }
+
+        ProcessorDefinition.metaClass.processBody = { closure ->  
+            delegate.process { closure(it.in.body) }
+        }
+    
+        ProcessorDefinition.metaClass.log = { log, closure -> delegate.process { log.info(closure.call(it)) } }
     }
 }

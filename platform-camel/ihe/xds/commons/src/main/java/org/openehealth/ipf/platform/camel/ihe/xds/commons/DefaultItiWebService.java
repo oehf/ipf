@@ -20,12 +20,12 @@ import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorCode;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.ErrorInfo;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Severity;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.XDSMetaDataException;
+import org.openehealth.ipf.commons.ihe.xds.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.responses.ErrorInfo;
+import org.openehealth.ipf.commons.ihe.xds.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.responses.Severity;
+import org.openehealth.ipf.commons.ihe.xds.responses.Status;
+import org.openehealth.ipf.commons.ihe.xds.validate.XDSMetaDataException;
 
 /**
  * Base class for web services that are aware of a {@link DefaultItiConsumer}.

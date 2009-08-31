@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14
 
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.requests.RegisterDocumentSet
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
@@ -33,7 +33,7 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
             .validate().iti14Request()
             .process { checkValue(it, 'service 1') }
             .validate().iti14Response()
-        
+            
         from('xds-iti14:xds-iti14-service2')
             .process { checkValue(it, 'service 2') }
 

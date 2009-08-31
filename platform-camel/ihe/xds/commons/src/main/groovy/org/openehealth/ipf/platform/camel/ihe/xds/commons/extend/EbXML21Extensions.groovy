@@ -16,24 +16,24 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.commons.extend
 
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.ValidationProfile
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.Actor
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.AdhocQueryRequestValidator
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.requests.SubmitObjectsRequestValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.responses.QueryResponseValidator;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.validate.responses.RegistryResponseValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.ValidationProfile
+import org.openehealth.ipf.commons.ihe.xds.validate.Actor
+import org.openehealth.ipf.commons.ihe.xds.validate.requests.AdhocQueryRequestValidator
+import org.openehealth.ipf.commons.ihe.xds.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.requests.SubmitObjectsRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.responses.QueryResponseValidator;
+import org.openehealth.ipf.commons.ihe.xds.validate.responses.RegistryResponseValidator;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLRegistryResponse21
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLSubmitObjectsRequest21
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLProvideAndRegisterDocumentSetRequest21
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLAdhocQueryRequest21
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.EbXMLQueryResponse21
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLRegistryResponse21
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLSubmitObjectsRequest21
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLProvideAndRegisterDocumentSetRequest21
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLAdhocQueryRequest21
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLQueryResponse21
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.SubmitObjectsRequest
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.SubmitObjectsRequest
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.query.AdhocQueryRequest
 
 /**
  * @author Jens Riemschneider

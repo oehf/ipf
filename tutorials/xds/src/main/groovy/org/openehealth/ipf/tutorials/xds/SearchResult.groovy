@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.*
+import org.openehealth.ipf.commons.ihe.xds.metadata.*
 
 /**
  * Type of search results used in queries to the {@link DataStore}.

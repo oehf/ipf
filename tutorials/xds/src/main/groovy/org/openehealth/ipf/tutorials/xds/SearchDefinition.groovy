@@ -16,7 +16,7 @@
 package org.openehealth.ipf.tutorials.xds
 
 import static org.openehealth.ipf.tutorials.xds.Comparators.*
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AssociationType.*
+import static org.openehealth.ipf.commons.ihe.xds.metadata.AssociationType.*
 
 import org.apache.camel.model.OutputDefinition
 import org.apache.camel.spi.RouteContext
@@ -33,7 +33,7 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 	def resultTypes
 	def filters = []
 	def resultField
-	def indexEvals = []
+	def indexEvals = [:]
 	
 	SearchDefinition(List<?> types) {
 	    resultTypes = types
@@ -48,12 +48,12 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 	}
 	
 	def by(filter) {
-		filters.add(filter)
+		filters += filter
 		this
 	}
 
 	def byIndex(indexEval) {
-		indexEvals.add(indexEval)
+		indexEvals += indexEval
 		this
 	}
 	
@@ -62,47 +62,46 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 	}
 	
 	def targets(field) {
-        byIndex { store, param -> evalIndex(get(param, field)*.entryUuid, store.targetUuidIndex) }
+        byIndex([targetUuid: { param -> get(param, field)*.entryUuid }])
 	}
 	
 	def targetUuids(field) {
-	    byIndex { store, param -> evalIndex(get(param, field), store.targetUuidIndex) }
+	    byIndex([targetUuid: { param -> get(param, field)}])
 	}
 	
     def targetUuid(field) {
-        byIndex { store, param -> evalIndex(get(param, field), store.targetUuidIndex) }
+        byIndex([targetUuid: { param -> get(param, field)}])
     }
     
 	def sources(field) {
-        byIndex { store, param -> evalIndex(get(param, field)*.entryUuid, store.sourceUuidIndex) }
+        byIndex([sourceUuid: { param -> get(param, field)*.entryUuid}])
 	}
 	
 	def sourceUuids(field) {
-        byIndex { store, param -> evalIndex(get(param, field), store.sourceUuidIndex) }
+        byIndex([sourceUuid: { param -> get(param, field)}]) 
 	}
 	
 	def uniqueIds(field) {
-		byIndex { store, param -> evalIndex(get(param, field), store.uniqueIdIndex) }
+		byIndex([uniqueId: { param -> get(param, field)}])
 	} 
 	
     def uniqueId(field) {
-		byIndex { store, param -> evalIndex(get(param, field), store.uniqueIdIndex) }
+		byIndex([uniqueId: { param -> get(param, field)}])
     }
 
 	def uuids(field) {
-		byIndex { store, param -> evalIndex(get(param, field), store.uuidIndex) }
+		byIndex([entryUuid: { param -> get(param, field)}])
 	}     
 	
     def uuid(field) {
-		byIndex { store, param -> evalIndex(get(param, field), store.uuidIndex) }
+		byIndex([entryUuid: { param -> get(param, field)}])
     }     
         
     def referenced(field) {
-        byIndex { store, param -> 
+        byIndex([entryUuid: { param -> 
             def assocs = get(param, field)
-            def sourcesAndTargets = assocs*.sourceUuid + assocs*.targetUuid 
-            evalIndex(sourcesAndTargets, store.uuidIndex) 
-        }
+            assocs*.sourceUuid + assocs*.targetUuid 
+        }])
     }
     
 	def status(status) {
@@ -136,7 +135,7 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
     }
     
     def patientId(field) {
-        byIndex { store, param -> evalIndex(get(param, field), store.patientIdIndex) }
+        byIndex([patientId: { param -> get(param, field)}])
     }
     
 	def withoutPatientId(field) {
@@ -159,18 +158,5 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 
     private static def get(body, resultField) {
         resultField.split('\\.').inject(body) { obj, field -> obj[field] } 
-    }
-
-    private static def evalIndex(List<?> expected, index) {
-		expected != null ? 
-				expected.inject([] as Set) { prev, it ->
-					def result = index[it]
-	                result != null ? prev + result : prev
-		        }.findAll { it != null } : 
-		        null
-    }
-
-    private static def evalIndex(expected, index) {
-		expected != null ? evalIndex([expected], index) : null
     }
 }

@@ -18,22 +18,22 @@ package org.openehealth.ipf.tutorials.xds
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.*
+import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.responses.*
 
 /**
  * Route builder for ITI-43.
  * @author Jens Riemschneider
  */
 class Iti43RouteBuilder extends SpringRouteBuilder {
-	private final static Log log = LogFactory.getLog(Iti43RouteBuilder.class);
-	
-	@Override
-	public void configure() throws Exception {
-		errorHandler(noErrorHandler())
-		
+    private final static Log log = LogFactory.getLog(Iti43RouteBuilder.class);
+    
+    @Override
+    public void configure() throws Exception {
+        errorHandler(noErrorHandler())
+        
         // Entry point for Retrieve Document Set
-		from('xds-iti43:xds-iti43?audit=false')
+        from('xds-iti43:xds-iti43')
             .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
             // Validate and convert the request
     		.validate().iti43Request()
@@ -44,6 +44,6 @@ class Iti43RouteBuilder extends SpringRouteBuilder {
     		.retrieve()    		
     		.end()
             // Create success response
-    		.transform { new RetrievedDocumentSet(Status.SUCCESS, it.in.body) }
+            .transform { new RetrievedDocumentSet(Status.SUCCESS, it.in.body) }
 	}
 }

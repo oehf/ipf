@@ -19,9 +19,9 @@ package org.openehealth.ipf.tutorials.xds
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.*
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.OrganizationTransformer
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.transform.hl7.PersonTransformer
+import org.openehealth.ipf.commons.ihe.xds.metadata.*
+import org.openehealth.ipf.commons.ihe.xds.transform.hl7.OrganizationTransformer
+import org.openehealth.ipf.commons.ihe.xds.transform.hl7.PersonTransformer
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 import javax.activation.DataHandler
@@ -38,11 +38,12 @@ public class DataStore {
      
      def entries = new CopyOnWriteArrayList()
      def documents = new ConcurrentHashMap()
-     def uniqueIdIndex = new ConcurrentHashMap()
-     def uuidIndex = new ConcurrentHashMap()
-     def targetUuidIndex = new ConcurrentHashMap()
-     def sourceUuidIndex = new ConcurrentHashMap()
-     def patientIdIndex = new ConcurrentHashMap()
+     
+     def indexes = [uniqueId: new ConcurrentHashMap(), 
+                    entryUuid: new ConcurrentHashMap(), 
+                    sourceUuid: new ConcurrentHashMap(), 
+                    targetUuid: new ConcurrentHashMap(), 
+                    patientId: new ConcurrentHashMap()]
 
      /**
       * Stores a document in memory for later retrieval
@@ -53,7 +54,7 @@ public class DataStore {
          def uniqueId = document.documentEntry.uniqueId
          def contents = ContentUtils.getContent(document.dataHandler)     
          documents.put(uniqueId, contents)
-         log.info("Stored document: " + uniqueId)
+         log.info("Stored document: " + uniqueId) 
      }
 
      /**
@@ -63,16 +64,8 @@ public class DataStore {
       */
      def store(entry) {
          entries.add(entry)
-         if (entry.metaClass.hasProperty(entry, 'uniqueId'))
-        	 getFromIndex(uniqueIdIndex, entry.uniqueId).add(entry)
-         if (entry.metaClass.hasProperty(entry, 'entryUuid'))
-        	 getFromIndex(uuidIndex, entry.entryUuid).add(entry)
-         if (entry.metaClass.hasProperty(entry, 'sourceUuid'))
-             getFromIndex(sourceUuidIndex, entry.sourceUuid).add(entry)
-         if (entry.metaClass.hasProperty(entry, 'targetUuid'))
-             getFromIndex(targetUuidIndex, entry.targetUuid).add(entry)
-         if (entry.metaClass.hasProperty(entry, 'patientId'))
-             getFromIndex(patientIdIndex, entry.patientId).add(entry)
+         indexes.findAll { entry.metaClass.hasProperty(entry, it.key) }
+             .each { getFromIndex(it.value, entry."$it.key").add(entry) }
          log.info('Stored: ' + entry)
      }
      
@@ -102,14 +95,12 @@ public class DataStore {
       * @return the matching entries.
       */
      def search(indexEvals, filters, param) {
-         def matches = indexEvals.inject(null) { entries, eval ->
-              def entriesMatchingIndex = eval(this, param)
-              if (entriesMatchingIndex != null)
-                  entries != null ? entries.intersect(entriesMatchingIndex) : entriesMatchingIndex
-              else
-                  entries
-         }
-          
+         def matches = indexEvals.collect { evalIndex(it.value(param), it.key) }
+             .findAll { it != null }
+             .inject(entries) { allMatches, indexMatches ->
+                 allMatches != null ? allMatches.intersect(indexMatches) : indexMatches
+             }
+
          if (matches == null) 
               matches = entries
               
@@ -118,6 +109,19 @@ public class DataStore {
          }
      }
 
+     private def evalIndex(List<?> keys, index) {
+         keys != null ? 
+                 keys.inject([] as Set) { prev, key ->
+                     def result = indexes[index][key]
+                     result != null ? prev + result : prev
+                 }.findAll { it != null } : 
+                 null
+     }
+
+     private def evalIndex(key, index) {
+         key != null ? evalIndex([key], index) : null
+     }
+     
      private def getFromIndex(index, key) {
           index.putIfAbsent(key, new CopyOnWriteArrayList())
           index[key]

@@ -62,6 +62,12 @@ abstract class ContentUtils {
         builder.toString()
     }
 
+    /**
+     * Retrieves the byte array from a datahandler.
+     * @param dataHandler
+     *          the data handler to access the content.
+     * @return the content as a byte[].
+     */
     static def getContent(dataHandler) {
         def inputStream = dataHandler.inputStream
         try {

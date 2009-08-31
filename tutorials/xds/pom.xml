@@ -41,6 +41,12 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds</artifactId>
+            <version>${pom.version}</version>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe</artifactId>
             <version>${pom.version}</version>
             <type>test-jar</type>

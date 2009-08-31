@@ -23,14 +23,14 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
 
 /**
  * Provides the ITI-16 web-service interface.
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds:2007", name = "DocumentRegistry_PortType")
-@XmlSeeAlso({org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.query.ObjectFactory.class,org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs21.rim.ObjectFactory.class})
+@XmlSeeAlso({org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.query.ObjectFactory.class,org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rim.ObjectFactory.class})
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti16PortType {
 

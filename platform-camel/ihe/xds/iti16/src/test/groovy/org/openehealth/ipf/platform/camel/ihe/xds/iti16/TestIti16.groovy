@@ -16,17 +16,17 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16
 
 import static junit.framework.Assert.assertEquals
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
 
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData
+import org.openehealth.ipf.commons.ihe.xds.SampleData
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.SqlQuery
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse
+import org.openehealth.ipf.commons.ihe.xds.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.requests.query.SqlQuery
+import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse
 
 
 /**

@@ -23,18 +23,18 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 
 /**
  * Provides the ITI-41 web-service interface.
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRepository_PortType")
 @XmlSeeAlso({
-    org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rim.ObjectFactory.class, 
-    org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.ObjectFactory.class, 
-    org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.ObjectFactory.class, 
-    org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.ObjectFactory.class})
+    org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rim.ObjectFactory.class, 
+    org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.ObjectFactory.class, 
+    org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.ObjectFactory.class, 
+    org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.ObjectFactory.class})
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti41PortType {
 

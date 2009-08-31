@@ -16,8 +16,8 @@
 package org.openehealth.ipf.tutorials.xds
 
 import static junit.framework.Assert.assertEquals
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Status.*
-import static org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.AvailabilityStatus.*
+import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.metadata.AvailabilityStatus.*
 
 import java.io.IOException
 import java.io.InputStream
@@ -39,19 +39,19 @@ import javax.mail.util.ByteArrayDataSource
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.*
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData
+import org.openehealth.ipf.commons.ihe.xds.SampleData
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.DocumentEntry
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.metadata.Identifiable
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocument
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.query.FindDocumentsQuery
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.RetrievedDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.metadata.DocumentEntry
+import org.openehealth.ipf.commons.ihe.xds.metadata.Identifiable
+import org.openehealth.ipf.commons.ihe.xds.requests.ProvideAndRegisterDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.requests.RegisterDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocument
+import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.requests.query.FindDocumentsQuery
+import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse
+import org.openehealth.ipf.commons.ihe.xds.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.responses.RetrievedDocumentSet
 
 /**
  * Tests for thread-safety.

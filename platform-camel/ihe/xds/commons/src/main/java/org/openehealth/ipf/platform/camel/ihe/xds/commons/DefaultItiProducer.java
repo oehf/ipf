@@ -34,13 +34,15 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.MustUnderstandDecoratorInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.AuditFinalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ItiAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ClientOutputStreamSubstituteInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.cxf.audit.ClientPayloadExtractorInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.utils.SoapUtils;
+import org.openehealth.ipf.commons.ihe.xds.Auditable;
+import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.cxf.MustUnderstandDecoratorInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditDatasetEnrichmentInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditFinalInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ClientOutputStreamSubstituteInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ClientPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.utils.SoapUtils;
 
 /**
  * Camel producer used to make calls to a webservice.

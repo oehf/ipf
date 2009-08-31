@@ -18,19 +18,19 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons.converters;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.SampleData;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.ProvideAndRegisterDocumentSet;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.QueryRegistry;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RegisterDocumentSet;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.requests.RetrieveDocumentSet;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.QueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.responses.Response;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.SampleData;
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.requests.QueryRegistry;
+import org.openehealth.ipf.commons.ihe.xds.requests.RegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 
 /**
  * Tests for {@link EbXML30Converters}.
