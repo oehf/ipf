@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.mappings
+package org.openehealth.ipf.commons.map
 
 import java.util.Collection
 import java.util.Set
@@ -30,7 +30,7 @@ import org.springframework.core.io.Resource
  * @see MappingsBuilder
  *
  */
-public class BidiMappingService implements MappingService {
+class BidiMappingService implements MappingService {
 
 	private static final String KEYSYSTEM  = '_%KEYSYSTEM%_'
 	private static final String VALUESYSTEM = '_%VALUESYSTEM%_'
@@ -122,8 +122,8 @@ public class BidiMappingService implements MappingService {
  	public Collection<?> values(Object mappingKey){
  		checkMappingKey(map, mappingKey)
  		map[mappingKey].findAll({ 
-      !(it.key.startsWith('_%')) 
-    }).values()
+          !(it.key.startsWith('_%')) 
+        }).values()
  	}
  	
  	private Object retrieve(Map m, Object mappingKey, Object key) {

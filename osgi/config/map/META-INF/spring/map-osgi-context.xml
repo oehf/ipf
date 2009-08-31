@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:osgi="http://www.springframework.org/schema/osgi"
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd
-http://www.springframework.org/schema/util
-http://www.springframework.org/schema/util/spring-util-2.5.xsd
+http://www.springframework.org/schema/osgi
+http://www.springframework.org/schema/osgi/spring-osgi.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <bean id="mappingService" 
-        class="org.openehealth.ipf.modules.hl7.mappings.BidiMappingService">
-    </bean>
-
-    <bean id="hapiModelExtension" 
-        class="org.openehealth.ipf.modules.hl7.extend.HapiModelExtension">
+    <bean class="org.openehealth.ipf.commons.map.BidiMappingServiceConfigurer" init-method="configure">
         <property name="mappingService" ref="mappingService" />
     </bean>
+    
+    <osgi:service ref="mappingService" 
+        interface="org.openehealth.ipf.commons.map.MappingService">
+    </osgi:service>
 
 </beans>

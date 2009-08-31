@@ -26,6 +26,12 @@
             <resource>
                 <directory>src/main/groovy</directory>
             </resource>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>META-INF/**/*</include>
+                </includes>
+            </resource>
         </resources>
         <plugins>
             <plugin>

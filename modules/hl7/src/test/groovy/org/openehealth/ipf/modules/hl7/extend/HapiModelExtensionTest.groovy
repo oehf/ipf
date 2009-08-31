@@ -17,32 +17,33 @@ package org.openehealth.ipf.modules.hl7.extend
 
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.Message
-import org.springframework.core.io.ClassPathResource
 
+import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
-import org.openehealth.ipf.modules.hl7.mappings.BidiMappingService
+
+import org.springframework.core.io.ClassPathResource
 
 /**
  * @author Christian Ohr
- *
+ * @author Martin Krasser
  */
 public class HapiModelExtensionTest extends GroovyTestCase {
 	
+    def mappingService
 	def extension
-	 
+
     static {
         ExpandoMetaClass.enableGlobally()
     }
     
     void setUp() {
+        mappingService = new BidiMappingService()
+        mappingService.setMappingScript(new ClassPathResource("example2.map"))
         extension = new HapiModelExtension()
-        def mappingService = new BidiMappingService()
-        mappingService.setMappingScript(new ClassPathResource("examplemap2.groovy"))
         extension.mappingService = mappingService
         extension.extensions.call()
-   	
     }
 	
     void testMatches() {
@@ -126,31 +127,9 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     	assert nak.MSA.textMessage.value == "blarg"
         //println new GenericParser().encode(nak)
     }
-    
-    void testMap() {
-        assert 'E'.map('encounterType') == 'EMER'
-        assert 'X'.map('encounterType') == null
-        assert 'X'.map('encounterType', 'WRONG') == 'WRONG'
         
-        assert 'E'.mapEncounterType() == 'EMER'
-        assert 'X'.mapEncounterType() == null
-        assert 'X'.mapEncounterType('WRONG') == 'WRONG'
-        assert 'Y'.mapVip() == 'VIP'
-        
-        try {
-        	assert 'Y'.map('BLABLA')
-        	fail()
-        } catch (IllegalArgumentException e) {
-        	// o.k.
-        }
-    }
-    
     void testList() {
-    	assert ['a','b'].map('listTest') == ['c','d']
-    	assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
-    	assert ['x','y'].map('listTest2') == ['c','d']
-      assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
-      def x = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
+        def x = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
     	def y = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
     	x.setValue('a')
     	y.setValue('b')
@@ -164,56 +143,18 @@ public class HapiModelExtensionTest extends GroovyTestCase {
         //assert msg.PV1.patientClass.mapEncounterType() == 'IMP'
         //assert msg.MSH.messageType.mapMessageType() == 'PRPA_IN402001'
     }
-    
-    void testMapReverse() {
-        assert 'EMER'.mapReverse('encounterType') == 'E'
-        assert 'X'.mapReverse('encounterType') == null
-        assert 'X'.mapReverse('encounterType', 'WRONG') == 'WRONG'
         
-        assert 'EMER'.mapReverseEncounterType() == 'E'
-        assert 'X'.mapReverseEncounterType() == null
-        assert 'X'.mapReverseEncounterType('WRONG') == 'WRONG'
-        assert 'VIP'.mapReverseVip() == 'Y'
+    void testKeyAndValueSystems() {
+        assert 'encounterType'.keySystem() == '2.16.840.1.113883.12.4'
+        assert 'encounterType'.valueSystem() == '2.16.840.1.113883.5.4'
         try {
-        	assert 'Y'.mapReverse('BLABLA')
+        	assert 'Y'.keySystem()
         	fail()
         } catch (IllegalArgumentException e) {
         	// o.k.
         }
     }
-    
-    
-    void testKeyAndValueSystems() {
-        assert 'encounterType'.keySystem() == '2.16.840.1.113883.12.4'
-        assert 'encounterType'.valueSystem() == '2.16.840.1.113883.5.4'
-            try {
-            	assert 'Y'.keySystem()
-            	fail()
-            } catch (IllegalArgumentException e) {
-            	// o.k.
-            }
 
-    }
-
-    void testKeys() {
-        assert 'encounterType'.keys().sort() == ['E','I','O']
-        assert 'vip'.keys() == ['Y'] as Set
-    }
-    
-    void testValues() {
-        assert 'encounterType'.values().sort() == ['AMB','EMER','IMP']
-    }
-    
-    void testHasKey() {
-        assert 'encounterType'.hasKey('E')
-        assert 'encounterType'.hasKey('Y') == false
-    }
-    
-    void testHasValue() {
-        assert 'encounterType'.hasValue('EMER')
-        assert 'encounterType'.hasValue('Y') == false
-    }
-    
     void testEncode() {
         def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         def msg = new GenericParser().parse(msgText)

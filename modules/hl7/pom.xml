@@ -23,6 +23,11 @@
             <version>${pom.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-map</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-base</artifactId>
         </dependency>        

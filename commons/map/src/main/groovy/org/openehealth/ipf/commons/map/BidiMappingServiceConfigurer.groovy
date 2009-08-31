@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.mappings
+package org.openehealth.ipf.commons.map
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -22,18 +22,19 @@ import org.osgi.framework.Bundle
 import org.osgi.framework.BundleContext
 import org.springframework.core.io.Resource
 import org.springframework.core.io.UrlResourceimport org.springframework.osgi.context.BundleContextAware
+
 /**
  * Searches the bundle space (including fragments) for mapping scripts
  * and configures the BidiMappingService with them.  
  * 
  * @author Martin Krasser
  */
-public class BidiMappingServiceConfigurer implements BundleContextAware { 
+class BidiMappingServiceConfigurer implements BundleContextAware { 
 
     static Log LOG = LogFactory.getLog(BidiMappingServiceConfigurer.class)
      
-    static String MAPPING_PATH = 'META-INF/hl7' 
-    static String MAPPING_FILE = 'mapping*.def'
+    static String MAPPING_PATH = 'META-INF/map' 
+    static String MAPPING_FILE = '*.map'
      
     BundleContext context
     

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.mappings
+package org.openehealth.ipf.commons.map
 
 import java.util.Map
 
@@ -51,7 +51,7 @@ import java.util.Map
  * @author Christian Ohr
  *
  */
-public class MappingsBuilder extends BuilderSupport{
+class MappingsBuilder extends BuilderSupport {
 
 	private static final String KEYSYSTEM  = '_%KEYSYSTEM%_'
 	private static final String VALUESYSTEM = '_%VALUESYSTEM%_'

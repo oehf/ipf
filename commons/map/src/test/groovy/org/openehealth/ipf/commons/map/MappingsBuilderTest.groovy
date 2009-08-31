@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.mappings
-
-
+package org.openehealth.ipf.commons.map
 
 /**
  * @author Christian Ohr
- *
  */
 public class MappingsBuilderTest extends GroovyTestCase {
 	
