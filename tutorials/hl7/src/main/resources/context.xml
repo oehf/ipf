@@ -58,8 +58,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
     
     <bean id="mappingService" 
-        class="org.openehealth.ipf.modules.hl7.mappings.BidiMappingService">
-        <property name="mappingScript" value="classpath:map.groovy"/>
+        class="org.openehealth.ipf.commons.map.BidiMappingService">
+        <property name="mappingScript" value="classpath:tutorial.map"/>
     </bean>
 
     <bean id="validationContext" 
