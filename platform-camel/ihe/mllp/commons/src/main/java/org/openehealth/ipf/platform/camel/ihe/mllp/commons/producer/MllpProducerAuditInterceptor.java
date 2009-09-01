@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer;
 
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
@@ -29,7 +30,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 
 /**
  * Producer-side ATNA auditing Camel interceptor.
- *  
  * @author Dmytro Rud
  */
 public class MllpProducerAuditInterceptor extends AbstractMllpProducerInterceptor {
@@ -51,39 +51,16 @@ public class MllpProducerAuditInterceptor extends AbstractMllpProducerIntercepto
      * raised during the proper call.
      */
     public void process(Exchange exchange) throws Exception {
-        MllpAuditDataset auditDataset = null;
+        MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
         MllpAuditStrategy strategy = getMllpEndpoint().getClientAuditStrategy();
-
-        try {
-            MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
-            auditDataset = strategy.createAuditDataset();
-            AuditUtils.enrichGenericAuditDatasetFromMessage(auditDataset, msg);
-            strategy.enrichAuditDataset(auditDataset, msg);
-            auditDataset.setLocalAddress("dummy");   // not used on client side
-            auditDataset.setRemoteAddress(
-                    AuditUtils.formatEndpointAddress(getEndpoint().getEndpointUri()));
-            
-        } catch(Exception e) {
-            // Ignore all auditing problems, they will be handled later.
-            // See URL parameter "allowIncompleteAudit". 
-            LOG.error("Exception when preparing the audit dataset", e);
-        }
+        MllpAuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, msg);
     
         boolean failed = false; 
         try {
             getWrappedProducer().process(exchange);
-            
-            /*
-             * The transaction is considered failed when either:
-             *   a) the call has thrown an exception, or
-             *   b) the response is not a positive ACK.
-             */
-            
-            failed = exchange.isFailed();
-            if( ! failed) {
-                MessageAdapter msg = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
-                failed = AuditUtils.isErrorMessage(msg);
-            }
+            msg = resultMessage(exchange).getBody(MessageAdapter.class);
+            enrichAuditDatasetFromResponse(auditDataset, strategy, msg);
+            failed = AuditUtils.isNotPositiveAck(msg);
         } catch (Exception e) {
             failed = true;
             throw e;
@@ -97,4 +74,45 @@ public class MllpProducerAuditInterceptor extends AbstractMllpProducerIntercepto
     }
 
     
+    /**
+     * Creates a new audit dataset and enriches it with data from the request 
+     * message.  All exception are ignored.
+     * @return
+     *      newly created audit dataset or <code>null</code> when creation failed.
+     */
+    private MllpAuditDataset createAndEnrichAuditDatasetFromRequest(
+            MllpAuditStrategy strategy,
+            MessageAdapter msg) 
+    {
+        try {
+            MllpAuditDataset auditDataset = strategy.createAuditDataset();
+            AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
+            strategy.enrichAuditDatasetFromRequest(auditDataset, msg);
+            auditDataset.setLocalAddress("dummy");   // not used on client side
+            auditDataset.setRemoteAddress(
+                    AuditUtils.formatEndpointAddress(getEndpoint().getEndpointUri()));
+            return auditDataset;
+            
+        } catch(Exception e) {
+            LOG.error("Exception when enriching audit dataset from request", e);
+            return null;
+        }
+    }
+
+    
+    /**
+     * Enriches the given audit dataset with data from the response message.
+     * All exception are ignored.
+     */
+    private void enrichAuditDatasetFromResponse(
+            MllpAuditDataset auditDataset,
+            MllpAuditStrategy strategy,
+            MessageAdapter msg) 
+    {
+        try {
+            strategy.enrichAuditDatasetFromResponse(auditDataset, msg);
+        } catch(Exception e) {
+            LOG.error("Exception when enriching audit dataset from response", e);
+        }
+    }
 }

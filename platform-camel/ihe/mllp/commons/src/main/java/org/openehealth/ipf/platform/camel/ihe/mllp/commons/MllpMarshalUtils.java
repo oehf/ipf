@@ -22,6 +22,9 @@ import java.io.InputStreamReader;
 
 import org.apache.camel.Message;
 import org.apache.camel.converter.IOConverter;
+import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 
@@ -173,10 +176,70 @@ public class MllpMarshalUtils {
         } else {
             // process all other types (String, File, InputStream, ByteBuffer, byte[])
             // by means of the standard routine.  An exception here will be o.k.
-            String s = marshalStandardTypes(message, charset, parser); 
-            s = s.replace('\n', '\r');
-            msg = MessageAdapters.make(parser, s);
+            String s = marshalStandardTypes(message, charset, parser);
+            if(s != null) {
+                s = s.replace('\n', '\r');
+                msg = MessageAdapters.make(parser, s);
+            }
         } 
         return msg;
     }
+
+    
+    /**
+     * Formats and returns error message of an exception.
+     * <p>
+     * In particular, all line break characters must be removed, 
+     * otherwise they will break the structure of an HL7 NAK.
+     * @param t
+     *      thrown exception.
+     * @return
+     *      formatted error message from the given exception.
+     */
+    public static String formatErrorMessage(Throwable t) { 
+        String s = t.getMessage();
+        if(s == null) {
+            s = t.getClass().getName();
+        }
+        s = s.replace('\n', ';'); 
+        s = s.replace('\r', ';');
+        return s;
+    }
+
+    
+    /**
+     * Generates a NAK message on processing errors on the basis of  
+     * of the thrown exception and the original HAPI request message.
+     * @param t
+     *      thrown exception.
+     * @param original
+     *      original HAPI request message.
+     * @param config
+     *      configuration parameters of the given transaction.                  
+     */
+    public static MessageAdapter createNak(
+            Throwable t, 
+            ca.uhn.hl7v2.model.Message original,
+            MllpTransactionConfiguration config) throws Exception 
+    {
+        AbstractHL7v2Exception hl7Exception;
+        if(t instanceof AbstractHL7v2Exception) {
+            hl7Exception = (AbstractHL7v2Exception) t; 
+        } else if(t.getCause() instanceof AbstractHL7v2Exception) {
+            hl7Exception = (AbstractHL7v2Exception) t.getCause();
+        } else {
+            hl7Exception = new HL7v2Exception(
+                    MllpMarshalUtils.formatErrorMessage(t), 
+                    config.getRequestErrorDefaultErrorCode(), 
+                    t); 
+        }
+
+        ca.uhn.hl7v2.model.Message nak = (ca.uhn.hl7v2.model.Message) MessageUtils.nak(
+                original, 
+                hl7Exception, 
+                config.getRequestErrorDefaultAckTypeCode());
+
+        return new MessageAdapter(nak);
+    }
+    
 }

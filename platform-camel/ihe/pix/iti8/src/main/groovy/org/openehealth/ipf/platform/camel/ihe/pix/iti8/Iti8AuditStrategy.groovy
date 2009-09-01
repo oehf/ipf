@@ -36,11 +36,16 @@ abstract class Iti8AuditStrategy implements MllpAuditStrategy {
     }
 
     
-    void enrichAuditDataset(MllpAuditDataset auditDataset, MessageAdapter msg) {
+    void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg) {
         auditDataset.patientId = AuditUtils.pidList(msg.PID[3])?.join(msg.MSH[2].value[1])        
         if(msg.MSH[9][2].value == 'A40') {
             auditDataset.oldPatientId = msg.MRG[1].value ?: null
         }
+    }
+
+    
+    void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
+        // nop
     }
     
     

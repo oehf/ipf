@@ -21,19 +21,15 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
 
 
 /**
  * Consumer-side ATNA auditing Camel interceptor.
- * 
  * @author Dmytro Rud
  */
 public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerInterceptor {
@@ -43,44 +39,25 @@ public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerIntercepto
         super(endpoint, wrappedProcessor);
     }
 
+    
+    /**
+     * Performs ATNA auditing. Both input and output messages 
+     * are expected to be {@link MessageAdapter}s. 
+     * <p>
+     * Does not produce any own exceptions, only rethrows exceptions
+     * raised during the proper call.
+     */
     public void process(Exchange exchange) throws Exception {
-        MllpAuditDataset auditDataset = null;
+        MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
         MllpAuditStrategy strategy = getMllpEndpoint().getServerAuditStrategy();
-        
-        // create and fill an ATNA audit dataset
-        try {
-            MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
-            auditDataset = strategy.createAuditDataset();
-            
-            // transaction-agnostic enrichment
-            AuditUtils.enrichGenericAuditDatasetFromSession(auditDataset);
-            AuditUtils.enrichGenericAuditDatasetFromMessage(auditDataset, msg);
-            // transaction-specific enrichment
-            strategy.enrichAuditDataset(auditDataset, msg);
-            
-        } catch(Exception e) {
-            // Ignore all auditing problems, they will be handled later.
-            // See URL parameter "allowIncompleteAudit". 
-            LOG.error("Exception when preparing the audit dataset", e);
-        }
+        MllpAuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, msg);
 
         boolean failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            Object body = resultMessage(exchange).getBody();
-            
-            /*
-             * The transaction is considered failed when either:
-             *   a) the route has thrown an exception, or
-             *   b) the exchange contains an exception object in the body, or
-             *   c) the type of the exchange body is not supported
-             *      and the "magic header" does not denote success.
-             */
-            Object header = resultMessage(exchange).getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
-            failed = exchange.isFailed() || 
-                     (body instanceof Exception) ||
-                     ( ! (MllpMarshalUtils.typeSupported(body) || (header == AckTypeCode.AA)));
-            
+            msg = resultMessage(exchange).getBody(MessageAdapter.class);
+            enrichAuditDatasetFromResponse(auditDataset, strategy, msg);
+            failed = AuditUtils.isNotPositiveAck(msg);
         } catch (Exception e) {
             failed = true;
             throw e;
@@ -93,4 +70,47 @@ public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerIntercepto
         }
     }
 
+    
+    /**
+     * Creates a new audit dataset and enriches it with data from the request 
+     * message.  All exception are ignored.
+     * @return
+     *      newly created audit dataset or <code>null</code> when creation failed.
+     */
+    private MllpAuditDataset createAndEnrichAuditDatasetFromRequest(
+            MllpAuditStrategy strategy,
+            MessageAdapter msg) 
+    {
+        try {
+            MllpAuditDataset auditDataset = strategy.createAuditDataset();
+            
+            // transaction-agnostic enrichment
+            AuditUtils.enrichGenericAuditDatasetFromSession(auditDataset);
+            AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
+            // transaction-specific enrichment
+            strategy.enrichAuditDatasetFromRequest(auditDataset, msg);
+            return auditDataset;
+            
+        } catch(Exception e) {
+            LOG.error("Exception when enriching audit dataset from request", e);
+            return null;
+        }
+    }
+    
+
+    /**
+     * Enriches the given audit dataset with data from the response message.
+     * All exception are ignored.
+     */
+    private void enrichAuditDatasetFromResponse(
+            MllpAuditDataset auditDataset,
+            MllpAuditStrategy strategy,
+            MessageAdapter msg) 
+    {
+        try {
+            strategy.enrichAuditDatasetFromResponse(auditDataset, msg);
+        } catch(Exception e) {
+            LOG.error("Exception when enriching audit dataset from response", e);
+        }
+    }
 }

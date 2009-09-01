@@ -27,6 +27,12 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
  */
 public abstract class AbstractMllpConsumerInterceptor implements Processor {
 
+    /**
+     * Name of the Camel message header where a copy of the original 
+     * request message (a {@link MessageAdapter} instance) will be saved.  
+     */
+    public static final String ORIGINAL_MESSAGE_HEADER_NAME = "pixPdqOriginalMessage";
+    
     private final MllpEndpoint endpoint;
     private final Processor wrappedProcessor;
 

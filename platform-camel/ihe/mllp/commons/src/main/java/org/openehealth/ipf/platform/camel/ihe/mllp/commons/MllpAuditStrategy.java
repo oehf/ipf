@@ -49,13 +49,25 @@ public interface MllpAuditStrategy {
     
     
     /**
-     * Enriches the given audit dataset with transaction-specific message contents.
+     * Enriches the given audit dataset with transaction-specific 
+     * contents of the request message.
      * @param auditDataset
      *          Audit dataset to be enriched.
      * @param msg
      *          {@link MessageAdapter} representing the message.
      */
-    public void enrichAuditDataset(MllpAuditDataset auditDataset, MessageAdapter msg);
+    public void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg);
+    
+    
+    /**
+     * Enriches the given audit dataset with transaction-specific 
+     * contents of the response message.
+     * @param auditDataset
+     *          Audit dataset to be enriched.
+     * @param msg
+     *          {@link MessageAdapter} representing the message.
+     */
+    public void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg);
     
     
     /**

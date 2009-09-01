@@ -17,28 +17,23 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
-import org.apache.camel.CamelException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
 
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
 
 
 /**
  * Consumer-side HL7 marshaling/unmarshaling Camel interceptor.
- * 
  * @author Dmytro Rud
  */
 public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerInterceptor {
@@ -54,66 +49,43 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
      * and marshals the response.
      */
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter originalAdapter = null;
-        Message originalMessage = null;
         String charset = getMllpEndpoint().getConfiguration().getCharsetName();
+        MessageAdapter originalAdapter = null;
         
         // unmarshal
         boolean unmarshallingFailed = false;
         try {
             MllpMarshalUtils.unmarshal(exchange.getIn(), charset, getMllpEndpoint().getParser()); 
-
-            // save a copy of the request message 
             originalAdapter = exchange.getIn().getBody(MessageAdapter.class).copy();
-            originalMessage = (Message) originalAdapter.getTarget();
+            exchange.getIn().setHeader(ORIGINAL_MESSAGE_HEADER_NAME, originalAdapter);
         } catch (Exception e) {
             unmarshallingFailed = true;
             LOG.error("Unmarshalling failed, message processing not possible", e);
             processUnmarshallingException(exchange, e);
         }
         
-        // run the route (with implicit acceptance check in the next interceptor)
+        // run the route
         if( ! unmarshallingFailed) {
             try {
                 exchange.setProperty(Exchange.CHARSET_NAME, charset);
                 getWrappedProcessor().process(exchange);
-                checkExchangeFailed(exchange, originalMessage);
-            } catch(Exception e) {
+            } catch (MllpAdaptingException mae) {
+                throw mae;
+            } catch (Exception e) {
                 LOG.error("Message processing failed", e);
-                resultMessage(exchange).setBody(createNak(e, originalMessage));
+                resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
+                        e, 
+                        (Message) originalAdapter.getTarget(), 
+                        getMllpEndpoint().getTransactionConfiguration()));
             }
         }
-
-        // marshal the response (or the NAK)
-        String s = marshal(exchange, originalMessage);
-        if(s == null) {
-            Object body = resultMessage(exchange).getBody();
-            String className = (body == null) ? "null" : body.getClass().getName();
-            throw new CamelException("Do not know how to handle " + className +
-                    " value returned from the PIX/PDQ route");
-        }
+        
+        // marshal 
+        String s = MllpMarshalUtils.marshalStandardTypes(
+                resultMessage(exchange), 
+                charset, 
+                getMllpEndpoint().getParser());
         resultMessage(exchange).setBody(s);
-    }
-    
-    
-    /**
-     * Checks whether the given exchange has failed.  
-     * If yes, substitutes the exception object with a HL7 NAK  
-     * and marks the exchange as successful. 
-     */
-    private void checkExchangeFailed(Exchange exchange, Message original) throws Exception {
-        if (exchange.isFailed()) {
-            Throwable t; 
-            if(exchange.getException() != null) {
-                t = exchange.getException();
-                exchange.setException(null);
-            } else {
-                t = exchange.getOut().getBody(Throwable.class);
-                exchange.getOut().setBody(null);
-            }
-            LOG.error("Message processing failed", t);
-            resultMessage(exchange).setBody(createNak(t, original));
-        }
     }
     
     
@@ -125,7 +97,7 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
         MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
         
         HL7v2Exception hl7e = new HL7v2Exception(
-                formatErrorMessage(t),
+                MllpMarshalUtils.formatErrorMessage(t),
                 config.getRequestErrorDefaultErrorCode(), 
                 t);
         
@@ -138,93 +110,5 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
         
         resultMessage(exchange).setBody(nak);
     }
-    
 
-    /**
-     * Generates a NAK message on processing errors on the basis   
-     * of the original request message. 
-     */
-    private Message createNak(Throwable t, Message original) throws Exception {
-        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
-        
-        AbstractHL7v2Exception hl7Exception;
-        if(t instanceof AbstractHL7v2Exception) {
-            hl7Exception = (AbstractHL7v2Exception) t; 
-        } else if(t.getCause() instanceof AbstractHL7v2Exception) {
-            hl7Exception = (AbstractHL7v2Exception) t.getCause();
-        } else {
-            hl7Exception = new HL7v2Exception(
-                    formatErrorMessage(t), 
-                    config.getRequestErrorDefaultErrorCode(), 
-                    t); 
-        }
-
-        return (Message) MessageUtils.nak(
-                original, 
-                hl7Exception, 
-                config.getRequestErrorDefaultAckTypeCode());
-    }
-    
-
-    /**
-     * Marshals the contents of the exchange.
-     */
-    private String marshal(Exchange exchange, Message original) throws Exception {
-        org.apache.camel.Message message = resultMessage(exchange);
-        Parser parser = getMllpEndpoint().getParser();
-        
-        // try standard data types first
-        String s = MllpMarshalUtils.marshalStandardTypes(
-                message, 
-                getMllpEndpoint().getConfiguration().getCharsetName(),
-                parser);
-        
-        // additionally: an Exception in the body?
-        if(s == null) {
-            Object body = message.getBody();
-            if(body instanceof Exception) {
-                Message nak = createNak((Exception) body, original);
-                s = parser.encode(nak);
-            }
-        }
-        
-        // no known data type --> determine user's intention on the basis of a header 
-        if((s == null) && (original != null)) {
-            Object header = message.getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
-            if(header == AckTypeCode.AA) {
-                Message ack = (Message) MessageUtils.ack(original); 
-                s = parser.encode(ack);
-            } else if((header == AckTypeCode.AE) || (header == AckTypeCode.AR)) {
-                HL7v2Exception exception = new HL7v2Exception(
-                        "Error in PIX/PDQ route, output type not supported", 
-                        getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
-                Message nak = (Message) MessageUtils.nak(original, exception, (AckTypeCode) header);
-                s = parser.encode(nak);
-            }
-        }
-
-        // return what we can return
-        return s;
-    }
-    
-    
-    /**
-     * Formats and returns error message of an exception.
-     * <p>
-     * In particular, all line break characters must be removed, 
-     * otherwise they will break the structure of an HL7 NAK.
-     * @param t
-     *      thrown exception.
-     * @return
-     *      formatted error message from the given exception.
-     */
-    private String formatErrorMessage(Throwable t) { 
-        String s = t.getMessage();
-        if(s == null) {
-            s = t.getClass().getName();
-        }
-        s = s.replace('\n', ';'); 
-        s = s.replace('\r', ';');
-        return s;
-    }
 }

@@ -32,7 +32,12 @@ abstract class Iti10AuditStrategy implements MllpAuditStrategy {
     }
 
     
-    void enrichAuditDataset(MllpAuditDataset auditDataset, MessageAdapter msg) {
+    void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg) {
         auditDataset.patientIds = AuditUtils.pidList(msg.PID[3])
+    }
+
+    
+    void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
+        // nop
     }
 }

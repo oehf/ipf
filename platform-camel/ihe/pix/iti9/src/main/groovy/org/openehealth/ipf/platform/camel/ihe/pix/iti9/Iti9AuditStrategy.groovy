@@ -32,11 +32,16 @@ abstract class Iti9AuditStrategy implements MllpAuditStrategy {
     }
 
     
-    void enrichAuditDataset(MllpAuditDataset auditDataset, MessageAdapter msg) {
+    void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg) {
         if(msg.QPD.value) {
             def patientId = MessageUtils.pipeEncode(msg.QPD[3].target)
             auditDataset.patientIds = (patientId ? [patientId] : null)
             auditDataset.qpdPayload = MessageUtils.pipeEncode(msg.QPD.target)
         }
+    }
+
+    
+    void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
+        // nop
     }
 }

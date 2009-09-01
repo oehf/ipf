@@ -60,9 +60,10 @@ class AuditUtils {
     
     /**
      * Enriches the given audit dataset with HL7-related 
-     * information common for all PIX/PDQ transactions.
+     * information common for all PIX/PDQ transactions
+     * contained in the request message.
      */
-    static void enrichGenericAuditDatasetFromMessage(
+    static void enrichGenericAuditDatasetFromRequest(
             MllpAuditDataset auditDataset, 
             MessageAdapter msg)
     {
@@ -185,11 +186,11 @@ class AuditUtils {
      * Returns <code>true</code> when the given {@link MessageAdapter}
      * does not contain code 'AA' in MSA-1.
      * <p>
-     * Invalid messages (without MSA segment, etc.) are considered  
-     * as error mesasges too.
+     * <code>null</code> values, damaged messages, etc. will lead
+     * to <code>true</code> return vales as well.
      */
-    static boolean isErrorMessage(MessageAdapter msg) {
-        msg.MSA[1]?.value != 'AA'
+    static boolean isNotPositiveAck(MessageAdapter msg) {
+        msg?.MSA[1]?.value != 'AA'
     }
      
 

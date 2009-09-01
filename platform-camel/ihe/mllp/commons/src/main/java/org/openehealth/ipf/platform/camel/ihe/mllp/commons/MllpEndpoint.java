@@ -38,6 +38,7 @@ import org.apache.mina.common.IoConnector;
 import org.apache.mina.common.IoConnectorConfig;
 import org.apache.mina.common.IoSession;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducerAcceptanceInterceptor;
@@ -111,6 +112,7 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     public Consumer createConsumer(Processor processor) throws Exception {
         Processor x = processor;
+        x = new MllpConsumerAdaptingInterceptor(this, x);
         if(isAudit()) {
             x = new MllpConsumerAuditInterceptor(this, x);
         }

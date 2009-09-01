@@ -36,8 +36,8 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
           'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PID PV1',
                    'A31'             : 'MSH EVN PID PV1',
                    'A40'             : 'MSH EVN PID MRG'],
-          'QPD' : ['Q23'             : 'MSH QPD RCP'], 
-          'RSP' : ['K23'             : 'MSH MSA QAK QPD'], 
+          'QPD' : ['Q22 Q23'         : 'MSH QPD RCP'], 
+          'RSP' : ['K22 K23'         : 'MSH MSA QAK QPD'], 
           'ACK' : ['*'               : 'MSH MSA'],
          ]
 
@@ -177,8 +177,8 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
       */
      static def checkQPD(msg) {
          def exceptions = []
-         //exceptions += checkSegmentStructure(msg, 'QPD', [1, 2])
-         //exceptions += checkPatientId(msg.QPD[3](0))
+         exceptions += checkSegmentStructure(msg, 'QPD', [1, 2])
+         exceptions += checkPatientId(msg.QPD[3](0))
          exceptions
      }
      
