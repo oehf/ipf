@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.openehealth.ipf.archetypes</groupId>
+            <artifactId>ipf-archetype-basic</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-core</artifactId>
             <version>${pom.version}</version>
@@ -30,9 +35,24 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-atna</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds</artifactId>
+            <version>${pom.version}</version>
+        </dependency>		
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-lbs</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-map</artifactId>
+            <version>${pom.version}</version>
+        </dependency>		
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-test</artifactId>
@@ -43,11 +63,6 @@
             <artifactId>commons-xml</artifactId>
             <version>${pom.version}</version>
         </dependency>		
-        <dependency>
-            <groupId>org.openehealth.ipf.archetypes</groupId>
-            <artifactId>ipf-archetype-basic</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-cda</artifactId>
@@ -80,11 +95,6 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>osgi-config-hl7</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-config-jms</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -95,12 +105,22 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
+            <artifactId>osgi-config-map</artifactId>
+            <version>${pom.version}</version>
+        </dependency>	
+        <dependency>
+            <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-extender-basic</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-extender-spring</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-cda</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -125,37 +145,22 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-lbs-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-lbs-cxf</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-lbs-http</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-lbs-mina</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-cda</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-mllp-commons</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-pix-iti8</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pix-iti9</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pix-iti10</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -201,6 +206,26 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-xds-iti43</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-lbs-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-lbs-cxf</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-lbs-http</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-lbs-mina</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
