@@ -32,13 +32,34 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
  * @author Christian Ohr
  * @author Martin Krasser
  */
-class HapiModelExtension extends MappingExtension {
+class HapiModelExtension {
 
+    MappingService mappingService
+     
 	def extensions = {
 
-        // activate extensions defined in base class
-        super.extensions.call()
+        // ----------------------------------------------------------------
+        //  Extensions to Collection for mapping values
+        // ----------------------------------------------------------------
         
+        Collection.metaClass.map = {
+                mappingService?.get(it, normalizeCollection(delegate))                  
+        }
+
+        Collection.metaClass.map = { mappingKey, defaultValue ->
+                mappingService?.get(mappingKey, normalizeCollection(delegate), defaultValue)                    
+        }
+        
+        Collection.metaClass.mapReverse = { 
+            mappingService?.getKey(it, normalizeCollection(delegate))                   
+        }
+
+        Collection.metaClass.mapReverse = { mappingKey, defaultValue ->
+            mappingService?.getKey(mappingKey, normalizeCollection(delegate), defaultValue)                 
+        }           
+
+        Collection.metaClass.methodMissing = MappingExtension.methodMissingLogic.curry(mappingService, normalizeCollection)
+            
         // ----------------------------------------------------------------
         //  Extensions to HAPI messages
         // ----------------------------------------------------------------
@@ -132,7 +153,7 @@ class HapiModelExtension extends MappingExtension {
 			mappingService?.getKey(mappingKey, delegate.encode(), defaultValue)
 	    }
         
-        Type.metaClass.methodMissing = methodMissingLogic.curry { it.encode() } 
+        Type.metaClass.methodMissing = MappingExtension.methodMissingLogic.curry(mappingService, {it.encode()}) 
 
         // ----------------------------------------------------------------
         //  Extensions to HAPI Composites
@@ -148,10 +169,7 @@ class HapiModelExtension extends MappingExtension {
 
 	}
 	
-    /**
-     * Override normalize collection function with a HAPI-specific one.
-     */
-    protected def normalizeCollection = { Collection c -> 
+    static def normalizeCollection = { Collection c -> 
         c.collect {
             it instanceof Type ? MessageUtils.pipeEncode(it) : it.toString()
         }

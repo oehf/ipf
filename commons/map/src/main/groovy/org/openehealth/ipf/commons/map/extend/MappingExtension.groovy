@@ -26,9 +26,9 @@ import org.openehealth.ipf.commons.map.MappingService
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class MappingExtension {
+class MappingExtension {
 
-	MappingService mappingService;
+	MappingService mappingService
 
 	def extensions = {
 			
@@ -80,41 +80,11 @@ public class MappingExtension {
 				mappingService?.values(delegate)?.contains(it)
         }
 
-        String.metaClass.methodMissing = methodMissingLogic.curry {it}
+        String.metaClass.methodMissing = methodMissingLogic.curry(mappingService, {it})
         
-        // ----------------------------------------------------------------
-        //  Extensions to Collection for mapping values
-        // ----------------------------------------------------------------
-        
-        /*
-         * In this section 'this.normalizeCollection' is used so that 
-         * subclasses can override the normalizeCollection function
-         * (if this is omitted, polymorphism doesn't work in Groovy) 
-         */
-        
-        Collection.metaClass.map = {
-        		mappingService?.get(it, this.normalizeCollection(delegate))	        		
-        }
-
-        Collection.metaClass.map = { mappingKey, defaultValue ->
-        		mappingService?.get(mappingKey, this.normalizeCollection(delegate), defaultValue)	        		
-        }
-        
-        Collection.metaClass.mapReverse = { 
-			mappingService?.getKey(it, this.normalizeCollection(delegate))	        		
-        }
-
-        Collection.metaClass.mapReverse = { mappingKey, defaultValue ->
-			mappingService?.getKey(mappingKey, this.normalizeCollection(delegate), defaultValue)	        		
-        }	        
-
-        Collection.metaClass.methodMissing = methodMissingLogic.curry(this.normalizeCollection)
-	        
 	}
 	
-	protected def normalizeCollection = { Collection c -> c.collect {it.toString()} }
-	
-	protected def methodMissingLogic = { def normalizer, String name, args ->
+    static def methodMissingLogic = { MappingService mappingService, def normalizer, String name, args ->
         def result
         if (name.startsWith('mapReverse')) {
             def key = name.minus('mapReverse').firstLower()
@@ -127,5 +97,5 @@ public class MappingExtension {
         }
         result
     }
-	
+
 }

@@ -23,7 +23,7 @@ import org.springframework.core.io.ClassPathResource
  * @author Christian Ohr
  * @author Martin Krasser
  */
-public class MappingExtensionsTest extends GroovyTestCase {
+public class MappingExtensionTest extends GroovyTestCase {
 	
      def mappingService
      def extension
@@ -56,13 +56,6 @@ public class MappingExtensionsTest extends GroovyTestCase {
         } catch (IllegalArgumentException e) {
         	// o.k.
         }
-    }
-    
-    void testList() {
-        assert ['a','b'].map('listTest') == ['c','d'] 
-    	assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
-    	assert ['x','y'].map('listTest2') == ['c','d']
-        assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
     }
     
     void testMapReverse() {

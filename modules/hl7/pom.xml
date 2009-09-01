@@ -13,6 +13,10 @@
     
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.modules.hl7.*</osgi.export.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.commons.map.extend,
+            *
+        </osgi.import.pkg>
         <ipf.extension.beans>hapiModelExtension</ipf.extension.beans>
     </properties>
     

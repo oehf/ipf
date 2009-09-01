@@ -19,6 +19,7 @@ import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.Message
 
 import org.openehealth.ipf.commons.map.BidiMappingService
+import org.openehealth.ipf.commons.map.extend.MappingExtension
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
@@ -32,7 +33,8 @@ import org.springframework.core.io.ClassPathResource
 public class HapiModelExtensionTest extends GroovyTestCase {
 	
     def mappingService
-	def extension
+	def defMappingExtension
+    def hl7MappingExtension
 
     static {
         ExpandoMetaClass.enableGlobally()
@@ -41,9 +43,12 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     void setUp() {
         mappingService = new BidiMappingService()
         mappingService.setMappingScript(new ClassPathResource("example2.map"))
-        extension = new HapiModelExtension()
-        extension.mappingService = mappingService
-        extension.extensions.call()
+        defMappingExtension = new MappingExtension()
+        hl7MappingExtension = new HapiModelExtension()
+        defMappingExtension.mappingService = mappingService
+        hl7MappingExtension.mappingService = mappingService
+        defMappingExtension.extensions.call()
+        hl7MappingExtension.extensions.call()
     }
 	
     void testMatches() {
@@ -129,6 +134,10 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     }
         
     void testList() {
+        assert ['a','b'].map('listTest') == ['c','d'] 
+        assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
+        assert ['x','y'].map('listTest2') == ['c','d']
+        assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
         def x = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
     	def y = new ca.uhn.hl7v2.model.v22.datatype.ID(null, 100)
     	x.setValue('a')

@@ -15,4 +15,9 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         class="org.openehealth.ipf.commons.map.BidiMappingService">
     </bean>
 
+    <bean id="mappingExtension" 
+        class="org.openehealth.ipf.commons.map.extend.MappingExtension">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
+    
 </beans>

@@ -13,7 +13,6 @@
     </parent>
 
     <modules>
-        <module>map</module>
         <module>flow</module>
         <module>jms</module>
         <module>log</module>
