@@ -46,6 +46,11 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <property name="mappingService" ref="mappingService" />
     </bean>
 
+    <bean id="mappingExtension" 
+        class="org.openehealth.ipf.commons.map.extend.MappingExtension">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
+
     <bean id="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
         <property name="routeModelExtensions">
@@ -53,6 +58,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
                 <ref bean="coreModelExtension" />
                 <ref bean="hl7ModelExtension" />
                 <ref bean="hapiModelExtension" />
+                <ref bean="mappingExtension" />
             </list>
         </property>
     </bean>
