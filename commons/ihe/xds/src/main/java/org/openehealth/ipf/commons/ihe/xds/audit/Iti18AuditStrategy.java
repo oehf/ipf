@@ -13,40 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti16.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLRegistryResponse21;
-import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLRegistryResponse30;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rim.AdhocQueryType;
+import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Audit strategy for ITI-16.
+ * Base audit strategy for ITI-18.
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti16AuditStrategy extends ItiAuditStrategy {
+abstract public class Iti18AuditStrategy extends ItiAuditStrategy {
 
-    public Iti16AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    public Iti18AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
     public void enrichDataset(Object pojo, ItiAuditDataset genericAuditDataset) {
-        // no additional steps necessary
+        AdhocQueryRequest request = (AdhocQueryRequest) pojo;
+        Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
+
+        AdhocQueryType adHocQuery = request.getAdhocQuery();
+        if (adHocQuery != null) {
+            auditDataset.setQueryUuid(adHocQuery.getId());
+        }
     }
 
     @Override
     public boolean needSavePayload() {
         return true;
     }
+    
+    @Override
+    public ItiAuditDataset createAuditDataset() {
+        return new Iti18AuditDataset(isServerSide());
+    }
 
     @Override
     public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
-        RegistryResponse response = (RegistryResponse) pojo;
-        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse21(response); 
+        RegistryResponseType response = (RegistryResponseType) pojo;
+        EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse30(response); 
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 }

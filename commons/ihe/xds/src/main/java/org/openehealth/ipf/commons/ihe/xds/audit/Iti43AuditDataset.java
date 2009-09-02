@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 

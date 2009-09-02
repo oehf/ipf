@@ -13,36 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit;
-
-import java.net.InetAddress;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Client audit strategy for ITI-14.
+ * Client audit strategy for ITI-42.
  * 
  * @author Dmytro Rud
  */
-public class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
+public class Iti42ClientAuditStrategy extends Iti42AuditStrategy {
 
-    public static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "ServiceEndpointUrl", 
+    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
+        "ServiceEndpointUrl",
         "SubmissionSetUuid",
         "PatientId"};
 
     
-    public Iti14ClientAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti42ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit);
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) throws Exception {
-        AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetEvent(
-                eventOutcome,
-                InetAddress.getLocalHost().getHostAddress(),   
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) {
+        AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetBEvent(
+                eventOutcome, 
+                auditDataset.getUserId(),
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getSubmissionSetUuid(),
                 auditDataset.getPatientId());

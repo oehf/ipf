@@ -13,36 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti15.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
+
+import java.net.InetAddress;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Server audit strategy for ITI-15.
+ * Client audit strategy for ITI-14.
  * 
  * @author Dmytro Rud
  */
-public class Iti15ServerAuditStrategy extends Iti15AuditStrategy {
+public class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "ClientIpAddress",
+    public static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ServiceEndpointUrl", 
         "SubmissionSetUuid",
         "PatientId"};
 
     
-    public Iti15ServerAuditStrategy(boolean allowIncompleteAudit) {
-        super(true, allowIncompleteAudit);
+    public Iti14ClientAuditStrategy(boolean allowIncompleteAudit) {
+        super(false, allowIncompleteAudit);
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) {
-        AuditorManager.getRepositoryAuditor().auditProvideAndRegisterDocumentSetEvent(
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) throws Exception {
+        AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetEvent(
                 eventOutcome,
-                auditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
-                auditDataset.getClientIpAddress(),
+                InetAddress.getLocalHost().getHostAddress(),   
                 auditDataset.getServiceEndpointUrl(),
                 auditDataset.getSubmissionSetUuid(),
                 auditDataset.getPatientId());

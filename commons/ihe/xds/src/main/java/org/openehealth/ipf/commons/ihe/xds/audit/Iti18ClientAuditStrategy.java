@@ -13,35 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti15.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Client audit strategy for ITI-15.
+ * Client audit strategy for ITI-18.
  * 
  * @author Dmytro Rud
  */
-public class Iti15ClientAuditStrategy extends Iti15AuditStrategy {
+public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "ServiceEndpointUrl", 
-        "SubmissionSetUuid",
-        "PatientId"};
+        "ServiceEndpointUrl",
+        "QueryUuid",
+        "Payload"
+        /*"PatientId"*/};
 
     
-    public Iti15ClientAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti18ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit);
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) {
-        AuditorManager.getSourceAuditor().auditProvideAndRegisterDocumentSetEvent(
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset genericAuditDataset) {
+        Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
+
+        AuditorManager.getConsumerAuditor().auditRegistryStoredQueryEvent(
                 eventOutcome,
-                auditDataset.getServiceEndpointUrl(),
-                auditDataset.getSubmissionSetUuid(),
+                auditDataset.getServiceEndpointUrl(), 
+                auditDataset.getQueryUuid(),
+                auditDataset.getPayload(), 
+                HOME_COMMUNITY_ID,
                 auditDataset.getPatientId());
     }
 

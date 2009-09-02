@@ -13,40 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
+import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Client audit strategy for ITI-18.
+ * Server audit strategy for ITI-14.
  * 
  * @author Dmytro Rud
  */
-public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
+public class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
 
-    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "ServiceEndpointUrl",
-        "QueryUuid",
-        "Payload"
-        /*"PatientId"*/};
+    public static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
+        "ClientIpAddress", 
+        "ServiceEndpointUrl", 
+        "SubmissionSetUuid",
+        "PatientId"};
 
     
-    public Iti18ClientAuditStrategy(boolean allowIncompleteAudit) {
-        super(false, allowIncompleteAudit);
+    public Iti14ServerAuditStrategy(boolean allowIncompleteAudit) {
+        super(true, allowIncompleteAudit);
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset genericAuditDataset) {
-        Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
-
-        AuditorManager.getConsumerAuditor().auditRegistryStoredQueryEvent(
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) {
+        XDSRegistryAuditor auditor = AuditorManager.getRegistryAuditor();
+        auditor.auditRegisterDocumentSetEvent(
                 eventOutcome,
-                auditDataset.getServiceEndpointUrl(), 
-                auditDataset.getQueryUuid(),
-                auditDataset.getPayload(), 
-                HOME_COMMUNITY_ID,
+                auditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
+                auditDataset.getClientIpAddress(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getSubmissionSetUuid(),
                 auditDataset.getPatientId());
     }
 

@@ -13,45 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
-
 /**
- * Server audit strategy for ITI-43.
+ * Server audit strategy for ITI-15.
  * 
  * @author Dmytro Rud
  */
-public class Iti43ServerAuditStrategy extends Iti43AuditStrategy {
+public class Iti15ServerAuditStrategy extends Iti15AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ClientIpAddress",
-        "ServiceEndpointUrl",
-        "DocumentUuids",
-        "RepositoryUuids",
-        "HomeCommunityUuids"};
+        "ServiceEndpointUrl", 
+        "SubmissionSetUuid",
+        "PatientId"};
 
     
-    public Iti43ServerAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti15ServerAuditStrategy(boolean allowIncompleteAudit) {
         super(true, allowIncompleteAudit);
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset genericAuditDataset) {
-        Iti43AuditDataset auditDataset = (Iti43AuditDataset)genericAuditDataset;
-        
-        AuditorManager.getRepositoryAuditor().auditRetrieveDocumentSetEvent(
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) {
+        AuditorManager.getRepositoryAuditor().auditProvideAndRegisterDocumentSetEvent(
                 eventOutcome,
-                auditDataset.getUserId(),
-                auditDataset.getUserName(),
+                auditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
                 auditDataset.getClientIpAddress(),
                 auditDataset.getServiceEndpointUrl(),
-                auditDataset.getDocumentUuids(),
-                auditDataset.getRepositoryUuids(),
-                auditDataset.getHomeCommunityUuids());
+                auditDataset.getSubmissionSetUuid(),
+                auditDataset.getPatientId());
     }
 
     @Override

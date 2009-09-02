@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
@@ -21,31 +21,26 @@ import org.openehealth.ipf.commons.ihe.xds.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
-
 /**
- * Audit strategy for ITI-41.
+ * Audit strategy for ITI-42.
  * 
  * @author Dmytro Rud
  */
-abstract public class Iti41AuditStrategy extends ItiAuditStrategy {
+abstract public class Iti42AuditStrategy extends ItiAuditStrategy {
 
-    public Iti41AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    public Iti42AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
     public void enrichDataset(Object pojo, ItiAuditDataset auditDataset) {
-        ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
-        SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
-        if(submitObjectsRequest != null) {
-            EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
-            auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
-        }
+        SubmitObjectsRequest submitObjectsRequest = (SubmitObjectsRequest) pojo;
+        EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
+        auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
     }
 
     @Override

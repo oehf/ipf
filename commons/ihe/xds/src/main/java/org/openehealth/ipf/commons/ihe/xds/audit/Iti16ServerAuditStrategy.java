@@ -13,41 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit;
+package org.openehealth.ipf.commons.ihe.xds.audit;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Server audit strategy for ITI-14.
+ * Server audit strategy for ITI-16.
  * 
  * @author Dmytro Rud
  */
-public class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
+public class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
 
-    public static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
-        "ClientIpAddress", 
-        "ServiceEndpointUrl", 
-        "SubmissionSetUuid",
-        "PatientId"};
+    private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
+        "ClientIpAddress",
+        "ServiceEndpointUrl",
+        "Payload"
+        /*"PatientId"*/};
 
     
-    public Iti14ServerAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti16ServerAuditStrategy(boolean allowIncompleteAudit) {
         super(true, allowIncompleteAudit);
     }
 
     @Override
     public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) {
-        XDSRegistryAuditor auditor = AuditorManager.getRegistryAuditor();
-        auditor.auditRegisterDocumentSetEvent(
+        AuditorManager.getRegistryAuditor().auditRegistryQueryEvent(
                 eventOutcome,
-                auditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
+                auditDataset.getClientIpAddress(), // Must be set to something, otherwise schema is broken
+                auditDataset.getUserName(),
                 auditDataset.getClientIpAddress(),
                 auditDataset.getServiceEndpointUrl(),
-                auditDataset.getSubmissionSetUuid(),
-                auditDataset.getPatientId());
+                auditDataset.getPayload(),
+                /*auditDataset.getPatientId()*/ null);
     }
 
     @Override
