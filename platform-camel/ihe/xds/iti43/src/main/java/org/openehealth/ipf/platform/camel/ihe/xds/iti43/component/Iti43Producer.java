@@ -20,15 +20,14 @@ import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti43PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.audit.Iti43ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.Iti43PortType;
 
 /**
  * The producer implementation for the ITI-42 component.
  */
-public class Iti43Producer extends DefaultItiProducer<Iti43PortType> {
+public class Iti43Producer extends DefaultItiProducer {
     
     /**
      * Constructs the producer.
@@ -36,9 +35,11 @@ public class Iti43Producer extends DefaultItiProducer<Iti43PortType> {
      *          the endpoint creating this producer.
      * @param serviceInfo
      *          info about the service being called by this producer.
+     * @param auditStrategy 
+     *          the strategy for auditing.
      */
-    public Iti43Producer(Iti43Endpoint endpoint, ItiServiceInfo<Iti43PortType> serviceInfo) {
-        super(endpoint, serviceInfo);
+    public Iti43Producer(Iti43Endpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
+        super(endpoint, serviceInfo, auditStrategy);
     }
 
     
@@ -46,13 +47,7 @@ public class Iti43Producer extends DefaultItiProducer<Iti43PortType> {
     protected void callService(Exchange exchange) {
         RetrieveDocumentSetRequestType body =
                 exchange.getIn().getBody(RetrieveDocumentSetRequestType.class);
-        RetrieveDocumentSetResponseType result = getClient().documentRepositoryRetrieveDocumentSet(body);
+        RetrieveDocumentSetResponseType result = ((Iti43PortType) getClient()).documentRepositoryRetrieveDocumentSet(body);
         Exchanges.resultMessage(exchange).setBody(result);
-    }
-
-    
-    @Override
-    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti43ClientAuditStrategy(allowIncompleteAudit);
     }
 }

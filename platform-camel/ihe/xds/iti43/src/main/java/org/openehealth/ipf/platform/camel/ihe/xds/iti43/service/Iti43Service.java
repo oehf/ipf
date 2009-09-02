@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43.service;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;

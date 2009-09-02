@@ -19,16 +19,15 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti41PortType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit.Iti41ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41PortType;
 
 /**
  * The producer implementation for the ITI-41 component.
  */
-public class Iti41Producer extends DefaultItiProducer<Iti41PortType> {
+public class Iti41Producer extends DefaultItiProducer {
     
     /**
      * Constructs the producer.
@@ -36,9 +35,11 @@ public class Iti41Producer extends DefaultItiProducer<Iti41PortType> {
      *          the endpoint creating this producer.
      * @param serviceInfo
      *          info about the service being called by this producer.
+     * @param auditStrategy 
+     *          the strategy for auditing.
      */
-    public Iti41Producer(Iti41Endpoint endpoint, ItiServiceInfo<Iti41PortType> serviceInfo) {
-        super(endpoint, serviceInfo);
+    public Iti41Producer(Iti41Endpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
+        super(endpoint, serviceInfo, auditStrategy);
     }
 
     
@@ -46,13 +47,7 @@ public class Iti41Producer extends DefaultItiProducer<Iti41PortType> {
     protected void callService(Exchange exchange) {
         ProvideAndRegisterDocumentSetRequestType body =
                 exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
-        RegistryResponseType result = getClient().documentRepositoryProvideAndRegisterDocumentSetB(body);
+        RegistryResponseType result = ((Iti41PortType) getClient()).documentRepositoryProvideAndRegisterDocumentSetB(body);
         Exchanges.resultMessage(exchange).setBody(result);
-    }
-
-    
-    @Override
-    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti41ClientAuditStrategy(allowIncompleteAudit);
     }
 }

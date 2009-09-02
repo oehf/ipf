@@ -18,17 +18,16 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42.component;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti42PortType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti42.audit.Iti42ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42PortType;
 
 /**
  * The producer implementation for the ITI-42 component.
  */
-public class Iti42Producer extends DefaultItiProducer<Iti42PortType> {
+public class Iti42Producer extends DefaultItiProducer {
     
     /**
      * Constructs the producer.
@@ -36,23 +35,18 @@ public class Iti42Producer extends DefaultItiProducer<Iti42PortType> {
      *          the endpoint creating this producer.
      * @param serviceInfo
      *          info about the service being called by this producer.
+     * @param auditStrategy 
+     *          the strategy for auditing.
      */
-    public Iti42Producer(Iti42Endpoint endpoint, ItiServiceInfo<Iti42PortType> serviceInfo) {
-        super(endpoint, serviceInfo);
+    public Iti42Producer(Iti42Endpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
+        super(endpoint, serviceInfo, auditStrategy);
     }
-
     
     @Override
     protected void callService(Exchange exchange) {
         SubmitObjectsRequest body =
                 exchange.getIn().getBody(SubmitObjectsRequest.class);
-        RegistryResponseType result = getClient().documentRegistryRegisterDocumentSetB(body);
+        RegistryResponseType result = ((Iti42PortType) getClient()).documentRegistryRegisterDocumentSetB(body);
         Exchanges.resultMessage(exchange).setBody(result);
-    }
-
-    
-    @Override
-    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti42ClientAuditStrategy(allowIncompleteAudit);
     }
 }

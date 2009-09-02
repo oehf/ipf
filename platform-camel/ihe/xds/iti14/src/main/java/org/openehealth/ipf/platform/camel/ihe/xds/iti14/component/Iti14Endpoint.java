@@ -19,26 +19,18 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14PortType;
-
-import javax.xml.namespace.QName;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit.Iti14ClientAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit.Iti14ServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14Service;
 import java.net.URISyntaxException;
 
 /**
  * The Camel endpoint for the ITI-14 transaction.
  */
 public class Iti14Endpoint extends DefaultItiEndpoint {
-    private static final ItiServiceInfo<Iti14PortType> SERVICE_INFO = new ItiServiceInfo<Iti14PortType>(
-            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
-            Iti14PortType.class,
-            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
-            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Port_Soap11", "ihe"),
-            null,
-            false,
-            "wsdl/iti14.wsdl",
-            false);
-
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -55,10 +47,14 @@ public class Iti14Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        return new Iti14Producer(this, SERVICE_INFO);
+        ItiAuditStrategy auditStrategy = 
+            isAudit() ? new Iti14ClientAuditStrategy(isAllowIncompleteAudit()) : null;
+        return new Iti14Producer(this, ItiServiceInfo.ITI_14, auditStrategy);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new Iti14Consumer(this, processor, SERVICE_INFO);
+        ItiAuditStrategy auditStrategy = 
+            isAudit() ? new Iti14ServerAuditStrategy(isAllowIncompleteAudit()) : null;
+        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_14, auditStrategy, Iti14Service.class);
     }
 }

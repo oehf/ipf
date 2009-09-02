@@ -16,56 +16,128 @@
 package org.openehealth.ipf.commons.ihe.xds;
 
 import org.apache.commons.lang.Validate;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti14PortType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti15PortType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti16PortType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti18PortType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti41PortType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti42PortType;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti43PortType;
 
 import javax.xml.namespace.QName;
 
 /**
- * Contains information about a web-service (e.g. the service class).
+ * Contains information about a web-service (e.g. the service class). 
+ * This is the static information about the web-service, i.e. all data that does
+ * not depend on the dynamic endpoint configuration (e.g. if SOAP 1.1 or 1.2 is
+ * used).
  * @param <T>
  *          type of the service interface.
  */
-public class ItiServiceInfo<T> {
+public enum ItiServiceInfo {
+    /** Service info for ITI-14 */
+    ITI_14(new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
+            Iti14PortType.class,
+            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Port_Soap11", "ihe"),
+            null,
+            false,
+            "wsdl/iti14.wsdl",
+            false,
+            false),
+
+    /** Service info for ITI-15 */
+    ITI_15(new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Service", "ihe"),
+            Iti15PortType.class,
+            new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Binding_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Port_Soap11", "ihe"),
+            null,
+            false,
+            "wsdl/iti15.wsdl",
+            false,
+            true),
+
+    /** Service info for ITI-16 */
+    ITI_16(new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
+            Iti16PortType.class,
+            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Port_Soap11", "ihe"),
+            null,
+            false,
+            "wsdl/iti16.wsdl",
+            false,
+            false),
+    
+    /** Service info for ITI-18 */
+    ITI_18(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+            Iti18PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap12", "ihe"),
+            false,
+            "wsdl/iti18.wsdl",
+            true,
+            false),
+    
+    /** Service info for ITI-41 */
+    ITI_41(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
+            Iti41PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap12", "ihe"),
+            true,
+            "wsdl/iti41.wsdl",
+            true,
+            false),
+    
+    /** Service info for ITI-42 */
+    ITI_42(new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+            Iti42PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap12", "ihe"),
+            false,
+            "wsdl/iti42.wsdl",
+            true,
+            false),
+    
+    /** Service info for ITI-43 */
+    ITI_43(new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
+            Iti43PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap11", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap12", "ihe"),
+            true,
+            "wsdl/iti43.wsdl",
+            true,
+            false);
+
     private final QName bindingName;
-    private final Class<T> serviceClass;
+    private final Class<?> serviceClass;
     private final QName serviceName;
     private final String wsdlLocation;
     private final boolean mtom;
     private final boolean addressing;
     private final QName portName11;
     private final QName portName12;
+    private final boolean swaOutSupport;
 
-    /**
-     * Constructs the service info.
-     * @param serviceName
-     *          the qualified name of the service.
-     * @param serviceClass
-     *          the class of the service interface.
-     * @param bindingName
-     *          the qualified name of the binding to use.
-     * @param portName11
-     *          the qualified name of the SOAP 1.1 port.
-     * @param portName12
-     *          the qualified name of the SOAP 1.2 port (if present).
-     * @param mtom
-     *          {@code true} if this service requires MTOM.
-     * @param wsdlLocation
-     *          the location of the WSDL of this webservice.
-     */
-    public ItiServiceInfo(QName serviceName, 
-                          Class<T> serviceClass, 
+    private ItiServiceInfo(QName serviceName, 
+                          Class<?> serviceClass,
                           QName bindingName,
                           QName portName11,
                           QName portName12,
                           boolean mtom, 
                           String wsdlLocation, 
-                          boolean addressing) 
+                          boolean addressing, 
+                          boolean swaOutSupport) 
     {
         Validate.notNull(serviceName, "serviceName");
         Validate.notNull(serviceClass, "serviceClass");
         Validate.notNull(bindingName, "bindingName");
         Validate.notNull(portName11, "portName11");
         Validate.notNull(wsdlLocation, "wsdlLocation");
-
+        
         this.serviceClass = serviceClass;
         this.serviceName = serviceName;
         this.bindingName = bindingName;
@@ -74,6 +146,7 @@ public class ItiServiceInfo<T> {
         this.mtom = mtom;
         this.wsdlLocation = wsdlLocation;
         this.addressing = addressing;
+        this.swaOutSupport = swaOutSupport;
     }
 
     /**
@@ -108,7 +181,7 @@ public class ItiServiceInfo<T> {
     /**
      * @return the class of the service interface.
      */
-    public Class<T> getServiceClass() {
+    public Class<?> getServiceClass() {
         return serviceClass;
     }
 
@@ -134,5 +207,12 @@ public class ItiServiceInfo<T> {
      */
     public boolean isAddressing() {
         return addressing;
+    }
+
+    /**
+     * @return <code>true</code> if this service requires SwA for its output.
+     */
+    public boolean isSwaOutSupport() {
+        return swaOutSupport;
     }
 }

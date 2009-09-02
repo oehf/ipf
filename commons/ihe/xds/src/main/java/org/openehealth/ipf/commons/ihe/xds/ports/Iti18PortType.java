@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openehealth.ipf.platform.camel.ihe.xds.iti18.service;
+package org.openehealth.ipf.commons.ihe.xds.ports;
 
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryResponse;

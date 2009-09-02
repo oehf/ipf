@@ -17,32 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import java.net.URL;
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Binding;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import javax.xml.ws.soap.SOAPBinding;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.ws.addressing.MAPAggregator;
-import org.apache.cxf.ws.addressing.soap.MAPCodec;
-import org.openehealth.ipf.commons.ihe.xds.Auditable;
+import org.openehealth.ipf.commons.ihe.xds.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.cxf.MustUnderstandDecoratorInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditFinalInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ClientOutputStreamSubstituteInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ClientPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.utils.SoapUtils;
 
 /**
  * Camel producer used to make calls to a webservice.
@@ -53,12 +34,10 @@ import org.openehealth.ipf.commons.ihe.xds.utils.SoapUtils;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiProducer<T> extends DefaultProducer implements Auditable {
+public abstract class DefaultItiProducer extends DefaultProducer {
     private static final Log log = LogFactory.getLog(DefaultItiProducer.class);
 
-    private final ThreadLocal<T> threadLocalPort = new ThreadLocal<T>();
-    private final ItiServiceInfo<T> serviceInfo;
-    private final DefaultItiEndpoint endpoint;
+    private final ItiClientFactory serviceClient;
 
     /**
      * Constructs the producer.
@@ -67,16 +46,19 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer implements A
      *            the endpoint that creates this producer.
      * @param serviceInfo
      *            the info describing the web-service.
+     * @param auditStrategy
+     *            the strategy to use for auditing. Can be <code>null</code> to disable
+     *            auditing.
      */
-    public DefaultItiProducer(DefaultItiEndpoint endpoint, ItiServiceInfo<T> serviceInfo) {
+    public DefaultItiProducer(DefaultItiEndpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
         super(endpoint);
-        notNull(serviceInfo, "serviceInfo");
-        this.serviceInfo = serviceInfo;
-        this.endpoint = endpoint;
+        notNull(serviceInfo, "serviceInfo");        
+        this.serviceClient = new ItiClientFactory(
+                serviceInfo, endpoint.isSoap11(), auditStrategy, endpoint.getServiceUrl());
     }
 
     public void process(Exchange exchange) throws Exception {
-        log.debug("Calling webservice on '" + serviceInfo.getServiceName() + "' with " + exchange);
+        log.debug("Calling webservice on '" + getServiceInfo().getServiceName() + "' with " + exchange);
         callService(exchange);
     }
 
@@ -96,80 +78,14 @@ public abstract class DefaultItiProducer<T> extends DefaultProducer implements A
      * 
      * @return the client stub.
      */
-    protected synchronized T getClient() {
-        if (threadLocalPort.get() == null) {
-            URL wsdlURL = getClass().getClassLoader().getResource(serviceInfo.getWsdlLocation());
-            Service service = Service.create(wsdlURL, serviceInfo.getServiceName());
-            
-            QName portName = 
-                ((serviceInfo.getPortName12() == null) || endpoint.isSoap11()) ?
-                    serviceInfo.getPortName11() : 
-                    serviceInfo.getPortName12();
-
-            T port = service.getPort(portName, serviceInfo.getServiceClass());
-            configureBinding(port);
-            configureInterceptors(port);
-
-            threadLocalPort.set(port);
-            log.debug("Created client adapter for: " + serviceInfo.getServiceName());
-        }        
-        return threadLocalPort.get();
+    protected Object getClient() {
+        return serviceClient.getClient();
     }
 
-    protected void configureInterceptors(T port) {
-        Client client = ClientProxy.getClient(port);
-        
-        // WS-Addressing-related interceptors
-        if(serviceInfo.isAddressing()) {
-            MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
-            for (String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
-                interceptor.addHeader(new QName(nsUri, "Action"));
-                interceptor.addHeader(new QName(nsUri, "ReplyTo"));
-            }
-
-            client.getOutInterceptors().add(interceptor);
-
-            MAPCodec mapCodec = new MAPCodec();
-            MAPAggregator mapAggregator = new MAPAggregator();
-            client.getInInterceptors().add(mapCodec);
-            client.getInInterceptors().add(mapAggregator);
-            client.getInFaultInterceptors().add(mapCodec);
-            client.getInFaultInterceptors().add(mapAggregator);
-            client.getOutInterceptors().add(mapCodec);
-            client.getOutInterceptors().add(mapAggregator);
-            client.getOutFaultInterceptors().add(mapCodec);
-            client.getOutFaultInterceptors().add(mapAggregator);
-        }
-        
-        // install auditing-related interceptors if the user has not switched
-        // auditing off
-        if (endpoint.isAudit()) {
-            ItiAuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
-            client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
-            client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor(auditStrategy));
-            client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor(auditStrategy));
-        
-            AuditFinalInterceptor finalInterceptor = new AuditFinalInterceptor(auditStrategy, false);
-            client.getInInterceptors().add(finalInterceptor);
-            client.getInFaultInterceptors().add(finalInterceptor);
-        }
-    }
-
-    protected void configureBinding(T port) {
-        BindingProvider bindingProvider = (BindingProvider) port;
-
-        Map<String, Object> reqContext = bindingProvider.getRequestContext();
-        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint.getServiceUrl());
-
-        Binding binding = bindingProvider.getBinding();
-        SOAPBinding soapBinding = (SOAPBinding) binding;
-        soapBinding.setMTOMEnabled(serviceInfo.isMtom());
-    }
-    
     /**
      * @return the info describing the web-service.
      */
-    public ItiServiceInfo<T> getServiceInfo() {
-        return serviceInfo;
+    public ItiServiceInfo getServiceInfo() {
+        return serviceClient.getServiceInfo();
     }
 }

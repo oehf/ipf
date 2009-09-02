@@ -18,38 +18,34 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti14.component;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti14PortType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti14.audit.Iti14ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14PortType;
 
 /**
  * The producer implementation for the ITI-14 component.
  */
-public class Iti14Producer extends DefaultItiProducer<Iti14PortType> {
+public class Iti14Producer extends DefaultItiProducer {
     /**
      * Constructs the producer.
      * @param endpoint
      *          the endpoint creating this producer.
      * @param serviceInfo
      *          info about the service being called by this producer.
+     * @param auditStrategy 
+     *          the strategy for auditing.
      */
-    public Iti14Producer(Iti14Endpoint endpoint, ItiServiceInfo<Iti14PortType> serviceInfo) {
-        super(endpoint, serviceInfo);
+    public Iti14Producer(Iti14Endpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
+        super(endpoint, serviceInfo, auditStrategy);
     }
 
     @Override
     protected void callService(Exchange exchange) {
         SubmitObjectsRequest body =
                 exchange.getIn().getBody(SubmitObjectsRequest.class);
-        RegistryResponse result = getClient().documentRegistryRegisterDocumentSet(body);
+        RegistryResponse result = ((Iti14PortType)getClient()).documentRegistryRegisterDocumentSet(body);
         Exchanges.resultMessage(exchange).setBody(result);
-    }
-
-    @Override
-    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti14ClientAuditStrategy(allowIncompleteAudit);
     }
 }

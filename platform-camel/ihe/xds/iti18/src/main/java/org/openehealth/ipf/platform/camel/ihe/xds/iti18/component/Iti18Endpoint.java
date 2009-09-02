@@ -19,28 +19,21 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18PortType;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit.Iti18ClientAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit.Iti18ServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18Service;
 
-import javax.xml.namespace.QName;
 import java.net.URISyntaxException;
 
 /**
  * The endpoint implementation for the ITI-18 component.
  */
 public class Iti18Endpoint extends DefaultItiEndpoint {
-    private static final ItiServiceInfo<Iti18PortType> SERVICE_INFO = new ItiServiceInfo<Iti18PortType>(
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
-            Iti18PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap11", "ihe"),
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Port_Soap12", "ihe"),
-            false,
-            "wsdl/iti18.wsdl",
-            true);
-
     /**
-     * Constructs the endpoint
+     * Constructs the endpoint.
      * @param endpointUri
      *          the URI of the endpoint.
      * @param address
@@ -55,10 +48,14 @@ public class Iti18Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        return new Iti18Producer(this, SERVICE_INFO);
+        ItiAuditStrategy auditStrategy = 
+            isAudit() ? new Iti18ClientAuditStrategy(isAllowIncompleteAudit()) : null;
+        return new Iti18Producer(this, ItiServiceInfo.ITI_18, auditStrategy);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new Iti18Consumer(this, processor, SERVICE_INFO);
+        ItiAuditStrategy auditStrategy = 
+            isAudit() ? new Iti18ServerAuditStrategy(isAllowIncompleteAudit()) : null;
+        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_18, auditStrategy, Iti18Service.class);
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti14.service;
+package org.openehealth.ipf.commons.ihe.xds.ports;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -27,23 +27,23 @@ import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.SubmitObjectsRequest;
 
 /**
- * Provides the ITI-14 web-service interface.
+ * Provides the ITI-15 web-service interface.
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds:2007", name = "DocumentRegistry_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xds:2007", name = "DocumentRepository_PortType")
 @XmlSeeAlso({org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.ObjectFactory.class,org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.query.ObjectFactory.class,org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rim.ObjectFactory.class})
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-public interface Iti14PortType {
+public interface Iti15PortType {
 
     /**
-     * Registers a set of documents according to the ITI-14 specification.
+     * Provides and registers a set of documents according to the ITI-15 specification.
      * @param body
      *          the request.
      * @return the response.
      */
     @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1", partName = "body")
-    @Action(input = "urn:ihe:iti:2007:RegisterDocumentSet", output = "urn:ihe:iti:2007:RegisterDocumentSetResponse")
-    @WebMethod(operationName = "DocumentRegistry_RegisterDocumentSet")
-    RegistryResponse documentRegistryRegisterDocumentSet(
+    @Action(input = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet", output = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSetResponse")
+    @WebMethod(operationName = "DocumentRepository_ProvideAndRegisterDocumentSet")    
+    public RegistryResponse documentRepositoryProvideAndRegisterDocumentSet(
         @WebParam(partName = "body", name = "SubmitObjectsRequest", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1")
         SubmitObjectsRequest body
     );

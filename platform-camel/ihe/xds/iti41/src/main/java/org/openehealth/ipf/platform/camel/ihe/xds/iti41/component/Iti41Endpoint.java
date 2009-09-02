@@ -19,26 +19,19 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41PortType;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit.Iti41ClientAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti41.audit.Iti41ServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41Service;
 
-import javax.xml.namespace.QName;
 import java.net.URISyntaxException;
 
 /**
  * The Camel endpoint for the ITI-41 transaction.
  */
 public class Iti41Endpoint extends DefaultItiEndpoint {
-    private static final ItiServiceInfo<Iti41PortType> SERVICE_INFO = new ItiServiceInfo<Iti41PortType>(
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
-            Iti41PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap11", "ihe"),
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Port_Soap12", "ihe"),
-            true,
-            "wsdl/iti41.wsdl",
-            true);
-
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -55,10 +48,14 @@ public class Iti41Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        return new Iti41Producer(this, SERVICE_INFO);
+        ItiAuditStrategy auditStrategy = 
+            isAudit() ? new Iti41ClientAuditStrategy(isAllowIncompleteAudit()) : null;
+        return new Iti41Producer(this, ItiServiceInfo.ITI_41, auditStrategy);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new Iti41Consumer(this, processor, SERVICE_INFO);
+        ItiAuditStrategy auditStrategy = 
+            isAudit() ? new Iti41ServerAuditStrategy(isAllowIncompleteAudit()) : null;
+        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_41, auditStrategy, Iti41Service.class);
     }
 }

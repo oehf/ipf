@@ -21,33 +21,31 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.xml.ws.BindingProvider;
 import org.apache.camel.Exchange;
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.cxf.ProvidedAttachmentOutInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti15PortType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.audit.Iti15ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.Iti15PortType;
 
 /**
  * The producer implementation for the ITI-15 component.
  */
-public class Iti15Producer extends DefaultItiProducer<Iti15PortType> {
+public class Iti15Producer extends DefaultItiProducer {
     /**
      * Constructs the producer.
      * @param endpoint
      *          the endpoint creating this producer.
      * @param serviceInfo
      *          info about the service being called by this producer.
+     * @param auditStrategy 
+     *          the strategy used for auditing.
      */
-    public Iti15Producer(Iti15Endpoint endpoint, ItiServiceInfo<Iti15PortType> serviceInfo) {
-        super(endpoint, serviceInfo);
+    public Iti15Producer(Iti15Endpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
+        super(endpoint, serviceInfo, auditStrategy);
     }
 
     @Override
@@ -64,21 +62,7 @@ public class Iti15Producer extends DefaultItiProducer<Iti15PortType> {
         
         requestContext.put(ProvidedAttachmentOutInterceptor.ATTACHMENTS, attachments);
         
-        RegistryResponse result = getClient().documentRepositoryProvideAndRegisterDocumentSet(body.getSubmitObjectsRequest());
+        RegistryResponse result = ((Iti15PortType) getClient()).documentRepositoryProvideAndRegisterDocumentSet(body.getSubmitObjectsRequest());
         Exchanges.resultMessage(exchange).setBody(result);
-    }
-    
-    @Override
-    protected void configureInterceptors(Iti15PortType port) {
-        super.configureInterceptors(port);
-        
-        Client client = ClientProxy.getClient(port);
-        client.getOutInterceptors().add(new ProvidedAttachmentOutInterceptor());
-        client.getOutInterceptors().add(new FixContentTypeOutInterceptor());
-    }
-
-    @Override
-    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti15ClientAuditStrategy(allowIncompleteAudit);
     }
 }

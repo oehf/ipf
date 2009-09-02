@@ -18,41 +18,34 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18.component;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti18PortType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti18.audit.Iti18ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
  * The producer implementation for the ITI-18 component.
  */
-public class Iti18Producer extends DefaultItiProducer<Iti18PortType> {
-    
+public class Iti18Producer extends DefaultItiProducer {
     /**
      * Constructs the producer.
      * @param endpoint
      *          the endpoint creating this producer.
      * @param serviceInfo
      *          info about the service being called by this producer.
+     * @param auditStrategy 
+     *          the strategy for auditing to use.
      */
-    public Iti18Producer(Iti18Endpoint endpoint, ItiServiceInfo<Iti18PortType> serviceInfo) {
-        super(endpoint, serviceInfo);
+    public Iti18Producer(Iti18Endpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
+        super(endpoint, serviceInfo, auditStrategy);
     }
-
     
     @Override
     protected void callService(Exchange exchange) {
         AdhocQueryRequest body =
                 exchange.getIn().getBody(AdhocQueryRequest.class);
-        AdhocQueryResponse result = getClient().documentRegistryRegistryStoredQuery(body);
+        AdhocQueryResponse result = ((Iti18PortType) getClient()).documentRegistryRegistryStoredQuery(body);
         Exchanges.resultMessage(exchange).setBody(result);
-    }
-
-    
-    @Override
-    public ItiAuditStrategy createAuditStrategy(boolean allowIncompleteAudit) {
-        return new Iti18ClientAuditStrategy(allowIncompleteAudit);
     }
 }

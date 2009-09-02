@@ -15,35 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.commons;
 
+import static org.apache.commons.lang.Validate.notNull;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 import org.apache.commons.lang.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.binding.soap.SoapBindingConfiguration;
-import org.apache.cxf.frontend.ServerFactoryBean;
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
-import org.apache.cxf.ws.addressing.WSAddressingFeature;
-import org.openehealth.ipf.commons.ihe.xds.Auditable;
+import org.openehealth.ipf.commons.ihe.xds.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.cxf.WsSecurityUnderstandingInInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ServerPayloadExtractorInterceptor;
-import java.util.Collections;
 
 /**
  * Camel component used to create process incoming exchanges based on webservice calls.
+ * @param <T>
+ *          the type of web-service used.
  *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiConsumer extends DefaultConsumer implements Auditable {
-    private static final Log log = LogFactory.getLog(DefaultItiConsumer.class);
-
-    private final DefaultItiEndpoint endpoint;
+public class DefaultItiConsumer extends DefaultConsumer {
+    private final ItiServiceFactory serviceFactory;
 
     /**
      * Constructs the consumer.
@@ -52,16 +43,22 @@ public abstract class DefaultItiConsumer extends DefaultConsumer implements Audi
      *          the endpoint representation in Camel.
      * @param processor
      *          the processor to start processing incoming exchanges.
-     * @param webService
-     *          the service that this consumer is using.
      * @param serviceInfo
      *          info describing the service.
+     * @param auditStrategy
+     *          the strategy to use for auditing.
+     * @param serviceImplClass
+     *          the class of the service implementation. 
      */
-    public DefaultItiConsumer(DefaultItiEndpoint endpoint, Processor processor, DefaultItiWebService webService, ItiServiceInfo<?> serviceInfo) {
+    public DefaultItiConsumer(DefaultItiEndpoint endpoint, Processor processor, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy, Class<?> serviceImplClass) {
         super(endpoint, processor);
-        this.endpoint = endpoint;
+        notNull(serviceInfo, "serviceInfo cannot be null");
+        Validate.notNull(endpoint.getServiceAddress());
+        
+        this.serviceFactory = new ItiServiceFactory(serviceInfo, auditStrategy, endpoint.getServiceAddress());
 
-        publishWebService(webService, serviceInfo);
+        DefaultItiWebService service = (DefaultItiWebService) serviceFactory.createService(serviceImplClass);
+        service.setConsumer(this);
     }
 
     /**
@@ -76,63 +73,5 @@ public abstract class DefaultItiConsumer extends DefaultConsumer implements Audi
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Publishes a webservice with the standard ITI transaction configuration.
-     * @param webService
-     *          a webservice instance that is to be used to create the webservice endpoint.
-     * @param info
-     *          webservice info describing various information about the service.
-     */
-    protected void publishWebService(DefaultItiWebService webService, ItiServiceInfo<?> info) {
-        Validate.notNull(endpoint.getServiceAddress());
-        Validate.notNull(info);
-        Validate.notNull(webService);
-
-        webService.setConsumer(this);
-
-        ServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
-        configureService(svrFactory, webService, info);
-        configureBinding(svrFactory, info);
-        configureInterceptors(svrFactory);        
-        
-        svrFactory.create();
-
-        log.debug("Published webservice endpoint for: " + info.getServiceName());
-    }
-
-    private void configureService(ServerFactoryBean svrFactory, Object webService, ItiServiceInfo<?> info) {
-        svrFactory.setServiceClass(info.getServiceClass());
-        svrFactory.setServiceName(info.getServiceName());
-        svrFactory.setWsdlLocation(info.getWsdlLocation());
-        svrFactory.setAddress(endpoint.getServiceAddress());
-        svrFactory.setServiceBean(webService);
-        svrFactory.getFeatures().add(new WSAddressingFeature());
-        if (info.isMtom()) {
-            svrFactory.setProperties(Collections.<String, Object>singletonMap("mtom-enabled", "true"));
-        }
-    }
-
-    private void configureBinding(ServerFactoryBean svrFactory, ItiServiceInfo<?> info) {
-        SoapBindingConfiguration bindingConfig = new SoapBindingConfiguration();
-        bindingConfig.setBindingName(info.getBindingName());
-        svrFactory.setBindingConfig(bindingConfig);
-    }
-
-    private void configureInterceptors(ServerFactoryBean svrFactory) {
-        // install auditing-related interceptors if the user has not switched auditing off
-        if (endpoint.isAudit()) {
-            ItiAuditStrategy auditStrategy = createAuditStrategy(endpoint.isAllowIncompleteAudit());
-            svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor(auditStrategy));
-            svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
-    
-            AuditFinalInterceptor auditOutInterceptor = new AuditFinalInterceptor(auditStrategy, true);
-            svrFactory.getOutInterceptors().add(auditOutInterceptor);
-            svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
-        }
-        
-        // protocol-related interceptors
-        svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
     }
 }

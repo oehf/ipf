@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.iti41.service;
+package org.openehealth.ipf.commons.ihe.xds.ports;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -23,32 +23,32 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 
 /**
- * Provides the ITI-41 web-service interface.
+ * Provides the ITI-43 web-service interface.
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRepository_PortType")
 @XmlSeeAlso({
     org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rim.ObjectFactory.class, 
     org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.ObjectFactory.class, 
     org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.ObjectFactory.class, 
-    org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.ObjectFactory.class})
+    org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-public interface Iti41PortType {
+public interface Iti43PortType {
 
     /**
-     * Provides and registers a set of documents according to the ITI-41 specification.
+     * Retrieves a set of documents according to the ITI-43 specification.
      * @param body
      *          the request.
      * @return the response.
      */
-    @WebResult(name = "RegistryResponse", targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0", partName = "body")
-    @Action(input = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-b", output = "urn:ihe:iti:2007:ProvideAndRegisterDocumentSet-bResponse")
-    @WebMethod(operationName = "DocumentRepository_ProvideAndRegisterDocumentSet-b")
-    public RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(
-        @WebParam(partName = "body", name = "ProvideAndRegisterDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
-        ProvideAndRegisterDocumentSetRequestType body
+    @WebResult(name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007", partName = "body")
+    @Action(input = "urn:ihe:iti:2007:RetrieveDocumentSet", output = "urn:ihe:iti:2007:RetrieveDocumentSetResponse")
+    @WebMethod(operationName = "DocumentRepository_RetrieveDocumentSet")
+    public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(
+        @WebParam(partName = "body", name = "RetrieveDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007")
+        RetrieveDocumentSetRequestType body
     );
 }

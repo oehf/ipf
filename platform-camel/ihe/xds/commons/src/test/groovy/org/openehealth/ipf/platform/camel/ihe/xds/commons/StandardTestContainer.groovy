@@ -72,7 +72,7 @@ class StandardTestContainer {
      static void startServer(servlet, appContextName, secure) {
          def contextResource = new ClassPathResource(appContextName)
          
-         port = getFreePort()
+         port = JettyServer.freePort
          log.info("Publishing services on port: ${port}")
          
          servletServer = new JettyServer(
@@ -166,32 +166,6 @@ class StandardTestContainer {
          producerTemplate.send(endpoint, exchange)        
      }
 
-     private static def getFreePort() {
-         def port = 8000
-         def portFree = false
-         while (!portFree) {
-             port = 8000 + RandomUtils.nextInt(2000)
-             portFree = isPortFree(port)
-         }
-         port
-     }
-     
-     private static def isPortFree(port) {
-         ServerSocket socket = null
-         try {
-             socket = new ServerSocket(port)
-             return true
-         } 
-         catch (IOException e) {
-             return false
-         } 
-         finally { 
-             if (socket != null) {
-                 socket.close()
-             }
-         }
-     }
-     
      def getAudit(actionCode, addr) {
          auditSender.messages.collect { getMessage(it) }.findAll {
              it.EventIdentification.@EventActionCode == actionCode

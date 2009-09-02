@@ -17,7 +17,12 @@ package org.openehealth.ipf.commons.ihe.xds.server;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 import javax.servlet.Servlet;
+
+import org.apache.commons.lang.math.RandomUtils;
 
 /**
  * Simple abstraction of an embedded servlet server (e.g. Jetty or Tomcat).
@@ -203,5 +208,38 @@ public abstract class ServletServer {
      */
     public void setContextResource(String contextResource) {
         this.contextResource = contextResource;
+    }
+    
+    /**
+     * @return a free port for testing between 8000-9999.
+     */
+    public static int getFreePort() {
+        int port = 8000;
+        boolean portFree = false;
+        while (!portFree) {
+            port = 8000 + RandomUtils.nextInt(2000);
+            portFree = isPortFree(port);
+        }
+        return port;
+    }
+    
+    private static boolean isPortFree(int port) {
+        ServerSocket socket = null;
+        try {
+            socket = new ServerSocket(port);
+            return true;
+        } 
+        catch (IOException e) {
+            return false;
+        } 
+        finally { 
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@ import javax.xml.ws.handler.MessageContext;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
+import org.openehealth.ipf.commons.ihe.xds.ports.Iti15PortType;
 import org.openehealth.ipf.commons.ihe.xds.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
