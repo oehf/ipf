@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
-import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocument
-import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.responses.RetrievedDocument
-import org.openehealth.ipf.commons.ihe.xds.responses.RetrievedDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.utils.LargeDataSource
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.utils.LargeDataSource
 
 import javax.activation.DataHandler;
 

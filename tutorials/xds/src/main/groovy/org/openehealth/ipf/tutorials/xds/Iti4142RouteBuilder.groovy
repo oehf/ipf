@@ -16,16 +16,16 @@
 package org.openehealth.ipf.tutorials.xds
 
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
-import static org.openehealth.ipf.commons.ihe.xds.metadata.AvailabilityStatus.*
-import static org.openehealth.ipf.commons.ihe.xds.validate.ValidationMessage.*
-import static org.openehealth.ipf.commons.ihe.xds.metadata.AssociationType.*
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.*
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.xds.metadata.Association
-import org.openehealth.ipf.commons.ihe.xds.requests.*
-import org.openehealth.ipf.commons.ihe.xds.responses.*
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
+import org.openehealth.ipf.commons.ihe.xds.core.requests.*
+import org.openehealth.ipf.commons.ihe.xds.core.responses.*
 
 /**
  * Route builder for ITI-41 and -42.

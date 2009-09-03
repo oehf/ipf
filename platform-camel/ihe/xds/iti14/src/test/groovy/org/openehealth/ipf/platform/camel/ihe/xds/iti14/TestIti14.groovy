@@ -16,18 +16,18 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14
 
 import static org.junit.Assert.*
-import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 import org.junit.Before
 import org.junit.Test
 import org.junit.BeforeClass
 import org.apache.cxf.transport.servlet.CXFServlet
 
-import org.openehealth.ipf.commons.ihe.xds.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
 
-import org.openehealth.ipf.commons.ihe.xds.metadata.LocalizedString
-import org.openehealth.ipf.commons.ihe.xds.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 
 /**
  * Tests the auditing of ITI-14.

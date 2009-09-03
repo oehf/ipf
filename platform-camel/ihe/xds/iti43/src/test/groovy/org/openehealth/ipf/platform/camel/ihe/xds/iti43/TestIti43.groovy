@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
 import static junit.framework.Assert.assertEquals
 import static org.junit.Assert.assertTrue
-import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 import java.io.IOException
 import java.io.InputStream
@@ -27,12 +27,12 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.commons.ihe.xds.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocument
-import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.responses.RetrievedDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.utils.CxfTestUtils
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.utils.CxfTestUtils
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.

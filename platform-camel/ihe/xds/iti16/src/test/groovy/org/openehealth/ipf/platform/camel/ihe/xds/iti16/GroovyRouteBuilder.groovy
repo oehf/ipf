@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16
 
-import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse
-import org.openehealth.ipf.commons.ihe.xds.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 
 /**
  * @author Jens Riemschneider

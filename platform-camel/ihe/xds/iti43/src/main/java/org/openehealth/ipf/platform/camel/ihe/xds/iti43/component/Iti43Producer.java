@@ -16,11 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.component;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.commons.ihe.xds.ports.Iti43PortType;
+import org.openehealth.ipf.commons.ihe.xds.Iti43PortType;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiProducer;
 
@@ -33,13 +32,11 @@ public class Iti43Producer extends DefaultItiProducer {
      * Constructs the producer.
      * @param endpoint
      *          the endpoint creating this producer.
-     * @param serviceInfo
-     *          info about the service being called by this producer.
-     * @param auditStrategy 
-     *          the strategy for auditing.
+     * @param clientFactory
+     *          the factory for clients to produce messages for the service.              
      */
-    public Iti43Producer(Iti43Endpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
-        super(endpoint, serviceInfo, auditStrategy);
+    public Iti43Producer(Iti43Endpoint endpoint, ItiClientFactory clientFactory) {
+        super(endpoint, clientFactory);
     }
 
     

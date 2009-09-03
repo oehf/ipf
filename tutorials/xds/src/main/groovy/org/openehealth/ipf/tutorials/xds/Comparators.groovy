@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.openehealth.ipf.commons.ihe.xds.transform.hl7.OrganizationTransformer
-import org.openehealth.ipf.commons.ihe.xds.transform.hl7.PersonTransformer
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.OrganizationTransformer
+import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer
 import java.text.SimpleDateFormat
 import java.util.regex.Pattern
 

@@ -20,10 +20,6 @@ import static org.apache.commons.lang.Validate.notNull;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
-import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
 
 /**
  * Camel component used to create process incoming exchanges based on webservice calls.
@@ -34,8 +30,6 @@ import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
  * @author Dmytro Rud
  */
 public class DefaultItiConsumer extends DefaultConsumer {
-    private final ItiServiceFactory serviceFactory;
-
     /**
      * Constructs the consumer.
      *
@@ -43,21 +37,12 @@ public class DefaultItiConsumer extends DefaultConsumer {
      *          the endpoint representation in Camel.
      * @param processor
      *          the processor to start processing incoming exchanges.
-     * @param serviceInfo
-     *          info describing the service.
-     * @param auditStrategy
-     *          the strategy to use for auditing.
-     * @param serviceImplClass
-     *          the class of the service implementation. 
+     * @param service
+     *          the service to consume messages from.
      */
-    public DefaultItiConsumer(DefaultItiEndpoint endpoint, Processor processor, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy, Class<?> serviceImplClass) {
+    public DefaultItiConsumer(DefaultItiEndpoint endpoint, Processor processor, DefaultItiWebService service) {
         super(endpoint, processor);
-        notNull(serviceInfo, "serviceInfo cannot be null");
-        Validate.notNull(endpoint.getServiceAddress());
-        
-        this.serviceFactory = new ItiServiceFactory(serviceInfo, auditStrategy, endpoint.getServiceAddress());
-
-        DefaultItiWebService service = (DefaultItiWebService) serviceFactory.createService(serviceImplClass);
+        notNull(service, "service cannot be null");
         service.setConsumer(this);
     }
 

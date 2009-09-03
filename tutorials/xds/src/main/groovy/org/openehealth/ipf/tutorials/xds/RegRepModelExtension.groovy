@@ -18,10 +18,10 @@ package org.openehealth.ipf.tutorials.xds
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 
 import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.commons.ihe.xds.metadata.ObjectReference
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference
 import org.openehealth.ipf.tutorials.xds.SearchDefinition
-import org.openehealth.ipf.commons.ihe.xds.validate.XDSMetaDataException
-import org.openehealth.ipf.commons.ihe.xds.responses.*
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
+import org.openehealth.ipf.commons.ihe.xds.core.responses.*
 import org.openehealth.ipf.tutorials.xds.ContentUtils
 
 import java.text.SimpleDateFormat

@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti43.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti43ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti43ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.Iti43;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.Iti43Service;
@@ -48,14 +47,14 @@ public class Iti43Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti43ClientAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new Iti43Producer(this, ItiServiceInfo.ITI_43, auditStrategy);
+        ItiClientFactory clientFactory = Iti43.getClientFactory(isSoap11(), isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        return new Iti43Producer(this, clientFactory);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti43ServerAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_43, auditStrategy, Iti43Service.class);
+        ItiServiceFactory serviceFactory = 
+            Iti43.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        Iti43Service service = serviceFactory.createService(Iti43Service.class);
+        return new DefaultItiConsumer(this, processor, service);
     }
 }

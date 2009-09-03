@@ -22,6 +22,11 @@
             <artifactId>platform-camel-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti14</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
 
         <!-- Dependencies for test -->
         <dependency>

@@ -18,7 +18,14 @@
     
     <modules>
         <module>atna</module> 
-        <module>xds</module> 
+        <module>xds/core</module> 
+        <module>xds/iti14</module> 
+        <module>xds/iti15</module> 
+        <module>xds/iti16</module> 
+        <module>xds/iti18</module> 
+        <module>xds/iti41</module> 
+        <module>xds/iti42</module> 
+        <module>xds/iti43</module> 
     </modules>
 
 </project>

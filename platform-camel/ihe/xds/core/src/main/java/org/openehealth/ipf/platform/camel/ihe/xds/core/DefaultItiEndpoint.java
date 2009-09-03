@@ -103,16 +103,16 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
 
     /**
      * @param allowIncompleteAudit
-     *          <code>true</code> if audit entries are logged even not all 
-     *          necessary data was available.
+     *          <code>true</code> if audit entries are logged even if not all 
+     *          necessary data is available.
      */
     public void setAllowIncompleteAudit(boolean allowIncompleteAudit) {
         this.allowIncompleteAudit = allowIncompleteAudit;
     }
 
     /**
-     * @return <code>true</code> if audit entries are logged even not all 
-     *          necessary data was available. Defaults to <code>false</code>.
+     * @return <code>true</code> if audit entries are logged even if not all 
+     *          necessary data is available. Defaults to <code>false</code>.
      */
     public boolean isAllowIncompleteAudit() {
         return allowIncompleteAudit;

@@ -16,18 +16,18 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
 import static junit.framework.Assert.assertEquals
-import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.commons.ihe.xds.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.xds.metadata.DocumentEntry
-import org.openehealth.ipf.commons.ihe.xds.metadata.LocalizedString
-import org.openehealth.ipf.commons.ihe.xds.requests.RegisterDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 
 /**
  * Tests the ITI-42 transaction with a webservice and client adapter defined via URIs.

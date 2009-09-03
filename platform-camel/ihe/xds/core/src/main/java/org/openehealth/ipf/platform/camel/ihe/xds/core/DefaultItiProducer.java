@@ -21,9 +21,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.ihe.xds.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceInfo;
 
 /**
  * Camel producer used to make calls to a webservice.
@@ -37,24 +36,22 @@ import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
 public abstract class DefaultItiProducer extends DefaultProducer {
     private static final Log log = LogFactory.getLog(DefaultItiProducer.class);
 
-    private final ItiClientFactory serviceClient;
+    private final ItiClientFactory clientFactory;
 
     /**
      * Constructs the producer.
      * 
      * @param endpoint
-     *            the endpoint that creates this producer.
-     * @param serviceInfo
-     *            the info describing the web-service.
-     * @param auditStrategy
-     *            the strategy to use for auditing. Can be <code>null</code> to disable
-     *            auditing.
+     *          the endpoint that creates this producer.
+     * @param clientFactory
+     *          the factory for clients to produce messages for the service.              
      */
-    public DefaultItiProducer(DefaultItiEndpoint endpoint, ItiServiceInfo serviceInfo, ItiAuditStrategy auditStrategy) {
+    public DefaultItiProducer(DefaultItiEndpoint endpoint, ItiClientFactory clientFactory) {
         super(endpoint);
-        notNull(serviceInfo, "serviceInfo");        
-        this.serviceClient = new ItiClientFactory(
-                serviceInfo, endpoint.isSoap11(), auditStrategy, endpoint.getServiceUrl());
+        
+        notNull(clientFactory, "clientFactory cannot be null");
+        
+        this.clientFactory = clientFactory;
     }
 
     public void process(Exchange exchange) throws Exception {
@@ -79,13 +76,13 @@ public abstract class DefaultItiProducer extends DefaultProducer {
      * @return the client stub.
      */
     protected Object getClient() {
-        return serviceClient.getClient();
+        return clientFactory.getClient();
     }
 
     /**
      * @return the info describing the web-service.
      */
     public ItiServiceInfo getServiceInfo() {
-        return serviceClient.getServiceInfo();
+        return clientFactory.getServiceInfo();
     }
 }

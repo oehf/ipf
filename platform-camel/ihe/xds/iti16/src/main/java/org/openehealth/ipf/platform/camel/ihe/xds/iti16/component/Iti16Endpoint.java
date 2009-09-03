@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti16.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti16ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti16ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.Iti16;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti16.service.Iti16Service;
@@ -48,14 +47,15 @@ public class Iti16Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti16ClientAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new Iti16Producer(this, ItiServiceInfo.ITI_16, auditStrategy);
+        ItiClientFactory clientFactory = 
+            Iti16.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        return new Iti16Producer(this, clientFactory);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti16ServerAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_16, auditStrategy, Iti16Service.class);
+        ItiServiceFactory serviceFactory = 
+            Iti16.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        Iti16Service service = serviceFactory.createService(Iti16Service.class);
+        return new DefaultItiConsumer(this, processor, service);
     }
 }

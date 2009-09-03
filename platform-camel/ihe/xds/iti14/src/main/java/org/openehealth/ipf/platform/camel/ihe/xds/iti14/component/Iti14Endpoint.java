@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti14.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti14ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti14ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14Service;
@@ -47,14 +46,15 @@ public class Iti14Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti14ClientAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new Iti14Producer(this, ItiServiceInfo.ITI_14, auditStrategy);
+        ItiClientFactory clientFactory = 
+            Iti14.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        return new Iti14Producer(this, clientFactory);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti14ServerAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_14, auditStrategy, Iti14Service.class);
+        ItiServiceFactory serviceFactory = 
+            Iti14.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        Iti14Service service = serviceFactory.createService(Iti14Service.class);
+        return new DefaultItiConsumer(this, processor, service);
     }
 }

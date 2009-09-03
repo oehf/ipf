@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti42ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti42ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.Iti42;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42Service;
@@ -48,14 +47,15 @@ public class Iti42Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti42ClientAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new Iti42Producer(this, ItiServiceInfo.ITI_42, auditStrategy);
+        ItiClientFactory clientFactory = 
+            Iti42.getClientFactory(isSoap11(), isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        return new Iti42Producer(this, clientFactory);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti42ServerAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_42, auditStrategy, Iti42Service.class);
+        ItiServiceFactory serviceFactory = 
+            Iti42.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        Iti42Service service = serviceFactory.createService(Iti42Service.class); 
+        return new DefaultItiConsumer(this, processor, service);
     }
 }

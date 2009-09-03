@@ -16,26 +16,26 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.core.converters;
 
 import org.apache.camel.Converter;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLAdhocQueryRequest21;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLProvideAndRegisterDocumentSetRequest21;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLQueryResponse21;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLRegistryResponse21;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
-import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
-import org.openehealth.ipf.commons.ihe.xds.requests.ProvideAndRegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.transform.requests.ProvideAndRegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.transform.requests.QueryRegistryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.transform.requests.RegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.transform.responses.QueryResponseTransformer;
-import org.openehealth.ipf.commons.ihe.xds.transform.responses.ResponseTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLAdhocQueryRequest21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLProvideAndRegisterDocumentSetRequest21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLQueryResponse21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLRegistryResponse21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
 
 /**
  * Camel type converters for EbXML 2.1.

@@ -18,8 +18,8 @@ package org.openehealth.ipf.tutorials.xds
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.xds.requests.RetrieveDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.responses.*
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.*
 
 /**
  * Route builder for ITI-43.

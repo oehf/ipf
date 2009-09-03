@@ -32,7 +32,7 @@
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-xds</artifactId>
+            <artifactId>commons-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -88,7 +88,7 @@
         <!-- Dependencies for tests -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-xds</artifactId>           
+            <artifactId>commons-ihe-xds-core</artifactId>           
             <version>${pom.version}</version>
             <scope>test</scope>
             <type>test-jar</type>

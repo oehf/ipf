@@ -16,7 +16,7 @@
 package org.openehealth.ipf.tutorials.xds
 
 import static org.openehealth.ipf.tutorials.xds.Comparators.*
-import static org.openehealth.ipf.commons.ihe.xds.metadata.AssociationType.*
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
 
 import org.apache.camel.model.OutputDefinition
 import org.apache.camel.spi.RouteContext

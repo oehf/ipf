@@ -16,11 +16,11 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16.service;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.xds.ports.Iti16PortType;
-import org.openehealth.ipf.commons.ihe.xds.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.Iti16PortType;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Converters;

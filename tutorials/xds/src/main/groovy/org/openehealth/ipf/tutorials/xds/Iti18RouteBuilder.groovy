@@ -15,16 +15,16 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import static org.openehealth.ipf.commons.ihe.xds.responses.Status.*
-import static org.openehealth.ipf.commons.ihe.xds.requests.query.QueryType.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.xds.responses.*
-import org.openehealth.ipf.commons.ihe.xds.requests.*
-import org.openehealth.ipf.commons.ihe.xds.requests.query.*
+import org.openehealth.ipf.commons.ihe.xds.core.responses.*
+import org.openehealth.ipf.commons.ihe.xds.core.requests.*
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*
 
 
 /**

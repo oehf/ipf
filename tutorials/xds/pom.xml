@@ -13,6 +13,7 @@
     </parent>
 
     <dependencies>
+        <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-xds-iti18</artifactId>
@@ -41,13 +42,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-xds</artifactId>
-            <version>${pom.version}</version>
-            <type>test-jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe</artifactId>
+            <artifactId>commons-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
             <type>test-jar</type>
         </dependency>
@@ -68,6 +63,15 @@
             <artifactId>jasper</artifactId>
             <version>6.0.18</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-atna</artifactId>
+            <version>${pom.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

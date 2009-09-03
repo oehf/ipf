@@ -18,10 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti15.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti15ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.audit.Iti15ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.Iti15;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.Iti15Service;
@@ -48,14 +47,15 @@ public class Iti15Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti15ClientAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new Iti15Producer(this, ItiServiceInfo.ITI_15, auditStrategy);
+        ItiClientFactory clientFactory = 
+            Iti15.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        return new Iti15Producer(this, clientFactory);
     }
 
-    public Consumer createConsumer(Processor processor) throws Exception {        
-        ItiAuditStrategy auditStrategy = 
-            isAudit() ? new Iti15ServerAuditStrategy(isAllowIncompleteAudit()) : null;
-        return new DefaultItiConsumer(this, processor, ItiServiceInfo.ITI_15, auditStrategy, Iti15Service.class);
+    public Consumer createConsumer(Processor processor) throws Exception {
+        ItiServiceFactory serviceFactory = 
+            Iti15.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        Iti15Service service = serviceFactory.createService(Iti15Service.class);
+        return new DefaultItiConsumer(this, processor, service);
     }
 }

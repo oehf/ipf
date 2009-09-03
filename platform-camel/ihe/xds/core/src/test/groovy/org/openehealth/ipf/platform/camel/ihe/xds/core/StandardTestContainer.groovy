@@ -34,8 +34,8 @@ import org.apache.cxf.jaxws.JaxWsServerFactoryBean
 import org.junit.AfterClass
 import org.junit.After
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.commons.ihe.xds.server.ServletServer
-import org.openehealth.ipf.commons.ihe.xds.server.JettyServer
+import org.openehealth.ipf.commons.ihe.xds.core.server.ServletServer
+import org.openehealth.ipf.commons.ihe.xds.core.server.JettyServer
 import org.openehealth.ipf.commons.ihe.atna.MockedSender
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.context.ApplicationContext

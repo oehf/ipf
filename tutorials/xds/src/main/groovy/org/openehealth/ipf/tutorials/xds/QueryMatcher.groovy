@@ -17,8 +17,8 @@ package org.openehealth.ipf.tutorials.xds
 
 import static org.openehealth.ipf.tutorials.xds.Comparators.*
 
-import org.openehealth.ipf.commons.ihe.xds.metadata.*
-import org.openehealth.ipf.commons.ihe.xds.requests.query.*
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*
 
 
 /**
