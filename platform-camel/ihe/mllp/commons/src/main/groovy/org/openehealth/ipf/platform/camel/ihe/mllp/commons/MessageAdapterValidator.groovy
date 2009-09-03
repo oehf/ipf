@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons
 
 import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openehealth.ipf.modules.hl7dsl.MessageAdapterimport org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-
+import org.openehealth.ipf.modules.hl7dsl.VariesAdapterimport org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 import java.util.Map
 import ca.uhn.hl7v2.model.Groupimport ca.uhn.hl7v2.model.GenericSegment
 
@@ -35,10 +35,16 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
          [
           'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PID PV1',
                    'A31'             : 'MSH EVN PID PV1',
-                   'A40'             : 'MSH EVN PID MRG'],
-          'QPD' : ['Q22 Q23'         : 'MSH QPD RCP'], 
-          'RSP' : ['K22 K23'         : 'MSH MSA QAK QPD'], 
-          'ACK' : ['*'               : 'MSH MSA'],
+                   'A40'             : 'MSH EVN PID MRG',
+                  ],
+          'QBP' : ['Q22 Q23 ZV1'     : 'MSH QPD RCP',
+                  ],
+          'RSP' : ['K22 K23'         : 'MSH MSA QAK QPD',
+                  ],
+          'QCN' : ['J01'             : 'MSH QID',
+                  ],              
+          'ACK' : ['*'               : 'MSH MSA',
+                  ],
          ]
 
      
@@ -173,12 +179,28 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
      }
          
      /**
+      * Validates segment QID.
+      */
+     static def checkQID(msg) {
+         checkSegmentStructure(msg, 'QID', [1, 2])
+     }
+         
+     /**
       * Validates segment QPD.
       */
      static def checkQPD(msg) {
          def exceptions = []
          exceptions += checkSegmentStructure(msg, 'QPD', [1, 2])
-         exceptions += checkPatientId(msg.QPD[3](0))
+         def qpd3 = msg.QPD[3]
+         if(qpd3 instanceof SelectorClosure){
+             // for ITI-21, ITI-22 (PDQ Queries)
+             if(qpd3().size() == 0) {
+                 exceptions += new Exception('Empty query in QPD-3')
+             }
+         } else { 
+             // for ITI-9 (PIX Query)
+             exceptions += checkPatientId(msg.QPD[3](0))
+         }
          exceptions
      }
      

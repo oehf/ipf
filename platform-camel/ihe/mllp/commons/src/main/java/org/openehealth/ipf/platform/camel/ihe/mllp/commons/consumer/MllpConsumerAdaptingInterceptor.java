@@ -54,7 +54,7 @@ public class MllpConsumerAdaptingInterceptor extends AbstractMllpConsumerInterce
      * a {@link MllpAdaptingException} on failure.  
      */
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_HEADER_NAME, MessageAdapter.class); 
+        MessageAdapter originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, MessageAdapter.class); 
         Message originalMessage = (Message) originalAdapter.getTarget();
         MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
         

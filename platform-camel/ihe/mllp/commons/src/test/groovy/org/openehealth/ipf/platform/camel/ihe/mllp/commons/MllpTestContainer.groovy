@@ -76,6 +76,15 @@ class MllpTestContainer {
 
      
      /**
+      * Checks whether the message represents a positive ReSPonse.
+      */
+     static void assertRSP(MessageAdapter msg) {
+         assertTrue(msg.MSH[9][1].value == 'RSP')  
+         assertFalse(msg.MSA[1].value[1] in ['R', 'E'])
+     }
+
+     
+     /**
       * Checks whether the message represents a NAK.
       */
      static void assertNAK(MessageAdapter msg) {

@@ -37,12 +37,17 @@ public class Iti10Component extends MllpComponent {
                 207, 
                 AckTypeCode.AR, 
                 207, 
-                "ADT",
-                new String[] {"A31"}); 
+                new String[] {"ADT"},
+                new String[] {"A31"},
+                new boolean[] {true},
+                new String[] {"ACK"},
+                new String[] {"*"}); 
   
-    private static final MllpAuditStrategy clientAuditStrategy = new Iti10ClientAuditStrategy();
-    private static final MllpAuditStrategy serverAuditStrategy = new Iti10ServerAuditStrategy();
-    private static final Parser parser = new PipeParser();
+    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
+        new Iti10ClientAuditStrategy();
+    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
+        new Iti10ServerAuditStrategy();
+    private static final Parser PARSER = new PipeParser();
     
     public Iti10Component() {
         super();
@@ -54,12 +59,12 @@ public class Iti10Component extends MllpComponent {
     
     @Override
     public MllpAuditStrategy getClientAuditStrategy() {
-        return clientAuditStrategy;
+        return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
     public MllpAuditStrategy getServerAuditStrategy() {
-        return serverAuditStrategy;
+        return SERVER_AUDIT_STRATEGY;
     }
     
     @Override
@@ -69,6 +74,6 @@ public class Iti10Component extends MllpComponent {
 
     @Override
     public Parser getParser() {
-        return parser;
+        return PARSER;
     }
 }

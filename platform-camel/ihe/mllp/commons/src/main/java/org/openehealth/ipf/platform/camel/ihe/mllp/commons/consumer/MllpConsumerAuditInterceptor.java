@@ -48,14 +48,13 @@ public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerIntercepto
      * raised during the proper call.
      */
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
         MllpAuditStrategy strategy = getMllpEndpoint().getServerAuditStrategy();
-        MllpAuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, msg);
+        MllpAuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, exchange);
 
         boolean failed = false;
         try {
             getWrappedProcessor().process(exchange);
-            msg = resultMessage(exchange).getBody(MessageAdapter.class);
+            MessageAdapter msg = resultMessage(exchange).getBody(MessageAdapter.class);
             enrichAuditDatasetFromResponse(auditDataset, strategy, msg);
             failed = AuditUtils.isNotPositiveAck(msg);
         } catch (Exception e) {
@@ -79,16 +78,14 @@ public class MllpConsumerAuditInterceptor extends AbstractMllpConsumerIntercepto
      */
     private MllpAuditDataset createAndEnrichAuditDatasetFromRequest(
             MllpAuditStrategy strategy,
-            MessageAdapter msg) 
+            Exchange exchange) 
     {
         try {
+            MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
             MllpAuditDataset auditDataset = strategy.createAuditDataset();
-            
-            // transaction-agnostic enrichment
             AuditUtils.enrichGenericAuditDatasetFromSession(auditDataset);
             AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
-            // transaction-specific enrichment
-            strategy.enrichAuditDatasetFromRequest(auditDataset, msg);
+            strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
             return auditDataset;
             
         } catch(Exception e) {

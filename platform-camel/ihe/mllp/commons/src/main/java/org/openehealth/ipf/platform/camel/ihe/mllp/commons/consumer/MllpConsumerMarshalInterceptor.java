@@ -55,9 +55,14 @@ public class MllpConsumerMarshalInterceptor extends AbstractMllpConsumerIntercep
         // unmarshal
         boolean unmarshallingFailed = false;
         try {
-            MllpMarshalUtils.unmarshal(exchange.getIn(), charset, getMllpEndpoint().getParser()); 
-            originalAdapter = exchange.getIn().getBody(MessageAdapter.class).copy();
-            exchange.getIn().setHeader(ORIGINAL_MESSAGE_HEADER_NAME, originalAdapter);
+            org.apache.camel.Message in = exchange.getIn();
+            String originalString = MllpMarshalUtils.unmarshal(in, charset, getMllpEndpoint().getParser());
+            
+            // Store different representations of the original request into Camel headers
+            // Call to .copy() will throw an NPE when the 
+            originalAdapter = in.getBody(MessageAdapter.class).copy();
+            in.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, originalAdapter);
+            in.setHeader(ORIGINAL_MESSAGE_STRING_HEADER_NAME, originalString);
         } catch (Exception e) {
             unmarshallingFailed = true;
             LOG.error("Unmarshalling failed, message processing not possible", e);

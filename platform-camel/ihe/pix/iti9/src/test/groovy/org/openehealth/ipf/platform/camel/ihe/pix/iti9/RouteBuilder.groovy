@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.pix.iti9
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessageimport java.io.File
 
 /**
  * Camel route for generic unit tests.
@@ -26,22 +26,29 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  */
 class RouteBuilder extends SpringRouteBuilder {
 
+    def rsp = '''MSH|^~\\&|MESA_XREF|XYZ_HOSPITAL|MESA_PIX_CLIENT|MESA_DEPARTMENT|20090901141123||RSP^K23^RSP_K23|356813|P|2.5
+         MSA|AA|10501108
+         QAK|QRY10501108|OK
+         QPD|QRY_1001^Query for Corresponding Identifiers^IHEDEMO|QRY10501108|79471^^^HZLN^PI|^^^KHKN~^^^&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO~^^^PKLN&2.16.840.1.113883.3.37.4.1.1.2.511.1&ISO
+         PID|1||79471^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI~78912^^^PKLN&2.16.840.1.113883.3.37.4.1.1.2.511.1&ISO^PI||~^S
+             '''
+              
      void configure() throws Exception {
 
          from('pix-iti9://0.0.0.0:8886?allowIncompleteAudit=true')
-         .onException(Exception.class)
-             .maximumRedeliveries(0)
-             .end()
-         .process {
-             resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-         }
+             .onException(Exception.class)
+                 .maximumRedeliveries(0)
+                 .end()
+             .process {
+                 resultMessage(it).body = rsp
+             }
 
          from('pix-iti9://0.0.0.0:8887?audit=false')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 resultMessage(it).body = rsp
              }
 
          from('pix-iti9://0.0.0.0:8888')
@@ -49,7 +56,12 @@ class RouteBuilder extends SpringRouteBuilder {
                  .maximumRedeliveries(0)
                  .end()
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 resultMessage(it).body = rsp
+             }
+         
+         from('pix-iti9://0.0.0.0:8889')
+             .process {
+                 resultMessage(it).body = rsp
              }
      }
 }

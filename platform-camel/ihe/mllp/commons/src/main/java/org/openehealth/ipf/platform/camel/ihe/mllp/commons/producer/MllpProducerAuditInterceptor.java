@@ -33,6 +33,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
  * @author Dmytro Rud
  */
 public class MllpProducerAuditInterceptor extends AbstractMllpProducerInterceptor {
+    
+    
     private static final transient Log LOG = LogFactory.getLog(MllpProducerAuditInterceptor.class);
 
     /**
@@ -51,14 +53,13 @@ public class MllpProducerAuditInterceptor extends AbstractMllpProducerIntercepto
      * raised during the proper call.
      */
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
         MllpAuditStrategy strategy = getMllpEndpoint().getClientAuditStrategy();
-        MllpAuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, msg);
+        MllpAuditDataset auditDataset = createAndEnrichAuditDatasetFromRequest(strategy, exchange);
     
         boolean failed = false; 
         try {
             getWrappedProducer().process(exchange);
-            msg = resultMessage(exchange).getBody(MessageAdapter.class);
+            MessageAdapter msg = resultMessage(exchange).getBody(MessageAdapter.class);
             enrichAuditDatasetFromResponse(auditDataset, strategy, msg);
             failed = AuditUtils.isNotPositiveAck(msg);
         } catch (Exception e) {
@@ -80,14 +81,15 @@ public class MllpProducerAuditInterceptor extends AbstractMllpProducerIntercepto
      * @return
      *      newly created audit dataset or <code>null</code> when creation failed.
      */
-    private MllpAuditDataset createAndEnrichAuditDatasetFromRequest(
+    public MllpAuditDataset createAndEnrichAuditDatasetFromRequest(
             MllpAuditStrategy strategy,
-            MessageAdapter msg) 
+            Exchange exchange) 
     {
         try {
+            MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
             MllpAuditDataset auditDataset = strategy.createAuditDataset();
             AuditUtils.enrichGenericAuditDatasetFromRequest(auditDataset, msg);
-            strategy.enrichAuditDatasetFromRequest(auditDataset, msg);
+            strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange);
             auditDataset.setLocalAddress("dummy");   // not used on client side
             auditDataset.setRemoteAddress(
                     AuditUtils.formatEndpointAddress(getEndpoint().getEndpointUri()));
@@ -104,7 +106,7 @@ public class MllpProducerAuditInterceptor extends AbstractMllpProducerIntercepto
      * Enriches the given audit dataset with data from the response message.
      * All exception are ignored.
      */
-    private void enrichAuditDatasetFromResponse(
+    public void enrichAuditDatasetFromResponse(
             MllpAuditDataset auditDataset,
             MllpAuditStrategy strategy,
             MessageAdapter msg) 

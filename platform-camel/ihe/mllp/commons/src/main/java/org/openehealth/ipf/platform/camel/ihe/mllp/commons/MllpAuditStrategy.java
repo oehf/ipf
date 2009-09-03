@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.commons;
 
+import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
@@ -50,24 +51,31 @@ public interface MllpAuditStrategy {
     
     /**
      * Enriches the given audit dataset with transaction-specific 
-     * contents of the request message.
+     * contents of the request message and Camel exchange.
      * @param auditDataset
-     *          Audit dataset to be enriched.
+     *      audit dataset to be enriched.
      * @param msg
-     *          {@link MessageAdapter} representing the message.
+     *      {@link MessageAdapter} representing the message.
+     * @param msg
+     *      Camel exchange
      */
-    public void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg);
+    public void enrichAuditDatasetFromRequest(
+            MllpAuditDataset auditDataset, 
+            MessageAdapter msg,
+            Exchange exchange);
     
     
     /**
      * Enriches the given audit dataset with transaction-specific 
      * contents of the response message.
      * @param auditDataset
-     *          Audit dataset to be enriched.
+     *      audit dataset to be enriched.
      * @param msg
-     *          {@link MessageAdapter} representing the message.
+     *      {@link MessageAdapter} representing the message.
      */
-    public void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg);
+    public void enrichAuditDatasetFromResponse(
+            MllpAuditDataset auditDataset, 
+            MessageAdapter msg);
     
     
     /**

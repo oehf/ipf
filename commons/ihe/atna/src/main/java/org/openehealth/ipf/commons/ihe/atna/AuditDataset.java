@@ -69,15 +69,23 @@ public class AuditDataset {
                 Class<?> methodReturnType = method.getReturnType();
 
                 if ((methodName.startsWith("get") || methodName.startsWith("is"))
-                        && (method.getParameterTypes().length == 0)) {
-                    sb.append("\n    ").append(method.getName()).append(" -> ");
+                        && (method.getParameterTypes().length == 0)) 
+                {
+                    sb.append("\n    ")
+                      .append(method.getName())
+                      .append(" -> ");
 
                     if (methodReturnType == String[].class) {
                         String[] result = (String[]) method.invoke(this);
-                        for (int i = 0; i < result.length; ++i) {
-                            sb.append((i == 0) ? "{" : ", ").append(result[i]);
+                        if(result != null) {
+                            for (int i = 0; i < result.length; ++i) {
+                                sb.append((i == 0) ? "{" : ", ")
+                                  .append(result[i]);
+                            }
+                            sb.append('}');
+                        } else {
+                            sb.append("null");
                         }
-                        sb.append('}');
 
                     } else {
                         sb.append(method.invoke(this));
@@ -161,6 +169,5 @@ public class AuditDataset {
         
         return missing.isEmpty() || allowIncompleteAudit;
     }
-    
     
 }

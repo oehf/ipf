@@ -20,7 +20,7 @@ import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.apache.camel.Exchangeimport org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.AbstractMllpConsumerInterceptor
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -190,7 +190,11 @@ class AuditUtils {
      * to <code>true</code> return vales as well.
      */
     static boolean isNotPositiveAck(MessageAdapter msg) {
-        msg?.MSA[1]?.value != 'AA'
+        try {
+            return msg.MSA[1].value != 'AA'
+        } catch (Exception e) {
+            return false
+        }
     }
      
 
@@ -198,7 +202,29 @@ class AuditUtils {
      * Returns a list of patient IDs from the given repeatable field 
      * or <code>null</code>, when there are no patient IDs.
      */
-    static List pidList(repeatable) {
+    static List pidList(SelectorClosure repeatable) {
         repeatable().collect { cx -> MessageUtils.pipeEncode(cx.target) } ?: null
+    }
+     
+    
+    /**
+     * Extracts string representation og the given HL7 segment  
+     * from the message stored in the given Camel exchange.
+     * <p>
+     * Tries stored original message first, then tries to encode  
+     * a segment from MessageAdapter.
+     */
+    static String getSegmentString(Exchange exchange, MessageAdapter msg, String segmentName) {
+        // try header first (will work only on consumer side)
+        def s = exchange.in.getHeader(
+                AbstractMllpConsumerInterceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME,
+                String.class)
+        s = s?.split('[\\n\\r]').find { it.startsWith(segmentName + '|') }
+        if(s) {
+            return s
+        }
+            
+        // fall back to the message abrakadapter
+        return MessageUtils.pipeEncode(msg."${segmentName}".target)
     }
 }

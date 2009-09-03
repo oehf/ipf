@@ -40,18 +40,23 @@ public class Iti9Component extends MllpComponent {
                 207, 
                 AckTypeCode.AR, 
                 207, 
-                "QBP",
-                new String[] {"Q23"}); 
+                new String[] {"QBP"},
+                new String[] {"Q23"},
+                new boolean[] {true},
+                new String[] {"RSP"},
+                new String[] {"K23"}); 
   
-    private static final MllpAuditStrategy clientAuditStrategy = new Iti9ClientAuditStrategy();
-    private static final MllpAuditStrategy serverAuditStrategy = new Iti9ServerAuditStrategy();
-    private static final Parser parser;
+    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
+        new Iti9ClientAuditStrategy();
+    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
+        new Iti9ServerAuditStrategy();
+    private static final Parser PARSER;
     
     static {
         HashMap<String, String[]> map = new HashMap<String, String[]>();
         map.put("2.5", new String[] {"org.openehealth.ipf.platform.camel.ihe.pix.iti9.def.v25"});
         CustomModelClassFactory factory = new CustomModelClassFactory(map); 
-        parser = new PipeParser(factory);
+        PARSER = new PipeParser(factory);
     }
     
     
@@ -65,12 +70,12 @@ public class Iti9Component extends MllpComponent {
     
     @Override
     public MllpAuditStrategy getClientAuditStrategy() {
-        return clientAuditStrategy;
+        return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
     public MllpAuditStrategy getServerAuditStrategy() {
-        return serverAuditStrategy;
+        return SERVER_AUDIT_STRATEGY;
     }
     
     @Override
@@ -80,6 +85,6 @@ public class Iti9Component extends MllpComponent {
 
     @Override
     public Parser getParser() {
-        return parser;
+        return PARSER;
     }
 }

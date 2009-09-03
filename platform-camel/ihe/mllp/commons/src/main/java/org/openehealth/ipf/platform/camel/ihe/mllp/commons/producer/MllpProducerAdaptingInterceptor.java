@@ -22,6 +22,10 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
 
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.util.Terser;
+
 
 /**
  * Producer-side Camel interceptor which creates a {@link MessageAdapter} 
@@ -41,14 +45,31 @@ public class MllpProducerAdaptingInterceptor extends AbstractMllpProducerInterce
      * and performs some exchange configuration.
      */
     public void process(Exchange exchange) throws Exception {
-        exchange.setPattern(ExchangePattern.InOut);
-        
         MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
                 exchange.getIn(), 
                 getMllpEndpoint().getConfiguration().getCharsetName(),
                 getMllpEndpoint().getParser());
         exchange.getIn().setBody(msg);
+        exchange.setPattern(ExchangePattern.InOut);
         
         getWrappedProducer().process(exchange);
+    }
+    
+    
+    /**
+     * Determines which Camel exchange pattern corresponds to the HL7 message
+     * represented by the given {@link MessageAdapter}.
+     */
+    private ExchangePattern getExchangePattern(MessageAdapter msg) throws HL7Exception {
+        Terser terser = new Terser((Message) msg.getTarget());
+        String messageType = terser.get("MSH-9-1");
+        try {
+            if( ! getMllpEndpoint().getTransactionConfiguration().isSynchronous(messageType)) {
+                return ExchangePattern.InOnly; 
+            }
+        } catch(Exception e) {
+            // nop
+        }
+        return ExchangePattern.InOut; 
     }
 }

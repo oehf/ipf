@@ -127,12 +127,15 @@ public class MllpMarshalUtils {
      * @param charset
      *      character set name for HL7 transformation. 
      * @param parser 
-     *      HL7 parser. 
+     *      HL7 parser.
+     * @return  
+     *      String representation of message contents, as a convenience.  
      */
-    public static void unmarshal(Message message, String charset, Parser parser) throws Exception {
+    public static String unmarshal(Message message, String charset, Parser parser) throws Exception {
         String s = convertBodyToString(message, charset);
         MessageAdapter msg = MessageAdapters.make(parser, s);
         message.setBody(msg);
+        return s;
     }
 
     

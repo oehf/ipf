@@ -41,8 +41,7 @@ public abstract class AbstractMllpProducerInterceptor implements Producer {
      * @param wrappedProducer
      *      The producer to be wrapped.
      */
-    public AbstractMllpProducerInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) 
-    {
+    public AbstractMllpProducerInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
         Validate.notNull(endpoint);
         Validate.notNull(wrappedProducer);
 
@@ -62,6 +61,7 @@ public abstract class AbstractMllpProducerInterceptor implements Producer {
     public MllpEndpoint getMllpEndpoint() {
         return endpoint;
     }
+    
     
     // ----- dumb delegation, nothing interesting below -----
     

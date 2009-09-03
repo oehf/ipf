@@ -21,24 +21,61 @@ import ca.uhn.hl7v2.parser.Parser
 
 /**
  * Groovy subroutines for HL7 message acceptance checks.
- * 
  * @author Dmytro Rud
  */
 class AcceptanceCheckUtils {
 
+     private AcceptanceCheckUtils() {
+         throw new IllegalStateException('Helper class, do not instantiate');
+     }
+
+     
     /**
      * Performs transaction-specific acceptance test of the given request message.
-     * @param msg
-     *          {@link MessageAdapter} representing the message.
-     * @param config
-     *          transaction-specific parameters.
-     * @throws MllpAcceptanceException
-     *          when the message cannot be accepted.
      */
      static void checkRequestAcceptance(
              MessageAdapter msg, 
              MllpTransactionConfiguration config,
              Parser parser) throws MllpAcceptanceException 
+     {
+         checkMessageAcceptance(msg, config, parser, 'Request')
+     }
+     
+     
+     /**
+      * Performs transaction-specific acceptance test of the given response message.
+      */
+     static void checkResponseAcceptance(
+             MessageAdapter msg, 
+             MllpTransactionConfiguration config,
+             Parser parser) throws MllpAcceptanceException 
+     {
+         checkMessageAcceptance(msg, config, parser, 'Response')
+         
+         if( ! ['AA', 'AR', 'AE'].contains(msg.MSA[1]?.value)) {
+             throw new MllpAcceptanceException("Bad response: missing or invalid MSA segment")
+         }
+     }
+      
+      
+     /**
+      * Performs acceptance test of the given message.
+      * @param msg
+      *          {@link MessageAdapter} representing the message.
+      * @param config
+      *          transaction-specific parameters.
+      * @param parser
+      *          HL7 parser.
+      * @param direction
+      *          either 'Resuest' or 'Response'.
+      * @throws MllpAcceptanceException
+      *          when the message cannot be accepted.
+      */
+     private static void checkMessageAcceptance(
+             MessageAdapter msg, 
+             MllpTransactionConfiguration config,
+             Parser parser,
+             String direction) throws MllpAcceptanceException 
      {
          def version = msg.MSH[12].value 
          if(version != config.hl7Version) {
@@ -46,41 +83,27 @@ class AcceptanceCheckUtils {
          }
          
          def msgType = msg.MSH[9][1].value
-         if(msgType != config.allowedMessageType) {
+         if( ! config."isSupported${direction}MessageType"(msgType)) {
              throw new MllpAcceptanceException("Invalid message type ${msgType}", 200)
          }
 
          def triggerEvent = msg.MSH[9][2].value
-         def found = false
-         for(int i = 0; i < config.allowedTriggerEvents.length; ++i) {
-             if(config.allowedTriggerEvents[i] == triggerEvent) {
-                 def structure = msg.MSH[9][3].value
-                 if(structure) {
-                     def expected = parser.getMessageStructureForEvent("${msgType}_${triggerEvent}", version)
-                     if(structure != expected) {
-                         throw new MllpAcceptanceException("Invalid structure map ${structure}", 204)
-                     }
-                 }
-                 found = true
-                 break
-             }
-         }
-         if( ! found) {
+         if( ! config."isSupported${direction}TriggerEvent"(msgType, triggerEvent)) {
              throw new MllpAcceptanceException("Invalid trigger event ${triggerEvent}", 201)
          }
-     }
-     
-     
-     /**
-      * Performs transaction-agnostic acceptance test of the given response message.
-      * @param msg
-      *          {@link MessageAdapter} representing the message.
-      * @throws MllpAcceptanceException
-      *          when the message cannot be accepted.
-      */
-     static void checkResponseAcceptance(MessageAdapter msg) {
-         if( ! ['AA', 'AR', 'AE'].contains(msg.MSA[1]?.value)) {
-             throw new MllpAcceptanceException("Bad response: missing or invalid MSA segment")
+
+         def structure = msg.MSH[9][3].value
+         if(structure) {
+             def expected = parser.getMessageStructureForEvent("${msgType}_${triggerEvent}", version)
+             
+             // the expected structure must be equal to the actual one,
+             // but second components may be omitted in acknowledgements 
+             if( ! ((structure == expected) || 
+                    (structure.startsWith('ACK') && expected.startsWith('ACK'))))
+             {
+                 throw new MllpAcceptanceException("Invalid structure map ${structure}", 204)
+             }
          }
      }
+
 }

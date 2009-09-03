@@ -18,13 +18,16 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AcceptanceCheckUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
+
+import ca.uhn.hl7v2.parser.Parser;
 
 
 /**
  * Consumer-side acceptance checking Camel interceptor.
- * 
  * @author Dmytro Rud
  */
 public class MllpConsumerAcceptanceInterceptor extends AbstractMllpConsumerInterceptor {
@@ -34,15 +37,19 @@ public class MllpConsumerAcceptanceInterceptor extends AbstractMllpConsumerInter
     }
 
     /**
-     * Checks whether the request is acceptable, 
-     * does not check the response (yet). 
+     * Checks whether the request and response messages are acceptable. 
      */
     public void process(Exchange exchange) throws Exception {
-        AcceptanceCheckUtils.checkRequestAcceptance(
-                exchange.getIn().getBody(MessageAdapter.class), 
-                getMllpEndpoint().getTransactionConfiguration(),
-                getMllpEndpoint().getParser());
+        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
+        Parser parser = getMllpEndpoint().getParser();
+        MessageAdapter msg;
+
+        msg = exchange.getIn().getBody(MessageAdapter.class);
+        AcceptanceCheckUtils.checkRequestAcceptance(msg, config, parser); 
         
         getWrappedProcessor().process(exchange);
+
+        msg = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
+        AcceptanceCheckUtils.checkResponseAcceptance(msg, config, parser);
     }
 }

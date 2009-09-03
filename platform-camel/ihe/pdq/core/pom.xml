@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.openehealth.ipf.platform-camel</groupId>
+	<artifactId>platform-camel-ihe-pdq-core</artifactId>
+	<name>platform-camel-ihe-pdq-core</name>
+
+	<properties>
+		<osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.pdq.core.*</osgi.export.pkg>
+	</properties>
+
+	<parent>
+		<groupId>org.openehealth.ipf.platform-camel</groupId>
+		<artifactId>platform-camel-ihe-pdq</artifactId>
+		<version>2.0-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<!-- Dependencies for main -->
+		<dependency>
+			<groupId>org.openehealth.ipf.platform-camel</groupId>
+			<artifactId>platform-camel-ihe-mllp-commons</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ca.uhn.hapi</groupId>
+			<artifactId>hapi-structures-v25</artifactId>
+		</dependency>
+
+
+		<!-- Dependencies for test -->
+		<dependency>
+			<groupId>org.openehealth.ipf.platform-camel</groupId>
+			<artifactId>platform-camel-ihe-mllp-commons</artifactId>
+			<version>${pom.version}</version>
+			<scope>test</scope>
+			<type>test-jar</type>
+		</dependency>
+	</dependencies>
+</project>

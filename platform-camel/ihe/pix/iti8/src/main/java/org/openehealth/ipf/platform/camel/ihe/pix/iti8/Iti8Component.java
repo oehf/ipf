@@ -26,7 +26,6 @@ import ca.uhn.hl7v2.parser.Parser;
 
 /**
  * Camel component for ITI-8 (PIX Feed).
- * 
  * @author Dmytro Rud
  */
 public class Iti8Component extends MllpComponent {
@@ -38,12 +37,17 @@ public class Iti8Component extends MllpComponent {
                 207, 
                 AckTypeCode.AR, 
                 207, 
-                "ADT",
-                new String[] {"A01", "A04", "A05", "A08", "A40"}); 
+                new String[] {"ADT"},
+                new String[] {"A01 A04 A05 A08 A40"},
+                new boolean[] {true},
+                new String[] {"ACK"},
+                new String[] {"*"}); 
   
-    private static final MllpAuditStrategy clientAuditStrategy = new Iti8ClientAuditStrategy();
-    private static final MllpAuditStrategy serverAuditStrategy = new Iti8ServerAuditStrategy();
-    private static final Parser parser = new PipeParser();
+    private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
+        new Iti8ClientAuditStrategy();
+    private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
+        new Iti8ServerAuditStrategy();
+    private static final Parser PARSER = new PipeParser();
     
     public Iti8Component() {
         super();
@@ -55,12 +59,12 @@ public class Iti8Component extends MllpComponent {
     
     @Override
     public MllpAuditStrategy getClientAuditStrategy() {
-        return clientAuditStrategy;
+        return CLIENT_AUDIT_STRATEGY;
     }
 
     @Override
     public MllpAuditStrategy getServerAuditStrategy() {
-        return serverAuditStrategy;
+        return SERVER_AUDIT_STRATEGY;
     }
     
     @Override
@@ -70,6 +74,6 @@ public class Iti8Component extends MllpComponent {
 
     @Override
     public Parser getParser() {
-        return parser;
+        return PARSER;
     }
 }

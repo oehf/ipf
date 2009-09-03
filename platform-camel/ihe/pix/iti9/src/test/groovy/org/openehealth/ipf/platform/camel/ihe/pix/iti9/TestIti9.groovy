@@ -76,7 +76,7 @@ class TestIti9 extends MllpTestContainer {
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q23', '2.5') 
         def msg = send(endpointUri, body)
-        assertACK(msg)
+        assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size)
     }
 
@@ -128,7 +128,6 @@ class TestIti9 extends MllpTestContainer {
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        println msg
         assertEquals(0, auditSender.messages.size)
     }
     
@@ -207,7 +206,8 @@ class TestIti9 extends MllpTestContainer {
     def doTestIncompleteAudit(String endpointUri, int expectedAuditItemsCount) {
         def body = getMessageString('QBP^Q23', '2.5', false)
         def msg = send(endpointUri, body)
-        assertACK(msg)
+        assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size)
     }
+    
 }

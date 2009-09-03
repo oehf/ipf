@@ -15,7 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.commons;
 
+import static org.apache.commons.lang.Validate.isTrue;
+import static org.apache.commons.lang.Validate.noNullElements;
+import static org.apache.commons.lang.Validate.notEmpty;
+import static org.apache.commons.lang.Validate.notNull;
+
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
+
 
 /**
  * Endpoint-agnostic parameters of an MLLP-based transaction.
@@ -28,12 +34,15 @@ public class MllpTransactionConfiguration {
     
     private final int requestErrorDefaultErrorCode;
     private final AckTypeCode requestErrorDefaultAckTypeCode;
-    
     private final int responseErrorDefaultErrorCode;
-    
-    private final String allowedMessageType;
-    private final String[] allowedTriggerEvents;
-    
+
+    private final String[] allowedRequestMessageTypes;
+    private final String[] allowedRequestTriggerEvents;
+    private final boolean[] requestSyncFlags;
+
+    private final String[] allowedResponseMessageTypes;
+    private final String[] allowedResponseTriggerEvents;
+
 
     /**
      * Constructor.
@@ -41,19 +50,32 @@ public class MllpTransactionConfiguration {
      * @param hl7Version
      *      HL7 version for acceptance checks and default NAKs (MSH-12).
      * @param sendingApplication
-     *      Sending application for default NAKs (MSH-3).
+     *      sending application for default NAKs (MSH-3).
      * @param sendingFacility
-     *      Sending application for default NAKs (MSH-4).
+     *      sending application for default NAKs (MSH-4).
      * @param requestErrorDefaultErrorCode
-     *      Default error code for request-related NAKs.
+     *      default error code for request-related NAKs.
      * @param requestErrorDefaultAckTypeCode
-     *      Default ack type code for request-related NAKs.
+     *      default ack type code for request-related NAKs.
      * @param responseErrorDefaultErrorCode
-     *      Default error code for response-related NAKs.
-     * @param allowedMessageType
-     *      Valid value of MSH-9-1 (for acceptance checks).
-     * @param allowedTriggerEvents
-     *      Array of valid values of MSH-9-2 (for acceptance checks).
+     *      default error code for response-related NAKs.
+     * @param allowedResponseMessageTypes
+     *      array of allowed request message types, 
+     *      e.g. <code>{"ADT", "MDM"}</code>.
+     * @param allowedRequestTriggerEvents
+     *      array of allowed request trigger events  
+     *      for each request message type,  
+     *      e.g. <code>{"A01 A02 A03", "T06 T07 T08"}</code>.
+     * @param requestSyncFlags
+     *      flags of whether the request messages of corresponding 
+     *      type should be handled synchronously.
+     * @param allowedResponseMessageTypes
+     *      array of allowed response message types, e.g. <code>{"ACK", "RSP"}</code>.
+     *      <code>null</code> values may be used for asynchronous requests.
+     * @param allowedResponseTriggerEvents
+     *      array of allowed response trigger events for each message type,  
+     *      may contain wildcard "*", e.g. <code>{"*", "K22"}</code>.
+     *      <code>null</code> values may be used for asynchronous requests.
      */
     public MllpTransactionConfiguration(
             String hl7Version,
@@ -62,9 +84,33 @@ public class MllpTransactionConfiguration {
             int requestErrorDefaultErrorCode,
             AckTypeCode requestErrorDefaultAckTypeCode,
             int responseErrorDefaultErrorCode,
-            String allowedMessageType,
-            String[] allowedTriggerEvents)
+            String[] allowedRequestMessageTypes,
+            String[] allowedRequestTriggerEvents,
+            boolean[] requestSyncFlags,
+            String[] allowedResponseMessageTypes,
+            String[] allowedResponseTriggerEvents)
     {
+        notNull(hl7Version);
+        notNull(sendingApplication);
+        notNull(sendingFacility);
+        notNull(requestErrorDefaultAckTypeCode);
+
+        notEmpty(allowedRequestMessageTypes);
+        notEmpty(allowedRequestTriggerEvents);
+        noNullElements(allowedRequestMessageTypes);
+        noNullElements(allowedRequestTriggerEvents);
+        notNull(requestSyncFlags);
+        
+        notEmpty(allowedResponseMessageTypes);
+        notEmpty(allowedResponseTriggerEvents);
+
+        isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
+        isTrue(allowedRequestMessageTypes.length == requestSyncFlags.length);
+        isTrue(allowedRequestMessageTypes.length == allowedResponseMessageTypes.length);
+        isTrue(allowedRequestMessageTypes.length == allowedResponseTriggerEvents.length);
+        
+        // QC passed ;)
+        
         this.hl7Version = hl7Version;
         this.sendingApplication = sendingApplication;
         this.sendingFacility = sendingFacility;
@@ -72,9 +118,87 @@ public class MllpTransactionConfiguration {
         this.requestErrorDefaultErrorCode = requestErrorDefaultErrorCode;
         this.requestErrorDefaultAckTypeCode = requestErrorDefaultAckTypeCode;
         this.responseErrorDefaultErrorCode = responseErrorDefaultErrorCode;
-        
-        this.allowedMessageType = allowedMessageType;
-        this.allowedTriggerEvents = allowedTriggerEvents;
+
+        this.allowedRequestMessageTypes = allowedRequestMessageTypes;
+        this.allowedRequestTriggerEvents = allowedRequestTriggerEvents;
+        this.requestSyncFlags = requestSyncFlags;
+
+        this.allowedResponseMessageTypes = allowedResponseMessageTypes;
+        this.allowedResponseTriggerEvents = allowedResponseTriggerEvents;
+    }
+
+    
+    /**
+     * Returns <code>true</code> when request messages  
+     * of the given type belong to this transaction. 
+     */
+    public boolean isSupportedRequestMessageType(String messageType) {
+        return indexOf(messageType, allowedRequestMessageTypes) != -1;
+    }
+
+    
+    /**
+     * Returns <code>true</code> when the given trigger event  
+     * is valid for request messages of the given type. 
+     */
+    public boolean isSupportedRequestTriggerEvent(String messageType, String triggerEvent) {
+        int index = indexOf(messageType, allowedRequestMessageTypes); 
+        if(index != -1) {
+            String triggerEvents = allowedRequestTriggerEvents[index]; 
+            return indexOf(triggerEvent, triggerEvents.split(" ")) != -1;
+        }
+        throw new IllegalStateException("Unknown message type " + messageType);
+    }
+
+    
+    /**
+     * Returns <code>true</code> when response messages  
+     * of the given type belong to this transaction. 
+     */
+    public boolean isSupportedResponseMessageType(String messageType) {
+        return indexOf(messageType, allowedResponseMessageTypes) != -1;
+    }
+
+    
+    /**
+     * Returns <code>true</code> when the given trigger event  
+     * is valid for response messages of the given type. 
+     * Wildcard "*" is handled appropriately.
+     */
+    public boolean isSupportedResponseTriggerEvent(String messageType, String triggerEvent) {
+        int index = indexOf(messageType, allowedResponseMessageTypes); 
+        if(index != -1) {
+            String triggerEvents = allowedResponseTriggerEvents[index];
+            return "*".equals(triggerEvents) || (indexOf(triggerEvent, triggerEvents.split(" ")) != -1);
+        }
+        throw new IllegalStateException("Unknown message type " + messageType);
+    }
+    
+    
+    /**
+     * Returns <code>true</code> when the message of the given type
+     * should be handled synchronously. 
+     */
+    public boolean isSynchronous(String messageType) {
+        int index = indexOf(messageType, allowedRequestMessageTypes);
+        if(index != -1) {
+            return requestSyncFlags[index];
+        }
+        throw new IllegalStateException("Unknown message type " + messageType);
+    }
+
+    
+    /**
+     * Helper methos that returns the index of the given String 
+     * in the given array, or -1 if not found.
+     */
+    private int indexOf(String s, String[] array) {
+        for(int i = 0; i < array.length; ++i) {
+            if(s.equals(array[i])) {
+                return i;
+            }
+        }        
+        return -1;
     }
 
     
@@ -103,12 +227,5 @@ public class MllpTransactionConfiguration {
     public String getSendingFacility() {
         return sendingFacility;
     }
-
-    public String getAllowedMessageType() {
-        return allowedMessageType;
-    }
-
-    public String[] getAllowedTriggerEvents() {
-        return allowedTriggerEvents;
-    }
 }
+

@@ -36,6 +36,7 @@
         <module>xds</module> 
         <module>mllp</module>
         <module>pix</module>
+        <module>pdq</module>
     </modules>
 
 </project>

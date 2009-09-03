@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.pix.iti9
 
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy
 import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditDataset
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtils
+import org.openehealth.ipf.platform.camel.ihe.mllp.commons.AuditUtilsimport org.apache.camel.Exchange
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
@@ -32,16 +32,26 @@ abstract class Iti9AuditStrategy implements MllpAuditStrategy {
     }
 
     
-    void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        if(msg.QPD.value) {
+    void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
+        if(msg.QPD?.value) {
             def patientId = MessageUtils.pipeEncode(msg.QPD[3].target)
-            auditDataset.patientIds = (patientId ? [patientId] : null)
-            auditDataset.qpdPayload = MessageUtils.pipeEncode(msg.QPD.target)
+            if(patientId) { 
+                auditDataset.patientIds = [patientId]
+            }
+            auditDataset.qpdPayload = AuditUtils.getSegmentString(exchange, msg, 'QPD')
+            //MessageUtils.pipeEncode(msg.QPD.target)
         }
     }
 
     
     void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        // nop
+        if(msg.QUERY_RESPONSE?.PID?.value) {
+            def patientIds = AuditUtils.pidList(msg.QUERY_RESPONSE.PID[3])
+            if(( ! auditDataset.patientIds) || patientIds.contains(auditDataset.patientIds[0])) {
+                auditDataset.patientIds = patientIds
+            } else {
+                auditDataset.patientIds = patientIds + auditDataset.patientIds[0]
+            }
+        }
     }
 }
