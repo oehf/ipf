@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xds-commons</artifactId>
+            <artifactId>platform-camel-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
             <type>test-jar</type>
         </dependency>

@@ -40,7 +40,7 @@ import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.*
 import org.openehealth.ipf.commons.ihe.xds.SampleData
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.xds.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.metadata.Identifiable
 import org.openehealth.ipf.commons.ihe.xds.requests.ProvideAndRegisterDocumentSet

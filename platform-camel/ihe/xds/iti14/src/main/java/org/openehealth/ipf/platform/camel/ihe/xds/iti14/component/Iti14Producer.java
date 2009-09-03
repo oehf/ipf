@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.ports.Iti14PortType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-14 component.

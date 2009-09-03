@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.ProvideAndRegisterDocum
 import org.openehealth.ipf.commons.ihe.xds.ports.Iti41PortType;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-41 component.

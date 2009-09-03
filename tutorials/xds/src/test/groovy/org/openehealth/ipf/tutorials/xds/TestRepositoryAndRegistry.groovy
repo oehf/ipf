@@ -7,7 +7,7 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.SampleData
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.xds.metadata.AvailabilityStatus
 import org.openehealth.ipf.commons.ihe.xds.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.metadata.Identifiable

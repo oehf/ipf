@@ -38,7 +38,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
 
     <bean id="xdsModelExtension"
-        class="org.openehealth.ipf.platform.camel.ihe.xds.commons.extend.XDSModelExtension">
+        class="org.openehealth.ipf.platform.camel.ihe.xds.core.extend.XDSModelExtension">
     </bean>
 
     <bean id="routeModelExtender" 

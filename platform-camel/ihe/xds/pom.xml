@@ -17,7 +17,7 @@
     </properties>
     
     <modules>
-        <module>commons</module>
+        <module>core</module>
         <module>iti14</module>
         <module>iti15</module>
         <module>iti16</module>

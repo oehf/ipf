@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetRequ
 import org.openehealth.ipf.commons.ihe.xds.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.ports.Iti43PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-42 component.

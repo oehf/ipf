@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.ports.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML30Converters;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
  * Service implementation for the IHE ITI-34 transaction (Retrieve Document Set).

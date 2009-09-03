@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.audit.Iti41ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.audit.Iti41ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.cxf.audit.ItiAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41Service;
 
 import java.net.URISyntaxException;

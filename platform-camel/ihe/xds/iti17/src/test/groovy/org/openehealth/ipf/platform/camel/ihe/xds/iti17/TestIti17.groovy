@@ -23,7 +23,7 @@ import java.io.InputStream
 import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet
 
 /**

@@ -19,7 +19,7 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import java.net.URISyntaxException;
 
 /**

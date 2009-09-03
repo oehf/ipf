@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML21Converters;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Converters;
 
 /**
  * Service implementation for the IHE ITI-16 transaction (Query Registry).

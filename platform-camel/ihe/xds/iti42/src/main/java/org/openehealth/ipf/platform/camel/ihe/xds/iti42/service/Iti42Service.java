@@ -23,8 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.commons.converters.EbXML30Converters;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
  * Service implementation for the IHE ITI-42 transaction (Register Document Set).
