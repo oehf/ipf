@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-ihe-xds-core</artifactId>
-    <name>platform-camel-ihe-core</name>
+    <name>platform-camel-ihe-xds-core</name>
      
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.xds.core.*</osgi.export.pkg>
