@@ -16,22 +16,6 @@
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.*</osgi.export.pkg>
     </properties>
     
-    <dependencies>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe</artifactId>
-            <version>${pom.version}</version>
-            <scope>test</scope>
-            <type>test-jar</type>
-        </dependency>
-    </dependencies>
-
     <modules>
         <module>xds</module> 
         <module>mllp</module>
