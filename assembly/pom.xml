@@ -40,9 +40,44 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-xds</artifactId>
+            <artifactId>commons-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
-        </dependency>		
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti14</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti15</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti16</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti18</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti41</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti42</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds-iti43</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-lbs</artifactId>
@@ -52,7 +87,7 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-map</artifactId>
             <version>${pom.version}</version>
-        </dependency>		
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-test</artifactId>
@@ -62,7 +97,7 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-xml</artifactId>
             <version>${pom.version}</version>
-        </dependency>		
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-cda</artifactId>
@@ -105,11 +140,6 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
-            <artifactId>osgi-config-map</artifactId>
-            <version>${pom.version}</version>
-        </dependency>	
-        <dependency>
-            <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-extender-basic</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -145,7 +175,22 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-mllp-commons</artifactId>
+            <artifactId>platform-camel-ihe-mllp-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pdq-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pdq-iti21</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pdq-iti22</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -165,7 +210,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xds-commons</artifactId>
+            <artifactId>platform-camel-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
