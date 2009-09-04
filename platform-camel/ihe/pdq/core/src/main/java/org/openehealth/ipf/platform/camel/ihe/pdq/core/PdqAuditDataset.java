@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pdq.core;
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 
 /**
  * Audit dataset for ITI-21 and ITI-22 (PDQ).

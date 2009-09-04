@@ -17,7 +17,7 @@
     </properties>
     
     <modules>
-        <module>commons</module>
+        <module>core</module>
     </modules>
 
     <dependencies>

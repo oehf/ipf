@@ -19,43 +19,8 @@
 	<dependencies>
 		<!-- Dependencies for main -->
 		<dependency>
-			<groupId>org.openehealth.ipf.platform-camel</groupId>
-			<artifactId>platform-camel-ihe-mllp-commons</artifactId>
-			<version>${pom.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>ca.uhn.hapi</groupId>
 			<artifactId>hapi-structures-v231</artifactId>
 		</dependency>
-
-
-		<!-- Dependencies for test -->
-		<dependency>
-			<groupId>org.openehealth.ipf.platform-camel</groupId>
-			<artifactId>platform-camel-ihe-mllp-commons</artifactId>
-			<version>${pom.version}</version>
-			<scope>test</scope>
-			<type>test-jar</type>
-		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.groovy.maven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-                            <goal>generateStubs</goal>
-                            <goal>generateTestStubs</goal>
-							<goal>compile</goal>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-
 </project>

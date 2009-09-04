@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
@@ -26,11 +26,11 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAdaptingException;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAdaptingException;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
 import ca.uhn.hl7v2.model.Message;
 

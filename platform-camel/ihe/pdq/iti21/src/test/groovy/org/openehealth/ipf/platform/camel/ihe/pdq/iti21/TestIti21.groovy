@@ -31,8 +31,8 @@ import org.apache.camel.impl.DefaultExchange;
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTestContainer
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerMarshalInterceptor;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.parser.PipeParser;

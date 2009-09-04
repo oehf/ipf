@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.commons;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 /**
- * An exception class for message adapting in MLLP consumer and producer.
+ * An exception class for message acceptance checks in MLLP consumer and producer.
  * @author Dmytro Rud
  */
-public class MllpAdaptingException extends RuntimeException {
-    private static final long serialVersionUID = -5822677733242792712L;
+public class MllpAcceptanceException extends HL7v2Exception {
+    private static final long serialVersionUID = 8061724688826230547L;
 
-    public MllpAdaptingException(String message) {
+    public MllpAcceptanceException(String message, int code) {
+        super(message, code);
+    }
+
+    public MllpAcceptanceException(String message) {
         super(message);
     }
 }

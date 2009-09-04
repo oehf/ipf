@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer;
 
 import org.apache.camel.Processor;
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
 
 /**

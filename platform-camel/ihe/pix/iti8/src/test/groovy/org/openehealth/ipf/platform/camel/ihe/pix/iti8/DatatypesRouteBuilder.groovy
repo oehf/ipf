@@ -16,10 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.pix.iti8
 
 import static junit.framework.Assert.*
-import static org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtils.typeSupported
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.typeSupported
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter

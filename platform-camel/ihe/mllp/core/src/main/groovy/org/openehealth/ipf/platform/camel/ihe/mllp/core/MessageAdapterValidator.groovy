@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.commons
+package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openehealth.ipf.modules.hl7dsl.MessageAdapterimport org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext

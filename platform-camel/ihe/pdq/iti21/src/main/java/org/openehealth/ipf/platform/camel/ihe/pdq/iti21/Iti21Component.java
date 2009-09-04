@@ -21,9 +21,9 @@ import org.apache.camel.CamelContext;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqServerAuditStrategy;
 

@@ -18,9 +18,9 @@ package org.openehealth.ipf.platform.camel.ihe.pix.iti8;
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
 import ca.uhn.hl7v2.parser.Parser;
 

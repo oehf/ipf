@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.commons
+package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.apache.camel.Exchangeimport org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.AbstractMllpConsumerInterceptor
+import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.AbstractMllpConsumerInterceptor
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.apache.commons.logging.Log;
+
+import org.apache.camel.Exchangeimport org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoSession
+
 import java.net.SocketAddress
 import java.util.List
 

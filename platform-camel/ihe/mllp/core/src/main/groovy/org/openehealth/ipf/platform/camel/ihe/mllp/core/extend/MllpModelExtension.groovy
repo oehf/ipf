@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.commons.extend
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.extend
 
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.MessageAdapterValidatorimport org.openehealth.ipf.platform.camel.ihe.mllp.commons.MllpMarshalUtilsimport org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.apache.camel.Exchangeimport org.apache.camel.Messageimport org.openehealth.ipf.platform.camel.core.util.Exchangesimport org.openehealth.ipf.modules.hl7.parser.PipeParser
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MessageAdapterValidatorimport org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtilsimport org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.modules.hl7.parser.PipeParser
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.apache.camel.Exchangeimport org.apache.camel.Message
 
 /**
  * DSL extensions for MLLP PIX/PDQ components.

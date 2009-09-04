@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.commons;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import java.net.SocketAddress;
 import java.util.Map;
@@ -37,14 +37,14 @@ import org.apache.mina.common.IoAcceptorConfig;
 import org.apache.mina.common.IoConnector;
 import org.apache.mina.common.IoConnectorConfig;
 import org.apache.mina.common.IoSession;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.consumer.MllpConsumerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducerAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.commons.producer.MllpProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerMarshalInterceptor;
 
 import ca.uhn.hl7v2.parser.Parser;
 

@@ -18,29 +18,10 @@
 
 	<dependencies>
 		<!-- Dependencies for main -->
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pdq-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-mllp-commons</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-		<dependency>
-			<groupId>ca.uhn.hapi</groupId>
-			<artifactId>hapi-structures-v25</artifactId>
-		</dependency>
-
-
-		<!-- Dependencies for test -->
 		<dependency>
 			<groupId>org.openehealth.ipf.platform-camel</groupId>
-			<artifactId>platform-camel-ihe-mllp-commons</artifactId>
+			<artifactId>platform-camel-ihe-pdq-core</artifactId>
 			<version>${pom.version}</version>
-			<scope>test</scope>
-			<type>test-jar</type>
 		</dependency>
 	</dependencies>
 </project>

@@ -1,95 +1,96 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel-ihe-mllp-commons</artifactId>
-    <name>platform-camel-ihe-commons</name>
-     
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.commons.*</osgi.export.pkg>
-    </properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <parent>
-        <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>platform-camel-ihe-mllp</artifactId>
-        <version>2.0-SNAPSHOT</version>
-    </parent>
-        
-    <dependencies>
-        <!-- Dependencies for main -->
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-		    <artifactId>commons-ihe-atna</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7dsl</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-hl7</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mina</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.mina</groupId>
-            <artifactId>mina-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.mina</groupId>
-            <artifactId>mina-filter-ssl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-        </dependency>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.openehealth.ipf.platform-camel</groupId>
+	<artifactId>platform-camel-ihe-mllp-core</artifactId>
+	<name>platform-camel-ihe-mllp-core</name>
 
-        <!-- Dependencies for test -->
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-		    <artifactId>commons-ihe-atna</artifactId>
-            <version>${pom.version}</version>
-            <scope>test</scope>
-            <type>test-jar</type>
-        </dependency>
-    </dependencies>
+	<properties>
+		<osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.core.*</osgi.export.pkg>
+	</properties>
 
-    <build>
-         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+	<parent>
+		<groupId>org.openehealth.ipf.platform-camel</groupId>
+		<artifactId>platform-camel-ihe-mllp</artifactId>
+		<version>2.0-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<!-- Dependencies for main -->
+		<dependency>
+			<groupId>org.openehealth.ipf.commons</groupId>
+			<artifactId>commons-ihe-atna</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openehealth.ipf.modules</groupId>
+			<artifactId>modules-hl7dsl</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openehealth.ipf.modules</groupId>
+			<artifactId>modules-hl7</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-hl7</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-mina</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-filter-ssl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openehealth.ipf.platform-camel</groupId>
+			<artifactId>platform-camel-core</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+
+		<!-- Dependencies for test -->
+		<dependency>
+			<groupId>org.openehealth.ipf.commons</groupId>
+			<artifactId>commons-ihe-atna</artifactId>
+			<version>${pom.version}</version>
+			<scope>test</scope>
+			<type>test-jar</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
