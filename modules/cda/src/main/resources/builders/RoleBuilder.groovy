@@ -66,7 +66,7 @@ associatedEntity(schema:'role', factory:'POCDMT000040_ASSOCIATED_ENTITY') {
     }
 }
 
-birthPlace(schema:'infrastructureRoot', factory:'POCDMT000040_BIRTH_PLACE') {
+birthplace(schema:'infrastructureRoot', factory:'POCDMT000040_BIRTH_PLACE') {
 	properties { 
 		place(schema:'place') 
 	}

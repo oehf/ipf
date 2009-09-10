@@ -29,6 +29,7 @@
 	<assert test="count(cda:subject/cda:relatedSubject/cda:subject)=1">RelatedSubject SHOULD contain exactly one RelatedSubject / subject.</assert>	
 	<assert test="count(cda:subject/cda:relatedSubject/cda:subject/cda:administrativeGenderCode)=1">RelatedSubject / subject SHOULD contain exactly one RelatedSubject / subject / administrativeGenderCode.</assert>
 	<assert test="count(cda:subject/cda:relatedSubject/cda:subject/cda:birthTime)=1">RelatedSubject / subject SHOULD contain exactly one RelatedSubject / subject / birthTime.</assert>
+    <assert test="document('schematron/ccd/voc.xml')/systems/system[@codeSystemName='RoleCode'][@group='FamilyHistoryRelatedSubjectCode']/code[@value = current()/cda:subject/cda:relatedSubject/cda:code/@code] or document('schematron/ccd/voc.xml')/systems/system[@codeSystemName='SNOMED CT'][@group='FamilyHistoryPersonCode']/code[@value = current()/cda:subject/cda:relatedSubject/cda:code/@code]">	The value for “RelatedSubject / code” SHOULD be selected from ValueSet 2.16.840.1.113883.1.11.19579 FamilyHistoryRelatedSubjectCode DYNAMIC or 2.16.840.1.113883.1.11.20.21 FamilyHistoryPersonCode DYNAMIC</assert>	
 	</rule>
 </pattern>
 

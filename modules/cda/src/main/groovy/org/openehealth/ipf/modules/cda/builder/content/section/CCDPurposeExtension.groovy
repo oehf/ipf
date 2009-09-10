@@ -105,7 +105,7 @@ public class CCDPurposeExtension extends CompositeModelExtension{
                     //          with a value of “23745001” “Documentation procedure” 2.16.840.1.113883.6.96
                     //          SNOMED CT STATIC.
                     ccd_entry(typeCode:'DRIV') {
-                        act(moodCode:'EVN', classCode:'ACT')  {
+                        act(classCode:'ACT', moodCode:'EVN')  {
                             templateId('2.16.840.1.113883.10.20.1.30')
                             statusCode('completed')
                             code(code:'23745001', codeSystem:'2.16.840.1.113883.6.96',

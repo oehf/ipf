@@ -86,8 +86,8 @@ clinicalDocument(schema:'infrastructureRoot', factory:'POCDMT000040_CLINICAL_DOC
 	        authorization(schema:'authorization')
 	    }
 	    // This class represents those orders that are fulfilled by this document
-	    inFullfillmentOfs(collection:'inFullfillmentOf') {
-	        inFullfillmentOf(schema:'inFullfillmentOf')
+	    inFulfillmentOfs(collection:'inFulfillmentOf') {
+	        inFulfillmentOf(schema:'inFulfillmentOf')
 	    }
 	    // This class represents the main Act, such as a colonoscopy or an appendectomy, being documented
 	    documentationOfs(collection:'documentationOf') {
@@ -444,7 +444,7 @@ substanceAdministration(schema:'clinicalStatement',factory:'POCDMT000040_SUBSTAN
             id(schema:'ii')
         }
         effectiveTimes(collection:'effectiveTime'){
-            effectiveTime(schema:'sxcmts')  // TODO any of type SXCMTS
+            effectiveTime()  // restrict to be subtype of GTS
         }
         approachSiteCodes(collection:'approachSiteCode'){
             approachSiteCode(schema:'cd')

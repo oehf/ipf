@@ -55,6 +55,7 @@ ccd_functionalStatus(schema:'ccd_section') {
         })
         text(schema:'strucDocText', req:true)
         problemAct(schema:'ccd_problemAct')
+        resultOrganizer(schema:'ccd_resultOrganizer')        
     }
     collections {
         templateIds(collection:'templateId', def: {

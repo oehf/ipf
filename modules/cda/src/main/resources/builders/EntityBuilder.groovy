@@ -73,38 +73,20 @@ labeledDrug(schema:'infrastructureRoot', factory:'POCDMT000040_LABELED_DRUG') {
     }
 }
 
+languageCommunication(schema:'infrastructureRoot', factory:'POCDMT000040_LANGUAGE_COMMUNICATION') {
+    properties {
+        languageCode(schema:'cs', req:true)
+        modeCode(schema:'ce')
+        proficiencyLevelCode(schema:'ce')
+        preferenceInd(schema:'bl')
+    }
+}
+
 material(schema:'labeledDrug', factory:'POCDMT000040_MATERIAL') {
     properties {
        lotNumberText(schema:'st')
     }
 }
-
-person(schema:'infrastructureRoot', factory:'POCDMT000040_PERSON') {
-	collections { 
-		names(collection:'name') {
-			name(schema:'pn') 
-		}
-	}
-}
-patient(schema:'person', factory:'POCDMT000040_PATIENT') {
-	properties {
-		id(schema:'ii')
-		administrativeGenderCode(schema:'administrativeGenderCode')
-		birthTime(schema:'ts', check: {
-		    DateTimeUtils.isValidDateTime(it.value, DateTimeUtils.YEAR_PRECISION, DateTimeUtils.DATE_PRECISION)
-		})
-		maritalStatusCode(schema:'ce')
-		religiousAffiliationCode(schema:'ce')
-		raceCode(schema:'ce')
-		ethnicGroupCode(schema:'ce')
-		birthPlace(schema:'birthPlace')                    
-	}
-	collections {
-		guardians(collection:'guardian') {
-			guardian(schema:'guardian') 
-		}
-	}
-}                          
 
 organization(schema:'infrastructureRoot', factory:'POCDMT000040_ORGANIZATION') {
 	properties { 
@@ -126,6 +108,37 @@ organization(schema:'infrastructureRoot', factory:'POCDMT000040_ORGANIZATION') {
 		}
 	}
 }
+
+person(schema:'infrastructureRoot', factory:'POCDMT000040_PERSON') {
+	collections { 
+		names(collection:'name') {
+			name(schema:'pn') 
+		}
+	}
+}
+
+patient(schema:'person', factory:'POCDMT000040_PATIENT') {
+	properties {
+		id(schema:'ii')
+		administrativeGenderCode(schema:'administrativeGenderCode')
+		birthTime(schema:'ts', check: {
+		    DateTimeUtils.isValidDateTime(it.value, DateTimeUtils.YEAR_PRECISION, DateTimeUtils.DATE_PRECISION)
+		})
+		maritalStatusCode(schema:'ce')
+		religiousAffiliationCode(schema:'ce')
+		raceCode(schema:'ce')
+		ethnicGroupCode(schema:'ce')
+		birthplace(schema:'birthplace')                    
+	}
+	collections {
+		guardians(collection:'guardian') {
+			guardian(schema:'guardian') 
+		}
+		languageCommunications(collection:'languageCommunication') {
+		    languageCommunication(schema:'languageCommunication')
+		}
+	}
+}                          
 
 place(schema:'infrastructureRoot', factory:'POCDMT000040_PLACE') {
 	properties {

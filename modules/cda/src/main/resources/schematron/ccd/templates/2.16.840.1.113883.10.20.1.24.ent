@@ -25,6 +25,7 @@
     <assert test="cda:effectiveTime">A medication activity SHOULD contain one or more SubstanceAdministration / effectiveTime elements, used to indicate the actual or intended start and stop date of a medication, and the frequency of administration.</assert>
     <assert test="count(cda:routeCode)=1">A medication activity SHOULD contain exactly one SubstanceAdministration / routeCode.</assert>
     <assert test="count(cda:doseQuantity)=1">A medication activity SHOULD contain exactly one SubstanceAdministration / doseQuantity.</assert>
+	<assert test="document('schematron/ccd/voc.xml')/systems/system[@codeSystemName='RouteOfAdministration']/code[@value = current()/cda:routeCode/@code]">The value for “SubstanceAdministration / routeCode” in a medication activity SHOULD be selected from the HL7 RouteOfAdministration (2.16.840.1.113883.5.112) code system</assert>
 	</rule>
 </pattern>
 

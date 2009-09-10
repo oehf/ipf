@@ -28,6 +28,7 @@
 	<title>Encounter activity - warning validation phase</title>
 	<rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.21"]'>
 	<assert test="count(cda:code) = 1">An encounter activity SHOULD contain exactly one Encounter / code.</assert>
+    <assert test="document('schematron/ccd/voc.xml')/systems/system[@codeSystemName='ActCode'][@group='EncounterCode']/code[@value = current()/cda:code/@code]">The value for "Encounter / code" in an encounter activity SHOULD be selected from ValueSet 2.16.840.1.113883.1.11.13955 EncounterCode 2.16.840.1.113883.5.4 ActCode DYNAMIC.</assert>	
 	</rule>
 </pattern>
 

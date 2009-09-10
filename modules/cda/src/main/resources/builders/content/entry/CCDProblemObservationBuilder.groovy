@@ -70,10 +70,10 @@ ccd_problemObservation(schema:'ccd_observation'){
 }
 
 //CONF-163: A problem status observation (templateId 2.16.840.1.113883.10.20.1.50) SHALL be
-//a conformant status observation (templateId 2.16.840.1.113883.10.20.1.57) 
-//(as defined in section 5.1 “Type” and “Status” values).
+//          a conformant status observation (templateId 2.16.840.1.113883.10.20.1.57) 
+//          (as defined in section 5.1 “Type” and “Status” values).
 //CONF-164: The value for “Observation / value” in a problem status observation SHALL be selected
-//from ValueSet 2.16.840.1.113883.1.11.20.13 ProblemStatusCode STATIC 20061017.
+//          from ValueSet 2.16.840.1.113883.1.11.20.13 ProblemStatusCode STATIC 20061017.
 ccd_problemObservationStatus(schema:'ccd_statusObservation'){
   collections{
       templateIds(collection:'templateId', def: {
@@ -88,12 +88,12 @@ ccd_problemObservationStatus(schema:'ccd_statusObservation'){
 }
 
 //CONF-166: A problem healthstatus observation (templateId 2.16.840.1.113883.10.20.1.51) SHALL be
-//a conformant status observation (templateId 2.16.840.1.113883.10.20.1.57) 
-//(as defined in section 5.1 “Type” and “Status” values), except that the value for 
-//“Observation / code” in a problem healthstatus observation SHALL be “11323-3” 
-//“Health status” 2.16.840.1.113883.6.1 LOINC STATIC.
+//          a conformant status observation (templateId 2.16.840.1.113883.10.20.1.57) 
+//         (as defined in section 5.1 “Type” and “Status” values), except that the value for 
+//         “Observation / code” in a problem healthstatus observation SHALL be “11323-3” 
+//         “Health status” 2.16.840.1.113883.6.1 LOINC STATIC.
 //CONF-167: The value for “Observation / value” in a problem healthstatus observation SHALL be selected
-//from ValueSet 2.16.840.1.113883.1.11.20.12 ProblemHealthStatusCode STATIC 20061017.
+//          from ValueSet 2.16.840.1.113883.1.11.20.12 ProblemHealthStatusCode STATIC 20061017.
 ccd_problemObservationHealthstatus(schema:'ccd_statusObservation'){
   properties{
       code(schema:'loincCoide', def: {

@@ -98,7 +98,7 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
 			
 			setProblemHealthstatus { POCDMT000040Observation observation ->
 				delegate.entryRelationship.add(builder.build {
-					entryRelationship(typeCode:'REFR', observation:observation)
+					entryRelationship(typeCode:'SUBJ', observation:observation)
 				})
 			}
 			
