@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.cxf.audit;
 
 import java.util.List;
 
+import org.apache.cxf.wsdl.EndpointReferenceUtils;
 import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
@@ -69,8 +70,16 @@ public class ItiAuditDataset extends AuditDataset {
         this.userId = userId;
     }
 
+    /**
+     * Returns User ID.
+     * <p>
+     * When the user ID could not be extracted from WS-Addressing header
+     * &lt;ReplyTo&gt;, the special "WS-Addressing anonymous address" 
+     * will be returned, as prescribed in 
+     * http://www.w3.org/TR/2006/REC-ws-addr-soap-20060509/#anonaddress
+     */
     public String getUserId() {
-        return userId;
+        return (userId != null) ? userId : EndpointReferenceUtils.ANONYMOUS_ADDRESS;
     }
 
     public void setUserName(String userName) {

@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pdq.iti21
 
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 
 /**
@@ -69,6 +70,14 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
              }
              .validate().iti21Response()
      
+             
+         // for cancel messages
+         from('pdq-iti21://0.0.0.0:8890')
+             .process {
+                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+             }
+             
+             
      }
 }
  

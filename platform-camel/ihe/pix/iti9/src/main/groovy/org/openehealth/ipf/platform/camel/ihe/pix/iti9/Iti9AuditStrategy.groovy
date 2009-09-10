@@ -39,7 +39,6 @@ abstract class Iti9AuditStrategy implements MllpAuditStrategy {
                 auditDataset.patientIds = [patientId]
             }
             auditDataset.qpdPayload = AuditUtils.getSegmentString(exchange, msg, 'QPD')
-            //MessageUtils.pipeEncode(msg.QPD.target)
         }
     }
 

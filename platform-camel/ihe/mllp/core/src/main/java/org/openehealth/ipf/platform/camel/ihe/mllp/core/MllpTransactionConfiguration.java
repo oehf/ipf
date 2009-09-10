@@ -38,10 +38,10 @@ public class MllpTransactionConfiguration {
 
     private final String[] allowedRequestMessageTypes;
     private final String[] allowedRequestTriggerEvents;
-    private final boolean[] requestSyncFlags;
-
     private final String[] allowedResponseMessageTypes;
     private final String[] allowedResponseTriggerEvents;
+
+    private final boolean[] auditabilityFlags;
 
 
     /**
@@ -66,16 +66,14 @@ public class MllpTransactionConfiguration {
      *      array of allowed request trigger events  
      *      for each request message type,  
      *      e.g. <code>{"A01 A02 A03", "T06 T07 T08"}</code>.
-     * @param requestSyncFlags
-     *      flags of whether the request messages of corresponding 
-     *      type should be handled synchronously.
      * @param allowedResponseMessageTypes
      *      array of allowed response message types, e.g. <code>{"ACK", "RSP"}</code>.
-     *      <code>null</code> values may be used for asynchronous requests.
      * @param allowedResponseTriggerEvents
-     *      array of allowed response trigger events for each message type,  
-     *      may contain wildcard "*", e.g. <code>{"*", "K22"}</code>.
-     *      <code>null</code> values may be used for asynchronous requests.
+     *      array of allowed response trigger events for each message type,
+     *      ignored for messages of type "ACK".  
+     * @param auditabilityFlags
+     *      flags of whether the messages of corresponding 
+     *      type should be audited
      */
     public MllpTransactionConfiguration(
             String hl7Version,
@@ -86,26 +84,24 @@ public class MllpTransactionConfiguration {
             int responseErrorDefaultErrorCode,
             String[] allowedRequestMessageTypes,
             String[] allowedRequestTriggerEvents,
-            boolean[] requestSyncFlags,
             String[] allowedResponseMessageTypes,
-            String[] allowedResponseTriggerEvents)
+            String[] allowedResponseTriggerEvents,
+            boolean[] auditabilityFlags)
     {
         notNull(hl7Version);
         notNull(sendingApplication);
         notNull(sendingFacility);
         notNull(requestErrorDefaultAckTypeCode);
 
-        notEmpty(allowedRequestMessageTypes);
-        notEmpty(allowedRequestTriggerEvents);
         noNullElements(allowedRequestMessageTypes);
         noNullElements(allowedRequestTriggerEvents);
-        notNull(requestSyncFlags);
-        
-        notEmpty(allowedResponseMessageTypes);
-        notEmpty(allowedResponseTriggerEvents);
+        noNullElements(allowedResponseMessageTypes);
+        noNullElements(allowedResponseTriggerEvents);
+        notNull(auditabilityFlags);
 
+        notEmpty(allowedRequestMessageTypes);
         isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
-        isTrue(allowedRequestMessageTypes.length == requestSyncFlags.length);
+        isTrue(allowedRequestMessageTypes.length == auditabilityFlags.length);
         isTrue(allowedRequestMessageTypes.length == allowedResponseMessageTypes.length);
         isTrue(allowedRequestMessageTypes.length == allowedResponseTriggerEvents.length);
         
@@ -121,7 +117,7 @@ public class MllpTransactionConfiguration {
 
         this.allowedRequestMessageTypes = allowedRequestMessageTypes;
         this.allowedRequestTriggerEvents = allowedRequestTriggerEvents;
-        this.requestSyncFlags = requestSyncFlags;
+        this.auditabilityFlags = auditabilityFlags;
 
         this.allowedResponseMessageTypes = allowedResponseMessageTypes;
         this.allowedResponseTriggerEvents = allowedResponseTriggerEvents;
@@ -154,42 +150,46 @@ public class MllpTransactionConfiguration {
     /**
      * Returns <code>true</code> when response messages  
      * of the given type belong to this transaction. 
+     * "ACK" is always supported.
      */
     public boolean isSupportedResponseMessageType(String messageType) {
-        return indexOf(messageType, allowedResponseMessageTypes) != -1;
+        return "ACK".equals(messageType) || 
+               (indexOf(messageType, allowedResponseMessageTypes) != -1);
     }
 
     
     /**
      * Returns <code>true</code> when the given trigger event  
      * is valid for response messages of the given type. 
-     * Wildcard "*" is handled appropriately.
+     * For "ACK" message type, every trigger event is considered valid.
      */
     public boolean isSupportedResponseTriggerEvent(String messageType, String triggerEvent) {
+        if("ACK".equals(messageType)) {
+            return true;
+        }
         int index = indexOf(messageType, allowedResponseMessageTypes); 
         if(index != -1) {
             String triggerEvents = allowedResponseTriggerEvents[index];
-            return "*".equals(triggerEvents) || (indexOf(triggerEvent, triggerEvents.split(" ")) != -1);
+            return indexOf(triggerEvent, triggerEvents.split(" ")) != -1;
         }
         throw new IllegalStateException("Unknown message type " + messageType);
     }
     
     
     /**
-     * Returns <code>true</code> when the message of the given type
-     * should be handled synchronously. 
+     * Returns <code>true</code> when messages of the given type are auditable.
      */
-    public boolean isSynchronous(String messageType) {
+    public boolean isAuditable(String messageType) {
         int index = indexOf(messageType, allowedRequestMessageTypes);
         if(index != -1) {
-            return requestSyncFlags[index];
+            return auditabilityFlags[index];
         }
         throw new IllegalStateException("Unknown message type " + messageType);
     }
 
     
     /**
-     * Helper methos that returns the index of the given String 
+     * Helper method that returns the index of the given String 
      * in the given array, or -1 if not found.
      */
     private int indexOf(String s, String[] array) {

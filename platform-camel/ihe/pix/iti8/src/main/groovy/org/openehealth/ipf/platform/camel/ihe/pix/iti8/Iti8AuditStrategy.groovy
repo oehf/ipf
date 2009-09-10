@@ -37,10 +37,15 @@ abstract class Iti8AuditStrategy implements MllpAuditStrategy {
 
     
     void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
-        auditDataset.patientId = AuditUtils.pidList(msg.PID[3])?.join(msg.MSH[2].value[1])        
+        def pidSegment
         if(msg.MSH[9][2].value == 'A40') {
-            auditDataset.oldPatientId = msg.MRG[1].value ?: null
+            def group = msg.PIDPD1MRGPV1
+            pidSegment = group.PID[3]
+            auditDataset.oldPatientId = group.MRG[1].value ?: null
+        } else {
+            pidSegment = msg.PID[3]
         }
+        auditDataset.patientId = AuditUtils.pidList(pidSegment)?.join(msg.MSH[2].value[1])
     }
 
     

@@ -39,9 +39,9 @@ public class Iti10Component extends MllpComponent {
                 207, 
                 new String[] {"ADT"},
                 new String[] {"A31"},
-                new boolean[] {true},
                 new String[] {"ACK"},
-                new String[] {"*"}); 
+                new String[] {"*"}, 
+                new boolean[] {true});
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti10ClientAuditStrategy();

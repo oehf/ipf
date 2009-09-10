@@ -33,9 +33,9 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
       */
      def static final RULES =
          [
-          'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PID PV1',
+          'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PIDx PV1',
                    'A31'             : 'MSH EVN PID PV1',
-                   'A40'             : 'MSH EVN PID MRG',
+                   'A40'             : 'MSH EVN PIDPD1MRGPV1',
                   ],
           'QBP' : ['Q22 Q23 ZV1'     : 'MSH QPD RCP',
                   ],
@@ -123,6 +123,20 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
          exceptions
      }
      
+
+     // --------------- Groups, ordered alphabetically ---------------
+     
+     /**
+      * Valdates group PIDPD1MRGPV1 from ADT^A40.
+      */
+     static def checkPIDPD1MRGPV1(msg) {
+         def exceptions = []
+         def group = msg.PIDPD1MRGPV1
+         exceptions += checkPID(group)
+         exceptions += checkMRG(group)
+         exceptions
+     }
+     
      
      // --------------- Segments, ordered alphabetically ---------------
 
@@ -165,6 +179,18 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
      }
 
      /**
+      * Validates segment PID (special case for PIX Feed).
+      */
+     static def checkPIDx(msg) {
+         def exceptions = []
+         def pid3 = msg.PID[3]
+         if(( ! pid3?.value) || ( ! pid3[1]?.value)) {
+             exceptions += new Exception('Missing patient ID')
+         }
+         exceptions
+     }
+
+     /**
       * Validates segment PV1.
       */
      static def checkPV1(msg) {
@@ -199,7 +225,7 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
              }
          } else { 
              // for ITI-9 (PIX Query)
-             exceptions += checkPatientId(msg.QPD[3](0))
+             exceptions += checkPatientId(msg.QPD[3])
          }
          exceptions
      }
@@ -208,7 +234,7 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
       * Validates segment RCP.
       */
      static def checkRCP(msg) {
-         msg.RCP ? [] : [new Exception('Missing segment RCP')]
+         msg.RCP?.value ? [] : [new Exception('Missing segment RCP')]
      }
 
      

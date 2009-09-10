@@ -20,7 +20,7 @@ import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.AbstractMllpConsumerInterceptor
+import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 import org.apache.camel.Exchangeimport org.apache.commons.logging.Log;
@@ -43,20 +43,6 @@ class AuditUtils {
     
     private AuditUtils() {
         throw new IllegalStateException('Helper class, do not instantiate');
-    }
-
-    
-    /**
-     * Enriches the given audit dataset with IOSession-related
-     * information common for all PIX/PDQ transactions.
-     */
-    static void enrichGenericAuditDatasetFromSession(
-            MllpAuditDataset auditDataset) 
-    {
-        // TODO: Make this work again with real addresses. In Camel 2.0 we cannot
-        // 		 access the IoSession anymore.
-        auditDataset.localAddress  = 'local'
-        auditDataset.remoteAddress = 'remote'
     }
 
     
@@ -133,57 +119,8 @@ class AuditUtils {
         System.arraycopy(src2, 0, result, src1.length, src2.length);
         result
     }
-    
 
-    /**
-     * Reformats machine address created by {@link SocketAddress.toString()}.
-     * <p>
-     * Source strings:
-     * <ul>
-     * <li>known hostname: <tt>hostname.zone.org/141.44.162.126[:8888]</tt></li>
-     * <li>unknown hostname: <tt>/141.44.162.126[:8888]</tt></li>
-     * </ul>
-     *      
-     * Resulting strings, respectively:
-     * <ul>
-     * <li>known hostname: <tt>hostname.zone.org[:8888]</tt></li>
-     * <li>unknown hostname: <tt>141.44.162.126</tt> (without port number, even if it was present)</li>
-     * </ul>
-     */
-    static String formatMachineAddress(SocketAddress address) {
-        String s = address.toString()
-        int pos1 = s.indexOf('/')
-        int pos2 = s.indexOf(':', pos1)
-        if(pos1 == 0) {
-            return s[1..(Math.max(pos2, 0) - 1)] 
-        } else {
-            String portNumber = (pos2 < 0) ? '' : s[pos2..(s.length() - 1)]
-            return s[0..(pos1 - 1)] + portNumber
-        }
-    }
-    
-     
-    /**
-     * Deletes trailing protocol name, URL parameters and, probably, port number.
-     * <p>
-     * For example, 
-     * <tt>mina:tcp://localhost:8989?tralivali=figlimigli</tt> will become
-     * <tt>localhost:8989</tt><br>, while
-     * <tt>mina:tcp://141.44.162.126:8989?tralivali=figlimigli</tt> will become
-     * <tt>141.44.162.126</tt>.
-     */
-    static String formatEndpointAddress(String address) {
-       int pos1 = address.indexOf('//')
-       int pos2 = address.indexOf('?', pos1)
-       String s = address[(pos1 + 2)..((pos2 < 0) ? -1 : (pos2 - 1))]
-       if('0123456789'.contains(s[0])) {
-           pos2 = s.indexOf(':')
-           return (pos2 < 0) ? s : s[0..(pos2 - 1)]
-       }
-       return s
-    }
-     
-     
+
     /**
      * Returns <code>true</code> when the given {@link MessageAdapter}
      * does not contain code 'AA' in MSA-1.
@@ -219,7 +156,7 @@ class AuditUtils {
     static String getSegmentString(Exchange exchange, MessageAdapter msg, String segmentName) {
         // try header first (will work only on consumer side)
         def s = exchange.in.getHeader(
-                AbstractMllpConsumerInterceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME,
+                AbstractMllpInterceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME,
                 String.class)
         s = s?.split('[\\n\\r]').find { it.startsWith(segmentName + '|') }
         if(s) {

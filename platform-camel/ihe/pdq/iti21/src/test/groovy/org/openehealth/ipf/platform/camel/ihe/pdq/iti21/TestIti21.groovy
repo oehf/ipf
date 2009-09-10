@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.pdq.iti21;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
+import org.apache.camel.ExchangePattern
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
@@ -32,7 +32,7 @@ import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.parser.PipeParser;
@@ -117,7 +117,7 @@ class TestIti21 extends MllpTestContainer {
         )
         def processor = consumer.processor
         
-        assertTrue(processor instanceof MllpConsumerMarshalInterceptor)
+        assertTrue(processor instanceof ConsumerMarshalInterceptor)
             
         def body = getMessageString(msh9, msh12);
         def exchange = new DefaultExchange(camelContext)
@@ -207,6 +207,19 @@ class TestIti21 extends MllpTestContainer {
         def msg = send(endpointUri, body)
         assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+    }
+    
+    
+    @Test
+    void testCancel() {
+        def body = 
+            'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
+                    '20081031112704||QCN^J01|324406609|P|2.5|||ER|||||\n' +
+            'QID|dummy|gummy||\n'
+        def endpointUri = 'pdq-iti21://localhost:8890'
+        def msg = send(endpointUri, body)
+        assertEquals(0, auditSender.messages.size)
+        assertACK(msg)
     }
 
 }

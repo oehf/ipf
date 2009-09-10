@@ -223,7 +223,7 @@ public class MllpMarshalUtils {
     public static MessageAdapter createNak(
             Throwable t, 
             ca.uhn.hl7v2.model.Message original,
-            MllpTransactionConfiguration config) throws Exception 
+            MllpTransactionConfiguration config)  
     {
         AbstractHL7v2Exception hl7Exception;
         if(t instanceof AbstractHL7v2Exception) {

@@ -37,14 +37,14 @@ import org.apache.mina.common.IoAcceptorConfig;
 import org.apache.mina.common.IoConnector;
 import org.apache.mina.common.IoConnectorConfig;
 import org.apache.mina.common.IoSession;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.consumer.MllpConsumerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.producer.MllpProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalInterceptor;
 
 import ca.uhn.hl7v2.parser.Parser;
 
@@ -112,12 +112,12 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     public Consumer createConsumer(Processor processor) throws Exception {
         Processor x = processor;
-        x = new MllpConsumerAdaptingInterceptor(this, x);
+        x = new ConsumerAdaptingInterceptor(this, x);
         if(isAudit()) {
-            x = new MllpConsumerAuditInterceptor(this, x);
+            x = new ConsumerAuditInterceptor(this, x);
         }
-        x = new MllpConsumerAcceptanceInterceptor(this, x);
-        x = new MllpConsumerMarshalInterceptor(this, x);
+        x = new ConsumerAcceptanceInterceptor(this, x);
+        x = new ConsumerMarshalInterceptor(this, x);
         return this.wrappedEndpoint.createConsumer(x);
     }
 
@@ -128,12 +128,12 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     public Producer createProducer() throws Exception {
         Producer x = this.wrappedEndpoint.createProducer();
-        x = new MllpProducerMarshalInterceptor(this, x);
+        x = new ProducerMarshalInterceptor(this, x);
         if(isAudit()) {
-            x = new MllpProducerAuditInterceptor(this, x);
+            x = new ProducerAuditInterceptor(this, x);
         }
-        x = new MllpProducerAcceptanceInterceptor(this, x);
-        x = new MllpProducerAdaptingInterceptor(this, x);
+        x = new ProducerAcceptanceInterceptor(this, x);
+        x = new ProducerAdaptingInterceptor(this, x);
         return x;
     }
 

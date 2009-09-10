@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import static org.junit.Assert.*;
-import org.junit.After
+import org.junit.Afterimport org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -51,12 +51,11 @@ class MllpTestContainer {
          camelContext = appContext.getBean('camelContext', CamelContext.class)
 
          auditSender = new MockedSender()
-         
-         AuditorManager.getPIXSourceAuditor().context.sender = auditSender
-         AuditorManager.getPIXManagerAuditor().context.sender = auditSender
-         
-         AuditorManager.getPIXSourceAuditor().config.auditRepositoryHost = 'localhost'
-         AuditorManager.getPIXManagerAuditor().config.auditRepositoryHost = 'localhost'
+         AuditorModuleContext.context.sender = auditSender
+         AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
+         AuditorModuleContext.context.config.auditRepositoryPort = 514
+         AuditorModuleContext.context.config.auditSourceId = 'audit-source-id'
+         AuditorModuleContext.context.config.auditEnterpriseSiteId = 'audit-enterprise-site-id'
      }
 
      

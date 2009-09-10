@@ -42,9 +42,9 @@ public class Iti9Component extends MllpComponent {
                 207, 
                 new String[] {"QBP"},
                 new String[] {"Q23"},
-                new boolean[] {true},
                 new String[] {"RSP"},
-                new String[] {"K23"}); 
+                new String[] {"K23"}, 
+                new boolean[] {true});
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti9ClientAuditStrategy();

@@ -175,6 +175,10 @@ public abstract class ItiAuditStrategy {
      * determines the corresponding RFC 3881 event outcome code. 
      */
     public static RFC3881EventOutcomeCodes getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
+        if(response == null) {
+            return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
+        }
+        
         if(response.getStatus() == Status.SUCCESS) {
             return RFC3881EventOutcomeCodes.SUCCESS; 
         }

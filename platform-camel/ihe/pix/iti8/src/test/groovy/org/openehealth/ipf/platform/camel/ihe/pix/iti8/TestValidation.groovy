@@ -65,7 +65,7 @@ class TestValidation extends MllpTestContainer {
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
         assertNAK(msg)
-        assertTrue(msg.toString().contains('Missing patient name'))
+        assertTrue(msg.toString().contains('Missing patient ID'))
     }
 
     @Test
