@@ -17,6 +17,17 @@ continuityOfCareDocument {
 				}
 				administrativeGenderCode('M')
 				birthTime('19320924')
+				birthplace{ 
+                    place {             
+                        name ('Massachusetts') 
+                        addr{ 
+                            streetAddressLine("17 Daws Rd.") 
+                            city("Blue Bell") 
+                            state("MA") 
+                            postalCode("02328") 
+                       } 
+                    } 
+                }//birthplace
 				guardian{
 				    guardianOrganization{
 				        id(root:"2.16.840.1.113883.19.5")
@@ -80,6 +91,11 @@ continuityOfCareDocument {
 			high(value:'20000407')
 		}
 	}//main activity
+	inFulfillmentOf{ 
+        order { 
+            id(extension:"order-12345", root:"2.16.840.1.113883.19.4") 
+        } 
+    } //inFulfillmentOf 
 	custodian {
 		assignedCustodian {
 			representedCustodianOrganization {
@@ -96,4 +112,32 @@ continuityOfCareDocument {
 			representedOrganization { id(root:"2.16.840.1.113883.19.5") }
 		}
 	}//legal authenticator
+	componentOf { 
+        encompassingEncounter { 
+                id(extension:"KPENC1332", root:"2.16.840.1.113883.19.6") 
+                effectiveTime { low("20000407") } 
+                encounterParticipant(typeCode:"CON"){ 
+                        time('20000407') 
+                        assignedEntity { 
+                                id(extension:"KP00017",root:"2.16.840.1.113883.19.5") 
+                                assignedPerson { 
+                                        name { 
+                                                given('Robert') 
+                                                family('Dolin') 
+                                                suffix('MD') 
+                                        } 
+                                } 
+                                representedOrganization { id(root:"2.16.840.1.113883.19.5") } 
+                        } 
+                } 
+                location { 
+                        healthCareFacility { 
+                                code(code:"GIM", 
+                                     codeSystem:"2.16.840.1.113883.5.10588", 
+                                         displayName:"General internal medicine clinic" 
+                                ) 
+                        } 
+                } 
+        } 
+	}//componentOf 
 }//document

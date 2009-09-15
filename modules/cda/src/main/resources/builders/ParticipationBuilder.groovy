@@ -65,6 +65,7 @@ dataEnterer(schema:'infrastructureRoot', factory:'POCDMT000040_DATA_ENTERER') {
 
 encounterParticipant(schema:'infrastructureRoot', factory:'POCDMT000040_ENCOUNTER_PARTICIPANT') {
     properties {
+        typeCode(factory:'ACT_RELATIONSHIP_HAS_COMPONENT')
         assignedEntity(schema:'assignedEntity')
         time(schema:'ivlts')
     }

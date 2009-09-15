@@ -106,7 +106,7 @@ entryRelationship(schema:'clinicalStatementChoice', factory:'POCDMT000040_ENTRY_
     }
 }
 
-inFullfillmentOf(schema:'infrastructureRoot', factory:'POCDMT000040_IN_FULFILLMENT_OF') {
+inFulfillmentOf(schema:'infrastructureRoot', factory:'POCDMT000040_IN_FULFILLMENT_OF') {
     properties {
         // typeCode(factory:'ACT_RELATIONSHIP_FULFILLS')
         order(schema:'order')

@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import groovytools.builder.*import org.codehaus.groovy.runtime.InvokerHelperimport groovytools.builder.SchemaNotFoundException
+import groovytools.builder.*
+import org.codehaus.groovy.runtime.InvokerHelper
+import groovytools.builder.SchemaNotFoundException
+
 
 /**
  * @author Christian Ohr
@@ -35,9 +38,11 @@ public class DynamicCDAR2MetaObjectGraphBuilder extends CDAR2MetaObjectGraphBuil
 
      public Object invokeMethod(String methodName, Object args) {
          if ('make'.equals(methodName)) {
-             InvokerHelper.invokeMethod(getMetaBuilder(), 'build', args)
+                 InvokerHelper.invokeMethod(getMetaBuilder(), 'build', args)
          } else {
-             super.invokeMethod(methodName, args)
+             synchronized(true){
+                 super.invokeMethod(methodName, args)
+             }
          }
      }
 /*
