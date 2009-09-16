@@ -232,7 +232,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
      * @return the result of the cast or <code>null</code> if the object wasn't of the given type.
      */
     protected <T extends IdentifiableType> T cast(JAXBElement<? extends IdentifiableType> identifiable, Class<T> type) {
-        if (identifiable.getDeclaredType() == type) {
+        if ((identifiable.getDeclaredType() == type) || identifiable.getValue().getClass() == type) {
             return type.cast(identifiable.getValue());
         }
         return null;

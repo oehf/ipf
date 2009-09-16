@@ -2,9 +2,6 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 
 import java.util.Collections;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapBindingConfiguration;
@@ -59,7 +56,7 @@ public class ItiServiceFactory {
             ServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
             configureService(svrFactory, service);
             configureBinding(svrFactory);
-            configureInterceptors(svrFactory);        
+            configureInterceptors(svrFactory);
             svrFactory.create();
             
             if(service instanceof JaxbContextAware) {
@@ -107,19 +104,5 @@ public class ItiServiceFactory {
         
         // protocol-related interceptors
         svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
-    }
-    
-    private void configureJaxb(ServerFactoryBean svrFactory) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(
-                org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.ObjectFactory.class,
-                org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectFactory.class,
-                org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ObjectFactory.class,
-                org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
-                org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class,
-                org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
-                org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.ObjectFactory.class);
-        
-        JAXBDataBinding dataBinding = new JAXBDataBinding(context);
-        svrFactory.setDataBinding(dataBinding);
     }
 }
