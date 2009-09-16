@@ -53,8 +53,8 @@ ccd_procedureActivityAct(schema:'ccd_act'){
         //           SHALL have a target of problem act (templateId 2.16.840.1.113883.10.20.1.27),
         //           problem observation (templateId 2.16.840.1.113883.10.20.1.28), 
         //           or some other clinical statement.
-        problemAct(schema:'ccd_problemAct')
-        problemObservation(schema:'ccd_problemObservation')
+        problemActReason(schema:'ccd_problemAct')
+        problemObservationReason(schema:'ccd_problemObservation')
         // CONF-441: A procedure activity MAY contain one or more patient instructions 
         //           (templateId 2.16.840.1.113883.10.20.1.49) (see section 3.9.2.2.2 Patient instructions), 
         //            to represent any additional information provided to a patient related to the procedure.
@@ -101,8 +101,8 @@ ccd_procedureActivityObservation(schema:'ccd_observation'){
         //           SHALL have a target of problem act (templateId 2.16.840.1.113883.10.20.1.27),
         //           problem observation (templateId 2.16.840.1.113883.10.20.1.28), 
         //           or some other clinical statement.
-        problemAct(schema:'ccd_problemAct')
-        problemObservation(schema:'ccd_problemObservation')
+        problemActReason(schema:'ccd_problemAct')
+        problemObservationReason(schema:'ccd_problemObservation')
         // CONF-441: A procedure activity MAY contain one or more patient instructions 
         //           (templateId 2.16.840.1.113883.10.20.1.49) (see section 3.9.2.2.2 Patient instructions), 
         //            to represent any additional information provided to a patient related to the procedure.
@@ -149,8 +149,8 @@ ccd_procedureActivityProcedure(schema:'ccd_procedure'){
         //           SHALL have a target of problem act (templateId 2.16.840.1.113883.10.20.1.27),
         //           problem observation (templateId 2.16.840.1.113883.10.20.1.28), 
         //           or some other clinical statement.
-        problemAct(schema:'ccd_problemAct')
-        problemObservation(schema:'ccd_problemObservation')       
+        problemActReason(schema:'ccd_problemAct')
+        problemObservationReason(schema:'ccd_problemObservation')       
         // CONF-441: A procedure activity MAY contain one or more patient instructions 
         //           (templateId 2.16.840.1.113883.10.20.1.49) (see section 3.9.2.2.2 Patient instructions), 
         //            to represent any additional information provided to a patient related to the procedure.

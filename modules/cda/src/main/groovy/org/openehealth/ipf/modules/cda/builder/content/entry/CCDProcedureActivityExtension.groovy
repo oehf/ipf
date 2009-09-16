@@ -30,6 +30,7 @@ import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
  * <li>                             Information Source
  * <li>2.16.840.1.113883.10.20.1.40 Comment 
  * <li>2.16.840.1.113883.10.20.1.49 Patient Instruction
+ * <li>2.16.840.1.113883.10.20.1.48 Patient Awareness
  * <li>2.16.840.1.113883.10.20.1.52 Product Instance
  * <li>2.16.840.1.113883.10.20.1.24 Medication Activity
  * <li>2.16.840.1.113883.10.20.1.27 Problem Act
@@ -82,6 +83,7 @@ public class CCDProcedureActivityExtension extends CompositeModelExtension {
           new CCDProblemActExtension(),
           new CCDProblemObservationExtension(),
           new CCDProductInstanceExtension(),
+          new CCDPatientAwarenessExtension(),
           new CCDPatientInstructionExtension(),
           new CCDAgeObservationExtension(),
           new CCDMedicationActivityExtension(),

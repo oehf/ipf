@@ -81,7 +81,8 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
                 }?.observation
             }    
         }//problem act extensions
-
+        
+        // Extension problem status required also by Family History Observation(2.16.840.1.113883.10.20.1.4)
 		POCDMT000040Observation.metaClass {
 			
 			setProblemStatus{ POCDMT000040Observation observation ->           
@@ -120,13 +121,13 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
 
         // Extension required by Procedure Activity (2.16.840.1.113883.10.20.1.29)
 		POCDMT000040Act.metaClass {
-			setProblemOvservation  {POCDMT000040Observation observation ->
+			setProblemObservationReason  {POCDMT000040Observation observation ->
 				delegate.entryRelationship.add(builder.build {
 				    entryRelationship (typeCode:'RSON', observation:observation)
 				})
 			}
 
-			getProblemObservation { ->
+			getProblemObservationReason { ->
 				delegate.entryRelationship.findAll{
 					templateId() in it.observation?.templateId.root
 				}?.observation
@@ -134,13 +135,13 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
         }
 
         POCDMT000040Observation.metaClass {
-			setProblemOvservation  {POCDMT000040Observation observation ->
+            setProblemObservationReason  {POCDMT000040Observation observation ->
 				delegate.entryRelationship.add(builder.build {
 				    entryRelationship (typeCode:'RSON', observation:observation)
 				})
 			}
 
-			getProblemObservation { ->
+            getProblemObservationReason { ->
 				delegate.entryRelationship.findAll{
 					templateId() in it.observation?.templateId.root
 				}?.observation
@@ -148,13 +149,13 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
         }
 
         POCDMT000040Procedure.metaClass {
-			setProblemOvservation  {POCDMT000040Observation observation ->
+            setProblemObservationReason  {POCDMT000040Observation observation ->
 				delegate.entryRelationship.add(builder.build {
 				    entryRelationship (typeCode:'RSON', observation:observation)
 				})
 			}
 
-			getProblemObservation { ->
+            getProblemObservationReason { ->
 				delegate.entryRelationship.findAll{
 					templateId() in it.observation?.templateId.root
 				}?.observation

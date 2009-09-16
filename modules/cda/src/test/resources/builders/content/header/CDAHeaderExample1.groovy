@@ -97,7 +97,7 @@ clinicalDocument {
 		encompassingEncounter {
 			id(extension:"KPENC1332", root:"2.16.840.1.113883.19.6")
 			effectiveTime { low("20000407") }
-			encounterParticipant(/*typeCode:"CON"*/) {
+			encounterParticipant(typeCode:"CON") {
 				time('20000407')
 				assignedEntity {
 					id(extension:"KP00017",root:"2.16.840.1.113883.19.5")

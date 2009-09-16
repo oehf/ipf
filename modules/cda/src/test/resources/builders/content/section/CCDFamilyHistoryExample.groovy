@@ -37,14 +37,16 @@ ccd_familyHistory {
 			id('5bfe3ec0-5c8b-11db-b0de-0800200c9a66')
 			code('ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
 			value(make {
-				ce(code:'59621000',codeSystem:'2.16.840.1.113883.6.96',displayName:'HTN')
-			}
-			)
-			// value(code:'59621000',codeSystem:'2.16.840.1.113883.6.96',displayName:'HTN')                                       
+				    ce(code:'59621000',codeSystem:'2.16.840.1.113883.6.96',displayName:'HTN')
+			    }
+			)                                      
 			age {
 				value(make { _int(40) }
 				)
 			}
+			problemStatus{
+                value(code:'413322009', displayName:'Resolved')
+            }
 		}
 	}                           
 	familyMember {

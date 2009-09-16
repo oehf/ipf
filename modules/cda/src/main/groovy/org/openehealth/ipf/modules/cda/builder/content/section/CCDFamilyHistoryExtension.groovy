@@ -32,6 +32,7 @@ import org.openehealth.ipf.modules.cda.builder.content.entry.*
  * Dependent templates:
  * <ul>
  * <li>2.16.840.1.113883.10.20.1.38 Age Observation
+ * <li>2.16.840.1.113883.10.20.1.50 Problem Status Observation
  * <li>2.16.840.1.113883.10.20.1.40 Comment
  * <li>                             Information Source 
  * </ul>
@@ -193,6 +194,7 @@ public class CCDFamilyHistoryExtension extends CompositeModelExtension {
 	
 	Collection modelExtensions() {
 		[ new CCDAgeObservationExtension(),
+		  new CCDProblemObservationExtension(),
 		  new CCDCommentsExtension(),
 		  new CCDSourceExtension()
 		]

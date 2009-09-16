@@ -49,6 +49,22 @@ ccd_procedures{
                 id(root:'2.16.840.1.113883.19.5')
                 playingEntity{ name('Very Good Health Clinic') }//playingEntity
             }
+            problemObservationReason{
+                id(root:'9d3d416d-45ab-4da1-912f-4583e0632000')
+                code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
+                value(make{
+                    cd(code:'233604007',
+                    codeSystem:'2.16.840.1.113883.6.96',
+                    displayName:'Pneumonia')
+                }
+                )
+                patientAwareness{
+                    awarenessCode(code:'TEST', codeSystem:'2.16.840.1.113883.5.4')
+                    participantRole{ 
+                        id('996-756-495@2.16.840.1.113883.19.5')
+                    }
+                }
+            }//problem observation
             productInstance{
                 id(root:'03ca01b0-7be1-11db-9fe1-0800200c9a66')
                 playingDevice{

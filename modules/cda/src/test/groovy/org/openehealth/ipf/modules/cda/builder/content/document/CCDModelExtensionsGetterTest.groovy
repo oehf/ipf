@@ -216,9 +216,9 @@ public class CCDModelExtensionsGetterTest extends AbstractCDAR2BuilderTest{
         assert ccdDoc.procedures.procedureActivity.procedure?.size == 1
         assert ccdDoc.procedures.procedureActivity.act[0] == null
         assert ccdDoc.procedures.procedureActivity.observation[0] == null
-        assert ccdDoc.procedures.procedureActivity.procedure[0].problemAct.size == 0
-        assert ccdDoc.procedures.procedureActivity.act.problemAct.size == 0
-        assert ccdDoc.procedures.procedureActivity.procedure[0].problemObservation.size == 0
+        assert ccdDoc.procedures.procedureActivity.procedure[0].problemActReason.size == 0
+        assert ccdDoc.procedures.procedureActivity.act.problemActReason.size == 0
+        assert ccdDoc.procedures.procedureActivity.procedure[0].problemObservationReason.size == 0
         assert ccdDoc.procedures.procedureActivity.procedure[0].medicationActivity.size == 0
         assert ccdDoc.procedures.procedureActivity.procedure[0].patientInstruction.size == 0
         assert ccdDoc.procedures.procedureActivity.procedure[0].age == null

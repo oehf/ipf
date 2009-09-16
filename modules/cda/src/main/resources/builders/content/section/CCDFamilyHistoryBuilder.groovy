@@ -25,6 +25,7 @@ import org.openhealthtools.ihe.common.cdar2.*
  *
  *  Dependecies:
  *      Age Observation (ccd_ageObservation)
+ *      Problem Status Observation (ccd_problemObservationStatus)
  *      Spurce
  *      Comments
  */
@@ -78,7 +79,7 @@ ccd_familyHistory(schema:'ccd_section') {
 
 // CONF-190: A family history observation (templateId 2.16.840.1.113883.10.20.1.22) 
 //           SHALL be represented with Observation
-ccd_familyHistoryObservation(schema:'observation') {
+ccd_familyHistoryObservation(schema:'ccd_observation') {
 	properties{
 		// CONF-191: The value for “Observation / @moodCode” in a family history 
 		//           observation SHALL be “EVN” 2.16.840.1.113883.5.1001 ActMood STATIC
@@ -94,7 +95,11 @@ ccd_familyHistoryObservation(schema:'observation') {
             }
         })
         age(schema:'ccd_ageObservation')
-        familyMember(schema:'ccd_familyMemberRelatedSubject')        
+        familyMember(schema:'ccd_familyMemberRelatedSubject')
+        // CONF-207: A family history observation act MAY contain exactly one 
+        //           problem status observation (templateId 2.16.840.1.113883.10.20.1.50) 
+	    //           (see section 3.5.2.2 Representation of “status” values).
+        problemStatus(schema:'ccd_problemObservationStatus')
 	}
 	collections{
 		// CONF-192: A family history observation SHALL contain at least one Observation / id.

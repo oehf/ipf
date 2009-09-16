@@ -70,13 +70,13 @@ public class CCDProblemActExtension extends CompositeModelExtension {
 
         // Extension required by Procedure Activity (2.16.840.1.113883.10.20.1.29)
 		POCDMT000040Act.metaClass {
-			setProblemAct  {POCDMT000040Act act ->
+			setProblemActReason  {POCDMT000040Act act ->
 				delegate.entryRelationship.add(builder.build {
 				    entryRelationship (typeCode:'RSON', act:act)
 				})
 			}
 
-			getProblemAct { ->
+			getProblemActReason { ->
 				delegate.entryRelationship.findAll{
 					templateId() in it.act.templateId.root
 				}?.act
@@ -85,13 +85,13 @@ public class CCDProblemActExtension extends CompositeModelExtension {
 
         // Extension required by Procedure Activity (2.16.840.1.113883.10.20.1.29)
         POCDMT000040Procedure.metaClass {
-			setProblemAct  {POCDMT000040Act act ->
+			setProblemActReason  {POCDMT000040Act act ->
 				delegate.entryRelationship.add(builder.build {
 				    entryRelationship (typeCode:'RSON', act:act)
 				})
 			}
 
-			getProblemAct { ->
+			getProblemActReason { ->
 				delegate.entryRelationship.findAll{
 					templateId() in it.act.templateId.root
 				}?.act
@@ -99,13 +99,13 @@ public class CCDProblemActExtension extends CompositeModelExtension {
         }
         // Extension required by Procedure Activity (2.16.840.1.113883.10.20.1.29)
         POCDMT000040Observation.metaClass {
-			setProblemAct  {POCDMT000040Act act ->
+			setProblemActReason  {POCDMT000040Act act ->
 				delegate.entryRelationship.add(builder.build {
 				    entryRelationship (typeCode:'RSON', act:act)
 				})
 			}
 
-			getProblemAct { ->
+			getProblemActReason { ->
 				delegate.entryRelationship.findAll{
 					templateId() in it.act.templateId.root
 				}?.act

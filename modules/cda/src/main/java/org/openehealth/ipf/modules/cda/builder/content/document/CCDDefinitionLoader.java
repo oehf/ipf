@@ -114,6 +114,8 @@ public class CCDDefinitionLoader extends CDAR2DefinitionLoader {
         doLoad("/builders/content/document/CCDCommonElementsBuilder.groovy", loaded);
         doLoad("/builders/content/section/CCDFamilyHistoryBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDAgeObservationBuilder.groovy", loaded);
+        doLoad("/builders/content/entry/CCDProblemObservationBuilder.groovy", loaded);
+        doLoad("/builders/content/entry/CCDStatusObservationBuilder.groovy", loaded);
         loadSource(loaded);   
         loadComments(loaded);        
     }
@@ -135,6 +137,7 @@ public class CCDDefinitionLoader extends CDAR2DefinitionLoader {
         doLoad("/builders/content/entry/CCDEncounterLocationBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDProblemActBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDProblemObservationBuilder.groovy", loaded);
+        doLoad("/builders/content/entry/CCDPatientAwarenessBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDPatientInstructionBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDAgeObservationBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDMedicationActivityBuilder.groovy", loaded);
