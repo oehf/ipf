@@ -48,7 +48,18 @@ public class AuditorManager {
 
     public static XDSConsumerAuditor getConsumerAuditor() {
         synchronized (sync) {
-            return XDSConsumerAuditor.getAuditor();
+            XDSConsumerAuditor auditor = XDSConsumerAuditor.getAuditor();
+            
+            // for ITI-16 and ITI-17
+            AuditorModuleConfig config = auditor.getConfig(); 
+            if(config.getSystemUserId() == null) {
+                try {
+                    config.setSystemUserId(InetAddress.getLocalHost().getHostAddress());
+                } catch (UnknownHostException e) {
+                    config.setSystemUserId("unknown");
+                }
+            }
+            return auditor; 
         }
     }
     
