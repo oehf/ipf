@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.atna;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
@@ -23,6 +26,7 @@ import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDSRepositoryAuditor;
 import org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor;
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 
 /**
  * Access synchronizer for OHT XDS ATNA Auditor singletons.
