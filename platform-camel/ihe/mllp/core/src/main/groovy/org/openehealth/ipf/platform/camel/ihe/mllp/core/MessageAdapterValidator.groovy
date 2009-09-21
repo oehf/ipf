@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openehealth.ipf.modules.hl7dsl.MessageAdapterimport org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-import org.openehealth.ipf.modules.hl7dsl.VariesAdapterimport org.openehealth.ipf.modules.hl7dsl.SelectorClosure
+import org.openehealth.ipf.modules.hl7dsl.VariesAdapterimport org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport ca.uhn.hl7v2.parser.PipeParser
 import java.util.Map
 import ca.uhn.hl7v2.model.Groupimport ca.uhn.hl7v2.model.GenericSegment
 
@@ -39,7 +39,7 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
                   ],
           'QBP' : ['Q22 Q23 ZV1'     : 'MSH QPD RCP',
                   ],
-          'RSP' : ['K22 K23'         : 'MSH MSA QAK QPD',
+          'RSP' : ['K22 K23'         : 'MSH MSA QAK QUERY_RESPONSE',
                   ],
           'QCN' : ['J01'             : 'MSH QID',
                   ],              
@@ -125,6 +125,17 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
      
 
      // --------------- Groups, ordered alphabetically ---------------
+
+     /**
+      * Valdates group QUERY_RESPONSE from RSP^K22, RSP^K23.
+      */
+     static def checkQUERY_RESPONSE(msg) {
+         def exceptions = []
+         for(group in msg.QUERY_RESPONSE()) {
+             exceptions += checkPID(group)
+         }
+         exceptions
+     }
      
      /**
       * Valdates group PIDPD1MRGPV1 from ADT^A40.
