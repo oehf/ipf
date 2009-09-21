@@ -27,6 +27,8 @@ import java.lang.reflect.Constructor;
 /**
  * PipeParser that also allows for using the CustomModelClassFactory in
  * order to support changes or extensions of the default HL7 model.
+ * As of HAPI v0.6, there's a {@link PipeParser(ModelClassFactory)} constructor
+ * so we can omit our local copy.
  * 
  * @author Christian Ohr
  * @author Marek Václávik
@@ -34,49 +36,24 @@ import java.lang.reflect.Constructor;
  */
 public class PipeParser extends ca.uhn.hl7v2.parser.PipeParser {
 	
-	ModelClassFactory factory
-	
 	PipeParser() {
-		super()
-		factory = new CustomModelClassFactory();
+		super(new CustomModelClassFactory())
 		setValidationContext(new DefaultTypeRulesValidationContext())
 	}
 	
 	PipeParser(ModelClassFactory factory) {
-		super()
-		this.factory = factory
+		super(factory)
 		setValidationContext(new DefaultTypeRulesValidationContext())
 	}
 
 	PipeParser(ValidationContext context) {
-	    super()
-		factory = new CustomModelClassFactory();
+	    super(new CustomModelClassFactory())
 		setValidationContext(context)
 	}
 	
 	PipeParser(ModelClassFactory factory, ValidationContext context) {
-		super()
-		this.factory = factory
+		super(factory)
 		setValidationContext(context)
 	}
-	
-	// Need to overwrite this method to access our own ModelClassFactory
-	protected Message instantiateMessage(String name, String version, boolean isExplicit)
-	throws HL7Exception {
-		Message result;		
-		try {
-			Class messageClass = factory.getMessageClass(name, version, isExplicit);
-			if (!messageClass)
-				throw new ClassNotFoundException("Can't find message class '$name'");
-			Constructor constructor = messageClass.getConstructor([ModelClassFactory.class] as Class[] );
-			result = (Message) constructor.newInstance([this.factory] as Object[]);
-		} catch (Exception e) {
-			throw new HL7Exception("Couldn't create Message object of type '$name'",
-			HL7Exception.UNSUPPORTED_MESSAGE_TYPE, e);
-		}
-		result.setValidationContext(getValidationContext());
-		result;
-	}
-	
 	
 }
