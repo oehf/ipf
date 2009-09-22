@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openehealth.ipf.modules.hl7dsl.MessageAdapterimport org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-import org.openehealth.ipf.modules.hl7dsl.VariesAdapterimport org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport ca.uhn.hl7v2.parser.PipeParser
+import org.openehealth.ipf.modules.hl7dsl.VariesAdapterimport org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport ca.uhn.hl7v2.parser.PipeParserimport org.openehealth.ipf.modules.hl7.message.MessageUtils
 import java.util.Map
 import ca.uhn.hl7v2.model.Groupimport ca.uhn.hl7v2.model.GenericSegment
 
@@ -39,7 +39,7 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
                   ],
           'QBP' : ['Q22 Q23 ZV1'     : 'MSH QPD RCP',
                   ],
-          'RSP' : ['K22 K23'         : 'MSH MSA QAK QUERY_RESPONSE',
+          'RSP' : ['K22 K23'         : 'MSH MSA QAK QPD QUERY_RESPONSE',
                   ],
           'QCN' : ['J01'             : 'MSH QID',
                   ],              
@@ -116,7 +116,7 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
              def c = group.getClass(name)
              if(c == GenericSegment.class) {
                  exceptions += new Exception("Unknown segment ${name}")
-             } else if(Group.class.isAssignableFrom(c)) {
+             } else if(Group.class.isAssignableFrom(c) && group.getAll(name)) {
                  exceptions += checkUnrecognizedSegments(group.get(name))
              }
          }
@@ -131,8 +131,15 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
       */
      static def checkQUERY_RESPONSE(msg) {
          def exceptions = []
-         for(group in msg.QUERY_RESPONSE()) {
-             exceptions += checkPID(group)
+         def queryResponse = msg.QUERY_RESPONSE
+         if(queryResponse instanceof SelectorClosure) {
+             // PDQ (ITI-21)
+             for(repetition in queryResponse()) {
+                 exceptions += checkPID(repetition)
+             }
+         } else {
+             // PIX Query (ITI-9)
+             exceptions += checkPatientIdList(queryResponse.PID[3])
          }
          exceptions
      }
@@ -143,8 +150,8 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
      static def checkPIDPD1MRGPV1(msg) {
          def exceptions = []
          def group = msg.PIDPD1MRGPV1
-         exceptions += checkPID(group)
-         exceptions += checkMRG(group)
+         exceptions += checkShortPatientId(group.PID[3])
+         exceptions += checkShortPatientId(group.MRG[1])
          exceptions
      }
      
@@ -156,13 +163,6 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
       */
      static def checkEVN(msg) {
          checkSegmentStructure(msg, 'EVN', [2])
-     }
-
-     /**
-      * Validates segment MRG.
-      */
-     static def checkMRG(msg) {
-         checkPatientIdList(msg.MRG[1])
      }
 
      /**
@@ -193,12 +193,7 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
       * Validates segment PID (special case for PIX Feed).
       */
      static def checkPIDx(msg) {
-         def exceptions = []
-         def pid3 = msg.PID[3]
-         if(( ! pid3?.value) || ( ! pid3[1]?.value)) {
-             exceptions += new Exception('Missing patient ID')
-         }
-         exceptions
+         checkShortPatientId(msg.PID[3])
      }
 
      /**
@@ -285,5 +280,15 @@ class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
          exceptions
      }
      
+     /**
+      * Validates short patient ID (i.e. without assigning authority, as in PIX Feed).
+      */
+     static def checkShortPatientId(pid3) {
+         def exceptions = []
+         if(( ! pid3?.value) || ( ! pid3[1]?.value)) {
+             exceptions += new Exception('Missing patient ID')
+         }
+         exceptions
+     }
 }
 

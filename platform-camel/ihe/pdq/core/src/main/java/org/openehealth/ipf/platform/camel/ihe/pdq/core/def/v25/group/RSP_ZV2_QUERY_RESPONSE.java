@@ -42,7 +42,7 @@ import ca.uhn.log.HapiLogFactory;
 public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
 
     /** 
-     * Creates a new RSP_K21_QUERY_RESPONSE Group.
+     * Creates a new RSP_ZV2_QUERY_RESPONSE Group.
      */
     public RSP_ZV2_QUERY_RESPONSE(Group parent, ModelClassFactory factory) {
        super(parent, factory);
@@ -53,7 +53,7 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
           this.add(PV2.class, false, false);
           this.add(QRI.class, false, false);
        } catch(HL7Exception e) {
-          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error creating RSP_K21_QUERY_RESPONSE - this is probably a bug in the source code generator.", e);
+          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error creating " + this.getClass().getName(), e);
        }
     }
 
@@ -65,7 +65,7 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
        try {
           ret = (PID)this.get("PID");
        } catch(HL7Exception e) {
-          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
+          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data", e);
           throw new RuntimeException(e);
        }
        return ret;
@@ -79,7 +79,7 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
        try {
           ret = (PD1)this.get("PD1");
        } catch(HL7Exception e) {
-          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
+          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data", e);
           throw new RuntimeException(e);
        }
        return ret;
@@ -94,7 +94,7 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
        try {
           ret = (PV1)this.get("PV1");
        } catch(HL7Exception e) {
-          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
+          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data", e);
           throw new RuntimeException(e);
        }
        return ret;
@@ -108,7 +108,7 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
        try {
           ret = (PV2)this.get("PV2");
        } catch(HL7Exception e) {
-          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
+          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data", e);
           throw new RuntimeException(e);
        }
        return ret;
@@ -122,7 +122,7 @@ public class RSP_ZV2_QUERY_RESPONSE extends AbstractGroup {
        try {
           ret = (QRI)this.get("QRI");
        } catch(HL7Exception e) {
-          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
+          HapiLogFactory.getHapiLog(this.getClass()).error("Unexpected error accessing data", e);
           throw new RuntimeException(e);
        }
        return ret;
