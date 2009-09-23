@@ -16,7 +16,8 @@
 package org.openehealth.ipf.modules.hl7.extend
 
 import ca.uhn.hl7v2.parser.*
-import ca.uhn.hl7v2.model.Message
+import ca.uhn.hl7v2.model.*
+import ca.uhn.hl7v2.model.v25.segment.NK1
 
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtension
@@ -132,6 +133,92 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     	assert nak.MSA.textMessage.value == "blarg"
         //println new GenericParser().encode(nak)
     }
+    
+    void testMakeMessage() {
+        def msg = Message.ADT_A01('2.5')
+    	assert msg.MSH.messageType.messageCode.value == 'ADT'
+        assert msg.MSH.messageType.triggerEvent.value == 'A01'
+        assert msg.MSH.versionID.versionID.value == '2.5'
+    }
+
+    void testMakeSegment() {
+        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def msg = new GenericParser().parse(msgText)
+        def nk1 = Segment.NK1(msg)
+    	assert nk1 instanceof NK1
+    }
+
+    void testMakeComposite() {
+        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def msg = new GenericParser().parse(msgText)        
+        def ce = Composite.CE(msg, [identifier:'BRO'])
+        assert ce.identifier.value == 'BRO'
+   }
+
+    void testMakePrimitive() {
+        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def msg = new GenericParser().parse(msgText)        
+        def si = Primitive.SI(msg, '1')
+        assert si.value == '1'
+    }
+
+    void testHAPIExampleCreateMessageFromScratch() {
+        def msg = Message.ADT_A01('2.4')
+        msg.MSH.with {
+            sendingApplication.namespaceID.value = 'TestSendingSystem' 
+            sequenceNumber.value = '123'
+        }
+        msg.PID.with {
+            getPatientName(0).familyName.surname.value = 'Doe'
+            getPatientName(0).givenName.value = 'John'
+        	getPatientIdentifierList(0).ID.value = '123456'
+        }
+        // println "Printing ER7 Encoded Message:"
+        // println new PipeParser().encode(msg)
+    }
+    
+    void testHAPIExamplePopulateOBX() {
+        def msg = Message.ORU_R01('2.5')
+        msg.PATIENT_RESULT.ORDER_OBSERVATION.with {
+        // Populate OBR
+            OBR.with {
+                setIDOBR.value = '1'
+                fillerOrderNumber.entityIdentifier.value = '1234'
+                fillerOrderNumber.namespaceID.value = 'LAB'
+                universalServiceIdentifier.identifier.value = '88304'
+            }
+            getOBSERVATION(0).OBX.with {
+                setIDOBX.value = '1'
+                observationIdentifier.identifier.value = "88304"
+                observationSubID.value = '1'
+                // The first OBX has a value type of CE. So first, we populate OBX-2 with "CE"...
+                valueType.value = 'CE'
+                def ce = Composite.CE(msg, [identifier:'T57000', text:'GALLBLADDER', nameOfCodingSystem:'SNM'])
+                getObservationValue(0).data = ce
+            }
+            // Now we populate the second OBX
+            getOBSERVATION(1).OBX.with {
+                setIDOBX.value = '2'
+                observationSubID.value = '2'
+                
+                // The second OBX in the sample message has an extra subcomponent at
+                // OBX-3-1. This component is actually an ST, but the HL7 specification allows
+                // extra subcomponents to be tacked on to the end of a component. This is
+                // uncommon, but HAPI nontheless allows it.
+                observationIdentifier.identifier.value = 88304
+                def st = Primitive.ST(msg, 'MDT')
+                observationIdentifier.identifier.extraComponents.getComponent(0).data = st
+                
+                // The first OBX has a value type of TX. So first, we populate OBX-2 with "TX"...
+                valueType.value = 'TX'
+                def tx = Primitive.TX(msg, 'MICROSCOPIC EXAM SHOWS HISTOLOGICALLY NORMAL GALLBLADDER TISSUE')
+                getObservationValue(0).data = tx
+            }
+        }
+        // println "Printing ER7 Encoded Message:"
+        // println new PipeParser().encode(msg)
+    }
+            
         
     void testList() {
         assert ['a','b'].map('listTest') == ['c','d'] 

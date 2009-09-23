@@ -18,18 +18,24 @@ package org.openehealth.ipf.modules.hl7.message
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.*
 import org.openehealth.ipf.modules.hl7.AckTypeCode
-
+import ca.uhn.hl7v2.model.v22.message.ADT_A04import ca.uhn.hl7v2.model.v25.message.ADT_A01import ca.uhn.hl7v2.model.v25.segment.NK1import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactoryimport ca.uhn.hl7v2.model.v25.datatype.CEimport ca.uhn.hl7v2.model.v25.datatype.SI
 /**
  * @author Christian Ohr
  *
  */
 public class MessageUtilsTest extends GroovyTestCase {
 	
+    private ModelClassFactory factory
+     
+    void setUp() throws Exception {
+        factory = new CustomModelClassFactory()
+    }
+    
 	void testAck() {
 		def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         def msg = parser.parse(msgText)        
-        def response = MessageUtils.ack(msg)
+        def response = MessageUtils.ack(factory, msg)
         assert response.MSH.messageType.messageType.value == 'ACK'
         assert response.MSH.messageType.triggerEvent.value == 'A01'
  	}
@@ -38,7 +44,7 @@ public class MessageUtilsTest extends GroovyTestCase {
 		def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         def msg = parser.parse(msgText)        
-        def response = MessageUtils.nak(msg, 'Some bad |&^\r\n mistake', AckTypeCode.AR)
+        def response = MessageUtils.nak(factory, msg, 'Some bad |&^\r\n mistake', AckTypeCode.AR)
         assert response instanceof Message
         assert response.MSH.messageType.messageType.value == 'ACK'
         assert response.MSH.messageType.triggerEvent.value == 'A01'
@@ -51,7 +57,7 @@ public class MessageUtilsTest extends GroovyTestCase {
 		def parser = new GenericParser()
         def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         def msg = parser.parse(msgText)        
-        def response = MessageUtils.ack(msg)
+        def response = MessageUtils.ack(factory, msg)
         assert response.MSH.messageType.messageCode.value == 'ACK'
         assert response.MSH.messageType.triggerEvent.value == 'Q22'
 	}
@@ -60,7 +66,7 @@ public class MessageUtilsTest extends GroovyTestCase {
 		def parser = new GenericParser()
         def origMsgText = this.class.classLoader.getResource('msg-01.hl7')?.text
         def origMsg = parser.parse(origMsgText)
-        def respMsg = MessageUtils.response(origMsg, 'ACK', null)        
+        def respMsg = MessageUtils.response(factory, origMsg, 'ACK', null)        
         assert parser.encode(respMsg).contains('|ACK^A01|')
 	}
 	
@@ -68,7 +74,7 @@ public class MessageUtilsTest extends GroovyTestCase {
 		def parser = new GenericParser()
         def origMsgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         def origMsg = parser.parse(origMsgText)
-        def respMsg = MessageUtils.response(origMsg, 'ACK', null)        
+        def respMsg = MessageUtils.response(factory, origMsg, 'ACK', null)        
         assert parser.encode(respMsg).contains('|ACK^Q22^ACK|')
 	}
 	
@@ -76,9 +82,51 @@ public class MessageUtilsTest extends GroovyTestCase {
 		def parser = new GenericParser()
         def origMsgText = this.class.classLoader.getResource('msg-03.hl7')?.text
         def origMsg = parser.parse(origMsgText)
-        def respMsg = MessageUtils.response(origMsg, 'RSP', 'K22')
+        def respMsg = MessageUtils.response(factory, origMsg, 'RSP', 'K22')
         assert parser.encode(respMsg).contains('|RSP^K22^RSP_K21|')
 	}
+	
+	void testMakeMessageVersion22() {
+	    def msg = MessageUtils.newMessage(factory, 'ADT_A04', '2.2')
+		def parser = new GenericParser()
+	    assert msg instanceof ADT_A04
+	    def encoded = parser.encode(msg)
+        assert encoded.contains('|ADT^A04|')	    
+	}
+	
+	void testMakeMessageVersion25() {
+	    def msg = MessageUtils.newMessage(factory, 'ADT_A04', '2.5')
+		def parser = new GenericParser()
+	    assert msg instanceof ADT_A01
+	    def encoded = parser.encode(msg)
+        assert encoded.contains('|ADT^A04^ADT_A01|')	    
+	}
+	
+	void testMakeNK1SegmentVersion25() {
+		def parser = new GenericParser()
+        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def msg = parser.parse(msgText)
+        def segment = MessageUtils.newSegment(factory, 'NK1', msg)
+	    assert segment instanceof NK1
+	}
+
+	void testMakeCECompositeVersion25() {
+		def parser = new GenericParser()
+        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def msg = parser.parse(msgText)
+        def type = MessageUtils.newComposite(factory, 'CE', msg, [identifier:'BRO'])
+	    assert type instanceof CE
+	    assert type.identifier.value == 'BRO'
+	}
+	
+	void testMakeSIPrimitiveVersion25() {
+		def parser = new GenericParser()
+        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def msg = parser.parse(msgText)
+        def si = MessageUtils.newPrimitive(factory, 'SI', msg, '1')
+	    assert si instanceof SI
+	    assert si.value == '1'
+	}	
 	
 	void testPipeEncode() {
 		def parser = new GenericParser()

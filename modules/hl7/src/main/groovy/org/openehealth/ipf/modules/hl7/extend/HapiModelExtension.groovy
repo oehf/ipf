@@ -17,12 +17,16 @@ package org.openehealth.ipf.modules.hl7.extend
 
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.parser.GenericParser
-import org.codehaus.groovy.runtime.InvokerHelperimport ca.uhn.hl7v2.model.primitive.CommonTS
-import org.openehealth.ipf.commons.map.MappingService
+import org.codehaus.groovy.runtime.InvokerHelper
+import ca.uhn.hl7v2.model.primitive.CommonTS
+import ca.uhn.hl7v2.parser.ModelClassFactory
+
+import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtension
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
 
 /**
  * Adds a couple of methods to common HAPI model classes. This makes HAPI
@@ -35,6 +39,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 class HapiModelExtension {
 
     MappingService mappingService
+	  ModelClassFactory factory = new CustomModelClassFactory()    
      
 	def extensions = {
 
@@ -77,13 +82,17 @@ class HapiModelExtension {
         Message.metaClass.getTriggerEvent = { ->
 			MessageUtils.triggerEvent(delegate)    				    
         }
+        
+	        Message.metaClass.'static'.methodMissing = { String name, args ->
+	            MessageUtils.newMessage(factory, name, args[0])
+	        }        
 
 	    /**
 	     * Positive acknowledgement for the message. The MessageAdapter
 	     * is populated with the same Parser instance.
 	     **/
 	     Message.metaClass.respond =  { String eventType, String triggerEvent ->
-	    	 MessageUtils.response(delegate, eventType, triggerEvent)
+		    	 MessageUtils.response(factory, delegate, eventType, triggerEvent)
 	     }
         
 	    /**
@@ -91,7 +100,7 @@ class HapiModelExtension {
 	     * is populated with the same Parser instance.
 	     **/
 	     Message.metaClass.ack =  {
-	    	 MessageUtils.ack(delegate)
+		    	 MessageUtils.ack(factory, delegate)
 	    }
 
 	    /**
@@ -99,7 +108,7 @@ class HapiModelExtension {
 	     * is populated with the same Parser instance.
 	     **/
 	    Message.metaClass.nak = { String cause, AckTypeCode ackTypeCode -> 
-	    	 MessageUtils.nak(delegate, cause, ackTypeCode)
+		    	 MessageUtils.nak(factory, delegate, cause, ackTypeCode)
 	    }
 		
 	    /**
@@ -107,7 +116,7 @@ class HapiModelExtension {
 	     * is populated with the same Parser instance.
 	     **/
 	    Message.metaClass.nak = { AbstractHL7v2Exception e, AckTypeCode ackTypeCode ->
-    		MessageUtils.nak(delegate, e, ackTypeCode)
+	    		MessageUtils.nak(factory, delegate, e, ackTypeCode)
 	    }
 
 	    /**
@@ -132,10 +141,27 @@ class HapiModelExtension {
 	    Message.metaClass.validate = { validationContext ->
     		MessageUtils.validate(delegate, validationContext)
 	    }
+	    
+	        // ----------------------------------------------------------------
+	        //  Extensions to HAPI Segments
+	        // ----------------------------------------------------------------
+
+	        Segment.metaClass.'static'.methodMissing = { String segmentName, args ->
+	            MessageUtils.newSegment(factory, segmentName, args[0])	                
+	        }
+	    
         
         // ----------------------------------------------------------------
         //  Extensions to HAPI Primitives
         // ----------------------------------------------------------------
+
+	        Primitive.metaClass.'static'.methodMissing = { String primitiveName, args ->
+	            if (args.size() > 1 && args[1] instanceof String) {
+	                MessageUtils.newPrimitive(factory, primitiveName, args[0], args[1])
+	            } else {
+	                MessageUtils.newPrimitive(factory, primitiveName, args[0], null)	                
+	            }
+	        }
 
         Type.metaClass.map = { 
         	mappingService?.get(it, delegate.encode())
@@ -158,6 +184,16 @@ class HapiModelExtension {
         // ----------------------------------------------------------------
         //  Extensions to HAPI Composites
         // ----------------------------------------------------------------
+
+	        Composite.metaClass.'static'.methodMissing = { String compositeName, args ->
+	            if (args.size() > 1 && args[1] instanceof Map) {
+	                MessageUtils.newComposite(factory, compositeName, args[0], args[1])
+	            } else {
+	                MessageUtils.newComposite(factory, compositeName, args[0], null)	                
+
+	            }
+
+	        }
 
         Type.metaClass.encode = { ->
         	MessageUtils.pipeEncode(delegate)

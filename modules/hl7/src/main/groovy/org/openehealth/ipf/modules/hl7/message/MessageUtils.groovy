@@ -21,7 +21,7 @@ import org.openehealth.ipf.modules.hl7.AckTypeCode
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.util.Terser
-import ca.uhn.hl7v2.util.MessageIDGenerator
+import ca.uhn.hl7v2.util.MessageIDGeneratorimport java.lang.reflect.Constructorimport ca.uhn.hl7v2.HL7Exceptionimport ca.uhn.hl7v2.parser.ModelClassFactoryimport ca.uhn.hl7v2.util.DeepCopy
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.DateTime
@@ -87,8 +87,8 @@ class MessageUtils {
 	/** 
 	 *  @return a positive ACK response message
 	 */
-	static def ack(Message msg) {
-		def ack = response(msg, 'ACK', triggerEvent(msg))
+	static def ack(ModelClassFactory factory, Message msg) {
+		def ack = response(factory, msg, 'ACK', triggerEvent(msg))
    	 	Terser terser = new Terser(ack)
         terser.set("MSA-1", "AA");
         ack
@@ -97,16 +97,16 @@ class MessageUtils {
 	/** 
 	 *  @return a negative ACK response message using a String cause
 	 */
-	static def nak(Message msg, String cause, AckTypeCode ackType) {
+	static def nak(ModelClassFactory factory, Message msg, String cause, AckTypeCode ackType) {
 		HL7v2Exception e = new HL7v2Exception(cause)
-		nak(msg, e, ackType)
+		nak(factory, msg, e, ackType)
 	}
 	
 	/** 
 	 *  @return a negative ACK response message using an Exception cause
 	 */
-	static def nak(Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
-		def ack = ack(msg)
+	static def nak(ModelClassFactory factory, Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
+		def ack = ack(factory, msg)
 		e.populateMessage(ack, ackType)
 		ack
 	}
@@ -137,35 +137,32 @@ class MessageUtils {
     static def defaultNak(AbstractHL7v2Exception e, AckTypeCode ackType, String version) {
         defaultNak(e, ackType, version, 'unknown', 'unknown')
     }
+    
+    /** 
+     *  @return a new message of the given event and version args[0]
+     */
+    static def newMessage(ModelClassFactory factory, String event, String version) {
+        if (version) {
+           def list = event.tokenize('_')
+           def eventType = list[0]
+           def triggerEvent = list[1]
+           return makeMessage(factory, eventType, triggerEvent, version)
+        } else {
+            throw new HL7v2Exception("Must have valid version to create message")
+        }
+    }
+        
 
 	/** 
 	 *  @return a response message with the basic MSH fields already populated
 	 */
-	static def response(Message msg, String eventType, String triggerEvent) {
+	static def response(ModelClassFactory factory, Message msg, String eventType, String triggerEvent) {
 
         // make message of correct version
         def version = msg.version
-        def structName
-        
-        if (eventType == 'ACK') {
-            structName = 'ACK'   
-        } else {          
-            structName = "${eventType}_${triggerEvent}"  
-            if (['2.4', '2.5'].contains(version)) {
-                structName = Parser.getMessageStructureForEvent(structName, version)
-            }
-        }
-        
-        String className = 'ca.uhn.hl7v2.model.v' + version.replace('.', '') + ".message.$structName"
-
-        Message out
-        try {
-            Class c = Class.forName(className)
-            out = c.newInstance()
-        }
-        catch (Exception e) {
-            throw new HL7v2Exception("Can't instantiate message of class $className")
-        }
+        if (!triggerEvent)
+            triggerEvent = Terser.get(msg.MSH, 9, 0, 2, 1)
+        Message out = makeMessage(factory, eventType, triggerEvent, version)
         
         //populate outbound MSH using data from inbound message ...                     
         Terser outTerser = new Terser(out)
@@ -189,15 +186,7 @@ class MessageUtils {
         outTerser.set('MSH-6-2', Terser.get(msh, 4, 0, 2, 1))
         outTerser.set('MSH-6-3', Terser.get(msh, 4, 0, 3, 1))
 
-        outTerser.set('MSH-7', hl7Now())
-        outTerser.set("MSH-9-1", eventType)
-        outTerser.set("MSH-9-2", triggerEvent ?: Terser.get(msh, 9, 0, 2, 1))
-        if (['2.4', '2.5'].contains(version))
-        	outTerser.set("MSH-9-3", structName)
-       
-        outTerser.set('MSH-10', MessageIDGenerator.getInstance().getNewID())
         outTerser.set('MSH-11', Terser.get(msh, 11, 0, 1, 1))       
-        outTerser.set('MSH-12', version)
         
         if (out.get("MSA") != null) {
           outTerser.set('MSA-2', Terser.get(msh, 10, 0, 1, 1))
@@ -206,7 +195,87 @@ class MessageUtils {
         out
     }
 	
+	private static Message makeMessage(ModelClassFactory factory, String eventType, String triggerEvent, String version) {
+        def structName
+		Message result;		
+        
+        if (eventType == 'ACK') {
+            structName = 'ACK'   
+        } else {          
+            structName = "${eventType}_${triggerEvent}"  
+            if (['2.4', '2.5'].contains(version)) {
+                structName = Parser.getMessageStructureForEvent(structName, version)
+            }
+        }
+        
+        Class c = factory.getMessageClass(structName, version, true);
+        if (!c) {
+            throw new HL7v2Exception("Can't instantiate message $structName", 
+                    HL7Exception.UNSUPPORTED_MESSAGE_TYPE) 
+        }
+        Message msg = c.newInstance([factory] as Object[])
+        Terser terser = new Terser(msg)
+        def msh = msg.MSH
+        terser.set('MSH-1', '|')
+        terser.set('MSH-2', '^~\\&')
+        terser.set('MSH-7', hl7Now())
+        terser.set("MSH-9-1", eventType)
+        terser.set("MSH-9-2", triggerEvent)
+        if (['2.4', '2.5'].contains(version))
+            terser.set("MSH-9-3", structName)          
+        terser.set('MSH-10', MessageIDGenerator.getInstance().getNewID())
+        terser.set('MSH-11-1', 'P')
+        terser.set('MSH-11-2', 'T')
+        terser.set('MSH-12', version)
+        msg
+	}
+	
+	static Segment newSegment(ModelClassFactory factory, String name, Message message) {
+        Class c = factory.getSegmentClass(name, message?.version);
+        if (!c) {
+            throw new HL7v2Exception("Can't instantiate Segment $name") 
+        }
+        Segment segment = c.newInstance([message, factory] as Object[])
+        segment	
+    }
+	
+	static Group newGroup(ModelClassFactory factory, String name, Message message) {
+        Class c = factory.getGroupClass(name, message?.version);
+        if (!c) {
+            throw new HL7v2Exception("Can't instantiate Group $name") 
+        }
+        Group group = c.newInstance([message, factory] as Object[])
+        group	
+	}
 
+	static Primitive newPrimitive(ModelClassFactory factory, String name, Message message, String value) {
+        Class c = factory.getTypeClass(name, message?.version);
+        if (!c) {
+            throw new HL7v2Exception("Can't instantiate Type $name") 
+        }
+        AbstractPrimitive primitive = c.newInstance([message] as Object[])
+        if (value) {
+            primitive.setValue(value)
+        }
+        primitive
+	}	
+	
+	static Composite newComposite(ModelClassFactory factory, String name, Message message, Map map) {
+        Class c = factory.getTypeClass(name, message?.version);
+        if (!c) {
+            throw new HL7v2Exception("Can't instantiate Type $name") 
+        }
+        Composite composite = c.newInstance([message] as Object[])
+        map?.each { k, v ->
+	        Type type = composite."$k"
+	        if ((type instanceof Primitive) && (v instanceof String)) {
+	            type.setValue(v)
+	        } else {
+	            DeepCopy.copy(v, type)
+	        }
+        }
+        composite	
+	}
 	
 	/** 
 	 *  @return a hierarchical dump of the message
