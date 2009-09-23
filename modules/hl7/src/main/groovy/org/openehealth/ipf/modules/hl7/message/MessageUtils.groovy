@@ -21,7 +21,7 @@ import org.openehealth.ipf.modules.hl7.AckTypeCode
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.util.Terser
-import ca.uhn.hl7v2.util.MessageIDGeneratorimport java.lang.reflect.Constructorimport ca.uhn.hl7v2.HL7Exceptionimport ca.uhn.hl7v2.parser.ModelClassFactoryimport ca.uhn.hl7v2.util.DeepCopy
+import ca.uhn.hl7v2.util.MessageIDGeneratorimport java.lang.reflect.Constructorimport ca.uhn.hl7v2.HL7Exceptionimport ca.uhn.hl7v2.parser.ModelClassFactoryimport ca.uhn.hl7v2.util.DeepCopyimport ca.uhn.hl7v2.parser.DefaultModelClassFactory
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.DateTime
@@ -39,6 +39,7 @@ class MessageUtils {
 
 	private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
 	private static int INDENT_SIZE = 3
+	private static defaultFactory = new DefaultModelClassFactory();
 
 	
 	/**
@@ -84,6 +85,13 @@ class MessageUtils {
 		Terser.get(msg.MSH, 9, 0, 2, 1)
 	}
 	
+	/*
+	 * @deprecated. Use {@link #ack(ModelClassFactory, Message)}.
+	 */
+	static def ack(Message msg) {
+	    ack(defaultFactory, msg)
+	}
+	
 	/** 
 	 *  @return a positive ACK response message
 	 */
@@ -94,12 +102,26 @@ class MessageUtils {
         ack
 	}
 	
+	/*
+	 * @deprecated. Use {@link #nak(ModelClassFactory, Message, String, AckTypeCode)}.
+	 */
+	static def nak(Message msg, String cause, AckTypeCode ackType) {
+	    nak(defaultFactory, msg, cause, ackType)
+	}
+	
 	/** 
 	 *  @return a negative ACK response message using a String cause
 	 */
 	static def nak(ModelClassFactory factory, Message msg, String cause, AckTypeCode ackType) {
 		HL7v2Exception e = new HL7v2Exception(cause)
 		nak(factory, msg, e, ackType)
+	}
+	
+	/*
+	 * @deprecated. Use {@link #nak(ModelClassFactory, Message, Exception, AckTypeCode)}.
+	 */
+	static def nak(Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
+	    nak(defaultFactory, e, ackType)
 	}
 	
 	/** 
@@ -152,7 +174,13 @@ class MessageUtils {
         }
     }
         
-
+    /*
+     * @deprecated
+     */
+    static def response(Message msg, String eventType, String triggerEvent) {
+        response(defaultFactory, msg, eventType, triggerEvent)
+    }
+    
 	/** 
 	 *  @return a response message with the basic MSH fields already populated
 	 */
