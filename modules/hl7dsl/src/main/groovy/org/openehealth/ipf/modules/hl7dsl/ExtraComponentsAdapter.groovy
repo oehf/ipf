@@ -16,9 +16,13 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
+
 
 import ca.uhn.hl7v2.model.ExtraComponents
 import ca.uhn.hl7v2.model.DataTypeException
+
+import org.codehaus.groovy.runtime.InvokerHelper
 
 /**
  * @author Christian Ohr
@@ -36,15 +40,16 @@ class ExtraComponentsAdapter {
     }
     
     Object invokeMethod(String name, Object args) {
-        adapt(InvokerHelper.invokeMethod(segment, name, args))
+        adapt(InvokerHelper.invokeMethod(extraComponents, name, args))
     }
     
     def getAt(int idx) {
-        adaptType(target.getComponent(componentIndex(idx)))
+        adaptType(target.getComponent(idx))
     }
     
     def getValue() {
         componentValue(this)
     }
+  
     
 }

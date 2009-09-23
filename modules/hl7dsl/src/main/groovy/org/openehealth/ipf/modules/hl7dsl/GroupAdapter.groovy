@@ -79,7 +79,7 @@ class GroupAdapter extends StructureAdapter {
     
     def getAt(String s) {
         if (group.isRepeating(s)) {
-            return selector(adaptStructures(group.getAll(s)))
+            return selector(adaptStructures(group.getAll(s)), this, s)
         } else {
             return adaptStructure(group.get(s))
         }

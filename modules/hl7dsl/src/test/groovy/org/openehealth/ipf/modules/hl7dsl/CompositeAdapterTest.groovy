@@ -40,8 +40,7 @@ class CompositeAdapterTest extends GroovyTestCase {
     }
 
     void testGetEmptyAt() {
-    	assert msg.PV2[5](0)[1].value == null
-    	assert msg.PID[9](0)[1][2].value == null
+    	assert msg.PID[9](0)[1].value == null
     	assert msg.NK1(10)[4].value == null
     	assert msg.PV2[2][1].value == null
     }

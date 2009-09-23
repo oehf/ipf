@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-
+import org.codehaus.groovy.runtime.InvokerHelper
 /**
  * Special closure that helps in the cases of HL7 DSL to allow for a default
  * repetition (0) and (sub-)component [1]. This is necessary for addressing
@@ -26,35 +26,35 @@ package org.openehealth.ipf.modules.hl7dsl
 class SelectorClosure extends Closure{
 	
 	def elements	
+	def adapter
+	def index
 	
-	SelectorClosure(owner, elements) {
+	SelectorClosure(owner, elements, adapter, index) {
 		super(owner)
 		this.elements = elements
+		this.adapter = adapter
+		this.index = index
 	}
-	
-	// Defines the [index] operator on this closure
-	def getAt(idx) {
-		call(0)?.getAt(idx)
-	}
-	
-	// Delegates assignments to the first repetition
-	def putAt(int idx, Object value) {
-	    call(0)?.putAt(idx, value)
-	}
-	
+
 	// Defining the value property with getValue() doesn't work
 	public Object getProperty(String property) {
 	    call(0)?.getProperty(property)
-    }
-	
-	public isNullValue() {
-	    call(0)?.isNullValue()
+    }		
+
+	// Forward other method calls to the first object
+	def methodMissing(String name, args) {
+	    InvokerHelper.invokeMethod(call(0), name, args)
 	}
+
+	// Forward property access to the first object
+	def propertyMissing(String name) {
+	    InvokerHelper.getProperty(call(0), name)
+	}	
 	
 	protected Object doCall(Object argument) {
 		argument != null ? 
 				(elements.size <= argument ? 
-						new NullAdapter() : 
+						adapter.nrp(index) :
 						elements[argument]) : 
 				elements
 	}

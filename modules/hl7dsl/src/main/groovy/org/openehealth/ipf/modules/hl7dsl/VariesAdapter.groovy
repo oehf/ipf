@@ -35,8 +35,10 @@ class VariesAdapter extends TypeAdapter {
     }
 
     void from(Object value) {
-        if (value instanceof CompositeAdapter) {
-            DeepCopy.copy((Type)value.target, (Type)this.target)
+        if (value instanceof TypeAdapter) {
+            this.target.data = value.target
+        } else if (value instanceof Type) {
+            this.target.data = value
         } else {
             throw new AdapterException("cannot assign from ${value.class.name} to ${VariesAdapter.class.name}")
         }

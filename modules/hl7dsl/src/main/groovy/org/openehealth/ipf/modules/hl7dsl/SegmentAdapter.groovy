@@ -73,7 +73,7 @@ class SegmentAdapter extends StructureAdapter {
             }            
         } else { 
             // repeating field
-            return selector(adapters)
+            return selector(adapters, this, idx)
         }
     }
     

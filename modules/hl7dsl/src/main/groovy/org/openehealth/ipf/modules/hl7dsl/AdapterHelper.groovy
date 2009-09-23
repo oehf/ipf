@@ -38,8 +38,8 @@ class AdapterHelper {
         index - 1
     }
     
-    static selector(elements) {
-        new SelectorClosure(this, elements)
+    static selector(elements, adapter, index) {
+        new SelectorClosure(this, elements, adapter, index)
     }
     
     static List adaptStructures(Structure[] structures) {
