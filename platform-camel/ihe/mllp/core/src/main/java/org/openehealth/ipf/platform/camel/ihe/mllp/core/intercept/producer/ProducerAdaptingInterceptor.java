@@ -19,6 +19,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Producer;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 
@@ -45,6 +46,13 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
                 exchange.getIn(), 
                 getMllpEndpoint().getConfiguration().getCharsetName(),
                 getMllpEndpoint().getParser());
+        
+        if(msg == null) {
+            Object body = exchange.getIn().getBody();
+            String className = (body == null) ? "null" : body.getClass().getName();
+            throw new MllpAdaptingException("Do not know how to handle " + className);
+        }
+        
         exchange.getIn().setBody(msg);
         exchange.setPattern(ExchangePattern.InOut);
         

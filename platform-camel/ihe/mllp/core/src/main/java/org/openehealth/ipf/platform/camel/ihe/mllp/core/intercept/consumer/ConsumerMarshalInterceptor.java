@@ -31,6 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfigura
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.Parser;
 
 
 /**
@@ -52,12 +53,13 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
     public void process(Exchange exchange) throws Exception {
         String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         MessageAdapter originalAdapter = null;
+        Parser parser = getMllpEndpoint().getParser();
         
         // unmarshal
         boolean unmarshallingFailed = false;
         try {
             org.apache.camel.Message in = exchange.getIn();
-            String originalString = MllpMarshalUtils.unmarshal(in, charset, getMllpEndpoint().getParser());
+            String originalString = MllpMarshalUtils.unmarshal(in, charset, parser);
             
             // Store different representations of the original request into Camel headers.
             // Call to .copy() will throw an NPE when the message structure (MSH-9-3)
@@ -83,7 +85,8 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
                 resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
                         e, 
                         (Message) originalAdapter.getTarget(), 
-                        getMllpEndpoint().getTransactionConfiguration()));
+                        getMllpEndpoint().getTransactionConfiguration(),
+                        parser.getFactory()));
             }
         }
         

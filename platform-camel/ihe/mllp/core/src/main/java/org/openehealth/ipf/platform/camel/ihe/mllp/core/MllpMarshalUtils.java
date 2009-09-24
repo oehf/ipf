@@ -28,6 +28,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 
+import ca.uhn.hl7v2.parser.ModelClassFactory;
 import ca.uhn.hl7v2.parser.Parser;
 
 
@@ -223,7 +224,8 @@ public class MllpMarshalUtils {
     public static MessageAdapter createNak(
             Throwable t, 
             ca.uhn.hl7v2.model.Message original,
-            MllpTransactionConfiguration config)  
+            MllpTransactionConfiguration config,
+            ModelClassFactory classFactory)  
     {
         AbstractHL7v2Exception hl7Exception;
         if(t instanceof AbstractHL7v2Exception) {
@@ -238,6 +240,7 @@ public class MllpMarshalUtils {
         }
 
         ca.uhn.hl7v2.model.Message nak = (ca.uhn.hl7v2.model.Message) MessageUtils.nak(
+                classFactory,
                 original, 
                 hl7Exception, 
                 config.getRequestErrorDefaultAckTypeCode());

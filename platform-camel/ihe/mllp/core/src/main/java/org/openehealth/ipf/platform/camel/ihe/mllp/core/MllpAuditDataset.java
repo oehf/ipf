@@ -53,8 +53,6 @@ public class MllpAuditDataset extends AuditDataset {
         /*
         // -------------------------------------------------------------------------
         // MSH-3,4,5,6 are optional in HL7 v.2.3, but mandatory in ITI TF.
-        // Question: Who is wrong?
-        // Answer: The both, plus Apache Camel (simply because he is always wrong).
         // -------------------------------------------------------------------------
         "SendingApplication",
         "SendingFacility",

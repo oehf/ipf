@@ -121,7 +121,7 @@ class MessageUtils {
 	 * @deprecated. Use {@link #nak(ModelClassFactory, Message, Exception, AckTypeCode)}.
 	 */
 	static def nak(Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
-	    nak(defaultFactory, e, ackType)
+	    nak(defaultFactory, msg, e, ackType)
 	}
 	
 	/** 
