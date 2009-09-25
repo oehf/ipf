@@ -35,7 +35,7 @@ public class CCDReactionObservationValidator extends AbstractValidator {
 	    assertNotNull('CONF-285', observation.statusCode)
 		assertEquals('CONF-286', 'completed', observation.statusCode.code)
 		def severityObservations = observation.entryRelationship.findAll{
-	        '2.16.840.1.113883.10.20.1.55' in it.observation.templateId.root
+	        '2.16.840.1.113883.10.20.1.55' in it.observation?.templateId?.root
 	    }
 	    severityObservations.each{ entry ->
             assertNotNull('CONF-287', entry.observation)

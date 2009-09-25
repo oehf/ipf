@@ -38,7 +38,7 @@ public class CCDMedicationsBuilderTest extends AbstractCDAR2BuilderTest {
 		POCDMT000040Section medications = builder.build(
 	        getClass().getResource('/builders/content/section/CCDMedicationsExample.groovy'))
 		
-		 new CCDMedicationsValidator().validate(medications, null)
+		new CCDMedicationsValidator().validate(medications, null)
 	}
 	
 }

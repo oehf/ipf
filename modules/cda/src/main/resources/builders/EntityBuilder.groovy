@@ -47,6 +47,7 @@ custodianOrganization(schema:'infrastructureRoot', factory:'POCDMT000040_CUSTODI
 
 device(schema:'infrastructureRoot', factory:'POCDMT000040_DEVICE') {
     properties {
+        classCode(factory:'ENTITY_CLASS_DEVICE')
         code(schema:'ce')
         manufacturerModelName(schema:'sc')
         softwareName(schema:'sc')
@@ -56,6 +57,7 @@ device(schema:'infrastructureRoot', factory:'POCDMT000040_DEVICE') {
 
 entity(schema:'infrastructureRoot', factory:'POCDMT000040_ENTITY') {
     properties {
+        classCode(factory:'ENTITY_CLASS_ROOT')
         code(schema:'ce')
         desc(schema:'ed')
     }
@@ -149,6 +151,7 @@ place(schema:'infrastructureRoot', factory:'POCDMT000040_PLACE') {
 
 playingEntity(schema:'infrastructureRoot', factory:'POCDMT000040_PLAYING_ENTITY') {
     properties {
+        classCode(factory:'ENTITY_CLASS_ROOT')
         code(schema:'ce')
         desc(schema:'ed')
     }

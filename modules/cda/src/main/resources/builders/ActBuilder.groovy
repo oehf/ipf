@@ -263,7 +263,9 @@ clinicalStatement(schema:'infrastructureRoot') {
 
 act(schema:'clinicalStatement', factory:'POCDMT000040_ACT') {
     properties {
-        classCode(factory:'XACT_CLASS_DOCUMENT_ENTRY_ACT')
+        classCode(factory:'XACT_CLASS_DOCUMENT_ENTRY_ACT', 
+                req:true, 
+                def:ActClassObservationMember3.ACT_LITERAL)
         moodCode(factory:'XDOCUMENT_ACT_MOOD')
         negationInd()
         code(schema:'cd', req:true)

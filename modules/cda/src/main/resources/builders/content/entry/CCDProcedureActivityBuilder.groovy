@@ -26,9 +26,9 @@ import org.openhealthtools.ihe.common.cdar2.*
 // TODO: One of
 ccd_procedureActivity(schema:'ccd_entry') {
    properties {
-       act(schema:'ccd_procedureActivityAct')
-       observation(schema:'ccd_procedureActivityObservation')
-       procedure(schema:'ccd_procedureActivityProcedure')     
+       procedureActivityAct(schema:'ccd_procedureActivityAct')
+       procedureActivityObservation(schema:'ccd_procedureActivityObservation')
+       procedureActivityProcedure(schema:'ccd_procedureActivityProcedure')     
    }
 }
 
@@ -38,7 +38,7 @@ ccd_procedureActivityAct(schema:'ccd_act'){
         //           in a procedure activity SHALL be “EVN” 2.16.840.1.113883.5.1001 
         //           ActMood STATIC.
         moodCode(factory:'XACT_MOOD_DOCUMENT_OBSERVATION', 
-                def: XActMoodDocumentObservation.EVN_LITERAL)
+                def: XDocumentActMood.EVN_LITERAL)
         // CONF-430: A procedure activity SHALL contain exactly one [Act | Observation | Procedure] / 
         //           statusCode.
         statusCode(schema:'cs', req:true)
@@ -59,6 +59,10 @@ ccd_procedureActivityAct(schema:'ccd_act'){
         //           (templateId 2.16.840.1.113883.10.20.1.49) (see section 3.9.2.2.2 Patient instructions), 
         //            to represent any additional information provided to a patient related to the procedure.
         patientInstruction(schema:'ccd_patientInstruction')
+        // CONF-445: The value for “[Act | Observation | Procedure] / entryRelationship / @typeCode” 
+        //           in a procedure activity MAY be “SUBJ” “Subject” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC
+        //           to reference an age observation (templateId 2.16.840.1.113883.10.20.1.38).11
+        age(schema:'ccd_ageObservation')
         // CONF-446: A procedure activity MAY have one or more [Act | Observation | Procedure] / 
         //           entryRelationship [@typeCode=”COMP”], the target of which is a medication activity
         //           (templateId 2.16.840.1.113883.10.20.1.24) (see section 3.9.2.1.1 Medication activity), 
@@ -107,6 +111,10 @@ ccd_procedureActivityObservation(schema:'ccd_observation'){
         //           (templateId 2.16.840.1.113883.10.20.1.49) (see section 3.9.2.2.2 Patient instructions), 
         //            to represent any additional information provided to a patient related to the procedure.
         patientInstruction(schema:'ccd_patientInstraction')
+        // CONF-445: The value for “[Act | Observation | Procedure] / entryRelationship / @typeCode” 
+        //           in a procedure activity MAY be “SUBJ” “Subject” 2.16.840.1.113883.5.1002 ActRelationshipType STATIC
+        //           to reference an age observation (templateId 2.16.840.1.113883.10.20.1.38).11
+        age(schema:'ccd_ageObservation')
         // CONF-446: A procedure activity MAY have one or more [Act | Observation | Procedure] / 
         //           entryRelationship [@typeCode=”COMP”], the target of which is a medication activity
         //           (templateId 2.16.840.1.113883.10.20.1.24) (see section 3.9.2.1.1 Medication activity), 

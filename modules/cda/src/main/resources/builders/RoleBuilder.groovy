@@ -59,10 +59,10 @@ assignedEntity(schema:'role', factory:'POCDMT000040_ASSIGNED_ENTITY') {
 
 associatedEntity(schema:'role', factory:'POCDMT000040_ASSOCIATED_ENTITY') {
     properties {
+        classCode(factory:'ROLE_CLASS_ASSOCIATIVE', req:true)
         scopingOrganization(schema:'organization')
         associatedPerson(schema:'person')
         code(schema:'roleCode')
-        classCode(factory:'ROLE_CLASS_ASSOCIATIVE') // TODO
     }
 }
 
@@ -140,6 +140,7 @@ organizationPartOf(schema:'infrastructureRoot', factory:'POCDMT000040_ORGANIZATI
 
 participantRole(schema:'role',  factory: 'POCDMT000040_PARTICIPANT_ROLE') {
 	properties {
+	    classCode(factory:'ROLE_CLASS_ROOT')
 	    code(schema:'roleCode')
 	    //TODO one of playingEntity|playingDevice
 	    playingEntity(schema:'playingEntity')
@@ -157,10 +158,10 @@ patientRole(schema:'role',  factory: 'POCDMT000040_PATIENT_ROLE') {
 
 relatedEntity(schema:'infrastructureRoot', factory:'POCDMT000040_RELATED_ENTITY') {
     properties {
-        relatedPerson(schema:'person')
-        effectiveTime(schema:'ivlts')
-        code(schema:'roleCode')
         classCode(factory:'ROLE_CLASS_MUTUAL_RELATIONSHIP_MEMBER1')
+        code(schema:'roleCode')
+        effectiveTime(schema:'ivlts')
+        relatedPerson(schema:'person')
     }
     collections {
 		addrs(collection:'addr') {

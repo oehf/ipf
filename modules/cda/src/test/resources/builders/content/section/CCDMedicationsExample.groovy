@@ -44,6 +44,10 @@ ccd_medications{
 		})
 		routeCode(code:'IPINHL', displayName:"Inhalation, oral")
 		doseQuantity(value:2.0)
+		maxDoseQuantity{
+		    numerator(value:3.0)
+		    denominator(value:5.0)
+		}
 		administrationUnitCode(code:"415215001",
 				codeSystem:"2.16.840.1.113883.6.96",
 				displayName:"Puff")
@@ -56,6 +60,14 @@ ccd_medications{
 			    }
             }
 		}
+        patientInstruction{
+            id('cdbd5b08-6cde-11db-9fe1-0800200b8a66')
+            code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
+            effectiveTime{
+                low('20000338')
+            }
+            text('Read the instructions carefully')
+        }
 		precondition {
 			// TODO add to extension
 			criterion {
@@ -63,9 +75,25 @@ ccd_medications{
 				value(make {
 					ce(code:'56018004', codeSystem:'2.16.840.1.113883.6.96', displayName:'Wheezing')
 				})
-
 			}
 		}
+		seriesNumber(5)
+		reactionObservation{
+            code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
+            value(make{
+                cd(code:'247472004', 
+                        codeSystem:'2.16.840.1.113883.6.96',
+                        displayName:'Hives')
+            }
+            )
+            severityObservation{
+                value(make{
+                    cd(code:'247472004', 
+                            codeSystem:'2.16.840.1.113883.6.96',
+                            displayName:'Hives')
+                })
+            }
+        }//reaction observation
 	}
 	medicationActivity {
 		id('cdbd5b07-6cde-11db-9fe1-0800200c9a66')

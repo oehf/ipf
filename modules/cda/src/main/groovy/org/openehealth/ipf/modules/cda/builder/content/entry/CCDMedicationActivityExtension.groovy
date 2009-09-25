@@ -34,6 +34,7 @@ import org.openehealth.ipf.modules.cda.builder.content.entry.*
  * <li>2.16.840.1.113883.10.20.1.53 Product
  * <li>2.16.840.1.113883.10.20.1.52 Product Instance
  * <li>2.16.840.1.113883.10.20.1.27 Problem Act
+ * <li>2.16.840.1.113883.10.20.1.54 Reaction Observation
  * <li>2.16.840.1.113883.10.20.1.57 Status Observation
  * <li>                             Source
  * <li>2.16.840.1.113883.10.20.1.40 Comments 

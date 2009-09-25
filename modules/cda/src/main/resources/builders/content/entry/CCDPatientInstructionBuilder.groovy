@@ -21,12 +21,12 @@ import org.openhealthtools.ihe.common.cdar2.*
 
 // CONF-331: A patient instruction (templateId 2.16.840.1.113883.10.20.1.49) 
 //           SHALL be represented with Act.
-ccd_patientInstruction(schema:'ccd_act') {
+ccd_patientInstruction(schema:'act') {
 	properties {
 		// CONF-332: The value for “Act / @moodCode” in a patient instruction 
 		//           SHALL be “INT” “Intent” 2.16.840.1.113883.5.1001 ActMood STATIC.
 		moodCode(factory:'XACT_MOOD_DOCUMENT_OBSERVATION', 
-		def: XActMoodDocumentObservation.INT_LITERAL)       
+		                    def: XDocumentActMood.INT_LITERAL)       
 	}
 	collections {        
 		templateIds(collection:'templateId', def: {

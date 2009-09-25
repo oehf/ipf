@@ -65,7 +65,34 @@ public class CCDProcedureActivityExtension extends CompositeModelExtension {
 			getProcedureActivity { ->
 				delegate.entry
 			}
-		}//procedure activity extensions		
+			
+		}//procedure activity extensions
+		
+		POCDMT000040Entry.metaClass {
+		    setProcedureActivityAct {POCDMT000040Act act ->
+                delegate.act = act
+		    }
+        
+		    getProcedureActivityAct { ->
+                delegate.act
+		    }
+		    
+		    setProcedureActivityObservation {POCDMT000040Observation obs ->
+                delegate.observation = obs
+		    }
+    
+		    getProcedureActivityObservation { ->
+		        delegate.observation
+		    }
+        
+		    setProcedureActivityProcedure {POCDMT000040Procedure proc ->
+		        delegate.procedure = proc
+		    }
+
+		    getProcedureActivityProcedure { ->
+		        delegate.procedure
+		    }
+		}
 		
 	}//ccd extensions 
 	

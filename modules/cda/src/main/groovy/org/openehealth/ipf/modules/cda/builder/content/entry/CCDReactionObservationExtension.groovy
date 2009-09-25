@@ -53,8 +53,22 @@ public class CCDReactionObservationExtension extends CompositeModelExtension {
 		
 		super.register(registered)
 		
-        //required by Alert Observation (2.16.840.1.113883.10.20.1.18)
 		//required by Medication Activity (2.16.840.1.113883.10.20.1.24)
+		POCDMT000040SubstanceAdministration.metaClass {
+		    setReactionObservation { POCDMT000040Observation observation ->
+                delegate.entryRelationship.add(builder.build {
+                    entryRelationship(typeCode:'CAUS', observation:observation)
+                })
+		    }
+        
+		    getReactionObservation{ ->
+		        delegate.entryRelationship.findAll {
+		            templateId() in it.observation?.templateId?.root
+		        }?.observation
+		    }
+		}
+		
+        //required by Alert Observation (2.16.840.1.113883.10.20.1.18)
 		POCDMT000040Observation.metaClass {
 			
 			setReactionObservation { POCDMT000040Observation observation ->
@@ -81,16 +95,49 @@ public class CCDReactionObservationExtension extends CompositeModelExtension {
 				}?.observation
 			}
 			
-			setReactionIntervention{ POCDMT000040Observation observation ->
-				delegate.entryRelationship.add(builder.build {
-					entryRelationship(typeCode:'RSON', observation:observation)
-				})
+			setReactionIntervention{ POCDMT000040EntryRelationship entryRel ->
+				delegate.entryRelationship.add(entryRel)
 			}
 			getReactionIntervention { ->
-				delegate.participant.find { it.typeCode == 'RSON' }?.observation
+				delegate.participant.find { it.typeCode == 'RSON' }
 			}
 			
-		}//alerts observation extensions
+		}//reaction observation extensions
+		
+		POCDMT000040EntryRelationship.metaClass{
+		    //medication activity reaction intervention
+		    setMedicationActivity{POCDMT000040SubstanceAdministration sa ->
+                delegate.substanceAdministration = sa
+		    }
+		    
+		    getMedicationActivity{ ->
+                delegate.substanceAdministration
+		    }
+		    //procedure activity act
+		    setProcedureActivityAct{POCDMT000040Act act ->
+		        delegate.act = act
+		    }
+        
+		    setProcedureActivityAct{ ->
+                delegate.act
+		    }
+		    //procedure activity observation
+            setProcedureActivityObservation{POCDMT000040Observation obs ->
+                delegate.observation = obs
+            }
+        
+            setProcedureActivityObservation{ ->
+                delegate.observation
+            }
+            //procedure activity procedure
+            setProcedureActivityProcedure{POCDMT000040Procedure proc ->
+                delegate.procedure = proc
+            }
+        
+            getProcedureActivityProcedure{ ->
+                delegate.procedure
+            }
+		}//reaction intervention extension
 		
 	}//ccd extensions 
 	

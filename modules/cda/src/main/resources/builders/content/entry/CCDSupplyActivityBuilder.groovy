@@ -70,6 +70,11 @@ ccd_supplyActivity(schema:'ccd_supply'){
 // CONF-335: A fulfillment instruction (templateId 2.16.840.1.113883.10.20.1.43) 
 //           SHALL be represented with Act.
 ccd_fulfillmentInstruction(schema:'act'){
+    properties{
+        // CONF-336: The value for “Act / @moodCode” in a fulfillment instruction 
+        //           SHALL be “INT” “Intent” 2.16.840.1.113883.5.1001 ActMood STATIC.
+        moodCode(def:XDocumentActMood.INT_LITERAL)
+    }
     collections {
         templateIds(collection:'templateId', def: {
             getMetaBuilder().buildList {

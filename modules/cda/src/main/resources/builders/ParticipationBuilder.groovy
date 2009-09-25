@@ -34,10 +34,10 @@ author(schema:'infrastructureRoot', factory:'POCDMT000040_AUTHOR') {
 
 clinicalStatementParticipant(schema:'infrastructureRoot', factory:'POCDMT000040_PARTICIPANT2') {
     properties {
+        typeCode(factory:'PARTICIPATION_TYPE', req:true)
         awarenessCode(schema:'ce')
         time(schema:'ivlts')
         participantRole(schema:'participantRole')
-        typeCode(factory:'PARTICIPATION_TYPE', req:true)
     }
 }
 
@@ -97,10 +97,10 @@ location(schema:'infrastructureRoot', factory:'POCDMT000040_LOCATION') {
 
 participant(schema:'infrastructureRoot', factory:'POCDMT000040_PARTICIPANT1') {
     properties {
+        typeCode(factory:'PARTICIPATION_TYPE', req:true)
         associatedEntity(schema:'associatedEntity')
         functionCode(schema:'ce')
         time(schema:'ivlts')
-        typeCode(factory:'PARTICIPATION_TYPE')
     }
 }
 
@@ -119,10 +119,10 @@ consumable(schema:'infrastructureRoot', factory:'POCDMT000040_CONSUMABLE') {
 
 performer(schema:'infrastructureRoot', factory:'POCDMT000040_PERFORMER1') {
     properties {
+        typeCode(factory:'XSERVICE_EVENT_PERFORMER', req:true)
         assignedEntity(schema:'assignedEntity')
         functionCode(schema:'ce')
         time(schema:'ivlts')
-        typeCode(factory:'XSERVICE_EVENT_PERFORMER')
     }
 }
 
@@ -147,10 +147,10 @@ specimen(schema:'infrastructureRoot', factory:'POCDMT000040_SPECIMEN') {
 
 subject(schema:'infrastructureRoot', factory:'POCDMT000040_SUBJECT') {
     properties {
-        awarenessCode(schema:'ce')
-        relatedSubject(schema:'relatedSubject')
         typeCode(factory:'PARTICIPATION_TARGET_SUBJECT')
         contextControlCode(factory:'CONTEXT_CONTROL')
+        awarenessCode(schema:'ce')
+        relatedSubject(schema:'relatedSubject')
     }
 }
 

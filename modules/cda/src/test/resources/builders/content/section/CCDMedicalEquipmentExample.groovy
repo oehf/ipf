@@ -74,5 +74,11 @@ ccd_medicalEquipment{
                         displayName:'Wheelchair')
             }//playingDevice
         }
+        fulfillmentInstruction{
+            id('cdbd5b08-6cde-11db-9fe1-0800200b8a66')
+            code(code:'ASSERTION', codeSystem:'2.16.840.1.113883.5.4')
+            effectiveTime { low('20000328') }
+            text('Instruction in german')
+        }
     }//suplly activity
 }

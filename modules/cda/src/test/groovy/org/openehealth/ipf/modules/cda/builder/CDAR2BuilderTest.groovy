@@ -35,12 +35,13 @@ public class CDAR2BuilderTest extends AbstractCDAR2BuilderTest{
 	@Test
 	public void testBuildClinicalDocumentMetaData() {		
 	    def document = builder.build(getClass().getResource('/builders/content/header/CDAHeaderExample1.groovy'))
-//		def renderer = new CDAR2Renderer()
-//		def opts = [:]
-//		opts[XMLResource.OPTION_DECLARE_XML] = true
-//		opts[XMLResource.OPTION_ENCODING] = 'utf-8'
 		Assert.assertNotNull document 
-//		println(renderer.render(document, opts))
 	}
+	
+	@Test
+    public void testBuildClinicalDocumentOptionalAttributes() {       
+        def document = builder.build(getClass().getResource('/builders/content/header/CDAHeaderExample2.groovy'))
+        Assert.assertNotNull document 
+    }
 	
 }

@@ -24,7 +24,7 @@ ccd_procedures{
         }//table
     }//text
     procedureActivity{
-        procedure{
+        procedureActivityProcedure{
             id(root:'e401f340-7be2-11db-9fe1-0800200c9a66')
             code(code:'52734007', codeSystem:'2.16.840.1.113883.6.96', displayName:'Total hip replacement'){
                 originalText{ reference(value:'#Proc2') }//originalText
@@ -60,7 +60,7 @@ ccd_procedures{
                 )
                 patientAwareness{
                     awarenessCode(code:'TEST', codeSystem:'2.16.840.1.113883.5.4')
-                    participantRole{ 
+                    participantRole(classCode:'MANU'){ 
                         id('996-756-495@2.16.840.1.113883.19.5')
                     }
                 }

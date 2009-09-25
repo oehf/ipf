@@ -76,14 +76,12 @@ component(
 
 componentOf(schema:'infrastructureRoot', factory:'POCDMT000040_COMPONENT1') {
     properties {
-        // typeCode(factory:'ACT_RELATIONSHIP_HAS_COMPONENT')
         encompassingEncounter(schema:'encompassingEncounter')
     }
 }
 
 documentationOf(schema:'infrastructureRoot', factory:'POCDMT000040_DOCUMENTATION_OF') {
     properties {
-        // typeCode(factory:'ACT_RELATIONSHIP_TYPE')
         serviceEvent(schema:'serviceEvent')
     }
 }

@@ -116,7 +116,9 @@ ccd_reactionIntervention(schema:'entryRelationship'){
     properties{
         typeCode(def:XActRelationshipEntryRelationship.RSON_LITERAL)
         /* FIX one of */
-        procedureActivity(schema:'ccd_procedureActivity')
+        procedureActivityAct(schema:'ccd_procedureActivityAct')
+        procedureActivityObservation(schema:'ccd_procedureActivityObservation')
+        procedureActivityProcedure(schema:'ccd_procedureActivityProcedure') 
         medicationActivity(schema:'ccd_medicationActivity')
     }   
 }

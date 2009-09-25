@@ -59,7 +59,7 @@ public class CCDMedicationsValidator extends AbstractValidator {
 		assertEquals('CONF-310', '2.16.840.1.113883.5.112', sa.routeCode.codeSystem)
 		// check MedicationStatus if present
 		def statusObservation = sa.entryRelationship.findAll{
-			'2.16.840.1.113883.10.20.1.47' in it.observation.templateId.root
+			'2.16.840.1.113883.10.20.1.47' in it.observation?.templateId?.root
 		}?.observation
 		if (statusObservation) {
 		    doValidateMedicationStatusObservation(statusObservation[0])
@@ -73,7 +73,7 @@ public class CCDMedicationsValidator extends AbstractValidator {
         assertNotNull('CONF-319', supply.statusCode)
 		// check MedicationStatus if present
 		def statusObservation = supply.entryRelationship.findAll{
-			'2.16.840.1.113883.10.20.1.47' in it.observation.templateId.root
+			'2.16.840.1.113883.10.20.1.47' in it.observation?.templateId?.root
 		}?.observation
 		if (statusObservation) {
 		    doValidateMedicationStatusObservation(statusObservation[0])

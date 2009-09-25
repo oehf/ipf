@@ -67,7 +67,7 @@ public class CCDAlertsValidator extends AbstractValidator {
 		assertEquals('CONF-149', 'NA', act.code.nullFlavor.name)
 		assertMinSize('CONF-151', 1, act.entryRelationship)
         def alertObservationEntries = act.entryRelationship.findAll{
-		    '2.16.840.1.113883.10.20.1.18' in it.observation.templateId.root 
+		    '2.16.840.1.113883.10.20.1.18' in it.observation?.templateId?.root 
 		}
 		alertObservationEntries.each{ entry ->
 		    assertEquals('CONF-153', 'SUBJ', entry.typeCode.name)
@@ -87,7 +87,7 @@ public class CCDAlertsValidator extends AbstractValidator {
          */
          //TODO check source
         def alertStatusObservations = obs.entryRelationship.findAll{
-            '2.16.840.1.113883.10.20.1.39' in it.observation.templateId.root
+            '2.16.840.1.113883.10.20.1.39' in it.observation?.templateId?.root
         }
         assertMaxSize('CONF-270', 1, alertStatusObservations)
         alertStatusObservations.each{ entry ->
@@ -103,7 +103,7 @@ public class CCDAlertsValidator extends AbstractValidator {
             doValidateAlertsParticipantAgent(entry)
         }
         def alertReactionObservations = obs.entryRelationship.findAll{
-            '2.16.840.1.113883.10.20.1.54' in it.observation.templateId.root
+            '2.16.840.1.113883.10.20.1.54' in it.observation?.templateId?.root
         }
         alertReactionObservations.each{ entry ->
             assertNotNull('CONF-282', entry.observation)
