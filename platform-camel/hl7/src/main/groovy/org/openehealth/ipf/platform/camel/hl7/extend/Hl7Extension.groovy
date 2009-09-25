@@ -35,7 +35,7 @@ public class Hl7Extension {
      
     /**
      * Defines marshalling between a standard HL7 message and a 
-     * <a href="http://repo.openehealth.org/confluence/display/ipf/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
+     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
      * @dsl platform-camel-hl7
      */
@@ -45,7 +45,7 @@ public class Hl7Extension {
     
     /**
      * Defines marshalling between a standard HL7 message and a 
-     * <a href="http://repo.openehealth.org/confluence/display/ipf/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
+     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * via an HL7 parser
      * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
      * @dsl platform-camel-hl7
@@ -56,7 +56,7 @@ public class Hl7Extension {
     
     /**
      * Defines marshalling between a standard HL7 message and a 
-     * <a href="http://repo.openehealth.org/confluence/display/ipf/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
+     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * using the given charset 
      * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
      * @dsl platform-camel-hl7
@@ -67,7 +67,7 @@ public class Hl7Extension {
     
     /**
      * Defines marshalling between a standard HL7 message and a 
-     * <a href="http://repo.openehealth.org/confluence/display/ipf/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
+     * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * using the given charset and parser 
      * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
      * @dsl platform-camel-hl7

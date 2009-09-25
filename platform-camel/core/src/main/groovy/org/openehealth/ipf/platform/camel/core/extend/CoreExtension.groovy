@@ -95,6 +95,13 @@ public class CoreExtension {
         return self.process(new DelegatingProcessor(processorLogic));
     }
         
+    /**
+     * Adds an interceptor to the route using the specified processor as a wrapper.
+     * @param delegateProcessor
+     * 			the processor that intercepts exchanges
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
     public static InterceptDefinition intercept(ProcessorDefinition self, DelegateProcessor delegateProcessor) {
         InterceptDefinition answer = new InterceptDefinition(delegateProcessor);
         self.addOutput(answer);
@@ -263,6 +270,12 @@ public class CoreExtension {
         return self.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic));
     }
 
+    /**
+     * Allows adding of extensions that replace existing extensions provided by Camel (e.g. 
+     * {@code split})
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
     public static IpfDefinition ipf(ProcessorDefinition self) {
         return new IpfDefinition(self);
     }
@@ -426,12 +439,14 @@ public class CoreExtension {
     }
 
     /**
-     * fill me 
+     * Unmarshal an XML stream or string using a 
+     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
+     * with a specific schema 
      * @param schemaResource
-     *          fill me
+     *          the schema to use
      * @param namespaceAware
-     *          fill me
-     * @ipfdoc fill me
+     *          {@code true} to make use of XML namespaces
+     * @ipfdoc Core Features#gnode-schema
      * @dsl platform-camel-core
      */
     public static ProcessorDefinition gnode(DataFormatClause self, String schemaResource, boolean namespaceAware) {
@@ -439,10 +454,11 @@ public class CoreExtension {
     }
 
     /**
-     * fill me 
+     * Unmarshal an XML stream or string using a 
+     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
      * @param namespaceAware
-     *          fill me
-     * @ipfdoc fill me
+     *          {@code true} to make use of XML namespaces
+     * @ipfdoc Core Features#gnode-namespace
      * @dsl platform-camel-core
      */
     public static ProcessorDefinition gnode(DataFormatClause self, boolean namespaceAware) {
@@ -450,8 +466,10 @@ public class CoreExtension {
     }
     
     /**
-     * fill me 
-     * @ipfdoc fill me
+     * Unmarshal an XML stream or string using a 
+     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
+     * (by default namespace aware)
+     * @ipfdoc Core Features#gnode
      * @dsl platform-camel-core
      */
     public static ProcessorDefinition gnode(DataFormatClause self) {
@@ -459,12 +477,14 @@ public class CoreExtension {
     }
     
     /**
-     * fill me 
+     * Unmarshal an XML stream or string using a 
+     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
+     * with a specific schema 
      * @param schemaResource
-     *          fill me
+     *          the schema to use
      * @param namespaceAware
-     *          fill me
-     * @ipfdoc fill me
+     *          {@code true} to make use of XML namespaces
+     * @ipfdoc Core Features#gpath-schema
      * @dsl platform-camel-core
      */
     public static ProcessorDefinition gpath(DataFormatClause self, String schemaResource, boolean namespaceAware) {
@@ -472,10 +492,11 @@ public class CoreExtension {
     }       
     
     /**
-     * fill me 
+     * Unmarshal an XML stream or string using a 
+     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
      * @param namespaceAware
-     *          fill me
-     * @ipfdoc fill me
+     *          {@code true} to make use of XML namespaces
+     * @ipfdoc Core Features#gpath-namespace
      * @dsl platform-camel-core
      */
     public static ProcessorDefinition gpath(DataFormatClause self, boolean namespaceAware) {
@@ -483,8 +504,10 @@ public class CoreExtension {
     }
     
     /**
-     * fill me 
-     * @ipfdoc fill me
+     * Unmarshal an XML stream or string using a 
+     * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
+     * (by default namespace aware)
+     * @ipfdoc Core Features#gpath
      * @dsl platform-camel-core
      */
     public static ProcessorDefinition gpath(DataFormatClause self) {
