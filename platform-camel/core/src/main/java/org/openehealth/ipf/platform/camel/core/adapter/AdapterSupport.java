@@ -28,6 +28,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  * interfaces to Apache Camel interfaces.
  * 
  * @author Martin Krasser
+ * @dsl platform-camel-core
  */
 public abstract class AdapterSupport implements Adapter {
 

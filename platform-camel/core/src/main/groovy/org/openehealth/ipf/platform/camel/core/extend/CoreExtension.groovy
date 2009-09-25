@@ -1,0 +1,649 @@
+/*
+ * Copyright 2009 the original author or authors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.openehealth.ipf.platform.camel.core.extend;
+
+import java.lang.reflect.Field;
+
+import groovy.lang.Closure;
+
+import org.apache.camel.Expression;
+import org.apache.camel.Processor;
+import org.apache.camel.builder.DataFormatClause;
+import org.apache.camel.builder.ExpressionClause;
+import org.apache.camel.builder.NoErrorHandlerBuilder;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.ChoiceDefinition;
+import org.apache.camel.model.OnExceptionDefinition;
+import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.DataFormatDefinition;
+import org.apache.camel.processor.aggregate.AggregationStrategy;
+import org.apache.camel.spi.DataFormat;
+import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.camel.processor.DelegateProcessor;
+
+import org.openehealth.ipf.commons.core.modules.api.Aggregator;
+import org.openehealth.ipf.commons.core.modules.api.Parser;
+import org.openehealth.ipf.commons.core.modules.api.Predicate;
+import org.openehealth.ipf.commons.core.modules.api.Renderer;
+import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
+import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
+import org.openehealth.ipf.platform.camel.core.adapter.PredicateAdapter;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregationStrategy;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregator;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingCamelPredicate;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingInterceptor;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingPredicate;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingProcessor;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingTransmogrifier;
+import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator;
+import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat;
+import org.openehealth.ipf.platform.camel.core.dataformat.GpathDataFormat;
+import org.openehealth.ipf.platform.camel.core.model.DataFormatAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.model.ParserAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.model.SplitterDefinition;
+import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.model.ValidationDefinition;
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.model.IpfDefinition;
+import org.openehealth.ipf.platform.camel.core.util.Expressions;
+import org.openehealth.ipf.platform.camel.core.model.InterceptDefinition;
+
+/**
+ * Core DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * @author Jens Riemschneider
+ */
+public class CoreExtension {
+    /**
+     * Adds a <a href="http://camel.apache.org/processor.html">processor</a> to the route 
+     * that calls the given processor bean
+     * @param processorBeanName
+     *          name of the processor bean
+     * @ipfdoc Core features#process-bean
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition process(ProcessorDefinition self, String processorBeanName) {
+         return self.processRef(processorBeanName);
+    }
+
+    /**
+     * Adds a <a href="http://camel.apache.org/processor.html">processor</a> to the route 
+     * that calls the given processor logic
+     * @param processorLogic
+     *          closure that implements the logic of the processor
+     * @ipfdoc Core features#process-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition process(ProcessorDefinition self, Closure processorLogic) {
+        return self.process(new DelegatingProcessor(processorLogic));
+    }
+        
+    public static InterceptDefinition intercept(ProcessorDefinition self, DelegateProcessor delegateProcessor) {
+        InterceptDefinition answer = new InterceptDefinition(delegateProcessor);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Adds an interceptor to the route that uses the given interceptor logic
+     * @param interceptorLogic
+     *          closure that implements the logic of the interceptor
+     * @ipfdoc Core features#intercept-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition intercept(ProcessorDefinition self, Closure interceptorLogic) {
+        return intercept(self, new DelegatingInterceptor(interceptorLogic));
+    }
+    
+    /**
+     * Drops the <a href="http://camel.apache.org/error-handler.html">error handler</a> 
+     * from the route by using the {@code noErrorHandler}
+     * @ipfdoc Core features#unhandled
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition unhandled(ProcessorDefinition self) {
+        return self.errorHandler(new NoErrorHandlerBuilder());
+    }
+    
+    /**
+     * Adds a <a href="http://camel.apache.org/message-filter.html">filter</a> 
+     * to the route using the predicate logic to find out if a message passes the 
+     * filter or not
+     * @param predicateLogic
+     *          logic to apply to the filter
+     * @ipfdoc Core features#filter-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition filter(ProcessorDefinition self, Closure predicateLogic) {
+        return self.filter(new DelegatingCamelPredicate(predicateLogic));
+    }
+    
+    /**
+     * Sets a message body via the expression depending on the Message Exchange Pattern
+     * @param transformExpression
+     *          the expression to set the body
+     * @ipfdoc Core features#transform-closure 
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition transform(ProcessorDefinition self, Closure transformExpression) {
+        return self.transform(new DelegatingExpression(transformExpression));
+    }
+
+    /**
+     * Sets a property of an exchange to the result of the property expression
+     * @param name
+     *          name of the property
+     * @param propertyExpression
+     *          expression that returns the value of the property
+     * @ipfdoc Core features#setProperty-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition setProperty(ProcessorDefinition self, String name, Closure propertyExpression) {
+        return self.setProperty(name, new DelegatingExpression(propertyExpression));
+    }
+
+    /**
+     * Sets a header of the input message to the result of the header expression
+     * @param name
+     *          name of the header
+     * @param headerExpression
+     *          expression that returns the value of the header
+     * @ipfdoc Core features#setHeader-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition setHeader(ProcessorDefinition self, String name, Closure headerExpression) {
+        return self.setHeader(name, new DelegatingExpression(headerExpression));
+    }
+
+    /**
+     * Sets a header of the output message to the result of the header expression
+     * @param name
+     *          name of the header
+     * @param headerExpression
+     *          expression that returns the value of the header
+     * @ipfdoc Core features#setHeader-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition setOutHeader(ProcessorDefinition self, String name, Closure headerExpression) {
+        return self.setOutHeader(name, new DelegatingExpression(headerExpression));
+    }
+
+    /**
+     * Sets a header of the fault message to the result of the header expression
+     * @param name
+     *          name of the header
+     * @param headerExpression
+     *          expression that returns the value of the header
+     * @ipfdoc Core features#setHeader-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition setFaultHeader(ProcessorDefinition self, String name, Closure headerExpression) {
+        return self.setFaultHeader(name, new DelegatingExpression(headerExpression));
+    }
+
+    /**
+     * Sets the input message body via the expression
+     * @param bodyExpression
+     *          the expression to evaluate
+     * @ipfdoc Core features#setBody-closure
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition setBody(ProcessorDefinition self, Closure bodyExpression) {
+        return self.setBody(new DelegatingExpression(bodyExpression));
+    }
+
+    /**
+     * Creates a validation workflow where actual validation is delegated to the given 
+     * validator
+     * @param validator
+     *          the processor used for validation
+     * @ipfdoc Core features#validation-processor
+     * @dsl platform-camel-core
+     */
+    public static ValidationDefinition validation(ProcessorDefinition self, Processor validator) {
+        ValidationDefinition answer = new ValidationDefinition(validator);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Creates a validation workflow where actual validation is done by calling the
+     * given endpoint
+     * @param validationUri
+     *          the URI of the endpoint to call for validation
+     * @ipfdoc Core features#validation-endpoint
+     * @dsl platform-camel-core
+     */
+    public static ValidationDefinition validation(ProcessorDefinition self, String validationUri) {
+        ValidationDefinition answer = new ValidationDefinition(validationUri);
+        self.addOutput(answer);
+        return answer;
+    }
+    
+    /**
+     * Creates a validation workflow where actual validation is delegated to given 
+     * validator logic
+     * @param validatorLogic
+     *          the closure implementing the validation logic
+     * @ipfdoc Core features#validation-closure
+     * @dsl platform-camel-core
+     */
+    public static ValidationDefinition validation(ProcessorDefinition self, Closure validatorLogic) {
+        return validation(self, new DelegatingProcessor(validatorLogic));
+    }
+    
+    /**
+     * Calls an endpoint specified by the URI and merges the original exchange
+     * with the result of the call by applying the aggregation logic
+     * @param resourceUri
+     *          the URI of the endpoint to call
+     * @param aggregationLogic
+     *          a closure implementing the logic to aggregate the two exchanges
+     * @ipfdoc Core features#Content enrichment
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition enrich(ProcessorDefinition self, String resourceUri, Closure aggregationLogic) {
+        return self.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic));
+    }
+
+    public static IpfDefinition ipf(ProcessorDefinition self) {
+        return new IpfDefinition(self);
+    }
+
+    /**
+     * Adds a transmogrifier to the route for message transformation
+     * @param transmogrifier
+     * @ipfdoc Core features#transmogrify-transmogrifier    
+     * @dsl platform-camel-core
+     */
+    public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, Transmogrifier transmogrifier) {
+        TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifier);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Adds a transmogrifier defined by a bean to the route
+     * @param transmogrifierBeanName
+     *          name of the bean implementing the transmogrifier
+     * @ipfdoc Core features#transmogrify-transmogrifier
+     * @dsl platform-camel-core
+     */
+    public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, String transmogrifierBeanName) {
+        TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifierBeanName);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Adds a transmogrifier defined by a closure to the route
+     * @param transmogrifierLogic
+     *          a closure implementing the transmogrifier logic
+     * @ipfdoc Core features#transmogrify-closure
+     * @dsl platform-camel-core
+     */
+    public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, Closure transmogrifierLogic) {
+        return transmogrify(self, new DelegatingTransmogrifier(transmogrifierLogic));
+    }
+    
+    /**
+     * Adds a transmogrifier to the route
+     * @ipfdoc Core features#transmogrify
+     * @dsl platform-camel-core
+     */
+    public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self) {
+        TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition((Transmogrifier)null);
+        self.addOutput(answer);
+        return answer;
+    }        
+
+    /**
+     * Validates a message
+     * @ipfdoc Core features#validate
+     * @dsl platform-camel-core
+     */
+    public static ValidatorAdapterDefinition validate(ProcessorDefinition self) {
+        ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition();
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Validates a message using the validator implementation
+     * @param validator
+     *          the validator implementation
+     * @ipfdoc Core features#validate
+     * @dsl platform-camel-core
+     */
+    public static ValidatorAdapterDefinition validate(ProcessorDefinition self, Validator validator) {
+        ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validator);
+        self.addOutput(answer);
+        return answer;
+    }
+    
+    /**
+     * Validates a message using a validator bean
+     * @param validatorBeanName
+     *          the name of the bean implementing the validator
+     * @ipfdoc Core features#validate 
+     * @dsl platform-camel-core
+     */
+    public static ValidatorAdapterDefinition validate(ProcessorDefinition self, String validatorBeanName) {
+        ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validatorBeanName);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Validates a message using the validator logic
+     * @param validatorLogic   
+     *          a closure implementing the validator logic
+     * @ipfdoc Core features#validate 
+     * @dsl platform-camel-core
+     */
+    public static ValidatorAdapterDefinition validate(ProcessorDefinition self, Closure validatorLogic) {
+        return validate(self, new DelegatingValidator(validatorLogic));
+    }
+
+    /**
+     * Parses a message to an internal format
+     * @param parser
+     *          the parser implementation 
+     * @ipfdoc Core features#parse
+     * @dsl platform-camel-core
+     */
+    public static ParserAdapterDefinition parse(ProcessorDefinition self, Parser parser) {
+        ParserAdapterDefinition answer = new ParserAdapterDefinition(parser);
+        self.addOutput(answer);
+        return answer;
+    }
+    
+    /**
+     * Parses a message to an internal format using a bean
+     * @param parserBeanName
+     *          name of the bean implementing the parser
+     * @ipfdoc Core features#parse 
+     */
+    public static ParserAdapterDefinition parse(ProcessorDefinition self, String parserBeanName) {
+        ParserAdapterDefinition answer = new ParserAdapterDefinition(parserBeanName);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Renders the message into an external representation
+     * @param renderer
+     *          the renderer implementation
+     * @ipfdoc Core features#render
+     * @dsl platform-camel-core
+     */
+    public static RendererAdapterDefinition render(ProcessorDefinition self, Renderer renderer) {
+        RendererAdapterDefinition answer = new RendererAdapterDefinition(renderer);
+        self.addOutput(answer);
+        return answer;
+    }
+    
+    /**
+     * Renders the message into an external representation via the given bean
+     * @param rendererBeanName  
+     *          name of the bean implementing the renderer
+     * @ipfdoc Core features#render
+     * @dsl platform-camel-core
+     */
+    public static RendererAdapterDefinition render(ProcessorDefinition self, String rendererBeanName) {
+        RendererAdapterDefinition answer = new RendererAdapterDefinition(rendererBeanName);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
+     * Adds a routing decision for <a href="http://camel.apache.org/message-router.html">message routing</a> 
+     * using the predicate logic
+     * @param predicateLogic
+     *          logic of the predicate
+     * @ipfdoc Core features#when-closure
+     * @dsl platform-camel-core
+     */
+    public static ChoiceDefinition when(ChoiceDefinition self, Closure predicateLogic) {
+        return self.when(new DelegatingCamelPredicate(predicateLogic));
+    }
+
+    /**
+     * fill me 
+     * @param schemaResource
+     *          fill me
+     * @param namespaceAware
+     *          fill me
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition gnode(DataFormatClause self, String schemaResource, boolean namespaceAware) {
+        return dataFormat(self, new GnodeDataFormat(schemaResource, namespaceAware));
+    }
+
+    /**
+     * fill me 
+     * @param namespaceAware
+     *          fill me
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition gnode(DataFormatClause self, boolean namespaceAware) {
+        return dataFormat(self, new GnodeDataFormat(namespaceAware));
+    }
+    
+    /**
+     * fill me 
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition gnode(DataFormatClause self) {
+        return gnode(self, true);
+    }
+    
+    /**
+     * fill me 
+     * @param schemaResource
+     *          fill me
+     * @param namespaceAware
+     *          fill me
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition gpath(DataFormatClause self, String schemaResource, boolean namespaceAware) {
+        return dataFormat(self, new GpathDataFormat(schemaResource, namespaceAware));
+    }       
+    
+    /**
+     * fill me 
+     * @param namespaceAware
+     *          fill me
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition gpath(DataFormatClause self, boolean namespaceAware) {
+        return dataFormat(self, new GpathDataFormat(namespaceAware));
+    }
+    
+    /**
+     * fill me 
+     * @ipfdoc fill me
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition gpath(DataFormatClause self) {
+        return gpath(self, true);
+    }
+
+    /**
+     * Retrieves the exception object from a handled exception in an exception route
+     * @ipfdoc Core features#Exception objects and messages 
+     * @dsl platform-camel-core
+     */
+    public static Object exceptionObject(ExpressionClause self) {
+        return self.expression(Expressions.exceptionObjectExpression());
+    }
+
+    /**
+     * Retrieves the exception message from a handled exception in an exception route
+     * @ipfdoc Core features#Exception objects and messages
+     * @dsl platform-camel-core
+     */
+    public static Object exceptionMessage(ExpressionClause self) {
+        return self.expression(Expressions.exceptionMessageExpression());
+    }
+    
+    /**
+     * Allows for fine-grained <a href="http://camel.apache.org/exception-clause.html">exception handling</a>
+     * @param predicate
+     *          the predicate to check for the exception
+     * @ipfdoc Core features#onwhen-closure
+     * @dsl platform-camel-core
+     */
+    public static OnExceptionDefinition onWhen(OnExceptionDefinition self, Closure predicate) {
+        return self.onWhen(new DelegatingCamelPredicate(predicate));
+    }
+    
+    /**
+     * Defines an <a href="http://camel.apache.org/maven/camel-core/apidocs/org/apache/camel/processor/aggregate/AggregationStrategy.html">AggregationStrategy</a> 
+     * via the {@code Aggregator} interface
+     * @param aggregator
+     *          the aggregator implementation
+     * @ipfdoc Core features#aggregationStrategy
+     * @dsl platform-camel-core
+     */
+    public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, Aggregator aggregator) {
+        return new AggregatorAdapter(aggregator);
+    }
+
+    /**
+     * Defines an <a href="http://camel.apache.org/maven/camel-core/apidocs/org/apache/camel/processor/aggregate/AggregationStrategy.html">AggregationStrategy</a>
+     * via a bean 
+     * @param aggregatorBeanName
+     *          name of the bean
+     * @ipfdoc Core features#aggregationStrategy
+     * @dsl platform-camel-core
+     */
+    public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, String aggregatorBeanName) {
+        return aggregationStrategy(self, self.lookup(aggregatorBeanName, Aggregator.class));
+    }
+
+    /**
+     * Defines an <a href="http://camel.apache.org/maven/camel-core/apidocs/org/apache/camel/processor/aggregate/AggregationStrategy.html">AggregationStrategy</a>
+     * via a closure 
+     * @param aggregationLogic
+     *          closure implementing the aggregation logic
+     * @ipfdoc Core features#aggregationStrategy
+     * @dsl platform-camel-core
+     */
+    public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, Closure aggregationLogic) {
+        return aggregationStrategy(self, new DelegatingAggregator(aggregationLogic));
+    }
+    
+    /**
+     * Defines a <a href="http://camel.apache.org/maven/camel-core/apidocs/org/apache/camel/Predicate.html">Predicate</a> 
+     * via the {@code Predicate} interface
+     * @param predicate
+     *          the predicate instance
+     * @ipfdoc Core features#predicate-extension
+     * @dsl platform-camel-core
+     */
+    public static PredicateAdapter predicate(SpringRouteBuilder self, Predicate predicate) {
+        return new PredicateAdapter(predicate);
+    }
+
+    /**
+     * Defines a <a href="http://camel.apache.org/maven/camel-core/apidocs/org/apache/camel/Predicate.html">Predicate</a> 
+     * via a bean
+     * @param predicateBeanName
+     *          name of the bean
+     * @ipfdoc Core features#predicate-extension
+     * @dsl platform-camel-core
+     */
+    public static PredicateAdapter predicate(SpringRouteBuilder self, String predicateBeanName) {
+        return predicate(self, self.lookup(predicateBeanName, Predicate.class));
+    }
+
+    /**
+     * Defines a <a href="http://camel.apache.org/maven/camel-core/apidocs/org/apache/camel/Predicate.html">Predicate</a> 
+     * via a closure
+     * @param predicateLogic
+     *          closure implementing the logic of the predicate
+     * @ipfdoc Core features#predicate-extension
+     * @dsl platform-camel-core
+     */
+    public static PredicateAdapter predicate(SpringRouteBuilder self, Closure predicateLogic) {
+        return predicate(self, new DelegatingPredicate(predicateLogic));
+    }
+    
+    /**
+     * Parses a message to an internal format
+     * @param parser
+     *          the parser implementation
+     * @ipfdoc Core features#Unmarshalling via Parser
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition parse(DataFormatClause self, Parser parser) {        
+        return self.processorType.unmarshal(new DataFormatAdapter((Parser)parser));
+    }
+    
+    /**
+     * Parses a message to an internal format using a bean
+     * @param parserBeanName
+     *          the name of the bean
+     * @ipfdoc Core features#Unmarshalling via Parser
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition parse(DataFormatClause self, String parserBeanName) {
+        return self.processorType.unmarshal((DataFormatDefinition)DataFormatAdapterDefinition.forParserBean(parserBeanName));
+    }
+
+    /**
+     * Renders the message into an external representation
+     * @param renderer
+     *          the implementation of the renderer
+     * @ipfdoc Core features#Marshalling via Renderer
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition render(DataFormatClause self, Renderer renderer) {
+        return self.processorType.marshal(new DataFormatAdapter((Renderer)renderer));
+    }
+
+    /**
+     * Renders the message into an external representation via the given bean
+     * @param rendererBeanName
+     *          the name of the bean
+     * @ipfdoc Core features#Marshalling via Renderer
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition render(DataFormatClause self, String rendererBeanName) {        
+        return self.processorType.marshal((DataFormatDefinition)DataFormatAdapterDefinition.forRendererBean(rendererBeanName));
+    }
+
+    
+    static ProcessorDefinition dataFormat(DataFormatClause self, DataFormat dataFormat) {
+        if (self.operation == DataFormatClause.Operation.Marshal) {
+            return self.processorType.marshal(dataFormat);
+        } else if (self.operation == DataFormatClause.Operation.Unmarshal) {
+            return self.processorType.unmarshal(dataFormat);
+        } else {
+            throw new IllegalArgumentException("Unknown data format operation: " + self.operation);
+        }
+    }
+}

@@ -26,6 +26,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
 /**
  * @author Martin Krasser
+ * @dsl platform-camel-flow
  */
 public class FlowBeginProcessorDefinition extends FlowProcessorDefinition {
 
@@ -40,16 +41,37 @@ public class FlowBeginProcessorDefinition extends FlowProcessorDefinition {
         this.identifier = identifier;
     }
 
+    /**
+     * Assigns an application name to created flows
+     * @param application
+     *          the name of the application
+     * @ipfdoc Flow Management#Parameterization of initFlow
+     * @dsl platform-camel-flow
+     */
     public FlowProcessorDefinition application(String application) {
         this.application = application;
         return this;
     }
     
+    /**
+     * Defines the endpoint URI for error messages in case a flow replay fails
+     * @param replayErrorUri
+     *          the endpoint URI
+     * @ipfdoc Flow Management#Parameterization of initFlow
+     * @dsl platform-camel-flow
+     */
     public FlowBeginProcessorDefinition replayErrorHandler(String replayErrorUri) {
         this.replayErrorUri = replayErrorUri;
         return this;
     }
     
+    /**
+     * Defines the number of acknowledgments that are expected for a created flow
+     * @param expectedAckCount
+     *          the expected number of acknowledgments 
+     * @ipfdoc Flow Management#Parameterization of initFlow
+     * @dsl platform-camel-flow
+     */
     public FlowBeginProcessorDefinition expectedAckCount(int expectedAckCount) {
         this.expectedAckCount = expectedAckCount;
         return this;

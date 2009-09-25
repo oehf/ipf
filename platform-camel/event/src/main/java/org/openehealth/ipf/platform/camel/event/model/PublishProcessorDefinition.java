@@ -30,6 +30,7 @@ import org.openehealth.ipf.platform.camel.event.process.Publisher;
  * <p>
  * This processor definition provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
+ * @dsl platform-camel-event
  */
 public class PublishProcessorDefinition extends OutputDefinition<PublishProcessorDefinition> {
     /** The default name of the event engine bean */
@@ -41,12 +42,12 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
     private String eventEngineBean = DEFAULT_EVENT_ENGINE_BEAN;
 
     /**
-     * Configures the topic that an event is publish with
-     * <p>
-     * If this method is not called, the event is published to the topic "default".
+     * Configures the topic that an event is publish with. If this method is 
+     * not called, the event is published to the topic "default".
      * @param topic
      *          the topic
-     * @return this instance to allow chaining
+     * @ipfdoc Event infrastructure#Event publishing via the DSL
+     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition toTopic(String topic) {
         notNull(topic, "topic cannot be null");
@@ -58,7 +59,8 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
      * Sets the closure that is used to create the event
      * @param closure
      *          the closure to use
-     * @return this instance to allow chaining
+     * @ipfdoc Event infrastructure#Event publishing via the DSL
+     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition eventFactoryClosure(Closure closure) {
         notNull(closure, "closure cannot be null");
@@ -67,11 +69,9 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
     }
     
     /**
-     * Configures synchronous event object delivery
-     * <p>
-     * Note: The default behavior is synchronous delivery. Calling this method is
-     *       usually not necessary.
-     * @return this instance to allow chaining
+     * Configures synchronous event object delivery (which is the default)
+     * @ipfdoc Event infrastructure#Event publishing via the DSL
+     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition synchronous() {
         this.sync = true;
@@ -80,7 +80,8 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
 
     /**
      * Configures asynchronous event object delivery
-     * @return this instance to allow chaining
+     * @ipfdoc Event infrastructure#Event publishing via the DSL
+     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition asynchronous() {
         this.sync = false;
@@ -92,7 +93,8 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
      * @param eventEngineBean
      *          the name of a bean in the application context that represents the
      *          event engine
-     * @return this instance to allow chaining
+     * @ipfdoc Event infrastructure#Event publishing via the DSL
+     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition with(String eventEngineBean) {
         notNull(eventEngineBean, "eventEngineBean cannot be null");

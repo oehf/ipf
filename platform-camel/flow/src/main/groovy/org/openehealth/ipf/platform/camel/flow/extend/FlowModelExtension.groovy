@@ -16,17 +16,9 @@
 package org.openehealth.ipf.platform.camel.flow.extend
 
 import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.flow.model.DedupeDefinition
-import org.openehealth.ipf.platform.camel.flow.model.IpfDefinition
-import org.openehealth.ipf.platform.camel.flow.model.FlowBeginProcessorDefinition
-import org.openehealth.ipf.platform.camel.flow.model.FlowEndProcessorDefinition
-import org.openehealth.ipf.platform.camel.flow.model.FlowErrorProcessorDefinition
-import org.openehealth.ipf.platform.camel.flow.model.SplitterDefinition
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression
 import org.apache.camel.Expression
 
 import org.apache.camel.model.ProcessorDefinition
-import org.apache.camel.spi.DataFormat
 
 /**
  * @author Martin Krasser
@@ -38,37 +30,27 @@ class FlowModelExtension {
     static extensions = {
 
         ProcessorDefinition.metaClass.initFlow = { ->
-            FlowBeginProcessorDefinition answer = new FlowBeginProcessorDefinition();
-            delegate.addOutput(answer);
-            return answer;
+            FlowExtension.initFlow(delegate)
         }
         
         ProcessorDefinition.metaClass.initFlow = { String identifier ->
-            FlowBeginProcessorDefinition answer = new FlowBeginProcessorDefinition(identifier);
-            delegate.addOutput(answer);
-            return answer;
+            FlowExtension.initFlow(delegate, identifier)
         }
         
         ProcessorDefinition.metaClass.ackFlow = {
-            FlowEndProcessorDefinition answer = new FlowEndProcessorDefinition();
-            delegate.addOutput(answer);
-            return answer;
+            FlowExtension.ackFlow(delegate)
         }
     
         ProcessorDefinition.metaClass.nakFlow = {
-            FlowErrorProcessorDefinition answer = new FlowErrorProcessorDefinition();
-            delegate.addOutput(answer);
-            return answer;
+            FlowExtension.nakFlow(delegate)
         }
         
         ProcessorDefinition.metaClass.dedupeFlow = {
-            DedupeDefinition answer = new DedupeDefinition()
-            delegate.addOutput(answer);
-            return answer;
+            FlowExtension.dedupeFlow(delegate)
         }
         
         ProcessorDefinition.metaClass.ipf = { ->
-            new IpfDefinition(delegate)
+            FlowExtension.ipf(delegate)
 	    }
                 
    }   

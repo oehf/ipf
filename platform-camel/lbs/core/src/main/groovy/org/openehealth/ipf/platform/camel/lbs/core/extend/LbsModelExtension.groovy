@@ -15,13 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.core.extend
 
-import org.openehealth.ipf.platform.camel.lbs.core.model.FetchProcessorDefinition
-import org.openehealth.ipf.platform.camel.lbs.core.model.StoreProcessorDefinition
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression
-import org.apache.camel.Expression
-
 import org.apache.camel.model.ProcessorDefinition
-import org.apache.camel.model.RouteDefinition
 
 /**
  * @author Jens Riemschneider
@@ -31,15 +25,11 @@ class LbsModelExtension {
     def extensions = {
             
         ProcessorDefinition.metaClass.store = {
-            def answer = new StoreProcessorDefinition()
-            delegate.addOutput(answer)
-            answer
+            LbsExtension.store(delegate)
         }        
 
         ProcessorDefinition.metaClass.fetch = {
-            def answer = new FetchProcessorDefinition()
-            delegate.addOutput(answer)
-            answer
+            LbsExtension.fetch(delegate)
         }        
     }    
 }

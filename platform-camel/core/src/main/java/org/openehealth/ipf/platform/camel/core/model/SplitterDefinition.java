@@ -39,6 +39,7 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  * 
  * @author Jens Riemschneider
  * @author Martin Krasser
+ * @dsl platform-camel-core
  */
 public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
 
@@ -57,6 +58,12 @@ public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
         this.expressionDefinition = new ExpressionDefinition(expression);
     }
 
+    /**
+     * Creates a split type, i.e. a builder for {@link Splitter}
+     * @param expressionBean
+     *          The name of the expression bean to be passed to the {@link Splitter} 
+     *          upon creation
+     */
     public SplitterDefinition(String expressionBean) {
         notNull(expressionBean, "expressionBean");
         this.expressionBean = expressionBean;
@@ -94,23 +101,22 @@ public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
     }
 
     /**
-     * Defines the aggregation strategy used by the {@link Splitter} created by
-     * {@link #createProcessor(RouteContext)}
+     * Defines the aggregation logic for the split results as a closure
      * @param aggregationStrategy    
-     *          the aggregation strategy. see {@link Splitter}
-     * @return this instance for chaining other calls
+     *          the aggregation strategy
+     * @ipfdoc Core features#split-aggregate
+     * @dsl platform-camel-core
      */
     public SplitterDefinition aggregationStrategy(Closure aggregationStrategy) {
         return aggregationStrategy(new DelegatingAggregationStrategy(aggregationStrategy));
     }
     
     /**
-     * Defines the aggregation strategy used by the {@link Splitter} created by
-     * {@link #createProcessor(RouteContext)}
+     * Defines the aggregation logic for the split results via a strategy interface
      * @param aggregationStrategy    
-     *          the aggregation strategy to be used by the {@link Splitter} 
-     *          created by {@link #createProcessor(RouteContext)}
-     * @return this instance for chaining other calls
+     *          the aggregation strategy
+     * @ipfdoc Core features#split-aggregate
+     * @dsl platform-camel-core
      */
     public SplitterDefinition aggregationStrategy(AggregationStrategy aggregationStrategy) {
         notNull(aggregationStrategy, "aggregationStrategy");

@@ -32,6 +32,7 @@ import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
  * <p>
  * This processor definition provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
+ * @dsl platform-camel-lbs
  */
 public class FetchProcessorDefinition extends OutputDefinition<FetchProcessorDefinition> {
 
@@ -40,22 +41,11 @@ public class FetchProcessorDefinition extends OutputDefinition<FetchProcessorDef
     private String resourceHandlersBeanName;
     
     /**
-     * Sets the {@link ResourceHandler} of the processor.
-     * A resource handler enables the processor to handle a specific type of
-     * endpoint exchange. The handler contains the actual strategy for 
-     * integrating resources from specific message type (e.g. an HTTP message).
-     * <p>
-     * When calling this method or {@link #with(ResourceHandler)} multiple  
-     * times the result is undefined.  
-     * <p>
-     * This method or {@link #with(ResourceHandler)} must be called at 
-     * least once. Otherwise an {@link IllegalArgumentException} is thrown when 
-     * creating the route.
-     * <p>
-     * This method can be called multiple times to add multiple handlers.
+     * Configures the resource handlers via a bean
      * @param handlerBeanName
      *          the bean name of the handler for integrating resources
-     * @return this definition instance for usage with a fluent API
+     * @ipfdoc Large Binary Support#DSL extensions of the LBS
+     * @dsl platform-camel-lbs
      */
     public FetchProcessorDefinition with(String resourceHandlersBeanName) {
         notNull(resourceHandlersBeanName, "resourceHandlersBeanName cannot be null");

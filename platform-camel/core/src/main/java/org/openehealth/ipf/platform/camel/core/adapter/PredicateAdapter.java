@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.core.modules.api.Predicate;
  * Adapts a {@link Predicate}.
  * 
  * @author Martin Krasser
+ * @dsl platform-camel-core
  */
 public class PredicateAdapter extends AdapterSupport implements org.apache.camel.Predicate {
 

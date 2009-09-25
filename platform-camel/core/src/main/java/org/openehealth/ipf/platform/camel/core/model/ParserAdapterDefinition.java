@@ -22,6 +22,7 @@ import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 
 /**
  * @author Martin Krasser
+ * @dsl platform-camel-core
  */
 public class ParserAdapterDefinition extends ProcessorAdapterDefinition {
 

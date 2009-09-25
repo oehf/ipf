@@ -33,6 +33,7 @@ import org.openehealth.ipf.platform.camel.test.performance.process.TimeProcessor
  * Extension type to support performance measurement.
  * 
  * @author Mitko Kolev
+ * @dsl platform-camel-test
  */
 public class MeasureDefinition extends DelegateDefinition {
     private final static Log LOG = LogFactory.getLog(MeasureDefinition.class);
@@ -60,9 +61,9 @@ public class MeasureDefinition extends DelegateDefinition {
     }
 
     /**
-     * Use a <code>TimeProcessor</code> to process the exchange
-     * 
-     * @return
+     * Defines the initial measurement point
+     * @ipfdoc Performance Measurement#dsl-extensions
+     * @dsl platform-camel-test
      */
     public MeasureDefinition time() {
         this.delegate = new TimeProcessor();
@@ -71,10 +72,9 @@ public class MeasureDefinition extends DelegateDefinition {
     }
 
     /**
-     * Use a <code>CheckpointProcessor</code> with the given name to process the
-     * exchange
-     * 
-     * @return
+     * Defines a measurement checkpoint, between the initial and the last measurement points
+     * @ipfdoc Performance Measurement#dsl-extensions
+     * @dsl platform-camel-test
      */
     public MeasureDefinition checkpoint(String name) {
         notNull(name, "The name must not be null!");
@@ -85,10 +85,9 @@ public class MeasureDefinition extends DelegateDefinition {
     }
 
     /**
-     * Use a <code>FinishProcessor</code> with the given name to process the
-     * exchange.
-     * 
-     * @return
+     * Defines the last measurement point
+     * @ipfdoc Performance Measurement#dsl-extensions
+     * @dsl platform-camel-test
      */
     public MeasureDefinition finish(String name) {
         notNull(name, "The name must not be null!");

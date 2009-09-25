@@ -26,32 +26,68 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
 /**
  * @author Martin Krasser
+ * @dsl platform-camel-core
  */
 public abstract class ProcessorAdapterDefinition extends DelegateDefinition {
 
     private Expression inputExpression;
     private Expression paramsExpression;
     
+    /**
+     * Defines the input to the adapter via the given expression 
+     * @param inputExpression
+     *          the expression logic
+     * @ipfdoc Core features#Transmogrifier input
+     * @dsl platform-camel-core
+     */
     public ProcessorAdapterDefinition input(Expression inputExpression) {
         this.inputExpression = inputExpression;
         return this;
     }
     
+    /**
+     * Defines the input to the adapter via the closure expression 
+     * @param inputExpression
+     *          a closure implementing the expression logic
+     * @ipfdoc Core features#Transmogrifier input
+     * @dsl platform-camel-core
+     */
     public ProcessorAdapterDefinition input(Closure inputExpression) {
         this.inputExpression = new DelegatingExpression(inputExpression);
         return this;
     }
     
+    /**
+     * Defines the parameters for the adapter via the given expression 
+     * @param paramsExpression
+     *          the expression logic
+     * @ipfdoc Core features#Transmogrifier input
+     * @dsl platform-camel-core
+     */
     public ProcessorAdapterDefinition params(Expression paramsExpression) {
         this.paramsExpression = paramsExpression;
         return this;
     }
     
+    /**
+     * Defines the parameters for the adapter via the closure expression 
+     * @param paramsExpression
+     *          a closure implementing the expression logic
+     * @ipfdoc Core features#Transmogrifier input
+     * @dsl platform-camel-core
+     */
     public ProcessorAdapterDefinition params(Closure paramsExpression) {
         this.paramsExpression = new DelegatingExpression(paramsExpression);
         return this;
     }
     
+    /**
+     * Defines the static parameters for the adapter 
+     * @param params
+     *          the parameters
+     * @ipfdoc Core features#Transmogrifier input
+     * @dsl platform-camel-core
+     */
     public ProcessorAdapterDefinition staticParams(Object... params) {
         this.paramsExpression = new StaticParams(params);
         return this;

@@ -28,6 +28,7 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 
 /**
  * @author Martin Krasser
+ * @dsl platform-camel-core
  */
 public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition {
 
@@ -55,21 +56,45 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
         return "transmogrifierAdapter";
     }
     
+    /**
+     * Specifies that the transformation is done via XSLT
+     * @ipfdoc Core Features#Transmogrifier implementations
+     * @dsl platform-camel-core
+     */
     public TransmogrifierAdapterDefinition xslt() {
         this.transmogrifier = new XsltTransmogrifier<String>(String.class);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
+    /**
+     * Specifies that the transformation is done via XSLT
+     * @param clazz
+     *          the resulting type of the message bodyf after the transformation
+     * @ipfdoc Core Features#Transmogrifier implementations
+     * @dsl platform-camel-core
+     */
     public <T> TransmogrifierAdapterDefinition xslt(Class<T> clazz) {
         this.transmogrifier = new XsltTransmogrifier<T>(clazz);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
+    /**
+     * Specifies that a schematron validation report is generated
+     * @ipfdoc Core Features#Transmogrifier implementations
+     * @dsl platform-camel-core
+     */
     public TransmogrifierAdapterDefinition schematron() {
         this.transmogrifier = new SchematronTransmogrifier<String>(String.class);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
 
+    /**
+     * Specifies that a schematron validation report is generated
+     * @param clazz
+     *          the resulting type of the message bodyf after the transformation
+     * @ipfdoc Core Features#Transmogrifier implementations
+     * @dsl platform-camel-core
+     */
     public <T> TransmogrifierAdapterDefinition schematron(Class<T> clazz) {
         this.transmogrifier = new SchematronTransmogrifier<T>(clazz);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));

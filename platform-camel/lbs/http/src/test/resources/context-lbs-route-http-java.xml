@@ -21,7 +21,7 @@ http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
-    <camel:camelContext id="camelContext" streamCache="false">
+    <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>

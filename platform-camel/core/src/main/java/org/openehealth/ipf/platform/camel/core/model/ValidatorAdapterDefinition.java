@@ -32,6 +32,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 /**
  * @author Martin Krasser
  * @author Christian Ohr
+ * @dsl platform-camel-core
  */
 public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
 
@@ -59,6 +60,13 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
         this.validator = validator;
     }
     
+    /**
+     * Defines the static profile for the validation 
+     * @param profile
+     *          the profile to use
+     * @ipfdoc Core features#Validator
+     * @dsl platform-camel-core
+     */
     public ValidatorAdapterDefinition staticProfile(Object profile) {
         this.profile = profile;
         return this;
@@ -70,21 +78,45 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
         return this;
     }
     
+    /**
+     * Defines the profile for the validation via the given expression 
+     * @param profileExpression
+     *          the profile expression
+     * @ipfdoc Core features#Validator
+     * @dsl platform-camel-core
+     */
     public ValidatorAdapterDefinition profile(Expression profileExpression) {
         this.profileExpression = profileExpression;
         return this;
     }
     
+    /**
+     * Defines the profile for the validation via the given closure 
+     * @param profileExpression
+     *          the profile closure
+     * @ipfdoc Core features#Validator
+     * @dsl platform-camel-core
+     */
     public ProcessorAdapterDefinition profile(Closure profileExpression) {
         this.profileExpression = new DelegatingExpression(profileExpression);
         return this;
     }
     
+    /**
+     * Interprets the defined profile as W3C schema location and validates against it 
+     * @ipfdoc Core features#validators
+     * @dsl platform-camel-core
+     */
     public ValidatorAdapterDefinition xsd() {
         this.validator = new XsdValidator();
         return (ValidatorAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
+    /**
+     * Interprets the defined profile as Schematron rules location and validates against it 
+     * @ipfdoc Core features#validators
+     * @dsl platform-camel-core
+     */
     public ValidatorAdapterDefinition schematron() {
         this.validator = new SchematronValidator();
         return (ValidatorAdapterDefinition)input(bodyAs(StreamSource.class));

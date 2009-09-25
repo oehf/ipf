@@ -15,59 +15,24 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.extend
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MessageAdapterValidatorimport org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtilsimport org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.modules.hl7.parser.PipeParser
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.apache.camel.Exchangeimport org.apache.camel.Message
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
+
 
 /**
  * DSL extensions for MLLP PIX/PDQ components.
  * @author Dmytro Rud
  */
 class MllpModelExtension {
-
-    // This is an interim and monolithic implementation, which 
-    // should be completely changed in subsequent versions.
-
-    
-    def static final classMap = 
-        [
-              8 : 'org.openehealth.ipf.platform.camel.ihe.pix.iti8.Iti8Component', 
-              9 : 'org.openehealth.ipf.platform.camel.ihe.pix.iti9.Iti9Component', 
-             10 : 'org.openehealth.ipf.platform.camel.ihe.pix.iti10.Iti10Component', 
-             21 : 'org.openehealth.ipf.platform.camel.ihe.pdq.iti21.Iti21Component', 
-             22 : 'org.openehealth.ipf.platform.camel.ihe.pdq.iti22.Iti22Component', 
-        ] 
-     
-    
-    static Closure getValidationClosure(parser) {
-        { ->
-            delegate.setValidator(new MessageAdapterValidator())
-            delegate.input { 
-                MllpMarshalUtils.extractMessageAdapter(
-                    it.in,
-                    it.getProperty(Exchange.CHARSET_NAME),
-                    parser)
-            }
-        }
-    }
-
-    
     static extensions = {
-        [8, 9, 10, 21, 22].each { transaction ->
-            try {
-                def parser = Class.forName(classMap[transaction]).newInstance().parser
-                def closure = getValidationClosure(parser)
-                ValidatorAdapterDefinition.metaClass."iti${transaction}Request"  = closure
-                ValidatorAdapterDefinition.metaClass."iti${transaction}Response" = closure
-            } catch(Exception e) {
-                /* 
-                 * Actually, in many cases there will be only one transaction 
-                 * configured, i.e. there will be only one successful iteration 
-                 * of this try-catch block.  All others will end here. 
-                 */
-            }
-        }
+        ValidatorAdapterDefinition.metaClass.iti8Request = { -> MllpExtension.iti8Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti8Response = { -> MllpExtension.iti8Response(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti9Request = { -> MllpExtension.iti9Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti9Response = { -> MllpExtension.iti9Response(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti10Request = { -> MllpExtension.iti10Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti10Response = { -> MllpExtension.iti10Response(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti21Request = { -> MllpExtension.iti21Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti21Response = { -> MllpExtension.iti21Response(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti22Request = { -> MllpExtension.iti22Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti22Response = { -> MllpExtension.iti22Response(delegate) }        
     }
 }

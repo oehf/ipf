@@ -37,26 +37,19 @@ class Hl7ModelExtension {
         // ----------------------------------------------------------------
         
         DataFormatClause.metaClass.ghl7 = { ->
-            delegate.ghl7(null, null)
+            Hl7Extension.ghl7(delegate)
         }
         
         DataFormatClause.metaClass.ghl7 = { Parser parser ->
-            delegate.ghl7(parser, null)
+            Hl7Extension.ghl7(delegate, parser)
         }
         
         DataFormatClause.metaClass.ghl7 = { String charset ->
-            delegate.ghl7(null, charset)
+            Hl7Extension.ghl7(delegate, charset)
         }
         
         DataFormatClause.metaClass.ghl7 = { Parser parser, String charset ->
-            Hl7DataFormat hl7DataFormat = new Hl7DataFormat()
-            if (parser) {
-                hl7DataFormat.parser = parser
-            }
-            if (charset) {
-                hl7DataFormat.charset = charset
-            }
-            delegate.dataFormat(hl7DataFormat)
+            Hl7Extension.ghl7(delegate, parser, charset)
         }
     
         // ----------------------------------------------------------------
@@ -64,9 +57,7 @@ class Hl7ModelExtension {
         // ----------------------------------------------------------------
         
         ValidatorAdapterDefinition.metaClass.ghl7 = {-> 
-            delegate.setValidator(new HL7Validator())
-            delegate.staticProfile(new DefaultValidationContext()) 
-            delegate.input(new Hl7InputExpression())
+            Hl7Extension.ghl7(delegate)
         }
         
     }

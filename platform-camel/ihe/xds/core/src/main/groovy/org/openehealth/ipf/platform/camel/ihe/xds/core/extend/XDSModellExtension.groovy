@@ -15,13 +15,28 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.core.extend
 
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
+
 /**
  * @author Jens Riemschneider
  */
 class XDSModelExtension {
      
     static extensions = {        
-        EbXML21Extensions.install()
-        EbXML30Extensions.install()
+        ValidatorAdapterDefinition.metaClass.iti14Request = { -> XDSExtension.iti14Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti14Response = { -> XDSExtension.iti14Response(delegate) }
+        ValidatorAdapterDefinition.metaClass.iti15Request = { -> XDSExtension.iti15Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti15Response = { -> XDSExtension.iti15Response(delegate) }
+        ValidatorAdapterDefinition.metaClass.iti16Request = { -> XDSExtension.iti16Request(delegate) } 
+        ValidatorAdapterDefinition.metaClass.iti16Response = { -> XDSExtension.iti16Response(delegate) }    
+
+        ValidatorAdapterDefinition.metaClass.iti41Request = { -> XDSExtension.iti41Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti41Response = { -> XDSExtension.iti41Response(delegate) }
+        ValidatorAdapterDefinition.metaClass.iti42Request = { -> XDSExtension.iti42Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti42Response = { -> XDSExtension.iti42Response(delegate) }
+        ValidatorAdapterDefinition.metaClass.iti43Request = { -> XDSExtension.iti43Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti43Response = { -> XDSExtension.iti43Response(delegate) }
+        ValidatorAdapterDefinition.metaClass.iti18Request = { -> XDSExtension.iti18Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti18Response = { -> XDSExtension.iti18Response(delegate) }
     }
 }

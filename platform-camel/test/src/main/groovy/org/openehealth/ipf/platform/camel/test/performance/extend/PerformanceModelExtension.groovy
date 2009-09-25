@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.test.performance.extend
 
 import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.platform.camel.test.performance.model.MeasureDefinition
+
 /**
  * Extension that defines the DSL extensions related to performance measurement of IPF applications.
  * 
@@ -26,10 +26,8 @@ class PerformanceModelExtension {
     
     static extensions = {
         
-        ProcessorDefinition.metaClass.measure = { 
-            MeasureDefinition answer = new MeasureDefinition()
-            delegate.addOutput(answer)
-            answer
+        ProcessorDefinition.metaClass.measure = {
+            PerformanceExtension.measure(delegate)
         }
     }
 }
