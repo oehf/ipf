@@ -5,7 +5,6 @@ package ${package};
 
 import static org.junit.Assert.*;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.junit.After;
 import org.junit.Before;
