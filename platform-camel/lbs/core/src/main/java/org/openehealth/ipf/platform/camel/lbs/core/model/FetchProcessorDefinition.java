@@ -25,7 +25,6 @@ import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.lbs.core.process.FetchProcessor;
-import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
 
 /**
  * Processor definition for {@link FetchProcessor}.

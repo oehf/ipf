@@ -24,7 +24,6 @@ import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.spi.RouteContext;
-import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
 import org.openehealth.ipf.platform.camel.lbs.core.process.StoreProcessor;
 
 /**
