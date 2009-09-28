@@ -70,8 +70,8 @@ import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHist
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-        "/context-performance-measurement-server.xml",
-        "/context-performance-measurement-server-properties.xml" })
+        "/context-performance-measurement-server-properties.xml",
+        "/context-performance-measurement-server.xml" })
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
 public class PerformanceMeasurementServerTest {
     /**
@@ -185,7 +185,7 @@ public class PerformanceMeasurementServerTest {
     public void testManyPOSTs() throws Exception {
         int requests = 30;
         sync = new CountDownLatch(requests);
-        for (int t = 0; t < requests; t++){
+        for (int t = 0; t < requests; t++) {
             postMeasurementHistory();
         }
         sync.await(MAX_AWAIT_SECONDS, TimeUnit.SECONDS);
@@ -208,12 +208,12 @@ public class PerformanceMeasurementServerTest {
     }
 
     private void sendStatisticsDELETERequest() {
-        producerTemplate.sendBodyAndHeader(buildURL(), EMPTY_BODY, 
+        producerTemplate.sendBodyAndHeader(buildURL(), EMPTY_BODY,
                 Exchange.HTTP_METHOD, DELETE);
     }
 
     private String sendStatisticsGETRequest() throws IOException {
-        Object response = producerTemplate.sendBodyAndHeader(buildURL(), 
+        Object response = producerTemplate.sendBodyAndHeader(buildURL(),
                 ExchangePattern.InOut, EMPTY_BODY, Exchange.HTTP_METHOD, GET);
         return IOUtils.toString((InputStream) response);
     }

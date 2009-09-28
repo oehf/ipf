@@ -23,14 +23,13 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <ctx:property-placeholder
-        location="classpath:/performance.measurement.server.properties"/>
+    <ctx:property-placeholder location="classpath:/performance.measurement.server.properties"/>
+        
     <!-- ================================================================== -->
-    <!--  Provide the server properties for the Test cases                  -->
+    <!--  Provide the server port for the Test cases                        -->
     <!-- ================================================================== -->
-
     <bean id="httpPort" class="java.lang.Integer">
         <constructor-arg value="${pms.http.port}"/>
     </bean>
-
+    
 </beans>

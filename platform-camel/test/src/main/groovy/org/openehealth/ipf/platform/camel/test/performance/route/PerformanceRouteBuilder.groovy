@@ -51,7 +51,7 @@ public class PerformanceRouteBuilder extends SpringRouteBuilder {
     /**
      * The URI path to access statistcs related resources
      */
-     String statisticsPath = 'statistics'
+    String statisticsPath = 'statistics'
     
     /**
      * The bean name to handle the requests from the Jetty server
@@ -80,18 +80,13 @@ public class PerformanceRouteBuilder extends SpringRouteBuilder {
      * The queue is used to provide asynchronous processing of the measurement history. Note that 
      * if there is no memory for the incoming measurements (the throughput of the cluster 
      * is much higher than the throughput of the performance measurement server), the server 
-     * may throw an OutOfMemoryError. In this case, the measurements made by the server must be 
-     * considered invalid 
+     * may throw an OutOfMemoryError. In this case, all measurements made by the server must be 
+     * considered invalid.
+     *  
      * The property is optional.
      * 
      */
     int queueSize = Integer.MAX_VALUE
-        
-    /**
-     * Confiuration for the HTTP client, used by the embedded Jetty server.
-     * The property is optional.
-     */
-    String jettyHttpClientOptions = 'httpClient.idleTimeout=30000'
     
     /**
      * Configures if the performance measurement server should override the 
@@ -102,14 +97,24 @@ public class PerformanceRouteBuilder extends SpringRouteBuilder {
      * the throughput of the performance measurement server, the performance measurement 
      * server will report it's throughtput rather than the cluster throughput. 
      * 
-     * This behaviour can be turned off, when a synchronization server runs on the cluster nodes.
+     * This behaviour can be turned off, when a time synchronization server runs on the cluster nodes.
+     * 
      * The property is optional. 
      * 
      */
     boolean overrideMeasurementHistoryReferenceDate = true
     
     /**
+     * Confiuration for the HTTP client, used by the embedded Jetty server. Split character is '&'
+     * The property is only relevant for the performance measurement server. 
+     *
+     * The property is optional.
+     */
+    String jettyHttpClientOptions = 'httpClient.idleTimeout=30000&httpClient.maxConnectionsPerAddress=5'
+    
+    /**
      * The port on which the Jetty server should accept requests.
+     *
      * The property is required.
      */
     int httpPort
@@ -136,13 +141,9 @@ public class PerformanceRouteBuilder extends SpringRouteBuilder {
                 .setBody {exchange ->
                     def history
                     //get the measurement history from the request body
-                    InputStream stream = exchange.in.getBody(InputStream.class)
-                    try{
-                        //TODO: extract the content encoding from the Content-Type header
-                        history = unmarshall(new InputStreamReader(stream, CONTENT_ENCODING))
-                    }finally{
-                        closeQuietly(stream)
-                    }
+                    //TODO: extract the content encoding from the Content-Type header
+                    String measurementHistory = exchange.in.getBody(String.class)
+                    history = unmarshall(measurementHistory)
                     //use the performance measuremetn server date for a reference date of the measurements
                     if (overrideMeasurementHistoryReferenceDate){
                         long time = exchange.in.getHeader('requestTime')

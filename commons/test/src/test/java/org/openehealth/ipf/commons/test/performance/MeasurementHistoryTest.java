@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.test.performance;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.StringReader;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -83,7 +82,7 @@ public class MeasurementHistoryTest {
 
     @Test
     public void testXMLSerializationWithXMLUtils() throws Exception {
-        // test unmarshall with string
+        // test unmarshal with string
         MeasurementHistory history = createMeasurementHistory(20);
         String marshalled = MeasurementHistoryXMLUtils.marshall(history);
         MeasurementHistory unmarshalled = MeasurementHistoryXMLUtils
@@ -93,11 +92,11 @@ public class MeasurementHistoryTest {
 
     @Test
     public void testXMLSerializationWithXMLUtils2() throws Exception {
-        // test unmarshall with a string reader
+        // test unmarshal with a string reader
         MeasurementHistory history = createMeasurementHistory(20);
         String marshalled = MeasurementHistoryXMLUtils.marshall(history);
         MeasurementHistory unmarshalled = MeasurementHistoryXMLUtils
-                .unmarshall(new StringReader(marshalled));
+                .unmarshall(marshalled);
         assertEquals(history, unmarshalled);
     }
 }

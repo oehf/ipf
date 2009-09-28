@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.test.performance.utils;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -26,18 +25,24 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
+import org.openehealth.ipf.commons.test.performance.MeasurementLostException;
 import org.openehealth.ipf.commons.test.performance.Timestamp;
 
 /**
+ * Provides utilities for marshalling and unmarshalling performance
+ * measurements. The class is thread-safe.
+ * 
  * @author Mitko Kolev
  */
 public class MeasurementHistoryXMLUtils {
 
     private static JAXBContext context = initContext();
+
     private final static Log LOG = LogFactory
             .getLog(MeasurementHistoryXMLUtils.class);
 
@@ -46,11 +51,11 @@ public class MeasurementHistoryXMLUtils {
      * object.
      * 
      * @param measurementHistory
-     *            a <code>MeasurementHistory</code> object to marshall
-     * @return a String that contains the marshalled
+     *            a <code>MeasurementHistory</code> object to marshal
+     * @return a String that contains the marshaled
      *         <code>measurementHistory</code>
      * @throws JAXBException
-     *             if the marshalling has failed
+     *             if the marshaling has failed
      */
     public static String marshall(MeasurementHistory measurementHistory)
             throws JAXBException {
@@ -59,24 +64,6 @@ public class MeasurementHistoryXMLUtils {
         StringWriter writer = new StringWriter();
         marshaller.marshal(measurementHistory, writer);
         return writer.toString();
-    }
-
-    /**
-     * Creates a <code>MeasurementHistory</code> object from the XML data in the
-     * given <code>Reader</code>
-     * 
-     * @param reader
-     *            a <code>Reader</code> instance with XML representation of
-     *            <code>MeasurementHistory</code>
-     * @return a <code>MeasurementHistory</code> object
-     * @throws JAXBException
-     *             if the unmarshalling has failed
-     */
-    public static MeasurementHistory unmarshall(Reader reader)
-            throws JAXBException {
-        notNull(reader, "The reader must not be null!");
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-        return (MeasurementHistory) unmarshaller.unmarshal(reader);
     }
 
     /**
@@ -90,15 +77,24 @@ public class MeasurementHistoryXMLUtils {
      * @throws JAXBException
      *             if the unmarshalling has failed
      */
-    public static MeasurementHistory unmarshall(String measurementHistory)
-            throws JAXBException {
+    public static MeasurementHistory unmarshall(String measurementHistory) {
         notNull(measurementHistory, "The measurementHistory must not be null!");
-
-        return unmarshall(new StringReader(measurementHistory));
+        // If the XML contains white spaces, the unmarshaller will fail
+        StringReader reader = new StringReader(measurementHistory.trim());
+        try {
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            return (MeasurementHistory) unmarshaller.unmarshal(reader);
+        } catch (JAXBException e) {
+            LOG.error("Failed to unmarshal:" + measurementHistory, e);
+            throw new MeasurementLostException(e);
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
     }
 
     /**
-     * Initialize the JAXB context
+     * Initialize the JAXB context, should be called just once because the
+     * JAXBContext instance is thread-safe
      */
     private static JAXBContext initContext() {
         try {
@@ -110,5 +106,4 @@ public class MeasurementHistoryXMLUtils {
         }
 
     }
-
 }

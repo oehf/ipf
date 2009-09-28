@@ -170,14 +170,10 @@ public class TimeProcessor implements Processor {
     }
 
     private MeasurementHistory unmarshal(String measurementHistoryXML) {
-        try {
-            MeasurementHistory history = MeasurementHistoryXMLUtils
-                    .unmarshall(measurementHistoryXML);
-            return history;
-        } catch (JAXBException e) {
-            throw new IllegalStateException(
-                    "Unmarshaling the measurement history failed!", e);
-        }
+        MeasurementHistory history = MeasurementHistoryXMLUtils
+                .unmarshall(measurementHistoryXML);
+        return history;
+
     }
 
     /**
