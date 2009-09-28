@@ -44,14 +44,27 @@ then
     JMX_PORT=9999
 fi
 
-PERFORMANCE_MEASUREMENT_SERVER_OPTS=-Dpms.http.port=$HTTP_PORT -Dpms.override.measurement.history.reference.date=$OVERRIDE_MEASUREMENT_HISTORY_DATE
+# ----------------------------------------------------------------------------
+# JETTY_HTTP_CLIENT_OPTIONS configures the HTTP Client that Jetty endpoint 
+# uses. The options separator is the chacacter &
+# For more details, go to component http://camel.apache.org/jetty.html
+# The max default connections per address of the performance measurement server 
+# is set to 5. 
+# ----------------------------------------------------------------------------
+JETTY_HTTP_CLIENT_OPTIONS=$4
+if ["$JETTY_HTTP_CLIENT_OPTIONS" == ""] 
+then 
+    JETTY_HTTP_CLIENT_OPTIONS="httpClient.idleTimeout=30000&httpClient.maxConnectionsPerAddress=5"
+fi
+
+PERFORMANCE_MEASUREMENT_SERVER_OPTS=-Dpms.http.port=$HTTP_PORT -Dpms.override.measurement.history.reference.date=$OVERRIDE_MEASUREMENT_HISTORY_DATE -Dpms.jetty.http.client.options=$JETTY_HTTP_CLIENT_OPTIONS
 
 # --------------------------------------------------------
 #  JMX and general Java system properties
 # --------------------------------------------------------
-JAVA_OPTS=-Xmx256m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=$JMX_PORT -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
+JAVA_OPTS=-Xms512m -Xmx512m  -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=$JMX_PORT -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
 
 # --------------------------------------------------------
 #  Startup Performance Management server (must be single node only)
 # --------------------------------------------------------
-"$JAVA_HOME/bin/java" $PERFORMANCE_MEASUREMENT_SERVER_OPTS $JAVA_OPTS -cp "../lib/*" org.openehealth.ipf.platform.camel.test.performance.server.PerformanceMeasurementServer
+"$JAVA_HOME/bin/java" $PERFORMANCE_MEASUREMENT_SERVER_OPTS $JAVA_OPTS -cp "../lib/*:../dist/*" org.openehealth.ipf.platform.camel.test.performance.server.PerformanceMeasurementServer

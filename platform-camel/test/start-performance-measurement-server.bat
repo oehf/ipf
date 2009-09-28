@@ -35,14 +35,24 @@ rem --------------------------------------------------------
 set JMX_PORT=%3
     IF "%JMX_PORT%" == "" SET JMX_PORT=9999
 
-set PERFORMANCE_MEASUREMENT_SERVER_OPTS=-Dpms.http.port=%HTTP_PORT% -Dpms.override.measurement.history.reference.date=%OVERRIDE_MEASUREMENT_HISTORY_DATE%
+rem ----------------------------------------------------------------------------
+rem JETTY_HTTP_CLIENT_OPTIONS configures the HTTP Client that Jetty endpoint 
+rem uses. The options separator is the chacacter &
+rem For more details, go to component http://camel.apache.org/jetty.html
+rem The max default connections per address of the performance measurement server 
+rem is set to 5. 
+rem ----------------------------------------------------------------------------
+set JETTY_HTTP_CLIENT_OPTIONS=%4
+    IF "%JETTY_HTTP_CLIENT_OPTIONS%" == "" set JETTY_HTTP_CLIENT_OPTIONS="httpClient.idleTimeout=30000&httpClient.maxConnectionsPerAddress=5"    
+
+set PERFORMANCE_MEASUREMENT_SERVER_OPTS=-Dpms.http.port=%HTTP_PORT% -Dpms.override.measurement.history.reference.date=%OVERRIDE_MEASUREMENT_HISTORY_DATE% -Dpms.jetty.http.client.options=%JETTY_HTTP_CLIENT_OPTIONS%
 
 rem --------------------------------------------------------
 rem  JMX and general Java system properties
 rem --------------------------------------------------------
-set JAVA_OPTS=-Xmx256m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=%JMX_PORT% -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
+set JAVA_OPTS=-Xms512m -Xmx512m -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=%JMX_PORT% -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
 
 rem --------------------------------------------------------
 rem  Startup Performance Management server (must be single node only)
 rem --------------------------------------------------------
-"%JAVA_HOME%\bin\java.exe" %JAVA_OPTS% %PERFORMANCE_MEASUREMENT_SERVER_OPTS% -cp "..\lib\*" org.openehealth.ipf.platform.camel.test.performance.server.PerformanceMeasurementServer
+"%JAVA_HOME%\bin\java.exe" %JAVA_OPTS% %PERFORMANCE_MEASUREMENT_SERVER_OPTS% -cp "..\lib\*;..\dist\*" org.openehealth.ipf.platform.camel.test.performance.server.PerformanceMeasurementServer
