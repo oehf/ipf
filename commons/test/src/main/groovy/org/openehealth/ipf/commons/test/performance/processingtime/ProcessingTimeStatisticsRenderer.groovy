@@ -48,16 +48,16 @@ class ProcessingTimeStatisticsRenderer implements StatisticsRenderer {
 				th('Min (ms)')
 				th('Max (ms)')
 				th('Mean (ms)')
-				th('Standard deviation')
+				th('Standard deviation (ms)')
 				for (name in names){
 					def summary = model.getStatisticalSummaryByName(name)
 					tr(){
 						td(name)
 						td(summary.n)
-						td(format(summary.min))
-						td(format(summary.max))
-						td(format(summary.mean))
-						td(format(summary.standardDeviation))
+						td(format(summary.min, 0))
+						td(format(summary.max, 0))
+						td(format(summary.mean, 0))
+						td(format(summary.standardDeviation, 0))
 					}
 				}
 			}

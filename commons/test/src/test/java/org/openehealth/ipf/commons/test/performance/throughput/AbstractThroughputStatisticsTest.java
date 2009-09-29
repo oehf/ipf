@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.test.performance.StatisticsRenderer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import static org.openehealth.ipf.commons.test.performance.PerformanceMeasurementTestUtils.createMeasurementHistory;
@@ -70,5 +71,12 @@ public abstract class AbstractThroughputStatisticsTest {
         }
         String report = getRenderer().render(getStatistics());
         assertTrue(report.contains(String.valueOf(UPDATES_COUNT)));
+    }
+
+    @Test
+    public void testRendererEmptyData() {
+        String report = getRenderer().render(getStatistics());
+        //It should not throw exception nor return empty content
+        assertFalse("".equals(report));
     }
 }

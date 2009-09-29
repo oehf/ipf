@@ -54,7 +54,7 @@ class ThroughputDistributionStatisticsRenderer extends ThroughputStatisticsRende
                 th('From')
                 th('To')
                 th('Duration (seconds)')
-                th('Throughput (count / duration)')
+                th('Throughput (messages / second)')
                 
                 int binIndex = 1
                 for (Throughput t : distribution.throughput){

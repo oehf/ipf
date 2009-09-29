@@ -53,7 +53,7 @@ class ThroughputStatisticsRenderer implements StatisticsRenderer {
                 th('From')
                 th('To')
                 th('Duration (seconds)')
-                th('Throughput (count / duration)')
+                th('Throughput (messages / second)')
                 tr(){
                     td(throughput.count)
                     td(throughput.from.format(DATE_PATTERN))
