@@ -126,6 +126,7 @@ public class CCDDefinitionLoader extends CDAR2DefinitionLoader {
         doLoad("/builders/content/entry/CCDEncounterActivityBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDEncounterLocationBuilder.groovy", loaded);
         doLoad("/builders/content/entry/CCDPatientInstructionBuilder.groovy", loaded);
+        doLoad("/builders/content/entry/CCDAgeObservationBuilder.groovy", loaded);
         loadSource(loaded);   
         loadComments(loaded);        
     }

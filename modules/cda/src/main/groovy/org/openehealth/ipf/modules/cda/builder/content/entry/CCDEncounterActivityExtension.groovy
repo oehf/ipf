@@ -27,6 +27,7 @@ import org.openehealth.ipf.modules.cda.builder.CompositeModelExtension
  * </ul>
  * Dependent templates:
  * <ul>
+ * <li>2.16.840.1.113883.10.20.1.38 Age Observation
  * <li>2.16.840.1.113883.10.20.1.45 Encounter Location
  * <li>2.16.840.1.113883.10.20.1.49 Patient Instruction 
  * <li>2.16.840.1.113883.10.20.1.40 Comment 
@@ -78,7 +79,8 @@ public class CCDEncounterActivityExtension extends CompositeModelExtension {
 	}	
 	
 	Collection modelExtensions() {
-		[ new CCDEncounterLocationExtension(),
+	    [ new CCDAgeObservationExtension(),
+		  new CCDEncounterLocationExtension(),
 		  new CCDPatientInstructionExtension(),
 		  new CCDSourceExtension(),
 		  new CCDCommentsExtension()]

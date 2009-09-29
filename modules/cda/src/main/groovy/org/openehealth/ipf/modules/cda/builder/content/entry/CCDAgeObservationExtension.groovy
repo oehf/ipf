@@ -100,6 +100,25 @@ public class CCDAgeObservationExtension extends BaseModelExtension {
             }
         }
 		
+		// required by Encounter Activity (2.16.840.1.113883.10.20.1.21)
+        POCDMT000040Encounter.metaClass {
+            
+            setAge {POCDMT000040Observation observation ->
+                POCDMT000040EntryRelationship rel = builder.build {
+                    entryRelationship(inversionInd:true, 
+                                        typeCode:'SUBJ', 
+                                        observation:observation)
+                }
+                delegate.entryRelationship.add(rel)
+            }
+            
+            getAge { ->
+                delegate.entryRelationship.find { 
+                    templateId() in it.observation?.templateId?.root
+                }?.observation            
+            }
+        }
+		
 	}//ccd extensions 
 	
 	

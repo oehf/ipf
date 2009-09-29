@@ -61,7 +61,7 @@ public class CCDEncountersValidator extends AbstractValidator {
 		assertSize('CONF-461', 1, encounter.id)
 		//validate patient instructions
 		def patientInstructionsEntries = encounter.entryRelationship.findAll{ 
-		    '2.16.840.1.113883.10.20.1.49' in it.act.templateId.root
+		    '2.16.840.1.113883.10.20.1.49' in it.act?.templateId?.root
 		}
 	    patientInstructionsEntries.each{
 		    new CCDMedicationsValidator().doValidatePatientInstructions(patientInstructionsEntries)

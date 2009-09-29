@@ -233,9 +233,9 @@ ccd_plannedSubstanceAdministration(schema:'ccd_substanceAdministration') {
     properties {
         moodCode(factory:'XDOCUMENT_SUBSTANCE_MOOD', check: [
            XDocumentSubstanceMood.INT_LITERAL,
-           XDocumentProcedureMood.PRMS_LITERAL,
-           XDocumentProcedureMood.PRP_LITERAL,
-           XDocumentProcedureMood.RQO_LITERAL])
+           XDocumentSubstanceMood.PRMS_LITERAL,
+           XDocumentSubstanceMood.PRP_LITERAL,
+           XDocumentSubstanceMood.RQO_LITERAL])
     }
     collections {
         templateIds(collection:'templateId', def: {
@@ -253,9 +253,9 @@ ccd_plannedSupply(schema:'ccd_supply') {
     properties {
         moodCode(factory:'XDOCUMENT_SUBSTANCE_MOOD', check: [
            XDocumentSubstanceMood.INT_LITERAL,
-           XDocumentProcedureMood.PRMS_LITERAL,
-           XDocumentProcedureMood.PRP_LITERAL,
-           XDocumentProcedureMood.RQO_LITERAL])
+           XDocumentSubstanceMood.PRMS_LITERAL,
+           XDocumentSubstanceMood.PRP_LITERAL,
+           XDocumentSubstanceMood.RQO_LITERAL])
     }
     collections {
         templateIds(collection:'templateId', def: {

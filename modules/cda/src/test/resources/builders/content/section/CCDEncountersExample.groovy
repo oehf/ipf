@@ -14,6 +14,10 @@ ccd_encounters {
                 name('Very Good Health Clinic')
             }//playingEntity 
         }
+        age {
+            value(make { _int(57) }
+            )
+        }
     }//encounter		
 }
 

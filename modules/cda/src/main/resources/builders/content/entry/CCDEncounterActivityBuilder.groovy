@@ -18,7 +18,8 @@ package builders.content.entry
 import org.openhealthtools.ihe.common.cdar2.*
 
 // Chapter 3.15.2.1: Encounter activities (2.16.840.1.113883.10.20.1.21)
-// Depends on      : ccd_patientInstruction, ccd_encounterLocationParticipantRole
+// Depends on      : ccd_patientInstruction, ccd_encounterLocationParticipantRole, 
+//                   ccd_ageObservation
 
 //CONF-458: An encounter activity (templateId 2.16.840.1.113883.10.20.1.21) SHALL be 
 //          represented with Encounter.
@@ -41,6 +42,11 @@ ccd_encounterActivity(schema:'ccd_encounter'){
 		//           as defined in section 5.2 Source. Defined by base schema.
 		//CONF-471: An encounter activity MAY contain one or more location participations.
 		encounterLocation(schema:'ccd_encounterLocationParticipantRole')
+		// CONF-469: The value for “Encounter / entryRelationship / @typeCode” in an 
+		//           encounter activity MAY be “SUBJ” “Subject” 2.16.840.1.113883.5.1002 
+		//           ActRelationshipType STATIC to reference an age observation 
+		//           (templateId 2.16.840.1.113883.10.20.1.38).
+		age(schema:'ccd_ageObservation')
 	}
 	collections{
 	    // CONF-461: An encounter activity SHALL contain at least one Encounter / id.
