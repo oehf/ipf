@@ -6,14 +6,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapBindingConfiguration;
 import org.apache.cxf.frontend.ServerFactoryBean;
-import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.WsSecurityUnderstandingInInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.AuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ServerPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.databinding.hl7v3.HL7v3DataBinding;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.payload.ServerParameterInjectorInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.payload.ServerPayloadExtractorInterceptor;
 
 /**
  * Factory for ITI web-services.
@@ -59,11 +60,6 @@ public class ItiServiceFactory {
             configureInterceptors(svrFactory);
             svrFactory.create();
             
-            if(service instanceof JaxbContextAware) {
-                JAXBDataBinding dataBinding = (JAXBDataBinding) svrFactory.getServiceFactory().getDataBinding(); 
-                ((JaxbContextAware) service).setJaxbContext(dataBinding.getContext());
-            }
-            
             log.debug("Published webservice endpoint for: " + serviceInfo.getServiceName());
             return service;
         } catch (InstantiationException e) {
@@ -94,12 +90,23 @@ public class ItiServiceFactory {
     private void configureInterceptors(ServerFactoryBean svrFactory) {
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor(auditStrategy));
             svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
     
             AuditFinalInterceptor auditOutInterceptor = new AuditFinalInterceptor(auditStrategy, true);
             svrFactory.getOutInterceptors().add(auditOutInterceptor);
             svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
+        }
+        
+        // install payload collecting interceptors when needed 
+        boolean auditPayload = (auditStrategy != null) && serviceInfo.isAuditPayload(); 
+        if(auditPayload || serviceInfo.isHl7v3()) {
+            svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor());
+        }        
+
+        // specific configuration for HL7 v3 transactions
+        if(serviceInfo.isHl7v3()) {
+            svrFactory.getInInterceptors().add(new ServerParameterInjectorInterceptor(0));
+            svrFactory.setDataBinding(new HL7v3DataBinding());
         }
         
         // protocol-related interceptors

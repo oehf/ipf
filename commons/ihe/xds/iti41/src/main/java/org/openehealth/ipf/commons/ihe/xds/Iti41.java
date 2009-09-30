@@ -20,6 +20,8 @@ public class Iti41 {
             true,
             "wsdl/iti41.wsdl",
             true,
+            false,
+            false,
             false);
            
     /**

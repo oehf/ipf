@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.cxf.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.cxf.payload;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -23,6 +23,7 @@ import org.apache.cxf.interceptor.AttachmentInInterceptor;
 import org.apache.cxf.interceptor.StaxInInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
 
 
@@ -34,34 +35,21 @@ import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
  * 
  * @author Dmytro Rud
  */
-public class ServerPayloadExtractorInterceptor extends AuditInterceptor {
+public class ServerPayloadExtractorInterceptor extends AbstractSafeInterceptor {
 
-    /**
-     * Constructor.
-     * 
-     * @param auditStrategy
-     *      an audit strategy instance
-     */
-    public ServerPayloadExtractorInterceptor(ItiAuditStrategy auditStrategy) {
-        super(Phase.PRE_STREAM, auditStrategy);
+    public ServerPayloadExtractorInterceptor() {
+        super(Phase.PRE_STREAM);
         addAfter(AttachmentInInterceptor.class.getName());
         addBefore(StaxInInterceptor.class.getName());
     }
 
-    
     @Override
-    public void process(Message message) throws Exception {
-        // check whether we should process
-        if( ! getAuditStrategy().needSavePayload()) {
-            return;
-        }
-        ItiAuditDataset auditDataset = getAuditDataset(message);
-        
+    protected void process(Message message) throws Exception {
         // extract XML body bytes and save them into the AuditDataset
         InputStream stream = message.getContent(InputStream.class);
         byte[] streamBytes = IOUtils.readBytesFromStream(stream);
         String payload = SoapUtils.extractSoapBody(new String(streamBytes));
-        auditDataset.setPayload(payload);
+        message.setContent(String.class, payload);
 
         // restore the stream
         message.setContent(InputStream.class, new ByteArrayInputStream(streamBytes));

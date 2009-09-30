@@ -45,11 +45,6 @@ abstract class Iti18AuditStrategy extends ItiAuditStrategy {
             auditDataset.setQueryUuid(adHocQuery.getId());
         }
     }
-
-    @Override
-    public boolean needSavePayload() {
-        return true;
-    }
     
     @Override
     public ItiAuditDataset createAuditDataset() {

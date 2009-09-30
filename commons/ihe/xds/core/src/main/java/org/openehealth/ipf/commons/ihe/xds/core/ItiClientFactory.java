@@ -22,9 +22,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.cxf.MustUnderstandDecoratorInter
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.ProvidedAttachmentOutInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.AuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.AuditFinalInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ClientOutputStreamSubstituteInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ClientPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.payload.ClientOutputStreamSubstituteInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.payload.ClientPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
 
 /**
@@ -119,12 +119,21 @@ public class ItiClientFactory {
         // auditing off
         if (auditStrategy != null) {
             client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
-            client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor(auditStrategy));
-            client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor(auditStrategy));
-        
             AuditFinalInterceptor finalInterceptor = new AuditFinalInterceptor(auditStrategy, false);
             client.getInInterceptors().add(finalInterceptor);
             client.getInFaultInterceptors().add(finalInterceptor);
+        }
+
+        // install payload collecting interceptors when needed 
+        boolean auditPayload = (auditStrategy != null) && serviceInfo.isAuditPayload(); 
+        if(auditPayload || serviceInfo.isHl7v3()) {
+            client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor());
+            client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor());
+        }
+
+        // specific configuration for HL7 v3 transactions
+        if(serviceInfo.isHl7v3()) {
+            // TODO
         }
         
         if (serviceInfo.isSwaOutSupport()) {

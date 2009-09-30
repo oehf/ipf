@@ -13,50 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.cxf.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.cxf.payload;
 
 import java.io.OutputStream;
 
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
 
 
 /**
  * CXF client-side interceptor that reads the payload collected by the output  
- * stream proxy installed in {@link ClientOutputStreamSubstituteInterceptor}.
+ * stream proxy installed in {@link ClientOutputStreamSubstituteInterceptor}
+ * and stores it in the message as Strinc content type.
  * <p>
  * Usable on client side only. 
  * 
  * @author Dmytro Rud
  */
-public class ClientPayloadExtractorInterceptor extends AuditInterceptor {
+public class ClientPayloadExtractorInterceptor extends AbstractSafeInterceptor {
 
-    /**
-     * Constructor.
-     * 
-     * @param auditStrategy
-     *      an audit strategy instance
-     */
-    public ClientPayloadExtractorInterceptor(ItiAuditStrategy auditStrategy) {
-        super(Phase.WRITE_ENDING, auditStrategy);
+    public ClientPayloadExtractorInterceptor() {
+        super(Phase.WRITE_ENDING);
         addAfter(SoapOutEndingInterceptor.class.getName());
     }
     
-    
     @Override
-    public void process(Message message) throws Exception {
-        // check whether we should process
-        if( ! getAuditStrategy().needSavePayload()) {
-            return;
-        }
-        ItiAuditDataset auditDataset = getAuditDataset(message);
-
-        // get the payload and store it in the audit dataset
+    protected void process(Message message) throws Exception {
         WrappedOutputStream wrapper = (WrappedOutputStream)message.getContent(OutputStream.class);
         String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate();
         String payload = SoapUtils.extractSoapBody(soapEnvelope);
-        auditDataset.setPayload(payload);
+        message.setContent(String.class, payload);
     }
 }

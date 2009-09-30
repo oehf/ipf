@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.cxf.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.cxf.payload;
 
 import java.io.OutputStream;
 
 import org.apache.cxf.interceptor.MessageSenderInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
 
 
 /**
@@ -30,28 +31,15 @@ import org.apache.cxf.phase.Phase;
  * 
  * @author Dmytro Rud
  */
-public class ClientOutputStreamSubstituteInterceptor extends AuditInterceptor {
+public class ClientOutputStreamSubstituteInterceptor extends AbstractSafeInterceptor {
 
-    /**
-     * Constructor.
-     * 
-     * @param auditStrategy
-     *      an audit strategy instance
-     */
-    public ClientOutputStreamSubstituteInterceptor(ItiAuditStrategy auditStrategy) {
-        super(Phase.PREPARE_SEND, auditStrategy);
+    public ClientOutputStreamSubstituteInterceptor() {
+        super(Phase.PREPARE_SEND);
         addAfter(MessageSenderInterceptor.class.getName());
     }
     
-    
     @Override
-    public void process(Message message) throws Exception {
-        // check whether we should process
-        if( ! getAuditStrategy().needSavePayload()) {
-            return;
-        }
-
-        // wrap the default output stream into a payload-collecting proxy
+    protected void process(Message message) throws Exception {
         OutputStream os = message.getContent(OutputStream.class);
         WrappedOutputStream wrapper = new WrappedOutputStream(os);
         message.setContent(OutputStream.class, wrapper);

@@ -26,6 +26,7 @@ import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.payload.ClientPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,12 +56,15 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
     public AuditDatasetEnrichmentInterceptor(ItiAuditStrategy auditStrategy, boolean serverSide) {
-        super(serverSide ? Phase.PRE_INVOKE : Phase.WRITE, auditStrategy); 
+        super(serverSide ? Phase.PRE_INVOKE : Phase.WRITE_ENDING, auditStrategy);
+        if( ! serverSide) {
+            addAfter(ClientPayloadExtractorInterceptor.class.getName());
+        }
     }
 
     
     @Override
-    public void process(Message message) throws Exception {
+    protected void process(Message message) throws Exception {
         ItiAuditDataset auditDataset = getAuditDataset(message);
 
         // determine what direction do we handle
@@ -131,6 +135,9 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
             auditDataset.setServiceEndpointUrl((String)message.get(Message.ENDPOINT_ADDRESS));
         }
 
+        // extract value prepared by (Client|Server)PayloadExctactorInterceptor
+        auditDataset.setPayload(message.getContent(String.class));
+        
         // perform transaction-specific audit dataset enrichment
         Object pojo = message.getContent(List.class).get(0);
         getAuditStrategy().enrichDataset(pojo, auditDataset);

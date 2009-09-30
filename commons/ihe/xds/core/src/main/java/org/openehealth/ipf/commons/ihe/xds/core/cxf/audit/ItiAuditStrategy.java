@@ -33,7 +33,6 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * @author Dmytro Rud
  */
 public abstract class ItiAuditStrategy {
-    
     private static final transient Log LOG = LogFactory.getLog(ItiAuditStrategy.class);
     
     // TODO: externalize constant
@@ -75,20 +74,6 @@ public abstract class ItiAuditStrategy {
         return new ItiAuditDataset(isServerSide());
     }
 
-    
-    /**
-     * Returns <code>true</code> when audit item must include message payload dump.
-     * <p>
-     * Per default returns <code>false</code>, because most of XDS transactions
-     * do not need it.  
-     * 
-     * @return
-     *      <code>true</code> when payload should be saved; <code>false</code> otherwise        
-     */
-    public boolean needSavePayload() {
-        return false;
-    }
-    
     
     /**
      * Enriches the dataset with transaction-specific information from the given POJO.

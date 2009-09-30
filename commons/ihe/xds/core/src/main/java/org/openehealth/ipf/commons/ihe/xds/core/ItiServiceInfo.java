@@ -37,6 +37,8 @@ public class ItiServiceInfo {
     private final QName portName11;
     private final QName portName12;
     private final boolean swaOutSupport;
+    private final boolean auditPayload;
+    private final boolean hl7v3;
 
     public ItiServiceInfo(QName serviceName, 
                           Class<?> serviceClass,
@@ -46,7 +48,9 @@ public class ItiServiceInfo {
                           boolean mtom, 
                           String wsdlLocation, 
                           boolean addressing, 
-                          boolean swaOutSupport) 
+                          boolean swaOutSupport,
+                          boolean auditPayload,
+                          boolean hl7v3) 
     {
         Validate.notNull(serviceName, "serviceName");
         Validate.notNull(serviceClass, "serviceClass");
@@ -63,6 +67,8 @@ public class ItiServiceInfo {
         this.wsdlLocation = wsdlLocation;
         this.addressing = addressing;
         this.swaOutSupport = swaOutSupport;
+        this.auditPayload = auditPayload;
+        this.hl7v3 = hl7v3;
     }
 
     /**
@@ -130,5 +136,19 @@ public class ItiServiceInfo {
      */
     public boolean isSwaOutSupport() {
         return swaOutSupport;
+    }
+
+    /**
+     * @return <code>true</code> if this service must save payload in audit record.
+     */
+    public boolean isAuditPayload() {
+        return auditPayload;
+    }
+
+    /**
+     * @return <code>true</code> if this service is a HL7 v3 one.
+     */
+    public boolean isHl7v3() {
+        return hl7v3;
     }
 }

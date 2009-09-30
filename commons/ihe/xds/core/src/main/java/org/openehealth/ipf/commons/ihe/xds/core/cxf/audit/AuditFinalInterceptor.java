@@ -50,7 +50,7 @@ public class AuditFinalInterceptor extends AuditInterceptor {
 
     
     @Override
-    public void process(Message message) throws Exception {
+    protected void process(Message message) throws Exception {
         ItiAuditDataset auditDataset = getAuditDataset(message);
 
         // try to extract response as POJO 

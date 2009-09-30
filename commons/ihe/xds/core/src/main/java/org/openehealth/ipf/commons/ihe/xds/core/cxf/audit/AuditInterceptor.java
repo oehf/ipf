@@ -19,7 +19,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.message.Message;
-import org.apache.cxf.phase.AbstractPhaseInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
 
 
 /**
@@ -27,10 +27,9 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
  * 
  * @author Dmytro Rud
  */
-abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message> {
-    
+abstract public class AuditInterceptor extends AbstractSafeInterceptor {
     private static final transient Log LOG = LogFactory.getLog(AuditInterceptor.class);
-    
+
     
     /**
      * Key used to store audit datasets in CXF exchanges
@@ -96,29 +95,5 @@ abstract public class AuditInterceptor extends AbstractPhaseInterceptor<Message>
             LOG.warn("Audit strategy not set, NPE is pending");
         }
         return this.auditStrategy;
-    }
-    
-    
-    /**
-     * Performs the actual work, being called from {@link #handleMessage(Message)}.   
-     * 
-     * @param message CXF message to process 
-     */
-    public abstract void process(Message message) throws Exception;
-    
-    
-    /**
-     * Calls {@link #process(Message)} and "forwards" all exceptions
-     * to the error log instead of letting them break message flow.
-     * 
-     * @param message CXF message to process 
-     */
-    @Override
-    public final void handleMessage(Message message) {
-        try {
-            process(message);
-        } catch(Exception e) {
-            LOG.error("Fault in audit interceptor", e);
-        }
     }
 }

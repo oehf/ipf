@@ -20,7 +20,9 @@ public class Iti15 {
             false,
             "wsdl/iti15.wsdl",
             false,
-            true);
+            true,
+            false,
+            false);
            
     /**
      * Returns a factory for client stubs of the ITI-15 service.

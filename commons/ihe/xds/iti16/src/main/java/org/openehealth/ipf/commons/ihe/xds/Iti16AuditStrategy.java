@@ -39,11 +39,6 @@ abstract class Iti16AuditStrategy extends ItiAuditStrategy {
     }
 
     @Override
-    public boolean needSavePayload() {
-        return true;
-    }
-
-    @Override
     public RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
         RegistryResponse response = (RegistryResponse) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse21(response); 

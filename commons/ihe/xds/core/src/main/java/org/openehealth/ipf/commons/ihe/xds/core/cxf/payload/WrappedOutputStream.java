@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.cxf.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.cxf.payload;
 
 import java.io.FilterOutputStream;
 import java.io.IOException;
