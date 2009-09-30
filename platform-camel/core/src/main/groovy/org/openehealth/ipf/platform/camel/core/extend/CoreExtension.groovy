@@ -99,7 +99,7 @@ public class CoreExtension {
      * Adds an interceptor to the route using the specified processor as a wrapper.
      * @param delegateProcessor
      * 			the processor that intercepts exchanges
-     * @ipfdoc fill me
+     * @ipfdoc Core features#Inteceptor
      * @dsl platform-camel-core
      */
     public static InterceptDefinition intercept(ProcessorDefinition self, DelegateProcessor delegateProcessor) {
@@ -273,7 +273,7 @@ public class CoreExtension {
     /**
      * Allows adding of extensions that replace existing extensions provided by Camel (e.g. 
      * {@code split})
-     * @ipfdoc fill me
+     * @ipfdoc Core features#Splitter
      * @dsl platform-camel-core
      */
     public static IpfDefinition ipf(ProcessorDefinition self) {
