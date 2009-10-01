@@ -54,7 +54,7 @@ public class MultiThreadedPerformanceMeasurementServerTest {
 
     int executions = 10000;
 
-    int threadsCount = 5;
+    int threadsCount = 100;
 
     int maxConnectionsPerHost = 5;
 
@@ -64,6 +64,7 @@ public class MultiThreadedPerformanceMeasurementServerTest {
         dispatcher = new SynchronousMeasurementDispatcher();
         dispatcher.setPerformanceMeasurementServerURL(new URL(
                 performanceMeasurementServerURL));
+        dispatcher.setDefaultMaxConnectionsPerHost(maxConnectionsPerHost);
 
     }
 

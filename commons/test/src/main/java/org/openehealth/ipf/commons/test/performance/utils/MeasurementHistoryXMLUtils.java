@@ -41,10 +41,49 @@ import org.openehealth.ipf.commons.test.performance.Timestamp;
  */
 public class MeasurementHistoryXMLUtils {
 
-    private static JAXBContext context = initContext();
-
     private final static Log LOG = LogFactory
             .getLog(MeasurementHistoryXMLUtils.class);
+
+    private final static JAXBContext context;
+
+    private final static ThreadLocal<Marshaller> marshallers;
+
+    private final static ThreadLocal<Unmarshaller> unmarshallers;
+
+    static {
+        try {
+            // The context is thread-safe
+            context = JAXBContext.newInstance(MeasurementHistory.class,
+                    Measurement.class, Timestamp.class);
+
+            // Use ThreadLocal to reuse the marshaller and unmarshaller
+            // instances
+            unmarshallers = new ThreadLocal<Unmarshaller>() {
+                @Override
+                public Unmarshaller initialValue() {
+                    try {
+                        return context.createUnmarshaller();
+                    } catch (JAXBException e) {
+                        throw new IllegalStateException(
+                                "Can not create thread context unmarshaller", e);
+                    }
+                }
+            };
+            marshallers = new ThreadLocal<Marshaller>() {
+                @Override
+                public Marshaller initialValue() {
+                    try {
+                        return context.createMarshaller();
+                    } catch (JAXBException e) {
+                        throw new IllegalStateException(
+                                "Can not create thread context marshaller", e);
+                    }
+                }
+            };
+        } catch (JAXBException e) {
+            throw new RuntimeException("Can not initialize JAXB context", e);
+        }
+    }
 
     /**
      * Creates a XML String from the given <code>MeasurementHistory</code>
@@ -60,7 +99,7 @@ public class MeasurementHistoryXMLUtils {
     public static String marshall(MeasurementHistory measurementHistory)
             throws JAXBException {
         notNull(measurementHistory, "The measurementHistory must not be null!");
-        Marshaller marshaller = context.createMarshaller();
+        Marshaller marshaller = marshallers.get();
         StringWriter writer = new StringWriter();
         marshaller.marshal(measurementHistory, writer);
         return writer.toString();
@@ -82,7 +121,7 @@ public class MeasurementHistoryXMLUtils {
         // If the XML contains white spaces, the unmarshaller will fail
         StringReader reader = new StringReader(measurementHistory.trim());
         try {
-            Unmarshaller unmarshaller = context.createUnmarshaller();
+            Unmarshaller unmarshaller = unmarshallers.get();
             return (MeasurementHistory) unmarshaller.unmarshal(reader);
         } catch (JAXBException e) {
             LOG.error("Failed to unmarshal:" + measurementHistory, e);
@@ -90,20 +129,5 @@ public class MeasurementHistoryXMLUtils {
         } finally {
             IOUtils.closeQuietly(reader);
         }
-    }
-
-    /**
-     * Initialize the JAXB context, should be called just once because the
-     * JAXBContext instance is thread-safe
-     */
-    private static JAXBContext initContext() {
-        try {
-            return JAXBContext.newInstance(MeasurementHistory.class,
-                    Measurement.class, Timestamp.class);
-        } catch (JAXBException e) {
-            LOG.error("Can not initialize JAXB context");
-            throw new RuntimeException(e);
-        }
-
     }
 }
