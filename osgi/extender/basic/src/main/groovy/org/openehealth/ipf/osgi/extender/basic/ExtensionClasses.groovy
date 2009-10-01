@@ -15,23 +15,17 @@
  */
 package org.openehealth.ipf.osgi.extender.basic
 
+import org.openehealth.ipf.osgi.commons.bundle.BundleHeaders
+import org.osgi.framework.Bundle
 /**
  * @author Martin Krasser
  */
-public class ExtensionsCount {
+class ExtensionClasses {
 
-    static int count;  
-    
-    static int getValue() {
-        count
-    }
-    
-    static void reset() {
-        count = 0
-    }
-
-    static extensions = { 
-        count++
-    }
-    
+     static List<Class> loadAll(Bundle bundle) {
+         BundleHeaders.extensionClasses(bundle).collect {
+             bundle.loadClass(it)
+         }
+     }
+     
 }

@@ -13,25 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.osgi.extender.basic
+package org.openehealth.ipf.commons.core.extend
 
 /**
  * @author Martin Krasser
  */
-public class ExtensionsCount {
+class ExtensionBlockActivator implements ConditionalActivator {
 
-    static int count;  
-    
-    static int getValue() {
-        count
+    boolean supports(Class<?> extensionClass) {
+        getExtensionsProperty(extensionClass) != null
+    }
+     
+    boolean supports(Object extensionObject) {
+        getExtensionsProperty(extensionObject.class) != null
+    }
+     
+    void activate(Class<?> extensionClass) {
+        extensionClass.extensions.call()
     }
     
-    static void reset() {
-        count = 0
+    void activate(Object extensionObject) {
+        extensionObject.extensions.call()
     }
-
-    static extensions = { 
-        count++
+   
+    private def getExtensionsProperty(Class<?> clazz) {
+        clazz.metaClass.getMetaProperty('extensions')
     }
-    
+     
 }

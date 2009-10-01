@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.commons.map.extend
 
-import org.codehaus.groovy.runtime.InvokerHelper
-import org.openehealth.ipf.commons.map.MappingService
+import org.codehaus.groovy.runtime.InvokerHelperimport org.openehealth.ipf.commons.map.MappingService
 
 /**
  * Adds a couple of methods to common HAPI model classes. This makes HAPI
@@ -80,22 +79,8 @@ class MappingExtension {
 				mappingService?.values(delegate)?.contains(it)
         }
 
-        String.metaClass.methodMissing = methodMissingLogic.curry(mappingService, {it})
+        String.metaClass.methodMissing = MappingExtensionHelper.methodMissingLogic.curry(mappingService, {it})
         
 	}
 	
-    static def methodMissingLogic = { MappingService mappingService, def normalizer, String name, args ->
-        def result
-        if (name.startsWith('mapReverse')) {
-            def key = name.minus('mapReverse').firstLower()
-            result = InvokerHelper.invokeMethod(mappingService, 'getKey', [key, normalizer(delegate), *args])
-        } else if (name.startsWith('map')) {
-            def key = name.minus('map').firstLower()
-            result = InvokerHelper.invokeMethod(mappingService, 'get', [key, normalizer(delegate), *args])
-        } else {
-            throw new MissingMethodException(name, delegate.class, args)
-        }
-        result
-    }
-
 }

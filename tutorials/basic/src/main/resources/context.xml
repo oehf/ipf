@@ -36,7 +36,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
 
     <bean id="coreModelExtension" 
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
+        class="org.openehealth.ipf.platform.camel.core.extend.CoreExtension">
     </bean>
 
     <bean id="sampleModelExtension" 

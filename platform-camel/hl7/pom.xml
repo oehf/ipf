@@ -17,8 +17,10 @@
         </osgi.export.pkg>
         <osgi.import.pkg>
             org.apache.camel.builder,
+            org.apache.camel.model,
             org.openehealth.ipf.modules.hl7.validation,
             org.openehealth.ipf.modules.hl7.validation.support,
+            org.openehealth.ipf.platform.camel.core.extend,
             org.openehealth.ipf.platform.camel.core.model,
             *
         </osgi.import.pkg>

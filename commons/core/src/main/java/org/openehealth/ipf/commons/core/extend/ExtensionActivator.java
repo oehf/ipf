@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.osgi.extender.basic
+package org.openehealth.ipf.commons.core.extend;
 
 /**
  * @author Martin Krasser
  */
-public class ExtensionsCount {
+public interface ExtensionActivator {
 
-    static int count;  
-    
-    static int getValue() {
-        count
-    }
-    
-    static void reset() {
-        count = 0
-    }
-
-    static extensions = { 
-        count++
-    }
+    void activate(Class<?> extensionClass);
+    void activate(Object extensionObject);
     
 }

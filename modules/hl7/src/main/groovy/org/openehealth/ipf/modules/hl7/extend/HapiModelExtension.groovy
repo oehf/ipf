@@ -17,12 +17,14 @@ package org.openehealth.ipf.modules.hl7.extend
 
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.parser.GenericParser
-import org.codehaus.groovy.runtime.InvokerHelper
 import ca.uhn.hl7v2.model.primitive.CommonTS
 import ca.uhn.hl7v2.parser.ModelClassFactory
 
+import org.codehaus.groovy.runtime.InvokerHelper
+
 import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtension
+import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper
 import org.openehealth.ipf.modules.hl7.AckTypeCode
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
@@ -38,21 +40,23 @@ import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
  */
 class HapiModelExtension {
 
-    MappingService mappingService
-	  ModelClassFactory factory = new CustomModelClassFactory()    
+     ModelClassFactory factory = new CustomModelClassFactory()    
      
+    MappingService mappingService
+    
 	def extensions = {
 
         // ----------------------------------------------------------------
         //  Extensions to Collection for mapping values
+        //  (depend on mapping service)
         // ----------------------------------------------------------------
         
         Collection.metaClass.map = {
-                mappingService?.get(it, normalizeCollection(delegate))                  
+            mappingService?.get(it, normalizeCollection(delegate))                  
         }
 
         Collection.metaClass.map = { mappingKey, defaultValue ->
-                mappingService?.get(mappingKey, normalizeCollection(delegate), defaultValue)                    
+            mappingService?.get(mappingKey, normalizeCollection(delegate), defaultValue)                    
         }
         
         Collection.metaClass.mapReverse = { 
@@ -63,8 +67,37 @@ class HapiModelExtension {
             mappingService?.getKey(mappingKey, normalizeCollection(delegate), defaultValue)                 
         }           
 
-        Collection.metaClass.methodMissing = MappingExtension.methodMissingLogic.curry(mappingService, normalizeCollection)
+        Collection.metaClass.methodMissing = MappingExtensionHelper.methodMissingLogic.curry(mappingService, normalizeCollection)
             
+        // ----------------------------------------------------------------
+        //  Extensions to HAPI Primitives
+        //  (depend on mapping service)
+        // ----------------------------------------------------------------
+
+        Type.metaClass.map = { 
+            mappingService?.get(it, delegate.encode())
+        }
+        
+        Type.metaClass.map = { mappingKey, defaultValue ->
+            mappingService?.get(mappingKey, delegate.encode(), defaultValue)
+        }
+
+        Type.metaClass.mapReverse = { 
+            mappingService?.getKey(it, delegate.encode())
+         }
+    
+        Type.metaClass.mapReverse = { mappingKey, defaultValue ->
+            mappingService?.getKey(mappingKey, delegate.encode(), defaultValue)
+        }
+        
+        Type.metaClass.methodMissing = MappingExtensionHelper.methodMissingLogic.curry(mappingService, {it.encode()}) 
+
+        // ################################################################
+        //
+        //  TODO: refactor to extension methods
+        //
+        // ################################################################
+        
         // ----------------------------------------------------------------
         //  Extensions to HAPI messages
         // ----------------------------------------------------------------
@@ -83,16 +116,16 @@ class HapiModelExtension {
 			MessageUtils.triggerEvent(delegate)    				    
         }
         
-	        Message.metaClass.'static'.methodMissing = { String name, args ->
-	            MessageUtils.newMessage(factory, name, args[0])
-	        }        
+        Message.metaClass.'static'.methodMissing = { String name, args ->
+            MessageUtils.newMessage(factory, name, args[0])
+        }        
 
 	    /**
 	     * Positive acknowledgement for the message. The MessageAdapter
 	     * is populated with the same Parser instance.
 	     **/
 	     Message.metaClass.respond =  { String eventType, String triggerEvent ->
-		    	 MessageUtils.response(factory, delegate, eventType, triggerEvent)
+             MessageUtils.response(factory, delegate, eventType, triggerEvent)
 	     }
         
 	    /**
@@ -100,15 +133,15 @@ class HapiModelExtension {
 	     * is populated with the same Parser instance.
 	     **/
 	     Message.metaClass.ack =  {
-		    	 MessageUtils.ack(factory, delegate)
-	    }
+	         MessageUtils.ack(factory, delegate)
+	     }
 
 	    /**
 	     * Negative acknowledgement for the underlying message. The MessageAdapter
 	     * is populated with the same Parser instance.
 	     **/
 	    Message.metaClass.nak = { String cause, AckTypeCode ackTypeCode -> 
-		    	 MessageUtils.nak(factory, delegate, cause, ackTypeCode)
+            MessageUtils.nak(factory, delegate, cause, ackTypeCode)
 	    }
 		
 	    /**
@@ -116,7 +149,7 @@ class HapiModelExtension {
 	     * is populated with the same Parser instance.
 	     **/
 	    Message.metaClass.nak = { AbstractHL7v2Exception e, AckTypeCode ackTypeCode ->
-	    		MessageUtils.nak(factory, delegate, e, ackTypeCode)
+            MessageUtils.nak(factory, delegate, e, ackTypeCode)
 	    }
 
 	    /**
@@ -124,7 +157,7 @@ class HapiModelExtension {
 	     * is populated with the same Parser instance.
 	     **/
         Message.metaClass.'static'.defaultNak = { AbstractHL7v2Exception e, AckTypeCode ackTypeCode, String version  ->
-        	MessageUtils.defaultNak(e, ackTypeCode, version)
+            MessageUtils.defaultNak(e, ackTypeCode, version)
 	    }
         
 	    /**
@@ -142,58 +175,25 @@ class HapiModelExtension {
     		MessageUtils.validate(delegate, validationContext)
 	    }
 	    
-	        // ----------------------------------------------------------------
-	        //  Extensions to HAPI Segments
-	        // ----------------------------------------------------------------
-
-	        Segment.metaClass.'static'.methodMissing = { String segmentName, args ->
-	            MessageUtils.newSegment(factory, segmentName, args[0])	                
-	        }
-	    
-        
         // ----------------------------------------------------------------
-        //  Extensions to HAPI Primitives
+        //  Extensions to HAPI Segments
         // ----------------------------------------------------------------
 
-	        Primitive.metaClass.'static'.methodMissing = { String primitiveName, args ->
-	            if (args.size() > 1 && args[1] instanceof String) {
-	                MessageUtils.newPrimitive(factory, primitiveName, args[0], args[1])
-	            } else {
-	                MessageUtils.newPrimitive(factory, primitiveName, args[0], null)	                
-	            }
-	        }
-
-        Type.metaClass.map = { 
-        	mappingService?.get(it, delegate.encode())
+        Segment.metaClass.'static'.methodMissing = { String segmentName, args ->
+            MessageUtils.newSegment(factory, segmentName, args[0])	                
         }
         
-        Type.metaClass.map = { mappingKey, defaultValue ->
-    		mappingService?.get(mappingKey, delegate.encode(), defaultValue)
-	    }
-
-        Type.metaClass.mapReverse = { 
-    		mappingService?.getKey(it, delegate.encode())
-	     }
-    
-        Type.metaClass.mapReverse = { mappingKey, defaultValue ->
-			mappingService?.getKey(mappingKey, delegate.encode(), defaultValue)
-	    }
-        
-        Type.metaClass.methodMissing = MappingExtension.methodMissingLogic.curry(mappingService, {it.encode()}) 
-
         // ----------------------------------------------------------------
         //  Extensions to HAPI Composites
         // ----------------------------------------------------------------
 
-	        Composite.metaClass.'static'.methodMissing = { String compositeName, args ->
-	            if (args.size() > 1 && args[1] instanceof Map) {
-	                MessageUtils.newComposite(factory, compositeName, args[0], args[1])
-	            } else {
-	                MessageUtils.newComposite(factory, compositeName, args[0], null)	                
-
-	            }
-
-	        }
+        Composite.metaClass.'static'.methodMissing = { String compositeName, args ->
+            if (args.size() > 1 && args[1] instanceof Map) {
+                MessageUtils.newComposite(factory, compositeName, args[0], args[1])
+            } else {
+                MessageUtils.newComposite(factory, compositeName, args[0], null)	                
+            }
+        }
 
         Type.metaClass.encode = { ->
         	MessageUtils.pipeEncode(delegate)
@@ -203,9 +203,27 @@ class HapiModelExtension {
     		MessageUtils.pipeEncode(delegate)
 	    }
 
+        // ----------------------------------------------------------------
+        //  Extensions to HAPI Primitives
+        // ----------------------------------------------------------------
+
+        Primitive.metaClass.'static'.methodMissing = { String primitiveName, args ->
+            if (args.size() > 1 && args[1] instanceof String) {
+                MessageUtils.newPrimitive(factory, primitiveName, args[0], args[1])
+            } else {
+                MessageUtils.newPrimitive(factory, primitiveName, args[0], null)                    
+            }
+        }
+
 	}
 	
-    static def normalizeCollection = { Collection c -> 
+    // ################################################################
+    //
+    //  Place extension methods here ...
+    //
+    // ################################################################
+     
+    private static def normalizeCollection = { Collection c -> 
         c.collect {
             it instanceof Type ? MessageUtils.pipeEncode(it) : it.toString()
         }

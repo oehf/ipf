@@ -20,10 +20,15 @@
             org.openehealth.ipf.osgi.commons.bundle,
             *
         </osgi.import.pkg>
-        <osgi.bundle.activator>org.openehealth.ipf.osgi.extender.basic.ExtensionActivator</osgi.bundle.activator>
+        <osgi.bundle.activator>org.openehealth.ipf.osgi.extender.basic.ExtenderActivator</osgi.bundle.activator>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-commons</artifactId>

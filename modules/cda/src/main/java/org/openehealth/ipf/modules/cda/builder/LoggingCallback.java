@@ -18,9 +18,6 @@ package org.openehealth.ipf.modules.cda.builder;
 import groovy.lang.Closure;
 import groovytools.builder.CreateNodeEvent;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * Example of a MetaBuilder Visitor object that is called on every 
  * node creation.
@@ -30,7 +27,6 @@ import org.apache.commons.logging.LogFactory;
 public class LoggingCallback extends Closure {
 
     private static final long serialVersionUID = 4962003375401288943L;
-    private static Log LOG = LogFactory.getLog(LoggingCallback.class);
     private int nodesCreated;
 
     public LoggingCallback() {

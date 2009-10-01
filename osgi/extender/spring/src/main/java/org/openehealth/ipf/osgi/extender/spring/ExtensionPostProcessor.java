@@ -15,6 +15,12 @@
  */
 package org.openehealth.ipf.osgi.extender.spring;
 
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openehealth.ipf.commons.core.extend.DefaultActivator;
+import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
 import org.osgi.framework.BundleContext;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.osgi.extender.OsgiBeanFactoryPostProcessor;
@@ -24,9 +30,28 @@ import org.springframework.osgi.extender.OsgiBeanFactoryPostProcessor;
  */
 public class ExtensionPostProcessor implements OsgiBeanFactoryPostProcessor {
 
+    private static final Log LOG = LogFactory.getLog(ExtensionPostProcessor.class);
+    
+    private ExtensionActivator extensionActivator;
+    
+    public ExtensionPostProcessor() {
+        extensionActivator = new DefaultActivator();
+    }
+    
     @Override
     public void postProcessBeanFactory(BundleContext bundleContext, ConfigurableListableBeanFactory beanFactory) {
-        ExtensionBean.activateAll(bundleContext.getBundle(), beanFactory);
+        activateExtensionBeans(ExtensionBeans.loadAll(bundleContext.getBundle(), beanFactory));
     }
 
+    private void activateExtensionBeans(List<Object> beans) {
+        for (Object bean : beans) {
+            try {
+                extensionActivator.activate(bean);
+                LOG.info("Activated extension bean " + bean);
+            } catch (Exception e) {
+                LOG.error("Couldn't activate extension bean " + bean, e);
+            }
+        }
+    }
+    
 }

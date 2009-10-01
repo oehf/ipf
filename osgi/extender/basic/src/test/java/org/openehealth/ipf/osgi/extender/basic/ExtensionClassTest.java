@@ -21,8 +21,6 @@ import static org.openehealth.ipf.osgi.commons.bundle.BundleHeaders.EXTENSION_CL
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openehealth.ipf.osgi.extender.basic.ExtensionsCount;
-import org.openehealth.ipf.osgi.extender.basic.ExtensionClass;
 import org.osgi.framework.Bundle;
 import org.springframework.osgi.mock.MockBundle;
 
@@ -47,14 +45,8 @@ public class ExtensionClassTest {
 
     @Test
     public void testLoadAll() {
-        assertEquals(1, ExtensionClass.loadAll(bundle).size());
+        assertEquals(1, ExtensionClasses.loadAll(bundle).size());
         assertEquals(0, ExtensionsCount.getValue());
-    }
-
-    @Test
-    public void testActivateAll() {
-        ExtensionClass.activateAll(bundle);
-        assertEquals(1, ExtensionsCount.getValue());
     }
 
 }

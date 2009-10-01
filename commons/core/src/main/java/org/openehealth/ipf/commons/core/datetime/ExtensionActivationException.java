@@ -13,25 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.osgi.extender.basic
+package org.openehealth.ipf.commons.core.datetime;
 
 /**
  * @author Martin Krasser
  */
-public class ExtensionsCount {
+@SuppressWarnings("serial")
+public class ExtensionActivationException extends RuntimeException {
 
-    static int count;  
-    
-    static int getValue() {
-        count
-    }
-    
-    static void reset() {
-        count = 0
+    public ExtensionActivationException() {
+        super();
     }
 
-    static extensions = { 
-        count++
+    public ExtensionActivationException(String message, Throwable cause) {
+        super(message, cause);
     }
-    
+
+    public ExtensionActivationException(String message) {
+        super(message);
+    }
+
+    public ExtensionActivationException(Throwable cause) {
+        super(cause);
+    }
+
 }

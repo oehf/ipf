@@ -24,6 +24,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-commons</artifactId>
             <version>${pom.version}</version>

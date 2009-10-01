@@ -29,11 +29,11 @@ import org.springframework.osgi.mock.MockBundle;
 /**
  * @author Martin Krasser
  */
-public class ExtensionActivatorTest {
+public class ExtenderActivatorTest {
 
     private static BundleEvent bundleEvent;
     
-    private static ExtensionActivator bundleListener;
+    private static ExtenderActivator bundleListener;
     
     @BeforeClass
     @SuppressWarnings("unchecked")
@@ -41,7 +41,7 @@ public class ExtensionActivatorTest {
         Bundle bundle = new MockBundle();
         bundle.getHeaders().put(EXTENSION_CLASSES_HEADER, ExtensionsCount.class.getName());
         bundleEvent = new BundleEvent(BundleEvent.STARTED, bundle);
-        bundleListener = new ExtensionActivator();
+        bundleListener = new ExtenderActivator();
     }
 
     @Before

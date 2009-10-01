@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.osgi.extender.basic
+package org.openehealth.ipf.osgi.extender.spring
+
+import org.openehealth.ipf.osgi.commons.bundle.BundleHeaders
+import org.osgi.framework.Bundle
+import org.springframework.beans.factory.BeanFactory
 
 /**
  * @author Martin Krasser
  */
-public class ExtensionsCount {
+class ExtensionBeans {
 
-    static int count;  
-    
-    static int getValue() {
-        count
-    }
-    
-    static void reset() {
-        count = 0
-    }
-
-    static extensions = { 
-        count++
-    }
-    
+     static List<Object> loadAll(Bundle bundle, BeanFactory beanFactory) {
+         BundleHeaders.extensionBeans(bundle).collect {
+             beanFactory.getBean(it)
+         }
+     }
+     
 }
