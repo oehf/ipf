@@ -18,8 +18,7 @@ package org.openehealth.ipf.commons.test.performance.dispatcher;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 
 /**
- * Extends the <code>MeasurementDispatcher</code> functionality providing
- * synchronous dispatching of {@link MeasurementHistory} objects.
+ * Provides synchronous dispatching of {@link MeasurementHistory} objects.
  * 
  * @see MeasurementDispatcher
  * @author Mitko Kolev
@@ -28,7 +27,6 @@ public class SynchronousMeasurementDispatcher extends MeasurementDispatcher {
 
     @Override
     public void dispatch(MeasurementHistory measurementHistory) {
-        updateStatisticsManager(measurementHistory);
-        updatePerformanceMeasurementServer(measurementHistory);
+        defaultDispatch(measurementHistory);
     }
 }

@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.test.performance.server;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
@@ -28,18 +26,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.test.http.client.Client;
-import org.openehealth.ipf.commons.test.http.client.ResponseHandler;
 import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Timestamp;
-import org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher;
-
-import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.marshall;
+import org.openehealth.ipf.commons.test.performance.dispatcher.SynchronousMeasurementDispatcher;
 
 /**
- * Tests to determine the optimal performance settings of the Client and/or the
- * performance measurement server. To before you run this test, run the
+ * Tests to determine the optimal performance settings of the HTTP Client and/or
+ * the performance measurement server. To before you run this test, run the
  * performance measurement server and comment the @Ignore annotation
  * 
  * @author Mitko Kolev
@@ -52,7 +46,7 @@ public class MultiThreadedPerformanceMeasurementServerTest {
      */
     private final Executor executor;
 
-    private final Client client;
+    private final SynchronousMeasurementDispatcher dispatcher;
 
     private final CountDownLatch latch;
 
@@ -60,24 +54,16 @@ public class MultiThreadedPerformanceMeasurementServerTest {
 
     int executions = 10000;
 
-    int threadsCount = 200;
+    int threadsCount = 5;
 
     int maxConnectionsPerHost = 5;
 
     public MultiThreadedPerformanceMeasurementServerTest() throws Exception {
         executor = Executors.newFixedThreadPool(threadsCount);
         latch = new CountDownLatch(executions);
-        client = new Client();
-        client.setServerUrl(new URL(performanceMeasurementServerURL));
-        client.setContentType("text/xml; Content-Encoding: "
-                + MeasurementDispatcher.CONTENT_ENCODING);
-        client.setDefaultMaxConnectionsPerHost(maxConnectionsPerHost);
-        client.setHandler(new ResponseHandler() {
-            @Override
-            public void handleResponse(InputStream response) throws Exception {
-                // do nothing
-            }
-        });
+        dispatcher = new SynchronousMeasurementDispatcher();
+        dispatcher.setPerformanceMeasurementServerURL(new URL(
+                performanceMeasurementServerURL));
 
     }
 
@@ -126,12 +112,11 @@ public class MultiThreadedPerformanceMeasurementServerTest {
                 TimeUnit.NANOSECONDS), " intermediate9"));
         history.add(new Measurement(new Timestamp(System.nanoTime(),
                 TimeUnit.NANOSECONDS), "intermediate 10"));
+
         history.add(new Measurement(new Timestamp(System.nanoTime(),
                 TimeUnit.NANOSECONDS), "finish"));
 
-        String xml = marshall(history);
-        client.execute(new ByteArrayInputStream(xml
-                .getBytes(MeasurementDispatcher.CONTENT_ENCODING)));
+        dispatcher.dispatch(history);
     }
 
 }

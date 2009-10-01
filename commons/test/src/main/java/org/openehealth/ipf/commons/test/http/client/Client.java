@@ -36,9 +36,9 @@ public class Client {
     
     private ResponseHandler handler;
     
-    private HttpClient client;
+    private final HttpClient client;
     
-    private HttpConnectionManager mgr; 
+    private final HttpConnectionManager mgr; 
     
     public Client() {
         this.mgr = new MultiThreadedHttpConnectionManager();
@@ -50,6 +50,13 @@ public class Client {
         mgr.getParams().setDefaultMaxConnectionsPerHost(numConnections);
     }
     
+    public int getDefaultMaxConnectionsPerHost() {
+        return mgr.getParams().getDefaultMaxConnectionsPerHost();
+    }
+    
+    public URL getServerUrl() {
+        return serverUrl;
+    }
     public void setServerUrl(URL serverUrl) {
         this.serverUrl = serverUrl;
     }

@@ -86,8 +86,7 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
         try {
             while (true) {
                 MeasurementHistory measurementHistory = queue.take();
-                updateStatisticsManager(measurementHistory);
-                updatePerformanceMeasurementServer(measurementHistory);
+                defaultDispatch(measurementHistory);
             }
         } catch (InterruptedException e) {
             LOG.warn("Consumer of "

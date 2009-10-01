@@ -23,6 +23,7 @@ import java.net.URL;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.test.http.client.Client;
@@ -35,9 +36,11 @@ import org.springframework.beans.factory.InitializingBean;
 import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.marshall;
 
 /**
- * Dispatches performance measurements to a <code>StatisticsManager</code>.
- * Additionally dispatches to a performance measurement server, if such is
- * configured with {@link #setPerformanceMeasurementServerURL(String)}
+ * Used to dispatch performance measurements to either a
+ * <code>StatisticsManager</code>, set with
+ * {@link #setStatisticsManager(StatisticsManager)}, a performance measurement
+ * server, if such is configured with
+ * {@link #setPerformanceMeasurementServerURL(URL)} or both.
  * 
  * @see StatisticsManager
  * @author Mitko Kolev
@@ -46,20 +49,27 @@ public abstract class MeasurementDispatcher implements InitializingBean {
 
     public static String CONTENT_ENCODING = "UTF-8";
 
-    // TODO 1 review the initial implementation with the test Client
-    // TODO 2 write a test for the the setting with the performance server URL
-    // TODO 3 Expose the configuration of the test client
     private final static Log LOG = LogFactory
             .getLog(MeasurementDispatcher.class);
 
     private StatisticsManager statisticsManager;
 
     /**
-     * The client should provide the settings of the HTTP Client
+     * The client provides the settings of the HTTP Client
      */
-    private Client client;
+    private final Client client;
 
-    private String performanceMeasurementServerURL;
+    public MeasurementDispatcher() {
+        client = new Client();
+        client.setContentType("text/xml; charset=" + CONTENT_ENCODING);
+        client.setDefaultMaxConnectionsPerHost(5);
+        client.setHandler(new ResponseHandler() {
+            @Override
+            public void handleResponse(InputStream response) throws Exception {
+                // do nothing
+            }
+        });
+    }
 
     /**
      * Dispatches the measurementHistory.
@@ -67,6 +77,16 @@ public abstract class MeasurementDispatcher implements InitializingBean {
      * @param measurementHistory
      */
     public abstract void dispatch(MeasurementHistory measurementHistory);
+
+    /**
+     * Default implementation
+     * 
+     * @param measurementHistory
+     */
+    public void defaultDispatch(MeasurementHistory measurementHistory) {
+        updateStatisticsManager(measurementHistory);
+        updatePerformanceMeasurementServer(measurementHistory);
+    }
 
     /**
      * The target statisticsManager
@@ -99,15 +119,47 @@ public abstract class MeasurementDispatcher implements InitializingBean {
      *            the performanceMeasurementServerURL to set
      */
     public void setPerformanceMeasurementServerURL(
-            String performanceMeasurementServerURL) {
-        this.performanceMeasurementServerURL = performanceMeasurementServerURL;
+            URL performanceMeasurementServerURL) {
+        notNull(performanceMeasurementServerURL,
+                "The performanceMeasurementServerURL must not be null!");
+
+        client.setServerUrl(performanceMeasurementServerURL);
     }
 
     /**
      * @return the performanceMeasurementServerURL
      */
-    public String getPerformanceMeasurementServerURL() {
-        return performanceMeasurementServerURL;
+    public URL getPerformanceMeasurementServerURL() {
+        return client.getServerUrl();
+    }
+
+    /**
+     * @return The max connections per host of the HTTP client used by this
+     *         dispatcher, to send measurements to the performance measurement
+     *         server.
+     * @see HttpConnectionManagerParams#getDefaultMaxConnectionsPerHost()
+     */
+    public int getDefaultMaxConnectionsPerHost() {
+        return client.getDefaultMaxConnectionsPerHost();
+    }
+
+    /**
+     * The max connections per host of the HTTP client used by this dispatcher,
+     * to send measurements to the performance measurement server. The default
+     * value is 5
+     * 
+     * @param numConnections
+     *            The number of connections to be used. The number must be
+     *            greater than 2
+     * 
+     * @see HttpConnectionManagerParams#setDefaultMaxConnectionsPerHost(int)
+     */
+    public void setDefaultMaxConnectionsPerHost(int numConnections) {
+        if (numConnections < 2) {
+            throw new IllegalArgumentException(
+                    "You must set more than 2 default max connections.");
+        }
+        client.setDefaultMaxConnectionsPerHost(numConnections);
     }
 
     /**
@@ -118,6 +170,9 @@ public abstract class MeasurementDispatcher implements InitializingBean {
      *            a <code>MeasurementHistory</code> object.
      */
     protected void updateStatisticsManager(MeasurementHistory measurementHistory) {
+        if (!isUsingStatisticsManager()) {
+            return;
+        }
         notNull(measurementHistory, "The measurementHistory must not be null!");
         this.statisticsManager.updateStatistics(measurementHistory);
     }
@@ -132,10 +187,10 @@ public abstract class MeasurementDispatcher implements InitializingBean {
      */
     protected void updatePerformanceMeasurementServer(
             MeasurementHistory measurementHistory) {
-        notNull(measurementHistory, "The measurementHistory must not be null!");
         if (!isUsingPerformanceMeasurementServer()) {
             return;
         }
+        notNull(measurementHistory, "The measurementHistory must not be null!");
         try {
             // marshal and send the current measurement history
             String xml = marshall(measurementHistory);
@@ -149,7 +204,7 @@ public abstract class MeasurementDispatcher implements InitializingBean {
             throw new MeasurementLostException(msg, e);
         } catch (Exception e) {
             String msg = "Failed to send performance measurement to a performance measurement server at "
-                    + performanceMeasurementServerURL;
+                    + getPerformanceMeasurementServerURL();
             LOG.error(msg, e);
             throw new MeasurementLostException(msg, e);
 
@@ -157,46 +212,48 @@ public abstract class MeasurementDispatcher implements InitializingBean {
     }
 
     /**
-     * Returns true if a performance measurement server has been configured.
+     * Returns true if the dispatcher will send measurements to a performance
+     * measurement server, if such is configured with
+     * {@link #setPerformanceMeasurementServerURL(URL)}
      * 
      * @return true if the {@link #getPerformanceMeasurementServerURL()} will
-     *         return a not null or empty URL String. Returns false otherwise.
+     *         return a not null or empty URL. Returns false otherwise.
      */
     public boolean isUsingPerformanceMeasurementServer() {
-        if (performanceMeasurementServerURL == null
-                || performanceMeasurementServerURL.isEmpty()) {
-            return false;
-        }
-        return true;
+        return getPerformanceMeasurementServerURL() != null;
     }
 
     /**
-     * Checks if the single statisticsManager is set and initializes the HTTP
-     * client, if performance measurement server is used.
+     * Returns true if the dispatcher will send measurements to a statistics
+     * manager. It makes sense to use a statistics manager if the application
+     * collects performance statistics. If this is not the case, a performance
+     * measurement server should be used.
+     * 
+     * @return true if there is a statistics manager set with
+     *         {@link #setStatisticsManager(StatisticsManager)}, false
+     *         otherwise.
+     */
+    public boolean isUsingStatisticsManager() {
+        return statisticsManager != null;
+    }
+
+    /**
+     * Logs the settings
      */
     public void afterPropertiesSet() throws Exception {
-        if (statisticsManager == null) {
-            throw new IllegalArgumentException("The "
-                    + MeasurementDispatcher.class.getName()
-                    + " msut be configured with a "
-                    + StatisticsManager.class.getName());
+        if (isUsingStatisticsManager()) {
+            LOG.info("The " + this.getClass().getSimpleName()
+                    + " is using a statistics manager ");
+        } else {
+            LOG.info("The " + MeasurementDispatcher.class.getSimpleName()
+                    + " is not configured to use a statistics manager ");
         }
-        // initialize the preformane measurement server client
+        // initialize the performance measurement server client
         if (isUsingPerformanceMeasurementServer()) {
-            client = new Client();
-            client.setServerUrl(new URL(performanceMeasurementServerURL));
-            client.setContentType("text/xml; charset=" + CONTENT_ENCODING);
-            client.setHandler(new ResponseHandler() {
-                @Override
-                public void handleResponse(InputStream response)
-                        throws Exception {
-                    // do nothing
-                }
-            });
             LOG
                     .info(this.getClass().getSimpleName()
                             + " is configured to use a performance measurement server with URL "
-                            + performanceMeasurementServerURL);
+                            + getPerformanceMeasurementServerURL());
         } else {
             LOG.info("Performance measurement server will not be used, "
                     + "because no URL is configured in "
