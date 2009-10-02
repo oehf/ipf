@@ -136,7 +136,7 @@ class BidiMappingService implements MappingService {
  		if (elseClause instanceof Closure) {
  			return elseClause.call(key)
  		}
- 		elseClause != null ? elseClause.toString() : null
+ 		elseClause
  	}
  	
     private void updateReverseMap() {
