@@ -34,15 +34,19 @@ class ExtensionMethodActivator implements ConditionalActivator {
      }
       
      void activate(Class<?> extensionClass) {
+         StringBuffer buffer = new StringBuffer()
          getExtensionMethods(extensionClass).each { method ->
-             registerExtensionMethod(extensionClass, method)
+             generateExtensionCode(extensionClass, method, buffer)
          }
+         activateExtensionCode(extensionClass, buffer.toString())
      }
      
      void activate(Object extensionObject) {
+         StringBuffer buffer = new StringBuffer()
          getExtensionMethods(extensionObject.class).each { method ->
-             registerExtensionMethod(extensionObject.class, method)
+             generateExtensionCode(extensionObject.class, method, buffer)
          }
+         activateExtensionCode(extensionObject.class, buffer.toString())
      }
 
      private static def getExtensionMethods(def clazz) {
@@ -52,8 +56,13 @@ class ExtensionMethodActivator implements ConditionalActivator {
              .findAll{it.name != 'getExtensions'}
              .findAll{it.name != 'setExtensions'}
      }
+
+     private static def activateExtensionCode(def clazz, def code) {
+         LOG.debug("Activate extension code: ${code}")
+         new GroovyShell(clazz.classLoader).evaluate(code)
+     }
      
-     private static def registerExtensionMethod(def clazz, def method) {
+     private static def generateExtensionCode(def clazz, def method, def buffer) {
          // the class to extend 
          def target = method.parameterTypes[0]
          // all parameter types except first
@@ -71,8 +80,7 @@ class ExtensionMethodActivator implements ConditionalActivator {
              "${target.name}.metaClass.${method.name} = {" +
              "${paramTypesList} -> ${clazz.name}.${method.name}(${paramNamesList}) " +
              "}"
-         LOG.debug("Compile and extecute extension code: $code")
-         new GroovyShell(clazz.classLoader).evaluate(code)
+         buffer.append('\n').append(code)
      }
      
 }

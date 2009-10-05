@@ -21,6 +21,8 @@ import org.openehealth.ipf.platform.camel.event.model.PublishProcessorDefinition
 
 /**
  * Extension that defines the DSL elements related to the IPF event infrastructure.
+ * 
+ * @author Martin Krasser
  * @author Jens Riemschneider
  */
 public class EventExtension {

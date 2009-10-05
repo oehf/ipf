@@ -29,6 +29,8 @@ import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression;
 
 /**
  * HL7 DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * 
+ * @author Martin Krasser
  * @author Jens Riemschneider
  */
 public class Hl7Extension {

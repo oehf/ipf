@@ -30,6 +30,8 @@ import org.apache.camel.spi.DataFormat;
 
 /**
  * Flow DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * 
+ * @author Martin Krasser
  * @author Jens Riemschneider
  */
 public class FlowExtension {

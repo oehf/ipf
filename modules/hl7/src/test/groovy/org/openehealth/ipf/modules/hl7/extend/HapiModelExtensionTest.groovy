@@ -19,6 +19,7 @@ import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.model.v25.segment.NK1
 
+import org.openehealth.ipf.commons.core.extend.DefaultActivator
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtension
 import org.openehealth.ipf.modules.hl7.AckTypeCode
@@ -33,23 +34,25 @@ import org.springframework.core.io.ClassPathResource
  */
 public class HapiModelExtensionTest extends GroovyTestCase {
 	
-    def mappingService
-	def defMappingExtension
-    def hl7MappingExtension
+    static def mappingService
+	static def defMappingExtension
+    static def hl7MappingExtension
 
     static {
         ExpandoMetaClass.enableGlobally()
     }
     
     void setUp() {
+        if (mappingService) return
         mappingService = new BidiMappingService()
         mappingService.setMappingScript(new ClassPathResource("example2.map"))
         defMappingExtension = new MappingExtension()
         hl7MappingExtension = new HapiModelExtension()
         defMappingExtension.mappingService = mappingService
         hl7MappingExtension.mappingService = mappingService
-        defMappingExtension.extensions.call()
-        hl7MappingExtension.extensions.call()
+        DefaultActivator activator = new DefaultActivator()
+        activator.activate(defMappingExtension)
+        activator.activate(hl7MappingExtension)
     }
 	
     void testMatches() {

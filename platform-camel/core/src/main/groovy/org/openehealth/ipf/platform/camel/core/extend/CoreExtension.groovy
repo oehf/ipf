@@ -68,6 +68,8 @@ import org.openehealth.ipf.platform.camel.core.model.InterceptDefinition;
 
 /**
  * Core DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * 
+ * @author Martin Krasser
  * @author Jens Riemschneider
  */
 public class CoreExtension {
