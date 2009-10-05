@@ -321,7 +321,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <page>http://repo.openehealth.org/confluence/display/ipf/IPF+reference+-+single#</page>
+                            <page>http://repo.openehealth.org/confluence/display/ipf2/IPF+reference+-+single#</page>
                             <head><![CDATA[ 
 								<title>Open eHealth Integration Platform reference manual</title>
 								<link rel="stylesheet" href="file:${basedir}/src/main/resources/styles/site.css" type="text/css" />
