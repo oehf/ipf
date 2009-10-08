@@ -73,11 +73,11 @@ public class MllpMarshalUtils {
         } else if(body instanceof ca.uhn.hl7v2.model.Message) {
             s = parser.encode((ca.uhn.hl7v2.model.Message) body);
         } else if(body instanceof File) {
-            s = readFile(body);
+            s = readFile(body, charset);
         } else if(body instanceof GenericFile<?>) {
             Object file = ((GenericFile<?>) body).getFile();
             if(file instanceof File) {
-                s = readFile(file);
+                s = readFile(file, charset);
             }
         } else {
             // In standard Camel distribution this will concern  
@@ -92,8 +92,9 @@ public class MllpMarshalUtils {
     }
     
 
-    private static String readFile(Object file) throws Exception {
-        return IOConverter.toString((File) file).replace('\n', '\r');
+    private static String readFile(Object file, String charset) throws Exception {
+        byte[] bytes = IOConverter.toByteArray((File) file);
+        return new String(bytes, charset).replace('\n', '\r');
     }
     
     
