@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.camel.Message;
+import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.converter.IOConverter;
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
@@ -56,7 +57,7 @@ public class MllpMarshalUtils {
      *      String representing the original exchange or <tt>null</tt>
      *      when the data type is unknown. 
      * @throws Exception
-     *      nn parsing and marshaling errors.
+     *      on parsing and marshaling errors.
      */
     public static String marshalStandardTypes(Message message, String charset, Parser parser) throws Exception {
         Object body = message.getBody();
@@ -72,7 +73,12 @@ public class MllpMarshalUtils {
         } else if(body instanceof ca.uhn.hl7v2.model.Message) {
             s = parser.encode((ca.uhn.hl7v2.model.Message) body);
         } else if(body instanceof File) {
-            s = IOConverter.toString((File) body).replace('\n', '\r');
+            s = readFile(body);
+        } else if(body instanceof GenericFile<?>) {
+            Object file = ((GenericFile<?>) body).getFile();
+            if(file instanceof File) {
+                s = readFile(file);
+            }
         } else {
             // In standard Camel distribution this will concern  
             // byte[], InputStream and ByteBuffer.
@@ -83,6 +89,11 @@ public class MllpMarshalUtils {
             }
         }
         return s;
+    }
+    
+
+    private static String readFile(Object file) throws Exception {
+        return IOConverter.toString((File) file).replace('\n', '\r');
     }
     
     
@@ -103,7 +114,8 @@ public class MllpMarshalUtils {
             File.class,
             InputStream.class,
             java.nio.ByteBuffer.class,
-            byte[].class
+            byte[].class,
+            GenericFile.class
         };
         
         for(Class<?> type : knownTypes) {
