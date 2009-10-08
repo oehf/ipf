@@ -1,0 +1,6 @@
+Third party licences
+--------------------
+
+- Report
+
+http://repo.openehealth.org/sites/thirdparty/license/reports/ipf-2.0/licenseComplianceReport.html
