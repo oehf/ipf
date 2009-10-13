@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.core.datetime;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * @author Martin Krasser
@@ -23,9 +24,9 @@ import java.util.Date;
 public class Duration {
 
     private static final String EMPTY = "";
-    private static final String PATTERN = "^[0-9]+[smhd]?$";
-    private static final String PATTERN_UNIT = "[smhd]";
-    private static final String PATTERN_NUMBER = "[0-9]+";
+    private static final Pattern PATTERN = Pattern.compile("^[0-9]+[smhd]?$");
+    private static final Pattern PATTERN_UNIT = Pattern.compile("[smhd]");
+    private static final Pattern PATTERN_NUMBER = Pattern.compile("[0-9]+");
     
     private static final String SECOND = "s";
     private static final String MINUTE = "m";
@@ -71,12 +72,12 @@ public class Duration {
      */
     public static Duration parse(String duration) {
         String d = duration.trim();
-        if (!d.matches(PATTERN)) {
+        if (!PATTERN.matcher(d).matches()) {
             throw new DurationFormatException(
                     "Duration string " + duration + " doesn't match pattern " + PATTERN);
         }
-        String u = d.replaceFirst(PATTERN_NUMBER, EMPTY);
-        long v = Long.parseLong(d.replaceFirst(PATTERN_UNIT, EMPTY));
+        String u = PATTERN_NUMBER.matcher(d).replaceFirst(EMPTY);
+        long v = Long.parseLong(PATTERN_UNIT.matcher(d).replaceFirst(EMPTY));
         if (u.length() == 0) {
             // v already in units of milliseconds
         } else if (u.equals(SECOND)) {

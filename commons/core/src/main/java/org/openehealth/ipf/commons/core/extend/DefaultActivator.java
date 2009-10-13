@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.core.extend;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openehealth.ipf.commons.core.datetime.ExtensionActivationException;
 
 /**
  * @author Martin Krasser
