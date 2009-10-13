@@ -6,10 +6,7 @@
     <name>commons-ihe-atna</name>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.atna*</osgi.export.pkg>
-        <osgi.dynamic.import.pkg>
-            *
-        </osgi.dynamic.import.pkg>
+        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.atna.*</osgi.export.pkg>
     </properties>
 
     <parent>
