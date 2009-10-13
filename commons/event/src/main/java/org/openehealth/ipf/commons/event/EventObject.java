@@ -27,13 +27,23 @@ import java.util.Map;
  * <p>
  * This class can be used as a base class for event implementations.
  * It provides meta data support for events via a simple {@code Map}.
+ * <p>
+ * Subclasses should be aware that an event object is treated as
+ * immutable after {@link EventEngine#publish} was called. This cannot
+ * be enforced by the event engine itself. Subclasses should therefore
+ * use final immutable members if possible.
  * @author Jens Riemschneider
  */
 public class EventObject implements Serializable {
     /** Serial Version UID */
     private static final long serialVersionUID = -7451402744233567966L;
-    
-    private Map<String, Object> metaDataMap = new HashMap<String, Object>();
+
+    // This map is treated as unmodifiable after EventEngine.publish() has
+    // been called. Ideally it would be created and filled within the constructor.
+    // However, the event engine does not construct these objects, it simply
+    // publishes them. This means that write access to this map must be possible
+    // simply to be able to fill in the meta data in publish().
+    private final Map<String, Object> metaDataMap = new HashMap<String, Object>();
 
     /**
      * Returns a meta data property from this event
@@ -47,13 +57,18 @@ public class EventObject implements Serializable {
     }
 
     /**
-     * Sets a meta data property for this event
+     * Sets a meta data property for this event.
+     * <p>
+     * Meta data should only be set before calling {@link EventEngine#publish}.
+     * Therefore, this method is package-private. Due to the nature of the
+     * Java language this method cannot be hidden from any subclassing
+     * event objects. Such classes should not call this method.
      * @param key
      *          the key, specifying the meta data property
      * @param value
      *          the value of the property
      */
-    public void setMetaData(String key, Object value) {
+    final void setMetaData(String key, Object value) {
         notNull(key, "key cannot be null");
         metaDataMap.put(key, value);
     }
