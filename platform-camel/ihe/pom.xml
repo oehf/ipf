@@ -33,6 +33,7 @@
     </dependencies>
 
     <modules>
+        <module>atna</module> 
         <module>xds</module> 
         <module>mllp</module>
         <module>pix</module>
