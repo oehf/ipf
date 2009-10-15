@@ -83,7 +83,10 @@ public enum ErrorCode {
     /** The unique ID of a repository could not be resolved to a valid document repository 
      *  or the value does not match that of the document repository. */
     UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId"),
-    
+    /** A query resulted in returning information about multiple patients, which is forbidden
+     *  because of security reasons. */ 
+    RESULT_NOT_SINGLE_PATIENT("XDSResultNotSinglePatient"),
+
     /** Some additional error codes from XCA, dealing with homeCommunityIDs */
     
     /** A value for the homeCommunityId is not recognized */

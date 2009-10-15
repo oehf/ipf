@@ -16,30 +16,17 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
-
-import java.util.EnumMap;
-import java.util.Map;
-
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.CXValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.NopValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.TimeValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.AssociationValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.ChoiceValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.CodeValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.NumberValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.QueryListCodeValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.QueryParameterValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.StatusValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.StringListValidation;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.StringValidation;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * Validates an {@link EbXMLAdhocQueryRequest}.
@@ -60,10 +47,10 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         validations = new EnumMap<QueryType, QueryParameterValidation[]>(QueryType.class);
         validations.put(QueryType.FIND_DOCUMENTS, new QueryParameterValidation[] {
                 new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                new CodeValidation(DOC_ENTRY_CLASS_CODE, DOC_ENTRY_CLASS_CODE_SCHEME),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE, DOC_ENTRY_PRACTICE_SETTING_CODE_SCHEME),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_SCHEME),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
                 new NumberValidation(DOC_ENTRY_CREATION_TIME_FROM, timeValidator),
                 new NumberValidation(DOC_ENTRY_CREATION_TIME_TO, timeValidator),
                 new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_FROM, timeValidator),
@@ -83,7 +70,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new NumberValidation(SUBMISSION_SET_SUBMISSION_TIME_FROM, timeValidator),
                 new NumberValidation(SUBMISSION_SET_SUBMISSION_TIME_TO, timeValidator),
                 new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
-                new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE, SUBMISSION_SET_CONTENT_TYPE_CODE_SCHEME),
+                new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
                 new StatusValidation(SUBMISSION_SET_STATUS)
         });
         
@@ -161,6 +148,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         });
     }
 
+    @Override
     public void validate(EbXMLAdhocQueryRequest request, ValidationProfile profile) {
         notNull(request, "request cannot be null");
         

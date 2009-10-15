@@ -81,6 +81,6 @@ public class GetAllQueryTransformer {
         query.setStatusSubmissionSets(slots.toStatus(SUBMISSION_SET_STATUS));
         
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
-        query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME));
+        query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
     }
 }

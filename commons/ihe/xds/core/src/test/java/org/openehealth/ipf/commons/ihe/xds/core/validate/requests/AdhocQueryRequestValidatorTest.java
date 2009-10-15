@@ -17,10 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-
-import java.util.Collections;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -32,8 +28,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
+
+import java.util.Collections;
 
 /**
  * Tests for {@link AdhocQueryRequestValidator}.
@@ -90,6 +88,31 @@ public class AdhocQueryRequestValidatorTest {
         expectFailure(PARAMETER_VALUE_NOT_STRING_LIST, ebXML);
     }
     
+    @Test
+    public void testCodeListNotEnoughSchemes() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().add("('code^^')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML);
+    }
+
+    @Test
+    public void testCodeListOldStyleCorrect() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(1, "('code2')");
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE_SCHEME.getSlotName(), "('scheme1','scheme2')");
+        validator.validate(transformer.toEbXML(request), null);
+    }
+
+    @Test
+    public void testCodeListOldStyleNotEnoughSchemes() {
+        EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(1, "('code2')");
+        ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE_SCHEME.getSlotName(), "('scheme1')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML);
+    }
+
     @Test
     public void testInvalidQueryParameterValue() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);

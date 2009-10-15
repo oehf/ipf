@@ -16,19 +16,16 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-
-import java.util.List;
-import java.util.regex.Pattern;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Query parameter validation for parameters that are Code-based. 
@@ -36,21 +33,18 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
  */
 public class CodeValidation implements QueryParameterValidation {
     private final QueryParameter param;
-    private final QueryParameter schemeParam;
 
     /**
      * Constructs a validation object.
      * @param param
-     *          parameter to validate.
+     *          parameter of the code to validate.
      */
-    public CodeValidation(QueryParameter param, QueryParameter schemeParam) {
+    public CodeValidation(QueryParameter param) {
         notNull(param, "param cannot be null");
-        notNull(schemeParam, "schemeParam cannot be null");
-        
         this.param = param;
-        this.schemeParam = schemeParam;
     }
 
+    @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
         for (String slotValue : slotValues) {
@@ -60,20 +54,14 @@ public class CodeValidation implements QueryParameterValidation {
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
-        List<Code> codes = slots.toCodeList(param, schemeParam);
+        List<Code> codes = slots.toCodeList(param);
         
         if (codes != null) {
-            List<String> schemes = slots.toStringList(schemeParam);
-            metaDataAssert(schemes == null || codes.size() == schemes.size(), INVALID_QUERY_PARAMETER_VALUE, schemeParam);
-            
             for (Code code : codes) {
                 metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);                
                 metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
+                metaDataAssert(code.getSchemeName() != null, INVALID_QUERY_PARAMETER_VALUE, param);
             }
-        }
-        else {
-            List<String> schemes = slots.toStringList(schemeParam);
-            metaDataAssert(schemes == null, INVALID_QUERY_PARAMETER_VALUE, schemeParam);
         }
     }
 }

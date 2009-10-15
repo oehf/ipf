@@ -15,60 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core;
 
-import java.util.Arrays;
-import java.util.Collections;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
+import org.openehealth.ipf.commons.ihe.xds.core.utils.LargeDataSource;
 
 import javax.activation.DataHandler;
-
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Address;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSetsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAssociationsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsAndAssociationsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFolderAndContentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersForDocumentQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetRelatedDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetAndContentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.utils.LargeDataSource;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Utility class to create sample data used in tests.
@@ -206,7 +161,6 @@ public abstract class SampleData {
         docFolderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
         docFolderAssociation.setSourceUuid("folder01");
         docFolderAssociation.setTargetUuid("document01");
-        docFolderAssociation.setDocCode(new Code("docCode3", new LocalizedString("docCode3"), "docScheme3"));
         docFolderAssociation.setEntryUuid("docFolderAss");
         return docFolderAssociation;
     }
@@ -216,7 +170,6 @@ public abstract class SampleData {
         folderAssociation.setAssociationType(AssociationType.HAS_MEMBER);
         folderAssociation.setSourceUuid("submissionSet01");
         folderAssociation.setTargetUuid("folder01");
-        folderAssociation.setDocCode(new Code("docCode2", new LocalizedString("docCode2"), "docScheme2"));        
         folderAssociation.setEntryUuid("folderAss");
         return folderAssociation;
     }
@@ -226,13 +179,18 @@ public abstract class SampleData {
         docAssociation.setAssociationType(AssociationType.HAS_MEMBER);
         docAssociation.setSourceUuid("submissionSet01");
         docAssociation.setTargetUuid("document01");
-        docAssociation.setDocCode(new Code("docCode1", new LocalizedString("docCode1"), "docScheme1"));
         docAssociation.setLabel(AssociationLabel.ORIGINAL);
         docAssociation.setEntryUuid("docAss");
         return docAssociation;
     }
 
-    private static Folder createFolder(Identifiable patientID) {
+    /**
+     * Creates a sample folder.
+     * @param patientID
+     *          the patient ID to use.
+     * @return the folder.                         
+     */
+    public static Folder createFolder(Identifiable patientID) {
         Folder folder = new Folder();
         folder.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         folder.getCodeList().add(new Code("code7", new LocalizedString("code7"), "scheme7"));
@@ -273,7 +231,13 @@ public abstract class SampleData {
         return submissionSet;
     }
 
-    private static DocumentEntry createDocumentEntry(Identifiable patientID) {
+    /**
+     * Creates a document entry
+     * @param patientID
+     *          patient used for the document entry.
+     * @return the new entry.
+     */
+    public static DocumentEntry createDocumentEntry(Identifiable patientID) {
         Author author2 = new Author();
         author2.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), new Name("Norbi")));
         author2.getAuthorInstitution().add(new Organization("authorOrg", null, null));

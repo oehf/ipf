@@ -89,10 +89,10 @@ public class FindDocumentsQueryTransformer {
         String patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
         query.setPatientId(identifiableTransformer.fromEbXML(patientId));
         
-        query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE, DOC_ENTRY_CLASS_CODE_SCHEME));
-        query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE, DOC_ENTRY_PRACTICE_SETTING_CODE_SCHEME));
-        query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_SCHEME));
-        query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME));
+        query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
+        query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));
+        query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE));
+        query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
 
         query.setEventCodes(slots.toCodeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME));
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));

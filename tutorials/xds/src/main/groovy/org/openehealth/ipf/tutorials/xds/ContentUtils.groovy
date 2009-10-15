@@ -15,13 +15,8 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.apache.commons.io.IOUtils
-
-import javax.activation.DataHandler
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.io.InputStream
-import java.io.IOException
+import org.apache.commons.io.IOUtils
 
 /**
  * Utility functionality for document content.
@@ -39,7 +34,9 @@ abstract class ContentUtils {
      * @return the size in bytes.
      */
     static def size(dataHandler) {
-        getContent(dataHandler).length
+        def content = getContent(dataHandler)
+        def size = content.length
+        size
     }
 
     /**
@@ -49,7 +46,8 @@ abstract class ContentUtils {
      * @return the SHA-1.
      */
     static def sha1(dataHandler) {
-        calcSha1(getContent(dataHandler))
+        def content = getContent(dataHandler)
+        calcSha1(content)
     }
 
     private static def calcSha1(content) {

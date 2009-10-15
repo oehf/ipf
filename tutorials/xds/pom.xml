@@ -39,12 +39,14 @@
             <artifactId>platform-camel-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
             <type>test-jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
             <type>test-jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>

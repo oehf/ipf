@@ -16,11 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import static org.apache.commons.lang.Validate.notNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
@@ -30,6 +25,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Wrapper class for ebXML query request to simplify access to slots.
@@ -94,11 +94,7 @@ public class QuerySlotHelper {
             String hl7CE = fromCodeToHL7CE(code);
             slotValues.add(encodeAsStringList(hl7CE));
         }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
-    }
-
-    private List<Code> toCodeList(QueryParameter param) {
-        return toCode(ebXML.getSlotValues(param.getSlotName()));
+        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
     }
 
     /**
@@ -171,7 +167,7 @@ public class QuerySlotHelper {
         for (String value : values) {
             slotValues.add(encodeAsStringList(value));
         }
-        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[0]));
+        ebXML.addSlot(param.getSlotName(), slotValues.toArray(new String[slotValues.size()]));
     }
     
     /**
@@ -197,23 +193,10 @@ public class QuerySlotHelper {
      * Retrieves a list of codes from a slot.
      * @param param
      *          the parameter.
-     * @param schemeParam
-     *          the code scheme parameter.
      * @return the codes.
      */
-    public List<Code> toCodeList(QueryParameter param, QueryParameter schemeParam) {
-        List<Code> codes = toCodeList(param);
-        if (codes == null) {
-            return null;
-        }
-        
-        List<String> schemes = toStringList(schemeParam);
-        if (schemes != null) {
-            for (int idx = 0; idx < schemes.size() && idx < codes.size(); ++idx) {
-                codes.get(idx).setSchemeName(schemes.get(idx));
-            }
-        }
-        return codes;
+    public List<Code> toCodeList(QueryParameter param) {
+        return toCode(ebXML.getSlotValues(param.getSlotName()));
     }
 
     /**

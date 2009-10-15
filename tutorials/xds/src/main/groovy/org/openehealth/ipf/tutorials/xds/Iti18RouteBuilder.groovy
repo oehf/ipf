@@ -15,17 +15,15 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
-import static org.openehealth.ipf.tutorials.xds.SearchResult.*
-
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.xds.core.responses.*
-import org.openehealth.ipf.commons.ihe.xds.core.requests.*
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*
-
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 
 /**
  * Route builder for ITI-18.
@@ -81,8 +79,9 @@ class Iti18RouteBuilder extends SpringRouteBuilder {
                 .otherwise()
             .end()
             .transform { it.in.body.resp }
+            .validate().iti18Response()     // This includes the check for RESULT_NOT_SINGLE_PATIENT
             .log(log) { 'response iti18: ' + it.in.body }
-                
+
         // Converts all results into ObjectReferences
         from('direct:convertToObjRefs')
             .convertToObjectRefs{it.resp.submissionSets}

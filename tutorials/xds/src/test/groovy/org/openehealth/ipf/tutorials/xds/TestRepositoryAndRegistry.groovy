@@ -1,28 +1,21 @@
 package org.openehealth.ipf.tutorials.xds
 
-
-import static junit.framework.Assert.assertEquals
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable
-import org.openehealth.ipf.commons.ihe.xds.core.requests.*
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
-
-import javax.activation.DataHandler
-import java.io.IOException
-import java.io.InputStream
-import java.util.Arrays
-import java.util.UUID
+import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
+import static junit.framework.Assert.assertEquals
 
 /**
  * Tests against the registry/repository.
@@ -46,6 +39,8 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()
         docEntry.uniqueId = '4.3.2.1'
+        docEntry.hash = ContentUtils.sha1(provide.documents[0].dataHandler)
+        docEntry.size = ContentUtils.size(provide.documents[0].dataHandler)
 
         def response = send(ITI41, provide, Response.class)
         assertEquals(response.toString(), Status.SUCCESS, response.status)
@@ -87,6 +82,8 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
     void testRetrieve() {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
         def docEntry = provide.documents[0].documentEntry
+        docEntry.hash = ContentUtils.sha1(provide.documents[0].dataHandler)
+        docEntry.size = ContentUtils.size(provide.documents[0].dataHandler)
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()
 

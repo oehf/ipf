@@ -15,32 +15,29 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
-import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.RESULT_NOT_SINGLE_PATIENT;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSValidationException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponseValidator;
 
 /**
- * Test for {@link ProvideAndRegisterDocumentSetRequestValidator}.
+ * Test for {@link QueryResponseValidator}.
  * @author Jens Riemschneider
  */
 public class QueryResponseValidatorTest {
-    private QueryResponseValidator validator;    
-    private EbXMLFactory factory;
+    private QueryResponseValidator validator;
     private QueryResponse response;
     private QueryResponseTransformer transformer;
     private DocumentEntry docEntry;
@@ -48,7 +45,7 @@ public class QueryResponseValidatorTest {
     @Before
     public void setUp() {
         validator = new QueryResponseValidator();
-        factory = new EbXMLFactory21();
+        EbXMLFactory factory = new EbXMLFactory21();
         
         response = SampleData.createQueryResponseWithLeafClass();
         transformer = new QueryResponseTransformer(factory);
@@ -60,13 +57,37 @@ public class QueryResponseValidatorTest {
     public void testValidateGoodCase() throws XDSValidationException {
         validator.validate(transformer.toEbXML(response), null);
     }
-    
+
     @Test
     public void testQueryResponseDoesNotHaveSubmissionSetLimitations() throws XDSValidationException {
         response.getSubmissionSets().clear();
         validator.validate(transformer.toEbXML(response), null);
     }
     
+    @Test
+    public void testQueryResponseMultiplePatientIdsDueToDocEntry() {
+        Identifiable otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
+        DocumentEntry docEntryOtherPatientId = SampleData.createDocumentEntry(otherId);
+        response.getDocumentEntries().add(docEntryOtherPatientId);
+        expectFailure(RESULT_NOT_SINGLE_PATIENT);
+    }
+
+    @Test
+    public void testQueryResponseMultiplePatientIdsDueToFolder() {
+        Identifiable otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
+        Folder folderOtherPatientId = SampleData.createFolder(otherId);
+        response.getFolders().add(folderOtherPatientId);
+        expectFailure(RESULT_NOT_SINGLE_PATIENT);
+    }
+
+    @Test
+    public void testQueryResponseMultiplePatientIdsDueToSubmissionSet() {
+        Identifiable otherId = new Identifiable("idbla", new AssigningAuthority("1.6"));
+        SubmissionSet submissionSetOtherPatientId = SampleData.createSubmissionSet(otherId);
+        response.getSubmissionSets().add(submissionSetOtherPatientId);
+        expectFailure(RESULT_NOT_SINGLE_PATIENT);
+    }
+
     @Test
     public void testValidateDelegatesToSubmitObjectsRequestValidator() {
         // Try a failure that is produced by the SubmitObjectsRequestValidator

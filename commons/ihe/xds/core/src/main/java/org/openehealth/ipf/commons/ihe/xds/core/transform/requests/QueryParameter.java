@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
  * @author Jens Riemschneider
  */
 public enum QueryParameter {
-    /** Used to filter {@link DocumentEntry#getPatientID()}. */
+    /** Used to filter {@link DocumentEntry#getPatientId()}. */
     DOC_ENTRY_PATIENT_ID("$XDSDocumentEntryPatientId"),
     /** Used to filter {@link DocumentEntry#getClassCode()}. */
     DOC_ENTRY_CLASS_CODE("$XDSDocumentEntryClassCode"),
@@ -68,9 +68,9 @@ public enum QueryParameter {
     DOC_ENTRY_CONFIDENTIALITY_CODE("$XDSDocumentEntryConfidentialityCode"),
     /** Used to filter {@link DocumentEntry#getConfidentialityCodes()}. */
     DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME("$XDSDocumentEntryConfidentialityCodeScheme"),
-    /** Used to filter {@link DocumentEntry#getEntryUUID()}. */
+    /** Used to filter {@link DocumentEntry#getEntryUuid()}. */
     DOC_ENTRY_UUID("$XDSDocumentEntryEntryUUID"),
-    /** Used to filter {@link DocumentEntry#getUniqueID()}. */
+    /** Used to filter {@link DocumentEntry#getUniqueId()}. */
     DOC_ENTRY_UNIQUE_ID("$XDSDocumentEntryUniqueId"),
      
     /** Used to filter {@link Folder#getCodeList()}. */
@@ -81,18 +81,18 @@ public enum QueryParameter {
     FOLDER_LAST_UPDATE_TIME_FROM("$XDSFolderLastUpdateTimeFrom"),
     /** Used to filter {@link Folder#getLastUpdateTime()}. */
     FOLDER_LAST_UPDATE_TIME_TO("$XDSFolderLastUpdateTimeTo"),
-    /** Used to filter {@link Folder#getPatientID()}. */
+    /** Used to filter {@link Folder#getPatientId()}. */
     FOLDER_PATIENT_ID("$XDSFolderPatientId"),
     /** Used to filter {@link Folder#getAvailabilityStatus()}. */
     FOLDER_STATUS("$XDSFolderStatus"),
-    /** Used to filter {@link Folder#getEntryUUID()}. */
+    /** Used to filter {@link Folder#getEntryUuid()}. */
     FOLDER_UUID("$XDSFolderEntryUUID"),
-    /** Used to filter {@link Folder#getUniqueID()}. */
+    /** Used to filter {@link Folder#getUniqueId()}. */
     FOLDER_UNIQUE_ID("$XDSFolderUniqueId"),
     
-    /** Used to filter {@link SubmissionSet#getPatientID()}. */
+    /** Used to filter {@link SubmissionSet#getPatientId()}. */
     SUBMISSION_SET_PATIENT_ID("$XDSSubmissionSetPatientId"),
-    /** Used to filter {@link SubmissionSet#getSourceID()}. */
+    /** Used to filter {@link SubmissionSet#getSourceId()}. */
     SUBMISSION_SET_SOURCE_ID("$XDSSubmissionSetSourceId"),
     /** Used to filter {@link SubmissionSet#getSubmissionTime()}. */
     SUBMISSION_SET_SUBMISSION_TIME_FROM("$XDSSubmissionSetSubmissionTimeFrom"),
@@ -106,14 +106,14 @@ public enum QueryParameter {
     SUBMISSION_SET_CONTENT_TYPE_CODE_SCHEME("$XDSSubmissionSetContentTypeScheme"),
     /** Used to filter {@link SubmissionSet#getAvailabilityStatus()}. */
     SUBMISSION_SET_STATUS("$XDSSubmissionSetStatus"),
-    /** Used to filter {@link SubmissionSet#getEntryUUID()}. */
+    /** Used to filter {@link SubmissionSet#getEntryUuid()}. */
     SUBMISSION_SET_UUID("$XDSSubmissionSetEntryUUID"),
-    /** Used to filter {@link SubmissionSet#getUniqueID()}. */
+    /** Used to filter {@link SubmissionSet#getUniqueId()}. */
     SUBMISSION_SET_UNIQUE_ID("$XDSSubmissionSetUniqueId"),
     
-    /** Used to filter {@link XDSMetaClass#getEntryUUID()}. */
+    /** Used to filter {@link XDSMetaClass#getEntryUuid()}. */
     UUID("$uuid"),
-    /** Used to filter {@link XDSMetaClass#getPatientID()}. */
+    /** Used to filter {@link XDSMetaClass#getPatientId()}. */
     PATIENT_ID("$patientId"),
     /** Used to filter {@link XDSMetaClass#getHomeCommunityId()}. */
     HOME("$homeCommunityId"),

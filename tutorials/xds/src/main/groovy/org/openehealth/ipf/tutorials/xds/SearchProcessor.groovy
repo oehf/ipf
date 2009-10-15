@@ -15,12 +15,9 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import static org.openehealth.ipf.tutorials.xds.SearchResult.*
-
-import org.apache.camel.processor.DelegateProcessor
 import org.apache.camel.Exchange
-import java.lang.IllegalArgumentException
-
+import org.apache.camel.processor.DelegateProcessor
+import org.openehealth.ipf.tutorials.xds.DataStore
 
 /**
  * Performs searches in a {@link DataStore}.

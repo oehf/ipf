@@ -79,7 +79,7 @@ public class FindSubmissionSetsQueryTransformer {
         
         query.setAuthorPerson(slots.toString(SUBMISSION_SET_AUTHOR_PERSON));
         
-        query.setContentTypeCodes(slots.toCodeList(SUBMISSION_SET_CONTENT_TYPE_CODE, SUBMISSION_SET_CONTENT_TYPE_CODE_SCHEME));
+        query.setContentTypeCodes(slots.toCodeList(SUBMISSION_SET_CONTENT_TYPE_CODE));
         
         query.setStatus(slots.toStatus(SUBMISSION_SET_STATUS));
     }

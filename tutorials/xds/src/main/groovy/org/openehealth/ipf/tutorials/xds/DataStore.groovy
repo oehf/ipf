@@ -17,17 +17,14 @@ import com.sun.java.util.jar.pack.ConstantPool.Index;
  */
 package org.openehealth.ipf.tutorials.xds
 
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.OrganizationTransformer
-import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer
-import java.text.SimpleDateFormat
-import java.util.regex.Pattern
-import javax.activation.DataHandler
-import javax.mail.util.ByteArrayDataSource
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
+import javax.activation.DataHandler
+import javax.mail.util.ByteArrayDataSource
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document
+import org.openehealth.ipf.tutorials.xds.ContentUtils
 
 /**
  * A simple store for meta data and documents.

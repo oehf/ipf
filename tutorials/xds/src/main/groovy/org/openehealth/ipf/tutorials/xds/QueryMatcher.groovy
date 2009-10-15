@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*
 
 
 /**
- * Matcher used by the {@link SearchType} to match queries. Note that this
+ * Matcher used by the {@link SearchDefinition} to match queries. Note that this
  * uses dynamic method dispatching in Groovy to find the method that fits
  * the entry and query type. 
  * @author Jens Riemschneider

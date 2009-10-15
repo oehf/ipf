@@ -15,43 +15,30 @@
  */
 package org.openehealth.ipf.tutorials.xds
 
-import static junit.framework.Assert.assertEquals
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.*
-
-import java.io.IOException
-import java.io.InputStream
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Date
-import java.util.List
-import java.util.UUID
 import java.util.concurrent.Callable
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
-
 import javax.activation.DataHandler
 import javax.mail.util.ByteArrayDataSource
-
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.junit.*
+import org.junit.BeforeClass
+import org.junit.Ignore
+import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
+import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
+import org.openehealth.ipf.tutorials.xds.Task
+import static junit.framework.Assert.assertEquals
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.APPROVED
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests for thread-safety.
@@ -87,7 +74,7 @@ class TestThreading extends StandardTestContainer {
         def start = new Date().time
         def futures = executorService.invokeAll(tasks)
         def failedResults = new ArrayList<Throwable>()
-        for (def future : futures) {
+        futures.foreach { future ->
             def result = future.get(1, TimeUnit.HOURS)
             if (result != null) {
                 failedResults += result
@@ -96,7 +83,7 @@ class TestThreading extends StandardTestContainer {
         def end = new Date().time
         println(Thread.currentThread().id + ' -> (' + taskCounter.getAndIncrement() + ') finished (' + (end - start) + 'ms)')
 
-        for (def e : failedResults) {            
+        failedResults.foreach { e ->
             e.printStackTrace()
         }
         assertEquals(failedResults.toString(), 0, failedResults.size())

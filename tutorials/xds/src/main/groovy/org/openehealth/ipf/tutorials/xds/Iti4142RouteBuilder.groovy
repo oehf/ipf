@@ -26,6 +26,8 @@ import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*
+import javax.activation.DataHandler
+import javax.mail.util.ByteArrayDataSource
 
 /**
  * Route builder for ITI-41 and -42.
@@ -44,10 +46,12 @@ class Iti4142RouteBuilder extends SpringRouteBuilder {
             // Validate and convert the request
             .validate().iti41Request()
             .transform { 
-                [ 'req': it.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ] 
+                [ 'req': it.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]
             }
+            // Make the dataHandlers re-readable
+            .to('direct:makeDocsReReadable')
             // Further validation based on the registry content
-            .to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds')
+            .to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds', 'direct:checkHashAndSize')
             // Store the individual entries contained in the request            
             .multicast().to(
                 'direct:storeDocs',
@@ -58,14 +62,14 @@ class Iti4142RouteBuilder extends SpringRouteBuilder {
             .end()
             // Create success response
             .transform { new Response(Status.SUCCESS) }
-            
+
         // Entry point for Register Document Set
         from('xds-iti42:xds-iti42')
             .log(log) { 'received iti42: ' + it.in.getBody(RegisterDocumentSet.class) }
             // Validate and convert the request
             .validate().iti42Request()
             .transform { 
-                [ 'req': it.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ] 
+                [ 'req': it.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ]
             }
             // Further validation based on the registry content
             .to('direct:checkForAssociationToDeprecatedObject', 'direct:checkPatientIds', 'direct:checkHash')
@@ -104,13 +108,37 @@ class Iti4142RouteBuilder extends SpringRouteBuilder {
                 .into('otherPatientsEntries')
             .splitEntries { it.otherPatientsEntries }
             .fail(FOLDER_PATIENT_ID_WRONG)
-        
+
+        // Document submissions that specify a size and hash must have correct values
+        from('direct:checkHashAndSize')
+            .splitEntries { it.req.documents }
+            .choice()
+                .when {
+                    def hash = it.in.body.entry.documentEntry.hash
+                    hash != null && hash != ContentUtils.sha1(it.in.body.entry.dataHandler)
+                }.fail(INCORRECT_HASH)
+            .end()
+            .choice()
+                .when {
+                    def size = it.in.body.entry.documentEntry.size
+                    size != null && size != ContentUtils.size(it.in.body.entry.dataHandler)
+                }.fail(INCORRECT_SIZE)
+            .end()
+
         // Resubmitted documents must have the same hash code as the version already in the store
         from('direct:checkHash')
             .splitEntries { it.req.documentEntries }
             .search(DOC_ENTRY).uniqueId('entry.uniqueId').withoutHash('entry.hash').into('docsWithOtherHash')
             .splitEntries { it.docsWithOtherHash }
             .fail(DIFFERENT_HASH_CODE_IN_RESUBMISSION)
+
+        // Make documents re-readable, otherwise we loose the content of the stream after the first read
+        from('direct:makeDocsReReadable')
+            .splitEntries { it.req.documents }
+            .processBody {
+                def content = ContentUtils.getContent(it.entry.dataHandler)
+                it.entry.dataHandler = new DataHandler(new ByteArrayDataSource(content, it.entry.dataHandler.contentType))
+            }
 
         // Put all documents in the store
         from('direct:storeDocs')

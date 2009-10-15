@@ -15,36 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.Actor;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSValidationException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Test for {@link SubmitObjectsRequestValidator}.
@@ -178,6 +161,12 @@ public class SubmitObjectsRequestValidatorTest {
     public void testInvalidAssociationType() {
         request.getAssociations().get(0).setAssociationType(null);
         expectFailure(INVALID_ASSOCIATION_TYPE);
+    }
+
+    @Test
+    public void testHasMemberShouldNotHaveDocCode() {
+        request.getAssociations().get(0).setDocCode(new Code("docCode1", new LocalizedString("docCode1"), "docScheme1"));
+        expectFailure(DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER);
     }
 
     @Test

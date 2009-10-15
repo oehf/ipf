@@ -93,7 +93,11 @@ public enum ValidationMessage {
     MISSING_OBJ_REF("Missing object reference"),
     DEPRECATED_OBJ_CANNOT_BE_TRANSFORMED("A deprecated entry cannot be transformed or appended", ErrorCode.REGISTRY_DEPRECATED_DOCUMENT_ERROR),
     DIFFERENT_HASH_CODE_IN_RESUBMISSION("A document was resubmitted with a different hash code", ErrorCode.NON_IDENTICAL_HASH),
-    UNKNOWN_PATIENT_ID("Patient Id is unknown", ErrorCode.UNKNOWN_PATIENT_ID);
+    UNKNOWN_PATIENT_ID("Patient Id is unknown", ErrorCode.UNKNOWN_PATIENT_ID),
+    INCORRECT_HASH("Hash of submitted document does not match value supplied in the meta data"),
+    INCORRECT_SIZE("Size of submitted document does not match value supplied in the meta data"),
+    DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER("HasMember association may not specify a relationship type"),
+    RESULT_NOT_SINGLE_PATIENT("Query result contains entries for multiple patients", ErrorCode.RESULT_NOT_SINGLE_PATIENT);
     
     private final String text;
     private final ErrorCode errorCode;
@@ -108,10 +112,16 @@ public enum ValidationMessage {
         this.errorCode = null;
     }
 
+    /**
+     * @return a textual representation of this message.
+     */
     public String getText() {
         return text;
     }
-    
+
+    /**
+     * @return the error code associated with this message.
+     */
     public ErrorCode getErrorCode() {
         return errorCode;
     }

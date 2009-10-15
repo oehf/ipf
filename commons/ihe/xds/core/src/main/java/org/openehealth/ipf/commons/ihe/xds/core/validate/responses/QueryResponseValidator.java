@@ -16,16 +16,17 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import static org.apache.commons.lang.Validate.notNull;
+import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ObjectContainerValidator;
 
 import java.util.List;
-
-import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ObjectContainerValidator;
 
 /**
  * Validate a {@link EbXMLQueryResponse}.
@@ -35,6 +36,7 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
     private final RegistryResponseValidator regResponseValidator = new RegistryResponseValidator();
     private final ObjectContainerValidator objectContainerValidator = new ObjectContainerValidator();
 
+    @Override
     public void validate(EbXMLQueryResponse response, ValidationProfile profile) {
         notNull(response, "response cannot be null");
         
@@ -48,5 +50,28 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
         for (ObjectReference objRef : references) {
             metaDataAssert(objRef.getId() != null, MISSING_OBJ_REF);
         }
+
+        validatePatientIdsAreIdentical(response);
     }
+
+    private void validatePatientIdsAreIdentical(EbXMLObjectContainer container) throws XDSMetaDataException {
+        String patientId = checkForMultiplePatientIds(null, SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID,
+                container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE));
+
+        patientId = checkForMultiplePatientIds(patientId, DOC_ENTRY_PATIENT_ID_EXTERNAL_ID,
+                container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE));
+
+        checkForMultiplePatientIds(patientId, FOLDER_PATIENT_ID_EXTERNAL_ID,
+                container.getRegistryPackages(FOLDER_CLASS_NODE));
+    }
+
+    private String checkForMultiplePatientIds(String patientId, String id, List<? extends EbXMLRegistryObject> entries) {
+        for (EbXMLRegistryObject entry : entries) {
+            String patientIdEntry = entry.getExternalIdentifierValue(id);
+            patientId = patientId == null ? patientIdEntry : patientId;
+            metaDataAssert(patientId.equals(patientIdEntry), RESULT_NOT_SINGLE_PATIENT);
+        }
+        return patientId;
+    }
+
 }
