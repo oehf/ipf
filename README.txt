@@ -14,15 +14,15 @@ Getting Started
 
 - Introduction
 
-http://repo.openehealth.org/confluence/display/ipf/IPF+Introduction
+http://repo.openehealth.org/confluence/display/ipf2/IPF+Introduction
 
 - Building
 
-http://repo.openehealth.org/confluence/display/ipf/IPF+Development
+http://repo.openehealth.org/confluence/display/ipf2/IPF+Development
 
 - Tutorials
 
-http://repo.openehealth.org/confluence/display/ipf/IPF+Tutorials
+http://repo.openehealth.org/confluence/display/ipf2/IPF+Tutorials
 
 
 Reference Manual 
@@ -30,11 +30,11 @@ Reference Manual
 
 - html (single-page view):
 
-http://repo.openehealth.org/confluence/display/ipf/IPF+reference+-+single
+http://repo.openehealth.org/confluence/display/ipf2/IPF+reference+-+single
 
 - html (multi-page view):
 
-http://repo.openehealth.org/confluence/display/ipf/IPF+reference+-+multi
+http://repo.openehealth.org/confluence/display/ipf2/IPF+reference+-+multi
 
 
 Mailing Lists
