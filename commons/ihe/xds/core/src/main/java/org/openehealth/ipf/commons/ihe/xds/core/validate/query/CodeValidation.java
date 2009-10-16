@@ -58,7 +58,7 @@ public class CodeValidation implements QueryParameterValidation {
         
         if (codes != null) {
             for (Code code : codes) {
-                metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);                
+                metaDataAssert(code != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 metaDataAssert(code.getCode() != null, INVALID_QUERY_PARAMETER_VALUE, param);
                 metaDataAssert(code.getSchemeName() != null, INVALID_QUERY_PARAMETER_VALUE, param);
             }

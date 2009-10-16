@@ -15,14 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.hl7;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
 
 /**
  * Helper class for rendering and parsing HL7 strings.
@@ -89,7 +88,13 @@ public abstract class HL7 {
     private static String escape(String text, HL7Delimiter delimiter) {
         return text.replace(delimiter.getValue(), delimiter.getSubstitute());
     }
-    
+
+    /**
+     * Unescapes a text that was used as part of an HL7 message.
+     * @param text
+     *          the text to unescape. Can be {@code null}.
+     * @return the unescaped text or {@code null} if the input was {@code null}.
+     */
     public static String unescape(String text) {
         if (text == null) {
             return null;
@@ -111,6 +116,7 @@ public abstract class HL7 {
     /**
      * Removes all trailing delimiters from an HL7 string.
      * @param hl7Data
+     *          the HL7 text.
      * @return the trimmed string.
      */
     public static String removeTrailingDelimiters(String hl7Data) {

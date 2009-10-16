@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
 import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
+
+import java.util.List;
 
 /**
  * Transformation logic for a {@link Organization}.
@@ -35,7 +35,7 @@ public class OrganizationTransformer {
     
     /**
      * Creates an organization instance via an HL7 XON string.
-     * @param hl7Value
+     * @param hl7XON
      *          the HL7 XON string. Can be <code>null</code>.
      * @return the created Organization instance. <code>null</code> if no relevant 
      *          data was found in the HL7 string.

@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.cxf.payload;
 
-import java.io.OutputStream;
-
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
+
+import java.io.OutputStream;
 
 
 /**
@@ -35,6 +35,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
  */
 public class ClientPayloadExtractorInterceptor extends AbstractSafeInterceptor {
 
+    /**
+     * Constructs the interceptor.
+     */
     public ClientPayloadExtractorInterceptor() {
         super(Phase.WRITE_ENDING);
         addAfter(SoapOutEndingInterceptor.class.getName());

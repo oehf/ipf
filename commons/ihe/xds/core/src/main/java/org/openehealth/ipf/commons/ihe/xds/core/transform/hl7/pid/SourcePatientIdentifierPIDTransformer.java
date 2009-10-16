@@ -72,6 +72,6 @@ public class SourcePatientIdentifierPIDTransformer implements PIDTransformer {
             }
         }
         
-        return HL7.render(HL7Delimiter.REPETITION, parts.toArray(new String[0]));
+        return HL7.render(HL7Delimiter.REPETITION, parts.toArray(new String[parts.size()]));
     }
 }

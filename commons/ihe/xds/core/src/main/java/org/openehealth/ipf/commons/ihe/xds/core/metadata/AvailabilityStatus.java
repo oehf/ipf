@@ -21,8 +21,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
  * @author Jens Riemschneider
  */
 public enum AvailabilityStatus {
+    /** The entry is approved. */
     APPROVED("Approved", "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"),
+    /** The entry is deprecated. */
     DEPRECATED("Deprecated", "urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated"),
+    /** The entry is submitted. */
     SUBMITTED("Submitted", "urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted");
     
     private final String opcode;

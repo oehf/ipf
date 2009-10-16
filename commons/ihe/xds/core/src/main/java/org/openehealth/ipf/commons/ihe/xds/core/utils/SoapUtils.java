@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.utils;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Generic constants and subroutines for SOAP/XML processing.
@@ -126,7 +126,8 @@ public abstract class SoapUtils {
      * @param nsUris          
      *      a set of namespace URIs the wanted elements can belong to
      * @param wantedLocalNamesChain 
-     *      a chain of local element names, e.g. <code>{"outer", "middle", "inner"}</code>    
+     *      a chain of local element names, e.g. <code>{"outer", "middle", "inner"}</code>
+     * @return the XML element or {@code null} if none was found.
      */
     public static Element getDeepElementNS(
             Element root, 
@@ -190,8 +191,7 @@ public abstract class SoapUtils {
                 .toString(); 
             pos3 = soapEnvelope.indexOf(bodyElementStart);
             pos4 = pos3 + bodyElementStart.length();
-            String body = soapEnvelope.substring(pos4 + 1, pos1);
-            return body;
+            return soapEnvelope.substring(pos4 + 1, pos1);
             
         } catch(Exception e) {
             LOG.error("Invalid contents, probably not a SOAP Envelope in the parameter", e);

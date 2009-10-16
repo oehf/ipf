@@ -16,9 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ebxml30;
 
 import static org.junit.Assert.*;
-
-import javax.activation.DataHandler;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -29,13 +26,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
+
+import javax.activation.DataHandler;
  
 /**
  * Tests for {@link RetrieveDocumentSetResponseTransformer}.
  * @author Jens Riemschneider
  */
 public class RetrieveDocumentSetResponseTransformerTest {
-    private EbXMLFactory factory;
     private RetrieveDocumentSetResponseTransformer transformer;
     private RetrievedDocumentSet response;
     private DataHandler dataHandler1;
@@ -43,7 +41,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
     
     @Before
     public void setUp() throws Exception {
-        factory = new EbXMLFactory30();
+        EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         
         response = SampleData.createRetrievedDocumentSet();

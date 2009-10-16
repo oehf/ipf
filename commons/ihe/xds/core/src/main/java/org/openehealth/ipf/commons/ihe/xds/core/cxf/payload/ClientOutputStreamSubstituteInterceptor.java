@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.cxf.payload;
 
-import java.io.OutputStream;
-
 import org.apache.cxf.interceptor.MessageSenderInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
+
+import java.io.OutputStream;
 
 
 /**
@@ -32,7 +32,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
  * @author Dmytro Rud
  */
 public class ClientOutputStreamSubstituteInterceptor extends AbstractSafeInterceptor {
-
+    /**
+     * Constructs the interceptor.
+     */
     public ClientOutputStreamSubstituteInterceptor() {
         super(Phase.PREPARE_SEND);
         addAfter(MessageSenderInterceptor.class.getName());

@@ -16,12 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import static org.apache.commons.lang.Validate.notNull;
-
-import java.io.Serializable;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
+
+import java.io.Serializable;
 
 /**
  * Request object for the Query Registry and Registry Stored Query transactions.
@@ -93,9 +92,7 @@ public class QueryRegistry implements Serializable {
                 return false;
         } else if (!query.equals(other.query))
             return false;
-        if (returnLeafObjects != other.returnLeafObjects)
-            return false;
-        return true;
+        return returnLeafObjects == other.returnLeafObjects;
     }
 
     @Override

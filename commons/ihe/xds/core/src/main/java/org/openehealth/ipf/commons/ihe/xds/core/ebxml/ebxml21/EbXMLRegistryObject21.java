@@ -16,25 +16,17 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
 import static org.apache.commons.lang.Validate.notNull;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ClassificationType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExternalIdentifierType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.InternationalStringType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryObjectType;
-
 /**
  * Encapsulation of {@link RegistryEntryType}.
+ * @param <E>
+ *          The EBXML type of the registry object.
  * @author Jens Riemschneider
  */
 public abstract class EbXMLRegistryObject21<E extends RegistryObjectType> implements EbXMLRegistryObject {

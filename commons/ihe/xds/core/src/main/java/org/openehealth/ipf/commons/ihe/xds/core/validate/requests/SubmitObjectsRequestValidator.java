@@ -34,6 +34,7 @@ public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjec
      * @throws XDSMetaDataException
      *          if the validation failed.
      */
+    @Override
     public void validate(EbXMLSubmitObjectsRequest request, ValidationProfile profile)  {
         objectContainerValidator.validate(request, profile);
     }

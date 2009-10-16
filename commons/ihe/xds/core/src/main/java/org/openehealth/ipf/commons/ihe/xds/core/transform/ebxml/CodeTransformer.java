@@ -16,14 +16,13 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_CODING_SCHEME;
+
+import java.util.List;
 
 /**
  * Transforms between {@link Code} and its ebXML representation.
@@ -34,7 +33,7 @@ public class CodeTransformer {
 
     /**
      * Constructs the transformer
-     * @param factory
+     * @param ebXMLFactory
      *          factory for version independent ebXML objects. 
      */
     public CodeTransformer(EbXMLFactory ebXMLFactory) {

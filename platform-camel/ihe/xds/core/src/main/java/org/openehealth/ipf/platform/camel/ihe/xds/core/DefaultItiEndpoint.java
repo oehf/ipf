@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.core;
 
 import org.apache.camel.Component;
 import org.apache.camel.impl.DefaultEndpoint;
-import java.net.URISyntaxException;
 
 /**
  * Camel endpoint used to create producers and consumers based on webservice calls.
@@ -45,20 +44,19 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      *          the endpoint address from the URI.
      * @param component
      *          the component creating this endpoint.
-     * @throws URISyntaxException
-     *          if the endpoint URI was not a valid URI.
      */
-    protected DefaultItiEndpoint(String endpointUri, String address, Component component) throws URISyntaxException {
+    protected DefaultItiEndpoint(String endpointUri, String address, Component component) {
         super(endpointUri, component);
         this.address = address;
         configure();
     }
 
-    private void configure() throws URISyntaxException {
+    private void configure() {
         this.serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
         this.serviceAddress = "/" + address;
     }
 
+    @Override
     public boolean isSingleton() {
         return true;
     }
@@ -149,7 +147,7 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      * @param secure
      *          <code>true</code> if https should be used instead of http.
      */
-    public void setSecure(boolean secure) throws URISyntaxException {
+    public void setSecure(boolean secure) {
         this.secure = secure;
         configure();
     }

@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class QuerySlotHelper {
-    private EbXMLAdhocQueryRequest ebXML;
+    private final EbXMLAdhocQueryRequest ebXML;
 
     /**
      * Constructs the wrapper.

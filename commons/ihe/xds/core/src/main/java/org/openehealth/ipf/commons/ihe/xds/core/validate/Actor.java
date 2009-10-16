@@ -20,8 +20,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
  * @author Jens Riemschneider
  */
 public enum Actor {
+    /** XDS Source actor */
     SOURCE,
+    /** XDS Consumer actor */
     CONSUMER,
+    /** XDS Repository actor */
     REPOSITORY,
+    /** XDS Registry actor */
     REGISTRY
 }

@@ -89,6 +89,6 @@ public class UriTransformer {
             ++slotIdx;
         }
         
-        return uriParts.toArray(new String[0]);
+        return uriParts.toArray(new String[uriParts.size()]);
     }
 }

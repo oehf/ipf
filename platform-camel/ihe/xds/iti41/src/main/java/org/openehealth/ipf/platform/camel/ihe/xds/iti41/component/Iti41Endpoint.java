@@ -25,8 +25,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41Service;
 
-import java.net.URISyntaxException;
-
 /**
  * The Camel endpoint for the ITI-41 transaction.
  */
@@ -39,19 +37,19 @@ public class Iti41Endpoint extends DefaultItiEndpoint {
      *          the endpoint address from the URI.
      * @param iti41Component
      *          the component creating this endpoint.
-     * @throws URISyntaxException
-     *          if the endpoint URI was not a valid URI.
      */
-    public Iti41Endpoint(String endpointUri, String address, Iti41Component iti41Component) throws URISyntaxException {
+    public Iti41Endpoint(String endpointUri, String address, Iti41Component iti41Component)  {
         super(endpointUri, address, iti41Component);
     }
 
+    @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = 
             Iti41.getClientFactory(isSoap11(), isAudit(), isAllowIncompleteAudit(), getServiceUrl());
         return new Iti41Producer(this, clientFactory);
     }
 
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = 
             Iti41.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());

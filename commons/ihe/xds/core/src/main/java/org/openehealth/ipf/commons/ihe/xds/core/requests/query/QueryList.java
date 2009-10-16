@@ -17,14 +17,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import static org.apache.commons.lang.Validate.noNullElements;
 import static org.apache.commons.lang.Validate.notNull;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents a list of query parameters.
@@ -34,7 +33,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * contains the inner lists and uses AND semantics. E.g. the query 
  * list <code>(a, b), (c, d)</code> contains two inner lists and the
  * parameters are evaluated (a OR b) AND (c OR d).
- * 
+ * @param <T>
+ *          The type contained in the list.
+ *
  * @author Jens Riemschneider
  */
 public class QueryList<T> implements Serializable {

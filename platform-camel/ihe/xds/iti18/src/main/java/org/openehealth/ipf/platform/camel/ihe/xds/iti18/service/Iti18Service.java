@@ -34,6 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * @author Jens Riemschneider
  */
 public class Iti18Service extends DefaultItiWebService implements Iti18PortType {
+    @Override
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {

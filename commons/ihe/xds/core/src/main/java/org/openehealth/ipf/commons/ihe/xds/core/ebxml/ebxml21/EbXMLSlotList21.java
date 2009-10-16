@@ -16,22 +16,21 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
 import static org.apache.commons.lang.Validate.notNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.SlotType1;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ValueListType;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a list of slots.
  * @author Jens Riemschneider
  */
 public class EbXMLSlotList21 implements EbXMLSlotList {
-    private List<SlotType1> slotListObj;
+    private final List<SlotType1> slotListObj;
     
     /**
      * Constructs the slot list by wrapping the given ebXML 2.1 object.

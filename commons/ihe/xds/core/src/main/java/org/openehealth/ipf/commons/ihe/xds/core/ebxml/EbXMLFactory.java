@@ -76,7 +76,7 @@ public interface EbXMLFactory {
     
     /**
      * Creates a new request to provide and register documents.
-     * @param objectLibrary
+     * @param library
      *          the object library to use.
      * @return the created object.
      */

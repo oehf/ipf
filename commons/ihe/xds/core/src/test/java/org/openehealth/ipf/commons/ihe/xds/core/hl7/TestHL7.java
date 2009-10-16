@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.hl7;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Test;
 
 import java.util.List;
-
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
 
 /**
  * Tests for {@link HL7}.

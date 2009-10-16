@@ -16,17 +16,16 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-
-import java.util.List;
-import java.util.regex.Pattern;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValueValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Query parameter validation for parameters that are String-based.
@@ -55,6 +54,7 @@ public class StringValidation implements QueryParameterValidation {
         this.optional = optional;
     }
 
+    @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
         metaDataAssert(optional || slotValues.size() >= 1, MISSING_REQUIRED_QUERY_PARAMETER, param);

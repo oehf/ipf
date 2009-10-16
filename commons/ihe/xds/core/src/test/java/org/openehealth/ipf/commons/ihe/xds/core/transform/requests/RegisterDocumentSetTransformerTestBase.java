@@ -15,23 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
+
+import java.util.List;
 
 /**
  * Tests for {@link RegisterDocumentSetTransformer}.
@@ -40,11 +34,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocum
 public abstract class RegisterDocumentSetTransformerTestBase implements FactoryCreator {
     private RegisterDocumentSetTransformer transformer;
     private RegisterDocumentSet request;
-    private EbXMLFactory factory;
-    
+
     @Before
-    public void setUp() {        
-        factory = createFactory();
+    public void setUp() {
+        EbXMLFactory factory = createFactory();
         transformer = new RegisterDocumentSetTransformer(factory);        
 
         request = SampleData.createRegisterDocumentSet();

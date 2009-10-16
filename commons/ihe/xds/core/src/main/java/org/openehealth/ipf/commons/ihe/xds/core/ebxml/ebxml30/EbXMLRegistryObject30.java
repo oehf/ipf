@@ -16,25 +16,21 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import static org.apache.commons.lang.Validate.notNull;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExternalIdentifierType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.InternationalStringType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectType;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 /**
  * Encapsulation of {@link RegistryObjectType}.
+ * @param <E>
+ *          the EBXML type of the registry object.
  * @author Jens Riemschneider
  */
 public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implements EbXMLRegistryObject {

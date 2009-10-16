@@ -51,7 +51,7 @@ public enum Severity {
     
     /**
      * <code>null</code>-safe version of {@link #getEbXML21()}.
-     * @param type
+     * @param severity
      *          the type for which to get the ebXML representation. Can be <code>null</code>.
      * @return the ebXML 2.1 representation or <code>null</code> if type was <code>null</code>.
      */
@@ -61,7 +61,7 @@ public enum Severity {
 
     /**
      * <code>null</code>-safe version of {@link #getOpcode30()}.
-     * @param type
+     * @param severity
      *          the type for which to get the opcode. Can be <code>null</code>.
      * @return the opcode or <code>null</code> if type was <code>null</code>.
      */

@@ -16,18 +16,16 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.RecipientTransformer;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Transforms between a {@link SubmissionSet} and its ebXML representation.
@@ -91,7 +89,7 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
         for (Recipient recipient : metaData.getIntendedRecipients()) {
             slotValues.add(recipientTransformer.toEbXML(recipient));
         }
-        ebXML.addSlot(SLOT_NAME_INTENDED_RECIPIENT, slotValues.toArray(new String[0]));
+        ebXML.addSlot(SLOT_NAME_INTENDED_RECIPIENT, slotValues.toArray(new String[slotValues.size()]));
         
         ebXML.addSlot(SLOT_NAME_SUBMISSION_TIME, metaData.getSubmissionTime());        
     }

@@ -24,8 +24,6 @@ import javax.xml.namespace.QName;
  * This is the static information about the web-service, i.e. all data that does
  * not depend on the dynamic endpoint configuration (e.g. if SOAP 1.1 or 1.2 is
  * used).
- * @param <T>
- *          type of the service interface.
  */
 public class ItiServiceInfo {
     private final QName bindingName;
@@ -40,6 +38,31 @@ public class ItiServiceInfo {
     private final boolean auditPayload;
     private final boolean hl7v3;
 
+    /**
+     * Constructs the service info.
+     * @param serviceName
+     *          the qualified name of the service.
+     * @param serviceClass
+     *          the class of the service interface.
+     * @param bindingName
+     *          the qualified name of the binding to use.
+     * @param portName11
+     *          the qualified port name for SOAP 1.1.
+     * @param portName12
+     *          the qualified port name for SOAP 1.2
+     * @param mtom
+     *          {@code true} if this service requires MTOM.
+     * @param wsdlLocation
+     *          the location of the WSDL of this webservice.
+     * @param addressing
+     *          {@code true} if this service requires WS-Addressing.
+     * @param swaOutSupport
+     *          <code>true</code> if this service requires SwA for its output.
+     * @param auditPayload
+     *          <code>true</code> if this service must save payload in audit record.
+     * @param hl7v3
+     *          <code>true</code> if this service is a HL7 v3 one.
+     */
     public ItiServiceInfo(QName serviceName, 
                           Class<?> serviceClass,
                           QName bindingName,

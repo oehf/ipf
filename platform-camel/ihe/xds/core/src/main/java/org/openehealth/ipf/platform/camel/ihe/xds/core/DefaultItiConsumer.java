@@ -23,8 +23,6 @@ import org.apache.camel.impl.DefaultConsumer;
 
 /**
  * Camel component used to create process incoming exchanges based on webservice calls.
- * @param <T>
- *          the type of web-service used.
  *
  * @author Jens Riemschneider
  * @author Dmytro Rud

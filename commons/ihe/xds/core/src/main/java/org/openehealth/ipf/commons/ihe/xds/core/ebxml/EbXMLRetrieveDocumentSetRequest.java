@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+
+import java.util.List;
 
 /**
  * Encapsulation of the ebXML classes for {@code RetrieveDocumentSetRequestType}. 
@@ -27,8 +27,20 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
  * @author Jens Riemschneider
  */
 public interface EbXMLRetrieveDocumentSetRequest {
+    /**
+     * Sets the documents of the request.
+     * @param documents
+     *          the documents.
+     */
     void setDocuments(List<RetrieveDocument> documents);
+
+    /**
+     * @return the documents of the request.
+     */
     List<RetrieveDocument> getDocuments();
 
+    /**
+     * @return the ebXML object being wrapped by this class. 
+     */
     Object getInternal();
 }

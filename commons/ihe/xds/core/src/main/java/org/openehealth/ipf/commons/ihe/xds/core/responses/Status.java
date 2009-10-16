@@ -51,7 +51,7 @@ public enum Status {
     
     /**
      * <code>null</code>-safe version of {@link #getOpcode21()}.
-     * @param type
+     * @param status
      *          the type for which to get the opcode. Can be <code>null</code>.
      * @return the opcode or <code>null</code> if type was <code>null</code>.
      */
@@ -61,7 +61,7 @@ public enum Status {
 
     /**
      * <code>null</code>-safe version of {@link #getOpcode30()}.
-     * @param type
+     * @param status
      *          the type for which to get the opcode. Can be <code>null</code>.
      * @return the opcode or <code>null</code> if type was <code>null</code>.
      */

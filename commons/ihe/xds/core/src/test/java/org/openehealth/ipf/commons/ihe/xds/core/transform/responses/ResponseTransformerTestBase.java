@@ -15,22 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
+
+import java.util.List;
 
 /**
  * Tests for {@link ResponseTransformer}.
@@ -39,11 +34,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTran
 public abstract class ResponseTransformerTestBase implements FactoryCreator {
     private ResponseTransformer transformer;
     private Response response;
-    private EbXMLFactory factory;
-    
+
     @Before
     public void baseSetUp() {
-        factory = createFactory();
+        EbXMLFactory factory = createFactory();
         transformer = new ResponseTransformer(factory);
         
         response = SampleData.createResponse();

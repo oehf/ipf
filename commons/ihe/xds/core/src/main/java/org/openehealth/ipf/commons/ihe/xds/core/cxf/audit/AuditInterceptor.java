@@ -40,17 +40,19 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
     /**
      * Audit strategy associated with this interceptor.  
      */
-    private ItiAuditStrategy auditStrategy; 
+    private final ItiAuditStrategy auditStrategy;
 
     
     /**
      * Constructor which sets a strategy.
      * 
+     * @param phase
+     *          the phase in which to use this interceptor.
      * @param auditStrategy
-     *      an audit strategy instance.  
-     *      <p><code>null</code> values are explicitly prohibited. 
+     *          an audit strategy instance. <p><code>null</code> values are
+     *          explicitly prohibited. 
      */
-    public AuditInterceptor(String phase, ItiAuditStrategy auditStrategy) {
+    protected AuditInterceptor(String phase, ItiAuditStrategy auditStrategy) {
         super(phase);
         Validate.notNull(auditStrategy);
         this.auditStrategy = auditStrategy;

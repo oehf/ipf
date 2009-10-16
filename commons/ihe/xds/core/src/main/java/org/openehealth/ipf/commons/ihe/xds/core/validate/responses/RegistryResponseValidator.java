@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  * @author Jens Riemschneider
  */
 public class RegistryResponseValidator implements Validator<EbXMLRegistryResponse, ValidationProfile>{
+    @Override
     public void validate(EbXMLRegistryResponse response, ValidationProfile profile) {
         notNull(response, "response cannot be null");
         

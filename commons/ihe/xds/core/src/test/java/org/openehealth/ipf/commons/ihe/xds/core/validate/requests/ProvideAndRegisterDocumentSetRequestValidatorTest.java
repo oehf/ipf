@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -28,20 +27,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.Actor;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSValidationException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Test for {@link ProvideAndRegisterDocumentSetRequestValidator}.
  * @author Jens Riemschneider
  */
 public class ProvideAndRegisterDocumentSetRequestValidatorTest {
-    private ProvideAndRegisterDocumentSetRequestValidator validator;    
-    private EbXMLFactory factory;
+    private ProvideAndRegisterDocumentSetRequestValidator validator;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
     
@@ -50,7 +44,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     @Before
     public void setUp() {
         validator = new ProvideAndRegisterDocumentSetRequestValidator();
-        factory = new EbXMLFactory21();
+        EbXMLFactory factory = new EbXMLFactory21();
         
         request = SampleData.createProvideAndRegisterDocumentSet();
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);
@@ -59,7 +53,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     }
     
     @Test
-    public void testValidateGoodCase() throws XDSValidationException {
+    public void testValidateGoodCase() {
         validator.validate(transformer.toEbXML(request), null);
     }
     

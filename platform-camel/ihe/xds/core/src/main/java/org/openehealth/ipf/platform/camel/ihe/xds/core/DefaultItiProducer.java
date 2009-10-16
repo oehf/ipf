@@ -27,9 +27,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceInfo;
 /**
  * Camel producer used to make calls to a webservice.
  * 
- * @param <T>
- *            the type of the webservice.
- * 
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
@@ -54,6 +51,7 @@ public abstract class DefaultItiProducer extends DefaultProducer {
         this.clientFactory = clientFactory;
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         log.debug("Calling webservice on '" + getServiceInfo().getServiceName() + "' with " + exchange);
         callService(exchange);

@@ -40,7 +40,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLProvideAndReg
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLQueryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetRequest30;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocumentSetResponse30
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.Exchange
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 
 /**
  * XDS DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
@@ -48,19 +51,19 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRetrieveDocum
  */
 public class XDSExtension {
      // Aliases for EbXML 2.1 classes: 
-     private static final Class Submit21 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest.class; 
-     private static final Class RegResp21 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse.class;
-     private static final Class Provide21 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.class;
-     private static final Class Query21 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest.class;
+     private static final Class Submit21 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
+     private static final Class RegResp21 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
+     private static final Class Provide21 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
+     private static final Class Query21 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
      
      // Aliases for EbXML 3.0 classes: 
-     private static final Class Submit30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest.class;
-     private static final Class RegResp30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType.class;
-     private static final Class Provide30 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.class;
-     private static final Class Retrieve30 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.class;
-     private static final Class RetrieveResp30 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.class;
-     private static final Class Query30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest.class;
-     private static final Class QueryResp30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse.class;
+     private static final Class Submit30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+     private static final Class RegResp30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+     private static final Class Provide30 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+     private static final Class Retrieve30 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+     private static final Class RetrieveResp30 = org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+     private static final Class Query30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
+     private static final Class QueryResp30 = org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 
      /**
       * Validates an ITI-14 request
@@ -179,7 +182,9 @@ public class XDSExtension {
       */
      public static ValidatorAdapterDefinition iti42Request(ValidatorAdapterDefinition self) { 
          self.setValidator(new SubmitObjectsRequestValidator());
-         self.input { new EbXMLSubmitObjectsRequest30(it.in.getBody(Submit30)) };
+         self.input {
+             org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest req = it.in.getBody(Submit30)
+             new EbXMLSubmitObjectsRequest30(req) };
          return self.staticProfile(new ValidationProfile(false, true, REGISTRY)); 
      }
     

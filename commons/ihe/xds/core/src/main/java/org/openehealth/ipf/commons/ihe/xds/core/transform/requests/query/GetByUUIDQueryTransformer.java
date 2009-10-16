@@ -87,6 +87,23 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
         fromEbXML(query, slots);
     }
 
+    /**
+     * Called by {@link #toEbXML(GetByUuidQuery, EbXMLAdhocQueryRequest)} to
+     * transform slots.
+     * @param query
+     *          the query to transform.
+     * @param slots
+     *          the slots to be filled.
+     */
     protected void toEbXML(T query, QuerySlotHelper slots) {}
+
+    /**
+     * Called by {@link #fromEbXML(GetByUuidQuery, EbXMLAdhocQueryRequest)} to
+     * transform slots.
+     * @param query
+     *          the target query.
+     * @param slots
+     *          the slots to transform.
+     */
     protected void fromEbXML(T query, QuerySlotHelper slots) {}
 }

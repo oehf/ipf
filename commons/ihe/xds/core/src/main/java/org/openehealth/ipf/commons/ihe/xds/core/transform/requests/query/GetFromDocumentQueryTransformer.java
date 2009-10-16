@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFromDocumentQu
 
 /**
  * Base class for transformers based on {@link GetFromDocumentQuery}.
+ * @param <T>
+ *          the actual query type that is transformed by an extending subclass.
  * @author Jens Riemschneider
  */
 public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQuery> {

@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.cxf.payload;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.interceptor.AttachmentInInterceptor;
 import org.apache.cxf.interceptor.StaxInInterceptor;
@@ -25,6 +22,9 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 
 /**
@@ -37,6 +37,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
  */
 public class ServerPayloadExtractorInterceptor extends AbstractSafeInterceptor {
 
+    /**
+     * Constructs the interceptor.
+     */
     public ServerPayloadExtractorInterceptor() {
         super(Phase.PRE_STREAM);
         addAfter(AttachmentInInterceptor.class.getName());

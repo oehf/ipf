@@ -15,22 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
 import static org.apache.commons.lang.Validate.notNull;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.activation.DataHandler;
-
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DOC_ENTRY_CLASS_NODE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOCUMENT_FOR_DOC_ENTRY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOC_ENTRY_FOR_DOCUMENT;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+
+import javax.activation.DataHandler;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Validates a {@link EbXMLSubmitObjectsRequest} request.
@@ -40,6 +39,7 @@ public class ProvideAndRegisterDocumentSetRequestValidator implements Validator<
     private final SubmitObjectsRequestValidator submitObjectsRequestValidator = 
         new SubmitObjectsRequestValidator();
     
+    @Override
     public void validate(EbXMLProvideAndRegisterDocumentSetRequest request, ValidationProfile profile) {
         notNull(request, "request cannot be null");
 

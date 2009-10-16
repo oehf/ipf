@@ -29,6 +29,7 @@ public class LargeDataSource implements DataSource {
      * CXF does use MTOM. */
     public static final int STREAM_SIZE = 70000;
 
+    @Override
     public InputStream getInputStream() throws IOException {
         return new InputStream() {
             private int idx;
@@ -50,14 +51,17 @@ public class LargeDataSource implements DataSource {
         };
     }
 
+    @Override
     public OutputStream getOutputStream() throws IOException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public String getContentType() {
         return "test/plain";
     }
 
+    @Override
     public String getName() {
         return "dummy";
     }

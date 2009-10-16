@@ -42,8 +42,6 @@ public class DefaultItiWebService {
      *
      * @param body
      *          contents of the in-message body to be processed.
-     * @param resultType
-     *          expected type of the result message after the processing.
      * @return the resulting exchange.
      */
     protected Exchange process(Object body) {

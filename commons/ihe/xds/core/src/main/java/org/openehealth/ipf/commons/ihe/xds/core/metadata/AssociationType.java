@@ -21,11 +21,17 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
  * @author Jens Riemschneider
  */
 public enum AssociationType {
+    /** An entry that is appended to another one. */
     APPEND("APND", "urn:ihe:iti:2007:AssociationType:APND"),
+    /** An entry that replaced another one. */
     REPLACE("RPLC", "urn:ihe:iti:2007:AssociationType:RPLC"),
+    /** An entry that transforms another one. */
     TRANSFORM("XFRM", "urn:ihe:iti:2007:AssociationType:XFRM"),
+    /** An entry that transforms and replaces another one. */
     TRANSFORM_AND_REPLACE("XFRM_RPLC", "urn:ihe:iti:2007:AssociationType:XFRM_RPLC"),
+    /** An entry that is a member of another one. */
     HAS_MEMBER("HasMember", "urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember"),
+    /** An entry that represents a signature of another one. */
     SIGNS("signs", "urn:ihe:iti:2007:AssociationType:signs");
 
     private final String opcode21;

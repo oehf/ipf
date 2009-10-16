@@ -33,7 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * @author Jens Riemschneider
  */
 public class Iti43Service extends DefaultItiWebService implements Iti43PortType {
-    public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
+    @Override public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
         Exchange result = process(body);
         if (result.getException() != null) {
             RetrievedDocumentSet errorResponse = new RetrievedDocumentSet();

@@ -32,7 +32,13 @@ class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
         "Payload"
         /*"PatientId"*/};
 
-    
+
+    /**
+     * Constructs the audit strategy.
+     * @param allowIncompleteAudit
+     *      whether this strategy should allow incomplete audit records
+     *      (parameter initially configurable via endpoint URL).
+     */
     Iti18ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit);
     }

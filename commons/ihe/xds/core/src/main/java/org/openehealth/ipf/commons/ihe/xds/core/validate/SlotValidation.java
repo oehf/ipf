@@ -15,14 +15,24 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 
+import java.util.List;
+
+/**
+ * Validation for slots.
+ */
 public class SlotValidation implements RegistryObjectValidator {
     private final String slotName;
     private final ValueListValidator validator;
 
+    /**
+     * Constructs the validation.
+     * @param slotName
+     *          the name of the slot.
+     * @param validator
+     *          the validator to call for the slot. 
+     */
     public SlotValidation(String slotName, ValueListValidator validator) {
         this.slotName = slotName;
         this.validator = validator;

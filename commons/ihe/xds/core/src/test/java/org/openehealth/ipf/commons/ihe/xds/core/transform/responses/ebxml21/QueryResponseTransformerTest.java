@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ebxml21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformerTestBase;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
 
 /**
  * Tests for {@link QueryResponseTransformer}.

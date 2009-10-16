@@ -34,6 +34,14 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  */
 abstract public class Iti41AuditStrategy extends ItiAuditStrategy {
 
+    /**
+     * Constructs the audit strategy.
+     * @param serverSide
+     *      whether this is a server-side or a client-side strategy.
+     * @param allowIncompleteAudit
+     *      whether this strategy should allow incomplete audit records
+     *      (parameter initially configurable via endpoint URL).
+     */
     public Iti41AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }

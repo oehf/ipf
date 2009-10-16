@@ -29,6 +29,15 @@ public class FindSubmissionSetsQueryTransformer {
     private final IdentifiableTransformer identifiableTransformer = 
         new IdentifiableTransformer();
 
+    /**
+     * Transforms the query into its EbXML representation.
+     * <p>
+     * Does not perform any transformation if one of the parameters is <code>null</code>.
+     * @param query
+     *          the query to transform.
+     * @param ebXML
+     *          the EbXML representation.
+     */
     public void toEbXML(FindSubmissionSetsQuery query, EbXMLAdhocQueryRequest ebXML) {
         if (query == null || ebXML == null) {
             return;

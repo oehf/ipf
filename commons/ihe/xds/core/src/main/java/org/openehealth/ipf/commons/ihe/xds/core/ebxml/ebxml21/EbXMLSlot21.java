@@ -16,11 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
 import static org.apache.commons.lang.Validate.notNull;
-
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.SlotType1;
+
+import java.util.List;
 
 /**
  * Encapsulation of {@link SlotType1}.
@@ -28,7 +27,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.SlotType1;
  */
 public class EbXMLSlot21 implements EbXMLSlot {
     private final SlotType1 slot;
-    
+
+    /**
+     * Constructs the slot wrapper.
+     * @param slot
+     *          the slot to wrap.
+     */
     public EbXMLSlot21(SlotType1 slot) {
         notNull(slot, "slot cannot be null");
         this.slot = slot;

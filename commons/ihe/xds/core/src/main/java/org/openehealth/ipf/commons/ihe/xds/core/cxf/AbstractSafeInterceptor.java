@@ -27,15 +27,23 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
  */
 abstract public class AbstractSafeInterceptor extends AbstractPhaseInterceptor<Message> {
     private static final transient Log LOG = LogFactory.getLog(AbstractSafeInterceptor.class);
-    
-    public AbstractSafeInterceptor(String phase) {
+
+    /**
+     * Constructs the interceptor.
+     * @param phase
+     *          the phase in which the interceptor is run.
+     */
+    protected AbstractSafeInterceptor(String phase) {
         super(phase);
     }
     
     /**
      * Performs the actual work, being called from {@link #handleMessage(Message)}.   
      * 
-     * @param message CXF message to process.
+     * @param message
+     *          CXF message to process.
+     * @throws Exception
+     *          any exception that occurred when processing the message.
      */
     abstract protected void process(Message message) throws Exception;
     

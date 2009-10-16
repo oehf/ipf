@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
+
+import java.util.List;
 
 /**
  * Encapsulation of the ebXML classes for {@code RegistryEntryType} and 
@@ -134,7 +134,7 @@ public interface EbXMLRegistryObject extends EbXMLSlotList {
     String getId();
     
     /**
-     * @param the id of this entry.
+     * @param id  the id of this entry.
      */
     void setId(String id);
     

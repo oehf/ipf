@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -31,8 +29,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 
 /**
  * Tests for {@link RegistryResponseValidator}.
@@ -42,12 +40,11 @@ public class RegistryResponseValidatorTest {
     private RegistryResponseValidator validator;
     private Response response;
     private ResponseTransformer transformer;
-    private EbXMLFactory factory;
 
     @Before
     public void setUp() {
         validator = new RegistryResponseValidator();
-        factory = new EbXMLFactory30();
+        EbXMLFactory factory = new EbXMLFactory30();
         transformer = new ResponseTransformer(factory);
         response = SampleData.createResponse();
     }

@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  * @author Jens Riemschneider
  */
 public class RetrieveDocumentSetRequestValidator implements Validator<EbXMLRetrieveDocumentSetRequest, ValidationProfile>{
+    @Override
     public void validate(EbXMLRetrieveDocumentSetRequest request, ValidationProfile profile) {
         notNull(request, "request cannot be null");
         

@@ -32,13 +32,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocum
  * @author Jens Riemschneider
  */
 public class RetrieveDocumentSetRequestTransformerTest {
-    private EbXMLFactory factory;
     private RetrieveDocumentSetRequestTransformer transformer;
     private RetrieveDocumentSet request;
     
     @Before
     public void setUp() {
-        factory = new EbXMLFactory30();
+        EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetRequestTransformer(factory);
         
         request = SampleData.createRetrieveDocumentSet();

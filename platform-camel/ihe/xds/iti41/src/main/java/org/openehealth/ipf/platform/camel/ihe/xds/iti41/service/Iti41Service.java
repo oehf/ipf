@@ -33,13 +33,13 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * @author Jens Riemschneider
  */
 public class Iti41Service extends DefaultItiWebService implements Iti41PortType {
+    @Override
     public RegistryResponseType documentRepositoryProvideAndRegisterDocumentSetB(ProvideAndRegisterDocumentSetRequestType body) {
         Exchange result = process(body);
         if (result.getException() != null) {
             Response errorResponse = new Response();
             configureError(errorResponse, result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR);
-            RegistryResponseType ebXML = EbXML30Converters.convert(errorResponse);
-            return ebXML;
+            return EbXML30Converters.convert(errorResponse);
         }
         
         return Exchanges.resultMessage(result).getBody(RegistryResponseType.class);            

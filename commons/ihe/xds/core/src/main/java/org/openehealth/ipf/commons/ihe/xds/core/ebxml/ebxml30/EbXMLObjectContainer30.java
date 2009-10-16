@@ -16,25 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import static org.apache.commons.lang.Validate.notNull;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
 
+import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.xml.bind.JAXBElement;
-
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryPackageType;
 
 /**
  * Base class for requests and responses that contain various ebXML 3.0
@@ -44,6 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryPackageT
 public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     private final EbXMLObjectLibrary objectLibrary;
 
+    @Override
     public EbXMLObjectLibrary getObjectLibrary() {
         return objectLibrary;
     }
@@ -225,7 +215,7 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
      * Casts an object from the contents into the given type.
      * @param <T>
      *          the type to cast to.
-     * @param obj
+     * @param identifiable
      *          the object to cast.
      * @param type
      *          the type to cast to.

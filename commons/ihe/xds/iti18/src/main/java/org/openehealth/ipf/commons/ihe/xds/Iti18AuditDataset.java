@@ -26,14 +26,29 @@ public class Iti18AuditDataset extends ItiAuditDataset {
 
     private String queryUuid;
 
+    /**
+     * Constructs the audit dataset.
+     * @param serverSide
+     *            specifies whether this audit dataset will be used on the
+     *            server side (<code>true</code>) or on the client side (
+     *            <code>false</code>)
+     */
     Iti18AuditDataset(boolean serverSide) {
         super(serverSide);
     }
 
+    /**
+     * Sets the UUID of the query.
+     * @param queryUuid
+     *          the UUID of the query being audited.
+     */
     void setQueryUuid(String queryUuid) {
         this.queryUuid = queryUuid;
     }
 
+    /**
+     * @return the UUID of the query being audited.
+     */
     public String getQueryUuid() {
         return queryUuid;
     }

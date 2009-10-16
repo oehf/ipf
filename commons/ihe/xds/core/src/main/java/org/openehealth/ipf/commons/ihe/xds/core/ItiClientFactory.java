@@ -1,16 +1,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core;
 
 import static org.apache.commons.lang.Validate.notNull;
-
-import java.net.URL;
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Binding;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import javax.xml.ws.soap.SOAPBinding;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.endpoint.Client;
@@ -26,6 +16,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.payload.ClientOutputStreamSubstituteInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.payload.ClientPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapUtils;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.Binding;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
+import javax.xml.ws.soap.SOAPBinding;
+import java.net.URL;
+import java.util.Map;
 
 /**
  * Factory for ITI web-service stubs.
@@ -86,6 +84,9 @@ public class ItiClientFactory {
         return threadLocalPort.get();
     }
 
+    /**
+     * @return the service info of this factory.
+     */
     public ItiServiceInfo getServiceInfo() {
         return serviceInfo;
     }

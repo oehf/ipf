@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.cxf.audit;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -25,6 +22,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -34,10 +34,11 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  */
 public abstract class ItiAuditStrategy {
     private static final transient Log LOG = LogFactory.getLog(ItiAuditStrategy.class);
-    
+
     // TODO: externalize constant
+    /** Home community ID to use in audit strategies. */
     public static final String HOME_COMMUNITY_ID = "";
-    
+
     /**
      * Whether this is a server-side or a client-side strategy. 
      */
@@ -83,6 +84,7 @@ public abstract class ItiAuditStrategy {
      * @param auditDataset
      *      audit dataset to be enriched
      * @throws Exception
+     *      any exception that occurred during this operation
      */
     public abstract void enrichDataset(Object pojo, ItiAuditDataset auditDataset) 
         throws Exception;
@@ -97,6 +99,7 @@ public abstract class ItiAuditStrategy {
      * @param auditDataset
      *      audit dataset with all the information needed 
      * @throws Exception
+     *      any exception that occurred during this operation
      */
     public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcomeCode, ItiAuditDataset auditDataset)
         throws Exception;
@@ -108,13 +111,14 @@ public abstract class ItiAuditStrategy {
      * <p>
      * Audit can be performed when all necessary data is present or
      * when the user allows us to audit with incomplete data,
-     * @see #allowIncompleteAudit.
+     * @see #allowIncompleteAudit
      * 
      * @param eventOutcomeCode
      *      event outcome code as defined in RFC 3881
      * @param auditDataset
      *      audit dataset  
      * @throws Exception
+     *      any exception that occurred during auditing
      */
     public void audit(RFC3881EventOutcomeCodes eventOutcomeCode, ItiAuditDataset auditDataset) throws Exception {
         Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
@@ -157,7 +161,10 @@ public abstract class ItiAuditStrategy {
     
     /**
      * A helper method that analyzes the given registry response and 
-     * determines the corresponding RFC 3881 event outcome code. 
+     * determines the corresponding RFC 3881 event outcome code.
+     * @param response
+     *          registry to analyze.
+     * @return outcome code.
      */
     public static RFC3881EventOutcomeCodes getEventOutcomeCodeFromRegistryResponse(EbXMLRegistryResponse response) {
         if(response == null) {
@@ -188,18 +195,34 @@ public abstract class ItiAuditStrategy {
 
     /* ----- automatically generated getters and setters ----- */
 
+    /**
+     * Defines whether this is a server-side or a client-side strategy.
+     * @param serverSide
+     *          whether this is a server-side or a client-side strategy.
+     */
     public void setServerSide(boolean serverSide) {
         this.serverSide = serverSide;
     }
 
+    /**
+     * @return whether this is a server-side or a client-side strategy.
+     */
     public boolean isServerSide() {
         return serverSide;
     }
 
+    /**
+     * Defines whether this strategy should allow incomplete audit records.
+     * @param allowIncompleteAudit
+     *          whether this strategy should allow incomplete audit records.
+     */
     public void setAllowIncompleteAudit(boolean allowIncompleteAudit) {
         this.allowIncompleteAudit = allowIncompleteAudit;
     }
 
+    /**
+     * @return whether this strategy should allow incomplete audit records.
+     */
     public boolean isAllowIncompleteAudit() {
         return allowIncompleteAudit;
     }

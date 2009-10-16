@@ -16,32 +16,31 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.OrganizationTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Transforms between an {@link Author} instance and its representation in ebXML.
  * @author Jens Riemschneider
  */
 public class AuthorTransformer {
-    private PersonTransformer personTransformer = new PersonTransformer();
-    private OrganizationTransformer organizationTransformer = new OrganizationTransformer();
+    private final PersonTransformer personTransformer = new PersonTransformer();
+    private final OrganizationTransformer organizationTransformer = new OrganizationTransformer();
     private final EbXMLFactory factory;
     
     /**
      * Constructs the transformer
-     * @param factory
+     * @param ebXMLFactory
      *          factory for version independent ebXML objects. 
      */
     public AuthorTransformer(EbXMLFactory ebXMLFactory) {
@@ -80,14 +79,14 @@ public class AuthorTransformer {
             }
         }
         
-        classification.addSlot(SLOT_NAME_AUTHOR_INSTITUTION, 
-                hl7XONs.toArray(new String[0]));
+        classification.addSlot(SLOT_NAME_AUTHOR_INSTITUTION,
+                hl7XONs.toArray(new String[hl7XONs.size()]));
         
-        classification.addSlot(SLOT_NAME_AUTHOR_ROLE, 
-                author.getAuthorRole().toArray(new String[0]));
+        classification.addSlot(SLOT_NAME_AUTHOR_ROLE,
+                author.getAuthorRole().toArray(new String[author.getAuthorRole().size()]));
 
-        classification.addSlot(SLOT_NAME_AUTHOR_SPECIALTY, 
-                author.getAuthorSpecialty().toArray(new String[0]));
+        classification.addSlot(SLOT_NAME_AUTHOR_SPECIALTY,
+                author.getAuthorSpecialty().toArray(new String[author.getAuthorSpecialty().size()]));
         
         return classification;
     }

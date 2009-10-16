@@ -28,9 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.RESULT_NOT_SINGLE_PATIENT;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSValidationException;
 
 /**
  * Test for {@link QueryResponseValidator}.
@@ -54,12 +52,12 @@ public class QueryResponseValidatorTest {
     }
     
     @Test
-    public void testValidateGoodCase() throws XDSValidationException {
+    public void testValidateGoodCase() {
         validator.validate(transformer.toEbXML(response), null);
     }
 
     @Test
-    public void testQueryResponseDoesNotHaveSubmissionSetLimitations() throws XDSValidationException {
+    public void testQueryResponseDoesNotHaveSubmissionSetLimitations() {
         response.getSubmissionSets().clear();
         validator.validate(transformer.toEbXML(response), null);
     }

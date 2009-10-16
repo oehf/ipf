@@ -322,8 +322,7 @@ public abstract class SampleData {
     public static QueryRegistry createSqlQuery() {
         SqlQuery query = new SqlQuery();        
         query.setSql("SELECT * FROM INTERNET");
-        QueryRegistry queryRegistry = new QueryRegistry(query);
-        return queryRegistry;
+        return new QueryRegistry(query);
     }
     
     /**

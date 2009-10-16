@@ -15,16 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a stored query for FindSubmissionSets.
@@ -87,7 +83,7 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
     }
 
     /**
-     * @return the author person text for filtering {@link SubmissionSet#getAuthors()}.
+     * @return the author person text for filtering {@link SubmissionSet#getAuthor()}.
      */
     public String getAuthorPerson() {
         return authorPerson;
@@ -95,7 +91,7 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
 
     /**
      * @param authorPerson
-     *          the author person text for filtering {@link SubmissionSet#getAuthors()}.
+     *          the author person text for filtering {@link SubmissionSet#getAuthor()}.
      */
     public void setAuthorPerson(String authorPerson) {
         this.authorPerson = authorPerson;

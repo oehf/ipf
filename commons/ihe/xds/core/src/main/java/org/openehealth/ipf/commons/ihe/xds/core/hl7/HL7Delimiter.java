@@ -20,10 +20,15 @@ package org.openehealth.ipf.commons.ihe.xds.core.hl7;
  * @author Jens Riemschneider
  */
 public enum HL7Delimiter {
+    /** HL7 field delimiter: | */
     FIELD("|", "\\F\\"),
+    /** HL7 component delimiter: ^ */
     COMPONENT("^", "\\S\\"),
+    /** HL7 subcomponent delimiter: & */
     SUBCOMPONENT("&", "\\T\\"),
+    /** HL7 repetition delimiter: ~ */
     REPETITION("~", "\\R\\"),
+    /** HL7 escape character: \ */
     ESCAPE("\\", "\\E\\");
     
     private final String value;

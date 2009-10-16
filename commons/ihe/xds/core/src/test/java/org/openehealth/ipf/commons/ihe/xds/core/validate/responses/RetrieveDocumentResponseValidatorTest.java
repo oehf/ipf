@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -30,8 +28,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RetrieveDocumentSetResponseValidator;
 
 /**
  * Tests for {@link RetrieveDocumentSetResponseValidator}.
@@ -41,12 +39,11 @@ public class RetrieveDocumentResponseValidatorTest {
     private RetrieveDocumentSetResponseValidator validator;
     private RetrievedDocumentSet response;
     private RetrieveDocumentSetResponseTransformer transformer;
-    private EbXMLFactory factory;
 
     @Before
     public void setUp() {
         validator = new RetrieveDocumentSetResponseValidator();
-        factory = new EbXMLFactory30();
+        EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         response = SampleData.createRetrievedDocumentSet();
     }

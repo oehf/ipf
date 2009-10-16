@@ -53,7 +53,7 @@ public class SubmitObjectsRequestValidatorTest {
     }
     
     @Test
-    public void testValidateGoodCase() throws XDSValidationException {
+    public void testValidateGoodCase() {
         validator.validate(transformer.toEbXML(request), null);
     }
     

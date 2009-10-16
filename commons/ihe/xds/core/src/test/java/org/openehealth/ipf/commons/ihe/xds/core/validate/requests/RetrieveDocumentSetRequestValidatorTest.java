@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -29,8 +27,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocumentSetRequestTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveDocumentSetRequestValidator;
 
 /**
  * Validates {@link RetrieveDocumentSetRequestValidator}.
@@ -40,12 +39,11 @@ public class RetrieveDocumentSetRequestValidatorTest {
     private RetrieveDocumentSetRequestValidator validator;
     private RetrieveDocumentSet request;
     private RetrieveDocumentSetRequestTransformer transformer;
-    private EbXMLFactory factory;
 
     @Before
     public void setUp() {
         validator = new RetrieveDocumentSetRequestValidator();
-        factory = new EbXMLFactory30();
+        EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetRequestTransformer(factory);
         request = SampleData.createRetrieveDocumentSet();
     }

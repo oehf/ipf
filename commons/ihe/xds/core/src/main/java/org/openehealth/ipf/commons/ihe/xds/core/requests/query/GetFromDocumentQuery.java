@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 
 /**
  * Base class for queries that retrieve results via a document entry.

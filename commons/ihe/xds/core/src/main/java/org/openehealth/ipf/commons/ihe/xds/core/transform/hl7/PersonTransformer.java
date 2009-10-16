@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.hl7;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
 import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
+
+import java.util.List;
 
 /**
  * Transformation logic for a {@link Person}.
@@ -37,7 +37,7 @@ public class PersonTransformer {
     
     /**
      * Creates a person instance via an HL7 XCN string.
-     * @param hl7Value
+     * @param hl7XCN
      *          the HL7 XCN string. Can be <code>null</code>.
      * @return the created Person instance. <code>null</code> if no relevant 
      *          data was found in the HL7 string or the input was <code>null</code>.

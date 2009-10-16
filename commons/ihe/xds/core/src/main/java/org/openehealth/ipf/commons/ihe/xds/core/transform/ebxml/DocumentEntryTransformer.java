@@ -16,10 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-
-import java.util.List;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
@@ -27,10 +23,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.IdentifiableTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.UriTransformer;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
+
+import java.util.List;
 
 /**
  * Transforms between a {@link DocumentEntry} and its ebXML representation.
@@ -139,7 +136,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_ID, sourcePatient);
         
         List<String> slotValues = patientInfoTransformer.toHL7(docEntry.getSourcePatientInfo());
-        extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[0]));
+        extrinsic.addSlot(SLOT_NAME_SOURCE_PATIENT_INFO, slotValues.toArray(new String[slotValues.size()]));
     }
 
     @Override

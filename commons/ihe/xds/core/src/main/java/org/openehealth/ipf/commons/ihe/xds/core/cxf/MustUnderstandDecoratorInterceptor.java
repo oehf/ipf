@@ -45,6 +45,7 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
         addBefore(LoggingOutInterceptor.class.getName());
     }
 
+    @Override
     public void handleMessage(SoapMessage message) throws Fault {
         List<Header> headers = message.getHeaders();
         for (QName name : mustUnderstandHeaders) {
@@ -73,6 +74,7 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
      * are to be flagged with {@code mustUnderstand}.
      *  
      * @param header
+     *          the header to flag.
      */
     public void addHeader(QName header) {
         this.mustUnderstandHeaders.add(header);

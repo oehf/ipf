@@ -16,19 +16,16 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
-
-import java.util.List;
-import java.util.regex.Pattern;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Query parameter validation for parameters that are AvailabilityStatus-based. 
@@ -47,6 +44,7 @@ public class StatusValidation implements QueryParameterValidation {
         this.param = param;
     }
 
+    @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
         for (String slotValue : slotValues) {

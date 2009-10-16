@@ -33,6 +33,12 @@ class Iti41ClientAuditStrategy extends Iti41AuditStrategy {
         "PatientId"};
 
     
+    /**
+     * Constructs the audit strategy.
+     * @param allowIncompleteAudit
+     *      whether this strategy should allow incomplete audit records
+     *      (parameter initially configurable via endpoint URL).
+     */
     Iti41ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit);
     }
