@@ -156,6 +156,16 @@ public class MessageUtilsTest extends GroovyTestCase {
         def msg = parser.parse(msgText)
         assert 'Q22' == MessageUtils.triggerEvent(msg)
 	}
+	
+	void testMessageStructure() {
+		def parser = new GenericParser()
+        def msgText = this.class.classLoader.getResource('msg-03.hl7')?.text
+        def msg = parser.parse(msgText)
+        assert 'QBP_Q21' == MessageUtils.messageStructure(msg)
+        msgText = this.class.classLoader.getResource('msg-01.hl7')?.text
+        msg = parser.parse(msgText)
+        assert 'ADT_A01' == MessageUtils.messageStructure(msg)
+	}	
 
 	void testVersionUnknownMessage() {
 		def parser = new GenericParser()

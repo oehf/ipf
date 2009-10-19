@@ -115,6 +115,10 @@ class HapiModelExtension {
         Message.metaClass.getTriggerEvent = { ->
 			MessageUtils.triggerEvent(delegate)    				    
         }
+		
+        Message.metaClass.getMessageStructure = { ->
+			MessageUtils.messageStructure(delegate)    				    
+        }		
         
         Message.metaClass.'static'.methodMissing = { String name, args ->
             MessageUtils.newMessage(factory, name, args[0])

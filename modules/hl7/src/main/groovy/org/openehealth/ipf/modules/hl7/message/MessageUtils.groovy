@@ -85,6 +85,17 @@ class MessageUtils {
 		Terser.get(msg.MSH, 9, 0, 2, 1)
 	}
 	
+	/**
+	 * @return structure of the message, e.g. 'ADT_A01'
+	 */
+	static def messageStructure(Message msg) {
+		def structName = eventType(msg) + '_' + triggerEvent(msg)
+        if (['2.4', '2.5', '2.6'].contains(msg.version)) {
+			structName = Parser.getMessageStructureForEvent(structName, msg.version)
+        }
+		structName
+	}	
+	
 	/*
 	 * @deprecated. Use {@link #ack(ModelClassFactory, Message)}.
 	 */
@@ -231,7 +242,7 @@ class MessageUtils {
             structName = 'ACK'   
         } else {          
             structName = "${eventType}_${triggerEvent}"  
-            if (['2.4', '2.5'].contains(version)) {
+            if (['2.4', '2.5', '2.6'].contains(version)) {
                 structName = Parser.getMessageStructureForEvent(structName, version)
             }
         }
@@ -249,7 +260,7 @@ class MessageUtils {
         terser.set('MSH-7', hl7Now())
         terser.set("MSH-9-1", eventType)
         terser.set("MSH-9-2", triggerEvent)
-        if (['2.4', '2.5'].contains(version))
+        if (['2.4', '2.5', '2.6'].contains(version))
             terser.set("MSH-9-3", structName)          
         terser.set('MSH-10', MessageIDGenerator.getInstance().getNewID())
         terser.set('MSH-11-1', 'P')
