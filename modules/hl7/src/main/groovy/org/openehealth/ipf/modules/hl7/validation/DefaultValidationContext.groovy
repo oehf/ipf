@@ -21,7 +21,7 @@ import ca.uhn.hl7v2.validation.EncodingRule
 import ca.uhn.hl7v2.validation.MessageRule
 import ca.uhn.hl7v2.validation.PrimitiveTypeRule
 import ca.uhn.hl7v2.validation.ValidationContext
-
+import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
 import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
 
 /**
@@ -66,6 +66,7 @@ public class DefaultValidationContext implements ValidationContext{
 	]
 	
 	private def nestedValidationContexts = []
+	boolean requireMessageRule = false
 	
 	public DefaultValidationContext() {	    
 	}
@@ -106,6 +107,10 @@ public class DefaultValidationContext implements ValidationContext{
 		    if (matchingRules) {
 		        rules.addAll(matchingRules)
 		    }
+		}
+		// If no message rule matched but we require one, add the MissingMessageRule
+		if (rules.size() == 0 && requireMessageRule) {
+			rules.add(new MissingMessageRule())
 		}
 		rules as MessageRule[]
 	}

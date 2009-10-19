@@ -22,7 +22,7 @@ import ca.uhn.hl7v2.validation.ValidationContext
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.conf.store.ProfileStoreFactory
 import ca.uhn.hl7v2.model.Message
-
+import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
 import org.openehealth.ipf.modules.hl7.validation.support.ClassPathProfileStore
 import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
@@ -55,6 +55,17 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	    assert r.getMessageRules('2.5', 'ADT', 'A01')[1] == rule2
 	    assert r.getMessageRules('2.4', 'ADT', 'A01').size() == 0
 	}
+	
+	void testGetMissingMessageRule(){
+	    DefaultValidationContext r = new DefaultValidationContext(requireMessageRule:true);
+	    MessageRule rule1 = new ClosureMessageRule() {}
+	    MessageRule rule2 = new ClosureMessageRule() {}
+	    r.addMessageRule('2.5', 'ADT', 'A01', rule1)
+	    r.addMessageRule('2.5', 'ADT', 'A01', rule2)
+	    assert r.getMessageRules('2.4', 'ADT', 'A01').size() == 1
+		assert r.getMessageRules('2.4', 'ADT', 'A01')[0] instanceof MissingMessageRule
+	}
+	
 	
 	void testGetEncodingRules(){
 	    DefaultValidationContext r = new DefaultValidationContext();
