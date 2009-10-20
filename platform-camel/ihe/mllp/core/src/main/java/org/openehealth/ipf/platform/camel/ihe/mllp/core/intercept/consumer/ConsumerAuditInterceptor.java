@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.Processor;
+import org.apache.camel.component.mina.MinaEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
@@ -48,10 +50,18 @@ public class ConsumerAuditInterceptor
     }
 
     public void determineParticipantsAddresses(Exchange exchange, MllpAuditDataset auditDataset) throws Exception {
-        // implementations of this method are totally different in IPF 1.x and 2.x
-        auditDataset.setLocalAddress(InetAddress.getLocalHost().getCanonicalHostName());
-        // TODO get remote address from somewhere
-        auditDataset.setRemoteAddress("remote");
+        Message message = exchange.getIn();
+        auditDataset.setLocalAddress(addressFromHeader(message, MinaEndpoint.HEADER_LOCAL_ADDRESS));
+        auditDataset.setRemoteAddress(addressFromHeader(message, MinaEndpoint.HEADER_REMOTE_ADDRESS));
+    }
+    
+    /**
+     * Extracts string representation of IP address from socket address instance  
+     * stored in the given header of the given Camel message.  
+     */
+    private static String addressFromHeader(Message message, String headerName) {
+        InetSocketAddress address = (InetSocketAddress) message.getHeader(headerName);
+        return address.getAddress().getHostAddress();
     }
     
 }
