@@ -27,6 +27,9 @@ import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Statistics;
 
 /**
+ * Holds {@link SummaryStatistics} for every measurement location. The class is
+ * not thread-safe.
+ * 
  * @author Mitko Kolev
  */
 public class ProcessingTimeStatistics implements Statistics {
@@ -61,7 +64,7 @@ public class ProcessingTimeStatistics implements Statistics {
         return statisticsByMeasurementName.get(name).getSummary();
     }
 
-    private void initializeStatisticsIfNecessary(MeasurementHistory history) {
+    protected void initializeStatisticsIfNecessary(MeasurementHistory history) {
         // initialize summary statistics only for measurements with name
         for (Measurement measurement : history.getMeasurements()) {
             if (!measurement.isNameEmpty()) {
@@ -74,7 +77,7 @@ public class ProcessingTimeStatistics implements Statistics {
         }
     }
 
-    private void updateStatisticsWithHistory(MeasurementHistory history) {
+    protected void updateStatisticsWithHistory(MeasurementHistory history) {
         List<Measurement> measurements = history.getMeasurements();
         Measurement firstMeasurement = measurements.get(0);
 
