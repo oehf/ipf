@@ -245,7 +245,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             metaDataAssert(type != null, INVALID_ASSOCIATION_TYPE);
     
             if (type != AssociationType.HAS_MEMBER) {
-                validateDocumentRelationship(association, docEntryIds);
+                validateDocumentRelationship(association, docEntryIds, profile);
             }
             else {
                 validateAssociation(association, docEntryIds, profile);
@@ -270,7 +270,9 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateDocumentRelationship(EbXMLAssociation association, Set<String> docEntryIds)throws XDSMetaDataException {
-        metaDataAssert(docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND); 
+    private void validateDocumentRelationship(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile)throws XDSMetaDataException {
+        if (!profile.isQuery()) {
+            metaDataAssert(docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
+        }
     }
 }
