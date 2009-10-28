@@ -44,7 +44,10 @@ abstract class Iti9AuditStrategy implements MllpAuditStrategy {
 
     
     void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        if(msg.QUERY_RESPONSE?.PID?.value) {
+        if((msg.MSH[9][1].value == 'RSP') && 
+           (msg.MSH[9][2].value == 'K23') && 
+           (msg.QUERY_RESPONSE?.PID?.value)) 
+        {
             def patientIds = AuditUtils.pidList(msg.QUERY_RESPONSE.PID[3])
             if(( ! auditDataset.patientIds) || patientIds.contains(auditDataset.patientIds[0])) {
                 auditDataset.patientIds = patientIds

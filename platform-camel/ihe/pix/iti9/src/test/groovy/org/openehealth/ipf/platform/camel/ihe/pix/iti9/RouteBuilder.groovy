@@ -63,6 +63,13 @@ class RouteBuilder extends SpringRouteBuilder {
              .process {
                  resultMessage(it).body = rsp
              }
+
+         // for automatic NAK 
+         from('pix-iti9://0.0.0.0:8891')
+             .process {
+                 throw new RuntimeException('12345')
+             }
+         
      }
 }
  

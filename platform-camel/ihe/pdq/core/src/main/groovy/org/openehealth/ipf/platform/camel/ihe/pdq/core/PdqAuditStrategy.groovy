@@ -89,14 +89,16 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
 
     
     void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        def patientIds = []
-        for(group in msg.QUERY_RESPONSE()) {
-            patientIds += AuditUtils.pidList(group.PID[3])
-        }
-        if(patientIds) {
-            auditDataset.patientIds = auditDataset.patientIds ? 
-                    patientIds + auditDataset.patientIds[0] :
-                    patientIds
+        if((msg.MSH[9][1].value == 'RSP') && (msg.MSH[9][2].value == 'K22')) {
+            def patientIds = []
+            for(group in msg.QUERY_RESPONSE()) {
+                patientIds += AuditUtils.pidList(group.PID[3])
+            }
+            if(patientIds) {
+                auditDataset.patientIds = auditDataset.patientIds ? 
+                        patientIds + auditDataset.patientIds[0] :
+                        patientIds
+            }
         }
     }
 

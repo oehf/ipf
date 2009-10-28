@@ -19,7 +19,7 @@ import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessageimport org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponentimport org.openehealth.ipf.modules.hl7.AckTypeCode
 
 /**
  * Camel route for generic unit tests.
@@ -77,6 +77,11 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
              
+         // for automatic NAK 
+         from('pdq-iti21://0.0.0.0:8891')
+             .process {
+                 throw new RuntimeException('12345')
+             }
              
      }
 }

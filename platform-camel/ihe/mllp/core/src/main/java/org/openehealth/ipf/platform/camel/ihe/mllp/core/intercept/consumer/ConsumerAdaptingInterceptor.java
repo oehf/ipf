@@ -117,7 +117,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
             return new MessageAdapter((Message) MessageUtils.ack(classFactory, originalMessage)); 
         } else if((header == AckTypeCode.AE) || (header == AckTypeCode.AR)) {
             HL7v2Exception exception = new HL7v2Exception(
-                    "Error in PIX/PDQ route, output type not supported", 
+                    "Error in PIX/PDQ route", 
                     getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
             Message nak = (Message) MessageUtils.nak(
                     classFactory,

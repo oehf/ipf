@@ -210,6 +210,19 @@ class TestIti21 extends MllpTestContainer {
     }
     
     
+    /**
+     * Auditing in case of automatically generated NAK.
+     */
+    @Test
+    void testAutoNak() throws Exception {
+        def body = getMessageString('QBP^Q22', '2.5')
+        def endpointUri = 'pdq-iti21://localhost:8891'
+        def msg = send(endpointUri, body)
+        assertEquals(2, auditSender.messages.size)
+        assertNAK(msg)
+    }
+    
+    
     @Test
     void testCancel() {
         def body = 
