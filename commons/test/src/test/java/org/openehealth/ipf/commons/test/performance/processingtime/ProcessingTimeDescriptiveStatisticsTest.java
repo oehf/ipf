@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.test.performance.processingtime;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.List;
 
 import org.apache.commons.math.stat.descriptive.StatisticalSummary;
@@ -22,7 +24,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openehealth.ipf.commons.test.performance.StatisticsRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -30,6 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import static org.openehealth.ipf.commons.test.performance.PerformanceMeasurementTestUtils.createMeasurementHistory;
 
@@ -45,7 +47,7 @@ public class ProcessingTimeDescriptiveStatisticsTest {
     ProcessingTimeDescriptiveStatistics statistics;
 
     @Autowired
-    StatisticsRenderer renderer;
+    ProcessingTimeDescriptiveStatisticsRenderer renderer;
 
     @Before
     public void setUp() {
@@ -96,10 +98,45 @@ public class ProcessingTimeDescriptiveStatisticsTest {
         }
         String report = renderer.render(statistics);
         System.out.println(report);
-        
-        String [] measurements = report.split(","); 
-        //the report contains maxUpdates number of measurements, separated by commas
+
+        String[] measurements = report.split(",");
+        // the report contains maxUpdates number of measurements, separated by
+        // commas
         assertEquals(maxUpdates, measurements.length);
-        
+
     }
+
+    @Test
+    public void testCreatesCSVFile() throws Exception {
+        int maxUpdates = 30;
+        for (int updates = 0; updates < maxUpdates; updates++) {
+            statistics.update(createMeasurementHistory());
+        }
+        renderer.setCreateMeasurementLocationDataFiles(true);
+        //do the rendering
+        renderer.render(statistics);
+        
+        File currentDir = new File(".");
+        File[] files = currentDir.listFiles(new FileFilter() {
+
+            @Override
+            public boolean accept(File pathname) {
+                String name = pathname.getName();
+                if (name.contains("measurement-location") && name.contains(".csv")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        });
+        assertNotSame(0, files.length);
+        //clean up
+        for(File f : files){
+            f.delete();
+        }
+        //restore the statistics state
+        renderer.setCreateMeasurementLocationDataFiles(false);
+    }
+
 }
