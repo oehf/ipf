@@ -28,7 +28,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 abstract class Iti9AuditStrategy implements MllpAuditStrategy {
     
     String[] getNecessaryFields(String messageType) {
-        ['QpdPayload', 'PatientIds']
+        ['Payload', 'PatientIds']
     }
 
     
@@ -38,8 +38,10 @@ abstract class Iti9AuditStrategy implements MllpAuditStrategy {
             if(patientId) { 
                 auditDataset.patientIds = [patientId]
             }
-            auditDataset.qpdPayload = AuditUtils.getSegmentString(exchange, msg, 'QPD')
         }
+
+        // request message as String
+        auditDataset.payload = AuditUtils.getRequestString(exchange, msg)
     }
 
     

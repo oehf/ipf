@@ -39,14 +39,6 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
      
      void configure() throws Exception {
 
-         from('pdq-iti21://0.0.0.0:8886?allowIncompleteAudit=true')
-         .onException(Exception.class)
-             .maximumRedeliveries(0)
-             .end()
-         .process {
-             resultMessage(it).body = rsp
-         }
-
          from('pdq-iti21://0.0.0.0:8887?audit=false')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
@@ -62,14 +54,6 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
              .process {
                  resultMessage(it).body = rsp
              }
-
-         from('pdq-iti21://0.0.0.0:8889')
-             .validate().iti21Request()
-             .process {
-                 resultMessage(it).body = rsp
-             }
-             .validate().iti21Response()
-     
              
          // for cancel messages
          from('pdq-iti21://0.0.0.0:8890')

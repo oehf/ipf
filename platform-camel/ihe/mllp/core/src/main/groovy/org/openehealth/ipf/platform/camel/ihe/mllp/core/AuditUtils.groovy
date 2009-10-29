@@ -22,7 +22,7 @@ import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpInterceptor
 import org.apache.camel.Exchangeimport org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoSession
@@ -147,23 +147,11 @@ class AuditUtils {
      
     
     /**
-     * Extracts string representation og the given HL7 segment  
-     * from the message stored in the given Camel exchange.
-     * <p>
-     * Tries stored original message first, then tries to encode  
-     * a segment from MessageAdapter.
-     */
-    static String getSegmentString(Exchange exchange, MessageAdapter msg, String segmentName) {
-        // try header first (will work only on consumer side)
-        def s = exchange.in.getHeader(
-                AbstractMllpInterceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME,
-                String.class)
-        s = s?.split('[\\n\\r]').find { it.startsWith(segmentName + '|') }
-        if(s) {
-            return s
-        }
-            
-        // fall back to the message abrakadapter
-        return MessageUtils.pipeEncode(msg."${segmentName}".target)
+      * Returns string representation of the request message by extracting it
+      * from the corresponding header of the given Camel exchange (preferred) 
+      * or by serializing the given message adapter. 
+      */
+    static String getRequestString(Exchange exchange, MessageAdapter msg) {
+        exchange.in.headers[MllpInterceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME] ?: msg.toString()
     }
 }

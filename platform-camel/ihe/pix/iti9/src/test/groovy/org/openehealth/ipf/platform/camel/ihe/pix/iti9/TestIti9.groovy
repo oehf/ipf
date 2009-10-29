@@ -185,12 +185,12 @@ class TestIti9 extends MllpTestContainer {
     @Test
     void testIncompleteAudit1() throws Exception {
         // both consumer-side and producer-side
-        doTestIncompleteAudit('pix-iti9://localhost:8886?allowIncompleteAudit=true', 2)
+        doTestIncompleteAudit('pix-iti9://localhost:8890?allowIncompleteAudit=true', 2)
     }
     @Test
     void testIncompleteAudit2() throws Exception {
         // consumer-side only
-        doTestIncompleteAudit('pix-iti9://localhost:8886', 1)
+        doTestIncompleteAudit('pix-iti9://localhost:8890', 1)
     }
     @Test
     void testIncompleteAudit3() throws Exception {

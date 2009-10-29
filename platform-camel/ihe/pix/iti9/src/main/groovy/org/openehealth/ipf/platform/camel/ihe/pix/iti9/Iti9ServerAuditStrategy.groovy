@@ -36,7 +36,7 @@ class Iti9ServerAuditStrategy extends Iti9AuditStrategy {
                 auditDataset.receivingFacility,
                 auditDataset.receivingApplication,
                 auditDataset.messageControlId,
-                auditDataset.qpdPayload,
+                auditDataset.payload,
                 auditDataset.patientIds)
     }
     

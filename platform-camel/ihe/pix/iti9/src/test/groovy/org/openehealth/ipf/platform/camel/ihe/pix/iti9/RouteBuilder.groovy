@@ -32,7 +32,13 @@ class RouteBuilder extends SpringRouteBuilder {
          QPD|QRY_1001^Query for Corresponding Identifiers^IHEDEMO|QRY10501108|79471^^^HZLN^PI|^^^KHKN~^^^&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO~^^^PKLN&2.16.840.1.113883.3.37.4.1.1.2.511.1&ISO
          PID|1||79471^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI~78912^^^PKLN&2.16.840.1.113883.3.37.4.1.1.2.511.1&ISO^PI||~^S
              '''
-              
+
+    def rspWithoutPid = '''MSH|^~\\&|MESA_XREF|XYZ_HOSPITAL|MESA_PIX_CLIENT|MESA_DEPARTMENT|20090901141123||RSP^K23^RSP_K23|356813|P|2.5
+         MSA|AA|10501108
+         QAK|QRY10501108|OK
+         QPD|||QRY_1001^Query for Corresponding Identifiers^IHEDEMO|QRY10501108|79471^^^HZLN^PI|^^^KHKN~^^^&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO~^^^PKLN&2.16.840.1.113883.3.37.4.1.1.2.511.1&ISO
+             '''
+             
      void configure() throws Exception {
 
          from('pix-iti9://0.0.0.0:8886?allowIncompleteAudit=true')
@@ -56,12 +62,20 @@ class RouteBuilder extends SpringRouteBuilder {
                  .maximumRedeliveries(0)
                  .end()
              .process {
-                 resultMessage(it).body = rsp
+                 resultMessage(it).body = rspWithoutPid
              }
          
          from('pix-iti9://0.0.0.0:8889')
              .process {
                  resultMessage(it).body = rsp
+             }
+
+         from('pix-iti9://0.0.0.0:8890?allowIncompleteAudit=true')
+             .onException(Exception.class)
+                 .maximumRedeliveries(0)
+                 .end()
+             .process {
+                 resultMessage(it).body = rspWithoutPid
              }
 
          // for automatic NAK 

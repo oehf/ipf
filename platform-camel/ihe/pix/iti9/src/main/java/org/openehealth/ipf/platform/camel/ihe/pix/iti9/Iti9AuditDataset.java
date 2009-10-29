@@ -25,8 +25,8 @@ public class Iti9AuditDataset extends MllpAuditDataset {
 
     /** Patient ID list from QPD-3. */
     private String[] patientIds;
-    /** The whole QPD segment as String. */
-    private String qpdPayload;
+    /** Request payload. */
+    private String payload;
     
     public Iti9AuditDataset(boolean serverSide) {
         super(serverSide);
@@ -43,11 +43,11 @@ public class Iti9AuditDataset extends MllpAuditDataset {
         return patientIds;
     }
 
-    public void setQpdPayload(String qpdPayload) {
-        this.qpdPayload = qpdPayload;
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
-    public String getQpdPayload() {
-        return qpdPayload;
+    public String getPayload() {
+        return payload;
     }
 }

@@ -17,9 +17,12 @@ package org.openehealth.ipf.platform.camel.ihe.pdq.core
 
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtilsimport org.apache.camel.Exchange
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
+
+import org.apache.camel.Exchange
+
 
 /**
  * Generic audit strategy for ITI-21 and ITI-22 (PDQ).
@@ -32,7 +35,7 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
     // criteria were not based on patient ID and no patients
     // have been found  
     String[] getNecessaryFields(String messageType) {
-        ['QpdPayload', /*'PatientIds'*/]
+        ['Payload', /*'PatientIds'*/]
     }
 
     
@@ -53,7 +56,7 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
 
     
     void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
-        if(msg.QPD.value) {
+        if(msg.QPD?.value) {
             // Try to extract a complete patient ID from query pieces.  
             // Double occurences of components are not allowed, 
             // so we do not care of them.
@@ -81,10 +84,10 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
                 
                 auditDataset.patientIds = [sb.toString()]
             }
-
-            // the whole segment QPD as String
-            auditDataset.qpdPayload = AuditUtils.getSegmentString(exchange, msg, 'QPD')
         }
+        
+        // request message as String
+        auditDataset.payload = AuditUtils.getRequestString(exchange, msg) 
     }
 
     

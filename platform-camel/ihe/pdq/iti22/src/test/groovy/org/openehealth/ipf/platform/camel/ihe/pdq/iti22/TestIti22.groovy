@@ -176,37 +176,4 @@ class TestIti22 extends MllpTestContainer {
         assertEquals(0, auditSender.messages.size)
     }
     
-
-    /**
-     * Incomplete messages (absent QPD segment), incomplete audit enabled.
-     * Expected results: corresponding count of audit items (0-1-2).
-     */
-    @Test
-    void testIncompleteAudit1() throws Exception {
-        // both consumer-side and producer-side
-        doTestIncompleteAudit('pdq-iti22://localhost:8886?allowIncompleteAudit=true', 2)
-    }
-    @Test
-    void testIncompleteAudit2() throws Exception {
-        // consumer-side only
-        doTestIncompleteAudit('pdq-iti22://localhost:8886', 1)
-    }
-    @Test
-    void testIncompleteAudit3() throws Exception {
-        // producer-side only
-        doTestIncompleteAudit('pdq-iti22://localhost:8888?allowIncompleteAudit=true', 1)
-    }
-    @Test
-    void testIncompleteAudit4() throws Exception {
-        // producer-side only, but fictive
-        doTestIncompleteAudit('pdq-iti22://localhost:8888?allowIncompleteAudit=true&audit=false', 0)
-    }
-
-    def doTestIncompleteAudit(String endpointUri, int expectedAuditItemsCount) {
-        def body = getMessageString('QBP^ZV1', '2.5', false)
-        def msg = send(endpointUri, body)
-        assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
-    }
-
 }

@@ -38,7 +38,7 @@ class PdqClientAuditStrategy extends PdqAuditStrategy {
                 auditDataset.sendingFacility,
                 auditDataset.sendingApplication,
                 auditDataset.messageControlId,
-                auditDataset.qpdPayload,
+                auditDataset.payload,
                 auditDataset.patientIds)
     }
     

@@ -40,7 +40,7 @@ class PdqServerAuditStrategy extends PdqAuditStrategy {
                 auditDataset.receivingFacility,
                 auditDataset.receivingApplication,
                 auditDataset.messageControlId,
-                auditDataset.qpdPayload,
+                auditDataset.payload,
                 auditDataset.patientIds)
     }
     
