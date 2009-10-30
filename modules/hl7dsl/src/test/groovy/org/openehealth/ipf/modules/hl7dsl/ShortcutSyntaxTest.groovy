@@ -17,6 +17,8 @@ package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 
+import ca.uhn.hl7v2.model.v231.message.ADT_A40
+
 /**
  * @author Christian Ohr
  */
@@ -99,4 +101,14 @@ public class ShortcutSyntaxTest extends GroovyTestCase{
          msg2.NK1[2] = 'Nachname4'
          assert 'Nachname4' == msg2.NK1[2][1].value
      }
+     
+     void testUndesiredReplication() {
+         def hapiMessage = new ADT_A40()
+         def adt = new MessageAdapter(hapiMessage)
+         def grp = adt.PIDPD1MRGPV1(0)
+         grp.PID[5][1] = 'X'
+         grp.PID[5][2] = 'Y'
+		 assert adt.count('PIDPD1MRGPV1') == 1
+		 assert adt.PIDPD1MRGPV1.PID[5][1].value == 'X'
+   }      
 }
