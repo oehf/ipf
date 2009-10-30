@@ -47,20 +47,20 @@ public class QPD extends AbstractSegment {
    * message.  
    */
   public QPD(Group parent, ModelClassFactory factory) {
-    super(parent, factory);
-    Message message = getMessage();
-    try {
-       this.add(CE.class, true, 1, 250, new Object[]{message});
-       this.add(ST.class, false, 1, 32, new Object[]{message});
-       this.add(Varies.class, true, 0, 256, new Object[]{message});
-       this.add(Varies.class, false, 0, 256, new Object[]{message});
-       this.add(Varies.class, false, 0, 256, new Object[]{message});
-       this.add(Varies.class, false, 0, 256, new Object[]{message});
-       this.add(Varies.class, false, 0, 256, new Object[]{message});       
-       this.add(Varies.class, true, 0, 256, new Object[]{message});
-    } catch (HL7Exception he) {
-        HapiLogFactory.getHapiLog(this.getClass()).error("Can't instantiate " + this.getClass().getName(), he);
-    }
+      super(parent, factory);
+      Message message = getMessage();
+      try {
+         this.add(CE.class, true, 1, 250, new Object[]{message});
+         this.add(ST.class, false, 1, 32, new Object[]{message});
+         this.add(HD.class, true, 0, 256, new Object[]{message});
+         this.add(Varies.class, false, 0, 256, new Object[]{message});
+         this.add(Varies.class, false, 0, 256, new Object[]{message});
+         this.add(Varies.class, false, 0, 256, new Object[]{message});
+         this.add(Varies.class, false, 0, 256, new Object[]{message});       
+         this.add(CX.class, true, 0, 256, new Object[]{message});
+      } catch (HL7Exception he) {
+          HapiLogFactory.getHapiLog(this.getClass()).error("Can't instantiate " + this.getClass().getName(), he);
+      }
   }
 
   /**

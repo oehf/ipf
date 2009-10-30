@@ -54,7 +54,7 @@ public class QPD extends AbstractSegment  {
        this.add(CE.class, true, 1, 250, new Object[]{message});
        this.add(ST.class, true, 1, 32, new Object[]{message});
        this.add(CX.class, true, 1, 256, new Object[]{message});
-       this.add(CX.class, false, 1, 256, new Object[]{message});
+       this.add(CX.class, false, 0, 256, new Object[]{message});
     } catch (HL7Exception he) {
         HapiLogFactory.getHapiLog(this.getClass()).error("Can't instantiate " + this.getClass().getName(), he);
     }

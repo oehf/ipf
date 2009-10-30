@@ -41,12 +41,13 @@ class MllpTestContainer {
      def static producerTemplate
      def static camelContext
      def static auditSender
-   
+     def static appContext
+     
      /**
       * Initializes a test on the basis of a Spring descriptor.
       */
      def static init(String descriptorFile) { 
-         def appContext = new ClassPathXmlApplicationContext(descriptorFile)
+         appContext = new ClassPathXmlApplicationContext(descriptorFile)
          producerTemplate = appContext.getBean('template', ProducerTemplate.class)
          camelContext = appContext.getBean('camelContext', CamelContext.class)
 
