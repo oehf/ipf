@@ -191,9 +191,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</connection>
-        <developerConnection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</developerConnection>
-        <url>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</url>
+        <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/branches/ipf-2.0</connection>
+        <developerConnection>scm:svn:http://gforge.openehealth.org/svn/ipf/branches/ipf-2.0</developerConnection>
+        <url>scm:svn:http://gforge.openehealth.org/svn/ipf/branches/ipf-2.0</url>
     </scm>
 
     <modules>
