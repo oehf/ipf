@@ -39,9 +39,6 @@
         <module>mllp</module>
         <module>pix</module>
         <module>pdq</module>
-        <module>hl7v3ws</module>
-        <module>pixv3</module>
-        <module>pdqv3</module>
     </modules>
 
 </project>
