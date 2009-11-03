@@ -18,67 +18,18 @@
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
-		    <groupId>org.openehealth.ipf.commons</groupId>
-		    <artifactId>commons-core</artifactId>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
             <version>${pom.version}</version>
         </dependency>
+        
+        <!-- Dependencies for test -->
         <dependency>
-		    <groupId>org.openehealth.ipf.commons</groupId>
-		    <artifactId>commons-ihe-atna</artifactId>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
             <version>${pom.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-bindings-soap</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-simple</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxws</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-ws-addr</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http-jetty</artifactId>
-        </dependency>
-
-        <!-- Dependencies for tests -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>catalina</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>coyote</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>jasper</artifactId>
-            <scope>test</scope>
+            <type>test-jar</type>
         </dependency>
     </dependencies>
 

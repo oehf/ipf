@@ -20,15 +20,16 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.xml.ws.BindingProvider;
+
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.Iti15PortType;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.ProvidedAttachmentOutInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-15 component.

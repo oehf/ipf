@@ -15,14 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds;
 
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 /**
  * ITI-18 specific Audit Dataset.
- * 
  * @author Dmytro Rud
  */
-public class Iti18AuditDataset extends ItiAuditDataset {
+public class Iti18AuditDataset extends XdsAuditDataset {
 
     private String queryUuid;
 

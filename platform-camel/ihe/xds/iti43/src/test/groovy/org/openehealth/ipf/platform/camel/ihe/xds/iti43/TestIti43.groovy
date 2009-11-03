@@ -32,7 +32,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.core.utils.CxfTestUtils
+import org.openehealth.ipf.commons.ihe.ws.utils.CxfTestUtils
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.

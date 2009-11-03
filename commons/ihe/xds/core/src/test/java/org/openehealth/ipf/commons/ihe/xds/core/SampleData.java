@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core;
 
+import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
-import org.openehealth.ipf.commons.ihe.xds.core.utils.LargeDataSource;
 
 import javax.activation.DataHandler;
 import java.util.Arrays;

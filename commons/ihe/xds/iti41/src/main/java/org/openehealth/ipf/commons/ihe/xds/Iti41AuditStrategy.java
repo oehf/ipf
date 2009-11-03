@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds;
 
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
@@ -29,10 +29,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 
 /**
  * Audit strategy for ITI-41.
- * 
  * @author Dmytro Rud
  */
-abstract public class Iti41AuditStrategy extends ItiAuditStrategy {
+abstract public class Iti41AuditStrategy extends XdsAuditStrategy {
 
     /**
      * Constructs the audit strategy.
@@ -47,7 +46,7 @@ abstract public class Iti41AuditStrategy extends ItiAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, ItiAuditDataset auditDataset) {
+    public void enrichDataset(Object pojo, XdsAuditDataset auditDataset) {
         ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if(submitObjectsRequest != null) {

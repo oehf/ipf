@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultXdsWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
@@ -33,7 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  *
  * @author Jens Riemschneider
  */
-public class Iti42Service extends DefaultItiWebService implements Iti42PortType {
+public class Iti42Service extends DefaultXdsWebService implements Iti42PortType {
     @Override public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {

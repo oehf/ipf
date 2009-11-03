@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds;
 
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
@@ -26,10 +26,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 
 /**
  * Base audit strategy for ITI-18.
- * 
  * @author Dmytro Rud
  */
-abstract class Iti18AuditStrategy extends ItiAuditStrategy {
+abstract class Iti18AuditStrategy extends XdsAuditStrategy {
 
     /**
      * Constructs the audit strategy.
@@ -44,7 +43,7 @@ abstract class Iti18AuditStrategy extends ItiAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, ItiAuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, XdsAuditDataset genericAuditDataset) {
         AdhocQueryRequest request = (AdhocQueryRequest) pojo;
         Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
 
@@ -55,7 +54,7 @@ abstract class Iti18AuditStrategy extends ItiAuditStrategy {
     }
     
     @Override
-    public ItiAuditDataset createAuditDataset() {
+    public XdsAuditDataset createAuditDataset() {
         return new Iti18AuditDataset(isServerSide());
     }
 

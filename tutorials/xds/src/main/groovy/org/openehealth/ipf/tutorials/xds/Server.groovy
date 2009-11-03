@@ -16,8 +16,8 @@
 package org.openehealth.ipf.tutorials.xds
 
 import org.apache.cxf.transport.servlet.CXFServlet
-import org.openehealth.ipf.commons.ihe.xds.core.server.ServletServer
-import org.openehealth.ipf.commons.ihe.xds.core.server.TomcatServer
+import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
+import org.openehealth.ipf.commons.ihe.ws.server.TomcatServer
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.core.io.ClassPathResource
 

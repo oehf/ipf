@@ -16,12 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xds;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Server audit strategy for ITI-16.
- * 
  * @author Dmytro Rud
  */
 class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
@@ -37,7 +36,7 @@ class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
     }
     
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset auditDataset) {
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, XdsAuditDataset auditDataset) {
         AuditorManager.getRegistryAuditor().auditRegistryQueryEvent(
                 eventOutcome,
                 auditDataset.getClientIpAddress(), // Must be set to something, otherwise schema is broken

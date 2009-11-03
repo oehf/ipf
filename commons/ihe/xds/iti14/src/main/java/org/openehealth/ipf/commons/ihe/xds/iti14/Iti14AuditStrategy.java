@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti14;
 
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLRegistryResponse21;
@@ -27,17 +27,16 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 
 /**
  * Audit strategy for ITI-14.
- * 
  * @author Dmytro Rud
  */
-abstract class Iti14AuditStrategy extends ItiAuditStrategy {
+abstract class Iti14AuditStrategy extends XdsAuditStrategy {
 
     Iti14AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDataset(Object pojo, ItiAuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, XdsAuditDataset genericAuditDataset) {
         SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest21(request);
         genericAuditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);

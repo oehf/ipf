@@ -15,17 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15.component;
 
+import java.net.URISyntaxException;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.Iti15;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.Iti15Service;
-
-import java.net.URISyntaxException;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiEndpoint;
 
 /**
  * The Camel endpoint for the ITI-15 transaction.

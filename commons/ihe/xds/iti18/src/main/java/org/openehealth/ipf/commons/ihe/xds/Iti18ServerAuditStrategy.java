@@ -16,12 +16,11 @@
 package org.openehealth.ipf.commons.ihe.xds;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Server audit strategy for ITI-18.
- * 
  * @author Dmytro Rud
  */
 class Iti18ServerAuditStrategy extends Iti18AuditStrategy {
@@ -45,7 +44,7 @@ class Iti18ServerAuditStrategy extends Iti18AuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset genericAuditDataset) {
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, XdsAuditDataset genericAuditDataset) {
         Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
 
         AuditorManager.getRegistryAuditor().auditRegistryStoredQueryEvent(

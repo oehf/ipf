@@ -18,12 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.Iti42;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42Service;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiEndpoint;
 
 /**
  * The Camel endpoint for the ITI-42 transaction.

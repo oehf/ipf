@@ -18,6 +18,7 @@
     
     <modules>
         <module>atna</module> 
+        <module>ws</module> 
         <module>xds</module> 
     </modules>
 

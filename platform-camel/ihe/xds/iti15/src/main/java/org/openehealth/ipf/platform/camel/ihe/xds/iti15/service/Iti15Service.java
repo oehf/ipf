@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultXdsWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Converters;
 
 /**
@@ -41,7 +41,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Convert
  *
  * @author Jens Riemschneider
  */
-public class Iti15Service extends DefaultItiWebService implements Iti15PortType {
+public class Iti15Service extends DefaultXdsWebService implements Iti15PortType {
     @Resource
     private WebServiceContext wsc;
 

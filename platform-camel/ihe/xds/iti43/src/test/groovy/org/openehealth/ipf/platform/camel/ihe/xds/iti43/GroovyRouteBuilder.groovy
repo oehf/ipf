@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.core.utils.LargeDataSource
+import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 
 import javax.activation.DataHandler;
 

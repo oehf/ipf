@@ -29,7 +29,6 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
-import org.openehealth.ipf.commons.ihe.xds.core.utils.SoapVersionTestInterceptor
 
 /**
  * Tests the ITI-18 component with the webservice and the client defined within the URI.
@@ -92,21 +91,6 @@ class TestIti18 extends StandardTestContainer {
         }
     }
         
-
-    @Test
-    void testIti18SoapVersions() {
-        SoapVersionTestInterceptor.soapVersion = 1.2
-        assert SUCCESS == sendIt(SERVICE_SOAPDEFAULT, 'implicit SOAP 1.2').status
-
-        SoapVersionTestInterceptor.soapVersion = 1.1
-        assert SUCCESS == sendIt(SERVICE_SOAP11, 'SOAP 1.1').status
-
-        SoapVersionTestInterceptor.soapVersion = 1.2
-        assert SUCCESS == sendIt(SERVICE_SOAP12, 'SOAP 1.2').status
-
-        SoapVersionTestInterceptor.soapVersion = null
-    }
-    
     @Test
     void testSample() {
         def response = 

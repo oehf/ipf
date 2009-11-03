@@ -30,6 +30,13 @@
 
         <!-- Dependencies for test -->
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-xds-core</artifactId>
             <version>${pom.version}</version>

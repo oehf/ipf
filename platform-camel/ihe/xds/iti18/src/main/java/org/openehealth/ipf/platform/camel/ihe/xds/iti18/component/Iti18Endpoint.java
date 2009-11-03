@@ -18,12 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.Iti18;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18Service;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiEndpoint;
 
 /**
  * The endpoint implementation for the ITI-18 component.

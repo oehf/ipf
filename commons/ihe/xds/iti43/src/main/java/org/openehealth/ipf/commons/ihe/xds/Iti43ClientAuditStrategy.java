@@ -16,13 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.audit.ItiAuditDataset;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
 /**
  * Client audit strategy for ITI-43.
- * 
  * @author Dmytro Rud
  */
 class Iti43ClientAuditStrategy extends Iti43AuditStrategy {
@@ -39,7 +38,7 @@ class Iti43ClientAuditStrategy extends Iti43AuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, ItiAuditDataset genericAuditDataset) {
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, XdsAuditDataset genericAuditDataset) {
         Iti43AuditDataset auditDataset = (Iti43AuditDataset)genericAuditDataset;
         
         AuditorManager.getConsumerAuditor().auditRetrieveDocumentSetEvent(

@@ -21,8 +21,8 @@ import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.commons.ihe.xds.core.utils.CxfTestUtils
-import org.openehealth.ipf.commons.ihe.xds.core.utils.LargeDataSource
+import org.openehealth.ipf.commons.ihe.ws.utils.CxfTestUtils
+import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.apache.commons.io.IOUtils
 
 /**

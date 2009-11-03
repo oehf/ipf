@@ -16,12 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16.component;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.Iti16PortType;
-import org.openehealth.ipf.commons.ihe.xds.core.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-16 component.
