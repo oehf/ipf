@@ -24,7 +24,7 @@ import org.junit.BeforeClass
 import org.apache.cxf.transport.servlet.CXFServlet
 
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response

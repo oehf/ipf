@@ -16,6 +16,7 @@
     </parent>
         
     <dependencies>
+        <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
@@ -25,6 +26,15 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-ws</artifactId>
             <version>${pom.version}</version>
+        </dependency>
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
+            <version>${pom.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
         </dependency>
     </dependencies>
         

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.ws.cxf.databinding.hl7v3;
+package org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -32,9 +32,9 @@ import org.apache.cxf.staxutils.StaxUtils;
 import org.xml.sax.InputSource;
 
 /**
- * A special writer for HL7 v3 transactions whose expected input data  
- * is a string representation of an XML element.  This string will
- * be simply transformed into XML stream.
+ * A special writer for some transactions (e.g. HL7 v3) whose    
+ * expected input data is a string representation of an XML element.   
+ * This string will be simply transformed into XML stream.
  *     
  * @author Dmytro Rud
  */

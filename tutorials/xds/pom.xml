@@ -56,6 +56,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-ws</artifactId>
+            <version>${pom.version}</version>
+            <type>test-jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>catalina</artifactId>
             <version>6.0.18</version>

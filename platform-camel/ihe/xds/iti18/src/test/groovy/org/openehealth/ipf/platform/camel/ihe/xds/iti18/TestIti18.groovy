@@ -25,7 +25,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.xds.core.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse

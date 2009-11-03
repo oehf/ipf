@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.ws.cxf.databinding.hl7v3;
+package org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
@@ -24,10 +24,10 @@ import org.apache.cxf.databinding.DataWriter;
 import org.apache.cxf.service.Service;
 
 /**
- * Special CXF data binding for HL7 v3 transactions. 
+ * Special CXF data binding for plain XML transactions (e.g. HL7 v3). 
  * @author Dmytro Rud
  */
-public class HL7v3DataBinding extends AbstractDataBinding {
+public class PlainXmlDataBinding extends AbstractDataBinding {
 
     @SuppressWarnings("unchecked")
     @Override

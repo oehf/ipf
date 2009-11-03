@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xds.core
+package org.openehealth.ipf.platform.camel.ihe.ws
 
 import java.io.IOException
 import java.lang.reflect.Constructor
@@ -47,8 +47,6 @@ import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor
 import org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor
 import org.openhealthtools.ihe.atna.auditor.XDSRepositoryAuditor
 import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor
-
-
 
 /**
  * Base class for tests that are run within an embedded web container.
