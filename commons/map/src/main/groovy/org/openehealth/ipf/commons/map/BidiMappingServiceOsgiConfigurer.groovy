@@ -29,9 +29,9 @@ import org.springframework.core.io.UrlResourceimport org.springframework.osgi.c
  * 
  * @author Martin Krasser
  */
-class BidiMappingServiceConfigurer implements BundleContextAware { 
+class BidiMappingServiceOsgiConfigurer implements BundleContextAware { 
 
-    static Log LOG = LogFactory.getLog(BidiMappingServiceConfigurer.class)
+    static Log LOG = LogFactory.getLog(BidiMappingServiceOsgiConfigurer.class)
      
     static String MAPPING_PATH = 'META-INF/map' 
     static String MAPPING_FILE = '*.map'
