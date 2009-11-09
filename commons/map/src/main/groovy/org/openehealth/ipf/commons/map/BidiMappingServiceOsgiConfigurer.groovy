@@ -51,7 +51,7 @@ class BidiMappingServiceOsgiConfigurer implements BundleContextAware {
                 false).collect { new UrlResource(it) }
 
         // configure mapping service with mapping resources
-        mappingService.setMappingScripts(resources as Resource[])
+        mappingService.addMappingScripts(resources as Resource[])
         
         resources.each { 
             LOG.info("Added mapping resource ${it} to mapping service")

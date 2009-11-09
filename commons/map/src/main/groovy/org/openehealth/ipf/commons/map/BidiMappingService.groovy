@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.map
 import java.util.Collection
 import java.util.Set
 import org.springframework.core.io.Resource
-
+import java.lang.Deprecated
 /**
  * An simple example of a MappingService implementation, backed by a
  * nested Map structure. It also allows bidrectional mapping, i.e.
@@ -27,6 +27,7 @@ import org.springframework.core.io.Resource
  * for details on the syntax. 
  * 
  * @author Christian Ohr
+ * @author Martin Krasser
  * @see MappingsBuilder
  *
  */
@@ -49,21 +50,30 @@ class BidiMappingService implements MappingService {
     	this.separator = separator
     }
     
+    @Deprecated // use setMappingScript
+    synchronized void setMappingScript(Resource resource) {
+        addMappingScript(resource)
+    }
+    
+    @Deprecated // use addMappingScripts
+    synchronized void setMappingScripts(Resource[] resources) {
+        addMappingScripts(resources)
+    }
     
     // Read in the mapping definition
-    synchronized public void setMappingScript(Resource resource) {
-     	Binding binding = new Binding()
-		GroovyShell shell = new GroovyShell(binding);
-     	evaluateResource(resource, shell, binding)
+    synchronized void addMappingScript(Resource resource) {
+        Binding binding = new Binding()
+        GroovyShell shell = new GroovyShell(binding);
+        evaluateResource(resource, shell, binding)
     }
     
     // Read in several mapping definition
-    synchronized public void setMappingScripts(Resource[] resources) {
-     	Binding binding = new Binding()
-		GroovyShell shell = new GroovyShell(binding);
-     	resources.each { resource ->
-     	   evaluateResource(resource, shell, binding)    
-     	}
+    synchronized void addMappingScripts(Resource[] resources) {
+        Binding binding = new Binding()
+        GroovyShell shell = new GroovyShell(binding);
+        resources.each { resource ->
+           evaluateResource(resource, shell, binding)    
+        }
     }
     
     private void evaluateResource(Resource resource, GroovyShell shell, Binding binding) {
