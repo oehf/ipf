@@ -49,14 +49,14 @@ class BidiMappingService implements MappingService {
     public BidiMappingService(String separator) {
     	this.separator = separator
     }
-    
-    @Deprecated // use setMappingScript
-    synchronized void setMappingScript(Resource resource) {
+
+    // bean configuration support 
+    void setMappingScript(Resource resource) {
         addMappingScript(resource)
     }
     
-    @Deprecated // use addMappingScripts
-    synchronized void setMappingScripts(Resource[] resources) {
+    // bean configuration support 
+    void setMappingScripts(Resource[] resources) {
         addMappingScripts(resources)
     }
     
