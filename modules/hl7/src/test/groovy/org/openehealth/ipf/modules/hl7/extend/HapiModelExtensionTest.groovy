@@ -45,7 +45,7 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     void setUp() {
         if (mappingService) return
         mappingService = new BidiMappingService()
-        mappingService.setMappingScript(new ClassPathResource("example2.map"))
+        mappingService.addMappingScript(new ClassPathResource("example2.map"))
         defMappingExtension = new MappingExtension()
         hl7MappingExtension = new HapiModelExtension()
         defMappingExtension.mappingService = mappingService
