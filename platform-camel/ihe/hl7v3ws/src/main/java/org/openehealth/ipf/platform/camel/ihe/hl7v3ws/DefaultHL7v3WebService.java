@@ -32,9 +32,13 @@ public class DefaultHL7v3WebService extends DefaultItiWebService {
      * @return
      *      XML payload of HL7 v3 response message.
      */
-    protected String doProcess(String request) {
-        Exchange exchange = process(request);
-        return Exchanges.resultMessage(exchange).getBody(String.class);
+    protected String doProcess(String request) throws Exception {
+        Exchange result = process(request);
+        if(result.getException() != null) {
+            // TODO
+            throw result.getException();
+        }
+        return Exchanges.resultMessage(result).getBody(String.class);
     }
 
 }
