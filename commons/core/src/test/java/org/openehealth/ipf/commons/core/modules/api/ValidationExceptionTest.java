@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.core.datetime;
+package org.openehealth.ipf.commons.core.modules.api;
 
 import static org.junit.Assert.*;
 
@@ -50,13 +50,20 @@ public class ValidationExceptionTest {
         assertTrue(s.startsWith(message));
         assertTrue(s.indexOf("java.lang.RuntimeException") != s.lastIndexOf("java.lang.RuntimeException")); 
         
+        s = new ValidationException(causes).getMessage();
+        assertEquals("java.lang.RuntimeException\njava.lang.RuntimeException", s); 
+
         // -----------------
         causes = new Throwable[] { new RuntimeException(), new RuntimeException("67890") };
 
         s = new ValidationException(message, causes).getMessage();
         assertTrue(s.startsWith(message));
-        assertTrue(s.contains("\n67890"));
         assertTrue(s.contains("\njava.lang.RuntimeException"));
+        assertTrue(s.contains("\n67890"));
+
+        s = new ValidationException(causes).getMessage();
+        assertTrue(s.startsWith("java.lang.RuntimeException\n"));
+        assertTrue(s.endsWith("\n67890"));
 
         // -----------------
         causes = new Throwable[] {};
@@ -67,6 +74,7 @@ public class ValidationExceptionTest {
         assertEquals(s, ValidationException.class.getName());
 
         // -----------------
+        causes = null;
         s = new ValidationException(message, causes).getMessage();
         assertEquals(s, message);
 
