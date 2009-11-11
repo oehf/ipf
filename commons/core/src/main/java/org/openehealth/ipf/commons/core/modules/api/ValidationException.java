@@ -36,7 +36,7 @@ public class ValidationException extends RuntimeException {
     }
 
     public ValidationException(String message, Throwable[] causes) {
-        super(message, causes[0]);
+        super(message, ((causes == null) || (causes.length == 0)) ? null : causes[0]);
         this.causes = causes;
     }
 
@@ -62,13 +62,24 @@ public class ValidationException extends RuntimeException {
 
     @Override
     public String getMessage() {
+        StringBuilder sb = new StringBuilder();
+        
         String msg = super.getMessage();
-        if (causes != null) {
-            for (int i = 0; i < causes.length; i++) {
-                msg += "\n" + causes[i].getMessage();
+        if(msg != null) {
+            sb.append(msg).append('\n');
+        }
+
+        if(causes != null) {
+            for(Throwable t : causes) {
+                if(t != null) {
+                    msg = t.getMessage();
+                    sb.append((msg == null) ? t.getClass().getName() : msg).append('\n');
+                }
             }
         }
-        return msg;
+
+        int len = sb.length(); 
+        return (len == 0) ? getClass().getName() : sb.deleteCharAt(len - 1).toString();
     }
 
 }
