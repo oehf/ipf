@@ -47,7 +47,7 @@ public class Hl7v3Validator implements Validator<String, Collection<String>> {
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
         "(?:\\s*<\\!--.*?-->)*"                        +    // optional comments before prolog (are they allowed?)
         "(?:\\s*<\\?xml.+?\\?>(?:\\s*<\\!--.*?-->)*)?" +    // optional prolog and comments after it 
-        "\\s*<([\\w\\.:-]+)(?:\\s|(?:/?>))"                 // open tag of the root element
+        "\\s*<(?:.+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))"         // open tag of the root element
     );
 
     private static final SchemaFactory schemaFactory = 
@@ -59,23 +59,42 @@ public class Hl7v3Validator implements Validator<String, Collection<String>> {
     
     
     /**
-     * Returns schema instance for the given schema name, creates it when necessary. 
-     * @param name
-     *      name of XML schema.
+     * Returns path to XML Schema document which contains the definition
+     * of the XML element with the given name. 
+     */
+    private static String getResourceForElement(String elementName) {
+        StringBuilder sb = new StringBuilder(XSD_PATH);
+        int pos1 = elementName.indexOf('_');
+        int pos2 = elementName.indexOf('_', pos1 + 1);
+        sb.append((pos2 > 0) ? elementName.substring(0, pos2) : elementName);
+        return sb.append(".xsd").toString();
+    }
+    
+    
+    /**
+     * Returns schema instance for the given root XML element name, 
+     * creates it when necessary. 
+     * @param rootElementName
+     *      name of the root XML element.
      * @return
      *      XML schema instance.
      * @throws SAXException
      */
-    synchronized private static Schema getSchema(String name) throws SAXException {
-        Schema schema = schemas.get(name);
+    synchronized private static Schema getSchema(String rootElementName) throws Exception {
+        Schema schema = schemas.get(rootElementName);
         if(schema == null) {
-            URL resource = Hl7v3Validator.class.getClassLoader().getResource(XSD_PATH + name + ".xsd");
+            String resourceName = getResourceForElement(rootElementName);
+            URL resource = Hl7v3Validator.class.getClassLoader().getResource(resourceName);
+            if(resource == null) {
+                throw new RuntimeException("Cannot load resource '" + resourceName + "'");
+            }
             schema = schemaFactory.newSchema(resource);
-            schemas.put(name, schema);
+            schemas.put(rootElementName, schema);
         }
         return schema;
     }
 
+    
     /**
      * Validates the given HL7 v3 message.
      */
