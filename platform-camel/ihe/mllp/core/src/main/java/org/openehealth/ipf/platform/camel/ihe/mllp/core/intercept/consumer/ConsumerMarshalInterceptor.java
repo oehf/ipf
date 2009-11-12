@@ -30,6 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
+import ca.uhn.hl7v2.model.GenericMessage;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 
@@ -64,8 +65,11 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
             // Store different representations of the original request into Camel headers.
             // Call to .copy() will throw an NPE when the message structure (MSH-9-3)
             // is wrong.
-            originalAdapter = in.getBody(MessageAdapter.class).copy();
-            in.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, originalAdapter);
+            originalAdapter = in.getBody(MessageAdapter.class);
+            in.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME,
+                    (originalAdapter.getTarget() instanceof GenericMessage) 
+                        ? originalAdapter 
+                        : originalAdapter.copy());
             in.setHeader(ORIGINAL_MESSAGE_STRING_HEADER_NAME, originalString);
         } catch (Exception e) {
             unmarshallingFailed = true;
