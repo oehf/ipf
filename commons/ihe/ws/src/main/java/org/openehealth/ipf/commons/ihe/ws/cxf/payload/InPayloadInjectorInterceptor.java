@@ -24,23 +24,21 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 
 /**
  * CXF interceptor which inserts data of String content type  
- * (it is supposed to be the XML payload of the input message)
- * into the parameter list of the invokee's operation.
- * <p>
- * Usable on server side only.
+ * (it is supposed to be the XML payload of the incoming message)
+ * into the list of an operation's parameters or response values.
  * 
  * @author Dmytro Rud
  */
-public class ServerParameterInjectorInterceptor extends AbstractSafeInterceptor {
+public class InPayloadInjectorInterceptor extends AbstractSafeInterceptor {
     private final int position;
     
     /**
      * Constructs an interceptor instance.
      * @param position
-     *      position in the parameter array at which the collected 
+     *      position in the parameter list at which the collected 
      *      message payload should be inserted.
      */
-    public ServerParameterInjectorInterceptor(int position) {
+    public InPayloadInjectorInterceptor(int position) {
         super(Phase.INVOKE);
         addBefore(ServiceInvokerInterceptor.class.getName());
         this.position = position;

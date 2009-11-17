@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.ServerPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.AuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
@@ -57,7 +57,7 @@ public class XdsServiceFactory extends ItiServiceFactory {
             svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
             
             if(((XdsServiceInfo) serviceInfo).isAuditPayload()) {
-                svrFactory.getInInterceptors().add(new ServerPayloadExtractorInterceptor());
+                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor());
             }        
         }
     }

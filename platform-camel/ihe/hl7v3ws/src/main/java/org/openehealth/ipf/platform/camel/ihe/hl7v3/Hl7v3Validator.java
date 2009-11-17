@@ -45,9 +45,9 @@ import org.xml.sax.SAXParseException;
 public class Hl7v3Validator implements Validator<String, Collection<String>> {
 
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
-        "(?:\\s*<\\!--.*?-->)*"                        +    // optional comments before prolog (are they allowed?)
-        "(?:\\s*<\\?xml.+?\\?>(?:\\s*<\\!--.*?-->)*)?" +    // optional prolog and comments after it 
-        "\\s*<(?:.+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))"         // open tag of the root element
+        "(?:\\s*<\\!--.*?-->)*"                             +  // optional comments before prolog (are they allowed?)
+        "(?:\\s*<\\?xml.+?\\?>(?:\\s*<\\!--.*?-->)*)?"      +  // optional prolog and comments after it 
+        "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))"    // open tag of the root element
     );
 
     private static final SchemaFactory schemaFactory = 

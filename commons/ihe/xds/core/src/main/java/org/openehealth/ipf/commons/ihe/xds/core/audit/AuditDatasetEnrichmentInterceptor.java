@@ -26,7 +26,7 @@ import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.ClientPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -58,7 +58,7 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
     public AuditDatasetEnrichmentInterceptor(XdsAuditStrategy auditStrategy, boolean serverSide) {
         super(serverSide ? Phase.PRE_INVOKE : Phase.WRITE_ENDING, auditStrategy);
         if( ! serverSide) {
-            addAfter(ClientPayloadExtractorInterceptor.class.getName());
+            addAfter(OutPayloadExtractorInterceptor.class.getName());
         }
     }
 

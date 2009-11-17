@@ -15,39 +15,41 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
+import org.apache.cxf.helpers.IOUtils;
+import org.apache.cxf.interceptor.AttachmentInInterceptor;
+import org.apache.cxf.interceptor.StaxInInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
-import java.io.OutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 
 /**
- * CXF client-side interceptor that reads the payload collected by the output  
- * stream proxy installed in {@link ClientOutputStreamSubstituteInterceptor}
- * and stores it in the message as Strinc content type.
+ * CXF interceptor that saves XML payload of the incoming SOAP message 
+ * body into String content of the CXF message.
  * <p>
- * Usable on client side only. 
+ * Usable on both client and server sides. 
  * 
  * @author Dmytro Rud
  */
-public class ClientPayloadExtractorInterceptor extends AbstractSafeInterceptor {
+public class InPayloadExtractorInterceptor extends AbstractSafeInterceptor {
 
-    /**
-     * Constructs the interceptor.
-     */
-    public ClientPayloadExtractorInterceptor() {
-        super(Phase.WRITE_ENDING);
-        addAfter(SoapOutEndingInterceptor.class.getName());
+    public InPayloadExtractorInterceptor() {
+        super(Phase.PRE_STREAM);
+        addAfter(AttachmentInInterceptor.class.getName());
+        addBefore(StaxInInterceptor.class.getName());
     }
-    
+
     @Override
     protected void process(Message message) throws Exception {
-        WrappedOutputStream wrapper = (WrappedOutputStream)message.getContent(OutputStream.class);
-        String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate();
-        String payload = SoapUtils.extractSoapBody(soapEnvelope);
+        InputStream stream = message.getContent(InputStream.class);
+        byte[] streamBytes = IOUtils.readBytesFromStream(stream);
+        String payload = SoapUtils.extractSoapBody(new String(streamBytes));
         message.setContent(String.class, payload);
+        message.setContent(InputStream.class, new ByteArrayInputStream(streamBytes));
     }
 }
+

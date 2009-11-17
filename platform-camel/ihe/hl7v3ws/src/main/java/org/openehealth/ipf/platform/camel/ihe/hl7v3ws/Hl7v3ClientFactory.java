@@ -19,8 +19,9 @@ import org.apache.cxf.endpoint.Client;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.ServerParameterInjectorInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.ServerPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
 /**
  * Factory for HL7 v3 Web Service clients.
@@ -45,8 +46,9 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
     @Override
     protected void configureInterceptors(Client client) {
         super.configureInterceptors(client);
-        client.getInInterceptors().add(new ServerPayloadExtractorInterceptor());
-        client.getInInterceptors().add(new ServerParameterInjectorInterceptor(0));
+        client.getInInterceptors().add(new InPayloadExtractorInterceptor());
+        client.getInInterceptors().add(new InNamespaceMergeInterceptor());
+        client.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
         client.getEndpoint().getService().setDataBinding(new PlainXmlDataBinding());
     }
 }

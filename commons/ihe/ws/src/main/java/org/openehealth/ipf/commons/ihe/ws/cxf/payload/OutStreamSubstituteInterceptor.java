@@ -22,20 +22,15 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 
 import java.io.OutputStream;
 
-
 /**
- * CXF client-side interceptor that substitutes message output stream 
- * with a special wrapper that collects SOAP payload.  
- * <p>
- * Usable on client side only. 
- * 
+ * CXF interceptor that substitutes message output stream 
+ * with a special wrapper that collects SOAP payload.
+ *   
  * @author Dmytro Rud
  */
-public class ClientOutputStreamSubstituteInterceptor extends AbstractSafeInterceptor {
-    /**
-     * Constructs the interceptor.
-     */
-    public ClientOutputStreamSubstituteInterceptor() {
+public class OutStreamSubstituteInterceptor extends AbstractSafeInterceptor {
+
+    public OutStreamSubstituteInterceptor() {
         super(Phase.PREPARE_SEND);
         addAfter(MessageSenderInterceptor.class.getName());
     }

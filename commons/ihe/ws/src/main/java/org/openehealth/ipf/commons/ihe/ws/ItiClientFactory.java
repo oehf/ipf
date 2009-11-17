@@ -35,8 +35,8 @@ import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.ClientOutputStreamSubstituteInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.ClientPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
 /**
@@ -141,8 +141,8 @@ public class ItiClientFactory {
      * for the given Client.
      */
     static protected void installPayloadInterceptors(Client client) {
-        client.getOutInterceptors().add(new ClientOutputStreamSubstituteInterceptor());
-        client.getOutInterceptors().add(new ClientPayloadExtractorInterceptor());
+        client.getOutInterceptors().add(new OutStreamSubstituteInterceptor());
+        client.getOutInterceptors().add(new OutPayloadExtractorInterceptor());
     }
 
 
