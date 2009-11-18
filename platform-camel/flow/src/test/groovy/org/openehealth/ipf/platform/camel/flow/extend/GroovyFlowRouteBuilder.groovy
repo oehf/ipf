@@ -17,9 +17,10 @@ package org.openehealth.ipf.platform.camel.flow.extend
 
 import static org.apache.camel.builder.Builder.*
 
+import org.apache.camel.component.http.HttpOperationFailedException
 import org.apache.camel.impl.SerializationDataFormat
-import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.camel.impl.StringDataFormat
+import org.apache.camel.spring.SpringRouteBuilder
 
 /**
  * @author Martin Krasser
@@ -30,7 +31,7 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
         
         def serialization = new SerializationDataFormat()
         
-        errorHandler(noErrorHandler())
+        //errorHandler(noErrorHandler())
         
         // --------------------------------------------------------------
         //  Linear Flows
@@ -136,6 +137,24 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
             .to("direct:out-1")
             .to("direct:out-2")
         
+        // --------------------------------------------------------------
+        //  Recipient lists
+        // --------------------------------------------------------------
+        
+        onException(HttpOperationFailedException.class)
+            .to('mock:mock')
+            .handled(true)
+            .nakFlow()
+            .end()
+        
+        from('direct:flow-test-recipient-list')
+            .split().body()
+            .initFlow('test-recipient-list')
+            .application('test')
+            .recipientList().header('recipient')
+            .ackFlow()
+            
+        from('jetty:http://localhost:7799/recipient').to('mock:mock')
     }
     
 }

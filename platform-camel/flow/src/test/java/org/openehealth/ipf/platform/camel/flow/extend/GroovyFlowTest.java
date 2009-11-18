@@ -15,9 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend;
 
+import org.junit.Test;
+import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.platform.camel.flow.process.AbstractFlowTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import static org.junit.Assert.assertEquals;
+import static org.openehealth.ipf.platform.camel.flow.PlatformMessage.FLOW_ID_KEY;
 
 /**
  * @author Martin Krasser
@@ -25,4 +30,33 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(locations = { "/context-flow-route-groovy.xml" })
 public class GroovyFlowTest extends AbstractFlowTest {
 
+    @Autowired
+    private FlowManager flowManager;
+    
+    @Test
+    public void testRecipientListSuccess() throws Exception {
+        mock.expectedBodiesReceived("test1", "test2");
+        producerTemplate.sendBodyAndHeader("direct:flow-test-recipient-list", "test1,test2", "recipient", "http://localhost:7799/recipient");
+        mock.assertIsSatisfied();
+        Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.class);
+        Long flowId2 = mock.getExchanges().get(1).getIn().getHeader(FLOW_ID_KEY, Long.class);
+        assertEquals(1, flowManager.findFlow(flowId1).getAckCount());
+        assertEquals(0, flowManager.findFlow(flowId1).getNakCount());
+        assertEquals(1, flowManager.findFlow(flowId2).getAckCount());
+        assertEquals(0, flowManager.findFlow(flowId2).getNakCount());
+    }
+    
+    @Test
+    public void testRecipientListFailure() throws Exception {
+        mock.expectedMessageCount(2);
+        producerTemplate.sendBodyAndHeader("direct:flow-test-recipient-list", "test1,test2", "recipient", "http://localhost:7799/bullshit");
+        mock.assertIsSatisfied();
+        Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.class);
+        Long flowId2 = mock.getExchanges().get(1).getIn().getHeader(FLOW_ID_KEY, Long.class);
+        assertEquals(0, flowManager.findFlow(flowId1).getAckCount());
+        assertEquals(1, flowManager.findFlow(flowId1).getNakCount());
+        assertEquals(0, flowManager.findFlow(flowId2).getAckCount());
+        assertEquals(1, flowManager.findFlow(flowId2).getNakCount());
+    }
+    
 }

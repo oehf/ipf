@@ -41,10 +41,10 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 public abstract class AbstractFlowTest {
 
     @Autowired
-    private ProducerTemplate producerTemplate;
+    protected ProducerTemplate producerTemplate;
     
     @EndpointInject(uri="mock:mock")
-    private MockEndpoint mock;
+    protected MockEndpoint mock;
     
     @Before
     public void setUp() throws Exception {
