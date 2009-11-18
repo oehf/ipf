@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.junit.After;
 import org.junit.Test;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.platform.camel.flow.process.AbstractFlowTest;
@@ -33,10 +36,21 @@ public class GroovyFlowTest extends AbstractFlowTest {
     @Autowired
     private FlowManager flowManager;
     
+    @EndpointInject(uri="mock:wait")
+    private MockEndpoint wait;
+    
+    @After
+    public void tearDown() throws Exception {
+        wait.reset();
+        super.tearDown();
+    }
+
     @Test
     public void testRecipientListSuccess() throws Exception {
+        wait.expectedMessageCount(2);
         mock.expectedBodiesReceived("test1", "test2");
         producerTemplate.sendBodyAndHeader("direct:flow-test-recipient-list", "test1,test2", "recipient", "http://localhost:7799/recipient");
+        wait.assertIsSatisfied();
         mock.assertIsSatisfied();
         Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.class);
         Long flowId2 = mock.getExchanges().get(1).getIn().getHeader(FLOW_ID_KEY, Long.class);

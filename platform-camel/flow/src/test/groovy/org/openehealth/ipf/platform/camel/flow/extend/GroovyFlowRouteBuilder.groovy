@@ -30,9 +30,7 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
     void configure() {
         
         def serialization = new SerializationDataFormat()
-        
-        //errorHandler(noErrorHandler())
-        
+                
         // --------------------------------------------------------------
         //  Linear Flows
         // --------------------------------------------------------------
@@ -142,17 +140,20 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
         // --------------------------------------------------------------
         
         onException(HttpOperationFailedException.class)
-            .to('mock:mock')
             .handled(true)
             .nakFlow()
-            .end()
-        
+            .to('mock:mock')
+
         from('direct:flow-test-recipient-list')
             .split().body()
             .initFlow('test-recipient-list')
             .application('test')
+            .inOnly().to('seda:recipient')
+            
+        from('seda:recipient')
             .recipientList().header('recipient')
             .ackFlow()
+            .to('mock:wait') // avoid race conditions
             
         from('jetty:http://localhost:7799/recipient').to('mock:mock')
     }
