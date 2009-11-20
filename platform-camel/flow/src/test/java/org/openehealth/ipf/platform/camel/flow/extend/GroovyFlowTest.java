@@ -20,6 +20,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
 import org.junit.Test;
 import org.openehealth.ipf.commons.flow.FlowManager;
+import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 import org.openehealth.ipf.platform.camel.flow.process.AbstractFlowTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -54,10 +55,14 @@ public class GroovyFlowTest extends AbstractFlowTest {
         mock.assertIsSatisfied();
         Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.class);
         Long flowId2 = mock.getExchanges().get(1).getIn().getHeader(FLOW_ID_KEY, Long.class);
-        assertEquals(1, flowManager.findFlow(flowId1).getAckCount());
-        assertEquals(0, flowManager.findFlow(flowId1).getNakCount());
-        assertEquals(1, flowManager.findFlow(flowId2).getAckCount());
-        assertEquals(0, flowManager.findFlow(flowId2).getNakCount());
+        FlowInfo flow1 = flowManager.findFlow(flowId1);
+        FlowInfo flow2 = flowManager.findFlow(flowId2);
+        assertEquals(1, flow1.getAckCount());
+        assertEquals(0, flow1.getNakCount());
+        assertEquals(1, flow2.getAckCount());
+        assertEquals(0, flow2.getNakCount());
+        assertEquals("CLEAN", flow1.getStatus());
+        assertEquals("CLEAN", flow2.getStatus());
     }
     
     @Test
@@ -67,10 +72,14 @@ public class GroovyFlowTest extends AbstractFlowTest {
         mock.assertIsSatisfied();
         Long flowId1 = mock.getExchanges().get(0).getIn().getHeader(FLOW_ID_KEY, Long.class);
         Long flowId2 = mock.getExchanges().get(1).getIn().getHeader(FLOW_ID_KEY, Long.class);
-        assertEquals(0, flowManager.findFlow(flowId1).getAckCount());
-        assertEquals(1, flowManager.findFlow(flowId1).getNakCount());
-        assertEquals(0, flowManager.findFlow(flowId2).getAckCount());
-        assertEquals(1, flowManager.findFlow(flowId2).getNakCount());
+        FlowInfo flow1 = flowManager.findFlow(flowId1);
+        FlowInfo flow2 = flowManager.findFlow(flowId2);
+        assertEquals(0, flow1.getAckCount());
+        assertEquals(1, flow1.getNakCount());
+        assertEquals(0, flow2.getAckCount());
+        assertEquals(1, flow2.getNakCount());
+        assertEquals("ERROR", flow1.getStatus());
+        assertEquals("ERROR", flow2.getStatus());
     }
     
 }
