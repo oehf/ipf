@@ -433,6 +433,11 @@
                 <version>${mina-version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.mina</groupId>
+                <artifactId>mina-integration-spring</artifactId>
+                <version>${mina-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j-version}</version>
