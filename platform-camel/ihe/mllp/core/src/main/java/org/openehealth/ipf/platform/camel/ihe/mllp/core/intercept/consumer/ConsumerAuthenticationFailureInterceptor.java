@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.mina.MinaEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
@@ -29,7 +29,7 @@ import java.net.InetSocketAddress;
  * Interceptor that handles any {@link MllpAuthenticationFailure} that occurred while
  * processing an exchange.
  */
-public class AuthenticationFailureHandlerInterceptor extends AbstractMllpInterceptor {
+public class ConsumerAuthenticationFailureInterceptor extends AbstractMllpInterceptor {
     private MllpAuditStrategy serverAuditStrategy;
 
     /**
@@ -41,7 +41,7 @@ public class AuthenticationFailureHandlerInterceptor extends AbstractMllpInterce
      * @param serverAuditStrategy
      *      Audit strategy to log authentication failures.
      */
-    public AuthenticationFailureHandlerInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor, MllpAuditStrategy serverAuditStrategy) {
+    public ConsumerAuthenticationFailureInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor, MllpAuditStrategy serverAuditStrategy) {
         super(endpoint, wrappedProcessor);
         this.serverAuditStrategy = serverAuditStrategy;
     }

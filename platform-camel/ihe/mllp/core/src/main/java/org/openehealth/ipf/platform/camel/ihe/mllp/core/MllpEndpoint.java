@@ -23,13 +23,10 @@ import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang.Validate;
 import org.apache.mina.common.*;
 import org.apache.mina.filter.SSLFilter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuthenticationFailureHandlerInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuthenticationFailureInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
@@ -118,7 +115,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             x = new CustomInterceptorWrapper(interceptor, this, x);
         }
         if (isAudit()) {
-            x = new AuthenticationFailureHandlerInterceptor(this, x, getServerAuditStrategy());
+            x = new ConsumerAuthenticationFailureInterceptor(this, x, getServerAuditStrategy());
         }
         x = new ConsumerAdaptingInterceptor(this, x);
         if(isAudit()) {
