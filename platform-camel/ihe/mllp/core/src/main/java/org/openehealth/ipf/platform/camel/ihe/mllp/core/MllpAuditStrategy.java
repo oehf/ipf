@@ -89,4 +89,10 @@ public interface MllpAuditStrategy {
             RFC3881EventOutcomeCodes eventOutcome, 
             MllpAuditDataset auditDataset);
 
+    /**
+     * Audits an authentication node failure.
+     * @param hostAddress
+     *          the address of the node that is responsible for the failure.
+     */
+    void auditAuthenticationNodeFailure(String hostAddress);
 }

@@ -48,4 +48,9 @@ class PdqServerAuditStrategy extends PdqAuditStrategy {
     MllpAuditDataset createAuditDataset() {
         return new PdqAuditDataset(true);
     }
+
+    void auditAuthenticationNodeFailure(String hostAddress) {
+        AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
+            true, null, getClass().name, null, hostAddress, null)
+    }
 }

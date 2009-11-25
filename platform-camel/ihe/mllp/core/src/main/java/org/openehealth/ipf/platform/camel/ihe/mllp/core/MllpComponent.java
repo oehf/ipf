@@ -15,13 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.SSLContext;
-
+import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
@@ -29,10 +23,13 @@ import org.apache.camel.component.mina.MinaComponent;
 import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.filter.SSLFilter;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 
-import ca.uhn.hl7v2.parser.Parser;
+import javax.net.ssl.SSLContext;
+import java.nio.charset.Charset;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 
 /**
@@ -46,7 +43,7 @@ public abstract class MllpComponent extends MinaComponent {
     public static final String ACK_TYPE_CODE_HEADER = "pixpdqAckTypeCode"; 
     
     private static final String DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME = "#hl7codec";
-    
+
     /**
      * Default constructor.
      */
@@ -84,6 +81,8 @@ public abstract class MllpComponent extends MinaComponent {
         boolean allowIncompleteAudit = 
             getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false); 
         boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
+        String sslContextBean = getAndRemoveParameter(parameters, "sslContext", String.class, "");
+        String interceptorBeans = getAndRemoveParameter(parameters, "interceptors", String.class, "");
 
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
@@ -97,10 +96,8 @@ public abstract class MllpComponent extends MinaComponent {
         }
 
         // adopt character set configured for the HL7 codec
-        String codecBean = (String) parameters.get("codec");
-        if (codecBean.startsWith("#")) {
-            codecBean = codecBean.substring(1);
-        }
+        String codecBean = extractBeanName((String) parameters.get("codec"));
+
         ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookup(
                     codecBean, 
                     ProtocolCodecFactory.class);
@@ -118,13 +115,9 @@ public abstract class MllpComponent extends MinaComponent {
         // construct the endpoint
         Endpoint endpoint = super.createEndpoint(uri, remaining, parameters);
         MinaEndpoint minaEndpoint = (MinaEndpoint) endpoint;
-        
-        // configure SSL filters if necessary
-        if (secure) {
-            SSLContext context = SSLContext.getDefault();
-            minaEndpoint.getAcceptorConfig().getFilterChain().addFirst("ssl", new SSLFilter(context));
-            minaEndpoint.getConnectorConfig().getFilterChain().addLast("ssl", new SSLFilter(context));
-        }
+
+        SSLContext sslContext = secure ? lookupSSLContext(sslContextBean) : null;
+        List<MllpCustomInterceptor> customInterceptors = getCustomInterceptors(interceptorBeans);
 
         // wrap and return
         return new MllpEndpoint(
@@ -134,7 +127,34 @@ public abstract class MllpComponent extends MinaComponent {
                 getServerAuditStrategy(), 
                 getClientAuditStrategy(),
                 getTransactionConfiguration(),
-                getParser());
+                getParser(),
+                sslContext,
+                customInterceptors);
+    }
+
+    private List<MllpCustomInterceptor> getCustomInterceptors(String interceptorBeans) {
+        if (interceptorBeans.equals("")) {
+            return Collections.emptyList();
+        }
+        List<MllpCustomInterceptor> interceptors = new ArrayList<MllpCustomInterceptor>();
+        for (String bean : interceptorBeans.split(",")) {
+            String beanName = extractBeanName(bean);
+            MllpCustomInterceptor interceptor =
+                getCamelContext().getRegistry().lookup(beanName, MllpCustomInterceptor.class);
+            interceptors.add(interceptor);
+        }
+        return interceptors;
+    }
+
+    private SSLContext lookupSSLContext(String sslContextBean) throws NoSuchAlgorithmException {
+        if (sslContextBean.equals("")) {
+            return SSLContext.getDefault();
+        }
+        return getCamelContext().getRegistry().lookup(extractBeanName(sslContextBean), SSLContext.class);
+    }
+
+    private String extractBeanName(String codecBean) {
+        return codecBean.startsWith("#") ? codecBean.substring(1) : codecBean;
     }
 
 

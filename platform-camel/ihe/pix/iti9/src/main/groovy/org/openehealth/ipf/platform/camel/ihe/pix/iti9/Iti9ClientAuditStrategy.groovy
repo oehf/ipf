@@ -37,8 +37,14 @@ class Iti9ClientAuditStrategy extends Iti9AuditStrategy {
                 auditDataset.payload,
                 auditDataset.patientIds)
     }
-    
-     
+
+    public void auditAuthenticationNodeFailure (String hostAddress) {
+        AuditorManager.getPIXConsumerAuditor().auditNodeAuthenticationFailure(
+            true, null, getClass().name, null, hostAddress, null)
+    }
+
+
+
     MllpAuditDataset createAuditDataset() {
         new Iti9AuditDataset(false);
     }

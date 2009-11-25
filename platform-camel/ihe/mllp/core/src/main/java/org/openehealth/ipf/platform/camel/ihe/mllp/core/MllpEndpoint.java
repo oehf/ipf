@@ -15,28 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import java.net.SocketAddress;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.apache.camel.CamelContext;
-import org.apache.camel.Component;
-import org.apache.camel.Consumer;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.PollingConsumer;
-import org.apache.camel.Processor;
-import org.apache.camel.Producer;
+import ca.uhn.hl7v2.parser.Parser;
+import org.apache.camel.*;
 import org.apache.camel.component.mina.MinaConfiguration;
 import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang.Validate;
-import org.apache.mina.common.IoAcceptor;
-import org.apache.mina.common.IoAcceptorConfig;
-import org.apache.mina.common.IoConnector;
-import org.apache.mina.common.IoConnectorConfig;
-import org.apache.mina.common.IoSession;
+import org.apache.mina.common.*;
+import org.apache.mina.filter.SSLFilter;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuthenticationFailureHandlerInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
@@ -46,7 +35,12 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.Produ
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalInterceptor;
 
-import ca.uhn.hl7v2.parser.Parser;
+import javax.net.ssl.SSLContext;
+import java.net.SocketAddress;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 
 /**
@@ -64,8 +58,10 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final MllpAuditStrategy clientStrategy;
     private final MllpTransactionConfiguration transactionConfiguration;
     private final Parser parser;
-    
-    
+    private final SSLContext sslContext;
+    private final List<MllpCustomInterceptor> customInterceptors;
+
+
     /**
      * Constructor.
      * @param wrappedEndpoint
@@ -77,22 +73,20 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param serverStrategy
      *      Server-side audit strategy.
      * @param clientStrategy
-     *      Client-side audit strategy.
+     * @param sslContext
+     *      the ssl context to use. {@code null} if secure communication is not used.
+     * @param customInterceptors
+     *      list of interceptors that are to be added to the processing of messages. Only applied to
+     *      consumers.
      */
-    public MllpEndpoint(
-            MinaEndpoint wrappedEndpoint,
-            boolean audit,
-            boolean allowIncompleteAudit,
-            MllpAuditStrategy serverStrategy,
-            MllpAuditStrategy clientStrategy,
-            MllpTransactionConfiguration transactionConfiguration,
-            Parser parser) 
+    public MllpEndpoint(MinaEndpoint wrappedEndpoint, boolean audit, boolean allowIncompleteAudit, MllpAuditStrategy serverStrategy, MllpAuditStrategy clientStrategy, MllpTransactionConfiguration transactionConfiguration, Parser parser, SSLContext sslContext, List<MllpCustomInterceptor> customInterceptors)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
         Validate.notNull(clientStrategy);
         Validate.notNull(transactionConfiguration);
         Validate.notNull(parser);
+        Validate.noNullElements(customInterceptors);
         
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
@@ -101,6 +95,8 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.clientStrategy = clientStrategy;
         this.transactionConfiguration = transactionConfiguration;
         this.parser = parser;
+        this.sslContext = sslContext;
+        this.customInterceptors = customInterceptors;
     }
 
 
@@ -111,7 +107,23 @@ public class MllpEndpoint extends DefaultEndpoint {
      *      The original consumer processor.  
      */
     public Consumer createConsumer(Processor processor) throws Exception {
+        if (sslContext != null) {
+            HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
+            filter.setHandshakeExceptionCallback(new HandshakeCallbackSSLFilter.Callback() {
+                @Override
+                public void run(IoSession session) {
+                    String hostAddress = session.getRemoteAddress().toString();
+                    getServerAuditStrategy().auditAuthenticationNodeFailure(hostAddress);
+                }
+            });
+            wrappedEndpoint.getAcceptorConfig().getFilterChain().addFirst("ssl", filter);
+        }
+
         Processor x = processor;
+        for (MllpCustomInterceptor interceptor : customInterceptors) {
+            x = new CustomInterceptorWrapper(interceptor, this, x);
+        }
+        x = new AuthenticationFailureHandlerInterceptor(this, x, getServerAuditStrategy());
         x = new ConsumerAdaptingInterceptor(this, x);
         if(isAudit()) {
             x = new ConsumerAuditInterceptor(this, x);
@@ -127,6 +139,12 @@ public class MllpEndpoint extends DefaultEndpoint {
      * into a set of PIX/PDQ-specific ones.
      */
     public Producer createProducer() throws Exception {
+        if (sslContext != null) {
+            SSLFilter filter = new SSLFilter(sslContext);
+            filter.setUseClientMode(true);
+            wrappedEndpoint.getConnectorConfig().getFilterChain().addFirst("ssl", filter);
+        }
+
         Producer x = this.wrappedEndpoint.createProducer();
         x = new ProducerMarshalInterceptor(this, x);
         if(isAudit()) {

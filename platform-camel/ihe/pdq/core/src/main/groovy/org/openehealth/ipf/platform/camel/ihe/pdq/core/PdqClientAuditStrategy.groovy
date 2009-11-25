@@ -46,5 +46,10 @@ class PdqClientAuditStrategy extends PdqAuditStrategy {
     MllpAuditDataset createAuditDataset() {
         new PdqAuditDataset(false);
     }
+
+    void auditAuthenticationNodeFailure(String hostAddress) {
+        AuditorManager.getPDQConsumerAuditor().auditNodeAuthenticationFailure(
+            true, null, getClass().name, null, hostAddress, null)
+    }
 }
  

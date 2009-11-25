@@ -37,8 +37,14 @@ class Iti10ServerAuditStrategy extends Iti10AuditStrategy {
                 auditDataset.messageControlId,
                 auditDataset.patientIds)
     }
-    
-    
+
+
+    void auditAuthenticationNodeFailure(String hostAddress) {
+        AuditorManager.getPIXConsumerAuditor().auditNodeAuthenticationFailure(
+            true, null, getClass().name, null, hostAddress, null)
+    }
+
+
     MllpAuditDataset createAuditDataset() {
         return new Iti10AuditDataset(true);
     }

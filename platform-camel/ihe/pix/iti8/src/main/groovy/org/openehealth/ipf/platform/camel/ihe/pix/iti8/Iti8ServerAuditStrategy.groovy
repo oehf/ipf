@@ -43,4 +43,10 @@ class Iti8ServerAuditStrategy extends Iti8AuditStrategy {
     MllpAuditDataset createAuditDataset() {
         return new Iti8AuditDataset(true);
     }
+
+    public void auditAuthenticationNodeFailure (String hostAddress) {
+        AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
+            true, null, getClass().name, null, hostAddress, null)
+    }
+
 }

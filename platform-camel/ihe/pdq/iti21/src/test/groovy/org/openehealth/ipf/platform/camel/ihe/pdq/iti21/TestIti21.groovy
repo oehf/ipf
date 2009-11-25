@@ -15,28 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pdq.iti21;
 
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.apache.camel.ExchangePattern
-import org.apache.camel.CamelContext;
-import org.apache.camel.Endpoint;
-import org.apache.camel.Exchange;
-import org.apache.camel.Message;
-import org.apache.camel.Processor;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.mina.MinaConsumer;
-import org.apache.camel.impl.DefaultExchange;
 
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.parser.PipeParser
+import org.apache.camel.CamelExchangeException
+import org.apache.camel.Exchange
+import org.apache.camel.Processor
+import org.apache.camel.RuntimeCamelException
+import org.apache.camel.impl.DefaultExchange
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor;
-
-import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.parser.PipeParser;
-
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor
+import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
+import static org.junit.Assert.*
 
 /**
  * Unit tests for the PDQ transaction aka ITI-21.
@@ -71,12 +66,49 @@ class TestIti21 extends MllpTestContainer {
     void testHappyCaseAndAudit2() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:8887?audit=false', 0)
     }
+
+    @Test
+    void testHappyCaseAndAuditSecure() {
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContext', 2)
+    }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5') 
         def msg = send(endpointUri, body)
         assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+    }
+
+    @Test
+    void testSSLFailureDueToNonSSLClient() {
+        try {
+            send('pdq-iti21://localhost:8889', getMessageString('QBP^Q22', '2.5'))
+            fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
+        } catch (RuntimeCamelException expected) {}
+
+        def messages = auditSender.messages
+        assertEquals(2, messages.size)
+        assertTrue(messages[0] instanceof SecurityAlertEvent)
+    }
+
+    @Test
+    void testCustomInterceptorCanThrowAuthenticationException() {
+        send('pdq-iti21://localhost:8892', getMessageString('QBP^Q22', '2.5'))
+        def messages = auditSender.messages
+        assertEquals(3, messages.size)
+        assertTrue(messages[0] instanceof SecurityAlertEvent)
+    }
+
+    @Test
+    void testSSLFailureDueToWrongKeystore() {
+        try {
+            send('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
+            fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
+        } catch (RuntimeCamelException expected) {}
+
+        def messages = auditSender.messages
+        assertEquals(2, messages.size)
+        assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
 
     /**

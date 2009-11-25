@@ -42,5 +42,10 @@ class Iti10ClientAuditStrategy extends Iti10AuditStrategy {
     MllpAuditDataset createAuditDataset() {
         new Iti10AuditDataset(false);
     }
+
+    void auditAuthenticationNodeFailure(String hostAddress) {
+        AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
+            true, null, getClass().name, null, hostAddress, null)
+    }
 }
  

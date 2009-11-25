@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
@@ -47,13 +48,18 @@ public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
         exchange.getIn().setBody(s);
 
         // run the route
-        getWrappedProcessor().process(exchange);
-        
+        Processor processor = getWrappedProcessor();
+        process(exchange, processor);
+
         // unmarshal
         MllpMarshalUtils.unmarshal(
                 Exchanges.resultMessage(exchange),
                 charset,
                 getMllpEndpoint().getParser());
         exchange.setProperty(Exchange.CHARSET_NAME, charset);
+    }
+
+    private void process(Exchange exchange, Processor processor) throws Exception {
+        processor.process(exchange);
     }
 }

@@ -15,21 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
-import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
-import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
-import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
+import org.apache.camel.Exchange
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpInterceptor
-import org.apache.camel.Exchangeimport org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.mina.common.IoSession
-
-import java.net.SocketAddress
-import java.util.List
-
+import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpInterceptor
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 
 /**
  * Various ATNA-auditing related utilities.

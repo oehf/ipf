@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
-import org.openehealth.ipf.commons.core.modules.api.Validatorimport org.openehealth.ipf.modules.hl7dsl.MessageAdapterimport org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-import org.openehealth.ipf.modules.hl7dsl.VariesAdapterimport org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport ca.uhn.hl7v2.parser.PipeParserimport org.openehealth.ipf.modules.hl7.message.MessageUtils
-import java.util.Map
-import ca.uhn.hl7v2.model.Groupimport ca.uhn.hl7v2.model.GenericSegment
-
+import ca.uhn.hl7v2.model.GenericSegment
+import ca.uhn.hl7v2.model.Group
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import org.openehealth.ipf.commons.core.modules.api.Validator
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 
 /**
  * HL7 message validator for PIX/PDQ transactions. 
  * @author Dmytro Rud
  */
-class MessageAdapterValidator implements Validator<MessageAdapter, Object> {
+class MessageAdapterValidator implements Validator<Object, Object> {
      
      /**
       * List of relevant segments for particular message types.
