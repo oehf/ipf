@@ -109,13 +109,7 @@ public class MllpEndpoint extends DefaultEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         if (sslContext != null) {
             HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
-            filter.setHandshakeExceptionCallback(new HandshakeCallbackSSLFilter.Callback() {
-                @Override
-                public void run(IoSession session) {
-                    String hostAddress = session.getRemoteAddress().toString();
-                    getServerAuditStrategy().auditAuthenticationNodeFailure(hostAddress);
-                }
-            });
+            filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
             wrappedEndpoint.getAcceptorConfig().getFilterChain().addFirst("ssl", filter);
         }
 
@@ -123,7 +117,9 @@ public class MllpEndpoint extends DefaultEndpoint {
         for (MllpCustomInterceptor interceptor : customInterceptors) {
             x = new CustomInterceptorWrapper(interceptor, this, x);
         }
-        x = new AuthenticationFailureHandlerInterceptor(this, x, getServerAuditStrategy());
+        if (isAudit()) {
+            x = new AuthenticationFailureHandlerInterceptor(this, x, getServerAuditStrategy());
+        }
         x = new ConsumerAdaptingInterceptor(this, x);
         if(isAudit()) {
             x = new ConsumerAuditInterceptor(this, x);
@@ -364,5 +360,15 @@ public class MllpEndpoint extends DefaultEndpoint {
     @Override
     public String toString() {
         return wrappedEndpoint.toString();
+    }
+
+    private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
+        @Override
+        public void run(IoSession session) {
+            if (isAudit()) {
+                String hostAddress = session.getRemoteAddress().toString();
+                getServerAuditStrategy().auditAuthenticationNodeFailure(hostAddress);
+            }
+        }
     }
 }
