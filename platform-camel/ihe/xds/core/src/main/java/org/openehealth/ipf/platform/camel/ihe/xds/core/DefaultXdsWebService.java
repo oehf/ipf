@@ -23,8 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
  * Base class for XDS web services that are aware of a {@link DefaultItiConsumer}.

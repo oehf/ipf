@@ -21,7 +21,7 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
 /**
  * The Camel endpoint for the ITI-17 transaction.

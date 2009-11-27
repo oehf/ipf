@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-42 component.

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ws;
+package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import org.apache.camel.Component;
 import org.apache.camel.impl.DefaultEndpoint;

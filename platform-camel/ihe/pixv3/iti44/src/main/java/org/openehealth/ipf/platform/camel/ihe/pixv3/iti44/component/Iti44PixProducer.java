@@ -19,8 +19,8 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.pixv3.iti44.Iti44PixPortType;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-44 component (PIX Feed v3).

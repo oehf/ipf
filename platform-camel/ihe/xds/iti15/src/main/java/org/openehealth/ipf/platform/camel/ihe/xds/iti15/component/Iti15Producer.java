@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegister
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-15 component.

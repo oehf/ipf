@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3ws;
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions.

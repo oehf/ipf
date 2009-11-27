@@ -36,7 +36,7 @@ import org.openehealth.ipf.commons.ihe.ws.utils.CxfTestUtils
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.
- * author Jens Riemschneider
+ * @author Jens Riemschneider
  */
 class TestIti43 extends StandardTestContainer {
     def SERVICE1 = "xds-iti43://localhost:${port}/xds-iti43-service1"
@@ -72,7 +72,7 @@ class TestIti43 extends StandardTestContainer {
         checkAudit('0', 'service 2')
     }
      
-    @Test
+    @Test   
     void testIti43FailureAudit() {
         def response2 = sendIt(SERVICE2, 'falsch')
         assert FAILURE == response2.status

@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.Iti41;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41Service;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
 /**
  * The Camel endpoint for the ITI-41 transaction.
