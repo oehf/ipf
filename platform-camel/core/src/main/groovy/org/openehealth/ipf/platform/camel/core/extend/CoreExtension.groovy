@@ -122,6 +122,19 @@ public class CoreExtension {
     }
     
     /**
+     * Adds an interceptor to the route that uses the given interceptor logic.
+     * @param interceptorBean
+     *          name of a bean that implements the {@link DelegateProcessor}.
+     * @ipfdoc Core features#intercept-bean
+     * @dsl platform-camel-core
+     */
+    public static ProcessorDefinition intercept(ProcessorDefinition self, String interceptorBean) {
+        InterceptDefinition answer = new InterceptDefinition(interceptorBean);
+        self.addOutput(answer);
+        return answer;
+    }
+
+    /**
      * Drops the <a href="http://camel.apache.org/error-handler.html">error handler</a> 
      * from the route by using the {@code noErrorHandler}
      * @ipfdoc Core features#unhandled

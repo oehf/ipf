@@ -97,6 +97,10 @@ class CoreModelExtension {
         ProcessorDefinition.metaClass.intercept = { Closure interceptorLogic ->
             CoreExtension.intercept(delegate, interceptorLogic)
         }
+
+        ProcessorDefinition.metaClass.intercept = { String interceptorBean ->
+            CoreExtension.intercept(delegate, interceptorBean)
+        }
         
         ProcessorDefinition.metaClass.unhandled = { ProcessorDefinition processorDefinition ->
             CoreExtension.unhandled(delegate, processorDefinition)

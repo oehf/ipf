@@ -27,13 +27,21 @@ import org.apache.camel.spi.RouteContext;
 public class InterceptDefinition extends OutputDefinition<ProcessorDefinition> {
 
     private DelegateProcessor delegateProcessor;
+    private String interceptorBean;
     
     public InterceptDefinition(DelegateProcessor delegateProcessor) {
         this.delegateProcessor = delegateProcessor;
     }
+
+    public InterceptDefinition(String interceptorBean) {
+        this.interceptorBean = interceptorBean;
+    }
     
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
+        if (interceptorBean != null) {
+            delegateProcessor = routeContext.lookup(interceptorBean, DelegateProcessor.class);
+        }
     	delegateProcessor.setProcessor(routeContext.createProcessor(this));
     	return delegateProcessor;
     }

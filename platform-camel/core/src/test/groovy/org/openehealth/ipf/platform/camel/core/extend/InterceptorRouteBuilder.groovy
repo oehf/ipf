@@ -35,6 +35,9 @@ class InterceptorRouteBuilder extends SpringRouteBuilder {
             .intercept(interceptorLogic) 
             .to('mock:output')
 
+        from('direct:input2')
+            .intercept('interceptorBean')
+            .to('mock:output')
     }
     
 }

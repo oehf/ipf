@@ -28,4 +28,5 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
         class="org.openehealth.ipf.platform.camel.core.extend.InterceptorRouteBuilder">
     </bean>
 
+    <bean id="interceptorBean" class="org.openehealth.ipf.platform.camel.core.extend.InterceptorExtensionTest$TestInterceptor" />
 </beans>

@@ -15,8 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.processor.DelegateProcessor;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Martin Krasser
@@ -38,4 +43,25 @@ public class InterceptorExtensionTest extends AbstractExtensionTest {
         mockOutput.assertIsSatisfied();
     }
 
+    @Test
+    public void testInterceptWithBeanName() throws InterruptedException {
+        mockOutput.expectedMessageCount(1);
+        mockOutput.expectedBodiesReceived("before");
+        Object result = producerTemplate.sendBody("direct:input2", ExchangePattern.InOut, "foo");
+        mockOutput.assertIsSatisfied();
+        assertEquals("after", result);
+    }
+
+    public static class TestInterceptor extends DelegateProcessor {
+        public TestInterceptor() {
+            System.out.println("hallo");
+        }
+
+        @Override
+        protected void processNext(Exchange exchange) throws Exception {
+            exchange.getIn().setBody("before");
+            super.processNext(exchange);
+            exchange.getOut().setBody("after");
+        }
+    }
 }
