@@ -15,11 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.RouteContext;
+import org.openehealth.ipf.platform.camel.core.process.Interceptor;
 
 /**
  * @author Martin Krasser
@@ -38,9 +40,15 @@ public class InterceptDefinition extends OutputDefinition<ProcessorDefinition> {
     }
     
     @Override
-    public Processor createProcessor(RouteContext routeContext) throws Exception {
+    public Processor createProcessor(final RouteContext routeContext) throws Exception {
         if (interceptorBean != null) {
-            delegateProcessor = routeContext.lookup(interceptorBean, DelegateProcessor.class);
+            final Interceptor interceptor = routeContext.lookup(interceptorBean, Interceptor.class);
+            delegateProcessor = new DelegateProcessor() {
+                @Override
+                protected void processNext(Exchange exchange) throws Exception {
+                    interceptor.process(exchange, getProcessor());
+                }
+            };
         }
     	delegateProcessor.setProcessor(routeContext.createProcessor(this));
     	return delegateProcessor;

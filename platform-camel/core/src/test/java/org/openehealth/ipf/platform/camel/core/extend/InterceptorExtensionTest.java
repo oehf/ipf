@@ -17,8 +17,9 @@ package org.openehealth.ipf.platform.camel.core.extend;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.processor.DelegateProcessor;
+import org.apache.camel.Processor;
 import org.junit.Test;
+import org.openehealth.ipf.platform.camel.core.process.Interceptor;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.Assert.assertEquals;
@@ -52,15 +53,11 @@ public class InterceptorExtensionTest extends AbstractExtensionTest {
         assertEquals("after", result);
     }
 
-    public static class TestInterceptor extends DelegateProcessor {
-        public TestInterceptor() {
-            System.out.println("hallo");
-        }
-
+    public static class TestInterceptor implements Interceptor {
         @Override
-        protected void processNext(Exchange exchange) throws Exception {
+        public void process(Exchange exchange, Processor next) throws Exception {
             exchange.getIn().setBody("before");
-            super.processNext(exchange);
+            next.process(exchange);
             exchange.getOut().setBody("after");
         }
     }
