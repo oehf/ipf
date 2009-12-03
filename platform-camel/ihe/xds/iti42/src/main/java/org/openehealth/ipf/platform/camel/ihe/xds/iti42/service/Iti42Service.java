@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42.service;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.xds.Iti42PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;

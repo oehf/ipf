@@ -17,7 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18.service;
 
 import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.ihe.xds.Iti18PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;

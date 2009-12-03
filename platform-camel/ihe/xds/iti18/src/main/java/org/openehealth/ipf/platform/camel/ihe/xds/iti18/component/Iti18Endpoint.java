@@ -20,7 +20,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.Iti18;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18Service;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
