@@ -261,16 +261,16 @@ class StandardTestContainer {
          assert uri.@ParticipantObjectTypeCodeRole == '3'
          checkCode(uri.ParticipantObjectIDTypeCode, '9', 'RFC-3881')
          assert uri.@ParticipantObjectID == docUniqueId
-         assert uri.ParticipantObjectName.text() == homeId
-         assert uri.ParticipantObjectDetail.@type == 'Repository Unique Id'
-                  
-         def base64RepoId = new String(Base64.encodeBase64(repoId.getBytes('UTF8')))
-         def base64 = uri.ParticipantObjectDetail.@value.toString().getBytes('UTF8')
-         def decoded = new String(Base64.decodeBase64(base64))
-         // This is currently buggy in OHT. The decoded string is again base64 encoded.
-         // Decoding it twice leads to the document unique id, which is wrong.
-         // This is filed as issue #53 in OHT.
-         // assert decoded == repoId
+
+         checkParticipantObjectDetail(uri.ParticipantObjectDetail[0], 'Repository Unique Id', repoId)
+         checkParticipantObjectDetail(uri.ParticipantObjectDetail[1], 'ihe:homeCommunityID', homeId)
+     }
+     
+     def checkParticipantObjectDetail(detail, expectedType, expectedValue) {
+         assert detail.@type == expectedType
+         String base64Expected = new String(Base64.encodeBase64(expectedValue.getBytes('UTF8')))
+         String base64Actual = detail.@value
+         assert base64Actual == base64Expected  
      }
      
      def checkSubmissionSet(submissionSet) {
