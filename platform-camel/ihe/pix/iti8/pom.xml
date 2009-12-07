@@ -22,4 +22,5 @@
 			<artifactId>hapi-structures-v231</artifactId>
 		</dependency>
 	</dependencies>
+    
 </project>

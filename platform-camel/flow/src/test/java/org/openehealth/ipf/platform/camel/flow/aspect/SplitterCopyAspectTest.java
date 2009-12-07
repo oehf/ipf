@@ -59,7 +59,7 @@ public class SplitterCopyAspectTest {
                 new TestExpression(),
                 new TestProcessor(),
                 new UseLatestAggregationStrategy(),
-                false, null, false);
+                false, null, false, false);
     }
 
     @After

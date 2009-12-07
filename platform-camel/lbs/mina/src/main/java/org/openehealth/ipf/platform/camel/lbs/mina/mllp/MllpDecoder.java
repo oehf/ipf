@@ -15,14 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.mina.mllp;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.UUID;
 
-import org.apache.camel.util.UuidGenerator;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +31,8 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.platform.camel.lbs.mina.mllp.MllpMessagePart.MllpMessageExtractionState;
+
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * Decoder implementation that delimits messages via the MLLP encoding and stores
@@ -156,7 +156,7 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
         public SessionContent(ResourceFactory resourceFactory) {
             notNull(resourceFactory, "resourceFactory cannot be null");
             this.resourceFactory = resourceFactory;
-            this.unitOfWorkId = new UuidGenerator().generateId() + ".mllp";
+            this.unitOfWorkId = UUID.randomUUID() + ".mllp";
         }
         
         public void resetMessage() {
