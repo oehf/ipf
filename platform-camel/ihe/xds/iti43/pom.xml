@@ -6,7 +6,7 @@
     <name>platform-camel-ihe-xds-iti43</name>
      
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe-xds.iti43.*</osgi.export.pkg>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.xds.iti43.*</osgi.export.pkg>
     </properties>
 
     <parent>
