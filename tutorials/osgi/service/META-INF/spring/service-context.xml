@@ -13,11 +13,6 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
     <context:annotation-config/>
     
-    <!--
-        Default properties.
-     -->
-    <util:properties id="service.properties" location="classpath:META-INF/spring/service.properties"/>
-
     <bean id="admissionTransmogrifier" 
         class="org.openehealth.ipf.tutorials.osgi.service.impl.AdmissionTransmogrifier">
         <property name="sendingFacility" value= "${service.sending.facility}" />
