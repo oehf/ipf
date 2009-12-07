@@ -16,8 +16,6 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
    
   <context:annotation-config />
 
-  <util:properties id="repository.properties" location="classpath:META-INF/spring/repository.properties"/>
-
   <!-- ================================================================= -->
   <!--  Declarative Transaction Management                               -->
   <!-- ================================================================= -->

@@ -11,10 +11,6 @@ http://www.springframework.org/schema/util/spring-util-2.5.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <util:properties id="jms.properties" 
-        location="classpath:META-INF/spring/jms.properties">
-    </util:properties>
-
     <!-- ================================================================== -->
     <!--  Camel JMS Setup                                                   -->
     <!-- ================================================================== -->

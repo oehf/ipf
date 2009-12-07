@@ -14,9 +14,12 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd
 http://www.springframework.org/schema/osgi-compendium
 http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
-    <osgix:property-placeholder 
-        persistent-id="org.openehealth.ipf.osgi.config.jms" defaults-ref="jms.properties">
-    </osgix:property-placeholder>
+    <!-- Configuration Admin entry -->
+    <osgix:cm-properties id="jmsProperties" persistent-id="org.openehealth.ipf.osgi.config.jms">
+	<prop key="activemq.redelivery.count">0</prop>
+    </osgix:cm-properties>
+
+    <context:property-placeholder properties-ref="jmsProperties" />
 
     <osgi:service ref="jms" 
         interface="org.apache.camel.Component">
