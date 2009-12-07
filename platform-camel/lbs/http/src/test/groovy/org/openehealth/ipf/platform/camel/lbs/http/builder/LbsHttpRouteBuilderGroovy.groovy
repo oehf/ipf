@@ -91,6 +91,10 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             
         from('direct:lbstest_download')
             .to('http://localhost:9452/lbstest_download')
+            .transform {
+                def result = it.in.getBody(InputStream.class)
+                org.openehealth.ipf.platform.camel.lbs.http.process.GroovyLbsHttpTest.getLength(result)
+            }
             
         from('jetty:http://localhost:9452/lbstest_download')
             .transform().constant(new org.openehealth.ipf.platform.camel.lbs.http.process.GroovyLbsHttpTest.HugeContentInputStream())

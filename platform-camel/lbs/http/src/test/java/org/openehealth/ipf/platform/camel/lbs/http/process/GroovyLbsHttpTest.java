@@ -15,13 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.http.process;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.httpclient.methods.FileRequestEntity;
@@ -31,9 +24,15 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
-import org.openehealth.ipf.platform.camel.lbs.http.process.ResourceList;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -124,14 +123,14 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
             new InputStreamRequestEntity(inputStream, CONTENT_SIZE, "text/plain");
         method.setRequestEntity(requestEntity);
 
-        final int[] count = { 0 };
+        final long[] count = { 0 };
 
         mock.expectedMessageCount(1);
         mock.whenAnyExchangeReceived(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
                 InputStream inputStream = exchange.getIn().getBody(InputStream.class);
-                int length = getLength(inputStream);
+                long length = getLength(inputStream);
                 inputStream.close();
                 count[0] = length;
             }
@@ -182,9 +181,8 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
         TrackMemThread memTracker = new TrackMemThread();
         memTracker.start();
         try {
-            Object result = producerTemplate.requestBody("direct:lbstest_download", "bla");
-            assertTrue(result instanceof InputStream);
-            assertEquals(CONTENT_SIZE, getLength((InputStream) result));
+            Long result = (Long) producerTemplate.requestBody("direct:lbstest_download", "bla");
+            assertEquals(CONTENT_SIZE, (long)result);
         }
         finally {
             memTracker.waitForStop();
@@ -192,7 +190,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
         }
     }
 
-    public static int getLength(InputStream inputStream) throws IOException {
+    public static long getLength(InputStream inputStream) throws IOException {
         byte[] buffer = new byte[1024];
         int length = 0;
         boolean done = false;
