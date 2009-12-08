@@ -15,14 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.RecipientListValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link RecipientListValidator}.
@@ -35,6 +33,7 @@ public class RecipientListValidatorTest {
     public void testValidateGoodCases() throws XDSMetaDataException {
         validator.validate(Arrays.asList("Some Hospital|^Welby"));
         validator.validate(Arrays.asList("|^Welby"));
+        validator.validate(Arrays.asList("|ONLYID"));
         validator.validate(Arrays.asList("Some Hospital"));
         validator.validate(Arrays.asList("Some Hospital", "|^Welby"));
     }
@@ -45,7 +44,6 @@ public class RecipientListValidatorTest {
 //        assertFails(Arrays.<String>asList());
         assertFails(Arrays.asList(""));
         assertFails(Arrays.asList("^LOL"));
-        assertFails(Arrays.asList("|LOL"));
         assertFails(Arrays.asList("Some Hospital|^Welby|"));
         assertFails(Arrays.asList("|Some Hospital|^Welby"));
         assertFails(Arrays.asList("Some Hospital", ""));

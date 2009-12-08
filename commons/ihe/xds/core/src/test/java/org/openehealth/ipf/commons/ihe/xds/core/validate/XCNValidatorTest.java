@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XCNValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link XCNValidator}.
@@ -35,18 +33,18 @@ public class XCNValidatorTest {
         validator.validate("abc^^^^^^^^&1.2.840.113619.6.197&ISO");
         validator.validate("^Welby^^^^^^^");
         validator.validate("^Welby");
+        validator.validate("abc");
+        validator.validate("abc^^^^^^^^");
     }
     
     @Test 
     public void testValidateBadCases() throws XDSMetaDataException {
         assertFails("");
-        assertFails("abc");
         assertFails("11375^^^^^^^^&1.2.840.113619.6.197");
         assertFails("11375^^^^^^^^&1.2.840.113619.6.197&LOL");
         assertFails("11375^^^^^^^^&&ISO");
         assertFails("11375^^^^^^^^&abc&ISO");
         assertFails("^^^^^^^^&1.2.840.113619.6.197&ISO");
-        assertFails("abc^^^^^^^^");
     }
 
     private static void assertFails(String value) {

@@ -15,18 +15,22 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.Actor;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
@@ -61,12 +65,6 @@ public class SubmitObjectsRequestValidatorTest {
     public void testValidateBadAuthorInstitution() {
         docEntry.getAuthors().get(0).getAuthorInstitution().add(new Organization(null, "LOL", null));
         expectFailure(ORGANIZATION_NAME_MISSING);            
-    }
-    
-    @Test
-    public void testValidateBadAuthorPerson()  {
-        docEntry.getAuthors().get(0).getAuthorPerson().setId(new Identifiable("LOL", null));
-        expectFailure(PERSON_HD_MISSING);
     }
 
     @Test
@@ -413,7 +411,8 @@ public class SubmitObjectsRequestValidatorTest {
     public void testPersonHDMissing() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME).get(0).getSlots().get(0).getValueList().set(0, "lol");
-        expectFailure(PERSON_HD_MISSING, ebXML);
+        // The spec allows this case: "If component 1 (ID Number) is specified, component 9 (Assigning Authority) shall be present if available"
+        validator.validate(transformer.toEbXML(request), null);
     }
         
     @Test    

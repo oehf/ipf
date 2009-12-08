@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.*;
+import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
+import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
 
 import java.util.List;
 
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7;
-import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
+import static org.apache.commons.lang.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validates a XCN string.
@@ -42,7 +42,9 @@ public class XCNValidator implements ValueValidator {
         metaDataAssert(hl7fn != null || idNumber != null, PERSON_MISSING_NAME_AND_ID, hl7xcn);
 
         String hl7hd = HL7.get(parts, 9, false);
-        metaDataAssert(idNumber == null || hl7hd != null, PERSON_HD_MISSING, hl7xcn);
+//        Spec actually allows the assigning authority to be missing:
+//          "If component 1 (ID Number) is specified, component 9 (Assigning Authority) shall be present if available"
+//        metaDataAssert(idNumber == null || hl7hd != null, PERSON_HD_MISSING, hl7xcn);
         
         if (hl7hd != null) {
             List<String> hdParts = HL7.parse(HL7Delimiter.SUBCOMPONENT, hl7hd);
