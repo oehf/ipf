@@ -108,10 +108,6 @@ class RegRepModelExtension {
             delegate.process {
                 def formatter = new SimpleDateFormat('yyyyMMddHHmmss')
                 def newTime = formatter.format(new Date())
-                while (newTime == it.in.body.entry.lastUpdateTime) {
-                    Thread.sleep(50)
-                    newTime = formatter.format(new Date())
-                }
                 it.in.body.entry.lastUpdateTime = newTime
             }
         }
