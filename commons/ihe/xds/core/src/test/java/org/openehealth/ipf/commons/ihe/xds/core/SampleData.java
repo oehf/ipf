@@ -213,11 +213,11 @@ public abstract class SampleData {
         Recipient recipient = new Recipient();
         recipient.setOrganization(new Organization("org", null, null));
         
-        Author author1 = new Author();
-        author1.setAuthorPerson(new Person(new Identifiable("id1", new AssigningAuthority("1.1")), new Name("Otto")));
+        Author author = new Author();
+        author.setAuthorPerson(new Person(new Identifiable("id1", new AssigningAuthority("1.1")), new Name("Otto")));
 
         SubmissionSet submissionSet = new SubmissionSet();
-        submissionSet.setAuthor(author1);
+        submissionSet.getAuthors().add(author);
         submissionSet.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         submissionSet.setComments(new LocalizedString("comments1"));
         submissionSet.setContentTypeCode(new Code("code1", new LocalizedString("code1"), "scheme1"));
@@ -238,9 +238,9 @@ public abstract class SampleData {
      * @return the new entry.
      */
     public static DocumentEntry createDocumentEntry(Identifiable patientID) {
-        Author author2 = new Author();
-        author2.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), new Name("Norbi")));
-        author2.getAuthorInstitution().add(new Organization("authorOrg", null, null));
+        Author author = new Author();
+        author.setAuthorPerson(new Person(new Identifiable("id2", new AssigningAuthority("1.2")), new Name("Norbi")));
+        author.getAuthorInstitution().add(new Organization("authorOrg", null, null));
         
         Address address = new Address();
         address.setStreetAddress("hier");
@@ -252,7 +252,7 @@ public abstract class SampleData {
         patientInfo.setName(new Name("Susi"));
         
         DocumentEntry docEntry = new DocumentEntry();
-        docEntry.getAuthors().add(author2);
+        docEntry.getAuthors().add(author);
         docEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         docEntry.setClassCode(new Code("code2", new LocalizedString("code2"), "scheme2"));
         docEntry.setComments(new LocalizedString("comment2"));
@@ -344,6 +344,7 @@ public abstract class SampleData {
         
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.setClassCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
+        query.setTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.getCreationTime().setFrom("1980");
         query.getCreationTime().setTo("1981");

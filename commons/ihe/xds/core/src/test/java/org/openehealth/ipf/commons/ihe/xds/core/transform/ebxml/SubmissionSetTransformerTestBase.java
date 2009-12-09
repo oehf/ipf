@@ -15,24 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Address;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
+import static org.junit.Assert.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.EbrsTestUtils.*;
 
 /**
  * Tests for {@link SubmissionSetTransformer}.
@@ -58,15 +51,24 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         transformer = new SubmissionSetTransformer(factory);
         objectLibrary = factory.createObjectLibrary();
         
-        Author author = new Author();
-        author.setAuthorPerson(createPerson(1));
-        author.getAuthorInstitution().add(new Organization("inst1"));
-        author.getAuthorInstitution().add(new Organization("inst2"));
-        author.getAuthorRole().add("role1");
-        author.getAuthorRole().add("role2");
-        author.getAuthorSpecialty().add("spec1");
-        author.getAuthorSpecialty().add("spec2");
+        Author author1 = new Author();
+        author1.setAuthorPerson(createPerson(1));
+        author1.getAuthorInstitution().add(new Organization("inst1"));
+        author1.getAuthorInstitution().add(new Organization("inst2"));
+        author1.getAuthorRole().add("role1");
+        author1.getAuthorRole().add("role2");
+        author1.getAuthorSpecialty().add("spec1");
+        author1.getAuthorSpecialty().add("spec2");
         
+        Author author2 = new Author();
+        author2.setAuthorPerson(createPerson(30));
+        author2.getAuthorInstitution().add(new Organization("inst3"));
+        author2.getAuthorInstitution().add(new Organization("inst4"));
+        author2.getAuthorRole().add("role3");
+        author2.getAuthorRole().add("role4");
+        author2.getAuthorSpecialty().add("spec3");
+        author2.getAuthorSpecialty().add("spec4");
+
         Address address = new Address();
         address.setCity("city");
         address.setCountry("country");
@@ -85,7 +87,8 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         sourcePatientInfo.getIds().add(createIdentifiable(6));
 
         set = new SubmissionSet();
-        set.setAuthor(author);
+        set.getAuthors().add(author1);
+        set.getAuthors().add(author2);
         set.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         set.setComments(createLocal(10));
         set.setSubmissionTime("123");
@@ -119,34 +122,40 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertEquals(createLocal(10), ebXML.getDescription());        
         assertEquals(createLocal(11), ebXML.getName());
         
-        assertSlot(Vocabulary.SLOT_NAME_SUBMISSION_TIME, ebXML.getSlots(), "123");
+        assertSlot(SLOT_NAME_SUBMISSION_TIME, ebXML.getSlots(), "123");
         
-        assertSlot(Vocabulary.SLOT_NAME_INTENDED_RECIPIENT, ebXML.getSlots(), 
+        assertSlot(SLOT_NAME_INTENDED_RECIPIENT, ebXML.getSlots(),
                 "orgName 20^^^^^namespace 20&uni 20&uniType 20^^^^id 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^^^namespace 22&uni 22&uniType 22",
                 "orgName 21^^^^^namespace 21&uni 21&uniType 21^^^^id 21",
                 "|id 23^familyName 23^givenName 23^prefix 23^second 23^suffix 23^^^namespace 23&uni 23&uniType 23");
 
         
-        EbXMLClassification classification = assertClassification(Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
-        assertSlot(Vocabulary.SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
+        EbXMLClassification classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 1^familyName 1^givenName 1^prefix 1^second 1^suffix 1^^^namespace 1&uni 1&uniType 1");
+        assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst1", "inst2");
+        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role1", "role2");
+        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec1", "spec2");
         
-        classification = assertClassification(Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 6", 6);
-        assertSlot(Vocabulary.SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
-        
-        
-        assertExternalIdentifier(Vocabulary.SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, ebXML, 
-                "id 3^^^namespace 3&uni 3&uniType 3", Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID);
+        classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 1, "", -1);
+        assertSlot(SLOT_NAME_AUTHOR_PERSON, classification.getSlots(), "id 30^familyName 30^givenName 30^prefix 30^second 30^suffix 30^^^namespace 30&uni 30&uniType 30");
+        assertSlot(SLOT_NAME_AUTHOR_INSTITUTION, classification.getSlots(), "inst3", "inst4");
+        assertSlot(SLOT_NAME_AUTHOR_ROLE, classification.getSlots(), "role3", "role4");
+        assertSlot(SLOT_NAME_AUTHOR_SPECIALTY, classification.getSlots(), "spec3", "spec4");
 
-        assertExternalIdentifier(Vocabulary.SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, ebXML, 
-                "uniqueId", Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID);
-
-        assertExternalIdentifier(Vocabulary.SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, ebXML, 
-                "sourceId", Vocabulary.SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID);
+        classification = assertClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, ebXML, 0, "code 6", 6);
+        assertSlot(SLOT_NAME_CODING_SCHEME, classification.getSlots(), "scheme 6");
         
-        assertEquals(2, ebXML.getClassifications().size());
+        
+        assertExternalIdentifier(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, ebXML,
+                "id 3^^^namespace 3&uni 3&uniType 3", SUBMISSION_SET_LOCALIZED_STRING_PATIENT_ID);
+
+        assertExternalIdentifier(SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID, ebXML,
+                "uniqueId", SUBMISSION_SET_LOCALIZED_STRING_UNIQUE_ID);
+
+        assertExternalIdentifier(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, ebXML,
+                "sourceId", SUBMISSION_SET_LOCALIZED_STRING_SOURCE_ID);
+        
+        assertEquals(3, ebXML.getClassifications().size());
         assertEquals(2, ebXML.getSlots().size());
         assertEquals(3, ebXML.getExternalIdentifiers().size());
     }

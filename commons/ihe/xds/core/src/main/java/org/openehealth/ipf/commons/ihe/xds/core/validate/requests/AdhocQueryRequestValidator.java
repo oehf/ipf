@@ -15,18 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
-import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
 
 import java.util.EnumMap;
 import java.util.Map;
+
+import static org.apache.commons.lang.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validates an {@link EbXMLAdhocQueryRequest}.
@@ -48,6 +49,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         validations.put(QueryType.FIND_DOCUMENTS, new QueryParameterValidation[] {
                 new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
                 new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                new CodeValidation(DOC_ENTRY_TYPE_CODE),
                 new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
                 new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
                 new CodeValidation(DOC_ENTRY_FORMAT_CODE),

@@ -15,10 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ebxml30;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -29,6 +25,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuer
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsQueryTransformer;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link FindDocumentsQueryTransformer}.
@@ -56,6 +57,9 @@ public class FindDocumentsQueryTransformerTest {
         
         assertEquals(Arrays.asList("('code1^^scheme1')", "('code2^^scheme2')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()));
+
+        assertEquals(Arrays.asList("('codet1^^schemet1')", "('codet2^^schemet2')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE_CODE.getSlotName()));
 
         assertEquals(Arrays.asList("('code3^^scheme3')", "('code4^^scheme4')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE.getSlotName()));
@@ -97,7 +101,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
         
-        assertEquals(17, ebXML.getSlots().size());
+        assertEquals(18, ebXML.getSlots().size());
     }
     
     @Test

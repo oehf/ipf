@@ -15,16 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a stored query for FindDocuments.
@@ -35,7 +31,8 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
 
     private Identifiable patientId;
     
-    private List<AvailabilityStatus> status;    
+    private List<AvailabilityStatus> status;
+    private List<Code> typeCodes;
     private List<Code> classCodes;
     private List<Code> practiceSettingCodes;
     private List<Code> healthcareFacilityTypeCodes;
@@ -119,6 +116,21 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
      */
     public void setClassCodes(List<Code> classCodes) {
         this.classCodes = classCodes;
+    }
+
+    /**
+     * @return the codes for filtering {@link DocumentEntry#getTypeCode()}.
+     */
+    public List<Code> getTypeCodes() {
+        return typeCodes;
+    }
+
+    /**
+     * @param typeCodes
+     *          the codes for filtering {@link DocumentEntry#getTypeCode()}.
+     */
+    public void setTypeCodes(List<Code> typeCodes) {
+        this.typeCodes = typeCodes;
     }
 
     /**
@@ -222,6 +234,7 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
         int result = 1;
         result = prime * result + ((authorPersons == null) ? 0 : authorPersons.hashCode());
         result = prime * result + ((classCodes == null) ? 0 : classCodes.hashCode());
+        result = prime * result + ((typeCodes == null) ? 0 : typeCodes.hashCode());
         result = prime * result
                 + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
         result = prime * result + ((creationTime == null) ? 0 : creationTime.hashCode());
@@ -258,6 +271,11 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
             if (other.classCodes != null)
                 return false;
         } else if (!classCodes.equals(other.classCodes))
+            return false;
+        if (typeCodes == null) {
+            if (other.typeCodes != null)
+                return false;
+        } else if (!typeCodes.equals(other.typeCodes))
             return false;
         if (confidentialityCodes == null) {
             if (other.confidentialityCodes != null)

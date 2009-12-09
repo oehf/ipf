@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents an XDS submission set according to the IHE XDS specification.
@@ -33,27 +33,19 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class SubmissionSet extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = 5961980266312684583L;
     
-    private Author author;
+    private final List<Author> authors = new ArrayList<Author>();
     private Code contentTypeCode;
     private final List<Recipient> intendedRecipients = new ArrayList<Recipient>(); 
     private String sourceId;
     private String submissionTime;
 
     /**
-     * @return the author creating this submission set.
+     * @return the list of authors of the submission set. Cannot be <code>null</code>.
      */
-    public Author getAuthor() {
-        return author;
+    public List<Author> getAuthors() {
+        return authors;
     }
-    
-    /**
-     * @param author
-     *          the author creating this submission set.
-     */
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-    
+
     /**
      * @return the code describing the content type.
      */
@@ -111,7 +103,7 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((author == null) ? 0 : author.hashCode());
+        result = prime * result + ((authors == null) ? 0 : authors.hashCode());
         result = prime * result + ((contentTypeCode == null) ? 0 : contentTypeCode.hashCode());
         result = prime * result
                 + ((intendedRecipients == null) ? 0 : intendedRecipients.hashCode());
@@ -129,10 +121,10 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         SubmissionSet other = (SubmissionSet) obj;
-        if (author == null) {
-            if (other.author != null)
+        if (authors == null) {
+            if (other.authors != null)
                 return false;
-        } else if (!author.equals(other.author))
+        } else if (!authors.equals(other.authors))
             return false;
         if (contentTypeCode == null) {
             if (other.contentTypeCode != null)

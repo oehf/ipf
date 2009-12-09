@@ -15,17 +15,19 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Recipient;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.lang.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
 /**
  * Transforms between a {@link SubmissionSet} and its ebXML representation.
@@ -110,9 +112,10 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addClassificationsFromEbXML(SubmissionSet set, EbXMLRegistryPackage regPackage) {
         super.addClassificationsFromEbXML(set, regPackage);
         
-        EbXMLClassification author = regPackage.getSingleClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME);
-        set.setAuthor(authorTransformer.fromEbXML(author));
- 
+        for (EbXMLClassification author : regPackage.getClassifications(SUBMISSION_SET_AUTHOR_CLASS_SCHEME)) {
+            set.getAuthors().add(authorTransformer.fromEbXML(author));
+        }
+
         EbXMLClassification contentType = regPackage.getSingleClassification(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);
         set.setContentTypeCode(codeTransformer.fromEbXML(contentType));
     }
@@ -121,8 +124,10 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
     protected void addClassifications(SubmissionSet set, EbXMLRegistryPackage regPackage, EbXMLObjectLibrary objectLibrary) {
         super.addClassifications(set, regPackage, objectLibrary);
         
-        EbXMLClassification author = authorTransformer.toEbXML(set.getAuthor(), objectLibrary);
-        regPackage.addClassification(author, SUBMISSION_SET_AUTHOR_CLASS_SCHEME);
+        for (Author author : set.getAuthors()) {
+            EbXMLClassification authorClasification = authorTransformer.toEbXML(author, objectLibrary);
+            regPackage.addClassification(authorClasification, SUBMISSION_SET_AUTHOR_CLASS_SCHEME);
+        }
 
         EbXMLClassification contentType = codeTransformer.toEbXML(set.getContentTypeCode(), objectLibrary);
         regPackage.addClassification(contentType, SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME);

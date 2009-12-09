@@ -34,7 +34,7 @@ class QueryMatcher {
         contains(query.sourceIds, entry.sourceId) &&
         any(query.contentTypeCodes) { matchesCode(it, entry.contentTypeCode) } &&
         isInRange(query.submissionTime, entry.submissionTime) &&
-        matchesAuthor(query.authorPerson, entry.author)
+        matchesAuthor(query.authorPerson, entry.authors)
     }
     
     def matches(Folder entry, FindFoldersQuery query) {        
@@ -51,6 +51,7 @@ class QueryMatcher {
         isInRange(query.serviceStartTime, entry.serviceStartTime) &&
         isInRange(query.serviceStopTime, entry.serviceStopTime) &&
         any(query.classCodes) { matchesCode(it, entry.classCode) } &&
+        any(query.typeCodes) { matchesCode(it, entry.typeCode) } &&
         any(query.formatCodes) { matchesCode(it, entry.formatCode) } &&
         any(query.healthcareFacilityTypeCodes) { matchesCode(it, entry.healthcareFacilityTypeCode) } &&
         any(query.practiceSettingCodes) { matchesCode(it, entry.practiceSettingCode) } &&

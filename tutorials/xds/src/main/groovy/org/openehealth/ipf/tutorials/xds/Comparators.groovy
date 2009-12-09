@@ -49,10 +49,10 @@ public class Comparators {
          }
      }
 
-     static def matchesAuthor(authorPerson, author) {
-         authorPerson == null || matchesAuthors([authorPerson], [author])
+     static def matchesAuthor(authorPerson, authors) {
+         authorPerson == null || matchesAuthors([authorPerson], authors)
      }
-     
+
      static def matchesAuthors(authorPersons, authors) {
          if (authorPersons == null || authorPersons.isEmpty())
              return true

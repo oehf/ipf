@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
@@ -42,6 +41,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for marshaling objects created with our ebxml 2.1 classes.
@@ -197,7 +198,7 @@ public class Ebrs21MarshalingTest {
         docEntry.setRepositoryUniqueId("42");
 
         SubmissionSet submissionSet = new SubmissionSet();
-        submissionSet.setAuthor(author2);
+        submissionSet.getAuthors().add(author2);
         submissionSet.setContentTypeCode(new Code("History and Physical", new LocalizedString("History and Physical", "en-us", "UTF-8"), "Connect-a-thon contentTypeCodes"));
         submissionSet.setSourceId("129.6.58.92.1.1");
         submissionSet.setSubmissionTime("20041225235050");

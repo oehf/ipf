@@ -30,6 +30,8 @@ public enum QueryParameter {
     DOC_ENTRY_PATIENT_ID("$XDSDocumentEntryPatientId"),
     /** Used to filter {@link DocumentEntry#getClassCode()}. */
     DOC_ENTRY_CLASS_CODE("$XDSDocumentEntryClassCode"),
+    /** Used to filter {@link DocumentEntry#getTypeCode()}. */
+    DOC_ENTRY_TYPE_CODE("$XDSDocumentEntryTypeCode"),
     /** Used to filter {@link DocumentEntry#getClassCode()}. */
     DOC_ENTRY_CLASS_CODE_SCHEME("$XDSDocumentEntryClassCodeScheme"),
     /** Used to filter {@link DocumentEntry#getAuthors()}. */

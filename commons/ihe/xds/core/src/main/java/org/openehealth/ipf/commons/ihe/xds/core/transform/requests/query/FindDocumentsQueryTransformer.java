@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.IdentifiableTransformer;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 
 /**
  * Transforms between a {@link FindDocumentsQuery} and {@link EbXMLAdhocQueryRequest}.
@@ -65,7 +65,8 @@ public class FindDocumentsQueryTransformer {
         
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_CLASS_CODE, query.getClassCodes());
-        slots.fromCode(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, query.getHealthcareFacilityTypeCodes());        
+        slots.fromCode(DOC_ENTRY_TYPE_CODE, query.getTypeCodes());
+        slots.fromCode(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE, query.getHealthcareFacilityTypeCodes());
         slots.fromCode(DOC_ENTRY_PRACTICE_SETTING_CODE, query.getPracticeSettingCodes());
         slots.fromCode(DOC_ENTRY_EVENT_CODE, query.getEventCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
@@ -90,6 +91,7 @@ public class FindDocumentsQueryTransformer {
         query.setPatientId(identifiableTransformer.fromEbXML(patientId));
         
         query.setClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE));
+        query.setTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE));
         query.setPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE));
         query.setHealthcareFacilityTypeCodes(slots.toCodeList(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE));
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
