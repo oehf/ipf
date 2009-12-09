@@ -100,6 +100,11 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Test
+    void testServerDoesNotNeedToAcceptCertificate() {
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:8893?secure=true&sslContext=#sslContext', 2)
+    }
+
+    @Test
     void testSSLFailureDueToWrongKeystore() {
         try {
             send('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))

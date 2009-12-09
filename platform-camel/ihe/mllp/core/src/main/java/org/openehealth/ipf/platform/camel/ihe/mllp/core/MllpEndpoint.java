@@ -57,6 +57,7 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final Parser parser;
     private final SSLContext sslContext;
     private final List<MllpCustomInterceptor> customInterceptors;
+    private final boolean mutualTLS;
 
 
     /**
@@ -64,19 +65,20 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param wrappedEndpoint
      *      The original camel-mina endpoint instance.
      * @param audit
-     *      Whether ATNA auditing should be performed.
+ *      Whether ATNA auditing should be performed.
      * @param allowIncompleteAudit
-     *      Whether incomplete ATNA auditing are allowed as well.
+*      Whether incomplete ATNA auditing are allowed as well.
      * @param serverStrategy
-     *      Server-side audit strategy.
+*      Server-side audit strategy.
      * @param clientStrategy
      * @param sslContext
-     *      the ssl context to use. {@code null} if secure communication is not used.
+*      the ssl context to use. {@code null} if secure communication is not used.
+     * @param mutualTLS
+     *      {@code true}, to require client authentication for mutual TLS.
      * @param customInterceptors
      *      list of interceptors that are to be added to the processing of messages. Only applied to
-     *      consumers.
      */
-    public MllpEndpoint(MinaEndpoint wrappedEndpoint, boolean audit, boolean allowIncompleteAudit, MllpAuditStrategy serverStrategy, MllpAuditStrategy clientStrategy, MllpTransactionConfiguration transactionConfiguration, Parser parser, SSLContext sslContext, List<MllpCustomInterceptor> customInterceptors)
+    public MllpEndpoint(MinaEndpoint wrappedEndpoint, boolean audit, boolean allowIncompleteAudit, MllpAuditStrategy serverStrategy, MllpAuditStrategy clientStrategy, MllpTransactionConfiguration transactionConfiguration, Parser parser, SSLContext sslContext, boolean mutualTLS, List<MllpCustomInterceptor> customInterceptors)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -93,6 +95,7 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.transactionConfiguration = transactionConfiguration;
         this.parser = parser;
         this.sslContext = sslContext;
+        this.mutualTLS = mutualTLS;
         this.customInterceptors = customInterceptors;
     }
 
@@ -106,6 +109,7 @@ public class MllpEndpoint extends DefaultEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         if (sslContext != null) {
             HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
+            filter.setNeedClientAuth(mutualTLS);
             filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
             wrappedEndpoint.getAcceptorConfig().getFilterChain().addFirst("ssl", filter);
         }

@@ -73,7 +73,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <property name="keyManagerFactoryKeyStore" ref="keyStoreOther"/>
         <property name="keyManagerFactoryKeyStorePassword" value="boguspw"/>
         <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
-        <property name="trustManagerFactoryKeyStore" ref="keyStoreOther"/>
+        <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
     </bean>
 
     <bean id="keyStoreOther" class="org.apache.mina.integration.spring.ssl.KeyStoreFactoryBean">

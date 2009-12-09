@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pdq.iti21
 
-import org.apache.camel.processor.DelegateProcessor
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint
+import org.springframework.context.event.ContextRefreshedEvent
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import org.apache.camel.Exchange
 
 /**
  * Camel route for generic unit tests.
@@ -55,7 +55,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti21://0.0.0.0:8889?secure=true&sslContext=#sslContext')
+         from('pdq-iti21://0.0.0.0:8889?secure=true&mutualTLS=true&sslContext=#sslContext')
              .process {
                  resultMessage(it).body = rsp
              }
@@ -77,6 +77,12 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
              .process {
                  resultMessage(it).body = rsp
              }
+
+         from('pdq-iti21://0.0.0.0:8893?secure=true&sslContext=#sslContext')
+             .process {
+                 resultMessage(it).body = rsp
+             }
+
      }
 }
  

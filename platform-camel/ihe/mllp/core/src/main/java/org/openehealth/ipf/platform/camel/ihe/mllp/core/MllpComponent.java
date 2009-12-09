@@ -81,6 +81,7 @@ public abstract class MllpComponent extends MinaComponent {
         boolean allowIncompleteAudit = 
             getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false); 
         boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
+        boolean mutualTLS = getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
         String sslContextBean = getAndRemoveParameter(parameters, "sslContext", String.class, "");
         String interceptorBeans = getAndRemoveParameter(parameters, "interceptors", String.class, "");
 
@@ -129,6 +130,7 @@ public abstract class MllpComponent extends MinaComponent {
                 getTransactionConfiguration(),
                 getParser(),
                 sslContext,
+                mutualTLS,
                 customInterceptors);
     }
 
