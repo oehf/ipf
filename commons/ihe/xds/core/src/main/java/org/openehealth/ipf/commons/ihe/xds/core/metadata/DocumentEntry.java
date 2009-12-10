@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Represents an XDS document entry according to the IHE XDS specification.
@@ -59,6 +59,24 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
      */
     public List<Author> getAuthors() {
         return authors;
+    }
+
+    /**
+     * @param author
+     *          the author of the document.
+     */
+    public void setAuthor(Author author) {
+        authors.clear();
+        authors.add(author);
+    }
+
+    /**
+     * @return the author of the document. If the document has multiple authors
+     *          this method returns only the first in the list. If the document
+     *          has no authors, this method returns {@code null}.
+     */
+    public Author getAuthor() {
+        return authors.size() > 1 ? authors.get(0) : null;
     }
     
     /**

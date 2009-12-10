@@ -40,10 +40,28 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     private String submissionTime;
 
     /**
-     * @return the list of authors of the submission set. Cannot be <code>null</code>.
+     * @return the list of authors of the submission. Cannot be <code>null</code>.
      */
     public List<Author> getAuthors() {
         return authors;
+    }
+
+    /**
+     * @param author
+     *          the author of the submission.
+     */
+    public void setAuthor(Author author) {
+        authors.clear();
+        authors.add(author);
+    }
+
+    /**
+     * @return the author of the submission. If the submission has multiple authors
+     *          this method returns only the first in the list. If the submission
+     *          has no authors, this method returns {@code null}.
+     */
+    public Author getAuthor() {
+        return authors.size() > 1 ? authors.get(0) : null;
     }
 
     /**
