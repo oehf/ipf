@@ -18,9 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42.component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42Service;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
@@ -53,7 +56,10 @@ public class Iti42Endpoint extends DefaultItiEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = 
             Iti42.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
-        Iti42Service service = serviceFactory.createService(Iti42Service.class); 
-        return new DefaultItiConsumer(this, processor, service);
+        ServerFactoryBean serverFactory =
+            serviceFactory.createServerFactory(Iti42Service.class);
+        Server server = serverFactory.create();
+        DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
+        return new DefaultItiConsumer(this, processor, service, server);
     }
 }

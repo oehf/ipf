@@ -20,12 +20,15 @@ import java.net.URISyntaxException;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.pixv3.iti44.Iti44Xds;
 import org.openehealth.ipf.platform.camel.ihe.pixv3.iti44.service.Iti44Service;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
  * The Camel endpoint for the ITI-44 transaction (XDS.b).
@@ -59,7 +62,10 @@ public class Iti44XdsEndpoint extends DefaultItiEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = 
             Iti44Xds.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
-        Iti44Service service = serviceFactory.createService(Iti44Service.class);
-        return new DefaultItiConsumer(this, processor, service);
+        ServerFactoryBean serverFactory =
+            serviceFactory.createServerFactory(Iti44Service.class);
+        Server server = serverFactory.create();
+        DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
+        return new DefaultItiConsumer(this, processor, service, server);
     }
 }

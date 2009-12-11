@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
-import java.util.Collections;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapBindingConfiguration;
@@ -25,14 +23,18 @@ import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsSecurityUnderstandingInInterceptor;
 
+import java.util.Collections;
+
 /**
  * Factory for ITI web-services.
  * @author Jens Riemschneider
  */
 public class ItiServiceFactory {
     private static final Log log = LogFactory.getLog(ItiServiceFactory.class);
-    
+
+    /** The service info. */
     protected final ItiServiceInfo serviceInfo;
+    /** The service address. */
     protected final String serviceAddress;
 
     /**
@@ -54,19 +56,35 @@ public class ItiServiceFactory {
      * @param serviceImplClass
      *          the type of the service implementation.
      * @return the service implementation.
+     * @deprecated Use {@link #createServerFactory(Class)} instead, because
+     *          the service created by this method cannot be stopped or
+     *          restarted.
      */
+    @Deprecated
     public <T> T createService(Class<T> serviceImplClass) {
+        ServerFactoryBean svrFactory = createServerFactory(serviceImplClass);
+        svrFactory.setStart(true);
+        svrFactory.create();
+        log.debug("Published webservice endpoint for: " + serviceInfo.getServiceName());
+        return serviceImplClass.cast(svrFactory.getServiceBean());
+    }
+
+    /**
+     * Creates and configures a server factory.
+     * Use the server factory to create a server instance that can be used
+     * to start and stop the service.
+     * @param serviceImplClass
+     *          the type of the service implementation.
+     * @return the server factory.
+     */
+    public ServerFactoryBean createServerFactory(Class<?> serviceImplClass) {
         try {
-            T service = serviceImplClass.newInstance();
-            
             ServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
-            configureService(svrFactory, service);
+            configureService(svrFactory, serviceImplClass.newInstance());
             configureBinding(svrFactory);
             configureInterceptors(svrFactory);
-            svrFactory.create();
-            
-            log.debug("Published webservice endpoint for: " + serviceInfo.getServiceName());
-            return service;
+            svrFactory.setStart(false);
+            return svrFactory;
         } catch (InstantiationException e) {
             throw new IllegalStateException(e);
         } catch (IllegalAccessException e) {
@@ -92,6 +110,11 @@ public class ItiServiceFactory {
         svrFactory.setBindingConfig(bindingConfig);
     }
 
+    /**
+     * Called to configure any interceptors of the service.
+     * @param svrFactory
+     *          the server factory.
+     */
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
     }

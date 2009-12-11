@@ -30,6 +30,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 class GroovyRouteBuilder extends SpringRouteBuilder {
     void configure() throws Exception {
         from('xds-iti18:xds-iti18-service1')
+            .id('service1route')
             .validate().iti18Request()
             .process { checkValue(it, 'service 1') }
             .validate().iti18Response()

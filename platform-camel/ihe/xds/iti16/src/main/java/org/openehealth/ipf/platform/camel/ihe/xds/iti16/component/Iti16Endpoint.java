@@ -15,17 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16.component;
 
-import java.net.URISyntaxException;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti16.service.Iti16Service;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti16.service.Iti16Service;
+
+import java.net.URISyntaxException;
 
 /**
  * The Camel endpoint for the ITI-16 transaction.
@@ -55,7 +58,10 @@ public class Iti16Endpoint extends DefaultItiEndpoint {
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = 
             Iti16.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
-        Iti16Service service = serviceFactory.createService(Iti16Service.class);
-        return new DefaultItiConsumer(this, processor, service);
+        ServerFactoryBean serverFactory =
+            serviceFactory.createServerFactory(Iti16Service.class);
+        Server server = serverFactory.create();
+        DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
+        return new DefaultItiConsumer(this, processor, service, server);
     }
 }

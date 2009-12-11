@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
+import org.apache.cxf.endpoint.Server;
+
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * Camel component used to create process incoming exchanges based on webservice calls.
@@ -28,20 +29,45 @@ import org.apache.camel.impl.DefaultConsumer;
  * @author Dmytro Rud
  */
 public class DefaultItiConsumer extends DefaultConsumer {
+    private final Server server;
+
     /**
      * Constructs the consumer.
-     *
      * @param endpoint
      *          the endpoint representation in Camel.
      * @param processor
      *          the processor to start processing incoming exchanges.
      * @param service
      *          the service to consume messages from.
+     * @deprecated It is strongly recommended to use {@link #DefaultItiConsumer(DefaultItiEndpoint, Processor, DefaultItiWebService, Server)}
+     *          instead of this constructor because this version does not allow
+     *          stopping/restarting of the service.
      */
+    @Deprecated
     public DefaultItiConsumer(DefaultItiEndpoint endpoint, Processor processor, DefaultItiWebService service) {
         super(endpoint, processor);
         notNull(service, "service cannot be null");
         service.setConsumer(this);
+        server = null;
+    }
+
+    /**
+     * Constructs the consumer.
+     * @param endpoint
+     *          the endpoint representation in Camel.
+     * @param processor
+     *          the processor to start processing incoming exchanges.
+     * @param service
+     *          the service to consume messages from.
+     * @param server
+     *          the CXF server instance driving the service.
+     */
+    public DefaultItiConsumer(DefaultItiEndpoint endpoint, Processor processor, DefaultItiWebService service, Server server) {
+        super(endpoint, processor);
+        notNull(service, "service cannot be null");
+        notNull(server, "server cannot be null");
+        service.setConsumer(this);
+        this.server = server;
     }
 
     /**
@@ -56,5 +82,21 @@ public class DefaultItiConsumer extends DefaultConsumer {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        if (server != null) {
+            server.stop();
+        }
+        super.doStop();
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+        if (server != null) {
+            server.start();
+        }
+        super.doStart();
     }
 }

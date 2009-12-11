@@ -15,20 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18
 
-import static junit.framework.Assert.assertEquals
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-
-import java.util.Arrays
-
+import org.apache.camel.RuntimeCamelException
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import static org.junit.Assert.fail
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-18 component with the webservice and the client defined within the URI.
@@ -57,6 +54,19 @@ class TestIti18 extends StandardTestContainer {
     void setUp() {
         request = SampleData.createFindDocumentsQuery()
         query = request.query
+    }
+
+    @Test
+    void testComponentCanBeRestarted() {
+        camelContext.stopRoute('service1route')
+        try {
+            sendIt(SERVICE1, 'service 1').status
+            fail('Expected exception: ' + RuntimeCamelException.class)
+        }
+        catch (RuntimeCamelException ignored) {}
+
+        camelContext.startRoute('service1route')
+        assert SUCCESS == sendIt(SERVICE1, 'service 1').status
     }
     
     @Test
