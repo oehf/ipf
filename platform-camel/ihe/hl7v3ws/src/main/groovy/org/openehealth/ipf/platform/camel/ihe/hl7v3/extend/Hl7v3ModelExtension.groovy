@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.extend
 
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-
+import org.apache.camel.model.ProcessorDefinition
 /**
  * DSL extensions for PIXv3/PDQv3 components.
  * @author Dmytro Rud
@@ -30,6 +30,14 @@ class Hl7v3ModelExtension {
         ValidatorAdapterDefinition.metaClass.iti46Request  = { -> Hl7v3Extension.iti46Request(delegate) }        
         ValidatorAdapterDefinition.metaClass.iti46Response = { -> Hl7v3Extension.iti46Response(delegate) }        
         ValidatorAdapterDefinition.metaClass.iti47Request  = { -> Hl7v3Extension.iti47Request(delegate) }        
-        ValidatorAdapterDefinition.metaClass.iti47Response = { -> Hl7v3Extension.iti47Response(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti47Response = { -> Hl7v3Extension.iti47Response(delegate) }
+        
+        ProcessorDefinition.metaClass.translateHl7RequestV3toV2 = { translator -> 
+            Hl7v3Extension.translateHl7RequestV3toV2(delegate, translator) }
+        ProcessorDefinition.metaClass.translateHl7ResponseV2toV3 = { translator -> 
+            Hl7v3Extension.translateHl7ResponseV2toV3(delegate, translator) }
+        ProcessorDefinition.metaClass.translateHl7ResponseV2toV3 = { translator, originalRequest -> 
+            Hl7v3Extension.translateHl7ResponseV2toV3(delegate, translator, originalRequest) }
+        
     }
 }
