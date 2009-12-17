@@ -1,0 +1,118 @@
+<PRPA_IN201302UV02 ITSVersion="XML_1.0" xmlns:urn="urn:hl7-org:v3" xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <id extension="678" root="21acf7be-007c-41e6-b176-d0969794983b"/>
+  <creationTime value="20091112115139"/>
+  <interactionId extension="PRPA_IN201302UV02" root="2.16.840.1.113883.1.6"/>
+  <processingCode code="P"/>
+  <processingModeCode code="T"/>
+  <acceptAckCode code="AL"/>
+  <receiver typeCode="RCV">
+    <device classCode="DEV" determinerCode="INSTANCE">
+      <id root="1.2.840.114350.1.13.99999.4567"/>
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.840.114350.1.13.99999.1234"/>
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </receiver>
+  <sender typeCode="SND">
+    <device classCode="DEV" determinerCode="INSTANCE">
+      <id root="1.2.840.114350.1.13.99998.8734"/>
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.840.114350.1.13.99998"/>
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </sender>
+  <controlActProcess classCode="CACT" moodCode="EVN">
+    <code code="PRPA_TE201301UV02" codeSystem="2.16.840.1.113883.1.6"/>
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <id nullFlavor="NA"/>
+        <statusCode code="active"/>
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id extension="PIX10515W3" assigningAuthorityName="HIMSS2005" root="1.3.6.1.4.1.21367.2005.1.1"/>
+	    <id root="1.2.3.4.5.1000" extension="PIX10515W4"/>
+	    <id assigningAuthorityName="domain2" extension="PIX10515W5"/>
+            <statusCode code="active"/>
+	    <veryImportantPersonCode code="true"/>
+            <patientPerson>
+              <name use="L">
+		<prefix qualifier="AC">Dr.</prefix>
+                <given>MARY</given>
+                <given>ROSE</given>
+                <family>WASHINGTON-UPDATE</family>
+		<suffix>II</suffix>
+              </name>
+	      <name>
+                <given>ANNE</given>
+                <family qualifier="BR">DEAN</family>
+               </name>
+	    <telecom use="HP" value="tel:012-0001"/>
+             <telecom use="WP" value="tel:012-0002"/>
+             <telecom use="MC" value="tel:012-0003"/>
+             <telecom use="H" value="fax:012-0004"/>
+             <telecom value="mailto:marywash@gmx.de"/>
+              <administrativeGenderCode code="F"/>
+              <birthTime value="19771208"/>
+              <addr>
+                <streetAddressLine>1 UPDATE ADDRESS</streetAddressLine>
+                <city>CHICAGO</city>
+                <state>IL</state>
+                <postalCode>60523</postalCode>
+		<country>US</country>
+              </addr>
+              <addr>
+                <streetAddressLine>100 JORIE BLVD</streetAddressLine>
+                <city>CHICAGO</city>
+                <state>IL</state>
+                <postalCode>60555</postalCode>
+              </addr>
+		<!--deceasedInd/>
+		<deceasedTime/>
+		<multipleBirthInd/>
+		<multipleBirthOrderNumber/-->
+        	<maritalStatusCode code="M"/>
+        	<religiousAffiliationCode code="1022"/>
+        	<raceCode code="1004-1"/>
+        	<raceCode code="1004-2"/>
+        	<ethnicGroupCode code="2178-2"/>
+        	<ethnicGroupCode code="2178-3"/>
+              <asOtherIDs classCode="PAT">
+                <id root="2.16.840.1.113883.4.1" extension="100-09-1234"/>
+                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id root="2.16.840.1.113883.4.1"/>
+                </scopingOrganization>
+              </asOtherIDs>
+              <asOtherIDs classCode="PAT">
+                <id root="1.2.3" extension="100-09-123456"/>
+                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id root="1.2.3"/>
+                </scopingOrganization>
+              </asOtherIDs>
+              <personalRelationship classCode="PRS">
+                <code codeSystem="2.16.840.1.113883.5.111" codeSystemName="PersonalRelationshipRoleType" code="MTH" displayName="Mother"/>
+                <relationshipHolder1 classCode="PSN" determinerCode="INSTANCE">
+                  <name xsi:type="urn:PN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <family>JOHN</family>
+                  </name>
+                </relationshipHolder1>
+              </personalRelationship>
+            </patientPerson>
+            <providerOrganization classCode="ORG" determinerCode="INSTANCE">
+              <id root="1.2.840.114350.1.13.99998.8734"/>
+              <contactParty classCode="CON"/>
+            </providerOrganization>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.840.114350.1.13.99998.8734"/>
+          </assignedEntity>
+        </custodian>
+      </registrationEvent>
+    </subject>
+  </controlActProcess>
+</PRPA_IN201302UV02>

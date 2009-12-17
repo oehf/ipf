@@ -1,0 +1,77 @@
+/*
+ * Mapping definitions
+ * 
+ * Always are in the following Groovy syntax:
+ * 
+ * <pre>
+ * mappings = {
+ *   mappingKey1(['oid of key code system','oid of value code system'],
+ *      key1  : 'value1',
+ *      key2  : 'value2',
+ *      (ELSE): Closure or Value
+ *   )
+ *   mappingKey2(
+ *      ...
+ *   )
+ *   ...
+ *   
+ * }
+ * <pre>
+ * 
+ * The list of OIDs is optional. The ELSE element can be either a Closure or a normal Object,
+ * which is converted to a String. The closure takes the key as only parameter, so that 
+ * <pre>
+ * ...
+ * (ELSE) : { it }
+ * ...
+ * </pre>
+ * will return that key, and thus an unknown key is mapped to itself.
+ * 
+ */
+
+
+mappings = {
+    'map-interactionId-eventStructure'(['2.16.840.1.113883.5.4', '2.16.840.1.113883.12.76'],            
+        'PRPA_IN201301UV02': 'A01~ADT_A01',
+        'PRPA_IN201302UV02': 'A08~ADT_A01',
+        'PRPA_IN201304UV02': 'A40~ADT_A39'
+    )   
+         
+    'bidi-administrativeGender-administrativeGender'(['2.16.840.1.113883.5.1', '2.16.840.1.113883.12.1'],
+		'M': 'M',
+ 		'F': 'F',
+ 		'U': 'O' 		     
+    )
+    
+    // patient marital status v3 -> v2
+    'patient-maritalStatus'(
+        'D': 'D',               // divorced
+        'L': 'A',               // legally separated
+        'M': 'M',               // married
+        'S': 'S',               // never married AKA single
+        'W': 'W',               // widowed
+        (ELSE) : ''             // A=annuled, I=interlocutory, P=polygamic, T=domestic partner
+    )
+    
+    // patient religious affiliation v3 -> v2
+    'patient-religiousAffiliation'(
+        (ELSE): { it }
+    )
+                                              
+    // patient race v3 -> v2
+    'patient-race'(
+        (ELSE): { it }
+    )
+
+    // patient ethnic group v3 -> v2
+    'patient-ethnic-group'(
+        (ELSE): { it }
+    )
+
+    // boolean values v3 -> v2
+    'boolean'(
+        'true': 'Y',
+        'false': 'N',
+        (ELSE): ''
+    )
+}

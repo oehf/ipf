@@ -20,6 +20,7 @@
         <module>atna</module> 
         <module>ws</module> 
         <module>xds</module> 
+        <module>transform</module> 
     </modules>
 
 </project>
