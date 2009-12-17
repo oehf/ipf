@@ -51,11 +51,16 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.openehealth.ipf.platform-camel</groupId>
-			<artifactId>platform-camel-core</artifactId>
-			<version>${pom.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-transform-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>

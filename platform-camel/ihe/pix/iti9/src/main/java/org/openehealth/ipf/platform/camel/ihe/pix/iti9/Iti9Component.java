@@ -15,12 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pix.iti9;
 
-import java.util.HashMap;
-
 import org.apache.camel.CamelContext;
+import org.openehealth.ipf.commons.ihe.transform.core.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
-import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
@@ -50,15 +47,7 @@ public class Iti9Component extends MllpComponent {
         new Iti9ClientAuditStrategy();
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new Iti9ServerAuditStrategy();
-    private static final Parser PARSER;
-    
-    static {
-        HashMap<String, String[]> map = new HashMap<String, String[]>();
-        map.put("2.5", new String[] {"org.openehealth.ipf.platform.camel.ihe.pix.iti9.def.v25"});
-        CustomModelClassFactory factory = new CustomModelClassFactory(map); 
-        PARSER = new PipeParser(factory);
-    }
-    
+    private static final Parser PARSER = CustomModelClassUtils.createParser("pix", "2.5");
     
     public Iti9Component() {
         super();
