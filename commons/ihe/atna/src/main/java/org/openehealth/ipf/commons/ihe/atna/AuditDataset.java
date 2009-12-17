@@ -19,6 +19,8 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -51,51 +53,13 @@ public class AuditDataset {
         return serverSide;
     }
 
-    
     /**
      * <i>"What you see is what I get"</i>&nbsp;&mdash; returns a string that
      * consists from all fields available through getter methods.
-     * 
-     * @return string representation of this audit dataset.
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-
-        try {
-            Method[] methods = this.getClass().getMethods();
-            for (Method method : methods) {
-                String methodName = method.getName();
-                Class<?> methodReturnType = method.getReturnType();
-
-                if ((methodName.startsWith("get") || methodName.startsWith("is"))
-                        && (method.getParameterTypes().length == 0)) 
-                {
-                    sb.append("\n    ")
-                      .append(method.getName())
-                      .append(" -> ");
-
-                    if (methodReturnType == String[].class) {
-                        String[] result = (String[]) method.invoke(this);
-                        if(result != null) {
-                            for (int i = 0; i < result.length; ++i) {
-                                sb.append((i == 0) ? "{" : ", ")
-                                  .append(result[i]);
-                            }
-                            sb.append('}');
-                        } else {
-                            sb.append("null");
-                        }
-
-                    } else {
-                        sb.append(method.invoke(this));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sb.append("\n]").toString();
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 
     /**
