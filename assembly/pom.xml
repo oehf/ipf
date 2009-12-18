@@ -40,6 +40,26 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-transform-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-transform-pixfeed</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-transform-pdqquery</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-xds-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -175,6 +195,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-hl7v3ws</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-mllp-core</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -195,6 +220,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pdqv3-iti47</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-pix-iti8</artifactId>
             <version>${pom.version}</version>
         </dependency>
@@ -206,6 +236,26 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-pix-iti10</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pixv3-iti44</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pixv3-iti45</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-pixv3-iti46</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-ws</artifactId>
             <version>${pom.version}</version>
         </dependency>
         <dependency>
@@ -323,13 +373,13 @@
                         <configuration>
                             <page>http://repo.openehealth.org/confluence/display/ipf2/IPF+reference+-+single#</page>
                             <head><![CDATA[ 
-								<title>Open eHealth Integration Platform reference manual</title>
-								<link rel="stylesheet" href="file:${basedir}/src/main/resources/styles/site.css" type="text/css" />
-								<p><div style="page-break-after: always" ><h1>Open eHealth Integration Platform version ${pom.version} Reference manual</h1>
-								<img border="0" align="absmiddle" src="file:${basedir}/src/main/resources/styles/oehf.png" /></div>
-								<h2>Table of contents</h2>
-								<hr>
-								<META http-equiv="Content-Type" content="text/html; charset=UTF-8">]]>
+                                <title>Open eHealth Integration Platform reference manual</title>
+                                <link rel="stylesheet" href="file:${basedir}/src/main/resources/styles/site.css" type="text/css" />
+                                <p><div style="page-break-after: always" ><h1>Open eHealth Integration Platform version ${pom.version} Reference manual</h1>
+                                <img border="0" align="absmiddle" src="file:${basedir}/src/main/resources/styles/oehf.png" /></div>
+                                <h2>Table of contents</h2>
+                                <hr>
+                                <META http-equiv="Content-Type" content="text/html; charset=UTF-8">]]>
                             </head>
                             <pdf>${project.build.directory}/site/manual/ipf-${pom.version}.pdf</pdf>
                         </configuration>
