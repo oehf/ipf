@@ -16,7 +16,7 @@ http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
 
     <!-- Configuration Admin entry -->
     <osgix:cm-properties id="jmsProperties" persistent-id="org.openehealth.ipf.osgi.config.jms">
-	<prop key="activemq.redelivery.count">0</prop>
+        <prop key="activemq.redelivery.count">0</prop>
     </osgix:cm-properties>
 
     <context:property-placeholder properties-ref="jmsProperties" />
