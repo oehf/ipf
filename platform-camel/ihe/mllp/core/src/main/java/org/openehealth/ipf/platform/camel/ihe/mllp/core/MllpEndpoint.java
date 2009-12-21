@@ -111,7 +111,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
             filter.setNeedClientAuth(mutualTLS);
             filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
-            wrappedEndpoint.getAcceptorConfig().getFilterChain().addFirst("ssl", filter);
+            wrappedEndpoint.getAcceptorConfig().getFilterChain().addFirst("sslc", filter);
         }
 
         Processor x = processor;
@@ -139,7 +139,7 @@ public class MllpEndpoint extends DefaultEndpoint {
         if (sslContext != null) {
             SSLFilter filter = new SSLFilter(sslContext);
             filter.setUseClientMode(true);
-            wrappedEndpoint.getConnectorConfig().getFilterChain().addFirst("ssl", filter);
+            wrappedEndpoint.getConnectorConfig().getFilterChain().addFirst("sslp", filter);
         }
 
         Producer x = this.wrappedEndpoint.createProducer();
