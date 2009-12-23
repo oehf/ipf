@@ -91,7 +91,7 @@ class TestIti21 extends MllpTestContainer {
         } catch (RuntimeCamelException expected) {}
 
         def messages = auditSender.messages
-        assertEquals(3, messages.size)
+        assertEquals(messages.collect { it.class }.toString(), 3, messages.size)
         assertTrue(messages[0] instanceof SecurityAlertEvent)
         assertTrue(messages[1] instanceof SecurityAlertEvent)
     }
