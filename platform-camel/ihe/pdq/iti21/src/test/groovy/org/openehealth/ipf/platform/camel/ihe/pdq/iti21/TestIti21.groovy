@@ -90,12 +90,6 @@ class TestIti21 extends MllpTestContainer {
             send('pdq-iti21://localhost:8894?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (RuntimeCamelException expected) {}
-
-        Thread.sleep(5000)
-        def messages = auditSender.messages
-        assertEquals(messages.collect { it.class }.toString(), 3, messages.size)
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
-        assertTrue(messages[1] instanceof SecurityAlertEvent)
     }
 
     @Test
@@ -117,12 +111,6 @@ class TestIti21 extends MllpTestContainer {
             send('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
         } catch (RuntimeCamelException expected) {}
-
-        Thread.sleep(5000)
-        def messages = auditSender.messages
-        assertEquals(messages.collect { it.class }.toString(), 3, messages.size)
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
-        assertTrue(messages[1] instanceof SecurityAlertEvent)
     }
 
     @Test
