@@ -28,6 +28,7 @@ import org.junit.Test
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.HandshakeCallbackSSLFilter
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor
 import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
@@ -85,12 +86,14 @@ class TestIti21 extends MllpTestContainer {
 
     @Test
     void testSSLFailureWithIncompatibleProtocols() {
+        HandshakeCallbackSSLFilter.handshakeFailures = 0;
         try {
             send('pdq-iti21://localhost:8894?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (RuntimeCamelException expected) {}
 
         def messages = auditSender.messages
+        assertEquals(2, HandshakeCallbackSSLFilter.handshakeFailures)
         assertEquals(messages.collect { it.class }.toString(), 3, messages.size)
         assertTrue(messages[0] instanceof SecurityAlertEvent)
         assertTrue(messages[1] instanceof SecurityAlertEvent)
@@ -98,12 +101,14 @@ class TestIti21 extends MllpTestContainer {
 
     @Test
     void testSSLFailureWithIncompatibleCiphers() {
+        HandshakeCallbackSSLFilter.handshakeFailures = 0;
         try {
             send('pdq-iti21://localhost:8896?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (RuntimeCamelException expected) {}
 
         def messages = auditSender.messages
+        assertEquals(2, HandshakeCallbackSSLFilter.handshakeFailures)
         assertEquals(3, messages.size)
         assertTrue(messages[0] instanceof SecurityAlertEvent)
         assertTrue(messages[1] instanceof SecurityAlertEvent)
@@ -111,13 +116,15 @@ class TestIti21 extends MllpTestContainer {
 
     @Test
     void testSSLFailureWithIncompatibleKeystores() {
+        HandshakeCallbackSSLFilter.handshakeFailures = 0;
         try {
             send('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
         } catch (RuntimeCamelException expected) {}
 
         def messages = auditSender.messages
-        assertEquals(3, messages.size)
+        assertEquals(2, HandshakeCallbackSSLFilter.handshakeFailures)
+        assertEquals(messages.collect { it.class }.toString(), 3, messages.size)
         assertTrue(messages[0] instanceof SecurityAlertEvent)
         assertTrue(messages[1] instanceof SecurityAlertEvent)
     }
