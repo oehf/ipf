@@ -54,10 +54,6 @@ class TestIti21 extends MllpTestContainer {
         return s
     }
     
-    /**
-     * Happy case, audit either enabled or disabled.
-     * Expected result: ACK response, two or zero audit items.
-     */
     @Test
     void testHappyCaseAndAudit1() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:8888', 2)
@@ -71,12 +67,64 @@ class TestIti21 extends MllpTestContainer {
     void testHappyCaseAndAuditSecure() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContext', 2)
     }
+
+    @Test
+    void testHappyCaseWithSSLv3() {
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:8894?secure=true&sslContext=#sslContext&sslProtocols=SSLv3', 2)
+    }
     
-    def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
-        final String body = getMessageString('QBP^Q22', '2.5') 
-        def msg = send(endpointUri, body)
-        assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+    @Test
+    void testHappyCaseWithSSLv3AndTLSv1() {
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:8895?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1', 2)
+    }
+
+    @Test
+    void testHappyCaseWithCiphers() {
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:8896?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA', 2)
+    }
+
+    @Test
+    void testDoubleTo() {
+        send('direct:test', getMessageString('QBP^Q22', '2.5'))
+    }
+
+    @Test
+    void testSSLFailureWithIncompatibleProtocols() {
+        try {
+            send('pdq-iti21://localhost:8894?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
+            fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
+        } catch (RuntimeCamelException expected) {}
+
+        def messages = auditSender.messages
+        assertEquals(3, messages.size)
+        assertTrue(messages[0] instanceof SecurityAlertEvent)
+        assertTrue(messages[1] instanceof SecurityAlertEvent)
+    }
+
+    @Test
+    void testSSLFailureWithIncompatibleCiphers() {
+        try {
+            send('pdq-iti21://localhost:8896?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5', getMessageString('QBP^Q22', '2.5'))
+            fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
+        } catch (RuntimeCamelException expected) {}
+
+        def messages = auditSender.messages
+        assertEquals(3, messages.size)
+        assertTrue(messages[0] instanceof SecurityAlertEvent)
+        assertTrue(messages[1] instanceof SecurityAlertEvent)
+    }
+
+    @Test
+    void testSSLFailureWithIncompatibleKeystores() {
+        try {
+            send('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
+            fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
+        } catch (RuntimeCamelException expected) {}
+
+        def messages = auditSender.messages
+        assertEquals(3, messages.size)
+        assertTrue(messages[0] instanceof SecurityAlertEvent)
+        assertTrue(messages[1] instanceof SecurityAlertEvent)
     }
 
     @Test
@@ -91,6 +139,13 @@ class TestIti21 extends MllpTestContainer {
         assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
 
+    def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
+        final String body = getMessageString('QBP^Q22', '2.5') 
+        def msg = send(endpointUri, body)
+        assertRSP(msg)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+    }
+
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
         send('pdq-iti21://localhost:8892', getMessageString('QBP^Q22', '2.5'))
@@ -102,18 +157,6 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testServerDoesNotNeedToAcceptCertificate() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:8893?secure=true&sslContext=#sslContext', 2)
-    }
-
-    @Test
-    void testSSLFailureDueToWrongKeystore() {
-        try {
-            send('pdq-iti21://localhost:8889?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
-            fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
-        } catch (RuntimeCamelException expected) {}
-
-        def messages = auditSender.messages
-        assertEquals(2, messages.size)
-        assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
 
     /**

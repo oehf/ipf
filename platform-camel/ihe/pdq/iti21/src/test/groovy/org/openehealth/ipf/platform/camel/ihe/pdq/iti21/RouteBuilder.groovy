@@ -83,6 +83,24 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  resultMessage(it).body = rsp
              }
 
+         from('pdq-iti21://0.0.0.0:8894?secure=true&sslContext=#sslContext&sslProtocols=SSLv3')
+             .process {
+                 resultMessage(it).body = rsp
+             }
+
+         from('pdq-iti21://0.0.0.0:8895?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1')
+             .process {
+                 resultMessage(it).body = rsp
+             }
+
+         from('pdq-iti21://0.0.0.0:8896?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
+             .process {
+                 resultMessage(it).body = rsp
+             }
+
+         from('direct:test')
+            .to('pdq-iti21://0.0.0.0:8889?secure=true&mutualTLS=true&sslContext=#sslContext')
+            .to('pdq-iti21://0.0.0.0:8889?secure=true&mutualTLS=true&sslContext=#sslContext')
      }
 }
  

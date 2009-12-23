@@ -22,8 +22,6 @@ import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang.Validate;
 import org.apache.mina.common.*;
-import org.apache.mina.filter.SSLFilter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuthenticationFailureInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
@@ -58,6 +56,8 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final SSLContext sslContext;
     private final List<MllpCustomInterceptor> customInterceptors;
     private final boolean mutualTLS;
+    private final String[] sslProtocols;
+    private final String[] sslCiphers;
 
 
     /**
@@ -65,20 +65,24 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param wrappedEndpoint
      *      The original camel-mina endpoint instance.
      * @param audit
- *      Whether ATNA auditing should be performed.
+     *      Whether ATNA auditing should be performed.
      * @param allowIncompleteAudit
-*      Whether incomplete ATNA auditing are allowed as well.
+     *      Whether incomplete ATNA auditing are allowed as well.
      * @param serverStrategy
-*      Server-side audit strategy.
+     *      Server-side audit strategy.
      * @param clientStrategy
      * @param sslContext
-*      the ssl context to use. {@code null} if secure communication is not used.
+     *      the ssl context to use. {@code null} if secure communication is not used.
      * @param mutualTLS
      *      {@code true}, to require client authentication for mutual TLS.
      * @param customInterceptors
-     *      list of interceptors that are to be added to the processing of messages. Only applied to
+     *          the interceptors defined in the endpoint URI.
+     * @param sslProtocols
+     *          the protocols defined in the endpoint URI or {@code null} if none were specified.
+     * @param sslCiphers
+     *          the ciphers defined in the endpoint URI or {@code null} if none were specified.
      */
-    public MllpEndpoint(MinaEndpoint wrappedEndpoint, boolean audit, boolean allowIncompleteAudit, MllpAuditStrategy serverStrategy, MllpAuditStrategy clientStrategy, MllpTransactionConfiguration transactionConfiguration, Parser parser, SSLContext sslContext, boolean mutualTLS, List<MllpCustomInterceptor> customInterceptors)
+    public MllpEndpoint(MinaEndpoint wrappedEndpoint, boolean audit, boolean allowIncompleteAudit, MllpAuditStrategy serverStrategy, MllpAuditStrategy clientStrategy, MllpTransactionConfiguration transactionConfiguration, Parser parser, SSLContext sslContext, boolean mutualTLS, List<MllpCustomInterceptor> customInterceptors, String[] sslProtocols, String[] sslCiphers)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -97,6 +101,8 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.sslContext = sslContext;
         this.mutualTLS = mutualTLS;
         this.customInterceptors = customInterceptors;
+        this.sslProtocols = sslProtocols;
+        this.sslCiphers = sslCiphers;
     }
 
 
@@ -108,10 +114,15 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     public Consumer createConsumer(Processor processor) throws Exception {
         if (sslContext != null) {
-            HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
-            filter.setNeedClientAuth(mutualTLS);
-            filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
-            wrappedEndpoint.getAcceptorConfig().getFilterChain().addFirst("sslc", filter);
+            DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
+            if (!filterChain.contains("ssl")) {
+                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
+                filter.setNeedClientAuth(mutualTLS);
+                filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
+                filter.setEnabledProtocols(sslProtocols);
+                filter.setEnabledCipherSuites(sslCiphers);
+                filterChain.addFirst("ssl", filter);
+            }
         }
 
         Processor x = processor;
@@ -137,9 +148,15 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     public Producer createProducer() throws Exception {
         if (sslContext != null) {
-            SSLFilter filter = new SSLFilter(sslContext);
-            filter.setUseClientMode(true);
-            wrappedEndpoint.getConnectorConfig().getFilterChain().addFirst("sslp", filter);
+            DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
+            if (!filterChain.contains("ssl")) {
+                HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
+                filter.setUseClientMode(true);
+                filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
+                filter.setEnabledProtocols(sslProtocols);
+                filter.setEnabledCipherSuites(sslCiphers);
+                filterChain.addFirst("ssl", filter);
+            }
         }
 
         Producer x = this.wrappedEndpoint.createProducer();

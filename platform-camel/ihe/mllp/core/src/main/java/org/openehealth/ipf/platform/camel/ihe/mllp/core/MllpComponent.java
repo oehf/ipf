@@ -84,6 +84,8 @@ public abstract class MllpComponent extends MinaComponent {
         boolean mutualTLS = getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
         String sslContextBean = getAndRemoveParameter(parameters, "sslContext", String.class, "");
         String interceptorBeans = getAndRemoveParameter(parameters, "interceptors", String.class, "");
+        String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
+        String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
 
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
@@ -120,6 +122,9 @@ public abstract class MllpComponent extends MinaComponent {
         SSLContext sslContext = secure ? lookupSSLContext(sslContextBean) : null;
         List<MllpCustomInterceptor> customInterceptors = getCustomInterceptors(interceptorBeans);
 
+        String[] sslProtocols = sslProtocolsString != null ? sslProtocolsString.split(",") : null;
+        String[] sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;
+
         // wrap and return
         return new MllpEndpoint(
                 minaEndpoint,
@@ -131,7 +136,9 @@ public abstract class MllpComponent extends MinaComponent {
                 getParser(),
                 sslContext,
                 mutualTLS,
-                customInterceptors);
+                customInterceptors,
+                sslProtocols,
+                sslCiphers);
     }
 
     private List<MllpCustomInterceptor> getCustomInterceptors(String interceptorBeans) {
