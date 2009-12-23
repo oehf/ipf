@@ -28,10 +28,10 @@ class MockedSender implements AuditMessageSender{
     def messages = []
      
     void sendAuditEvent(AuditEventMessage[] msg) {
-        messages += Arrays.asList(msg)
+        messages.addAll(Arrays.asList(msg))
     }
     
     void sendAuditEvent(AuditEventMessage[] msg, InetAddress destination, int port) {
-        messages += Arrays.asList(msg)
+        messages.addAll(Arrays.asList(msg))
     }
 }
