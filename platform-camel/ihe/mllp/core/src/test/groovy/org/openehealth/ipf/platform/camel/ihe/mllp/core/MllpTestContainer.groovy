@@ -15,21 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
-import static org.junit.Assert.*;
-import org.junit.Afterimport org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
-import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.Message;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.impl.DefaultExchange;
-import org.junit.BeforeClass;
-import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
+import org.apache.camel.CamelContext
+import org.apache.camel.ProducerTemplate
+import org.apache.camel.impl.DefaultExchange
+import org.junit.After
 import org.openehealth.ipf.commons.ihe.atna.MockedSender
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
+import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
+import org.springframework.context.support.ClassPathXmlApplicationContext
+import static org.junit.Assert.*
 
 /**
  * Generic Unit Test container for MLLP components.
@@ -52,6 +48,10 @@ class MllpTestContainer {
          camelContext = appContext.getBean('camelContext', CamelContext.class)
 
          auditSender = new MockedSender()
+         AuditEventMessage[] a = new AuditEventMessage[2];
+         auditSender.sendAuditEvent(a)
+         assertEquals(2, auditSender.messages.size())
+         auditSender.messages.clear()
          AuditorModuleContext.context.sender = auditSender
          AuditorModuleContext.context.config.auditRepositoryHost = 'localhost'
          AuditorModuleContext.context.config.auditRepositoryPort = 514

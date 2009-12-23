@@ -59,8 +59,6 @@ public class HandshakeCallbackSSLFilter extends SSLFilter {
         this.handshakeExceptionCallback = handshakeExceptionCallback;
     }
 
-    public static int handshakeFailures = 0;
-
     @Override
     public void messageReceived(NextFilter nextFilter, IoSession session, Object message) throws SSLException {
         try {
@@ -68,7 +66,6 @@ public class HandshakeCallbackSSLFilter extends SSLFilter {
         }
         catch (SSLHandshakeException e) {
             handshakeExceptionCallback.run(session);
-            ++handshakeFailures;
             throw e;
         }
     }
