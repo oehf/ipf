@@ -97,10 +97,6 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
              .process {
                  resultMessage(it).body = rsp
              }
-
-         from('direct:test')
-            .to('pdq-iti21://0.0.0.0:8889?secure=true&mutualTLS=true&sslContext=#sslContext')
-            .to('pdq-iti21://0.0.0.0:8889?secure=true&mutualTLS=true&sslContext=#sslContext')
      }
 }
  

@@ -114,7 +114,7 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     public Consumer createConsumer(Processor processor) throws Exception {
         if (sslContext != null) {
-            DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
+            DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
             if (!filterChain.contains("ssl")) {
                 HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
                 filter.setNeedClientAuth(mutualTLS);

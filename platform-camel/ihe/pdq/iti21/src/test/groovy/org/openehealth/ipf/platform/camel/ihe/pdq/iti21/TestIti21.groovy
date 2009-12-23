@@ -84,11 +84,6 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Test
-    void testDoubleTo() {
-        send('direct:test', getMessageString('QBP^Q22', '2.5'))
-    }
-
-    @Test
     void testSSLFailureWithIncompatibleProtocols() {
         try {
             send('pdq-iti21://localhost:8894?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
