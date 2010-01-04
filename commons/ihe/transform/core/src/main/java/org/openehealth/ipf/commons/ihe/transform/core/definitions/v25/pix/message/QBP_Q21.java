@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.transform.core.definitions.v25.pix.message;
 
-import org.openehealth.ipf.commons.ihe.transform.core.definitions.v25.pdq.segment.QPD;
+import org.openehealth.ipf.commons.ihe.transform.core.definitions.v25.pix.segment.QPD;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractMessage;
