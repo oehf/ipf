@@ -25,5 +25,6 @@
         <module>iti41</module>
         <module>iti42</module>
         <module>iti43</module>
+        <module>model</module>
     </modules>
 </project>
