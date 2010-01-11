@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2009 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+
+<definitions
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+        xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:ihe="urn:ihe:iti:xds:2007"
+        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:rs="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1"
+        targetNamespace="urn:ihe:iti:xds:2007"
+        name="DocumentRegistry">
+
+    <documentation>IHE XDS.a Document Registry = ITI-14 adaptor = Register Document Set</documentation>
+
+    <types>
+        <xsd:schema elementFormDefault="qualified">
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1" schemaLocation="classpath:wsdl/schema/ebRS21/rs.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="RegisterDocumentSet_Message">
+        <documentation>Register Document Set</documentation>
+        <part name="body" element="rs:SubmitObjectsRequest"/>
+    </message>
+
+    <message name="RegisterDocumentSetResponse_Message">
+        <documentation>Register Document Set Response</documentation>
+        <part name="body" element="rs:RegistryResponse"/>
+    </message>
+
+    <portType name="DocumentRegistry_PortType">
+        <operation name="DocumentRegistry_RegisterDocumentSet">
+            <input message="ihe:RegisterDocumentSet_Message"/>
+<!--                   wsaw:Action="urn:ihe:iti:2007:RegisterDocumentSet"/>-->
+            <output message="ihe:RegisterDocumentSetResponse_Message"/>
+<!--                    wsaw:Action="urn:ihe:iti:2007:RegisterDocumentSetResponse"/>-->
+        </operation>
+    </portType>
+
+    <binding name="DocumentRegistry_Binding_Soap11" type="ihe:DocumentRegistry_PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="DocumentRegistry_RegisterDocumentSet">
+            <soap:operation soapAction="urn:ihe:iti:2007:RegisterDocumentSet"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="DocumentRegistry_Service">
+        <port name="DocumentRegistry_Port_Soap11" binding="ihe:DocumentRegistry_Binding_Soap11">
+            <soap:address location="http://servicelocation/DocumentRegistry_Service"/>
+        </port>
+    </service>
+</definitions>
