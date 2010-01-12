@@ -26,11 +26,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.LeafRegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ObjectRefType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.RegistryEntryType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 
 import javax.xml.bind.JAXBContext;
@@ -131,7 +131,7 @@ public class Ebrs21MarshalingTest {
     }
 
     private SubmitObjectsRequest send() throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs");
+        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs");
         Marshaller marshaller = context.createMarshaller();
         Unmarshaller unmarshaller = context.createUnmarshaller();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); 
@@ -241,7 +241,7 @@ public class Ebrs21MarshalingTest {
         
         File file = new File(getClass().getClassLoader().getResource("SubmitObjectsRequest_ebrs21.xml").toURI());
         
-        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs");
+        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs");
         Unmarshaller unmarshaller = context.createUnmarshaller();
         
         Object unmarshalled = unmarshaller.unmarshal(file);

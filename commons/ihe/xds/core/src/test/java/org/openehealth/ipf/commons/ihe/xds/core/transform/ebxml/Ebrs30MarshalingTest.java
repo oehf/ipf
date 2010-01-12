@@ -25,10 +25,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLExtrinsicObject30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.IdentifiableType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.RegistryObjectListType;
 
 import javax.xml.bind.*;
 import javax.xml.namespace.QName;
@@ -120,7 +120,7 @@ public class Ebrs30MarshalingTest {
     }
 
     private SubmitObjectsRequest send() throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs");
+        JAXBContext context = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rs");
         Marshaller marshaller = context.createMarshaller();
         Unmarshaller unmarshaller = context.createUnmarshaller();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); 
