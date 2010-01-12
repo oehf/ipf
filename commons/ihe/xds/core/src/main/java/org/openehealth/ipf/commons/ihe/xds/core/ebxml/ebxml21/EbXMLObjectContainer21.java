@@ -28,11 +28,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.AssociationType1;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ClassificationType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryPackageType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.AssociationType1;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ClassificationType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ObjectRefType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.RegistryPackageType;
 
 /**
  * Base class for requests and responses that contain various ebXML 2.1

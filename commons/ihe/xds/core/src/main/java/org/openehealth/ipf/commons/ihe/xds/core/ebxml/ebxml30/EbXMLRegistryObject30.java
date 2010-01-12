@@ -18,10 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExternalIdentifierType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.InternationalStringType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.ClassificationType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.ExternalIdentifierType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.InternationalStringType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.RegistryObjectType;
 
 import java.util.ArrayList;
 import java.util.List;

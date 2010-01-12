@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ExtrinsicObjectType;
 
 /**
  * Encapsulation of {@link ExtrinsicObjectType}.

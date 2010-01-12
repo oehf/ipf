@@ -26,9 +26,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryErrorList;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.RegistryError;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.RegistryErrorList;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.RegistryResponse;
 
 /**
  * The ebXML 2.1 version of the {@link RegistryResponse}.

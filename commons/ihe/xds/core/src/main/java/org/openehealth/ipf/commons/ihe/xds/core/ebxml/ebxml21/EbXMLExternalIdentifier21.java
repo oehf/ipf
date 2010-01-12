@@ -20,7 +20,7 @@ import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExternalIdentifier;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExternalIdentifierType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ExternalIdentifierType;
 
 /**
  * Encapsulation of {@link ExternalIdentifierType}.

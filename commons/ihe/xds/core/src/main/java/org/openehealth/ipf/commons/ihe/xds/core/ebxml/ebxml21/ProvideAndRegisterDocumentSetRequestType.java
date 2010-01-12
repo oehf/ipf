@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.SubmitObjectsRequest;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.annotation.*;

@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
 import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.*;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;

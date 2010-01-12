@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ClassificationType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ClassificationType;
 
 /**
  * Encapsulation of {@link ClassificationType}.

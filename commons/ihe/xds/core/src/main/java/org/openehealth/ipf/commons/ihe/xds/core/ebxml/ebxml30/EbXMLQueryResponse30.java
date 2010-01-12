@@ -30,12 +30,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.IdentifiableType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.ObjectRefType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rs.RegistryError;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rs.RegistryErrorList;
 
 /**
  * Encapsulation of {@link AdhocQueryResponse}.

@@ -23,7 +23,7 @@ import java.util.UUID;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rim.ClassificationType;
 
 /**
  * Encapsulation of {@link ClassificationType}.

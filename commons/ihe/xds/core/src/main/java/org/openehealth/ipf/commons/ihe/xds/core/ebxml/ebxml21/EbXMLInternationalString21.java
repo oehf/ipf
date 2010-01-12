@@ -21,8 +21,8 @@ import java.util.List;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLInternationalString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.InternationalStringType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.LocalizedStringType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.InternationalStringType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.LocalizedStringType;
 
 /**
  * Encapsulation of {@link InternationalStringType}.
