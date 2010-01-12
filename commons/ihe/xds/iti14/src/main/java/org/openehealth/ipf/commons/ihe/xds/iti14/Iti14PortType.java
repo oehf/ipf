@@ -23,14 +23,14 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.SubmitObjectsRequest;
 
 /**
  * Provides the ITI-14 web-service interface.
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds:2007", name = "DocumentRegistry_PortType")
-@XmlSeeAlso({org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ObjectFactory.class,org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.ObjectFactory.class,org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectFactory.class})
+@XmlSeeAlso({org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.ObjectFactory.class,org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.query.ObjectFactory.class,org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rim.ObjectFactory.class})
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti14PortType {
 
