@@ -34,8 +34,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryRespo
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSubmitObjectsRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
