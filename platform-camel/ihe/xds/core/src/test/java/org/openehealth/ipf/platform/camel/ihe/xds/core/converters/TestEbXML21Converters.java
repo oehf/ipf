@@ -24,9 +24,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs21.rs.SubmitObjectsRequest;
 
 /**
  * Tests for {@link EbXML21Converters}.

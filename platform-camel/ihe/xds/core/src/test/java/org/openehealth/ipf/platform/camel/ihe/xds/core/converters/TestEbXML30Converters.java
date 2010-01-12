@@ -26,10 +26,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.model.stub.ebrs30.rs.RegistryResponseType;
 
 /**
  * Tests for {@link EbXML30Converters}.
