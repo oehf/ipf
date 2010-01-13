@@ -22,6 +22,7 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
 import org.springframework.test.context.ContextConfiguration;
@@ -116,6 +117,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
     }
     
     @Test
+    @Ignore
     public void testHugeFileUpload() throws Exception {
         PostMethod method = new PostMethod(ENDPOINT_EXTRACT);
         InputStream inputStream = new HugeContentInputStream();
