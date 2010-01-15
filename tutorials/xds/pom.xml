@@ -12,6 +12,21 @@
         <version>2.1-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <osgi.export.pkg>
+            org.openehealth.ipf.tutorials.xds.*;version="${pom.version}"
+        </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.platform.camel.core.extend,
+            org.openehealth.ipf.platform.camel.core.util,
+            org.openehealth.ipf.platform.camel.ihe.xds.core.extend,
+            org.openehealth.ipf.commons.ihe.xds.core.requests,
+            org.openehealth.ipf.commons.ihe.xds.core.responses,
+            org.openehealth.ipf.commons.ihe.xds.core.validate,
+            *
+        </osgi.import.pkg>
+    </properties>
+
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
