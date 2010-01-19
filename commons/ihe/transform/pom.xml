@@ -26,12 +26,12 @@
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-hl7</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-hl7dsl</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
