@@ -20,13 +20,13 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-atna</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-atna</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
         </dependency>
