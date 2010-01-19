@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-lbs-core</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
