@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.openehealth.ipf.platform-camel</groupId>
 			<artifactId>platform-camel-ihe-pdq-core</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

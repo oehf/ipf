@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-xds-core</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-httpclient</groupId>
@@ -31,14 +31,14 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-ws</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-ws</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
         </dependency>

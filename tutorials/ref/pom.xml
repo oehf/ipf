@@ -16,17 +16,17 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-flow</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-core</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-test</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>

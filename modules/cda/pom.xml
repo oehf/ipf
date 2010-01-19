@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-core</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>  
         <dependency>
             <groupId>commons-logging</groupId>
@@ -34,14 +34,9 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovytools-builder</artifactId>
         </dependency>
-        
        <dependency>
             <groupId>org.openhealthtools.ihe</groupId>
             <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
         </dependency>
     </dependencies>
     
