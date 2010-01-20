@@ -20,8 +20,6 @@ import static org.apache.commons.lang.Validate.notNull;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -29,9 +27,12 @@ import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Timestamp;
 import org.openehealth.ipf.commons.test.performance.dispatcher.MeasurementDispatcher;
-import org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils;
+
+import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.marshall;
+import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHistoryXMLUtils.unmarshall;
 
 /**
+ * 
  * Puts a <code>MeasurementHistory</code> in the inbound message header, with a
  * measurement with time the result of {@link #getCurrentTimestamp()}, on
  * {@link #process(Exchange)}. Provides methods for modification and access of
@@ -78,102 +79,48 @@ public class TimeProcessor implements Processor {
     }
 
     /**
-     * Registers the measurement in the measurement history of the given
-     * exchange. If the given <code>exchange</code> does not contain a
-     * measurement history object in the inbound message header, a
-     * {@link IllegalStateException} is thrown, indicating that the measurement
-     * history object is lost, or is not created at all.
-     * 
-     * @param exchange
-     *            the exchange, whose <code>MeasurementHistory</code> object
-     *            will be updated
-     * @param measurement
-     *            the measurement to add to the <code>MeasurementHistory</code>
-     *            object of the given <code>exchange</code>
-     */
-    public void registerMeasurement(Exchange exchange, Measurement measurement) {
-        notNull(exchange, "The exchange must not be null!");
-        notNull(measurement, "The measurement must not be null!");
-
-        MeasurementHistory history = checkExistsAndGetMeasurementHistory(exchange);
-        history.add(measurement);
-        enrichMessageHeaderWithMeasurementHistory(exchange, history);
-    }
-
-    /**
      * Returns the <code>MeasurementHistory</code> object contained in the
-     * inbound message header. The initial <code>MeasurementHistory</code>
-     * object in the message header must be created from a
-     * <code>TimeProcessor</code>. The history object is then updated with
-     * {@link #registerMeasurement(Exchange, Measurement)}. Note that some Camel
+     * inbound message header with name {@link #MEASUREMENT_HISTORY_HEADER_KEY}.
+     * The initial <code>MeasurementHistory</code> object in the message header
+     * must be created from a <code>TimeProcessor</code>. Note that some Camel
      * components filter some message headers (for example the JMS camel
-     * component filters headers with raw Java serializable values. If the
-     * exchange does not contain a measurement history object in the inbound
-     * message header, a {@link IllegalStateException} is thrown, indicating
-     * that the measurement history object is lost, or is not created at all.
+     * component filters headers with raw Java serializable values).
      * 
      * @param exchange
      *            the exchange that contains the measurement history object.
      * @return a measurement history object, if such exists in the inbound
-     *         message header. If the exchange does not contain a measurement
-     *         history object, throws {@link IllegalStateException}
+     *         message header. If no header with name
+     *         {@link #MEASUREMENT_HISTORY_HEADER_KEY} is found, returns null
      */
     public MeasurementHistory getMeasurementHistory(Exchange exchange) {
         notNull(exchange, "The exchange must not be null!");
-        return checkExistsAndGetMeasurementHistory(exchange);
+        return getMeasurementHistoryFromMessageHeader(exchange);
     }
 
-    private MeasurementHistory checkExistsAndGetMeasurementHistory(
-            Exchange exchange) {
-        MeasurementHistory history = getMeasurementHistoryFromMessageHeader(exchange);
-        if (history == null) {// at this point
-            String msg = String
-                    .format(
-                            "No measurement history can be found as expected at this point."
-                                    + " Make sure the inbound message headers are not lost for exchange %1$s",
-                            exchange.toString());
-            throw new IllegalStateException(msg);
-        }
-        return history;
-    }
-
-    private void enrichMessageHeaderWithMeasurementHistory(Exchange exchange,
+    protected void enrichMessageHeaderWithMeasurementHistory(Exchange exchange,
             MeasurementHistory measurementHistory) {
         exchange.getIn().removeHeader(MEASUREMENT_HISTORY_HEADER_KEY);
+        String measurementHistoryString = marshall(measurementHistory);
         exchange.getIn().setHeader(MEASUREMENT_HISTORY_HEADER_KEY,
-                marshal(measurementHistory));
+                measurementHistoryString);
 
     }
 
-    private String marshal(MeasurementHistory measurementHistory) {
-        try {
-            String marshaled = MeasurementHistoryXMLUtils
-                    .marshall(measurementHistory);
-            return marshaled;
-        } catch (JAXBException e) {
-            throw new IllegalStateException(
-                    "Marshaling the measurement history failed!", e);
-        }
+    protected void removeMeasurementHistoryHeader(Exchange exchange) {
+        exchange.getIn().removeHeader(MEASUREMENT_HISTORY_HEADER_KEY);
     }
 
-    private MeasurementHistory getMeasurementHistoryFromMessageHeader(
+    protected MeasurementHistory getMeasurementHistoryFromMessageHeader(
             Exchange exchange) {
         Message inMessage = exchange.getIn();
 
-        String header = (String) inMessage
+        String measurementHistoryXML = (String) inMessage
                 .getHeader(MEASUREMENT_HISTORY_HEADER_KEY);
-        if (header == null) {
+        if (measurementHistoryXML == null) {
             return null;
         } else {
-            return unmarshal(header);
+            return unmarshall(measurementHistoryXML);
         }
-    }
-
-    private MeasurementHistory unmarshal(String measurementHistoryXML) {
-        MeasurementHistory history = MeasurementHistoryXMLUtils
-                .unmarshall(measurementHistoryXML);
-        return history;
-
     }
 
     /**

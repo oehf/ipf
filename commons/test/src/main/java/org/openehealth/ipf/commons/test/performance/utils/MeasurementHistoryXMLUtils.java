@@ -34,8 +34,8 @@ import org.openehealth.ipf.commons.test.performance.MeasurementLostException;
 import org.openehealth.ipf.commons.test.performance.Timestamp;
 
 /**
- * Provides utilities for marshalling and unmarshalling performance
- * measurements. The class is thread-safe.
+ * Provides utilities for marshaling and unmarshaling performance measurements.
+ * The class is thread-safe.
  * 
  * @author Mitko Kolev
  */
@@ -65,7 +65,8 @@ public class MeasurementHistoryXMLUtils {
                         return context.createUnmarshaller();
                     } catch (JAXBException e) {
                         throw new IllegalStateException(
-                                "Can not create thread context unmarshaller", e);
+                                "Can not create measurement history unmarshaller",
+                                e);
                     }
                 }
             };
@@ -76,7 +77,8 @@ public class MeasurementHistoryXMLUtils {
                         return context.createMarshaller();
                     } catch (JAXBException e) {
                         throw new IllegalStateException(
-                                "Can not create thread context marshaller", e);
+                                "Can not create measurement history marshaller",
+                                e);
                     }
                 }
             };
@@ -96,13 +98,20 @@ public class MeasurementHistoryXMLUtils {
      * @throws JAXBException
      *             if the marshaling has failed
      */
-    public static String marshall(MeasurementHistory measurementHistory)
-            throws JAXBException {
+    public static String marshall(MeasurementHistory measurementHistory) {
         notNull(measurementHistory, "The measurementHistory must not be null!");
         Marshaller marshaller = marshallers.get();
         StringWriter writer = new StringWriter();
-        marshaller.marshal(measurementHistory, writer);
-        return writer.toString();
+        try {
+            marshaller.marshal(measurementHistory, writer);
+            return writer.toString();
+        } catch (JAXBException e) {
+            LOG.error("Failed to marshal:" + measurementHistory, e);
+            throw new MeasurementLostException(e);
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+
     }
 
     /**
@@ -114,7 +123,7 @@ public class MeasurementHistoryXMLUtils {
      *            <code>MeasurementHistory</code>
      * @return a <code>MeasurementHistory</code> object
      * @throws JAXBException
-     *             if the unmarshalling has failed
+     *             if the unmarshaling has failed
      */
     public static MeasurementHistory unmarshall(String measurementHistory) {
         notNull(measurementHistory, "The measurementHistory must not be null!");

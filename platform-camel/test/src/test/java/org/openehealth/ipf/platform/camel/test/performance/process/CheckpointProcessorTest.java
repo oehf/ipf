@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for <code>CheckpointProcessor</code>
@@ -35,12 +36,13 @@ import static org.junit.Assert.assertNotSame;
 public class CheckpointProcessorTest extends MeasureProcessorTest {
 
     CheckpointProcessor processor;
+    String name = "checkPointProcessorNAME";
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        processor = new CheckpointProcessor("this name");
+        processor = new CheckpointProcessor(name);
 
     }
 
@@ -79,7 +81,7 @@ public class CheckpointProcessorTest extends MeasureProcessorTest {
         processor.process(exchange);
         MeasurementHistory history = processor.getMeasurementHistory(exchange);
         Measurement m = history.getLastMeasurement();
-        assertEquals("this name", m.getName());
+        assertEquals(name, m.getName());
     }
 
     @Test
@@ -115,11 +117,25 @@ public class CheckpointProcessorTest extends MeasureProcessorTest {
         assertEquals(5, history.getMeasurements().size());
         assertEquals(3, historyOfCopiedMessage.getMeasurements().size());
     }
-    
+
     @Test(expected = IllegalStateException.class)
-    public void testProcessWithNoMeasurementHistoryInExchange() throws Exception {
+    public void testProcessWithNoMeasurementHistoryInExchange()
+            throws Exception {
         processor.process(exchange);
     }
 
-
+    @Test
+    public void testExceptionNoMeasurementHistoryContainsProcessorName()
+            throws Exception {
+        boolean containsName = false;
+        try {
+            processor.process(exchange);
+        } catch (IllegalStateException e) {
+            if (e.getMessage().contains(processor.getName())) {
+                containsName = true;
+            }
+        }
+        assertTrue("The exception message must contain the processor name"
+                + processor.getName(), containsName);
+    }
 }

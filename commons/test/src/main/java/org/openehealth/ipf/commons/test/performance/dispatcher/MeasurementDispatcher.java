@@ -21,8 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -198,10 +196,6 @@ public abstract class MeasurementDispatcher implements InitializingBean {
             client.execute(new ByteArrayInputStream(xml
                     .getBytes(CONTENT_ENCODING)));
 
-        } catch (JAXBException e) {
-            String msg = "Unable to marshal the measurement history to XML";
-            LOG.error(msg, e);
-            throw new MeasurementLostException(msg, e);
         } catch (Exception e) {
             String msg = "Failed to send performance measurement to a performance measurement server at "
                     + getPerformanceMeasurementServerURL();

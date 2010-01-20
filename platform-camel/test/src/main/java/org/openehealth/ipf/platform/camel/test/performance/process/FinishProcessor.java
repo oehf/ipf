@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.test.performance.process;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
@@ -25,31 +23,32 @@ import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
  * 
  * @author Mitko Kolev
  */
-public class FinishProcessor extends TimeProcessor {
-
-    private final String name;
+public class FinishProcessor extends CheckpointProcessor {
 
     /**
      * Creates a FinishProcessor with the given <code>name</code>
      * 
      * @param name
+     *            the name of the processor
      */
     public FinishProcessor(String name) {
-        notNull(name, "The name must not be null!");
-        this.name = name;
+        super(name);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Sends the measurement history to the dispatche and clear the measurement
+     * history header
      * 
      * @see org.apache.camel.Processor#process(org.apache.camel.Exchange)
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Measurement measurement = new Measurement(getCurrentTimestamp(), name);
+        Measurement measurement = new Measurement(getCurrentTimestamp(),
+                getName());
         MeasurementHistory history = getMeasurementHistory(exchange);
         history.add(measurement);
         getMeasurementDispatcher().dispatch(history);
+        removeMeasurementHistoryHeader(exchange);
     }
 
 }
