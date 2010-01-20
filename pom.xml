@@ -8,8 +8,16 @@
     <packaging>pom</packaging>
 
     <properties>
+		<!-- Project configurations -->
+        <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
+		
+        <!-- Report version properties -->
+        <surefire-report-plugin-version>2.4.3</surefire-report-plugin-version>
+        <javadoc-plugin-version>2.5</javadoc-plugin-version>
+        <jxr-plugin-version>2.1</jxr-plugin-version>
+        <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
 
-        <!-- Default Bundle Properties -->
+		<!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>*</osgi.import.pkg>
         <osgi.dynamic.import.pkg />
@@ -23,10 +31,14 @@
         <ipf.extension.classes />
         <ipf.extension.beans />
         <eclipse.supplement.bundle />
+		<osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
+		<osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
+		<osgi.bundle.category>healthcare</osgi.bundle.category>
+		
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
-        <bundle-plugin-version>1.4.3</bundle-plugin-version>
+        <bundle-plugin-version>2.0.0</bundle-plugin-version>
         <enforcer-plugin-version>1.0-beta-1</enforcer-plugin-version>
         <jar-plugin-version>2.2</jar-plugin-version>
         <javadoc-plugin-version>2.5</javadoc-plugin-version>
@@ -141,7 +153,18 @@
                 <role>Developer</role>
             </roles>
             <timezone>+1</timezone>
-        </developer>    
+        </developer>
+        <developer>
+            <id>mirkojahn</id>
+            <name>Mirko Jahn</name>
+            <email>mirko.jahn@icw.de</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
     </developers>
 
     <licenses>
@@ -366,11 +389,6 @@
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-jetty</artifactId>
-                <version>${camel-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-http</artifactId>
                 <version>${camel-version}</version>
             </dependency>
             <dependency>
@@ -659,11 +677,28 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${javadoc-plugin-version}</version>
-                </plugin>
+				<!-- reporting plugins -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${javadoc-plugin-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>${surefire-report-plugin-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jxr-plugin</artifactId>
+					<version>${jxr-plugin-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>${project-info-reports-plugin-version}</version>
+				</plugin>
+				<!-- regular plugins -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -702,8 +737,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -740,20 +775,36 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
-                    <instructions>
-                        <Export-Package>${osgi.export.pkg}</Export-Package>
+                    <unpackBundle>true</unpackBundle>
+				    <manifestLocation>META-INF</manifestLocation>
+					<instructions>
+						<!-- remove the qualifier from ANY versioning rule -->
+						<_versionpolicy>${version;===;${@}}</_versionpolicy>
+                        <!-- enable simple spring xml file analysis -->
+						<_plugin>aQute.lib.spring.SpringComponent</_plugin>
+						<Export-Package>${osgi.export.pkg}</Export-Package>
                         <Import-Package>${osgi.import.pkg}</Import-Package>
                         <DynamicImport-Package>${osgi.dynamic.import.pkg}</DynamicImport-Package>
                         <Private-Package>${osgi.private.pkg}</Private-Package>
                         <Bundle-Activator>${osgi.bundle.activator}</Bundle-Activator>
-                        <Bundle-Classpath>${osgi.bundle.classpath}</Bundle-Classpath>
+                        <Bundle-ClassPath>${osgi.bundle.classpath}</Bundle-ClassPath>
                         <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
                         <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
                         <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
+						<Bundle-Category>${osgi.bundle.category}</Bundle-Category>
+						
+						<!-- project specifics -->
+						<Bundle-Description>${project.description}</Bundle-Description>
+						<Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
+						<Bundle-License>${osgi.bundle.license}</Bundle-License>
+						
+						<!-- custom headers (not according to OSGi-Spec standard) -->
                         <Spring-Context>${osgi.spring.context}</Spring-Context>
                         <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
                         <Eclipse-SupplementBundle>${eclipse.supplement.bundle}</Eclipse-SupplementBundle>
+						
+						<Build-Time>$(now)</Build-Time>
                     </instructions>
                     <manifestLocation>META-INF</manifestLocation>
                 </configuration>
@@ -799,6 +850,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
+				<version>${javadoc-plugin-version}</version>
                 <configuration>
                     <links>
                         <link>http://java.sun.com/javase/6/docs/api/</link>
@@ -816,12 +868,15 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
+				<version>${surefire-report-plugin-version}</version>
             </plugin>
             <plugin>
                 <artifactId>maven-jxr-plugin</artifactId>
+				<version>${jxr-plugin-version}</version>
             </plugin>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${project-info-reports-plugin-version}</version>
             </plugin>
         </plugins>
     </reporting>
