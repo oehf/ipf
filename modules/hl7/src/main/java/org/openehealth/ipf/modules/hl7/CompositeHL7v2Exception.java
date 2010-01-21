@@ -33,7 +33,7 @@ import ca.uhn.hl7v2.util.Terser;
  * into MSA-3.
  * 
  * @author Christian Ohr
- * @author Marek Václavík
+ * @author Marek Vaclavik
  * 
  */
 @SuppressWarnings("serial")

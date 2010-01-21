@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.util.Terser;
  * {@link RuntimeException} so it need not to be caught.
  * 
  * @author Christian Ohr
- * @author Marek Václavík
+ * @author Marek Vaclavik
  */
 @SuppressWarnings("serial")
 public class HL7v2Exception extends AbstractHL7v2Exception {
