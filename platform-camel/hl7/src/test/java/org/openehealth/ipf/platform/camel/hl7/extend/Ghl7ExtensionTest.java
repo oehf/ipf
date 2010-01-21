@@ -69,8 +69,8 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
         // We expect an ByteArray
         assertEquals("[B", result.getBody().getClass().getName());
         String s = new String(((byte[])result.getBody()), "ISO-8859-1");
-        assertTrue(s.contains("Nächname"));
-        assertTrue(s.contains("Vörname"));
+        assertTrue(s.contains("NÃ¤chname"));
+        assertTrue(s.contains("VÃ¶rname"));
     }
 
     private void testMarshal(String endpoint) throws Exception {
