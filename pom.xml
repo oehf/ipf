@@ -8,16 +8,16 @@
     <packaging>pom</packaging>
 
     <properties>
-		<!-- Project configurations -->
+        <!-- Project configurations -->
         <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
-		
+        
         <!-- Report version properties -->
         <surefire-report-plugin-version>2.4.3</surefire-report-plugin-version>
         <javadoc-plugin-version>2.5</javadoc-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
         <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
 
-		<!-- Default Bundle Properties -->
+        <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
         <osgi.import.pkg>*</osgi.import.pkg>
         <osgi.dynamic.import.pkg />
@@ -31,10 +31,10 @@
         <ipf.extension.classes />
         <ipf.extension.beans />
         <eclipse.supplement.bundle />
-		<osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
-		<osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
-		<osgi.bundle.category>healthcare</osgi.bundle.category>
-		
+        <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
+        <osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
+        <osgi.bundle.category>healthcare</osgi.bundle.category>
+        
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
@@ -69,7 +69,7 @@
         <hibernate-search-version>3.0.1.GA</hibernate-search-version>
         <jasypt-version>1.5</jasypt-version>
         <jetty-version>6.1.16</jetty-version>
-       	<joda-time-version>1.5.2</joda-time-version>
+        <joda-time-version>1.5.2</joda-time-version>
         <junit-version>4.4</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.14</log4j-version>
@@ -313,42 +313,42 @@
                 <artifactId>groovytools-builder</artifactId>
                 <version>${metabuilder-version}</version>
             </dependency>
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-base</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v22</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v23</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v231</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v24</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v25</artifactId>
                 <version>${hapi-version}</version>
             </dependency>                                                
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v251</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-			      <dependency>
+                  <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v26</artifactId>
                 <version>${hapi-version}</version>
@@ -375,10 +375,10 @@
                 <artifactId>camel-hl7</artifactId>
                 <version>${camel-version}</version>
                 <exclusions>
-            	     <exclusion>
-            		      <groupId>org.hl7</groupId>
-            		      <artifactId>hapi</artifactId>
-            	     </exclusion>
+                     <exclusion>
+                          <groupId>org.hl7</groupId>
+                          <artifactId>hapi</artifactId>
+                     </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -677,28 +677,28 @@
     <build>
         <pluginManagement>
             <plugins>
-				<!-- reporting plugins -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${javadoc-plugin-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-report-plugin</artifactId>
-					<version>${surefire-report-plugin-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jxr-plugin</artifactId>
-					<version>${jxr-plugin-version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>${project-info-reports-plugin-version}</version>
-				</plugin>
-				<!-- regular plugins -->
+                <!-- reporting plugins -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${javadoc-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${surefire-report-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>${jxr-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${project-info-reports-plugin-version}</version>
+                </plugin>
+                <!-- regular plugins -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -708,9 +708,9 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>${bundle-plugin-version}</version>  <configuration>
-						<excludeDependencies>*;scope=provided|runtime</excludeDependencies>
-					</configuration>
-					<extensions>true</extensions>
+                        <excludeDependencies>*;scope=provided|runtime</excludeDependencies>
+                    </configuration>
+                    <extensions>true</extensions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -740,8 +740,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -750,9 +750,9 @@
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${release-plugin-version}</version>
-        			<configuration>
-        				<preparationGoals>clean verify install</preparationGoals>
-        			</configuration>
+                    <configuration>
+                        <preparationGoals>clean verify install</preparationGoals>
+                    </configuration>
             </plugin>
             <plugin>
               <artifactId>maven-jar-plugin</artifactId>
@@ -779,19 +779,19 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <unpackBundle>true</unpackBundle>
-				    <manifestLocation>META-INF</manifestLocation>
-					<instructions>
-						<!-- remove the qualifier from ANY versioning rule -->
-						<_versionpolicy>"$(version;===;$(@))"</_versionpolicy>
-						
-						<!-- This doesn't work with the 2.0.1 version of the plug-in, but probably later
-						<_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl>
-						<_versionpolicy-uses>[$(version;=;$(@)),$(version;+;$(@)))</_versionpolicy-uses>
-						-->
-						
+                    <manifestLocation>META-INF</manifestLocation>
+                    <instructions>
+                        <!-- remove the qualifier from ANY versioning rule -->
+                        <_versionpolicy>"$(version;===;$(@))"</_versionpolicy>
+
+                        <!-- This doesn't work with the 2.0.1 version of the plug-in, but probably later-->
+                        <!--_versionpolicy-impl>[$(version;==;$(@)),$(version;=+;$(@)))</_versionpolicy-impl-->
+                        <!--_versionpolicy-uses>[$(version;=;$(@)),$(version;+;$(@)))</_versionpolicy-uses-->
                         <!-- enable simple spring xml file analysis -->
-						<_plugin>aQute.lib.spring.SpringComponent</_plugin>
-						<Export-Package>${osgi.export.pkg}</Export-Package>
+                        <_plugin>aQute.lib.spring.SpringComponent</_plugin>
+                        <!-- Changed behavior in the > 2.0.0 bundle version forces us to do it this way -->
+                        <Bundle-SymbolicName>${groupId}.${artifactId}</Bundle-SymbolicName>
+                        <Export-Package>${osgi.export.pkg}</Export-Package>
                         <Import-Package>${osgi.import.pkg}</Import-Package>
                         <DynamicImport-Package>${osgi.dynamic.import.pkg}</DynamicImport-Package>
                         <Private-Package>${osgi.private.pkg}</Private-Package>
@@ -800,20 +800,20 @@
                         <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
                         <Fragment-Host>${osgi.fragment.host}</Fragment-Host>
                         <Require-Bundle>${osgi.require.bundle}</Require-Bundle>
-						<Bundle-Category>${osgi.bundle.category}</Bundle-Category>
-						
-						<!-- project specifics -->
-						<Bundle-Description>${project.description}</Bundle-Description>
-						<Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
-						<Bundle-License>${osgi.bundle.license}</Bundle-License>
-						
-						<!-- custom headers (not according to OSGi-Spec standard) -->
+                        <Bundle-Category>${osgi.bundle.category}</Bundle-Category>
+
+                        <!-- project specifics -->
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Bundle-Vendor>${osgi.bundle.vendor}</Bundle-Vendor>
+                        <Bundle-License>${osgi.bundle.license}</Bundle-License>
+
+                        <!-- custom headers (not according to OSGi-Spec standard) -->
                         <Spring-Context>${osgi.spring.context}</Spring-Context>
                         <Extension-Classes>${ipf.extension.classes}</Extension-Classes>
                         <Extension-Beans>${ipf.extension.beans}</Extension-Beans>
                         <Eclipse-SupplementBundle>${eclipse.supplement.bundle}</Eclipse-SupplementBundle>
-						
-						<Build-Time>$(now)</Build-Time>
+
+                        <Build-Time>$(now)</Build-Time>
                     </instructions>
                     <manifestLocation>META-INF</manifestLocation>
                 </configuration>
@@ -859,7 +859,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-				<version>${javadoc-plugin-version}</version>
+                <version>${javadoc-plugin-version}</version>
                 <configuration>
                     <links>
                         <link>http://java.sun.com/javase/6/docs/api/</link>
@@ -877,15 +877,15 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-				<version>${surefire-report-plugin-version}</version>
+                <version>${surefire-report-plugin-version}</version>
             </plugin>
             <plugin>
                 <artifactId>maven-jxr-plugin</artifactId>
-				<version>${jxr-plugin-version}</version>
+                <version>${jxr-plugin-version}</version>
             </plugin>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${project-info-reports-plugin-version}</version>
+                <version>${project-info-reports-plugin-version}</version>
             </plugin>
         </plugins>
     </reporting>
