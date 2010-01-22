@@ -28,6 +28,7 @@ import ca.uhn.hl7v2.model.Group
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
 class GroupAdapter extends StructureAdapter {
 
@@ -56,6 +57,10 @@ class GroupAdapter extends StructureAdapter {
     public Object invokeMethod(String name, Object args) {
         if (cachedNames.contains(name)) {
             return getAt(name).call(args)
+        } else if (name.startsWith('findAll')) {
+        	return findAll { it.name == name.substring(7) }
+        } else if (name.startsWith('find')) {
+        	return find { it.name == name.substring(4) }
         } else {
             return adapt(InvokerHelper.invokeMethod(group, name, args))
         }
@@ -88,10 +93,31 @@ class GroupAdapter extends StructureAdapter {
     void from(def value) {
         throw new UnsupportedOperationException('group copying not implemented yet')
     }
-    
+	
+	Iterator iterator() {
+		GroupAdapterIterator.iterator(this)
+	}
     
     def call(object) {
         throw new AdapterException("The group ${group.class.simpleName} is not repeatable in this group or message")
-    }    
+    }
+	
+	/**
+	 * @return true if the group has only empty substructures
+	 */
+	boolean isEmpty() {
+		group.getNames().every { 
+			get(it).isEmpty() 
+		}
+	}
+	
+	/**
+	 * @param o switch value
+	 * @return true if o in this
+	 */
+	boolean isCase(Object o) {
+		
+	}
+	
     
 }

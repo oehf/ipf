@@ -100,5 +100,17 @@ class SegmentAdapter extends StructureAdapter {
     
     def getValue() {
         componentValue(this)
-    }    
+    }
+	
+	/**
+	 * @return true if the segment is empty
+	 */
+	boolean isEmpty() {
+		int i = 1
+		boolean found = false
+		while (i <= segment.numFields() && !found) {
+			found = (count(i++) > 0)
+		}
+		!found
+	}
 }

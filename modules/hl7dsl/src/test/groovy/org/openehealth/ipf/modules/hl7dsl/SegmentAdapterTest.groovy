@@ -27,6 +27,8 @@ class SegmentAdapterTest extends GroovyTestCase {
     def msh
     def evn
     def pid
+	def pv1
+	def pv2
     
     void setUp() {
         def msg1 = load('msg-01.hl7')
@@ -37,6 +39,8 @@ class SegmentAdapterTest extends GroovyTestCase {
         msh = msg1.MSH
         evn = msg2.EVN
         pid = msg2.PID
+		pv1 = msg1.PV1
+		pv2 = msg1.PV2
     }
      
     void testInvokeMethod() {
@@ -142,5 +146,10 @@ class SegmentAdapterTest extends GroovyTestCase {
         pid[5](0)[1][2] = 'van'
         assert pid[5](0)[1][2].value == 'van'
     }
+	
+	void testIsEmpty() {
+		assert pv2.isEmpty() == true
+		assert pv1.isEmpty() == false
+	}
         
 }

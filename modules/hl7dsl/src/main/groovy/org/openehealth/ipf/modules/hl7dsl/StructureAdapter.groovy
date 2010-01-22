@@ -18,6 +18,8 @@ package org.openehealth.ipf.modules.hl7dsl
 /**
  * @author Martin Krasser
  */
-class StructureAdapter {
-
+abstract class StructureAdapter {
+	
+	abstract boolean isEmpty()
+	
 }
