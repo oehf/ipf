@@ -34,7 +34,8 @@ class GroupAdapterIterator extends ReadOnlyMessageIterator {
 	}
 	
 	/**
-	 * TODO hardcoded to return groups and non-empty segments. Shall this be customizable?
+	 * TODO hardcoded to return non-empty groups and non-empty segments. 
+	 * Shall this be customizable?
 	 * 
 	 * @param group
 	 * @return
