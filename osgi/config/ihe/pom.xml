@@ -2,21 +2,21 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-config</artifactId>
-    <name>osgi-config</name>
+    <artifactId>osgi-config-ihe</artifactId>
+    <name>osgi-config-ihe</name>
     <packaging>pom</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
-        <artifactId>osgi</artifactId>
+        <artifactId>osgi-config</artifactId>
         <version>2.1-SNAPSHOT</version>
     </parent>
-
+    
     <modules>
-        <module>flow</module>
-        <module>ihe</module>
-        <module>jms</module>
-        <module>log</module>
+        <module>atna</module>
+        <module>pix</module>
+        <module>pdq</module>
+        <module>xds</module>
     </modules>
     
 </project>

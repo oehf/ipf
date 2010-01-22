@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:osgi="http://www.springframework.org/schema/osgi"
+    xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
+http://www.springframework.org/schema/osgi
+http://www.springframework.org/schema/osgi/spring-osgi.xsd
+http://www.springframework.org/schema/osgi-compendium
+http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+    <!-- Configuration Admin entry -->
+    <osgix:cm-properties id="atnaProperties" persistent-id="org.openehealth.ipf.osgi.config.atna">
+        <prop key="audit.repository.host">localhost</prop>
+        <prop key="audit.repository.port">514</prop>
+    </osgix:cm-properties>
+
+    <context:property-placeholder properties-ref="atnaProperties"/>
+
+    <osgi:reference id="camelEndpointSender" bean-name="camelEndpointSender"
+        cardinality="0..1"
+        timeout="10000"
+        interface="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender">
+
+        <osgi:listener ref="camelEndpointSenderListener"
+            bind-method="setCamelEndpointSenderService"
+            unbind-method="unsetCamelEndpointSenderService"/>
+    </osgi:reference>
+
+</beans>

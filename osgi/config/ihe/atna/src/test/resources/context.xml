@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ctx="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <ctx:property-placeholder location="classpath:context.properties" />
+
+    <bean id="iheAuditorContext"
+          class="org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext"
+          factory-method="getContext">
+    </bean>
+
+    <bean id="iheAuditorConfig"
+          factory-bean="iheAuditorContext"
+          factory-method="getConfig">
+
+        <property name="auditRepositoryHost" value="${audit.repository.host}"/>
+        <property name="auditRepositoryPort" value="${audit.repository.port}"/>
+    </bean>
+
+    <bean id="camelEndpointSenderListener"
+          class="org.openehealth.ipf.osgi.config.ihe.atna.CamelEndpointSenderRegistration">
+        <property name="iheAuditorContext" ref="iheAuditorContext"/>
+        <property name="auditRepositoryHost" value="${audit.repository.host}"/>
+        <property name="auditRepositoryPort" value="${audit.repository.port}"/>  
+    </bean>
+
+</beans>
