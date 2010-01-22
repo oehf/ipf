@@ -78,6 +78,7 @@ class GroupAdapterTest extends GroovyTestCase {
 		def obx = message.find { it.name == 'OBX' }
 		assert obx[3][1].value == '25026500'
 		obx = message.findOBX()
+		assert message.findOBX()[3][1].value == '25026500'
 		assert obx[3][1].value == '25026500'
 		def patient = message.findPATIENT()
 		assert patient.target instanceof ORU_R01_PATIENT
