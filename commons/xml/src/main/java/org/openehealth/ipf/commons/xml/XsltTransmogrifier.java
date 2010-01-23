@@ -204,7 +204,8 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
      * @param params
      * @return
      */
-    protected String resource(Object... params) {
+    @SuppressWarnings("unchecked")
+	protected String resource(Object... params) {
         String resourceLocation = null;
         if (params[0] instanceof String) {
             resourceLocation = (String) params[0];
