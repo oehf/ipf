@@ -1,0 +1,40 @@
+Manifest-Version: 1.0
+Export-Package: org.openehealth.ipf.tutorials.osgi.atna.route.sender;u
+ ses:="groovy.lang,org.codehaus.groovy.runtime.wrappers,org.codehaus.g
+ roovy.reflection,org.codehaus.groovy.runtime,org.codehaus.groovy.runt
+ ime.callsite,org.apache.camel.builder,org.springframework.transaction
+ ,org.apache.commons.logging,org.apache.camel,org.apache.camel.spring.
+ spi,org.springframework.context,org.apache.camel.model,org.apache.cam
+ el.spring,org.springframework.transaction.support";version="2.1.0.SNA
+ PSHOT"
+Build-Time: Mon Jan 25 14:57:01 CET 2010
+Built-By: i000553
+Tool: Bnd-0.0.357
+Bundle-Category: healthcare
+Bundle-Name: tutorials-osgi-ihe-route-auditor
+Created-By: 1.6.0_07 (Sun Microsystems Inc.)
+Bundle-Vendor: Open eHealth Foundation
+Bundle-Version: 2.1.0.SNAPSHOT
+Build-Jdk: 1.6.0_07
+Bnd-LastModified: 1264427821942
+Bundle-ManifestVersion: 2
+Bundle-License: Apache License, Version 2.0;url=http://www.apache.org/
+ licenses/LICENSE-2.0;description=OpenSource license provided by the A
+ pache foundation
+Import-Package: groovy.lang;version="1.6.7",org.apache.camel;version="
+ 2.1.0",org.apache.camel.builder;version="2.1.0",org.apache.camel.mode
+ l;version="2.1.0",org.apache.camel.spring;version="2.1.0",org.apache.
+ camel.spring.spi;version="2.1.0",org.apache.commons.logging,org.codeh
+ aus.groovy.reflection;version="1.6.7",org.codehaus.groovy.runtime;ver
+ sion="1.6.7",org.codehaus.groovy.runtime.callsite;version="1.6.7",org
+ .codehaus.groovy.runtime.wrappers;version="1.6.7",org.openehealth.ipf
+ .platform.camel.ihe.atna.util,org.openehealth.ipf.tutorials.osgi.atna
+ .route.sender;version="2.1.0",org.openhealthtools.ihe.atna.auditor.se
+ nder,org.springframework.context;version="2.5.6",org.springframework.
+ transaction;version="2.5.6",org.springframework.transaction.support;v
+ ersion="2.5.6"
+Bundle-DocURL: http://gforge.openehealth.org/
+Bundle-SymbolicName: org.openehealth.ipf.tutorials.tutorials-osgi-ihe-
+ route-auditor
+Originally-Created-By: Apache Maven Bundle Plugin
+

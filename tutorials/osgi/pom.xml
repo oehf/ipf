@@ -18,6 +18,7 @@
         <module>service</module>
         <module>route-file</module>
         <module>route-web</module>
+        <module>ihe</module>
     </modules>
 
     <build>
