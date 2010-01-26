@@ -17,9 +17,19 @@ package org.openehealth.ipf.modules.hl7dsl
 
 /**
  * @author Martin Krasser
+ * @author Christian Ohr
  */
 abstract class StructureAdapter {
 	
+	String path
+	
 	abstract boolean isEmpty()
 	
+	StructureAdapter withPath(def parent, int idx) {
+		String pp = parent.path
+		path = pp + (pp == '' ? name : ".$name") +
+		       (parent.isRepeating(name) ? "($idx)" : '')
+		this
+	}
+		
 }

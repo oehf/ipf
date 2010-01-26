@@ -22,52 +22,60 @@ import ca.uhn.hl7v2.parser.Parser
  * @author Martin Krasser
  */
 public class MessageAdapters {
-
-     static Parser defaultParser() {
-         return new GenericParser()
-     }
-     
-     // -----------------------------------------------------------------
-     //  Factory methods using default parser
-     // -----------------------------------------------------------------
-     
-     static MessageAdapter load(String resource) {
-         make(MessageAdapter.class.classLoader.getResource(resource)?.text)
-     }
-
-     static MessageAdapter make(InputStream stream) {
-         return make(stream.text)
-     }
-
-     static MessageAdapter make(InputStream stream, String charset) {
-         return make(stream.getText(charset))
-     }
-
-     static MessageAdapter make(String message) {
-         make(defaultParser(), message)
-     }
-     
-     // -----------------------------------------------------------------
-     //  Factory methods using custom parser
-     // -----------------------------------------------------------------
-     
-     static MessageAdapter load(Parser parser, String resource) {
-         make(parser, MessageAdapter.class.classLoader.getResource(resource)?.text)
-     }
-     
-     static MessageAdapter make(Parser parser, InputStream stream) {
-         return make(parser, stream.text)
-     }
-
-     static MessageAdapter make(Parser parser, InputStream stream, String charset) {
-         return make(parser, stream.getText(charset))
-     }
-
-     static MessageAdapter make(Parser parser, String message) {
-         if (!message) {
-             return null
-         }
-         new MessageAdapter(parser, parser.parse(message))
-     }
-    
+	
+	static Parser defaultParser() {
+		return new GenericParser()
+	}
+	
+	// -----------------------------------------------------------------
+	//  Factory methods using default parser
+	// -----------------------------------------------------------------
+	
+	static MessageAdapter load(String resource) {
+		make(MessageAdapter.class.classLoader.getResource(resource)?.text)
+	}
+	
+	static MessageAdapter load(String resource, String charset) {
+		make(MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
+	}
+	
+	static MessageAdapter make(InputStream stream) {
+		return make(stream.text)
+	}
+	
+	static MessageAdapter make(InputStream stream, String charset) {
+		return make(stream.getText(charset))
+	}
+	
+	static MessageAdapter make(String message) {
+		make(defaultParser(), message)
+	}
+	
+	// -----------------------------------------------------------------
+	//  Factory methods using custom parser
+	// -----------------------------------------------------------------
+	
+	static MessageAdapter load(Parser parser, String resource) {
+		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.text)
+	}
+	
+	static MessageAdapter load(Parser parser, String resource, String charset) {
+		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
+	}
+	
+	static MessageAdapter make(Parser parser, InputStream stream) {
+		return make(parser, stream.text)
+	}
+	
+	static MessageAdapter make(Parser parser, InputStream stream, String charset) {
+		return make(parser, stream.getText(charset))
+	}
+	
+	static MessageAdapter make(Parser parser, String message) {
+		if (!message) {
+			return null
+		}
+		new MessageAdapter(parser, parser.parse(message))
+	}
+	
 }

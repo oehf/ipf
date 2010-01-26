@@ -40,6 +40,7 @@ class SegmentAdapter extends StructureAdapter {
     
     SegmentAdapter(Segment segment) {
         this.segment = segment
+		this.path = ''
     }
 
     def getTarget() {

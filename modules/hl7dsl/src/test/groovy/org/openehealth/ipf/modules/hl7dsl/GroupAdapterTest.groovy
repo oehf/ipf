@@ -71,7 +71,7 @@ class GroupAdapterTest extends GroovyTestCase {
 	
 	void testGrep() {
 		// We have three OBX segments somewhere in the message
-		assert message.grep { it.name == 'OBX' }.size() == 3
+		assertEquals(3, message.grep { it.name == 'OBX' }.size())
 	}
 	
 	void testFind() {
@@ -88,19 +88,53 @@ class GroupAdapterTest extends GroovyTestCase {
 	
 	void testFindAll() {
 		def obxs = message.findAll { it.name == 'OBX' }
-		assert obxs.size() == 3
+		assertEquals(3, obxs?.size())
+		def obxs2 = message.findAllOBX()
+		assertEquals(obxs*.name, obxs2*.name)
+	}
+	
+	void testFindIndexOf() {
+		def index = message.findIndexOf { it.name == 'OBX' }
+		assertEquals('PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX', index)		
+		def index2 = message.findIndexOfOBX()
+		assertEquals(index, index2)
+	}
+	
+	void testFindLastIndexOf() {
+		def index = message.findLastIndexOf { it.name == 'OBX' }
+		assertEquals('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX', index)
+		def index2 = message.findLastIndexOfOBX()
+		assertEquals(index, index2)
+	}
+	
+	void testFindIndexValues() {
+		def indexes = message.findIndexValues { it.name == 'OBX' }
+		assertEquals(3, indexes?.size())
+		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX')
+		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(0).OBX')
+		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX')
 	}
 	
 	void testSplit() {
 		def (segments, groups) = message.split { it instanceof SegmentAdapter }
-		assert segments.size() == 28
-		assert groups.size() == 7
+		assertEquals(28, segments.size())
+		assertEquals(7, groups.size())
 	}
 	
 	void testEach() {
 		int numberOfStructures = 0
 		message.each { numberOfStructures++ }
-		assert numberOfStructures == 35
+		assertEquals(35,  numberOfStructures)
+	}
+	
+	void testEachWithIndex() {
+		def found = []
+		message.eachWithIndex { structure, index ->
+			found << index
+		}
+		assert found.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).NTE(17)')
+		assert found.contains('PATIENT_RESULT(0).PATIENT.PID')
+		assert found.contains('MSH')
 	}
 	
 	void testEvery() {
@@ -108,12 +142,12 @@ class GroupAdapterTest extends GroovyTestCase {
 	}
 	
 	void testAny() {
-		assertTrue message.any { it instanceof GroupAdapter }		
+		assert message.any { it instanceof GroupAdapter }		
 	}
 	
 	void testSpread() {
 		// Length of all structure names concatenated
-		assertEquals 172,  message*.name.join('').length()
+		assertEquals(172,  message*.name.join('').length())
 	}
     
     void testNrp() {
@@ -130,9 +164,9 @@ class GroupAdapterTest extends GroovyTestCase {
 	void testFor() {
 		int length = 0
 		for (def s in message) {
-			length += s.getName().length()
+			length += s.name.length()
 		}
-		assertEquals 172, length
+		assertEquals(172, length)
 	}
 	
     

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 the original author or authors.
+ * Copyright 2010 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 /**
- * @author Martin Krasser
+ * @author Christian Ohr
  */
-class GroupIteratorAdapterTest extends GroovyTestCase {
+class GroupAdapterIteratorTest extends GroovyTestCase {
     
     def message
     
@@ -31,7 +31,7 @@ class GroupIteratorAdapterTest extends GroovyTestCase {
 		def iterator = GroupAdapterIterator.iterator(message)
 		def structures = []
 		while (iterator.hasNext()) {
-			structures += iterator.next().name
+			structures += iterator.next().path
 		}
 		assertEquals(35, structures.size())
     }

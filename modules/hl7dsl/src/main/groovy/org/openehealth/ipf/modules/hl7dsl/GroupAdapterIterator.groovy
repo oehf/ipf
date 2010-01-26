@@ -15,46 +15,82 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import ca.uhn.hl7v2.model.Group;
+import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.util.FilterIterator 
-import ca.uhn.hl7v2.util.ReadOnlyMessageIterator
 import ca.uhn.hl7v2.parser.EncodingCharacters
-import ca.uhn.hl7v2.parser.PipeParser;
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
 
+import java.util.List;
+
 /**
+ * Iterator class that does a depth-first traversal over message classes.
+ * Inspired by HAPI's {@link ca.uhn.hl7v2.util.ReadOnlyMessageIterator}
+ * 
  * @author Christian Ohr
  */
-class GroupAdapterIterator extends ReadOnlyMessageIterator {
+class GroupAdapterIterator implements Iterator {
 	
 	private static final EncodingCharacters ec = new EncodingCharacters('|' as char, "^~\\&")
-
-	static FilterIterator iterator(GroupAdapter adapter) {
-		iterator(adapter.target)
-	}
+	
+	private List<? extends StructureAdapter> remainingStructures = []
 	
 	/**
-	 * TODO hardcoded to return non-empty groups and non-empty segments. 
-	 * Shall this be customizable?
 	 * 
 	 * @param group
-	 * @return
+	 * @return depth-first traversing iterator
 	 */
 	static FilterIterator iterator(Group group) {
+		iterator(adapt(group))
+	}
+	
+	static FilterIterator iterator(GroupAdapter group) {
 		Iterator iterator = new GroupAdapterIterator(group)
-		DelegatingPredicate predicate = new DelegatingPredicate( {
-			! it.isEmpty()
-		})
+		DelegatingPredicate predicate = new DelegatingPredicate( { ! it.isEmpty() })
 		new FilterIterator(iterator, predicate)
 	}
 	
-	private GroupAdapterIterator(Group group) {
-		super(group)
+	private GroupAdapterIterator(GroupAdapter group) {
+		addChildren(group)
 	}
 	
 	@Override
 	public Object next() {
-		adapt(super.next())
+		if (!hasNext()) { 
+			throw new NoSuchElementException("No more structures in message")
+		}
+		addChildren(remainingStructures.pop());
+	}
+	
+	private StructureAdapter addChildren(SegmentAdapter segment) {
+		segment
+	}
+	
+	private StructureAdapter addChildren(GroupAdapter group) {
+		group?.names.reverseEach { name ->
+			reverseEachWithIndex(group.getAll(name)) { adapter, i ->
+				remainingStructures << adapter.withPath(group, i)
+			}
+		}
+		group
+	}		
+	@Override
+	public boolean hasNext() {
+		! remainingStructures.isEmpty()
+	}
+	
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException("Not applicable")
+	}
+	
+	private static void reverseEachWithIndex(List<StructureAdapter> a, Closure closure) {
+		for (int i = a.size() - 1; i >= 0; i--) {
+			closure.call(a[i], i)
+		}
 	}
 	
 }

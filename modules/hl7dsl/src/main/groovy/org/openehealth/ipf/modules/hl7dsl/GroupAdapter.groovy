@@ -38,6 +38,7 @@ class GroupAdapter extends StructureAdapter {
     
     GroupAdapter(Group group) {
         this.group = group
+		this.path = ''
         this.cachedNames = group.names as HashSet
     }
 
@@ -57,7 +58,11 @@ class GroupAdapter extends StructureAdapter {
     public Object invokeMethod(String name, Object args) {
         if (cachedNames.contains(name)) {
             return getAt(name).call(args)
-        } else if (name.startsWith('findAll')) {
+		} else if (name.startsWith('findLastIndexOf')) {
+			return findLastIndexOf { it.name == name.substring(15) }
+		} else if (name.startsWith('findIndexOf')) {
+			return findIndexOf { it.name == name.substring(11) }
+		} else if (name.startsWith('findAll')) {
         	return findAll { it.name == name.substring(7) }
         } else if (name.startsWith('find')) {
         	return find { it.name == name.substring(4) }
@@ -110,14 +115,48 @@ class GroupAdapter extends StructureAdapter {
 			get(it).isEmpty() 
 		}
 	}
-	
-	/**
-	 * @param o switch value
-	 * @return true if o in this
-	 */
-	boolean isCase(Object o) {
 		
+	Object eachWithIndex(Closure closure) {
+		for (Iterator iter = iterator(); iter.hasNext();) {
+			def next = iter.next()
+			closure.call(next, next.path)
+		}
+		this
 	}
 	
+	String findIndexOf(Closure closure) {
+		String result = ''
+		for (Iterator iter = iterator(); iter.hasNext();) {
+			def next = iter.next()
+			if (closure.call(next)) {
+				result = next.path
+				break
+			}
+		}
+		result
+	}
+	
+	String findLastIndexOf(Closure closure) {
+		String result = ''
+		for (Iterator iter = iterator(); iter.hasNext();) {
+			def next = iter.next()
+			if (closure.call(next)) {
+				result = next.path
+			}
+		}
+		result
+	}
+	
+	List<String> findIndexValues(Closure closure) {
+		List<String> result = []
+		for (Iterator iter = iterator(); iter.hasNext();) {
+			def next = iter.next()
+			if (closure.call(next)) {
+				result << next.path
+			}
+		}
+		result
+	}	
+		
     
 }

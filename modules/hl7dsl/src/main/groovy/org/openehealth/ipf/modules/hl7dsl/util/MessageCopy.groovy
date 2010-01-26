@@ -40,7 +40,8 @@ public class MessageCopy {
         this.srcTerser = new Terser(src)
         this.dstTerser = new Terser(dst)
     }
-    
+	
+	// TODO refactor to use GroupAdapterIterator
     void execute() {
         execute('/', src)
     }
