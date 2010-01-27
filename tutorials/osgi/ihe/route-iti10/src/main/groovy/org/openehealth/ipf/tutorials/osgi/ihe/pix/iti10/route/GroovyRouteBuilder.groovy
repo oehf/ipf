@@ -26,36 +26,32 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  */
 class GroovyRouteBuilder extends SpringRouteBuilder {
 
-     void configure() throws Exception {
+    void configure() throws Exception {
 
-         from('pix-iti10://0.0.0.0:8896?allowIncompleteAudit=true')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-         
-         
-         from('pix-iti10://0.0.0.0:8897?audit=false')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .validate().iti10Request()
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-             .validate().iti10Response()
+        from('pix-iti10://0.0.0.0:8891?allowIncompleteAudit=true')
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+            .process {
+                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            }
 
-             
-         from('pix-iti10://0.0.0.0:8898')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-			 
+        from('pix-iti10://0.0.0.0:8892?audit=false')
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+            .validate().iti10Request()
+            .process {
+                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            }
+            .validate().iti10Response()
+
+        from('pix-iti10://0.0.0.0:8893')
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+            .process {
+                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            }
      }
-}
- 
+} 

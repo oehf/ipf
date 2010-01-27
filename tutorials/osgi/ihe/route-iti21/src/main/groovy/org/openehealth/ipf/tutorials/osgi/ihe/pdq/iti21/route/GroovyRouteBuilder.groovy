@@ -34,24 +34,24 @@ PID|3||79653^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Hannes|
 PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Joachim||19400101|M|||Am Domplatz 112^^Köln^^57000||022/844275
      '''
      
-     void configure() throws Exception {
+    void configure() throws Exception {
 
-         from('pdq-iti21://0.0.0.0:8487?audit=false')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 resultMessage(it).body = rsp
-             }
+        from('pdq-iti21://0.0.0.0:8871?audit=false')
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+            .process {
+                resultMessage(it).body = rsp
+            }
 
-         from('pdq-iti21://0.0.0.0:8488')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 resultMessage(it).body = rsp
-             }
+        from('pdq-iti21://0.0.0.0:8872')
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+            .process {
+                resultMessage(it).body = rsp
+            }
 
-     }
+    }
 }
  

@@ -26,31 +26,25 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  */
 class GroovyRouteBuilder extends SpringRouteBuilder {
 
-     void configure() throws Exception {
+    void configure() throws Exception {
 
-         // normal processing without auditing
-         from('xds-iti8://0.0.0.0:8887?audit=false')
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-             
-         // normal processing with auditing
-         from('pix-iti8://0.0.0.0:8888')
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
+        // normal processing without auditing
+        from('xds-iti8://0.0.0.0:8881?audit=false')
+            .process {
+                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            }
+
+        // normal processing with auditing
+        from('pix-iti8://0.0.0.0:8882')
+            .process {
+                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            }
          
-         // normal processing with support for incomplete auditing
-         from('xds-iti8://0.0.0.0:8889?allowIncompleteAudit=true')
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-         
-         // fictive route to test producer-side acceptance checking
-         from('pix-iti8://0.0.0.0:8890')
-             .process {
-                 resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
-                 resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
-             }
-     }
+        // normal processing with support for incomplete auditing
+        from('xds-iti8://0.0.0.0:8883?allowIncompleteAudit=true')
+            .process {
+                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+            }
+
+    }
 }
