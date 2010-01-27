@@ -33,7 +33,7 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
             .process { createResponse(it) }
             .validate().iti15Response()
     
-        from('xds-iti15:xds-iti15-service2?audit=false'')
+        from('xds-iti15:xds-iti15-service2?audit=false')
             .process { createResponse(it) }
     }
 
