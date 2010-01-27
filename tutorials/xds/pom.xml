@@ -23,6 +23,9 @@
             org.openehealth.ipf.commons.ihe.xds.core.requests,
             org.openehealth.ipf.commons.ihe.xds.core.responses,
             org.openehealth.ipf.commons.ihe.xds.core.validate,
+            org.apache.commons.io,
+            javax.activation,
+            javax.mail.util,
             *
         </osgi.import.pkg>
     </properties>
