@@ -31,20 +31,15 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti14:xds-iti14-service1')
             .validate().iti14Request()
-            .process { checkValue(it, 'service 1') }
+            .process { createResponse(it) }
             .validate().iti14Response()
             
-        from('xds-iti14:xds-iti14-service2')
-            .process { checkValue(it, 'service 2') }
 
-        from('xds-iti14:xds-iti14-service12?audit=false&allowIncompleteAudit=true')
-            .process { checkValue(it, 'service 12') }
-    
-        from('xds-iti14:xds-iti14-service13?allowIncompleteAudit=true')
-            .process { checkValue(it, 'service 13') }
+        from('xds-iti14:xds-iti14-service2?audit=false')
+            .process { createResponse(it) }
     }
 
-    def checkValue(exchange, expected) {
+    def createResponse(exchange) {
         Exchanges.resultMessage(exchange).body = new Response(SUCCESS)
     }
 }

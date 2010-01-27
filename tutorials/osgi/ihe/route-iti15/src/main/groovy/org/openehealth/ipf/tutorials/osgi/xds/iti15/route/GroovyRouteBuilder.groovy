@@ -30,10 +30,10 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('xds-iti15:xds-iti15-service1')
             .validate().iti15Request()
-            .process { createResponse(it)  }
+            .process { createResponse(it) }
             .validate().iti15Response()
     
-        from('xds-iti15:xds-iti15-service2')
+        from('xds-iti15:xds-iti15-service2?audit=false'')
             .process { createResponse(it) }
     }
 
