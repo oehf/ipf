@@ -114,8 +114,8 @@ class CoreModelExtension {
             CoreExtension.transform(delegate, transformExpression)
         }
     
-        ProcessorDefinition.metaClass.setProperty = { String name, Closure propertyExpression ->
-            CoreExtension.setProperty(delegate, name, propertyExpression)
+        ProcessorDefinition.metaClass.setExchangeProperty = { String name, Closure propertyExpression ->
+            CoreExtension.setExchangeProperty(delegate, name, propertyExpression)
         }
 
         ProcessorDefinition.metaClass.setHeader = { String name, Closure headerExpression ->

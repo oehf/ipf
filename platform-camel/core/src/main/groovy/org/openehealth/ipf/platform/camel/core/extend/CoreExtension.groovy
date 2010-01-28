@@ -177,7 +177,7 @@ public class CoreExtension {
      * @ipfdoc Core features#setProperty-closure
      * @dsl platform-camel-core
      */
-    public static ProcessorDefinition setProperty(ProcessorDefinition self, String name, Closure propertyExpression) {
+    public static ProcessorDefinition setExchangeProperty(ProcessorDefinition self, String name, Closure propertyExpression) {
         return self.setProperty(name, new DelegatingExpression(propertyExpression));
     }
 

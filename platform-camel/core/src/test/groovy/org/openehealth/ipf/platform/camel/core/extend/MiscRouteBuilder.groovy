@@ -31,7 +31,7 @@ class MiscRouteBuilder extends SpringRouteBuilder {
             .to('mock:output')
 
         from('direct:input2')
-            .setProperty('test') { it.in.body }
+            .setExchangeProperty('test') { it.in.body }
 
         from('direct:input3')
             .transform { it.in.body * 2 }
