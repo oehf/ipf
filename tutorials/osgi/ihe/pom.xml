@@ -107,6 +107,7 @@
             <param>--startLevel=5</param>
             <param>--bundleStartLevel=4</param>
             <param>--workingDirectory=${project.build.directory}/runtime</param>
+            <param>--repositories=+http://repo.openehealth.org/maven2/snapshots@snapshots</param>
             <param>mvn:org.eclipse.equinox/cm/${equinox-cm-version}@1</param>
             <param>mvn:javax.persistence/com.springsource.javax.persistence/${springsource-persistence-api-version}@nostart</param>
             <param>mvn:org.aspectj/com.springsource.org.aspectj.weaver/${springsource-aspectj-version}@nostart</param>
