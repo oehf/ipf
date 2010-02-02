@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.appendSegments;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isPresent;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.joinSegments;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.splitString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +33,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.ContinuationStorage;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.ContinuationUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
@@ -43,7 +44,7 @@ import ca.uhn.hl7v2.util.Terser;
 
 /**
  * Consumer-side interceptor for interactive continuation support 
- * as described in § 5.6.3 of the HL7 v2.5 specification.
+ * as described in paragraph 5.6.3 of the HL7 v2.5 specification.
  * @author Dmytro Rud
  */
 public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor {
@@ -170,15 +171,15 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         }
         
         // determine data record boundaries in the response
-        List<String> segments = MllpMarshalUtils.splitString(response.toString(), '\r');
+        List<String> segments = splitString(response.toString(), '\r');
         List<Integer> recordBoundaries = getRecordBoundaries(segments);
         if (recordBoundaries.size() - 1 <= threshold) {
             return responseMessage;
         }
         
         // prepare header and footer segment groups
-        CharSequence headerSegments = ContinuationUtils.joinSegments(segments, 0, recordBoundaries.get(0));
-        CharSequence footerSegments = ContinuationUtils.joinSegments(
+        CharSequence headerSegments = joinSegments(segments, 0, recordBoundaries.get(0));
+        CharSequence footerSegments = joinSegments(
                 segments, recordBoundaries.get(recordBoundaries.size() - 1), segments.size());
 
         // determine count of resulting fragments
@@ -195,7 +196,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             int endSegmentIndex = recordBoundaries.get(endRecordIndex);
 
             StringBuilder sb = new StringBuilder(headerSegments);
-            ContinuationUtils.appendSegments(sb, segments, startSegmentIndex, endSegmentIndex);
+            appendSegments(sb, segments, startSegmentIndex, endSegmentIndex);
             sb.append(footerSegments);
 
             // parse, post-process and register the current fragment

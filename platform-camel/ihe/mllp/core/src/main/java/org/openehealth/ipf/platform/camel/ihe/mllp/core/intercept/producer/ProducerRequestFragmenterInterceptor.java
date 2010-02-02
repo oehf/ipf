@@ -24,16 +24,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.ContinuationUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.*;
 
 import ca.uhn.hl7v2.util.Terser;
 
 
 /**
  * A producer-side interceptor which implements non-interactive request 
- * fragmentation as described in § 2.10.2.2 of the HL7 v.2.5 specification.
+ * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
 public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterceptor {
@@ -53,7 +52,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterc
         
         String request = exchange.getIn().getBody(String.class);
         char fieldSeparator = request.charAt(3);
-        List<String> segments = MllpMarshalUtils.splitString(request, '\r');
+        List<String> segments = splitString(request, '\r');
 
         // short message --> send unmodified and return
         if (segments.size() <= threshold) {
@@ -62,11 +61,11 @@ public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterc
         }
 
         // parse MSH segment
-        List<String> mshFields = MllpMarshalUtils.splitString(segments.get(0), request.charAt(3));
+        List<String> mshFields = splitString(segments.get(0), request.charAt(3));
         
         // check whether MSH-14 and/or DSC are already present --> send unmodified and return
         if (segments.get(segments.size() - 1).startsWith("DSC") 
-                || ((mshFields.size() >= 14) && MllpMarshalUtils.isPresent(mshFields.get(13)))) 
+                || ((mshFields.size() >= 14) && isPresent(mshFields.get(13)))) 
         {
             LOG.debug("MSH-14 or DSC not empty, cannot perform automatic message fragmentation");
             getWrappedProcessor().process(exchange);
@@ -85,7 +84,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterc
             StringBuilder sb = new StringBuilder();
             
             // add MSH (position 1)
-            ContinuationUtils.appendSplittedSegment(sb, mshFields, fieldSeparator);
+            appendSplittedSegment(sb, mshFields, fieldSeparator);
 
             // add data segments (positions 2..MAX-1)
             do {

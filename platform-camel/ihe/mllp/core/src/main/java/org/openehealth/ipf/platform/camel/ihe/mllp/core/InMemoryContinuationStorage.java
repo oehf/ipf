@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.keyString;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +46,7 @@ public class InMemoryContinuationStorage implements ContinuationStorage {
             String msh32, 
             String msh33) 
     {
-        String storageKey = ContinuationUtils.keyString(queryTag, msh31, msh32, msh33);
+        String storageKey = keyString(queryTag, msh31, msh32, msh33);
         Chain chain = chains.get(storageKey);
         return (chain != null) ? chain.get(continuationPointer) : null;
     }
@@ -59,7 +61,7 @@ public class InMemoryContinuationStorage implements ContinuationStorage {
             String msh33, 
             Message fragment) 
     {
-        String storageKey = ContinuationUtils.keyString(queryTag, msh31, msh32, msh33);
+        String storageKey = keyString(queryTag, msh31, msh32, msh33);
         Chain chain = chains.get(storageKey);
         if (chain == null) {
             LOG.debug("Create chain for query tag " + queryTag);
@@ -72,7 +74,7 @@ public class InMemoryContinuationStorage implements ContinuationStorage {
 
     @Override
     public boolean deleteFragments(String queryTag, String msh31, String msh32, String msh33) {
-        String storageKey = ContinuationUtils.keyString(queryTag, msh31, msh32, msh33);
+        String storageKey = keyString(queryTag, msh31, msh32, msh33);
         return chains.remove(storageKey) != null;
     }
 

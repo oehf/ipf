@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.ContinuationUtils.keyString;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.keyString;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import ca.uhn.hl7v2.util.Terser;
 
 /**
  * Consumer-side interceptor for receiving unsolicited request fragments
- * as described in § 2.10.2.2 of the HL7 v.2.5 specification.
+ * as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
 public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor {

@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 import java.util.List;
 import java.util.UUID;
 
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.*;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
 import org.apache.commons.logging.Log;
@@ -26,9 +28,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.ContinuationUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
 import ca.uhn.hl7v2.model.Message;
@@ -69,9 +69,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         if (getMllpEndpoint().isSupportInteractiveContinuation()) {
             Message requestMessage = (Message) request.getTarget();
             requestTerser = new Terser(requestMessage);
-            if (config.isContinuable(requestTerser.get("MSH-9-1")) &&
-                MllpMarshalUtils.isEmpty(requestTerser.get("DSC-1")))
-            {
+            if (config.isContinuable(requestTerser.get("MSH-9-1")) && isEmpty(requestTerser.get("DSC-1"))) {
                 supportContinuations = true;
                 fragmentAccumulator = new StringBuilder();
             }
@@ -93,12 +91,12 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
             // continuations handling 
             if (supportContinuations) {
                 char fieldDelimiter = responseString.charAt(3);
-                List<String> segments = MllpMarshalUtils.splitString(responseString, '\r');
+                List<String> segments = splitString(responseString, '\r');
                 
                 // check whether this fragment is a correct one, 
                 // i.e. whether its MSH-14 corresponds to DSC-1 of the request
                 if (CONSIDER_MSH_14 && (continuationPointer != null)) {
-                    List<String> mshFields = MllpMarshalUtils.splitString(segments.get(0), fieldDelimiter);
+                    List<String> mshFields = splitString(segments.get(0), fieldDelimiter);
                     String msh14 = (mshFields.size() >= 14) ? mshFields.get(13) : null;
                     if (! continuationPointer.equals(msh14)) {
                         throw new IllegalStateException(new StringBuilder()
@@ -112,12 +110,11 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
                 
                 // analyse whether we should request the next fragment   
                 if (segments.get(segments.size() - 1).startsWith("DSC")) {
-                    List<String> dscFields = MllpMarshalUtils.splitString(
-                            segments.get(segments.size() - 1), fieldDelimiter);
+                    List<String> dscFields = splitString(segments.get(segments.size() - 1), fieldDelimiter);
                     
                     if ((dscFields.size() >= 3) 
                             && "I".equals(dscFields.get(2)) 
-                            && ! MllpMarshalUtils.isEmpty(dscFields.get(1))) 
+                            && ! isEmpty(dscFields.get(1))) 
                     {
                         continuationPointer = dscFields.get(1);
                         LOG.debug("Automatically query interactive fragment " + continuationPointer);
@@ -155,11 +152,11 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
                 }
                 
                 if (++fragmentsCount == 1) {
-                    ContinuationUtils.appendSegments(fragmentAccumulator, segments, 0, startDataSegmentIndex);
+                    appendSegments(fragmentAccumulator, segments, 0, startDataSegmentIndex);
                 }
-                ContinuationUtils.appendSegments(fragmentAccumulator, segments, startDataSegmentIndex, endDataSegmentIndex);
+                appendSegments(fragmentAccumulator, segments, startDataSegmentIndex, endDataSegmentIndex);
                 if (! mustSend) {
-                    ContinuationUtils.appendSegments(fragmentAccumulator, segments, endDataSegmentIndex, segments.size());
+                    appendSegments(fragmentAccumulator, segments, endDataSegmentIndex, segments.size());
                 }
             }
         }
