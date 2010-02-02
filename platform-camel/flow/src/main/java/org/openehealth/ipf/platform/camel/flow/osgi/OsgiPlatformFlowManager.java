@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.flow.ReplayStrategy;
  */
 public class OsgiPlatformFlowManager extends PlatformFlowManager {
 
-    private static final Log LOG = LogFactory.getLog(OsgiListPlatformFlowManager.class);
+    private static final Log LOG = LogFactory.getLog(OsgiPlatformFlowManager.class);
 
     private List<ReplayStrategy> replayStrategies;
 
