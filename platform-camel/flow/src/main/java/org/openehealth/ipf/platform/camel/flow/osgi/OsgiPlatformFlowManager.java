@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.flow.osgi;
 
-import static org.openehealth.ipf.platform.camel.flow.osgi.OsgiReplayStrategyRegistry.REPLAY_STRATEGY_IDENTIFIER_KEY;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,22 +24,15 @@ import org.openehealth.ipf.commons.flow.FlowReplayException;
 import org.openehealth.ipf.platform.camel.flow.PlatformFlowManager;
 import org.openehealth.ipf.platform.camel.flow.PlatformPacket;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategy;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.springframework.osgi.context.BundleContextAware;
 
 /**
- * @author Martin Krasser
+ * @author Martin Krasser, Boris Stanojevic
  */
-public class OsgiPlatformFlowManager extends PlatformFlowManager implements BundleContextAware {
+public class OsgiPlatformFlowManager extends PlatformFlowManager {
 
-    private static final Log LOG = LogFactory.getLog(OsgiReplayStrategyRegistry.class);
-    
-private BundleContext bundleContext;
-    
-    public void setBundleContext(BundleContext bundleContext) {
-        this.bundleContext = bundleContext;
-    }
+    private static final Log LOG = LogFactory.getLog(OsgiListPlatformFlowManager.class);
+
+    private List<ReplayStrategy> replayStrategies;
 
     /**
      * Delegates replay of the <code>packet</code> to
@@ -56,28 +50,32 @@ private BundleContext bundleContext;
      */
     protected PlatformPacket replayFlow(PlatformPacket packet) throws Exception {
         String replayStrategyId = packet.getReplayStrategyId();
-        ServiceReference reference = getReplayStrategyReference(replayStrategyId);
-        if (reference == null) {
-            throw new FlowReplayException("replay strategy " + replayStrategyId + 
-                    " not found in OSGi service registry");
+        ReplayStrategy replayStrategy = getReplayStrategy(replayStrategyId);
+        if (replayStrategy == null) {
+            throw new FlowReplayException("replay strategy " + replayStrategyId
+                    + " not found in OSGi service registry");
         }
-        // In the following we deliberately ingnore that the service reference might be stale.  
-        ReplayStrategy replayStrategy = (ReplayStrategy)bundleContext.getService(reference);
         LOG.debug("Using replay strategy " + replayStrategyId + " from OSGi service registry");
-        try {
-            return replayStrategy.replay(packet);
-        } finally {
-            bundleContext.ungetService(reference);
-        }
+        return replayStrategy.replay(packet);
     }
 
-    private ServiceReference getReplayStrategyReference(String replayStrategyId) throws Exception {
-        ServiceReference[] references = bundleContext.getServiceReferences(ReplayStrategy.class.getName(), 
-                createSearchFilterExpression(replayStrategyId));
-        return (references == null) ? null : references[0]; 
+    private ReplayStrategy getReplayStrategy(String replayStrategyId) throws Exception {
+        Iterator<ReplayStrategy> iterator = getReplayStrategies().iterator();
+        while (iterator.hasNext()) {
+            ReplayStrategy replayStrategy = iterator.next();
+            if (replayStrategy.getIdentifier().equals(replayStrategyId)) {
+                return replayStrategy;
+            }
+        }
+        return null;
     }
-    
-    private static String createSearchFilterExpression(String replayStrategyId) {
-        return "(" + REPLAY_STRATEGY_IDENTIFIER_KEY + "=" + replayStrategyId + ")";
+
+    public List<ReplayStrategy> getReplayStrategies() {
+        return replayStrategies;
+    }
+
+    public void setReplayStrategies(List<ReplayStrategy> replayStrategies) {
+        this.replayStrategies = replayStrategies;
+        LOG.debug("Replay strategies list was set");
     }
 }
