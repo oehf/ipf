@@ -56,7 +56,7 @@ class TestContinuations extends MllpTestContainer {
     @Test
     void testHappyCaseAndAudit1() {
         def msg = send(
-                'pdq-iti21://localhost:9001?timeout=30000000000' + 
+                'pdq-iti21://localhost:9000?timeout=30000000000' + 
                 '&supportInteractiveContinuation=true' + 
                 '&supportUnsolicitedFragmentation=true&unsolicitedFragmentationThreshold=3' + 
                 '&supportSegmentFragmentation=true',
