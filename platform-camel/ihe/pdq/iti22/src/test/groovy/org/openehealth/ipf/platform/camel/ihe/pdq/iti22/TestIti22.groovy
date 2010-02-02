@@ -32,7 +32,6 @@ import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.parser.PipeParser;
@@ -117,8 +116,6 @@ class TestIti22 extends MllpTestContainer {
         )
         def processor = consumer.processor
         
-        assertTrue(processor instanceof ConsumerMarshalInterceptor)
-            
         def body = getMessageString(msh9, msh12);
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body

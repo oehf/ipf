@@ -16,14 +16,16 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.Producer;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 
 
 /**
- * Producer-side Hl7 marshalling/unmarshalling Camel interceptor.
+ * Producer-side Hl7 marshalling/unmarshalling interceptor.
  * @author Dmytro Rud
  */
 public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
@@ -37,24 +39,20 @@ public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
      * Marshals the request, sends it to the route, and unmarshals the response. 
      */
     public void process(Exchange exchange) throws Exception {
-        String charset = getMllpEndpoint().getConfiguration().getCharsetName();
-
+        Message message;
+        
         // marshal
-        String s = MllpMarshalUtils.marshalStandardTypes(
-                exchange.getIn(), 
-                charset,
-                getMllpEndpoint().getParser());
-        exchange.getIn().setBody(s);
+        message = exchange.getIn();
+        MessageAdapter request = message.getBody(MessageAdapter.class);
+        message.setBody(request.toString());
 
         // run the route
         getWrappedProcessor().process(exchange);
 
         // unmarshal
-        MllpMarshalUtils.unmarshal(
-                Exchanges.resultMessage(exchange),
-                charset,
-                getMllpEndpoint().getParser());
-        exchange.setProperty(Exchange.CHARSET_NAME, charset);
+        message = Exchanges.resultMessage(exchange);
+        String responseString = message.getBody(String.class);
+        message.setBody(MessageAdapters.make(responseString));
+        exchange.setProperty(Exchange.CHARSET_NAME, getMllpEndpoint().getConfiguration().getCharsetName());
     }
-
 }

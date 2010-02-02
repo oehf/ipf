@@ -19,6 +19,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.camel.Message;
 import org.apache.camel.component.file.GenericFile;
@@ -35,7 +37,6 @@ import ca.uhn.hl7v2.parser.Parser;
 
 /**
  * Various helper methods for data transformation.
- * 
  * @author Dmytro Rud
  */
 public class MllpMarshalUtils {
@@ -133,35 +134,22 @@ public class MllpMarshalUtils {
 
     
     /**
-     * Unmarshalls the message contents by converting it from 
-     * {@link InputStream} to {@link MessageAdapter}.
-     *   
-     * @param message
-     *      camel message containing the data to be unmarshalled.
-     * @param charset
-     *      character set name for HL7 transformation. 
-     * @param parser 
-     *      HL7 parser.
-     * @return  
-     *      String representation of message contents, as a convenience.  
-     */
-    public static String unmarshal(Message message, String charset, Parser parser) throws Exception {
-        String s = convertBodyToString(message, charset);
-        MessageAdapter msg = MessageAdapters.make(parser, s);
-        message.setBody(msg);
-        return s;
-    }
-
-    
-    /**
      * Converts message contents to a {@link String} using the given character set
-     * and replaces all <tt>'\n'</tt>'s with <tt>'\r'</tt>'s. 
+     * and replaces all <tt>'\n'</tt>'s with <tt>'\r'</tt>'s.  
+     * If requested, segments will be defragmented as well.
      */
-    public static String convertBodyToString(Message message, String charset) throws Exception {
+    public static String convertBodyToString(
+            Message message, 
+            String charset, 
+            boolean defragmentSegments) throws Exception 
+    {
         InputStream stream = message.getBody(InputStream.class);
         BufferedReader br = new BufferedReader(new InputStreamReader(stream, charset));
         String s = IOConverter.toString(br);
         s = s.replace('\n', '\r');
+        if (defragmentSegments) {
+            s = s.replace("\rADD" + s.charAt(3), "");
+        }
         return s;
     }
     
@@ -261,4 +249,104 @@ public class MllpMarshalUtils {
         return new MessageAdapter(nak);
     }
     
+
+    /**
+     * Splits the given String at occurrences of the given character.
+     */
+    public static List<String> splitString(String s, char c) {
+        List<String> result = new ArrayList<String>();
+        int startPos = 0;
+        while (true) {
+            int pos = s.indexOf(c, startPos);
+            if (pos == -1) {
+                break;
+            }
+            result.add(s.substring(startPos, pos));
+            startPos = pos + 1;
+        }
+        if (startPos != s.length()) {
+            result.add(s.substring(startPos, s.length()));
+        }
+        return result;
+    }
+
+
+    /**
+     * Returns <code>true</code> if the given String is <code>null</code> or empty.
+     */
+    public static boolean isEmpty(String s) {
+        return (s == null) || (s.length() == 0);
+    }
+    
+    /**
+     * Returns <code>false</code> if the given String is <code>null</code> or empty.
+     */
+    public static boolean isPresent(String s) {
+        return ! isEmpty(s);
+    }
+    
+    
+    /**
+     * Ensures that all segments in the given HL7 message string representation
+     * are not longer than the given value (-1 means positive infinity).
+     * If needed, splits long segments by means of ADD segments, as described
+     * in § 2.10.2.1 of the HL7 v.2.5 specification.
+     * <p>
+     * <code>'\r'<code> characters are not considered in the length computation. 
+     * @param message
+     *      string representation of the source HL7 message.
+     * @param maxLength
+     *      maximal segment length, must be either -1 or greater than 4.
+     * @return
+     *      string representation of a semantically equivalent message,   
+     *      whose segments are not longer than the given value. 
+     */
+    public static String ensureMaximalSegmentsLength(String message, int maxLength) {
+        if (maxLength == -1) {
+            return message;
+        }
+        if (maxLength <= 4) {
+            throw new IllegalArgumentException("maximal length must be greater than 4");
+        }
+        List<String> segments = splitString(message, '\r');
+        
+        // check whether we have to do anything
+        boolean needProcess = false;
+        for (String segment : segments) {
+            if (segment.length() > maxLength) {
+                needProcess = true;
+                break;
+            }
+        }
+        if ( ! needProcess) {
+            return message;
+        }
+
+        // process segments
+        StringBuilder sb = new StringBuilder();
+        String prefix = "ADD" + message.charAt(3);
+        int restLength = maxLength - prefix.length();
+        for (String segment : segments) {
+            // short segment
+            if (segment.length() <= maxLength) {
+                sb.append(segment).append('\r');
+                continue;
+            }
+            
+            // first part of the long segment
+            sb.append(segment.substring(0, maxLength)).append('\r');
+            // parts 2..n-1 of the long segment
+            int startPos;
+            for (startPos = maxLength; startPos + restLength <= segment.length(); startPos += restLength) {
+                sb.append(prefix)
+                  .append(segment.substring(startPos, startPos + restLength))
+                  .append('\r');
+            }
+            // part n of the long segment
+            if (startPos < segment.length()) {
+                sb.append(prefix).append(segment.substring(startPos)).append('\r');
+            }
+        }
+        return sb.toString();
+    }
 }

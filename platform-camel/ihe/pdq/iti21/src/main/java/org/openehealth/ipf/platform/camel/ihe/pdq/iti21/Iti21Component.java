@@ -23,6 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqTransactionConfiguration;
 
 import ca.uhn.hl7v2.parser.Parser;
 
@@ -32,7 +33,7 @@ import ca.uhn.hl7v2.parser.Parser;
  */
 public class Iti21Component extends MllpComponent {
     private static final MllpTransactionConfiguration CONFIGURATION =
-        new MllpTransactionConfiguration(
+        new PdqTransactionConfiguration(
                 "2.5", 
                 "PDQ adapter", 
                 "IPF",
@@ -43,13 +44,16 @@ public class Iti21Component extends MllpComponent {
                 new String[] {"Q22", "J01"},
                 new String[] {"RSP", "ACK"},
                 new String[] {"K22", "*"},
-                new boolean[] {true, false});
-  
+                new boolean[] {true, false},
+                new boolean[] {true, false},
+                new String[] {"PID", "PD1", "NK1", "QRI"});
+        
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new PdqClientAuditStrategy("PDQ");
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new PdqServerAuditStrategy("PDQ");
     private static final Parser PARSER = CustomModelClassUtils.createParser("pdq", "2.5");
+    
     
     public Iti21Component() {
         super();

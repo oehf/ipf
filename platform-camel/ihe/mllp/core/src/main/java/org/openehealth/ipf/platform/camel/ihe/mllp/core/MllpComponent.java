@@ -80,13 +80,41 @@ public abstract class MllpComponent extends MinaComponent {
         boolean audit = getAndRemoveParameter(parameters, "audit", boolean.class, true);
         boolean allowIncompleteAudit = 
             getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false); 
+
         boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
         boolean mutualTLS = getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
         String sslContextBean = getAndRemoveParameter(parameters, "sslContext", String.class, "");
         String interceptorBeans = getAndRemoveParameter(parameters, "interceptors", String.class, "");
         String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
         String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
-
+        
+        boolean supportInteractiveContinuation = getAndRemoveParameter(
+                parameters, "supportInteractiveContinuation", boolean.class, false);
+        int interactiveContinuationDefaultThreshold = getAndRemoveParameter(
+                parameters, "interactiveContinuationDefaultThreshold", int.class, -1);      // >= 1 data record
+        
+        boolean supportUnsolicitedFragmentation = getAndRemoveParameter(
+                parameters, "supportUnsolicitedFragmentation", boolean.class, false);
+        int unsolicitedFragmentationThreshold = getAndRemoveParameter(
+                parameters, "unsolicitedFragmentationThreshold", int.class, -1);            // >= 3 segments
+        
+        boolean supportSegmentFragmentation = getAndRemoveParameter(
+                parameters, "supportSegmentFragmentation", boolean.class, false);
+        int segmentFragmentationThreshold = getAndRemoveParameter(
+                parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
+        
+        ContinuationStorage storage = null;
+        if (supportInteractiveContinuation) {
+            String storageBean = getAndRemoveParameter(
+                    parameters, "interactiveContinuationStorage", String.class, null);
+            if (storageBean == null) {
+                storage = new InMemoryContinuationStorage();
+            } else {
+                storage = getCamelContext().getRegistry().lookup(
+                        extractBeanName(storageBean), ContinuationStorage.class);
+            }
+        }
+        
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
             parameters = new HashMap();
@@ -100,7 +128,6 @@ public abstract class MllpComponent extends MinaComponent {
 
         // adopt character set configured for the HL7 codec
         String codecBean = extractBeanName((String) parameters.get("codec"));
-
         ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookup(
                     codecBean, 
                     ProtocolCodecFactory.class);
@@ -138,7 +165,14 @@ public abstract class MllpComponent extends MinaComponent {
                 mutualTLS,
                 customInterceptors,
                 sslProtocols,
-                sslCiphers);
+                sslCiphers,
+                supportInteractiveContinuation,
+                supportUnsolicitedFragmentation,
+                supportSegmentFragmentation,
+                interactiveContinuationDefaultThreshold,
+                unsolicitedFragmentationThreshold,
+                segmentFragmentationThreshold,
+                storage);
     }
 
     private List<MllpCustomInterceptor> getCustomInterceptors(String interceptorBeans) {
@@ -162,8 +196,8 @@ public abstract class MllpComponent extends MinaComponent {
         return getCamelContext().getRegistry().lookup(extractBeanName(sslContextBean), SSLContext.class);
     }
 
-    private String extractBeanName(String codecBean) {
-        return codecBean.startsWith("#") ? codecBean.substring(1) : codecBean;
+    private String extractBeanName(String originalBeanName) {
+        return originalBeanName.startsWith("#") ? originalBeanName.substring(1) : originalBeanName;
     }
 
 

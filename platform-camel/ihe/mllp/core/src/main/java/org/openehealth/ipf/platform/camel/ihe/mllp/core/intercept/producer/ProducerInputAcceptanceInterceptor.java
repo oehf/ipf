@@ -13,29 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AcceptanceInterceptorUtils;
 
 
 /**
- * Consumer-side Camel interceptor for message acceptance checking.
+ * Producer-side interceptor for input message acceptance checking.
  * @author Dmytro Rud
  */
-public class ConsumerAcceptanceInterceptor 
-        extends AbstractMllpInterceptor 
+public class ProducerInputAcceptanceInterceptor 
+        extends AbstractProducerInterceptor 
         implements AcceptanceInterceptor 
 {
-    public ConsumerAcceptanceInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        super(endpoint, wrappedProcessor);
+    public ProducerInputAcceptanceInterceptor(
+            MllpEndpoint endpoint, 
+            Producer wrappedProducer) 
+    {
+        super(endpoint, wrappedProducer);
     }
 
     public void process(Exchange exchange) throws Exception {
-        AcceptanceInterceptorUtils.doProcess(this, exchange);
+        AcceptanceInterceptorUtils.processInput(this, exchange);
     }
 }

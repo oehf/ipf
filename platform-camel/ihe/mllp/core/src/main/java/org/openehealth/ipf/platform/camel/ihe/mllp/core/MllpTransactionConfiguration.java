@@ -20,6 +20,8 @@ import static org.apache.commons.lang.Validate.noNullElements;
 import static org.apache.commons.lang.Validate.notEmpty;
 import static org.apache.commons.lang.Validate.notNull;
 
+import java.util.List;
+
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 
 
@@ -38,10 +40,12 @@ public class MllpTransactionConfiguration {
 
     private final String[] allowedRequestMessageTypes;
     private final String[] allowedRequestTriggerEvents;
+
     private final String[] allowedResponseMessageTypes;
     private final String[] allowedResponseTriggerEvents;
 
     private final boolean[] auditabilityFlags;
+    private final boolean[] responseContinuabilityFlags;
 
 
     /**
@@ -73,7 +77,9 @@ public class MllpTransactionConfiguration {
      *      ignored for messages of type "ACK".  
      * @param auditabilityFlags
      *      flags of whether the messages of corresponding 
-     *      type should be audited
+     *      type should be audited.
+     * @param responseRecordSegmentNames
+     *      names of segments which belong to the "data record" of the response.
      */
     public MllpTransactionConfiguration(
             String hl7Version,
@@ -86,7 +92,8 @@ public class MllpTransactionConfiguration {
             String[] allowedRequestTriggerEvents,
             String[] allowedResponseMessageTypes,
             String[] allowedResponseTriggerEvents,
-            boolean[] auditabilityFlags)
+            boolean[] auditabilityFlags,
+            boolean[] responseContinuabilityFlags)
     {
         notNull(hl7Version);
         notNull(sendingApplication);
@@ -98,12 +105,14 @@ public class MllpTransactionConfiguration {
         noNullElements(allowedResponseMessageTypes);
         noNullElements(allowedResponseTriggerEvents);
         notNull(auditabilityFlags);
+        notNull(responseContinuabilityFlags);
 
         notEmpty(allowedRequestMessageTypes);
         isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
-        isTrue(allowedRequestMessageTypes.length == auditabilityFlags.length);
         isTrue(allowedRequestMessageTypes.length == allowedResponseMessageTypes.length);
         isTrue(allowedRequestMessageTypes.length == allowedResponseTriggerEvents.length);
+        isTrue(allowedRequestMessageTypes.length == auditabilityFlags.length);
+        isTrue(allowedRequestMessageTypes.length == responseContinuabilityFlags.length);
         
         // QC passed ;)
         
@@ -117,10 +126,11 @@ public class MllpTransactionConfiguration {
 
         this.allowedRequestMessageTypes = allowedRequestMessageTypes;
         this.allowedRequestTriggerEvents = allowedRequestTriggerEvents;
-        this.auditabilityFlags = auditabilityFlags;
-
         this.allowedResponseMessageTypes = allowedResponseMessageTypes;
         this.allowedResponseTriggerEvents = allowedResponseTriggerEvents;
+
+        this.auditabilityFlags = auditabilityFlags;
+        this.responseContinuabilityFlags = responseContinuabilityFlags;
     }
 
     
@@ -187,6 +197,23 @@ public class MllpTransactionConfiguration {
         throw new IllegalStateException("Unknown message type " + messageType);
     }
 
+
+    /**
+     * Returns <code>true</code> when messages of the given [request] type 
+     * can be splitted by means of interactive continuation.
+     * <p>
+     * When this method returns true, the request message structure must 
+     * be able to contain segments RCP, QPD, DSC; and the response message
+     * structure -- segments DSC, QAK.
+     */
+    public boolean isContinuable(String messageType) {
+        int index = indexOf(messageType, allowedRequestMessageTypes);
+        if(index != -1) {
+            return responseContinuabilityFlags[index];
+        }
+        throw new IllegalStateException("Unknown message type " + messageType);
+    }
+    
     
     /**
      * Helper method that returns the index of the given String 
@@ -201,6 +228,24 @@ public class MllpTransactionConfiguration {
         return -1;
     }
 
+    
+    /**
+     * Returns <code>true</code> if the given element of the given list 
+     * contains a start segment of a data record. 
+     */
+    public boolean isDataStartSegment(List<String> segments, int index) {
+        return false;
+    }
+
+    
+    /**
+     * Returns <code>true</code> if the given element of the given list 
+     * contains a segment which does not belongs to any data record. 
+     */
+    public boolean isNotDataSegment(List<String> segments, int index) {
+        return false;
+    }
+    
     
     // ----- automatically generated getters -----
 

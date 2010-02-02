@@ -41,7 +41,8 @@ public class Iti8Component extends MllpComponent {
                 new String[] {"A01 A04 A05 A08 A40"},
                 new String[] {"ACK"},
                 new String[] {"*"},
-                new boolean[] {true}); 
+                new boolean[] {true},
+                new boolean[] {false}); 
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti8ClientAuditStrategy();

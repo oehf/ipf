@@ -24,6 +24,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.util.Terser;
@@ -88,8 +89,17 @@ public class AuditInterceptorUtils  {
      */
     private static boolean isAuditable(AuditInterceptor interceptor, MessageAdapter msg) {
         try {
-            Terser terser = new Terser((Message) msg.getTarget());
-            String messageType = terser.get("MSH-9-1-1");
+            Message message = (Message) msg.getTarget();
+            Terser terser = new Terser(message);
+            
+            // no audit for fragments 2..n
+            for (String name : message.getNames()) {
+                if ("DSC".equals(name) && MllpMarshalUtils.isPresent(terser.get("DSC-1"))) {
+                    return false;
+                }
+            }
+            
+            String messageType = terser.get("MSH-9-1");
             return interceptor.getMllpEndpoint().getTransactionConfiguration().isAuditable(messageType);
         } catch (Exception e) {
             LOG.error("Exception when determining message auditability, no audit will be performed", e);

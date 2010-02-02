@@ -23,6 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.pdq.core.PdqTransactionConfiguration;
 
 import ca.uhn.hl7v2.parser.Parser;
 
@@ -32,7 +33,7 @@ import ca.uhn.hl7v2.parser.Parser;
  */
 public class Iti22Component extends MllpComponent {
     private static final MllpTransactionConfiguration CONFIGURATION =
-        new MllpTransactionConfiguration(
+        new PdqTransactionConfiguration(
                 "2.5", 
                 "PDQ adapter", 
                 "IPF",
@@ -43,7 +44,9 @@ public class Iti22Component extends MllpComponent {
                 new String[] {"ZV1", "J01"},
                 new String[] {"RSP", "ACK"},
                 new String[] {"ZV2", "*"}, 
-                new boolean[] {true, false});
+                new boolean[] {true, false},                
+                new boolean[] {true, false},                
+                new String[] {"PID", "PD1", "PV1", "PV2", "QRI"});
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new PdqClientAuditStrategy("PDVQ");

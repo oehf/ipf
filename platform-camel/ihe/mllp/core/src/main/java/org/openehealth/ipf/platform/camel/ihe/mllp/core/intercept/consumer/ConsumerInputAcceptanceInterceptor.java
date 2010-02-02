@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2010 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Producer;
+import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AcceptanceInterceptorUtils;
 
 
 /**
- * Producer-side Camel interceptor for message acceptance checking.
+ * Consumer-side interceptor for input message acceptance checking.
  * @author Dmytro Rud
  */
-public class ProducerAcceptanceInterceptor 
-        extends AbstractProducerInterceptor 
+public class ConsumerInputAcceptanceInterceptor 
+        extends AbstractMllpInterceptor 
         implements AcceptanceInterceptor 
 {
-    public ProducerAcceptanceInterceptor(
-            MllpEndpoint endpoint, 
-            Producer wrappedProducer) 
-    {
-        super(endpoint, wrappedProducer);
+    public ConsumerInputAcceptanceInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
+        super(endpoint, wrappedProcessor);
     }
 
     public void process(Exchange exchange) throws Exception {
-        AcceptanceInterceptorUtils.doProcess(this, exchange);
+        AcceptanceInterceptorUtils.processInput(this, exchange);
     }
 }

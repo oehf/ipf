@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pdq.iti21;
 
-
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.CamelExchangeException
@@ -30,7 +29,6 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.HandshakeCallbackSSLFilter
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerMarshalInterceptor
 import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 import static org.junit.Assert.*
 
@@ -183,8 +181,6 @@ class TestIti21 extends MllpTestContainer {
         )
         def processor = consumer.processor
         
-        assertTrue(processor instanceof ConsumerMarshalInterceptor)
-            
         def body = getMessageString(msh9, msh12);
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body

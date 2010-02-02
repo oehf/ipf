@@ -19,9 +19,6 @@ import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-
-import ca.uhn.hl7v2.parser.Parser;
 
 
 /**
@@ -38,27 +35,36 @@ public class AcceptanceInterceptorUtils {
     
     /**
      * Checks acceptance of the input message and calls the route.
-     * For synchronous message types, checks acceptance of the 
-     * output message as well.
      */
-    public static void doProcess(
+    public static void processInput(
+            AcceptanceInterceptor interceptor, 
+            Exchange exchange) throws Exception
+    {
+        // check input message
+        AcceptanceCheckUtils.checkRequestAcceptance(
+                exchange.getIn().getBody(MessageAdapter.class), 
+                interceptor.getMllpEndpoint().getTransactionConfiguration(), 
+                interceptor.getMllpEndpoint().getParser()); 
+        
+        // run the route
+        interceptor.getWrappedProcessor().process(exchange);
+    }
+    
+    
+    /**
+     * Calls the route and checks acceptance of the output message.
+     */
+    public static void processOutput(
             AcceptanceInterceptor interceptor, 
             Exchange exchange) throws Exception 
     {
-        MllpTransactionConfiguration config = 
-            interceptor.getMllpEndpoint().getTransactionConfiguration();
-        Parser parser = interceptor.getMllpEndpoint().getParser();
-        MessageAdapter msg;
-
-        // check input message
-        msg = exchange.getIn().getBody(MessageAdapter.class);
-        AcceptanceCheckUtils.checkRequestAcceptance(msg, config, parser); 
-        
         // run the route
         interceptor.getWrappedProcessor().process(exchange);
 
         // check output message
-        msg = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
-        AcceptanceCheckUtils.checkResponseAcceptance(msg, config, parser);
+        AcceptanceCheckUtils.checkResponseAcceptance(
+                Exchanges.resultMessage(exchange).getBody(MessageAdapter.class),
+                interceptor.getMllpEndpoint().getTransactionConfiguration(),
+                interceptor.getMllpEndpoint().getParser());
     }
 }

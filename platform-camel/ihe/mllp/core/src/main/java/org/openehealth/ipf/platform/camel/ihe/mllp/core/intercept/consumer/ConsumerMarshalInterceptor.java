@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
@@ -36,7 +37,7 @@ import ca.uhn.hl7v2.parser.Parser;
 
 
 /**
- * Consumer-side HL7 marshaling/unmarshaling Camel interceptor.
+ * Consumer-side HL7 marshaling/unmarshaling interceptor.
  * @author Dmytro Rud
  */
 public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
@@ -60,12 +61,13 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
         boolean unmarshallingFailed = false;
         try {
             org.apache.camel.Message in = exchange.getIn();
-            String originalString = MllpMarshalUtils.unmarshal(in, charset, parser);
+            String originalString = in.getBody(String.class);
+            originalAdapter = MessageAdapters.make(parser, originalString);
+            in.setBody(originalAdapter);
             
             // Store different representations of the original request into Camel headers.
             // Call to .copy() will throw an NPE when the message structure (MSH-9-3)
             // is wrong.
-            originalAdapter = in.getBody(MessageAdapter.class);
             in.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME,
                     (originalAdapter.getTarget() instanceof GenericMessage) 
                         ? originalAdapter 

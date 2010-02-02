@@ -25,10 +25,14 @@ import org.apache.mina.common.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInputAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerStringProcessorInterceptor;
 
 import javax.net.ssl.SSLContext;
 import java.net.SocketAddress;
@@ -53,11 +57,20 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final MllpAuditStrategy clientStrategy;
     private final MllpTransactionConfiguration transactionConfiguration;
     private final Parser parser;
+    
     private final SSLContext sslContext;
     private final List<MllpCustomInterceptor> customInterceptors;
     private final boolean mutualTLS;
     private final String[] sslProtocols;
     private final String[] sslCiphers;
+    
+    private final boolean supportInteractiveContinuation;
+    private final boolean supportUnsolicitedFragmentation;
+    private final boolean supportSegmentFragmentation;
+    private final int interactiveContinuationDefaultThreshold;
+    private final int unsolicitedFragmentationThreshold;
+    private final int segmentFragmentationThreshold;
+    private final ContinuationStorage storage;
 
 
     /**
@@ -82,7 +95,26 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param sslCiphers
      *          the ciphers defined in the endpoint URI or {@code null} if none were specified.
      */
-    public MllpEndpoint(MinaEndpoint wrappedEndpoint, boolean audit, boolean allowIncompleteAudit, MllpAuditStrategy serverStrategy, MllpAuditStrategy clientStrategy, MllpTransactionConfiguration transactionConfiguration, Parser parser, SSLContext sslContext, boolean mutualTLS, List<MllpCustomInterceptor> customInterceptors, String[] sslProtocols, String[] sslCiphers)
+    public MllpEndpoint(
+            MinaEndpoint wrappedEndpoint, 
+            boolean audit, 
+            boolean allowIncompleteAudit, 
+            MllpAuditStrategy serverStrategy, 
+            MllpAuditStrategy clientStrategy, 
+            MllpTransactionConfiguration transactionConfiguration, 
+            Parser parser, 
+            SSLContext sslContext, 
+            boolean mutualTLS, 
+            List<MllpCustomInterceptor> customInterceptors, 
+            String[] sslProtocols, 
+            String[] sslCiphers,
+            boolean supportInteractiveContinuation,
+            boolean supportUnsolicitedFragmentation,
+            boolean supportSegmentFragmentation,
+            int interactiveContinuationDefaultThreshold,
+            int unsolicitedFragmentationThreshold,
+            int segmentFragmentationThreshold,
+            ContinuationStorage storage)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -90,6 +122,9 @@ public class MllpEndpoint extends DefaultEndpoint {
         Validate.notNull(transactionConfiguration);
         Validate.notNull(parser);
         Validate.noNullElements(customInterceptors);
+        if (supportInteractiveContinuation) {
+            Validate.notNull(storage);
+        }
         
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
@@ -103,6 +138,14 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.customInterceptors = customInterceptors;
         this.sslProtocols = sslProtocols;
         this.sslCiphers = sslCiphers;
+        
+        this.supportInteractiveContinuation = supportInteractiveContinuation;
+        this.supportUnsolicitedFragmentation = supportUnsolicitedFragmentation;
+        this.supportSegmentFragmentation = supportSegmentFragmentation;
+        this.interactiveContinuationDefaultThreshold = interactiveContinuationDefaultThreshold;
+        this.unsolicitedFragmentationThreshold = unsolicitedFragmentationThreshold;
+        this.segmentFragmentationThreshold = segmentFragmentationThreshold;
+        this.storage = storage;
     }
 
 
@@ -133,11 +176,19 @@ public class MllpEndpoint extends DefaultEndpoint {
             x = new ConsumerAuthenticationFailureInterceptor(this, x, getServerAuditStrategy());
         }
         x = new ConsumerAdaptingInterceptor(this, x);
-        if(isAudit()) {
+        x = new ConsumerOutputAcceptanceInterceptor(this, x);
+        if (isAudit()) {
             x = new ConsumerAuditInterceptor(this, x);
         }
-        x = new ConsumerAcceptanceInterceptor(this, x);
+        if (isSupportInteractiveContinuation()) {
+            x = new ConsumerInteractiveResponseSenderInterceptor(this, x, getStorage());
+        }
+        x = new ConsumerInputAcceptanceInterceptor(this, x);
         x = new ConsumerMarshalInterceptor(this, x);
+        if (isSupportUnsolicitedFragmentation()) {
+            x = new ConsumerRequestDefragmenterInterceptor(this, x);
+        }
+        x = new ConsumerStringProcessorInterceptor(this, x);
         return this.wrappedEndpoint.createConsumer(x);
     }
 
@@ -160,15 +211,33 @@ public class MllpEndpoint extends DefaultEndpoint {
         }
 
         Producer x = this.wrappedEndpoint.createProducer();
-        x = new ProducerMarshalInterceptor(this, x);
-        if(isAudit()) {
+        x = new ProducerStringProcessorInterceptor(this, x);
+        if (isSupportUnsolicitedFragmentation()) {
+            x = new ProducerRequestFragmenterInterceptor(this, x);
+        }
+        x = isSupportInteractiveContinuation() 
+                ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor(this, x)
+                : new ProducerMarshalInterceptor(this, x);
+        x = new ProducerOutputAcceptanceInterceptor(this, x);
+        if (isAudit()) {
             x = new ProducerAuditInterceptor(this, x);
         }
-        x = new ProducerAcceptanceInterceptor(this, x);
+        x = new ProducerInputAcceptanceInterceptor(this, x);
         x = new ProducerAdaptingInterceptor(this, x);
         return x;
     }
 
+    
+    private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
+        @Override
+        public void run(IoSession session) {
+            if (isAudit()) {
+                String hostAddress = session.getRemoteAddress().toString();
+                getServerAuditStrategy().auditAuthenticationNodeFailure(hostAddress);
+            }
+        }
+    }
+    
     
     // ----- getters -----
     
@@ -214,7 +283,35 @@ public class MllpEndpoint extends DefaultEndpoint {
         return parser;
     }
 
-    
+    public boolean isSupportInteractiveContinuation() {
+        return supportInteractiveContinuation;
+    }
+
+    public boolean isSupportUnsolicitedFragmentation() {
+        return supportUnsolicitedFragmentation;
+    }
+
+    public boolean isSupportSegmentFragmentation() {
+        return supportSegmentFragmentation;
+    }
+
+    public int getInteractiveContinuationDefaultThreshold() {
+        return interactiveContinuationDefaultThreshold;
+    }
+
+    public int getUnsolicitedFragmentationThreshold() {
+        return unsolicitedFragmentationThreshold;
+    }
+
+    public int getSegmentFragmentationThreshold() {
+        return segmentFragmentationThreshold;
+    }
+
+    public ContinuationStorage getStorage() {
+        return storage;
+    }
+
+
     // ----- dumb delegation, nothing interesting below -----
 
     @SuppressWarnings("unchecked")
@@ -378,15 +475,5 @@ public class MllpEndpoint extends DefaultEndpoint {
     @Override
     public String toString() {
         return wrappedEndpoint.toString();
-    }
-
-    private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
-        @Override
-        public void run(IoSession session) {
-            if (isAudit()) {
-                String hostAddress = session.getRemoteAddress().toString();
-                getServerAuditStrategy().auditAuthenticationNodeFailure(hostAddress);
-            }
-        }
     }
 }

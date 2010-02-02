@@ -26,6 +26,10 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
  */
 public interface MllpInterceptor extends Processor {
 
+    // TODO: externalize parameters
+    static final boolean CONSIDER_MSH_14 = true;
+    static final boolean CONSIDER_CROSS_MESSAGE_ADD = true;
+    
     /**
      * Name of the Camel message header where a copy of the original request  
      * message (as a {@link MessageAdapter} instance) will be saved.  
