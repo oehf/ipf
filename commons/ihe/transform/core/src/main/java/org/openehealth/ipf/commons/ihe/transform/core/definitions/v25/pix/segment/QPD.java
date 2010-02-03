@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.transform.core.definitions.v25.pix.segment;
 
+import java.util.Collection;
+
 import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
 
 import ca.uhn.hl7v2.HL7Exception;
@@ -80,11 +82,22 @@ public class QPD extends AbstractSegment  {
   public CX getPersonIdentifier()  {
 	  return getTypedField(3, 0);
   }
-
+  
   /**
-   * Returns Person identifier (QPD-3).
+   * Returns What Domains to be returned (QPD-4).
    */
-  public CX getWhatDomainsReturned()  {
-	  return getTypedField(4, 0);
-  }
+   public CX getWhatDomainsReturned(int rep) {
+      return getTypedField(4, rep);
+   }
+
+   /**
+   * Returns What Domains to be returned (QPD-4).
+   * 
+   * @return movement IDs
+   */
+   public CX[] getWhatDomainsReturned() {
+      Collection<CX> result = getTypedField(4);
+      return (CX[]) result.toArray(new CX[result.size()]);
+   }
+  
 }

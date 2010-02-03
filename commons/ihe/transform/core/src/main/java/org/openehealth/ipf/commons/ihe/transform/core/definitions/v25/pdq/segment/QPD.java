@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.transform.core.definitions.v25.pdq.segment;
 
+import java.util.Collection;
+
 import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
 
 import ca.uhn.hl7v2.model.Group;
@@ -53,7 +55,7 @@ public class QPD extends AbstractSegment {
          this.add(CE.class, true, 1, 250, new Object[]{message});
          this.add(ST.class, false, 1, 32, new Object[]{message});
          this.add(HD.class, true, 0, 256, new Object[]{message});
-         this.add(Varies.class, false, 0, 256, new Object[]{message});
+         this.add(QIP.class, false, 0, 256, new Object[]{message});
          this.add(Varies.class, false, 0, 256, new Object[]{message});
          this.add(Varies.class, false, 0, 256, new Object[]{message});
          this.add(Varies.class, false, 0, 256, new Object[]{message});       
@@ -78,11 +80,35 @@ public class QPD extends AbstractSegment {
   }
 
   /**
-   * Returns User Parameters (in successive fields) (QPD-3).
+   * Returns Demographics Fields (QPD-3).
    */
-  public Varies getUserParametersInsuccessivefields()  {
-	  return getTypedField(3, 0);
-
+  public QIP getDemographicsFields(int rep)  {
+	  return getTypedField(3, rep);
   }
+  
+  /**
+   * Returns Demographics Fields (QPD-3).
+   */
+  public QIP[] getDemographicsFields() {
+      Collection<QIP> result = getTypedField(3);
+      return (QIP[]) result.toArray(new QIP[result.size()]);
+   }    
+  
+  /**
+   * Returns What Domains to be returned (QPD-8).
+   */
+   public CX getWhatDomainsReturned(int rep) {
+      return getTypedField(8, rep);
+   }
+
+   /**
+   * Returns What Domains to be returned (QPD-8).
+   * 
+   * @return movement IDs
+   */
+   public CX[] getWhatDomainsReturned() {
+      Collection<CX> result = getTypedField(8);
+      return (CX[]) result.toArray(new CX[result.size()]);
+   }  
 
 }
