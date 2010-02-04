@@ -101,19 +101,23 @@ public class XsdValidator implements Validator<Source, String> {
 		}
 	}
 
-	protected Schema obtainSchema(String schemaResource) throws SAXException,
-			IOException {
-		if (!(cachedSchemas.containsKey(schemaResource))) {
-			// SchemaFactory is neither thread-safe nor reentrant
-			SchemaFactory factory = SchemaFactory
-					.newInstance(getSchemaLanguage());
-
-			// Register resource resolver to resolve external XML schemas
-			factory.setResourceResolver(lrri);
-			Schema schema = factory.newSchema(schemaSource(schemaResource));
-			cachedSchemas.put(schemaResource, schema);
+	protected Schema obtainSchema(String schemaResource) throws SAXException, IOException {
+		if (! cachedSchemas.containsKey(schemaResource)) {
+		    createSchema(schemaResource);
 		}
 		return cachedSchemas.get(schemaResource);
+	}
+
+	protected synchronized void createSchema(String schemaResource) throws SAXException, IOException {
+        if (! cachedSchemas.containsKey(schemaResource)) {
+            // SchemaFactory is neither thread-safe nor reentrant
+            SchemaFactory factory = SchemaFactory.newInstance(getSchemaLanguage());
+
+            // Register resource resolver to resolve external XML schemas
+            factory.setResourceResolver(lrri);
+            Schema schema = factory.newSchema(schemaSource(schemaResource));
+            cachedSchemas.put(schemaResource, schema);
+        }
 	}
 
 	public Source schemaSource(String resource) throws IOException {
