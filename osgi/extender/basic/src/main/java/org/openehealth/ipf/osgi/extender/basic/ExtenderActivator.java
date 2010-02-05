@@ -16,7 +16,6 @@
 package org.openehealth.ipf.osgi.extender.basic;
 
 import static org.osgi.framework.BundleEvent.STARTED;
-
 import groovy.lang.ExpandoMetaClass;
 
 import java.util.List;
@@ -25,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.core.extend.DefaultActivator;
 import org.openehealth.ipf.commons.core.extend.ExtensionActivator;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -57,6 +57,24 @@ public class ExtenderActivator implements BundleActivator, SynchronousBundleList
     @Override
     public void start(BundleContext context) throws Exception {
         context.addBundleListener(this);
+        
+        // also check already installed bundles
+        Bundle[] bundles = context.getBundles();
+        // should not happen, but be defensive
+        if(bundles != null){
+        	LOG.debug("loading extension for already deployed (and started) bundles");
+        	for (Bundle bundle : bundles) {
+        		try{
+	        		// only check for active ones... others will notify the listener themselves
+					if(bundle.getState() == Bundle.ACTIVE){
+						activateExtensionClasses(ExtensionClasses.loadAll(bundle));
+					}
+        		} catch(Throwable e){
+        			// this can happen at any time if a bundle was uninstalled after gathering
+        			// the list of previous installed bundles.
+        		}
+			}
+        }
         LOG.debug("initialized extender activator");
     }
 
