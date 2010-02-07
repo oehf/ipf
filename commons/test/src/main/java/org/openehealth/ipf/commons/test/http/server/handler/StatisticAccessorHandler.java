@@ -49,7 +49,6 @@ public class StatisticAccessorHandler extends AbstractHandler {
 		response.getWriter().println("<th>Number Requests</th>");
 		response.getWriter().println("<th>Curr Active Requests</th>");
 		response.getWriter().println("<th>MAX Active Requests</th>");
-		response.getWriter().println("<th>MIN Active Requests</th>");
 		response.getWriter().println("<th>Total Duration (ms)</th>");
 		response.getWriter().println("<th>Average Duration (ms)</th>");
 		response.getWriter().println("<th>MIN Duration (ms)</th>");
@@ -73,12 +72,11 @@ public class StatisticAccessorHandler extends AbstractHandler {
 					response.getWriter().println("<td>" + contextStatisticsHandler.getRequests() + "</td>");
 					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActive() + "</td>");
 					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActiveMax() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActiveMin() + "</td>");
 					//
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsDurationTotal() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsDurationAve() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsDurationMin() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsDurationMax() + "</td>");
+					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeTotal() + "</td>");
+					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeAverage() + "</td>");
+					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMin() + "</td>");
+					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMax() + "</td>");
 					//
 					response.getWriter().println("<td>" + contextStatisticsHandler.getResponses1xx() + "</td>");
 					response.getWriter().println("<td>" + contextStatisticsHandler.getResponses2xx() + "</td>");

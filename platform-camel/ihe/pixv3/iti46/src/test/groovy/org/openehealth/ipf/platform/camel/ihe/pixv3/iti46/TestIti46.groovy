@@ -16,8 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.pixv3.iti46
 
 import static org.junit.Assert.*
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.BeforeClass
 import org.apache.cxf.transport.servlet.CXFServlet
@@ -37,7 +39,7 @@ class TestIti46 extends StandardTestContainer {
          startServer(new CXFServlet(), 'iti-46.xml')
      }
     
-     @Test
+     @Test @Ignore
      void testIti46() {
          def response = send(SERVICE1, '<request/>', String.class)
          def slurper = new XmlSlurper().parseText(response)

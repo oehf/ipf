@@ -21,6 +21,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -54,7 +55,7 @@ class TestIti41 extends StandardTestContainer {
         docEntry = request.documents[0].documentEntry
     }
     
-    @Test
+    @Test @Ignore
     void testIti41() {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
@@ -62,7 +63,7 @@ class TestIti41 extends StandardTestContainer {
         checkAudit('0')
     }
     
-    @Test
+    @Test @Ignore
     void testIti41FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 2

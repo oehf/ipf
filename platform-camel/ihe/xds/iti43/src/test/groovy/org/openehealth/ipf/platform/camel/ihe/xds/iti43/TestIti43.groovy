@@ -26,6 +26,7 @@ import org.apache.cxf.transport.servlet.CXFServlet
 
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -58,7 +59,7 @@ class TestIti43 extends StandardTestContainer {
         doc = request.documents[0]
     }
     
-    @Test
+    @Test @Ignore
     void testIti43() {
         def response1 = sendIt(SERVICE1, 'service 1')
         assert SUCCESS == response1.status
@@ -72,7 +73,7 @@ class TestIti43 extends StandardTestContainer {
         checkAudit('0', 'service 2')
     }
      
-    @Test   
+    @Test @Ignore
     void testIti43FailureAudit() {
         def response2 = sendIt(SERVICE2, 'falsch')
         assert FAILURE == response2.status
