@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-config-ihe-xds</artifactId>
-    <name>osgi-config-ihe-xds</name>
+    <artifactId>osgi-config-ihe-pixpdqv3</artifactId>
+    <name>osgi-config-ihe-pixpdqv3</name>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
@@ -44,16 +44,15 @@
             org.apache.cxf.workqueue,
             org.apache.cxf.wsdl,
             org.apache.cxf.wsdl11,
+            org.apache.cxf.ws.addressing.policy,
+            org.apache.cxf.ws.policy.builder.primitive,
             org.springframework.beans.factory.config,
             org.springframework.context,
             org.springframework.osgi.context.support,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti14.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti15.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti16.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti18.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti41.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti42.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti43.component,
+            org.openehealth.ipf.platform.camel.ihe.pixv3.iti44.component,
+            org.openehealth.ipf.platform.camel.ihe.pixv3.iti45.component,
+            org.openehealth.ipf.platform.camel.ihe.pixv3.iti46.component,
+            org.openehealth.ipf.platform.camel.ihe.pdqv3.iti47.component,
             *
         </osgi.import.pkg>
     </properties>

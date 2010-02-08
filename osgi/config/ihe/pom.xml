@@ -14,8 +14,8 @@
     
     <modules>
         <module>atna</module>
-        <module>pix</module>
-        <module>pdq</module>
+        <module>pixpdq</module>
+        <module>pixpdqv3</module>
         <module>xds</module>
     </modules>
     
