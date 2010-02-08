@@ -14,7 +14,6 @@
 
     <properties>
         <commons-management-version>1.0</commons-management-version>
-        <cxf-bundle-version>2.2.5</cxf-bundle-version>
         <equinox-cm-version>1.0.100-v20090520-1800</equinox-cm-version>
         <fileinstall-version>1.0.0</fileinstall-version>
         <geronimo-javamail-api-version>1.2</geronimo-javamail-api-version>
@@ -156,12 +155,12 @@
             <param>mvn:org.apache.camel/camel-osgi/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-spring/${camel-version}@nostart</param>
             <param>mvn:org.apache.camel/camel-jms/${camel-version}@nostart</param>
-            <param>mvn:org.apache.camel/camel-mina/${camel-version}-p1@nostart</param>
+            <param>mvn:org.apache.camel/camel-mina/${camel-version}@nostart</param>
             <param>mvn:org.apache.camel/camel-core/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-http/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-jetty/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-hl7/${camel-version}@start</param>
-            <param>mvn:org.apache.cxf/cxf-bundle/${cxf-bundle-version}@start</param>
+            <param>mvn:org.apache.cxf/cxf-bundle/${cxf-version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.mina/${servicemix-mina-version}@start</param>
             <param>mvn:org.fusesource.commonman/commons-management/${commons-management-version}@nostart</param>
             <param>mvn:javax.wsdl/com.springsource.javax.wsdl/${springsource-wsdl-version}@nostart</param>
@@ -210,18 +209,9 @@
             <param>mvn:org.openehealth.ipf.osgi/osgi-config-flow-manager/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.osgi/osgi-config-log/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-atna/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pix-iti8/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pix-iti9/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pix-iti10/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pdq-iti21/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pdq-iti22/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds-iti14/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds-iti15/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds-iti16/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds-iti18/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds-iti41/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds-iti42/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds-iti43/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pixpdq/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pixpdqv3/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/commons-core/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-xml/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-flow/${project.version}@3</param>
@@ -246,12 +236,17 @@
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-ws/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-core/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp-core/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-hl7v3ws/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pix-iti8/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pix-iti9/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pix-iti10/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixv3-iti44/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixv3-iti45/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixv3-iti46/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pdq-core/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pdq-iti21/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pdq-iti22/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pdqv3-iti47/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti14/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti15/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti16/${project.version}@nostart</param>
