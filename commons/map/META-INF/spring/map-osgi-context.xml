@@ -11,10 +11,15 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-    <bean class="org.openehealth.ipf.commons.map.BidiMappingServiceOsgiConfigurer" init-method="configure">
-        <property name="mappingService" ref="mappingService" />
+    <bean class="org.openehealth.ipf.commons.map.BidiMappingServiceOsgiConfigurer">
+        <constructor-arg 
+            type="org.openehealth.ipf.commons.map.BidiMappingService"
+            ref="mappingService"/>
+        <constructor-arg 
+            type="org.osgi.framework.BundleContext"
+            ref="bundleContext"/>
     </bean>
-    
+
     <osgi:service ref="mappingService" 
         interface="org.openehealth.ipf.commons.map.MappingService">
     </osgi:service>
