@@ -30,8 +30,6 @@ public class Iti14 {
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti14PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
-            new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Port_Soap11", "ihe"),
-            null,
             false,
             "wsdl/iti14.wsdl",
             false,
@@ -50,7 +48,7 @@ public class Iti14 {
      * @return the client factory.
      */
     public static XdsClientFactory getClientFactory(boolean audit, boolean allowIncompleteAudit, String serviceUrl) {        
-        return new XdsClientFactory(ITI_14, false, audit ? new Iti14ClientAuditStrategy(allowIncompleteAudit) : null, serviceUrl);
+        return new XdsClientFactory(ITI_14, audit ? new Iti14ClientAuditStrategy(allowIncompleteAudit) : null, serviceUrl);
     }
 
     /**

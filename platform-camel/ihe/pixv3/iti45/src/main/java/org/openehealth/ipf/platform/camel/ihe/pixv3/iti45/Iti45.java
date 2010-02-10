@@ -33,8 +33,6 @@ public class Iti45 {
             new QName(NS_URI, "PIXManager_Service", "ihe"),
             Iti45PortType.class,
             new QName(NS_URI, "PIXManager_Binding_Soap12", "ihe"),
-            new QName(NS_URI, "PIXManager_Port_Soap11", "ihe"),
-            new QName(NS_URI, "PIXManager_Port_Soap12", "ihe"),
             false,
             "wsdl/iti45-raw.wsdl",
             false,

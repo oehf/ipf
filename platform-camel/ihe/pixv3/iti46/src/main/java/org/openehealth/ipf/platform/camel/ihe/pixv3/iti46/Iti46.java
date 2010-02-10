@@ -33,8 +33,6 @@ public class Iti46 {
             new QName(NS_URI, "PIXConsumer_Service", "ihe"),
             Iti46PortType.class,
             new QName(NS_URI, "PIXConsumer_Binding_Soap12", "ihe"),
-            new QName(NS_URI, "PIXConsumer_Port_Soap11", "ihe"),
-            new QName(NS_URI, "PIXConsumer_Port_Soap12", "ihe"),
             false,
             "wsdl/iti46-raw.wsdl",
             false,

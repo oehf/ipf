@@ -39,7 +39,7 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
      *          the URL of the web-service.
      */
     public Hl7v3ClientFactory(ItiServiceInfo serviceInfo, boolean soap11, String serviceUrl) {
-        super(serviceInfo, soap11, serviceUrl);
+        super(serviceInfo, serviceUrl);
     }
 
     

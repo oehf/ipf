@@ -33,8 +33,6 @@ public class Iti47 {
             new QName(NS_URI, "PDSupplier_Service", "ihe"),
             Iti47PortType.class,
             new QName(NS_URI, "PDSupplier_Binding_Soap12", "ihe"),
-            new QName(NS_URI, "PDSupplier_Port_Soap11", "ihe"),
-            new QName(NS_URI, "PDSupplier_Port_Soap12", "ihe"),
             false,
             "wsdl/iti47-raw.wsdl",
             false,

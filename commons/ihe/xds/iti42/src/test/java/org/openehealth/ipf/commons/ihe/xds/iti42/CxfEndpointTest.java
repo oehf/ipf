@@ -111,7 +111,7 @@ public class CxfEndpointTest {
     }
 
     private Response runRequest() {
-        ItiClientFactory clientFactory = Iti42.getClientFactory(false, false, false, "http://localhost:" + port + "/iti-42");
+        ItiClientFactory clientFactory = Iti42.getClientFactory(false, false, "http://localhost:" + port + "/iti-42");
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
         RegisterDocumentSet request = SampleData.createRegisterDocumentSet();
         EbXMLSubmitObjectsRequest ebXMLReq = reqTransformer.toEbXML(request);

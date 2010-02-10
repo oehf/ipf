@@ -32,8 +32,6 @@ public class ItiServiceInfo {
     private final String wsdlLocation;
     private final boolean mtom;
     private final boolean addressing;
-    private final QName portName11;
-    private final QName portName12;
     private final boolean swaOutSupport;
 
     /**
@@ -44,10 +42,6 @@ public class ItiServiceInfo {
      *          the class of the service interface.
      * @param bindingName
      *          the qualified name of the binding to use.
-     * @param portName11
-     *          the qualified port name for SOAP 1.1.
-     * @param portName12
-     *          the qualified port name for SOAP 1.2
      * @param mtom
      *          {@code true} if this service requires MTOM.
      * @param wsdlLocation
@@ -60,8 +54,6 @@ public class ItiServiceInfo {
     public ItiServiceInfo(QName serviceName, 
                           Class<?> serviceClass,
                           QName bindingName,
-                          QName portName11,
-                          QName portName12,
                           boolean mtom, 
                           String wsdlLocation, 
                           boolean addressing, 
@@ -70,14 +62,11 @@ public class ItiServiceInfo {
         Validate.notNull(serviceName, "serviceName");
         Validate.notNull(serviceClass, "serviceClass");
         Validate.notNull(bindingName, "bindingName");
-        Validate.notNull(portName11, "portName11");
         Validate.notNull(wsdlLocation, "wsdlLocation");
         
         this.serviceClass = serviceClass;
         this.serviceName = serviceName;
         this.bindingName = bindingName;
-        this.portName11 = portName11;
-        this.portName12 = portName12;
         this.mtom = mtom;
         this.wsdlLocation = wsdlLocation;
         this.addressing = addressing;
@@ -89,21 +78,6 @@ public class ItiServiceInfo {
      */
     public QName getBindingName() {
         return bindingName;
-    }
-
-    /**
-     * @return the qualified port name for SOAP 1.1.
-     */
-    public QName getPortName11() {
-        return portName11;
-    }
-
-    /**
-     * @return the qualified port name for SOAP 1.2 
-     * (can be <code>null<code> for XDS.a transactions).  
-     */
-    public QName getPortName12() {
-        return portName12;
     }
 
     /**

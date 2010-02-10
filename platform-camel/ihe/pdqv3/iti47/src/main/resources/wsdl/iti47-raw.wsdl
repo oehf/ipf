@@ -17,7 +17,6 @@
         xmlns:hl7="urn:hl7-org:v3"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-        xmlns:wsoap11="http://schemas.xmlsoap.org/wsdl/soap/"
         xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     
@@ -99,40 +98,9 @@
         </operation>
     </binding>
     
-    <binding name="PDSupplier_Binding_Soap11" type="ihe:PDSupplier_PortType">
-        <wsoap11:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="PDSupplier_PRPA_IN201305UV02">
-            <input>
-                <wsoap11:body use="literal"/>
-            </input>
-            <output>
-                <wsoap11:body use="literal"/>
-            </output>
-        </operation>
-        <operation name="PDSupplier_QUQI_IN000003UV01_Continue">
-            <input>
-                <wsoap11:body use="literal"/>
-            </input>
-            <output>
-                <wsoap11:body use="literal"/>
-            </output>
-        </operation>
-        <operation name="PDSupplier_QUQI_IN000003UV01_Cancel">
-            <input>
-                <wsoap11:body use="literal"/>
-            </input>
-            <output>
-                <wsoap11:body use="literal"/>
-            </output>
-        </operation>
-    </binding>
-    
     <service name="PDSupplier_Service">
         <port binding="ihe:PDSupplier_Binding_Soap12" name="PDSupplier_Port_Soap12">
             <wsoap12:address location="http://localhost/PDSupplier_Soap12"/>
-        </port>
-        <port binding="ihe:PDSupplier_Binding_Soap11" name="PDSupplier_Port_Soap11">
-            <wsoap11:address location="http://localhost/PDSupplier_Soap11"/>
         </port>
     </service>
 </definitions>

@@ -32,16 +32,13 @@ public class XdsClientFactory extends ItiClientFactory {
      * Constructs the factory.
      * @param serviceInfo
      *          the info about the web-service.
-     * @param soap11
-     *          whether SOAP 1.1 should be used instead of SOAP 1.2 for XDS.b 
-     *          transactions. Does not have any meaning for XDS.a transactions.
      * @param auditStrategy
      *          the audit strategy to use.
      * @param serviceUrl
      *          the URL of the web-service.
      */
-    public XdsClientFactory(XdsServiceInfo serviceInfo, boolean soap11, XdsAuditStrategy auditStrategy, String serviceUrl) {
-        super(serviceInfo, soap11, serviceUrl);
+    public XdsClientFactory(XdsServiceInfo serviceInfo, XdsAuditStrategy auditStrategy, String serviceUrl) {
+        super(serviceInfo, serviceUrl);
         this.auditStrategy = auditStrategy;
     }
 

@@ -48,22 +48,18 @@ public class ItiClientFactory {
 
     protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<Object>();
     protected final ItiServiceInfo serviceInfo;
-    protected final boolean soap11;
     protected final String serviceUrl;
 
     /**
      * Constructs the factory.
      * @param serviceInfo
      *          the info about the web-service.
-     * @param soap11
-     *          whether SOAP 1.1 should be used instead of SOAP 1.2.
      * @param serviceUrl
      *          the URL of the web-service.
      */
-    public ItiClientFactory(ItiServiceInfo serviceInfo, boolean soap11, String serviceUrl) {
+    public ItiClientFactory(ItiServiceInfo serviceInfo, String serviceUrl) {
         notNull(serviceInfo, "serviceInfo");
         this.serviceInfo = serviceInfo;
-        this.soap11 = soap11;
         this.serviceUrl = serviceUrl;
     }
 
@@ -77,13 +73,7 @@ public class ItiClientFactory {
         if (threadLocalPort.get() == null) {
             URL wsdlURL = getClass().getClassLoader().getResource(serviceInfo.getWsdlLocation());
             Service service = Service.create(wsdlURL, serviceInfo.getServiceName());
-            
-            QName portName = 
-                ((serviceInfo.getPortName12() == null) || soap11) ?
-                    serviceInfo.getPortName11() : 
-                    serviceInfo.getPortName12();
-
-            Object port = service.getPort(portName, serviceInfo.getServiceClass());
+            Object port = service.getPort(serviceInfo.getServiceClass());
             Client client = ClientProxy.getClient(port);
             configureBinding(port);
             configureInterceptors(client);

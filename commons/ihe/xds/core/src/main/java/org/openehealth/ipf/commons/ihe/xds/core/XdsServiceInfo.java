@@ -36,10 +36,6 @@ public class XdsServiceInfo extends ItiServiceInfo {
      *          the class of the service interface.
      * @param bindingName
      *          the qualified name of the binding to use.
-     * @param portName11
-     *          the qualified port name for SOAP 1.1.
-     * @param portName12
-     *          the qualified port name for SOAP 1.2
      * @param mtom
      *          {@code true} if this service requires MTOM.
      * @param wsdlLocation
@@ -54,16 +50,14 @@ public class XdsServiceInfo extends ItiServiceInfo {
     public XdsServiceInfo(QName serviceName, 
                           Class<?> serviceClass,
                           QName bindingName,
-                          QName portName11,
-                          QName portName12,
                           boolean mtom, 
                           String wsdlLocation, 
                           boolean addressing, 
                           boolean swaOutSupport,
                           boolean auditPayload) 
     {
-        super(serviceName, serviceClass, bindingName, portName11, portName12,
-                mtom, wsdlLocation, addressing, swaOutSupport);
+        super(serviceName, serviceClass, bindingName, mtom, 
+                wsdlLocation, addressing, swaOutSupport);
         this.auditPayload = auditPayload;
     }
 

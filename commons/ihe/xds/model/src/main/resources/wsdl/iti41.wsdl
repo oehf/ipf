@@ -12,7 +12,6 @@
 -->
 
 <definitions
-        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:ihe="urn:ihe:iti:xds-b:2007"
@@ -64,24 +63,9 @@
         </operation>
     </binding>
 
-    <binding name="DocumentRepository_Binding_Soap11" type="ihe:DocumentRepository_PortType">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="DocumentRepository_ProvideAndRegisterDocumentSet-b">
-            <input>
-                <soap:body use="literal"/>
-            </input>
-            <output>
-                <soap:body use="literal"/>
-            </output>
-        </operation>
-    </binding>
-
     <service name="DocumentRepository_Service">
         <port name="DocumentRepository_Port_Soap12" binding="ihe:DocumentRepository_Binding_Soap12">
             <soap12:address location="http://servicelocation/DocumentRepository_Service12"/>
-        </port>
-        <port name="DocumentRepository_Port_Soap11" binding="ihe:DocumentRepository_Binding_Soap11">
-            <soap:address location="http://servicelocation/DocumentRepository_Service11"/>
         </port>
     </service>
 </definitions>

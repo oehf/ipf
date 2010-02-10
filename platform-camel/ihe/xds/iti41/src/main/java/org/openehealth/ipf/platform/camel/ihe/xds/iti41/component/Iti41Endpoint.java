@@ -48,7 +48,7 @@ public class Iti41Endpoint extends DefaultItiEndpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = 
-            Iti41.getClientFactory(isSoap11(), isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+            Iti41.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
         return new Iti41Producer(this, clientFactory);
     }
 

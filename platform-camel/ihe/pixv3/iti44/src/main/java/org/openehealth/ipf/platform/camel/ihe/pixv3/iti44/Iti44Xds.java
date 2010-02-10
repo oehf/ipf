@@ -18,8 +18,6 @@ public class Iti44Xds {
             new QName(NS_URI, "DocumentRegistry_Service", "ihe"),
             Iti44XdsPortType.class,
             new QName(NS_URI, "DocumentRegistry_Binding_Soap12", "ihe"),
-            new QName(NS_URI, "DocumentRegistry_Port_Soap11", "ihe"),
-            new QName(NS_URI, "DocumentRegistry_Port_Soap12", "ihe"),
             false,
             "wsdl/iti44-xds-raw.wsdl",
             false,

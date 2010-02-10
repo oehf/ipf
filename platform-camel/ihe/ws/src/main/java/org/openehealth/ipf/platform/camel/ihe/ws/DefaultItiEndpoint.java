@@ -34,7 +34,6 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     private boolean secure;
     private boolean audit = true;
     private boolean allowIncompleteAudit = false;
-    private boolean soap11 = false;
 
     /**
      * Constructs the endpoint.
@@ -114,24 +113,6 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      */
     public boolean isAllowIncompleteAudit() {
         return allowIncompleteAudit;
-    }
-
-    /**
-     * @return Whether SOAP 1.1 should be used instead of SOAP 1.2 for XDS.b 
-     *          transactions. Default is <code>false</code>. Does not have any 
-     *          meaning for XDS.a transactions.
-     */
-    public boolean isSoap11() {
-        return soap11;
-    }
-
-    /**
-     * @param soap11
-     *          Whether SOAP 1.1 should be used instead of SOAP 1.2 for XDS.b 
-     *          transactions. Does not have any meaning for XDS.a transactions.
-     */
-    public void setSoap11(boolean soap11) {
-        this.soap11 = soap11;
     }
 
     /**
