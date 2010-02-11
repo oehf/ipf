@@ -122,8 +122,8 @@ class StandardTestContainer {
          XDSRepositoryAuditor.auditor.config.systemUserId = 'repositoryUserId'
          XDSRepositoryAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
          
-         //auditSender = new MockedSender()
-         //AuditorModuleContext.context.sender = auditSender
+         auditSender = new MockedSender()
+         AuditorModuleContext.context.sender = auditSender
      }
 
      static void startServer(servlet, appContextName) {
