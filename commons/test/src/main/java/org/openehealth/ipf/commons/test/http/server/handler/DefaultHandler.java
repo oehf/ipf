@@ -36,11 +36,10 @@ public class DefaultHandler implements RequestHandler {
 
     public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException {
         InputStream requestStream = request.getInputStream();
-        
         String result = IOUtils.toString(requestStream);
-        
-        response.getWriter().println(request.getMethod());
-        LOG.info("result = " + result);
+        response.getWriter().println(result);
+        response.setContentType("text/plain");
+        LOG.info(result);
         IOUtils.closeQuietly(requestStream);
     }
 

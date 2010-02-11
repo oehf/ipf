@@ -92,32 +92,38 @@ class StandardTestContainer {
          producerTemplate = appContext.getBean('template')  
          camelContext = appContext.getBean('camelContext')  
 
+         def port = 514
+         
          XDSRegistryAuditor.auditor.config = new AuditorModuleConfig()
          XDSRegistryAuditor.auditor.config.auditSourceId = 'registryId'
          XDSRegistryAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XDSRegistryAuditor.auditor.config.auditRepositoryPort = port
          XDSRegistryAuditor.auditor.config.systemUserId = 'registryUserId'
          XDSRegistryAuditor.auditor.config.systemAltUserId = 'registryAltUserId'
 
          XDSSourceAuditor.auditor.config = new AuditorModuleConfig()
          XDSSourceAuditor.auditor.config.auditSourceId = 'sourceId'
          XDSSourceAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XDSSourceAuditor.auditor.config.auditRepositoryPort = port
          XDSSourceAuditor.auditor.config.systemUserId = 'sourceUserId'
          XDSSourceAuditor.auditor.config.systemAltUserId = 'sourceAltUserId'
 
          XDSConsumerAuditor.auditor.config = new AuditorModuleConfig()
          XDSConsumerAuditor.auditor.config.auditSourceId = 'consumerId'
          XDSConsumerAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XDSConsumerAuditor.auditor.config.auditRepositoryPort = port
          XDSConsumerAuditor.auditor.config.systemUserId = 'consumerUserId'
          XDSConsumerAuditor.auditor.config.systemAltUserId = 'consumerAltUserId'
 
          XDSRepositoryAuditor.auditor.config = new AuditorModuleConfig()
          XDSRepositoryAuditor.auditor.config.auditSourceId = 'repositoryId'
          XDSRepositoryAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XDSRepositoryAuditor.auditor.config.auditRepositoryPort = port
          XDSRepositoryAuditor.auditor.config.systemUserId = 'repositoryUserId'
          XDSRepositoryAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
          
-         auditSender = new MockedSender()
-         AuditorModuleContext.context.sender = auditSender
+         //auditSender = new MockedSender()
+         //AuditorModuleContext.context.sender = auditSender
      }
 
      static void startServer(servlet, appContextName) {

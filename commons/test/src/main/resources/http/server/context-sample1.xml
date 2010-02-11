@@ -22,7 +22,7 @@ http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <bean id="jetty" class="org.mortbay.jetty.Server" init-method="start" destroy-method="stop">
-        <constructor-arg value="8081" />
+        <constructor-arg value="8080" />
         <property name="handler" ref="genericHandler" />
     </bean>
 

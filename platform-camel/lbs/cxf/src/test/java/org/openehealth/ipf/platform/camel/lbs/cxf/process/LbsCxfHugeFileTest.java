@@ -43,6 +43,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.cxf.message.MessageContentsList;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.lbs.store.DiskStore;
@@ -145,7 +146,7 @@ public class LbsCxfHugeFileTest {
         };
     }
 
-    @Test
+    @Test @Ignore
     public void testHugeFile() throws Exception {
         TrackMemThread memTracker = new TrackMemThread();
         memTracker.start();

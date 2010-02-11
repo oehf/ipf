@@ -36,7 +36,7 @@ public abstract class XdsAuditStrategy {
 
     // TODO: externalize constant
     /** Home community ID to use in audit strategies. */
-    public static final String HOME_COMMUNITY_ID = "";
+    public static final String HOME_COMMUNITY_ID = null;
 
     /**
      * Whether this is a server-side or a client-side strategy. 

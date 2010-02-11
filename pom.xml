@@ -939,7 +939,7 @@
         <repository>
             <id>camel.staging</id>
             <name>Camel Staging Repository</name>
-            <url>https://repository.apache.org/content/repositories/orgapachecamel-007/</url>
+            <url>https://repository.apache.org/content/repositories/orgapachecamel-012/</url>
         </repository>
     
     </repositories>
