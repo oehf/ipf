@@ -19,8 +19,9 @@
     <modules>
         <module>atna</module> 
         <module>ws</module> 
-        <module>xds</module> 
-        <module>transform</module> 
+        <module>xds</module>
+	<module>pixpdq</module>
+	<module>pixpdqv3</module>
     </modules>
 
 </project>

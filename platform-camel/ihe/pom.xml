@@ -42,11 +42,8 @@
         <module>ws</module> 
         <module>xds</module> 
         <module>mllp</module>
-        <module>pix</module>
-        <module>pdq</module>
-        <module>hl7v3ws</module>
-        <module>pixv3</module>
-        <module>pdqv3</module>
+        <module>pixpdq</module>
+        <module>pixpdqv3</module>
     </modules>
 
 </project>
