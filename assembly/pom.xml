@@ -40,17 +40,12 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-transform-core</artifactId>
+            <artifactId>commons-ihe-pixpdq</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-transform-pixfeed</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-transform-pdqquery</artifactId>
+            <artifactId>commons-ihe-pixpdqv3</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -200,57 +195,17 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-mllp-core</artifactId>
+            <artifactId>platform-camel-ihe-mllp</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pdq-core</artifactId>
+            <artifactId>platform-camel-ihe-pixpdq</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pdq-iti21</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pdq-iti22</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pdqv3-iti47</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pix-iti8</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pix-iti9</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pix-iti10</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pixv3-iti44</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pixv3-iti45</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pixv3-iti46</artifactId>
+            <artifactId>platform-camel-ihe-pixpdqv3</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
