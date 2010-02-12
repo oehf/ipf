@@ -49,10 +49,10 @@
             org.springframework.beans.factory.config,
             org.springframework.context,
             org.springframework.osgi.context.support,
-            org.openehealth.ipf.platform.camel.ihe.pixv3.iti44.component,
-            org.openehealth.ipf.platform.camel.ihe.pixv3.iti45.component,
-            org.openehealth.ipf.platform.camel.ihe.pixv3.iti46.component,
-            org.openehealth.ipf.platform.camel.ihe.pdqv3.iti47.component,
+            org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44,
+            org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti45,
+            org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti46,
+            org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47,
             *
         </osgi.import.pkg>
     </properties>

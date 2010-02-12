@@ -10,8 +10,8 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="classpath:META-INF/cxf/cxf-extension-addr.xml"/>
     <import resource="classpath:META-INF/cxf/osgi/cxf-extension-osgi.xml"/>
 
-    <bean id="pixv3-iti44" class="org.openehealth.ipf.platform.camel.ihe.pixv3.iti44.component.Iti44PixComponent"/>
+    <bean id="pixv3-iti44" class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44.Iti44PixComponent"/>
 
-    <bean id="xds-iti44" class="org.openehealth.ipf.platform.camel.ihe.pixv3.iti44.component.Iti44XdsComponent"/>
+    <bean id="xds-iti44" class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44.Iti44XdsComponent"/>
 
 </beans>
