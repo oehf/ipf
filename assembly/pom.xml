@@ -190,11 +190,6 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-hl7v3ws</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-mllp</artifactId>
             <version>${project.version}</version>
         </dependency>
