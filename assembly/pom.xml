@@ -155,6 +155,26 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
+            <artifactId>osgi-config-ihe-atna</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.osgi</groupId>
+            <artifactId>osgi-config-ihe-pixpdq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.osgi</groupId>
+            <artifactId>osgi-config-ihe-pixpdqv3</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.osgi</groupId>
+            <artifactId>osgi-config-ihe-xds</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-extender-basic</artifactId>
             <version>${project.version}</version>
         </dependency>
