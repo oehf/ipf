@@ -6,6 +6,7 @@
     <name>platform-camel-ihe-pixpdq</name>
 
     <properties>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.pixpdq.extend.PixPdqModelExtension</ipf.extension.classes>
     </properties>
 
     <parent>
