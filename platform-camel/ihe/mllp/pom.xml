@@ -7,8 +7,8 @@
     <name>platform-camel-ihe-mllp</name>
 
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.core.*</osgi.export.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.mllp.core.extend.MllpModelExtension</ipf.extension.classes>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.*</osgi.export.pkg>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.mllp.extend.MllpModelExtension</ipf.extension.classes>
     </properties>
 
     <parent>
