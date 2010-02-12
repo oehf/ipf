@@ -19,7 +19,7 @@
         <osgi.import.pkg>
             org.openehealth.ipf.platform.camel.core.extend,
             org.openehealth.ipf.platform.camel.core.util,
-            org.openehealth.ipf.platform.camel.ihe.mllp.extend,
+            org.openehealth.ipf.platform.camel.ihe.pixpdq.extend,
             org.openehealth.ipf.modules.hl7.message,
             org.apache.camel.component.hl7,
             *

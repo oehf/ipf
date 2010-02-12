@@ -236,9 +236,9 @@
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-hl7/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-ws/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-core/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdq/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdqv3/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdq/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdqv3/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti14/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti15/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti16/${project.version}@nostart</param>
