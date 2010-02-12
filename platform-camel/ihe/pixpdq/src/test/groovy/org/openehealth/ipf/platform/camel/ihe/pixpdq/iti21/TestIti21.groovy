@@ -55,37 +55,37 @@ class TestIti21 extends MllpTestContainer {
     
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:8210', 2)
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18210', 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:8887?audit=false', 0)
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18887?audit=false', 0)
     }
 
     @Test
     void testHappyCaseAndAuditSecure() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:8211?secure=true&sslContext=#sslContext', 2)
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContext', 2)
     }
 
     @Test
     void testHappyCaseWithSSLv3() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:8216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3', 2)
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3', 2)
     }
     
     @Test
     void testHappyCaseWithSSLv3AndTLSv1() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:8217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1', 2)
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1', 2)
     }
 
     @Test
     void testHappyCaseWithCiphers() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:8218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA', 2)
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA', 2)
     }
 
     @Test
     void testSSLFailureWithIncompatibleProtocols() {
         try {
-            send('pdq-iti21://localhost:8216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
+            send('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (RuntimeCamelException expected) {}
     }
@@ -93,7 +93,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testSSLFailureWithIncompatibleCiphers() {
         try {
-            send('pdq-iti21://localhost:8218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5', getMessageString('QBP^Q22', '2.5'))
+            send('pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (RuntimeCamelException expected) {}
 
@@ -106,7 +106,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testSSLFailureWithIncompatibleKeystores() {
         try {
-            send('pdq-iti21://localhost:8211?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
+            send('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
         } catch (RuntimeCamelException expected) {}
     }
@@ -114,7 +114,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testSSLFailureDueToNonSSLClient() {
         try {
-            send('pdq-iti21://localhost:8211', getMessageString('QBP^Q22', '2.5'))
+            send('pdq-iti21://localhost:18211', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
         } catch (RuntimeCamelException expected) {}
 
@@ -132,7 +132,7 @@ class TestIti21 extends MllpTestContainer {
 
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
-        send('pdq-iti21://localhost:8214', getMessageString('QBP^Q22', '2.5'))
+        send('pdq-iti21://localhost:18214', getMessageString('QBP^Q22', '2.5'))
         def messages = auditSender.messages
         assertEquals(3, messages.size)
         assertTrue(messages[0] instanceof SecurityAlertEvent)
@@ -140,7 +140,7 @@ class TestIti21 extends MllpTestContainer {
 
     @Test
     void testServerDoesNotNeedToAcceptCertificate() {
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:8215?secure=true&sslContext=#sslContext', 2)
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18215?secure=true&sslContext=#sslContext', 2)
     }
 
     /**
@@ -174,7 +174,7 @@ class TestIti21 extends MllpTestContainer {
     }
 
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'pdq-iti21://localhost:8210'
+        def endpointUri = 'pdq-iti21://localhost:18210'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
             [process : { Exchange e -> /* nop */ }] as Processor  
@@ -220,7 +220,7 @@ class TestIti21 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'pdq-iti21://localhost:8210'
+        def endpointUri = 'pdq-iti21://localhost:18210'
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -245,7 +245,7 @@ class TestIti21 extends MllpTestContainer {
     @Test
     void testAutoNak() throws Exception {
         def body = getMessageString('QBP^Q22', '2.5')
-        def endpointUri = 'pdq-iti21://localhost:8213'
+        def endpointUri = 'pdq-iti21://localhost:18213'
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size)
         assertNAK(msg)
@@ -258,7 +258,7 @@ class TestIti21 extends MllpTestContainer {
             'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|' +
                     '20081031112704||QCN^J01|324406609|P|2.5|||ER|||||\n' +
             'QID|dummy|gummy||\n'
-        def endpointUri = 'pdq-iti21://localhost:8212'
+        def endpointUri = 'pdq-iti21://localhost:18212'
         def msg = send(endpointUri, body)
         assertEquals(0, auditSender.messages.size)
         assertACK(msg)

@@ -27,7 +27,7 @@ class RouteBuilder extends SpringRouteBuilder {
 
      void configure() throws Exception {
 
-         from('pix-iti10://0.0.0.0:8106?allowIncompleteAudit=true')
+         from('pix-iti10://0.0.0.0:18106?allowIncompleteAudit=true')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -36,7 +36,7 @@ class RouteBuilder extends SpringRouteBuilder {
              }
          
          
-         from('pix-iti10://0.0.0.0:8107?audit=false')
+         from('pix-iti10://0.0.0.0:18107?audit=false')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -47,7 +47,7 @@ class RouteBuilder extends SpringRouteBuilder {
              .validate().iti10Response()
 
              
-         from('pix-iti10://0.0.0.0:8108')
+         from('pix-iti10://0.0.0.0:18108')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()

@@ -37,7 +37,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
      
      void configure() throws Exception {
 
-         from('pdq-iti21://0.0.0.0:8887?audit=false')
+         from('pdq-iti21://0.0.0.0:18887?audit=false')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -45,7 +45,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti21://0.0.0.0:8210')
+         from('pdq-iti21://0.0.0.0:18210')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -53,45 +53,45 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti21://0.0.0.0:8211?secure=true&mutualTLS=true&sslContext=#sslContext')
+         from('pdq-iti21://0.0.0.0:18211?secure=true&mutualTLS=true&sslContext=#sslContext')
              .process {
                  resultMessage(it).body = rsp
              }
          
          // for cancel messages
-         from('pdq-iti21://0.0.0.0:8212')
+         from('pdq-iti21://0.0.0.0:18212')
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
              
          // for automatic NAK 
-         from('pdq-iti21://0.0.0.0:8213')
+         from('pdq-iti21://0.0.0.0:18213')
              .process {
                  throw new RuntimeException('12345')
              }
              
 
-         from('pdq-iti21://0.0.0.0:8214?interceptors=#dummyInterceptor,#authenticationInterceptor')
+         from('pdq-iti21://0.0.0.0:18214?interceptors=#dummyInterceptor,#authenticationInterceptor')
              .process {
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti21://0.0.0.0:8215?secure=true&sslContext=#sslContext')
+         from('pdq-iti21://0.0.0.0:18215?secure=true&sslContext=#sslContext')
              .process {
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti21://0.0.0.0:8216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3')
+         from('pdq-iti21://0.0.0.0:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3')
              .process {
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti21://0.0.0.0:8217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1')
+         from('pdq-iti21://0.0.0.0:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1')
              .process {
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti21://0.0.0.0:8218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
+         from('pdq-iti21://0.0.0.0:18218?secure=true&sslContext=#sslContext&sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
              .process {
                  resultMessage(it).body = rsp
              }

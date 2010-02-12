@@ -46,7 +46,7 @@ class TestDatatypes extends MllpTestContainer {
      */
     @Test
     void testRequestDataTypes() {
-        def endpointUri = 'pix-iti8://localhost:8088?audit=false'
+        def endpointUri = 'pix-iti8://localhost:18088?audit=false'
         def originalBody = getMessageString('ADT^A01', '2.3.1')
         def body
     
@@ -111,7 +111,7 @@ class TestDatatypes extends MllpTestContainer {
      */
     @Test
     public void testResponseDataTypes() {
-        final String endpointUri = 'pix-iti8://localhost:8087?audit=false'
+        final String endpointUri = 'pix-iti8://localhost:18087?audit=false'
         final String body = getMessageString('ADT^A01', '2.3.1')
         DatatypesRouteBuilder.cleanCheckedContentTypes()
         

@@ -41,7 +41,7 @@ class RouteBuilder extends SpringRouteBuilder {
              
      void configure() throws Exception {
 
-         from('pix-iti9://0.0.0.0:8091?audit=false')
+         from('pix-iti9://0.0.0.0:18091?audit=false')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -49,7 +49,7 @@ class RouteBuilder extends SpringRouteBuilder {
                  resultMessage(it).body = rsp
              }
 
-         from('pix-iti9://0.0.0.0:8090')
+         from('pix-iti9://0.0.0.0:18090')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -57,7 +57,7 @@ class RouteBuilder extends SpringRouteBuilder {
                  resultMessage(it).body = rspWithoutPid
              }
          
-         from('pix-iti9://0.0.0.0:8092?allowIncompleteAudit=true')
+         from('pix-iti9://0.0.0.0:18092?allowIncompleteAudit=true')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -66,7 +66,7 @@ class RouteBuilder extends SpringRouteBuilder {
              }
 
          // for automatic NAK 
-         from('pix-iti9://0.0.0.0:8093')
+         from('pix-iti9://0.0.0.0:18093')
              .process {
                  throw new RuntimeException('12345')
              }

@@ -39,7 +39,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
      
      void configure() throws Exception {
 
-         from('pdq-iti22://0.0.0.0:8220?audit=false')
+         from('pdq-iti22://0.0.0.0:18220?audit=false')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -47,7 +47,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                  resultMessage(it).body = rsp
              }
 
-         from('pdq-iti22://0.0.0.0:8221')
+         from('pdq-iti22://0.0.0.0:18221')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()

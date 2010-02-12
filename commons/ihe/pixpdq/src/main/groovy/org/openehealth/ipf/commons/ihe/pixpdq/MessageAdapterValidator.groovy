@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp
+package org.openehealth.ipf.commons.ihe.pixpdq
 
 import ca.uhn.hl7v2.model.GenericSegment
 import ca.uhn.hl7v2.model.Group

@@ -43,7 +43,7 @@ class TestValidation extends MllpTestContainer {
     
     @Test
     void testHappyCase() {
-        def endpointUri = 'pix-iti8://localhost:8080?audit=false'
+        def endpointUri = 'pix-iti8://localhost:18080?audit=false'
         def body = getMessageString('ADT^A01', '2.3.1')
         def msg = send(endpointUri, body)
         assertACK(msg)
@@ -51,7 +51,7 @@ class TestValidation extends MllpTestContainer {
     
     @Test
     void testUnknownSegments() {
-        def endpointUri = 'pix-iti8://localhost:8080?audit=false'
+        def endpointUri = 'pix-iti8://localhost:18080?audit=false'
         def body = getMessageString('ADT^A01', '2.3.1')
         body = body + 'AAA|1|2|3\n'
         def msg = send(endpointUri, body)
@@ -61,7 +61,7 @@ class TestValidation extends MllpTestContainer {
     
     @Test
     void testMissingFields() {
-        def endpointUri = 'pix-iti8://localhost:8080?audit=false'
+        def endpointUri = 'pix-iti8://localhost:18080?audit=false'
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
         assertNAK(msg)
@@ -70,7 +70,7 @@ class TestValidation extends MllpTestContainer {
 
     @Test
     void testHandledError() {
-        def endpointUri = 'pix-iti8://localhost:8089?audit=false'
+        def endpointUri = 'pix-iti8://localhost:18089?audit=false'
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
         assertACK(msg)

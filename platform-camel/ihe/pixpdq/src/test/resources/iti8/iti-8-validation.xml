@@ -38,8 +38,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
 
-    <bean id="mllpModelExtension"
-        class="org.openehealth.ipf.platform.camel.ihe.mllp.extend.MllpModelExtension">
+    <bean id="pixpdqModelExtension"
+        class="org.openehealth.ipf.platform.camel.ihe.pixpdq.extend.PixPdqModelExtension">
     </bean>
 
     <bean id="routeModelExtender" 
@@ -47,7 +47,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
-                <ref bean="mllpModelExtension" />
+                <ref bean="pixpdqModelExtension" />
             </list>
         </property>
     </bean>

@@ -54,11 +54,11 @@ class TestIti10 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('pix-iti10://localhost:8108', true, 2)
+        doTestHappyCaseAndAudit('pix-iti10://localhost:18108', true, 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pix-iti10://localhost:8107?audit=false', false, 0)
+        doTestHappyCaseAndAudit('pix-iti10://localhost:18107?audit=false', false, 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, boolean needStructure, int expectedAuditItemsCount) {
@@ -99,7 +99,7 @@ class TestIti10 extends MllpTestContainer {
     }
 
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'pix-iti10://localhost:8108'
+        def endpointUri = 'pix-iti10://localhost:18108'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
             [process : { Exchange e -> /* nop */ }] as Processor  
@@ -145,7 +145,7 @@ class TestIti10 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'pix-iti10://localhost:8108'
+        def endpointUri = 'pix-iti10://localhost:18108'
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -171,22 +171,22 @@ class TestIti10 extends MllpTestContainer {
     @Test
     void testIncompleteAudit1() throws Exception {
         // both consumer-side and producer-side
-        doTestIncompleteAudit('pix-iti10://localhost:8106?allowIncompleteAudit=true', 2)
+        doTestIncompleteAudit('pix-iti10://localhost:18106?allowIncompleteAudit=true', 2)
     }
     @Test
     void testIncompleteAudit2() throws Exception {
         // consumer-side only
-        doTestIncompleteAudit('pix-iti10://localhost:8106', 1)
+        doTestIncompleteAudit('pix-iti10://localhost:18106', 1)
     }
     @Test
     void testIncompleteAudit3() throws Exception {
         // producer-side only
-        doTestIncompleteAudit('pix-iti10://localhost:8108?allowIncompleteAudit=true', 1)
+        doTestIncompleteAudit('pix-iti10://localhost:18108?allowIncompleteAudit=true', 1)
     }
     @Test
     void testIncompleteAudit4() throws Exception {
         // producer-side only, but fictive
-        doTestIncompleteAudit('pix-iti10://localhost:8108?allowIncompleteAudit=true&audit=false', 0)
+        doTestIncompleteAudit('pix-iti10://localhost:18108?allowIncompleteAudit=true&audit=false', 0)
     }
 
     def doTestIncompleteAudit(String endpointUri, int expectedAuditItemsCount) {

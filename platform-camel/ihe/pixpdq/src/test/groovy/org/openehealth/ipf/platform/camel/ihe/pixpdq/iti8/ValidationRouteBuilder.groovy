@@ -30,7 +30,7 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
      void configure() throws Exception {
 
          // no error handling
-         from('xds-iti8://0.0.0.0:8080?audit=false')
+         from('xds-iti8://0.0.0.0:18080?audit=false')
              .onException(ValidationException.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -42,7 +42,7 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
              
              
          // manual ACK generation on error
-         from('xds-iti8://0.0.0.0:8089?audit=false')
+         from('xds-iti8://0.0.0.0:18089?audit=false')
              .onException(ValidationException.class)
                  .handled(true)
                  .process {

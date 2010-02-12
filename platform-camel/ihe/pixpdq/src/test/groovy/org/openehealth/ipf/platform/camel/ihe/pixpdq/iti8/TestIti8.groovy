@@ -66,15 +66,15 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('xds-iti8://localhost:8082', 2)
+        doTestHappyCaseAndAudit('xds-iti8://localhost:18082', 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pix-iti8://localhost:8082?audit=true', 2)
+        doTestHappyCaseAndAudit('pix-iti8://localhost:18082?audit=true', 2)
     }
     @Test
     void testHappyCaseAndAudit3() {
-        doTestHappyCaseAndAudit('xds-iti8://localhost:8081?audit=false', 0)
+        doTestHappyCaseAndAudit('xds-iti8://localhost:18081?audit=false', 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -115,7 +115,7 @@ class TestIti8 extends MllpTestContainer {
     }
 
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'pix-iti8://localhost:8084'
+        def endpointUri = 'pix-iti8://localhost:18084'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
             [process : { Exchange e -> /* nop */ }] as Processor  
@@ -161,7 +161,7 @@ class TestIti8 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'xds-iti8://localhost:8084'
+        def endpointUri = 'xds-iti8://localhost:18084'
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -187,22 +187,22 @@ class TestIti8 extends MllpTestContainer {
     @Test
     void testIncompleteAudit1() throws Exception {
         // both consumer-side and producer-side
-        doTestIncompleteAudit('xds-iti8://localhost:8083?allowIncompleteAudit=true', 2)
+        doTestIncompleteAudit('xds-iti8://localhost:18083?allowIncompleteAudit=true', 2)
     }
     @Test
     void testIncompleteAudit2() throws Exception {
         // consumer-side only
-        doTestIncompleteAudit('pix-iti8://localhost:8083', 1)
+        doTestIncompleteAudit('pix-iti8://localhost:18083', 1)
     }
     @Test
     void testIncompleteAudit3() throws Exception {
         // producer-side only
-        doTestIncompleteAudit('xds-iti8://localhost:8082?allowIncompleteAudit=true', 1)
+        doTestIncompleteAudit('xds-iti8://localhost:18082?allowIncompleteAudit=true', 1)
     }
     @Test
     void testIncompleteAudit4() throws Exception {
         // producer-side only, but fictive
-        doTestIncompleteAudit('pix-iti8://localhost:8082?allowIncompleteAudit=true&audit=false', 0)
+        doTestIncompleteAudit('pix-iti8://localhost:18082?allowIncompleteAudit=true&audit=false', 0)
     }
 
     def doTestIncompleteAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -219,8 +219,8 @@ class TestIti8 extends MllpTestContainer {
     @Test
     void testExceptions() {
         def body = getMessageString('ADT^A01', '2.3.1')
-        doTestException('pix-iti8://localhost:8085', body, 'you cry')
-        doTestException('pix-iti8://localhost:8086', body, 'lazy dog')
+        doTestException('pix-iti8://localhost:18085', body, 'you cry')
+        doTestException('pix-iti8://localhost:18086', body, 'lazy dog')
     }
 
     def doTestException(String endpointUri, String body, String wantedOutputContent) {
@@ -235,8 +235,8 @@ class TestIti8 extends MllpTestContainer {
      */
     @Test
     void testAlterativeHl7CodecFactory() {
-        def endpointUri1 = 'pix-iti8://fake.address.no.uri:80?codec=#alternativeCodec'
-        def endpointUri2 = 'xds-iti8://localhost:8085'
+        def endpointUri1 = 'pix-iti8://fake.address.no.uri:180?codec=#alternativeCodec'
+        def endpointUri2 = 'xds-iti8://localhost:18085'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)
         assertEquals('UTF-8', endpoint1.configuration.charsetName)

@@ -16,16 +16,19 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.extend;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3Validator;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2;
 import org.apache.camel.model.ProcessorDefinition;
-//import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+
 /**
  * HL7 v3 DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-class Hl7v3Extension {
+class PixPdqV3Extension {
 
      /**
       * Name of the header in which original v3 requets messages will be saved
@@ -57,7 +60,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-44 request
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti44Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 44, true);
@@ -66,7 +69,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-44 response
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti44Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 44, false);
@@ -75,7 +78,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-45 request
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti45Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 45, true);
@@ -84,7 +87,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-45 response
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti45Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 45, false);
@@ -93,7 +96,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-46 request
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti46Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 46, true);
@@ -102,7 +105,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-46 response
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti46Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 46, false);
@@ -111,7 +114,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-47 request
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti47Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 47, true);
@@ -120,7 +123,7 @@ class Hl7v3Extension {
      /**
       * Validates an ITI-47 response
       * @ipfdoc IHE Support#validation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
+      * @dsl platform-camel-ihe-pixpdqv3
       */
      public static ValidatorAdapterDefinition iti47Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 47, false);
@@ -138,55 +141,38 @@ class Hl7v3Extension {
          };
      }
 
- 
+     
      /**
-      * Translates a HL7 v3 request message to HL7 v2 using the given translator.
+      * Translates a HL7v3 message to HL7v2 using the given translator.
       * @ipfdoc IHE Support#translation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
-      *
-     public static ProcessorDefinition translateHl7RequestV3toV2(
+      * @dsl platform-camel-ihe-pixpdqv3
+      */
+     public static ProcessorDefinition translateHL7v3toHL7v2(
              ProcessorDefinition self, 
-             Object translator) 
+             Hl7TranslatorV3toV2 translator) 
      {
          return self.process {
+             MessageAdapter initial = it.in.getHeader(HL7V3_ORIGINAL_REQUEST_HEADER_NAME, MessageAdapter.class);
              String xmlText = it.in.getBody(String.class);
              it.out.headers[HL7V3_ORIGINAL_REQUEST_HEADER_NAME] = xmlText;
-             it.out.body = translator.translateRequest(xmlText);
-         };
-     }
-
-     /**
-      * Translates a HL7 v2 response message to HL7 v3 using the given translator.
-      * The original request message is expected to be in the header.
-      * @ipfdoc IHE Support#translation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
-      *
-     public static ProcessorDefinition translateHl7ResponseV2toV3(
-             ProcessorDefinition self, 
-             Object translator) 
-     {
-         return self.process {
-             String originalRequest = it.in.headers[HL7V3_ORIGINAL_REQUEST_HEADER_NAME];
-             MessageAdapter response = it.in.getBody(MessageAdapter.class);
-             it.out.body = translator.translateResponse(response, originalRequest); 
+             it.out.body = translator.translateV3toV2(xmlText, initial);
          };
      }
      
      /**
-      * Translates a HL7 v2 response message to HL7 v3 using the given translator.
-      * The original request message must be provided as parameter.
+      * Translates a HL7v2 message to HL7v3 using the given translator.
       * @ipfdoc IHE Support#translation hl7v3
-      * @dsl platform-camel-ihe-hl7v3ws
-      *
-     public static ProcessorDefinition translateHl7ResponseV2toV3(
+      * @dsl platform-camel-ihe-pixpdqv3
+      */
+     public static ProcessorDefinition translateHL7v2toHL7v3(
              ProcessorDefinition self, 
-             Object translator,
-             String originalRequest) 
+             Hl7TranslatorV2toV3 translator) 
      {
          return self.process {
-             MessageAdapter response = it.in.getBody(MessageAdapter.class);
-             it.out.body = translator.translateResponse(response, originalRequest); 
+             String initial = it.in.getHeader(HL7V3_ORIGINAL_REQUEST_HEADER_NAME, String.class);
+             MessageAdapter msg = it.in.getBody(MessageAdapter.class);
+             it.out.headers[HL7V3_ORIGINAL_REQUEST_HEADER_NAME] = msg;
+             it.out.body = translator.translateV2toV3(msg, initial);
          };
      }
-     */
 }

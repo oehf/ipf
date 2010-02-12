@@ -44,7 +44,7 @@ class ContinuationsRouteBuilder extends SpringRouteBuilder {
 
      
     void configure() throws Exception {
-        from('pdq-iti21://0.0.0.0:8219' + 
+        from('pdq-iti21://0.0.0.0:18219' + 
                 '?supportInteractiveContinuation=true&interactiveContinuationDefaultThreshold=3' + 
                 '&supportSegmentFragmentation=true&segmentFragmentationThreshold=20' + 
                 '&supportUnsolicitedFragmentation=true')

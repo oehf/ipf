@@ -63,11 +63,11 @@ class TestIti22 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('QBP^ZV1', 'pdq-iti22://localhost:8221', 2)
+        doTestHappyCaseAndAudit('QBP^ZV1', 'pdq-iti22://localhost:18221', 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('QBP^ZV1^QBP_Q21', 'pdq-iti22://localhost:8220?audit=false', 0)
+        doTestHappyCaseAndAudit('QBP^ZV1^QBP_Q21', 'pdq-iti22://localhost:18220?audit=false', 0)
     }
     
     def doTestHappyCaseAndAudit(String msh9, String endpointUri, int expectedAuditItemsCount) {
@@ -108,7 +108,7 @@ class TestIti22 extends MllpTestContainer {
     }
 
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'pdq-iti22://localhost:8221'
+        def endpointUri = 'pdq-iti22://localhost:18221'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
             [process : { Exchange e -> /* nop */ }] as Processor  
@@ -154,7 +154,7 @@ class TestIti22 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'pdq-iti22://localhost:8221'
+        def endpointUri = 'pdq-iti22://localhost:18221'
         def body = getMessageString(msh9, msh12)
         def failed = true;
         

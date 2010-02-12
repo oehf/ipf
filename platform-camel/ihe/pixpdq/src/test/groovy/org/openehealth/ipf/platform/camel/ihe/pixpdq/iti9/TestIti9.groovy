@@ -65,11 +65,11 @@ class TestIti9 extends MllpTestContainer {
      */
     @Test
     void testHappyCaseAndAudit1() {
-        doTestHappyCaseAndAudit('pix-iti9://localhost:8090', 2)
+        doTestHappyCaseAndAudit('pix-iti9://localhost:18090', 2)
     }
     @Test
     void testHappyCaseAndAudit2() {
-        doTestHappyCaseAndAudit('pix-iti9://localhost:8091?audit=false', 0)
+        doTestHappyCaseAndAudit('pix-iti9://localhost:18091?audit=false', 0)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -110,7 +110,7 @@ class TestIti9 extends MllpTestContainer {
     }
 
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
-        def endpointUri = 'pix-iti9://localhost:8090'
+        def endpointUri = 'pix-iti9://localhost:18090'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
             [process : { Exchange e -> /* nop */ }] as Processor  
@@ -156,7 +156,7 @@ class TestIti9 extends MllpTestContainer {
     }
     
     def doTestInacceptanceOnProducer(String msh9, String msh12) {
-        def endpointUri = 'pix-iti9://localhost:8090'
+        def endpointUri = 'pix-iti9://localhost:18090'
         def body = getMessageString(msh9, msh12)
         def failed = true;
         
@@ -182,22 +182,22 @@ class TestIti9 extends MllpTestContainer {
     @Test
     void testIncompleteAudit1() throws Exception {
         // both consumer-side and producer-side
-        doTestIncompleteAudit('pix-iti9://localhost:8092?allowIncompleteAudit=true', 2)
+        doTestIncompleteAudit('pix-iti9://localhost:18092?allowIncompleteAudit=true', 2)
     }
     @Test
     void testIncompleteAudit2() throws Exception {
         // consumer-side only
-        doTestIncompleteAudit('pix-iti9://localhost:8092', 1)
+        doTestIncompleteAudit('pix-iti9://localhost:18092', 1)
     }
     @Test
     void testIncompleteAudit3() throws Exception {
         // producer-side only
-        doTestIncompleteAudit('pix-iti9://localhost:8090?allowIncompleteAudit=true', 1)
+        doTestIncompleteAudit('pix-iti9://localhost:18090?allowIncompleteAudit=true', 1)
     }
     @Test
     void testIncompleteAudit4() throws Exception {
         // producer-side only, but fictive
-        doTestIncompleteAudit('pix-iti9://localhost:8090?allowIncompleteAudit=true&audit=false', 0)
+        doTestIncompleteAudit('pix-iti9://localhost:18090?allowIncompleteAudit=true&audit=false', 0)
     }
 
     def doTestIncompleteAudit(String endpointUri, int expectedAuditItemsCount) {
@@ -213,7 +213,7 @@ class TestIti9 extends MllpTestContainer {
     @Test
     void testAutoNak() throws Exception {
         def body = getMessageString('QBP^Q23', '2.5')
-        def endpointUri = 'pix-iti9://localhost:8093'
+        def endpointUri = 'pix-iti9://localhost:18093'
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size)
         assertNAK(msg)

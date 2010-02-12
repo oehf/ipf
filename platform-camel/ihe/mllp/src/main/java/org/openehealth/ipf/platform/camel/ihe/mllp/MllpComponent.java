@@ -77,35 +77,35 @@ public abstract class MllpComponent extends MinaComponent {
         remaining = "tcp://" + remaining;
 
         // extract & exclude parameters which cannot be handled by camel-mina
-        boolean audit = getAndRemoveParameter(parameters, "audit", boolean.class, true);
+        boolean audit = (Boolean) getAndRemoveParameter(parameters, "audit", boolean.class, true);
         boolean allowIncompleteAudit = 
-            getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false); 
+            (Boolean) getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false); 
 
-        boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
-        boolean mutualTLS = getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
-        String sslContextBean = getAndRemoveParameter(parameters, "sslContext", String.class, "");
-        String interceptorBeans = getAndRemoveParameter(parameters, "interceptors", String.class, "");
-        String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
-        String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
+        boolean secure = (Boolean) getAndRemoveParameter(parameters, "secure", boolean.class, false);
+        boolean mutualTLS = (Boolean) getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
+        String sslContextBean = (String) getAndRemoveParameter(parameters, "sslContext", String.class, "");
+        String interceptorBeans = (String) getAndRemoveParameter(parameters, "interceptors", String.class, "");
+        String sslProtocolsString = (String) getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
+        String sslCiphersString = (String) getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
         
-        boolean supportInteractiveContinuation = getAndRemoveParameter(
+        boolean supportInteractiveContinuation = (Boolean) getAndRemoveParameter(
                 parameters, "supportInteractiveContinuation", boolean.class, false);
-        int interactiveContinuationDefaultThreshold = getAndRemoveParameter(
+        int interactiveContinuationDefaultThreshold = (Integer) getAndRemoveParameter(
                 parameters, "interactiveContinuationDefaultThreshold", int.class, -1);      // >= 1 data record
         
-        boolean supportUnsolicitedFragmentation = getAndRemoveParameter(
+        boolean supportUnsolicitedFragmentation = (Boolean) getAndRemoveParameter(
                 parameters, "supportUnsolicitedFragmentation", boolean.class, false);
-        int unsolicitedFragmentationThreshold = getAndRemoveParameter(
+        int unsolicitedFragmentationThreshold = (Integer) getAndRemoveParameter(
                 parameters, "unsolicitedFragmentationThreshold", int.class, -1);            // >= 3 segments
         
-        boolean supportSegmentFragmentation = getAndRemoveParameter(
+        boolean supportSegmentFragmentation = (Boolean) getAndRemoveParameter(
                 parameters, "supportSegmentFragmentation", boolean.class, false);
-        int segmentFragmentationThreshold = getAndRemoveParameter(
+        int segmentFragmentationThreshold = (Integer) getAndRemoveParameter(
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
         
         ContinuationStorage storage = null;
         if (supportInteractiveContinuation) {
-            String storageBean = getAndRemoveParameter(
+            String storageBean = (String) getAndRemoveParameter(
                     parameters, "interactiveContinuationStorage", String.class, null);
             if (storageBean == null) {
                 storage = new InMemoryContinuationStorage();

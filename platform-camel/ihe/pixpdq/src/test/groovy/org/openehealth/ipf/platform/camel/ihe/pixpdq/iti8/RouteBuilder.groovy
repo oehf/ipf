@@ -29,32 +29,32 @@ class RouteBuilder extends SpringRouteBuilder {
      void configure() throws Exception {
 
          // normal processing without auditing
-         from('xds-iti8://0.0.0.0:8081?audit=false')
+         from('xds-iti8://0.0.0.0:18081?audit=false')
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
              
          // normal processing with auditing
-         from('pix-iti8://0.0.0.0:8082')
+         from('pix-iti8://0.0.0.0:18082')
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
          
          // normal processing with support for incomplete auditing
-         from('xds-iti8://0.0.0.0:8083?allowIncompleteAudit=true')
+         from('xds-iti8://0.0.0.0:18083?allowIncompleteAudit=true')
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
          
          // fictive route to test producer-side acceptance checking
-         from('pix-iti8://0.0.0.0:8084')
+         from('pix-iti8://0.0.0.0:18084')
              .process {
                  resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
                  resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
              }
 
          // route with normal exception
-         from('xds-iti8://0.0.0.0:8085')
+         from('xds-iti8://0.0.0.0:18085')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
@@ -63,7 +63,7 @@ class RouteBuilder extends SpringRouteBuilder {
              }
 
          // route with runtime exception
-         from('pix-iti8://0.0.0.0:8086')
+         from('pix-iti8://0.0.0.0:18086')
              .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
