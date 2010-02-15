@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
 
