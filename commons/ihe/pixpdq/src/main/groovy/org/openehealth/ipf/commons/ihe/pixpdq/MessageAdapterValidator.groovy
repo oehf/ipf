@@ -184,7 +184,9 @@ class MessageAdapterValidator implements Validator<Object, Object> {
       */
      static def checkPID(msg) {
          def exceptions = []
-         exceptions += checkPatientName(msg.PID[5])
+         if (msg.MSH[9][2].value != 'A31') {
+             exceptions += checkPatientName(msg.PID[5])
+         }
          exceptions += checkPatientIdList(msg.PID[3])
          exceptions
      }
