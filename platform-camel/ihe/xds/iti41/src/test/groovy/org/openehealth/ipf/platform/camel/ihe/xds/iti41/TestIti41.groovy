@@ -15,21 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
-import static junit.framework.Assert.assertEquals
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
-import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-41 transaction with a webservice and client adapter defined via URIs.
@@ -55,7 +50,7 @@ class TestIti41 extends StandardTestContainer {
         docEntry = request.documents[0].documentEntry
     }
     
-    @Test @Ignore
+    @Test
     void testIti41() {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
@@ -63,7 +58,7 @@ class TestIti41 extends StandardTestContainer {
         checkAudit('0')
     }
     
-    @Test @Ignore
+    @Test
     void testIti41FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 2

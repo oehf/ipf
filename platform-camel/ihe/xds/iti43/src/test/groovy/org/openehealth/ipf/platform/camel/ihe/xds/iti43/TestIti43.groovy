@@ -15,25 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
-import static junit.framework.Assert.assertEquals
-import static org.junit.Assert.assertTrue
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-
-import java.io.IOException
-import java.io.InputStream
-
 import org.apache.cxf.transport.servlet.CXFServlet
-
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
-import org.openehealth.ipf.commons.ihe.ws.utils.CxfTestUtils
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.
@@ -59,7 +49,7 @@ class TestIti43 extends StandardTestContainer {
         doc = request.documents[0]
     }
     
-    @Test @Ignore
+    @Test
     void testIti43() {
         def response1 = sendIt(SERVICE1, 'service 1')
         assert SUCCESS == response1.status
@@ -73,7 +63,7 @@ class TestIti43 extends StandardTestContainer {
         checkAudit('0', 'service 2')
     }
      
-    @Test @Ignore
+    @Test
     void testIti43FailureAudit() {
         def response2 = sendIt(SERVICE2, 'falsch')
         assert FAILURE == response2.status
@@ -113,14 +103,10 @@ class TestIti43 extends StandardTestContainer {
         checkDocument(message.ParticipantObjectIdentification[1], 'doc2', 'home2', 'repo2')
     }
     
-    void checkForMTOM(RetrievedDocumentSet response1) {
-        def inputStream = response1.documents[0].dataHandler.inputStream
-        try {
-            assert CxfTestUtils.isCxfUsingMtom(inputStream)
-        }
-        finally {
-            inputStream.close()
-        }
+    void checkForMTOM(response) {
+        def attachments = response.documents[0].dataHandler.dataSource.attachments
+        assert attachments.size() == 1
+        assert attachments.iterator().next().xop
     }
 
     def sendIt(endpoint, value) {

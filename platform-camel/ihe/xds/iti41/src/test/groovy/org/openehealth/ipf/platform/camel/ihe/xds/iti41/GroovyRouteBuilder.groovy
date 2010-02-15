@@ -15,15 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.apache.commons.io.IOUtils
+import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.commons.ihe.ws.utils.CxfTestUtils
-import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
-import org.apache.commons.io.IOUtils
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * @author Jens Riemschneider
@@ -45,9 +44,10 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
         def value = doc.documentEntry.comments.value        
         def status = FAILURE;
         if (expected == value && doc.dataHandler != null) {
+            Collection attachments = doc.dataHandler.dataSource.attachments
             def inputStream = doc.dataHandler.inputStream
             try {
-                if (CxfTestUtils.isCxfUsingMtom(inputStream)) {
+                if (attachments.size() == 1 && attachments.iterator().next().xop) {
                     def length = 0
                     while (inputStream.read() != -1) {
                         ++length
