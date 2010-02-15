@@ -203,7 +203,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             Message fragment = parser.parse(sb.toString());
             Terser fragmentTerser = new Terser(fragment);
             String nextContinuationPointer = UUID.randomUUID().toString();
-            if (CONSIDER_MSH_14) {
+            if (getMllpEndpoint().isUseMsh14()) {
                 fragmentTerser.set("MSH-14", continuationPointer);
             }
             if (currentFragmentIndex != fragmentsCount - 1) {

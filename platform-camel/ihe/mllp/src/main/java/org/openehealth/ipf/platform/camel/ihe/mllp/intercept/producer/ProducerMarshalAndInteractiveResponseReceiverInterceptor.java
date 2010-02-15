@@ -95,7 +95,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
                 
                 // check whether this fragment is a correct one, 
                 // i.e. whether its MSH-14 corresponds to DSC-1 of the request
-                if (CONSIDER_MSH_14 && (continuationPointer != null)) {
+                if (getMllpEndpoint().isUseMsh14() && (continuationPointer != null)) {
                     List<String> mshFields = splitString(segments.get(0), fieldDelimiter);
                     String msh14 = (mshFields.size() >= 14) ? mshFields.get(13) : null;
                     if (! continuationPointer.equals(msh14)) {

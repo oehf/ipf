@@ -92,6 +92,7 @@ public abstract class MllpComponent extends MinaComponent {
                 parameters, "supportInteractiveContinuation", boolean.class, false);
         int interactiveContinuationDefaultThreshold = (Integer) getAndRemoveParameter(
                 parameters, "interactiveContinuationDefaultThreshold", int.class, -1);      // >= 1 data record
+        boolean useMsh14 = (Boolean) getAndRemoveParameter(parameters, "useMsh14", boolean.class, true);
         
         boolean supportUnsolicitedFragmentation = (Boolean) getAndRemoveParameter(
                 parameters, "supportUnsolicitedFragmentation", boolean.class, false);
@@ -172,7 +173,8 @@ public abstract class MllpComponent extends MinaComponent {
                 interactiveContinuationDefaultThreshold,
                 unsolicitedFragmentationThreshold,
                 segmentFragmentationThreshold,
-                storage);
+                storage,
+                useMsh14);
     }
 
     private List<MllpCustomInterceptor> getCustomInterceptors(String interceptorBeans) {

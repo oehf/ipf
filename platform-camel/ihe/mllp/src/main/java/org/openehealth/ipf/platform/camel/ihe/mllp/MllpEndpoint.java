@@ -45,7 +45,6 @@ import java.util.concurrent.ScheduledExecutorService;
 /**
  * A wrapper for standard camel-mina endpoint 
  * which provides support for IHE PIX/PDQ-related extensions.
- *  
  * @author Dmytro Rud
  */
 public class MllpEndpoint extends DefaultEndpoint {
@@ -71,8 +70,37 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final int unsolicitedFragmentationThreshold;
     private final int segmentFragmentationThreshold;
     private final ContinuationStorage storage;
+    private final boolean useMsh14;
 
 
+    /**
+     * Returns default threshold for interactive continuation 
+     * (relevant on consumer side only).
+     * <p>
+     * This value will be used when interactive continuation is generally supported 
+     * by this endpoint and is particularly applicable for the current response message,   
+     * and the corresponding request message does not set the records count threshold 
+     * explicitly (RCP-2-1==integer, RCP-2-2=='RD').
+     */
+
+    /**
+     * Returns threshold for unsolicited message fragmentation 
+     * (relevant on producer side only).
+     */
+
+    /**
+     * Returns threshold for segment fragmentation. 
+     */
+    /**
+     * Returns the interactive continuation storage bean. 
+     */
+
+    /**
+     * Returns <code>true</code> when the MSH-14 field should be used 
+     * by the interactive message continuation machinery. 
+     */
+    
+    
     /**
      * Constructor.
      * @param wrappedEndpoint
@@ -84,16 +112,38 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param serverStrategy
      *      Server-side audit strategy.
      * @param clientStrategy
+     *      Client-side audit strategy.
+     * @param transactionConfiguration
+     *      Configuration of the transaction exposed by this endpoint.
+     * @param parser
+     *      HL7 v2 parser instance for using in (un-)marshalling.      
      * @param sslContext
-     *      the ssl context to use. {@code null} if secure communication is not used.
+     *      the SSL context to use; {@code null} if secure communication is not used.
      * @param mutualTLS
-     *      {@code true}, to require client authentication for mutual TLS.
+     *      {@code true} when client authentication for mutual TLS is required.
      * @param customInterceptors
-     *          the interceptors defined in the endpoint URI.
+     *      the interceptors defined in the endpoint URI.
      * @param sslProtocols
-     *          the protocols defined in the endpoint URI or {@code null} if none were specified.
+     *      the protocols defined in the endpoint URI or {@code null} if none were specified.
      * @param sslCiphers
-     *          the ciphers defined in the endpoint URI or {@code null} if none were specified.
+     *      the ciphers defined in the endpoint URI or {@code null} if none were specified.
+     * @param supportInteractiveContinuation
+     *      {@code true} when this endpoint should support interactive message continuation.
+     * @param supportUnsolicitedFragmentation
+     *      {@code true} when this endpoint should support segment fragmentation.
+     * @param supportSegmentFragmentation
+     *      {@code true} when this endpoint should support segment fragmentation.
+     * @param interactiveContinuationDefaultThreshold
+     *      default consumer-side threshold for interactive response continuation. 
+     * @param unsolicitedFragmentationThreshold
+     *      producer-side threshold for unsolicited message fragmentation. 
+     * @param segmentFragmentationThreshold
+     *      threshold for segment fragmentation.
+     * @param storage
+     *      consumer-side storage for interactive message continuation.
+     * @param useMsh14
+     *      {@code true} when MSH-14 should be considered by 
+     *      the interactive continuation machinery.
      */
     public MllpEndpoint(
             MinaEndpoint wrappedEndpoint, 
@@ -114,7 +164,8 @@ public class MllpEndpoint extends DefaultEndpoint {
             int interactiveContinuationDefaultThreshold,
             int unsolicitedFragmentationThreshold,
             int segmentFragmentationThreshold,
-            ContinuationStorage storage)
+            ContinuationStorage storage,
+            boolean useMsh14)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -146,6 +197,7 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.unsolicitedFragmentationThreshold = unsolicitedFragmentationThreshold;
         this.segmentFragmentationThreshold = segmentFragmentationThreshold;
         this.storage = storage;
+        this.useMsh14 = useMsh14;
     }
 
 
@@ -283,34 +335,69 @@ public class MllpEndpoint extends DefaultEndpoint {
         return parser;
     }
 
+    /**
+     * Returns <code>true</code> if this endpoint supports interactive continuation.
+     */
     public boolean isSupportInteractiveContinuation() {
         return supportInteractiveContinuation;
     }
 
+    /**
+     * Returns <code>true</code> if this endpoint supports unsolicited message fragmentation.
+     */
     public boolean isSupportUnsolicitedFragmentation() {
         return supportUnsolicitedFragmentation;
     }
 
+    /**
+     * Returns <code>true</code> if this endpoint supports segment fragmentation.
+     */
     public boolean isSupportSegmentFragmentation() {
         return supportSegmentFragmentation;
     }
 
+    /**
+     * Returns default threshold for interactive continuation 
+     * (relevant on consumer side only).
+     * <p>
+     * This value will be used when interactive continuation is generally supported 
+     * by this endpoint and is particularly applicable for the current response message,   
+     * and the corresponding request message does not set the records count threshold 
+     * explicitly (RCP-2-1==integer, RCP-2-2=='RD').
+     */
     public int getInteractiveContinuationDefaultThreshold() {
         return interactiveContinuationDefaultThreshold;
     }
 
+    /**
+     * Returns threshold for unsolicited message fragmentation 
+     * (relevant on producer side only).
+     */
     public int getUnsolicitedFragmentationThreshold() {
         return unsolicitedFragmentationThreshold;
     }
 
+    /**
+     * Returns threshold for segment fragmentation. 
+     */
     public int getSegmentFragmentationThreshold() {
         return segmentFragmentationThreshold;
     }
 
+    /**
+     * Returns the interactive continuation storage bean. 
+     */
     public ContinuationStorage getStorage() {
         return storage;
     }
 
+    /**
+     * Returns <code>true</code> when the MSH-14 field should be used 
+     * by the interactive message continuation machinery. 
+     */
+    public boolean isUseMsh14() {
+        return useMsh14;
+    }
 
     // ----- dumb delegation, nothing interesting below -----
 
