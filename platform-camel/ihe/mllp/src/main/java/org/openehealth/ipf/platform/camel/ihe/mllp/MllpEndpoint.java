@@ -74,34 +74,6 @@ public class MllpEndpoint extends DefaultEndpoint {
 
 
     /**
-     * Returns default threshold for interactive continuation 
-     * (relevant on consumer side only).
-     * <p>
-     * This value will be used when interactive continuation is generally supported 
-     * by this endpoint and is particularly applicable for the current response message,   
-     * and the corresponding request message does not set the records count threshold 
-     * explicitly (RCP-2-1==integer, RCP-2-2=='RD').
-     */
-
-    /**
-     * Returns threshold for unsolicited message fragmentation 
-     * (relevant on producer side only).
-     */
-
-    /**
-     * Returns threshold for segment fragmentation. 
-     */
-    /**
-     * Returns the interactive continuation storage bean. 
-     */
-
-    /**
-     * Returns <code>true</code> when the MSH-14 field should be used 
-     * by the interactive message continuation machinery. 
-     */
-    
-    
-    /**
      * Constructor.
      * @param wrappedEndpoint
      *      The original camel-mina endpoint instance.
