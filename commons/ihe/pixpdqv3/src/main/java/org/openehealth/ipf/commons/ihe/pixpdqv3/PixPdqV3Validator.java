@@ -42,7 +42,7 @@ import org.xml.sax.SAXParseException;
  * Validator for HL7 v3 messages.
  * @author Dmytro Rud
  */
-public class Hl7v3Validator implements Validator<String, Collection<String>> {
+public class PixPdqV3Validator implements Validator<String, Collection<String>> {
 
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
         "(?:\\s*<\\!--.*?-->)*"                             +  // optional comments before prolog (are they allowed?)
@@ -84,7 +84,7 @@ public class Hl7v3Validator implements Validator<String, Collection<String>> {
         Schema schema = schemas.get(rootElementName);
         if(schema == null) {
             String resourceName = getResourceForElement(rootElementName);
-            URL resource = Hl7v3Validator.class.getClassLoader().getResource(resourceName);
+            URL resource = PixPdqV3Validator.class.getClassLoader().getResource(resourceName);
             if(resource == null) {
                 throw new RuntimeException("Cannot load resource '" + resourceName + "'");
             }

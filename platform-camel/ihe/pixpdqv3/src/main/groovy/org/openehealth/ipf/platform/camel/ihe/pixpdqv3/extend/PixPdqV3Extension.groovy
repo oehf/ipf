@@ -18,7 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.extend;
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3Validator;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.PixPdqV3Validator;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2;
 import org.apache.camel.model.ProcessorDefinition;
@@ -34,7 +35,7 @@ class PixPdqV3Extension {
       * Name of the header in which original v3 requets messages will be saved
       * before transformation to v2.
       */
-     private static final String HL7V3_ORIGINAL_REQUEST_HEADER_NAME = "hl7v3.original.request";
+     private static final String HL7V3_ORIGINAL_REQUEST_PROPERTY = "hl7v3.original.request";
 
      /**
       * Correpondence between transaction number and HL7 v3 request message type.   
@@ -134,7 +135,7 @@ class PixPdqV3Extension {
              int transaction,
              boolean request) 
      {
-         self.setValidator(new Hl7v3Validator());
+         self.setValidator(new PixPdqV3Validator());
          self.staticProfile(request ? REQUEST_TYPES[transaction] : RESPONSE_TYPES[transaction]);
          return self.input {
              it.in.getBody(String.class)
@@ -152,10 +153,10 @@ class PixPdqV3Extension {
              Hl7TranslatorV3toV2 translator) 
      {
          return self.process {
-             MessageAdapter initial = it.in.getHeader(HL7V3_ORIGINAL_REQUEST_HEADER_NAME, MessageAdapter.class);
+             MessageAdapter initial = it.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, MessageAdapter.class);
              String xmlText = it.in.getBody(String.class);
-             it.out.headers[HL7V3_ORIGINAL_REQUEST_HEADER_NAME] = xmlText;
-             it.out.body = translator.translateV3toV2(xmlText, initial);
+             it.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
+             Exchanges.resultMessage(it).body = translator.translateV3toV2(xmlText, initial);
          };
      }
      
@@ -169,10 +170,10 @@ class PixPdqV3Extension {
              Hl7TranslatorV2toV3 translator) 
      {
          return self.process {
-             String initial = it.in.getHeader(HL7V3_ORIGINAL_REQUEST_HEADER_NAME, String.class);
+             String initial = it.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
              MessageAdapter msg = it.in.getBody(MessageAdapter.class);
-             it.out.headers[HL7V3_ORIGINAL_REQUEST_HEADER_NAME] = msg;
-             it.out.body = translator.translateV2toV3(msg, initial);
+             it.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
+             Exchanges.resultMessage(it).body = translator.translateV2toV3(msg, initial);
          };
      }
 }
