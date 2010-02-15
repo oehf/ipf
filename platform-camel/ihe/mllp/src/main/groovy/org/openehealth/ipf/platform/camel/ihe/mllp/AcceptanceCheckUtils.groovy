@@ -55,7 +55,7 @@ class AcceptanceCheckUtils {
      {
          checkMessageAcceptance(msg, config, parser, 'Response')
          
-         if( ! ['AA', 'AR', 'AE'].contains(msg.MSA[1]?.value)) {
+         if( ! ['AA', 'AR', 'AE', 'CA', 'CR', 'CE'].contains(msg.MSA[1]?.value)) {
              throw new MllpAcceptanceException("Bad response: missing or invalid MSA segment")
          }
      }
