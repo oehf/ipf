@@ -52,7 +52,7 @@ public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
         // unmarshal
         message = Exchanges.resultMessage(exchange);
         String responseString = message.getBody(String.class);
-        message.setBody(MessageAdapters.make(responseString));
+        message.setBody(MessageAdapters.make(getMllpEndpoint().getParser(), responseString));
         exchange.setProperty(Exchange.CHARSET_NAME, getMllpEndpoint().getConfiguration().getCharsetName());
     }
 }
