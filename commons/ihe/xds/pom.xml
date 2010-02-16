@@ -4,27 +4,49 @@
     <groupId>org.openehealth.ipf.commons</groupId>
     <artifactId>commons-ihe-xds</artifactId>
     <name>commons-ihe-xds</name>
-    <packaging>pom</packaging>
-     
+
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>commons-ihe</artifactId>
         <version>2.1-SNAPSHOT</version>
     </parent>
-    
+
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.xds.*</osgi.export.pkg>
+        <osgi.export.pkg>org.openehealth.ipf.commons.ihe.xds.*,wsdl.*</osgi.export.pkg>
+        <osgi.fragment.host>org.apache.cxf.bundle</osgi.fragment.host>
     </properties>
     
-    <modules>
-        <module>core</module>
-        <module>iti14</module>
-        <module>iti15</module>
-        <module>iti16</module>
-        <module>iti18</module>
-        <module>iti41</module>
-        <module>iti42</module>
-        <module>iti43</module>
-        <module>model</module>
-    </modules>
+    <dependencies>
+        <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -4,7 +4,6 @@
     <groupId>org.openehealth.ipf.platform-camel</groupId>
     <artifactId>platform-camel-ihe-xds</artifactId>
     <name>platform-camel-ihe-xds</name>
-    <packaging>pom</packaging>
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
@@ -14,25 +13,24 @@
     
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.xds.*</osgi.export.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.commons.ihe.xds.core.validate.requests,
+            org.openehealth.ipf.commons.ihe.xds.core.validate.responses,
+            *
+        </osgi.import.pkg>
+        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.xds.core.extend.XDSModelExtension</ipf.extension.classes>
     </properties>
     
-    <modules>
-        <module>core</module>
-        <module>iti14</module>
-        <module>iti15</module>
-        <module>iti16</module>
-        <module>iti17</module>
-        <module>iti18</module>
-        <module>iti41</module>
-        <module>iti42</module>
-        <module>iti43</module>
-    </modules>
-
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-ws</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-xds-core</artifactId>
+            <artifactId>commons-ihe-xds</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -88,7 +86,21 @@
         <!-- Dependencies for tests -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-xds-core</artifactId>           
+            <artifactId>commons-ihe-ws</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-ws</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-xds</artifactId>           
             <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>
@@ -110,4 +122,19 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

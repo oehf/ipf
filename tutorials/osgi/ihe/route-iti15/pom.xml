@@ -29,7 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-xds-iti15</artifactId>
+            <artifactId>platform-camel-ihe-xds</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
