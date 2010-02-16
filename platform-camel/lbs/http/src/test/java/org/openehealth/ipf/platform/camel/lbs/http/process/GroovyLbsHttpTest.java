@@ -178,7 +178,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
         }
     }
     
-    @Test
+    @Test @Ignore 
     public void testHugeFileDownload() throws Exception {
         TrackMemThread memTracker = new TrackMemThread();
         memTracker.start();
