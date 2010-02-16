@@ -7,12 +7,10 @@
 
     <properties>
         <osgi.import.pkg>
-            org.openehealth.ipf.commons.ihe.pixpdq,
             org.openehealth.ipf.commons.ihe.atna,
             org.openehealth.ipf.modules.hl7.message,
             *
         </osgi.import.pkg>
-        <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.pixpdq.extend.PixPdqModelExtension</ipf.extension.classes>
     </properties>
 
     <parent>

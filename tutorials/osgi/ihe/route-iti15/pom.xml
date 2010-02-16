@@ -17,9 +17,7 @@
             org.openehealth.ipf.tutorials.osgi.xds.route.iti15.*;version="${project.version}"
         </osgi.export.pkg>
         <osgi.import.pkg>
-            org.openehealth.ipf.platform.camel.core.extend,
             org.openehealth.ipf.platform.camel.core.util,
-            org.openehealth.ipf.platform.camel.ihe.xds.core.extend,
             org.openehealth.ipf.commons.ihe.xds.core.requests,
             org.openehealth.ipf.commons.ihe.xds.core.responses,
             *

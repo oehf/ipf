@@ -220,33 +220,17 @@
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-pixpdq/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-pixpdqv3/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-ws/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-core/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-model/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-iti14/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-iti15/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-iti16/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-iti18/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-iti41/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-iti42/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds-iti43/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.modules/modules-hl7/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.modules/modules-hl7dsl/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-flow/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-core/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-hl7/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-ws/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-core/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdq/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdq/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdqv3/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti14/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti15/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti16/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti17/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti18/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti41/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti42/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds-iti43/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-atna-util/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.tutorials/tutorials-xds/${project.version}@start</param>
             <param>mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}@start</param>
