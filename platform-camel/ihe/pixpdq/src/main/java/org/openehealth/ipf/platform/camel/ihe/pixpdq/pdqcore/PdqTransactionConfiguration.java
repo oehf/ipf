@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
 /**
  * A MLLP transaction configuration with PDQ-specific methods for continuation support.

@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.AuditUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 
 /**
  * Generic audit strategy for ITI-21 and ITI-22 (PDQ).
@@ -55,7 +55,7 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
     void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         if(msg.QPD?.value) {
             // Try to extract a complete patient ID from query pieces.  
-            // Double occurences of components are not allowed, 
+            // Double occurrences of components are not allowed, 
             // so we do not care of them.
             final String[] names  = ['@PID.3.1', '@PID.3.4.1', '@PID.3.4.2', '@PID.3.4.3']
             String[] pieces = new String[4]
@@ -89,7 +89,7 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
 
     
     void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        if((msg.MSH[9][1].value == 'RSP') && (msg.MSH[9][2].value == 'K22')) {
+        if(msg.MSH[9][1].value == 'RSP') {
             def patientIds = []
             for(group in msg.QUERY_RESPONSE()) {
                 patientIds += AuditUtils.pidList(group.PID[3])

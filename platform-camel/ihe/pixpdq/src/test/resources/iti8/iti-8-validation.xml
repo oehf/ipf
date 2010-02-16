@@ -39,7 +39,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
 
     <bean id="pixpdqModelExtension"
-        class="org.openehealth.ipf.platform.camel.ihe.pixpdq.extend.PixPdqModelExtension">
+        class="org.openehealth.ipf.platform.camel.ihe.mllp.core.extend.MllpModelExtension">
     </bean>
 
     <bean id="routeModelExtender" 

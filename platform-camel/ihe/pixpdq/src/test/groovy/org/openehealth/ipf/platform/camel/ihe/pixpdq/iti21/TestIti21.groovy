@@ -27,8 +27,8 @@ import org.junit.Test
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.mllp.HandshakeCallbackSSLFilter
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.HandshakeCallbackSSLFilter
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 import static org.junit.Assert.*
 

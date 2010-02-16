@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.openehealth.ipf.platform.camel.ihe.mllp.AuditUtils;
 
 /**
  * Generic audit strategy for ITI-8 (PIX Feed).

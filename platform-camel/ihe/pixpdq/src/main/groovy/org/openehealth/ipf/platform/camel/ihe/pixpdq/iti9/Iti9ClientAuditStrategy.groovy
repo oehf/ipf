@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti9
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti9;
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 
 /**
  * Audit dataset for ITI-9 (PIX Query).

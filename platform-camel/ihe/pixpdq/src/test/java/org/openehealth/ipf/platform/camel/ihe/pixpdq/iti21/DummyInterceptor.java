@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti21;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.intercept.MllpCustomInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 
 public class DummyInterceptor implements MllpCustomInterceptor {
     @Override

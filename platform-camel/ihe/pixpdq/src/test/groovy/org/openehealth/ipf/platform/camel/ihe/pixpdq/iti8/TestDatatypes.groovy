@@ -26,7 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpTestContainer
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 import ca.uhn.hl7v2.parser.PipeParser;
 

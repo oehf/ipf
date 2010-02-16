@@ -17,9 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti10
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.mllp.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.AuditUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 
 /**
  * Generic audit strategy for ITI-10 (PIX Update Notification).
