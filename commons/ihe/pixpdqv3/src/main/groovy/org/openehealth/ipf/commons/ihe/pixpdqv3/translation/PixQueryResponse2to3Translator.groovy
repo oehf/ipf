@@ -53,14 +53,21 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      */
     String messageIdRoot = '1.2.3'
 
+    /**
+     * First character of the acknowledgment code.  Possible values are 'A' and 'C'.
+     * <p>
+     * Declared as String from technical reasons.
+     */
+    String ackCodeFirstCharacter = 'C'
+
 
     /**
      * Translates HL7 v2 response messages <tt>RSP^K23</tt> and <tt>ACK</tt> 
      * into HL7 v3 message <tt>PRPA_IN201310UV02</tt>.
      */
     String translateV2toV3(MessageAdapter rsp, String origMessage) {
-        def writer  = new StringWriter()
-        def builder = getBuilder(writer)
+        def output = new ByteArrayOutputStream()
+        def builder = getBuilder(output)
 
         def xml = slurp(origMessage)
 
@@ -80,7 +87,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
             buildReceiverAndSender(builder, xml, 'urn:hl7-org:v3')
-            createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem) 
+            createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter) 
 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
                 code(code: 'PRPA_TE201310UV02', codeSystem: '2.16.840.1.113883.1.6')
@@ -91,18 +98,18 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                     if (pid3collection) {
                         subject(typeCode: 'SUBJ') {
                             registrationEvent(classCode: 'REG', moodCode: 'EVN') {
-                                statusCode(code: 'active') {
-                                    subject1(typeCode: 'SBJ') {
-                                        patient(classCode: 'PAT') {
-                                            for(pid3 in pid3collection) {   
-                                                buildInstanceIdentifier(builder, 'id', false, 
-                                                        pid3[4][2].value, pid3[1].value, pid3[4][1].value) 
-                                            }
-											statusCode(code: 'active')
-										}
+                                statusCode(code: 'active')
+                                subject1(typeCode: 'SBJ') {
+                                    patient(classCode: 'PAT') {
+                                        for(pid3 in pid3collection) {   
+                                            buildInstanceIdentifier(builder, 'id', false, 
+                                                    pid3[4][2].value, pid3[1].value, pid3[4][1].value) 
+                                        }
+										statusCode(code: 'active')
+										fakePatientPerson(builder)
 									}
-									createCustodian(builder, this.mpiSystemIdRoot, this.mpiSystemIdExtension)
-                                }
+								}
+								createCustodian(builder, this.mpiSystemIdRoot, this.mpiSystemIdExtension)
                             }                            
                         }
 				    }
@@ -117,18 +124,17 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
             }
         }
 
-        return writer.toString()
+        return output.toString()
     }
 
      
     private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
-        def responseStatus = 'OK'
         def errorText      = ''
         def errorCode      = ''
         def errorLocations = []
         def ackCode        = rsp.MSA[1].value
+        def responseStatus = ackCode
         
-        responseStatus = ackCode
         errorCode = rsp.ERR[3][1].value ?: ''
         errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''} ${rsp.MSA[3].value ?: ''}]"
 

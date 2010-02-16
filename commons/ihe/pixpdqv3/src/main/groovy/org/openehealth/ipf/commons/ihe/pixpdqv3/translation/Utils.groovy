@@ -27,10 +27,11 @@ import org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport org.openehealth
 class Utils {
 
     /**
-     * Creates and configures an XML builder based on the given {@link StringWriter}.
+     * Creates and configures an XML builder based on the given output stream.
      */
-    static MarkupBuilder getBuilder(StringWriter stringWriter) {
-        MarkupBuilder builder = new MarkupBuilder(stringWriter)
+    static MarkupBuilder getBuilder(OutputStream output) {
+        Writer writer = new OutputStreamWriter(output, 'UTF-8')
+        MarkupBuilder builder = new MarkupBuilder(writer)
         builder.setDoubleQuotes(true)
         builder.setOmitNullAttributes(true)
         builder.setOmitEmptyAttributes(true)
@@ -228,15 +229,18 @@ class Utils {
             MarkupBuilder builder, 
             GPathResult xml, 
             Map status,
-            String errorCodeSystem) 
+            String errorCodeSystem,
+            String ackCodeFirstCharacter) 
     {
+        def ackCode = ackCodeFirstCharacter[0] + status.ackCode[1]
+        
         builder.acknowledgement {
-            typeCode(code: status.ackCode)
+            typeCode(code: ackCode)
             targetMessage {
                 def quid = xml.id
                 buildInstanceIdentifier(builder, 'id', false, quid.@root.text(), quid.@extension.text())
             }
-            if (status.ackCode[1] != 'A') {
+            if (ackCode[1] != 'A') {
                 acknowledgementDetail(typeCode: 'E') {
                     code(code: status.errorCode, codeSystem: errorCodeSystem)
                     text(status.errorText)
@@ -257,7 +261,16 @@ class Utils {
                         mpiSystemIdRoot, mpiSystemIdExtension)
             }
         }
-
     }
     
+    
+    /**
+     * Some schemas prescribe the existence of an patientPerson element,
+     * but we do not have any data to fill in there.
+     */
+    static void fakePatientPerson(MarkupBuilder builder) {
+        builder.patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
+            name(nullFlavor: 'UNK')
+        }
+    }
 }

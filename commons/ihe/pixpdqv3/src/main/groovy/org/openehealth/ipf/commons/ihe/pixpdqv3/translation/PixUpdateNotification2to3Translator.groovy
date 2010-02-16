@@ -71,8 +71,8 @@ class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
      * into HL7 v3 <tt>PRPA_IN201302UV02</tt> message.
      */
     String translateV2toV3(MessageAdapter adt, String dummy = null) {    
-        def writer = new StringWriter()
-        def builder = getBuilder(writer)          
+        def output = new ByteArrayOutputStream()
+        def builder = getBuilder(output)
 
         builder.PRPA_IN201302UV02(
             'ITSVersion' : 'XML_1.0',
@@ -101,9 +101,7 @@ class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
                                     buildInstanceIdentifier(builder, 'id', false, pid3[4][2].value, pid3[1].value)
                                 }
                                 statusCode(code: 'active')
-                                patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-                                    name(nullFlavor: 'UNK')
-                                }
+                                fakePatientPerson(builder)
                             }
                         }
                         createCustodian(builder, this.mpiSystemIdRoot, this.mpiSystemIdExtension)  
@@ -112,7 +110,7 @@ class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
             }
         }
 
-        return writer.toString()
+        return output.toString()
     }
 	
 	

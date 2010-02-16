@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation;
 
 import java.util.Map
-
 import groovy.xml.MarkupBuilder
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
@@ -79,14 +78,21 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
      */
     String messageIdRoot = '1.2.3'
 
+    /**
+     * First character of the acknowledgment code.  Possible values are 'A' and 'C'.
+     * <p>
+     * Declared as String from technical reasons.
+     */
+    String ackCodeFirstCharacter = 'C'
 
+        
     /**
      * Translates HL7 v2 response messages <tt>RSP^K22</tt> and <tt>ACK</tt> 
      * into HL7 v3 message <tt>PRPA_IN201306UV02</tt>.
      */
     String translateV2toV3(MessageAdapter rsp, String origMessage) {
-        def writer  = new StringWriter()
-        def builder = getBuilder(writer)
+        def output = new ByteArrayOutputStream()
+        def builder = getBuilder(output)
 
         def xml = slurp(origMessage)
 
@@ -106,7 +112,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
             buildReceiverAndSender(builder, xml, 'urn:hl7-org:v3')
-            createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem) 
+            createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter) 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
                 code(code: 'PRPA_TE201306UV02', codeSystem: '2.16.840.1.113883.1.6')
                 effectiveTime(value: messageTimestamp)
@@ -126,7 +132,9 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                             }
                                             statusCode(code: 'active')
                                             patientPerson {
-                                                createName(builder, qr.PID[5])
+                                                for (pid5 in qr.PID[5]()) {
+                                                    createName(builder, pid5) 
+                                                }
 
                                                 qr.PID[13]().collect { it[1].value }.each { tel ->
                                                     telecom(value: "tel: ${tel}")
@@ -185,7 +193,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
             }
         }
 
-        return writer.toString()
+        return output.toString()
     }
 
      

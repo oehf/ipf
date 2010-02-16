@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
+import groovy.util.slurpersupport.GPathResult;
+import groovy.xml.MarkupBuilder;
+import java.util.Map;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
@@ -38,22 +41,22 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
 	String messageIdRoot = '1.2.3'
 	
     /**
+     * Predefined fix value of <code>//acknowledgementDetail/code/@codeSystem</code>.
+     */
+    String errorCodeSystem = '2.16.840.1.113883.5.1100'
+	    
+	    
+    /**
      * Translates an HL7 v2 <tt>ACK</tt> response message 
      * into HL7 v3 <tt>MCCI_IN000002UV01</tt> message.
      */
     String translateV2toV3(MessageAdapter rsp, String originalMessage) {    
         def xml = slurp(originalMessage)
         
-        def rspErrorCode = ''
-        def rspErrorText = ''
-        if (rsp.MSA[1].value[1] != 'A') {
-            rspErrorCode = rsp.ERR[3][1].value ?: ''
-            rspErrorText = rsp.ERR[7].value ?: ''
-        } 
-      
-        def writer  = new StringWriter()
-        def builder = getBuilder(writer)          
-
+        def output = new ByteArrayOutputStream()
+        def builder = getBuilder(output)
+        def status = getStatusInformation(rsp, xml)
+        
         builder.MCCI_IN000002UV01(
             'ITSVersion' : 'XML_1.0',
             'xmlns'      : 'urn:hl7-org:v3',
@@ -67,27 +70,27 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
             buildReceiverAndSender(builder, xml, 'urn:hl7-org:v3')
-
-            acknowledgement {
-                typeCode(code: ackCodeFirstCharacter + rsp.MSA[1].value[1])
-                targetMessage {
-                    buildInstanceIdentifier(builder, 'id', false, 
-                            xml.id.@root.text(), 
-                            xml.id.@extension.text())
-
-                    if (rspErrorCode || rspErrorText) {
-                        acknowledgementDetail {
-                            code(code : rspErrorCode, codeSystem : '2.16.840.1.113883.5.1100')                                            
-                            text(rspErrorText)
-                            location {
-                                // TODO
-                            }                
-                        }
-                    }
-                }
-            }                                 
+            createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter)
         }
 
-        return writer.toString()
+        return output.toString()
    }
+
+
+    private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
+        def errorText      = ''
+        def errorCode      = ''
+        def errorLocations = []
+        def ackCode        = rsp.MSA[1].value
+        
+        if (ackCode[1] != 'A') {
+            errorCode = rsp.ERR[3][1].value ?: ''
+            errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''}]"
+        } 
+
+        return [ackCode:        ackCode, 
+                errorText:      errorText, 
+                errorCode:      errorCode, 
+                errorLocations: errorLocations]
+    }
 }

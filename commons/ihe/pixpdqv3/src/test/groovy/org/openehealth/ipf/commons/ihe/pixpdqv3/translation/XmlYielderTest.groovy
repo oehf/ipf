@@ -82,8 +82,8 @@ class XmlYielderTest {
         '''
 
         def source  = slurp(sourceText)
-        def writer  = new StringWriter()
-        def builder = getBuilder(writer)
+        def output = new ByteArrayOutputStream()
+        def builder = getBuilder(output)
         
         String defaultNs = 'urn:hl7-org:v3' 
         builder.rootElement(xmlns: defaultNs) {
@@ -92,7 +92,7 @@ class XmlYielderTest {
             }
         }
 
-        Diff diff = new Diff(expectedTargetText, writer.toString())
+        Diff diff = new Diff(expectedTargetText, output.toString())
         assert diff.identical()
     }
     

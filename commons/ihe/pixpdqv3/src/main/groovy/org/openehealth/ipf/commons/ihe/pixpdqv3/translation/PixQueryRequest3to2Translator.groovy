@@ -86,7 +86,10 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
         qry.QPD[2] = constructQueryId(queryByParameter)
         fillCx(qry.QPD[3], params.patientIdentifier.value)
         for (source in params.dataSource) {
-            fillCx(nextRepetition(qry.QPD[4]), source.value)
+            def cx = nextRepetition(qry.QPD[4])
+            cx[4][1] = source.value.@assigningAuthorityName.text()
+            cx[4][2] = source.value.@root.text()
+            cx[4][3] = 'ISO'
         }
 
         // Segment RCP

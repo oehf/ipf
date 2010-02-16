@@ -34,7 +34,7 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      def static final RULES =
          [
           'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PIDx PV1',
-                   'A31'             : 'MSH EVN PID PV1',
+                   'A31'             : 'MSH EVN PIDy PV1',
                    'A40'             : 'MSH EVN PIDPD1MRGPV1',
                   ],
           'QBP' : ['Q22 Q23 ZV1'     : 'MSH QPD RCP',
@@ -184,9 +184,7 @@ class MessageAdapterValidator implements Validator<Object, Object> {
       */
      static def checkPID(msg) {
          def exceptions = []
-         if (msg.MSH[9][2].value != 'A31') {
-             exceptions += checkPatientName(msg.PID[5])
-         }
+         exceptions += checkPatientName(msg.PID[5])
          exceptions += checkPatientIdList(msg.PID[3])
          exceptions
      }
@@ -196,6 +194,13 @@ class MessageAdapterValidator implements Validator<Object, Object> {
       */
      static def checkPIDx(msg) {
          checkShortPatientId(msg.PID[3])
+     }
+
+     /**
+      * Validates segment PID (special case for PIX Update Notification).
+      */
+     static def checkPIDy(msg) {
+         checkPatientIdList(msg.PID[3])
      }
 
      /**
