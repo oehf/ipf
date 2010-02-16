@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 package org.openehealth.ipf.modules.cda.builder.content.document
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
+
+import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.eclipse.emf.ecore.xmi.XMLResource
 import org.openhealthtools.ihe.common.cdar2.*
 import org.junit.Test
 import org.junit.Before
 import org.junit.Ignore
-import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTestimport org.openehealth.ipf.modules.ccd.builder.CCDModelExtension
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
+import org.openehealth.ipf.modules.ccd.builder.CCDModelExtension
+
 /**
  * Test CCD Model Extenstions - add new components
  * @author Stefan Ivanov
@@ -210,7 +213,7 @@ public class CCDModelExtensionsSetterTest extends AbstractCDAR2BuilderTest{
         assert ccdDoc.encounters != null
     }
 
-    private showDocument(def document){
+    void showDocument(def document){
         CDAR2Renderer renderer = new CDAR2Renderer()
         def opts = [:]
         opts[XMLResource.OPTION_DECLARE_XML] = true

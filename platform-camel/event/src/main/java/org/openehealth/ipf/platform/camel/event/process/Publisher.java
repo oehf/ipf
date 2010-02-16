@@ -15,15 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.event.process;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import groovy.lang.Closure;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.processor.DelegateProcessor;
 import org.openehealth.ipf.commons.event.EventEngine;
 import org.openehealth.ipf.commons.event.EventObject;
+
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * The Camel processor to use within routes to create and publish events
@@ -32,7 +31,7 @@ import org.openehealth.ipf.commons.event.EventObject;
 public class Publisher extends DelegateProcessor {
     private Closure closure;
     private String topic;
-    private boolean sync = true;
+    private boolean sync = true;        
     private EventEngine eventEngine;
 
     /**
@@ -134,7 +133,7 @@ public class Publisher extends DelegateProcessor {
         return callClosureWithBody(exchange, type);
     }
 
-    private EventObject callClosureWithBody(Exchange exchange, Class type) {
+    private EventObject callClosureWithBody(Exchange exchange, Class<?> type) {
         Message in = exchange.getIn();
         if (in != null) {
             Object body = in.getBody();
@@ -145,7 +144,7 @@ public class Publisher extends DelegateProcessor {
         return null;
     }
 
-    private EventObject callClosureWithMessage(Exchange exchange, Class type) {
+    private EventObject callClosureWithMessage(Exchange exchange, Class<?> type) {
         Message in = exchange.getIn();
         if (in != null && type.isAssignableFrom(in.getClass())) {
             return (EventObject) closure.call(in);
@@ -153,7 +152,7 @@ public class Publisher extends DelegateProcessor {
         return null;
     }
 
-    private EventObject callClosureWithExchange(Exchange exchange, Class type) {
+    private EventObject callClosureWithExchange(Exchange exchange, Class<?> type) {
         if (type.isAssignableFrom(exchange.getClass())) {
             return (EventObject) closure.call(exchange);
         }

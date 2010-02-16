@@ -15,11 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.flow.aspect;
 
-import static junit.framework.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
@@ -38,6 +33,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.Assert.assertEquals;
 
 
 /**
@@ -88,14 +88,16 @@ public class SplitterCopyAspectTest {
     }
     
     private class TestProcessor implements Processor {
+        @Override
         public void process(Exchange exchange) throws Exception {
             messages.add(new PlatformMessage(exchange));
         }
     }
     
     private static class TestExpression implements Expression {
+        @Override
         public <T> T evaluate(Exchange exchange, Class<T> type) {
-            return (T)new String[] {"a", "b", "c"};
+            return type.cast(new String[] {"a", "b", "c"});
         }
     }
 

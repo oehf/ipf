@@ -19,7 +19,8 @@ import ca.uhn.hl7v2.validation.MessageRule
 import ca.uhn.hl7v2.validation.impl.ConformanceProfileRule
 import ca.uhn.hl7v2.validation.ValidationContext
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
-import ca.uhn.hl7v2.validation.Rule
+import ca.uhn.hl7v2.validation.Rule
+
 /**
  * @author Christian Ohr
  */
@@ -28,7 +29,8 @@ public class MessageRuleBuilder extends VersionBuilder{
 	String messageType
 	def triggerEvent
 	
-	MessageRuleBuilder() {	    
+	MessageRuleBuilder() {
+        super(null)
 	}
 	
 	MessageRuleBuilder(String version, ValidationContext context, String messageType, triggerEvent) {

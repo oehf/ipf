@@ -15,35 +15,22 @@
  */
 package org.openehealth.ipf.commons.lbs.resource;
 
-import static java.util.Arrays.asList;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+import org.openehealth.ipf.commons.lbs.utils.CorruptedInputStream;
+import org.openehealth.ipf.commons.lbs.utils.NiceClass;
 
+import javax.activation.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.activation.DataSource;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.openehealth.ipf.commons.lbs.resource.ResourceCompatibleDataSource;
-import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
-import org.openehealth.ipf.commons.lbs.utils.CorruptedInputStream;
-import org.openehealth.ipf.commons.lbs.utils.NiceClass;
-
-/**
- * @author Jens Riemschneider
- */
 public class ResourceDataSourceTest {
     private DataSource nonResourceDS;
     private ResourceCompatibleDataSource resourceCompatibleDS;
@@ -153,6 +140,6 @@ public class ResourceDataSourceTest {
         NiceClass.checkToString(dataSource, "id", resourceCompatibleDS);
         NiceClass.checkNullSafety(dataSource, 
                 asList("id", resourceCompatibleDS), 
-                asList());
+                emptyList());
     }
 }

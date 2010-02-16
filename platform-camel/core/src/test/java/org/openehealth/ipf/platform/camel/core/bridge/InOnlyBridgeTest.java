@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.core.bridge;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Processor;
@@ -26,7 +23,9 @@ import org.apache.camel.impl.DefaultExchange;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openehealth.ipf.platform.camel.core.bridge.InOnlyBridge;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 /**
@@ -78,6 +77,7 @@ public class InOnlyBridgeTest {
     }
     
     private class NextProcessor implements Processor {
+        @Override
         public void process(Exchange exchange) throws Exception {
             target = exchange;
         }

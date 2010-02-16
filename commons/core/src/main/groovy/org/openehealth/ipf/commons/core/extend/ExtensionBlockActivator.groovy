@@ -25,7 +25,7 @@ class ExtensionBlockActivator implements ConditionalActivator {
     }
      
     boolean supports(Object extensionObject) {
-        getExtensionsProperty(extensionObject.class) != null
+        getExtensionsProperty(extensionObject.getClass()) != null
     }
      
     void activate(Class<?> extensionClass) {

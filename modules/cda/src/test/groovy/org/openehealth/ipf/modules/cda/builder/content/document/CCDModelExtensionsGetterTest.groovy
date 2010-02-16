@@ -22,7 +22,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.Ignore
 import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
-import org.openehealth.ipf.modules.ccd.builder.CCDModelExtensionimport org.junit.BeforeClass
+import org.openehealth.ipf.modules.ccd.builder.CCDModelExtension
+import org.junit.BeforeClass
+
 /**
  * Test the CDAr2 Parser in conjunction with CCD Model Extenstion accessors
  *
@@ -34,7 +36,7 @@ public class CCDModelExtensionsGetterTest extends AbstractCDAR2BuilderTest{
     static CDAR2Parser parser
 
     @BeforeClass
-    public static void setUp(){
+    public static void setUpClass(){
         parser = new CDAR2Parser()
         ccdDoc = parser.parse(
                 getClass().getResourceAsStream("/builders/content/document/SampleCCDDocument.xml"))

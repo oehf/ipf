@@ -15,8 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.cxf.process;
 
-import static org.apache.commons.lang.Validate.notNull;
+import org.apache.camel.InvalidPayloadException;
+import org.apache.camel.Message;
+import org.apache.cxf.message.MessageContentsList;
+import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
+import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
+import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.xml.ws.Holder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,16 +32,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.xml.ws.Holder;
-
-import org.apache.camel.InvalidPayloadException;
-import org.apache.camel.Message;
-import org.apache.cxf.message.MessageContentsList;
-import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
-import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
-import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * A handler for resources contained in a CXF Soap POJO message.
@@ -63,7 +62,7 @@ public class CxfPojoResourceHandler implements ResourceHandler {
     @Override
     public Collection<ResourceDataSource> extract(String unitOfWorkId, Message message) throws Exception {
     	String subUnit = getSubUnit(unitOfWorkId);
-        return extractFromParams(subUnit, message, getParams(message));
+        return extractFromParams(subUnit, getParams(message));
     }
 
     private String getSubUnit(String unitOfWorkId) {
@@ -80,12 +79,11 @@ public class CxfPojoResourceHandler implements ResourceHandler {
         }
         catch (InvalidPayloadException e) {
             // This is ok. This message is not intended to be processed by this handler
-            // TODO: Find a way to do this without exception handling
         }
         return Collections.emptyList();
     }
 
-    private Collection<ResourceDataSource> extractFromParams(String subUnit, Message message, List<Object> params) throws IOException {
+    private Collection<ResourceDataSource> extractFromParams(String subUnit, List<Object> params) throws IOException {
         List<ResourceDataSource> resources = new ArrayList<ResourceDataSource>(); 
         for (int idx = 0; idx < params.size(); ++idx) {
             Object param = params.get(idx);
@@ -96,9 +94,10 @@ public class CxfPojoResourceHandler implements ResourceHandler {
                 params.set(idx, new DataHandler(dataSource));
             }
             else if (param instanceof Holder) {
-                Holder holder = (Holder) param;
+                @SuppressWarnings("unchecked") // Ok, because of instanceof check  
+                Holder<DataHandler> holder = (Holder<DataHandler>) param;
                 if (holder.value instanceof DataHandler) {
-                    DataHandler dataHandler = (DataHandler) holder.value;
+                    DataHandler dataHandler = holder.value;
                     ResourceDataSource dataSource = extractFromDataHandler(subUnit, dataHandler, idx);
                     resources.add(dataSource);
                     holder.value = new DataHandler(dataSource);
@@ -158,7 +157,7 @@ public class CxfPojoResourceHandler implements ResourceHandler {
         }
         return resources;
     }
-
+                                       
     private ResourceDataSource getResource(Object param) {
         if (param instanceof DataHandler) {
             return getResource((DataHandler) param);

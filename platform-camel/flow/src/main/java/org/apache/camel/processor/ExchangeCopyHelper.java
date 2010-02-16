@@ -15,14 +15,14 @@
  */
 package org.apache.camel.processor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
 import org.openehealth.ipf.commons.flow.history.SplitHistory;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * For package-protected access to {@link MulticastProcessor}.
@@ -32,10 +32,10 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 public class ExchangeCopyHelper {
 
     public static void afterCopy(Exchange exchange, Iterable pairs) {
-        Iterable<ProcessorExchangePair> ps = pairs;
-        ArrayList<ManagedMessage> copies = new ArrayList<ManagedMessage>(countElements(ps));
-        for (ProcessorExchangePair p : ps) {
-            copies.add(new PlatformMessage(p.getExchange()));
+        ArrayList<ManagedMessage> copies = new ArrayList<ManagedMessage>(countElements(pairs));
+        for (Object p : pairs) {
+            ProcessorExchangePair pair = (ProcessorExchangePair) p;
+            copies.add(new PlatformMessage(pair.getExchange()));
         }
         afterCopy(new PlatformMessage(exchange), copies);
     }
@@ -53,11 +53,11 @@ public class ExchangeCopyHelper {
         
     }
     
-    private static int countElements(Iterable<ProcessorExchangePair> pairs) {
+    private static int countElements(Iterable<?> pairs) {
         // Currently we can only handle split results
         // that are lists because we need its size.
         if (pairs instanceof List) {
-             return ((List<ProcessorExchangePair>)pairs).size();
+             return ((List<?>)pairs).size();
         } else {
             throw new IllegalArgumentException("Cannot determine split size from split result.");
         }

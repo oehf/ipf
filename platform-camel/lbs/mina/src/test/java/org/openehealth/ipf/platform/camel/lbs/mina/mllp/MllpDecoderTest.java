@@ -15,14 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.mina.mllp;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.mina.common.ByteBuffer;
 import org.apache.mina.common.IoSession;
@@ -37,8 +29,13 @@ import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.commons.lbs.store.MemoryStore;
 import org.openehealth.ipf.commons.lbs.store.StoreRegistration;
 import org.openehealth.ipf.commons.lbs.utils.NiceClass;
-import org.openehealth.ipf.platform.camel.lbs.mina.mllp.MllpDecoder;
 import org.openehealth.ipf.platform.camel.lbs.mina.mllp.MllpDecoder.SessionContent;
+
+import java.io.IOException;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.junit.Assert.*;
 
 /**
  * @author Jens Riemschneider
@@ -193,7 +190,7 @@ public class MllpDecoderTest {
         NiceClass.checkToString(decoder, resourceFactory);
         NiceClass.checkNullSafety(decoder, 
                 asList(buffer, out, resourceFactory, session), 
-                asList());
+                emptyList());
     }    
     
     private ByteBuffer toByteBuffer(String message) {
@@ -202,7 +199,7 @@ public class MllpDecoderTest {
         in.flip();
         return in;
     }
-
+                                       
     private final class TestDecoderOutput implements ProtocolDecoderOutput {
         private ResourceDataSource resource;
         private boolean throwsException;
@@ -237,6 +234,7 @@ public class MllpDecoderTest {
             super(store, defaultResourceId);
         }
         
+        @Override
         public ResourceDataSource createResource(String unitOfWorkId) throws IOException {
             resource = super.createResource(unitOfWorkId);
             return resource;

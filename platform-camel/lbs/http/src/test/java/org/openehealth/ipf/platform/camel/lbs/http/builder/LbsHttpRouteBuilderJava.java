@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.http.builder;
 
-import static org.openehealth.ipf.platform.camel.lbs.core.builder.RouteHelper.fetch;
-import static org.openehealth.ipf.platform.camel.lbs.core.builder.RouteHelper.store;
-
-import java.util.List;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.openehealth.ipf.platform.camel.lbs.core.builder.RouteHelper.fetch;
+import static org.openehealth.ipf.platform.camel.lbs.core.builder.RouteHelper.store;
 
 /**
  * @author Jens Riemschneider
@@ -33,7 +34,11 @@ public class LbsHttpRouteBuilderJava extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        List<ResourceHandler> handlers = lookup("resourceHandlers", List.class);
+        List<?> list = lookup("resourceHandlers", List.class);
+        List<ResourceHandler> handlers = new ArrayList<ResourceHandler>();
+        for (Object handler : list) {
+            handlers.add((ResourceHandler) handler);
+        }
 
         errorHandler(noErrorHandler());
         
