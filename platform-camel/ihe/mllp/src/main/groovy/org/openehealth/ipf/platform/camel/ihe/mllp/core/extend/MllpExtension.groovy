@@ -29,7 +29,7 @@ class MllpExtension {
      /**
       * Validates an ITI-8 request
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti8Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 8);
@@ -38,7 +38,7 @@ class MllpExtension {
      /**
       * Validates an ITI-8 response
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti8Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 8);
@@ -47,7 +47,7 @@ class MllpExtension {
      /**
       * Validates an ITI-9 request
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti9Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 9);
@@ -56,7 +56,7 @@ class MllpExtension {
      /**
       * Validates an ITI-9 response
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti9Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 9);
@@ -65,7 +65,7 @@ class MllpExtension {
      /**
       * Validates an ITI-10 request
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti10Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 10);
@@ -74,7 +74,7 @@ class MllpExtension {
      /**
       * Validates an ITI-10 response
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti10Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 10);
@@ -83,7 +83,7 @@ class MllpExtension {
      /**
       * Validates an ITI-21 request
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti21Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 21);
@@ -92,7 +92,7 @@ class MllpExtension {
      /**
       * Validates an ITI-21 response
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti21Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 21);
@@ -101,7 +101,7 @@ class MllpExtension {
      /**
       * Validates an ITI-22 request
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti22Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 22);
@@ -110,7 +110,7 @@ class MllpExtension {
      /**
       * Validates an ITI-22 response
       * @ipfdoc IHE Support#validation pixpdq
-      * @dsl platform-camel-ihe-pixpdq
+      * @dsl platform-camel-ihe-mllp
       */
      public static ValidatorAdapterDefinition iti22Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 22);

@@ -32,13 +32,13 @@ import org.apache.camel.model.ProcessorDefinition;
 class PixPdqV3Extension {
 
      /**
-      * Name of the header in which original v3 requets messages will be saved
-      * before transformation to v2.
+      * Name of the Camel exchange property in which original   
+      * request messages will be saved before translation.
       */
-     private static final String HL7V3_ORIGINAL_REQUEST_PROPERTY = "hl7v3.original.request";
+     public static final String HL7V3_ORIGINAL_REQUEST_PROPERTY = "hl7v3.original.request";
 
      /**
-      * Correpondence between transaction number and HL7 v3 request message type.   
+      * Correspondence between transaction number and HL7 v3 request message type.   
       */
      private static final Map REQUEST_TYPES = [
          44 : ['PRPA_IN201301UV02', 'PRPA_IN201302UV02', 'PRPA_IN201304UV02'],
@@ -48,7 +48,7 @@ class PixPdqV3Extension {
      ];
       
      /**
-      * Correpondence between transaction number and HL7 v3 response message type.   
+      * Correspondence between transaction number and HL7 v3 response message type.   
       */
      private static final Map RESPONSE_TYPES = [
          44 : ['MCCI_IN000002UV01'],
