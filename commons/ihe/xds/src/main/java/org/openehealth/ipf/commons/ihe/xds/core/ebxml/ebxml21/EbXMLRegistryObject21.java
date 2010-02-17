@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.*;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.*;
 
 import java.util.ArrayList;
 import java.util.List;

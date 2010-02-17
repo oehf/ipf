@@ -23,18 +23,18 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
 
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 
 /**
  * Provides the ITI-42 web-service interface.
  */
 @WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRegistry_PortType")
 @XmlSeeAlso({
-    org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.ObjectFactory.class,
-    org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.lcm.ObjectFactory.class,
-    org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rs.ObjectFactory.class,
-    org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.query.ObjectFactory.class })
+    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
+    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
+    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.ObjectFactory.class,
+    org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory.class })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti42PortType {
 

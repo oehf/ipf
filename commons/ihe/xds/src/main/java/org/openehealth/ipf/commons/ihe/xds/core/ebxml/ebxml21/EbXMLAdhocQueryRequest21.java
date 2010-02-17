@@ -23,8 +23,8 @@ import java.util.List;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.query.ResponseOptionType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.ResponseOptionType;
 
 /**
  * Encapsulation of {@link AdhocQueryRequest}.

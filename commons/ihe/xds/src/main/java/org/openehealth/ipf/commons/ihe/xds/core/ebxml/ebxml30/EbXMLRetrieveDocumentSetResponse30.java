@@ -30,8 +30,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rs.RegistryError;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rs.RegistryErrorList;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryErrorList;
 
 /**
  * The ebXML 3.0 version of the {@link EbXMLRetrieveDocumentSetRequest}.

@@ -28,9 +28,9 @@ import javax.xml.bind.JAXBElement;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.Document;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.IdentifiableType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
 
 /**
  * Encapsulation of {@link ProvideAndRegisterDocumentSetRequestType}

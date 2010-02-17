@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.AssociationType1;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1;
 
 /**
  * Encapsulation of {@link AssociationType1}.

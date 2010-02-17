@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-atna-util</artifactId>
+            <artifactId>platform-camel-ihe-atna</artifactId>
             <version>${pom.version}</version>
         </dependency>
         

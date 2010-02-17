@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rs.ErrorType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ErrorType;
 
 /**
  * Severities defined by the XDS specification.

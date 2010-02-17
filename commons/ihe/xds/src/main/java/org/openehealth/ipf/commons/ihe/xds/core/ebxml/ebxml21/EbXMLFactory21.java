@@ -20,16 +20,16 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.query.ResponseOptionType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.AssociationType1;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.ObjectRefType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.RegistryPackageType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.ResponseOptionType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.AssociationType1;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.LeafRegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectRefType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryPackageType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 
 /**
  * Factory for EbXML 2.1 objects.
@@ -39,20 +39,20 @@ public class EbXMLFactory21 implements EbXMLFactory {
     /**
      * The object factory for the ebXML 2.1 rim namespace.
      */
-    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.ObjectFactory RIM_FACTORY =
-        new org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.ObjectFactory();
+    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectFactory RIM_FACTORY =
+        new org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectFactory();
     
     /**
      * The object factory for the ebXML 2.1 query namespace.
      */
-    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.query.ObjectFactory QUERY_FACTORY =
-        new org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.query.ObjectFactory();
+    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.ObjectFactory QUERY_FACTORY =
+        new org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.ObjectFactory();
     
     /**
      * The object factory for the ebXML 2.1 rs namespace.
      */
-    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rs.ObjectFactory RS_FACTORY =
-        new org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rs.ObjectFactory();
+    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ObjectFactory RS_FACTORY =
+        new org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ObjectFactory();
 
     @Override
     public EbXMLObjectLibrary createObjectLibrary() {

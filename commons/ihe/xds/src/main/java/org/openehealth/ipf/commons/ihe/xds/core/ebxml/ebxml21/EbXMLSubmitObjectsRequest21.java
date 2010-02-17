@@ -23,8 +23,8 @@ import java.util.List;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rim.LeafRegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs21.rs.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.LeafRegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 
 /**
  * Encapsulation of {@link SubmitObjectsRequest}

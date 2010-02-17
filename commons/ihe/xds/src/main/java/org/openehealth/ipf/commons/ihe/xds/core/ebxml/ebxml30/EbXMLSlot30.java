@@ -20,7 +20,7 @@ import static org.apache.commons.lang.Validate.notNull;
 import java.util.List;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.SlotType1;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotType1;
 
 /**
  * Encapsulation of {@link SlotType1}.

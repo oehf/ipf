@@ -28,15 +28,15 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.lcm.SubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.query.ResponseOptionType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.AdhocQueryType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.AssociationType1;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.RegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.RegistryPackageType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ResponseOptionType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryPackageType;
 
 /**
  * Factory for EbXML 2.1 objects.
@@ -46,26 +46,26 @@ public class EbXMLFactory30 implements EbXMLFactory {
     /**
      * The factory to create objects of the query namespace.
      */
-    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.query.ObjectFactory QUERY_FACTORY =
-        new org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.query.ObjectFactory();
+    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory QUERY_FACTORY =
+        new org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ObjectFactory();
 
     /**
      * The factory to create objects of the rim namespace.
      */
-    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.ObjectFactory RIM_FACTORY =
-        new org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rim.ObjectFactory();
+    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory RIM_FACTORY =
+        new org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory();
 
     /**
      * The factory to create objects of the rs namespace.
      */
-    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rs.ObjectFactory RS_FACTORY =
-        new org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.rs.ObjectFactory();
+    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.ObjectFactory RS_FACTORY =
+        new org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.ObjectFactory();
 
     /**
      * The factory to create objects of the lcm namespace.
      */
-    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.lcm.ObjectFactory LCM_FACTORY =
-        new org.openehealth.ipf.commons.ihe.xds.core.stub.stub.ebrs30.lcm.ObjectFactory();
+    public final static org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory LCM_FACTORY =
+        new org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory();
 
     @Override
     public EbXMLClassification createClassification(EbXMLObjectLibrary objectLibrary) {
