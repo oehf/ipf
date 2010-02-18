@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.appendSegments;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isPresent;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.splitString;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.uniqueId;
 
@@ -92,31 +93,15 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
 
             // continuations handling 
             if (supportContinuations) {
-                char fieldDelimiter = responseString.charAt(3);
                 List<String> segments = splitString(responseString, '\r');
-                
-                // check whether this fragment is a correct one, 
-                // i.e. whether its MSH-14 corresponds to DSC-1 of the request
-                if (getMllpEndpoint().isUseMsh14() && (continuationPointer != null)) {
-                    List<String> mshFields = splitString(segments.get(0), fieldDelimiter);
-                    String msh14 = (mshFields.size() >= 14) ? mshFields.get(13) : null;
-                    if (! continuationPointer.equals(msh14)) {
-                        throw new RuntimeException(new StringBuilder()
-                            .append("Expected ")
-                            .append(continuationPointer)
-                            .append(" in MSH-14, but got ")
-                            .append(msh14)
-                            .toString());
-                    }
-                }
                 
                 // analyse whether we should request the next fragment   
                 if (segments.get(segments.size() - 1).startsWith("DSC")) {
-                    List<String> dscFields = splitString(segments.get(segments.size() - 1), fieldDelimiter);
+                    List<String> dscFields = splitString(segments.get(segments.size() - 1), responseString.charAt(3));
                     
                     if ((dscFields.size() >= 3) 
                             && "I".equals(dscFields.get(2)) 
-                            && ! isEmpty(dscFields.get(1))) 
+                            && isPresent(dscFields.get(1))) 
                     {
                         continuationPointer = dscFields.get(1);
                         LOG.debug("Automatically query interactive fragment " + continuationPointer);

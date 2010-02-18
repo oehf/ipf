@@ -66,13 +66,24 @@ public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterc
         // parse MSH segment
         List<String> mshFields = splitString(segments.get(0), request.charAt(3));
         
-        // check whether MSH-14 and/or DSC are already present --> send unmodified and return
-        if (segments.get(segments.size() - 1).startsWith("DSC") 
-                || ((mshFields.size() >= 14) && isPresent(mshFields.get(13)))) 
-        {
-            LOG.debug("MSH-14 or DSC not empty, cannot perform automatic message fragmentation");
+        // when MSH-14 is already present -- send the message unmodified and return
+        if ((mshFields.size() >= 14) && isPresent(mshFields.get(13))) {
+            LOG.warn("MSH-14 is not empty, cannot perform automatic message fragmentation");
             getWrappedProcessor().process(exchange);
             return;
+        }
+        
+        // when DSC is present and already filled -- send the message unmodified 
+        // and return; otherwise -- delete the DSC segment, if present 
+        if (segments.get(segments.size() - 1).startsWith("DSC")) {
+            List<String> dscFields = splitString(segments.get(segments.size() - 1), request.charAt(3));
+            String dsc1 = (dscFields.size() >= 2) ? dscFields.get(1) : null;
+            if (isPresent(dsc1)) {
+                LOG.warn("DSC-1 is not empty, cannot perform automatic message fragmentation");
+                getWrappedProcessor().process(exchange);
+                return;
+            }
+            segments.remove(segments.size() - 1);
         }
 
         while (mshFields.size() < 14) {

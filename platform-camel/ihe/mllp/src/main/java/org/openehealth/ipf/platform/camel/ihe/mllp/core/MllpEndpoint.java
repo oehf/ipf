@@ -70,7 +70,6 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final int unsolicitedFragmentationThreshold;
     private final int segmentFragmentationThreshold;
     private final ContinuationStorage storage;
-    private final boolean useMsh14;
 
 
     /**
@@ -113,9 +112,6 @@ public class MllpEndpoint extends DefaultEndpoint {
      *      threshold for segment fragmentation.
      * @param storage
      *      consumer-side storage for interactive message continuation.
-     * @param useMsh14
-     *      {@code true} when MSH-14 should be considered by 
-     *      the interactive continuation machinery.
      */
     public MllpEndpoint(
             MinaEndpoint wrappedEndpoint, 
@@ -136,8 +132,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             int interactiveContinuationDefaultThreshold,
             int unsolicitedFragmentationThreshold,
             int segmentFragmentationThreshold,
-            ContinuationStorage storage,
-            boolean useMsh14)
+            ContinuationStorage storage)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -169,7 +164,6 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.unsolicitedFragmentationThreshold = unsolicitedFragmentationThreshold;
         this.segmentFragmentationThreshold = segmentFragmentationThreshold;
         this.storage = storage;
-        this.useMsh14 = useMsh14;
     }
 
 
@@ -363,13 +357,6 @@ public class MllpEndpoint extends DefaultEndpoint {
         return storage;
     }
 
-    /**
-     * Returns <code>true</code> when the MSH-14 field should be used 
-     * by the interactive message continuation machinery. 
-     */
-    public boolean isUseMsh14() {
-        return useMsh14;
-    }
 
     // ----- dumb delegation, nothing interesting below -----
 

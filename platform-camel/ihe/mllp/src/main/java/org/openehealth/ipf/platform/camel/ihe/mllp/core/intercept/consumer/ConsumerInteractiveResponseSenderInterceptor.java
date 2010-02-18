@@ -105,13 +105,18 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             threshold = getMllpEndpoint().getInteractiveContinuationDefaultThreshold();
         }
         if (threshold < 1) {
-            LOG.warn("Cannot perform interactive continuation: threshold not set");
+            LOG.debug("Cannot perform interactive continuation: threshold not set");
             getWrappedProcessor().process(exchange);
             return;
         }
         
         // check whether the request is acceptable; if not -- pass it to the route, let the user decide 
-        if (isPresent(requestTerser.get("DSC-1")) && ! "I".equals(requestTerser.get("DSC-2"))) {
+        String continuationPointer = requestTerser.get("DSC-1");
+        if (isEmpty(continuationPointer)) {
+            continuationPointer = null;
+        }
+
+        if ((continuationPointer != null) && ! "I".equals(requestTerser.get("DSC-2"))) {
             LOG.warn("Cannot perform interactive continuation: DSC-1 is not empty and DSC-2 is not 'I'");
             getWrappedProcessor().process(exchange);
             return;
@@ -125,10 +130,6 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         }
 
         // handle query
-        String continuationPointer = requestTerser.get("DSC-1");
-        if (isEmpty(continuationPointer)) {
-            continuationPointer = null;
-        }
         Message responseMessage = storage.getFragment(continuationPointer, queryTag, msh31, msh32, msh33);
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
@@ -204,9 +205,6 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             Message fragment = parser.parse(sb.toString());
             Terser fragmentTerser = new Terser(fragment);
             String nextContinuationPointer = uniqueId();
-            if (getMllpEndpoint().isUseMsh14()) {
-                fragmentTerser.set("MSH-14", continuationPointer);
-            }
             if (currentFragmentIndex != fragmentsCount - 1) {
                 fragmentTerser.set("DSC-1", nextContinuationPointer);
                 fragmentTerser.set("DSC-2", "I");
