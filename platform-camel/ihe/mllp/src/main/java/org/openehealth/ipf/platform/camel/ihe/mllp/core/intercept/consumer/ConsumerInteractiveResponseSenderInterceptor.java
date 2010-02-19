@@ -166,8 +166,8 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     {
         Message responseMessage = (Message) response.getTarget();
         Terser responseTerser = new Terser(responseMessage);  
-        if (isPresent(responseTerser.get("DSC-1")) || isPresent(responseTerser.get("MSH-14"))) {
-            LOG.warn("Cannot perform interactive continuation: DSC-1 and/or MSH-14 already " +
+        if (isPresent(responseTerser.get("DSC-1"))) {
+            LOG.warn("Cannot perform interactive continuation: DSC-1 already " +
             		 "present in the response message returned from the route");
             return responseMessage;
         }

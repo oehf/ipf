@@ -93,7 +93,7 @@ public class InMemoryContinuationStorage implements ContinuationStorage {
     /**
      * Chain of response fragments for a query.
      * <p>
-     * Keys correspond to continuation pointers of the fragments (MSH-14, if any); 
+     * Keys correspond to continuation pointers of the fragments; 
      * the key of the first fragment is <code>null</code>. 
      */
     private static class Chain {

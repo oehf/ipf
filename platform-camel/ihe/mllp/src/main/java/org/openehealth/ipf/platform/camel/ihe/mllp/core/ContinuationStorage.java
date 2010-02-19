@@ -26,7 +26,7 @@ public interface ContinuationStorage {
     /**
      * Puts a fragment into this storage.
      * @param continuationPointer
-     *      continuation pointer of the fragment (MSH-14).  
+     *      continuation pointer of the fragment.  
      *      <code>null<code> values must be allowed.
      * @param queryTag
      *      query tag of the fragment (QPD-2).
@@ -52,7 +52,7 @@ public interface ContinuationStorage {
      * Retrieves a fragment from the storage or <code>null</code> when no fragment
      * with the given parameters could be found.
      * @param continuationPointer
-     *      continuation pointer of the fragment (MSH-14).
+     *      continuation pointer of the fragment.
      *      <code>null<code> values must be allowed.
      * @param queryTag
      *      query tag of the fragment (QPD-2).
