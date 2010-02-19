@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.apache.camel.builder.Builder.body;
 import groovy.lang.Closure;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Message;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
+
+import static org.apache.camel.builder.Builder.body;
 
 /**
  * Abstract base class for classes that adapt <i>transform support library</i>
@@ -49,6 +49,7 @@ public abstract class AdapterSupport implements Adapter {
     /* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.core.adapter.Adapter#input(org.apache.camel.Expression)
      */
+    @Override
     public Adapter input(Expression inputExpression) {
         this.inputExpression = inputExpression;
         return this;
@@ -65,6 +66,7 @@ public abstract class AdapterSupport implements Adapter {
     /* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.core.adapter.Adapter#params(org.apache.camel.Expression)
      */
+    @Override
     public Adapter params(Expression paramsExpression) {
         this.paramsExpression = paramsExpression;
         return this;
@@ -81,6 +83,7 @@ public abstract class AdapterSupport implements Adapter {
     /* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.core.adapter.Adapter#staticParams(java.lang.Object[])
      */
+    @Override
     public Adapter staticParams(Object... params) {
         this.paramsExpression = new StaticParams(params);
         return this;

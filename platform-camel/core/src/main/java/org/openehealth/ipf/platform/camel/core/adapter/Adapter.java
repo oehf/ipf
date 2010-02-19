@@ -85,7 +85,7 @@ public interface Adapter {
      * Configures this adapter to use the given {@code params}
      * independent of the {@link Exchange} to be processed.
      * 
-     * @param paramsExpression
+     * @param params
      *            expression for obtaining input params.
      * @return this object.
      * @dsl platform-camel-core

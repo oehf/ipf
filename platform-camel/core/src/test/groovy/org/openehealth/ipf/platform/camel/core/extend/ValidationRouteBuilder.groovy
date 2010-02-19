@@ -15,14 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
 import org.apache.camel.Processor
-
 import org.apache.camel.spring.SpringRouteBuilder
-
 import org.openehealth.ipf.platform.camel.core.builder.RouteHelper
-import org.openehealth.ipf.platform.camel.core.support.transformer.ConstantTransformer;
-import org.openehealth.ipf.platform.camel.core.support.transformer.FailureTransformer;
+import org.openehealth.ipf.platform.camel.core.support.transformer.ConstantTransformer
+import org.openehealth.ipf.platform.camel.core.support.transformer.FailureTransformer
 
 /**
  * @author Martin Krasser

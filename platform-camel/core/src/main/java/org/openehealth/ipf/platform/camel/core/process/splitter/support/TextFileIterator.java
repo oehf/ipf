@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.core.process.splitter.support;
 
+import org.apache.camel.util.ObjectHelper;
+import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
-
-import org.apache.camel.util.ObjectHelper;
 
 /**
  * String-based iterator class that reads a file line by line
@@ -119,6 +120,7 @@ public class TextFileIterator implements Iterator<String> {
      * Not supported for this iterator
      * @see java.util.Iterator#remove()
      */
+    @Override
     public void remove() {
         close();
         throw new UnsupportedOperationException();

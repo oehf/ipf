@@ -1,0 +1,17 @@
+contributor([context(ctype: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition')]) {
+    method name: 'iti14Request', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti14Response', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti15Request', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti15Response', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti16Request', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti16Response', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti18Request', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti18Response', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti41Request', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti41Response', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti42Request', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti42Response', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti43Request', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'iti43Response', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+}
+

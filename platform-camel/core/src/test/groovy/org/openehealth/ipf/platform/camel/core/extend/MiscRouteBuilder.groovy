@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-
 import org.apache.camel.spring.SpringRouteBuilder
 
 /**
@@ -25,7 +23,7 @@ import org.apache.camel.spring.SpringRouteBuilder
 class MiscRouteBuilder extends SpringRouteBuilder {
     
     void configure() {
-       
+
         from('direct:input1')
             .setBody { it.in.headers.foo }
             .to('mock:output')

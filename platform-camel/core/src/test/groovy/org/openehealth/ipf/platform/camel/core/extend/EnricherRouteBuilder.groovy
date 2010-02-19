@@ -15,11 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-
-import org.openehealth.ipf.platform.camel.core.support.transform.min.TestAggregator
-
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.support.transform.min.TestAggregator
 
 /**
  * @author Martin Krasser
@@ -29,18 +26,18 @@ class EnricherRouteBuilder extends SpringRouteBuilder {
     void configure() {
        
         errorHandler(noErrorHandler())
-       
+
         def aggregationStrategy1 = aggregationStrategy(new TestAggregator())
-        def aggregationStrategy2 = aggregationStrategy('sampleAggregator') 
+        def aggregationStrategy2 = aggregationStrategy('sampleAggregator')
         def aggregationStrategy3 = aggregationStrategy {originalInBody, resourceOutBody -> 
             originalInBody + ':' + resourceOutBody
         } 
         def aggregationStrategy4 = aggregationStrategy {originalInBody, resourceInBody -> 
             originalInBody + ':' + resourceInBody
         } 
-        .input            {exchange -> exchange.in.body * 2}
         .aggregationInput {exchange -> exchange.in.body.substring(0, 2)}
-        
+        .input            {exchange -> exchange.in.body * 2}
+
         from('direct:input1')
             .enrich('direct:resource', aggregationStrategy1)
             .to('mock:output')

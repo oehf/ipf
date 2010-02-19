@@ -15,17 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.extend;
 
-import org.apache.camel.Exchange;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+
+import org.apache.camel.model.ProcessorDefinition;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.PixPdqV3Validator;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2;
-import org.apache.camel.model.ProcessorDefinition;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
- * HL7 v3 DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * HL7 v3 DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
@@ -137,7 +137,7 @@ class PixPdqV3Extension {
      {
          self.setValidator(new PixPdqV3Validator());
          self.staticProfile(request ? REQUEST_TYPES[transaction] : RESPONSE_TYPES[transaction]);
-         return self.input {
+         return (ValidatorAdapterDefinition)self.input {
              it.in.getBody(String.class)
          };
      }

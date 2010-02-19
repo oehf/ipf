@@ -15,9 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.event
 
-import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.event.MyEventImpl1
-import org.openehealth.ipf.platform.camel.event.MyEventImpl2
+import org.apache.camel.spring.SpringRouteBuilder
 
 /**
  * @author Jens Riemschneider

@@ -15,10 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-
-import org.openehealth.ipf.platform.camel.core.support.transform.min.TestConverter
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.support.transform.min.TestConverter
 
 /**
  * @author Jens Riemschneider
@@ -36,7 +34,7 @@ class UseRouteBuilder extends SpringRouteBuilder {
             from("direct:internal1")
                 .marshal()
                 .render(converter)
-                .convertBodyTo(String.class)
+                .convertBodyTo(String)
         }
     }
 }

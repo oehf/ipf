@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
+
 import org.apache.camel.builder.DataFormatClause;
 import org.apache.camel.model.ProcessorDefinition;
-
+import org.openehealth.ipf.commons.xml.SchematronProfile;
+import org.openehealth.ipf.modules.cda.CDAR2Constants;
+import org.openehealth.ipf.platform.camel.cda.dataformat.CDADataFormat;
 import org.openehealth.ipf.platform.camel.core.extend.CoreExtension;
-import org.openehealth.ipf.platform.camel.cda.dataformat.CDADataFormat; import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.modules.cda.CDAR2Constants;import org.openehealth.ipf.commons.xml.SchematronProfile;
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
+
 /**
- * CDA DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * CDA DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  * @author Jens Riemschneider
  */
 public class CDAExtension {

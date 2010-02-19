@@ -1,0 +1,10 @@
+contributor([context(ctype: 'org.apache.camel.builder.DataFormatClause')]) {
+    method name: 'ghl7', type: 'org.apache.camel.model.ProcessorDefinition'
+    method name: 'ghl7', type: 'org.apache.camel.model.ProcessorDefinition', params: [parser: 'ca.uhn.hl7v2.parser.Parser']
+    method name: 'ghl7', type: 'org.apache.camel.model.ProcessorDefinition', params: [charset: 'java.lang.String']
+    method name: 'ghl7', type: 'org.apache.camel.model.ProcessorDefinition', params: [parser: 'ca.uhn.hl7v2.parser.Parser', charset: 'java.lang.String']
+}
+contributor([context(ctype: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition')]) {
+    method name: 'ghl7', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+}
+

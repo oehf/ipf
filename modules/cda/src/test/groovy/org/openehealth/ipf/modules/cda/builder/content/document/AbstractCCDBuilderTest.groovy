@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.document
 
-import org.openehealth.ipf.modules.cda.AbstractCDAR2Test
-import org.openehealth.ipf.modules.ccd.builder.CCDModelExtension
-import org.openehealth.ipf.modules.cda.builder.content.document.CCDBuilder
 import org.junit.Before
-import org.junit.BeforeClass
+import org.openehealth.ipf.modules.ccd.builder.CCDModelExtension
+import org.openehealth.ipf.modules.cda.AbstractCDAR2Test
 
 /**
  * Abstract CCD Document Builder Test environment

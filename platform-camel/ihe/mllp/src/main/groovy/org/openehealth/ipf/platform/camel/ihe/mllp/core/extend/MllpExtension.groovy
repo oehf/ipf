@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.core.extend
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.extend;
 
 import org.apache.camel.Exchange;
-
+import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
-import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator;
 
 /**
- * PIX/PDQ DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * PIX/PDQ DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  * @author Jens Riemschneider
  */
 class MllpExtension {
@@ -120,7 +119,7 @@ class MllpExtension {
      private static ValidatorAdapterDefinition validationLogic(ValidatorAdapterDefinition self, int transaction) {
          self.setValidator(new MessageAdapterValidator());
          String className = "org.openehealth.ipf.platform.camel.ihe.pixpdq.iti${transaction}.Iti${transaction}Component";
-         return self.input { 
+         return (ValidatorAdapterDefinition)self.input {
              MllpMarshalUtils.extractMessageAdapter(
                  it.in,
                  it.getProperty(Exchange.CHARSET_NAME),

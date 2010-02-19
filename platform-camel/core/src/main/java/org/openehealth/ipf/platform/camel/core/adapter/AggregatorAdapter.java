@@ -15,18 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.core.adapter;
 
-import static org.apache.camel.builder.Builder.body;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResult;
-
 import groovy.lang.Closure;
-
-import java.util.Arrays;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
+
+import java.util.Arrays;
+
+import static org.apache.camel.builder.Builder.body;
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResult;
 
 /**
  * Adapts an {@link Aggregator}. 
@@ -83,7 +82,7 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      * @dsl platform-camel-core
      * @ipfdoc Core Features#Aggregator
      */
-    public Adapter aggregationInput(Closure aggregationInputExpressionLogic) {
+    public AggregatorAdapter aggregationInput(Closure aggregationInputExpressionLogic) {
         return aggregationInput(new DelegatingExpression(aggregationInputExpressionLogic));
     }
 
@@ -96,9 +95,10 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      * @see #input(Expression)
      * @see #params(Expression)
      */
+    @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
         Object newInput = adaptAggregationInput(newExchange);
-        Object oldInput = adaptInput((Exchange)oldExchange);
+        Object oldInput = adaptInput(oldExchange);
         Object params = adaptParams(oldExchange);
         if (params == null) {
             doAggregate(oldExchange, oldInput, newInput, (Object[])null);

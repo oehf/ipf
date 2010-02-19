@@ -15,16 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.core.extend;
 
-import org.openehealth.ipf.platform.camel.lbs.core.model.FetchProcessorDefinition;
-import org.openehealth.ipf.platform.camel.lbs.core.model.StoreProcessorDefinition;
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
-import org.apache.camel.Expression;
 
 import org.apache.camel.model.ProcessorDefinition;
-import org.apache.camel.model.RouteDefinition;
+import org.openehealth.ipf.platform.camel.lbs.core.model.FetchProcessorDefinition;
+import org.openehealth.ipf.platform.camel.lbs.core.model.StoreProcessorDefinition;
 
 /**
- * LBS DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * LBS DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  * @author Jens Riemschneider
  */
 public class LbsExtension {

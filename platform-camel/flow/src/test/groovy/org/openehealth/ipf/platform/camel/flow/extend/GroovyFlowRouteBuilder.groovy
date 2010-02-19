@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend
 
-import static org.apache.camel.builder.Builder.*
-
 import org.apache.camel.component.http.HttpOperationFailedException
 import org.apache.camel.impl.SerializationDataFormat
 import org.apache.camel.impl.StringDataFormat

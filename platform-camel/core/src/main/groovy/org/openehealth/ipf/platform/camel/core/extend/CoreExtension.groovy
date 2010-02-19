@@ -16,25 +16,20 @@
 
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import java.lang.reflect.Field;
 
-import groovy.lang.Closure;
-
-import org.apache.camel.Expression;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.DataFormatClause;
 import org.apache.camel.builder.ExpressionClause;
 import org.apache.camel.builder.NoErrorHandlerBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.ChoiceDefinition;
+import org.apache.camel.model.DataFormatDefinition;
+import org.apache.camel.model.FilterDefinition;
 import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
-import org.apache.camel.model.DataFormatDefinition;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
+import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.spring.SpringRouteBuilder;
-import org.apache.camel.processor.DelegateProcessor;
-
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
 import org.openehealth.ipf.commons.core.modules.api.Parser;
 import org.openehealth.ipf.commons.core.modules.api.Predicate;
@@ -56,15 +51,14 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator;
 import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat;
 import org.openehealth.ipf.platform.camel.core.dataformat.GpathDataFormat;
 import org.openehealth.ipf.platform.camel.core.model.DataFormatAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.model.InterceptDefinition;
+import org.openehealth.ipf.platform.camel.core.model.IpfDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ParserAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition;
-import org.openehealth.ipf.platform.camel.core.model.SplitterDefinition;
 import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ValidationDefinition;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.platform.camel.core.model.IpfDefinition;
 import org.openehealth.ipf.platform.camel.core.util.Expressions;
-import org.openehealth.ipf.platform.camel.core.model.InterceptDefinition;
 
 /**
  * Core DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
@@ -117,7 +111,7 @@ public class CoreExtension {
      * @ipfdoc Core features#intercept-closure
      * @dsl platform-camel-core
      */
-    public static ProcessorDefinition intercept(ProcessorDefinition self, Closure interceptorLogic) {
+    public static InterceptDefinition intercept(ProcessorDefinition self, Closure interceptorLogic) {
         return intercept(self, new DelegatingInterceptor(interceptorLogic));
     }
     
@@ -128,7 +122,7 @@ public class CoreExtension {
      * @ipfdoc Core features#intercept-bean
      * @dsl platform-camel-core
      */
-    public static ProcessorDefinition intercept(ProcessorDefinition self, String interceptorBean) {
+    public static InterceptDefinition intercept(ProcessorDefinition self, String interceptorBean) {
         InterceptDefinition answer = new InterceptDefinition(interceptorBean);
         self.addOutput(answer);
         return answer;
@@ -153,7 +147,7 @@ public class CoreExtension {
      * @ipfdoc Core features#filter-closure
      * @dsl platform-camel-core
      */
-    public static ProcessorDefinition filter(ProcessorDefinition self, Closure predicateLogic) {
+    public static FilterDefinition filter(ProcessorDefinition self, Closure predicateLogic) {
         return self.filter(new DelegatingCamelPredicate(predicateLogic));
     }
     

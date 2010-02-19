@@ -19,7 +19,7 @@ import org.apache.camel.model.ProcessorDefinition;
 import org.openehealth.ipf.platform.camel.test.performance.model.MeasureDefinition;
 
 /**
- * Performance DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * Performance DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  * @author Jens Riemschneider
  */
 class PerformanceExtension {

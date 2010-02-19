@@ -1,0 +1,62 @@
+contributor([context(ctype: 'org.apache.camel.model.ProcessorDefinition')]) {
+    method name: 'process', type: 'org.apache.camel.model.ProcessorDefinition', params: [processorBeanName: 'java.lang.String']
+    method name: 'process', type: 'org.apache.camel.model.ProcessorDefinition', params: [processorLogic: 'Closure']
+    method name: 'intercept', type: 'org.openehealth.ipf.platform.camel.core.model.InterceptDefinition', params: [delegateProcessor: 'org.apache.camel.processor.DelegateProcessor']
+    method name: 'intercept', type: 'org.openehealth.ipf.platform.camel.core.model.InterceptDefinition', params: [interceptorLogic: 'Closure']
+    method name: 'intercept', type: 'org.openehealth.ipf.platform.camel.core.model.InterceptDefinition', params: [interceptorBean: 'java.lang.String']
+    method name: 'unhandled', type: 'org.apache.camel.model.ProcessorDefinition'
+    method name: 'filter', type: 'FilterDefinition', params: [predicateLogic: 'Closure']
+    method name: 'transform', type: 'org.apache.camel.model.ProcessorDefinition', params: [transformExpression: 'Closure']
+    method name: 'setExchangeProperty', type: 'org.apache.camel.model.ProcessorDefinition', params: [name: 'java.lang.String', propertyExpression: 'Closure']
+    method name: 'setHeader', type: 'org.apache.camel.model.ProcessorDefinition', params: [name: 'java.lang.String', headerExpression: 'Closure']
+    method name: 'setOutHeader', type: 'org.apache.camel.model.ProcessorDefinition', params: [name: 'java.lang.String', headerExpression: 'Closure']
+    method name: 'setFaultHeader', type: 'org.apache.camel.model.ProcessorDefinition', params: [name: 'java.lang.String', headerExpression: 'Closure']
+    method name: 'setBody', type: 'org.apache.camel.model.ProcessorDefinition', params: [bodyExpression: 'Closure']
+    method name: 'validation', type: 'org.openehealth.ipf.platform.camel.core.model.ValidationDefinition', params: [validator: 'org.apache.camel.Processor']
+    method name: 'validation', type: 'org.openehealth.ipf.platform.camel.core.model.ValidationDefinition', params: [validationUri: 'java.lang.String']
+    method name: 'validation', type: 'org.openehealth.ipf.platform.camel.core.model.ValidationDefinition', params: [validatorLogic: 'Closure']
+    method name: 'enrich', type: 'org.apache.camel.model.ProcessorDefinition', params: [resourceUri: 'java.lang.String', aggregationLogic: 'Closure']
+    method name: 'ipf', type: 'org.openehealth.ipf.platform.camel.core.model.IpfDefinition'
+    method name: 'transmogrify', type: 'org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition', params: [transmogrifier: 'Transmogrifier']
+    method name: 'transmogrify', type: 'org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition', params: [transmogrifierBeanName: 'java.lang.String']
+    method name: 'transmogrify', type: 'org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition', params: [transmogrifierLogic: 'Closure']
+    method name: 'transmogrify', type: 'org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition'
+    method name: 'validate', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
+    method name: 'validate', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition', params: [validator: 'Validator']
+    method name: 'validate', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition', params: [validatorBeanName: 'java.lang.String']
+    method name: 'validate', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition', params: [validatorLogic: 'Closure']
+    method name: 'parse', type: 'org.openehealth.ipf.platform.camel.core.model.ParserAdapterDefinition', params: [parser: 'Parser']
+    method name: 'render', type: 'org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition', params: [renderer: 'Renderer']
+    method name: 'render', type: 'org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition', params: [rendererBeanName: 'java.lang.String']
+}
+contributor([context(ctype: 'org.apache.camel.model.ChoiceDefinition')]) {
+    method name: 'when', type: 'org.apache.camel.model.ChoiceDefinition', params: [predicateLogic: 'Closure']
+}
+contributor([context(ctype: 'org.apache.camel.builder.DataFormatClause')]) {
+    method name: 'gnode', type: 'org.apache.camel.model.ProcessorDefinition', params: [schemaResource: 'java.lang.String', namespaceAware: 'boolean']
+    method name: 'gnode', type: 'org.apache.camel.model.ProcessorDefinition', params: [namespaceAware: 'boolean']
+    method name: 'gnode', type: 'org.apache.camel.model.ProcessorDefinition'
+    method name: 'gpath', type: 'org.apache.camel.model.ProcessorDefinition', params: [schemaResource: 'java.lang.String', namespaceAware: 'boolean']
+    method name: 'gpath', type: 'org.apache.camel.model.ProcessorDefinition', params: [namespaceAware: 'boolean']
+    method name: 'gpath', type: 'org.apache.camel.model.ProcessorDefinition'
+    method name: 'parse', type: 'org.apache.camel.model.ProcessorDefinition', params: [parser: 'Parser']
+    method name: 'parse', type: 'org.apache.camel.model.ProcessorDefinition', params: [parserBeanName: 'java.lang.String']
+    method name: 'render', type: 'org.apache.camel.model.ProcessorDefinition', params: [renderer: 'Renderer']
+    method name: 'render', type: 'org.apache.camel.model.ProcessorDefinition', params: [rendererBeanName: 'java.lang.String']
+}
+contributor([context(ctype: 'org.apache.camel.builder.ExpressionClause')]) {
+    method name: 'exceptionObject', type: 'java.lang.Object'
+    method name: 'exceptionMessage', type: 'java.lang.Object'
+}
+contributor([context(ctype: 'org.apache.camel.model.OnExceptionDefinition')]) {
+    method name: 'onWhen', type: 'org.apache.camel.model.OnExceptionDefinition', params: [predicate: 'Closure']
+}
+contributor([context(ctype: 'org.apache.camel.spring.SpringRouteBuilder')]) {
+    method name: 'aggregationStrategy', type: 'org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter', params: [aggregator: 'Aggregator']
+    method name: 'aggregationStrategy', type: 'org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter', params: [aggregatorBeanName: 'java.lang.String']
+    method name: 'aggregationStrategy', type: 'org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter', params: [aggregationLogic: 'Closure']
+    method name: 'predicate', type: 'org.openehealth.ipf.platform.camel.core.adapter.PredicateAdapter', params: [predicate: 'Predicate']
+    method name: 'predicate', type: 'org.openehealth.ipf.platform.camel.core.adapter.PredicateAdapter', params: [predicateBeanName: 'java.lang.String']
+    method name: 'predicate', type: 'org.openehealth.ipf.platform.camel.core.adapter.PredicateAdapter', params: [predicateLogic: 'Closure']
+}
+

@@ -15,11 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-
-import org.openehealth.ipf.platform.camel.core.support.transform.min.TestPredicate
-
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.core.support.transform.min.TestPredicate
 
 /**
  * @author Martin Krasser

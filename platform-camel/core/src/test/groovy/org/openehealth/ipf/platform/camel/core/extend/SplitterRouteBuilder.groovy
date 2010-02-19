@@ -15,14 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
-
 import org.openehealth.ipf.platform.camel.core.process.splitter.SplitterTest
-import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator
 import org.openehealth.ipf.platform.camel.core.process.splitter.support.SplitStringLineSplitterLogic
+import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator
 
 /**
  * @author Jens Riemschneider
@@ -79,15 +76,16 @@ class SplitterRouteBuilder extends SpringRouteBuilder {
               .to('mock:output')
               
           from('direct:split_read_file_lines')
-              .ipf().split { exchange -> 
-                  return new TextFileIterator(exchange.in.body);
+              .ipf().split { exchange ->
+                  String filename = exchange.in.body
+                  new TextFileIterator(filename)
               }
               .to('mock:output')
 
           from('direct:split_huge_file')
               .ipf().split { exchange -> 
-                  String filename = exchange.in.body;
-                  return new TextFileIterator(filename, new SplitStringLineSplitterLogic(','));
+                  String filename = exchange.in.body
+                  new TextFileIterator(filename, new SplitStringLineSplitterLogic(','))
               }
               .filter { exchange -> exchange.in.body == 'Line 1' }
               .to('mock:output')

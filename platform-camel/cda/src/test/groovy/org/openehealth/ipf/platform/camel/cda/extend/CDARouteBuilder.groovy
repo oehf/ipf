@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend
 
-
 import org.apache.camel.spring.SpringRouteBuilder
-import javax.xml.transform.stream.StreamSource
+
 /**
  * @author Christian Ohr
  */

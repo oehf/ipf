@@ -1,0 +1,4 @@
+contributor([context(ctype: 'org.apache.camel.model.ProcessorDefinition')]) {
+    method name: 'measure', type: 'org.openehealth.ipf.platform.camel.test.performance.model.MeasureDefinition'
+}
+

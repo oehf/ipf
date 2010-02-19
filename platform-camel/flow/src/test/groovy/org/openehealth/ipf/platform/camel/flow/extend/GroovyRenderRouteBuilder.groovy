@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend
 
-import static org.apache.camel.builder.Builder.*
-
 import org.apache.camel.spring.SpringRouteBuilder
 
 /**
@@ -31,12 +29,12 @@ class GroovyRenderRouteBuilder extends SpringRouteBuilder {
         // --------------------------
         //  Default route
         // --------------------------
-                
+
         from('direct:render-test')
             .errorHandler(dlc)
             .initFlow('test-1')
-                .renderer('initRenderer')
                 .application("test")
+                .renderer('initRenderer')
                 .outType(String.class)
             .validate { body ->
                 if (body == 'error') {

@@ -15,12 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-
+import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.platform.camel.core.support.transform.min.TestValidator
-
-import org.apache.camel.spring.SpringRouteBuilder
 
 /**
  * @author Martin Krasser

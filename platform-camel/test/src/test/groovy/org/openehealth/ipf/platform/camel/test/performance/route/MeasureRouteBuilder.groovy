@@ -15,12 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.test.performance.route
 
-import static org.apache.camel.builder.Builder.*
-import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.camel.Exchange
+import org.apache.camel.spring.SpringRouteBuilder
 
 /**
- * Contains test routes, that are instrumeted for performance measurement  
+ * Contains test routes, that are instrumented for performance measurement
  * 
  * @author Mitko Kolev
  */
@@ -49,7 +48,7 @@ class MeasureRouteBuilder extends SpringRouteBuilder {
         from('direct:split') 
                 .measure().time()
                 .ipf().split { Exchange exchange -> 
-                    exchange.in.body.split(',') 
+                    exchange.in.getBody(String.class).split(',')
                 }
                 .measure().finish('finish')
                 .to('mock:output')
