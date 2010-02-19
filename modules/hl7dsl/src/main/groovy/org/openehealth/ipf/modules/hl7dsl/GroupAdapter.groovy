@@ -45,6 +45,10 @@ class GroupAdapter extends StructureAdapter {
     def getTarget() {
         group
     }
+	
+	void wrapTarget(Group group) {
+		this.group = group
+	}
     
     int count(String s) {
         group.getAll(s).length
