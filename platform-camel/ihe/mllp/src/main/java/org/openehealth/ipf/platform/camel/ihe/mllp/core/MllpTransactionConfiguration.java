@@ -240,9 +240,10 @@ public class MllpTransactionConfiguration {
     
     /**
      * Returns <code>true</code> if the given element of the given list 
-     * contains a segment which does not belongs to any data record. 
+     * contains a segment which belongs to segments following the data 
+     * records ("footer"). 
      */
-    public boolean isNotDataSegment(List<String> segments, int index) {
+    public boolean isFooterStartSegment(List<String> segments, int index) {
         return false;
     }
     

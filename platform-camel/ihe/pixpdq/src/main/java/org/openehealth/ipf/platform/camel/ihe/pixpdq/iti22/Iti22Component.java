@@ -45,8 +45,7 @@ public class Iti22Component extends MllpComponent {
                 new String[] {"RSP", "ACK"},
                 new String[] {"ZV2", "*"}, 
                 new boolean[] {true, false},                
-                new boolean[] {true, false},                
-                new String[] {"PID", "PD1", "PV1", "PV2", "QRI"});
+                new boolean[] {true, false});
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new PdqClientAuditStrategy("PDVQ");

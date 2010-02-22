@@ -242,12 +242,10 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         for (int i = 1; i < segments.size(); ++i) {
             if (config.isDataStartSegment(segments, i)) {
                 recordBoundaries.add(i);
-            } else {
-                foundFooter = (recordBoundaries.size() > 0) && config.isNotDataSegment(segments, i);
-                if (foundFooter) {
-                    recordBoundaries.add(i);
-                    break;
-                }
+            } else if ((recordBoundaries.size() > 0) && config.isFooterStartSegment(segments, i)) {
+                foundFooter = true;
+                recordBoundaries.add(i);
+                break;
             }
         }
         if (! foundFooter) {

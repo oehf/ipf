@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore;
 
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
@@ -26,8 +25,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfigura
  * @author Dmytro Rud
  */
 public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
-    private final String[] dataSegmentNames;
-    
     public PdqTransactionConfiguration(
             String hl7Version,
             String sendingApplication, 
@@ -40,8 +37,7 @@ public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
             String[] allowedResponseMessageTypes,
             String[] allowedResponseTriggerEvents, 
             boolean[] auditabilityFlags,
-            boolean[] responseContinuabilityFlags,
-            String[] dataSegmentNames) 
+            boolean[] responseContinuabilityFlags) 
     {
         super(hl7Version, sendingApplication, sendingFacility,
                 requestErrorDefaultErrorCode, requestErrorDefaultAckTypeCode,
@@ -49,9 +45,6 @@ public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
                 allowedRequestTriggerEvents, allowedResponseMessageTypes,
                 allowedResponseTriggerEvents, auditabilityFlags,
                 responseContinuabilityFlags);
-        
-        Validate.noNullElements(dataSegmentNames);
-        this.dataSegmentNames = dataSegmentNames;
     }
     
     @Override
@@ -60,13 +53,7 @@ public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
     }
 
     @Override
-    public boolean isNotDataSegment(List<String> segments, int index) {
-        String segmentName = (index < segments.size()) ? segments.get(index).substring(0, 3) : null;
-        for (String dataSegmentName : dataSegmentNames) {
-            if (segmentName.equals(dataSegmentName)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isFooterStartSegment(List<String> segments, int index) {
+        return segments.get(index).startsWith("DSC");
     }
 }

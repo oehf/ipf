@@ -118,32 +118,31 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
                 //      - data records from all
                 //      - footer segments from the last one
                 int startDataSegmentIndex = -1;
-                int endDataSegmentIndex = segments.size();
+                int startFooterSegmentIndex = segments.size();
                 for (int i = 1; i < segments.size(); ++i) {
                     if(config.isDataStartSegment(segments, i)) {
                         ++recordsCount;
                         if (startDataSegmentIndex == -1) {
                             startDataSegmentIndex = i;
                         }
-                    } else {
-                        if (startDataSegmentIndex != -1) {
-                            endDataSegmentIndex = i;
-                            break;
-                        }
+                    } 
+                    else if (config.isFooterStartSegment(segments, i)) {
+                        startFooterSegmentIndex = i;
+                        break;
                     }
                 }
                 
                 if (startDataSegmentIndex == -1) {
-                    LOG.warn("No data segments found, thus the resulting message structure can be wrong");
+                    // no data records in this message
                     startDataSegmentIndex = segments.size();
                 }
                 
                 if (++fragmentsCount == 1) {
                     appendSegments(fragmentAccumulator, segments, 0, startDataSegmentIndex);
                 }
-                appendSegments(fragmentAccumulator, segments, startDataSegmentIndex, endDataSegmentIndex);
+                appendSegments(fragmentAccumulator, segments, startDataSegmentIndex, startFooterSegmentIndex);
                 if (! mustSend) {
-                    appendSegments(fragmentAccumulator, segments, endDataSegmentIndex, segments.size());
+                    appendSegments(fragmentAccumulator, segments, startFooterSegmentIndex, segments.size());
                 }
             }
         }

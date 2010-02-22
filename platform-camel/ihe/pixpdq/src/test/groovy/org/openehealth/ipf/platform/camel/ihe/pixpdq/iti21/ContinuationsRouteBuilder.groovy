@@ -43,17 +43,94 @@ class ContinuationsRouteBuilder extends SpringRouteBuilder {
              '|MÃ¼ller^Joachim||19400101|M|||Am Domplatz 112^^KÃ¶ln^^57000||022/844275\r';
 
      
+     static final Map CHAIN_1 = [
+          '' : 
+              'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 
+                  '20090901140929||RSP^K22^RSP_K21|356757|P|2.5|||\r' +
+              'MSA|AA|12345\r' +
+              'QAK|1486133081|OK\n' +
+              'QPD|IHE PDQ Query|1486133081|@PID.11.3^KÃ¶ln\n' +
+              'PID|1||79471^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&' + 
+                  'ISO^PI~78912^^^PKLN&2.16.840.1.113883.3.37.4.1.1.2.511.1&ISO^PI|' + 
+                  '|MÃ¼ller^Hans||19400101|M|||Am Domplatz 1^^KÃ¶ln^^57000|' + 
+                  '|022/235715~022/874491~01732356265||||' +
+                  '|GLD-1-1^^^ANGID1&2.16.840.1.113883.3.37.4.1.5.2&ISO^AN|123-11-1234\r' +
+              'DSC|a|I\r',
+          'a' :
+              'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 
+                  '20090901140929||RSP^K22^RSP_K21|356758|P|2.5|||\r' +
+              'MSA|AA|12345\r' +
+              'QAK|1486133081|OK\n' +
+              'QPD|IHE PDQ Query|1486133081|@PID.11.3^KÃ¶ln\n' +
+              'PID|2||78001^^^PKLN&2.16.840.1.113883.3.37.4.1.1.2.511.1&ISO^PI|' +
+                  '|Mueller^Hans||19400101|M|||Teststr. 1^^KÃ¶ln^^57000||022/235715\r' +
+              'DSC|b|I\r',
+          'b' :
+              'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 
+                  '20090901140929||RSP^K22^RSP_K21|356759|P|2.5|||\r' +
+              'MSA|AA|12345\r' +
+              'QAK|1486133081|OK\n' +
+              'QPD|IHE PDQ Query|1486133081|@PID.11.3^KÃ¶ln\n' +
+              'PID|3||79653^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI|' +
+                  '|MÃ¼ller^Hannes||19400101|M|||Am Domplatz 14^^KÃ¶ln^^57000||022/843274\r' +
+              'DSC|c|I\r',
+          'c' :
+              'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 
+                  '20090901140929||RSP^K22^RSP_K21|356759|P|2.5|||\r' +
+              'MSA|AA|12345\r' +
+              'QAK|1486133081|OK\n' +
+              'QPD|IHE PDQ Query|1486133081|@PID.11.3^KÃ¶ln\n' +
+              'DSC|d|I\r',
+          'd' :
+              'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 
+                  '20090901140929||RSP^K22^RSP_K21|356759|P|2.5|||\r' +
+              'MSA|AA|12345\r' +
+              'QAK|1486133081|OK\n' +
+              'QPD|IHE PDQ Query|1486133081|@PID.11.3^KÃ¶ln\n' +
+              'PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI|' +
+                  '|MÃ¼ller^Joachim||19400101|M|||Am Domplatz 112^^KÃ¶ln^^57000||022/844275\r' +
+              'DSC|e|I\r',
+          'e' :
+              'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 
+                  '20090901140929||RSP^K22^RSP_K21|356759|P|2.5|||\r' +
+              'MSA|AA|12345\r' +
+              'QAK|1486133081|OK\n' +
+              'QPD|IHE PDQ Query|1486133081|@PID.11.3^KÃ¶ln\n'
+      ]
+              
+                                      
+     
+     
+     
     void configure() throws Exception {
-        from('pdq-iti21://0.0.0.0:18219' + 
-                '?supportInteractiveContinuation=true&interactiveContinuationDefaultThreshold=3' + 
-                '&supportSegmentFragmentation=true&segmentFragmentationThreshold=20' + 
-                '&supportUnsolicitedFragmentation=true')
+        /**
+         * Full automatism.
+         */
+        from(TestContinuations.endpointUri(28210, true, true, true))
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
+            .validate().iti21Request()
             .process {
                 resultMessage(it).body = BIG_RESPONSE
             }
+            .validate().iti21Response()
+
+            
+        /**
+         * Test interactive continuations on client side.
+         * A special case are fragments without data records (c, e).
+         */
+        from(TestContinuations.endpointUri(28211, false, false, false))
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+            .validate().iti21Request()
+            .process {
+                def dsc = it.in.body.DSC[1].value ?: ''
+                resultMessage(it).body = CHAIN_1[dsc]
+            }
+
     }
 }
  
