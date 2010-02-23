@@ -83,12 +83,9 @@
 
     <modules>
         <module>route-auditor</module>
-        <module>route-iti8</module>
-        <module>route-iti10</module>
-        <module>route-iti14</module>
-        <module>route-iti15</module>
-        <module>route-iti17</module>
-        <module>route-iti21</module>
+        <module>route-pixpdq</module>
+        <module>route-pixpdqv3</module>
+        <module>route-xds</module>
     </modules>
 
 
