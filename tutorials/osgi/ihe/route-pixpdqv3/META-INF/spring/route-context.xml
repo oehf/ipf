@@ -32,6 +32,29 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <bean id="routeBuilder"
         class="org.openehealth.ipf.tutorials.osgi.ihe.pixv3.iti44.route.GroovyRouteBuilder">
+        <property name="pixFeedRequestTranslator" ref="pixFeedRequestTranslator" />
+        <property name="pixFeedAckTranslator" ref="pixFeedAckTranslator" />
     </bean>
 
+    <bean id="pixFeedRequestTranslator"
+      class="org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PixFeedRequest3to2Translator">
+        <property name="useSenderDeviceName"      value="true" />
+        <property name="useReceiverDeviceName"    value="true" />
+        <property name="copyEmailAs"              value="PID-13-1" />
+        <property name="copyAccountNumberAs"      value="PID-18" />
+        <property name="accountNumberRoot"        value="1.2.3" />
+        <property name="copyNationalIdentifierAs" value="PID-19" />
+        <property name="nationalIdentifierRoot"   value="2.16.840.1.113883.4.1" />
+        <property name="birthNameCopyTo"          value="PID-5" />
+        <property name="useOtherIds"              value="true" />
+    </bean>
+
+    <bean id="pixFeedAckTranslator"
+      class="org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PixFeedAck2to3Translator">
+        <property name="ackCodeFirstCharacter" value="C" />
+    </bean>
+
+    <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+        <property name="charset" value="utf-8"/>
+    </bean>
 </beans>

@@ -18,6 +18,8 @@
         </osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.platform.camel.core.util,
+            org.openehealth.ipf.commons.ihe.pixpdqv3.translation,
+            org.apache.camel.component.hl7,
             *
         </osgi.import.pkg>
     </properties>

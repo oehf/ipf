@@ -9,7 +9,9 @@ http://www.springframework.org/schema/osgi
 http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
     <osgi:reference id="pixv3-iti44" bean-name="pixv3-iti44" interface="org.apache.camel.Component"/>
-	
-	<osgi:reference id="xds-iti44" bean-name="xds-iti44" interface="org.apache.camel.Component"/>
+
+    <osgi:reference id="xds-iti44" bean-name="xds-iti44" interface="org.apache.camel.Component"/>
+
+    <osgi:reference id="pix-iti8" bean-name="pix-iti8" interface="org.apache.camel.Component"/>
 
  </beans>

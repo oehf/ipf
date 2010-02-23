@@ -23,6 +23,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 
 /**
  * @author Dmytro Rud
+ * @author Boris Stanojevic
  */
 class GroovyRouteBuilder extends SpringRouteBuilder {
 
@@ -38,6 +39,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
         from('pix-iti8://0.0.0.0:8882')
             .validate().iti8Request()
             .process {
+                println('PIX-ITI8 Content: ' + it.in.body)
                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
             }
             .validate().iti8Response()

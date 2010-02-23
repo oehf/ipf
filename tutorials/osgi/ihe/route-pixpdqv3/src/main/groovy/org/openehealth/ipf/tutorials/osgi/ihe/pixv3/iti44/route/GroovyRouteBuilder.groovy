@@ -22,6 +22,10 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
  * @author Dmytro Rud
  */
 class GroovyRouteBuilder extends SpringRouteBuilder {
+
+    def pixFeedRequestTranslator
+    def pixFeedAckTranslator
+
     @Override
     public void configure() throws Exception {
         from('pixv3-iti44:pixv3-iti44-service1')
@@ -29,14 +33,20 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 .maximumRedeliveries(0)
                 .end()
             .validate().iti44Request()
-            .process { 
-                Exchanges.resultMessage(it).body = '<response from="PIX Manager"/>'
-            }
+            .translateHL7v3toHL7v2(pixFeedRequestTranslator)
+            .to('pix-iti8://localhost:8882')
+            .translateHL7v2toHL7v3(pixFeedAckTranslator)
+            .validate().iti44Response()
+            
 
         from('xds-iti44:xds-iti44-service1')
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
             .process { 
-                Exchanges.resultMessage(it).body = '<response from="Document Registry"/>'
+                Exchanges.resultMessage(it).body = '<response from="XDS Manager"/>'
             }
+
 
     }
 }
