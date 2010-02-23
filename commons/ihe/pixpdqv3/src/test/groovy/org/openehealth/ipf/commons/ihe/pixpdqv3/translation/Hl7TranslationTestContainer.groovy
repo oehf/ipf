@@ -55,7 +55,7 @@ class Hl7TranslationTestContainer {
     {
         if (mappingResourceName) {
             def mappingService = new BidiMappingService()
-            mappingService.mappingScript = new ClassPathResource('translation/' + mappingResourceName)
+            mappingService.mappingScript = new ClassPathResource('META-INF/map/' + mappingResourceName)
             def mappingExtension = new MappingExtension()
             mappingExtension.mappingService = mappingService
             mappingExtension.extensions()
