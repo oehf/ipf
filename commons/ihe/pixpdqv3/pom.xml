@@ -20,6 +20,12 @@
             wsdl.iti46,
             wsdl.iti47
         </osgi.export.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.modules.hl7.message,
+            groovy.util,
+            ca.uhn.hl7v2.model,
+            *
+        </osgi.import.pkg>
         <osgi.fragment.host>org.apache.cxf.bundle</osgi.fragment.host>
     </properties>
     
