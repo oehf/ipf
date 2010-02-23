@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.cxf.builder;
 
-import org.apache.camel.spring.SpringRouteBuilder;
-import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
-import org.openehealth.ipf.platform.camel.lbs.cxf.process.AbstractLbsCxfTest;
+import static org.openehealth.ipf.platform.camel.lbs.core.builder.RouteHelper.store;
 
 import java.util.List;
 
-import static org.openehealth.ipf.platform.camel.lbs.core.builder.RouteHelper.store;
+import org.apache.camel.spring.SpringRouteBuilder;
+import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
+import org.openehealth.ipf.platform.camel.lbs.cxf.process.AbstractLbsCxfTest;
 
 /**
  * @author Jens Riemschneider
@@ -32,7 +32,7 @@ public class LbsCxfRouteBuilderJava extends SpringRouteBuilder {
     public void configure() throws Exception {
         List<ResourceHandler> handlers = lookup("resourceHandlers", List.class);
         
-        from("cxf:bean:soapEndpointNoExtract?dataFormat=PAYLOAD") 
+        from("cxf:bean:soapEndpointNoExtract?dataFormat=POJO") 
             .to("bean:serviceBean?method=processSOAP");
         
         from("cxf:bean:soapEndpointExtract?dataFormat=POJO")
