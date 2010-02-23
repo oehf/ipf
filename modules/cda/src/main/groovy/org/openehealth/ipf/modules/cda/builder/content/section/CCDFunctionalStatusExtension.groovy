@@ -72,7 +72,7 @@ public class CCDFunctionalStatusExtension extends CompositeModelExtension {
             }
             
             getFunctionalStatus { ->
-                delegate.component?.structuredBody?.component.find { 
+                delegate.component?.structuredBody?.component?.find { 
                     it.section?.code?.code == '47420-5'
                 } ?.section
             }

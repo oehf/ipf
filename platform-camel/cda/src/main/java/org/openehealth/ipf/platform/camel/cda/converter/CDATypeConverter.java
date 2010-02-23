@@ -25,7 +25,7 @@ import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument;
 @Converter
 public class CDATypeConverter {
 
-    private static CDAR2Renderer renderer = new CDAR2Renderer();
+    private final static CDAR2Renderer renderer = new CDAR2Renderer();
 
     @Converter
     public static InputStream toInputStream(

@@ -173,6 +173,7 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param processor
      *      The original consumer processor.  
      */
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
@@ -207,7 +208,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             x = new ConsumerRequestDefragmenterInterceptor(this, x);
         }
         x = new ConsumerStringProcessorInterceptor(this, x);
-        return this.wrappedEndpoint.createConsumer(x);
+        return wrappedEndpoint.createConsumer(x);
     }
 
 
@@ -215,6 +216,7 @@ public class MllpEndpoint extends DefaultEndpoint {
      * Wraps the original camel-mina producer  
      * into a set of PIX/PDQ-specific ones.
      */
+    @Override
     public Producer createProducer() throws Exception {
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
@@ -228,7 +230,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             }
         }
 
-        Producer x = this.wrappedEndpoint.createProducer();
+        Producer x = wrappedEndpoint.createProducer();
         x = new ProducerStringProcessorInterceptor(this, x);
         if (isSupportUnsolicitedFragmentation()) {
             x = new ProducerRequestFragmenterInterceptor(this, x);

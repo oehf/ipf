@@ -109,7 +109,7 @@ public enum ValidationMessage {
 
     private ValidationMessage(String text) {
         this.text = text;
-        this.errorCode = null;
+        errorCode = null;
     }
 
     /**

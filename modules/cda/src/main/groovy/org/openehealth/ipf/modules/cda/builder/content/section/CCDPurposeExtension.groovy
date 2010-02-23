@@ -67,7 +67,7 @@ public class CCDPurposeExtension extends CompositeModelExtension{
             }
             
             getPurpose{ ->
-                delegate.component?.structuredBody?.component.find { 
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '48764-5'
                 } ?.section
             }

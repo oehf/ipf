@@ -55,7 +55,7 @@ public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
      */
     public SplitterDefinition(Expression expression) {
         notNull(expression, "expression");
-        this.expressionDefinition = new ExpressionDefinition(expression);
+        expressionDefinition = new ExpressionDefinition(expression);
     }
 
     /**

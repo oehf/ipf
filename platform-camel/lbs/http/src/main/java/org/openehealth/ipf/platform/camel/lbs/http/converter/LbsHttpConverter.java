@@ -55,7 +55,7 @@ public final class LbsHttpConverter {
      *          the resource list
      * @return the input stream. The stream must be closed by the caller of the converter.
      *          This also applies when using the converter implicitly via 
-     *          {@link Message#getBody(Class))}. Example:
+     *          {@link org.apache.camel.Message#getBody(Class))}. Example:
      *          <blockquote><pre><code>
      *          InputStream input = exchange.getIn().getBody(InputStream.class);
      *          try {
@@ -80,11 +80,9 @@ public final class LbsHttpConverter {
      * @param resourceList
      *          the resource list
      * @return the data source
-     * @throws IOException
-     *          if an {@code IOException} was thrown by the resource
      */
     @Converter
-    public static DataSource toDataSource(ResourceList resourceList) throws IOException {
+    public static DataSource toDataSource(ResourceList resourceList) {
         return toResourceDataSource(resourceList);
     }
     
@@ -95,11 +93,9 @@ public final class LbsHttpConverter {
      * @param resourceList
      *          the resource list
      * @return the data source
-     * @throws IOException
-     *          if an {@code IOException} was thrown by the resource
      */
     @Converter
-    public static ResourceDataSource toResourceDataSource(ResourceList resourceList) throws IOException {
+    public static ResourceDataSource toResourceDataSource(ResourceList resourceList) {
         if (resourceList.size() == 0) {
             log.debug("creating a substitute data source because there is no content in the resource list");
             new ResourceDataSource("invalid", INVALID_DATA_SOURCE);

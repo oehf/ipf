@@ -45,7 +45,7 @@ public class AuthorTransformer {
      */
     public AuthorTransformer(EbXMLFactory ebXMLFactory) {
         notNull(ebXMLFactory, "ebXMLFactory cannot be null");
-        this.factory = ebXMLFactory; 
+        factory = ebXMLFactory;
     }
 
     /**

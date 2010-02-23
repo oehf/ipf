@@ -41,7 +41,7 @@ public class AssociationTransformer {
     public AssociationTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
-        this.codeTransformer = new CodeTransformer(factory);
+        codeTransformer = new CodeTransformer(factory);
     }
     
     /**

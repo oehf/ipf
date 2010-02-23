@@ -31,7 +31,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 /**
  * Access synchronizer for OHT XDS ATNA Auditor singletons.
  */
-public class AuditorManager {
+public abstract class AuditorManager {
     private static final Object sync = new Object();
     
     private AuditorManager() {

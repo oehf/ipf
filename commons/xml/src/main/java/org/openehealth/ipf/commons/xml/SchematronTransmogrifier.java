@@ -56,9 +56,9 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
 
-    private static Log LOG = LogFactory.getLog(SchematronTransmogrifier.class);
+    private final static Log LOG = LogFactory.getLog(SchematronTransmogrifier.class);
 
-    private XsltTransmogrifier<String> xsltTransmogrifier;
+    private final XsltTransmogrifier<String> xsltTransmogrifier;
 
     @SuppressWarnings("unchecked")
     public SchematronTransmogrifier() {
@@ -76,12 +76,12 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
 
     public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> clazz) {
         super(clazz);
-        this.xsltTransmogrifier = t;
+        xsltTransmogrifier = t;
     }
     
     public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> clazz, Map<String, Object> staticParams) {
         super(clazz, staticParams);
-        this.xsltTransmogrifier = t;
+        xsltTransmogrifier = t;
     }
 
     @Override

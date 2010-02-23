@@ -41,6 +41,7 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
      * Converts outgoing request to a {@link MessageAdapter}  
      * and performs some exchange configuration.
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
                 exchange.getIn(), 

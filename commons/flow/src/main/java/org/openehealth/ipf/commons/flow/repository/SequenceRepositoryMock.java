@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class SequenceRepositoryMock implements SequenceRepository {
 
-    private AtomicLong number = new AtomicLong(0L);
+    private final AtomicLong number = new AtomicLong(0L);
     
     @Override
     public void initSequence() {

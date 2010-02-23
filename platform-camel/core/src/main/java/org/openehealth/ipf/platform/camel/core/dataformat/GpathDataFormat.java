@@ -31,7 +31,7 @@ import org.springframework.util.xml.SimpleSaxErrorHandler;
  */
 public class GpathDataFormat extends AbstractXmlDataFormat {
 
-    private static Log LOG = LogFactory.getLog(GnodeDataFormat.class);
+    private final static Log LOG = LogFactory.getLog(GnodeDataFormat.class);
 
     public GpathDataFormat() {
         super();

@@ -64,12 +64,11 @@ public abstract class MllpComponent extends MinaComponent {
     /**
      * Creates and configures the endpoint.
      */
-    @SuppressWarnings("unchecked")
     @Override
     protected Endpoint createEndpoint(
             String uri,
             String remaining, 
-            Map parameters) throws Exception 
+            Map<String, Object> parameters) throws Exception
     {
         // replace URL parts
         int pos = uri.indexOf(":");
@@ -77,35 +76,35 @@ public abstract class MllpComponent extends MinaComponent {
         remaining = "tcp://" + remaining;
 
         // extract & exclude parameters which cannot be handled by camel-mina
-        boolean audit = (Boolean) getAndRemoveParameter(parameters, "audit", boolean.class, true);
-        boolean allowIncompleteAudit = 
-            (Boolean) getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false); 
+        boolean audit = getAndRemoveParameter(parameters, "audit", boolean.class, true);
+        boolean allowIncompleteAudit =
+                getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false);
 
-        boolean secure = (Boolean) getAndRemoveParameter(parameters, "secure", boolean.class, false);
-        boolean mutualTLS = (Boolean) getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
-        String sslContextBean = (String) getAndRemoveParameter(parameters, "sslContext", String.class, "");
-        String interceptorBeans = (String) getAndRemoveParameter(parameters, "interceptors", String.class, "");
-        String sslProtocolsString = (String) getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
-        String sslCiphersString = (String) getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
+        boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
+        boolean mutualTLS = getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
+        String sslContextBean = getAndRemoveParameter(parameters, "sslContext", String.class, "");
+        String interceptorBeans = getAndRemoveParameter(parameters, "interceptors", String.class, "");
+        String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
+        String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
         
-        boolean supportInteractiveContinuation = (Boolean) getAndRemoveParameter(
+        boolean supportInteractiveContinuation = getAndRemoveParameter(
                 parameters, "supportInteractiveContinuation", boolean.class, false);
-        int interactiveContinuationDefaultThreshold = (Integer) getAndRemoveParameter(
+        int interactiveContinuationDefaultThreshold = getAndRemoveParameter(
                 parameters, "interactiveContinuationDefaultThreshold", int.class, -1);      // >= 1 data record
         
-        boolean supportUnsolicitedFragmentation = (Boolean) getAndRemoveParameter(
+        boolean supportUnsolicitedFragmentation = getAndRemoveParameter(
                 parameters, "supportUnsolicitedFragmentation", boolean.class, false);
-        int unsolicitedFragmentationThreshold = (Integer) getAndRemoveParameter(
+        int unsolicitedFragmentationThreshold = getAndRemoveParameter(
                 parameters, "unsolicitedFragmentationThreshold", int.class, -1);            // >= 3 segments
         
-        boolean supportSegmentFragmentation = (Boolean) getAndRemoveParameter(
+        boolean supportSegmentFragmentation = getAndRemoveParameter(
                 parameters, "supportSegmentFragmentation", boolean.class, false);
-        int segmentFragmentationThreshold = (Integer) getAndRemoveParameter(
+        int segmentFragmentationThreshold = getAndRemoveParameter(
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
         
         ContinuationStorage storage = null;
         if (supportInteractiveContinuation) {
-            String storageBean = (String) getAndRemoveParameter(
+            String storageBean = getAndRemoveParameter(
                     parameters, "interactiveContinuationStorage", String.class, null);
             if (storageBean == null) {
                 storage = new InMemoryContinuationStorage();
@@ -117,7 +116,7 @@ public abstract class MllpComponent extends MinaComponent {
         
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
-            parameters = new HashMap();
+            parameters = new HashMap<String, Object>();
         }
         parameters.put("sync", true);
         parameters.put("lazySessionCreation", true);

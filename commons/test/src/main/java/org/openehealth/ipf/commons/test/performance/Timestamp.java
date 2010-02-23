@@ -42,14 +42,14 @@ public class Timestamp implements Serializable {
     private long nanoValue;
 
     public Timestamp() {
-        this.nanoValue = NANO_UNIT.convert(System.currentTimeMillis(),
+        nanoValue = NANO_UNIT.convert(System.currentTimeMillis(),
                 TimeUnit.MILLISECONDS);
     }
 
     public Timestamp(Long value, TimeUnit unit) {
         notNull(unit, "The unit must not be null!");
         notNull(value, "The value must not be null!");
-        this.nanoValue = NANO_UNIT.convert(value, unit);
+        nanoValue = NANO_UNIT.convert(value, unit);
     }
 
     public boolean isAfterOrEqual(Timestamp timestamp) {
@@ -59,11 +59,7 @@ public class Timestamp implements Serializable {
     public boolean isBefore(Timestamp timestamp) {
         notNull(timestamp, "The timestamp must not be null!");
         long delta = nanoValue - timestamp.nanoValue;
-        if (delta >= 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return delta < 0;
     }
 
     /**
@@ -117,10 +113,7 @@ public class Timestamp implements Serializable {
             return false;
         }
         Timestamp other = (Timestamp) obj;
-        if (nanoValue != other.nanoValue) {
-            return false;
-        }
-        return true;
+        return nanoValue == other.nanoValue;
     }
 
     @Override

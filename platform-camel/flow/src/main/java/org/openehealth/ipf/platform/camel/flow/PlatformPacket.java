@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.flow;
 
+import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.core.io.IOUtils;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.camel.Exchange;
-import org.openehealth.ipf.commons.core.io.IOUtils;
 
 /**
  * A serializable data container for {@link Exchange} content. The data
@@ -109,8 +109,6 @@ public class PlatformPacket implements Serializable {
      * Returns the {@link ReplayStrategy} identifier.
      * 
      * @return the {@link ReplayStrategy} identifier.
-     * 
-     * @see ReplayStrategy#ge
      */
     public String getReplayStrategyId() {
         return replayStrategyId;
@@ -118,6 +116,7 @@ public class PlatformPacket implements Serializable {
 
     /**
      * @param replayStrategyId
+     *          the replay strategy.
      */
     public void setReplayStrategyId(String replayStrategyId) {
         this.replayStrategyId = replayStrategyId;

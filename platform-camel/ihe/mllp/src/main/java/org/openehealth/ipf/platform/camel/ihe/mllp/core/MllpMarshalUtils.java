@@ -241,7 +241,7 @@ public class MllpMarshalUtils {
                     t); 
         }
 
-        ca.uhn.hl7v2.model.Message nak = (ca.uhn.hl7v2.model.Message) MessageUtils.nak(
+        ca.uhn.hl7v2.model.Message nak = MessageUtils.nak(
                 classFactory,
                 original, 
                 hl7Exception, 

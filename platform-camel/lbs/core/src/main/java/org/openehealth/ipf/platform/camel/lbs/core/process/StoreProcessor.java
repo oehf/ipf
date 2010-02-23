@@ -70,7 +70,7 @@ public class StoreProcessor extends ResourceHandlingProcessor {
     }
 
     private final class ResourceCleanUp implements Synchronization {
-        private String unitOfWorkId;
+        private final String unitOfWorkId;
 
         public ResourceCleanUp(String unitOfWorkId) {
             this.unitOfWorkId = unitOfWorkId;

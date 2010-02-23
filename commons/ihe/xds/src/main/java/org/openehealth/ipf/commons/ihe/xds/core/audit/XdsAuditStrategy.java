@@ -59,8 +59,8 @@ public abstract class XdsAuditStrategy {
      *      (parameter initially configurable via endpoint URL).
      */
     public XdsAuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        this.setServerSide(serverSide);
-        this.setAllowIncompleteAudit(allowIncompleteAudit);
+        setServerSide(serverSide);
+        setAllowIncompleteAudit(allowIncompleteAudit);
     }
     
 

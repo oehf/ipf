@@ -40,7 +40,7 @@ public class MllpEncoder extends ProtocolEncoderAdapter {
 
     static final int BLOCK_SIZE = 1024;
     
-    private TypeConverter typeConverter;
+    private final TypeConverter typeConverter;
 
     private static final Log log = LogFactory.getLog(MllpEncoder.class);
 

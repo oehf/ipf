@@ -41,9 +41,9 @@ public class Client {
     private final HttpConnectionManager mgr; 
     
     public Client() {
-        this.mgr = new MultiThreadedHttpConnectionManager();
-        this.client = new HttpClient(mgr);
-        this.contentType = "text/plain";
+        mgr = new MultiThreadedHttpConnectionManager();
+        client = new HttpClient(mgr);
+        contentType = "text/plain";
     }
     
     public void setDefaultMaxConnectionsPerHost(int numConnections) {

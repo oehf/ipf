@@ -36,7 +36,7 @@ import org.openehealth.ipf.commons.core.modules.api.Parser;
  */
 public class ParserAdapter extends ProcessorAdapter {
 
-    private Parser parser;
+    private final Parser parser;
 
     /**
      * Creates a new {@link ParserAdapter} and sets the delegate
@@ -63,9 +63,9 @@ public class ParserAdapter extends ProcessorAdapter {
      * @throws Exception
      *             if a processing error occurs.
      * 
-     * @see #doProcess(InputStream, OutputStream, Object...)
-     * @see #doProcess(Reader, Writer, Object...)
-     * @see #doProcess(Source, Result, Object...)
+     * @see #doProcess(InputStream, Object...)
+     * @see #doProcess(Reader, Object...)
+     * @see #doProcess(Source, Object...)
      * @see #doProcess(String, Object...)
      */
     @Override
@@ -147,11 +147,9 @@ public class ParserAdapter extends ProcessorAdapter {
      *            input data
      * @param inputParams
      *            input parameters
-     * @throws IOException
-     *             if a system-level problem occurs
      * @return parsing result
      */
-    protected Object doProcess(String inputData, Object... inputParams) throws IOException {
+    protected Object doProcess(String inputData, Object... inputParams) {
         return parser.parse(inputData, inputParams);
     }
     

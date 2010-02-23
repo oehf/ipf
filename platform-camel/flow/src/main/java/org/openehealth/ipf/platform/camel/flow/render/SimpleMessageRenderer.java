@@ -28,6 +28,7 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessageRenderer;
  */
 public class SimpleMessageRenderer implements PlatformMessageRenderer {
 
+    @Override
     public String render(PlatformMessage message) {
         Message input = message.getExchange().getIn();
         if (input.getBody() instanceof InputStream) {

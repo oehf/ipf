@@ -30,13 +30,14 @@ public abstract class DefaultBuilderDefinitionLoader implements
     private static final Log LOG = LogFactory
             .getLog(DefaultBuilderDefinitionLoader.class);
 
-    private MetaBuilder builder;
+    private final MetaBuilder builder;
 
     public DefaultBuilderDefinitionLoader(MetaBuilder builder) {
         super();
         this.builder = builder;
     }
 
+    @Override
     public Collection<String> load() {
         Collection<String> loaded = new HashSet<String>();
         load(loaded);

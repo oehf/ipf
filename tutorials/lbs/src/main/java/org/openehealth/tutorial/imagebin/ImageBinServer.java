@@ -15,15 +15,15 @@
  */
 package org.openehealth.tutorial.imagebin;
 
-import java.io.File;
-import javax.xml.ws.Endpoint;
-import javax.xml.ws.soap.SOAPBinding;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.xml.ws.Endpoint;
+import javax.xml.ws.soap.SOAPBinding;
+import java.io.File;
+
 public class ImageBinServer {
-    private static Log log = LogFactory.getLog(ImageBinServer.class);
+    private static final Log log = LogFactory.getLog(ImageBinServer.class);
     
     private Endpoint imageBinEndpoint;    
 

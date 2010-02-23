@@ -70,7 +70,7 @@ public class CCDFamilyHistoryExtension extends CompositeModelExtension {
                 }
             }
             getFamilyHistory { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '10157-6'
                 } ?.section
             }
@@ -164,7 +164,7 @@ public class CCDFamilyHistoryExtension extends CompositeModelExtension {
 			}
 			getCauseOfDeath { ->
 				delegate.component.findAll {
-					'2.16.840.1.113883.10.20.1.42' in it.observation?.templateId.root
+					'2.16.840.1.113883.10.20.1.42' in it.observation?.templateId?.root
 				}?.observation
 			}
 			
@@ -176,7 +176,7 @@ public class CCDFamilyHistoryExtension extends CompositeModelExtension {
 			
 			getFamilyHistoryObservation { ->
 				delegate.component.find { 
-					'2.16.840.1.113883.10.20.1.22' in it.observation?.templateId.root  
+					'2.16.840.1.113883.10.20.1.22' in it.observation?.templateId?.root  
 				}?.observation
 			}
 		}

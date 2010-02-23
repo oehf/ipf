@@ -33,6 +33,7 @@ public class LoggingCallback extends Closure {
         super(null);
     }
     
+    @Override
     public Object call(Object e) {
         CreateNodeEvent cne = (CreateNodeEvent)e;
         nodesCreated++;

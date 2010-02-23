@@ -15,15 +15,12 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptTypes
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
-
-import ca.uhn.hl7v2.model.Varies
-import ca.uhn.hl7v2.model.Type
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Primitive
-import ca.uhn.hl7v2.util.DeepCopy
+import ca.uhn.hl7v2.model.Type
+import ca.uhn.hl7v2.model.Varies
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
 
 /**
  * @author Christian Ohr
@@ -55,6 +52,8 @@ class VariesAdapter extends TypeAdapter {
         if (target.data instanceof Primitive) {
           return idx == 1 ? target.data : new NullAdapter()
         }
+
+        return new NullAdapter();
     }
     
     void putAt(int idx, Object value) {

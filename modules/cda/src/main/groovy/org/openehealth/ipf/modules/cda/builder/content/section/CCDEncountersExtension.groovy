@@ -66,7 +66,7 @@ public class CCDEncountersExtension extends CompositeModelExtension {
                 }
             }
             getEncounters { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '46240-8'
                 } ?.section
             }

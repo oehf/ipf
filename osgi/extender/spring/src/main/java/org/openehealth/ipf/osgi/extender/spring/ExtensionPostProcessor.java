@@ -32,7 +32,7 @@ public class ExtensionPostProcessor implements OsgiBeanFactoryPostProcessor {
 
     private static final Log LOG = LogFactory.getLog(ExtensionPostProcessor.class);
     
-    private ExtensionActivator extensionActivator;
+    private final ExtensionActivator extensionActivator;
     
     public ExtensionPostProcessor() {
         extensionActivator = new DefaultActivator();

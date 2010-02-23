@@ -31,6 +31,7 @@ public class DelegatingAggregationStrategy extends ClosureAdapter implements Agg
         super(closure);
     }
 
+    @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
         Object result = call(oldExchange, newExchange);
         if (result instanceof Exchange) {

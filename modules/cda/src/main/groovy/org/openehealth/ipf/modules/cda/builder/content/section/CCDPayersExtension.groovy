@@ -69,7 +69,7 @@ public class CCDPayersExtension extends CompositeModelExtension {
             }
             
 	        getPayers{ ->
-                delegate.component?.structuredBody?.component.find { 
+                delegate.component?.structuredBody?.component?.find { 
                     it.section?.code?.code == '48768-6'
                 } ?.section
             }

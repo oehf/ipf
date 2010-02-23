@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
-import groovy.xml.MarkupBuilderimport groovy.util.XmlSlurper
-import groovy.util.slurpersupport.GPathResultimport groovy.util.slurpersupport.Node
+import groovy.xml.MarkupBuilder
+import groovy.util.XmlSlurper
+import groovy.util.slurpersupport.GPathResult
+import groovy.util.slurpersupport.Node
+
 /*
  * Routines for yielding of XML contents from a GPath Slurper to a Markup Builder.
  * @author Dmytro Rud
@@ -42,7 +45,7 @@ class XmlYielder {
         Map<String, String> knownNamespaces = [:]
         knownNamespaces.putAll(predefinedNamespaces)
 
-        String elementNsPrefix = getNsPrefix(source.namespaceURI, knownNamespaces, attributes)
+        String elementNsPrefix = getNsPrefix(source.namespaceURI(), knownNamespaces, attributes)
 
         for(attribute in source.attributes()) {
             String nsUri = source.attributeNamespaces[attribute.key]
@@ -68,7 +71,7 @@ class XmlYielder {
      * XML builder, using the provided set of pre-defined namespace prefixes.
      */
     static void yieldChildren(Node source, MarkupBuilder target, Map<String, String> predefinedNamespaces) {
-        for (child in source.children) {
+        for (child in source.children()) {
             if (child instanceof Node) {
                 yieldElement(child, target, predefinedNamespaces)
             } else {

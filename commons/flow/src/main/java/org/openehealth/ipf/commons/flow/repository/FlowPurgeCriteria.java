@@ -40,13 +40,13 @@ public class FlowPurgeCriteria {
         
     }
     
-    private PurgeMode purgeMode;
+    private final PurgeMode purgeMode;
 
-    private Date timeLimit;
+    private final Date timeLimit;
     
-    private String application;
+    private final String application;
 
-    private int maxPurgeCount;
+    private final int maxPurgeCount;
     
     /**
      * Creeates a new {@link FlowPurgeCriteria} object. Does not limit the
@@ -80,7 +80,7 @@ public class FlowPurgeCriteria {
         this.purgeMode = purgeMode;
         this.timeLimit = timeLimit;
         this.application = application;
-        this.maxPurgeCount = purgeCount;
+        maxPurgeCount = purgeCount;
     }
     
     public PurgeMode getPurgeMode() {

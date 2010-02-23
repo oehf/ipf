@@ -81,10 +81,9 @@ public class HibernateUtils {
      * @param blob
      *            an initialized {@link Blob}.
      * @return the {@link Blob} instance passed as <code>blob</code> argument.
-     * @throws IOException
      * @throws SQLException
      */
-    public static Blob writeToBlob(byte[] bytes, Blob blob) throws IOException, SQLException {
+    public static Blob writeToBlob(byte[] bytes, Blob blob) throws SQLException {
         if (/*blob != null*/ false) { // not supported
             blob.setBytes(0, bytes);
             blob.truncate(bytes.length);

@@ -70,7 +70,7 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
      */
     public FlowBeginProcessor(String identifier) {
         this.identifier = identifier;
-        this.replayErrorProcessor = new Noop();
+        replayErrorProcessor = new Noop();
     }
     
     public void setRegistry(ReplayStrategyRegistry registry) {
@@ -87,6 +87,7 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
      * 
      * @return this processor's unique identifier.
      */
+    @Override
     public String getIdentifier() {
         return identifier;
     }
@@ -123,7 +124,7 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
      */
     public FlowBeginProcessor replayErrorHandler(String replayErrorUri) throws Exception {
         if (replayErrorUri != null) {
-            this.replayErrorProcessor = resolveReplayErrorEndpoint(replayErrorUri).createProducer();
+            replayErrorProcessor = resolveReplayErrorEndpoint(replayErrorUri).createProducer();
         }
         return this;
     }
@@ -143,6 +144,7 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
     /* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.flow.ReplayStrategy#register()
      */
+    @Override
     public void register() {
         if (registry != null) {
             registration = registry.register(this);
@@ -175,12 +177,13 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
     /**
      * Replays the exchange represented by <code>packet</code>. If the
      * replayed exchange has failed it is forwarded to the error endpoint
-     * configured via {@link #replayErrorUri}.
+     * configured via {@link #replayErrorProcessor}.
      * 
      * @throws Exception
      *             if replay fails.
      * @return the packet passed as argument.
      */
+    @Override
     public PlatformPacket replay(PlatformPacket packet) throws Exception {
         Exchange exchange = createExchange(packet);
         getProcessor().process(exchange);

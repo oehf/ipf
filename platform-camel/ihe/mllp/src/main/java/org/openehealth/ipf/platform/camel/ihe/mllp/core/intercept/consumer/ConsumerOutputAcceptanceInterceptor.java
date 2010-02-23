@@ -35,6 +35,7 @@ public class ConsumerOutputAcceptanceInterceptor
         super(endpoint, wrappedProcessor);
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         AcceptanceInterceptorUtils.processOutput(this, exchange);
     }

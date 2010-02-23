@@ -32,10 +32,7 @@ public class ProcessingTime {
         this.value = value;
         this.unit = unit;
     }
-    /**
-     * @param targetUnit
-     * @return
-     */
+
     public long getValue(TimeUnit unit) {
         return unit.convert(value, this.unit);
     }

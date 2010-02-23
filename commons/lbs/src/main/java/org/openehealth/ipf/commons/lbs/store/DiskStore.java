@@ -45,10 +45,10 @@ public class DiskStore implements LargeBinaryStore {
     private static final URI DEFAULT_BASE_URI = URI.create("lbs://localhost/");
     private static final FlatUriUuidConversion DEFAULT_CONVERSION_STRATEGY = 
         new FlatUriUuidConversion(DEFAULT_BASE_URI);
-    
-    private UuidUriConversionStrategy uuidUriConversion; 
-    private FileSystemLayoutStrategy fileSystemLayout;
-    
+
+    private final UuidUriConversionStrategy uuidUriConversion;
+    private final FileSystemLayoutStrategy fileSystemLayout;
+
     private static final Log log = LogFactory.getLog(DiskStore.class);
 
     /**
@@ -198,6 +198,7 @@ public class DiskStore implements LargeBinaryStore {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e1) {
+            Thread.currentThread().interrupt();
         }
     }
 

@@ -51,8 +51,8 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     }
 
     private void configure() {
-        this.serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
-        this.serviceAddress = "/" + address;
+        serviceUrl = (secure ? ENDPOINT_PROTOCOL_SECURE : ENDPOINT_PROTOCOL) + address;
+        serviceAddress = "/" + address;
     }
 
     @Override

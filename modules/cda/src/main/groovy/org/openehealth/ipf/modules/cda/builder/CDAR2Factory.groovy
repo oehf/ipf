@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.EClassifier
 public class CDAR2Factory extends AbstractFactory{
 	
 	static def f = org.openhealthtools.ihe.common.cdar2.CDAR2Factory.eINSTANCE
-	static def factories = [:]
+	static final def factories = [:]
 	def type
 	
 	CDAR2Factory() {
@@ -114,13 +114,13 @@ public class CDAR2Factory extends AbstractFactory{
 	 * @param name
 	 * @return factory instance for name
 	 */
-	static def factoryFor(String name) {
-		if (!factories.containsKey(name)) {
-			synchronized(this) {
-				factories.put(name, new CDAR2Factory(name))
-			}
-		}
-		factories.get(name)
-	}
-	
+    static def factoryFor(String name) {
+        synchronized (factories) {
+            if (!factories.containsKey(name)) {
+                factories.put(name, new CDAR2Factory(name))
+            }
+            factories.get(name)
+        }
+    }
+
 }

@@ -108,7 +108,7 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
      * @dsl platform-camel-core
      */
     public ValidatorAdapterDefinition xsd() {
-        this.validator = new XsdValidator();
+        validator = new XsdValidator();
         return (ValidatorAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
@@ -118,7 +118,7 @@ public class ValidatorAdapterDefinition extends ProcessorAdapterDefinition {
      * @dsl platform-camel-core
      */
     public ValidatorAdapterDefinition schematron() {
-        this.validator = new SchematronValidator();
+        validator = new SchematronValidator();
         return (ValidatorAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     

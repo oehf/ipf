@@ -34,7 +34,7 @@ import org.xml.sax.InputSource;
  */
 class ClasspathUriResolver implements URIResolver {
 
-    private URIResolver standardResolver;
+    private final URIResolver standardResolver;
     
     public ClasspathUriResolver(TransformerFactory factory) {
         super();

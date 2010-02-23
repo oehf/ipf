@@ -77,9 +77,9 @@ public class FlowPart {
     
     
     public FlowPart() {
-        this.identifier = UUID.randomUUID().toString();
-        this.contributionCount = 0;
-        this.filterCount = 0;
+        identifier = UUID.randomUUID().toString();
+        contributionCount = 0;
+        filterCount = 0;
     }
 
     public Long getFlowId() {
@@ -99,7 +99,7 @@ public class FlowPart {
     }
 
     public void setPath(String branch) {
-        this.path = branch;
+        path = branch;
     }
 
     public Date getContributionTime() {
@@ -170,9 +170,9 @@ public class FlowPart {
      */
     public void setFlowPartMessageText(String message) {
         if (message == null) {
-            this.flowPartMessage = null;
+            flowPartMessage = null;
         } else {
-            this.flowPartMessage = new FlowPartMessage(message);
+            flowPartMessage = new FlowPartMessage(message);
         }
     }
     

@@ -29,8 +29,8 @@ import org.openehealth.ipf.commons.core.modules.api.Renderer;
  */
 public class DataFormatAdapter extends AdapterSupport implements DataFormat {
 
-    private Parser parser;
-    private Renderer renderer;
+    private final Parser parser;
+    private final Renderer renderer;
     
     public DataFormatAdapter(Parser parser) {
         this(parser, null);
@@ -46,8 +46,8 @@ public class DataFormatAdapter extends AdapterSupport implements DataFormat {
     }
     
     public DataFormatAdapter(Converter converter) {
-        this.parser = converter;
-        this.renderer = converter;
+        parser = converter;
+        renderer = converter;
     }
     
     @Override

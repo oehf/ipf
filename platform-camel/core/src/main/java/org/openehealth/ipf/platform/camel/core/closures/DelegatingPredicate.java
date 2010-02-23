@@ -30,9 +30,10 @@ public class DelegatingPredicate extends ClosureAdapter implements Predicate {
         super(closure);
     }
 
+    @Override
     public boolean matches(Object source, Object... params) {
         if (getClosure().getParameterTypes().length == 2) {
-            return (Boolean)call(new Object[] {source, params});
+            return (Boolean)call(source, params);
         } else {
             return (Boolean)call(source);
         }

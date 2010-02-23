@@ -42,19 +42,19 @@ public class Iti16Endpoint extends DefaultItiEndpoint {
      *          the endpoint address from the URI.
      * @param iti16Component
      *          the component creating this endpoint.
-     * @throws URISyntaxException
-     *          if the endpoint URI was not a valid URI.
      */
-    public Iti16Endpoint(String endpointUri, String address, Iti16Component iti16Component) throws URISyntaxException {
+    public Iti16Endpoint(String endpointUri, String address, Iti16Component iti16Component) {
         super(endpointUri, address, iti16Component);
     }
 
+    @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = 
             Iti16.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
         return new Iti16Producer(this, clientFactory);
     }
 
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = 
             Iti16.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());

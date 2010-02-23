@@ -34,7 +34,7 @@ public class Duration {
     private static final String DAY = "d";
     
     
-    private long milliseconds;
+    private final long milliseconds;
     
     public Duration(long milliseconds) {
         this.milliseconds = milliseconds;

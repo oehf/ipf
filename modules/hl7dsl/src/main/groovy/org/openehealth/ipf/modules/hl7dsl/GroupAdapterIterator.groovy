@@ -70,13 +70,14 @@ class GroupAdapterIterator implements Iterator {
 	}
 	
 	private StructureAdapter addChildren(GroupAdapter group) {
-		group?.names.reverseEach { name ->
+		group?.names?.reverseEach { name ->
 			reverseEachWithIndex(group.getAll(name)) { adapter, i ->
 				remainingStructures << adapter.withPath(group, i)
 			}
 		}
 		group
-	}		
+	}
+		
 	@Override
 	public boolean hasNext() {
 		! remainingStructures.isEmpty()

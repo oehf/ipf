@@ -24,6 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHL7v3WebService;
  */
 public class Iti46Service extends DefaultHL7v3WebService implements Iti46PortType {
 
+    @Override
     public String pixConsumerPRPAIN201302UV02(String body) {
         return doProcess(body);
     }

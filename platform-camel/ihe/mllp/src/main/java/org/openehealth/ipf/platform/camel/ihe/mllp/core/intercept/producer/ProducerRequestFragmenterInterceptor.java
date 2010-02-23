@@ -46,6 +46,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterc
     }
 
     
+    @Override
     public void process(Exchange exchange) throws Exception {
         int threshold = getMllpEndpoint().getUnsolicitedFragmentationThreshold();
         if (threshold < 3) {

@@ -68,7 +68,7 @@ public class CCDProblemsExtension extends CompositeModelExtension {
             }
 
             getProblems { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '11450-4'
                 } ?.section
             }

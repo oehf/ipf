@@ -43,7 +43,7 @@ public abstract class AdapterSupport implements Adapter {
      * @see Message#getBody()
      */
     public AdapterSupport() {
-        this.inputExpression = body();
+        inputExpression = body();
     }
     
     /* (non-Javadoc)
@@ -85,7 +85,7 @@ public abstract class AdapterSupport implements Adapter {
      */
     @Override
     public Adapter staticParams(Object... params) {
-        this.paramsExpression = new StaticParams(params);
+        paramsExpression = new StaticParams(params);
         return this;
     }
     

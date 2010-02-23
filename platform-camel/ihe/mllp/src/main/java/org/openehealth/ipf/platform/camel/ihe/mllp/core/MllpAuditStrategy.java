@@ -56,7 +56,7 @@ public interface MllpAuditStrategy {
      *      audit dataset to be enriched.
      * @param msg
      *      {@link MessageAdapter} representing the message.
-     * @param msg
+     * @param exchange
      *      Camel exchange
      */
     public void enrichAuditDatasetFromRequest(

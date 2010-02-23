@@ -38,12 +38,12 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
     
     public TransmogrifierAdapterDefinition(Transmogrifier transmogrifier) {
         this.transmogrifier = transmogrifier;
-        this.params().headers();
+        params().headers();
     }
 
     public TransmogrifierAdapterDefinition(String transmogrifierBean) {
         this.transmogrifierBean = transmogrifierBean;
-        this.params().headers();
+        params().headers();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * @dsl platform-camel-core
      */
     public TransmogrifierAdapterDefinition xslt() {
-        this.transmogrifier = new XsltTransmogrifier<String>(String.class);
+        transmogrifier = new XsltTransmogrifier<String>(String.class);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
@@ -74,7 +74,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * @dsl platform-camel-core
      */
     public <T> TransmogrifierAdapterDefinition xslt(Class<T> clazz) {
-        this.transmogrifier = new XsltTransmogrifier<T>(clazz);
+        transmogrifier = new XsltTransmogrifier<T>(clazz);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
@@ -84,7 +84,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * @dsl platform-camel-core
      */
     public TransmogrifierAdapterDefinition schematron() {
-        this.transmogrifier = new SchematronTransmogrifier<String>(String.class);
+        transmogrifier = new SchematronTransmogrifier<String>(String.class);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
 
@@ -96,7 +96,7 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * @dsl platform-camel-core
      */
     public <T> TransmogrifierAdapterDefinition schematron(Class<T> clazz) {
-        this.transmogrifier = new SchematronTransmogrifier<T>(clazz);
+        transmogrifier = new SchematronTransmogrifier<T>(clazz);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
 

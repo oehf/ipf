@@ -27,7 +27,7 @@ import javax.persistence.Table;
 @Table(name = "T_FLOW_NUMBER", schema = "PLATFORM")
 public class FlowNumber {
     
-    public static String DEFAULT_SEQUENCE = "default";
+    public static final String DEFAULT_SEQUENCE = "default";
     
     @Id
     @Column(name="C_SEQUENCE")
@@ -41,7 +41,7 @@ public class FlowNumber {
     }
 
     public FlowNumber(String sequence) {
-        this.value = 0L;
+        value = 0L;
         this.sequence = sequence;
     }
 

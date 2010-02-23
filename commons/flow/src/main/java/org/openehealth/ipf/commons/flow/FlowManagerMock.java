@@ -27,114 +27,142 @@ import org.openehealth.ipf.commons.flow.transfer.FlowInfoFinderCriteria;
  */
 public class FlowManagerMock implements FlowManager {
 
+    @Override
     public FlowInfo findFlow(Long flowId) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public FlowInfo findFlow(Long flowId, boolean includeText) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public boolean flowCompleted(Long flowId) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public List<FlowInfo> findFlows(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public List<FlowInfo> findErrorFlows(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public List<FlowInfo> findUnackFlows(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
     
+    @Override
     public List<Long> findFlowIds(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public List<Long> findErrorFlowIds(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public List<Long> findUnackFlowIds(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
    
+    @Override
     public String findFlowMessageText(Long flowId) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public String findFlowPartMessageText(Long flowId, String flowPartPath) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public int purgeFlows(FlowPurgeCriteria purgeCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public int replayFlows(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public int replayErrorFlows(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public int replayUnackFlows(FlowInfoFinderCriteria finderCriteria) {
         throw new UnsupportedOperationException("not implemented");
     }
     
+    @Override
     public void acknowledgeFlow(ManagedMessage managedMessage) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public void invalidateFlow(ManagedMessage managedMessage) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public boolean filterFlow(ManagedMessage managedMessage) {
         throw new UnsupportedOperationException("not implemented");
     }
     
+    @Override
     public Long beginFlow(ManagedMessage managedMessage, String application) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public Long beginFlow(ManagedMessage managedMessage, String application, int ackCountExpected) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public void replayFlow(Long flowId) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public boolean isFlowFilterEnabled(String application) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public void setFlowFilterEnabled(String application, boolean flowFilterEnabled) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public boolean isFlowCleanupEnabled(String application) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public void setFlowCleanupEnabled(String application, boolean flowCleanupEnabled) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public List<ApplicationConfig> findApplicationConfigs() {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public ApplicationConfig getApplicationConfig(String application) {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    @Override
     public void mergeApplicationConfig(ApplicationConfig applicationConfig) {
         throw new UnsupportedOperationException("not implemented");
     }

@@ -26,7 +26,7 @@ import org.codehaus.groovy.runtime.InvokerInvocationException;
  */
 public abstract class ClosureAdapter {
     
-    private Closure closure;
+    private final Closure closure;
     
     public ClosureAdapter(Closure closure) {
         this.closure = closure;

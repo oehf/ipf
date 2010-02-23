@@ -22,7 +22,7 @@ import java.io.StringWriter;
  */
 public class MarkupBuilder extends groovy.xml.MarkupBuilder {
 
-    private StringWriter writer;
+    private final StringWriter writer;
     
     private MarkupBuilder(StringWriter writer) {
         super(writer);

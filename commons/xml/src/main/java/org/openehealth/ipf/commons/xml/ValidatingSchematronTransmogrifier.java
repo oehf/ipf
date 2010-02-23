@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
  */
 class ValidatingSchematronTransmogrifier<T> extends SchematronTransmogrifier<T> {
 
-    private static Log LOG = LogFactory
+    private final static Log LOG = LogFactory
             .getLog(ValidatingSchematronTransmogrifier.class);
 
     public ValidatingSchematronTransmogrifier() {

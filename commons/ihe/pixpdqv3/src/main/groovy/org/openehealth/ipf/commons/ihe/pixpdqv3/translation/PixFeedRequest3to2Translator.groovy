@@ -15,10 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
+import ca.uhn.hl7v2.model.Message
+import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.GroupAdapterimport groovy.util.slurpersupport.GPathResultimport ca.uhn.hl7v2.model.Message
-import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.dropTimeZone
+import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.fillCx
+import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.fillMshFromSlurper
+import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.nextRepetition
+import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.slurp
 
 /**
  * PIX Feed Requests translator v3 to v2.
@@ -150,7 +155,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         def triggerEvent  = interactionId.map('map-interactionId-eventStructure')[0]
 	    
         def hapiMessage   = Message."ADT_${triggerEvent}"('2.3.1')        
-        def adt           = new MessageAdapter(hapiMessage);          
+        def adt           = new MessageAdapter(hapiMessage)
         def grp           = (triggerEvent == 'A40') ? adt.PIDPD1MRGPV1(0) : adt
 
         // Segment MSH

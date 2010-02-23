@@ -35,13 +35,13 @@ import org.openehealth.ipf.platform.camel.lbs.core.process.StoreProcessor;
  */
 public class StoreProcessorDefinition extends OutputDefinition<StoreProcessorDefinition> {
 
-    private List<ProcessorDefinition<?>> outputs = new ArrayList<ProcessorDefinition<?>>();
+    private final List<ProcessorDefinition<?>> outputs = new ArrayList<ProcessorDefinition<?>>();
     
     private String resourceHandlersBeanName;
     
     /**
      * Configures the resource handlers via a bean
-     * @param handlerBeanName
+     * @param resourceHandlersBeanName
      *          the bean name of the handler for integrating resources
      * @ipfdoc Large Binary Support#DSL extensions of the LBS
      * @dsl platform-camel-lbs

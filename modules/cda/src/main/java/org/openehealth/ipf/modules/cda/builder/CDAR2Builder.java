@@ -27,7 +27,7 @@ import groovytools.builder.SchemaNode;
 public class CDAR2Builder extends MetaBuilder {
 
     private BuilderDefinitionLoader loader;
-    private Collection<String> loaded = new HashSet<String>();
+    private final Collection<String> loaded = new HashSet<String>();
 
     public CDAR2Builder() {
         super();
@@ -43,6 +43,7 @@ public class CDAR2Builder extends MetaBuilder {
         loader.load(loaded);
     }
 
+    @Override
     protected MetaObjectGraphBuilder createMetaObjectGraphBuilder(
             SchemaNode defaultSchema, Factory defaultNodeFactory,
             Closure objectVisitor) {

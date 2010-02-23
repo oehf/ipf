@@ -76,7 +76,7 @@ public class MustUnderstandDecoratorInterceptor extends AbstractSoapInterceptor 
      *          the header to flag.
      */
     public void addHeader(QName header) {
-        this.mustUnderstandHeaders.add(header);
+        mustUnderstandHeaders.add(header);
     }
     
     

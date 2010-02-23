@@ -20,10 +20,6 @@ import groovy.util.Factory;
 import groovytools.builder.MetaBuilder;
 import groovytools.builder.MetaObjectGraphBuilder;
 import groovytools.builder.SchemaNode;
-
-import java.util.Iterator;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.EList;
@@ -33,9 +29,11 @@ import org.eclipse.emf.ecore.impl.EAttributeImpl;
 import org.eclipse.emf.ecore.impl.EClassImpl;
 import org.openhealthtools.ihe.common.cdar2.CDAR2Package;
 
+import java.util.Map;
+
 public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
 
-    static CDAR2Package ePackage = CDAR2Package.eINSTANCE;
+    static final CDAR2Package ePackage = CDAR2Package.eINSTANCE;
     private static final Log LOG = LogFactory
             .getLog(CDAR2MetaObjectGraphBuilder.class);
     
@@ -50,6 +48,7 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
         super(metaBuilder, defaultSchema, defaultFactory, objectVisitor);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     protected Factory resolveFactory(Object name, Map attrs, Object value) {
         SchemaNode schema = getCurrentSchema();
@@ -70,7 +69,7 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
         if (factoryAttr instanceof String) {
             // Replace String attribute by Factory instance
 
-            Object factory = (Object)CDAR2Factory.factoryFor(factoryAttr.toString());
+            Object factory = CDAR2Factory.factoryFor(factoryAttr.toString());
             schema.attributes().put("factory", factory);
         }
         // as of check attribute is not propagated to the extension deifinitions
@@ -88,6 +87,7 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
      * @see MetaObjectGraphBuilder#setVariable(Object, SchemaNode, String,
      *      Object)
      */
+    @Override
     public void setVariable(Object node, SchemaNode schema, String name,
             Object value) {
         if (node instanceof EObject) {
@@ -99,10 +99,9 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
                 if (propertyAttr != null) {
                     String propertyName = resolvePropertyAttrName(name,
                             propertySchema, propertyAttr);
-                    value = evaluateAttrValue(node, propertyName, value,
-                            propertySchema);
+                    value = evaluateAttrValue(node, propertyName, value);
                 } else {
-                    value = evaluateAttrValue(node, name, value, propertySchema);
+                    value = evaluateAttrValue(node, name, value);
                 }
             }
             super.setVariable(node, schema, name, value);
@@ -115,16 +114,14 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
      * Reads the 'property' attribute from the meta builder definition Allows
      * using it for value instaciation.
      */
-    private Object evaluateAttrValue(Object node, String name, Object val,
-            SchemaNode propertySchema) {
-        String propertyName = name;
+    private Object evaluateAttrValue(Object node, String name, Object val) {
         if (val instanceof String) {
             try {
                 return createAttributeByNameFromString(node.getClass(),
-                        propertyName, val.toString());
+                        name, val.toString());
             } catch (Exception e) {
                 LOG.warn("Can't evaluate the value from String for the property "
-                                + propertyName + " : " + e.getMessage());
+                                + name + " : " + e.getMessage());
                 return val;
             }
         } else {
@@ -164,15 +161,15 @@ public class CDAR2MetaObjectGraphBuilder extends MetaObjectGraphBuilder {
                 .getInterfaces()[0].getSimpleName());
         if (classifierImpl != null) {
             EList eList = classifierImpl.getEAllAttributes();
-            for (Iterator i = eList.iterator(); i.hasNext();) {
-                EAttributeImpl attrImpl = (EAttributeImpl) i.next();
+            for (Object anEList : eList) {
+                EAttributeImpl attrImpl = (EAttributeImpl) anEList;
                 if (attrImpl.getName().equals(key)) {
                     Class valueClass = attrImpl.getEAttributeType()
                             .getInstanceClass();
                     if (Enumerator.class.isAssignableFrom(valueClass)) { // create
                         // enumeration
                         // instance
-                        Object instance = (Object)((CDAR2Factory) getMetaBuilder()
+                        Object instance = ((CDAR2Factory) getMetaBuilder()
                                 .getDefaultBuildNodeFactory())
                                 .createFromString(attrImpl
                                         .basicGetEAttributeType(), value);

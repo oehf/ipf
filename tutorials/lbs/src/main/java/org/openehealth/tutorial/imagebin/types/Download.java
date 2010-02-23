@@ -58,7 +58,7 @@ public class Download {
      *     
      */
     public void setHandle(String value) {
-        this.handle = value;
+        handle = value;
     }
 
 }

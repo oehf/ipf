@@ -52,6 +52,7 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
      * Unmarshals the request, passes it to the processing route, 
      * and marshals the response.
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         MessageAdapter originalAdapter = null;

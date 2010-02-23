@@ -34,19 +34,19 @@ import org.openehealth.ipf.commons.flow.domain.FlowPart;
  */
 class Query {
 
-    public static Analyzer DEFAULT_INBOUND_TEXT_ANALYZER = new StandardAnalyzer();
-    public static Analyzer DEFAULT_OUTBOUND_TEXT_ANALYZER = new StandardAnalyzer();
+    public static final Analyzer DEFAULT_INBOUND_TEXT_ANALYZER = new StandardAnalyzer();
+    public static final Analyzer DEFAULT_OUTBOUND_TEXT_ANALYZER = new StandardAnalyzer();
 
     private static final String INBOUND_TEXT_FIELD = "flowMessage.text";
     private static final String OUTBOUND_TEXT_FIELD = "flowPartMessage.text";
 
-    private Session session;
+    private final Session session;
     
-    private Analyzer analyzer;
+    private final Analyzer analyzer;
 
-    private Class<?> domainClass;
+    private final Class<?> domainClass;
     
-    private String field;
+    private final String field;
     
     private Query(Session session, Analyzer analyzer, Class<?> domainClass, String field) {
         this.session = session;
@@ -100,7 +100,7 @@ class Query {
     private FullTextQuery createFullTextQuery(String query) {
         FullTextSession fullTextSession = Search.createFullTextSession(session);
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
-                createLuceneQuery(query), new Class[] {domainClass});
+                createLuceneQuery(query), domainClass);
         return fullTextQuery.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
     }
     

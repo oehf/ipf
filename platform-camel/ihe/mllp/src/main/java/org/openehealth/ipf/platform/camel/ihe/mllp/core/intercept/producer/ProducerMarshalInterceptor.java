@@ -38,6 +38,7 @@ public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
     /**
      * Marshals the request, sends it to the route, and unmarshals the response. 
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         Message message;
         

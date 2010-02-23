@@ -25,24 +25,29 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
  */
 public class ConfigRepositoryImpl extends HibernateDaoSupport implements ConfigRepository {
 
+    @Override
     @SuppressWarnings("unchecked")
     public List<ApplicationConfig> find() {
         return getHibernateTemplate().loadAll(ApplicationConfig.class);
     }
 
+    @Override
     public ApplicationConfig find(String application) {
         return (ApplicationConfig)getHibernateTemplate().get(
                 ApplicationConfig.class, application);
     }
 
+    @Override
     public void persist(ApplicationConfig applicationConfig) {
         getHibernateTemplate().persist(applicationConfig);
     }
 
+    @Override
     public void merge(ApplicationConfig applicationConfig) {
         getHibernateTemplate().merge(applicationConfig);
     }
 
+    @Override
     public void remove(ApplicationConfig applicationConfig) {
         getHibernateTemplate().delete(applicationConfig);
     }

@@ -28,7 +28,7 @@ import org.apache.camel.processor.DelegateProcessor;
  * @author Jens Riemschneider
  */
 public abstract class ResourceHandlingProcessor extends DelegateProcessor {
-    private List<ResourceHandler> resourceHandlers = new ArrayList<ResourceHandler>();
+    private final List<ResourceHandler> resourceHandlers = new ArrayList<ResourceHandler>();
 
     /**
      * Sets the {@link ResourceHandler} of the processor.
@@ -39,8 +39,8 @@ public abstract class ResourceHandlingProcessor extends DelegateProcessor {
      * (e.g. an HTTP message).
      * <p>
      * This method can be called multiple times to add multiple handlers.
-     * @param handler
-     *          handler for integrating and extracting resources
+     * @param handlers
+     *          handlers for integrating and extracting resources
      * @return this instance for usage with a fluent API
      */
     public ResourceHandlingProcessor with(List<ResourceHandler> handlers) {
@@ -50,7 +50,7 @@ public abstract class ResourceHandlingProcessor extends DelegateProcessor {
     }
     
     /**
-     * @return the resource handlers configured by {@link #with(ResourceHandler)}
+     * @return the resource handlers configured by {@link #with}
      */
     protected final List<ResourceHandler> getResourceHandlers() {
         return resourceHandlers;

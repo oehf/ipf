@@ -54,7 +54,7 @@ public interface ResourceHandler {
     /**
      * Handle message integration for the given message.
      * <p>
-     * In contrast to {@link #extract(Message)}, this method cannot test if it
+     * In contrast to {@link #extract}, this method cannot test if it
      * is operating for a compatible endpoint. Therefore, the message is always
      * changed to meet the requirements of the endpoint that is compatible with
      * this handler. The actual endpoint might show unexpected behavior or throw

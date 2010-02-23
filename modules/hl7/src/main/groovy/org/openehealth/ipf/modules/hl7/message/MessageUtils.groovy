@@ -21,7 +21,13 @@ import org.openehealth.ipf.modules.hl7.AckTypeCode
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.util.Terser
-import ca.uhn.hl7v2.util.MessageIDGeneratorimport java.lang.reflect.Constructorimport ca.uhn.hl7v2.HL7Exceptionimport ca.uhn.hl7v2.parser.ModelClassFactoryimport ca.uhn.hl7v2.util.DeepCopyimport ca.uhn.hl7v2.parser.DefaultModelClassFactory
+import ca.uhn.hl7v2.util.MessageIDGenerator
+import java.lang.reflect.Constructor
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.parser.ModelClassFactory
+import ca.uhn.hl7v2.util.DeepCopy
+import ca.uhn.hl7v2.parser.DefaultModelClassFactory
+
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.DateTime
@@ -74,21 +80,21 @@ class MessageUtils {
 	/**
 	 * @return event type of the message, e.g. 'ADT'
 	 */
-	static def eventType(Message msg) {
+	static String eventType(Message msg) {
 		Terser.get(msg.MSH, 9, 0, 1, 1)
 	}
 
 	/**
 	 * @return trigger event of the message, e.g. 'A01'
 	 */
-	static def triggerEvent(Message msg) {
+	static String triggerEvent(Message msg) {
 		Terser.get(msg.MSH, 9, 0, 2, 1)
 	}
 	
 	/**
 	 * @return structure of the message, e.g. 'ADT_A01'
 	 */
-	static def messageStructure(Message msg) {
+	static String messageStructure(Message msg) {
 		def structName = eventType(msg) + '_' + triggerEvent(msg)
         if (['2.4', '2.5', '2.6'].contains(msg.version)) {
 			structName = Parser.getMessageStructureForEvent(structName, msg.version)
@@ -99,14 +105,14 @@ class MessageUtils {
 	/*
 	 * @deprecated. Use {@link #ack(ModelClassFactory, Message)}.
 	 */
-	static def ack(Message msg) {
+	static Message ack(Message msg) {
 	    ack(defaultFactory, msg)
 	}
 	
 	/** 
 	 *  @return a positive ACK response message
 	 */
-	static def ack(ModelClassFactory factory, Message msg) {
+	static Message ack(ModelClassFactory factory, Message msg) {
 		def ack = response(factory, msg, 'ACK', triggerEvent(msg))
    	 	Terser terser = new Terser(ack)
         terser.set("MSA-1", "AA");
@@ -116,14 +122,14 @@ class MessageUtils {
 	/*
 	 * @deprecated. Use {@link #nak(ModelClassFactory, Message, String, AckTypeCode)}.
 	 */
-	static def nak(Message msg, String cause, AckTypeCode ackType) {
+	static Message nak(Message msg, String cause, AckTypeCode ackType) {
 	    nak(defaultFactory, msg, cause, ackType)
 	}
 	
 	/** 
 	 *  @return a negative ACK response message using a String cause
 	 */
-	static def nak(ModelClassFactory factory, Message msg, String cause, AckTypeCode ackType) {
+	static Message nak(ModelClassFactory factory, Message msg, String cause, AckTypeCode ackType) {
 		HL7v2Exception e = new HL7v2Exception(cause)
 		nak(factory, msg, e, ackType)
 	}
@@ -131,14 +137,14 @@ class MessageUtils {
 	/*
 	 * @deprecated. Use {@link #nak(ModelClassFactory, Message, Exception, AckTypeCode)}.
 	 */
-	static def nak(Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
+	static Message nak(Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
 	    nak(defaultFactory, msg, e, ackType)
 	}
 	
 	/** 
 	 *  @return a negative ACK response message using an Exception cause
 	 */
-	static def nak(ModelClassFactory factory, Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
+	static Message nak(ModelClassFactory factory, Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
 		def ack = ack(factory, msg)
 		e.populateMessage(ack, ackType)
 		ack
@@ -147,7 +153,7 @@ class MessageUtils {
 	/** 
 	 *  @return a negative ACK response message constructed from scratch
 	 */
-    static def defaultNak(
+    static Message defaultNak(
             AbstractHL7v2Exception e, 
             AckTypeCode ackType, 
             String version,
@@ -167,14 +173,14 @@ class MessageUtils {
     /** 
      *  @return a negative ACK response message constructed from scratch
      */
-    static def defaultNak(AbstractHL7v2Exception e, AckTypeCode ackType, String version) {
+    static Message defaultNak(AbstractHL7v2Exception e, AckTypeCode ackType, String version) {
         defaultNak(e, ackType, version, 'unknown', 'unknown')
     }
     
     /** 
      *  @return a new message of the given event and version args[0]
      */
-    static def newMessage(ModelClassFactory factory, String event, String version) {
+    static Message newMessage(ModelClassFactory factory, String event, String version) {
         if (version) {
            def list = event.tokenize('_')
            def eventType = list[0]
@@ -188,14 +194,14 @@ class MessageUtils {
     /*
      * @deprecated
      */
-    static def response(Message msg, String eventType, String triggerEvent) {
+    static Message response(Message msg, String eventType, String triggerEvent) {
         response(defaultFactory, msg, eventType, triggerEvent)
     }
     
 	/** 
 	 *  @return a response message with the basic MSH fields already populated
 	 */
-	static def response(ModelClassFactory factory, Message msg, String eventType, String triggerEvent) {
+	static Message response(ModelClassFactory factory, Message msg, String eventType, String triggerEvent) {
 
         // make message of correct version
         def version = msg.version
@@ -234,7 +240,7 @@ class MessageUtils {
         out
     }
 	
-	private static Message makeMessage(ModelClassFactory factory, String eventType, String triggerEvent, String version) {
+	public static Message makeMessage(ModelClassFactory factory, String eventType, String triggerEvent, String version) {
         def structName
 		Message result;		
         
@@ -319,7 +325,7 @@ class MessageUtils {
 	/** 
 	 *  @return a hierarchical dump of the message
 	 */
-	 static def dump(Message msg) {
+	 static String dump(Message msg) {
 		 def version = msg.version
          StringBuffer buf = new StringBuffer("${msg.class.simpleName} Version $version\n")
          dumpStructure(msg, buf, INDENT_SIZE).toString()
@@ -364,7 +370,8 @@ class MessageUtils {
 
 	 private static def dumpType(Type type, boolean isRepeating, StringBuffer buf, int indent) {
 		 if (type instanceof Varies) {
-			 buf << ' ' * indent << "${type.data.class.simpleName}\n"
+			 def varies = (Varies) type
+             buf << ' ' * indent << "${varies.data.class.simpleName}\n"
 			 dumpType(type.data, isRepeating, buf, indent + INDENT_SIZE);
 		 } else if (type instanceof Composite) {
 			 type.components.eachWithIndex { it, i ->

@@ -31,6 +31,7 @@ public class DelegatingProcessor extends ClosureAdapter implements Processor {
         super(closure);
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         call(exchange);
     }

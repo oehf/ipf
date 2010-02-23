@@ -36,7 +36,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  */
 public class IpfDefinition {
 
-	private ProcessorDefinition<ProcessorDefinition> processorDefinition;
+	private final ProcessorDefinition<ProcessorDefinition> processorDefinition;
 	
 	public IpfDefinition(ProcessorDefinition<ProcessorDefinition> processorDefinition) {
 		this.processorDefinition = processorDefinition;

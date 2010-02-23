@@ -29,7 +29,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 abstract class Iti9AuditStrategy implements MllpAuditStrategy {
     
     String[] getNecessaryFields(String messageType) {
-        ['Payload', 'PatientIds']
+        ['Payload', 'PatientIds'] as String[]
     }
 
     

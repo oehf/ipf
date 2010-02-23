@@ -61,8 +61,8 @@ public class LocalizedString implements Serializable {
      */
     public LocalizedString(String value) {
         this.value = value;
-        this.lang = "en-US";
-        this.charset = "UTF8";
+        lang = "en-US";
+        charset = "UTF8";
     }
 
     /**

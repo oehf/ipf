@@ -20,7 +20,7 @@ import org.openehealth.ipf.modules.cda.builder.content.entry.*
 import org.openhealthtools.ihe.common.cdar2.*
 
 /**
- * Chapter 3.10 "Medical Qeuipment".
+ * Chapter 3.10 "Medical Equipment".
  *
  * Templates included:
  * <ul>
@@ -67,7 +67,7 @@ public class CCDMedicalEquipmentExtension extends CompositeModelExtension {
                 }
             }
             getMedicalEquipment { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '46264-8'
                 } ?.section
             }

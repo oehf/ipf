@@ -41,8 +41,8 @@ public class WrappedOutputStream extends FilterOutputStream {
      */
     public WrappedOutputStream(OutputStream os) {
         super(os);
-        this.isActive = true;
-        this.payloadCollector = new StringBuilder();
+        isActive = true;
+        payloadCollector = new StringBuilder();
     }
 
     /**

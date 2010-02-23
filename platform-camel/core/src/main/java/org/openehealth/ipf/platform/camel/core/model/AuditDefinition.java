@@ -29,7 +29,7 @@ public class AuditDefinition extends DelegateDefinition {
     private String auditProcessorBeanName;
     
     public AuditDefinition() {
-        this.auditProcessor = new Noop();
+        auditProcessor = new Noop();
     }
     
     /**
@@ -56,6 +56,7 @@ public class AuditDefinition extends DelegateDefinition {
 
     private static class Noop implements Processor {
 
+        @Override
         public void process(Exchange exchange) throws Exception {
         }
         

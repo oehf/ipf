@@ -36,12 +36,13 @@ import org.w3c.dom.ls.LSResourceResolver;
  */
 public class LSResourceResolverImpl implements LSResourceResolver {
 
-    private static Log LOG = LogFactory.getLog(LSResourceResolverImpl.class);
+    private final static Log LOG = LogFactory.getLog(LSResourceResolverImpl.class);
 
     /**
      * @see org.w3c.dom.ls.LSResourceResolver#resolveResource(String, String,
      *      String, String, String)
      */
+    @Override
     public LSInput resolveResource(String type, String namespaceURI,
             String publicId, String systemId, String baseURI) {
 

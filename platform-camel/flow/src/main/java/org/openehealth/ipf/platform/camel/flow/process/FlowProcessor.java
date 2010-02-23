@@ -15,18 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.flow.process;
 
-import static org.openehealth.ipf.platform.camel.flow.PlatformPacket.serializableCopy;
-import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.marshal;
-import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.unmarshal;
-
-import java.io.InputStream;
-import java.util.HashMap;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.DataFormat;
 import org.openehealth.ipf.commons.flow.FlowManager;
@@ -37,11 +29,16 @@ import org.openehealth.ipf.platform.camel.flow.PlatformPacket;
 import org.openehealth.ipf.platform.camel.flow.PlatformPacketFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.InputStream;
+import java.util.HashMap;
+
+import static org.openehealth.ipf.platform.camel.flow.PlatformPacket.serializableCopy;
+import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.marshal;
+import static org.openehealth.ipf.platform.camel.flow.util.DataFormats.unmarshal;
+
 
 /**
  * A base class for processors that trigger {@link FlowManager} operations.
- * 
- * @see ProcessorDefinition#intercept(DelegateProcessor)
  * 
  * @author Martin Krasser
  */
@@ -116,7 +113,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
      * Sets the {@link DataFormat} to be applied to the {@link Exchange#getIn()}
      * message body for creating a byte array representation. The original
      * message body is not replaced by the byte array. The data format is only
-     * applied during {@link #createPacket()} calls. Calls to this method are
+     * applied during {@link #createPacket} calls. Calls to this method are
      * made by the {@link PlatformMessage#createPacket()} method on messages
      * created by this processor.
      * 
@@ -134,10 +131,10 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
      * representation for creating the {@link Exchange#getIn()} message body
      * (replacing the original message body). The outFormat is applied: 
      * <ul>
-     * <li> if {@link #outConversion(boolean)} is set to true, during {@link #createPacket()} 
+     * <li> if {@link #outConversion(boolean)} is set to true, during {@link #createPacket}
      * calls, made by {@link PlatformMessage#createPacket()}</li>
      * <li> during {@link #createExchange(PlatformPacket)} calls, made by {@link FlowBeginProcessor#replay(PlatformPacket)})</li></ul>
-     * If both {@link #outFormat(DataFormat)} and {@link #outType(Class)} are set, 
+     * If both {@code outFormat(DataFormat)} and {@link #outType(Class)} are set,
      * outType is ignored and only outFormat is used.
      * 
      * @param outFormat
@@ -153,7 +150,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
      * Sets the data type the {@link Exchange#getIn()} message body shall be
      * converted to (replacing the original message body) before creating the
      * internal byte array representation. The conversion is only made during
-     * {@link #createPacket()} calls. Calls to this method are made by the
+     * {@link #createPacket} calls. Calls to this method are made by the
      * {@link PlatformMessage#createPacket()} method on messages created by this
      * processor.
      * 
@@ -172,7 +169,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
      * converted to (replacing the original message body) from the internal byte
      * array representation. The conversion is made:
      * <ul>
-     * <li> if {@link #outConversion(boolean)} is set to true, during {@link #createPacket()} 
+     * <li> if {@link #outConversion(boolean)} is set to true, during {@link #createPacket}
      * calls, made by {@link PlatformMessage#createPacket()}
      * <li> during {@link #createExchange(PlatformPacket)} calls, made by 
      * {@link FlowBeginProcessor#replay(PlatformPacket)})</li>  
@@ -209,7 +206,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
      * Sets the {@link PlatformMessageRenderer} instance, which will produce 
      * readable text representation of the platform message.
      * 
-     * @param messageRenderer instance of {@ling PlatformMessageRenderer}
+     * @param messageRenderer instance of {@link PlatformMessageRenderer}
      *              which will be used to render the {@link PlatformMessage}
      * @return this processor
      */
@@ -229,6 +226,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
      * 
      * @param exchange message exchange.
      */
+    @Override
     public PlatformPacket createPacket(Exchange exchange) {
         PlatformPacket packet = new PlatformPacket();
         
@@ -283,8 +281,7 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
     }
 
     /**
-     * Processes <code>exchange</code> by delegating to
-     * {@link #processMessage(ManagedMessage)}.
+     * Processes <code>exchange</code> by delegating to{@link #processMessage}.
      * 
      * @param exchange
      *            exchange to process.

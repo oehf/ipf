@@ -39,13 +39,15 @@ public class IpfDefinition extends org.openehealth.ipf.platform.camel.core.model
 		super(processorDefinition);
 	}
 	
-	public SplitterDefinition split(Expression splitExpression) {
+	@Override
+    public SplitterDefinition split(Expression splitExpression) {
         SplitterDefinition answer = new SplitterDefinition(splitExpression);        
         getProcessorDefinition().addOutput(answer);
         return answer;
     }
 	
-	public SplitterDefinition split(Closure splitLogic) {
+	@Override
+    public SplitterDefinition split(Closure splitLogic) {
     	return split(new DelegatingExpression(splitLogic));
     }
 	

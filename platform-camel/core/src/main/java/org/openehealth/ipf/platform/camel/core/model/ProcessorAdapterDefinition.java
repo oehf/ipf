@@ -89,7 +89,7 @@ public abstract class ProcessorAdapterDefinition extends DelegateDefinition {
      * @dsl platform-camel-core
      */
     public ProcessorAdapterDefinition staticParams(Object... params) {
-        this.paramsExpression = new StaticParams(params);
+        paramsExpression = new StaticParams(params);
         return this;
     }
     

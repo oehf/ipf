@@ -36,7 +36,8 @@ public class GenericHandler extends AbstractHandler {
         this.delegateHandler = delegateHandler;
     }
 
-    public void handle(String target, 
+    @Override
+    public void handle(String target,
             HttpServletRequest request,
             HttpServletResponse response, 
             int dispatch) throws IOException, ServletException {

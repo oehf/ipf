@@ -32,7 +32,7 @@ import org.openehealth.ipf.commons.core.modules.api.Renderer;
  */
 public class RendererAdapter extends ProcessorAdapter {
 
-    private Renderer renderer;
+    private final Renderer renderer;
     
     /**
      * Creates a new {@link RendererAdapter} and sets the delegate

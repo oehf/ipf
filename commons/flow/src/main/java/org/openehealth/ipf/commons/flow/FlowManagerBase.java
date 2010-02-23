@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.flow;
 
-import java.util.List;
-
 import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
 import org.openehealth.ipf.commons.flow.domain.Flow;
 import org.openehealth.ipf.commons.flow.domain.FlowPart;
@@ -27,6 +25,8 @@ import org.openehealth.ipf.commons.flow.repository.FlowRepository;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfoFinderCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static org.openehealth.ipf.commons.flow.transfer.FlowInfoUtils.textString;
 
@@ -42,26 +42,32 @@ public class FlowManagerBase implements FlowManager {
     @Autowired
     private ConfigRepository configRepository;
     
+    @Override
     public List<Long> findFlowIds(FlowInfoFinderCriteria finderCriteria) {
         return flowRepository.findFlowIds(repositoryFinderCriteria(finderCriteria));
     }
 
+    @Override
     public List<Long> findErrorFlowIds(FlowInfoFinderCriteria finderCriteria) {
         return flowRepository.findErrorFlowIds(repositoryFinderCriteria(finderCriteria));
     }
 
+    @Override
     public List<Long> findUnackFlowIds(FlowInfoFinderCriteria finderCriteria) {
         return flowRepository.findUnackFlowIds(repositoryFinderCriteria(finderCriteria));
     }
 
+    @Override
     public FlowInfo findFlow(Long flowId) {
         return loadFlow(flowId).getInfo();
     }
 
+    @Override
     public FlowInfo findFlow(Long flowId, boolean includeText) {
         return loadFlow(flowId).getInfo(includeText);
     }
 
+    @Override
     public boolean flowCompleted(Long flowId) {
         Flow flow = loadFlow(flowId);
         if (flow.isAckCountExpectationSet()) {
@@ -70,22 +76,27 @@ public class FlowManagerBase implements FlowManager {
         throw new FlowStatusException("acknowledgement count expectation not set on flow object");
     }
 
+    @Override
     public List<FlowInfo> findFlows(FlowInfoFinderCriteria finderCriteria) {
         return Flow.getInfos(flowRepository.findFlows(repositoryFinderCriteria(finderCriteria)));
     }
 
+    @Override
     public List<FlowInfo> findErrorFlows(FlowInfoFinderCriteria finderCriteria) {
         return Flow.getInfos(flowRepository.findErrorFlows(repositoryFinderCriteria(finderCriteria)));
     }
 
+    @Override
     public List<FlowInfo> findUnackFlows(FlowInfoFinderCriteria finderCriteria) {
         return Flow.getInfos(flowRepository.findUnackFlows(repositoryFinderCriteria(finderCriteria)));
     }
     
+    @Override
     public String findFlowMessageText(Long flowId){
         return textString(loadFlow(flowId).getFlowMessageText());
     } 
     
+    @Override
     public String findFlowPartMessageText(Long flowId, String flowPath) {
         Flow flow = loadFlow(flowId);
         FlowPart part = flow.getPart(flowPath);
@@ -96,22 +107,27 @@ public class FlowManagerBase implements FlowManager {
         return textString(part.getFlowPartMessageText());
     }
     
+    @Override
     public int purgeFlows(FlowPurgeCriteria purgeCriteria) {
         return flowRepository.purgeFlows(purgeCriteria);
     }
 
+    @Override
     public int replayFlows(FlowInfoFinderCriteria finderCriteria) {
         return replayFlows(findFlowIds(finderCriteria));
     }
 
+    @Override
     public int replayErrorFlows(FlowInfoFinderCriteria finderCriteria) {
         return replayFlows(findErrorFlowIds(finderCriteria));
     }
 
+    @Override
     public int replayUnackFlows(FlowInfoFinderCriteria finderCriteria) {
         return replayFlows(findUnackFlowIds(finderCriteria));
     }
     
+    @Override
     public void acknowledgeFlow(final ManagedMessage managedMessage) {
         Flow flow = lockFlow(managedMessage);
         boolean cleanup = isFlowCleanupEnabled(flow.getApplication());
@@ -120,12 +136,14 @@ public class FlowManagerBase implements FlowManager {
         
     }
 
+    @Override
     public void invalidateFlow(final ManagedMessage managedMessage) {
         Flow flow = lockFlow(managedMessage);
         String path = managedMessage.getSplitHistory().indexPathString();
         flow.invalidate(path, managedMessage.render());
     }
 
+    @Override
     public boolean filterFlow(final ManagedMessage managedMessage) {
         Flow flow = lockFlow(managedMessage);
         if (!isFlowFilterEnabled(flow.getApplication())) {
@@ -134,10 +152,12 @@ public class FlowManagerBase implements FlowManager {
         return flow.filter(managedMessage.getSplitHistory().indexPathString());
     }
 
+    @Override
     public Long beginFlow(ManagedMessage managedMessage, String application) {
         return beginFlow(managedMessage, application, FlowInfo.ACK_COUNT_EXPECTED_UNDEFINED);
     }
     
+    @Override
     public Long beginFlow(ManagedMessage managedMessage, String application, int ackCountExpected) {
         Long flowId = managedMessage.getFlowId();
         if (flowId != null) {
@@ -156,6 +176,7 @@ public class FlowManagerBase implements FlowManager {
         return flow.getIdentifier();
     }
 
+    @Override
     public void replayFlow(Long flowId) {
         Flow flow = loadFlow(flowId);
         if (!flow.isReplayable()) {
@@ -175,6 +196,7 @@ public class FlowManagerBase implements FlowManager {
         }
     }
 
+    @Override
     public boolean isFlowFilterEnabled(String application) {
         ApplicationConfig config = configRepository.find(application);
         if (config == null) {
@@ -183,6 +205,7 @@ public class FlowManagerBase implements FlowManager {
         return config.isFlowFilterEnabled();
     }
 
+    @Override
     public void setFlowFilterEnabled(String application, boolean flowFilterEnabled) {
         ApplicationConfig config = configRepository.find(application);
         if (config == null) {
@@ -194,6 +217,7 @@ public class FlowManagerBase implements FlowManager {
         }
     }
 
+    @Override
     public boolean isFlowCleanupEnabled(String application) {
         ApplicationConfig config = configRepository.find(application);
         if (config == null) {
@@ -202,6 +226,7 @@ public class FlowManagerBase implements FlowManager {
         return config.isFlowCleanupEnabled();
     }
     
+    @Override
     public void setFlowCleanupEnabled(String application, boolean flowCleanupEnabled) {
         ApplicationConfig config = configRepository.find(application);
         if (config == null) {
@@ -213,10 +238,12 @@ public class FlowManagerBase implements FlowManager {
         }
     }
     
+    @Override
     public List<ApplicationConfig> findApplicationConfigs() {
         return configRepository.find();
     }
 
+    @Override
     public ApplicationConfig getApplicationConfig(String application) {
         ApplicationConfig applicationConfig = configRepository.find(application);
         if (applicationConfig == null) {
@@ -225,6 +252,7 @@ public class FlowManagerBase implements FlowManager {
         return applicationConfig;
     }
 
+    @Override
     public void mergeApplicationConfig(ApplicationConfig applicationConfig) {
         configRepository.merge(applicationConfig);
     }

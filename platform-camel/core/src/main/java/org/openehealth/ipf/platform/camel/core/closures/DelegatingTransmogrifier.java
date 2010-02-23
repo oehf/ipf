@@ -30,9 +30,10 @@ public class DelegatingTransmogrifier extends ClosureAdapter implements Transmog
         super(closure);
     }
 
+    @Override
     public Object zap(Object object, Object... params) {
         if (getClosure().getParameterTypes().length == 2) {
-            return call(new Object[] {object, prepare(params)});
+            return call(object, prepare(params));
         } else {
             return call(object);
         }

@@ -69,7 +69,7 @@ public class CCDMedicationsExtension extends CompositeModelExtension {
                 }
             }
             getMedications { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '10160-0'
                 } ?.section
             }

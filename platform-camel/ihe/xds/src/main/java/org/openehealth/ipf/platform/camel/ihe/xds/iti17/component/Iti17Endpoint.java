@@ -37,17 +37,17 @@ public class Iti17Endpoint extends DefaultItiEndpoint {
      *          the endpoint address from the URI.
      * @param iti17Component
      *          the component creating this endpoint.
-     * @throws URISyntaxException
-     *          if the endpoint URI was not a valid URI.
      */
-    public Iti17Endpoint(String endpointUri, String address, Iti17Component iti17Component) throws URISyntaxException {
+    public Iti17Endpoint(String endpointUri, String address, Iti17Component iti17Component) {
         super(endpointUri, address, iti17Component);
     }
 
+    @Override
     public Producer createProducer() throws Exception {
         return new Iti17Producer(this);
     }
 
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         return new Iti17Consumer(this, processor);
     }

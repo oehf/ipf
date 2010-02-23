@@ -16,8 +16,8 @@ import java.util.concurrent.Executors;
  * {@link EventEngine#distributeToHandlers}.
  * <p>
  * Adapters can deny event object distribution if they do not provide the
- * necessary quality of service. In this case {@link #canHandle} returns
- * <code>false</code> and {@link #consume} is not called by the engine.
+ * necessary quality of service. In this case {@link #accepts} returns
+ * <code>false</code> and {@link #send} is not called by the engine.
  * @author Jens Riemschneider
  */
 public class EventChannelAdapter {

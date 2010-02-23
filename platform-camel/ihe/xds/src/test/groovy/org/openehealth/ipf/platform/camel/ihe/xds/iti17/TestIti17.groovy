@@ -15,16 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17
 
-import static junit.framework.Assert.assertEquals
-
-import java.io.InputStream
-
-
 import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet
+import static junit.framework.Assert.assertEquals
 
 /**
  * Tests the ITI-17 transaction with a webservice and client adapter defined via URIs.
@@ -61,7 +57,7 @@ class TestIti17 extends StandardTestContainer {
     
     @Test
     void testIti17FailureAudit() {
-        def response = send(SERVICE2, '?falsch', InputStream.class)
+        send(SERVICE2, '?falsch', InputStream.class)
 
         assert auditSender.messages.size() == 2
         
@@ -93,10 +89,5 @@ class TestIti17 extends StandardTestContainer {
         checkSource(message.ActiveParticipant[0], 'false')
         checkDestination(message.ActiveParticipant[1], 'true')
         checkUri(message.ParticipantObjectIdentification[0], addr, '')
-    }
-    
-    def sendIt(endpoint, value) {
-        query.sql = value
-        send(endpoint, request, QueryResponse.class)
     }
 }

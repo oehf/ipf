@@ -24,7 +24,7 @@ import static org.apache.camel.util.ObjectHelper.notNull;
  * @author Jens Riemschneider
  */
 public class SplitStringLineSplitterLogic implements LineSplitterLogic {
-    private String regex;
+    private final String regex;
     
     /**
      * Creates the split logic

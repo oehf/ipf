@@ -79,7 +79,7 @@ public class CCDSupplyActivityExtension extends CompositeModelExtension {
 			
 			getFulfillmentInstruction { ->
 				delegate.entryRelationship.find {
-					'2.16.840.1.113883.10.20.1.43' in it.observation?.templateId.root
+					'2.16.840.1.113883.10.20.1.43' in it.observation?.templateId?.root
 				}?.observation
 			}
 			

@@ -46,8 +46,8 @@ import org.openehealth.ipf.commons.lbs.store.ResourceNotFoundException;
 public class MemoryStore implements LargeBinaryStore {
     private static final String STORE_URI_SCHEME = "mockstore";
     
-    private AtomicLong currentResourceCounter = new AtomicLong();
-    private ConcurrentMap<URI, byte[]> resources = new ConcurrentHashMap<URI, byte[]>();
+    private final AtomicLong currentResourceCounter = new AtomicLong();
+    private final ConcurrentMap<URI, byte[]> resources = new ConcurrentHashMap<URI, byte[]>();
 
     private static final Log log = LogFactory.getLog(MemoryStore.class);
     

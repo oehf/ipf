@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.core.modules.api.Predicate;
  */
 public class PredicateAdapter extends AdapterSupport implements org.apache.camel.Predicate {
 
-    private Predicate predicate;
+    private final Predicate predicate;
     
     /**
      * Creates a new {@link PredicateAdapter} and sets the delegate
@@ -65,6 +65,7 @@ public class PredicateAdapter extends AdapterSupport implements org.apache.camel
      * @see #params(Expression)
      * @see #staticParams(Object...)
      */
+    @Override
     public boolean matches(Exchange exchange) {
         Object input = adaptInput(exchange);
         Object params = adaptParams(exchange);

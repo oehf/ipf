@@ -46,7 +46,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
     
     private static final String PATTERN = "^\\" + PATH_OPEN + ".*\\" + PATH_CLOSE + "$"; 
     
-    private List<SplitHistoryEntry> entries;
+    private final List<SplitHistoryEntry> entries;
 
     /**
      * Creates a new split history with a {@link SplitHistoryEntry#ROOT} entry.
@@ -123,18 +123,6 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
     }
     
     /**
-     * Aggregates <code>histories</code> of split messages to a single result
-     * history.
-     * 
-     * @param histories
-     *            the split histories to aggregate.
-     * @return the aggregated result history.
-     */
-    public static SplitHistory aggregate(SplitHistory... histories) {
-        throw new UnsupportedOperationException("not implemented");
-    }
-    
-    /**
      * Splits this history into <code>num</code> result histories. The result
      * histories represent the split of a single message into <code>num</code>
      * split messages.
@@ -182,11 +170,12 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
     /**
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
+    @Override
     public int compareTo(SplitHistory history) {
-        int ts = this.size();
+        int ts = size();
         int ps = history.size();
         for (int i = 0; i < Math.min(ts, ps); i++) {
-            SplitHistoryEntry tn = this.entries.get(i);
+            SplitHistoryEntry tn = entries.get(i);
             SplitHistoryEntry pn = history.entries.get(i);
             if (tn.getIndex() != pn.getIndex()) {
                 return tn.getIndex() - pn.getIndex();
@@ -205,7 +194,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
      *         predecessor of the given split history.
      */
     public boolean isPredecessor(SplitHistory history) {
-        int ts = this.size();
+        int ts = size();
         int ps = history.size();
         int last = -1;
         SplitHistoryEntry tn = null;
@@ -213,7 +202,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
         // walk along common path from root
         for (int i = 0; i < Math.min(ts, ps); i++) {
             last = i;
-            tn = this.entries.get(i);
+            tn = entries.get(i);
             pn = history.entries.get(i);
             if (tn.getIndex() != pn.getIndex()) {
                 break;
@@ -222,14 +211,14 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
         if (!tn.isPredecessor(pn)) {
             return false;
         }
-        if (!this.isLastUpTo(last)) {
+        if (!isLastUpTo(last)) {
             return false;
         }
         if (!history.isFirstUpTo(last)) {
             return false;
         }
         return true;
-        
+
     }
 
     /**
@@ -242,7 +231,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
      *         successor of the given split history.
      */
     public boolean isSuccessor(SplitHistory history) {
-        int ts = this.size();
+        int ts = size();
         int ps = history.size();
         int last = -1;
         SplitHistoryEntry tn = null;
@@ -250,7 +239,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
         // walk along common path from root
         for (int i = 0; i < Math.min(ts, ps); i++) {
             last = i;
-            tn = this.entries.get(i);
+            tn = entries.get(i);
             pn = history.entries.get(i);
             if (tn.getIndex() != pn.getIndex()) {
                 break;
@@ -259,7 +248,7 @@ public class SplitHistory implements Comparable<SplitHistory>, Serializable {
         if (!tn.isSuccessor(pn)) {
             return false;
         }
-        if (!this.isFirstUpTo(last)) {
+        if (!isFirstUpTo(last)) {
             return false;
         }
         if (!history.isLastUpTo(last)) {

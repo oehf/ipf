@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
  */
 public class TransmogrifierAdapter extends ProcessorAdapter {
 
-    private Transmogrifier transmogrifier;
+    private final Transmogrifier transmogrifier;
 
     /**
      * Creates a new {@link TransmogrifierAdapter} and sets the delegate

@@ -101,8 +101,8 @@ public class MllpMessagePart {
         notNull(buffer, "buffer cannot be null");
         
         this.buffer = buffer;
-        this.start = buffer.position();
-        this.end = buffer.position() - 1;
+        start = buffer.position();
+        end = buffer.position() - 1;
     }
         
     private void checkTermination(MllpMessageExtractionState state, ByteBuffer buffer) {

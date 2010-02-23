@@ -31,7 +31,7 @@ public enum Severity {
     private final String opcode30;
     
     private Severity(ErrorType opcode21, String opcode30) {
-        this.ebXML21 = opcode21;
+        ebXML21 = opcode21;
         this.opcode30 = opcode30;
     }
 

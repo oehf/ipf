@@ -38,18 +38,19 @@ public class PlatformFlowManager extends FlowManagerBase implements ReplayStrate
 
     private static final Log LOG = LogFactory.getLog(PlatformFlowManager.class);
     
-    private Map<String, ReplayStrategy> replayStrategies;
+    private final Map<String, ReplayStrategy> replayStrategies;
     
     /**
      * Creates a new {@link PlatformFlowManager}.
      */
     public PlatformFlowManager() {
-        this.replayStrategies = Collections.synchronizedMap(new HashMap<String, ReplayStrategy>());
+        replayStrategies = Collections.synchronizedMap(new HashMap<String, ReplayStrategy>());
     }
     
     /* (non-Javadoc)
      * @see org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry#register(org.openehealth.ipf.platform.camel.flow.ReplayStrategy)
      */
+    @Override
     public ReplayStrategyRegistration register(ReplayStrategy replayStrategy) {
         replayStrategies.put(replayStrategy.getIdentifier(), replayStrategy);
         LOG.info("Registered replay strategy with identifier " + replayStrategy.getIdentifier() + " at flow manager");
@@ -99,12 +100,13 @@ public class PlatformFlowManager extends FlowManagerBase implements ReplayStrate
     
     private class LocalReplayStrategyRegistration implements ReplayStrategyRegistration {
      
-        private ReplayStrategy replayStrategy;
+        private final ReplayStrategy replayStrategy;
         
         public LocalReplayStrategyRegistration(ReplayStrategy replayStrategy) {
             this.replayStrategy = replayStrategy;
         }
 
+        @Override
         public void terminate() {
             replayStrategies.remove(replayStrategy.getIdentifier());
             LOG.info("Unregistered replay strategy with identifier " + replayStrategy.getIdentifier() + " from flow manager");

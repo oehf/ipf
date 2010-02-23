@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class DefaultActivator implements ExtensionActivator {
 
-    private List<ConditionalActivator> activators;
+    private final List<ConditionalActivator> activators;
     
     public DefaultActivator() {
         activators = new ArrayList<ConditionalActivator>();

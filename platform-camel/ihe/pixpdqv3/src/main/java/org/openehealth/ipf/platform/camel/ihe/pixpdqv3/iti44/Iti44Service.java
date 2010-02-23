@@ -25,26 +25,32 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHL7v3WebService;
  */
 public class Iti44Service extends DefaultHL7v3WebService implements Iti44XdsPortType, Iti44PixPortType {
 
+    @Override
     public String documentRegistryPRPAIN201301UV02(String body) {
         return doProcess(body);
     }
 
+    @Override
     public String documentRegistryPRPAIN201302UV02(String body) {
         return doProcess(body);
     }
 
+    @Override
     public String documentRegistryPRPAIN201304UV02(String body) {
         return doProcess(body);
     }
 
+    @Override
     public String pixManagerPRPAIN201301UV02(String body) {
         return doProcess(body);
     }
 
+    @Override
     public String pixManagerPRPAIN201302UV02(String body) {
         return doProcess(body);
     }
 
+    @Override
     public String pixManagerPRPAIN201304UV02(String body) {
         return doProcess(body);
     }

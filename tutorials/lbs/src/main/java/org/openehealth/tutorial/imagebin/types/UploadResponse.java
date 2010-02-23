@@ -58,7 +58,7 @@ public class UploadResponse {
      *     
      */
     public void setHandle(String value) {
-        this.handle = value;
+        handle = value;
     }
 
 }

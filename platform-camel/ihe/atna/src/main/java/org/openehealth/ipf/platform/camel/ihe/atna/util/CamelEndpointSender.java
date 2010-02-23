@@ -67,19 +67,22 @@ public class CamelEndpointSender implements AuditMessageSender, InitializingBean
      * @throws URISyntaxException 
      */
     public void setEndpointUri(String endpointUri) throws URISyntaxException {
-        this.endpointUriString = endpointUri;
-        this.endpointUriObject = new URI(endpointUri);
+        endpointUriString = endpointUri;
+        endpointUriObject = new URI(endpointUri);
     }
     
+    @Override
     public void afterPropertiesSet() throws Exception {
         producerTemplate = camelContext.createProducerTemplate();
         producerTemplate.start();
     }
 
+    @Override
     public void destroy() throws Exception {
         producerTemplate.stop();
     }
 
+    @Override
     public void sendAuditEvent(AuditEventMessage[] msg) throws Exception {
         sendAuditEvent(msg, null, 0);
     }
@@ -91,6 +94,7 @@ public class CamelEndpointSender implements AuditMessageSender, InitializingBean
      * @param addr ignored
      * @param port ignored
      */
+    @Override
     public void sendAuditEvent(AuditEventMessage[] msg, InetAddress addr, int port) throws Exception {
         for (AuditEventMessage m : Arrays.asList(msg)) {
             m.setDestinationAddress(getDestinationAddress());

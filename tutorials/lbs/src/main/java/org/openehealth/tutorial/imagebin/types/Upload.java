@@ -61,7 +61,7 @@ public class Upload {
      *     
      */
     public void setImageData(DataHandler value) {
-        this.imageData = value;
+        imageData = value;
     }
 
 }

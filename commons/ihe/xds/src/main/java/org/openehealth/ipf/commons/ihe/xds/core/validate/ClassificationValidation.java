@@ -62,9 +62,9 @@ public class ClassificationValidation implements RegistryObjectValidator {
      */
     public ClassificationValidation(String classScheme, SlotValueValidation[] slotValidations) {
         this.classScheme = classScheme;
-        this.min = 1;
-        this.max = 1;
         this.slotValidations = slotValidations;
+        min = 1;
+        max = 1;
     }
 
     @Override

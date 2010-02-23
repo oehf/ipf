@@ -129,7 +129,7 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
 
 			getProblemObservationReason { ->
 				delegate.entryRelationship.findAll{
-					templateId() in it.observation?.templateId.root
+					templateId() in it.observation?.templateId?.root
 				}?.observation
 		    }
         }
@@ -143,7 +143,7 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
 
             getProblemObservationReason { ->
 				delegate.entryRelationship.findAll{
-					templateId() in it.observation?.templateId.root
+					templateId() in it.observation?.templateId?.root
 				}?.observation
 		    }
         }
@@ -157,7 +157,7 @@ public class CCDProblemObservationExtension extends CompositeModelExtension {
 
             getProblemObservationReason { ->
 				delegate.entryRelationship.findAll{
-					templateId() in it.observation?.templateId.root
+					templateId() in it.observation?.templateId?.root
 				}?.observation
 		    }
         }

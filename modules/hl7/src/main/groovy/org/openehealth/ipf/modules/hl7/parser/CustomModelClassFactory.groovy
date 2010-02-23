@@ -90,7 +90,7 @@ public class CustomModelClassFactory implements ModelClassFactory{
 			throw new HL7Exception("HL7 version $version is not supported",
 			HL7Exception.UNSUPPORTED_VERSION_ID);
 		}
-		def classLoaded
+		def classLoaded = null
 		customModelClasses?.getAt(version)?.find {
 			try {
 				def sep = it.endsWith('.') ? '' : '.'

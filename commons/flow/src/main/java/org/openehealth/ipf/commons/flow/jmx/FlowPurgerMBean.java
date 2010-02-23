@@ -53,10 +53,10 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
 
     private Scheduler scheduler;
     
-    private Map<String, FlowPurgeJob> flowPurgeJobs;
+    private final Map<String, FlowPurgeJob> flowPurgeJobs;
     
     public FlowPurgerMBean() {
-        this.flowPurgeJobs = new HashMap<String, FlowPurgeJob>();
+        flowPurgeJobs = new HashMap<String, FlowPurgeJob>();
     }
     
     @ManagedAttribute(description="Application name")
@@ -129,12 +129,14 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
         unscheduleJob(flowManager.getApplicationConfig(application));
     }
     
+    @Override
     public void afterPropertiesSet() throws Exception {
         scheduler = StdSchedulerFactory.getDefaultScheduler();
         scheduler.start();
         initJobs();
     }
 
+    @Override
     public void destroy() throws Exception {
         scheduler.shutdown();
     }

@@ -26,7 +26,7 @@ import java.util.UUID;
  * @author Jens Riemschneider
  */
 public abstract class UuidUriConversionStrategy {
-    private URI baseUri;
+    private final URI baseUri;
     
     /**
      * Constructs the strategy via its base {@code URI}.

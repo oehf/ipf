@@ -191,8 +191,6 @@ public class RouteHelper {
      * Creates a new {@link ValidatorAdapter} that adapts the given
      * <code>XsdValidator</code>.
      * 
-     * @param validator
-     *            a validator.
      * @return an adapted validator.
      */
     public ValidatorAdapter xsdValidator() {
@@ -205,8 +203,6 @@ public class RouteHelper {
      * Creates a new {@link ValidatorAdapter} that adapts the given
      * <code>SchematronValidator</code>.
      * 
-     * @param validator
-     *            a validator.
      * @return an adapted validator.
      */
     public ValidatorAdapter schematronValidator() {
@@ -219,7 +215,7 @@ public class RouteHelper {
      * Creates a new {@link AggregatorAdapter} that adapts the given
      * <code>aggregator</code>.
      * 
-     * @param an
+     * @param aggregator
      *            an aggregator.
      * @return an adapted aggregator.
      */

@@ -30,85 +30,85 @@ import ca.uhn.hl7v2.HL7Exception;
 
 
 /**
- * <p>Represents an HL7 QPD message segment. 
+ * <p>Represents an HL7 QPD message segment.
  * This segment has the following fields:</p><p>
- * QPD-1: Message Query Name (CE)<br> 
- * QPD-2: Query Tag (ST)<br> 
- * QPD-3: User Parameters (in successive fields) (varies)<br> 
- * </p><p>The get...() methods return data from individual fields.  These methods 
- * do not throw exceptions and may therefore have to handle exceptions internally.  
- * If an exception is handled internally, it is logged and null is returned.  
- * This is not expected to happen - if it does happen this indicates not so much 
- * an exceptional circumstance as a bug in the code for this class.</p>    
+ * QPD-1: Message Query Name (CE)<br>
+ * QPD-2: Query Tag (ST)<br>
+ * QPD-3: User Parameters (in successive fields) (varies)<br>
+ * </p><p>The get...() methods return data from individual fields.  These methods
+ * do not throw exceptions and may therefore have to handle exceptions internally.
+ * If an exception is handled internally, it is logged and null is returned.
+ * This is not expected to happen - if it does happen this indicates not so much
+ * an exceptional circumstance as a bug in the code for this class.</p>
  */
 @SuppressWarnings("serial")
 public class QPD extends AbstractSegment {
 
-  /**
-   * Creates a QPD (Query Parameter Definition) segment object that belongs to the given 
-   * message.  
-   */
-  public QPD(Group parent, ModelClassFactory factory) {
-      super(parent, factory);
-      Message message = getMessage();
-      try {
-         this.add(CE.class, true, 1, 250, new Object[]{message});
-         this.add(ST.class, false, 1, 32, new Object[]{message});
-         this.add(HD.class, true, 0, 256, new Object[]{message});
-         this.add(QIP.class, false, 0, 256, new Object[]{message});
-         this.add(Varies.class, false, 0, 256, new Object[]{message});
-         this.add(Varies.class, false, 0, 256, new Object[]{message});
-         this.add(Varies.class, false, 0, 256, new Object[]{message});       
-         this.add(CX.class, true, 0, 256, new Object[]{message});
-      } catch (HL7Exception he) {
-          HapiLogFactory.getHapiLog(this.getClass()).error("Can't instantiate " + this.getClass().getName(), he);
-      }
-  }
+    /**
+     * Creates a QPD (Query Parameter Definition) segment object that belongs to the given
+     * message.
+     */
+    public QPD(Group parent, ModelClassFactory factory) {
+        super(parent, factory);
+        Message message = getMessage();
+        try {
+            add(CE.class, true, 1, 250, new Object[]{message});
+            add(ST.class, false, 1, 32, new Object[]{message});
+            add(HD.class, true, 0, 256, new Object[]{message});
+            add(QIP.class, false, 0, 256, new Object[]{message});
+            add(Varies.class, false, 0, 256, new Object[]{message});
+            add(Varies.class, false, 0, 256, new Object[]{message});
+            add(Varies.class, false, 0, 256, new Object[]{message});
+            add(CX.class, true, 0, 256, new Object[]{message});
+        } catch (HL7Exception he) {
+            HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), he);
+        }
+    }
 
-  /**
-   * Returns Message Query Name (QPD-1).
-   */
-  public CE getMessageQueryName()  {
-	  return getTypedField(1, 0);
-  }
+    /**
+     * Returns Message Query Name (QPD-1).
+     */
+    public CE getMessageQueryName() {
+        return getTypedField(1, 0);
+    }
 
-  /**
-   * Returns Query Tag (QPD-2).
-   */
-  public ST getQueryTag()  {
-	  return getTypedField(2, 0);
-  }
+    /**
+     * Returns Query Tag (QPD-2).
+     */
+    public ST getQueryTag() {
+        return getTypedField(2, 0);
+    }
 
-  /**
-   * Returns Demographics Fields (QPD-3).
-   */
-  public QIP getDemographicsFields(int rep)  {
-	  return getTypedField(3, rep);
-  }
-  
-  /**
-   * Returns Demographics Fields (QPD-3).
-   */
-  public QIP[] getDemographicsFields() {
-      Collection<QIP> result = getTypedField(3);
-      return (QIP[]) result.toArray(new QIP[result.size()]);
-   }    
-  
-  /**
-   * Returns What Domains to be returned (QPD-8).
-   */
-   public CX getWhatDomainsReturned(int rep) {
-      return getTypedField(8, rep);
-   }
+    /**
+     * Returns Demographics Fields (QPD-3).
+     */
+    public QIP getDemographicsFields(int rep) {
+        return getTypedField(3, rep);
+    }
 
-   /**
-   * Returns What Domains to be returned (QPD-8).
-   * 
-   * @return movement IDs
-   */
-   public CX[] getWhatDomainsReturned() {
-      Collection<CX> result = getTypedField(8);
-      return (CX[]) result.toArray(new CX[result.size()]);
-   }  
+    /**
+     * Returns Demographics Fields (QPD-3).
+     */
+    public QIP[] getDemographicsFields() {
+        Collection<QIP> result = getTypedField(3);
+        return result.toArray(new QIP[result.size()]);
+    }
+
+    /**
+     * Returns What Domains to be returned (QPD-8).
+     */
+    public CX getWhatDomainsReturned(int rep) {
+        return getTypedField(8, rep);
+    }
+
+    /**
+     * Returns What Domains to be returned (QPD-8).
+     *
+     * @return movement IDs
+     */
+    public CX[] getWhatDomainsReturned() {
+        Collection<CX> result = getTypedField(8);
+        return result.toArray(new CX[result.size()]);
+    }
 
 }

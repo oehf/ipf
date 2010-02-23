@@ -71,7 +71,7 @@ public class Splitter extends DelegateProcessor {
      * @return the splitter for chaining
      */
     public Splitter aggregate(AggregationStrategy strategy) {
-        this.aggregationStrategy = 
+        aggregationStrategy =
             strategy != null ? strategy : DEFAULT_AGGREGATION_STRATEGY;
         return this;
     }

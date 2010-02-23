@@ -45,12 +45,13 @@ public abstract class ProcessorAdapter extends AdapterSupport implements Process
 
     /**
      * Dispatches the <code>exchange</code> to
-     * {@link #doProcess(Message, Object, Object...)} implementations.
+     * {@link #doProcess(Exchange, Object, Object...)} implementations.
      * 
      * @see #input(Expression)
      * @see #params(Expression)
      * @see #staticParams(Object...)
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         Object input = adaptInput(exchange);
         Object params = adaptParams(exchange);

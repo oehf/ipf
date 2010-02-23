@@ -69,7 +69,7 @@ public class CCDPlanOfCareExtension extends CompositeModelExtension {
                 }
             }
             getPlanOfCare { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '18776-5'
                 } ?.section
             }

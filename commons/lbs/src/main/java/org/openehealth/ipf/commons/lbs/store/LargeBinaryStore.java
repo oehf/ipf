@@ -158,6 +158,7 @@ public interface LargeBinaryStore {
      * resource.
      * @param resourceUri
      *          the resource {@code URI} returned by {@link #add}
+     * @return the output stream.
      * @throws ResourceNotFoundException
      *          if the resource {@code URI} was not found in the store
      * @throws ResourceIOException

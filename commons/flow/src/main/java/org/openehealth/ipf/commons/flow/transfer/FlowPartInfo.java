@@ -102,7 +102,7 @@ public class FlowPartInfo implements Serializable {
     }
 
     public void setPathDuration(long partDuration) {
-        this.pathDuration = partDuration;
+        pathDuration = partDuration;
     }
 
     public String getPath() {

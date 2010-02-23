@@ -40,8 +40,8 @@ public class EbXMLExternalIdentifier21 implements EbXMLExternalIdentifier {
     public EbXMLExternalIdentifier21(ExternalIdentifierType externalIdentifierType, EbXMLObjectLibrary objectLibrary) {
         notNull(objectLibrary, "objectLibrary cannot be null");
         notNull(externalIdentifierType, "externalIdentifierType cannot be null");
-        
-        this.externalIdentifier = externalIdentifierType;
+
+        externalIdentifier = externalIdentifierType;
         this.objectLibrary = objectLibrary;
     }
     

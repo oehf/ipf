@@ -30,7 +30,7 @@ import java.net.InetSocketAddress;
  * processing an exchange.
  */
 public class ConsumerAuthenticationFailureInterceptor extends AbstractMllpInterceptor {
-    private MllpAuditStrategy serverAuditStrategy;
+    private final MllpAuditStrategy serverAuditStrategy;
 
     /**
      * Constructs the interceptor.

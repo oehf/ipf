@@ -54,13 +54,6 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
     /**
      * Parses a message and renders the internal model into a different external
      * representation.
-     * 
-     * @param message
-     * @param params
-     * @return
-     * @throws IOException
-     * @throws ParseException
-     * @throws RenderException
      */
     public final OutputStream convert(InputStream in, OutputStream out, Object... params) throws IOException {
         S parsed = parse(in, params);
@@ -71,13 +64,6 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
     /**
      * Parses a message and renders the internal model into a different external
      * representation.
-     * 
-     * @param source
-     * @param params
-     * @return
-     * @throws IOException
-     * @throws ParseException
-     * @throws RenderException
      */
     public final Result convert(Source source, Result result, Object... params) throws IOException {
         S parsed = parse(source, params);
@@ -88,13 +74,6 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
     /**
      * Parses a message and renders the internal model into a different external
      * representation.
-     * 
-     * @param source
-     * @param params
-     * @return
-     * @throws IOException
-     * @throws ParseException
-     * @throws RenderException
      */
     public final Writer convert(Reader reader, Writer writer, Object... params) throws IOException {
         S parsed = parse(reader, params);

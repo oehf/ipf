@@ -63,9 +63,9 @@ public class RouteBuilder extends SpringRouteBuilder {
     
     private RouteBuilderConfig routeBuilderConfig;
     
-    private DefaultConfigExtender routeConfigExtender;
+    private final DefaultConfigExtender routeConfigExtender;
     
-    private RouteHelper routeHelper;
+    private final RouteHelper routeHelper;
     
     public RouteBuilder() {
         routeConfigExtender = new DefaultConfigExtender();

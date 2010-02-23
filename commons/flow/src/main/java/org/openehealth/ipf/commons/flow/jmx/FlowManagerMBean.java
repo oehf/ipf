@@ -96,9 +96,9 @@ public class FlowManagerMBean {
     "Maximum number of flows returned by finder operations or processed during replay operations")
     public void setMaxFlows(String maxFlows) {
         if (maxFlows == null || maxFlows.trim().equals("")) {
-            this.maxResults = null;
+            maxResults = null;
         } else {
-            this.maxResults = Integer.valueOf(maxFlows);
+            maxResults = Integer.valueOf(maxFlows);
         }
     }
 
@@ -124,7 +124,7 @@ public class FlowManagerMBean {
 
     @ManagedOperation(description="Set upper time limit to current time")
     public void setUpperTimeLimitToCurrentTime() {
-        this.upperTimeLimit = new Date();
+        upperTimeLimit = new Date();
     }
     @ManagedOperation(description = "Find flows within given timespan "
             + "containing flowMessageSearchQuery in the flow message")

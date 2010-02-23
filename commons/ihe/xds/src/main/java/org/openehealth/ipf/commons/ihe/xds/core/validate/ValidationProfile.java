@@ -54,9 +54,9 @@ public class ValidationProfile {
      */
     public ValidationProfile(ValidationProfile profile) {
         if (profile != null) {
-            this.query = profile.query;
-            this.xdsb = profile.xdsb;
-            this.actor = profile.actor;
+            query = profile.query;
+            xdsb = profile.xdsb;
+            actor = profile.actor;
         }
     }
 

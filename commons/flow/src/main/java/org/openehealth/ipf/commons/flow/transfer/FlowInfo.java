@@ -79,7 +79,7 @@ public class FlowInfo implements Serializable {
     private String text;
     
     @XmlElementRef(name="flow-part-infos")
-    private Set<FlowPartInfo> partInfos;
+    private final Set<FlowPartInfo> partInfos;
     
     public FlowInfo() {
         partInfos = new HashSet<FlowPartInfo>();

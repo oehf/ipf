@@ -53,11 +53,11 @@ public abstract class AbstractSegment extends ca.uhn.hl7v2.model.AbstractSegment
             Type t = getField(c, rep);
             return (T) t;
         } catch (ClassCastException cce) {
-            HapiLogFactory.getHapiLog(this.getClass()).error(
+            HapiLogFactory.getHapiLog(getClass()).error(
                     "Unexpected problem obtaining field value.  This is a bug.", cce);
             throw new RuntimeException(cce);
         } catch (HL7Exception he) {
-            HapiLogFactory.getHapiLog(this.getClass()).error(
+            HapiLogFactory.getHapiLog(getClass()).error(
                     "Unexpected problem obtaining field value.  This is a bug.", he);
             throw new RuntimeException(he);
         }
@@ -76,16 +76,16 @@ public abstract class AbstractSegment extends ca.uhn.hl7v2.model.AbstractSegment
         try {
             Type[] t = getField(c);
             List<T> result = new ArrayList<T>(t.length);
-            for (int i = 0; i < t.length; i++) {
-                result.add((T) t[i]);
+            for (Type aT : t) {
+                result.add((T) aT);
             }
             return result;
         } catch (ClassCastException cce) {
-            HapiLogFactory.getHapiLog(this.getClass()).error(
+            HapiLogFactory.getHapiLog(getClass()).error(
                     "Unexpected problem obtaining field value.  This is a bug.", cce);
             throw new RuntimeException(cce);
         } catch (HL7Exception he) {
-            HapiLogFactory.getHapiLog(this.getClass()).error(
+            HapiLogFactory.getHapiLog(getClass()).error(
                     "Unexpected problem obtaining field value.  This is a bug.", he);
             throw new RuntimeException(he);
         }

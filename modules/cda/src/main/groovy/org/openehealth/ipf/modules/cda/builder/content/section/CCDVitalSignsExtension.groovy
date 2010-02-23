@@ -69,7 +69,7 @@ public class CCDVitalSignsExtension extends CompositeModelExtension {
                 }
             }
             getVitalSigns { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '8716-3'
                 } ?.section
             }

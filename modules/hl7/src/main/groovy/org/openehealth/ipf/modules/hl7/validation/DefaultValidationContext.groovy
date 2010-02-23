@@ -21,13 +21,14 @@ import ca.uhn.hl7v2.validation.EncodingRule
 import ca.uhn.hl7v2.validation.MessageRule
 import ca.uhn.hl7v2.validation.PrimitiveTypeRule
 import ca.uhn.hl7v2.validation.ValidationContext
-import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
+import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
+
 import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
 
 /**
  * IPF implementation of a HAPI validation context. It's strongly recommended
  * to use the {@link RuleBuilder} to assemble the rules that are checked during
- * validation by calling {@link #configure()}
+ * validation by calling {@link DefaultValidationContext#configure()}
  * A ValidationContext can either be injected into a HAPI Parser instance (is this case the
  * message is validated during parsing) or be used in seperate validation steps, e.g.
  * using HAPI's MessageValidator. 

@@ -116,7 +116,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
             .toString());
             
         accumulators.put(keyString(dsc1, msh31, msh32, msh33), accumulator);
-        Message ack = (Message) MessageUtils.response(
+        Message ack = MessageUtils.response(
                 getMllpEndpoint().getParser().getFactory(), 
                 requestMessage, "ACK", 
                 requestTerser.get("MSH-9-2"));

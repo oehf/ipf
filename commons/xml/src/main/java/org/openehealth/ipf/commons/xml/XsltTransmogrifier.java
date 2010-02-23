@@ -50,16 +50,16 @@ import org.springframework.core.io.ResourceLoader;
  */
 public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
 
-    private Map<Object, Templates> templateCache = new HashMap<Object, Templates>();
+    private final Map<Object, Templates> templateCache = new HashMap<Object, Templates>();
 
     private Map<String, Object> staticParams;
 
-    private TransformerFactory factory;
-    private URIResolver resolver;
-    private Class<T> outputFormat;
+    private final TransformerFactory factory;
+    private final URIResolver resolver;
+    private final Class<T> outputFormat;
 
-    private static ResourceLoader resourceLoader = new DefaultResourceLoader();
-    private static Log LOG = LogFactory.getLog(XsltTransmogrifier.class);
+    private final static ResourceLoader resourceLoader = new DefaultResourceLoader();
+    private final static Log LOG = LogFactory.getLog(XsltTransmogrifier.class);
 
     private static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";
 

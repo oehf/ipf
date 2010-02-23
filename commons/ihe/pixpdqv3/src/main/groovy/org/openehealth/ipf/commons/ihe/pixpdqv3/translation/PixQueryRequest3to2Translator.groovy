@@ -18,7 +18,8 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
-import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
+import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
 
 /**
  * PIX Query Requests translator v3 to v2.
@@ -68,17 +69,10 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
         // Segment MSH
         fillMshFromSlurper(xml, qry, this.useSenderDeviceName, this.useReceiverDeviceName)                       
-        def time = xml.controlActProcess.subject.registrationEvent.effectiveTime.@value.text()
         if (!this.outputMessageStructure) {
             qry.MSH[9][3] = ''
         }
-        if (!time) {
-            time = xml.controlActProcess.effectiveTime.@value.text()
-        }
-        if (!time) {
-            time = qry.MSH[7][1].value
-        }
-                
+
         // Segment QPD
 		def queryByParameter = xml.controlActProcess.queryByParameter
         def params = queryByParameter.parameterList

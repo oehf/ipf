@@ -48,7 +48,7 @@ public final class LbsConverter {
      *          the data source
      * @return the input stream. The stream must be closed by the caller of the converter.
      *          This also applies when using the converter implicitly via 
-     *          {@link Message#getBody(Class))}. Example:
+     *          {@link org.apache.camel.Message#getBody(Class))}. Example:
      *          <blockquote><pre><code>
      *          InputStream input = exchange.getIn().getBody(InputStream.class);
      *          try {

@@ -26,12 +26,12 @@ import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument;
 
 public class CDADataFormat implements DataFormat {
 
-    private CDAR2Renderer renderer;
-    private CDAR2Parser parser;
+    private final CDAR2Renderer renderer;
+    private final CDAR2Parser parser;
 
     public CDADataFormat() {
-        this.renderer = new CDAR2Renderer();
-        this.parser = new CDAR2Parser();
+        renderer = new CDAR2Renderer();
+        parser = new CDAR2Parser();
     }
 
     @Override

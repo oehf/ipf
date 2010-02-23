@@ -60,7 +60,7 @@ public class AsynchronousMeasurementDispatcher extends MeasurementDispatcher
     /**
      * Fills the blocking queue with the given <code>measurementHistory</code>
      * 
-     * @param data
+     * @param measurementHistory
      *            a <code>MeasurementHistory</code> instance
      */
     @Override

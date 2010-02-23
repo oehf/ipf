@@ -66,7 +66,7 @@ public class CCDAlertsExtension extends CompositeModelExtension {
                 }
             }
             getAlerts { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '48765-2'
                 } ?.section
             }

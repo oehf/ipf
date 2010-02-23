@@ -25,7 +25,7 @@ import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
  * @author Jens Riemschneider
  */
 class MockedSender implements AuditMessageSender{
-    def messages = []
+    def List<AuditEventMessage> messages = []
      
     void sendAuditEvent(AuditEventMessage[] msg) {
         messages.addAll(Arrays.asList(msg))

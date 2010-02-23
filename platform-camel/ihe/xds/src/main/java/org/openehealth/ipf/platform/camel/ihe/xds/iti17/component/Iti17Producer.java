@@ -32,14 +32,12 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * The producer implementation for the ITI-17 component.
  */
 public class Iti17Producer extends DefaultProducer {
-    private Iti17Endpoint endpoint;
+    private final Iti17Endpoint endpoint;
     
     /**
      * Constructs the producer.
      * @param endpoint
      *          the endpoint creating this producer.
-     * @param serviceInfo
-     *          info about the service being called by this producer.
      */
     public Iti17Producer(Iti17Endpoint endpoint) {
         super(endpoint);

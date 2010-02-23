@@ -34,6 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Convert
  * @author Jens Riemschneider
  */
 public class Iti14Service extends DefaultXdsWebService implements Iti14PortType {
+    @Override
     public RegistryResponse documentRegistryRegisterDocumentSet(SubmitObjectsRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {

@@ -34,11 +34,11 @@ import org.openehealth.ipf.platform.camel.flow.process.Splitter;
  */
 public class RouteBuilder extends org.openehealth.ipf.platform.camel.core.builder.RouteBuilder {
 
-    private RouteHelper routeHelper;
+    private final RouteHelper routeHelper;
     
     public RouteBuilder() {
         super();
-        this.routeHelper = new RouteHelper(this);
+        routeHelper = new RouteHelper(this);
     }
     
     public FlowBeginProcessor flowBegin(String identifier) {

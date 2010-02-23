@@ -27,7 +27,7 @@ import org.apache.camel.processor.DelegateProcessor;
  */
 public class DelegatingInterceptor extends DelegateProcessor {
 
-    private Closure closure;
+    private final Closure closure;
     
     public DelegatingInterceptor(Closure closure) {
         this.closure = closure;

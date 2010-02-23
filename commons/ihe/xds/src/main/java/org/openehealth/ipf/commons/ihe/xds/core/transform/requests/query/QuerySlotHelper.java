@@ -396,7 +396,7 @@ public class QuerySlotHelper {
         
         List<String> values = new ArrayList<String>();
 
-        Pattern pattern = Pattern.compile("\\s*,{0,1}\\s*'((?:[^']*(?:'')*[^']*)*)'(.*)", Pattern.DOTALL);
+        Pattern pattern = Pattern.compile("\\s*,?\\s*'((?:[^']*(?:'')*[^']*)*)'(.*)", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(list);
         while (matcher.matches() && matcher.groupCount() == 2) {
             String value = matcher.group(1);

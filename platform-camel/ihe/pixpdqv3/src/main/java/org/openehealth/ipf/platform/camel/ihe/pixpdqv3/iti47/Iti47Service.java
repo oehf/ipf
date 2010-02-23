@@ -24,14 +24,17 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHL7v3WebService;
  */
 public class Iti47Service extends DefaultHL7v3WebService implements Iti47PortType {
 
+    @Override
     public String pdSupplierPRPAIN201305UV02(String body) {
         return doProcess(body);
     }
 
+    @Override
     public String pdSupplierQUQIIN000003UV01Cancel(String body) {
         return doProcess(body);
     }
 
+    @Override
     public String pdSupplierQUQIIN000003UV01Continue(String body) {
         return doProcess(body);
     }

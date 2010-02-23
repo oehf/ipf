@@ -73,7 +73,6 @@ public interface Parser<S> {
      * Parses a message and returns an internal representation of the
      * information.
      * 
-     * @param source
      * @param params
      * @return the parsed message
      * @throws IOException

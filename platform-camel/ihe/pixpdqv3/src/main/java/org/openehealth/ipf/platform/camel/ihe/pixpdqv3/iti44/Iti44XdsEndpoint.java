@@ -39,7 +39,7 @@ public class Iti44XdsEndpoint extends DefaultItiEndpoint {
      *          the endpoint URI.
      * @param address
      *          the endpoint address from the URI.
-     * @param iti47Component
+     * @param iti44Component
      *          the component creating this endpoint.
      * @throws URISyntaxException
      *          if the endpoint URI was not a valid URI.
@@ -47,17 +47,18 @@ public class Iti44XdsEndpoint extends DefaultItiEndpoint {
     public Iti44XdsEndpoint(
             String endpointUri, 
             String address, 
-            Iti44XdsComponent iti44Component) throws URISyntaxException 
-    {
+            Iti44XdsComponent iti44Component) {
         super(endpointUri, address, iti44Component);
     }
 
+    @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = 
             Iti44Xds.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
         return new Iti44XdsProducer(this, clientFactory);
     }
 
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = 
             Iti44Xds.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());

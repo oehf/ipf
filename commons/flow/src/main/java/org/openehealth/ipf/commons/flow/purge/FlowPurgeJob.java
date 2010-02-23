@@ -57,9 +57,9 @@ public class FlowPurgeJob implements Job {
     private static final String APP_CONFIG_KEY = "appConfig";
     private static final Log LOG = LogFactory.getLog(FlowPurgeJob.class);
     
-    private FlowManager flowManager;
-    private Scheduler scheduler;
-    private String application;
+    private final FlowManager flowManager;
+    private final Scheduler scheduler;
+    private final String application;
 
     private String flowPurgeSchedule;
     private String purgeFlowsOlderThan;
@@ -86,9 +86,9 @@ public class FlowPurgeJob implements Job {
         this.flowManager = flowManager;
         this.scheduler = scheduler;
         this.application = application;
-        this.flowPurgeSchedule = FLOW_PURGE_SCHEDULE_DEFAULT;
-        this.purgeFlowsOlderThan = PURGE_FLOWS_OLDER_THAN_DEFAULT;
-        this.doNotPurgeErrorFlows = DO_NOT_PURGE_ERROR_FLOWS_DEFAULT;
+        flowPurgeSchedule = FLOW_PURGE_SCHEDULE_DEFAULT;
+        purgeFlowsOlderThan = PURGE_FLOWS_OLDER_THAN_DEFAULT;
+        doNotPurgeErrorFlows = DO_NOT_PURGE_ERROR_FLOWS_DEFAULT;
     }
     
     public String getFlowPurgeSchedule() {
@@ -127,6 +127,7 @@ public class FlowPurgeJob implements Job {
     /**
      * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
      */
+    @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         FlowManager manager = (FlowManager)context.getJobDetail().getJobDataMap().get(FLOW_MANAGER_KEY);
         ApplicationConfig config = (ApplicationConfig)context.getJobDetail().getJobDataMap().get(APP_CONFIG_KEY);
@@ -151,7 +152,7 @@ public class FlowPurgeJob implements Job {
         FlowPurgeCriteria criteria = new FlowPurgeCriteria(mode, olderThan, config.getApplication(), 100);
     
         int purgeCountTotal = 0;
-        int purgeCount = 0;
+        int purgeCount;
         LOG.info("Start purging flows for application " + config.getApplication());
         do {
             purgeCount = manager.purgeFlows(criteria);
@@ -169,13 +170,9 @@ public class FlowPurgeJob implements Job {
      *            application-specific purge configuration
      */
     public void execute(ApplicationConfig config) {
-        try {
-            String name = "once";
-            schedule(config, new SimpleTrigger(name, null), name);
-            LOG.info("Execute purge job once for application " + application);
-        } catch (ParseException e) {
-            throw new FlowPurgeJobException("Cannot parse schedule: " + e.getMessage());
-        }
+        String name = "once";
+        schedule(config, new SimpleTrigger(name, null), name);
+        LOG.info("Execute purge job once for application " + application);
     }
     
     /**
@@ -195,7 +192,7 @@ public class FlowPurgeJob implements Job {
         }
     }
     
-    private void schedule(ApplicationConfig config, Trigger trigger, String jobName) throws ParseException {
+    private void schedule(ApplicationConfig config, Trigger trigger, String jobName) {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put(FlowPurgeJob.FLOW_MANAGER_KEY, flowManager);
         jobDataMap.put(FlowPurgeJob.APP_CONFIG_KEY, config);

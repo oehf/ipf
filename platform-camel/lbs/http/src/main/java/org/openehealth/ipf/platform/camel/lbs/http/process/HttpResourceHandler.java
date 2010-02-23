@@ -51,7 +51,7 @@ import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
  * @author Jens Riemschneider
  */
 public class HttpResourceHandler implements ResourceHandler {
-    private ResourceFactory resourceFactory;
+    private final ResourceFactory resourceFactory;
 
     /**
      * Constructs the handler
@@ -105,8 +105,7 @@ public class HttpResourceHandler implements ResourceHandler {
         }
     }
 
-    private void integrate(Message message, ResourceList resourceList)
-            throws IOException {
+    private void integrate(Message message, ResourceList resourceList) {
         if (resourceList.size() > 1) {
             integrateToMultipart(message, resourceList);
         }
@@ -141,7 +140,7 @@ public class HttpResourceHandler implements ResourceHandler {
                 .getSimpleName(), resourceFactory);
     }
     
-    private void integrateToSingle(Message message, ResourceList resourceList) throws IOException {
+    private void integrateToSingle(Message message, ResourceList resourceList) {
         // Note: We don't use InputStreamRequestEntity here. It sounds like the
         //       perfect fit, but it does not close the stream because it thinks
         //       that we can do that later after the request is processed. 
@@ -155,7 +154,7 @@ public class HttpResourceHandler implements ResourceHandler {
     }
     
     private static class ResourceRequestEntity implements RequestEntity {
-        private ResourceDataSource resource;
+        private final ResourceDataSource resource;
         
         public ResourceRequestEntity(ResourceDataSource resource) {
             this.resource = resource;
@@ -203,12 +202,12 @@ public class HttpResourceHandler implements ResourceHandler {
         for (ResourceDataSource resource : resourceList) {
             parts[idx] = new ResourcePart(resource.getId(), resource);
             ++idx;
-        };
+        }
         message.setBody(new MultipartRequestEntity(parts, method.getParams()));
     }
     
     private static class ResourcePart extends PartBase {
-        private ResourceDataSource resource;
+        private final ResourceDataSource resource;
 
         private static final String DEFAULT_TRANSFER_ENCODING = "binary";
         private static final String DEFAULT_CHARSET = "ISO-8859-1";
@@ -275,7 +274,7 @@ public class HttpResourceHandler implements ResourceHandler {
     }
 
     private void handleResource(String subUnit, ResourceList resources, 
-            String contentType, String name, String id, InputStream inputStream) throws IOException {
+            String contentType, String name, String id, InputStream inputStream) {
         
         ResourceDataSource resource = 
             resourceFactory.createResource(subUnit, contentType, name, id, inputStream);

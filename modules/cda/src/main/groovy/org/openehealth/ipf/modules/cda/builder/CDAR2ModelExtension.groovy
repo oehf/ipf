@@ -15,34 +15,52 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.openhealthtools.ihe.common.cdar2.*
-import java.lang.Boolean
-
-import org.eclipse.emf.ecore.xml.type.XMLTypePackage
+import org.eclipse.emf.common.util.AbstractEnumerator
 import org.eclipse.emf.ecore.util.FeatureMap
 import org.eclipse.emf.ecore.util.FeatureMapUtil
 import org.eclipse.emf.ecore.xmi.XMLResource
-import org.eclipse.emf.common.util.AbstractEnumerator
-import org.openhealthtools.ihe.common.cdar2.CDAR2Factory
-import org.openehealth.ipf.modules.cda.builder.BaseModelExtension
+import org.eclipse.emf.ecore.xml.type.XMLTypePackage
+import org.openehealth.ipf.modules.cda.CDAR2Renderer
+import org.openhealthtools.ihe.common.cdar2.AD
+import org.openhealthtools.ihe.common.cdar2.BL1
+import org.openhealthtools.ihe.common.cdar2.CD
+import org.openhealthtools.ihe.common.cdar2.ED
+import org.openhealthtools.ihe.common.cdar2.EN
+import org.openhealthtools.ihe.common.cdar2.II
+import org.openhealthtools.ihe.common.cdar2.INT1
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040ClinicalDocument
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040RegionOfInterest
+import org.openhealthtools.ihe.common.cdar2.PQ
+import org.openhealthtools.ihe.common.cdar2.StrucDocCaption
+import org.openhealthtools.ihe.common.cdar2.StrucDocContent
+import org.openhealthtools.ihe.common.cdar2.StrucDocFootnote
+import org.openhealthtools.ihe.common.cdar2.StrucDocItem
+import org.openhealthtools.ihe.common.cdar2.StrucDocLinkHtml
+import org.openhealthtools.ihe.common.cdar2.StrucDocParagraph
+import org.openhealthtools.ihe.common.cdar2.StrucDocTd
+import org.openhealthtools.ihe.common.cdar2.StrucDocText
+import org.openhealthtools.ihe.common.cdar2.StrucDocTh
+import org.openhealthtools.ihe.common.cdar2.StrucDocTitle
+import org.openhealthtools.ihe.common.cdar2.StrucDocTitleContent
+import org.openhealthtools.ihe.common.cdar2.StrucDocTitleFootnote
+import org.openhealthtools.ihe.common.cdar2.StrucDocTr
+import org.openhealthtools.ihe.common.cdar2.TS1
 
 /**
  * @author Christian Ohr
  */
 public class CDAR2ModelExtension extends BaseModelExtension {
 
-     static private void setLiteralText(FeatureMap mixed, String s) {
-         FeatureMapUtil.addText(mixed, s)
-     }
+    static private void setLiteralText(FeatureMap mixed, String s) {
+        FeatureMapUtil.addText(mixed, s)
+    }
 
-     static private String getLiteralText(FeatureMap mixed) {
-         getLiteralText(mixed, 0)
-     }
+    static private String getLiteralText(FeatureMap mixed) {
+        getLiteralText(mixed, 0)
+    }
      
      static private String getLiteralText(FeatureMap mixed, int index) {
-       if (mixed)
-         mixed.get(XMLTypePackage.eINSTANCE.getXMLTypeDocumentRoot_Text(), true).get(index)
+         mixed ? mixed.get(XMLTypePackage.eINSTANCE.getXMLTypeDocumentRoot_Text(), true).get(index) : null
      }
      
 	def register(List registered) {

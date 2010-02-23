@@ -90,12 +90,11 @@ public class ThroughputDistributionStatistics extends ThroughputStatistics {
 
     protected List<Throughput> getThroughputForIntervals() {
 
-        List<Throughput> bins = new ArrayList<Throughput>(
-                this.numberOfIntervalBins);
+        List<Throughput> bins = new ArrayList<Throughput>(numberOfIntervalBins);
 
         long lastTo = getToTime();
         long duration = (lastTo - getFromTime());
-        long step = duration / (this.numberOfIntervalBins);
+        long step = duration / (numberOfIntervalBins);
         for (int t = 0; t < numberOfIntervalBins; t++) {
             long to = lastTo - t * step;
             long from = to - step;

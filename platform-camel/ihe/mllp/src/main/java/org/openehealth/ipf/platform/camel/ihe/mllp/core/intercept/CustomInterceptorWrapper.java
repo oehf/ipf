@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInte
  * Wrapper to use a {@link MllpCustomInterceptor} as an {@link MllpInterceptor}.
  */
 public class CustomInterceptorWrapper extends AbstractMllpInterceptor {
-    private MllpCustomInterceptor wrappedInterceptor;
+    private final MllpCustomInterceptor wrappedInterceptor;
 
     /**
      * Constructor.

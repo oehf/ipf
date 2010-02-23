@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import org.codehaus.groovy.runtime.InvokerHelper
+import org.codehaus.groovy.runtime.InvokerHelper
+
 /**
  * Special closure that helps in the cases of HL7 DSL to allow for a default
  * repetition (0) and (sub-)component [1]. This is necessary for addressing
@@ -23,7 +24,7 @@ import org.codehaus.groovy.runtime.InvokerHelper
  * 
  * @author Christian Ohr
  */
-class SelectorClosure extends Closure{
+class SelectorClosure extends Closure {
 	
 	def elements	
 	def adapter

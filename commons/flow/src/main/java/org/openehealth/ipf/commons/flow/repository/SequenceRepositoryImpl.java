@@ -41,6 +41,7 @@ public class SequenceRepositoryImpl extends HibernateDaoSupport implements Seque
         }
     }
     
+    @Override
     public Long nextNumber() {
         return lockNumber().incrementAndGet();
     }

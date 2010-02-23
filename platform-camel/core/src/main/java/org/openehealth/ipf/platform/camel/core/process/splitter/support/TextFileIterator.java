@@ -51,7 +51,7 @@ public class TextFileIterator implements Iterator<String> {
     private BufferedReader reader;
     private String[] nextSplitLine;
     private int curSplitLineIdx;
-    private LineSplitterLogic lineSplitterLogic;
+    private final LineSplitterLogic lineSplitterLogic;
     private boolean closed;
     
     /**
@@ -64,11 +64,11 @@ public class TextFileIterator implements Iterator<String> {
     public TextFileIterator(String filename) throws IOException {
         
         ObjectHelper.notNull(filename, "filename");
-        
-        this.lineSplitterLogic = DEFAULT_LINE_SPLITTER_LOGIC;        
+
+        lineSplitterLogic = DEFAULT_LINE_SPLITTER_LOGIC;
         
         try {
-            this.reader = new BufferedReader(new FileReader(filename));
+            reader = new BufferedReader(new FileReader(filename));
             readNextLine();
         }
         catch (IOException e) {
@@ -92,8 +92,8 @@ public class TextFileIterator implements Iterator<String> {
         ObjectHelper.notNull(filename, "filename");
         ObjectHelper.notNull(lineSplitterLogic, "lineSplitterLogic");
         
-        this.lineSplitterLogic = lineSplitterLogic;        
-        this.reader = new BufferedReader(new FileReader(filename));
+        this.lineSplitterLogic = lineSplitterLogic;
+        reader = new BufferedReader(new FileReader(filename));
         
         readNextLine();
     }

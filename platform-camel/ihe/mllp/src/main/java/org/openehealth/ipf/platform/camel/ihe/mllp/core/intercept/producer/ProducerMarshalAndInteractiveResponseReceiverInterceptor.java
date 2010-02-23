@@ -54,6 +54,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
     /**
      * Marshals the request, sends it to the route, and unmarshals the response. 
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
         String charset = getMllpEndpoint().getConfiguration().getCharsetName();
@@ -82,7 +83,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         boolean mustSend = true;
         int fragmentsCount = 0;
         int recordsCount = 0;
-        String continuationPointer = null; 
+        String continuationPointer; 
         while (mustSend) {
             mustSend = false;
     

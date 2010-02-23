@@ -29,6 +29,7 @@ public class DefaultHandler implements ResponseHandler {
 
     private static final Log LOG = LogFactory.getLog(DefaultHandler.class);
     
+    @Override
     public void handleResponse(InputStream response) throws Exception {
         LOG.info(IOUtils.toString(response));
     }

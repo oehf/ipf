@@ -39,25 +39,24 @@ public class Iti44PixEndpoint extends DefaultItiEndpoint {
      *          the endpoint URI.
      * @param address
      *          the endpoint address from the URI.
-     * @param iti47Component
+     * @param iti44Component
      *          the component creating this endpoint.
-     * @throws URISyntaxException
-     *          if the endpoint URI was not a valid URI.
      */
     public Iti44PixEndpoint(
             String endpointUri, 
             String address, 
-            Iti44PixComponent iti44Component) throws URISyntaxException 
-    {
+            Iti44PixComponent iti44Component) {
         super(endpointUri, address, iti44Component);
     }
 
+    @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = 
             Iti44Pix.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
         return new Iti44PixProducer(this, clientFactory);
     }
 
+    @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = 
             Iti44Pix.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());

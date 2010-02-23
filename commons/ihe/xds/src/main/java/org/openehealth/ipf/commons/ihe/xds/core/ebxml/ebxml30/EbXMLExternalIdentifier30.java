@@ -34,8 +34,8 @@ public class EbXMLExternalIdentifier30 implements EbXMLExternalIdentifier {
      *          the object to wrap.
      */
     public EbXMLExternalIdentifier30(ExternalIdentifierType externalIdentifierType) {
-        notNull(externalIdentifierType, "externalIdentifierType cannot be null");        
-        this.externalIdentifier = externalIdentifierType;
+        notNull(externalIdentifierType, "externalIdentifierType cannot be null");
+        externalIdentifier = externalIdentifierType;
     }
     
     @Override

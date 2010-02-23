@@ -33,12 +33,13 @@ public class DelegatingAggregator extends ClosureAdapter implements Aggregator<O
         super(closure);
     }
 
+    @Override
     public Object zap(Collection<Object> input, Object... params) {
         List<Object> list = (List<Object>)input;
         if (getClosure().getParameterTypes().length == 3) {
-            return call(new Object[] {list.get(0), list.get(1), params});
+            return call(list.get(0), list.get(1), params);
         } else {
-            return call(new Object[] {list.get(0), list.get(1)});
+            return call(list.get(0), list.get(1));
         }
     }
     

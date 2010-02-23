@@ -133,7 +133,7 @@ public class XdsAuditDataset extends AuditDataset {
      *          service (i.e. registry or repository) endpoint URL.
      */
     public void setServiceEndpointUrl(String serviceEntpointUrl) {
-        this.serviceEndpointUrl = serviceEntpointUrl;
+        serviceEndpointUrl = serviceEntpointUrl;
     }
 
     /**

@@ -90,7 +90,7 @@ public class RetrieveDocumentSetRequestType {
         if (documentRequest == null) {
             documentRequest = new ArrayList<RetrieveDocumentSetRequestType.DocumentRequest>();
         }
-        return this.documentRequest;
+        return documentRequest;
     }
 
 
@@ -151,7 +151,7 @@ public class RetrieveDocumentSetRequestType {
          *     
          */
         public void setHomeCommunityId(String value) {
-            this.homeCommunityId = value;
+            homeCommunityId = value;
         }
 
         /**
@@ -175,7 +175,7 @@ public class RetrieveDocumentSetRequestType {
          *     
          */
         public void setRepositoryUniqueId(String value) {
-            this.repositoryUniqueId = value;
+            repositoryUniqueId = value;
         }
 
         /**
@@ -199,7 +199,7 @@ public class RetrieveDocumentSetRequestType {
          *     
          */
         public void setDocumentUniqueId(String value) {
-            this.documentUniqueId = value;
+            documentUniqueId = value;
         }
 
     }

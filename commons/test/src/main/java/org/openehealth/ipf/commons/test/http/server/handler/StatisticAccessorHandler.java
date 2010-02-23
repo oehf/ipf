@@ -35,7 +35,8 @@ public class StatisticAccessorHandler extends AbstractHandler {
 	
 	private final static String STATISTIC_CONTEXT_NAME = "/statistics";
 
-	public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch) throws IOException, ServletException {
+	@Override
+    public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch) throws IOException, ServletException {
 		Request baseRequest = (request instanceof Request) ? (Request)request:HttpConnection.getCurrentConnection().getRequest();
 		baseRequest.setHandled(true);
 
@@ -60,34 +61,33 @@ public class StatisticAccessorHandler extends AbstractHandler {
 		response.getWriter().println("<th>Success Responses (5xx)</th>");
 		response.getWriter().println("</tr>");
 		
-		Handler[] handlersList = this.getServer().getHandlers();
-		for (int i=0; i< handlersList.length; i++){
-			Handler thisHandler = handlersList[i];
-			if (thisHandler instanceof ContextHandler ){
-				if (!STATISTIC_CONTEXT_NAME.equals(((ContextHandler) thisHandler).getContextPath())){
-					response.getWriter().println("<tr>");
-					response.getWriter().println("<td>" + ((ContextHandler) thisHandler).getContextPath() + "</td>");
-					//nested list
-					StatisticsHandler contextStatisticsHandler = (StatisticsHandler)((ContextHandler) thisHandler).getHandler();
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequests() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActive() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActiveMax() + "</td>");
-					//
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeTotal() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeAverage() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMin() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMax() + "</td>");
-					//
-					response.getWriter().println("<td>" + contextStatisticsHandler.getResponses1xx() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getResponses2xx() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getResponses3xx() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getResponses4xx() + "</td>");
-					response.getWriter().println("<td>" + contextStatisticsHandler.getResponses5xx() + "</td>");
-					//
-					response.getWriter().println("</tr>");	
-				}
-			}
-		}
+		Handler[] handlersList = getServer().getHandlers();
+        for (Handler thisHandler : handlersList) {
+            if (thisHandler instanceof ContextHandler) {
+                if (!STATISTIC_CONTEXT_NAME.equals(((ContextHandler) thisHandler).getContextPath())) {
+                    response.getWriter().println("<tr>");
+                    response.getWriter().println("<td>" + ((ContextHandler) thisHandler).getContextPath() + "</td>");
+                    //nested list
+                    StatisticsHandler contextStatisticsHandler = (StatisticsHandler) ((ContextHandler) thisHandler).getHandler();
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequests() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActive() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActiveMax() + "</td>");
+                    //
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeTotal() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeAverage() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMin() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMax() + "</td>");
+                    //
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getResponses1xx() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getResponses2xx() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getResponses3xx() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getResponses4xx() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getResponses5xx() + "</td>");
+                    //
+                    response.getWriter().println("</tr>");
+                }
+            }
+        }
 		response.getWriter().println("</table>");		
 		
 	}

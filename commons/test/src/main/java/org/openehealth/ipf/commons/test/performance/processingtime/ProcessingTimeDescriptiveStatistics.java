@@ -41,7 +41,7 @@ public class ProcessingTimeDescriptiveStatistics extends
 
     private final TreeMap<String, DescriptiveStatistics> statisticsByMeasurementName;
 
-    private static TimeUnit PROCESSING_TIME_UNIT = TimeUnit.MILLISECONDS;
+    private final static TimeUnit PROCESSING_TIME_UNIT = TimeUnit.MILLISECONDS;
 
     public ProcessingTimeDescriptiveStatistics() {
         statisticsByMeasurementName = new TreeMap<String, DescriptiveStatistics>();
@@ -83,7 +83,7 @@ public class ProcessingTimeDescriptiveStatistics extends
 
     @Override
     protected void updateStatisticsWithDuration(Measurement from, Measurement to) {
-        DescriptiveStatistics statistics = this.statisticsByMeasurementName
+        DescriptiveStatistics statistics = statisticsByMeasurementName
                 .get(to.getName());
         ProcessingTime processingTime = ProcessingTime.getProcessingTime(from
                 .getTimestamp(), to.getTimestamp());

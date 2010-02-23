@@ -25,8 +25,8 @@ public class FlowFinderCriteria {
 
     public static final int DEFAULT_MAX_RESULTS = -1;
 
-    private String inboundMessageQuery;
-    private String outboundMessageQuery;
+    private final String inboundMessageQuery;
+    private final String outboundMessageQuery;
     private String application;
     private Date from;
     private Date to;

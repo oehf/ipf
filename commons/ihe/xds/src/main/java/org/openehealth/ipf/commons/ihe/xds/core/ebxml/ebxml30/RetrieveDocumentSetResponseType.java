@@ -92,7 +92,7 @@ public class RetrieveDocumentSetResponseType {
      *     
      */
     public void setRegistryResponse(RegistryResponseType value) {
-        this.registryResponse = value;
+        registryResponse = value;
     }
 
     /**
@@ -122,7 +122,7 @@ public class RetrieveDocumentSetResponseType {
         if (documentResponse == null) {
             documentResponse = new ArrayList<RetrieveDocumentSetResponseType.DocumentResponse>();
         }
-        return this.documentResponse;
+        return documentResponse;
     }
 
 
@@ -192,7 +192,7 @@ public class RetrieveDocumentSetResponseType {
          *     
          */
         public void setHomeCommunityId(String value) {
-            this.homeCommunityId = value;
+            homeCommunityId = value;
         }
 
         /**
@@ -216,7 +216,7 @@ public class RetrieveDocumentSetResponseType {
          *     
          */
         public void setRepositoryUniqueId(String value) {
-            this.repositoryUniqueId = value;
+            repositoryUniqueId = value;
         }
 
         /**
@@ -240,7 +240,7 @@ public class RetrieveDocumentSetResponseType {
          *     
          */
         public void setDocumentUniqueId(String value) {
-            this.documentUniqueId = value;
+            documentUniqueId = value;
         }
 
         /**
@@ -264,7 +264,7 @@ public class RetrieveDocumentSetResponseType {
          *     
          */
         public void setMimeType(String value) {
-            this.mimeType = value;
+            mimeType = value;
         }
 
         /**
@@ -288,7 +288,7 @@ public class RetrieveDocumentSetResponseType {
          *     
          */
         public void setDocument(DataHandler value) {
-            this.document = value;
+            document = value;
         }
 
     }

@@ -25,7 +25,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersEx
  */
 public class ParamsDefinition {
 
-    private ProcessorAdapterDefinition processorAdapterDefinition;
+    private final ProcessorAdapterDefinition processorAdapterDefinition;
     
     public ParamsDefinition(ProcessorAdapterDefinition processorAdapterDefinition) {
         this.processorAdapterDefinition = processorAdapterDefinition;

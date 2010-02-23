@@ -46,13 +46,8 @@ public class Iti17Servlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	CamelContext camelContext = null;
-        if (getContext() != null){
-        	camelContext = getContext();
-        }else{
-        	camelContext = getCamelContext();
-        }
-        
+    	CamelContext camelContext = getContext() != null ? getContext() : getCamelContext();
+
         String requestURI = req.getRequestURI();        
         String endpointName = toEndpointName(requestURI);
         

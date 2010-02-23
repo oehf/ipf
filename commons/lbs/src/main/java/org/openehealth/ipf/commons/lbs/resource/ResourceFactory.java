@@ -60,7 +60,8 @@ public class ResourceFactory {
         
         this.store = store;
         this.defaultResourceId = defaultResourceId;
-        this.unitOfWorkMap = new HashMap<String, List<ResourceDataSource>>();
+
+        unitOfWorkMap = new HashMap<String, List<ResourceDataSource>>();
         
         log.debug("created: " + this);
     }
@@ -80,10 +81,8 @@ public class ResourceFactory {
      * @param inputStream
      *          stream to the actual content
      * @return the created resource
-     * @throws IOException
-     *          if a problem occurred related to the input stream
      */
-    public ResourceDataSource createResource(String unitOfWorkId, String contentType, String name, String id, InputStream inputStream) throws IOException {
+    public ResourceDataSource createResource(String unitOfWorkId, String contentType, String name, String id, InputStream inputStream) {
         notNull(contentType, "contentType cannot be null");
         notNull(inputStream, "inputStream cannot be null");
         notNull(unitOfWorkId, "unitOfWorkId cannot be null");
@@ -108,11 +107,8 @@ public class ResourceFactory {
      *          id of the resource. May be {@code null} if the id is not known 
      *          and the default id should be used.
      * @return the created resource
-     * @throws IOException
-     *          if a problem occurred related to the input stream in the
-     *          resource description
      */
-    public ResourceDataSource createResource(String unitOfWorkId, String contentType, String name, String id) throws IOException {
+    public ResourceDataSource createResource(String unitOfWorkId, String contentType, String name, String id) {
         notNull(contentType, "contentType cannot be null");
         notNull(unitOfWorkId, "unitOfWorkId cannot be null");
         URI resourceUri = store.add();

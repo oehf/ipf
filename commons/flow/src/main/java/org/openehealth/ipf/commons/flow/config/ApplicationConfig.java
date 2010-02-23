@@ -77,12 +77,12 @@ public class ApplicationConfig {
      */
     public ApplicationConfig(String application) { 
         this.application = application;
-        this.flowFilterEnabled = FLOW_FILTER_ENABLED_DEFAULT;
-        this.flowCleanupEnabled = FLOW_CLEANUP_ENABLED_DEFAULT;
-        this.flowPurgeScheduled = FLOW_PURGE_SCHEDULED_DEFAULT;
-        this.doNotPurgeErrorFlows = DO_NOT_PURGE_ERROR_FLOWS_DEFAULT;
-        this.flowPurgeSchedule = FLOW_PURGE_SCHEDULE_DEFAULT;
-        this.purgeFlowsOlderThan = PURGE_FLOWS_OLDER_THAN_DEFAULT;
+        flowFilterEnabled = FLOW_FILTER_ENABLED_DEFAULT;
+        flowCleanupEnabled = FLOW_CLEANUP_ENABLED_DEFAULT;
+        flowPurgeScheduled = FLOW_PURGE_SCHEDULED_DEFAULT;
+        doNotPurgeErrorFlows = DO_NOT_PURGE_ERROR_FLOWS_DEFAULT;
+        flowPurgeSchedule = FLOW_PURGE_SCHEDULE_DEFAULT;
+        purgeFlowsOlderThan = PURGE_FLOWS_OLDER_THAN_DEFAULT;
     }
     
     public String getApplication() {

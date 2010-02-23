@@ -28,6 +28,6 @@ public enum FlowStatus {
     /**
      * An error condition has been detected in message flow.
      */
-    ERROR;
+    ERROR
     
 }

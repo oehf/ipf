@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.test.performance.model;
 
-import static org.apache.commons.lang.Validate.notNull;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.RouteContext;
@@ -28,6 +26,8 @@ import org.openehealth.ipf.platform.camel.core.util.Contexts;
 import org.openehealth.ipf.platform.camel.test.performance.process.CheckpointProcessor;
 import org.openehealth.ipf.platform.camel.test.performance.process.FinishProcessor;
 import org.openehealth.ipf.platform.camel.test.performance.process.TimeProcessor;
+
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * Extension type to support performance measurement.
@@ -66,7 +66,7 @@ public class MeasureDefinition extends DelegateDefinition {
      * @dsl platform-camel-test
      */
     public MeasureDefinition time() {
-        this.delegate = new TimeProcessor();
+        delegate = new TimeProcessor();
         LOG.debug("Using " + TimeProcessor.class.getName());
         return this;
     }
@@ -78,7 +78,7 @@ public class MeasureDefinition extends DelegateDefinition {
      */
     public MeasureDefinition checkpoint(String name) {
         notNull(name, "The name must not be null!");
-        this.delegate = new CheckpointProcessor(name);
+        delegate = new CheckpointProcessor(name);
         LOG.debug("Using " + CheckpointProcessor.class.getName() + " with name "
                 + name);
         return this;
@@ -91,7 +91,7 @@ public class MeasureDefinition extends DelegateDefinition {
      */
     public MeasureDefinition finish(String name) {
         notNull(name, "The name must not be null!");
-        this.delegate = new FinishProcessor(name);
+        delegate = new FinishProcessor(name);
         LOG.debug("Using " + FinishProcessor.class.getName() + " with name "
                 + name);
         return this;

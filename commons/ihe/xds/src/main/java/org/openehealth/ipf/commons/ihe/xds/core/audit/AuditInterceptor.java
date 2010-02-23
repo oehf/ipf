@@ -92,9 +92,9 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      *      an audit strategy instance or <code>null</code> when none configured
      */
     public XdsAuditStrategy getAuditStrategy() {
-        if(this.auditStrategy == null) {
+        if (auditStrategy == null) {
             LOG.warn("Audit strategy not set, NPE is pending");
         }
-        return this.auditStrategy;
+        return auditStrategy;
     }
 }

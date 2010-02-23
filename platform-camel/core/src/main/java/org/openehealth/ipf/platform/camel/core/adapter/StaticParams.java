@@ -26,7 +26,7 @@ import org.apache.camel.Expression;
  */
 public class StaticParams implements Expression {
 
-    private Object[] params;
+    private final Object[] params;
 
     /**
      * Creates a new {@link StaticParams} expression.

@@ -42,7 +42,7 @@ import static org.apache.commons.lang.Validate.notNull;
 public class MllpDecoder extends CumulativeProtocolDecoder {
     private static final String SESSION_CONTENT = MllpDecoder.class.getName() + ".SessionContent";
     
-    private ResourceFactory resourceFactory;
+    private final ResourceFactory resourceFactory;
     
     private static final Log log = LogFactory.getLog(MllpDecoder.class);    
 
@@ -76,7 +76,7 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
         
         MllpMessagePart part = MllpMessagePart.extractMessage(state, in);
         
-        copy(in, part, outputStream);
+        copy(part, outputStream);
         
         if (part.isComplete()) {
             outputStream.close();
@@ -125,7 +125,7 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
                 .getSimpleName(), resourceFactory);
     }
 
-    private SessionContent getSessionContent(IoSession session) throws IOException {
+    private SessionContent getSessionContent(IoSession session) {
         SessionContent sessionContent = (SessionContent) session.getAttribute(SESSION_CONTENT);
         
         if (sessionContent == null) {
@@ -136,7 +136,7 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
         return sessionContent;
     }
     
-    private void copy(ByteBuffer in, MllpMessagePart message, OutputStream outputStream) throws IOException {
+    private void copy(MllpMessagePart message, OutputStream outputStream) throws IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(message.asByteArray());
         try {
             IOUtils.copy(input, outputStream);
@@ -147,16 +147,17 @@ public class MllpDecoder extends CumulativeProtocolDecoder {
     }
     
     static class SessionContent {        
-        private ResourceFactory resourceFactory;
+        private final ResourceFactory resourceFactory;
+        private final String unitOfWorkId;
+
         private OutputStream outputStream;
         private MllpMessageExtractionState state;
         private ResourceDataSource message;
-        private String unitOfWorkId;
-        
+
         public SessionContent(ResourceFactory resourceFactory) {
             notNull(resourceFactory, "resourceFactory cannot be null");
             this.resourceFactory = resourceFactory;
-            this.unitOfWorkId = UUID.randomUUID() + ".mllp";
+            unitOfWorkId = UUID.randomUUID() + ".mllp";
         }
         
         public void resetMessage() {

@@ -66,7 +66,7 @@ public class CCDSocialHistoryExtension extends CompositeModelExtension {
                 }
             }
             getSocialHistory { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '29762-2'
                 } ?.section
             }

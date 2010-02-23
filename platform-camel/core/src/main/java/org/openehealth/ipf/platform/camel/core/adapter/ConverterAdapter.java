@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.core.io.ReadableStringWriter;
  */
 public class ConverterAdapter extends ProcessorAdapter {
 
-    private Converter converter;
+    private final Converter converter;
     
     /**
      * Creates a new {@link ConverterAdapter} and sets the delegate
@@ -160,11 +160,9 @@ public class ConverterAdapter extends ProcessorAdapter {
      *            input data
      * @param inputParams
      *            input parameters
-     * @throws IOException
-     *             if a system-level problem occurs
      * @return converted result.
      */
-    protected String doProcess(String inputData, Object... inputParams) throws IOException {
+    protected String doProcess(String inputData, Object... inputParams) {
         return converter.convert(inputData, inputParams);
     }
     

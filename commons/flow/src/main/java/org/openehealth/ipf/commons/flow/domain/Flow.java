@@ -122,9 +122,9 @@ public class Flow {
      * Creates a flow.
      */
     public Flow() {
-        this.replayCount = 0;
-        this.derivedStatus = CLEAN;
-        this.ackCountExpected = ACK_COUNT_EXPECTED_UNDEFINED; 
+        replayCount = 0;
+        derivedStatus = CLEAN;
+        ackCountExpected = ACK_COUNT_EXPECTED_UNDEFINED;
     }
     
     /**
@@ -134,9 +134,9 @@ public class Flow {
      */
     public Flow(String application) {
         this.application = application;
-        this.creationTime = currentTime();
-        this.derivedStatus = CLEAN;
-        this.replayCount = 0;
+        creationTime = currentTime();
+        derivedStatus = CLEAN;
+        replayCount = 0;
     }
     
     public Long getIdentifier() {
@@ -181,7 +181,7 @@ public class Flow {
     }
 
     public void setCreationTime(Date start) {
-        this.creationTime = start;
+        creationTime = start;
     }
 
     public Date getReplayTime() {
@@ -281,9 +281,9 @@ public class Flow {
      */
     public void setFlowMessageText(String message) {
         if (message == null) {
-            this.flowMessage = null;
+            flowMessage = null;
         } else {
-            this.flowMessage = new FlowMessage(message);
+            flowMessage = new FlowMessage(message);
         }
     }
   
@@ -338,7 +338,7 @@ public class Flow {
     }
     
     public long getPartDuration(FlowPart part) {
-        Date fu = this.getLatestUpdate();
+        Date fu = getLatestUpdate();
         Date pu = part.getLatestUpdate();
         if (fu == null || pu == null) {
             return -1;
@@ -413,9 +413,6 @@ public class Flow {
      * 
      * @param path 
      *            a flow path.
-     * @param partTextMessage
-     *            a the part text message of the FlowPart with path <code>path<code>
-     *            to be saved.
      */
     public void invalidate(String path) {
         invalidate(path, null);

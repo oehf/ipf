@@ -61,8 +61,8 @@ public class SlotValueValidation implements RegistryObjectValidator {
     public SlotValueValidation(String slotName, ValueValidator validator) {
         this.slotName = slotName;
         this.validator = validator;
-        this.min = 1;
-        this.max = 1;
+        min = 1;
+        max = 1;
     }
 
     @Override

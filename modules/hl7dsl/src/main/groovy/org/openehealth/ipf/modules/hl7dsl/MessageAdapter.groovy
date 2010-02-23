@@ -51,6 +51,7 @@ class MessageAdapter extends GroupAdapter implements Writable {
         String s = parser.encode(group)
         writer.write(s)
         writer.flush()
+        writer
     }
     
     String toString() {

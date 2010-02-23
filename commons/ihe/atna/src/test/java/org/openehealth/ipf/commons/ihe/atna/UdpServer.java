@@ -40,13 +40,13 @@ public class UdpServer extends Thread {
 
     private static final int WAIT_TIMEOUT = 10; // seconds
 
-    private int port;
+    private final int port;
 
     private int expectedPacketCount;
 
     private DatagramSocket socket;
 
-    private List<String> packets;
+    private final List<String> packets;
 
     private CountDownLatch latch;
 
@@ -103,7 +103,7 @@ public class UdpServer extends Thread {
 
     }
 
-    public void cancel() throws InterruptedException {
+    public void cancel() {
         socket.close();
     }
 

@@ -34,6 +34,7 @@ public class Expressions {
      */
     public static <E extends Exchange> Expression headersExpression() {
         return new Expression() {
+            @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return type.cast(exchange.getIn().getHeaders());
             }
@@ -47,6 +48,7 @@ public class Expressions {
     
     public static Expression builderExpression() {
         return new Expression() {
+            @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return type.cast(MarkupBuilder.newInstance());
             }
@@ -60,6 +62,7 @@ public class Expressions {
 
     public static <E extends Exchange> Expression headersAndBuilderExpression() {
         return new Expression() {
+            @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 Object[] result = new Object[2];
                 result [0] = exchange.getIn().getHeaders();
@@ -76,6 +79,7 @@ public class Expressions {
 
     public static Expression exceptionObjectExpression() {
         return new Expression() {
+            @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 return type.cast(exception(exchange));
             }
@@ -84,6 +88,7 @@ public class Expressions {
     
     public static Expression exceptionMessageExpression() {
         return new Expression() {
+            @Override
             public <T> T evaluate(Exchange exchange, Class<T> type) {
                 Throwable throwable = exception(exchange);
                 return type.cast(throwable == null ? null : throwable.getMessage());

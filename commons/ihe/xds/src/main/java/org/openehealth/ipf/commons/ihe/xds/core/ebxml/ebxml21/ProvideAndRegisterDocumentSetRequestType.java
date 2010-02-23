@@ -86,7 +86,7 @@ public class ProvideAndRegisterDocumentSetRequestType {
      *     
      */
     public void setSubmitObjectsRequest(SubmitObjectsRequest value) {
-        this.submitObjectsRequest = value;
+        submitObjectsRequest = value;
     }
 
     /**
@@ -116,7 +116,7 @@ public class ProvideAndRegisterDocumentSetRequestType {
         if (document == null) {
             document = new ArrayList<ProvideAndRegisterDocumentSetRequestType.Document>();
         }
-        return this.document;
+        return document;
     }
 
 
@@ -195,7 +195,7 @@ public class ProvideAndRegisterDocumentSetRequestType {
          *     
          */
         public void setId(String value) {
-            this.id = value;
+            id = value;
         }
 
     }

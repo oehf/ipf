@@ -18,7 +18,8 @@ package org.openehealth.ipf.commons.map
 import java.util.Collection
 import java.util.Set
 import org.springframework.core.io.Resource
-import java.lang.Deprecated
+import java.lang.Deprecated
+
 /**
  * An simple example of a MappingService implementation, backed by a
  * nested Map structure. It also allows bidrectional mapping, i.e.
@@ -187,7 +188,7 @@ class BidiMappingService implements MappingService {
     
     private Object splitKey(Object x) {
     	if (x instanceof String) {
-    		def list = x?.split(separator).collect { it.toString() }
+    		def list = x?.split(separator)?.collect { it.toString() }
     		return list?.size() == 1 ? list[0] : list
     	} else {
     		return x

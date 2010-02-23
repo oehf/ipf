@@ -61,6 +61,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     }
 
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         Parser parser = getMllpEndpoint().getParser();
         MessageAdapter request = (MessageAdapter) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
@@ -78,7 +79,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             String queryTag = requestTerser.get("QID-1");
             if (storage.deleteFragments(queryTag, msh31, msh32, msh33)) {
                 LOG.debug("Dropped response chain for query ID " + queryTag);
-                Message ack = (Message) MessageUtils.ack(parser.getFactory(), requestMessage);
+                Message ack = MessageUtils.ack(parser.getFactory(), requestMessage);
                 Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
             } else {
                 getWrappedProcessor().process(exchange);

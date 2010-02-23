@@ -37,9 +37,6 @@ public class AutoDiscoveryEventEngine extends EventEngine implements Application
         }
     }
     
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.event.EventEngine#distributeToHandlers(org.openehealth.ipf.commons.event.EventObject)
-     */
     @Override
     public void distributeToHandlers(EventObject event) {
         super.distributeToHandlers(event);

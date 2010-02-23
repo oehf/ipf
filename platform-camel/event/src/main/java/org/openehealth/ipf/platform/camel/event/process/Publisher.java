@@ -55,7 +55,7 @@ public class Publisher extends DelegateProcessor {
      * @return this instance to allow chaining
      */
     public Publisher synchronous() {
-        this.sync = true;
+        sync = true;
         return this;
     }
 
@@ -64,7 +64,7 @@ public class Publisher extends DelegateProcessor {
      * @return this instance to allow chaining
      */
     public Publisher asynchronous() {
-        this.sync = false;
+        sync = false;
         return this;
     }
 
@@ -102,7 +102,7 @@ public class Publisher extends DelegateProcessor {
         super.processNext(exchange);
     }
     
-    private void publish(Exchange exchange) throws Exception {
+    private void publish(Exchange exchange) {
         Class[] parameterTypes = closure.getParameterTypes();
         if (parameterTypes.length > 1) {
             throw new IllegalArgumentException("Closure defined in the publish() processor must have no argument or a single exchange parameter");

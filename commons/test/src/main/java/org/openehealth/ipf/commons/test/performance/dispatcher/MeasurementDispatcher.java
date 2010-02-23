@@ -45,7 +45,7 @@ import static org.openehealth.ipf.commons.test.performance.utils.MeasurementHist
  */
 public abstract class MeasurementDispatcher implements InitializingBean {
 
-    public static String CONTENT_ENCODING = "UTF-8";
+    public final static String CONTENT_ENCODING = "UTF-8";
 
     private final static Log LOG = LogFactory
             .getLog(MeasurementDispatcher.class);
@@ -172,7 +172,7 @@ public abstract class MeasurementDispatcher implements InitializingBean {
             return;
         }
         notNull(measurementHistory, "The measurementHistory must not be null!");
-        this.statisticsManager.updateStatistics(measurementHistory);
+        statisticsManager.updateStatistics(measurementHistory);
     }
 
     /**
@@ -234,9 +234,10 @@ public abstract class MeasurementDispatcher implements InitializingBean {
     /**
      * Logs the settings
      */
+    @Override
     public void afterPropertiesSet() throws Exception {
         if (isUsingStatisticsManager()) {
-            LOG.info("The " + this.getClass().getSimpleName()
+            LOG.info("The " + getClass().getSimpleName()
                     + " is using a statistics manager ");
         } else {
             LOG.info("The " + MeasurementDispatcher.class.getSimpleName()
@@ -245,13 +246,13 @@ public abstract class MeasurementDispatcher implements InitializingBean {
         // initialize the performance measurement server client
         if (isUsingPerformanceMeasurementServer()) {
             LOG
-                    .info(this.getClass().getSimpleName()
+                    .info(getClass().getSimpleName()
                             + " is configured to use a performance measurement server with URL "
                             + getPerformanceMeasurementServerURL());
         } else {
             LOG.info("Performance measurement server will not be used, "
                     + "because no URL is configured in "
-                    + this.getClass().getSimpleName());
+                    + getClass().getSimpleName());
         }
     }
 }

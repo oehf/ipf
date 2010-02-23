@@ -70,7 +70,7 @@ public class CCDAdvanceDirectivesExtension extends CompositeModelExtension {
 	        }
 	        
 	        getAdvanceDirectives{ ->
-	            delegate.component?.structuredBody?.component.find { 
+	            delegate.component?.structuredBody?.component?.find { 
 	                it.section.code.code == '42348-3'
 	            } ?.section
 	        }

@@ -29,7 +29,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 abstract class Iti8AuditStrategy implements MllpAuditStrategy {
     
     String[] getNecessaryFields(String messageType) {
-        (messageType == 'A40') ? ['PatientId', 'OldPatientId'] : ['PatientId']
+        (messageType == 'A40') ? ['PatientId', 'OldPatientId'] as String[] : ['PatientId'] as String[]
     }
 
     

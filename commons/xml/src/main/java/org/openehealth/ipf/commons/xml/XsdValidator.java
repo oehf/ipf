@@ -48,12 +48,12 @@ import org.xml.sax.SAXParseException;
  */
 public class XsdValidator implements Validator<Source, String> {
 
-	private static Log LOG = LogFactory.getLog(XsdValidator.class);
-	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
-	private static LSResourceResolverImpl lrri = new LSResourceResolverImpl();
+	private final static Log LOG = LogFactory.getLog(XsdValidator.class);
+	private final static ResourceLoader resourceLoader = new DefaultResourceLoader();
+	private final static LSResourceResolverImpl lrri = new LSResourceResolverImpl();
 	private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
-	private static Map<String, Schema> cachedSchemas = Collections
+	private final static Map<String, Schema> cachedSchemas = Collections
 			.synchronizedMap(new HashMap<String, Schema>(3));
 
 	@Override
@@ -90,14 +90,14 @@ public class XsdValidator implements Validator<Source, String> {
 			return exceptions;
 		} catch (SAXException e) {
 			return Arrays
-					.asList(new ValidationException[] { new ValidationException(
+					.asList(new ValidationException(
 							"Unexpected validation failure because "
-									+ e.getMessage(), e) });
+									+ e.getMessage(), e));
 		} catch (IOException e) {
 			return Arrays
-					.asList(new ValidationException[] { new ValidationException(
+					.asList(new ValidationException(
 							"Unexpected validation failure because "
-									+ e.getMessage(), e) });
+									+ e.getMessage(), e));
 		}
 	}
 
@@ -157,21 +157,24 @@ public class XsdValidator implements Validator<Source, String> {
 
 		private List<SAXParseException> exceptions;
 
-		public void error(SAXParseException exception) throws SAXException {
+		@Override
+        public void error(SAXParseException exception) throws SAXException {
 			if (exceptions == null) {
 				exceptions = new ArrayList<SAXParseException>();
 			}
 			exceptions.add(exception);
 		}
 
-		public void fatalError(SAXParseException exception) throws SAXException {
+		@Override
+        public void fatalError(SAXParseException exception) throws SAXException {
 			if (exceptions == null) {
 				exceptions = new ArrayList<SAXParseException>();
 			}
 			exceptions.add(exception);
 		}
 
-		public void warning(SAXParseException exception) throws SAXException {
+		@Override
+        public void warning(SAXParseException exception) throws SAXException {
 			// TODO LOG some message
 		}
 

@@ -38,7 +38,7 @@ public class CodeTransformer {
      */
     public CodeTransformer(EbXMLFactory ebXMLFactory) {
         notNull(ebXMLFactory, "ebXMLFactory cannot be null");
-        this.factory = ebXMLFactory; 
+        factory = ebXMLFactory;
     }
 
     /**

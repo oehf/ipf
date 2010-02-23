@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.hl7.dataformat;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-
+import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 
-import ca.uhn.hl7v2.parser.Parser;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 /**
  * @author Martin Krasser
@@ -36,8 +35,8 @@ public class Hl7DataFormat implements DataFormat {
     private Parser parser;
     
     public Hl7DataFormat() {
-        this.charset = System.getProperty("file.encoding");
-        this.parser = MessageAdapters.defaultParser();
+        charset = System.getProperty("file.encoding");
+        parser = MessageAdapters.defaultParser();
     }
     
     public String getCharset() {

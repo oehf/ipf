@@ -66,7 +66,7 @@ public class CCDProceduresExtension extends CompositeModelExtension {
                 }
             }
             getProcedures { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '47519-4'
                 } ?.section
             }

@@ -31,8 +31,9 @@ public class DelegatingValidator extends ClosureAdapter implements Validator<Obj
         super(closure);
     }
 
+    @Override
     public void validate(Object message, Object profile) {
-        Object result = null;
+        Object result;
         result = validateInternal(message, profile);
         if (result instanceof Boolean == false) {
             return;
@@ -44,7 +45,7 @@ public class DelegatingValidator extends ClosureAdapter implements Validator<Obj
     
     private Object validateInternal(Object message, Object profile) {
         if (getClosure().getParameterTypes().length == 2) {
-            return call(new Object[] {message, profile});
+            return call(message, profile);
         } else {
             return call(message);
         }

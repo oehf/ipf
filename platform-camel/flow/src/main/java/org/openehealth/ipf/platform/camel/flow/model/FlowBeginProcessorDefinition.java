@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
  */
 public class FlowBeginProcessorDefinition extends FlowProcessorDefinition {
 
-    private String identifier;
+    private final String identifier;
     private String application;
     private String replayErrorUri;
     

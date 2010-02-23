@@ -37,7 +37,7 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
 
     private Expression aggregationInputExpression;
 
-    private Aggregator aggregator;
+    private final Aggregator aggregator;
 
     /**
      * Creates a new {@link AggregatorAdapter} and sets the delegate
@@ -47,8 +47,8 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      *            an aggregator.
      */
     public AggregatorAdapter(Aggregator aggregator) {
-        this.aggregationInputExpression = body();
         this.aggregator = aggregator;
+        aggregationInputExpression = body();
     }
     
     /**

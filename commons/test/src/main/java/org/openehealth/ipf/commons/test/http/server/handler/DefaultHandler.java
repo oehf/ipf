@@ -34,6 +34,7 @@ public class DefaultHandler implements RequestHandler {
     private static final Log LOG = LogFactory.getLog(DefaultHandler.class);
     
 
+    @Override
     public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException {
         InputStream requestStream = request.getInputStream();
         String result = IOUtils.toString(requestStream);

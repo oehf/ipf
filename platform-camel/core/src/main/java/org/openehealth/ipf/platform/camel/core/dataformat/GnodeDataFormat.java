@@ -34,7 +34,7 @@ import org.springframework.util.xml.SimpleSaxErrorHandler;
  */
 public class GnodeDataFormat extends AbstractXmlDataFormat {
 
-    private static Log LOG = LogFactory.getLog(GnodeDataFormat.class);
+    private final static Log LOG = LogFactory.getLog(GnodeDataFormat.class);
 
     private boolean namespaceAware;
 
@@ -72,7 +72,7 @@ public class GnodeDataFormat extends AbstractXmlDataFormat {
         return xmlParser;
     }
 
-    private XmlNodePrinter printer(OutputStream stream) throws Exception {
+    private XmlNodePrinter printer(OutputStream stream) {
         XmlNodePrinter xmlNodePrinter = new XmlNodePrinter(new PrintWriter(
                 stream));
         xmlNodePrinter.setNamespaceAware(namespaceAware);

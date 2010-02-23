@@ -14,7 +14,7 @@ import org.openehealth.ipf.commons.event.DeliveryMode;
  * This adapter uses two Camel routes to send and receive events.
  * Sending events is done by sending it to a route specified by an endpoint.
  * Receiving events is done by allowing a second route to access the 
- * {@link #produce(Event)} method via the bean endpoint in Camel.
+ * {@link #send} method via the bean endpoint in Camel.
  *   
  * @author Jens Riemschneider
  */
@@ -22,7 +22,7 @@ public class RoutingChannelAdapter extends EventChannelAdapter {
 
     private final ProducerTemplate template;
     private final String sendEndpoint;
-    private boolean supportsAsync;
+    private final boolean supportsAsync;
     
     /**
      * Constructs the adapter
@@ -64,14 +64,8 @@ public class RoutingChannelAdapter extends EventChannelAdapter {
         getEventEngine().distributeToHandlers(event);
     }
     
-    /* (non-Javadoc)
-     * @see org.openehealth.ipf.commons.event.EventChannelAdapter#canHandle(org.openehealth.ipf.commons.event.QualityOfService)
-     */
     @Override
     public boolean accepts(DeliveryMode mode) {
-        if (supportsAsync) {
-            return true;
-        }
-        return super.accepts(mode);
+        return supportsAsync || super.accepts(mode);
     }
 }

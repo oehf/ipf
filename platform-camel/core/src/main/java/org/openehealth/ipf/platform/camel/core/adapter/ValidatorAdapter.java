@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
  */
 public class ValidatorAdapter extends ProcessorAdapter {
 
-    private Validator validator;
+    private final Validator validator;
     
     private Object profile;
     
@@ -78,7 +78,7 @@ public class ValidatorAdapter extends ProcessorAdapter {
      * {@link Exchange}. Profile data are passed to adapted
      * transform-support-library objects.
      * 
-     * @param profile
+     * @param profileExpression
      *            validation profile expression.
      * @return this object.
      */

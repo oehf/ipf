@@ -37,7 +37,7 @@ public class ExtenderActivator implements BundleActivator, SynchronousBundleList
 
     private static final Log LOG = LogFactory.getLog(ExtenderActivator.class);
     
-    private ExtensionActivator extensionActivator;
+    private final ExtensionActivator extensionActivator;
     
     static {
         ExpandoMetaClass.enableGlobally();

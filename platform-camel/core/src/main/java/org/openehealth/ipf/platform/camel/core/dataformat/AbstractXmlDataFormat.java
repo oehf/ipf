@@ -44,7 +44,7 @@ public abstract class AbstractXmlDataFormat implements DataFormat {
 
     private boolean namespaceAware;
     private String schemaResource;
-    private static ResourceLoader resourceLoader = new DefaultResourceLoader();
+    private final static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
     
     public AbstractXmlDataFormat() {
@@ -74,7 +74,7 @@ public abstract class AbstractXmlDataFormat implements DataFormat {
     }
 
     private Schema schema() throws IOException, SAXException {
-        Source source = null;
+        Source source;
         if (schemaResource != null) {
             Resource r = resourceLoader.getResource(schemaResource);
             if (r != null) {

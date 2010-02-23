@@ -66,7 +66,7 @@ public class CCDResultsExtension extends CompositeModelExtension {
                 }
             }
             getResults { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '30954-2'
                 } ?.section
             }

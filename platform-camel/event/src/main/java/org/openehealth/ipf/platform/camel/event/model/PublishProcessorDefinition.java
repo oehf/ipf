@@ -74,7 +74,7 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
      * @dsl platform-camel-event
      */
     public PublishProcessorDefinition synchronous() {
-        this.sync = true;
+        sync = true;
         return this;
     }
 
@@ -84,7 +84,7 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
      * @dsl platform-camel-event
      */
     public PublishProcessorDefinition asynchronous() {
-        this.sync = false;
+        sync = false;
         return this;
     }
     

@@ -106,8 +106,6 @@ public class AuditDataset {
      * @param allowIncompleteAudit
      *            {@code true} when the incomplete audit records are allowed;
      *            {@code false} otherwise.
-     * @param log
-     *            logger to send the error message to.
      * @return
      *            {@code true} when the auditing can be performed;
      *            {@code false} otherwise.

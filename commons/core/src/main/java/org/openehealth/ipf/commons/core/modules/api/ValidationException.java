@@ -27,12 +27,12 @@ public class ValidationException extends RuntimeException {
 
     public ValidationException(Throwable cause) {
         super(cause);
-        this.causes = new Throwable[] { cause };
+        causes = new Throwable[] { cause };
     }
 
     public ValidationException(String message, Throwable cause) {
         super(message, cause);
-        this.causes = new Throwable[] { cause };
+        causes = new Throwable[] { cause };
     }
 
     public ValidationException(String message, Throwable[] causes) {
@@ -41,7 +41,7 @@ public class ValidationException extends RuntimeException {
     }
 
     public ValidationException(String message, List<? extends Throwable> causes) {
-        this(message, (Throwable[]) causes.toArray(new Throwable[causes.size()]));
+        this(message, causes.toArray(new Throwable[causes.size()]));
     }
 
     public ValidationException(String message) {

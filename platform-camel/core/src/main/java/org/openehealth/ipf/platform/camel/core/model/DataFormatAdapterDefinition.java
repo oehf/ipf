@@ -27,8 +27,8 @@ import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter;
  */
 public class DataFormatAdapterDefinition extends DataFormatDefinition {
 
-    private String parserBeanName;
-    private String rendererBeanName;
+    private final String parserBeanName;
+    private final String rendererBeanName;
     
     private DataFormatAdapterDefinition(String parserBeanName, String rendererBeanName) {
         this.parserBeanName = parserBeanName;

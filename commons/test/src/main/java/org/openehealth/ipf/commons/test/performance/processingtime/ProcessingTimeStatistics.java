@@ -36,7 +36,7 @@ public class ProcessingTimeStatistics implements Statistics {
 
     private final TreeMap<String, SummaryStatistics> statisticsByMeasurementName;
 
-    private static TimeUnit PROCESSING_TIME_UNIT = TimeUnit.MILLISECONDS;
+    private final static TimeUnit PROCESSING_TIME_UNIT = TimeUnit.MILLISECONDS;
 
     public ProcessingTimeStatistics() {
         statisticsByMeasurementName = new TreeMap<String, SummaryStatistics>();
@@ -94,7 +94,7 @@ public class ProcessingTimeStatistics implements Statistics {
                 }
                 Measurement prev = measurements.get(prevIndex);
                 updateStatisticsWithDuration(prev, measurement);
-            } else if (t == lastIndex) {
+            } else {
                 // finish
                 updateStatisticsWithDuration(firstMeasurement, measurement);
             }
@@ -102,7 +102,7 @@ public class ProcessingTimeStatistics implements Statistics {
     }
 
     protected void updateStatisticsWithDuration(Measurement from, Measurement to) {
-        SummaryStatistics statistics = this.statisticsByMeasurementName.get(to
+        SummaryStatistics statistics = statisticsByMeasurementName.get(to
                 .getName());
         ProcessingTime processingTime = ProcessingTime.getProcessingTime(from
                 .getTimestamp(), to.getTimestamp());

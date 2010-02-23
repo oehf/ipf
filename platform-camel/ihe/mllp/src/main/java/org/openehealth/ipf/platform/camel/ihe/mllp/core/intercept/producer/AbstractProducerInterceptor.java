@@ -45,6 +45,7 @@ public abstract class AbstractProducerInterceptor
         super(endpoint, wrappedProducer);
     }
 
+    @Override
     public Endpoint getEndpoint() {
         return getMllpEndpoint();
     }
@@ -56,14 +57,17 @@ public abstract class AbstractProducerInterceptor
         return (Producer) getWrappedProcessor();
     }
     
+    @Override
     public Exchange createExchange() {
         return getWrappedProducer().createExchange();
     }
 
+    @Override
     public Exchange createExchange(ExchangePattern pattern) {
         return getWrappedProducer().createExchange(pattern);
     }
 
+    @Override
     public Exchange createExchange(Exchange exchange) {
         return getWrappedProducer().createExchange(exchange);
     }

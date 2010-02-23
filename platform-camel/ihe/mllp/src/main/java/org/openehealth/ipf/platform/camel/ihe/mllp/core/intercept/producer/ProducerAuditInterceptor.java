@@ -39,11 +39,13 @@ public class ProducerAuditInterceptor
     }
     
     
+    @Override
     public void process(Exchange exchange) throws Exception {
         AuditInterceptorUtils.doProcess(this, exchange);
     }
 
     
+    @Override
     public void determineParticipantsAddresses(
             Exchange exchange,
             MllpAuditDataset auditDataset) throws Exception 
@@ -53,6 +55,7 @@ public class ProducerAuditInterceptor
     }
 
 
+    @Override
     public MllpAuditStrategy getAuditStrategy() {
         return getMllpEndpoint().getClientAuditStrategy();
     }

@@ -26,9 +26,9 @@ import org.openehealth.ipf.platform.camel.core.process.Validation;
  */
 public class ValidationDefinition extends OutputDefinition<ValidationDefinition>{
 
-    private Processor responseGeneratorProcessor;
+    private final Processor responseGeneratorProcessor;
     
-    private String responseGeneratorUri;
+    private final String responseGeneratorUri;
     
     public ValidationDefinition(String responseGeneratorUri) {
         this(null, responseGeneratorUri);

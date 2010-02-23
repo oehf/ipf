@@ -37,6 +37,7 @@ public class ProducerOutputAcceptanceInterceptor
         super(endpoint, wrappedProducer);
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         AcceptanceInterceptorUtils.processOutput(this, exchange);
     }

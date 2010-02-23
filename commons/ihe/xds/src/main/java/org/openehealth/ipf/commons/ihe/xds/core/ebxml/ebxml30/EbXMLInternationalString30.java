@@ -52,11 +52,11 @@ public class EbXMLInternationalString30 implements EbXMLInternationalString {
             localizedEbRS30.setLang(localized.getLang());
             localizedEbRS30.setValue(localized.getValue());
 
-            this.international = EbXMLFactory30.RIM_FACTORY.createInternationalStringType();
-            this.international.getLocalizedString().add(localizedEbRS30);            
+            international = EbXMLFactory30.RIM_FACTORY.createInternationalStringType();
+            international.getLocalizedString().add(localizedEbRS30);
         }
         else {
-            this.international = null;
+            international = null;
         }
     }
 

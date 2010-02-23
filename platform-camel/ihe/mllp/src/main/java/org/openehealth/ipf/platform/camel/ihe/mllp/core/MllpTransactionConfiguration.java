@@ -63,7 +63,7 @@ public class MllpTransactionConfiguration {
      *      default ack type code for request-related NAKs.
      * @param responseErrorDefaultErrorCode
      *      default error code for response-related NAKs.
-     * @param allowedResponseMessageTypes
+     * @param allowedRequestMessageTypes
      *      array of allowed request message types, 
      *      e.g. <code>{"ADT", "MDM"}</code>.
      * @param allowedRequestTriggerEvents
@@ -78,8 +78,6 @@ public class MllpTransactionConfiguration {
      * @param auditabilityFlags
      *      flags of whether the messages of corresponding 
      *      type should be audited.
-     * @param responseRecordSegmentNames
-     *      names of segments which belong to the "data record" of the response.
      */
     public MllpTransactionConfiguration(
             String hl7Version,
@@ -231,7 +229,7 @@ public class MllpTransactionConfiguration {
     
     /**
      * Returns <code>true</code> if the given element of the given list 
-     * contains a start segment of a data record. 
+     * contains a start segment of a data record.
      */
     public boolean isDataStartSegment(List<String> segments, int index) {
         return false;

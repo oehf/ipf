@@ -32,7 +32,7 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
     // criteria were not based on patient ID and no patients
     // have been found  
     String[] getNecessaryFields(String messageType) {
-        ['Payload', /*'PatientIds'*/]
+        ['Payload', /*'PatientIds'*/] as String[]
     }
 
     

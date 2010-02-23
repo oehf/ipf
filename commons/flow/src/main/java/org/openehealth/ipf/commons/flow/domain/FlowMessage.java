@@ -51,7 +51,7 @@ public class FlowMessage implements TextMessage {
     }
 
     public FlowMessage(String text) {
-        this.identifier = UUID.randomUUID().toString();
+        identifier = UUID.randomUUID().toString();
         this.text = text;
     }
 
@@ -59,10 +59,12 @@ public class FlowMessage implements TextMessage {
         return identifier;
     }
 
+    @Override
     public String getText() {
         return text;
     }
 
+    @Override
     public void setText(String text) {
         this.text = text;
     }

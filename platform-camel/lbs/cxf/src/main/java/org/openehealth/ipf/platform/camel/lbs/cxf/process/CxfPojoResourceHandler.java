@@ -44,7 +44,7 @@ import static org.apache.commons.lang.Validate.notNull;
 public class CxfPojoResourceHandler implements ResourceHandler {
     private static final String RESOURCE_ID_PARAM_PREFIX = "org.openehealth.ipf.platform.camel.lbs.cxf.CxfPojoResourceHandler.Param.";
     
-    private ResourceFactory resourceFactory;
+    private final ResourceFactory resourceFactory;
 
     /**
      * Constructs the handler

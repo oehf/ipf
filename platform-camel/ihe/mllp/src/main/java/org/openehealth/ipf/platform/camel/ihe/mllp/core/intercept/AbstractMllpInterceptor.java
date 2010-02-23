@@ -45,10 +45,12 @@ public abstract class AbstractMllpInterceptor implements MllpInterceptor {
         this.wrappedProcessor = wrappedProcessor;
     }
 
+    @Override
     public MllpEndpoint getMllpEndpoint() {
         return endpoint;
     }
 
+    @Override
     public Processor getWrappedProcessor() {
         return wrappedProcessor;
     }

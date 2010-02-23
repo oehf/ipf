@@ -84,7 +84,7 @@ public class EventObject implements Serializable {
         /** the topic that the event is published with */
         TOPIC("org.openehealth.ipf.commons.event.metadata.topic");
 
-        private String key;
+        private final String key;
 
         private MetaDataKeys(String key) {
             this.key = key;

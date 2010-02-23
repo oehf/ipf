@@ -26,7 +26,7 @@ import java.util.UUID;
  * @author Jens Riemschneider
  */
 public abstract class FileSystemLayoutStrategy {
-    private File baseDir;
+    private final File baseDir;
 
     /**
      * Constructs a file system layout.

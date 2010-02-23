@@ -129,17 +129,14 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 
      
     private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
-        def errorText      = ''
-        def errorCode      = ''
-        def errorLocations = []
         def ackCode        = rsp.MSA[1].value
         def responseStatus = ackCode
         
-        errorCode = rsp.ERR[3][1].value ?: ''
-        errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''} ${rsp.MSA[3].value ?: ''}]"
+        def errorCode = rsp.ERR[3][1].value ?: ''
+        def errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''} ${rsp.MSA[3].value ?: ''}]"
 
         // collect error locations
-        errorLocations = rsp.ERR[2]()?.collect { err ->
+        def errorLocations = rsp.ERR[2]()?.collect { err ->
             if ((err[1].value == 'QPD') && (err[2].value == '1') && (err[3].value == '4')) {
                 return '/' + xml.interactionId.@extension.text() +
                        '/controlActProcess/queryByParameter/parameterList/dataSource' +

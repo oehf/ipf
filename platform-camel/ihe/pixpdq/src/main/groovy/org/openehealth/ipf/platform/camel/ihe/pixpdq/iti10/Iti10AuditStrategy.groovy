@@ -28,7 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
 abstract class Iti10AuditStrategy implements MllpAuditStrategy {
     
     String[] getNecessaryFields(String messageType) {
-        ['PatientIds']
+        ['PatientIds'] as String[]
     }
 
     

@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.ModelClassFactory;
+import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.logging.Log;
@@ -33,9 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.hl7v2.parser.Parser;
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 
 
 /**
@@ -56,6 +55,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
      * Converts response to a {@link MessageAdapter}, throws 
      * a {@link MllpAdaptingException} on failure.  
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         MessageAdapter originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, MessageAdapter.class); 
         Message originalMessage = (Message) originalAdapter.getTarget();
@@ -114,12 +114,12 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
     {
         Object header = m.getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
         if(header == AckTypeCode.AA) {
-            return new MessageAdapter((Message) MessageUtils.ack(classFactory, originalMessage)); 
+            return new MessageAdapter(MessageUtils.ack(classFactory, originalMessage));
         } else if((header == AckTypeCode.AE) || (header == AckTypeCode.AR)) {
             HL7v2Exception exception = new HL7v2Exception(
                     "Error in PIX/PDQ route", 
                     getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
-            Message nak = (Message) MessageUtils.nak(
+            Message nak = MessageUtils.nak(
                     classFactory,
                     originalMessage, 
                     exception, 
@@ -138,8 +138,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
     private void checkExchangeFailed(
             Exchange exchange, 
             Message original, 
-            ModelClassFactory classFactory) throws Exception 
-    {
+            ModelClassFactory classFactory) {
         if (exchange.isFailed()) {
             Throwable t; 
             if(exchange.getException() != null) {

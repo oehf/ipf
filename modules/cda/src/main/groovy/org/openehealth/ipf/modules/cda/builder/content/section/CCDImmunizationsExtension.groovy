@@ -67,7 +67,7 @@ public class CCDImmunizationsExtension extends CompositeModelExtension {
                 }
             }
             getImmunizations { ->
-                delegate.component?.structuredBody?.component.find {
+                delegate.component?.structuredBody?.component?.find {
                     it.section?.code?.code == '11369-6'
                 } ?.section
             }

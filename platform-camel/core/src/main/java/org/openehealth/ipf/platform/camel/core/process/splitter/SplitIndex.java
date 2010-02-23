@@ -43,7 +43,7 @@ public final class SplitIndex {
      *          {@code true} if this index is the last in the corresponding 
      *          collection of sub exchanges
      *           
-     * @return A {@link SplitExchange} corresponding to the index information
+     * @return A {@link SplitIndex} corresponding to the index information
      */
     public static SplitIndex valueOf(int index, boolean last) {
         return new SplitIndex(index, last);

@@ -45,6 +45,7 @@ public class Iti15Service extends DefaultXdsWebService implements Iti15PortType 
     @Resource
     private WebServiceContext wsc;
 
+    @Override
     public RegistryResponse documentRepositoryProvideAndRegisterDocumentSet(SubmitObjectsRequest body) {
         // We need to put together a structure similar to what is done in ITI-41
         // This means we have to put any message attachments into a ProvideAndRegisterDocumentSet

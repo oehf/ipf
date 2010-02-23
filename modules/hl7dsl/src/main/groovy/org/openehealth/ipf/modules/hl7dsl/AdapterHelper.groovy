@@ -39,7 +39,7 @@ class AdapterHelper {
     }
     
     static selector(elements, adapter, index) {
-        new SelectorClosure(this, elements, adapter, index)
+        new SelectorClosure(AdapterHelper.class, elements, adapter, index)
     }
     
     static List adaptStructures(Structure[] structures) {

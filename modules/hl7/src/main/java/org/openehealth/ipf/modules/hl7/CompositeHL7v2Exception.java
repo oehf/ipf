@@ -40,7 +40,7 @@ import ca.uhn.hl7v2.util.Terser;
 public class CompositeHL7v2Exception extends AbstractHL7v2Exception implements
 		Iterable<AbstractHL7v2Exception> {
 
-	private List<AbstractHL7v2Exception> wrapped;
+	private final List<AbstractHL7v2Exception> wrapped;
 
 	public CompositeHL7v2Exception() {
 		this("HL7 Processing Error", new ArrayList<AbstractHL7v2Exception>());
@@ -102,7 +102,8 @@ public class CompositeHL7v2Exception extends AbstractHL7v2Exception implements
 	/**
 	 * @see java.lang.Iterable#iterator()
 	 */
-	public Iterator<AbstractHL7v2Exception> iterator() {
+	@Override
+    public Iterator<AbstractHL7v2Exception> iterator() {
 		return wrapped.iterator();
 	}
 

@@ -43,7 +43,7 @@ public class RouteHelper {
     /**
      * Returns a new {@link FlowBeginProcessor} after assigning the
      * <code>identifier</code>. The returned processor is registered at the
-     * {@link ReplayStrategyRegistry}.
+     * {@link org.openehealth.ipf.platform.camel.flow.ReplayStrategyRegistry}.
      * 
      * @param identifier
      *            the identifier to set on the {@link FlowBeginProcessor}.

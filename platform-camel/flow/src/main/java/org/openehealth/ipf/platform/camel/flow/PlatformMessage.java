@@ -113,6 +113,7 @@ public class PlatformMessage implements ManagedMessage {
      * @see PlatformPacketFactory#createPacket(Exchange)
      * @see PlatformPacket#serialize()
      */
+    @Override
     public byte[] createPacket() {
         return packetFactory.createPacket(exchange).serialize();
     }
@@ -122,6 +123,7 @@ public class PlatformMessage implements ManagedMessage {
      * 
      * @return flow identifier. 
      */
+    @Override
     public Long getFlowId() {
         return (Long)exchange.getIn().getHeader(FLOW_ID_KEY);
     }
@@ -132,6 +134,7 @@ public class PlatformMessage implements ManagedMessage {
      * @param flowId
      *            flow identifier.
      */
+    @Override
     public void setFlowId(Long flowId) {
         exchange.getIn().setHeader(FLOW_ID_KEY, flowId);
     }
@@ -141,6 +144,7 @@ public class PlatformMessage implements ManagedMessage {
      * 
      * @return split history. 
      */
+    @Override
     public SplitHistory getSplitHistory() {
         String history = (String)exchange.getIn().getHeader(FLOW_SPLIT_HISTORY);
         if (history == null) {
@@ -155,6 +159,7 @@ public class PlatformMessage implements ManagedMessage {
      * @param history
      *            split history.
      */
+    @Override
     public void setSplitHistory(SplitHistory history) {
         exchange.getIn().setHeader(FLOW_SPLIT_HISTORY, history.toString());
     }
@@ -174,6 +179,7 @@ public class PlatformMessage implements ManagedMessage {
     /* (non-Javadoc)
      * @see org.openehealth.ipf.commons.flow.ManagedMessage#render()
      */
+    @Override
     public String render() {
         if (messageRenderer != null) {
            return messageRenderer.render(this);

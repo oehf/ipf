@@ -30,7 +30,8 @@ public class CounterHandler implements RequestHandler {
 	
 	private int iCounter;
 
-	public void handle(HttpServletRequest request, HttpServletResponse response)
+	@Override
+    public void handle(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("text/html");

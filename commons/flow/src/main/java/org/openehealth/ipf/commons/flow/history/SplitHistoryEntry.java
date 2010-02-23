@@ -67,7 +67,7 @@ public class SplitHistoryEntry implements Serializable {
             throw new IllegalArgumentException("condition index < numSiblings violated");
         }
         this.index = index;
-        this.last = (index + 1) == numSiblings;
+        last = (index + 1) == numSiblings;
     }
     
     /**
@@ -186,7 +186,7 @@ public class SplitHistoryEntry implements Serializable {
      * Parses the <code>entry</code> string and returns a
      * {@link SplitHistoryEntry} object.
      * 
-     * @param history
+     * @param entry
      *            entry string to parse.
      * @return parsed {@link SplitHistoryEntry} object.
      */

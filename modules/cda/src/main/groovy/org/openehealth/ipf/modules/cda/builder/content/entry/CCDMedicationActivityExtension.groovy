@@ -141,7 +141,7 @@ public class CCDMedicationActivityExtension extends CompositeModelExtension {
 
 			getMedicationActivity { ->
 				delegate.entryRelationship.findAll{
-					templateId() in it.substanceAdministration?.templateId.root
+					templateId() in it.substanceAdministration?.templateId?.root
 				}?.observation
 		    }
         }
@@ -155,7 +155,7 @@ public class CCDMedicationActivityExtension extends CompositeModelExtension {
 
 			getMedicationActivity { ->
 				delegate.entryRelationship.findAll{
-					templateId() in it.substanceAdministration?.templateId.root
+					templateId() in it.substanceAdministration?.templateId?.root
 				}?.observation
 		    }
         }
@@ -169,7 +169,7 @@ public class CCDMedicationActivityExtension extends CompositeModelExtension {
 
 			getMedicationActivity { ->
 				delegate.entryRelationship.findAll{
-					templateId() in it.substanceAdministration?.templateId.root
+					templateId() in it.substanceAdministration?.templateId?.root
 				}?.observation
 		    }
         }

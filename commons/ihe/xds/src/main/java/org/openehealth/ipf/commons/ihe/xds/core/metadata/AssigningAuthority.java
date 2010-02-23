@@ -69,7 +69,7 @@ public class AssigningAuthority implements Serializable {
      */
     public AssigningAuthority(String universalId) {
         this.universalId = universalId;
-        this.universalIdType = "ISO";
+        universalIdType = "ISO";
     }
 
     /**

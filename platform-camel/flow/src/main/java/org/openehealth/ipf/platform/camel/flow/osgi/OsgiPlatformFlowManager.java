@@ -15,15 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.flow.osgi;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.flow.FlowReplayException;
 import org.openehealth.ipf.platform.camel.flow.PlatformFlowManager;
 import org.openehealth.ipf.platform.camel.flow.PlatformPacket;
 import org.openehealth.ipf.platform.camel.flow.ReplayStrategy;
+
+import java.util.List;
 
 /**
  * @author Martin Krasser, Boris Stanojevic
@@ -48,6 +47,7 @@ public class OsgiPlatformFlowManager extends PlatformFlowManager {
      * @see PlatformPacket#deserialize(byte[])
      * @see PlatformPacket#serialize()
      */
+    @Override
     protected PlatformPacket replayFlow(PlatformPacket packet) throws Exception {
         String replayStrategyId = packet.getReplayStrategyId();
         ReplayStrategy replayStrategy = getReplayStrategy(replayStrategyId);
@@ -59,10 +59,8 @@ public class OsgiPlatformFlowManager extends PlatformFlowManager {
         return replayStrategy.replay(packet);
     }
 
-    private ReplayStrategy getReplayStrategy(String replayStrategyId) throws Exception {
-        Iterator<ReplayStrategy> iterator = getReplayStrategies().iterator();
-        while (iterator.hasNext()) {
-            ReplayStrategy replayStrategy = iterator.next();
+    private ReplayStrategy getReplayStrategy(String replayStrategyId) {
+        for (ReplayStrategy replayStrategy : getReplayStrategies()) {
             if (replayStrategy.getIdentifier().equals(replayStrategyId)) {
                 return replayStrategy;
             }

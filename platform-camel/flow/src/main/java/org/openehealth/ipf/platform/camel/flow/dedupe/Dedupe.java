@@ -57,6 +57,7 @@ public class Dedupe implements Predicate {
      * @param exchange
      *            message exchange
      */
+    @Override
     public boolean matches(Exchange exchange) {
         try {
             return !flowManager.filterFlow(new PlatformMessage(exchange));

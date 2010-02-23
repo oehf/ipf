@@ -66,7 +66,7 @@ public class CDAR2ExtractorTest extends AbstractCDAR2Test {
 		
 		// Use find(Closure) to return the first value matching the closure condition    
 		assertEquals('History of Present Illness',
-				components.find { it.section.code.code == '10164-2' }?.section.title.text)
+				components.find { it.section.code.code == '10164-2' }?.section?.title?.text)
 		
 		// Use findAll to return all values matching the closure condition
 		assertEquals(1, components.findAll { it.section.code.code == '10164-2' }.size())

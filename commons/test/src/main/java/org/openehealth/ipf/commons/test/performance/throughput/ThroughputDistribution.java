@@ -28,7 +28,7 @@ public class ThroughputDistribution {
     private final Throughput cumulativeThroughput;
     
     public ThroughputDistribution(Throughput cumulativeThroughput, List<Throughput> intervalThroughput) {
-        this.intervalThroughputs = intervalThroughput;
+        intervalThroughputs = intervalThroughput;
         this.cumulativeThroughput = cumulativeThroughput;
     }
 

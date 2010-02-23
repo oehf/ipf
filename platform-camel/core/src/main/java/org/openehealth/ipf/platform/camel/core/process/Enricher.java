@@ -38,7 +38,7 @@ import org.apache.camel.processor.aggregate.AggregationStrategy;
  */
 public class Enricher extends ServiceSupport implements Processor {
 
-    private Producer producer;
+    private final Producer producer;
     
     private AggregationStrategy aggregationStrategy;
     
@@ -52,7 +52,7 @@ public class Enricher extends ServiceSupport implements Processor {
      *            producer to resource endpoint.
      */
     public Enricher(Producer producer) {
-        this(defauAggregationStrategy(), producer);
+        this(defaultAggregationStrategy(), producer);
     }
     
     /**
@@ -80,11 +80,9 @@ public class Enricher extends ServiceSupport implements Processor {
     
     /**
      * Sets the default aggregation strategy for this enricher.
-     * 
-     * @param aggregationStrategy the aggregationStrategy to set
      */
     public void setDefaultAggregationStrategy() {
-        this.aggregationStrategy = defauAggregationStrategy();
+        aggregationStrategy = defaultAggregationStrategy();
     }
     
     /**
@@ -100,6 +98,7 @@ public class Enricher extends ServiceSupport implements Processor {
      * @param exchange
      *            input data.
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         Exchange resourceExchange = createExchange(exchange, ExchangePattern.InOut);
         producer.process(resourceExchange);
@@ -126,12 +125,13 @@ public class Enricher extends ServiceSupport implements Processor {
         producer.stop();
     }
 
-    private static AggregationStrategy defauAggregationStrategy() {
+    private static AggregationStrategy defaultAggregationStrategy() {
         return new CopyAggregationStrategy();
     }
-    
+
     private static class CopyAggregationStrategy implements AggregationStrategy {
 
+        @Override
         public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
             copyExchange(newExchange, oldExchange);
             return oldExchange;

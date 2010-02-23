@@ -41,14 +41,17 @@ public class ConsumerAuditInterceptor
         super(endpoint, wrappedProcessor);
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         AuditInterceptorUtils.doProcess(this, exchange);
     }
 
+    @Override
     public MllpAuditStrategy getAuditStrategy() {
         return getMllpEndpoint().getServerAuditStrategy();
     }
 
+    @Override
     public void determineParticipantsAddresses(Exchange exchange, MllpAuditDataset auditDataset) throws Exception {
         Message message = exchange.getIn();
         auditDataset.setLocalAddress(addressFromHeader(message, MinaEndpoint.HEADER_LOCAL_ADDRESS));

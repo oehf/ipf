@@ -144,6 +144,7 @@ public class ResourceDataSource implements ResourceCompatibleDataSource, Seriali
         dataSource.deleteAfterNextUsage();
     }
     
+    @Override
     public void delete() {
         dataSource.delete();
     }
