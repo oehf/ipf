@@ -19,6 +19,9 @@ import java.util.Map
 import groovy.xml.MarkupBuilder
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
+
+import org.openehealth.ipf.modules.hl7dsl.GroupAdapter;
+import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
@@ -159,10 +162,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                             }
                                             */
                                             subjectOf1 {
-                                                queryMatchObservation(classCode: 'COND', moodCode: 'EVN') {
-                                                    code(code: 'IHE_PDQ')
-                                                    value('xsi:type': 'INT', value: this.defaultMatchQuality)
-                                                }
+                                                createQueryMatchObservation(builder, qr)
                                             }
                                         }
                                     }
@@ -219,16 +219,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
             responseStatus = ackCode
             errorCode = rsp.ERR[3][1].value ?: ''
             errorText = "PDQv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''}]"
-
-            // collect error locations
-            errorLocations = rsp.ERR[2]()?.collect { err ->
-                if ((err[1].value == 'QPD') && (err[2].value == '1') && (err[3].value == '8')) {
-                    return '/' + xml.interactionId.@extension.text() +
-                           '/controlActProcess/queryByParameter/parameterList/otherIDsScopingOrganization' +
-                           (err[4].value ? ('[' + (err[4].value + 1) + ']') : '')
-                }
-                return '/'
-            }
+            errorLocations = rsp.ERR[2]()?.collect { err2 -> getV3ErrorLocation(err2, xml) }
         } 
         
         return [ackCode:        ackCode, 
@@ -236,6 +227,33 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 errorCode:      errorCode, 
                 errorLocations: errorLocations, 
                 responseStatus: responseStatus]
-        
+    }
+    
+    
+    /**
+     * Constructs an v3 error location string from the given v2 ERR-2 field. 
+     */
+    String getV3ErrorLocation(CompositeAdapter err2, GPathResult xml) { 
+        if ((err2[1].value == 'QPD') && (err2[2].value == '1')) {
+            def location = '/' + xml.interactionId.@extension.text() + '/controlActProcess/queryByParameter'
+            if (err2[3].value == '8') {
+                location += '/parameterList/otherIDsScopingOrganization' + (err2[4].value ? ('[' + (err2[4].value + 1) + ']') : '')
+            }
+            return location
+        }
+        return '/'
+    }
+    
+    
+    
+    /**
+     * Default (dummy) creation of the queryMatchObservation element,
+     * to be customized in derived classes.
+     */
+    void createQueryMatchObservation(MarkupBuilder builder, GroupAdapter grp) {
+        builder.queryMatchObservation(classCode: 'COND', moodCode: 'EVN') {
+            code(code: 'IHE_PDQ')
+            value('xsi:type': 'INT', value: this.defaultMatchQuality)
+        }
     }
 }

@@ -273,4 +273,21 @@ class Utils {
             name(nullFlavor: 'UNK')
         }
     }
+    
+    
+    /**
+     * Creates in the given target HL7 v2 data structure a set of repeatable fields
+     * which correspond to the items of the given source map.
+     * <p>
+     * E.g. the source is <code>['abc' : '123', 'cde' : '456']</code> and the 
+     * target is <code>msg.QPD[3]</code>.  A call to this function will lead to
+     * <code>QPD|...|...|abc^123~cde^456|...</code>.  
+     */
+    static void fillFacets(Map<String, String> source, SelectorClosure target) {
+        for (facet in source.findAll { it.value }) { 
+            def field = nextRepetition(target)
+            field[1].value = facet.key
+            field[2].value = facet.value
+        }
+    }
 }

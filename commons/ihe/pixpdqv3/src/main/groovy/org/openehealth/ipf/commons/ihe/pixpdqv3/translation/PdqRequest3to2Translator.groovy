@@ -51,7 +51,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	/**
 	 * Predefined fix value of QPD-1 (as String)
 	 */
-	String queryTag = 'IHE PDQ Query' 
+	String queryName = 'IHE PDQ Query' 
 
 	/**
 	 * Patient id having this root will be placed in PID-18 of the output message. 
@@ -131,16 +131,12 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
             '@PID.18.4.2' : accountNumber.@root.text(), 
             '@PID.18.4.3' : getIso(accountNumber),
         ] 
-
+        
         // Segment QPD
-        qry.QPD[1] = this.queryTag
+        qry.QPD[1] = this.queryName
         qry.QPD[2] = queryId
-
-        for (facet in queryParams.findAll { it.value }) { 
-            def qpd3 = nextRepetition(qry.QPD[3])
-            qpd3[1].value = facet.key
-            qpd3[2].value = facet.value
-        }
+        
+        fillFacets(queryParams, qry.QPD[3]) 
 
         for (scopingOrg in parameterList.otherIDsScopingOrganization) {
             def value = scopingOrg.value.@root.text()
@@ -165,6 +161,9 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	        qry.DSC[1].value = resultStart 
 	    }
 
+        // user-defined enrichment/post-processing of the MessageAdapter
+        postprocess(qry, xml)
+        
         // return MessageAdapter
 	    return qry
 	}
@@ -173,5 +172,12 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
     private String wildcardize(String value, boolean needWildcard) {
         return (value && needWildcard) ? "*${value}*" : value 
     }
-    
+ 
+
+    /**
+     * To be customized in derived classes. 
+     */
+    void postprocess(MessageAdapter qry, GPathResult xml) {
+        // empty per default
+    }
 }

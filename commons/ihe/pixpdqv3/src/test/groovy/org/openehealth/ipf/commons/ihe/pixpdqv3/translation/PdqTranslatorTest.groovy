@@ -29,7 +29,7 @@ class PdqTranslatorTestorTest extends Hl7TranslationTestContainer {
         doSetUp('pdq',
                 new PdqRequest3to2Translator(), 
                 new PdqResponse2to3Translator(),
-                'pdq-mappings.map')
+                'pdq-translation.map')
     }      
 
     @Test

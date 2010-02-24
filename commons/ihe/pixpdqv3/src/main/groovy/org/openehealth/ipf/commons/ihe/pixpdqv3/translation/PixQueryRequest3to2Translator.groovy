@@ -46,7 +46,7 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
     /**
      * Predefined fix value of QPD-1 (as String)
      */
-    String queryTag = 'IHE PIX Query' 
+    String queryName = 'IHE PIX Query' 
 
     /**
      * If true, MSH-9-3 of the output message will be filled. 
@@ -76,7 +76,7 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // Segment QPD
 		def queryByParameter = xml.controlActProcess.queryByParameter
         def params = queryByParameter.parameterList
-        qry.QPD[1] = this.queryTag
+        qry.QPD[1] = this.queryName
         qry.QPD[2] = constructQueryId(queryByParameter)
         fillCx(qry.QPD[3], params.patientIdentifier.value)
         for (source in params.dataSource) {
