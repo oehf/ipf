@@ -179,8 +179,11 @@ public abstract class SoapUtils {
             int pos1, pos2, pos3, pos4, pos5;
             pos1 = soapEnvelope.lastIndexOf("<");
             pos1 = soapEnvelope.lastIndexOf("<", pos1 - 1);
-            pos2 = soapEnvelope.indexOf(":", pos1);
             pos5 = soapEnvelope.indexOf(">", pos1);
+            if (soapEnvelope.charAt(pos5 - 1) == '/') {
+                return "";
+            }
+            pos2 = soapEnvelope.indexOf(":", pos1);
             String soapPrefix = ((pos2 == -1) || (pos5 < pos2)) ? 
                     "" : soapEnvelope.substring(pos1 + 2, pos2) + ":";
             String bodyElementStart = new StringBuilder()

@@ -51,9 +51,28 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
     public void handleMessage(Message message) throws Fault {
         Document document = (Document) message.getContent(Node.class);
         String payload = message.getContent(String.class);
-        message.setContent(String.class, enrichNamespaces(document, payload));
+        if (isXmlContent(payload)) {
+            message.setContent(String.class, enrichNamespaces(document, payload));
+        }
     }
 
+    
+    /**
+     * Returns <code>true</code> iff the given payload string seems to contain XML.
+     */
+    private static boolean isXmlContent(String payload) {
+        if ((payload == null) || payload.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < payload.length(); ++i) {
+            char c = payload.charAt(i);
+            if (!Character.isWhitespace(c)) {
+                return (c == '<');
+            }
+        }
+        return false;
+    }
+    
     
     /**
      * Copies namespace definitions from SOAP Envelope and SOAP Body elements 

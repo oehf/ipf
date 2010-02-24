@@ -48,8 +48,10 @@ public class InPayloadInjectorInterceptor extends AbstractSafeInterceptor {
     @Override
     protected void process(Message message) throws Exception {
         List list = message.getContent(List.class);
-        String payload = message.getContent(String.class);
-        list.set(position, payload);
+        if (list != null) {
+            String payload = message.getContent(String.class);
+            list.set(position, payload);
+        }
     }
 }
 

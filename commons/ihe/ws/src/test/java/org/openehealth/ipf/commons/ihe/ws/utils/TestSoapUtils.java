@@ -45,11 +45,36 @@ public class TestSoapUtils {
             contents + 
             "</Body></Envelope>";
 
+        final String emptyEnvelopeWithNamespacePrefixes = 
+            "<soap:Envelope><soap:Header>" +
+            "    <thirdns:header value=\"12345\">some text</thirdns:header></soap:Header>" +
+            "    <soap:Body></soap:Body></soap:Envelope>";
+
+        final String emptyEnvelopeWithoutNamespacePrefixes = 
+            "<Envelope><Header>" +
+            "    <thirdns:header value=\"12345\">some text</thirdns:header></Header>" +
+            "    <Body></Body></Envelope>";
+
+        final String emptyEnvelopeWithNamespacePrefixesShort = 
+            "<soap:Envelope><soap:Header>" +
+            "    <thirdns:header value=\"12345\">some text</thirdns:header></soap:Header>" +
+            "    <soap:Body/></soap:Envelope>";
+
+        final String emptyEnvelopeWithoutNamespacePrefixesShort = 
+            "<Envelope><Header>" +
+            "    <thirdns:header value=\"12345\">some text</thirdns:header></Header>" +
+            "    <Body /></Envelope>";
+
         final String totallyBad = "12345";
         
         assertEquals(contents, SoapUtils.extractSoapBody(envelopeWithNamespacePrefixes));
         assertEquals(contents, SoapUtils.extractSoapBody(envelopeWithoutNamespacePrefixes));
-            
+
+        assertEquals("", SoapUtils.extractSoapBody(emptyEnvelopeWithNamespacePrefixes));
+        assertEquals("", SoapUtils.extractSoapBody(emptyEnvelopeWithoutNamespacePrefixes));
+        assertEquals("", SoapUtils.extractSoapBody(emptyEnvelopeWithNamespacePrefixesShort));
+        assertEquals("", SoapUtils.extractSoapBody(emptyEnvelopeWithoutNamespacePrefixesShort));
+        
         Assert.assertNull(SoapUtils.extractSoapBody(null));
         Assert.assertEquals(totallyBad, SoapUtils.extractSoapBody(totallyBad));
     }
