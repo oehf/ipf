@@ -118,7 +118,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 queryAck {
                     buildInstanceIdentifier(builder, 'queryId', false, 
                             xml.id.@root.text(), xml.id.@extension.text())
-                    queryResponseCode(code: status.responseStatus)
+                    queryResponseCode(code: rsp.QAK[2].value)
                 }
                 XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, 'urn:hl7-org:v3')
             }
@@ -129,9 +129,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 
      
     private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
-        def ackCode        = rsp.MSA[1].value
-        def responseStatus = (ackCode[1] == 'A') ? 'OK' : (rsp.QAK[2].value ?: '')
-        
+        def ackCode   = rsp.MSA[1].value
         def errorCode = rsp.ERR[3][1].value ?: ''
         def errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''} ${rsp.MSA[3].value ?: ''}]"
 
@@ -161,8 +159,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
         return [ackCode:        ackCode, 
                 errorText:      errorText, 
                 errorCode:      errorCode, 
-                errorLocations: errorLocations, 
-                responseStatus: responseStatus]
+                errorLocations: errorLocations]
         
     }
 }
