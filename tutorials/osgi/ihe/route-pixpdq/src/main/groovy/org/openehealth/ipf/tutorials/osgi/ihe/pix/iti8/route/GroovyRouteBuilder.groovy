@@ -43,12 +43,5 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
             }
             .validate().iti8Response()
-         
-        // normal processing with support for incomplete auditing
-        from('xds-iti8://0.0.0.0:8883?allowIncompleteAudit=true')
-            .process {
-                resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-            }
-
     }
 }
