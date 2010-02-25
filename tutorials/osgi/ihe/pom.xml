@@ -99,7 +99,7 @@
             <param>--platform=equinox</param>
             <param>--version=3.5.1</param>
             <param>--ee=J2SE-1.5</param>
-            <param>--vmo=-Dosgi.classloader.lock=classname</param>
+            <param>--vmo=-Dosgi.classloader.lock=classname -Xmx256M</param>
             <param>--startLevel=5</param>
             <param>--bundleStartLevel=4</param>
             <param>--workingDirectory=${project.build.directory}/runtime</param>
