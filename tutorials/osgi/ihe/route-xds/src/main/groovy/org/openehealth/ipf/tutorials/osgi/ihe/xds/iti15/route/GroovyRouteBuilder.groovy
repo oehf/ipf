@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 
 /**
  * @author Jens Riemschneider
+ * @author Boris Stanojevic 
  */
 public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override

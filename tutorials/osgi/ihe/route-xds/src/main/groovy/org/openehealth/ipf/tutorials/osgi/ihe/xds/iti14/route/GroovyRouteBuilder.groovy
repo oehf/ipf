@@ -25,6 +25,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
  * @author Jens Riemschneider
+ * @author Boris Stanojevic
  */
 public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
