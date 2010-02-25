@@ -175,6 +175,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-atna</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-mllp</artifactId>
             <version>${project.version}</version>
         </dependency>
