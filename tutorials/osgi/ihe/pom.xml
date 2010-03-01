@@ -228,7 +228,7 @@
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdq/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdqv3/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-atna-util/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-atna/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.tutorials/tutorials-xds/${project.version}@start</param>
             <param>mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}@start</param>
                 </provision>
