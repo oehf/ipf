@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.interceptor.AttachmentInInterceptor;
 import org.apache.cxf.interceptor.StaxInInterceptor;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 
 /**
@@ -35,7 +36,7 @@ import java.io.InputStream;
  * 
  * @author Dmytro Rud
  */
-public class InPayloadExtractorInterceptor extends AbstractSafeInterceptor {
+public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Message> {
 
     public InPayloadExtractorInterceptor() {
         super(Phase.PRE_STREAM);
@@ -44,12 +45,16 @@ public class InPayloadExtractorInterceptor extends AbstractSafeInterceptor {
     }
 
     @Override
-    protected void process(Message message) throws Exception {
-        InputStream stream = message.getContent(InputStream.class);
-        byte[] streamBytes = IOUtils.readBytesFromStream(stream);
-        String payload = SoapUtils.extractSoapBody(new String(streamBytes));
-        message.setContent(String.class, payload);
-        message.setContent(InputStream.class, new ByteArrayInputStream(streamBytes));
+    public void handleMessage(Message message) {
+        try {
+            InputStream stream = message.getContent(InputStream.class);
+            byte[] streamBytes = IOUtils.readBytesFromStream(stream);
+            String payload = SoapUtils.extractSoapBody(new String(streamBytes));
+            message.setContent(String.class, payload);
+            message.setContent(InputStream.class, new ByteArrayInputStream(streamBytes));
+        } catch (IOException e) {
+            throw new RuntimeException("Error when extracting SOAP payload", e);
+        }
     }
 }
 

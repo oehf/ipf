@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
+import java.io.OutputStream;
+
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
-
-import java.io.OutputStream;
 
 /**
  * CXF interceptor that reads outgoing payload collected by the output 
@@ -30,7 +30,7 @@ import java.io.OutputStream;
  * 
  * @author Dmytro Rud
  */
-public class OutPayloadExtractorInterceptor extends AbstractSafeInterceptor {
+public class OutPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Message> {
 
     public OutPayloadExtractorInterceptor() {
         super(Phase.WRITE_ENDING);
@@ -38,7 +38,7 @@ public class OutPayloadExtractorInterceptor extends AbstractSafeInterceptor {
     }
     
     @Override
-    protected void process(Message message) throws Exception {
+    public void handleMessage(Message message) {
         WrappedOutputStream wrapper = (WrappedOutputStream) message.getContent(OutputStream.class);
         String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate();
         String payload = SoapUtils.extractSoapBody(soapEnvelope);

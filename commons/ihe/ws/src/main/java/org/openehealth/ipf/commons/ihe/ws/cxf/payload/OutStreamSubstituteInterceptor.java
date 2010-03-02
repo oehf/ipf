@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
+import java.io.OutputStream;
+
 import org.apache.cxf.interceptor.MessageSenderInterceptor;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
-
-import java.io.OutputStream;
 
 /**
  * CXF interceptor that substitutes message output stream 
@@ -28,7 +28,7 @@ import java.io.OutputStream;
  *   
  * @author Dmytro Rud
  */
-public class OutStreamSubstituteInterceptor extends AbstractSafeInterceptor {
+public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Message> {
 
     public OutStreamSubstituteInterceptor() {
         super(Phase.PREPARE_SEND);
@@ -36,7 +36,7 @@ public class OutStreamSubstituteInterceptor extends AbstractSafeInterceptor {
     }
     
     @Override
-    protected void process(Message message) throws Exception {
+    public void handleMessage(Message message) {
         OutputStream os = message.getContent(OutputStream.class);
         WrappedOutputStream wrapper = new WrappedOutputStream(os);
         message.setContent(OutputStream.class, wrapper);

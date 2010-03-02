@@ -19,8 +19,8 @@ import java.util.List;
 
 import org.apache.cxf.interceptor.ServiceInvokerInterceptor;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 
 /**
  * CXF interceptor which inserts data of String content type  
@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
  * 
  * @author Dmytro Rud
  */
-public class InPayloadInjectorInterceptor extends AbstractSafeInterceptor {
+public class InPayloadInjectorInterceptor extends AbstractPhaseInterceptor<Message> {
     private final int position;
     
     /**
@@ -46,7 +46,7 @@ public class InPayloadInjectorInterceptor extends AbstractSafeInterceptor {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void process(Message message) throws Exception {
+    public void handleMessage(Message message) {
         List list = message.getContent(List.class);
         if (list != null) {
             String payload = message.getContent(String.class);

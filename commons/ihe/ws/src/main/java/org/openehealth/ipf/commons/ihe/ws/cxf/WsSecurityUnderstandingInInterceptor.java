@@ -22,7 +22,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
-import org.apache.cxf.binding.soap.interceptor.SoapInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
@@ -32,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
  * CXF interceptor that claims to understand WS-Security headers.
  * @author Dmytro Rud
  */
-public class WsSecurityUnderstandingInInterceptor extends AbstractSoapInterceptor implements SoapInterceptor {
+public class WsSecurityUnderstandingInInterceptor extends AbstractSoapInterceptor {
 
     private static final Set<QName> UNDERSTOOD_HEADERS;
     static {

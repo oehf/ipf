@@ -43,14 +43,16 @@ public class XmlStringWriter implements DataWriter<XMLStreamWriter> {
 
     @Override
     public void write(Object obj, MessagePartInfo part, XMLStreamWriter writer) {
-        try {
-            String s = (String) obj;
-            InputStream stream = new ByteArrayInputStream(s.getBytes());
-            SAXSource saxSource = new SAXSource(new InputSource(stream));
-            StaxUtils.copy(saxSource, writer);
-        } catch (Exception e) {
-            LOG.error("Error in XML string writer", e);
-        } 
+        if (obj != null) {
+            try {
+                String s = (String) obj;
+                InputStream stream = new ByteArrayInputStream(s.getBytes());
+                SAXSource saxSource = new SAXSource(new InputSource(stream));
+                StaxUtils.copy(saxSource, writer);
+            } catch (Exception e) {
+                LOG.error("Error in XML string writer", e);
+            }
+        }
     }
 
     @Override
