@@ -92,21 +92,27 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             getWrappedProcessor().process(exchange);
             return;
         }
-        
-        // determine the threshold
+
+        // check whether requested unit type is supported
+        String rcp22 = requestTerser.get("RCP-2-2");
+        if (!"RD".equals(rcp22)) {
+            LOG.warn("Unit '" + rcp22 + "' in RCP-2-2 is not supported");
+            getWrappedProcessor().process(exchange);
+            return;
+        }
+
+        // determine the threshold (maximal records count per message)
         int threshold = -1;
-        if ("RD".equals(requestTerser.get("RCP-2-2"))) {
-            try {
-                threshold = new Integer(requestTerser.get("RCP-2-1"));
-            } catch (NumberFormatException nfe) {
-                LOG.warn("Cannot parse RCP-2-1, use default threshold, if any", nfe);
-            }
+        try {
+            threshold = new Integer(requestTerser.get("RCP-2-1"));
+        } catch (NumberFormatException nfe) {
+            LOG.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
         }
         if (threshold < 1) {
             threshold = getMllpEndpoint().getInteractiveContinuationDefaultThreshold();
         }
         if (threshold < 1) {
-            LOG.debug("Cannot perform interactive continuation: threshold not set");
+            LOG.debug("Cannot perform interactive continuation: invalid or missing threshold");
             getWrappedProcessor().process(exchange);
             return;
         }
