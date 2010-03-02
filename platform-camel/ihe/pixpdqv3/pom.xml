@@ -11,10 +11,6 @@
     </parent>
 
     <properties>
-        <osgi.import.pkg>
-            org.openehealth.ipf.commons.ihe.pixpdqv3,
-            *
-        </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.pixpdqv3.extend.PixPdqV3ModelExtension</ipf.extension.classes>
     </properties>
 
