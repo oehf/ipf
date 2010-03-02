@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.extend;
 
-
 import org.apache.camel.model.ProcessorDefinition;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.PixPdqV3Validator;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -135,7 +134,7 @@ class PixPdqV3Extension {
              int transaction,
              boolean request) 
      {
-         self.setValidator(new PixPdqV3Validator());
+         self.setValidator(new Hl7v3Validator());
          self.staticProfile(request ? REQUEST_TYPES[transaction] : RESPONSE_TYPES[transaction]);
          return (ValidatorAdapterDefinition)self.input {
              it.in.getBody(String.class)

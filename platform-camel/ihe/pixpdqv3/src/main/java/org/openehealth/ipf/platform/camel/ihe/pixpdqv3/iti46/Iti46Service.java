@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti46;
 
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti46.Iti46PortType;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHL7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService;
 
 /**
  * Service implementation for the IHE ITI-46 transaction (PIX Update Notification v3).
  * @author Dmytro Rud
  */
-public class Iti46Service extends DefaultHL7v3WebService implements Iti46PortType {
+public class Iti46Service extends DefaultPixPdqV3WebService implements Iti46PortType {
 
     @Override
     public String pixConsumerPRPAIN201302UV02(String body) {

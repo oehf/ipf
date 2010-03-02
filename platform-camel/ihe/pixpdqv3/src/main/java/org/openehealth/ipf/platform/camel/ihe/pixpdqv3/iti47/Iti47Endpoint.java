@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47;
 
-import java.net.URISyntaxException;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;

@@ -17,13 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
 
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44PixPortType;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44XdsPortType;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHL7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService;
 
 /**
  * Generic service class for the IHE ITI-44 transaction.
  * @author Dmytro Rud
  */
-public class Iti44Service extends DefaultHL7v3WebService implements Iti44XdsPortType, Iti44PixPortType {
+public class Iti44Service extends DefaultPixPdqV3WebService implements Iti44XdsPortType, Iti44PixPortType {
 
     @Override
     public String documentRegistryPRPAIN201301UV02(String body) {

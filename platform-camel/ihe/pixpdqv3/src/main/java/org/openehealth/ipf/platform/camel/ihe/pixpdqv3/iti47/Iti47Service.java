@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47;
 
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti47.Iti47PortType;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHL7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService;
 
 /**
  * Service implementation for the IHE ITI-47 transaction (PDQ v3).
  * @author Dmytro Rud
  */
-public class Iti47Service extends DefaultHL7v3WebService implements Iti47PortType {
+public class Iti47Service extends DefaultPixPdqV3WebService implements Iti47PortType {
 
     @Override
     public String pdSupplierPRPAIN201305UV02(String body) {

@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti45;
 
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti45.Iti45PortType;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHL7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService;
 
 /**
  * Service implementation for the IHE ITI-45 transaction (PIX Query v3).
  * @author Dmytro Rud
  */
-public class Iti45Service extends DefaultHL7v3WebService implements Iti45PortType {
+public class Iti45Service extends DefaultPixPdqV3WebService implements Iti45PortType {
 
     @Override
     public String pixManagerPRPAIN201309UV02(String body) {

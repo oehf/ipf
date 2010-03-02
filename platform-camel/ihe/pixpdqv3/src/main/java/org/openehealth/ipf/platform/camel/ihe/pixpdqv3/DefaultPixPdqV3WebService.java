@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  * Generic Web Service implementation for HL7 v3-based transactions.
  * @author Dmytro Rud
  */
-public class DefaultHL7v3WebService extends DefaultItiWebService {
+public class DefaultPixPdqV3WebService extends DefaultItiWebService {
 
     /**
      * The proper message processing method.
