@@ -21,6 +21,7 @@
         <module>ws</module> 
         <module>xds</module>
 	<module>pixpdq</module>
+	<module>hl7v3</module>
 	<module>pixpdqv3</module>
     </modules>
 

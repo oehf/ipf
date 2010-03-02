@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.pixpdqv3;
+package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.endpoint.Client;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
@@ -33,12 +33,10 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
      * Constructs the factory.
      * @param serviceInfo
      *          the info about the web-service.
-     * @param soap11
-     *          whether SOAP 1.1 should be used instead of SOAP 1.2.
      * @param serviceUrl
      *          the URL of the web-service.
      */
-    public Hl7v3ClientFactory(ItiServiceInfo serviceInfo, boolean soap11, String serviceUrl) {
+    public Hl7v3ClientFactory(ItiServiceInfo serviceInfo, String serviceUrl) {
         super(serviceInfo, serviceUrl);
     }
 

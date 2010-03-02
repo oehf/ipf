@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-ws</artifactId>
+            <artifactId>commons-ihe-hl7v3</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -17,8 +17,8 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.iti44;
 
 import javax.xml.namespace.QName;
 
-import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
@@ -50,7 +50,7 @@ public class Iti44Pix {
      * @return the client factory.
      */
     public static ItiClientFactory getClientFactory(boolean audit, boolean allowIncompleteAudit, String serviceUrl) {
-        return new Hl7v3ClientFactory(ITI_44, false, serviceUrl);
+        return new Hl7v3ClientFactory(ITI_44, serviceUrl);
     }
 
     /**

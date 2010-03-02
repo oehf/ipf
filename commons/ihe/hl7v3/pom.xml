@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.commons</groupId>
+    <artifactId>commons-ihe-hl7v3</artifactId>
+    <name>commons-ihe-hl7v3</name>
+
+    <parent>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>commons-ihe</artifactId>
+        <version>2.1-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <osgi.export.pkg>
+            org.openehealth.ipf.commons.ihe.hl7v3.*
+        </osgi.export.pkg>
+        <osgi.fragment.host>org.apache.cxf.bundle</osgi.fragment.host>
+    </properties>
+    
+    <dependencies>
+        <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-ws</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
