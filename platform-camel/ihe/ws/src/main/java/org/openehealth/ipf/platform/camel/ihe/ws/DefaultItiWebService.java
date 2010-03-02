@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import java.util.Map;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang.Validate;
@@ -32,17 +34,41 @@ public class DefaultItiWebService {
      *
      * @param body
      *          contents of the in-message body to be processed.
+     * @param headers
+     *          additional in-message headers.
+     * @param exchangePattern
+     *          pattern of the exchange put into the route.
      * @return the resulting exchange.
      */
-    protected Exchange process(Object body) {
+    protected Exchange process(
+            Object body, 
+            Map<String, Object> headers,
+            ExchangePattern exchangePattern) 
+    {
         Validate.notNull(consumer);
 
-        Exchange exchange = consumer.getEndpoint().createExchange(ExchangePattern.InOut);
+        Exchange exchange = consumer.getEndpoint().createExchange(exchangePattern);
         exchange.getIn().setBody(body);
+        if (headers != null) {
+            exchange.getIn().getHeaders().putAll(headers);
+        }
         consumer.process(exchange);
         return exchange;
     }
 
+    /**
+     * Calls the consumer for synchronous (InOut) processing via Camel
+     * without additional in-message headers.
+     *
+     * @param body
+     *          contents of the in-message body to be processed.
+     * @return the resulting exchange.
+     */
+    protected Exchange process(Object body) {
+        return process(body, null, ExchangePattern.InOut);
+    }
+
+    
     /**
      * Sets the consumer to be used to process exchanges
      * @param consumer
