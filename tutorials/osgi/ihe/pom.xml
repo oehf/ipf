@@ -216,6 +216,7 @@
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-atna/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-pixpdq/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-pixpdqv3/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v3/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-ws/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.modules/modules-hl7/${project.version}@start</param>
