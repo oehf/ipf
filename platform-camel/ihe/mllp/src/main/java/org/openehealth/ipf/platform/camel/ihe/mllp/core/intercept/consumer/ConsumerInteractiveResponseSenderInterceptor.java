@@ -104,7 +104,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         // determine the threshold (maximal records count per message)
         int threshold = -1;
         try {
-            threshold = new Integer(requestTerser.get("RCP-2-1"));
+            threshold = Integer.parseInt(requestTerser.get("RCP-2-1"));
         } catch (NumberFormatException nfe) {
             LOG.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
         }
