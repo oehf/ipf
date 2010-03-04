@@ -16,30 +16,20 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import java.io.ByteArrayInputStream;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import org.openehealth.ipf.commons.xml.XsdValidator;
 
 /**
- * Validator for HL7 v3 messages.
+ * XSD-based validator for HL7 v3 messages.
  * @author Dmytro Rud
  */
 public class Hl7v3Validator implements Validator<String, Collection<String>> {
@@ -50,59 +40,44 @@ public class Hl7v3Validator implements Validator<String, Collection<String>> {
         "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))"    // open tag of the root element
     );
 
-    private static final SchemaFactory schemaFactory = 
-        SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    
-    private static final Map<String, Schema> schemas = new HashMap<String, Schema>();
-
     private static final String XSD_PATH = "schema/HL7V3/NE2008/multicacheschemas/";
     
+    private static final XsdValidator XSD_VALIDATOR = new XsdValidator();
+
     
-    /**
-     * Returns path to XML Schema document which contains the definition
-     * of the XML element with the given name. 
-     */
-    private static String getResourceForElement(String elementName) {
-        StringBuilder sb = new StringBuilder(XSD_PATH);
-        int pos1 = elementName.indexOf('_');
-        int pos2 = elementName.indexOf('_', pos1 + 1);
-        sb.append((pos2 > 0) ? elementName.substring(0, pos2) : elementName);
-        return sb.append(".xsd").toString();
+    public static XsdValidator getXsdValidator() {
+        return XSD_VALIDATOR;
     }
     
     
     /**
-     * Returns schema instance for the given root XML element name, 
-     * creates it when necessary. 
-     * @param rootElementName
-     *      name of the root XML element.
-     * @return
-     *      XML schema instance.
-     * @throws SAXException
+     * Returns path to the XML Schema document which contains the definition 
+     * of the root HL7 v3 element with the given name. 
      */
-    synchronized private static Schema getSchema(String rootElementName) throws Exception {
-        Schema schema = schemas.get(rootElementName);
-        if(schema == null) {
-            String resourceName = getResourceForElement(rootElementName);
-            URL resource = Hl7v3Validator.class.getClassLoader().getResource(resourceName);
-            if(resource == null) {
-                throw new RuntimeException("Cannot load resource '" + resourceName + "'");
-            }
-            schema = schemaFactory.newSchema(resource);
-            schemas.put(rootElementName, schema);
-        }
-        return schema;
+    public static String getXsdPathForElement(String rootElementName) {
+        return new StringBuilder(XSD_PATH)
+            .append(rootElementName)
+            .append(".xsd")
+            .toString();
     }
 
     
     /**
-     * Validates the given HL7 v3 message.
+     * Checks whether the given String seems to represent an XML document 
+     * and whether its root element is a valid one.
+     * 
+     * @param message
+     *            a String which should contain an HL7 v3 XML document.
+     * @param validRootElementNames
+     *            list of valid root element names (with suffixes).
+     * @return name of the extracted root element without suffix 
+     *         (i.e. <code>QUQI_IN000003UV01</code> instead of
+     *         <code>QUQI_IN000003UV01_Cancel</code>).
+     * @throws ValidationException
+     *             when the given String does not contain XML payload 
+     *             or the root element is not valid.
      */
-    public void validate(String message, Collection<String> validRootElementNames) throws ValidationException {
-        Validate.notNull(message, "message");
-        Validate.notEmpty(validRootElementNames, "list of valid root element names");
-
-        // search for the root element (which corresponds to the schema name)
+    public static String getRootElementName(String message, Collection<String> validRootElementNames) {
         Matcher matcher = ROOT_ELEMENT_PATTERN.matcher(message);
         if(( ! matcher.find()) || (matcher.start() != 0)) {
             throw new ValidationException("Cannot extract root element, probably bad XML");
@@ -113,46 +88,32 @@ public class Hl7v3Validator implements Validator<String, Collection<String>> {
             throw new ValidationException("Invalid root element '" + rootElementName + "'");
         }
 
-        // validate against XML Schema
-        List<SAXParseException> exceptions;
-        try {
-            Source source = new StreamSource(new ByteArrayInputStream(message.getBytes()));
-            javax.xml.validation.Validator validator = getSchema(rootElementName).newValidator();
-            ErrorCollector errorCollector = new ErrorCollector();
-            validator.setErrorHandler(errorCollector);
-            validator.validate(source);
-            exceptions = errorCollector.getExceptions();
-        } catch (Exception e) {
-            throw new ValidationException(e);
-        }
-        
-        if(exceptions.size() > 0) {
-            throw new ValidationException(exceptions);
-        }
+        int pos1 = rootElementName.indexOf('_');
+        int pos2 = rootElementName.indexOf('_', pos1 + 1);
+        return (pos2 > 0) ? rootElementName.substring(0, pos2) : rootElementName;
+    }
+
+
+    /**
+     * Converts the given XML string to a Source object.
+     */
+    public static Source getSource(String message) {
+        return new StreamSource(new ByteArrayInputStream(message.getBytes()));
     }
     
 
     /**
-     * Collector of validation errors.
+     * Validates the given HL7 v3 message.
      */
-    private class ErrorCollector implements ErrorHandler {
-        private final List<SAXParseException> exceptions = new ArrayList<SAXParseException>(); 
-        
-        public List<SAXParseException> getExceptions() {
-            return exceptions;
-        }
-        
-        public void error(SAXParseException exception) throws SAXException {
-            exceptions.add(exception);
-        }
+    @Override
+    public void validate(String message, Collection<String> validRootElementNames) throws ValidationException {
+        Validate.notNull(message, "message");
+        Validate.notEmpty(validRootElementNames, "list of valid root element names");
 
-        public void fatalError(SAXParseException exception) throws SAXException {
-            exceptions.add(exception);
-        }
-
-        public void warning(SAXParseException exception) throws SAXException {
-            // nop
-        }
-        
+        String rootElementName = getRootElementName(message, validRootElementNames);
+        Source source = getSource(message);
+        String xsdPath = getXsdPathForElement(rootElementName);
+        getXsdValidator().validate(source, xsdPath);
     }
+
 }

@@ -19,6 +19,11 @@
             <artifactId>commons-ihe-ws</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-xml</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
