@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
@@ -28,15 +29,14 @@ public class DefaultPixPdqV3WebService extends DefaultItiWebService {
     /**
      * The proper message processing method.
      * @param request
-     *      XML payload of HL7 v3 request message.
+     *      XML payload of the HL7 v3 request message.
      * @return
-     *      XML payload of HL7 v3 response message.
+     *      XML payload of the HL7 v3 response message or an automatically generated NAK.
      */
     protected String doProcess(String request) {
         Exchange result = process(request);
         if(result.getException() != null) {
-            // TODO
-            throw new RuntimeException(result.getException());
+            return Hl7v3NakFactory.createNak(request, result.getException());
         }
         return Exchanges.resultMessage(result).getBody(String.class);
     }

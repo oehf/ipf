@@ -21,6 +21,7 @@ import java.util.Map;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * Translator for PIX Feed Responses v2 to v3.

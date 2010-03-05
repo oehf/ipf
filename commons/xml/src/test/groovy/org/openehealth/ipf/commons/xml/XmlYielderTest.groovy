@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
+package org.openehealth.ipf.commons.xml
 
-import static Utils.*
-import static XmlYielder.*
+import static org.openehealth.ipf.commons.xml.XmlYielder.*
 
+import groovy.util.XmlSlurper;
+import groovy.util.slurpersupport.GPathResult;
 import groovy.xml.MarkupBuilderimport org.junit.BeforeClassimport org.junit.Test
 
 import org.custommonkey.xmlunit.XMLUnit
-import org.custommonkey.xmlunit.Diffimport org.custommonkey.xmlunit.DetailedDiffimport org.custommonkey.xmlunit.Differenceimport org.custommonkey.xmlunit.DifferenceConstants
-
+import org.custommonkey.xmlunit.Diff
 /**
  * Unit test for GPath-to-XMLBuilder content yielding.
  * @author Dmytro Rud
@@ -37,6 +37,15 @@ class XmlYielderTest {
         XMLUnit.setIgnoreWhitespace(true)
     }
 
+    private static MarkupBuilder getBuilder(StringWriter writer) {
+        MarkupBuilder builder = new MarkupBuilder(writer)
+        builder.setDoubleQuotes(true)
+        builder.setOmitNullAttributes(true)
+        builder.setOmitEmptyAttributes(true)
+        return builder
+    }
+
+    
     @Test
     void testXmlYield() {
         def sourceText = '''
@@ -81,10 +90,13 @@ class XmlYielderTest {
             </rootElement>
         '''
 
-        def source  = slurp(sourceText)
-        def output = new ByteArrayOutputStream()
-        def builder = getBuilder(output)
+
+        // prepare
+        GPathResult source = new XmlSlurper(false, true).parseText(sourceText)
+        Writer writer = new StringWriter()
+        MarkupBuilder builder = getBuilder(writer)
         
+        // test per se
         String defaultNs = 'urn:hl7-org:v3' 
         builder.rootElement(xmlns: defaultNs) {
             childElement {
@@ -92,8 +104,19 @@ class XmlYielderTest {
             }
         }
 
-        Diff diff = new Diff(expectedTargetText, output.toString())
+        Diff diff = new Diff(expectedTargetText, writer.toString())
         assert diff.identical()
     }
     
+    
+    @Test
+    void testMissingSource() {
+        GPathResult source = new XmlSlurper(false, true).parseText('<abc />')
+        Writer writer = new StringWriter()
+        MarkupBuilder builder = getBuilder(writer)
+        builder.element() {}
+        yieldChildren(source, builder, 'urn:dummy-ns')
+        assert writer.toString() == '<element />'
+    }
+
 }

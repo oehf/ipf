@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
+package org.openehealth.ipf.commons.xml
 
 import groovy.xml.MarkupBuilder
 import groovy.util.XmlSlurper
@@ -32,6 +32,9 @@ class XmlYielder {
      * as a default one, i.e. without prefix for it.
      */
     static void yieldElement(GPathResult source, MarkupBuilder target, String defaultNamespaceUri) {
+        if (!source) {
+            return
+        }
         yieldElement(source.nodeIterator().next(), target, [(defaultNamespaceUri) : '*'])
     }
      
@@ -41,6 +44,10 @@ class XmlYielder {
      * using the provided set of pre-defined namespace prefixes.
      */
     static void yieldElement(Node source, MarkupBuilder target, Map<String, String> predefinedNamespaces) {
+        if (!source) {
+            return
+        }
+        
         Map<String, String> attributes = [:]
         Map<String, String> knownNamespaces = [:]
         knownNamespaces.putAll(predefinedNamespaces)
@@ -71,6 +78,9 @@ class XmlYielder {
      * XML builder, using the provided set of pre-defined namespace prefixes.
      */
     static void yieldChildren(Node source, MarkupBuilder target, Map<String, String> predefinedNamespaces) {
+        if (!source) {
+            return
+        }
         for (child in source.children()) {
             if (child instanceof Node) {
                 yieldElement(child, target, predefinedNamespaces)
@@ -87,6 +97,9 @@ class XmlYielder {
      * as a default one, i.e. without prefix for it.
      */
     static void yieldChildren(GPathResult source, MarkupBuilder target, String defaultNamespaceUri) {
+        if (!source) {
+            return
+        }
         yieldChildren(source.nodeIterator().next(), target, [(defaultNamespaceUri) : '*'])
     }
 

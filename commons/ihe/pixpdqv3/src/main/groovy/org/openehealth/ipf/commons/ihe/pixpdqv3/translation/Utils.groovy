@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
-import groovy.xml.MarkupBuilderimport groovy.util.XmlSlurper
-import groovy.util.slurpersupport.GPathResultimport groovy.util.slurpersupport.Node
+import groovy.xml.MarkupBuilderimport groovy.util.slurpersupport.GPathResultimport groovy.util.slurpersupport.Node
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /*
  * Generic routines for HL7 v2-to-v3 transformation.
@@ -27,32 +27,28 @@ import org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport org.openehealth
 class Utils {
 
     /**
-     * Creates and configures an XML builder based on the given output stream.
+     * Maps v2 ERR-3 (table 0357) to v3 AcknowledgementDetailCode 
+     * (code system 2.16.840.1.113883.5.1100). 
      */
-    static MarkupBuilder getBuilder(OutputStream output) {
-        Writer writer = new OutputStreamWriter(output, 'UTF-8')
-        MarkupBuilder builder = new MarkupBuilder(writer)
-        builder.setDoubleQuotes(true)
-        builder.setOmitNullAttributes(true)
-        builder.setOmitEmptyAttributes(true)
-        return builder
-    }
-    
+    private static final Map<String, String> V2_TO_V3_ERROR_CODE_MAP = [
+        '101' : 'SYN105',
+        '102' : 'SYN102',
+        '103' : 'SYN103',
+        '200' : 'NS200',
+        '201' : 'NS200',
+        '202' : 'NS202',
+        '203' : 'NS203',
+    ]
+
     
     /**
-     * Parses the given XML document and performs some post-configuration 
-     * of the generated {@link GPathResult} object. 
+     * Returns the next repetition of the given HL7 v2 field/segment/etc.
      */
-    static GPathResult slurp(String document) {
-        GPathResult xml = new XmlSlurper(false, true).parseText(document)
-        xml.declareNamespace(
-            '*'   : 'urn:hl7-org:v3',              
-            'xsi' : 'http://www.w3.org/2001/XMLSchema-instance',
-            'xsd' : 'http://www.w3.org/2001/XMLSchema')
-        return xml
+    static def nextRepetition(SelectorClosure closure) {
+        return closure(closure().size())
     }
-    
-    
+
+
     static String senderOrReceiverIdentification(GPathResult senderOrReceiver, boolean useDeviceName) {
         def device = senderOrReceiver.device
         if (useDeviceName) {
@@ -63,14 +59,6 @@ class Utils {
         }
         return device.id.@extension.text() + '@' + device.id.@root.text()
     }    
-
-
-    /**
-     * Returns the next repetition of the given HL7 v2 field/segment/etc.
-     */
-    static def nextRepetition(SelectorClosure closure) {
-        return closure(closure().size())
-    }
 
 
     /**
@@ -87,61 +75,10 @@ class Utils {
         msg.MSH[5][1] = senderOrReceiverIdentification(xml.receiver, useReceiverDeviceName)
         msg.MSH[6][1] = ''
         msg.MSH[7][1] = xml.creationTime.@value.text().replaceFirst('[.+-].*$', '')
-        msg.MSH[10]   = xml.id.@extension?.text() ?: System.currentTimeMillis()
+        msg.MSH[10]   = xml.id.@extension?.text() ?: UUID.randomUUID().toString()
     }
 
     
-    /**
-     * Creates an XML element that represents an instance identifier with given contents.
-     * <p>
-     * Both root and extension can be empty or <code>null</code>.
-     */
-    static void buildInstanceIdentifier(
-            MarkupBuilder builder, 
-            String elementName, 
-            boolean useNullFlavor, 
-            String root, 
-            String extension,
-            String assigningAuthorityName = null) 
-    {    
-        if (root || extension) {
-            def map = [root: root, 
-                       extension: extension, 
-                       assigningAuthorityName: assigningAuthorityName].findAll { it.value } 
-            builder."$elementName"(map)
-        } else if (useNullFlavor){
-            builder."$elementName"(nullFlavor: 'UNK')
-        }
-    }         
-
-
-    /**
-     * Yields crossed sender and receiver elements from original message.
-     */
-    static void buildReceiverAndSender(
-            MarkupBuilder builder, 
-            GPathResult originalXml, 
-            String defaultNamespaceUri) 
-    {
-        builder.receiver(typeCode: 'RCV') {
-            XmlYielder.yieldChildren(originalXml.sender, builder, defaultNamespaceUri)
-        }
-        builder.sender(typeCode: 'SND') {
-            XmlYielder.yieldChildren(originalXml.receiver, builder, defaultNamespaceUri)
-        }
-    }
-
-    
-    /**
-     * Inserts an XML element with the given name if the corresponding content is present.
-     */
-    static void conditional(MarkupBuilder builder, String elementName, String content) {
-        if (content) {
-            builder."${elementName}"(content)
-        }
-    }
-    
-
     /**
      * Determines whether CX-4-3 should be filled.
      * <p>
@@ -183,18 +120,6 @@ class Utils {
 
     
     /**
-     * Removes time zone from date/time representation (i.e. suffix "[+-].*").
-     */
-    static String dropTimeZone(String s) {
-        int pos = s.indexOf('+')
-        if (pos == -1) {
-            pos = s.indexOf('-')
-        }
-        return (pos > 0) ? s.substring(0, pos) : s
-    }
-    
-
-    /**
      * Constructs a v2 query ID on the basis of the given v3 XML elements.
      */
     static String constructQueryId(GPathResult source) {
@@ -232,6 +157,7 @@ class Utils {
             String errorCodeSystem,
             String ackCodeFirstCharacter) 
     {
+        
         def ackCode = ackCodeFirstCharacter[0] + status.ackCode[1]
         
         builder.acknowledgement {
@@ -242,35 +168,12 @@ class Utils {
             }
             if (ackCode[1] != 'A') {
                 acknowledgementDetail(typeCode: 'E') {
-                    code(code: status.errorCode, codeSystem: errorCodeSystem)
+                    def errorCode = V2_TO_V3_ERROR_CODE_MAP[status.errorCode] ?: 'INTERR'
+                    code(code: errorCode, codeSystem: errorCodeSystem)
                     text(status.errorText)
                     status.errorLocations.each { location(it) }
                 }
             }
-        }
-    }
-    
-    
-    /**
-     * Creates an HL7 v3 "custodian" element.
-     */
-    static createCustodian(MarkupBuilder builder, String mpiSystemIdRoot, mpiSystemIdExtension) {
-        builder.custodian(typeCode: 'CST') {
-            assignedEntity(classCode: 'ASSIGNED') {
-                buildInstanceIdentifier(builder, 'id', false, 
-                        mpiSystemIdRoot, mpiSystemIdExtension)
-            }
-        }
-    }
-    
-    
-    /**
-     * Some schemas prescribe the existence of an patientPerson element,
-     * but we do not have any data to fill in there.
-     */
-    static void fakePatientPerson(MarkupBuilder builder) {
-        builder.patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-            name(nullFlavor: 'UNK')
         }
     }
     
@@ -290,4 +193,5 @@ class Utils {
             field[2].value = facet.value
         }
     }
+    
 }

@@ -19,11 +19,8 @@ import ca.uhn.hl7v2.model.Message
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.dropTimeZone
-import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.fillCx
-import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.fillMshFromSlurper
-import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.nextRepetition
-import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.slurp
+import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Feed Requests translator v3 to v2.

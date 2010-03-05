@@ -19,6 +19,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;import ca.uhn.hl7v2.parser.ModelClassFactory;
 import groovy.util.slurpersupport.GPathResult
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PDQ Query request translator HL7 v3 to v2.

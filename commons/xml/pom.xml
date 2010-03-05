@@ -52,6 +52,13 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
         </dependency>        
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <artifactId>xmlunit</artifactId>
+            <groupId>xmlunit</groupId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     
      <build>

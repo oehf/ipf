@@ -17,9 +17,12 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
 import groovy.xml.MarkupBuilder
 import groovy.util.slurpersupport.GPathResult
+
+import org.openehealth.ipf.commons.xml.XmlYielder;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Query Response translator HL7 v2 to v3.

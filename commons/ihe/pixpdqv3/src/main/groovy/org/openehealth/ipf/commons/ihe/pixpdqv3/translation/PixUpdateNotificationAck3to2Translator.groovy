@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Update Notification Acknowledgement translator v3 to v2.

@@ -20,6 +20,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
 import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Query Requests translator v3 to v2.
