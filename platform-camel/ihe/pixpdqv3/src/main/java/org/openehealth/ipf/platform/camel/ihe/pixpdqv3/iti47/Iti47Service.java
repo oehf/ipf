@@ -24,6 +24,10 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService
  */
 public class Iti47Service extends DefaultPixPdqV3WebService implements Iti47PortType {
 
+    public Iti47Service() {
+        super("PRPA_IN201306UV02", true);
+    }
+
     @Override
     public String pdSupplierPRPAIN201305UV02(String body) {
         return doProcess(body);

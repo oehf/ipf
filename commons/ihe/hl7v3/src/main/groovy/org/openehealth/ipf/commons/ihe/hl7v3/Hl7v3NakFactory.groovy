@@ -23,6 +23,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.DateTime;
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import static org.openehealth.ipf.commons.xml.XmlYielder.*
 
 /**
  * Factory class for HL7 v3 NAK messages.
@@ -30,15 +31,33 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
  */
 class Hl7v3NakFactory {
 
+    private static final String HL7V3_NSURI = 'urn:hl7-org:v3'
     private static final DateTimeFormatter TIME_FORMAT = ISODateTimeFormat.basicDateTimeNoMillis()
 
     /**
-     * <tt>root</tt> attribute of message's <tt>id</tt> element.
+     * Creates a HL7 v3 NAK message as XML String.
+     * 
+     * @param originalMessage
+     *      original request message as XML String.
+     * @param t
+     *      the occurred exception.
+     * @param targetRootElementName
+     *      root element name of the target NAK message, for example, 
+     *      'MCCI_IN000002UV01' or 'PRPA_IN201306UV02'.
+     * @param needControlActProcess
+     *      whether a <tt>controlAckProcess<tt> element should be created in the NAK.
+     * @param targetMessageIdRoot
+     *      <tt>root</tt> attribute of the NAK's <tt>id</tt> element.
+     *      Per default, equals to '1.2.3'.
+     * @return
      */
-    static String messageIdRoot = '1.2.3'
-    
-
-    static String createNak(String originalMessage, Throwable t) {
+    static String createNak(
+            String originalMessage, 
+            Throwable t,
+            String targetRootElementName,
+            boolean needControlActProcess,
+            String targetMessageIdRoot = '1.2.3') 
+    {
         GPathResult xml
         try {
             xml = slurp(originalMessage)
@@ -49,21 +68,21 @@ class Hl7v3NakFactory {
         OutputStream output = new ByteArrayOutputStream()
         MarkupBuilder builder = getBuilder(output)
         
-        builder.MCCI_IN000002UV01(
+        builder."${targetRootElementName}"(
             'ITSVersion' : 'XML_1.0',
-            'xmlns'      : 'urn:hl7-org:v3',
+            'xmlns'      : HL7V3_NSURI,
             'xmlns:xsi'  : 'http://www.w3.org/2001/XMLSchema-instance',
             'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') 
         {
-            buildInstanceIdentifier(builder, 'id', false, messageIdRoot, UUID.randomUUID().toString())
+            buildInstanceIdentifier(builder, 'id', false, targetMessageIdRoot, UUID.randomUUID().toString())
             creationTime(value: TIME_FORMAT.print(new DateTime())[0..7, 9..14])      
             interactionId(root: '2.16.840.1.113883.1.6', extension: 'MCCI_IN000002UV01')
             processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
-            buildReceiverAndSender(builder, xml, 'urn:hl7-org:v3')
+            buildReceiverAndSender(builder, xml, HL7V3_NSURI)
             
-            builder.acknowledgement {
+            acknowledgement {
                 typeCode(code: 'AE')
                 targetMessage {
                     def quid = xml.id
@@ -72,6 +91,17 @@ class Hl7v3NakFactory {
                 acknowledgementDetail(typeCode: 'E') {
                     code(code: 'INTERR', codeSystem: '2.16.840.1.113883.5.1100')
                     text(t.getMessage())
+                }
+            }
+            
+            if (needControlActProcess) {
+                controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
+                    def qbp = xml.controlActProcess.queryByParameter
+                    queryAck {
+                        yieldElement(qbp.queryId, builder, HL7V3_NSURI)
+                        queryResponseCode(code: 'AE')
+                    }
+                    yieldElement(qbp, builder, HL7V3_NSURI)
                 }
             }
         }

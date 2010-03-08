@@ -24,6 +24,10 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService
  */
 public class Iti46Service extends DefaultPixPdqV3WebService implements Iti46PortType {
 
+    public Iti46Service() {
+        super("MCCI_IN000002UV01", false);
+    }
+
     @Override
     public String pixConsumerPRPAIN201302UV02(String body) {
         return doProcess(body);

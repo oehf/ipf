@@ -26,6 +26,21 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  */
 public class DefaultPixPdqV3WebService extends DefaultItiWebService {
 
+    private final String nakTargetRootElementName;
+    private final boolean nakNeedControlActProcess;
+    
+    /**
+     * @param nakTargetRootElementName
+     *      root element name of NAK messages. 
+     * @param nakNeedControlActProcess
+     *      whether the <tt>controlActProcess</tt> element 
+     *      should be generated in NAK messages.
+     */
+    public DefaultPixPdqV3WebService(String nakTargetRootElementName, boolean nakNeedControlActProcess) {
+        this.nakTargetRootElementName = nakTargetRootElementName;
+        this.nakNeedControlActProcess = nakNeedControlActProcess;
+    }
+    
     /**
      * The proper message processing method.
      * @param request
@@ -36,7 +51,8 @@ public class DefaultPixPdqV3WebService extends DefaultItiWebService {
     protected String doProcess(String request) {
         Exchange result = process(request);
         if(result.getException() != null) {
-            return Hl7v3NakFactory.createNak(request, result.getException());
+            return Hl7v3NakFactory.createNak(request, result.getException(), 
+                    this.nakTargetRootElementName, this.nakNeedControlActProcess);
         }
         return Exchanges.resultMessage(result).getBody(String.class);
     }
