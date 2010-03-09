@@ -28,6 +28,7 @@
             javax.mail.util,
             *
         </osgi.import.pkg>
+        <ipf.extension.beans>regRepModelExtension</ipf.extension.beans>
     </properties>
 
     <dependencies>

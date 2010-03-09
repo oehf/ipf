@@ -24,41 +24,20 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
     
     <!-- Our route builders for the ITI transactions -->
-    <bean id="iti4142RouteBuilder" depends-on="routeModelExtender"
+    <bean id="iti4142RouteBuilder"
         class="org.openehealth.ipf.tutorials.xds.Iti4142RouteBuilder">
     </bean>
 
-    <bean id="iti43RouteBuilder" depends-on="routeModelExtender"
+    <bean id="iti43RouteBuilder"
         class="org.openehealth.ipf.tutorials.xds.Iti43RouteBuilder">
     </bean>
 
-    <bean id="iti18RouteBuilder" depends-on="routeModelExtender"
+    <bean id="iti18RouteBuilder"
         class="org.openehealth.ipf.tutorials.xds.Iti18RouteBuilder">
     </bean>
 
-    <!-- The DSL extensions. We use the core extension of the IPF and the ones 
-         that come with the XDS components. In addition, we also define our own. -->
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="xdsModelExtension"
-        class="org.openehealth.ipf.platform.camel.ihe.xds.core.extend.XDSModelExtension">
-    </bean>
-    
     <bean id="regRepModelExtension" class="org.openehealth.ipf.tutorials.xds.RegRepModelExtension">
         <property name="dataStore" ref="dataStore"/>
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-                <ref bean="xdsModelExtension" />
-                <ref bean="regRepModelExtension" />
-            </list>
-        </property>
     </bean>
 
     <!-- The store that contains all the in-memory documents and their meta data -->    
