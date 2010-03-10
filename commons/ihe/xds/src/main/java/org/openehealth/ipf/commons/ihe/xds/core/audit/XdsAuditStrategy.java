@@ -15,42 +15,28 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.List;
+
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
-import java.util.List;
-import java.util.Set;
-
 
 /**
- * Basis for Strategy pattern implementation for ATNA Auditing.
+ * Basis for Strategy pattern implementation for ATNA Auditing in XDS transactions.
  * @author Dmytro Rud
  */
-public abstract class XdsAuditStrategy {
-    private static final transient Log LOG = LogFactory.getLog(XdsAuditStrategy.class);
+public abstract class XdsAuditStrategy extends WsAuditStrategy {
 
-    // TODO: externalize constant
     /** Home community ID to use in audit strategies. */
-    public static final String HOME_COMMUNITY_ID = null;
+    public static String homeCommunityId = null;
+
 
     /**
-     * Whether this is a server-side or a client-side strategy. 
-     */
-    private boolean serverSide;
-
-    /**
-     * Whether this strategy should allow incomplete audit records.
-     */
-    private boolean allowIncompleteAudit;
-    
-
-    /**
-     * Constructs an audit strategy.
+     * Constructs an XDS audit strategy.
      *   
      * @param serverSide
      *      whether this is a server-side or a client-side strategy.
@@ -59,103 +45,20 @@ public abstract class XdsAuditStrategy {
      *      (parameter initially configurable via endpoint URL).
      */
     public XdsAuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
-        setServerSide(serverSide);
-        setAllowIncompleteAudit(allowIncompleteAudit);
+        super(serverSide, allowIncompleteAudit);
     }
     
 
     /**
-     * Creates a new audit dataset audit instance. 
+     * Creates a new XDS audit dataset audit instance. 
      * 
      * @return
      *      newly created audit dataset
      */
+    @Override
     public XdsAuditDataset createAuditDataset() {
         return new XdsAuditDataset(isServerSide());
     }
-
-    
-    /**
-     * Enriches the dataset with transaction-specific information from the given POJO.
-     *   
-     * @param pojo
-     *      POJO extracted from the message
-     * @param auditDataset
-     *      audit dataset to be enriched
-     * @throws Exception
-     *      any exception that occurred during this operation
-     */
-    public abstract void enrichDataset(Object pojo, XdsAuditDataset auditDataset) 
-        throws Exception;
-    
-    
-    /**
-     * Performs transaction-specific auditing using 
-     * information containing in the dataset.
-     *   
-     * @param eventOutcomeCode
-     *      event outcome code as defined in RFC 3881
-     * @param auditDataset
-     *      audit dataset with all the information needed 
-     * @throws Exception
-     *      any exception that occurred during this operation
-     */
-    public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcomeCode, XdsAuditDataset auditDataset)
-        throws Exception;
-
-    
-    /**
-     * Checks whether the audit can be performed and calls {@link #doAudit}  
-     * if the answer is positive. 
-     * <p>
-     * Audit can be performed when all necessary data is present or
-     * when the user allows us to audit with incomplete data,
-     * @see #allowIncompleteAudit
-     * 
-     * @param eventOutcomeCode
-     *      event outcome code as defined in RFC 3881
-     * @param auditDataset
-     *      audit dataset  
-     * @throws Exception
-     *      any exception that occurred during auditing
-     */
-    public void audit(RFC3881EventOutcomeCodes eventOutcomeCode, XdsAuditDataset auditDataset) throws Exception {
-        Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
-        if(! missing.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Missing audit fields: ");
-            for(String fieldName : missing) {
-                sb.append(fieldName).append(", ");
-            }
-            sb.append(isAllowIncompleteAudit() ? 
-                "but incomplete audit is allowed, so we'll perform it." :
-                "auditing not possible.");
-            LOG.error(sb.toString());
-        }
-        if(missing.isEmpty() || isAllowIncompleteAudit()) {
-            doAudit(eventOutcomeCode, auditDataset);
-        }
-    }
-        
-    
-    /**
-     * Returns a transaction-specific list of names of fields 
-     * a "complete" audit dataset must contain. 
-     *  
-     * @return
-     *      list of field names as a string array
-     */
-    public abstract String[] getNecessaryAuditFieldNames();
-    
-    
-    /**
-     * Determines which RFC 3881 event outcome code corresponds to the
-     * given response POJO.  
-     * @param pojo
-     *      ebXML object.
-     * @return
-     *      RFC 3881 event outcome code.
-     */
-    public abstract RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo);
 
     
     /**
@@ -190,39 +93,4 @@ public abstract class XdsAuditStrategy {
         return RFC3881EventOutcomeCodes.MINOR_FAILURE;
     }
 
-    
-
-    /* ----- automatically generated getters and setters ----- */
-
-    /**
-     * Defines whether this is a server-side or a client-side strategy.
-     * @param serverSide
-     *          whether this is a server-side or a client-side strategy.
-     */
-    public void setServerSide(boolean serverSide) {
-        this.serverSide = serverSide;
-    }
-
-    /**
-     * @return whether this is a server-side or a client-side strategy.
-     */
-    public boolean isServerSide() {
-        return serverSide;
-    }
-
-    /**
-     * Defines whether this strategy should allow incomplete audit records.
-     * @param allowIncompleteAudit
-     *          whether this strategy should allow incomplete audit records.
-     */
-    public void setAllowIncompleteAudit(boolean allowIncompleteAudit) {
-        this.allowIncompleteAudit = allowIncompleteAudit;
-    }
-
-    /**
-     * @return whether this strategy should allow incomplete audit records.
-     */
-    public boolean isAllowIncompleteAudit() {
-        return allowIncompleteAudit;
-    }
 }

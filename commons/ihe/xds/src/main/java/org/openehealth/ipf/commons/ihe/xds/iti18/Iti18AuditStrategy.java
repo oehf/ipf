@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti18;
 
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -43,13 +44,13 @@ abstract class Iti18AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, XdsAuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
         AdhocQueryRequest request = (AdhocQueryRequest) pojo;
-        Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
+        Iti18AuditDataset xdsAuditDataset = (Iti18AuditDataset) auditDataset;
 
         AdhocQueryType adHocQuery = request.getAdhocQuery();
         if (adHocQuery != null) {
-            auditDataset.setQueryUuid(adHocQuery.getId());
+            xdsAuditDataset.setQueryUuid(adHocQuery.getId());
         }
     }
     

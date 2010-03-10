@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.iti18;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
@@ -43,16 +43,16 @@ class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, XdsAuditDataset genericAuditDataset) {
-        Iti18AuditDataset auditDataset = (Iti18AuditDataset) genericAuditDataset;
+    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, WsAuditDataset auditDataset) {
+        Iti18AuditDataset xdsAuditDataset = (Iti18AuditDataset) auditDataset;
 
         AuditorManager.getConsumerAuditor().auditRegistryStoredQueryEvent(
                 eventOutcome,
-                auditDataset.getServiceEndpointUrl(), 
-                auditDataset.getQueryUuid(),
-                auditDataset.getPayload(), 
-                HOME_COMMUNITY_ID,
-                auditDataset.getPatientId());
+                xdsAuditDataset.getServiceEndpointUrl(), 
+                xdsAuditDataset.getQueryUuid(),
+                xdsAuditDataset.getPayload(), 
+                homeCommunityId,
+                xdsAuditDataset.getPatientId());
     }
 
     @Override

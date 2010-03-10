@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti16;
 
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLRegistryResponse21;
@@ -33,7 +33,7 @@ abstract class Iti16AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, XdsAuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
         // no additional steps necessary
     }
 

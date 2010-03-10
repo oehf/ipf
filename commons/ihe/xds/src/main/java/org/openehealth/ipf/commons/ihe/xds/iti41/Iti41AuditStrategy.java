@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti41;
 
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -46,12 +47,13 @@ abstract public class Iti41AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, XdsAuditDataset auditDataset) {
+    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
+        XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
         ProvideAndRegisterDocumentSetRequestType request = (ProvideAndRegisterDocumentSetRequestType)pojo;
         SubmitObjectsRequest submitObjectsRequest = request.getSubmitObjectsRequest();
         if(submitObjectsRequest != null) {
             EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);
-            auditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
+            xdsAuditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
         }
     }
 

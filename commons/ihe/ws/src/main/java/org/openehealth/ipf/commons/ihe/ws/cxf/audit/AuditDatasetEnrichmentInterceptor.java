@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.audit;
+package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,9 +34,6 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterce
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -55,7 +56,7 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    public AuditDatasetEnrichmentInterceptor(XdsAuditStrategy auditStrategy, boolean serverSide) {
+    public AuditDatasetEnrichmentInterceptor(WsAuditStrategy auditStrategy, boolean serverSide) {
         super(serverSide ? Phase.PRE_INVOKE : Phase.WRITE_ENDING, auditStrategy);
         if( ! serverSide) {
             addAfter(OutPayloadExtractorInterceptor.class.getName());
@@ -65,7 +66,7 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
     
     @Override
     protected void process(Message message) throws Exception {
-        XdsAuditDataset auditDataset = getAuditDataset(message);
+        WsAuditDataset auditDataset = getAuditDataset(message);
 
         // determine what direction do we handle
         Exchange exchange = message.getExchange();

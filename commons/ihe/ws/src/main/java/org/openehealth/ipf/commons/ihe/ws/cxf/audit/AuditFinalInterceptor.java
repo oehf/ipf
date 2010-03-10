@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.audit;
+package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ import org.apache.cxf.message.AbstractWrappedMessage;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
-
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
@@ -44,14 +43,14 @@ public class AuditFinalInterceptor extends AuditInterceptor {
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    public AuditFinalInterceptor(XdsAuditStrategy auditStrategy, boolean serverSide) {
+    public AuditFinalInterceptor(WsAuditStrategy auditStrategy, boolean serverSide) {
         super(serverSide ? Phase.PREPARE_SEND : Phase.PRE_LOGICAL, auditStrategy);
     }
 
     
     @Override
     protected void process(Message message) throws Exception {
-        XdsAuditDataset auditDataset = getAuditDataset(message);
+        WsAuditDataset auditDataset = getAuditDataset(message);
 
         // try to extract response as POJO 
         List<?> list = message.getContent(List.class);

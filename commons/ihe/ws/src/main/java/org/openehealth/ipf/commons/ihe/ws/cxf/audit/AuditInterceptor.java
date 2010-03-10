@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xds.core.audit;
+package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
@@ -39,7 +39,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
     /**
      * Audit strategy associated with this interceptor.  
      */
-    private final XdsAuditStrategy auditStrategy;
+    private final WsAuditStrategy auditStrategy;
 
     
     /**
@@ -51,7 +51,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      *          an audit strategy instance. <p><code>null</code> values are
      *          explicitly prohibited. 
      */
-    protected AuditInterceptor(String phase, XdsAuditStrategy auditStrategy) {
+    protected AuditInterceptor(String phase, WsAuditStrategy auditStrategy) {
         super(phase);
         Validate.notNull(auditStrategy);
         this.auditStrategy = auditStrategy;
@@ -62,7 +62,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      * Returns an audit dataset instance which corresponds to the given message.
      * <p>
      * When no such instance is currently associated with the message, a new one 
-     * will be created by means of the corresponding {@link XdsAuditStrategy} 
+     * will be created by means of the corresponding {@link WsAuditStrategy} 
      * and registered in the message's exchange.
      * 
      * @param message
@@ -71,8 +71,8 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      *      an audit dataset instance, or <code>null</code> when this instance   
      *      could be neither obtained nor created from scratch
      */
-    protected XdsAuditDataset getAuditDataset(Message message) {
-        XdsAuditDataset auditDataset = (XdsAuditDataset)message.getExchange().get(CXF_EXCHANGE_KEY);
+    protected WsAuditDataset getAuditDataset(Message message) {
+        WsAuditDataset auditDataset = (WsAuditDataset)message.getExchange().get(CXF_EXCHANGE_KEY);
         if(auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if(auditDataset == null) {
@@ -91,7 +91,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      * @return
      *      an audit strategy instance or <code>null</code> when none configured
      */
-    public XdsAuditStrategy getAuditStrategy() {
+    public WsAuditStrategy getAuditStrategy() {
         if (auditStrategy == null) {
             LOG.warn("Audit strategy not set, NPE is pending");
         }

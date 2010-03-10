@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti14;
 
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -36,10 +37,11 @@ abstract class Iti14AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, XdsAuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
+        XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
         SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest21(request);
-        genericAuditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
+        xdsAuditDataset.enrichDatasetFromSubmitObjectsRequest(ebXML);
     }
 
     @Override

@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti43;
 
 import java.util.List;
 
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -37,9 +38,9 @@ abstract class Iti43AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, XdsAuditDataset genericAuditDataset) {
+    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
         RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
-        Iti43AuditDataset auditDataset = (Iti43AuditDataset) genericAuditDataset;
+        Iti43AuditDataset xdsAuditDataset = (Iti43AuditDataset) auditDataset;
 
         List<DocumentRequest> requestedDocuments = request.getDocumentRequest();
         if (requestedDocuments != null) {
@@ -56,9 +57,9 @@ abstract class Iti43AuditStrategy extends XdsAuditStrategy {
                 homeCommunityUuids[i] = document.getHomeCommunityId();
             }
 
-            auditDataset.setDocumentUuids(documentUuids);
-            auditDataset.setRepositoryUuids(repositoryUuids);
-            auditDataset.setHomeCommunityUuids(homeCommunityUuids);
+            xdsAuditDataset.setDocumentUuids(documentUuids);
+            xdsAuditDataset.setRepositoryUuids(repositoryUuids);
+            xdsAuditDataset.setHomeCommunityUuids(homeCommunityUuids);
         }
     }
     

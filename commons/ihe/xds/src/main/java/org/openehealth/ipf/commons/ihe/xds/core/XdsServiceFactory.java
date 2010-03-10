@@ -18,9 +18,9 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditDatasetEnrichmentInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.AuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 
 /**
