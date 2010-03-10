@@ -83,16 +83,6 @@ public class AuditDatasetEnrichmentInterceptor extends AuditInterceptor {
                     JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_INBOUND :
                     JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
         
-        /*
-         * TODO: is WS-Addressing obligatory or optional?
-         * ITI TF Vol. 2 states in a table in appendix V, chapter V.3.2, 
-         * requirement IHE_WSA100, that server-side WS frameworks must
-         * properly handle and generate WS-Addressing headers.
-         * But in all audit record tables (e.g. the one for ITI-18, 
-         * chapter 3.18.5.1) UserID fields are marked as
-         * "conditional, _when_ WS-Addressing is used".
-         */
-        
         if(wsaProperties != null) {
             // extract client User ID from WS-Addressing <wsa:ReplyTo> element
             EndpointReferenceType replyTo = wsaProperties.getReplyTo();
