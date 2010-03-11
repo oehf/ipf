@@ -81,10 +81,12 @@ public class InMemoryContinuationStorage implements ContinuationStorage {
     
     @Override
     public void purge(long timestamp) {
-        for (String storageKey : chains.keySet()) {
-            Chain chain = chains.get(storageKey);
-            if ((chain != null) && (chain.getCreationTimestamp() < timestamp)) {
-                chains.remove(storageKey);
+        synchronized (chains) {
+            for (String storageKey : chains.keySet()) {
+                Chain chain = chains.get(storageKey);
+                if ((chain != null) && (chain.getCreationTimestamp() < timestamp)) {
+                    chains.remove(storageKey);
+                }
             }
         }
     }
