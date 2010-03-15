@@ -17,9 +17,9 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.endpoint.Client;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditDatasetEnrichmentInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditFinalInterceptor;
 
 /**
  * Factory for XDS web-service stubs.
@@ -50,8 +50,8 @@ public class XdsClientFactory extends ItiClientFactory {
         // install auditing-related interceptors if the user has not switched
         // auditing off
         if (auditStrategy != null) {
-            client.getOutInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, false));
-            AuditFinalInterceptor finalInterceptor = new AuditFinalInterceptor(auditStrategy, false);
+            client.getOutInterceptors().add(new XdsAuditDatasetEnrichmentInterceptor(auditStrategy, false));
+            XdsAuditFinalInterceptor finalInterceptor = new XdsAuditFinalInterceptor(auditStrategy, false);
             client.getInInterceptors().add(finalInterceptor);
             client.getInFaultInterceptors().add(finalInterceptor);
 

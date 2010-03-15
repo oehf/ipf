@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2010 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+
+<!--
+    Schematron rules for ITI-55 response message.
+    @author Dmytro Rud 
+-->
+
+<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    <sch:ns uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi" />
+	<sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
+
+    <!-- ========================================================================== 
+                  Rules based on Section 3.55.4.2.2.2 of IHE XCPD supplement
+         ========================================================================== -->
+    <sch:pattern id="patient-constraints-section_3_55_4_2_2_2">
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient">
+            <sch:report test="hl7:patientNonPersonLivingSubject">result must relate to a person</sch:report>
+            
+            <sch:report test="hl7:subjectOf2">subjectOf2 must be omitted</sch:report>
+            <sch:report test="hl7:coveredPartyOf">coveredPartyOf must be omitted</sch:report>
+
+            <sch:assert test="@classCode = 'PAT'">classCode must equal to 'PAT'</sch:assert>
+            <sch:assert test="count(hl7:id) = 1">exactly one main patient ID must be present (use asOtherIds for additional IDs)</sch:assert>
+            <sch:assert test="hl7:statusCode/@code = 'active'">statusCode must equal to 'active'</sch:assert>
+            
+            <sch:assert test="hl7:subjectOf1/hl7:queryMatchObservation/hl7:value/@xsi:type = 'INT'">
+                this element is constrained to data type 'INT'
+            </sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:patientPerson">
+            <sch:report test="hl7:asPatientOfOtherProvider">asPatientOfOtherProvider must be omitted</sch:report>
+            <sch:report test="hl7:guarantorRole">guarantorRole must be omitted</sch:report>
+            <sch:report test="hl7:guardian">guardian must be omitted</sch:report>
+            <sch:report test="hl7:contactParty">contactParty must be omitted</sch:report>
+            <sch:report test="hl7:asMember">asMember must be omitted</sch:report>
+            <sch:report test="hl7:careGiver">careGiver must be omitted</sch:report>
+            <sch:report test="hl7:asStudent">asStudent must be omitted</sch:report>
+            
+            <sch:assert test="@classCode = 'PSN'">classCode must equal to 'PSN'</sch:assert>
+            <sch:assert test="@determinerCode = 'INSTANCE'">determinerCode must equal to 'INSTANCE'</sch:assert>
+            <sch:assert test="count(hl7:name) &gt; 0">at least one sub-element "name" must be present</sch:assert>
+            
+            <sch:let name="qbp" value="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList" />
+            <sch:let name="idPresent" value="($qbp/hl7:id/@root and $qbp/hl7:id/@extension)" />
+            <sch:let name="demographicsPresent" value=" 
+	            ($qbp/hl7:livingSubjectAdministrativeGender
+					or $qbp/hl7:livingSubjectBirthPlaceAddress
+					or $qbp/hl7:livingSubjectBirthPlaceName
+					or $qbp/hl7:livingSubjectBirthTime
+					or $qbp/hl7:livingSubjectDeceasedTime
+					or $qbp/hl7:livingSubjectName
+					or $qbp/hl7:mothersMaidenName
+					or $qbp/hl7:patientAddress
+					or $qbp/hl7:patientTelecom)" /> 
+            <sch:assert test="not(hl7:name/@nullFlavor) or ($idPresent and not($demographicsPresent))">
+                patient name may be null only if the request contained only a patient identifier and no demographic data
+            </sch:assert>
+            
+            <sch:assert test="not(hl7:personalRelationship) or hl7:personalRelationship/@classCode = 'PSN'">
+                relationship holder of the personal relationship is restricted to be a person, classCode must equal to 'PSN'
+            </sch:assert>
+
+            <sch:assert test="not(hl7:asEmployee) or hl7:asEmployee/@classCode = 'EMP'">
+                classCode must equal to 'EMP'
+            </sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:patientPerson/hl7:asCitizen">
+            <sch:assert test="@classCode = 'CIT'">classCode must equal to 'CIT'</sch:assert>
+            <sch:assert test="hl7:politicalNation/@classCode = 'NAT'">politicalNation.classCode must equal to 'NAT'</sch:assert>
+            <sch:assert test="hl7:politicalNation/@determinerCode = 'INSTANCE'">politicalNation.determinerCode must equal to 'INSTANCE'</sch:assert>
+        </sch:rule>
+
+
+        <!-- ICW specific -->
+        <sch:rule context="/hl7:PRPA_IN201306UV02">
+            <sch:assert test="count(hl7:acknowledgement) = 1">exactly one "acknowledgement" element must be present</sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:acknowledgement/hl7:targetMessage/hl7:id">
+            <sch:assert test="@root and @extension">attributes 'root' and 'extension' must be present</sch:assert>
+        </sch:rule>
+        
+        <!-- 'receiver' of the response should be an 1:1 copy of 'sender' of the request, 
+             and we need homeCommunityId there -->
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:receiver">
+            <sch:assert test="hl7:device/hl7:asAgent/hl7:representedOrganization">
+                organisational information must be presented in 'receiver'
+            </sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:receiver/hl7:device/hl7:asAgent/hl7:representedOrganization">
+            <sch:assert test="count(hl7:id) = 1">
+                only one 'id' sub-element is allowed here
+            </sch:assert>
+            <sch:assert test="hl7:id/@root">
+                homeCommunityId must be specified in the attribute 'id@root'
+            </sch:assert>
+            <sch:report test="hl7:id/@nullFlavor or hl7:id/@extension or hl7:id/@assigningAuthorityName">
+                only attribute 'root' is allowed in the sub-element 'id'
+            </sch:report>
+        </sch:rule>
+	</sch:pattern>
+
+</sch:schema>

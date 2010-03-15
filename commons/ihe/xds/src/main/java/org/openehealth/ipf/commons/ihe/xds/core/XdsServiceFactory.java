@@ -18,10 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditFinalInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditDatasetEnrichmentInterceptor;
+import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditFinalInterceptor;
 
 /**
  * Factory for XDS web-services.
@@ -50,9 +50,9 @@ public class XdsServiceFactory extends ItiServiceFactory {
         
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            svrFactory.getInInterceptors().add(new AuditDatasetEnrichmentInterceptor(auditStrategy, true));
+            svrFactory.getInInterceptors().add(new XdsAuditDatasetEnrichmentInterceptor(auditStrategy, true));
     
-            AuditFinalInterceptor auditOutInterceptor = new AuditFinalInterceptor(auditStrategy, true);
+            XdsAuditFinalInterceptor auditOutInterceptor = new XdsAuditFinalInterceptor(auditStrategy, true);
             svrFactory.getOutInterceptors().add(auditOutInterceptor);
             svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
             

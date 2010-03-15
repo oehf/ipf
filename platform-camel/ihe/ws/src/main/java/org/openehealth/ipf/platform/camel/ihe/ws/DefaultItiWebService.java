@@ -67,7 +67,6 @@ public class DefaultItiWebService {
     protected Exchange process(Object body) {
         return process(body, null, ExchangePattern.InOut);
     }
-
     
     /**
      * Sets the consumer to be used to process exchanges
@@ -77,5 +76,12 @@ public class DefaultItiWebService {
     public void setConsumer(DefaultItiConsumer consumer) {
         Validate.notNull(consumer, "consumer");
         this.consumer = consumer;
+    }
+
+    /**
+     * Returns the configured ITI consumer instance.
+     */
+    protected DefaultItiConsumer getConsumer() {
+        return consumer;
     }
 }

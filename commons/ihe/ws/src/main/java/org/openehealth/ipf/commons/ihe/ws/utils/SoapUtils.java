@@ -23,6 +23,7 @@ import org.w3c.dom.Node;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Generic constants and subroutines for SOAP/XML processing.
@@ -201,4 +202,39 @@ public abstract class SoapUtils {
         }
     }
     
+
+    public static String extractElement(String payload, String name) {
+        
+        final String nameStartChar = "[" +
+        		"A-Z" +
+        		"a-z" +
+        		"_" +
+        		"\\u00C0-\\u00D6" +
+        		"\\u00D8-\\u00F6" +
+        		"\\u00F8-\\u02FF" +
+        		"\\u0370-\\u037D" +
+        		"\\u037F-\\u1FFF" +
+        		"\\u200C-\\u200D" +
+        		"\\u2070-\\u218F" +
+        		"\\u2C00-\\u2FEF" +
+        		"\\u3001-\\uD7FF" +
+        		"\\uF900-\\uFDCF" +
+        		"\\uFDF0-\\uFFFD" +
+        		"\\u10000-\\uEFFFF" +
+        		"]";
+
+		final String nameChar = nameStartChar + "|[" +
+				"-" +
+				"." +
+				"0-9" +
+				"\\u00B7" +
+				"\\u0300-\\u036F" +
+				"\\u203F-\\u2040" +
+				"]";
+        
+		final String prefix = nameStartChar + "(" + nameChar + "*):";
+		final String element = "<(" + prefix + ")?" + name + "(\\s|\\s*/?>)"; 
+        Pattern pattern = Pattern.compile(element);
+        return null;
+    }
 }

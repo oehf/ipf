@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.atna;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.openehealth.ipf.commons.ihe.atna.custom.XCPDInitiatingGatewayAuditor;
+import org.openehealth.ipf.commons.ihe.atna.custom.XCPDRespondingGatewayAuditor;
 import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
 import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
@@ -94,6 +96,18 @@ public abstract class AuditorManager {
     public static PDQConsumerAuditor getPDQConsumerAuditor() {
         synchronized (sync) {
             return PDQConsumerAuditor.getAuditor();
+        }
+    }
+    
+    public static XCPDInitiatingGatewayAuditor getXCPDInitiatingGatewayAuditor() {
+        synchronized (sync) {
+            return XCPDInitiatingGatewayAuditor.getAuditor();
+        }
+    }
+
+    public static XCPDRespondingGatewayAuditor getXCPDRespondingGatewayAuditor() {
+        synchronized (sync) {
+            return XCPDRespondingGatewayAuditor.getAuditor();
         }
     }
 }

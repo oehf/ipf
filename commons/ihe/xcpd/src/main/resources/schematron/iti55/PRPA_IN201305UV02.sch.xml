@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2010 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+
+<!--
+    Schematron rules for ITI-55 request message.
+    @author Dmytro Rud 
+-->
+
+<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    <sch:ns uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi" />
+    <sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
+	
+    <!-- ========================================================================== 
+                                RULES FOR xsi:DATATYPE CHECKS 
+                      (based on Section 3.55.4.1.2.2 of IHE XCPD supplement)
+         ========================================================================== -->
+    <sch:pattern abstract="true" id="check-type">
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/$element/hl7:value">
+            <sch:assert test="not(.) or (@xsi:type = '$type')">
+                this element is constrained to data type $type
+            </sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern is-a="check-type" id="x1">
+        <sch:param name="element" value="hl7:matchCriterionList/hl7:matchAlgorithm" />
+        <sch:param name="type" value="ST" />
+    </sch:pattern>
+
+    <sch:pattern is-a="check-type" id="x2">
+        <sch:param name="element" value="hl7:matchCriterionList/hl7:minimumDegreeMatch" />
+        <sch:param name="type" value="INT" />
+    </sch:pattern>
+
+    <!-- 
+    <sch:pattern is-a="check-type">
+        <sch:param name="element" value="hl7:parameterList/hl7:livingSubjectName" />
+        <sch:param name="type" value="PN" />
+    </sch:pattern>
+    -->
+    
+    
+    <!-- ========================================================================== 
+                    RULES FOR CHECKS THAT count(SOMETHING/hl7:value) <= 1
+               (based on Table 3.55.4.1.2-1, pp. 29-32 in IHE SCPD Supplement) 
+         ========================================================================== -->
+    <sch:pattern abstract="true" id="check-count-1">
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList/$element">
+            <sch:assert test="count(hl7:value) &lt;= 1">
+                only one 'value' sub-element is allowed here
+            </sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern is-a="check-count-1" id="x3">
+        <sch:param name="element" value="hl7:administrativeGender" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-1" id="x4">
+        <sch:param name="element" value="hl7:livingSubjectBirthTime" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-1" id="x5">
+        <sch:param name="element" value="hl7:livingSubjectName" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-1" id="x6">
+        <sch:param name="element" value="hl7:patientAddress" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-1" id="x7">
+        <sch:param name="element" value="hl7:principalCareProviderId" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-1" id="x8">
+        <sch:param name="element" value="hl7:mothersMaidenName" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-1" id="x9">
+        <sch:param name="element" value="hl7:patientTelecom" />
+    </sch:pattern>
+
+
+    <!-- ========================================================================== 
+                                 RULES FOR ALL OTHER CHECKS  
+                    (based on Section 3.55.4.1.2.2 of IHE XCPD supplement)
+         ========================================================================== -->
+    <sch:pattern id="qbp-constraints-section_3_55_4_1_2_2">
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter">
+            <sch:report test="hl7:matchCriterionList/hl7:id">matchCriterionList.id must be omitted</sch:report>
+            <sch:report test="hl7:responseElementGroupId">responseElementGroupId must be omitted</sch:report>
+            <sch:report test="hl7:modifyCode">modifyCode must be omitted</sch:report>
+            <sch:report test="hl7:executionAndDeliveryTime">executionAndDeliveryTime must be omitted</sch:report>
+            <sch:report test="hl7:sortControl">sortControl must be omitted</sch:report>
+            <sch:report test="hl7:matchCriterionList/hl7:matchWeight">matchCriterionList.matchWeight must be omitted</sch:report>
+            <sch:report test="hl7:initialQuantity">initialQuantity must be omitted</sch:report>
+            <sch:report test="hl7:initialQuantityCode">initialQuantityCode must be omitted</sch:report>
+
+            <sch:assert test="hl7:responsePriorityCode/@code = 'I'">responsePriorityCode must equal to 'I'</sch:assert>
+            <sch:assert test="hl7:responseModalityCode/@code = 'R'">responseModalityCode must equal to 'R'</sch:assert>
+            <sch:assert test="hl7:statusCode/@code = 'new'">statusCode must equal to 'new'</sch:assert>
+        </sch:rule>
+            
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:matchCriterionList/hl7:minimumDegreeMatch/hl7:value">
+            <sch:assert test="not(@value) or ((number(@value) &gt;= 0) and (number(@value) &lt;= 100))">
+                minimumDegreeMatch.value must be between 0 and 100
+            </sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList">
+            <!-- from Section 3.55.4.1.2.1, line #780 -->
+            <sch:assert test="hl7:livingSubjectId or (hl7:livingSubjectName and hl7:livingSubjectBirthTime)">
+                when no patient ID is provided, both patient name and birth time must be specified   
+            </sch:assert>
+        
+            <sch:report test="hl7:id">parameterList.id must be omitted</sch:report>
+            <sch:report test="hl7:patientStatusCode">patientStatusCode must be omitted</sch:report>
+            <sch:report test="hl7:livingSubjectDeceaseTime">livingSubjectDeceaseTime must be omitted</sch:report>
+            <sch:report test="hl7:otherIDsScopingOrganization">otherIDsScopingOrganization must be omitted</sch:report>
+        </sch:rule>
+        
+        <!-- ICW specific -->
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:sender/hl7:device/hl7:asAgent/hl7:representedOrganization">
+            <sch:assert test="count(hl7:id) = 1">
+                only one 'id' sub-element is allowed here
+            </sch:assert>
+            <sch:assert test="hl7:id/@root">
+                homeCommunityId must be specified in the attribute 'id@root'
+            </sch:assert>
+            <sch:report test="hl7:id/@nullFlavor or hl7:id/@extension or hl7:id/@assigningAuthorityName">
+                only attribute 'root' is allowed in the sub-element 'id'
+            </sch:report>
+        </sch:rule>
+        
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:id">
+            <sch:assert test="@root and @extension">attributes 'root' and 'extension' must be present</sch:assert>
+        </sch:rule>
+	</sch:pattern>
+
+</sch:schema>

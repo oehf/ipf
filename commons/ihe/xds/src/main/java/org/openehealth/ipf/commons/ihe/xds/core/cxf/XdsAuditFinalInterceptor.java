@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
+package org.openehealth.ipf.commons.ihe.xds.core.cxf;
 
 import java.util.List;
 
@@ -21,6 +21,9 @@ import org.apache.cxf.message.AbstractWrappedMessage;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
@@ -32,7 +35,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * 
  * @author Dmytro Rud
  */
-public class AuditFinalInterceptor extends AuditInterceptor {
+public class XdsAuditFinalInterceptor extends AuditInterceptor {
 
     /**
      * Constructor.
@@ -43,7 +46,7 @@ public class AuditFinalInterceptor extends AuditInterceptor {
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
-    public AuditFinalInterceptor(WsAuditStrategy auditStrategy, boolean serverSide) {
+    public XdsAuditFinalInterceptor(WsAuditStrategy auditStrategy, boolean serverSide) {
         super(serverSide ? Phase.PREPARE_SEND : Phase.PRE_LOGICAL, auditStrategy);
     }
 

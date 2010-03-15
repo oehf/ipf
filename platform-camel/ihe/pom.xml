@@ -44,6 +44,7 @@
         <module>mllp</module>
         <module>pixpdq</module>
         <module>pixpdqv3</module>
+	<module>xcpd</module>
     </modules>
 
 </project>

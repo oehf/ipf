@@ -37,6 +37,8 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.atna.MockedSender
+import org.openehealth.ipf.commons.ihe.atna.custom.XCPDInitiatingGatewayAuditor;
+import org.openehealth.ipf.commons.ihe.atna.custom.XCPDRespondingGatewayAuditor;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
@@ -121,7 +123,21 @@ class StandardTestContainer {
          XDSRepositoryAuditor.auditor.config.auditRepositoryPort = port
          XDSRepositoryAuditor.auditor.config.systemUserId = 'repositoryUserId'
          XDSRepositoryAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
-         
+             
+         XCPDInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
+         XCPDInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'
+         XCPDInitiatingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XCPDInitiatingGatewayAuditor.auditor.config.auditRepositoryPort = port
+         XCPDInitiatingGatewayAuditor.auditor.config.systemUserId = 'initiatingGwUserId'
+         XCPDInitiatingGatewayAuditor.auditor.config.systemAltUserId = 'initiatingGwAltUserId'
+             
+         XCPDRespondingGatewayAuditor.auditor.config = new AuditorModuleConfig()
+         XCPDRespondingGatewayAuditor.auditor.config.auditSourceId = 'respondingGwId'
+         XCPDRespondingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XCPDRespondingGatewayAuditor.auditor.config.auditRepositoryPort = port
+         XCPDRespondingGatewayAuditor.auditor.config.systemUserId = 'respondingGwUserId'
+         XCPDRespondingGatewayAuditor.auditor.config.systemAltUserId = 'respondingGwAltUserId'
+
          auditSender = new MockedSender()
          AuditorModuleContext.context.sender = auditSender
      }
