@@ -42,12 +42,9 @@ public class Hl7v3Validator implements Validator<String, Collection<String>> {
 
     private static final String XSD_PATH = "schema/HL7V3/NE2008/multicacheschemas/";
     
-    private static XsdValidator XSD_VALIDATOR;
+    private static final XsdValidator XSD_VALIDATOR = new XsdValidator(Hl7v3Validator.class.getClassLoader());
     
     public static XsdValidator getXsdValidator() {
-        if (XSD_VALIDATOR == null){
-            XSD_VALIDATOR = new XsdValidator(Hl7v3Validator.class.getClassLoader());
-        }
         return XSD_VALIDATOR;
     }
 
