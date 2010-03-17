@@ -145,6 +145,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.osgi</groupId>
+            <artifactId>osgi-config-ihe-xcpd</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.osgi</groupId>
             <artifactId>osgi-config-ihe-xds</artifactId>
             <version>${project.version}</version>
         </dependency>
