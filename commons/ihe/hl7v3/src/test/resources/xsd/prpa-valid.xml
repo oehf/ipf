@@ -1,0 +1,63 @@
+<PRPA_IN201301UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3" xmlns:urn="urn:hl7-org:v3">
+  <id root="c47bb4cd-649d-433d-a18b-3dac3ae6dcec"/>
+  <creationTime value="20091103103704"/>
+  <interactionId extension="PRPA_IN201301UV02" root="2.16.840.1.113883.1.6"/>
+  <processingCode code="P"/>
+  <processingModeCode code="T"/>
+  <acceptAckCode code="AL"/>
+  <receiver typeCode="RCV">
+    <device classCode="DEV" determinerCode="INSTANCE">
+      <id root="1.2.840.114350.1.13.99999.4567"/>
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.840.114350.1.13.99999.1234"/>
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </receiver>
+  <sender typeCode="SND">
+    <device classCode="DEV" determinerCode="INSTANCE">
+      <id root="1.2.840.114350.1.13.99998.8734"/>
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.840.114350.1.13.99998"/>
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </sender>
+  <controlActProcess classCode="CACT" moodCode="EVN">
+    <code code="PRPA_TE201301UV02" codeSystem="2.16.840.1.113883.1.6"/>
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <id nullFlavor="NA"/>
+        <statusCode code="active"/>
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id extension="1003" root="2.16.840.1.113883.3.37.4.1.1.2.511.1"/>
+            <statusCode code="active"/>
+            <patientPerson>
+              <name>
+                <given>JOHN</given>
+                <family>LABBE</family>
+              </name>
+              <administrativeGenderCode code="U"/>
+              <birthTime value="19840721"/>
+              <addr>
+                <city>Montreal</city>
+              </addr>
+            </patientPerson>
+            <providerOrganization classCode="ORG" determinerCode="INSTANCE">
+              <id root="1.2.840.114350.1.13.99998.8734"/>
+              <contactParty classCode="CON"/>
+            </providerOrganization>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.840.114350.1.13.99998.8734"/>
+          </assignedEntity>
+        </custodian>
+      </registrationEvent>
+    </subject>
+  </controlActProcess>
+</PRPA_IN201301UV02>    

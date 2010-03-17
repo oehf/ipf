@@ -49,13 +49,21 @@ import org.xml.sax.SAXParseException;
 public class XsdValidator implements Validator<Source, String> {
 
 	private final static Log LOG = LogFactory.getLog(XsdValidator.class);
-	private final static ResourceLoader resourceLoader = new DefaultResourceLoader();
+	private static ResourceLoader resourceLoader;
 	private final static LSResourceResolverImpl lrri = new LSResourceResolverImpl();
 	private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 	private final static Map<String, Schema> cachedSchemas = Collections
 			.synchronizedMap(new HashMap<String, Schema>(3));
 
+	public XsdValidator(){
+		resourceLoader = new DefaultResourceLoader();
+	}
+	
+	public XsdValidator(ClassLoader classloader){
+        resourceLoader = new DefaultResourceLoader(classloader);
+	}
+	
 	@Override
 	public void validate(Source message, String schema) {
 		List<ValidationException> exceptions = doValidate(message, schema);
