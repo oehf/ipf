@@ -45,7 +45,7 @@ class Iti55ServerAuditStrategy extends Iti55AuditStrategy {
             WsAuditDataset auditDataset) throws Exception 
     {
         AuditorManager.getXCPDRespondingGatewayAuditor().auditXCPDPatientDiscoveryEvent(
-                eventOutcomeCode,
+                auditDataset.outcomeCode,
                 auditDataset.userId,
                 auditDataset.clientIpAddress,
                 auditDataset.serviceEndpointUrl,

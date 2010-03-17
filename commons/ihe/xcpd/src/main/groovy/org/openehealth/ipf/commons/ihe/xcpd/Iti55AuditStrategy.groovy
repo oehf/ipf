@@ -48,12 +48,13 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
      *   <li> when the typeCode=='OK' -- "success",
      *   <li> in all other cases -- "serious failure".
      * </ul>
+     * 
+     * @param xml
+     *      parsed response message.
      */
     @Override
-    RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo) {
+    RFC3881EventOutcomeCodes getEventOutcomeCode(Object xml) {
         try {
-            def xml = Hl7v3Utils.slurp((String) pojo)
-        
             def code = xml.controlAckProcess.queryAck.queryResponseCode.@code
             if (!code) {
                 // code not found -- bad XML
@@ -76,7 +77,7 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
      */
     @Override
     void enrichDataset(Object pojo, WsAuditDataset auditDataset) throws Exception {
-        def xml = Hl7v3Utils.slurp((String) pojo)
+        GPathResult xml = Hl7v3Utils.slurp((String) pojo)
         
         // query ID
         def queryId = xml.controlActProcess.queryByParameter.queryId
@@ -106,6 +107,9 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
         }
         
         auditDataset.patientIds = patientIds.toArray() ?: null
+
+        // event outcome code
+        auditDataset.outcomeCode = getEventOutcomeCode(xml)
     }
 
     
