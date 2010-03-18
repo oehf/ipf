@@ -26,7 +26,6 @@ import org.osgi.framework.BundleEvent
 import org.osgi.framework.BundleListener
 import org.springframework.core.io.Resource
 import org.springframework.core.io.UrlResource
-import org.springframework.osgi.context.BundleContextAware
 
 /**
  * Searches in all bundles for mapping scripts 
