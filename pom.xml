@@ -323,10 +323,16 @@
                 <artifactId>groovytools-builder</artifactId>
                 <version>${metabuilder-version}</version>
             </dependency>
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-base</artifactId>
                 <version>${hapi-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>xalan</groupId>
+                        <artifactId>xalan</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
                   <dependency>
                 <groupId>ca.uhn.hapi</groupId>
