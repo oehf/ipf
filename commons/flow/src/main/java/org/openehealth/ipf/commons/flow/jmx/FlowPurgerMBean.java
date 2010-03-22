@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.config.ApplicationConfig;
 import org.openehealth.ipf.commons.flow.purge.FlowPurgeJob;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,7 +46,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 public class FlowPurgerMBean implements InitializingBean, DisposableBean {
 
     private static final Log LOG = LogFactory.getLog(FlowPurgerMBean.class);
-    
+
     @Autowired
     private FlowManager flowManager; 
 
@@ -54,21 +55,21 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
     private Scheduler scheduler;
     
     private final Map<String, FlowPurgeJob> flowPurgeJobs;
-    
+
     public FlowPurgerMBean() {
         flowPurgeJobs = new HashMap<String, FlowPurgeJob>();
     }
-    
+
     @ManagedAttribute(description="Application name")
     public String getApplication() {
         return application;
     }
-    
+
     @ManagedAttribute(description="Application name")
     public void setApplication(String application) {
         this.application = application;
     }
-    
+
     @ManagedAttribute(description="Purge flows older than given duration "
             + "(e.g. \"30d\" will purge flows older than 30 days)")
     public String getPurgeFlowsOlderThan() {
@@ -85,7 +86,7 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
     public String getPurgeSchedule() {
         return flowManager.getApplicationConfig(application).getFlowPurgeSchedule();
     }
-    
+
     @ManagedAttribute(description="Purge job status for current application")
     public boolean isPurgeScheduled() {
         return flowManager.getApplicationConfig(application).isFlowPurgeScheduled();
@@ -118,21 +119,26 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
     public void execute() {
         executeJob(flowManager.getApplicationConfig(application));
     }
-    
+
     @ManagedOperation(description = "Schedules or reschedules a purge job for current application and schedule")
     public void schedule() {
         scheduleJob(flowManager.getApplicationConfig(application));
     }
-    
+
     @ManagedOperation(description = "Unschedules a purge job for current application and schedule")
     public void unschedule() {
         unscheduleJob(flowManager.getApplicationConfig(application));
     }
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        scheduler = StdSchedulerFactory.getDefaultScheduler();
-        scheduler.start();
+        if (scheduler == null){
+    	    scheduler = StdSchedulerFactory.getDefaultScheduler();
+        }
+    	if (!scheduler.isStarted()){ 
+            scheduler.start();
+        }
+        LOG.info("Scheduler started:" + scheduler.isStarted());
         initJobs();
     }
 
@@ -145,7 +151,7 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
         FlowPurgeJob flowPurgeJob = getFlowPurgeJob(config);
         flowPurgeJob.execute(config);
     }
-    
+
     private void scheduleJob(ApplicationConfig config) {
         FlowPurgeJob flowPurgeJob = getFlowPurgeJob(config);
         if (flowPurgeJob.isScheduled()) {
@@ -153,11 +159,11 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
         }
         flowPurgeJob.schedule(config);
     }
-    
+
     private void unscheduleJob(ApplicationConfig config) {
         getFlowPurgeJob(config).unschedule();
     }
-    
+
     private void initJobs() {
         LOG.info("Initialize flow purge jobs ... ");
         for (ApplicationConfig config : flowManager.findApplicationConfigs()) {
@@ -169,7 +175,7 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
         }
         LOG.info("Initialization done. ");
     }
-    
+
     private static String formatInput(String input) {
         if (input == null) {
             return null;
@@ -192,5 +198,29 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
         }
         return flowPurgeJob;
     }
-    
+
+    public Scheduler getScheduler() {
+        return scheduler;
+    }
+
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    @ManagedAttribute(description="Schedulers metadata")
+    public Map<String, String> getSchedulerMetaData() {
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            map.put("Scheduler Name", scheduler.getMetaData().getSchedulerName());
+            map.put("Scheduler Class", scheduler.getMetaData().getSchedulerClass().getCanonicalName());
+            map.put("Thread Pool Class", scheduler.getMetaData().getThreadPoolClass().getCanonicalName());
+            map.put("Thread Pool Size", String.valueOf(scheduler.getMetaData().getThreadPoolSize()));
+            map.put("Number Of Jobs Executed", String.valueOf(scheduler.getMetaData().numJobsExecuted()));
+            map.put("Running Since", MBeanUtils.formatDate(scheduler.getMetaData().runningSince()));
+            return map;
+        } catch (SchedulerException e) {
+            return null;
+        }
+    }
+
 }
