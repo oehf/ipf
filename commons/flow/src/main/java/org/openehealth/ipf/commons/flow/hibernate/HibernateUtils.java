@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.flow.hibernate;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
