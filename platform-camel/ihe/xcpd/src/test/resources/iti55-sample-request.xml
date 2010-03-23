@@ -57,10 +57,6 @@
                     <semanticsText>LivingSubject.administrativeGender</semanticsText>
                 </livingSubjectAdministrativeGender>
                 <livingSubjectBirthTime>
-                   <value value="19630804"/>
-                   <semanticsText>LivingSubject.birthTime</semanticsText>
-               </livingSubjectBirthTime>
-                <livingSubjectBirthTime>
                    <value value="19630805"/>
                    <semanticsText>LivingSubject.birthTime</semanticsText>
                </livingSubjectBirthTime>
