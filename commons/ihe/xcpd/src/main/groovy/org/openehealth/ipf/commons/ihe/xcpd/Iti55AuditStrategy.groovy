@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55AuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
+import org.openehealth.ipf.commons.xml.XmlYielder
 
 /**
  * Generic audit strategy for ITI-55 (XCPD).
@@ -110,6 +111,9 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
 
         // event outcome code
         auditDataset.outcomeCode = getEventOutcomeCode(xml)
+        
+        // contents of <queryBaParameter>
+        auditDataset.payload = extractQueryByParameterElement(xml)
     }
 
     
@@ -136,4 +140,16 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
         }
     }
 
+    
+    /**
+     * Extracts contents of the <tt>&lt;queryByParameter&gt;</tt> element
+     * from the given HL7v3 message.
+     */ 
+    private static String extractQueryByParameterElement(GPathResult xml) {
+        def output = new ByteArrayOutputStream()
+        def builder = Hl7v3Utils.getBuilder(output)
+        XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, 'urn:hl7-org:v3')
+        return output.toString()
+    }
+    
 }

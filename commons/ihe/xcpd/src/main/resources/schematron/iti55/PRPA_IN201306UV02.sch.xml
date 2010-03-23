@@ -81,36 +81,58 @@
             <sch:assert test="hl7:politicalNation/@classCode = 'NAT'">politicalNation.classCode must equal to 'NAT'</sch:assert>
             <sch:assert test="hl7:politicalNation/@determinerCode = 'INSTANCE'">politicalNation.determinerCode must equal to 'INSTANCE'</sch:assert>
         </sch:rule>
+    </sch:pattern>
 
-
-        <!-- ICW specific -->
+    <!-- ========================================================================== 
+                                      ADDITIONAL RULES  
+         ========================================================================== -->
+    <sch:pattern id="additional">
         <sch:rule context="/hl7:PRPA_IN201306UV02">
-            <sch:assert test="count(hl7:acknowledgement) = 1">exactly one "acknowledgement" element must be present</sch:assert>
+            <sch:assert test="count(hl7:acknowledgement) = 1">exactly one sub-element 'acknowledgement' must be present</sch:assert>
         </sch:rule>
 
-        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:acknowledgement/hl7:targetMessage/hl7:id">
+        <!-- 
+        HL7v3 spec 2009, Section 2.17.1:
+        "The root alone may be the entire instance identifier."
+        
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:acknowledgement/hl7:targetMessage/hl7:id">
             <sch:assert test="@root and @extension">attributes 'root' and 'extension' must be present</sch:assert>
         </sch:rule>
+        -->
         
         <!-- 'receiver' of the response should be an 1:1 copy of 'sender' of the request, 
-             and we need homeCommunityId there -->
+             and we need homeCommunityId there (see below) -->
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:receiver">
             <sch:assert test="hl7:device/hl7:asAgent/hl7:representedOrganization">
-                organisational information must be presented in 'receiver'
+                organizational information must be presented in 'receiver'
             </sch:assert>
         </sch:rule>
+	</sch:pattern>
 
-        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:receiver/hl7:device/hl7:asAgent/hl7:representedOrganization">
+
+    <sch:pattern abstract="true" id="check-home-community-id">
+        <sch:rule context="/hl7:PRPA_IN201306UV02/$element">
             <sch:assert test="count(hl7:id) = 1">
-                only one 'id' sub-element is allowed here
+                exactly one sub-element 'id' must be present here
             </sch:assert>
             <sch:assert test="hl7:id/@root">
-                homeCommunityId must be specified in the attribute 'id@root'
+                homeCommunityId must be specified in the attribute 'id/@root'
             </sch:assert>
             <sch:report test="hl7:id/@nullFlavor or hl7:id/@extension or hl7:id/@assigningAuthorityName">
                 only attribute 'root' is allowed in the sub-element 'id'
             </sch:report>
         </sch:rule>
-	</sch:pattern>
+    </sch:pattern>
+
+    <!-- in the response receiver, copied from the request sender -->    
+    <sch:pattern is-a="check-home-community-id" id="x1">
+        <sch:param name="element" value="hl7:receiver/hl7:device/hl7:asAgent/hl7:representedOrganization" />
+    </sch:pattern>
+
+    <!-- in custodian, see line 1072 in XCPD supplement -->
+    <sch:pattern is-a="check-home-community-id" id="x2">
+        <sch:param name="element" value="hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:custodian/hl7:assignedEntity" />
+    </sch:pattern>
+
 
 </sch:schema>
