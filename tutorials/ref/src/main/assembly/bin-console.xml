@@ -21,6 +21,8 @@
     </formats>
     <fileSets>
         <fileSet>
+            <directory>${project.build.directory}/scripts</directory>
+            <outputDirectory>/</outputDirectory>
             <includes>
                 <include>start-console.bat</include>
             </includes>

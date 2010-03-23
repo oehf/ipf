@@ -43,6 +43,7 @@
         <jar-plugin-version>2.2</jar-plugin-version>
         <javadoc-plugin-version>2.5</javadoc-plugin-version>
         <release-plugin-version>2.0-beta-9</release-plugin-version>
+        <resources-plugin-version>2.4.2</resources-plugin-version>
 
         <!-- Dependency version properties -->
         <activemq-version>5.3.0</activemq-version>
@@ -774,6 +775,10 @@
                     <configuration>
                         <preparationGoals>clean verify install</preparationGoals>
                     </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${resources-plugin-version}</version>
             </plugin>
             <plugin>
               <artifactId>maven-jar-plugin</artifactId>
