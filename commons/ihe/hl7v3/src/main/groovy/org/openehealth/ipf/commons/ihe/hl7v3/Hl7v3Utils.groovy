@@ -17,6 +17,10 @@ package org.openehealth.ipf.commons.ihe.hl7v3
 
 import groovy.xml.MarkupBuilderimport groovy.util.XmlSlurper
 import groovy.util.slurpersupport.GPathResultimport groovy.util.slurpersupport.Node
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
 import org.openehealth.ipf.commons.xml.XmlYielder
 
 /*
@@ -25,6 +29,18 @@ import org.openehealth.ipf.commons.xml.XmlYielder
  */
 class Hl7v3Utils {
 
+    private static final String HL7V3_NSURI = 'urn:hl7-org:v3'
+    private static final DateTimeFormatter TIME_FORMAT = ISODateTimeFormat.basicDateTimeNoMillis()
+    
+    
+    /**
+     * Returns current timestamp in the format prescribed by HL7. 
+     */
+    static String hl7timestamp() {
+        return TIME_FORMAT.print(new DateTime())[0..7, 9..14]
+    }
+
+    
     /**
      * Creates and configures an XML builder based on the given output stream.
      */

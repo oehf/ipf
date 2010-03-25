@@ -18,10 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3
 import groovy.util.slurpersupport.GPathResult;
 import groovy.xml.MarkupBuilder;
 
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-import org.joda.time.DateTime;
-
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.xml.XmlYielder.*
 
@@ -30,9 +26,6 @@ import static org.openehealth.ipf.commons.xml.XmlYielder.*
  * @author Dmytro Rud
  */
 class Hl7v3NakFactory {
-
-    private static final String HL7V3_NSURI = 'urn:hl7-org:v3'
-    private static final DateTimeFormatter TIME_FORMAT = ISODateTimeFormat.basicDateTimeNoMillis()
 
     /**
      * Creates a HL7 v3 NAK message as XML String.
@@ -75,7 +68,7 @@ class Hl7v3NakFactory {
             'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') 
         {
             buildInstanceIdentifier(builder, 'id', false, targetMessageIdRoot, UUID.randomUUID().toString())
-            creationTime(value: TIME_FORMAT.print(new DateTime())[0..7, 9..14])      
+            creationTime(value: hl7timestamp())      
             interactionId(root: '2.16.840.1.113883.1.6', extension: 'MCCI_IN000002UV01')
             processingCode(code: 'P')
             processingModeCode(code: 'T')
