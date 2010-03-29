@@ -39,7 +39,7 @@ public class Hl7v3CorrelationUtils {
         XPathFactory xpathFactory = XPathFactory.newInstance();
         XPath xpath = xpathFactory.newXPath();
         xpath.setNamespaceContext(new MapNamespaceContext(
-                Collections.singletonMap("hl7", "urn:hl7-org:v3")));
+                Collections.singletonMap("hl7", Hl7v3Utils.HL7V3_NSURI)));
         
         try {
             REQUEST_MESSAGE_ID_EXPRESSION = xpath.compile(
@@ -47,7 +47,7 @@ public class Hl7v3CorrelationUtils {
             RESPONSE_MESSAGE_ID_EXPRESSION = xpath.compile(
                     idExpresison("/hl7:*[1]/hl7:acknowledgement[1]/hl7:targetMessage[1]/hl7:id[1]"));
         } catch (XPathExpressionException e) {
-            // TODO
+            // should not occur
             throw new RuntimeException(e);
         }
     }
@@ -81,7 +81,6 @@ public class Hl7v3CorrelationUtils {
                 return expression.evaluate(source);
             }
         } catch (XPathExpressionException e) {
-            // TODO
             throw new RuntimeException(e);
         }
     }

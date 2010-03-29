@@ -28,8 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14Service;
 
-import java.net.URISyntaxException;
-
 /**
  * The Camel endpoint for the ITI-14 transaction.
  */

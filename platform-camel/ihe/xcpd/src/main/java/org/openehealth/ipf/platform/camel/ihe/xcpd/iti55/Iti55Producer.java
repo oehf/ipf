@@ -79,52 +79,5 @@ public class Iti55Producer extends AsynchronousItiProducer {
         super.cleanRequestContext(requestContext);
         TtlHeaderUtils.removeTtlHeader(requestContext);
     }
-    
-
-    /*
-    @Override
-    protected void callService(Exchange exchange) {
-        // prepare
-        String body = exchange.getIn().getBody(String.class);
-        Iti55PortType client = (Iti55PortType) getClient();
-        configureClient(client);
-        BindingProvider bindingProvider = (BindingProvider) client;
-        Map<String, Object> requestContext = bindingProvider.getRequestContext();
-        cleanRequestContext(requestContext);
-
-        
-        // get and analyse WS-Addressing asynchrony configuration
-        String replyToUri = exchange.getIn().getHeader(
-                Iti55Component.XCPD_WSA_REPLYTO_HEADER_NAME, String.class);
-        boolean async = (replyToUri != null) && (! replyToUri.isEmpty());
-
-        // for asynchronous interaction: prepare WSA headers
-        if (async) {
-            setWSAReplyToHeader(replyToUri, requestContext);
-            
-            AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getEndpoint();
-            String correlationKey = exchange.getIn().getHeader(
-                    Iti55Component.XCPD_CORRELATION_KEY_HEADER_NAME, String.class);
-            endpoint.getCorrelator().put(
-                    Hl7v3CorrelationUtils.getHl7v3MessageId(body, true), 
-                    endpoint.getEndpointUri(),
-                    correlationKey);
-        }
-        
-        // invoke
-        exchange.setPattern(async ? ExchangePattern.InOnly : ExchangePattern.InOut);
-        String result = client.respondingGatewayPRPAIN201305UV02(body);
-        
-        // for synchronous interaction: handle response
-        if (! async) {
-            Message resultMessage = Exchanges.resultMessage(exchange);
-            dura = TtlHeaderUtils.retrieveTtlHeader(bindingProvider.getResponseContext());
-            if (dura != null) {
-                resultMessage.setHeader(Iti55Component.XCPD_INPUT_TTL_HEADER_NAME, dura);
-            }
-            resultMessage.setBody(result);
-        } 
-    }
-*/
 
 }

@@ -77,7 +77,7 @@ class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
 
         builder.PRPA_IN201302UV02(
             'ITSVersion' : 'XML_1.0',
-            'xmlns'      : 'urn:hl7-org:v3',
+            'xmlns'      : HL7V3_NSURI,
             'xmlns:xsi'  : 'http://www.w3.org/2001/XMLSchema-instance',
             'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') 
         {         

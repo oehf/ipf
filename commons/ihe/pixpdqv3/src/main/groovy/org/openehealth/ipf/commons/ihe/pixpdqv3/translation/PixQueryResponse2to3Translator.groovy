@@ -79,7 +79,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
         
         builder.PRPA_IN201310UV02(
                 'ITSVersion': 'XML_1.0',
-                'xmlns':      'urn:hl7-org:v3',
+                'xmlns':      HL7V3_NSURI,
                 'xmlns:xsi':  'http://www.w3.org/2001/XMLSchema-instance',
                 'xmlns:xsd':  'http://www.w3.org/2001/XMLSchema') 
         {
@@ -89,7 +89,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
             processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
-            buildReceiverAndSender(builder, xml, 'urn:hl7-org:v3')
+            buildReceiverAndSender(builder, xml, HL7V3_NSURI)
             createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter) 
 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
@@ -119,11 +119,12 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 				}
                 
                 queryAck {
+                    def queryId = xml.controlActProcess.queryByParameter.queryId
                     buildInstanceIdentifier(builder, 'queryId', false, 
-                            xml.id.@root.text(), xml.id.@extension.text())
+                            queryId.@root.text(), queryId.@extension.text())
                     queryResponseCode(code: rsp.QAK[2].value)
                 }
-                XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, 'urn:hl7-org:v3')
+                XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, HL7V3_NSURI)
             }
         }
 

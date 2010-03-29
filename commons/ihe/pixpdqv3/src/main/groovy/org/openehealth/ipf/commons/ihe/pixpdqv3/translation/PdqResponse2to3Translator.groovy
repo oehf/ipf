@@ -107,7 +107,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
         
         builder.PRPA_IN201306UV02(
                 'ITSVersion': 'XML_1.0',
-                'xmlns':      'urn:hl7-org:v3',
+                'xmlns':      HL7V3_NSURI,
                 'xmlns:xsi':  'http://www.w3.org/2001/XMLSchema-instance',
                 'xmlns:xsd':  'http://www.w3.org/2001/XMLSchema') 
         {
@@ -117,7 +117,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
             processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
-            buildReceiverAndSender(builder, xml, 'urn:hl7-org:v3')
+            buildReceiverAndSender(builder, xml, HL7V3_NSURI)
             createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter) 
             controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
                 code(code: 'PRPA_TE201306UV02', codeSystem: '2.16.840.1.113883.1.6')
@@ -179,8 +179,9 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 queryAck {
                     int patientCount = (rsp.MSH[9][1].value == 'RSP') ? rsp.QUERY_RESPONSE().size() : 0
                     
+                    def queryId = xml.controlActProcess.queryByParameter.queryId
                     buildInstanceIdentifier(builder, 'queryId', false, 
-                            xml.id.@root.text(), xml.id.@extension.text())
+                            queryId.@root.text(), queryId.@extension.text())
 
                     queryResponseCode(code: status.responseStatus)
                     if (this.outputResultTotalQuantity) {
@@ -192,7 +193,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                     }
                 }
                 
-                XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, 'urn:hl7-org:v3')
+                XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, HL7V3_NSURI)
             }
         }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3
+package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import groovy.xml.MarkupBuilderimport groovy.util.XmlSlurper
 import groovy.util.slurpersupport.GPathResultimport groovy.util.slurpersupport.Node
@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.xml.XmlYielder
  */
 class Hl7v3Utils {
 
-    private static final String HL7V3_NSURI = 'urn:hl7-org:v3'
+    public static final String HL7V3_NSURI = 'urn:hl7-org:v3'
     private static final DateTimeFormatter TIME_FORMAT = ISODateTimeFormat.basicDateTimeNoMillis()
     
     

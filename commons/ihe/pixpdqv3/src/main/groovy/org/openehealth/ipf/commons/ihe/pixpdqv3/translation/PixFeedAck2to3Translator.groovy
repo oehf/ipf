@@ -60,7 +60,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
         
         builder.MCCI_IN000002UV01(
             'ITSVersion' : 'XML_1.0',
-            'xmlns'      : 'urn:hl7-org:v3',
+            'xmlns'      : HL7V3_NSURI,
             'xmlns:xsi'  : 'http://www.w3.org/2001/XMLSchema-instance',
             'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') 
         {         
@@ -70,7 +70,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
             processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
-            buildReceiverAndSender(builder, xml, 'urn:hl7-org:v3')
+            buildReceiverAndSender(builder, xml, HL7V3_NSURI)
             createQueryAcknowledgementElement(builder, xml, status, this.errorCodeSystem, this.ackCodeFirstCharacter)
         }
 

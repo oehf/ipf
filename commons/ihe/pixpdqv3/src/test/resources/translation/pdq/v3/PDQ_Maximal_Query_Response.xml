@@ -35,7 +35,7 @@
     <code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6" />
     <effectiveTime value="20091217121020" />
     <queryAck>
-      <queryId root="1.2.840.114350.1.13.0.1.7.1.1" extension="35423" />
+      <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204" />
       <queryResponseCode code="NF" />
       <resultTotalQuantity value="0" />
       <resultCurrentQuantity value="0" />
