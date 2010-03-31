@@ -19,6 +19,7 @@ import org.apache.camel.CamelContext
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.impl.DefaultExchange
 import org.junit.After
+import org.junit.AfterClass
 import org.openehealth.ipf.commons.ihe.atna.MockedSender
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -63,6 +64,10 @@ class MllpTestContainer {
      @After
      void tearDown() {
          auditSender.messages.clear()
+     }
+
+     @AfterClass
+     static void tearDownAfterClass() {
          appContext.destroy()
      }
           
