@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
-import org.apache.camel.Endpoint;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Producer;
+import org.apache.camel.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
@@ -29,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
  */
 public abstract class AbstractProducerInterceptor 
        extends AbstractMllpInterceptor 
-       implements Producer 
+       implements Producer, ServicePoolAware 
 {
     /**
      * Constructor.
@@ -38,7 +35,7 @@ public abstract class AbstractProducerInterceptor
      * @param wrappedProducer
      *      The producer to be wrapped.
      */
-    public AbstractProducerInterceptor(
+    protected AbstractProducerInterceptor(
             MllpEndpoint endpoint, 
             Producer wrappedProducer)  
     {

@@ -63,6 +63,7 @@ class MllpTestContainer {
      @After
      void tearDown() {
          auditSender.messages.clear()
+         appContext.destroy()
      }
           
      
