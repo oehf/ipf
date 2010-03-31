@@ -56,7 +56,7 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
     @Override
     RFC3881EventOutcomeCodes getEventOutcomeCode(Object xml) {
         try {
-            def code = xml.controlAckProcess.queryAck.queryResponseCode.@code
+            def code = xml.controlActProcess.queryAck.queryResponseCode.@code.text()
             if (!code) {
                 // code not found -- bad XML
                 return RFC3881EventOutcomeCodes.MAJOR_FAILURE

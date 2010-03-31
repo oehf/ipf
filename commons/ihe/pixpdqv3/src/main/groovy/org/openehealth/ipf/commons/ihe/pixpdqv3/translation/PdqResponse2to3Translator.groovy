@@ -137,7 +137,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                                         pid3[4][2].value, pid3[1].value, pid3[4][1].value) 
                                             }
                                             statusCode(code: 'active')
-                                            patientPerson {
+                                            patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
                                                 for (pid5 in qr.PID[5]()) {
                                                     createName(builder, pid5) 
                                                 }
