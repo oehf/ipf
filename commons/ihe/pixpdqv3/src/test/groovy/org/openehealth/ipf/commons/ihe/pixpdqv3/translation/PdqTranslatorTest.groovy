@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
  * Unit test for PDQ translator.
  * @author Marek Václavík, Dmytro Rud
  */
-class PdqTranslatorTestorTest extends Hl7TranslationTestContainer {
+class PdqTranslatorTest extends Hl7TranslationTestContainer {
  
     @BeforeClass
     static void setUpClass() {

@@ -57,8 +57,8 @@
               <addr>
                 <country>DE</country>
                 <postalCode>89000</postalCode>
-                <city>München</city>
-                <streetAddressLine>Münchner Freiheit 1</streetAddressLine>
+                <city>Muenchen</city>
+                <streetAddressLine>Muenchner Freiheit 1</streetAddressLine>
               </addr>
             </patientPerson>
             <subjectOf1>
@@ -138,7 +138,7 @@
                 <country>DE</country>
                 <postalCode>69190</postalCode>
                 <city>Walldorf</city>
-                <streetAddressLine>Hauptstraße 43</streetAddressLine>
+                <streetAddressLine>Hauptstrasse 43</streetAddressLine>
               </addr>
             </patientPerson>
             <subjectOf1>
@@ -216,7 +216,7 @@
               <addr>
                 <country>DE</country>
                 <postalCode>57000</postalCode>
-                <city>Köln</city>
+                <city>Koeln</city>
                 <streetAddressLine>Teststr. 1</streetAddressLine>
               </addr>
             </patientPerson>
@@ -244,11 +244,11 @@
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
               <name>
-                <family>Müller</family>
+                <family>Mueller</family>
                 <given>Hannes</given>
               </name>
               <name>
-                <family>Müller</family>
+                <family>Mueller</family>
               </name>
               <telecom value="tel: 022/843274" />
               <administrativeGenderCode code="M" />
@@ -256,7 +256,7 @@
               <addr>
                 <country>DE</country>
                 <postalCode>57000</postalCode>
-                <city>Köln</city>
+                <city>Koeln</city>
                 <streetAddressLine>Am Domplatz 14</streetAddressLine>
               </addr>
             </patientPerson>
@@ -285,11 +285,11 @@
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
               <name>
-                <family>Müller</family>
+                <family>Mueller</family>
                 <given>Hans</given>
               </name>
               <name>
-                <family>Müller</family>
+                <family>Mueller</family>
               </name>
               <telecom value="tel: 022/235715" />
               <telecom value="tel: 022/874491" />
@@ -299,7 +299,7 @@
               <addr>
                 <country>DE</country>
                 <postalCode>57000</postalCode>
-                <city>Köln</city>
+                <city>KÃ¶ln</city>
                 <streetAddressLine>Am Domplatz 1</streetAddressLine>
               </addr>
             </patientPerson>
@@ -327,11 +327,11 @@
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
               <name>
-                <family>Müller</family>
+                <family>Mueller</family>
                 <given>Joachim</given>
               </name>
               <name>
-                <family>Müller</family>
+                <family>Mueller</family>
               </name>
               <telecom value="tel: 022/844275" />
               <administrativeGenderCode code="M" />
@@ -339,7 +339,7 @@
               <addr>
                 <country>DE</country>
                 <postalCode>57000</postalCode>
-                <city>Köln</city>
+                <city>Koeln</city>
                 <streetAddressLine>Am Domplatz 112</streetAddressLine>
               </addr>
             </patientPerson>
