@@ -22,12 +22,18 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
 import org.openehealth.ipf.modules.hl7.extend.HapiModelExtension
 
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.extend.MappingExtension
+
+import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator
 
 import org.custommonkey.xmlunit.XMLUnitimport org.custommonkey.xmlunit.Diff
 import org.springframework.core.io.ClassPathResource
 import org.apache.commons.io.IOUtils
+
+import ca.uhn.hl7v2.parser.Parser;
 
 /**
  * Test container for HL7 v3-v2 transformation routines.
@@ -42,6 +48,9 @@ class Hl7TranslationTestContainer {
     static {
         ExpandoMetaClass.enableGlobally()
     }
+    
+    private static final MessageAdapterValidator V2_VALIDATOR = new MessageAdapterValidator()
+    private static final Hl7v3Validator V3_VALIDATOR = new Hl7v3Validator()
     
     static String transactionName
     static Hl7TranslatorV3toV2 v3tov2Translator
@@ -100,21 +109,30 @@ class Hl7TranslationTestContainer {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)
         return IOUtils.toString(inputStream)
     }
-    
-    String doTestV3toV2RequestTranslation(String fn) {
+
+
+    String doTestV3toV2RequestTranslation(String fn, int v2index, int v3index) {
         String v3request = getFileContent(fn, V3, REQUEST)
+        V3_VALIDATOR.validate(v3request, Hl7v3ValidationProfiles.REQUEST_TYPES[v3index])
+        
         String expectedV2request = getFileContent(fn, V2, REQUEST)
         MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request)
+        V2_VALIDATOR.validate(translatedV2request, null)
+        
         assert translatedV2request.toString().trim() == expectedV2request.trim()
     }
-    
-    String doTestV2toV3ResponseTranslation(String fn) {
+
+
+    String doTestV2toV3ResponseTranslation(String fn, int v2index, int v3index, Parser parser) {
         String v3request = getFileContent(fn, V3, REQUEST)
         String v2response = getFileContent(fn, V2, RESPONSE)
+        MessageAdapter msg = MessageAdapters.make(parser, v2response)
+        V2_VALIDATOR.validate(msg, null)
+
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
-        String translatedV3response = v2tov3Translator.translateV2toV3(
-                MessageAdapters.make(v2response),
-                v3request)
+        String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request)
+        V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.RESPONSE_TYPES[v3index])
+
         Diff diff = new Diff(expectedV3response, translatedV3response)
         assert diff.identical()
     }

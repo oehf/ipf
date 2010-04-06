@@ -11,7 +11,7 @@
 -->
 
 <!--
-    Schematron rules for ITI-55 response message.
+    Schematron rules for ITI-47 response message.
     @author Dmytro Rud 
 -->
 
@@ -20,9 +20,9 @@
 	<sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
 
     <!-- ========================================================================== 
-                  Rules based on Section 3.55.4.2.2.2 of IHE XCPD supplement
+                  Rules based on Section 3.47.4.2.2.2 of IHE XCPD supplement
          ========================================================================== -->
-    <sch:pattern id="patient-constraints-section_3_55_4_2_2_2">
+    <sch:pattern id="patient-constraints-section_3_47_4_2_2_2">
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient">
             <sch:report test="hl7:patientNonPersonLivingSubject">result must relate to a person</sch:report>
             
@@ -30,9 +30,9 @@
             <sch:report test="hl7:coveredPartyOf">coveredPartyOf must be omitted</sch:report>
 
             <sch:assert test="@classCode = 'PAT'">classCode must equal to 'PAT'</sch:assert>
-            <sch:assert test="count(hl7:id) = 1">exactly one main patient ID must be present (use asOtherIds for additional IDs)</sch:assert>
+            <sch:assert test="count(hl7:id) ge 1">at least one main patient ID must be present</sch:assert>
             <sch:assert test="hl7:statusCode/@code = 'active'">statusCode must equal to 'active'</sch:assert>
-            
+
             <sch:assert test="hl7:subjectOf1/hl7:queryMatchObservation/hl7:value/@xsi:type = 'INT'">
                 this element is constrained to data type 'INT'
             </sch:assert>
@@ -40,33 +40,18 @@
 
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:patientPerson">
             <sch:report test="hl7:asPatientOfOtherProvider">asPatientOfOtherProvider must be omitted</sch:report>
+            <sch:report test="hl7:birthPlace">birthPlace must be omitted</sch:report>
             <sch:report test="hl7:guarantorRole">guarantorRole must be omitted</sch:report>
             <sch:report test="hl7:guardian">guardian must be omitted</sch:report>
             <sch:report test="hl7:contactParty">contactParty must be omitted</sch:report>
             <sch:report test="hl7:asMember">asMember must be omitted</sch:report>
             <sch:report test="hl7:careGiver">careGiver must be omitted</sch:report>
             <sch:report test="hl7:asStudent">asStudent must be omitted</sch:report>
-            
+
             <sch:assert test="@classCode = 'PSN'">classCode must equal to 'PSN'</sch:assert>
             <sch:assert test="@determinerCode = 'INSTANCE'">determinerCode must equal to 'INSTANCE'</sch:assert>
             <sch:assert test="count(hl7:name) &gt; 0">at least one sub-element "name" must be present</sch:assert>
-            
-            <sch:let name="qbp" value="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList" />
-            <sch:let name="idPresent" value="($qbp/hl7:id/@root and $qbp/hl7:id/@extension)" />
-            <sch:let name="demographicsPresent" value=" 
-	            ($qbp/hl7:livingSubjectAdministrativeGender
-					or $qbp/hl7:livingSubjectBirthPlaceAddress
-					or $qbp/hl7:livingSubjectBirthPlaceName
-					or $qbp/hl7:livingSubjectBirthTime
-					or $qbp/hl7:livingSubjectDeceasedTime
-					or $qbp/hl7:livingSubjectName
-					or $qbp/hl7:mothersMaidenName
-					or $qbp/hl7:patientAddress
-					or $qbp/hl7:patientTelecom)" /> 
-            <sch:assert test="not(hl7:name/@nullFlavor) or ($idPresent and not($demographicsPresent))">
-                patient name may be null only if the request contained only a patient identifier and no demographic data
-            </sch:assert>
-            
+
             <sch:assert test="not(hl7:personalRelationship) or hl7:personalRelationship/@classCode = 'PRS'">
                 relationship holder of the personal relationship is restricted to be a person, classCode must equal to 'PRS'
             </sch:assert>
@@ -90,49 +75,6 @@
         <sch:rule context="/hl7:PRPA_IN201306UV02">
             <sch:assert test="count(hl7:acknowledgement) = 1">exactly one sub-element 'acknowledgement' must be present</sch:assert>
         </sch:rule>
-
-        <!-- 
-        HL7v3 spec 2009, Section 2.17.1:
-        "The root alone may be the entire instance identifier."
-        
-        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:acknowledgement/hl7:targetMessage/hl7:id">
-            <sch:assert test="@root and @extension">attributes 'root' and 'extension' must be present</sch:assert>
-        </sch:rule>
-        -->
-        
-        <!-- 'receiver' of the response should be an 1:1 copy of 'sender' of the request, 
-             and we need homeCommunityId there (see below) -->
-        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:receiver">
-            <sch:assert test="hl7:device/hl7:asAgent/hl7:representedOrganization">
-                organizational information must be presented in 'receiver'
-            </sch:assert>
-        </sch:rule>
 	</sch:pattern>
-
-
-    <sch:pattern abstract="true" id="check-home-community-id">
-        <sch:rule context="/hl7:PRPA_IN201306UV02/$element">
-            <sch:assert test="count(hl7:id) = 1">
-                exactly one sub-element 'id' must be present here
-            </sch:assert>
-            <sch:assert test="hl7:id/@root">
-                homeCommunityId must be specified in the attribute 'id/@root'
-            </sch:assert>
-            <sch:report test="hl7:id/@nullFlavor or hl7:id/@extension or hl7:id/@assigningAuthorityName">
-                only attribute 'root' is allowed in the sub-element 'id'
-            </sch:report>
-        </sch:rule>
-    </sch:pattern>
-
-    <!-- in the response receiver, copied from the request sender -->    
-    <sch:pattern is-a="check-home-community-id" id="x1">
-        <sch:param name="element" value="hl7:receiver/hl7:device/hl7:asAgent/hl7:representedOrganization" />
-    </sch:pattern>
-
-    <!-- in custodian, see line 1072 in XCPD supplement -->
-    <sch:pattern is-a="check-home-community-id" id="x2">
-        <sch:param name="element" value="hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:custodian/hl7:assignedEntity" />
-    </sch:pattern>
-
 
 </sch:schema>

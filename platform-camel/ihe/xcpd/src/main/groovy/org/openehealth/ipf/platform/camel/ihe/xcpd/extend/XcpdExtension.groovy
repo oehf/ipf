@@ -16,7 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.xcpd.extend;
 
 import org.apache.camel.model.ProcessorDefinition;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdValidator;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
@@ -26,21 +27,6 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
  * @author Dmytro Rud
  */
 class XcpdExtension {
-
-     /**
-      * Correspondence between transaction number and HL7 v3 request message type.   
-      */
-     private static final Map REQUEST_TYPES = [
-         55 : ['PRPA_IN201305UV02'],
-     ];
-      
-     /**
-      * Correspondence between transaction number and HL7 v3 response message type.   
-      */
-     private static final Map RESPONSE_TYPES = [
-         55 : ['PRPA_IN201306UV02'],
-     ];
-
      
      /**
       * Validates an ITI-55 request
@@ -66,8 +52,10 @@ class XcpdExtension {
              int transaction,
              boolean request) 
      {
-         self.setValidator(new XcpdValidator());
-         self.staticProfile(request ? REQUEST_TYPES[transaction] : RESPONSE_TYPES[transaction]);
+         self.setValidator(new Hl7v3Validator());
+         self.staticProfile(request ? 
+                 Hl7v3ValidationProfiles.REQUEST_TYPES[transaction] : 
+                 Hl7v3ValidationProfiles.RESPONSE_TYPES[transaction]);
          return (ValidatorAdapterDefinition)self.input {
              it.in.getBody(String.class)
          };

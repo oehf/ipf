@@ -20,9 +20,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class HL7v3ValidatorTest {
 
 	@Test
@@ -30,9 +27,7 @@ public class HL7v3ValidatorTest {
 		String message = IOUtils.readStringFromStream(getClass()
 				.getResourceAsStream("/xsd/prpa-valid.xml"));
         Hl7v3Validator validator = new Hl7v3Validator();
-        Collection<String> root = new ArrayList<String>();
-        root.add("PRPA_IN201301UV02");
-        validator.validate(message, root);
+        validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get(44));
 	}
 	
 	@Test
@@ -40,13 +35,13 @@ public class HL7v3ValidatorTest {
 		String message = IOUtils.readStringFromStream(getClass()
 				.getResourceAsStream("/xsd/prpa-invalid.xml"));
 		Hl7v3Validator validator = new Hl7v3Validator();
-        Collection<String> root = new ArrayList<String>();
-        root.add("PRPA_IN201301UV02");
+        boolean failed = false;
         try {
-			validator.validate(message, root);
-		} catch (Exception e) {
-			Assert.assertTrue(e instanceof ValidationException);
+			validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get(44));
+		} catch (ValidationException e) {
+		    failed = true;
 		}
+		Assert.assertTrue(failed);
 	}
 
 }

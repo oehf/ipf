@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
 
 /**
  * Unit test for PDQ translator.
@@ -34,7 +35,9 @@ class PdqTranslatorTestorTest extends Hl7TranslationTestContainer {
 
     @Test
     void testPdqQuery() {
-        doTestV3toV2RequestTranslation('PDQ_Maximal_Query')
-        doTestV2toV3ResponseTranslation('PDQ_Maximal_Query')
+        def parser = CustomModelClassUtils.createParser('pdq', '2.5')
+        doTestV3toV2RequestTranslation('PDQ_Maximal_Query', 21, 47)
+        doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, 47, parser)
+        doTestV2toV3ResponseTranslation('PDQ', 21, 47, parser)
     }
 }

@@ -34,17 +34,17 @@ class PixFeedTranslatorTest extends Hl7TranslationTestContainer {
   
     @Test
     void testMaximalMergeRequest() {
-        doTestV3toV2RequestTranslation('PIX_FEED_MERGE_Maximal_Request')
+        doTestV3toV2RequestTranslation('PIX_FEED_MERGE_Maximal_Request', 8, 44)
     }
   
     @Test
     void testMaximalRegistrationRequest() {
-        doTestV3toV2RequestTranslation('PIX_FEED_REG_Maximal_Request')
+        doTestV3toV2RequestTranslation('PIX_FEED_REG_Maximal_Request', 8, 44)
     }
   
     @Test
     void testMaximalRevRequest() {
-        doTestV3toV2RequestTranslation('PIX_FEED_REV_Maximal_Request')
+        doTestV3toV2RequestTranslation('PIX_FEED_REV_Maximal_Request', 8, 44)
     }
   
 }
