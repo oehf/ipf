@@ -38,7 +38,7 @@ class Hl7v3NakFactory {
      *      root element name of the target NAK message, for example, 
      *      'MCCI_IN000002UV01' or 'PRPA_IN201306UV02'.
      * @param needControlActProcess
-     *      whether a <tt>controlAckProcess<tt> element should be created in the NAK.
+     *      whether a <tt>controlAckProcess</tt> element should be created in the NAK.
      * @param targetMessageIdRoot
      *      <tt>root</tt> attribute of the NAK's <tt>id</tt> element.
      *      Per default, equals to '1.2.3'.

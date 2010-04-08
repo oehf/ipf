@@ -46,8 +46,8 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
      * <ul>
      *   <li> when the output message cannot be parsed -- "major failure",
      *   <li> when the typeCode is missing -- "major failure",
-     *   <li> when the typeCode=='OK' -- "success",
-     *   <li> in all other cases -- "serious failure".
+     *   <li> when the typeCode is 'OK' or 'NF' -- "success",
+     *   <li> in all other cases ('AE' and 'QE') -- "serious failure".
      * </ul>
      * 
      * @param xml
@@ -61,7 +61,10 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
                 // code not found -- bad XML
                 return RFC3881EventOutcomeCodes.MAJOR_FAILURE
             }
-            return (code == 'OK') ? RFC3881EventOutcomeCodes.SUCCESS : RFC3881EventOutcomeCodes.SERIOUS_FAILURE
+            return (code == 'OK') || (code == 'NF') ? 
+                    RFC3881EventOutcomeCodes.SUCCESS : 
+                    RFC3881EventOutcomeCodes.SERIOUS_FAILURE
+
         } catch (Exception e) {
             return RFC3881EventOutcomeCodes.MAJOR_FAILURE
         }
