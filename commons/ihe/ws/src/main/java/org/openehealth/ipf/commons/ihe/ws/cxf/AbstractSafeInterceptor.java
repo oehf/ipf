@@ -17,15 +17,16 @@ package org.openehealth.ipf.commons.ihe.ws.cxf;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.message.Message;
-import org.apache.cxf.phase.AbstractPhaseInterceptor;
 
 /**
  * CXF interceptor which logs all errors instead of 
  * letting them break the processing flow.
  * @author Dmytro Rud
  */
-abstract public class AbstractSafeInterceptor extends AbstractPhaseInterceptor<Message> {
+abstract public class AbstractSafeInterceptor extends AbstractSoapInterceptor {
     private static final transient Log LOG = LogFactory.getLog(AbstractSafeInterceptor.class);
 
     /**
@@ -45,7 +46,7 @@ abstract public class AbstractSafeInterceptor extends AbstractPhaseInterceptor<M
      * @throws Exception
      *          any exception that occurred when processing the message.
      */
-    abstract protected void process(Message message) throws Exception;
+    abstract protected void process(SoapMessage message) throws Exception;
     
     /**
      * Calls {@link #process(Message)} and "forwards" 
@@ -54,7 +55,7 @@ abstract public class AbstractSafeInterceptor extends AbstractPhaseInterceptor<M
      * @param message CXF message to process.
      */
     @Override
-    public final void handleMessage(Message message) {
+    public final void handleMessage(SoapMessage message) {
         try {
             process(message);
         } catch(Exception e) {

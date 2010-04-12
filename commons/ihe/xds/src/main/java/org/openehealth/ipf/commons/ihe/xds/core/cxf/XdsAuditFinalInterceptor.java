@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.cxf;
 
 import java.util.List;
 
+import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.AbstractWrappedMessage;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
@@ -52,7 +53,7 @@ public class XdsAuditFinalInterceptor extends AuditInterceptor {
 
     
     @Override
-    protected void process(Message message) throws Exception {
+    protected void process(SoapMessage message) throws Exception {
         WsAuditDataset auditDataset = getAuditDataset(message);
 
         // try to extract response as POJO 
@@ -61,7 +62,7 @@ public class XdsAuditFinalInterceptor extends AuditInterceptor {
         
         // determine event outcome code
         Exchange exchange = message.getExchange();
-        Message wrappedMessage = ((AbstractWrappedMessage)message).getMessage();
+        Message wrappedMessage = ((AbstractWrappedMessage) message).getMessage();
         
         RFC3881EventOutcomeCodes eventOutcomeCode;
         if((message == exchange.getInFaultMessage()) ||

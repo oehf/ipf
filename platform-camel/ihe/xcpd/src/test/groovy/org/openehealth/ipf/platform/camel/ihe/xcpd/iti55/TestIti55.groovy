@@ -25,6 +25,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiProducer;
 import static org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55TestUtils.*
 
@@ -88,9 +89,12 @@ class TestIti55 extends StandardTestContainer {
          
          // set WSA ReplyTo header, when necessary
          if (responseEndpointUri) {
-             requestExchange.in.headers[AsynchronousItiProducer.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
+             requestExchange.in.headers[AsynchronousItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
          }
 
+         // set correlation key
+         requestExchange.in.headers[AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
+         
          // set TTL SOAP header
          setOutgoingTTL(requestExchange.in, n)
          

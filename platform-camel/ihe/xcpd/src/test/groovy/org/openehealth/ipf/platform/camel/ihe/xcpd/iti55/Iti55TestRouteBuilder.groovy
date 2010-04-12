@@ -22,6 +22,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
 import static org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55TestUtils.*
 
 /**
@@ -46,8 +47,9 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
             .validate().iti55Response()
             .process {
                 assert it.pattern == ExchangePattern.InOnly
+                assert it.in.headers[AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME] == 
+                    "corr ${asyncResponseCount.getAndIncrement() * 2}"
                 testPositiveAckCode(it.in.body)
-                asyncResponseCount.incrementAndGet()
             }
             .delay(ASYNC_DELAY)
 

@@ -21,13 +21,12 @@ import javax.xml.datatype.Duration;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3CorrelationUtils;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiProducer;
 
 /**
- * The producer implementation for the ITI-45 component.
+ * The producer implementation for the ITI-55 component.
  * @author Dmytro Rud
  */
 public class Iti55Producer extends AsynchronousItiProducer {
@@ -67,12 +66,6 @@ public class Iti55Producer extends AsynchronousItiProducer {
         }
     }
 
-
-    @Override
-    protected String getMessageIdForCorrelation(String body) {
-        return Hl7v3CorrelationUtils.getHl7v3MessageId(body, true);
-    }
-    
     
     @Override
     protected void cleanRequestContext(Map<String, Object> requestContext) {

@@ -26,6 +26,20 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
  * @author Dmytro Rud
  */
 abstract public class AsynchronousItiEndpoint extends DefaultItiEndpoint {
+
+    /**
+     * Name of incoming Camel header where the user should store the URL
+     * of asynchronous response endpoint (WS-Addressing header "ReplyTo").  
+     */
+    public static final String WSA_REPLYTO_HEADER_NAME = "ipf.wsa.ReplyTo";
+    
+    /**
+     * Name of incoming Camel header where the user should store 
+     * the optional correlation key.  
+     */
+    public static final String CORRELATION_KEY_HEADER_NAME = "ipf.correlation.key";
+    
+    
     private AsynchronyCorrelator correlator = null;
 
     protected AsynchronousItiEndpoint(String endpointUri, String address, Component component) {

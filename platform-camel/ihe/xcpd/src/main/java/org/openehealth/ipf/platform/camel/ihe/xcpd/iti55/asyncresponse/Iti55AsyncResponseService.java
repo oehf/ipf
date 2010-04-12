@@ -21,25 +21,18 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.apache.camel.ExchangePattern;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3CorrelationUtils;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.asyncresponse.Iti55AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousResponseItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.TtlHeaderUtils;
 
 /**
- * Service implementation for the IHE ITI-55 (XCPD) async response.
+ * Service implementation for the IHE ITI-55 (XCPD) asynchronous response.
  * @author Dmytro Rud
  */
-public class Iti55AsyncResponseService extends DefaultItiWebService implements Iti55AsyncResponsePortType {
+public class Iti55AsyncResponseService extends AsynchronousResponseItiWebService implements Iti55AsyncResponsePortType {
 
     @Override
     public Object respondingGatewayPRPAIN201305UV02(String response) {
-        AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getConsumer().getEndpoint();
-        
-        String messageId = Hl7v3CorrelationUtils.getHl7v3MessageId(response, false);
-        endpoint.getCorrelator().getServiceEndpoint(messageId);
-        
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
         Map<String, Object> headers = TtlHeaderUtils.retrieveTtlHeaderAsMap(messageContext);
         process(response, headers, ExchangePattern.InOnly);

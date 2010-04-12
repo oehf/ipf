@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +66,7 @@ public class TtlHeaderUtils {
                             }
                         }
                     }
+                    break;
                 }
             }
         }
@@ -80,9 +81,12 @@ public class TtlHeaderUtils {
      */
     public static Map<String, Object> retrieveTtlHeaderAsMap(Map<String, Object> context) {
         Duration dura = retrieveTtlHeader(context);
-        return (dura != null) 
-            ? Collections.<String, Object> singletonMap(Iti55Component.XCPD_INPUT_TTL_HEADER_NAME, dura) 
-            : null;
+        if (dura != null) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(Iti55Component.XCPD_INPUT_TTL_HEADER_NAME, dura);
+            return map;
+        }
+        return null;
     }
     
     

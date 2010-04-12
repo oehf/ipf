@@ -24,7 +24,7 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.xml.ws.Action;
  
 /**
- * SEI for XCPD sender and receiver endpoint. 
+ * SEI for XCPD ITI-55 -- Cross Gateway Patient Discovery. 
  * @author Dmytro Rud
  */
 @WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_PortType")
@@ -35,7 +35,7 @@ public interface Iti55PortType {
             output = "urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery")
     @WebMethod(operationName = "RespondingGateway_PRPA_IN201305UV02")
     public String respondingGatewayPRPAIN201305UV02(
-            @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-            String request
+        @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
+        String request
     );
 }

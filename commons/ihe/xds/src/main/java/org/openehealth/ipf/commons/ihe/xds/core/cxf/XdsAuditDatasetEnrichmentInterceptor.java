@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.cxf;
 
 import java.util.List;
 
+import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
@@ -53,7 +54,7 @@ public class XdsAuditDatasetEnrichmentInterceptor extends AuditInterceptor {
 
     
     @Override
-    protected void process(Message message) throws Exception {
+    protected void process(SoapMessage message) throws Exception {
         WsAuditDataset auditDataset = getAuditDataset(message);
 
         boolean isInbound = isInboundMessage(message);

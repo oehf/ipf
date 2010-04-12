@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xcpd.cxf;
 
+import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
@@ -45,7 +46,7 @@ public class XcpdProducerAuditInterceptor extends AuditInterceptor {
 
     
     @Override
-    protected void process(Message message) throws Exception {
+    protected void process(SoapMessage message) throws Exception {
         WsAuditDataset auditDataset = getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
     }

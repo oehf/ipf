@@ -20,9 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.message.AbstractWrappedMessage;
+import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Exchange;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
@@ -81,7 +80,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      *      an audit dataset instance, or <code>null</code> when this instance   
      *      could be neither obtained nor created from scratch.
      */
-    protected WsAuditDataset getAuditDataset(Message message) {
+    protected WsAuditDataset getAuditDataset(SoapMessage message) {
         WsAuditDataset auditDataset = (WsAuditDataset) message.getExchange().get(CXF_EXCHANGE_KEY);
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
@@ -110,13 +109,12 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      * Returns <code>true</code> when the given XCF message is an inbound one
      * (i.e. input or input-fault).
      */
-    protected static boolean isInboundMessage(Message message) {
+    protected static boolean isInboundMessage(SoapMessage message) {
         Exchange exchange = message.getExchange();
-        Message wrappedMessage = ((AbstractWrappedMessage) message).getMessage();
         return message == exchange.getInMessage()
                 || message == exchange.getInFaultMessage()
-                || wrappedMessage == exchange.getInMessage()
-                || wrappedMessage == exchange.getInFaultMessage();
+                || message.getMessage() == exchange.getInMessage()
+                || message.getMessage() == exchange.getInFaultMessage();
     }
     
     
@@ -137,7 +135,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      *      target audit dataset.
      */
     protected static void extractUserIdFromWSAddressing(
-            Message message, 
+            SoapMessage message, 
             boolean isInbound, 
             boolean inverseWsaDirection,
             WsAuditDataset auditDataset) 
@@ -172,7 +170,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      * Seems to be of marginal nature.
      */
     protected static void extractUserNameFromWSSecurity(
-            Message message, 
+            SoapMessage message, 
             WsAuditDataset auditDataset) 
     {
         // get <soapenv:Header> element
@@ -200,7 +198,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      * Extracts service URI and client IP address from the servlet request.
      */
     protected static void extractAddressesFromServletRequest(
-            Message message,
+            SoapMessage message,
             WsAuditDataset auditDataset) 
     {
         HttpServletRequest request = 

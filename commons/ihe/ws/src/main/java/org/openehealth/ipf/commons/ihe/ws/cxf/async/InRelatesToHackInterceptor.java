@@ -23,74 +23,78 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.binding.soap.interceptor.ReadHeadersInterceptor;
 import org.apache.cxf.headers.Header;
-import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.phase.Phase;
-import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
-import org.apache.cxf.ws.addressing.ContextUtils;
-import org.apache.cxf.ws.addressing.JAXWSAConstants;
-import org.apache.cxf.ws.addressing.RelatesToType;
-import org.apache.cxf.ws.addressing.soap.MAPCodec;
+import org.apache.cxf.ws.addressing.Names;
+import org.apache.cxf.ws.addressing.VersionTransformer;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 /**
- * CXF interceptor which removes the partial response flag from
- * incoming messages in order to let the CXF client unlock
- * the producer which is waiting for the response.
+ * CXF interceptor which renames the RelatesTo WSA header in order to prevent
+ * correlation failure in {@link org.apache.cxf.ws.addressing.soap.MAPCodec},
+ * (line #779 for CXF 2.2.6).
  * 
  * @author Dmytro Rud
  */
 public class InRelatesToHackInterceptor extends AbstractSoapInterceptor {
+
+    /**
+     * New local name of the WSA RelatesTo header.  Namespace URI will remain unchanged. 
+     */
+    public static final String CONCEAL_NAME = "_RelatesTo";
     
-    private static final QName RELATES_TO_QNAME = new QName(JAXWSAConstants.NS_WSA, "RelatesTo");
+    private static final VersionTransformer WSA_VERSION_HELPER = new VersionTransformer(); 
     
     public InRelatesToHackInterceptor() {
         super(Phase.READ);
         addAfter(ReadHeadersInterceptor.class.getName());
     }
 
+    
     @Override
     public void handleMessage(SoapMessage message) {
-        /* 
-         * See line #779 in org.apache.cxf.ws.addressing.soap.MAPCodec.java (CXF 2.2.6)
-         */
         List<Header> headers = message.getHeaders();
-        for (Header header : headers) {
-            if (RELATES_TO_QNAME.equals(header.getName())) { 
-                message.setContent(Header.class, header);
-                headers.remove(header);
-                message.getMessage().getInterceptorChain().add(new InRelatesToHackEndingInterceptor());
-                return;
+        for (int i = 0; i < headers.size(); ++i) {
+            Header header = headers.get(i);
+            QName name = header.getName();
+            if (Names.WSA_RELATESTO_NAME.equals(name.getLocalPart())
+                    && WSA_VERSION_HELPER.isSupported(name.getNamespaceURI())) 
+            {
+                Object o = header.getObject();
+                if (o instanceof Element) {
+                    Node child = ((Element) o).getFirstChild();
+                    if (child instanceof Text) {
+                        header.setName(new QName(name.getNamespaceURI(), CONCEAL_NAME));
+                        header.setObject(((Text) child).getNodeValue());
+                    }
+                }
+                break;
             }
         }
     }
     
 
-    // TODO: do we really need to restore the header?
-    private class InRelatesToHackEndingInterceptor extends AbstractSoapInterceptor {
-        public InRelatesToHackEndingInterceptor() {
-            super(Phase.PRE_PROTOCOL);
-            addAfter(MAPCodec.class.getName());
-        }
-
-        @Override
-        public void handleMessage(SoapMessage message) throws Fault {
-            Header header = message.getContent(Header.class);
-            if (header == null) {
-                return;
+    /**
+     * Helper method &mdash; retrieve message ID from modified WS-Addressing header 
+     * contained in the given headers list.
+     * 
+     * @param headers
+     *      list of SOAP headers, may be <code>null</code>.
+     */
+    public static String retrieveMessageId(List<Header> headers) {
+        if (headers != null) {
+            for (Header header : headers) {
+                QName qname = header.getName();
+                if (CONCEAL_NAME.equals(qname.getLocalPart())
+                        && WSA_VERSION_HELPER.isSupported(qname.getNamespaceURI())) 
+                {
+                    return (String) header.getObject();
+                }
             }
-
-            message.getHeaders().add(header);
-            
-            Element element = (Element) header.getObject();
-            String messageId = element.getTextContent();
-            RelatesToType relatesTo = new RelatesToType();
-            relatesTo.setValue(messageId);
-            AddressingPropertiesImpl maps = ContextUtils.retrieveMAPs(message, false, false, false);
-            maps.setRelatesTo(relatesTo);
-
-            message.removeContent(Header.class);
         }
+        return null;
     }
-    
+
 }
 

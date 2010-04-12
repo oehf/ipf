@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.ws.async;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.xml.ws.BindingProvider;
 
@@ -39,19 +40,6 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     
     /**
-     * Name of incoming Camel header where the user should store the URL
-     * of asynchronous response endpoint (WS-Addressing header "ReplyTo").  
-     */
-    public static final String WSA_REPLYTO_HEADER_NAME = "ipf.wsa.ReplyTo";
-    
-    /**
-     * Name of incoming Camel header where the user should store 
-     * the optional correlation key.  
-     */
-    public static final String CORRELATION_KEY_HEADER_NAME = "ipf.correlation.key";
-    
-    
-    /**
      * Constructs the producer.
      * @param endpoint
      *          the asynchronous endpoint creating this producer.
@@ -61,27 +49,28 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     public AsynchronousItiProducer(AsynchronousItiEndpoint endpoint, ItiClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
-    
-    /**
-     * Returns unique ID of the given message for using in correlation.
-     */
-    abstract protected String getMessageIdForCorrelation(String body);
 
-    /**
-     * Enriches the given request exchange from the request context data.
-     */
-    abstract protected  void enrichRequestExchange(Exchange exchange, Map<String, Object> requestContext);
-    
+
     /**
      * Calls the remote service.
      */
     abstract protected String call(Object client, String body);
-    
+
+
+    /**
+     * Enriches the given request exchange from the request context data.
+     */
+    protected void enrichRequestExchange(Exchange exchange, Map<String, Object> requestContext) {
+        // does nothing per default
+    }
+
     /**
      * Enriches the given response message from the request context data.
      */
-    abstract protected void enrichResponseMessage(Message message, Map<String, Object> responseContext);
-    
+    protected void enrichResponseMessage(Message message, Map<String, Object> responseContext) {
+        // does nothing per default
+    }
+
 
     @Override
     protected void callService(Exchange exchange) {
@@ -96,18 +85,18 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
         enrichRequestExchange(exchange, requestContext);
         
         // get and analyse WS-Addressing asynchrony configuration
-        String replyToUri = exchange.getIn().getHeader(WSA_REPLYTO_HEADER_NAME, String.class);
+        String replyToUri = exchange.getIn().getHeader(
+                AsynchronousItiEndpoint.WSA_REPLYTO_HEADER_NAME, String.class);
         boolean async = (replyToUri != null) && (! replyToUri.isEmpty());
 
-        // for asynchronous interaction: prepare WSA headers
+        // for asynchronous interaction: configure WSA headers
         if (async) {
-            setWSAReplyToHeader(replyToUri, requestContext);
-            
             AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getEndpoint();
-            String correlationKey = 
-                exchange.getIn().getHeader(CORRELATION_KEY_HEADER_NAME, String.class);
+            String messageId = configureWSAHeaders(replyToUri, requestContext);
+            String correlationKey = exchange.getIn().getHeader(
+                    AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, String.class);
             endpoint.getCorrelator().put(
-                    getMessageIdForCorrelation(body), 
+                    messageId, 
                     endpoint.getEndpointUri(),
                     correlationKey);
         }
@@ -138,7 +127,6 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     
     /**
      * Request context is shared among subsequent requests, so we have to clean it.
-     * @param requestContext
      */
     protected void cleanRequestContext(Map<String, Object> requestContext) {
         requestContext.remove(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES);
@@ -146,20 +134,35 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     
     
     /**
-     * Initializes a WS-Addressing ReplyTo header and stores it into the given message context.
+     * Initializes WS-Addressing headers ReplyTo (to the value provided 
+     * via parameter) and MessageID (to a randomly generated value) and  
+     * stores them into the given message context.
      * 
      * @param replyToUri
-     *          URI to which the response should be sent  
+     *            URI to which the response should be sent.
      * @param context
-     *          SOAP message context 
+     *            SOAP message context.
+     * @return the generated message ID.
      */
-    protected void setWSAReplyToHeader(String replyToUri, Map<String, Object> context) {
-        AttributedURIType uri = new AttributedURIType();
-        uri.setValue(replyToUri);
+    protected String configureWSAHeaders(String replyToUri, Map<String, Object> context) {
+        // ReplyTo header
+        AttributedURIType uri1 = new AttributedURIType();
+        uri1.setValue(replyToUri);
         EndpointReferenceType endpointReference = new EndpointReferenceType();
-        endpointReference.setAddress(uri);
+        endpointReference.setAddress(uri1);
+        
+        // MessageID header
+        AttributedURIType uri2 = new AttributedURIType();
+        String messageId = UUID.randomUUID().toString();
+        uri2.setValue(messageId);
+        
+        // header container
         AddressingPropertiesImpl maps = new AddressingPropertiesImpl();
         maps.setReplyTo(endpointReference);
+        maps.setMessageID(uri2);
         context.put(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES, maps);
+
+        // return generated message ID
+        return messageId;
     }
 }

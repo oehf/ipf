@@ -35,7 +35,7 @@ public class DefaultItiWebService {
      * @param body
      *          contents of the in-message body to be processed.
      * @param headers
-     *          additional in-message headers.
+     *          additional in-message headers (can be <code>null</code>).
      * @param exchangePattern
      *          pattern of the exchange put into the route.
      * @return the resulting exchange.

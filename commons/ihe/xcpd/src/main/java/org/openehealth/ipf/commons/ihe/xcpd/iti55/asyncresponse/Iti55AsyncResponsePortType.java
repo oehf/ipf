@@ -24,7 +24,7 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.xml.ws.Action;
 
 /**
- * SEI for asynchronous XCPD response receiver. 
+ * SEI for asynchronous ITI-55 response receiver. 
  * @author Dmytro Rud
  */
 @WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_Response_PortType")
