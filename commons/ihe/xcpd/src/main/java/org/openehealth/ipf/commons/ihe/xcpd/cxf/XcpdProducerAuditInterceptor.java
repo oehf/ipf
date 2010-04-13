@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xcpd.cxf;
 
+import java.util.List;
+
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 
 
 /**
@@ -47,8 +50,12 @@ public class XcpdProducerAuditInterceptor extends AuditInterceptor {
     
     @Override
     protected void process(SoapMessage message) throws Exception {
-        WsAuditDataset auditDataset = getAuditDataset(message);
+        XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
+        
+        if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
+            auditDataset.setRequestPayload((String) message.getContent(List.class).get(0));
+        }
     }
 
 }

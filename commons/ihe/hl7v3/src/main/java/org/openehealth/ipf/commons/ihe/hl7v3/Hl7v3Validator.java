@@ -43,8 +43,7 @@ public class Hl7v3Validator implements Validator<String, Collection<List<String>
         "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))"    // open tag of the root element
     );
 
-    private static final String XSD_ROOT_PATH = "schema/HL7V3/NE2008/multicacheschemas/";
-    private static final String SCHEMATRON_ROOT_PATH = "schematron/"; 
+    private static final String HL7V3_SCHEMAS_PATH = "HL7V3/NE2008/multicacheschemas/";
     
     private static final XsdValidator XSD_VALIDATOR = new XsdValidator(Hl7v3Validator.class.getClassLoader());
     private static final SchematronValidator SCHEMATRON_VALIDATOR = new SchematronValidator();
@@ -56,11 +55,18 @@ public class Hl7v3Validator implements Validator<String, Collection<List<String>
      * @param message
      *            a String which should contain an HL7 v3 XML document.
      * @param profiles
-     *            a collection of string lists, where each <tt>list[0]</tt> 
-     *            is a name of valid XML root element (with suffix), and
-     *            <tt>list[1]</tt> is either a name of Schematron profile for
-     *            the corresponding message, or <tt>null</tt>, when only XML
-     *            Schema-based validation should be performed.
+     *            a collection of string tuples which obey to the following format:
+     *            <ol>
+     *              <li> name of valid XML root element (with suffix),
+     *              <li> either a name of Schematron profile for the corresponding 
+     *                   message, or <tt>null</tt>, when only XML Schema-based 
+     *                   validation should be performed,
+     *              <li> (optional) name of XML schema file relative to 
+     *                   "classpath:/schema/", when it does not correspond
+     *                   to the root element name, or when the latter does
+     *                   not belong to HL7 v3 (as e.g. for ITI-56).
+     *                   Suffix ".xsd" should be omitted.
+     *            </ol>
      * @throws ValidationException
      *             when the message is not valid.
      */
@@ -95,16 +101,19 @@ public class Hl7v3Validator implements Validator<String, Collection<List<String>
         
         // XSD validation
         Source source = getSource(message);
-        String xsdPath = new StringBuilder(XSD_ROOT_PATH)
-            .append(rootElementName)
-            .append(".xsd")
-            .toString();
+        StringBuilder sb = new StringBuilder("schema/");
+        if (profile.size() > 2) {
+            sb.append(profile.get(2));
+        } else {
+            sb.append(HL7V3_SCHEMAS_PATH).append(rootElementName);
+        }
+        String xsdPath = sb.append(".xsd").toString();
         XSD_VALIDATOR.validate(source, xsdPath);
 
         // Schematron validation, if configured
         if (profile.get(1) != null) {
             source = getSource(message);
-            String schematronPath = new StringBuilder(SCHEMATRON_ROOT_PATH)
+            String schematronPath = new StringBuilder("schematron/")
                 .append(profile.get(1))
                 .append(".sch.xml")
                 .toString();

@@ -15,22 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xcpd.iti55;
 
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
 
 /**
  * ATNA Audit dataset for ITI-55.
  * @author Dmytro Rud
  */
-public class Iti55AuditDataset extends WsAuditDataset {
+public class Iti55AuditDataset extends XcpdAuditDataset {
 
     private String queryId;
     private String homeCommunityId;
     private String[] patientIds;
-    
-    // as opposed to XDS, we determine outcome code as part of audit dataset 
-    // enrichment, in order to not parse the payload twice.
-    private RFC3881EventOutcomeCodes outcomeCode;
     
     public Iti55AuditDataset(boolean serverSide) {
         super(serverSide);
@@ -58,13 +53,5 @@ public class Iti55AuditDataset extends WsAuditDataset {
 
     public void setPatientIds(String[] patientIds) {
         this.patientIds = patientIds;
-    }
-
-    public void setOutcomeCode(RFC3881EventOutcomeCodes outcomeCode) {
-        this.outcomeCode = outcomeCode;
-    }
-
-    public RFC3881EventOutcomeCodes getOutcomeCode() {
-        return outcomeCode;
     }
 }

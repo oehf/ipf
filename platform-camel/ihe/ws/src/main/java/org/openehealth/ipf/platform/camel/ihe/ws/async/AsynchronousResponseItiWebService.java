@@ -51,15 +51,22 @@ public class AsynchronousResponseItiWebService extends DefaultItiWebService {
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
         List<Header> messageHeaders = (List<Header>) messageContext.get(Header.HEADER_LIST);        
         String messageId = InRelatesToHackInterceptor.retrieveMessageId(messageHeaders);
+
         if (messageId != null) {
             AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getConsumer().getEndpoint();
+            
+            // expose user-defined correlation key as message header
             String correlationKey = endpoint.getCorrelator().getCorrelationKey(messageId);
             if (correlationKey != null) {
                 if (headers == null) {
+                    // NB: it shouldn't be a non-modifiable singleton map...
                     headers = new HashMap<String, Object>();
                 }
                 headers.put(AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, correlationKey);
             }
+            
+            // correlation data in not necessary any more
+            endpoint.getCorrelator().delete(messageId);
         } else {
             LOG.error("Cannot retrieve WSA RelatesTo header, message correlation not possible");
         }

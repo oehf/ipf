@@ -39,7 +39,7 @@ public class Iti55Producer extends AsynchronousItiProducer {
      *          the factory for clients to produce messages for the service.              
      */
     public Iti55Producer(Iti55Endpoint endpoint, ItiClientFactory clientFactory) {
-        super(endpoint, clientFactory);
+        super(endpoint, clientFactory, false);
     }
     
 

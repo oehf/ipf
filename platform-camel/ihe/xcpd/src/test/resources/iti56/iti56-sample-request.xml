@@ -1,0 +1,6 @@
+<xcpd:PatientLocationQueryRequest 
+    xmlns:xcpd="urn:ihe:iti:xcpd:2009"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  
+    <xcpd:RequestedPatientId root="1.2.840.114350.1.13.99997.2.3412" extension="38273N237"/>
+</xcpd:PatientLocationQueryRequest>

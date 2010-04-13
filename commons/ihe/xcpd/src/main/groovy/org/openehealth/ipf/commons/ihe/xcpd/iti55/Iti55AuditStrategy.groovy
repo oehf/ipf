@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xcpd;
+package org.openehealth.ipf.commons.ihe.xcpd.iti55;
 
 import groovy.util.slurpersupport.GPathResult;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55AuditDataset;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.xml.XmlYielder
@@ -28,7 +29,8 @@ import org.openehealth.ipf.commons.xml.XmlYielder
  * Generic audit strategy for ITI-55 (XCPD).
  * @author Dmytro Rud
  */
-abstract class Iti55AuditStrategy extends WsAuditStrategy {
+abstract class Iti55AuditStrategy extends XcpdAuditStrategy {
+    private static final transient Log LOG = LogFactory.getLog(Iti55AuditStrategy.class);
 
     Iti55AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit)
@@ -38,6 +40,11 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
     public WsAuditDataset createAuditDataset() {
         return new Iti55AuditDataset(isServerSide());
     }    
+    
+    
+    public boolean needStoreRequestPayload() {
+        return false
+    }
     
     
     /**
@@ -66,6 +73,7 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
                     RFC3881EventOutcomeCodes.SERIOUS_FAILURE
 
         } catch (Exception e) {
+            LOG.error('Exception in ITI-55 audit strategy', e)
             return RFC3881EventOutcomeCodes.MAJOR_FAILURE
         }
     }
@@ -120,26 +128,9 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
     }
 
     
-    /**
-     * Creates string representation of an HL7v2 CX field from the given HL7v3 id element.
-     */
-    private static String xmlToCx(GPathResult xmlIdNode) {
-        def root = xmlIdNode.@root
-        def extension = xmlIdNode.@extension
-        def assigningAuthority = xmlIdNode.@assigningAuthorityName
-        StringBuilder sb = new StringBuilder()
-            .append(extension)
-            .append('^^^')
-            .append(assigningAuthority)
-            .append('&')
-            .append(root)
-            .append((root || extension) ? '&ISO' : '')
-        return sb.toString()
-    }
-
     private static void addPatientIds(GPathResult source, Set<String> target) {
         for (node in source) {
-            target << xmlToCx(node)
+            target << Hl7v3Utils.iiToCx(node)
         }
     }
 
@@ -151,7 +142,7 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
     private static String extractQueryByParameterElement(GPathResult xml) {
         def output = new ByteArrayOutputStream()
         def builder = Hl7v3Utils.getBuilder(output)
-        XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, 'urn:hl7-org:v3')
+        XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, Hl7v3Utils.HL7V3_NSURI)
         return output.toString()
     }
     

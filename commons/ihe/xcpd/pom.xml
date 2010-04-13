@@ -14,7 +14,8 @@
     <properties>
         <osgi.export.pkg>
             org.openehealth.ipf.commons.ihe.xcpd.*,
-            wsdl.iti55
+            wsdl.iti55,
+            wsdl.iti56
         </osgi.export.pkg>
         <osgi.fragment.host>org.apache.cxf.bundle</osgi.fragment.host>
     </properties>

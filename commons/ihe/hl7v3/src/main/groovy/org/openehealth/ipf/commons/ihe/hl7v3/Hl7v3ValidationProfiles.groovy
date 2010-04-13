@@ -34,6 +34,7 @@ class Hl7v3ValidationProfiles {
               ['QUQI_IN000003UV01', null],
               ['QUQI_IN000003UV01_Cancel', null]],
         55 : [['PRPA_IN201305UV02', 'iti55/PRPA_IN201305UV02']],
+        56 : [['PatientLocationQueryRequest', null, 'IHE/XCPD_PLQ']],
               ]
      
     /**
@@ -46,6 +47,7 @@ class Hl7v3ValidationProfiles {
         47 : [['PRPA_IN201306UV02', 'iti47/PRPA_IN201306UV02'],
               ['MCCI_IN000002UV01', null]],
         55 : [['PRPA_IN201306UV02', 'iti55/PRPA_IN201306UV02']],
+        56 : [['PatientLocationQueryResponse', null, 'IHE/XCPD_PLQ']],
               ]
 
 }

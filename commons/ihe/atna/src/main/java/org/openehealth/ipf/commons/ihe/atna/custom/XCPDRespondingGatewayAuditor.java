@@ -28,6 +28,7 @@ import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
  * 
  * Supports sending ATNA Audit messages for the following IHE transactions:
  *  - ITI-55 
+ *  - ITI-56
  * 
  * @author <a href="mailto:mattadav@us.ibm.com">Matthew Davis</a>
  * @author <a href="mailto:unixoid@web.de">Dmytro Rud</a>
@@ -46,11 +47,8 @@ public class XCPDRespondingGatewayAuditor extends PIXAuditor
 	/**
 	 * Audits an ITI-55 XCPD Cross-Gateway Patient Discovery Query 
 	 * event for XCPD Initiating Gateway actors.
-	 * 
-	 * @param eventOutcome The event outcome indicator
-	 * @param respondingGatewayUri The URI of the XCPD Responding Gateway being accessed
 	 */
-	public void auditXCPDPatientDiscoveryEvent(
+	public void auditXCPDPatientDiscoveryQueryEvent(
 	        RFC3881EventOutcomeCodes eventOutcome,
 	        String replyToUri,
 	        String initiatingGatewayIp,
@@ -66,7 +64,7 @@ public class XCPDRespondingGatewayAuditor extends PIXAuditor
 
         // Create query event
         QueryEvent queryEvent = new QueryEvent(
-                true, 
+                false, 
                 eventOutcome, 
                 new CustomIHETransactionEventTypeCodes.CrossGatewayPatientDiscovery());
 
@@ -107,4 +105,56 @@ public class XCPDRespondingGatewayAuditor extends PIXAuditor
         audit(queryEvent);
 	}
 	
+	
+    /**
+     * Audits an ITI-56 XCPD Patient Location Query 
+     * event for XCPD Initiating Gateway actors.
+     */
+    public void auditXCPDPatientLocationQueryEvent(
+            RFC3881EventOutcomeCodes eventOutcome,
+            String replyToUri,
+            String initiatingGatewayIp,
+            String respondingGatewayUri, 
+            String queryPayload,
+            String patientId)
+    {
+        if (!isAuditorEnabled()) {
+            return;
+        }
+
+        // Create query event
+        Iti56QueryEvent queryEvent = new Iti56QueryEvent(
+                false, 
+                eventOutcome, 
+                new CustomIHETransactionEventTypeCodes.PatientLocationQuery());
+
+        queryEvent.setAuditSourceId(
+                getAuditSourceId(), 
+                getAuditEnterpriseSiteId());
+        
+        // Set the source active participant
+        queryEvent.addSourceActiveParticipant(
+                replyToUri, 
+                null, 
+                null, 
+                initiatingGatewayIp, 
+                true);
+        
+        // Set the destination active participant
+        queryEvent.addDestinationActiveParticipant(
+                respondingGatewayUri, 
+                null,
+                null,
+                EventUtils.getAddressForUrl(respondingGatewayUri, false),
+                false);
+        
+        // Add a patient participant object for the patient id
+        queryEvent.addPatientParticipantObject(patientId);
+        
+        // Add the Query parameters object
+        queryEvent.addQueryParametersObject(queryPayload);
+        
+        audit(queryEvent);
+    }
+    
 }

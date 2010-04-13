@@ -13,28 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.xcpd;
+package org.openehealth.ipf.commons.ihe.xcpd.iti56;
 
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55AuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
- * Client-side audit strategy for ITI-55 (XCPD).
+ * Client-side audit strategy for ITI-56 (XCPD).
  * @author Dmytro Rud
  */
-class Iti55ClientAuditStrategy extends Iti55AuditStrategy {
+class Iti56ClientAuditStrategy extends Iti56AuditStrategy {
 
     private static final String[] NECESSARY_FIELD_NAMES = [
-       'UserId', 'ServiceEndpointUrl', 'Payload', 
-       'QueryId', 'HomeCommunityId'            
+       'UserId', 'ServiceEndpointUrl', 'Payload', 'PatientId' 
     ]
 
     
-    Iti55ClientAuditStrategy(boolean allowIncompleteAudit) {
+    Iti56ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit)
     }
     
@@ -44,14 +40,12 @@ class Iti55ClientAuditStrategy extends Iti55AuditStrategy {
             RFC3881EventOutcomeCodes eventOutcomeCode, 
             WsAuditDataset auditDataset) throws Exception 
     {
-        AuditorManager.getXCPDInitiatingGatewayAuditor().auditXCPDPatientDiscoveryEvent(
+        AuditorManager.getXCPDInitiatingGatewayAuditor().auditXCPDPatientLocationQueryEvent(
                 auditDataset.outcomeCode,
                 auditDataset.userId,
                 auditDataset.serviceEndpointUrl,
-                auditDataset.payload,
-                auditDataset.queryId,
-                auditDataset.homeCommunityId,
-                auditDataset.patientIds)
+                auditDataset.requestPayload,
+                auditDataset.patientId)
     }
 
     @Override

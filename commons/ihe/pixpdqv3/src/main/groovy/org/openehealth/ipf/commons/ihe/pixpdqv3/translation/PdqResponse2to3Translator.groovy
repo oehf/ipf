@@ -257,7 +257,9 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
     void createQueryMatchObservation(MarkupBuilder builder, GroupAdapter grp) {
         builder.queryMatchObservation(classCode: 'COND', moodCode: 'EVN') {
             code(code: 'IHE_PDQ')
-            value('xsi:type': 'INT', value: this.defaultMatchQuality)
+            value('xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', 
+                  'xsi:type': 'INT', 
+                  value: this.defaultMatchQuality)
         }
     }
 }

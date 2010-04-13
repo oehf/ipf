@@ -19,20 +19,22 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 
 
 /**
- * CXF interceptor which stores the URL of the target endpoint and
- * client IP address into audit dataset.  
+ * CXF interceptor which stores the URL of the target endpoint, 
+ * the client IP address, and the request payload into audit dataset.  
  * <p>
  * Usable only on server-side.
  *
  * @author Dmytro Rud
  */
 public class XcpdServiceAuditInterceptor extends AuditInterceptor {
-
+    
     /**
      * Constructor.
      * 
@@ -41,7 +43,8 @@ public class XcpdServiceAuditInterceptor extends AuditInterceptor {
      */
     public XcpdServiceAuditInterceptor(WsAuditStrategy auditStrategy) {
         // must be executed before the splitting of the the message flow into sync ack + async response  
-        super(Phase.RECEIVE, auditStrategy);
+        super(Phase.PRE_STREAM, auditStrategy);
+        addAfter(InPayloadExtractorInterceptor.class.getName());
     }
 
     
@@ -52,8 +55,12 @@ public class XcpdServiceAuditInterceptor extends AuditInterceptor {
             return;
         }
 
-        WsAuditDataset auditDataset = getAuditDataset(message);
+        XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
+        
+        if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
+            auditDataset.setRequestPayload(message.getContent(String.class));
+        }
     }
 
 }

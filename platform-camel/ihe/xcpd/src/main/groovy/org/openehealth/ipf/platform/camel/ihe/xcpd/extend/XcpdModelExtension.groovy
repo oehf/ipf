@@ -25,5 +25,7 @@ class XcpdModelExtension {
     static extensions = {
         ValidatorAdapterDefinition.metaClass.iti55Request  = { -> XcpdExtension.iti55Request(delegate) }        
         ValidatorAdapterDefinition.metaClass.iti55Response = { -> XcpdExtension.iti55Response(delegate) }
+        ValidatorAdapterDefinition.metaClass.iti56Request  = { -> XcpdExtension.iti56Request(delegate) }        
+        ValidatorAdapterDefinition.metaClass.iti56Response = { -> XcpdExtension.iti56Response(delegate) }
     }
 }

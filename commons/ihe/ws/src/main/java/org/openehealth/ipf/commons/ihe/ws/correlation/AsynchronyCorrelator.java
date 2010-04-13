@@ -20,10 +20,12 @@ package org.openehealth.ipf.commons.ihe.ws.correlation;
  * @author Dmytro Rud
  */
 public interface AsynchronyCorrelator {
-    void put(String messageId, String serviceEndpoint, String correlationKey);
+    void put(String messageId, String serviceEndpoint, String correlationKey, String requestPayload);
     
     String getServiceEndpoint(String messageId);
     String getCorrelationKey(String messageId);
-    
+    String getRequestPayload(String messageId);
+
+    boolean delete(String messageId);
     void purge(long timestamp);
 }

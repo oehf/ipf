@@ -46,6 +46,24 @@ class XcpdExtension {
          return validationLogic(self, 55, false);
      }
 
+     /**
+      * Validates an ITI-56 request
+      * @ipfdoc IHE Support#validation xcpd
+      * @dsl platform-camel-ihe-xcpd
+      */
+     public static ValidatorAdapterDefinition iti56Request(ValidatorAdapterDefinition self) {
+         return validationLogic(self, 56, true);
+     }
+     
+     /**
+      * Validates an ITI-56 response
+      * @ipfdoc IHE Support#validation xcpd
+      * @dsl platform-camel-ihe-xcpd
+      */
+     public static ValidatorAdapterDefinition iti56Response(ValidatorAdapterDefinition self) {
+         return validationLogic(self, 56, false);
+     }
+
      
      private static ValidatorAdapterDefinition validationLogic(
              ValidatorAdapterDefinition self, 

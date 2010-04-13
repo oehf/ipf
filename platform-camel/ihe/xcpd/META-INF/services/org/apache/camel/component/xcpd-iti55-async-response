@@ -7,6 +7,6 @@
 #    KIND, either express or implied. See the License for the specific
 #    language governing permissions and limitations under the License.
 
-# Camel registration for the xds-iti44 component
+# Camel registration for the xds-iti55 component
  
 class=org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.asyncresponse.Iti55AsyncResponseComponent

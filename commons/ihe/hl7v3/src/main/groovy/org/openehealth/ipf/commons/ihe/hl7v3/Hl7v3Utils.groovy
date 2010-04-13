@@ -153,5 +153,22 @@ class Hl7v3Utils {
             name(nullFlavor: 'UNK')
         }
     }
+
     
+    /**
+     * Creates string representation of an HL7v2 CX field from the given HL7v3 id element.
+     */
+    static String iiToCx(GPathResult xmlIdNode) {
+        def root = xmlIdNode.@root
+        def extension = xmlIdNode.@extension
+        def assigningAuthority = xmlIdNode.@assigningAuthorityName
+        StringBuilder sb = new StringBuilder()
+            .append(extension)
+            .append('^^^')
+            .append(assigningAuthority)
+            .append('&')
+            .append(root)
+            .append((root || extension) ? '&ISO' : '')
+        return sb.toString()
+    }
 }

@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiProducer;
-import static org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55TestUtils.*
+import static org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils.*
 
 /**
  * Tests for ITI-55.
@@ -38,12 +38,12 @@ class TestIti55 extends StandardTestContainer {
      final String SERVICE1_URI =    "xcpd-iti55://localhost:${port}/iti55service?correlator=#correlator";
      final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti55service-response";
 
-     static final String REQUEST = readFile('iti55-sample-request.xml')
+     static final String REQUEST = readFile('iti55/iti55-sample-request.xml')
 
      
      @BeforeClass
      static void setUpClass() {
-         startServer(new CXFServlet(), 'iti-55.xml')
+         startServer(new CXFServlet(), 'iti55/iti-55.xml')
      }
 
      
@@ -60,13 +60,13 @@ class TestIti55 extends StandardTestContainer {
       * </ol>
       */
      @Test
-     void testXcpd() {
+     void testIti55() {
          final int N = 5
          int i = 0
          
          N.times {
-             sendXcpd(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
-             sendXcpd(SERVICE1_URI, i++)
+             send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
+             send(SERVICE1_URI, i++)
          }
          
          // wait for completion of asynchronous routes
@@ -79,7 +79,7 @@ class TestIti55 extends StandardTestContainer {
      }
      
 
-     private void sendXcpd(
+     private void send(
              String endpointUri, 
              int n,
              String responseEndpointUri = null) 

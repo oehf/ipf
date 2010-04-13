@@ -20,17 +20,16 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.interceptor.ServiceInvokerInterceptor;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.Phase;
-import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
-import org.apache.cxf.ws.addressing.AttributedURIType;
-import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InRelatesToHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 
 
 /**
@@ -70,6 +69,7 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         super(isClient(asyncReceiver, serverSide) ? Phase.INVOKE : Phase.PREPARE_SEND, auditStrategy);
         if (isClient(asyncReceiver, serverSide)) {
             addAfter(InPayloadInjectorInterceptor.class.getName());
+            addBefore(ServiceInvokerInterceptor.class.getName());
         }
         this.correlator = correlator;
         this.serverSide = serverSide;
@@ -94,7 +94,7 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
             return;
         }
 
-        WsAuditDataset auditDataset = getAuditDataset(message);
+        XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
 
         // extract user ID from WSA "To" header (not "ReplyTo" due to direction inversion!)
         extractUserIdFromWSAddressing(
@@ -110,66 +110,29 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         // determine service address when we are on async receiver 
         // side and have got an async response
         if(asyncReceiver) {
-            String messageId = getWsaMessageId(message,
-                    isClient(asyncReceiver, serverSide),
-                    serverSide);
-            String serviceEndpoint = correlator.getServiceEndpoint(messageId);
-            if (serviceEndpoint == null) {
-                LOG.warn("Unknown async response with target message ID " + messageId);
-            }
-            auditDataset.setServiceEndpointUrl(serviceEndpoint);
+            String messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
+            if (messageId != null) {
+                String serviceEndpoint = correlator.getServiceEndpoint(messageId);
+                if (serviceEndpoint == null) {
+                    LOG.warn("Unknown async response with target message ID " + messageId);
+                }
+                auditDataset.setServiceEndpointUrl(serviceEndpoint);
+                
+                if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
+                    auditDataset.setRequestPayload(correlator.getRequestPayload(messageId));
+                }
+            } else {
+                LOG.error("Cannot determine WSA message ID");
+            } 
         } 
         
         // perform transaction-specific enrichment of the audit dataset 
         getAuditStrategy().enrichDataset(payload, auditDataset);
         
         // perform transaction-specific auditing
-        // 
-        // the first parameter is null because the outcome code 
-        // will be taken from the audit dataset.
+        // (the first parameter is null because the outcome code
+        // will be taken from the audit dataset)
         getAuditStrategy().audit(null, auditDataset);
-    }
-
-
-    /**
-     * Returns WS-Addressing ID of the current message (for direct direction),
-     * or of the message to which this message responds (for inverse direction),
-     * or <code>null</code>, when WS-Addressing headers are missing or incomplete
-     * (should actually not occur).
-     * <p>
-     * WSA message ID is used for message correlation in async transactions.
-     * 
-     * @param message
-     *      CXF message containing WS-Addressing headers.
-     * @param isInbound
-     *      <code>true</code>, when the message is an inbound one.
-     * @param inverseWsaDirection
-     *      <code>true</code>, when the <tt>RelatesTo</tt> WSA header    
-     *      should be used instead of <tt>MessageID</tt>.
-     * @return
-     */
-    protected String getWsaMessageId(SoapMessage message, boolean isInbound, boolean inverseWsaDirection) {
-        String messageId = null;
-        
-        if (inverseWsaDirection) {
-            messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
-        } else {
-            AddressingPropertiesImpl wsaProperties = (AddressingPropertiesImpl) message.get(isInbound ? 
-                    JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_INBOUND : 
-                    JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
-
-            if (wsaProperties != null) {
-                AttributedURIType messageIdHolder = wsaProperties.getMessageID();
-                if (messageIdHolder != null) {
-                    messageId = messageIdHolder.getValue();
-                }
-            }            
-        }
-        
-        if (messageId == null) {
-            LOG.error("Cannot determine WSA message ID");
-        }
-        return messageId;
     }
     
 }

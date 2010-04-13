@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
+package org.openehealth.ipf.platform.camel.ihe.xcpd;
 
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
@@ -23,16 +23,16 @@ import javax.xml.datatype.DatatypeFactory;
 import org.apache.camel.Message;
 import org.apache.commons.io.IOUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-
+import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55Component;
 
 /**
- * Helper functions for ITI-55 tests.
+ * Helper functions for XCPD tests.
  * @author Dmytro Rud
  */
-class Iti55TestUtils {
+class XcpdTestUtils {
 
     static String readFile(String fn) {
-        InputStream stream = Iti55TestUtils.class.classLoader.getResourceAsStream(fn)
+        InputStream stream = XcpdTestUtils.class.classLoader.getResourceAsStream(fn)
         return IOUtils.toString(stream)
     }
     

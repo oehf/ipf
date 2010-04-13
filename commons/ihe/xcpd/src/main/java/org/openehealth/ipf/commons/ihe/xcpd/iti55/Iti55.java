@@ -21,10 +21,10 @@ import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.ihe.xcpd.Iti55ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xcpd.Iti55ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdClientFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdServiceFactory;
+import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55ServerAuditStrategy;
 
 /**
  * Provides access to the service and client factories for ITI-55.

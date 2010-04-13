@@ -1,0 +1,17 @@
+ <xcpd:PatientLocationQueryResponse 
+   xmlns:xcpd="urn:ihe:iti:xcpd:2009"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   
+      <xcpd:PatientLocationResponse>
+          <xcpd:HomeCommunityId>urn:oid:1.2.333495.30291</xcpd:HomeCommunityId>
+          <xcpd:CorrespondingPatientId root="1.2.840.114350.1.13.99997.12" extension="38273N237"/>
+          <xcpd:RequestedPatientId root="1.2.840.114350.1.13.99997.2.3412" extension="38273N237"/>
+      </xcpd:PatientLocationResponse>
+   
+      <xcpd:PatientLocationResponse>
+          <xcpd:HomeCommunityId>urn:oid:1.555.324.1.2.3</xcpd:HomeCommunityId>
+          <xcpd:CorrespondingPatientId root="1.555.324.1.2.3.12" extension="7382931"/>
+          <xcpd:RequestedPatientId root="1.2.840.114350.1.13.99997.2.3412" extension="38273N237"/>
+      </xcpd:PatientLocationResponse>
+      
+  </xcpd:PatientLocationQueryResponse>

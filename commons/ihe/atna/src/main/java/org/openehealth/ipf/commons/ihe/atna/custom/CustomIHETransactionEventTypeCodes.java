@@ -19,13 +19,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCod
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 /**
- * Audit Event ID codes for IHE Transactions
- * 
- * @author <a href="mailto:mattadav@us.ibm.com">Matthew Davis</a>
- * @since Eclipse OHF IHE 0.3.0
+ * Audit Event ID codes for XCPD Transactions
  */
-public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType
-{
+public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType {
 
     /**
      * "IHE Transactions","ITI-55","Cross Gateway Patient Discovery"
@@ -35,6 +31,17 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType
         public CrossGatewayPatientDiscovery()
         {
             super("ITI-55", "Cross Gateway Patient Discovery");
+        }   
+    }
+
+    /**
+     * "IHE Transactions","ITI-56","Patient Location Query"
+     */
+    public static final class PatientLocationQuery extends IHETransactionEventTypeCodes
+    {
+        public PatientLocationQuery()
+        {
+            super("ITI-56", "Patient Location Query");
         }   
     }
 

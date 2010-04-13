@@ -30,8 +30,8 @@ public class InMemoryAsynchronyCorrelator implements AsynchronyCorrelator {
         Collections.synchronizedMap(new HashMap<String, Item>());
 
     @Override
-    public void put(String messageId, String serviceEndpoint, String correlationKey) {
-        map.put(messageId, new Item(serviceEndpoint, correlationKey));
+    public void put(String messageId, String serviceEndpoint, String correlationKey, String requestPayload) {
+        map.put(messageId, new Item(serviceEndpoint, correlationKey, requestPayload));
     }
     
     @Override
@@ -47,6 +47,17 @@ public class InMemoryAsynchronyCorrelator implements AsynchronyCorrelator {
     }
 
     @Override
+    public String getRequestPayload(String messageId) {
+        Item item = map.get(messageId);
+        return (item != null) ? item.getRequestPayload() : null;
+    }
+
+    @Override
+    public boolean delete(String messageId) {
+        return map.remove(messageId) != null;
+    }
+    
+    @Override
     public void purge(long timestamp) {
         synchronized (map) {
             for (String messageId : map.keySet()) {
@@ -58,17 +69,23 @@ public class InMemoryAsynchronyCorrelator implements AsynchronyCorrelator {
         }
     }
     
-
+    public int size() {
+        return map.size();
+    }
+    
+    
     private static class Item {
         private final String serviceEndpoint;
         private final String correlationKey;
+        private final String requestPayload;
         private final long creationTimestamp;
         
-        public Item(String serviceEndpoint, String correlationKey) {
+        public Item(String serviceEndpoint, String correlationKey, String requestPayload) {
             Validate.notEmpty(serviceEndpoint);
             
             this.serviceEndpoint = serviceEndpoint;
             this.correlationKey = correlationKey;
+            this.requestPayload = requestPayload;
             this.creationTimestamp = System.currentTimeMillis();
         }
 
@@ -78,6 +95,10 @@ public class InMemoryAsynchronyCorrelator implements AsynchronyCorrelator {
 
         public String getCorrelationKey() {
             return correlationKey;
+        }
+
+        public String getRequestPayload() {
+            return requestPayload;
         }
 
         public long getCreationTimestamp() {

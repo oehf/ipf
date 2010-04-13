@@ -26,7 +26,6 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
  * @author Dmytro Rud
  */
 public class XCPDAuditTest extends TestCase {
-
     
     @Override
     protected void setUp() throws Exception {
@@ -35,8 +34,9 @@ public class XCPDAuditTest extends TestCase {
         AuditorModuleContext.getContext().getConfig().setAuditRepositoryPort(514);
     }
 
-    public void testXcpdInitiatingGatewayAudit() {
-        new XCPDInitiatingGatewayAuditor().auditXCPDPatientDiscoveryEvent(
+    
+    public void testIti55InitiatingGatewayAudit() {
+        new XCPDInitiatingGatewayAuditor().auditXCPDPatientDiscoveryQueryEvent(
                 RFC3881EventOutcomeCodes.SUCCESS,
                 "http://141.44.162.126:8090/services/iti55-response",
                 "http://www.icw.int/pxs/iti55-service",
@@ -46,11 +46,13 @@ public class XCPDAuditTest extends TestCase {
                 new String[] {
                         "1234^^^&1.2.3.4.5.6&ISO",
                         "durak^^^&6.7.8.9.10&KRYSO"
-                });
+                }
+            );
     }
 
-    public void testXcpdRespondingGatewayAudit() {
-        new XCPDRespondingGatewayAuditor().auditXCPDPatientDiscoveryEvent(
+    
+    public void testIti55RespondingGatewayAudit() {
+        new XCPDRespondingGatewayAuditor().auditXCPDPatientDiscoveryQueryEvent(
                 RFC3881EventOutcomeCodes.SUCCESS,
                 "http://141.44.162.126:8090/services/iti55-response",
                 "http://requestorUri",
@@ -61,7 +63,30 @@ public class XCPDAuditTest extends TestCase {
                 new String[] {
                         "1234^^^&1.2.3.4.5.6&ISO",
                         "durak^^^&6.7.8.9.10&KRYSO"
-                });
+                }
+            );
     }
 
+    
+    public void testIti56InitiatingGatewayAudit() {
+        new XCPDInitiatingGatewayAuditor().auditXCPDPatientLocationQueryEvent(
+                RFC3881EventOutcomeCodes.SUCCESS,
+                "http://141.44.162.126:8090/services/iti56-response",
+                "http://www.icw.int/pxs/iti56-service",
+                "<query><kakao /></query>", 
+                "31415926^^^&1.2.3.4.5.6&ISO"
+            );
+    }
+
+    
+    public void testIti56RespondingGatewayAudit() {
+        new XCPDRespondingGatewayAuditor().auditXCPDPatientLocationQueryEvent(
+                RFC3881EventOutcomeCodes.SUCCESS,
+                "http://141.44.162.126:8090/services/iti56-response",
+                "http://requestorUri",
+                "http://www.icw.int/pxs/iti56-service",
+                "<query><kakao /></query>", 
+                "31415927^^^&1.2.3.4.5.6&ISO"
+            );
+    }
 }

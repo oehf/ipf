@@ -20,8 +20,8 @@ import javax.xml.namespace.QName;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.ihe.xcpd.Iti55ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAsyncResponseServiceFactory;
+import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55ClientAuditStrategy;
 
 /**
  * Provides access to the service factory for ITI-55 async response.

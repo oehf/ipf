@@ -30,6 +30,7 @@ import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
@@ -40,14 +41,24 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     
     /**
+     * Whether request payload should be stored in the asynchrony correlator. 
+     */
+    private final boolean needStoreRequestPayload;
+    
+    /**
      * Constructs the producer.
      * @param endpoint
      *          the asynchronous endpoint creating this producer.
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public AsynchronousItiProducer(AsynchronousItiEndpoint endpoint, ItiClientFactory clientFactory) {
+    public AsynchronousItiProducer(
+            AsynchronousItiEndpoint endpoint, 
+            ItiClientFactory clientFactory,
+            boolean needStoreRequestPayload) 
+    {
         super(endpoint, clientFactory);
+        this.needStoreRequestPayload = needStoreRequestPayload;
     }
 
 
@@ -87,26 +98,31 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
         // get and analyse WS-Addressing asynchrony configuration
         String replyToUri = exchange.getIn().getHeader(
                 AsynchronousItiEndpoint.WSA_REPLYTO_HEADER_NAME, String.class);
-        boolean async = (replyToUri != null) && (! replyToUri.isEmpty());
-
-        // for asynchronous interaction: configure WSA headers
-        if (async) {
-            AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getEndpoint();
-            String messageId = configureWSAHeaders(replyToUri, requestContext);
-            String correlationKey = exchange.getIn().getHeader(
-                    AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, String.class);
-            endpoint.getCorrelator().put(
-                    messageId, 
-                    endpoint.getEndpointUri(),
-                    correlationKey);
+        if ((replyToUri != null) && replyToUri.trim().isEmpty()) {
+            replyToUri = null;
         }
+
+        // configure WSA headers
+        final String messageId = UUID.randomUUID().toString();
+        configureWSAHeaders(messageId, replyToUri, requestContext);
+
+        // store correlation data
+        AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getEndpoint();
+        AsynchronyCorrelator correlator = endpoint.getCorrelator();
+        correlator.put(
+                messageId, 
+                endpoint.getEndpointUri(),
+                exchange.getIn().getHeader(AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, String.class),
+                needStoreRequestPayload ? body : null);
         
         // invoke
-        exchange.setPattern(async ? ExchangePattern.InOnly : ExchangePattern.InOut);
+        exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
         String result = call(client, body);
         
-        // for synchronous interaction: handle response
-        if (! async) {
+        // for synchronous interaction: drop correlation data and handle response
+        if (replyToUri == null) {
+            correlator.delete(messageId);
+            
             Message responseMessage = Exchanges.resultMessage(exchange);
             Map<String, Object> responseContext = bindingProvider.getResponseContext();
             enrichResponseMessage(responseMessage, responseContext);
@@ -134,35 +150,26 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     
     
     /**
-     * Initializes WS-Addressing headers ReplyTo (to the value provided 
-     * via parameter) and MessageID (to a randomly generated value) and  
-     * stores them into the given message context.
-     * 
-     * @param replyToUri
-     *            URI to which the response should be sent.
-     * @param context
-     *            SOAP message context.
-     * @return the generated message ID.
+     * Initializes WS-Addressing headers MessageID and, optionally, 
+     * ReplyTo, and stores them into the given message context.
      */
-    protected String configureWSAHeaders(String replyToUri, Map<String, Object> context) {
-        // ReplyTo header
-        AttributedURIType uri1 = new AttributedURIType();
-        uri1.setValue(replyToUri);
-        EndpointReferenceType endpointReference = new EndpointReferenceType();
-        endpointReference.setAddress(uri1);
-        
-        // MessageID header
-        AttributedURIType uri2 = new AttributedURIType();
-        String messageId = UUID.randomUUID().toString();
-        uri2.setValue(messageId);
-        
+    private void configureWSAHeaders(String messageId, String replyToUri, Map<String, Object> context) {
         // header container
         AddressingPropertiesImpl maps = new AddressingPropertiesImpl();
-        maps.setReplyTo(endpointReference);
-        maps.setMessageID(uri2);
         context.put(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES, maps);
 
-        // return generated message ID
-        return messageId;
+        // MessageID header
+        AttributedURIType uri = new AttributedURIType();
+        uri.setValue(messageId);
+        maps.setMessageID(uri);
+
+        // ReplyTo header, if provided
+        if (replyToUri != null) {
+            AttributedURIType uri2 = new AttributedURIType();
+            uri2.setValue(replyToUri);
+            EndpointReferenceType endpointReference = new EndpointReferenceType();
+            endpointReference.setAddress(uri2);
+            maps.setReplyTo(endpointReference);
+        }
     }
 }
