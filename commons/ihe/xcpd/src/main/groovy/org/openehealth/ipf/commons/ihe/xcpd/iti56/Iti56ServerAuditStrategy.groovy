@@ -26,7 +26,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 class Iti56ServerAuditStrategy extends Iti56AuditStrategy {
 
     private static final String[] NECESSARY_FIELD_NAMES = [
-        'UserId', 'ServiceEndpointUrl', 'Payload', 
+        'UserId', 'ServiceEndpointUrl', 'RequestPayload', 
         'PatientId', 'ClientIpAddress'            
     ]
     

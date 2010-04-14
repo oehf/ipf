@@ -157,18 +157,24 @@ class Hl7v3Utils {
     
     /**
      * Creates string representation of an HL7v2 CX field from the given HL7v3 id element.
+     * When the element is not well-formed, returns empty string.
      */
     static String iiToCx(GPathResult xmlIdNode) {
-        def root = xmlIdNode.@root
-        def extension = xmlIdNode.@extension
-        def assigningAuthority = xmlIdNode.@assigningAuthorityName
-        StringBuilder sb = new StringBuilder()
-            .append(extension)
-            .append('^^^')
-            .append(assigningAuthority)
-            .append('&')
-            .append(root)
-            .append((root || extension) ? '&ISO' : '')
-        return sb.toString()
+        String root = xmlIdNode.@root.text()
+        String extension = xmlIdNode.@extension.text()
+        String assigningAuthority = xmlIdNode.@assigningAuthorityName.text()
+        
+        if (root || extension || assigningAuthority) {
+            return new StringBuilder()
+                .append(extension)
+                .append('^^^')
+                .append(assigningAuthority)
+                .append('&')
+                .append(root)
+                .append((root || extension) ? '&ISO' : '')
+                .toString()
+        }
+        
+        return ''
     }
 }

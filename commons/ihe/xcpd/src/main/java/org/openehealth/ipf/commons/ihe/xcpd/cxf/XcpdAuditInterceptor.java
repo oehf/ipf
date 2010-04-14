@@ -103,8 +103,10 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
                 serverSide, 
                 auditDataset);
 
-        // save XML payload to the dataset 
-        String payload = (String) message.getContent(List.class).get(0);
+        // save XML payload to the dataset
+        // (list will be null in case of SOAP fault in ITI-56)
+        List<?> list = message.getContent(List.class);
+        String payload = (list == null) ? null : (String) list.get(0); 
         auditDataset.setPayload(payload);
         
         // determine service address when we are on async receiver 

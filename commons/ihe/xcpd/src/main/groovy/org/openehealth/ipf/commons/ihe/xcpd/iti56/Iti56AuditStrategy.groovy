@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xcpd.iti56;
 
 import groovy.util.slurpersupport.GPathResult;
+import groovy.util.slurpersupport.NoChildren;
 import groovy.util.slurpersupport.NodeChild;
 
 import org.apache.commons.logging.Log;
@@ -53,11 +54,12 @@ abstract class Iti56AuditStrategy extends XcpdAuditStrategy {
      * MAJOR_FAILURE on exception.
      * 
      * @param xml
-     *      parsed response message.
+     *      response message as unparsed XML string.
      */
     @Override
-    RFC3881EventOutcomeCodes getEventOutcomeCode(Object xml) {
+    RFC3881EventOutcomeCodes getEventOutcomeCode(Object response) {
         try {
+            GPathResult xml = Hl7v3Utils.slurp(response)
             NodeChild node = (NodeChild) xml
             return ((node.name() == 'PatientLocationQueryResponse') && 
                     (node.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?
@@ -79,13 +81,14 @@ abstract class Iti56AuditStrategy extends XcpdAuditStrategy {
      */
     @Override
     void enrichDataset(Object pojo, WsAuditDataset auditDataset) throws Exception {
-        // patient ID from request
-        GPathResult requestXml = Hl7v3Utils.slurp(auditDataset.requestPayload)
-        auditDataset.patientId = Hl7v3Utils.iiToCx(requestXml.RequestedPatientId)
-        
-        // event outcome code
-        GPathResult responseXml = Hl7v3Utils.slurp(auditDataset.payload)
-        auditDataset.outcomeCode = getEventOutcomeCode(responseXml)
+
+        // payload can be missing when the request is not valid
+        if (auditDataset.requestPayload) {
+            GPathResult patientId = Hl7v3Utils.slurp(auditDataset.requestPayload).RequestedPatientId
+            auditDataset.patientId = Hl7v3Utils.iiToCx(patientId)
+        }
+
+        auditDataset.outcomeCode = getEventOutcomeCode(auditDataset.payload)
     }
 
 }
