@@ -30,7 +30,6 @@ import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
@@ -50,7 +49,10 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
      * @param endpoint
      *          the asynchronous endpoint creating this producer.
      * @param clientFactory
-     *          the factory for clients to produce messages for the service.              
+     *          the factory for clients to produce messages for the service.
+     * @param needStoreRequestPayload
+     *          <code>true</code>, when payload of asynchronous requests 
+     *          should be stored as part of correlation data.              
      */
     public AsynchronousItiProducer(
             AsynchronousItiEndpoint endpoint, 
@@ -102,27 +104,28 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
             replyToUri = null;
         }
 
-        // configure WSA headers
-        final String messageId = UUID.randomUUID().toString();
-        configureWSAHeaders(messageId, replyToUri, requestContext);
-
-        // store correlation data
-        AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getEndpoint();
-        AsynchronyCorrelator correlator = endpoint.getCorrelator();
-        correlator.put(
-                messageId, 
-                endpoint.getEndpointUri(),
-                exchange.getIn().getHeader(AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, String.class),
-                needStoreRequestPayload ? body : null);
+        // for asynchronous interaction: configure WSA headers and store correlation data
+        if (replyToUri != null) {
+            String messageId = UUID.randomUUID().toString();
+            configureWSAHeaders(messageId, replyToUri, requestContext);
+            
+            AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getEndpoint();
+            String correlationKey = exchange.getIn().getHeader(
+                    AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, 
+                    String.class);
+            endpoint.getCorrelator().put(
+                    messageId, 
+                    endpoint.getEndpointUri(),
+                    correlationKey,
+                    needStoreRequestPayload ? body : null);
+        }
         
         // invoke
         exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
         String result = call(client, body);
         
-        // for synchronous interaction: drop correlation data and handle response
+        // for synchronous interaction: handle response
         if (replyToUri == null) {
-            correlator.delete(messageId);
-            
             Message responseMessage = Exchanges.resultMessage(exchange);
             Map<String, Object> responseContext = bindingProvider.getResponseContext();
             enrichResponseMessage(responseMessage, responseContext);
