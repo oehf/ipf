@@ -15,94 +15,50 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.correlation;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang.Validate;
+import org.openehealth.ipf.commons.core.purgeable.PurgeableMap;
 
 /**
- * Simple in-memory implementation of async message correlator.
+ * Simple in-memory implementation of asynchronous message correlator.
  * @author Dmytro Rud
  */
-public class InMemoryAsynchronyCorrelator implements AsynchronyCorrelator {
-    private final Map<String, Item> map = 
-        Collections.synchronizedMap(new HashMap<String, Item>());
-
+public class InMemoryAsynchronyCorrelator 
+        extends PurgeableMap<String, AsynchronyCorrelationItem> 
+        implements AsynchronyCorrelator 
+{
     @Override
-    public void put(String messageId, String serviceEndpoint, String correlationKey, String requestPayload) {
-        map.put(messageId, new Item(serviceEndpoint, correlationKey, requestPayload));
+    public void put(
+            String messageId, 
+            String serviceEndpoint, 
+            String correlationKey, 
+            String requestPayload) 
+    {
+        put(messageId,new AsynchronyCorrelationItem(
+                serviceEndpoint, correlationKey, requestPayload));
     }
     
     @Override
     public String getServiceEndpoint(String messageId) {
-        Item item = map.get(messageId);
-        return (item != null) ? item.getServiceEndpoint() : null;
+        AsynchronyCorrelationItem asynchronyCorrelationItem = get(messageId);
+        return (asynchronyCorrelationItem != null) ? 
+                asynchronyCorrelationItem.getServiceEndpoint() : null;
     }
     
     @Override
     public String getCorrelationKey(String messageId) {
-        Item item = map.get(messageId);
-        return (item != null) ? item.getCorrelationKey() : null;
+        AsynchronyCorrelationItem asynchronyCorrelationItem = get(messageId);
+        return (asynchronyCorrelationItem != null) ? 
+                asynchronyCorrelationItem.getCorrelationKey() : null;
     }
 
     @Override
     public String getRequestPayload(String messageId) {
-        Item item = map.get(messageId);
-        return (item != null) ? item.getRequestPayload() : null;
+        AsynchronyCorrelationItem asynchronyCorrelationItem = get(messageId);
+        return (asynchronyCorrelationItem != null) ? 
+                asynchronyCorrelationItem.getRequestPayload() : null;
     }
 
     @Override
     public boolean delete(String messageId) {
-        return map.remove(messageId) != null;
-    }
-    
-    @Override
-    public void purge(long timestamp) {
-        synchronized (map) {
-            for (String messageId : map.keySet()) {
-                Item item = map.get(messageId);
-                if ((item != null) && (item.getCreationTimestamp() < timestamp)) {
-                    map.remove(messageId);
-                }
-            }
-        }
-    }
-    
-    public int size() {
-        return map.size();
-    }
-    
-    
-    private static class Item {
-        private final String serviceEndpoint;
-        private final String correlationKey;
-        private final String requestPayload;
-        private final long creationTimestamp;
-        
-        public Item(String serviceEndpoint, String correlationKey, String requestPayload) {
-            Validate.notEmpty(serviceEndpoint);
-            
-            this.serviceEndpoint = serviceEndpoint;
-            this.correlationKey = correlationKey;
-            this.requestPayload = requestPayload;
-            this.creationTimestamp = System.currentTimeMillis();
-        }
-
-        public String getServiceEndpoint() {
-            return serviceEndpoint;
-        }
-
-        public String getCorrelationKey() {
-            return correlationKey;
-        }
-
-        public String getRequestPayload() {
-            return requestPayload;
-        }
-
-        public long getCreationTimestamp() {
-            return creationTimestamp;
-        }
+        return remove(messageId) != null;
     }
 }

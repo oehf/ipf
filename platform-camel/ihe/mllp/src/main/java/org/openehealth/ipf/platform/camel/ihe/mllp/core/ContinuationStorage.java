@@ -15,19 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import org.openehealth.ipf.commons.core.purgeable.PurgeableCollection;
+
 import ca.uhn.hl7v2.model.Message;
 
 /**
  * Interface for storages of HL7 v2 interactive continuation fragments.
  * @author Dmytro Rud
  */
-public interface ContinuationStorage {
+public interface ContinuationStorage extends PurgeableCollection {
     
     /**
      * Puts a fragment into this storage.
+     * 
      * @param continuationPointer
      *      continuation pointer of the fragment.  
-     *      <code>null<code> values must be allowed.
+     *      <code>null</code> values must be allowed.
      * @param queryTag
      *      query tag of the fragment (QPD-2).
      * @param msh31
@@ -49,11 +52,12 @@ public interface ContinuationStorage {
     
     
     /**
-     * Retrieves a fragment from the storage or <code>null</code> when no fragment
-     * with the given parameters could be found.
+     * Retrieves a fragment from the storage or <code>null</code> 
+     * when no fragment with the given parameters could be found.
+     * 
      * @param continuationPointer
      *      continuation pointer of the fragment.
-     *      <code>null<code> values must be allowed.
+     *      <code>null</code> values must be allowed.
      * @param queryTag
      *      query tag of the fragment (QPD-2).
      * @param msh31
@@ -75,8 +79,7 @@ public interface ContinuationStorage {
     
     /**
      * Deletes all fragments which belong to the given query tag.
-     * <p>
-     * This method is to be called when query is calcelled:
+     *
      * @param queryTag
      *      query tag of the fragment (QPD-2).
      * @param msh31
@@ -86,8 +89,8 @@ public interface ContinuationStorage {
      * @param msh33
      *      MSH-3-3 of the request.
      * @return
-     *      <code>true</code>, when some fragments have been actually deleted,
-     *      i.e. when the given query tag is known.
+     *      <code>true</code>, when some fragments have been 
+     *      actually deleted, i.e. when the given query tag is known.
      */
     boolean deleteFragments(
         String queryTag, 
@@ -95,13 +98,4 @@ public interface ContinuationStorage {
         String msh32,
         String msh33);
 
-    
-    /**
-     * Purges all fragments older than the given timestamp.
-     * <p>
-     * This method is to be called by the user -- e.g. from a Camel route or an JMX console.  
-     * When this storage has internal time-based invalidation mechanisms which do not need 
-     * to be triggered externally, this method can be a no-op.
-     */
-    void purge(long timestamp);
 }
