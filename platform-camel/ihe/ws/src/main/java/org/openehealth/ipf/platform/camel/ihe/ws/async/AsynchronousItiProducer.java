@@ -153,8 +153,8 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     
     
     /**
-     * Initializes WS-Addressing headers MessageID and, optionally, 
-     * ReplyTo, and stores them into the given message context.
+     * Initializes WS-Addressing headers MessageID and ReplyTo, 
+     * and stores them into the given message context.
      */
     private void configureWSAHeaders(String messageId, String replyToUri, Map<String, Object> context) {
         // header container
@@ -166,13 +166,11 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
         uri.setValue(messageId);
         maps.setMessageID(uri);
 
-        // ReplyTo header, if provided
-        if (replyToUri != null) {
-            AttributedURIType uri2 = new AttributedURIType();
-            uri2.setValue(replyToUri);
-            EndpointReferenceType endpointReference = new EndpointReferenceType();
-            endpointReference.setAddress(uri2);
-            maps.setReplyTo(endpointReference);
-        }
+        // ReplyTo header
+        AttributedURIType uri2 = new AttributedURIType();
+        uri2.setValue(replyToUri);
+        EndpointReferenceType endpointReference = new EndpointReferenceType();
+        endpointReference.setAddress(uri2);
+        maps.setReplyTo(endpointReference);
     }
 }
