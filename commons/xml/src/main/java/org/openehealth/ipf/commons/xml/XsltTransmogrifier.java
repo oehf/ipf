@@ -58,7 +58,7 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
     private final URIResolver resolver;
     private final Class<T> outputFormat;
 
-    private final static ResourceLoader resourceLoader = new DefaultResourceLoader();
+    private final static ResourceLoader resourceLoader = new DefaultResourceLoader(XsltTransmogrifier.class.getClassLoader());
     private final static Log LOG = LogFactory.getLog(XsltTransmogrifier.class);
 
     private static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";

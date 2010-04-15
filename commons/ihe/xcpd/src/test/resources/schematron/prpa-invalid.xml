@@ -1,0 +1,85 @@
+<PRPA_IN201305UV02 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="urn:hl7-org:v3"
+ ITSVersion="XML_1.0">
+  <id root="1.2.840.114350.1.13.0.1.7.1.1" extension="35423"/>
+  <creationTime value="20090417150301"/>
+  <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201305UV02"/>
+  <processingCode code="T"/>
+  <processingModeCode code="I"/>
+  <acceptAckCode code="AL"/>
+  <receiver typeCode="RCV">
+      <device  classCode="DEV" determinerCode="INSTANCE">
+          <id root="1.2.840.114350.1.13.999.234"/>
+          <telecom value="http://servicelocation/QDQuery"/>
+      </device>
+  </receiver>
+  <sender typeCode="SND">
+      <device classCode="DEV" determinerCode="INSTANCE">
+          <id root="1.2.840.114350.1.13.999.567"/>
+          <!-- Used to carry the homeCommunityId -->
+          <asAgent classCode="AGNT">
+              <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <!-- homeCommunityId=urn:oid:1.2.3.928.955 -->
+                  <id root="1.2.3.928.955"/>
+              </representedOrganization>
+          </asAgent>
+      </device>
+  </sender>
+  <controlActProcess  classCode="CACT" moodCode="EVN">
+      <code code="PRPA_TE201305UV02" codeSystem="2.16.840.1.113883.1.6"/>
+      
+      <!-- Identifies one of LivingSubjectID for use by responder in XCA Query 
+            - provisioning the opposite direction -->
+      <authorOrPerformer typeCode="AUT"> 
+          <assignedDevice classCode="ASSIGNED">
+              <id root="1.2.840.114350.1.13.99997.2.3412"/>  
+          </assignedDevice>
+      </authorOrPerformer>
+      
+      <queryByParameter>
+          <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204"/>
+          <statusCode code="new"/>
+          <responseModalityCode code="R"/>
+          <responsePriorityCode code="I"/>
+          <matchCriterionList>
+      <matchAlgorithm>
+                  <value xsi:type="ST">hund</value>
+                  <semanticsText>Degree of match requested</semanticsText>
+              </matchAlgorithm>                 <minimumDegreeMatch>
+                  <value xsi:type="INT" value="100"/>
+                  <semanticsText>Degree of match requested</semanticsText>
+              </minimumDegreeMatch>
+          </matchCriterionList>
+          <parameterList>
+      <livingSubjectAdministrativeGender>
+                  <value code="M"/>
+                  <semanticsText>LivingSubject.administrativeGender</semanticsText>
+              </livingSubjectAdministrativeGender>
+              <livingSubjectBirthTime>
+                 <value value="19630805"/>
+                 <semanticsText>LivingSubject.birthTime</semanticsText>
+             </livingSubjectBirthTime>
+              <livingSubjectBirthTime>
+                 <value value="19630806"/>
+                 <semanticsText>LivingSubject.birthTime</semanticsText>
+             </livingSubjectBirthTime>             
+              <livingSubjectId>
+                  <value root="1.2.840.114350.1.13.99997.2.3412" extension="1234"/>
+                  <semanticsText>LivingSubject.id</semanticsText>
+              </livingSubjectId>
+              <livingSubjectId>
+                  <value root="2.16.840.1.113883.4.1" extension="58910"/>
+                  <semanticsText>LivingSubject.id</semanticsText>
+              </livingSubjectId>
+              <livingSubjectName>
+                  <value xsi:type="PN">
+                      <given>Jimmy</given>
+                      <family>Jones</family>
+                  </value>
+                  <semanticsText>LivingSubject.name</semanticsText>
+              </livingSubjectName>              
+          </parameterList>
+      </queryByParameter>
+  </controlActProcess>
+</PRPA_IN201305UV02>
