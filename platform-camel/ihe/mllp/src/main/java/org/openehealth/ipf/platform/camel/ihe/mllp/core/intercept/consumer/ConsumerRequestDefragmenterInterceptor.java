@@ -18,17 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.keyString;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import ca.uhn.hl7v2.model.Message;
@@ -39,21 +37,23 @@ import ca.uhn.hl7v2.util.Terser;
 /**
  * Consumer-side interceptor for receiving unsolicited request fragments
  * as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
- * <p>
- * Currently there is no timeout handling.
  * 
  * @author Dmytro Rud
  */
 public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpInterceptor {
     private static final transient Log LOG = LogFactory.getLog(ConsumerRequestDefragmenterInterceptor.class);
-
-    // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
-    private static final Map<String, StringBuilder> accumulators = 
-        Collections.synchronizedMap(new HashMap<String, StringBuilder>());
-
     
-    public ConsumerRequestDefragmenterInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
+    // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
+    private final UnsolicitedFragmentationStorage storage;
+    
+    public ConsumerRequestDefragmenterInterceptor(
+            MllpEndpoint endpoint, 
+            Processor wrappedProcessor,
+            UnsolicitedFragmentationStorage storage) 
+    {
         super(endpoint, wrappedProcessor);
+        Validate.notNull(storage);
+        this.storage = storage;
     }
 
 
@@ -86,7 +86,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
         if (isEmpty(msh14)) {
             accumulator = new StringBuilder();
         } else {
-            accumulator = accumulators.remove(keyString(msh14, msh31, msh32, msh33));
+            accumulator = storage.getAndRemove(keyString(msh14, msh31, msh32, msh33));
             if (accumulator == null) {
                 LOG.warn("Pass unknown fragment with MSH-14==" + msh14 + " to the route");
                 getWrappedProcessor().process(exchange);
@@ -115,7 +115,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
             .append(dsc1)
             .toString());
             
-        accumulators.put(keyString(dsc1, msh31, msh32, msh33), accumulator);
+        storage.put(keyString(dsc1, msh31, msh32, msh33), accumulator);
         Message ack = MessageUtils.response(
                 getMllpEndpoint().getParser().getFactory(), 
                 requestMessage, "ACK", 

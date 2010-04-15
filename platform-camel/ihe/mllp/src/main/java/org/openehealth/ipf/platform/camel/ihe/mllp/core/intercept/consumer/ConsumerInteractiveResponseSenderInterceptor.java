@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
@@ -57,6 +58,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             ContinuationStorage storage) 
     {
         super(endpoint, wrappedProcessor);
+        Validate.notNull(storage);
         this.storage = storage;
     }
 

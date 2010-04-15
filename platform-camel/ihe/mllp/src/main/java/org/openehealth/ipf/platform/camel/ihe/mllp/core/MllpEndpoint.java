@@ -69,7 +69,8 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final int interactiveContinuationDefaultThreshold;
     private final int unsolicitedFragmentationThreshold;
     private final int segmentFragmentationThreshold;
-    private final ContinuationStorage storage;
+    private final ContinuationStorage continuationStorage;
+    private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
 
 
     /**
@@ -110,7 +111,7 @@ public class MllpEndpoint extends DefaultEndpoint {
      *      producer-side threshold for unsolicited message fragmentation. 
      * @param segmentFragmentationThreshold
      *      threshold for segment fragmentation.
-     * @param storage
+     * @param continuationStorage
      *      consumer-side storage for interactive message continuation.
      */
     public MllpEndpoint(
@@ -132,7 +133,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             int interactiveContinuationDefaultThreshold,
             int unsolicitedFragmentationThreshold,
             int segmentFragmentationThreshold,
-            ContinuationStorage storage)
+            ContinuationStorage continuationStorage)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -140,9 +141,6 @@ public class MllpEndpoint extends DefaultEndpoint {
         Validate.notNull(transactionConfiguration);
         Validate.notNull(parser);
         Validate.noNullElements(customInterceptors);
-        if (supportInteractiveContinuation) {
-            Validate.notNull(storage);
-        }
         
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
@@ -163,7 +161,10 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.interactiveContinuationDefaultThreshold = interactiveContinuationDefaultThreshold;
         this.unsolicitedFragmentationThreshold = unsolicitedFragmentationThreshold;
         this.segmentFragmentationThreshold = segmentFragmentationThreshold;
-        this.storage = storage;
+        this.continuationStorage = continuationStorage;
+        
+        this.unsolicitedFragmentationStorage = supportUnsolicitedFragmentation ?
+             new UnsolicitedFragmentationStorage() : null;
     }
 
 
@@ -200,12 +201,12 @@ public class MllpEndpoint extends DefaultEndpoint {
             x = new ConsumerAuditInterceptor(this, x);
         }
         if (isSupportInteractiveContinuation()) {
-            x = new ConsumerInteractiveResponseSenderInterceptor(this, x, getStorage());
+            x = new ConsumerInteractiveResponseSenderInterceptor(this, x, continuationStorage);
         }
         x = new ConsumerInputAcceptanceInterceptor(this, x);
         x = new ConsumerMarshalInterceptor(this, x);
         if (isSupportUnsolicitedFragmentation()) {
-            x = new ConsumerRequestDefragmenterInterceptor(this, x);
+            x = new ConsumerRequestDefragmenterInterceptor(this, x, unsolicitedFragmentationStorage);
         }
         x = new ConsumerStringProcessorInterceptor(this, x);
         return wrappedEndpoint.createConsumer(x);
@@ -355,10 +356,17 @@ public class MllpEndpoint extends DefaultEndpoint {
     /**
      * Returns the interactive continuation storage bean. 
      */
-    public ContinuationStorage getStorage() {
-        return storage;
+    public ContinuationStorage getContinuationStorage() {
+        return continuationStorage;
     }
 
+    /**
+     * Returns the unsolicited fragmentation storage bean. 
+     */
+    public UnsolicitedFragmentationStorage getUnsolicitedFragmentationStorage() {
+        return unsolicitedFragmentationStorage;
+    }
+    
 
     // ----- dumb delegation, nothing interesting below -----
 

@@ -102,14 +102,14 @@ public abstract class MllpComponent extends MinaComponent {
         int segmentFragmentationThreshold = getAndRemoveParameter(
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
         
-        ContinuationStorage storage = null;
+        ContinuationStorage continuationStorage = null;
         if (supportInteractiveContinuation) {
             String storageBean = getAndRemoveParameter(
                     parameters, "interactiveContinuationStorage", String.class, null);
             if (storageBean == null) {
-                storage = new InMemoryContinuationStorage();
+                continuationStorage = new InMemoryContinuationStorage();
             } else {
-                storage = getCamelContext().getRegistry().lookup(
+                continuationStorage = getCamelContext().getRegistry().lookup(
                         extractBeanName(storageBean), ContinuationStorage.class);
             }
         }
@@ -171,7 +171,7 @@ public abstract class MllpComponent extends MinaComponent {
                 interactiveContinuationDefaultThreshold,
                 unsolicitedFragmentationThreshold,
                 segmentFragmentationThreshold,
-                storage);
+                continuationStorage);
     }
 
     private List<MllpCustomInterceptor> getCustomInterceptors(String interceptorBeans) {
