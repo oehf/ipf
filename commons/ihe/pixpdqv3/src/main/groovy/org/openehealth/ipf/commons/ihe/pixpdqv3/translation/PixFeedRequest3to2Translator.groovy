@@ -232,35 +232,36 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // PID-13 = telecom        
         for (telecom in person.telecom) {            
             String value = telecom.@value.text()
-            int pos      = value.indexOf(':')
-            
-            String type   = value.substring(0, pos)
-            String number = value.substring(pos + 1)
-
-            def pid13 = nextRepetition(grp.PID[13])
-
-            switch (type) {
-            case 'tel':
-                pid13[3].value = (telecom.@use.text() == 'MC') ? 'MP' : 'PH'
-                pid13[1].value = number
-                break
-
-            case 'mailto':
-                pid13[3].value = 'Internet'
-                if (this.copyEmailAs == 'PID-13-1') {                           
+            if (value) {
+                int pos = value.indexOf(':')
+                String type   = value.substring(0, pos)
+                String number = value.substring(pos + 1)
+    
+                def pid13 = nextRepetition(grp.PID[13])
+    
+                switch (type) {
+                case 'tel':
+                    pid13[3].value = (telecom.@use.text() == 'MC') ? 'MP' : 'PH'
                     pid13[1].value = number
-                } else if (this.copyEmailAs == 'PID-13-4'){
-                    pid13[4].value = number
+                    break
+    
+                case 'mailto':
+                    pid13[3].value = 'Internet'
+                    if (this.copyEmailAs == 'PID-13-1') {                           
+                        pid13[1].value = number
+                    } else if (this.copyEmailAs == 'PID-13-4'){
+                        pid13[4].value = number
+                    }
+                    break
+                
+                case 'fax':
+                    pid13[3].value = 'FX'
+                    pid13[1].value = number
+                    break
+                
+                default:
+                    throw new IllegalStateException("Unknown telecom type ${type}")
                 }
-                break
-            
-            case 'fax':
-                pid13[3].value = 'FX'
-                pid13[1].value = number
-                break
-            
-            default:
-                throw new IllegalStateException("Unknown telecom type ${type}")
             }
         }        
         
