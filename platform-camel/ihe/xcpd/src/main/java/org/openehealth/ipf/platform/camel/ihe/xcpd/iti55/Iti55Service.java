@@ -38,11 +38,16 @@ public class Iti55Service extends DefaultItiWebService implements Iti55PortType 
     @Override
     public String respondingGatewayPRPAIN201305UV02(String request) {
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-        Map<String, Object> headers = TtlHeaderUtils.retrieveTtlHeaderAsMap(messageContext);
+        Exchange result;
         
-        Exchange result = process(request, headers, ExchangePattern.InOut);
-        if(result.getException() != null) {
-            return Hl7v3NakFactory.createNak(request, result.getException(), "PRPA_IN201306UV02", true);
+        try {
+            Map<String, Object> headers = TtlHeaderUtils.retrieveTtlHeaderAsMap(messageContext);
+            result = process(request, headers, ExchangePattern.InOut);
+            if(result.getException() != null) {
+                throw result.getException();
+            }
+        } catch (Exception e) {
+            return Hl7v3NakFactory.createNak(request, e, "PRPA_IN201306UV02", true);
         }
         
         Message resultMessage = Exchanges.resultMessage(result);

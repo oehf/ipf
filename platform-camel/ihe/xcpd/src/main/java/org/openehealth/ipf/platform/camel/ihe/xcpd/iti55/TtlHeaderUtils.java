@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 import javax.xml.namespace.QName;
@@ -58,11 +57,11 @@ public class TtlHeaderUtils {
                     if (o instanceof Element) {
                         Node child = ((Element) o).getFirstChild();
                         if (child instanceof Text) {
+                            String value = ((Text) child).getNodeValue();
                             try {
-                                String value = ((Text) child).getNodeValue();
                                 return DatatypeFactory.newInstance().newDuration(value);
-                            } catch (DatatypeConfigurationException e) {
-                                throw new RuntimeException(e); 
+                            } catch (Exception e) {
+                                throw new RuntimeException("Cannot parse TTL header " + value, e); 
                             }
                         }
                     }
@@ -106,7 +105,7 @@ public class TtlHeaderUtils {
                 context.put(Header.HEADER_LIST, soapHeaders);
             }
         } catch (JAXBException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Cannot add TTL header", e);
         }
     }
 

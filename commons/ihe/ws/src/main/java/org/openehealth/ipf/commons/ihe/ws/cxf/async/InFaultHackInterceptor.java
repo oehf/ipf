@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.async;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.CheckFaultInterceptor;
+import org.apache.cxf.interceptor.InFaultChainInitiatorObserver;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageImpl;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
@@ -36,12 +37,12 @@ public class InFaultHackInterceptor extends AbstractPhaseInterceptor<Message> {
     }
 
     /**
-     * See InFaultChainInitiatorObserver#initializeInterceptors(), line #59: 
-     * NPE on incoming faults without requests (WSA async or notification).
+     * See {@link InFaultChainInitiatorObserver#initializeInterceptors()}, 
+     * line #59 in CXF 2.2.6: NPE on incoming faults without requests 
+     * (WSA async response or notification).
      */
     @Override
     public void handleMessage(Message message) {
         message.getExchange().setOutMessage(new SoapMessage(new MessageImpl()));
     }
 }
-
