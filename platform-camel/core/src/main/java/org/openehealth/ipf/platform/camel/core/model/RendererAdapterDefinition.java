@@ -22,7 +22,6 @@ import org.openehealth.ipf.platform.camel.core.adapter.RendererAdapter;
 
 /**
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public class RendererAdapterDefinition extends ProcessorAdapterDefinition {
 

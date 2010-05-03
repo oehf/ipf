@@ -28,7 +28,6 @@ import static org.apache.camel.builder.Builder.body;
  * interfaces to Apache Camel interfaces.
  * 
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public abstract class AdapterSupport implements Adapter {
 

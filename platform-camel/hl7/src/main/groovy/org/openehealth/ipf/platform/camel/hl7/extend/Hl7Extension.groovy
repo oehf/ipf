@@ -28,6 +28,8 @@ import org.openehealth.ipf.platform.camel.hl7.expression.Hl7InputExpression;
 
 /**
  * HL7 DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
+ *
+ * @dsl
  * 
  * @author Martin Krasser
  * @author Jens Riemschneider
@@ -37,8 +39,7 @@ public class Hl7Extension {
     /**
      * Defines marshaling between a standard HL7 message and a
      * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
-     * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
-     * @dsl platform-camel-hl7
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
      */
     public static ProcessorDefinition ghl7(DataFormatClause self) {
         return ghl7(self, null, null);
@@ -48,8 +49,7 @@ public class Hl7Extension {
      * Defines marshaling between a standard HL7 message and a
      * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * via an HL7 parser
-     * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
-     * @dsl platform-camel-hl7
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
      */
     public static ProcessorDefinition ghl7(DataFormatClause self, Parser parser) {
         return ghl7(self, parser, null);
@@ -59,8 +59,7 @@ public class Hl7Extension {
      * Defines marshaling between a standard HL7 message and a
      * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * using the given charset 
-     * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
-     * @dsl platform-camel-hl7
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
      */
     public static ProcessorDefinition ghl7(DataFormatClause self, String charset) {
         return ghl7(self, null, charset);
@@ -70,8 +69,7 @@ public class Hl7Extension {
      * Defines marshaling between a standard HL7 message and a
      * <a href="http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling">MessageAdapter</a>
      * using the given charset and parser 
-     * @ipfdoc HL7 processing#HL7 adapter (un)marshalling
-     * @dsl platform-camel-hl7
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7adapter%28un%29marshalling
      */
     public static ProcessorDefinition ghl7(DataFormatClause self, Parser parser, String charset) {
         Hl7DataFormat hl7DataFormat = new Hl7DataFormat();
@@ -86,8 +84,7 @@ public class Hl7Extension {
 
     /**
      * Configures a validator with HL7 support
-     * @ipfdoc HL7 processing#HL7 message validation
-     * @dsl platform-camel-hl7
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/HL7+processing#HL7processing-HL7messagevalidation
      */
     public static ValidatorAdapterDefinition ghl7(ValidatorAdapterDefinition self) { 
         self.setValidator(new HL7Validator());
@@ -95,4 +92,3 @@ public class Hl7Extension {
         return (ValidatorAdapterDefinition)self.input(new Hl7InputExpression());
     }
 }
- 

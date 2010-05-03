@@ -1,9 +1,0 @@
-contributor([context(ctype: 'org.apache.camel.builder.DataFormatClause')]) {
-    method name: 'cdar2', type: 'org.apache.camel.model.ProcessorDefinition'
-}
-contributor([context(ctype: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition')]) {
-    method name: 'cdar2', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
-    method name: 'ccd', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition', params: [parameters: 'Map']
-    method name: 'ccd', type: 'org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition'
-}
-

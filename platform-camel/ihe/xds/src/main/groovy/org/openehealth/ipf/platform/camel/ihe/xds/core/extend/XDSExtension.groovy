@@ -45,6 +45,9 @@ import org.apache.camel.builder.RouteBuilder;
 
 /**
  * XDS DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ *
+ * @dsl
+ *
  * @author Jens Riemschneider
  */
 public class XDSExtension {
@@ -65,8 +68,7 @@ public class XDSExtension {
 
      /**
       * Validates an ITI-14 request
-      * @ipfdoc IHE Support#validation xds.a
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsa
       */
      public static ValidatorAdapterDefinition iti14Request(ValidatorAdapterDefinition self) {
          self.setValidator(new SubmitObjectsRequestValidator());
@@ -76,8 +78,7 @@ public class XDSExtension {
      
      /**
       * Validates an ITI-14 response
-      * @ipfdoc IHE Support#validation xds.a
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsa
       */
      public static ValidatorAdapterDefinition iti14Response(ValidatorAdapterDefinition self) {
          self.setValidator(new RegistryResponseValidator());
@@ -87,8 +88,7 @@ public class XDSExtension {
      
      /**
       * Validates an ITI-15 request
-      * @ipfdoc IHE Support#validation xds.a
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsa
       */
      public static ValidatorAdapterDefinition iti15Request(ValidatorAdapterDefinition self) { 
          self.setValidator(new ProvideAndRegisterDocumentSetRequestValidator());
@@ -98,8 +98,7 @@ public class XDSExtension {
     
      /**
       * Validates an ITI-15 response
-      * @ipfdoc IHE Support#validation xds.a
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsa
       */
      public static ValidatorAdapterDefinition iti15Response(ValidatorAdapterDefinition self) { 
          self.setValidator(new RegistryResponseValidator());
@@ -109,8 +108,7 @@ public class XDSExtension {
      
      /**
       * Validates an ITI-16 request
-      * @ipfdoc IHE Support#validation xds.a
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsa
       */
      public static ValidatorAdapterDefinition iti16Request(ValidatorAdapterDefinition self) { 
          self.setValidator(new AdhocQueryRequestValidator());
@@ -120,8 +118,7 @@ public class XDSExtension {
     
      /**
       * Validates an ITI-16 response
-      * @ipfdoc IHE Support#validation xds.a
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsa
       */
      public static ValidatorAdapterDefinition iti16Response(ValidatorAdapterDefinition self) { 
          self.setValidator(new QueryResponseValidator());
@@ -131,8 +128,7 @@ public class XDSExtension {
      
      /**
       * Validates an ITI-18 request
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti18Request(ValidatorAdapterDefinition self) { 
          self.setValidator(new AdhocQueryRequestValidator());
@@ -142,8 +138,7 @@ public class XDSExtension {
     
      /**
       * Validates an ITI-18 response
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti18Response(ValidatorAdapterDefinition self) { 
          self.setValidator(new QueryResponseValidator());
@@ -153,8 +148,7 @@ public class XDSExtension {
      
      /**
       * Validates an ITI-41 request
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti41Request(ValidatorAdapterDefinition self) { 
          self.setValidator(new ProvideAndRegisterDocumentSetRequestValidator());
@@ -164,8 +158,7 @@ public class XDSExtension {
     
      /**
       * Validates an ITI-41 response
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti41Response(ValidatorAdapterDefinition self) { 
          self.setValidator(new RegistryResponseValidator());
@@ -175,8 +168,7 @@ public class XDSExtension {
 
      /**
       * Validates an ITI-42 request
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti42Request(ValidatorAdapterDefinition self) { 
          self.setValidator(new SubmitObjectsRequestValidator());
@@ -188,8 +180,7 @@ public class XDSExtension {
     
      /**
       * Validates an ITI-42 response
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti42Response(ValidatorAdapterDefinition self) { 
          self.setValidator(new RegistryResponseValidator());
@@ -199,8 +190,7 @@ public class XDSExtension {
      
      /**
       * Validates an ITI-43 request
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti43Request(ValidatorAdapterDefinition self) { 
          self.setValidator(new RetrieveDocumentSetRequestValidator());
@@ -210,8 +200,7 @@ public class XDSExtension {
     
      /**
       * Validates an ITI-43 response
-      * @ipfdoc IHE Support#validation xds.b
-      * @dsl platform-camel-ihe-xds-core
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationxdsb
       */
      public static ValidatorAdapterDefinition iti43Response(ValidatorAdapterDefinition self) { 
          self.setValidator(new RetrieveDocumentSetResponseValidator());

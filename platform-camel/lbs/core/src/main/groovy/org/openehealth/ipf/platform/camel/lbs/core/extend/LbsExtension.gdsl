@@ -1,5 +1,0 @@
-contributor([context(ctype: 'org.apache.camel.model.ProcessorDefinition')]) {
-    method name: 'store', type: 'org.openehealth.ipf.platform.camel.lbs.core.model.StoreProcessorDefinition'
-    method name: 'fetch', type: 'org.openehealth.ipf.platform.camel.lbs.core.model.FetchProcessorDefinition'
-}
-

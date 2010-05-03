@@ -25,7 +25,6 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 
 /**
  * @author Martin Krasser
- * @dsl platform-camel-flow
  */
 public abstract class FlowProcessorDefinition extends OutputDefinition<ProcessorDefinition> {
 
@@ -46,7 +45,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<Processor
      * @param inType
      *          the type
      * @ipfdoc Flow Management#Parameterization of initFlow 
-     * @dsl platform-camel-flow
      */
     public FlowProcessorDefinition inType(Class<?> inType) {
         this.inType = inType;
@@ -57,8 +55,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<Processor
      * Defines the type into which outgoing messages are converted
      * @param outType
      *          the type
-     * @ipfdoc Flow Management#Parameterization of initFlow 
-     * @dsl platform-camel-flow
      */
     public FlowProcessorDefinition outType(Class<?> outType) {
         this.outType = outType;
@@ -69,8 +65,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<Processor
      * Defines the data format used to convert incoming messages
      * @param inFormat
      *          the data format
-     * @ipfdoc Flow Management#Parameterization of initFlow 
-     * @dsl platform-camel-flow
      */
     public FlowProcessorDefinition inFormat(DataFormat inFormat) {
         this.inFormat = inFormat;
@@ -81,8 +75,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<Processor
      * Defines the data format used to convert outgoing messages
      * @param outFormat
      *          the data format
-     * @ipfdoc Flow Management#Parameterization of initFlow 
-     * @dsl platform-camel-flow
      */
     public FlowProcessorDefinition outFormat(DataFormat outFormat) {
         this.outFormat = outFormat;
@@ -93,8 +85,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<Processor
      * Defines whether conversion via {@code outType} or {@code outFormat} is performed or not
      * @param outConversion
      *          {@code true} to perform conversion of outgoing messages
-     * @ipfdoc Flow Management#Parameterization of initFlow 
-     * @dsl platform-camel-flow
      */
     public FlowProcessorDefinition outConversion(boolean outConversion) {
         this.outConversion = outConversion;
@@ -105,8 +95,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<Processor
      * Sets the message renderer
      * @param messageRenderer
      *          the renderer instance to use
-     * @ipfdoc Flow Management#Parameterization of initFlow 
-     * @dsl platform-camel-flow
      */
     public FlowProcessorDefinition renderer(PlatformMessageRenderer messageRenderer) {
         this.messageRenderer = messageRenderer;
@@ -117,8 +105,6 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<Processor
      * Sets the message renderer via a bean
      * @param messageRendererBeanName
      *          the name of the bean to use
-     * @ipfdoc Flow Management#Parameterization of initFlow 
-     * @dsl platform-camel-flow
      */
     public FlowProcessorDefinition renderer(String messageRendererBeanName) {
         this.messageRendererBeanName = messageRendererBeanName;

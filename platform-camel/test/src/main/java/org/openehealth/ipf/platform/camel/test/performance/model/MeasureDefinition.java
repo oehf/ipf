@@ -33,7 +33,6 @@ import static org.apache.commons.lang.Validate.notNull;
  * Extension type to support performance measurement.
  * 
  * @author Mitko Kolev
- * @dsl platform-camel-test
  */
 public class MeasureDefinition extends DelegateDefinition {
     private final static Log LOG = LogFactory.getLog(MeasureDefinition.class);
@@ -62,8 +61,6 @@ public class MeasureDefinition extends DelegateDefinition {
 
     /**
      * Defines the initial measurement point
-     * @ipfdoc Performance Measurement#dsl-extensions
-     * @dsl platform-camel-test
      */
     public MeasureDefinition time() {
         delegate = new TimeProcessor();
@@ -73,8 +70,6 @@ public class MeasureDefinition extends DelegateDefinition {
 
     /**
      * Defines a measurement checkpoint, between the initial and the last measurement points
-     * @ipfdoc Performance Measurement#dsl-extensions
-     * @dsl platform-camel-test
      */
     public MeasureDefinition checkpoint(String name) {
         notNull(name, "The name must not be null!");
@@ -86,8 +81,6 @@ public class MeasureDefinition extends DelegateDefinition {
 
     /**
      * Defines the last measurement point
-     * @ipfdoc Performance Measurement#dsl-extensions
-     * @dsl platform-camel-test
      */
     public MeasureDefinition finish(String name) {
         notNull(name, "The name must not be null!");

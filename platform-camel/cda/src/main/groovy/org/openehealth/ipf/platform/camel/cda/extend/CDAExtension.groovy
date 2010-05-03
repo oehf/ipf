@@ -26,13 +26,15 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
 
 /**
  * CDA DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
+ *
+ * @dsl
+ *
  * @author Jens Riemschneider
  */
 public class CDAExtension {
      /**
       * Defines marshalling between a standard CDA document and a POCDMT000040ClinicalDocument object 
-      * @ipfdoc CDA DSL Extensions
-      * @dsl platform-camel-cda
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
      public static ProcessorDefinition cdar2(DataFormatClause self) {
          CDADataFormat dataFormat = new CDADataFormat();
@@ -41,8 +43,7 @@ public class CDAExtension {
  
      /**
       * Parameterizes the xsd() validator to validate against a W3C CDA Schema 
-      * @ipfdoc CDA DSL Extensions
-      * @dsl platform-camel-cda
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/CDA+DSL+Extensions
       */
      public static ValidatorAdapterDefinition cdar2(ValidatorAdapterDefinition self) { 
          return self.staticProfile(CDAR2Constants.CDAR2_SCHEMA);
@@ -53,7 +54,6 @@ public class CDAExtension {
       * @param parameters
       * 		fill me 
       * @ipfdoc fill me
-      * @dsl platform-camel-cda
       */
      public static ValidatorAdapterDefinition ccd(ValidatorAdapterDefinition self, Map parameters) {
          return self.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES, parameters));
@@ -62,7 +62,6 @@ public class CDAExtension {
      /**
       * fill me 
       * @ipfdoc fill me
-      * @dsl platform-camel-cda
       */
      public static ValidatorAdapterDefinition ccd(ValidatorAdapterDefinition self) { 
          return self.staticProfile(new SchematronProfile(CDAR2Constants.CCD_SCHEMATRON_RULES));

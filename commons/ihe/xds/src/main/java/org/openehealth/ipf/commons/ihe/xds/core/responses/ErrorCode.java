@@ -87,7 +87,7 @@ public enum ErrorCode {
      *  because of security reasons. */ 
     RESULT_NOT_SINGLE_PATIENT("XDSResultNotSinglePatient"),
 
-    /** Some additional error codes from XCA, dealing with homeCommunityIDs */
+    /* Some additional error codes from XCA, dealing with homeCommunityIDs */
     
     /** A value for the homeCommunityId is not recognized */
     UNKNOWN_COMMUNITY("XDSUnknownCommunity"),

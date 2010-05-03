@@ -30,7 +30,6 @@ import org.openehealth.ipf.platform.camel.event.process.Publisher;
  * <p>
  * This processor definition provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
- * @dsl platform-camel-event
  */
 public class PublishProcessorDefinition extends OutputDefinition<PublishProcessorDefinition> {
     /** The default name of the event engine bean */
@@ -46,8 +45,6 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
      * not called, the event is published to the topic "default".
      * @param topic
      *          the topic
-     * @ipfdoc Event infrastructure#Event publishing via the DSL
-     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition toTopic(String topic) {
         notNull(topic, "topic cannot be null");
@@ -59,8 +56,6 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
      * Sets the closure that is used to create the event
      * @param closure
      *          the closure to use
-     * @ipfdoc Event infrastructure#Event publishing via the DSL
-     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition eventFactoryClosure(Closure closure) {
         notNull(closure, "closure cannot be null");
@@ -70,8 +65,6 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
     
     /**
      * Configures synchronous event object delivery (which is the default)
-     * @ipfdoc Event infrastructure#Event publishing via the DSL
-     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition synchronous() {
         sync = true;
@@ -80,8 +73,6 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
 
     /**
      * Configures asynchronous event object delivery
-     * @ipfdoc Event infrastructure#Event publishing via the DSL
-     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition asynchronous() {
         sync = false;
@@ -93,8 +84,6 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
      * @param eventEngineBean
      *          the name of a bean in the application context that represents the
      *          event engine
-     * @ipfdoc Event infrastructure#Event publishing via the DSL
-     * @dsl platform-camel-event
      */
     public PublishProcessorDefinition with(String eventEngineBean) {
         notNull(eventEngineBean, "eventEngineBean cannot be null");

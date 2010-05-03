@@ -65,6 +65,7 @@ import org.openehealth.ipf.platform.camel.core.util.Expressions;
  * 
  * @author Martin Krasser
  * @author Jens Riemschneider
+ * @dsl
  */
 public class CoreExtension {
     /**
@@ -72,8 +73,7 @@ public class CoreExtension {
      * that calls the given processor bean
      * @param processorBeanName
      *          name of the processor bean
-     * @ipfdoc Core features#process-bean
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-processbean
      */
     public static ProcessorDefinition process(ProcessorDefinition self, String processorBeanName) {
          return self.processRef(processorBeanName);
@@ -84,8 +84,7 @@ public class CoreExtension {
      * that calls the given processor logic
      * @param processorLogic
      *          closure that implements the logic of the processor
-     * @ipfdoc Core features#process-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-processclosure
      */
     public static ProcessorDefinition process(ProcessorDefinition self, Closure processorLogic) {
         return self.process(new DelegatingProcessor(processorLogic));
@@ -95,8 +94,7 @@ public class CoreExtension {
      * Adds an interceptor to the route using the specified processor as a wrapper.
      * @param delegateProcessor
      * 			the processor that intercepts exchanges
-     * @ipfdoc Core features#intercept-delegate-processor
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-interceptdelegateprocessor
      */
     public static InterceptDefinition intercept(ProcessorDefinition self, DelegateProcessor delegateProcessor) {
         InterceptDefinition answer = new InterceptDefinition(delegateProcessor);
@@ -108,8 +106,7 @@ public class CoreExtension {
      * Adds an interceptor to the route that uses the given interceptor logic
      * @param interceptorLogic
      *          closure that implements the logic of the interceptor
-     * @ipfdoc Core features#intercept-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-interceptclosure
      */
     public static InterceptDefinition intercept(ProcessorDefinition self, Closure interceptorLogic) {
         return intercept(self, new DelegatingInterceptor(interceptorLogic));
@@ -119,8 +116,7 @@ public class CoreExtension {
      * Adds an interceptor to the route that uses the given interceptor logic.
      * @param interceptorBean
      *          name of a bean that implements the {@link DelegateProcessor}.
-     * @ipfdoc Core features#intercept-bean
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-interceptbean
      */
     public static InterceptDefinition intercept(ProcessorDefinition self, String interceptorBean) {
         InterceptDefinition answer = new InterceptDefinition(interceptorBean);
@@ -131,8 +127,7 @@ public class CoreExtension {
     /**
      * Drops the <a href="http://camel.apache.org/error-handler.html">error handler</a> 
      * from the route by using the {@code noErrorHandler}
-     * @ipfdoc Core features#unhandled
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-unhandled
      */
     public static ProcessorDefinition unhandled(ProcessorDefinition self) {
         return self.errorHandler(new NoErrorHandlerBuilder());
@@ -144,8 +139,7 @@ public class CoreExtension {
      * filter or not
      * @param predicateLogic
      *          logic to apply to the filter
-     * @ipfdoc Core features#filter-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-filterclosure
      */
     public static FilterDefinition filter(ProcessorDefinition self, Closure predicateLogic) {
         return self.filter(new DelegatingCamelPredicate(predicateLogic));
@@ -155,8 +149,7 @@ public class CoreExtension {
      * Sets a message body via the expression depending on the Message Exchange Pattern
      * @param transformExpression
      *          the expression to set the body
-     * @ipfdoc Core features#transform-closure 
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-transformclosure 
      */
     public static ProcessorDefinition transform(ProcessorDefinition self, Closure transformExpression) {
         return self.transform(new DelegatingExpression(transformExpression));
@@ -168,8 +161,7 @@ public class CoreExtension {
      *          name of the property
      * @param propertyExpression
      *          expression that returns the value of the property
-     * @ipfdoc Core features#setProperty-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setPropertyclosure
      */
     public static ProcessorDefinition setExchangeProperty(ProcessorDefinition self, String name, Closure propertyExpression) {
         return self.setProperty(name, new DelegatingExpression(propertyExpression));
@@ -181,8 +173,7 @@ public class CoreExtension {
      *          name of the header
      * @param headerExpression
      *          expression that returns the value of the header
-     * @ipfdoc Core features#setHeader-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setHeaderclosure
      */
     public static ProcessorDefinition setHeader(ProcessorDefinition self, String name, Closure headerExpression) {
         return self.setHeader(name, new DelegatingExpression(headerExpression));
@@ -194,8 +185,7 @@ public class CoreExtension {
      *          name of the header
      * @param headerExpression
      *          expression that returns the value of the header
-     * @ipfdoc Core features#setHeader-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setHeaderclosure
      */
     public static ProcessorDefinition setOutHeader(ProcessorDefinition self, String name, Closure headerExpression) {
         return self.setOutHeader(name, new DelegatingExpression(headerExpression));
@@ -207,8 +197,7 @@ public class CoreExtension {
      *          name of the header
      * @param headerExpression
      *          expression that returns the value of the header
-     * @ipfdoc Core features#setHeader-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setHeaderclosure
      */
     public static ProcessorDefinition setFaultHeader(ProcessorDefinition self, String name, Closure headerExpression) {
         return self.setFaultHeader(name, new DelegatingExpression(headerExpression));
@@ -218,8 +207,7 @@ public class CoreExtension {
      * Sets the input message body via the expression
      * @param bodyExpression
      *          the expression to evaluate
-     * @ipfdoc Core features#setBody-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-setBodyclosure
      */
     public static ProcessorDefinition setBody(ProcessorDefinition self, Closure bodyExpression) {
         return self.setBody(new DelegatingExpression(bodyExpression));
@@ -230,8 +218,7 @@ public class CoreExtension {
      * validator
      * @param validator
      *          the processor used for validation
-     * @ipfdoc Core features#validation-processor
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validationprocessor
      */
     public static ValidationDefinition validation(ProcessorDefinition self, Processor validator) {
         ValidationDefinition answer = new ValidationDefinition(validator);
@@ -244,8 +231,7 @@ public class CoreExtension {
      * given endpoint
      * @param validationUri
      *          the URI of the endpoint to call for validation
-     * @ipfdoc Core features#validation-endpoint
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validationendpoint
      */
     public static ValidationDefinition validation(ProcessorDefinition self, String validationUri) {
         ValidationDefinition answer = new ValidationDefinition(validationUri);
@@ -258,8 +244,7 @@ public class CoreExtension {
      * validator logic
      * @param validatorLogic
      *          the closure implementing the validation logic
-     * @ipfdoc Core features#validation-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validationclosure
      */
     public static ValidationDefinition validation(ProcessorDefinition self, Closure validatorLogic) {
         return validation(self, new DelegatingProcessor(validatorLogic));
@@ -272,8 +257,7 @@ public class CoreExtension {
      *          the URI of the endpoint to call
      * @param aggregationLogic
      *          a closure implementing the logic to aggregate the two exchanges
-     * @ipfdoc Core features#Content enrichment
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Contentenrichment
      */
     public static ProcessorDefinition enrich(ProcessorDefinition self, String resourceUri, Closure aggregationLogic) {
         return self.enrich(resourceUri, new DelegatingAggregationStrategy(aggregationLogic));
@@ -282,8 +266,7 @@ public class CoreExtension {
     /**
      * Allows adding of extensions that replace existing extensions provided by Camel (e.g. 
      * {@code split})
-     * @ipfdoc Core features#Splitter
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Splitter
      */
     public static IpfDefinition ipf(ProcessorDefinition self) {
         return new IpfDefinition(self);
@@ -292,8 +275,7 @@ public class CoreExtension {
     /**
      * Adds a transmogrifier to the route for message transformation
      * @param transmogrifier
-     * @ipfdoc Core features#transmogrify-transmogrifier    
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-transmogrifytransmogrifier    
      */
     public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, Transmogrifier transmogrifier) {
         TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifier);
@@ -305,8 +287,7 @@ public class CoreExtension {
      * Adds a transmogrifier defined by a bean to the route
      * @param transmogrifierBeanName
      *          name of the bean implementing the transmogrifier
-     * @ipfdoc Core features#transmogrify-transmogrifier
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-transmogrifybean
      */
     public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, String transmogrifierBeanName) {
         TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition(transmogrifierBeanName);
@@ -318,8 +299,7 @@ public class CoreExtension {
      * Adds a transmogrifier defined by a closure to the route
      * @param transmogrifierLogic
      *          a closure implementing the transmogrifier logic
-     * @ipfdoc Core features#transmogrify-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-transmogrifyclosure
      */
     public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self, Closure transmogrifierLogic) {
         return transmogrify(self, new DelegatingTransmogrifier(transmogrifierLogic));
@@ -327,8 +307,7 @@ public class CoreExtension {
     
     /**
      * Adds a transmogrifier to the route
-     * @ipfdoc Core features#transmogrify
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Transmogrifier
      */
     public static TransmogrifierAdapterDefinition transmogrify(ProcessorDefinition self) {
         TransmogrifierAdapterDefinition answer = new TransmogrifierAdapterDefinition((Transmogrifier)null);
@@ -338,8 +317,7 @@ public class CoreExtension {
 
     /**
      * Validates a message
-     * @ipfdoc Core features#validate
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validate
      */
     public static ValidatorAdapterDefinition validate(ProcessorDefinition self) {
         ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition();
@@ -351,8 +329,7 @@ public class CoreExtension {
      * Validates a message using the validator implementation
      * @param validator
      *          the validator implementation
-     * @ipfdoc Core features#validate
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validate
      */
     public static ValidatorAdapterDefinition validate(ProcessorDefinition self, Validator validator) {
         ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validator);
@@ -364,8 +341,7 @@ public class CoreExtension {
      * Validates a message using a validator bean
      * @param validatorBeanName
      *          the name of the bean implementing the validator
-     * @ipfdoc Core features#validate 
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validate 
      */
     public static ValidatorAdapterDefinition validate(ProcessorDefinition self, String validatorBeanName) {
         ValidatorAdapterDefinition answer = new ValidatorAdapterDefinition(validatorBeanName);
@@ -377,8 +353,7 @@ public class CoreExtension {
      * Validates a message using the validator logic
      * @param validatorLogic   
      *          a closure implementing the validator logic
-     * @ipfdoc Core features#validate 
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-validate 
      */
     public static ValidatorAdapterDefinition validate(ProcessorDefinition self, Closure validatorLogic) {
         return validate(self, new DelegatingValidator(validatorLogic));
@@ -388,8 +363,7 @@ public class CoreExtension {
      * Parses a message to an internal format
      * @param parser
      *          the parser implementation 
-     * @ipfdoc Core features#parse
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-parse
      */
     public static ParserAdapterDefinition parse(ProcessorDefinition self, Parser parser) {
         ParserAdapterDefinition answer = new ParserAdapterDefinition(parser);
@@ -401,7 +375,7 @@ public class CoreExtension {
      * Parses a message to an internal format using a bean
      * @param parserBeanName
      *          name of the bean implementing the parser
-     * @ipfdoc Core features#parse 
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-parse 
      */
     public static ParserAdapterDefinition parse(ProcessorDefinition self, String parserBeanName) {
         ParserAdapterDefinition answer = new ParserAdapterDefinition(parserBeanName);
@@ -413,8 +387,7 @@ public class CoreExtension {
      * Renders the message into an external representation
      * @param renderer
      *          the renderer implementation
-     * @ipfdoc Core features#render
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-render
      */
     public static RendererAdapterDefinition render(ProcessorDefinition self, Renderer renderer) {
         RendererAdapterDefinition answer = new RendererAdapterDefinition(renderer);
@@ -426,8 +399,7 @@ public class CoreExtension {
      * Renders the message into an external representation via the given bean
      * @param rendererBeanName  
      *          name of the bean implementing the renderer
-     * @ipfdoc Core features#render
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-render
      */
     public static RendererAdapterDefinition render(ProcessorDefinition self, String rendererBeanName) {
         RendererAdapterDefinition answer = new RendererAdapterDefinition(rendererBeanName);
@@ -440,8 +412,7 @@ public class CoreExtension {
      * using the predicate logic
      * @param predicateLogic
      *          logic of the predicate
-     * @ipfdoc Core features#when-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-whenclosure
      */
     public static ChoiceDefinition when(ChoiceDefinition self, Closure predicateLogic) {
         return self.when(new DelegatingCamelPredicate(predicateLogic));
@@ -455,8 +426,7 @@ public class CoreExtension {
      *          the schema to use
      * @param namespaceAware
      *          {@code true} to make use of XML namespaces
-     * @ipfdoc Core Features#gnode-schema
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gnode
      */
     public static ProcessorDefinition gnode(DataFormatClause self, String schemaResource, boolean namespaceAware) {
         return dataFormat(self, new GnodeDataFormat(schemaResource, namespaceAware));
@@ -467,8 +437,7 @@ public class CoreExtension {
      * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
      * @param namespaceAware
      *          {@code true} to make use of XML namespaces
-     * @ipfdoc Core Features#gnode-namespace
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gnode
      */
     public static ProcessorDefinition gnode(DataFormatClause self, boolean namespaceAware) {
         return dataFormat(self, new GnodeDataFormat(namespaceAware));
@@ -478,8 +447,7 @@ public class CoreExtension {
      * Unmarshal an XML stream or string using a 
      * <a href="http://groovy.codehaus.org/api/groovy/util/XmlParser.html">groovy.util.XmlParser</a>
      * (by default namespace aware)
-     * @ipfdoc Core Features#gnode
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gnode
      */
     public static ProcessorDefinition gnode(DataFormatClause self) {
         return gnode(self, true);
@@ -493,8 +461,7 @@ public class CoreExtension {
      *          the schema to use
      * @param namespaceAware
      *          {@code true} to make use of XML namespaces
-     * @ipfdoc Core Features#gpath-schema
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gpath
      */
     public static ProcessorDefinition gpath(DataFormatClause self, String schemaResource, boolean namespaceAware) {
         return dataFormat(self, new GpathDataFormat(schemaResource, namespaceAware));
@@ -505,8 +472,7 @@ public class CoreExtension {
      * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
      * @param namespaceAware
      *          {@code true} to make use of XML namespaces
-     * @ipfdoc Core Features#gpath-namespace
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gpath
      */
     public static ProcessorDefinition gpath(DataFormatClause self, boolean namespaceAware) {
         return dataFormat(self, new GpathDataFormat(namespaceAware));
@@ -516,8 +482,7 @@ public class CoreExtension {
      * Unmarshal an XML stream or string using a 
      * <a href="http://groovy.codehaus.org/api/groovy/util/XmlSlurper.html">groovy.util.XmlSlurper</a>
      * (by default namespace aware)
-     * @ipfdoc Core Features#gpath
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-gpath
      */
     public static ProcessorDefinition gpath(DataFormatClause self) {
         return gpath(self, true);
@@ -525,8 +490,7 @@ public class CoreExtension {
 
     /**
      * Retrieves the exception object from a handled exception in an exception route
-     * @ipfdoc Core features#Exception objects and messages 
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Exceptionobjectsandmessages 
      */
     public static Object exceptionObject(ExpressionClause self) {
         return self.expression(Expressions.exceptionObjectExpression());
@@ -534,8 +498,7 @@ public class CoreExtension {
 
     /**
      * Retrieves the exception message from a handled exception in an exception route
-     * @ipfdoc Core features#Exception objects and messages
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Exceptionobjectsandmessages
      */
     public static Object exceptionMessage(ExpressionClause self) {
         return self.expression(Expressions.exceptionMessageExpression());
@@ -545,8 +508,7 @@ public class CoreExtension {
      * Allows for fine-grained <a href="http://camel.apache.org/exception-clause.html">exception handling</a>
      * @param predicate
      *          the predicate to check for the exception
-     * @ipfdoc Core features#onwhen-closure
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-onwhenclosure
      */
     public static OnExceptionDefinition onWhen(OnExceptionDefinition self, Closure predicate) {
         return self.onWhen(new DelegatingCamelPredicate(predicate));
@@ -557,8 +519,7 @@ public class CoreExtension {
      * via the {@code Aggregator} interface
      * @param aggregator
      *          the aggregator implementation
-     * @ipfdoc Core features#aggregationStrategy
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
     public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, Aggregator aggregator) {
         return new AggregatorAdapter(aggregator);
@@ -569,8 +530,7 @@ public class CoreExtension {
      * via a bean 
      * @param aggregatorBeanName
      *          name of the bean
-     * @ipfdoc Core features#aggregationStrategy
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
     public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, String aggregatorBeanName) {
         return aggregationStrategy(self, self.lookup(aggregatorBeanName, Aggregator.class));
@@ -581,8 +541,7 @@ public class CoreExtension {
      * via a closure 
      * @param aggregationLogic
      *          closure implementing the aggregation logic
-     * @ipfdoc Core features#aggregationStrategy
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Aggregator
      */
     public static AggregatorAdapter aggregationStrategy(SpringRouteBuilder self, Closure aggregationLogic) {
         return aggregationStrategy(self, new DelegatingAggregator(aggregationLogic));
@@ -593,8 +552,7 @@ public class CoreExtension {
      * via the {@code Predicate} interface
      * @param predicate
      *          the predicate instance
-     * @ipfdoc Core features#predicate-extension
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-predicateextension
      */
     public static PredicateAdapter predicate(SpringRouteBuilder self, Predicate predicate) {
         return new PredicateAdapter(predicate);
@@ -605,8 +563,7 @@ public class CoreExtension {
      * via a bean
      * @param predicateBeanName
      *          name of the bean
-     * @ipfdoc Core features#predicate-extension
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-predicateextension
      */
     public static PredicateAdapter predicate(SpringRouteBuilder self, String predicateBeanName) {
         return predicate(self, self.lookup(predicateBeanName, Predicate.class));
@@ -617,8 +574,7 @@ public class CoreExtension {
      * via a closure
      * @param predicateLogic
      *          closure implementing the logic of the predicate
-     * @ipfdoc Core features#predicate-extension
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-predicateextension
      */
     public static PredicateAdapter predicate(SpringRouteBuilder self, Closure predicateLogic) {
         return predicate(self, new DelegatingPredicate(predicateLogic));
@@ -628,8 +584,7 @@ public class CoreExtension {
      * Parses a message to an internal format
      * @param parser
      *          the parser implementation
-     * @ipfdoc Core features#Unmarshalling via Parser
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-UnmarshallingviaParser
      */
     public static ProcessorDefinition parse(DataFormatClause self, Parser parser) {        
         return self.processorType.unmarshal(new DataFormatAdapter((Parser)parser));
@@ -639,8 +594,7 @@ public class CoreExtension {
      * Parses a message to an internal format using a bean
      * @param parserBeanName
      *          the name of the bean
-     * @ipfdoc Core features#Unmarshalling via Parser
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-UnmarshallingviaParser
      */
     public static ProcessorDefinition parse(DataFormatClause self, String parserBeanName) {
         return self.processorType.unmarshal((DataFormatDefinition)DataFormatAdapterDefinition.forParserBean(parserBeanName));
@@ -650,8 +604,7 @@ public class CoreExtension {
      * Renders the message into an external representation
      * @param renderer
      *          the implementation of the renderer
-     * @ipfdoc Core features#Marshalling via Renderer
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-MarshallingviaRenderer
      */
     public static ProcessorDefinition render(DataFormatClause self, Renderer renderer) {
         return self.processorType.marshal(new DataFormatAdapter((Renderer)renderer));
@@ -661,8 +614,7 @@ public class CoreExtension {
      * Renders the message into an external representation via the given bean
      * @param rendererBeanName
      *          the name of the bean
-     * @ipfdoc Core features#Marshalling via Renderer
-     * @dsl platform-camel-core
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-MarshallingviaRenderer
      */
     public static ProcessorDefinition render(DataFormatClause self, String rendererBeanName) {        
         return self.processorType.marshal((DataFormatDefinition)DataFormatAdapterDefinition.forRendererBean(rendererBeanName));

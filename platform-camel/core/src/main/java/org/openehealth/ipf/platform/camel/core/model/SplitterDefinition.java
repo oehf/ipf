@@ -39,7 +39,6 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  * 
  * @author Jens Riemschneider
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
 
@@ -104,8 +103,6 @@ public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
      * Defines the aggregation logic for the split results as a closure
      * @param aggregationStrategy    
      *          the aggregation strategy
-     * @ipfdoc Core features#split-aggregate
-     * @dsl platform-camel-core
      */
     public SplitterDefinition aggregationStrategy(Closure aggregationStrategy) {
         return aggregationStrategy(new DelegatingAggregationStrategy(aggregationStrategy));
@@ -115,8 +112,6 @@ public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
      * Defines the aggregation logic for the split results via a strategy interface
      * @param aggregationStrategy    
      *          the aggregation strategy
-     * @ipfdoc Core features#split-aggregate
-     * @dsl platform-camel-core
      */
     public SplitterDefinition aggregationStrategy(AggregationStrategy aggregationStrategy) {
         notNull(aggregationStrategy, "aggregationStrategy");

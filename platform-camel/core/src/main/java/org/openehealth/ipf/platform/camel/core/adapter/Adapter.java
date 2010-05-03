@@ -25,7 +25,6 @@ import org.apache.camel.Expression;
  * interfaces.
  * 
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public interface Adapter {
 
@@ -37,8 +36,6 @@ public interface Adapter {
      * @param inputExpression
      *            expression for obtaining input data.
      * @return this object.
-     * @dsl platform-camel-core
-     * @ipfdoc Core features#Transmogrifier input
      */
     public Adapter input(Expression inputExpression);
     
@@ -50,8 +47,6 @@ public interface Adapter {
      * @param inputExpressionLogic
      *            expression for obtaining input data.
      * @return this object.
-     * @dsl platform-camel-core
-     * @ipfdoc Core features#Transmogrifier input
      */
     public Adapter input(Closure inputExpressionLogic);
     
@@ -63,8 +58,6 @@ public interface Adapter {
      * @param paramsExpression
      *            expression for obtaining input params.
      * @return this object.
-     * @dsl platform-camel-core
-     * @ipfdoc Core features#Transmogrifier input
      */
     public Adapter params(Expression paramsExpression);
     
@@ -76,8 +69,6 @@ public interface Adapter {
      * @param paramsExpressionLogic
      *            expression for obtaining input params.
      * @return this object.
-     * @dsl platform-camel-core
-     * @ipfdoc Core features#Transmogrifier input
      */
     public Adapter params(Closure paramsExpressionLogic);
     
@@ -88,8 +79,6 @@ public interface Adapter {
      * @param params
      *            expression for obtaining input params.
      * @return this object.
-     * @dsl platform-camel-core
-     * @ipfdoc Core features#Transmogrifier input
      */
     public Adapter staticParams(Object... params);
     

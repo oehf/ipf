@@ -20,13 +20,15 @@ import org.openehealth.ipf.platform.camel.test.performance.model.MeasureDefiniti
 
 /**
  * Performance DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
+ *
+ * @dsl
+ *
  * @author Jens Riemschneider
  */
 class PerformanceExtension {
     /**
      * Defines a performance measurement location in the route 
-     * @ipfdoc Performance Measurement#dsl-extensions
-     * @dsl platform-camel-test
+     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Performance+measurement#Performancemeasurement-dslextensions
      */
     public static MeasureDefinition measure(ProcessorDefinition self) { 
         MeasureDefinition answer = new MeasureDefinition();

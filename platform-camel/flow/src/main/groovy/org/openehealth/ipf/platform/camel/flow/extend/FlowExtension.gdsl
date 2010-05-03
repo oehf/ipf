@@ -1,8 +1,0 @@
-contributor([context(ctype: 'org.apache.camel.model.ProcessorDefinition')]) {
-    method name: 'initFlow', type: 'org.openehealth.ipf.platform.camel.flow.model.FlowBeginProcessorDefinition'
-    method name: 'initFlow', type: 'org.openehealth.ipf.platform.camel.flow.model.FlowBeginProcessorDefinition', params: [identifier: 'java.lang.String']
-    method name: 'ackFlow', type: 'org.openehealth.ipf.platform.camel.flow.model.FlowEndProcessorDefinition'
-    method name: 'nakFlow', type: 'org.openehealth.ipf.platform.camel.flow.model.FlowErrorProcessorDefinition'
-    method name: 'dedupeFlow', type: 'org.openehealth.ipf.platform.camel.flow.model.DedupeDefinition'
-}
-

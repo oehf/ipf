@@ -22,7 +22,6 @@ import org.openehealth.ipf.platform.camel.core.process.Validation;
 
 /**
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public class ValidationDefinition extends OutputDefinition<ValidationDefinition>{
 

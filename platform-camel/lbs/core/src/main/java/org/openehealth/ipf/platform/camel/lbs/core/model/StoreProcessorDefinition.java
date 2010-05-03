@@ -31,7 +31,6 @@ import org.openehealth.ipf.platform.camel.lbs.core.process.StoreProcessor;
  * <p>
  * This processor definition provides the fluent API configuration of the processor.
  * @author Jens Riemschneider
- * @dsl platform-camel-lbs
  */
 public class StoreProcessorDefinition extends OutputDefinition<StoreProcessorDefinition> {
 
@@ -43,8 +42,6 @@ public class StoreProcessorDefinition extends OutputDefinition<StoreProcessorDef
      * Configures the resource handlers via a bean
      * @param resourceHandlersBeanName
      *          the bean name of the handler for integrating resources
-     * @ipfdoc Large Binary Support#DSL extensions of the LBS
-     * @dsl platform-camel-lbs
      */
     public StoreProcessorDefinition with(String resourceHandlersBeanName) {
         notNull(resourceHandlersBeanName, "resourceHandlersBeanName cannot be null");

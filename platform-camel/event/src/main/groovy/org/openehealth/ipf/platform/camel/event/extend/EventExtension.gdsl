@@ -1,4 +1,0 @@
-contributor([context(ctype: 'org.apache.camel.model.ProcessorDefinition')]) {
-    method name: 'publish', type: 'org.openehealth.ipf.platform.camel.event.model.PublishProcessorDefinition', params: [publishingLogic: 'Closure']
-}
-

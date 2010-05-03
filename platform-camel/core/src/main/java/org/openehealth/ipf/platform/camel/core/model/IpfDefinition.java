@@ -32,7 +32,6 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  * This selects the IPF splitter rather than the Camel splitter.
  * 
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public class IpfDefinition {
 
@@ -50,8 +49,6 @@ public class IpfDefinition {
      * Splits an exchange by evaluating the expression
      * @param splitExpression
      *          the expression that returns the collection of sub exchanges
-     * @ipfdoc Core features#split-expression
-     * @dsl platform-camel-core
      */
 	public SplitterDefinition split(Expression splitExpression) {
         SplitterDefinition answer = new SplitterDefinition(splitExpression);        
@@ -63,8 +60,6 @@ public class IpfDefinition {
      * Splits an exchange by evaluating the expression defined by a bean reference
      * @param splitExpressionBeanName
      *          the name of an expression bean that returns the collection of sub exchanges
-     * @ipfdoc Core features#split-bean
-     * @dsl platform-camel-core
      */
 	public SplitterDefinition split(String splitExpressionBeanName) {
         SplitterDefinition answer = new SplitterDefinition(splitExpressionBeanName);        
@@ -76,8 +71,6 @@ public class IpfDefinition {
      * Splits an exchange by evaluating the split logic
      * @param splitLogic
      *          a closure implementing the split logic that returns the collection of sub exchanges
-     * @ipfdoc Core features#split-closure
-     * @dsl platform-camel-core
      */
 	public SplitterDefinition split(Closure splitLogic) {
     	return split(new DelegatingExpression(splitLogic));

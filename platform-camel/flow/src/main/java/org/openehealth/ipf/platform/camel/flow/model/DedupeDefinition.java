@@ -26,7 +26,6 @@ import org.openehealth.ipf.platform.camel.flow.dedupe.Dedupe;
 
 /**
  * @author Martin Krasser
- * @dsl platform-camel-flow
  */
 public class DedupeDefinition extends FilterDefinition {
 

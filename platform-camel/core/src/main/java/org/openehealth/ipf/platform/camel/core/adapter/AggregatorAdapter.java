@@ -31,7 +31,6 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.prepareResu
  * Adapts an {@link Aggregator}. 
  * 
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public class AggregatorAdapter extends AdapterSupport implements AggregationStrategy {
 
@@ -61,8 +60,6 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      * @return this object.
      * 
      * @see #aggregate(Exchange, Exchange)
-     * @dsl platform-camel-core
-     * @ipfdoc Core Features#Aggregator
      */
     public AggregatorAdapter aggregationInput(Expression aggregationInputExpression) {
         this.aggregationInputExpression = aggregationInputExpression;
@@ -79,8 +76,6 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
      * @return this object.
      * 
      * @see #aggregate(Exchange, Exchange)
-     * @dsl platform-camel-core
-     * @ipfdoc Core Features#Aggregator
      */
     public AggregatorAdapter aggregationInput(Closure aggregationInputExpressionLogic) {
         return aggregationInput(new DelegatingExpression(aggregationInputExpressionLogic));

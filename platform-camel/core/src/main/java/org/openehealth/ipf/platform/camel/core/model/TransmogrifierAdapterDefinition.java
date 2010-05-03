@@ -28,7 +28,6 @@ import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
 
 /**
  * @author Martin Krasser
- * @dsl platform-camel-core
  */
 public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition {
 
@@ -58,8 +57,6 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
     
     /**
      * Specifies that the transformation is done via XSLT
-     * @ipfdoc Core Features#Transmogrifier implementations
-     * @dsl platform-camel-core
      */
     public TransmogrifierAdapterDefinition xslt() {
         transmogrifier = new XsltTransmogrifier<String>(String.class);
@@ -70,8 +67,6 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * Specifies that the transformation is done via XSLT
      * @param clazz
      *          the resulting type of the message bodyf after the transformation
-     * @ipfdoc Core Features#Transmogrifier implementations
-     * @dsl platform-camel-core
      */
     public <T> TransmogrifierAdapterDefinition xslt(Class<T> clazz) {
         transmogrifier = new XsltTransmogrifier<T>(clazz);
@@ -80,8 +75,6 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
     
     /**
      * Specifies that a schematron validation report is generated
-     * @ipfdoc Core Features#Transmogrifier implementations
-     * @dsl platform-camel-core
      */
     public TransmogrifierAdapterDefinition schematron() {
         transmogrifier = new SchematronTransmogrifier<String>(String.class);
@@ -92,8 +85,6 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
      * Specifies that a schematron validation report is generated
      * @param clazz
      *          the resulting type of the message bodyf after the transformation
-     * @ipfdoc Core Features#Transmogrifier implementations
-     * @dsl platform-camel-core
      */
     public <T> TransmogrifierAdapterDefinition schematron(Class<T> clazz) {
         transmogrifier = new SchematronTransmogrifier<T>(clazz);
