@@ -20,8 +20,9 @@ import groovy.util.XmlSlurper
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.Node
 
-/*
- * Routines for yielding of XML contents from a GPath Slurper to a Markup Builder.
+/**
+ * Routines for yielding of XML contents from a {@link GPathResult GPath object} 
+ * to a {@link MarkupBuilder markup builder}.
  * @author Dmytro Rud
  */
 class XmlYielder {
@@ -107,7 +108,7 @@ class XmlYielder {
     /**
      * Returns namespace prefix for the given namespace URI.
      * When this URI is not known yet, registers it in the "known namespaces" map
-     * and creates the corresponding attribute <code>xmlns:prefix="uri"<code>. 
+     * and creates the corresponding attribute <code>xmlns:prefix="uri"</code>. 
      */
     static String getNsPrefix(String nsUri, Map<String, String> knownNamespaces, Map<String, String> attributes) {
         String prefix = knownNamespaces[nsUri]
@@ -120,7 +121,7 @@ class XmlYielder {
 
     /**
      * Adds the given namespace URI to the "known namespaces" map and creates
-     * the corresponding attribute <code>xmlns:prefix="uri"<code>. 
+     * the corresponding attribute <code>xmlns:prefix="uri"</code>. 
      */
     static String createNsPrefix(String nsUri, Map<String, String> knownNamespaces, Map<String, String> attributes) {
         String prefix = "ns${knownNamespaces.size()}"

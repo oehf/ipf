@@ -30,8 +30,7 @@ class XcpdExtension {
      
      /**
       * Validates an ITI-55 request
-      * @ipfdoc IHE Support#validation xcpd
-      * @dsl platform-camel-ihe-xcpd
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti55Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 55, true);
@@ -39,8 +38,7 @@ class XcpdExtension {
      
      /**
       * Validates an ITI-55 response
-      * @ipfdoc IHE Support#validation xcpd
-      * @dsl platform-camel-ihe-xcpd
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti55Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 55, false);
@@ -48,8 +46,7 @@ class XcpdExtension {
 
      /**
       * Validates an ITI-56 request
-      * @ipfdoc IHE Support#validation xcpd
-      * @dsl platform-camel-ihe-xcpd
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti56Request(ValidatorAdapterDefinition self) {
          return validationLogic(self, 56, true);
@@ -57,8 +54,7 @@ class XcpdExtension {
      
      /**
       * Validates an ITI-56 response
-      * @ipfdoc IHE Support#validation xcpd
-      * @dsl platform-camel-ihe-xcpd
+      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti56Response(ValidatorAdapterDefinition self) {
          return validationLogic(self, 56, false);

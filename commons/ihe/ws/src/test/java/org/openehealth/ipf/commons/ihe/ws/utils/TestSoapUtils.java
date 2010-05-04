@@ -48,7 +48,7 @@ public class TestSoapUtils {
         final String emptyEnvelopeWithNamespacePrefixes = 
             "<soap:Envelope><soap:Header>" +
             "    <thirdns:header value=\"12345\">some text</thirdns:header></soap:Header>" +
-            "    <soap:Body></soap:Body></soap:Envelope>";
+            "    <soap:Body xmlns:prefix=\"uri\"></soap:Body></soap:Envelope>";
 
         final String emptyEnvelopeWithoutNamespacePrefixes = 
             "<Envelope><Header>" +
@@ -58,7 +58,7 @@ public class TestSoapUtils {
         final String emptyEnvelopeWithNamespacePrefixesShort = 
             "<soap:Envelope><soap:Header>" +
             "    <thirdns:header value=\"12345\">some text</thirdns:header></soap:Header>" +
-            "    <soap:Body/></soap:Envelope>";
+            "    <soap:Body attrib=\"value\" /></soap:Envelope>";
 
         final String emptyEnvelopeWithoutNamespacePrefixesShort = 
             "<Envelope><Header>" +
