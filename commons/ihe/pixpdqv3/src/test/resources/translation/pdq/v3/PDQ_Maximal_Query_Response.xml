@@ -28,7 +28,7 @@
   <acknowledgement>
     <typeCode code="CA" />
     <targetMessage>
-      <id root="1.2.840.114350.1.13.0.1.7.1.1" extension="35423" />
+      <id root="1.2.840.114350.1.13.0.1.7.1.1" />
     </targetMessage>
   </acknowledgement>
   <controlActProcess classCode="CACT" moodCode="EVN">

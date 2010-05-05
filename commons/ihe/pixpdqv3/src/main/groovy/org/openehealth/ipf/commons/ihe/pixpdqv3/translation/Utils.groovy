@@ -75,7 +75,14 @@ class Utils {
         msg.MSH[5][1] = senderOrReceiverIdentification(xml.receiver, useReceiverDeviceName)
         msg.MSH[6][1] = ''
         msg.MSH[7][1] = xml.creationTime.@value.text().replaceFirst('[.+-].*$', '')
-        msg.MSH[10]   = xml.id.@extension?.text() ?: UUID.randomUUID().toString()
+        
+        String idRoot = xml.id.@root?.text()
+        if (idRoot) {
+            String idExtension = xml.id.@extension?.text()
+            msg.MSH[10] = idExtension ? (idExtension + '@' + idRoot) : idRoot
+        } else {
+            msg.MSH[10] = UUID.randomUUID().toString()
+        }
     }
 
     
