@@ -24,6 +24,9 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 /**
  * XCPD DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} 
  * using the {@code use} keyword.
+ *
+ * @dsl
+ *
  * @author Dmytro Rud
  */
 class XcpdExtension {

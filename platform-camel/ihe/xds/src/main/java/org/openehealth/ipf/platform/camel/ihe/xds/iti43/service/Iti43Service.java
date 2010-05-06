@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultXdsWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
- * Service implementation for the IHE ITI-34 transaction (Retrieve Document Set).
+ * Service implementation for the IHE ITI-43 transaction (Retrieve Document Set).
  * <p>
  * This implementation delegates to a Camel consumer by creating an exchange.
  *

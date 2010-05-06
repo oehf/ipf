@@ -21,6 +21,11 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.binding.soap.Soap11;
+import org.apache.cxf.binding.soap.Soap12;
+import org.apache.cxf.ws.addressing.Names;
+import org.apache.cxf.ws.addressing.VersionTransformer.Names200403;
+import org.apache.cxf.ws.addressing.VersionTransformer.Names200408;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -56,21 +61,20 @@ public abstract class SoapUtils {
     
     static {
         WS_ADDRESSING_NS_URIS = new HashSet<String>();
-        WS_ADDRESSING_NS_URIS.add("http://schemas.xmlsoap.org/ws/2004/08/addressing");
-        WS_ADDRESSING_NS_URIS.add("http://www.w3.org/2005/08/addressing");                                 
-        WS_ADDRESSING_NS_URIS.add("http://www.w3.org/2006/05/addressing");
+        WS_ADDRESSING_NS_URIS.add(Names.WSA_NAMESPACE_NAME);
+        WS_ADDRESSING_NS_URIS.add(Names200403.WSA_NAMESPACE_NAME);
+        WS_ADDRESSING_NS_URIS.add(Names200408.WSA_NAMESPACE_NAME);
         
         WS_SECURITY_NS_URIS = new HashSet<String>();
         WS_SECURITY_NS_URIS.add("http://schemas.xmlsoap.org/ws/2002/07/secext");
         WS_SECURITY_NS_URIS.add("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
         
         SOAP_NS_URIS = new HashSet<String>();
-        SOAP_NS_URIS.add("http://schemas.xmlsoap.org/soap/envelope/");      // SOAP 1.1
-        SOAP_NS_URIS.add("http://www.w3.org/2003/05/soap-envelope");        // SOAP 1.2
+        SOAP_NS_URIS.add(Soap11.SOAP_NAMESPACE);
+        SOAP_NS_URIS.add(Soap12.SOAP_NAMESPACE);
     }
 
 
-    
     /* ----------------------- */
     /*      XML utilities      */ 
     /* ----------------------- */

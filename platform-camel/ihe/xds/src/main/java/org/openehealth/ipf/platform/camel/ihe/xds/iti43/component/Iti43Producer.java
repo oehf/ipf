@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
- * The producer implementation for the ITI-42 component.
+ * The producer implementation for the ITI-43 component.
  */
 public class Iti43Producer extends DefaultItiProducer {
     
