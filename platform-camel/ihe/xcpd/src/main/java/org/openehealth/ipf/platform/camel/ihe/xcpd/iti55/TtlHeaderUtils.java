@@ -39,16 +39,6 @@ public class TtlHeaderUtils {
 
     private static final QName TTL_HEADER_QNAME = new QName("urn:ihe:iti:xcpd:2009", "CorrelationTimeToLive"); 
     
-    private static final JAXBDataBinding DATABINDING;
-    static {
-        try {
-            DATABINDING = new JAXBDataBinding(String.class);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);      // cannot occur
-        }
-    }
-
-
     private TtlHeaderUtils() {
         throw new IllegalStateException("cannot instantiate utility class");
     }
@@ -105,7 +95,7 @@ public class TtlHeaderUtils {
     @SuppressWarnings("unchecked")
     public static void addTtlHeader(Duration dura, Map<String, Object> context) {
         if (dura != null) {
-            Header soapHeader = new Header(TTL_HEADER_QNAME, dura.toString(), DATABINDING);
+            Header soapHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
             List<Header> soapHeaders = (List<Header>) context.get(Header.HEADER_LIST);
             if (soapHeaders == null) {
                 soapHeaders = new ArrayList<Header>();
@@ -115,6 +105,16 @@ public class TtlHeaderUtils {
         }
     }
 
+    
+    private static JAXBDataBinding getStringDataBinding() {
+        try {
+            return new JAXBDataBinding(String.class);
+        } catch (JAXBException e) {
+            // actually cannot occur
+            throw new RuntimeException(e);
+        }
+    }
+    
     
     /**
      * Removes XCPD TTL header from the given message context.
