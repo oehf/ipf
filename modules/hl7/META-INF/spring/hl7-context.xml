@@ -15,5 +15,13 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         class="org.openehealth.ipf.modules.hl7.extend.HapiModelExtension">
         <property name="mappingService" ref="mappingService" />
     </bean>
+    
+    <bean id="customModelClassFactory" 
+        class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory">
+    </bean>    
 
+    <bean id="customModelClassFactoryConfigurer" 
+        class="org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer">
+        <property name="customModelClassFactory" ref="customModelClassFactory" />
+    </bean>
 </beans>
