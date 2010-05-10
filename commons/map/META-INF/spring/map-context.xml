@@ -20,4 +20,9 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         <property name="mappingService" ref="mappingService" />
     </bean>
     
+    <bean id="customMappingsConfigurer"
+        class="org.openehealth.ipf.commons.map.config.CustomMappingsConfigurer">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
+    
 </beans>

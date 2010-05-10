@@ -24,4 +24,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
         interface="org.openehealth.ipf.commons.map.MappingService">
     </osgi:service>
 
+    <osgi:service ref="customMappingsConfigurer" 
+        interface="org.openehealth.ipf.commons.core.config.SpringConfigurer" />    
+
 </beans>

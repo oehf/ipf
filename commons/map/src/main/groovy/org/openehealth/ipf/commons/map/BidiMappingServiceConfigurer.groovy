@@ -17,9 +17,13 @@ package org.openehealth.ipf.commons.map
 
 import org.springframework.beans.factory.InitializingBeanimport org.springframework.core.io.Resource
 /**
- * Adds mapping scripts to a reference BidiMappingService instance. 
+ * Adds mapping scripts to a reference BidiMappingService instance. Due
+ * to introduction of the new IPF's extension framework, this
+ * specific configurer is deprecated.
  * 
  * @author Martin Krasser
+ * @Deprecated
+ * 
  */
 class BidiMappingServiceConfigurer implements InitializingBean {
 
