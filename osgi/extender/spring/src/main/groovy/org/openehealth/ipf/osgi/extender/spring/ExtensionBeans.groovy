@@ -29,5 +29,5 @@ class ExtensionBeans {
              beanFactory.getBean(it)
          }
      }
-     
+
 }

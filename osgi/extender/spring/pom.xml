@@ -4,13 +4,13 @@
     <groupId>org.openehealth.ipf.osgi</groupId>
     <artifactId>osgi-extender-spring</artifactId>
     <name>osgi-extender-spring</name>
-    
+
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
         <artifactId>osgi-extender</artifactId>
         <version>2.2-SNAPSHOT</version>
     </parent>
-    
+
     <properties>
         <osgi.export.pkg>
             org.openehealth.ipf.osgi.extender.spring.*
