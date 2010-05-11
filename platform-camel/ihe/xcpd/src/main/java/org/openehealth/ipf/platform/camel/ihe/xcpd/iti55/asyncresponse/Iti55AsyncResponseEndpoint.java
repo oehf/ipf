@@ -25,13 +25,13 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.asyncresponse.Iti55AsyncResponse;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
 
 /**
  * The Camel endpoint for the ITI-55 async response.
  */
-public class Iti55AsyncResponseEndpoint extends AsynchronousItiEndpoint /*DefaultItiEndpoint*/ {
+public class Iti55AsyncResponseEndpoint extends DefaultItiEndpoint {
     /**
      * Constructs the endpoint.
      * @param endpointUri

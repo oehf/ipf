@@ -21,9 +21,8 @@ import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiProducer;
 import static org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils.*
 
 /**
@@ -86,11 +85,11 @@ class TestIti56 extends StandardTestContainer {
          
          // set WSA ReplyTo header, when necessary
          if (responseEndpointUri) {
-             requestExchange.in.headers[AsynchronousItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
+             requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
          }
 
          // set correlation key
-         requestExchange.in.headers[AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
+         requestExchange.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
          
          // send and check timing
          long startTimestamp = System.currentTimeMillis()

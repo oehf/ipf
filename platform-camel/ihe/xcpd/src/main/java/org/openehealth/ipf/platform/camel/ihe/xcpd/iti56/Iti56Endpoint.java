@@ -26,13 +26,13 @@ import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
 
 /**
  * The Camel endpoint for the ITI-56 transaction.
  */
-public class Iti56Endpoint extends AsynchronousItiEndpoint /*DefaultItiEndpoint*/{
+public class Iti56Endpoint extends DefaultItiEndpoint {
     /**
      * Constructs the endpoint.
      * @param endpointUri

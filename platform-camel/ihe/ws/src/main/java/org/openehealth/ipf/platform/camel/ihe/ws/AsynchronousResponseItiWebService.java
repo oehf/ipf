@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.ws.async;
+package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InRelatesToHackInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
  * Base class for receivers of asynchronous responses for Web Service-based IHE transactions.
@@ -53,7 +52,7 @@ public class AsynchronousResponseItiWebService extends DefaultItiWebService {
         String messageId = InRelatesToHackInterceptor.retrieveMessageId(messageHeaders);
 
         if (messageId != null) {
-            AsynchronousItiEndpoint endpoint = (AsynchronousItiEndpoint) getConsumer().getEndpoint();
+            DefaultItiEndpoint endpoint = (DefaultItiEndpoint) getConsumer().getEndpoint();
             
             // expose user-defined correlation key as message header
             String correlationKey = endpoint.getCorrelator().getCorrelationKey(messageId);
@@ -62,7 +61,7 @@ public class AsynchronousResponseItiWebService extends DefaultItiWebService {
                     // NB: it shouldn't be a non-modifiable singleton map...
                     headers = new HashMap<String, Object>();
                 }
-                headers.put(AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, correlationKey);
+                headers.put(DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME, correlationKey);
             }
             
             // correlation data in not necessary any more

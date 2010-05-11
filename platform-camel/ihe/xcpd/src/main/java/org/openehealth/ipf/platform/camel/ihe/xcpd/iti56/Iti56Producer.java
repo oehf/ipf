@@ -17,13 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti56;
 
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-56 component.
  * @author Dmytro Rud
  */
-public class Iti56Producer extends AsynchronousItiProducer<String, String> {
+public class Iti56Producer extends DefaultItiProducer<String, String> {
     
     /**
      * Constructs the producer.
@@ -33,7 +33,7 @@ public class Iti56Producer extends AsynchronousItiProducer<String, String> {
      *          the factory for clients to produce messages for the service.              
      */
     public Iti56Producer(Iti56Endpoint endpoint, ItiClientFactory clientFactory) {
-        super(endpoint, clientFactory, true);
+        super(endpoint, clientFactory, true, true);
     }
 
 

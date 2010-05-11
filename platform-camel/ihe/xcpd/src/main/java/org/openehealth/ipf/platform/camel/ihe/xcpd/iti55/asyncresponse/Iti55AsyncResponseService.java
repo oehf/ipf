@@ -22,7 +22,7 @@ import javax.xml.ws.handler.MessageContext;
 import org.apache.camel.ExchangePattern;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.asyncresponse.Iti55AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousResponseItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.TtlHeaderUtils;
 
 /**

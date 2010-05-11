@@ -22,7 +22,6 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.Action;
 
-
 @WebService(targetNamespace = "urn:ihe:iti:pdqv3:2007", name = "PDSupplier_PortType")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti47PortType {
@@ -30,27 +29,24 @@ public interface Iti47PortType {
     @WebResult(name = "PRPA_IN201306UV02", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201305UV02", output = "urn:hl7-org:v3:PRPA_IN201306UV02")
     @WebMethod(operationName = "PDSupplier_PRPA_IN201305UV02")
-    public /*PRPAIN201306UV02*/ String pdSupplierPRPAIN201305UV02(
+    public String pdSupplierPRPAIN201305UV02(
         @WebParam(partName = "Body", name = "PRPA_IN201305UV02", targetNamespace = "urn:hl7-org:v3")
-        //PRPAIN201305UV02 body
         String body
     );
 
     @WebResult(name = "PRPA_IN201306UV02", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue", output = "urn:hl7-org:v3:PRPA_IN201306UV02")
     @WebMethod(operationName = "PDSupplier_QUQI_IN000003UV01_Continue")
-    public /*PRPAIN201306UV02*/ String pdSupplierQUQIIN000003UV01Continue(
+    public String pdSupplierQUQIIN000003UV01Continue(
         @WebParam(partName = "Body", name = "QUQI_IN000003UV01", targetNamespace = "urn:hl7-org:v3")
-        //QUQIIN000003UV01Type body
         String body
     );
 
     @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "PDSupplier_QUQI_IN000003UV01_Cancel")
-    public /*MCCIIN000002UV01*/ String pdSupplierQUQIIN000003UV01Cancel(
+    public String pdSupplierQUQIIN000003UV01Cancel(
         @WebParam(partName = "Body", name = "QUQI_IN000003UV01_Cancel", targetNamespace = "urn:hl7-org:v3")
-        //QUQIIN000003UV01Type body
         String body
     );
 }

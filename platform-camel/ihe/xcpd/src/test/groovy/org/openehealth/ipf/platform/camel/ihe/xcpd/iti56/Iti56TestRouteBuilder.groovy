@@ -21,7 +21,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import static org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils.*
 
 /**
@@ -46,7 +46,7 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
             .validate().iti56Response()
             .process {
                 assert it.pattern == ExchangePattern.InOnly
-                assert it.in.headers[AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME] == 
+                assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == 
                     "corr ${asyncResponseCount.getAndIncrement() * 2}"
             }
             .delay(ASYNC_DELAY)

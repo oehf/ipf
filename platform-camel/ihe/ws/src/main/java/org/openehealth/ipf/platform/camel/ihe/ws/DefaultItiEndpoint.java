@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import org.apache.camel.Component;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 
 /**
  * Camel endpoint used to create producers and consumers based on webservice calls.
@@ -27,13 +28,27 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     private static final String ENDPOINT_PROTOCOL = "http://";
     private static final String ENDPOINT_PROTOCOL_SECURE = "https://";
 
-    private final String address;
+    /**
+     * Name of incoming Camel header where the user should store the URL
+     * of asynchronous response endpoint (WS-Addressing header "ReplyTo").  
+     */
+    public static final String WSA_REPLYTO_HEADER_NAME = "ipf.wsa.ReplyTo";
     
+    /**
+     * Name of incoming Camel header where the user should store 
+     * the optional correlation key.  
+     */
+    public static final String CORRELATION_KEY_HEADER_NAME = "ipf.correlation.key";
+
+    private final String address;
+
     private String serviceAddress;
     private String serviceUrl;    
     private boolean secure;
     private boolean audit = true;
     private boolean allowIncompleteAudit = false;
+    private AsynchronyCorrelator correlator = null;
+
 
     /**
      * Constructs the endpoint.
@@ -131,5 +146,19 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     public void setSecure(boolean secure) {
         this.secure = secure;
         configure();
+    }
+
+    /**
+     * Configures the asynchrony correlator for this endpoint.
+     */
+    public void setCorrelator(AsynchronyCorrelator correlator) {
+        this.correlator = correlator;
+    }
+    
+    /**
+     * Returns the correlator.
+     */
+    public AsynchronyCorrelator getCorrelator() {
+        return correlator;
     }
 }
