@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.async.AsynchronousItiProducer;
  * The producer implementation for the ITI-55 component.
  * @author Dmytro Rud
  */
-public class Iti55Producer extends AsynchronousItiProducer {
+public class Iti55Producer extends AsynchronousItiProducer<String, String> {
     
     /**
      * Constructs the producer.
@@ -53,7 +53,7 @@ public class Iti55Producer extends AsynchronousItiProducer {
 
     
     @Override
-    protected String call(Object client, String body) {
+    protected String callService(Object client, String body) {
         return ((Iti55PortType) client).respondingGatewayPRPAIN201305UV02(body);
     }
 

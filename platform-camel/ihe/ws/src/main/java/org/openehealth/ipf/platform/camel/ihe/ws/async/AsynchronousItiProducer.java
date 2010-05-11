@@ -37,7 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
  * Producer implementation with support for WSA-based asynchronous interactions.
  * @author Dmytro Rud
  */
-abstract public class AsynchronousItiProducer extends DefaultItiProducer {
+abstract public class AsynchronousItiProducer<InType, OutType> extends DefaultItiProducer<InType, OutType> {
     
     /**
      * Whether request payload should be stored in the asynchrony correlator. 
@@ -63,13 +63,6 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
         this.needStoreRequestPayload = needStoreRequestPayload;
     }
 
-
-    /**
-     * Calls the remote service.
-     */
-    abstract protected String call(Object client, String body);
-
-
     /**
      * Enriches the given request exchange from the request context data.
      */
@@ -85,10 +78,11 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
-    protected void callService(Exchange exchange) {
+    public void process(Exchange exchange) {
         // prepare
-        String body = exchange.getIn().getBody(String.class);
+        InType body = (InType) exchange.getIn().getBody();
         Object client = getClient();
         configureClient(client);
         BindingProvider bindingProvider = (BindingProvider) client;
@@ -113,16 +107,18 @@ abstract public class AsynchronousItiProducer extends DefaultItiProducer {
             String correlationKey = exchange.getIn().getHeader(
                     AsynchronousItiEndpoint.CORRELATION_KEY_HEADER_NAME, 
                     String.class);
+
+            // TODO: better body serialization instead of .toString()
             endpoint.getCorrelator().put(
                     messageId, 
                     endpoint.getEndpointUri(),
                     correlationKey,
-                    needStoreRequestPayload ? body : null);
+                    needStoreRequestPayload ? body.toString() : null);
         }
         
         // invoke
         exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
-        String result = call(client, body);
+        OutType result = callService(client, body);
         
         // for synchronous interaction: handle response
         if (replyToUri == null) {

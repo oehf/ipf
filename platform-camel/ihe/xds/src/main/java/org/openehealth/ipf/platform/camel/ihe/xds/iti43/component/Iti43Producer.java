@@ -15,18 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43.component;
 
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-43 component.
  */
-public class Iti43Producer extends DefaultItiProducer {
+public class Iti43Producer extends DefaultItiProducer<RetrieveDocumentSetRequestType, RetrieveDocumentSetResponseType> {
     
     /**
      * Constructs the producer.
@@ -39,12 +37,8 @@ public class Iti43Producer extends DefaultItiProducer {
         super(endpoint, clientFactory);
     }
 
-    
     @Override
-    protected void callService(Exchange exchange) {
-        RetrieveDocumentSetRequestType body =
-                exchange.getIn().getBody(RetrieveDocumentSetRequestType.class);
-        RetrieveDocumentSetResponseType result = ((Iti43PortType) getClient()).documentRepositoryRetrieveDocumentSet(body);
-        Exchanges.resultMessage(exchange).setBody(result);
+    protected RetrieveDocumentSetResponseType callService(Object client, RetrieveDocumentSetRequestType body) {
+        return ((Iti43PortType) client).documentRepositoryRetrieveDocumentSet(body);
     }
 }

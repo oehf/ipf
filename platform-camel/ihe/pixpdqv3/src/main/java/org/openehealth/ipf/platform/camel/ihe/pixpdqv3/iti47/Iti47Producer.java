@@ -15,16 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47;
 
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti47.Iti47PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-47 component.
  */
-public class Iti47Producer extends DefaultItiProducer {
+public class Iti47Producer extends DefaultItiProducer<String, String> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -37,10 +35,7 @@ public class Iti47Producer extends DefaultItiProducer {
     }
 
     @Override
-    protected void callService(Exchange exchange) {
-        String body = exchange.getIn().getBody(String.class);
-        Iti47PortType client = (Iti47PortType) getClient();
-        String result = client.pdSupplierPRPAIN201305UV02(body);
-        Exchanges.resultMessage(exchange).setBody(result);
+    protected String callService(Object client, String body) {
+        return ((Iti47PortType) client).pdSupplierPRPAIN201305UV02(body);
     }
 }

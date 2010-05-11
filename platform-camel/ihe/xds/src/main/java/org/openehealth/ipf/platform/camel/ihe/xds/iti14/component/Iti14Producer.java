@@ -15,18 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14.component;
 
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14PortType;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-14 component.
  */
-public class Iti14Producer extends DefaultItiProducer {
+public class Iti14Producer extends DefaultItiProducer<SubmitObjectsRequest, RegistryResponse> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -39,10 +37,7 @@ public class Iti14Producer extends DefaultItiProducer {
     }
 
     @Override
-    protected void callService(Exchange exchange) {
-        SubmitObjectsRequest body =
-                exchange.getIn().getBody(SubmitObjectsRequest.class);
-        RegistryResponse result = ((Iti14PortType)getClient()).documentRegistryRegisterDocumentSet(body);
-        Exchanges.resultMessage(exchange).setBody(result);
+    protected RegistryResponse callService(Object client, SubmitObjectsRequest body) {
+        return ((Iti14PortType) client).documentRegistryRegisterDocumentSet(body);
     }
 }

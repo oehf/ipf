@@ -15,18 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16.component;
 
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-16 component.
  */
-public class Iti16Producer extends DefaultItiProducer {
+public class Iti16Producer extends DefaultItiProducer<AdhocQueryRequest, RegistryResponse> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -39,10 +37,7 @@ public class Iti16Producer extends DefaultItiProducer {
     }
 
     @Override
-    protected void callService(Exchange exchange) {
-        AdhocQueryRequest body =
-                exchange.getIn().getBody(AdhocQueryRequest.class);
-        RegistryResponse result = ((Iti16PortType) getClient()).documentRegistryQueryRegistry(body);
-        Exchanges.resultMessage(exchange).setBody(result);
+    protected RegistryResponse callService(Object client, AdhocQueryRequest body) {
+        return ((Iti16PortType) client).documentRegistryQueryRegistry(body);
     }
 }

@@ -21,20 +21,18 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.xml.ws.BindingProvider;
 
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-15 component.
  */
-public class Iti15Producer extends DefaultItiProducer {
+public class Iti15Producer extends DefaultItiProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponse> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -47,20 +45,16 @@ public class Iti15Producer extends DefaultItiProducer {
     }
 
     @Override
-    protected void callService(Exchange exchange) {
-        ProvideAndRegisterDocumentSetRequestType body =
-                exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
-        BindingProvider bindingProvider = (BindingProvider)getClient();
-        Map<String, Object> requestContext = bindingProvider.getRequestContext();
-        
+    protected RegistryResponse callService(Object client, ProvideAndRegisterDocumentSetRequestType body) {
         Map<String, DataHandler> attachments = new HashMap<String, DataHandler>();
         for (Document document : body.getDocument()) {
             attachments.put(document.getId(), document.getValue());
         }
         
+        BindingProvider bindingProvider = (BindingProvider) client;
+        Map<String, Object> requestContext = bindingProvider.getRequestContext();
         requestContext.put(ProvidedAttachmentOutInterceptor.ATTACHMENTS, attachments);
-        
-        RegistryResponse result = ((Iti15PortType) getClient()).documentRepositoryProvideAndRegisterDocumentSet(body.getSubmitObjectsRequest());
-        Exchanges.resultMessage(exchange).setBody(result);
+
+        return ((Iti15PortType) client).documentRepositoryProvideAndRegisterDocumentSet(body.getSubmitObjectsRequest());
     }
 }

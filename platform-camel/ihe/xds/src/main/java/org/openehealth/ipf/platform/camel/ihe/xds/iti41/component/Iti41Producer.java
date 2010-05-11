@@ -15,18 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41.component;
 
-import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-41 component.
  */
-public class Iti41Producer extends DefaultItiProducer {
+public class Iti41Producer extends DefaultItiProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponseType> {
     
     /**
      * Constructs the producer.
@@ -39,12 +37,8 @@ public class Iti41Producer extends DefaultItiProducer {
         super(endpoint, clientFactory);
     }
 
-    
     @Override
-    protected void callService(Exchange exchange) {
-        ProvideAndRegisterDocumentSetRequestType body =
-                exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class);
-        RegistryResponseType result = ((Iti41PortType) getClient()).documentRepositoryProvideAndRegisterDocumentSetB(body);
-        Exchanges.resultMessage(exchange).setBody(result);
+    protected RegistryResponseType callService(Object client, ProvideAndRegisterDocumentSetRequestType body) {
+        return ((Iti41PortType) client).documentRepositoryProvideAndRegisterDocumentSetB(body);
     }
 }
