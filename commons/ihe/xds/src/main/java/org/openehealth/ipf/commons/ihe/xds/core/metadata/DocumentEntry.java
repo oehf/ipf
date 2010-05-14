@@ -76,7 +76,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
      *          has no authors, this method returns {@code null}.
      */
     public Author getAuthor() {
-        return authors.size() > 1 ? authors.get(0) : null;
+        return authors.isEmpty() ? null : authors.get(0);
     }
     
     /**
