@@ -18,6 +18,7 @@ package org.openehealth.ipf.modules.cda.builder
 import org.openehealth.ipf.modules.cda.CDAR2Renderer
 import org.eclipse.emf.ecore.xmi.XMLResource
 import org.openhealthtools.ihe.common.cdar2.*
+import org.openhealthtools.ihe.common.cdar2.impl.*
 import org.junit.Test
 import org.junit.Assert
 
@@ -36,6 +37,11 @@ public class CDAR2BuilderTest extends AbstractCDAR2BuilderTest{
 	public void testBuildClinicalDocumentMetaData() {		
 	    def document = builder.build(getClass().getResource('/builders/content/header/CDAHeaderExample1.groovy'))
 		Assert.assertNotNull document 
+		POCDMT000040ClinicalDocumentImpl docImpl = document
+		POCDMT000040RecordTargetImpl recordTargetImpl = docImpl.recordTarget.get(0)
+		POCDMT000040PatientRoleImpl patientRoleImpl = recordTargetImpl.patientRole
+		ADImpl addr = patientRoleImpl.addr.get(0)
+		assert addr.getPostalCode().get(0) instanceof AdxpPostalCode
 	}
 	
 	@Test

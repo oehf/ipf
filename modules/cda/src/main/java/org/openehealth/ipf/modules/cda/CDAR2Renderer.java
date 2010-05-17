@@ -38,8 +38,11 @@ import org.openhealthtools.ihe.common.cdar2.util.CDAR2ResourceFactoryImpl;
  */
 public class CDAR2Renderer implements Renderer<POCDMT000040ClinicalDocument> {
 
-    @Override
-    public String render(POCDMT000040ClinicalDocument doc, Object... options) {
+    /*
+     * (non-Javadoc)
+     * @see org.openehealth.ipf.commons.core.modules.api.Renderer#render(java.lang.Object, java.lang.Object[])
+     */
+	public String render(POCDMT000040ClinicalDocument doc, Object... options) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
             render(doc, bos, options);
@@ -60,7 +63,6 @@ public class CDAR2Renderer implements Renderer<POCDMT000040ClinicalDocument> {
      * @param os the stream to write the XML to
      * @param options may contains a map with options for rendering.
      */
-    @Override
     @SuppressWarnings("unchecked")
     public OutputStream render(POCDMT000040ClinicalDocument doc,
             OutputStream os, Object... options) throws IOException {
@@ -87,13 +89,19 @@ public class CDAR2Renderer implements Renderer<POCDMT000040ClinicalDocument> {
         return os;
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * @see org.openehealth.ipf.commons.core.modules.api.Renderer#render(java.lang.Object, javax.xml.transform.Result, java.lang.Object[])
+     */
     public Result render(POCDMT000040ClinicalDocument doc, Result result,
             Object... options) throws IOException {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * @see org.openehealth.ipf.commons.core.modules.api.Renderer#render(java.lang.Object, java.io.Writer, java.lang.Object[])
+     */
     public Writer render(POCDMT000040ClinicalDocument doc, Writer writer,
             Object... options) throws IOException {
         // TODO avoid temporary string object

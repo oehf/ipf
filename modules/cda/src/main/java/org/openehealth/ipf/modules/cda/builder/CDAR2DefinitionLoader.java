@@ -27,7 +27,10 @@ public class CDAR2DefinitionLoader extends DefaultBuilderDefinitionLoader {
         super(builder);
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * @see org.openehealth.ipf.modules.cda.builder.BuilderDefinitionLoader#load(java.util.Collection)
+     */
     public void load(Collection<String> loaded) {
         try {
             doLoad("/builders/AnyBuilder.groovy", loaded);

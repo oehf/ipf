@@ -47,7 +47,6 @@ public class CDAR2Parser implements Parser<POCDMT000040ClinicalDocument> {
     /* (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.lang.String, java.lang.Object[])
      */
-    @Override
     public POCDMT000040ClinicalDocument parse(String s, Object... options) {
         try {
             return parse(new ByteArrayInputStream(s.getBytes()), options);
@@ -59,7 +58,6 @@ public class CDAR2Parser implements Parser<POCDMT000040ClinicalDocument> {
     /* (non-Javadoc)
      * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.io.InputStream, java.lang.Object[])
      */
-    @Override
     public POCDMT000040ClinicalDocument parse(InputStream is, Object... options)
             throws IOException {
         Resource resources = new CDAR2ResourceFactoryImpl().createResource(URI.createURI(CDAR2Package.eNS_URI));
@@ -73,12 +71,18 @@ public class CDAR2Parser implements Parser<POCDMT000040ClinicalDocument> {
         return root.getClinicalDocument();
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(javax.xml.transform.Source, java.lang.Object[])
+     */
     public POCDMT000040ClinicalDocument parse(Source source, Object... options) throws IOException {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * @see org.openehealth.ipf.commons.core.modules.api.Parser#parse(java.io.Reader, java.lang.Object[])
+     */
     public POCDMT000040ClinicalDocument parse(Reader reader, Object... options) throws IOException {
         throw new UnsupportedOperationException("Not implemented yet");
     }

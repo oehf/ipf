@@ -37,7 +37,10 @@ public abstract class DefaultBuilderDefinitionLoader implements
         this.builder = builder;
     }
 
-    @Override
+    /*
+     * (non-Javadoc)
+     * @see org.openehealth.ipf.modules.cda.builder.BuilderDefinitionLoader#load()
+     */
     public Collection<String> load() {
         Collection<String> loaded = new HashSet<String>();
         load(loaded);

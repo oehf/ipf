@@ -20,6 +20,13 @@ clinicalDocument {
 				extension="12345" 
 				root="2.16.840.1.113883.19.5"
 			}
+			addr{
+				streetAddressLine('21 North Ave')
+	            city('Burlington')
+	            state('MA')
+	            postalCode('01803')
+	            country('USA')
+			}//addr	  
 			patient {
 				name {
 					given('Henry') 
@@ -39,7 +46,7 @@ clinicalDocument {
 							family('Person')
 						}
 					}
-				}
+				}          
 			}
 			providerOrganization { id(root:"2.16.840.1.113883.19.5") }
 		}//patient role
