@@ -20,6 +20,7 @@
         <module>osgi</module>
         <module>lbs</module>
         <module>xds</module>
+		<module>config</module>
     </modules>
 
     <dependencies>
