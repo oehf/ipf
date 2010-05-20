@@ -31,7 +31,7 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * List of relevant segments for particular message types.
       */
-     def static final RULES =
+     static final Map<String, Map<String, String>>RULES =
          [
           'ADT' : ['A01 A04 A05 A08' : 'MSH EVN PIDx PV1',
                    'A31'             : 'MSH EVN PIDy PV1',
@@ -49,11 +49,11 @@ class MessageAdapterValidator implements Validator<Object, Object> {
 
      
      /**
-      * Performs validation of an HL7 message
+      * Performs validation of an HL7 message.
       * @param msg
-      *     {@link MessageAdapter} with the mesasge to be validated
+      *     {@link MessageAdapter} with the message to be validated.
       * @param dummy
-      *     unused fictive parameter  
+      *     unused parameter.
       */
      void validate(Object msg, Object dummy) throws ValidationException {
          def msh91 = msg.MSH[9][1].value
@@ -84,8 +84,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates a message.
       */
-     static def checkMessage(msg, segmentNames) {
-         def exceptions = []
+     Collection<Exception> checkMessage(msg, String segmentNames) {
+         Collection<Exception> exceptions = []
          exceptions += checkUnrecognizedSegments(msg.group)
          for(segmentName in segmentNames.tokenize()) {
              exceptions += "check${segmentName}"(msg)
@@ -96,8 +96,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates structure of a message segment.
       */
-     static def checkSegmentStructure(msg, segmentName, fieldNumbers) {
-         def exceptions = []
+     Collection<Exception> checkSegmentStructure(msg, String segmentName, Collection<Integer> fieldNumbers) {
+         Collection<Exception> exceptions = []
          def segment = msg."${segmentName}"
          for(i in fieldNumbers) {
              if( ! segment[i].value) {
@@ -110,8 +110,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Searches for unrecognized segments in a Group.
       */
-     static def checkUnrecognizedSegments(Group group) {
-         def exceptions = []
+     Collection<Exception> checkUnrecognizedSegments(Group group) {
+         Collection<Exception> exceptions = []
          for(name in group.names) {
              def c = group.getClass(name)
              if(c == GenericSegment.class) {
@@ -129,8 +129,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Valdates group QUERY_RESPONSE from RSP^K22, RSP^K23.
       */
-     static def checkQUERY_RESPONSE(msg) {
-         def exceptions = []
+     Collection<Exception> checkQUERY_RESPONSE(msg) {
+         Collection<Exception> exceptions = []
          def queryResponse = msg.QUERY_RESPONSE
          if(queryResponse instanceof SelectorClosure) {
              // PDQ (ITI-21)
@@ -147,8 +147,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Valdates group PIDPD1MRGPV1 from ADT^A40.
       */
-     static def checkPIDPD1MRGPV1(msg) {
-         def exceptions = []
+     Collection<Exception> checkPIDPD1MRGPV1(msg) {
+         Collection<Exception> exceptions = []
          def group = msg.PIDPD1MRGPV1
          exceptions += checkShortPatientId(group.PID[3])
          exceptions += checkShortPatientId(group.MRG[1])
@@ -161,29 +161,29 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates segment EVN.
       */
-     static def checkEVN(msg) {
+     Collection<Exception> checkEVN(msg) {
          checkSegmentStructure(msg, 'EVN', [2])
      }
 
      /**
       * Validates segment MSA.
       */
-     static def checkMSA(msg) {
+     Collection<Exception> checkMSA(msg) {
          checkSegmentStructure(msg, 'MSA', [1, 2])
      }
 
      /**
       * Validates segment MSH.
       */
-     static def checkMSH(msg) {
+     Collection<Exception> checkMSH(msg) {
          checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12])
      }
 
      /**
       * Validates segment PID.
       */
-     static def checkPID(msg) {
-         def exceptions = []
+     Collection<Exception> checkPID(msg) {
+         Collection<Exception> exceptions = []
          exceptions += checkPatientName(msg.PID[5])
          exceptions += checkPatientIdList(msg.PID[3])
          exceptions
@@ -192,43 +192,43 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates segment PID (special case for PIX Feed).
       */
-     static def checkPIDx(msg) {
+     Collection<Exception> checkPIDx(msg) {
          checkShortPatientId(msg.PID[3])
      }
 
      /**
       * Validates segment PID (special case for PIX Update Notification).
       */
-     static def checkPIDy(msg) {
+     Collection<Exception> checkPIDy(msg) {
          checkPatientIdList(msg.PID[3])
      }
 
      /**
       * Validates segment PV1.
       */
-     static def checkPV1(msg) {
+     Collection<Exception> checkPV1(msg) {
          checkSegmentStructure(msg, 'PV1', [2])
      }
 
      /**
       * Validates segment QAK.
       */
-     static def checkQAK(msg) {
+     Collection<Exception> checkQAK(msg) {
          checkSegmentStructure(msg, 'QAK', [1, 2])
      }
          
      /**
       * Validates segment QID.
       */
-     static def checkQID(msg) {
+     Collection<Exception> checkQID(msg) {
          checkSegmentStructure(msg, 'QID', [1, 2])
      }
          
      /**
       * Validates segment QPD.
       */
-     static def checkQPD(msg) {
-         def exceptions = []
+     Collection<Exception> checkQPD(msg) {
+         Collection<Exception> exceptions = []
          exceptions += checkSegmentStructure(msg, 'QPD', [1, 2])
          def qpd3 = msg.QPD[3]
          if(qpd3 instanceof SelectorClosure){
@@ -246,7 +246,7 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates segment RCP.
       */
-     static def checkRCP(msg) {
+     Collection<Exception> checkRCP(msg) {
          msg.RCP?.value ? [] : [new Exception('Missing segment RCP')]
      }
 
@@ -257,8 +257,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates patient name (datatype XPN).
       */
-     static def checkPatientName(xpn) {
-         def exceptions = []
+     Collection<Exception> checkPatientName(xpn) {
+         Collection<Exception> exceptions = []
          if( ! (xpn[1].value || xpn[2].value)) {
              exceptions += new Exception('Missing patient name')
          }
@@ -268,8 +268,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates a single patient ID (datatype CX).
       */
-     static def checkPatientId(cx) {
-         def exceptions = []
+     Collection<Exception> checkPatientId(cx) {
+         Collection<Exception> exceptions = []
          if( ! (cx[1].value && (cx[4][1].value || (cx[4][2].value && (cx[4][3].value == 'ISO'))))) {
              exceptions += new Exception('Incomplete patient ID')
          }
@@ -279,8 +279,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates patient ID list (datatype repeatable CX).
       */
-     static def checkPatientIdList(repeatableCX) {
-         def exceptions = []
+     Collection<Exception> checkPatientIdList(repeatableCX) {
+         Collection<Exception> exceptions = []
          repeatableCX().each { cx -> 
              exceptions += checkPatientId(cx) 
          }
@@ -290,8 +290,8 @@ class MessageAdapterValidator implements Validator<Object, Object> {
      /**
       * Validates short patient ID (i.e. without assigning authority, as in PIX Feed).
       */
-     static def checkShortPatientId(pid3) {
-         def exceptions = []
+     Collection<Exception> checkShortPatientId(pid3) {
+         Collection<Exception> exceptions = []
          if(( ! pid3?.value) || ( ! pid3[1]?.value)) {
              exceptions += new Exception('Missing patient ID')
          }
