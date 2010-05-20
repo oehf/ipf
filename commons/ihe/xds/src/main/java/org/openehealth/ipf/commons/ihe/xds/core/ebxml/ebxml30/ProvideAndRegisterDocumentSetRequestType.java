@@ -53,6 +53,7 @@ import java.util.List;
  * 
  * 
  */
+@XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ProvideAndRegisterDocumentSetRequestType", propOrder = {
     "submitObjectsRequest",
