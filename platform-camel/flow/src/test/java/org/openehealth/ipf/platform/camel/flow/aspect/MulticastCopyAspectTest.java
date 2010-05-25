@@ -15,12 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.flow.aspect;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultCamelContext;
@@ -39,6 +34,12 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 
 /**
  * @author Martin Krasser
@@ -54,9 +55,10 @@ public class MulticastCopyAspectTest {
     
     @Before
     public void setUp() throws Exception {
+        CamelContext context = new DefaultCamelContext();
         Processor processor = new TestProcessor();
         messages = new ArrayList<ManagedMessage>();
-        multicast = new MulticastProcessor(Collections.nCopies(5, processor),
+        multicast = new MulticastProcessor(context, Collections.nCopies(5, processor),
                 new UseLatestAggregationStrategy());
     }
 

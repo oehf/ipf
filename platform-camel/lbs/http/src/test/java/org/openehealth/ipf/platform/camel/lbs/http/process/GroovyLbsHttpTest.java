@@ -100,7 +100,7 @@ public class GroovyLbsHttpTest extends AbstractLbsHttpTest {
     /**
      * Test to verify that example code works 
      */
-    @Test
+    @Ignore @Test
     public void testExample3() throws Exception {        
         PostMethod method = new PostMethod("http://localhost:9452/lbstest_example3");
         method.setRequestEntity(new StringRequestEntity("testtext", "text/plain", null));

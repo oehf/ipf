@@ -25,21 +25,12 @@ import org.apache.mina.common.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerInputAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerOutputAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerStringProcessorInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.*;
 
 import javax.net.ssl.SSLContext;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
 
 
 /**
@@ -460,16 +451,6 @@ public class MllpEndpoint extends DefaultEndpoint {
     }
 
     @Override
-    public ExecutorService getExecutorService() {
-        return wrappedEndpoint.getExecutorService();
-    }
-
-    @Override
-    public ScheduledExecutorService getScheduledExecutorService() {
-        return wrappedEndpoint.getScheduledExecutorService();
-    }
-
-    @Override
     public int hashCode() {
         return wrappedEndpoint.hashCode();
     }
@@ -521,11 +502,6 @@ public class MllpEndpoint extends DefaultEndpoint {
     @Override
     public void setExchangePattern(ExchangePattern exchangePattern) {
         wrappedEndpoint.setExchangePattern(exchangePattern);
-    }
-
-    @Override
-    public void setExecutorService(ExecutorService executorService) {
-        wrappedEndpoint.setExecutorService(executorService);
     }
 
     @Override

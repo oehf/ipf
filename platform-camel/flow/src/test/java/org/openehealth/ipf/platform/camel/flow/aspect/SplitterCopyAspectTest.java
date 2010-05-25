@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.flow.aspect;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
@@ -54,8 +55,10 @@ public class SplitterCopyAspectTest {
     
     @Before
     public void setUp() throws Exception {
+        CamelContext context = new DefaultCamelContext();
         messages = new ArrayList<ManagedMessage>();
         splitter = new Splitter(
+                context,
                 new TestExpression(),
                 new TestProcessor(),
                 new UseLatestAggregationStrategy(),

@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.openehealth.tutorial.imagebin.ImageBinServer;
 import org.springframework.test.context.ContextConfiguration;
@@ -57,7 +58,7 @@ public class SampleRouteTest {
         server.stop();
     }
 
-    @Test
+    @Ignore @Test
     public void testUploadAndDownload() throws Exception {
         // Create a post request containing a "fake" image
         PostMethod post = new PostMethod("http://localhost:8412/imagebin");

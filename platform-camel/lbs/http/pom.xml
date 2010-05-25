@@ -32,7 +32,7 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
             <version>${project.version}</version>
-            <classifier>tests</classifier>
+            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>

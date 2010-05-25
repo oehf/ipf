@@ -46,14 +46,14 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
         // --------------------------------------------------------------
         //  LBS routes
         // --------------------------------------------------------------
-        from('jetty:http://localhost:9452/lbstest_no_extract')
+        from('jetty:http://localhost:9452/lbstest_no_extract?disableStreamCache=true').noStreamCaching()
             .to('mock:mock')
 
-        from('jetty:http://localhost:9452/lbstest_extract')
+        from('jetty:http://localhost:9452/lbstest_extract?disableStreamCache=true').noStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
-        from('jetty:http://localhost:9452/lbstest_ping')
+        from('jetty:http://localhost:9452/lbstest_ping?disableStreamCache=true').noStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 def dataSource = exchange.in.getBody(ResourceDataSource.class)
@@ -61,11 +61,11 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             }
             .to('mock:mock');
             
-        from('jetty:http://localhost:9452/lbstest_extract_factory_via_bean')
+        from('jetty:http://localhost:9452/lbstest_extract_factory_via_bean?disableStreamCache=true').noStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
 
-        from('jetty:http://localhost:9452/lbstest_extract_router')
+        from('jetty:http://localhost:9452/lbstest_extract_router?disableStreamCache=true').noStreamCaching()
             .store().with('resourceHandlers')
             .setHeader('tag').constant('I was here')
             .fetch().with('resourceHandlers')
@@ -81,11 +81,11 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             .store().with('resourceHandlers')
             .to('mock:mock')
             
-        from('jetty:http://localhost:9452/lbstest_receiver')
+        from('jetty:http://localhost:9452/lbstest_receiver?disableStreamCache=true').noStreamCaching()
             .store().with('resourceHandlers')
             .to('mock:mock')
             
-        from('jetty:http://localhost:9452/lbstest_jms')
+        from('jetty:http://localhost:9452/lbstest_jms?disableStreamCache=true').noStreamCaching()
             .store().with('resourceHandlers')
             .to('jms:temp:queue:lbstest')
             
@@ -96,14 +96,14 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
                 org.openehealth.ipf.platform.camel.lbs.http.process.GroovyLbsHttpTest.getLength(result)
             }
             
-        from('jetty:http://localhost:9452/lbstest_download')
+        from('jetty:http://localhost:9452/lbstest_download?disableStreamCache=true').noStreamCaching()
             .transform().constant(new org.openehealth.ipf.platform.camel.lbs.http.process.GroovyLbsHttpTest.HugeContentInputStream())
             
         from('jms:temp:queue:lbstest')
             .to('mock:mock')
             
         // Example routes only tested with groovy
-        from('jetty:http://localhost:9452/lbstest_example1')
+        from('jetty:http://localhost:9452/lbstest_example1?disableStreamCache=true').noStreamCaching()
             // Replace the message content with a data source
             .store().with('resourceHandlers') 
             // Custom processing to find a token
@@ -128,7 +128,7 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             }
             .to('mock:mock')
             
-        from('jetty:http://localhost:9452/lbstest_example2')
+        from('jetty:http://localhost:9452/lbstest_example2?disableStreamCache=true').noStreamCaching()
             // Replace the message content with data sources
             .store().with('resourceHandlers')
             // Custom processing to look for text resources
@@ -142,7 +142,7 @@ class LbsHttpRouteBuilderGroovy extends SpringRouteBuilder {
             }
             .to('mock:mock')
             
-        from('jetty:http://localhost:9452/lbstest_example3')
+        from('jetty:http://localhost:9452/lbstest_example3?disableStreamCache=true').noStreamCaching()
             .store().with('resourceHandlers')
             .process { Exchange exchange ->
                 // The resource factory can be used to create resources manually
