@@ -52,7 +52,7 @@
         <springsource-commons-io-version>1.4.0</springsource-commons-io-version>
         <springsource-commons-lang-version>2.4.0</springsource-commons-lang-version>
         <springsource-commons-logging-version>1.1.1</springsource-commons-logging-version>
-        <springsource-commons-pool-version>1.3.0</springsource-commons-pool-version>
+        <springsource-commons-pool-version>1.5.3</springsource-commons-pool-version>
         <springsource-derby-version>10.4.1000003.648739</springsource-derby-version>
         <springsource-dom4j-version>1.6.1</springsource-dom4j-version>
         <springsource-ejb-api-version>3.0.0</springsource-ejb-api-version>
@@ -188,7 +188,18 @@
             <param>mvn:org.springframework.osgi/org.springframework.osgi.core/${spring-osgi-version}@nostart</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.io/${spring-osgi-version}@nostart</param>
             <param>mvn:ca.uhn.hapi/hapi/${hapi-osgi-version}@nostart</param>
-            <param>mvn:org.mortbay.jetty/jetty-client/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-client/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-http/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-server/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-io/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-jmx/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-xml/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-webapp/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-servlet/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-servlets/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-security/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-continuation/${jetty-version}@nostart</param>
+			<param>mvn:org.eclipse.jetty/jetty-util/${jetty-version}@nostart</param>
             <param>mvn:javax.jms/jms/${jms-version}@nostart</param>
             <param>mvn:xml-apis/xml-apis/${xml-apis-version}@nostart</param>
             <param>mvn:xalan/xalan/${xalan-version}@nostart</param>
