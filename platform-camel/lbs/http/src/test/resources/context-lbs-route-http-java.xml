@@ -26,6 +26,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
+    <bean id="jetty" class="org.openehealth.ipf.platform.camel.lbs.http.LbsJettyHttpComponent" />
+
     <bean id="routeBuilder"
         class="org.openehealth.ipf.platform.camel.lbs.http.builder.LbsHttpRouteBuilderJava" />
 

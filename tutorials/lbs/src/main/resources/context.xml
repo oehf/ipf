@@ -42,6 +42,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.tutorial.SampleRouteBuilder">
     </bean>
 
+    <bean id="jetty" class="org.openehealth.ipf.platform.camel.lbs.http.LbsJettyHttpComponent" />
+
     <bean id="coreModelExtension" class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension" />
 
     <bean id="lbsModelExtension" class="org.openehealth.ipf.platform.camel.lbs.core.extend.LbsModelExtension" />

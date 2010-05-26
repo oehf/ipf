@@ -1,8 +1,5 @@
 package org.openehealth.tutorial;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -12,13 +9,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.openehealth.tutorial.imagebin.ImageBinServer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class })
@@ -58,7 +58,7 @@ public class SampleRouteTest {
         server.stop();
     }
 
-    @Ignore @Test
+    @Test
     public void testUploadAndDownload() throws Exception {
         // Create a post request containing a "fake" image
         PostMethod post = new PostMethod("http://localhost:8412/imagebin");

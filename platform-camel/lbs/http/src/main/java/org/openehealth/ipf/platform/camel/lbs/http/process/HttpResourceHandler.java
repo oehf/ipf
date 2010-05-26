@@ -15,17 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.http.process;
 
-import static org.apache.commons.lang.Validate.notNull;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.InvalidPayloadException;
 import org.apache.camel.Message;
@@ -40,9 +29,20 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartBase;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.server.HttpInput;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.platform.camel.lbs.core.process.ResourceHandler;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * A handler for resource contained in an Http message.
@@ -69,8 +69,8 @@ public class HttpResourceHandler implements ResourceHandler {
     @Override
     public Collection<ResourceDataSource> extract(String unitOfWorkId, Message message) throws Exception {
         try {
-            HttpServletRequest request = message.getBody(HttpServletRequest.class);
-            if (request != null) {
+            if (message.getBody() instanceof HttpInput) {
+                HttpServletRequest request = message.getBody(HttpServletRequest.class);
             	String subUnit = getSubUnit(unitOfWorkId);
                 ResourceList resources = extract(subUnit, request);
                 message.setBody(resources);
@@ -237,7 +237,7 @@ public class HttpResourceHandler implements ResourceHandler {
     }
 
     private ResourceList extract(String subUnit, HttpServletRequest request) throws Exception {
-        if (ServletFileUpload.isMultipartContent(request)) {            
+        if (ServletFileUpload.isMultipartContent(request)) {
             return extractFromMultipart(subUnit, request);
         }
         return extractFromSingle(subUnit, request);

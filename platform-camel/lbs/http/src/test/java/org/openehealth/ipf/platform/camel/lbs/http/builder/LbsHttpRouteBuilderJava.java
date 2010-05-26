@@ -42,14 +42,14 @@ public class LbsHttpRouteBuilderJava extends SpringRouteBuilder {
 
         errorHandler(noErrorHandler());
         
-        from("jetty:http://localhost:9452/lbstest_no_extract?disableStreamCache=true").noStreamCaching()
+        from("jetty:http://localhost:9452/lbstest_no_extract")
             .to("mock:mock");
         
-        from("jetty:http://localhost:9452/lbstest_extract?disableStreamCache=true").noStreamCaching()
+        from("jetty:http://localhost:9452/lbstest_extract")
             .process(store().with(handlers))
             .to("mock:mock");
         
-        from("jetty:http://localhost:9452/lbstest_ping?disableStreamCache=true").noStreamCaching()
+        from("jetty:http://localhost:9452/lbstest_ping")
             .process(store().with(handlers))
             .process(new Processor() {
                 @Override
@@ -62,11 +62,11 @@ public class LbsHttpRouteBuilderJava extends SpringRouteBuilder {
             .to("mock:mock");
         
         // Note: This is not available via java, only groovy. Simply make the test work
-        from("jetty:http://localhost:9452/lbstest_extract_factory_via_bean?disableStreamCache=true").noStreamCaching()
+        from("jetty:http://localhost:9452/lbstest_extract_factory_via_bean")
             .process(store().with(handlers))
             .to("mock:mock");
         
-        from("jetty:http://localhost:9452/lbstest_extract_router?disableStreamCache=true").noStreamCaching()
+        from("jetty:http://localhost:9452/lbstest_extract_router")
             .process(store().with(handlers))
             .setHeader("tag", constant("I was here"))
             .process(fetch().with(handlers))
@@ -83,7 +83,7 @@ public class LbsHttpRouteBuilderJava extends SpringRouteBuilder {
             .process(store().with(handlers))
             .to("mock:mock");
 
-        from("jetty:http://localhost:9452/lbstest_receiver?disableStreamCache=true").noStreamCaching()
+        from("jetty:http://localhost:9452/lbstest_receiver")
             .process(store().with(handlers))
             .to("mock:mock");
     }

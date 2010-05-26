@@ -15,36 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.http.process;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.camel.CamelContext;
-import org.apache.camel.EndpointInject;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Processor;
-import org.apache.camel.ProducerTemplate;
+import org.apache.camel.*;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.commons.fileupload.FileItem;
@@ -64,15 +35,26 @@ import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.openehealth.ipf.commons.lbs.resource.ResourceCompatibleDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceDataSource;
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory;
 import org.openehealth.ipf.commons.lbs.store.LargeBinaryStore;
 import org.openehealth.ipf.commons.lbs.utils.CorruptedInputStream;
 import org.openehealth.ipf.platform.camel.core.junit.DirtySpringContextJUnit4ClassRunner;
-import org.openehealth.ipf.platform.camel.lbs.http.process.ResourceList;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 
 /**
@@ -193,7 +175,7 @@ public abstract class AbstractLbsHttpTest {
         mock.assertIsSatisfied();
     }
     
-    @Ignore @Test
+    @Test
     public void testMultipartWithoutResourceExtract() throws Exception {        
         PostMethod method = new PostMethod(ENDPOINT_NO_EXTRACT);
         Part[] parts = new Part[] {
@@ -344,17 +326,17 @@ public abstract class AbstractLbsHttpTest {
                 store.contains(resourceUri[0]));
     }
     
-    @Ignore @Test
+    @Test
     public void testMultipartEndpointExtract() throws Exception {
         testMultipart(ENDPOINT_EXTRACT); 
     }
     
-    @Ignore @Test
+    @Test
     public void testMultipartEndpointFactoryViaBean() throws Exception {
         testMultipart(ENDPOINT_EXTRACT_FACTORY_VIA_BEAN);
     }
 
-    @Ignore @Test
+    @Test
     public void testMultipartEndpointRouter() throws Exception {
         testMultipart(ENDPOINT_EXTRACT_ROUTER);
     }
@@ -387,7 +369,7 @@ public abstract class AbstractLbsHttpTest {
         assertEquals("blu bla", outputGenerator.getReceivedBody());
     }
     
-    @Ignore @Test
+    @Test
     public void testMultipartSendOnly() throws Exception {
         Exchange sendExchange = new DefaultExchange(camelContext);
         

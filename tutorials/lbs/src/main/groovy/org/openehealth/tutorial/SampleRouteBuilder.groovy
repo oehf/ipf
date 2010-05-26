@@ -15,17 +15,11 @@
  */
 package org.openehealth.tutorial
 
-import static org.apache.camel.component.cxf.CxfConstants.*
-import static org.apache.camel.Exchange.*
-
 import javax.activation.DataHandler
-import javax.activation.DataSource
-
+import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.cxf.message.MessageContentsList
-
-import org.openehealth.ipf.platform.camel.lbs.http.process.ResourceList
-
+import static org.apache.camel.Exchange.HTTP_METHOD
+import static org.apache.camel.component.cxf.CxfConstants.OPERATION_NAME
 
 class SampleRouteBuilder extends SpringRouteBuilder {
     
