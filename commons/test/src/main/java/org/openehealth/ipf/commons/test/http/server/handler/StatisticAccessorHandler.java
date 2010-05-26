@@ -21,12 +21,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.HttpConnection;
-import org.mortbay.jetty.Request;
-import org.mortbay.jetty.handler.AbstractHandler;
-import org.mortbay.jetty.handler.ContextHandler;
-import org.mortbay.jetty.handler.StatisticsHandler;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
 
 /**
  * @author Martin Krasser
@@ -35,9 +34,13 @@ public class StatisticAccessorHandler extends AbstractHandler {
 	
 	private final static String STATISTIC_CONTEXT_NAME = "/statistics";
 
+
 	@Override
-    public void handle(String target, HttpServletRequest request, HttpServletResponse response, int dispatch) throws IOException, ServletException {
-		Request baseRequest = (request instanceof Request) ? (Request)request:HttpConnection.getCurrentConnection().getRequest();
+	public void handle(String target,
+			Request baseRequest,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+		
 		baseRequest.setHandled(true);
 
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -75,7 +78,7 @@ public class StatisticAccessorHandler extends AbstractHandler {
                     //
                     response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeTotal() + "</td>");
                     response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeAverage() + "</td>");
-                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMin() + "</td>");
+//                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMin() + "</td>");
                     response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMax() + "</td>");
                     //
                     response.getWriter().println("<td>" + contextStatisticsHandler.getResponses1xx() + "</td>");
@@ -88,7 +91,7 @@ public class StatisticAccessorHandler extends AbstractHandler {
                 }
             }
         }
-		response.getWriter().println("</table>");		
+		response.getWriter().println("</table>");
 		
 	}
 }

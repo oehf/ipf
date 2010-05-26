@@ -21,9 +21,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.jetty.handler.AbstractHandler;
-import org.mortbay.jetty.HttpConnection;
-import org.mortbay.jetty.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.server.Request;
 
 /**
  * @author Martin Krasser
@@ -36,16 +35,14 @@ public class GenericHandler extends AbstractHandler {
         this.delegateHandler = delegateHandler;
     }
 
-    @Override
-    public void handle(String target,
-            HttpServletRequest request,
-            HttpServletResponse response, 
-            int dispatch) throws IOException, ServletException {
-    	
-    	Request base_request = (request instanceof Request) ? (Request)request:HttpConnection.getCurrentConnection().getRequest();
+	@Override
+	public void handle(String target,
+			Request base_request,
+			HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
 		base_request.setHandled(true);
 		delegateHandler.handle(request, response);
         response.getWriter().flush();
-    }
+	}
 
 }
