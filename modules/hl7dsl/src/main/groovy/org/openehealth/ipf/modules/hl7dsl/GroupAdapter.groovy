@@ -84,11 +84,11 @@ class GroupAdapter extends StructureAdapter {
     }
     
     void set(String s, Object value) {
-        def grp = getAt(s)
+        def group = getAt(s)
         if (value instanceof Closure) {
             throw new AdapterException('cannot assign to a repetition')
         }
-        grp.from(value)
+        group.from(value)
     }
     
     def getAt(String s) {
