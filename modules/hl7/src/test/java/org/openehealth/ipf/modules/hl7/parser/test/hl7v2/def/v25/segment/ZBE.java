@@ -53,10 +53,10 @@ public class ZBE extends AbstractSegment {
         super(parent, factory);
         Message message = getMessage();
         try {
-            add(EI.class, true, 0, 999, new Object[] { message });
-            add(TS.class, true, 1, 26, new Object[] { message });
-            add(TS.class, false, 1, 26, new Object[] { message });
-            add(ST.class, true, 1, 10, new Object[] { message });
+            add(EI.class, true, 0, 999, new Object[] { message }, null);
+            add(TS.class, true, 1, 26, new Object[] { message }, null);
+            add(TS.class, false, 1, 26, new Object[] { message }, null);
+            add(ST.class, true, 1, 10, new Object[] { message }, null);
         } catch (HL7Exception he) {
             HapiLogFactory.getHapiLog(this.getClass()).error(
                     "Can't instantiate " + this.getClass().getName(), he);

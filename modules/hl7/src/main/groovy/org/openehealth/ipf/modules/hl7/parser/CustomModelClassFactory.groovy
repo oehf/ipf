@@ -17,6 +17,7 @@ package org.openehealth.ipf.modules.hl7.parser
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.*
+import ca.uhn.hl7v2.model.*;
 
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -57,7 +58,7 @@ public class CustomModelClassFactory implements ModelClassFactory{
 	/* (non-Javadoc)
 	 * @see ca.uhn.hl7v2.parser.ModelClassFactory#getMessageClass(java.lang.String, java.lang.String, boolean)
 	 */
-	public Class getMessageClass(String name, String version, boolean isExplicit){
+	public Class<? extends Message> getMessageClass(String name, String version, boolean isExplicit){
 		if (!isExplicit)
 			name = Parser.getMessageStructureForEvent(name, version);
 		findClass("message", name, version) ?: defaultFactory.getMessageClass(name, version, isExplicit)	
@@ -66,21 +67,21 @@ public class CustomModelClassFactory implements ModelClassFactory{
 	/* (non-Javadoc)
 	 * @see ca.uhn.hl7v2.parser.ModelClassFactory#getGroupClass(java.lang.String, java.lang.String)
 	 */
-	public Class getGroupClass(String name, String version){
+	public Class<? extends Group> getGroupClass(String name, String version){
 		findClass("group", name, version) ?: defaultFactory.getGroupClass(name, version)
 	}
 	
 	/* (non-Javadoc)
 	 * @see ca.uhn.hl7v2.parser.ModelClassFactory#getSegmentClass(java.lang.String, java.lang.String)
 	 */
-	public Class getSegmentClass(String name, String version){
+	public Class<? extends Segment> getSegmentClass(String name, String version){
 		findClass("segment", name, version) ?: defaultFactory.getSegmentClass(name, version)
 	}
 	
 	/* (non-Javadoc)
 	 * @see ca.uhn.hl7v2.parser.ModelClassFactory#getTypeClass(java.lang.String, java.lang.String)
 	 */
-	public Class getTypeClass(String name, String version){
+	public Class<? extends Type> getTypeClass(String name, String version){
 		findClass("datatype", name, version) ?: defaultFactory.getTypeClass(name, version)
 	}
 	

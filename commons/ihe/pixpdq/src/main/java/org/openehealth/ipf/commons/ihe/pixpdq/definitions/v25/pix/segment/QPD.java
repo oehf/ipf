@@ -53,10 +53,10 @@ public class QPD extends AbstractSegment {
         super(parent, factory);
         Message message = getMessage();
         try {
-            add(CE.class, true, 1, 250, new Object[]{message});
-            add(ST.class, true, 1, 32, new Object[]{message});
-            add(CX.class, true, 1, 256, new Object[]{message});
-            add(CX.class, false, 0, 256, new Object[]{message});
+            add(CE.class, true, 1, 250, new Object[]{message}, null);
+            add(ST.class, true, 1, 32, new Object[]{message}, null);
+            add(CX.class, true, 1, 256, new Object[]{message}, null);
+            add(CX.class, false, 0, 256, new Object[]{message}, null);
         } catch (HL7Exception he) {
             HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), he);
         }
