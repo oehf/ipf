@@ -1026,17 +1026,6 @@
             <name>HAPI Sourceforge Repository</name>
             <url>http://hl7api.sourceforge.net/m2</url>
         </repository>
-        <repository>
-            <id>camel-2.3</id>
-            <name>camel-2.3</name>
-            <url>https://repository.apache.org/content/repositories/orgapachecamel-006</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
 </project>
