@@ -38,7 +38,7 @@ public class InFaultHackInterceptor extends AbstractPhaseInterceptor<Message> {
 
     /**
      * See {@link InFaultChainInitiatorObserver#initializeInterceptors()}, 
-     * line #59 in CXF 2.2.6: NPE on incoming faults without requests 
+     * line #59 in CXF 2.2.8: NPE on incoming faults without requests 
      * (WSA async response or notification).
      */
     @Override

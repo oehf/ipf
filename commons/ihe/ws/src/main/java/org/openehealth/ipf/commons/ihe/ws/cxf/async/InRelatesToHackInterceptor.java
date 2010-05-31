@@ -33,7 +33,7 @@ import org.w3c.dom.Text;
 /**
  * CXF interceptor which renames the RelatesTo WSA header in order to prevent
  * correlation failure in {@link org.apache.cxf.ws.addressing.soap.MAPCodec},
- * (line #779 for CXF 2.2.6).
+ * (line #779 for CXF 2.2.8).
  * 
  * @author Dmytro Rud
  */
