@@ -179,11 +179,20 @@
 			<sch:assert test="@root and @extension">attributes 'root' and 'extension' must be present</sch:assert>
 		</sch:rule>
 		-->
+		
+		<!--
+		XCPD Supplement August 2009, Section 3.55.4.1.2.4, line 885:
+		"The IG should be capable of specifying..."
+		
+		As "should be capable of X" is not equal to "should do X", 
+		we disable the check below. 
+		 
 		<sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess">
 			<sch:assert test="count(hl7:authorOrPerformer) = 1">
 				exactly one 'authorOrPerformer' sub-element must be present here
 			</sch:assert>
 		</sch:rule>
+		-->
 	</sch:pattern>
 
 	<sch:pattern abstract="true" id="id-root-exactly-one">
