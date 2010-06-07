@@ -157,13 +157,20 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                                     conditional(builder, 'city',              pid11[3].value)
                                                     conditional(builder, 'streetAddressLine', pid11[1][1].value)
                                                 }
+                                                
+                                                def pid4collection = qr.PID[4]()
+                                                if (pid4collection) {
+                                                    asOtherIDs(classCode: 'PAT') {
+                                                        for(pid4 in pid4collection) {   
+                                                            buildInstanceIdentifier(builder, 'id', false, 
+                                                                    pid4[4][2].value, pid4[1].value, pid4[4][1].value) 
+                                                        }
+                                                        scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                                                            id(nullFlavor: 'UNK')
+                                                        }
+                                                    }
+                                                }
                                             }
-                                            /*
-                                            providerOrganization {
-                                                buildInstanceIdentifier(builder, 'id', false, 
-                                                        qr.PID[3][4][2].value, '', '') 
-                                            }
-                                            */
                                             subjectOf1 {
                                                 createQueryMatchObservation(builder, qr)
                                             }

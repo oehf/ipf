@@ -24,20 +24,28 @@ import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
  * @author Marek Václavík, Dmytro Rud
  */
 class PdqTranslatorTest extends Hl7TranslationTestContainer {
- 
+
+    static def parser
+    
     @BeforeClass
     static void setUpClass() {
         doSetUp('pdq',
                 new PdqRequest3to2Translator(), 
                 new PdqResponse2to3Translator(),
                 'pdq-translation.map')
+
+        parser = CustomModelClassUtils.createParser('pdq', '2.5')
     }      
 
     @Test
     void testPdqQuery() {
-        def parser = CustomModelClassUtils.createParser('pdq', '2.5')
         doTestV3toV2RequestTranslation('PDQ_Maximal_Query', 21, 47)
         doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, 47, parser)
         doTestV2toV3ResponseTranslation('PDQ', 21, 47, parser)
+    }
+     
+    @Test
+    void testResponseWithPid4() {
+        doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, 47, parser)
     }
 }
