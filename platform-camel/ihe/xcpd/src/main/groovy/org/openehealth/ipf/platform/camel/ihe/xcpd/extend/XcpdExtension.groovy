@@ -15,11 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xcpd.extend;
 
-import org.apache.camel.model.ProcessorDefinition;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+
+import static org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdCamelValidators.*;
+import static org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExchangeValidator.definition;
 
 /**
  * XCPD DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} 
@@ -36,7 +35,7 @@ class XcpdExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti55Request(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 55, true);
+         return definition(self, iti55RequestValidator());
      }
      
      /**
@@ -44,7 +43,7 @@ class XcpdExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti55Response(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 55, false);
+         return definition(self, iti55ResponseValidator());
      }
 
      /**
@@ -52,7 +51,7 @@ class XcpdExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti56Request(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 56, true);
+         return definition(self, iti56RequestValidator());
      }
      
      /**
@@ -60,22 +59,7 @@ class XcpdExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti56Response(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 56, false);
-     }
-
-     
-     private static ValidatorAdapterDefinition validationLogic(
-             ValidatorAdapterDefinition self, 
-             int transaction,
-             boolean request) 
-     {
-         self.setValidator(new Hl7v3Validator());
-         self.staticProfile(request ? 
-                 Hl7v3ValidationProfiles.REQUEST_TYPES[transaction] : 
-                 Hl7v3ValidationProfiles.RESPONSE_TYPES[transaction]);
-         return (ValidatorAdapterDefinition)self.input {
-             it.in.getBody(String.class)
-         };
+         return definition(self, iti56ResponseValidator());
      }
 
 }

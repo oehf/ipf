@@ -15,9 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.extend;
 
+import java.lang.reflect.Method;
+
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
+import org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExchangeValidator;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 
 /**
@@ -33,7 +37,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti8Request(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 8);
+         return definition(self, 8, true);
      }
      
      /**
@@ -41,7 +45,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti8Response(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 8);
+         return definition(self, 8, false);
      }
      
      /**
@@ -49,7 +53,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti9Request(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 9);
+         return definition(self, 9, true);
      }
      
      /**
@@ -57,7 +61,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti9Response(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 9);
+         return definition(self, 9, false);
      }
      
      /**
@@ -65,7 +69,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti10Request(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 10);
+         return definition(self, 10, true);
      }
      
      /**
@@ -73,7 +77,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti10Response(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 10);
+         return definition(self, 10, false);
      }
      
      /**
@@ -81,7 +85,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti21Request(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 21);
+         return definition(self, 21, true);
      }
 
      /**
@@ -89,7 +93,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti21Response(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 21);
+         return definition(self, 21, false);
      }
 
      /**
@@ -97,7 +101,7 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti22Request(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 22);
+         return definition(self, 22, true);
      }
      
      /**
@@ -105,18 +109,19 @@ class MllpExtension {
       * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti22Response(ValidatorAdapterDefinition self) {
-         return validationLogic(self, 22);
+         return definition(self, 22, false);
      }
      
      
-     private static ValidatorAdapterDefinition validationLogic(ValidatorAdapterDefinition self, int transaction) {
-         self.setValidator(new MessageAdapterValidator());
-         String className = "org.openehealth.ipf.platform.camel.ihe.pixpdq.iti${transaction}.Iti${transaction}Component";
-         return (ValidatorAdapterDefinition)self.input {
-             MllpMarshalUtils.extractMessageAdapter(
-                 it.in,
-                 it.getProperty(Exchange.CHARSET_NAME),
-                 Class.forName(className).newInstance().parser);               
-         };
+     private static ValidatorAdapterDefinition definition(
+             ValidatorAdapterDefinition self, 
+             int transaction,
+             boolean request) 
+     {
+         Class clazz = Class.forName('org.openehealth.ipf.platform.camel.ihe.pixpdq.PixPdqCamelValidators');
+         String what = request ? 'Request' : 'Response';
+         Method method = clazz.getDeclaredMethod("iti${transaction}${what}Validator")
+         Processor validatingProcessor = method.invoke(null);
+         return ProcessorBasedExchangeValidator.definition(self, validatingProcessor);
      }
 }
