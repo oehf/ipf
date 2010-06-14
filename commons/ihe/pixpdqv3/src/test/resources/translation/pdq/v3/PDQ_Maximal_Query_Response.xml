@@ -65,11 +65,6 @@
         <livingSubjectName>
           <value>
             <given>MARY</given>
-          </value>
-          <semanticsText>LivingSubject.name</semanticsText>
-        </livingSubjectName>
-        <livingSubjectName>
-          <value>
             <family>Heidi</family>
           </value>
           <semanticsText>LivingSubject.name</semanticsText>

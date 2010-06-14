@@ -135,4 +135,15 @@
     </sch:pattern>
 
 
+    <!-- section 3.55.4.2.2.5 -->
+    <sch:pattern id="check-health-data-locator-flag">
+        <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:custodian/hl7:assignedEntity">
+            <sch:assert test="((hl7:code/@code = 'SupportsHealthDataLocator') or 
+                               (hl7:code/@code = 'NotHealthDataLocator')) and
+                              (hl7:code/@codeSystem = '1.3.6.1.4.1.19376.1.2.27.2')">
+                specification of Health Data Locator support is wrong or missing 
+            </sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
 </sch:schema>

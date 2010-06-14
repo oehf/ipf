@@ -99,7 +99,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
         // determine data containers
         def parameterList     = queryByParameter.parameterList
-	    def livingSubjectName = parameterList.livingSubjectName.value
+	    def livingSubjectName = parameterList.livingSubjectName[0].value
         def livingSubjectId   = parameterList.livingSubjectId.value
         def patientAddress    = parameterList.patientAddress.value
 	    
