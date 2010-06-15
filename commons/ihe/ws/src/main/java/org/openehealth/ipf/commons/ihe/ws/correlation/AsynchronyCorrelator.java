@@ -15,14 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.correlation;
 
-import org.openehealth.ipf.commons.core.purgeable.PurgeableCollection;
-
 /**
  * Interface for message correlators in asynchronous 
  * Web Service-based IHE transactions. 
  * @author Dmytro Rud
  */
-public interface AsynchronyCorrelator extends PurgeableCollection {
+public interface AsynchronyCorrelator {
 
     /**
      * Stores informations about an asynchronous request.

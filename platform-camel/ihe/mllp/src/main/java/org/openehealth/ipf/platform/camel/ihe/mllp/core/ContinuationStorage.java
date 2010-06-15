@@ -15,15 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.openehealth.ipf.commons.core.purgeable.PurgeableCollection;
-
 import ca.uhn.hl7v2.model.Message;
 
 /**
  * Interface for storages of HL7 v2 interactive continuation fragments.
  * @author Dmytro Rud
  */
-public interface ContinuationStorage extends PurgeableCollection {
+public interface ContinuationStorage {
     
     /**
      * Puts a fragment into this storage.
