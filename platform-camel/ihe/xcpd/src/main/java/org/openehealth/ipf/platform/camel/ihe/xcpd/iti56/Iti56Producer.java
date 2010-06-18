@@ -33,7 +33,7 @@ public class Iti56Producer extends DefaultItiProducer<String, String> {
      *          the factory for clients to produce messages for the service.              
      */
     public Iti56Producer(Iti56Endpoint endpoint, ItiClientFactory clientFactory) {
-        super(endpoint, clientFactory, true, true);
+        super(endpoint, clientFactory, true);
     }
 
 

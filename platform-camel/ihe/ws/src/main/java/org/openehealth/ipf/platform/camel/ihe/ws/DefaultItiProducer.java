@@ -57,7 +57,6 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
     private final ItiClientFactory clientFactory;
     private final Class<InType> inTypeClass;
     private final boolean allowAsynchrony; 
-    private final boolean needStoreRequestPayload;
     
 
     /**
@@ -69,7 +68,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
      *          the factory for clients to produce messages for the service.              
      */
     public DefaultItiProducer(DefaultItiEndpoint endpoint, ItiClientFactory clientFactory) {
-        this(endpoint, clientFactory, false, false);
+        this(endpoint, clientFactory, false);
     }
 
     
@@ -90,15 +89,12 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
     public DefaultItiProducer(
             DefaultItiEndpoint endpoint, 
             ItiClientFactory clientFactory,
-            boolean allowAsynchrony,
-            boolean needStoreRequestPayload) 
+            boolean allowAsynchrony) 
     {
         super(endpoint);
         notNull(clientFactory, "clientFactory cannot be null");
         this.clientFactory = clientFactory;
-
         this.allowAsynchrony = allowAsynchrony;
-        this.needStoreRequestPayload = needStoreRequestPayload;
         
         // get java.lang.Class object for the input type
         ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
@@ -140,12 +136,10 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
                     DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME, 
                     String.class);
 
-            // TODO: better body serialization instead of .toString()
             endpoint.getCorrelator().put(
                     messageId, 
                     endpoint.getEndpointUri(),
-                    correlationKey,
-                    needStoreRequestPayload ? body.toString() : null);
+                    correlationKey);
         }
         
         // invoke

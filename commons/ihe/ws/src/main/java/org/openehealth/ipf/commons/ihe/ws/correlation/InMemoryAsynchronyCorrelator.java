@@ -26,16 +26,15 @@ public class InMemoryAsynchronyCorrelator
         implements AsynchronyCorrelator 
 {
     @Override
-    public void put(
-            String messageId, 
-            String serviceEndpoint, 
-            String correlationKey, 
-            String requestPayload) 
-    {
-        put(messageId,new AsynchronyCorrelationItem(
-                serviceEndpoint, correlationKey, requestPayload));
+    public void put(String messageId, String serviceEndpoint, String correlationKey) {
+        put(messageId, new AsynchronyCorrelationItem(serviceEndpoint, correlationKey));
     }
     
+    @Override
+    public void setRequestPayload(String messageId, String requestPayload) {
+        get(messageId).setRequestPayload(requestPayload);
+    }
+
     @Override
     public String getServiceEndpoint(String messageId) {
         AsynchronyCorrelationItem asynchronyCorrelationItem = get(messageId);

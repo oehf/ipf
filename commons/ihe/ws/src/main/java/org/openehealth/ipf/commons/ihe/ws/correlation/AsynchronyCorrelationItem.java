@@ -24,18 +24,16 @@ import org.openehealth.ipf.commons.core.purgeable.PurgeableObject;
 class AsynchronyCorrelationItem extends PurgeableObject {
     private final String serviceEndpoint;
     private final String correlationKey;
-    private final String requestPayload;
+    private String requestPayload;
     
     public AsynchronyCorrelationItem(
             String serviceEndpoint, 
-            String correlationKey, 
-            String requestPayload) 
+            String correlationKey) 
     {
         Validate.notEmpty(serviceEndpoint);
         
         this.serviceEndpoint = serviceEndpoint;
         this.correlationKey = correlationKey;
-        this.requestPayload = requestPayload;
     }
 
     public String getServiceEndpoint() {
@@ -48,5 +46,9 @@ class AsynchronyCorrelationItem extends PurgeableObject {
 
     public String getRequestPayload() {
         return requestPayload;
+    }
+    
+    public void setRequestPayload(String requestPayload) {
+        this.requestPayload = requestPayload;
     }
 }

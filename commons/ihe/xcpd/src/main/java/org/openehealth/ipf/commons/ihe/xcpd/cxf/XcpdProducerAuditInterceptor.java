@@ -20,6 +20,10 @@ import java.util.List;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
+import org.apache.cxf.ws.addressing.AddressingProperties;
+import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.apache.cxf.ws.addressing.Names;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
@@ -36,15 +40,17 @@ import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
  * @author Dmytro Rud
  */
 public class XcpdProducerAuditInterceptor extends AuditInterceptor {
-
+    private final AsynchronyCorrelator correlator;
+    
     /**
      * Constructor.
      * 
      * @param auditStrategy
      *      an audit strategy instance
      */
-    public XcpdProducerAuditInterceptor(WsAuditStrategy auditStrategy) {
+    public XcpdProducerAuditInterceptor(WsAuditStrategy auditStrategy, AsynchronyCorrelator correlator) {
         super(Phase.WRITE_ENDING, auditStrategy);
+        this.correlator = correlator;
     }
 
     
@@ -54,7 +60,13 @@ public class XcpdProducerAuditInterceptor extends AuditInterceptor {
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
         
         if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
-            auditDataset.setRequestPayload((String) message.getContent(List.class).get(0));
+            String payload = (String) message.getContent(List.class).get(0);
+            AddressingProperties apropo = (AddressingProperties) message.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
+            if (Names.WSA_ANONYMOUS_ADDRESS.equals(apropo.getReplyTo().getAddress().getValue())) {
+                auditDataset.setRequestPayload(payload);
+            } else {
+                correlator.setRequestPayload(apropo.getMessageID().getValue(), payload);
+            }
         }
     }
 

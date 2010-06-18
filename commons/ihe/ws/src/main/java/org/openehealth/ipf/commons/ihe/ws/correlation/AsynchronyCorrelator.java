@@ -30,13 +30,8 @@ public interface AsynchronyCorrelator {
      *      URL of the endpoint the request is being sent to.
      * @param correlationKey
      *      correlation key provided by the user (optional).
-     * @param requestPayload
-     *      request payload (optional).
      */
-    void put(String messageId, 
-             String serviceEndpoint, 
-             String correlationKey, 
-             String requestPayload);
+    void put(String messageId, String serviceEndpoint, String correlationKey);
     
     /**
      * Returns the URL of the endpoint to which the message with the given 
@@ -69,4 +64,10 @@ public interface AsynchronyCorrelator {
      */
     boolean delete(String messageId);
     
+    /**
+     * Stores payload of the request message with the given ID.
+     * <p>
+     * The message ID should be already known for the correlator.
+     */
+    void setRequestPayload(String messageId, String requestPayload);
 }
