@@ -53,7 +53,7 @@ public class ExtensionConfigurer extends SpringConfigurer<Extension>{
     @Override
     public void configure(Extension configuration) {
         extensionActivator.activate(configuration);
-        LOG.info("Extension configured..." + configuration);
+        LOG.debug("Extension configured..." + configuration);
     }
 
     @SuppressWarnings("unchecked")

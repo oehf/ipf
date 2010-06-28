@@ -74,7 +74,7 @@ public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomMo
                         .getModelClasses().get(version));
             }
         } 
-        LOG.info("Custom model classes configured: " + configuration);
+        LOG.debug("Custom model classes configured: " + configuration);
     }
 
     public CustomModelClassFactory getCustomModelClassFactory() {

@@ -69,7 +69,7 @@ public class CustomRouteBuilderConfigurer extends SpringConfigurer<CustomRouteBu
         } catch (Exception e) {
             LOG.error("Custom route configuration failed: " + e);
         }
-        LOG.info("Custom route builder configured: " + configuration);
+        LOG.debug("Custom route builder configured: " + configuration);
     }
 
     public CamelContext getCamelContext() {
