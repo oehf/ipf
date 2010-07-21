@@ -15,11 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import static org.openehealth.ipf.platform.camel.ihe.ws.HttpHeaderUtils.processIncomingHttpHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HttpHeaderUtils.processUserDefinedOutgoingHttpHeaders;
+
 import java.util.Map;
+
+import javax.xml.ws.handler.MessageContext;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.lang.Validate;
+import org.apache.cxf.jaxws.context.WebServiceContextImpl;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
  * Base class for web services that are aware of a {@link DefaultItiConsumer}.
@@ -34,7 +41,7 @@ public class DefaultItiWebService {
      *
      * @param body
      *          contents of the in-message body to be processed.
-     * @param headers
+     * @param additionalHeaders
      *          additional in-message headers (can be <code>null</code>).
      * @param exchangePattern
      *          pattern of the exchange put into the route.
@@ -42,17 +49,24 @@ public class DefaultItiWebService {
      */
     protected Exchange process(
             Object body, 
-            Map<String, Object> headers,
+            Map<String, Object> additionalHeaders,
             ExchangePattern exchangePattern) 
     {
         Validate.notNull(consumer);
+        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
 
         Exchange exchange = consumer.getEndpoint().createExchange(exchangePattern);
         exchange.getIn().setBody(body);
-        if (headers != null) {
-            exchange.getIn().getHeaders().putAll(headers);
+        processIncomingHttpHeaders(messageContext, exchange.getIn(), true);
+        if (additionalHeaders != null) {
+            exchange.getIn().getHeaders().putAll(additionalHeaders);
         }
         consumer.process(exchange);
+
+        processUserDefinedOutgoingHttpHeaders(
+                messageContext, 
+                Exchanges.resultMessage(exchange),
+                false);
         return exchange;
     }
 

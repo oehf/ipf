@@ -46,6 +46,9 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
         from('xcpd-iti55-async-response:iti55service-response?correlator=#correlator')
             .validate().iti55Response()
             .process {
+                def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+
                 assert it.pattern == ExchangePattern.InOnly
                 assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == 
                     "corr ${asyncResponseCount.getAndIncrement() * 2}"
@@ -58,12 +61,19 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
         from('xcpd-iti55:iti55service')
             .validate().iti55Request()
             .process {
+                // check incoming SOAP and HTTP headers
                 def dura = it.in.headers[Iti55Component.XCPD_INPUT_TTL_HEADER_NAME]
                 assert dura instanceof Duration
 
+                def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
+
+                // create response, inclusive SOAP and HTTP headers
                 Message message = Exchanges.resultMessage(it)
-                setOutgoingTTL(message, dura.years * 2)
                 message.body = RESPONSE
+                setOutgoingTTL(message, dura.years * 2)
+                message.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] = 
+                    ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 
                 responseCount.incrementAndGet()
             }

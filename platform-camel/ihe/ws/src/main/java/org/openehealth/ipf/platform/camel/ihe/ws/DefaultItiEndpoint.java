@@ -35,10 +35,23 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     public static final String WSA_REPLYTO_HEADER_NAME = "ipf.wsa.ReplyTo";
     
     /**
-     * Name of incoming Camel header where the user should store 
+     * Name of Camel message header where the user should store 
      * the optional correlation key.  
      */
     public static final String CORRELATION_KEY_HEADER_NAME = "ipf.correlation.key";
+    
+    /**
+     * Name of Camel message header where incoming HTTP headers
+     * will be stored as a <code>Map&lt;String, String&gt</code>.
+     */
+    public static final String INCOMING_HTTP_HEADERS = "ipf.ihe.http.headers.incoming";
+
+    /**
+     * Name of Camel message header from where additional user-defined HTTP 
+     * headers will be taken as a <code>Map&lt;String, String&gt</code>.
+     */
+    public static final String OUTGOING_HTTP_HEADERS = "ipf.ihe.http.headers.outgoing";
+    
 
     private final String address;
 

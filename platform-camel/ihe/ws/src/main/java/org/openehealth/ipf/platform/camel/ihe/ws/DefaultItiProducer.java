@@ -16,6 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import static org.apache.commons.lang.Validate.notNull;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HttpHeaderUtils.processIncomingHttpHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HttpHeaderUtils.processUserDefinedOutgoingHttpHeaders;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -116,6 +118,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         cleanRequestContext(requestContext);
 
         enrichRequestExchange(exchange, requestContext);
+        processUserDefinedOutgoingHttpHeaders(requestContext, exchange.getIn(), true);
         
         // get and analyse WS-Addressing asynchrony configuration
         String replyToUri = 
@@ -152,6 +155,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
             Map<String, Object> responseContext = bindingProvider.getResponseContext();
             enrichResponseMessage(responseMessage, responseContext);
             responseMessage.setBody(result);
+            processIncomingHttpHeaders(responseContext, responseMessage, false);
         } 
     }
 

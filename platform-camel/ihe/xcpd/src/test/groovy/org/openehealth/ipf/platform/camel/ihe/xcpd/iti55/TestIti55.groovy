@@ -97,6 +97,10 @@ class TestIti55 extends StandardTestContainer {
          // set TTL SOAP header
          setOutgoingTTL(requestExchange.in, n)
          
+         // set request HTTP headers
+         requestExchange.in.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] = 
+             ['MyRequestHeader' : "Number ${n}".toString()]
+         
          // send and check timing
          long startTimestamp = System.currentTimeMillis()
          def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
@@ -110,6 +114,9 @@ class TestIti55 extends StandardTestContainer {
              def dura = resultMessage.headers[Iti55Component.XCPD_INPUT_TTL_HEADER_NAME]
              assert dura instanceof Duration
              assert dura.toString() == "P${n * 2}Y"
+
+             def inHttpHeaders = resultMessage.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
          }
      }
 
