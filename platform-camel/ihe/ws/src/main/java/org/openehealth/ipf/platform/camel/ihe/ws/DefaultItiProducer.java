@@ -155,7 +155,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
             Map<String, Object> responseContext = bindingProvider.getResponseContext();
             enrichResponseMessage(responseMessage, responseContext);
             responseMessage.setBody(result);
-            processIncomingHttpHeaders(responseContext, responseMessage, false);
+            processIncomingHttpHeaders(responseContext, responseMessage);
         } 
     }
 

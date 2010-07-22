@@ -42,8 +42,8 @@ abstract public class HttpHeaderUtils {
      * 
      * @param messageContext
      *      Web Service message context. 
-     * @param isRequest
-     *      whether the message under consideration is a request one.
+     * @param useInputMessage
+     *      whether input message should the used.
      * @param needCreateWhenNotExist
      *      whether the headers' map should be created when it does 
      *      not exist.
@@ -54,11 +54,11 @@ abstract public class HttpHeaderUtils {
      */
     static Map<String, List<String>> getHttpHeaders(
             Map<String, Object> messageContext,
-            boolean isRequest,
+            boolean useInputMessage,
             boolean needCreateWhenNotExist) 
     {
         WrappedMessageContext wrappedContext = (WrappedMessageContext) messageContext;
-        Map<String, Object> headersContainer = isRequest
+        Map<String, Object> headersContainer = useInputMessage
             ? wrappedContext.getWrappedMap()
             : wrappedContext.getWrappedMessage().getExchange().getOutMessage();
         
@@ -83,27 +83,21 @@ abstract public class HttpHeaderUtils {
      * @param message
      *      Camel message in whose headers the 
      *      HTTP headers should be stored.
-     * @param isRequest
-     *      whether the Web Service message under consideration 
-     *      is a request one (<code>true</code> on server side, 
-     *      <code>false</code> on client side). 
      */
     static void processIncomingHttpHeaders(
             Map<String, Object> messageContext, 
-            Message message,
-            boolean isRequest) 
+            Message message) 
     {
         Map<String, String> userHeaders = new HashMap<String, String>();
         Map<String, List<String>> httpHeaders = getHttpHeaders(messageContext, true, false);
         for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
             userHeaders.put(entry.getKey(), entry.getValue().get(0));
         }
-        message.getHeaders().put(DefaultItiEndpoint.INCOMING_HTTP_HEADERS, userHeaders);
+        message.setHeader(DefaultItiEndpoint.INCOMING_HTTP_HEADERS, userHeaders);
     }
 
 
     /**
-     *
      * Injects user-defined HTTP headers from the header 
      * {@link DefaultItiEndpoint#OUTGOING_HTTP_HEADERS} 
      * of the given Camel message into the given Web Service 

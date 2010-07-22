@@ -57,7 +57,7 @@ public class DefaultItiWebService {
 
         Exchange exchange = consumer.getEndpoint().createExchange(exchangePattern);
         exchange.getIn().setBody(body);
-        processIncomingHttpHeaders(messageContext, exchange.getIn(), true);
+        processIncomingHttpHeaders(messageContext, exchange.getIn());
         if (additionalHeaders != null) {
             exchange.getIn().getHeaders().putAll(additionalHeaders);
         }
