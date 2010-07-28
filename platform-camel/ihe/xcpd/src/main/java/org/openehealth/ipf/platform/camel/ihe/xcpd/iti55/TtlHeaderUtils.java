@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +24,11 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 import javax.xml.namespace.QName;
 
+import org.apache.camel.Message;
 import org.apache.cxf.headers.Header;
+import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.jaxb.JAXBDataBinding;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -45,66 +47,47 @@ public class TtlHeaderUtils {
     
     
     /**
-     * Retrieves the XCPD TTL header from the given message context.
+     * Returns the XCPD TTL value stored in incoming SOAP headers associated   
+     * with the given message, or <code>null</code>, when none found.
      */
-    @SuppressWarnings("unchecked")
-    public static Duration retrieveTtlHeader(Map<String, Object> context) {
-        List<Header> soapHeaders = (List<Header>) context.get(Header.HEADER_LIST);
-        if (soapHeaders != null) {
-            for (Header soapHeader : soapHeaders) {
-                if (TTL_HEADER_QNAME.equals(soapHeader.getName())) {
-                    Object o = soapHeader.getObject();
-                    if (o instanceof Element) {
-                        Node child = ((Element) o).getFirstChild();
-                        if (child instanceof Text) {
-                            String value = ((Text) child).getNodeValue();
-                            try {
-                                return DatatypeFactory.newInstance().newDuration(value);
-                            } catch (Exception e) {
-                                throw new RuntimeException("Cannot parse TTL header " + value, e); 
-                            }
-                        }
+    public static Duration getTtl(Message message) {
+        Map<QName, Header> soapHeaders = CastUtils.cast(message.getHeader(
+                DefaultItiEndpoint.INCOMING_SOAP_HEADERS, 
+                Map.class));
+        if ((soapHeaders != null) && soapHeaders.containsKey(TTL_HEADER_QNAME)) {
+            Object o = soapHeaders.get(TTL_HEADER_QNAME).getObject();
+            if (o instanceof Element) {
+                Node child = ((Element) o).getFirstChild();
+                if (child instanceof Text) {
+                    String value = ((Text) child).getNodeValue();
+                    try {
+                        return DatatypeFactory.newInstance().newDuration(value);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Cannot parse TTL header " + value, e); 
                     }
-                    break;
                 }
             }
         }
         return null;
     }
-
-
-    /**
-     * Retrieves the incoming XCPD TTL header from the given message context
-     * and returns it as a map suitable for Camel exchange headers
-     * (or <code>null</code>, when the header could not be retrieved).
-     */
-    public static Map<String, Object> retrieveTtlHeaderAsMap(Map<String, Object> context) {
-        Duration dura = retrieveTtlHeader(context);
-        if (dura != null) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put(Iti55Component.XCPD_INPUT_TTL_HEADER_NAME, dura);
-            return map;
-        }
-        return null;
-    }
     
     
     /**
-     * Adds an XCPD TTL header containing the given duration to the given message context.
+     * Stores the user-defined XCPD TTL value into outgoing SOAP headers    
+     * associated with the given message.
      */
-    @SuppressWarnings("unchecked")
-    public static void addTtlHeader(Duration dura, Map<String, Object> context) {
-        if (dura != null) {
-            Header soapHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
-            List<Header> soapHeaders = (List<Header>) context.get(Header.HEADER_LIST);
-            if (soapHeaders == null) {
-                soapHeaders = new ArrayList<Header>();
-            }
-            soapHeaders.add(soapHeader);
-            context.put(Header.HEADER_LIST, soapHeaders);
+    public static void setTtl(Duration dura, Message message) {
+        List<Header> soapHeaders = CastUtils.cast(message.getHeader(
+                DefaultItiEndpoint.OUTGOING_SOAP_HEADERS, List.class));
+        if (soapHeaders == null) {
+            soapHeaders = new ArrayList<Header>();
+            message.setHeader(DefaultItiEndpoint.OUTGOING_SOAP_HEADERS, soapHeaders);
         }
+        
+        Header ttlHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
+        soapHeaders.add(ttlHeader);
     }
-
+    
     
     private static JAXBDataBinding getStringDataBinding() {
         try {
@@ -112,23 +95,6 @@ public class TtlHeaderUtils {
         } catch (JAXBException e) {
             // actually cannot occur
             throw new RuntimeException(e);
-        }
-    }
-    
-    
-    /**
-     * Removes XCPD TTL header from the given message context.
-     */
-    @SuppressWarnings("unchecked")
-    public static void removeTtlHeader(Map<String, Object> context) {
-        List<Header> soapHeaders = (List<Header>) context.get(Header.HEADER_LIST);
-        if (soapHeaders != null) {
-            for (Header header : soapHeaders) {
-                if (TTL_HEADER_QNAME.equals(header.getName())) {
-                    soapHeaders.remove(header);
-                    return;
-                }
-            }
         }
     }
 }

@@ -15,12 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
-import java.util.Map;
-
-import javax.xml.datatype.Duration;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
@@ -42,35 +36,9 @@ public class Iti55Producer extends DefaultItiProducer<String, String> {
         super(endpoint, clientFactory, true);
     }
     
-
-    @Override
-    protected void enrichRequestExchange(Exchange exchange, Map<String, Object> requestContext) {
-        // add TTL header
-        Duration dura = exchange.getIn().getHeader(
-                Iti55Component.XCPD_OUTPUT_TTL_HEADER_NAME, Duration.class);
-        TtlHeaderUtils.addTtlHeader(dura, requestContext);
-    }
-
     
     @Override
     protected String callService(Object client, String body) {
         return ((Iti55PortType) client).respondingGatewayPRPAIN201305UV02(body);
     }
-
-
-    @Override
-    protected void enrichResponseMessage(Message message, Map<String, Object> responseContext) {
-        Duration dura = TtlHeaderUtils.retrieveTtlHeader(responseContext);
-        if (dura != null) {
-            message.setHeader(Iti55Component.XCPD_INPUT_TTL_HEADER_NAME, dura);
-        }
-    }
-
-    
-    @Override
-    protected void cleanRequestContext(Map<String, Object> requestContext) {
-        super.cleanRequestContext(requestContext);
-        TtlHeaderUtils.removeTtlHeader(requestContext);
-    }
-
 }

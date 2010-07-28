@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Component;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.cxf.headers.Header;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 
 /**
@@ -52,6 +55,18 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      */
     public static final String OUTGOING_HTTP_HEADERS = "ipf.ihe.http.headers.outgoing";
     
+    /**
+     * Name of Camel message header where incoming SOAP headers
+     * will be stored as a <code>Map&lt;{@link QName}, {@link Header}&gt</code>.
+     */
+    public static final String INCOMING_SOAP_HEADERS = "ipf.ihe.soap.headers.incoming";
+
+    /**
+     * Name of Camel message header from where additional user-defined HTTP 
+     * headers will be taken as a <code>List&lt;{@link Header}&gt</code>.
+     */
+    public static final String OUTGOING_SOAP_HEADERS = "ipf.ihe.soap.headers.outgoing";
+
 
     private final String address;
 

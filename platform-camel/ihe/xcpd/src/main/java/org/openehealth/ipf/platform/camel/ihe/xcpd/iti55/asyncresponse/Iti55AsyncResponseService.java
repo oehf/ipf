@@ -15,15 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.asyncresponse;
 
-import java.util.Map;
-
-import javax.xml.ws.handler.MessageContext;
-
 import org.apache.camel.ExchangePattern;
-import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.asyncresponse.Iti55AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.TtlHeaderUtils;
 
 /**
  * Service implementation for the IHE ITI-55 (XCPD) asynchronous response.
@@ -33,9 +27,7 @@ public class Iti55AsyncResponseService extends AsynchronousResponseItiWebService
 
     @Override
     public Object respondingGatewayPRPAIN201305UV02(String response) {
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-        Map<String, Object> headers = TtlHeaderUtils.retrieveTtlHeaderAsMap(messageContext);
-        process(response, headers, ExchangePattern.InOnly);
+        process(response, null, ExchangePattern.InOnly);
         return null;
     }
 }

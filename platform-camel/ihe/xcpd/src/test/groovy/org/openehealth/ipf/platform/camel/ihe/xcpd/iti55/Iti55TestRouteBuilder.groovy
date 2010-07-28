@@ -23,7 +23,7 @@ import org.apache.camel.Message;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import static org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils.*
+import org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils;
 
 /**
  * Test routes for ITI-55.
@@ -34,7 +34,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
     
-    static final String RESPONSE = readFile('iti55/iti55-sample-response.xml') 
+    static final String RESPONSE = XcpdTestUtils.readFile('iti55/iti55-sample-response.xml') 
 
     static final long ASYNC_DELAY = 10 * 1000L
     
@@ -48,11 +48,11 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
             .process {
                 def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
                 assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
-
+                
                 assert it.pattern == ExchangePattern.InOnly
                 assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == 
                     "corr ${asyncResponseCount.getAndIncrement() * 2}"
-                testPositiveAckCode(it.in.body)
+                XcpdTestUtils.testPositiveAckCode(it.in.body)
             }
             .delay(ASYNC_DELAY)
 
@@ -62,16 +62,16 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
             .validate().iti55Request()
             .process {
                 // check incoming SOAP and HTTP headers
-                def dura = it.in.headers[Iti55Component.XCPD_INPUT_TTL_HEADER_NAME]
-                assert dura instanceof Duration
-
+                Duration dura = TtlHeaderUtils.getTtl(it.in)
                 def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
                 assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
 
                 // create response, inclusive SOAP and HTTP headers
                 Message message = Exchanges.resultMessage(it)
                 message.body = RESPONSE
-                setOutgoingTTL(message, dura.years * 2)
+                if (dura) {
+                    XcpdTestUtils.setTtl(message, dura.years * 2)
+                }
                 message.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] = 
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 

@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
 import javax.xml.datatype.Duration;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -26,7 +27,7 @@ import org.junit.Test;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
-import static org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils.*
+import org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils;
 
 /**
  * Tests for ITI-55.
@@ -37,15 +38,16 @@ class TestIti55 extends StandardTestContainer {
      final String SERVICE1_URI =    "xcpd-iti55://localhost:${port}/iti55service?correlator=#correlator";
      final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti55service-response";
 
-     static final String REQUEST = readFile('iti55/iti55-sample-request.xml')
-
+     static final String REQUEST = XcpdTestUtils.readFile('iti55/iti55-sample-request.xml')
+     
+     static final Set<Integer> CALLS_WITH_TTL_HEADER = [1, 5, 9] as Set 
+     static final AtomicInteger ttlResponsesCount = new AtomicInteger(0)
      
      @BeforeClass
      static void setUpClass() {
          startServer(new CXFServlet(), 'iti55/iti-55.xml')
      }
 
-     
      /**
       * Test whether:
       * <ol>
@@ -75,6 +77,7 @@ class TestIti55 extends StandardTestContainer {
          assert Iti55TestRouteBuilder.asyncResponseCount.get() == N
          
          assert auditSender.messages.size() == N * 4
+         assert ttlResponsesCount.get() == CALLS_WITH_TTL_HEADER.size()
      }
      
 
@@ -95,7 +98,11 @@ class TestIti55 extends StandardTestContainer {
          requestExchange.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
          
          // set TTL SOAP header
-         setOutgoingTTL(requestExchange.in, n)
+         // we do it not on each message to check whether message context is being properly cleared
+         // between invocations
+         if (n in CALLS_WITH_TTL_HEADER) {
+             XcpdTestUtils.setTtl(requestExchange.in, n)
+         }
          
          // set request HTTP headers
          requestExchange.in.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] = 
@@ -109,11 +116,13 @@ class TestIti55 extends StandardTestContainer {
          
          // for sync messages -- check acknowledgement code and incoming TTL header
          if (! responseEndpointUri) {
-             testPositiveAckCode(resultMessage.body)
+             XcpdTestUtils.testPositiveAckCode(resultMessage.body)
              
-             def dura = resultMessage.headers[Iti55Component.XCPD_INPUT_TTL_HEADER_NAME]
-             assert dura instanceof Duration
-             assert dura.toString() == "P${n * 2}Y"
+             def dura = TtlHeaderUtils.getTtl(resultMessage)
+             if (dura) {
+                 assert dura.toString() == "P${n * 2}Y"
+                 ttlResponsesCount.incrementAndGet()
+             }
 
              def inHttpHeaders = resultMessage.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
              assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')

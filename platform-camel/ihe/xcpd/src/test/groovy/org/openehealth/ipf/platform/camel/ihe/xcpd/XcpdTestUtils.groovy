@@ -24,6 +24,7 @@ import org.apache.camel.Message;
 import org.apache.commons.io.IOUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55Component;
+import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.TtlHeaderUtils;
 
 /**
  * Helper functions for XCPD tests.
@@ -36,9 +37,9 @@ class XcpdTestUtils {
         return IOUtils.toString(stream)
     }
     
-    static void setOutgoingTTL(Message message, int n) {
-        message.headers[Iti55Component.XCPD_OUTPUT_TTL_HEADER_NAME] = 
-            DatatypeFactory.newInstance().newDuration("P${n}Y")
+    static void setTtl(Message message, int n) {
+        Duration dura = DatatypeFactory.newInstance().newDuration("P${n}Y")
+        TtlHeaderUtils.setTtl(dura, message)
     }
     
     static void testPositiveAckCode(String message) {

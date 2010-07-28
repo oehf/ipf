@@ -16,8 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HttpHeaderUtils.processIncomingHttpHeaders;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HttpHeaderUtils.processUserDefinedOutgoingHttpHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -34,6 +34,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.headers.Header;
 import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
@@ -118,7 +119,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         cleanRequestContext(requestContext);
 
         enrichRequestExchange(exchange, requestContext);
-        processUserDefinedOutgoingHttpHeaders(requestContext, exchange.getIn(), true);
+        processUserDefinedOutgoingHeaders(requestContext, exchange.getIn(), true);
         
         // get and analyse WS-Addressing asynchrony configuration
         String replyToUri = 
@@ -153,9 +154,9 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         if (replyToUri == null) {
             Message responseMessage = Exchanges.resultMessage(exchange);
             Map<String, Object> responseContext = bindingProvider.getResponseContext();
+            processIncomingHeaders(responseContext, responseMessage);
             enrichResponseMessage(responseMessage, responseContext);
             responseMessage.setBody(result);
-            processIncomingHttpHeaders(responseContext, responseMessage);
         } 
     }
 
@@ -197,6 +198,8 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
      */
     protected void cleanRequestContext(Map<String, Object> requestContext) {
         requestContext.remove(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES);
+        requestContext.remove(org.apache.cxf.message.Message.PROTOCOL_HEADERS);
+        requestContext.remove(Header.HEADER_LIST);
     }
     
     

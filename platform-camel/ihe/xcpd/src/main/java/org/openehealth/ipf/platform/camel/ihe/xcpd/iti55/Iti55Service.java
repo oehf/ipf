@@ -15,15 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
-import java.util.Map;
-
-import javax.xml.datatype.Duration;
-import javax.xml.ws.handler.MessageContext;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
-import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -37,24 +30,15 @@ public class Iti55Service extends DefaultItiWebService implements Iti55PortType 
 
     @Override
     public String respondingGatewayPRPAIN201305UV02(String request) {
-        MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-        Exchange result;
-        
         try {
-            Map<String, Object> headers = TtlHeaderUtils.retrieveTtlHeaderAsMap(messageContext);
-            result = process(request, headers, ExchangePattern.InOut);
+            Exchange result = process(request, null, ExchangePattern.InOut);
             if(result.getException() != null) {
                 throw result.getException();
             }
+            return Exchanges.resultMessage(result).getBody(String.class);
         } catch (Exception e) {
             return Hl7v3NakFactory.createNak(request, e, "PRPA_IN201306UV02", true);
         }
-        
-        Message resultMessage = Exchanges.resultMessage(result);
-        Duration dura = resultMessage.getHeader(Iti55Component.XCPD_OUTPUT_TTL_HEADER_NAME, Duration.class);
-        TtlHeaderUtils.addTtlHeader(dura, messageContext);
-        return resultMessage.getBody(String.class);
     }
- 
 
 }
