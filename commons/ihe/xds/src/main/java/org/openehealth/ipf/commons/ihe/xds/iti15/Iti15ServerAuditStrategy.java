@@ -25,14 +25,14 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * 
  * @author Dmytro Rud
  */
-class Iti15ServerAuditStrategy extends Iti15AuditStrategy {
+public class Iti15ServerAuditStrategy extends Iti15AuditStrategy {
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ClientIpAddress",
         "ServiceEndpointUrl", 
         "SubmissionSetUuid",
         "PatientId"};
     
-    Iti15ServerAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti15ServerAuditStrategy(boolean allowIncompleteAudit) {
         super(true, allowIncompleteAudit);
     }
 

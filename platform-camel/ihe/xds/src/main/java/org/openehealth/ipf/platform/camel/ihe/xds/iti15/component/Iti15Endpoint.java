@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti15.component;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -22,7 +24,12 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -32,6 +39,16 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.Iti15Service;
  * The Camel endpoint for the ITI-15 transaction.
  */
 public class Iti15Endpoint extends DefaultItiEndpoint {
+    private final static XdsServiceInfo ITI_15 = new XdsServiceInfo(
+            new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Service", "ihe"),
+            Iti15PortType.class,
+            new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Binding_Soap11", "ihe"),
+            false,
+            "wsdl/iti15.wsdl",
+            false,
+            true,
+            false);
+           
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -47,15 +64,19 @@ public class Iti15Endpoint extends DefaultItiEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = 
-            Iti15.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        ItiClientFactory clientFactory = new XdsClientFactory(
+                ITI_15, 
+                isAudit() ? new Iti15ClientAuditStrategy(isAllowIncompleteAudit()) : null, 
+                getServiceUrl());
         return new Iti15Producer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = 
-            Iti15.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        ItiServiceFactory serviceFactory = new XdsServiceFactory(
+                ITI_15, 
+                isAudit() ? new Iti15ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
+                getServiceAddress());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti15Service.class);
         Server server = serverFactory.create();

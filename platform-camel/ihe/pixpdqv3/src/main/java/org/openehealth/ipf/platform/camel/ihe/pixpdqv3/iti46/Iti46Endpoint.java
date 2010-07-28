@@ -15,14 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti46;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.iti46.Iti46;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.iti46.Iti46PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -31,6 +36,16 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  * The Camel endpoint for the ITI-46 transaction.
  */
 public class Iti46Endpoint extends DefaultItiEndpoint {
+    private static final String NS_URI = "urn:ihe:iti:pixv3:2007"; 
+    private final static ItiServiceInfo ITI_46 = new ItiServiceInfo(
+            new QName(NS_URI, "PIXConsumer_Service", "ihe"),
+            Iti46PortType.class,
+            new QName(NS_URI, "PIXConsumer_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti46/iti46-raw.wsdl",
+            false,
+            false);
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -49,15 +64,13 @@ public class Iti46Endpoint extends DefaultItiEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = 
-            Iti46.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        ItiClientFactory clientFactory = new Hl7v3ClientFactory(ITI_46, getServiceUrl());
         return new Iti46Producer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = 
-            Iti46.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(ITI_46, getServiceAddress());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti46Service.class);
         Server server = serverFactory.create();

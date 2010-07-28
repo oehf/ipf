@@ -19,12 +19,11 @@ import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
-
 /**
  * Client audit strategy for ITI-43.
  * @author Dmytro Rud
  */
-class Iti43ClientAuditStrategy extends Iti43AuditStrategy {
+public class Iti43ClientAuditStrategy extends Iti43AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ServiceEndpointUrl",
@@ -33,7 +32,7 @@ class Iti43ClientAuditStrategy extends Iti43AuditStrategy {
         "HomeCommunityUuids"};
 
     
-    Iti43ClientAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti43ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit);
     }
 

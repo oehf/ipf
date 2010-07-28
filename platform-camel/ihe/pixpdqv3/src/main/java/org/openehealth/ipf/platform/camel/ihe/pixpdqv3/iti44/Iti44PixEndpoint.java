@@ -15,14 +15,19 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44Pix;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44PixPortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -31,6 +36,16 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  * The Camel endpoint for the ITI-44 transaction (PIX Feed v3).
  */
 public class Iti44PixEndpoint extends DefaultItiEndpoint {
+    private static final String NS_URI = "urn:ihe:iti:pixv3:2007";
+    private static final ItiServiceInfo ITI_44 = new ItiServiceInfo(
+            new QName(NS_URI, "PIXManager_Service", "ihe"),
+            Iti44PixPortType.class,
+            new QName(NS_URI, "PIXManager_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti44/iti44-pix-raw.wsdl",
+            false,
+            false);
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -49,15 +64,13 @@ public class Iti44PixEndpoint extends DefaultItiEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = 
-            Iti44Pix.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        ItiClientFactory clientFactory = new Hl7v3ClientFactory(ITI_44, getServiceUrl());
         return new Iti44PixProducer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = 
-            Iti44Pix.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(ITI_44, getServiceAddress());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti44Service.class);
         Server server = serverFactory.create();

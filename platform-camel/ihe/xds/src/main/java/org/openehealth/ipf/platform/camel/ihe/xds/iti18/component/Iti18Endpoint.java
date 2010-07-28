@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18.component;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -22,16 +24,31 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18Service;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti18.service.Iti18Service;
 
 /**
  * The endpoint implementation for the ITI-18 component.
  */
 public class Iti18Endpoint extends DefaultItiEndpoint {
+    private final static XdsServiceInfo ITI_18 = new XdsServiceInfo(
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+            Iti18PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti18.wsdl",
+            true,
+            false,
+            true);
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -47,14 +64,19 @@ public class Iti18Endpoint extends DefaultItiEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = Iti18.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        ItiClientFactory clientFactory = new XdsClientFactory(
+                ITI_18, 
+                isAudit() ? new Iti18ClientAuditStrategy(isAllowIncompleteAudit()) : null, 
+                getServiceUrl());
         return new Iti18Producer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = 
-            Iti18.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        ItiServiceFactory serviceFactory = new XdsServiceFactory(
+                ITI_18, 
+                isAudit() ? new Iti18ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
+                getServiceAddress());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti18Service.class);
         Server server = serverFactory.create();

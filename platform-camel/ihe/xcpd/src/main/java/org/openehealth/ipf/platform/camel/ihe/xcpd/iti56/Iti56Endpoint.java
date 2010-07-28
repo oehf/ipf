@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti56;
 
 import java.net.URISyntaxException;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -24,7 +26,12 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdClientFactory;
+import org.openehealth.ipf.commons.ihe.xcpd.XcpdServiceFactory;
+import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56PortType;
+import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -33,6 +40,16 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  * The Camel endpoint for the ITI-56 transaction.
  */
 public class Iti56Endpoint extends DefaultItiEndpoint {
+    private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
+    private final static ItiServiceInfo ITI_56 = new ItiServiceInfo(
+            new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
+            Iti56PortType.class,
+            new QName(NS_URI, "RespondingGateway_Binding_Soap12", "xcpd"),
+            false,
+            "wsdl/iti56/iti56-raw.wsdl",
+            true,
+            false);
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -53,18 +70,18 @@ public class Iti56Endpoint extends DefaultItiEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = Iti56.getClientFactory(
-                isAudit(), 
-                isAllowIncompleteAudit(), 
+        ItiClientFactory clientFactory = new XcpdClientFactory(
+                ITI_56,
+                isAudit() ? new Iti56ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceUrl(),
                 getCorrelator());
         return new Iti56Producer(this, clientFactory);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = Iti56.getServiceFactory(
-                isAudit(), 
-                isAllowIncompleteAudit(), 
+        ItiServiceFactory serviceFactory = new XcpdServiceFactory(
+                ITI_56,
+                isAudit() ? new Iti56ServerAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti56Service.class);

@@ -26,14 +26,14 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Client audit strategy for ITI-14.
  * @author Dmytro Rud
  */
-class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
+public class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ServiceEndpointUrl", 
         "SubmissionSetUuid",
         "PatientId"};
     
-    Iti14ClientAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti14ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit);
     }
 

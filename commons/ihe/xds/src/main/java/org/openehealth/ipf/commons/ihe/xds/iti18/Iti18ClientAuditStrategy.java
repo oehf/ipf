@@ -23,7 +23,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Client audit strategy for ITI-18.
  * @author Dmytro Rud
  */
-class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
+public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ServiceEndpointUrl",
@@ -38,7 +38,7 @@ class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
      *      whether this strategy should allow incomplete audit records
      *      (parameter initially configurable via endpoint URL).
      */
-    Iti18ClientAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti18ClientAuditStrategy(boolean allowIncompleteAudit) {
         super(false, allowIncompleteAudit);
     }
 

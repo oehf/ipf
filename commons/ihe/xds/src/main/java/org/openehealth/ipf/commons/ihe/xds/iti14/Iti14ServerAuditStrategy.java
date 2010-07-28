@@ -24,7 +24,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Server audit strategy for ITI-14.
  * @author Dmytro Rud
  */
-class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
+public class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ClientIpAddress", 
@@ -32,7 +32,7 @@ class Iti14ServerAuditStrategy extends Iti14AuditStrategy {
         "SubmissionSetUuid",
         "PatientId"};
     
-    Iti14ServerAuditStrategy(boolean allowIncompleteAudit) {
+    public Iti14ServerAuditStrategy(boolean allowIncompleteAudit) {
         super(true, allowIncompleteAudit);
     }
 

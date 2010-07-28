@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42.component;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -22,16 +24,31 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42Service;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42Service;
 
 /**
  * The Camel endpoint for the ITI-42 transaction.
  */
 public class Iti42Endpoint extends DefaultItiEndpoint {
+    private final static XdsServiceInfo ITI_42 = new XdsServiceInfo(
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+            Iti42PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti42.wsdl",
+            true,
+            false,
+            false);
+           
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -47,15 +64,19 @@ public class Iti42Endpoint extends DefaultItiEndpoint {
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = 
-            Iti42.getClientFactory(isAudit(), isAllowIncompleteAudit(), getServiceUrl());
+        ItiClientFactory clientFactory = new XdsClientFactory(
+                ITI_42, 
+                isAudit() ? new Iti42ClientAuditStrategy(isAllowIncompleteAudit()) : null, 
+                getServiceUrl());
         return new Iti42Producer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = 
-            Iti42.getServiceFactory(isAudit(), isAllowIncompleteAudit(), getServiceAddress());
+        ItiServiceFactory serviceFactory = new XdsServiceFactory(
+                ITI_42, 
+                isAudit() ? new Iti42ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
+                getServiceAddress());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti42Service.class);
         Server server = serverFactory.create();
