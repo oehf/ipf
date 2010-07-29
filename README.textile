@@ -1,0 +1,6 @@
+The Open eHealth Integration Platform (IPF) is an extension of the Apache Camel routing and mediation engine and comes with comprehensive support for message processing and connecting information systems in the healthcare sector. It is available under the Apache License version 2.0. IPF focuses on a domain-specific language (DSL) to implement Enterprise Integration Patterns (EIPs) in integration solutions. IPF is based on the Java and Groovy programming languages for application development and for designing project-specific DSLs.
+
+IPF provides highl-level building blocks for implementing IHE profiles such as XDS, PIX, PDQ or XCPD. Support for further IHE profiles will be added in the future through IPF's plugin architecture. Other supported standards are HL7v2 and HL7v3 (CDA and CCD) for which IPF provides domain-specific languages (DSLs) for creation, parsing, rendering, navigation and modification. Recently support for the HL7 continuation protocol has been added as well.
+
+An more detailed overview of IPF is given at "http://repo.openehealth.org/confluence/display/ipf2/IPF+Overview":http://repo.openehealth.org/confluence/display/ipf2/IPF+Overview
+An (older) introductory article is available at "http://architects.dzone.com/articles/introduction-open-ehealth":http://architects.dzone.com/articles/introduction-open-ehealth
