@@ -24,6 +24,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
@@ -64,9 +65,10 @@ public class Iti55Endpoint extends DefaultItiEndpoint {
     public Iti55Endpoint(
             String endpointUri, 
             String address, 
-            Iti55Component iti55Component) throws URISyntaxException 
+            Iti55Component iti55Component,
+            InterceptorProvider customInterceptors) throws URISyntaxException 
     {
-        super(endpointUri, address, iti55Component);
+        super(endpointUri, address, iti55Component, customInterceptors);
     }
 
     public Producer createProducer() throws Exception {
@@ -74,7 +76,8 @@ public class Iti55Endpoint extends DefaultItiEndpoint {
                 ITI_55,
                 isAudit() ? new Iti55ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceUrl(),
-                getCorrelator());
+                getCorrelator(),
+                getCustomInterceptors());
         return new Iti55Producer(this, clientFactory);
     }
 
@@ -82,7 +85,8 @@ public class Iti55Endpoint extends DefaultItiEndpoint {
         ItiServiceFactory serviceFactory = new XcpdServiceFactory(
                 ITI_55,
                 isAudit() ? new Iti55ServerAuditStrategy(isAllowIncompleteAudit()) : null,
-                getServiceAddress());
+                getServiceAddress(),
+                getCustomInterceptors());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti55Service.class);
         Server server = serverFactory.create();

@@ -22,6 +22,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti47.Iti47PortType;
@@ -58,19 +59,27 @@ public class Iti47Endpoint extends DefaultItiEndpoint {
     public Iti47Endpoint(
             String endpointUri, 
             String address, 
-            Iti47Component iti47Component) {
-        super(endpointUri, address, iti47Component);
+            Iti47Component iti47Component,
+            InterceptorProvider customInterceptors) 
+    {
+        super(endpointUri, address, iti47Component, customInterceptors);
     }
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = new Hl7v3ClientFactory(ITI_47, getServiceUrl());
+        ItiClientFactory clientFactory = new Hl7v3ClientFactory(
+                ITI_47, 
+                getServiceUrl(), 
+                getCustomInterceptors());
         return new Iti47Producer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(ITI_47, getServiceAddress());
+        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
+                ITI_47, 
+                getServiceAddress(),
+                getCustomInterceptors());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti47Service.class);
         Server server = serverFactory.create();

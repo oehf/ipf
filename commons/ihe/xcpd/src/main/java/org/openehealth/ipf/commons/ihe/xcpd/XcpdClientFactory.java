@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xcpd;
 
 import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
@@ -38,16 +39,21 @@ public class XcpdClientFactory extends Hl7v3ClientFactory {
      *          the info about the web-service.
      * @param auditStrategy
      *          the audit strategy to use.
-     * @param serviceUrl
+     * @param serviceAddress
      *          the URL of the web-service.
+     * @param correlator
+     *          asynchrony correlator.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.
      */
     public XcpdClientFactory(
             ItiServiceInfo serviceInfo, 
             WsAuditStrategy auditStrategy, 
             String serviceAddress,
-            AsynchronyCorrelator correlator) 
+            AsynchronyCorrelator correlator,
+            InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceAddress);
+        super(serviceInfo, serviceAddress, customInterceptors);
         this.auditStrategy = auditStrategy;
         this.correlator = correlator;
     }

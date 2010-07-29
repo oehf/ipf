@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
@@ -38,9 +39,16 @@ public class XdsServiceFactory extends ItiServiceFactory {
      *          the auditing strategy to use.
      * @param serviceAddress
      *          the address of the service that it should be published with.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.
      */
-    public XdsServiceFactory(ItiServiceInfo serviceInfo, XdsAuditStrategy auditStrategy, String serviceAddress) {
-        super(serviceInfo, serviceAddress);
+    public XdsServiceFactory(
+            ItiServiceInfo serviceInfo, 
+            XdsAuditStrategy auditStrategy, 
+            String serviceAddress,
+            InterceptorProvider customInterceptors) 
+    {
+        super(serviceInfo, serviceAddress, customInterceptors);
         this.auditStrategy = auditStrategy;
     }
     

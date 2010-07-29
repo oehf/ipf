@@ -24,6 +24,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAsyncResponseServiceFactory;
@@ -61,9 +62,10 @@ public class Iti56AsyncResponseEndpoint extends DefaultItiEndpoint {
     public Iti56AsyncResponseEndpoint(
             String endpointUri, 
             String address, 
-            Iti56AsyncResponseComponent iti56AsyncResponseComponent) throws URISyntaxException 
+            Iti56AsyncResponseComponent iti56AsyncResponseComponent,
+            InterceptorProvider customInterceptors) throws URISyntaxException 
     {
-        super(endpointUri, address, iti56AsyncResponseComponent);
+        super(endpointUri, address, iti56AsyncResponseComponent, customInterceptors);
     }
 
     public Producer createProducer() throws Exception {
@@ -75,7 +77,8 @@ public class Iti56AsyncResponseEndpoint extends DefaultItiEndpoint {
                 ITI_56_ASYNC_RESPONSE,
                 isAudit() ? new Iti56ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
-                getCorrelator());
+                getCorrelator(),
+                getCustomInterceptors());
         ServerFactoryBean serverFactory = 
             serviceFactory.createServerFactory(Iti56AsyncResponseService.class);
         Server server = serverFactory.create();

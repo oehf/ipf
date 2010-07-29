@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditDatasetEnrichmentInterceptor;
@@ -36,9 +37,16 @@ public class XdsClientFactory extends ItiClientFactory {
      *          the audit strategy to use.
      * @param serviceUrl
      *          the URL of the web-service.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.
      */
-    public XdsClientFactory(XdsServiceInfo serviceInfo, XdsAuditStrategy auditStrategy, String serviceUrl) {
-        super(serviceInfo, serviceUrl);
+    public XdsClientFactory(
+            XdsServiceInfo serviceInfo, 
+            XdsAuditStrategy auditStrategy, 
+            String serviceUrl,
+            InterceptorProvider customInterceptors) 
+    {
+        super(serviceInfo, serviceUrl, customInterceptors);
         this.auditStrategy = auditStrategy;
     }
 

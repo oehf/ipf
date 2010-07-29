@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
@@ -35,9 +36,15 @@ public class Hl7v3ServiceFactory extends ItiServiceFactory {
      *          the info about the service to produce.
      * @param serviceAddress
      *          the address of the service that it should be published with.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.
      */
-    public Hl7v3ServiceFactory(ItiServiceInfo serviceInfo, String serviceAddress) {
-        super(serviceInfo, serviceAddress);
+    public Hl7v3ServiceFactory(
+            ItiServiceInfo serviceInfo, 
+            String serviceAddress,
+            InterceptorProvider customInterceptors) 
+    {
+        super(serviceInfo, serviceAddress, customInterceptors);
     }
     
     @Override

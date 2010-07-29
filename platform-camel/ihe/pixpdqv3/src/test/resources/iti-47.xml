@@ -46,4 +46,21 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
             </list>
         </property>
     </bean>
+    
+    <bean id="customInterceptorA" class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor">
+        <constructor-arg value="a" />
+    </bean>
+
+    <bean id="customInterceptorB" class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor">
+        <constructor-arg value="b" />
+    </bean>
+
+    <bean id="customInterceptorC" class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor">
+        <constructor-arg value="c" />
+    </bean>
+
+    <bean id="customInterceptorD" class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor">
+        <constructor-arg value="d" />
+    </bean>
+
 </beans>

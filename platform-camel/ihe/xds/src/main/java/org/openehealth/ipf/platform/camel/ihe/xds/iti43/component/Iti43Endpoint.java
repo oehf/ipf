@@ -22,6 +22,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
@@ -58,22 +59,29 @@ public class Iti43Endpoint extends DefaultItiEndpoint {
      * @param iti43Component
      *          the component creating this endpoint.
      */
-    public Iti43Endpoint(String endpointUri, String address, Iti43Component iti43Component)  {
-        super(endpointUri, address, iti43Component);
+    public Iti43Endpoint(
+            String endpointUri, 
+            String address, 
+            Iti43Component iti43Component,
+            InterceptorProvider customInterceptors)  
+    {
+        super(endpointUri, address, iti43Component, customInterceptors);
     }
 
     @Override public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new XdsClientFactory(
                 ITI_43, 
                 isAudit() ? new Iti43ClientAuditStrategy(isAllowIncompleteAudit()) : null, 
-                getServiceUrl());
+                getServiceUrl(),
+                getCustomInterceptors());
         return new Iti43Producer(this, clientFactory);
     }
 
     @Override public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XdsServiceFactory(
                 ITI_43, isAudit() ? new Iti43ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
-                getServiceAddress());
+                getServiceAddress(),
+                getCustomInterceptors());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti43Service.class);
         Server server = serverFactory.create();

@@ -15,18 +15,18 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41.component;
 
-import org.apache.camel.Endpoint;
-import org.apache.camel.impl.DefaultComponent;
-
 import java.util.Map;
+
+import org.apache.camel.Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
 
 /**
  * The Camel component for the ITI-41 transaction.
  */
-public class Iti41Component extends DefaultComponent {
+public class Iti41Component extends DefaultWsComponent {
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti41Endpoint(uri, remaining, this);
+        return new Iti41Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 }

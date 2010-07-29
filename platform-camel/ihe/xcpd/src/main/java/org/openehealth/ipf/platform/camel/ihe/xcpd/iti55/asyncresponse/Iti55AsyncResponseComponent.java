@@ -18,16 +18,16 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.asyncresponse;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.apache.camel.impl.DefaultComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
 
 /**
  * The Camel component for the ITI-55 (XCPD) async response.
  */
-public class Iti55AsyncResponseComponent extends DefaultComponent {
+public class Iti55AsyncResponseComponent extends DefaultWsComponent {
     
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti55AsyncResponseEndpoint(uri, remaining, this);
+        return new Iti55AsyncResponseEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 }

@@ -18,15 +18,15 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.apache.camel.impl.DefaultComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
 
 /**
  * The Camel component for the ITI-44 transaction (PIX Feed v3).
  */
-public class Iti44PixComponent extends DefaultComponent {
+public class Iti44PixComponent extends DefaultWsComponent {
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti44PixEndpoint(uri, remaining, this);
+        return new Iti44PixEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 }

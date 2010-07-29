@@ -37,7 +37,7 @@ public class Iti17Endpoint extends DefaultItiEndpoint {
      *          the component creating this endpoint.
      */
     public Iti17Endpoint(String endpointUri, String address, Iti17Component iti17Component) {
-        super(endpointUri, address, iti17Component);
+        super(endpointUri, address, iti17Component, null);
     }
 
     @Override

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xcpd;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
@@ -37,13 +38,16 @@ public class XcpdServiceFactory extends Hl7v3ServiceFactory {
      *          the auditing strategy to use.
      * @param serviceAddress
      *          the address of the service that it should be published with.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.
      */
     public XcpdServiceFactory(
             ItiServiceInfo serviceInfo,
             WsAuditStrategy auditStrategy,
-            String serviceAddress) 
+            String serviceAddress,
+            InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceAddress);
+        super(serviceInfo, serviceAddress, customInterceptors);
         this.auditStrategy = auditStrategy;
     }
 

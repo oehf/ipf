@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
@@ -35,9 +36,15 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
      *          the info about the web-service.
      * @param serviceUrl
      *          the URL of the web-service.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.          
      */
-    public Hl7v3ClientFactory(ItiServiceInfo serviceInfo, String serviceUrl) {
-        super(serviceInfo, serviceUrl);
+    public Hl7v3ClientFactory(
+            ItiServiceInfo serviceInfo, 
+            String serviceUrl, 
+            InterceptorProvider customInterceptors) 
+    {
+        super(serviceInfo, serviceUrl, customInterceptors);
     }
 
     

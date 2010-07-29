@@ -22,6 +22,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44PixPortType;
@@ -54,23 +55,32 @@ public class Iti44PixEndpoint extends DefaultItiEndpoint {
      *          the endpoint address from the URI.
      * @param iti44Component
      *          the component creating this endpoint.
+     * @param customInterceptors 
      */
     public Iti44PixEndpoint(
             String endpointUri, 
             String address, 
-            Iti44PixComponent iti44Component) {
-        super(endpointUri, address, iti44Component);
+            Iti44PixComponent iti44Component, 
+            InterceptorProvider customInterceptors) 
+    {
+        super(endpointUri, address, iti44Component, customInterceptors);
     }
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = new Hl7v3ClientFactory(ITI_44, getServiceUrl());
+        ItiClientFactory clientFactory = new Hl7v3ClientFactory(
+                ITI_44, 
+                getServiceUrl(), 
+                getCustomInterceptors());
         return new Iti44PixProducer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(ITI_44, getServiceAddress());
+        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
+                ITI_44, 
+                getServiceAddress(),
+                getCustomInterceptors());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti44Service.class);
         Server server = serverFactory.create();

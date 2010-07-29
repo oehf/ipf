@@ -30,13 +30,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
 /**
@@ -49,6 +50,7 @@ public class ItiClientFactory {
     protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<Object>();
     protected final ItiServiceInfo serviceInfo;
     protected final String serviceUrl;
+    protected final InterceptorProvider customInterceptors;
 
     /**
      * Constructs the factory.
@@ -56,11 +58,18 @@ public class ItiClientFactory {
      *          the info about the web-service.
      * @param serviceUrl
      *          the URL of the web-service.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.          
      */
-    public ItiClientFactory(ItiServiceInfo serviceInfo, String serviceUrl) {
+    public ItiClientFactory(
+            ItiServiceInfo serviceInfo, 
+            String serviceUrl, 
+            InterceptorProvider customInterceptors) 
+    {
         notNull(serviceInfo, "serviceInfo");
         this.serviceInfo = serviceInfo;
         this.serviceUrl = serviceUrl;
+        this.customInterceptors = customInterceptors;
     }
 
     /**
@@ -123,9 +132,11 @@ public class ItiClientFactory {
             client.getOutInterceptors().add(new ProvidedAttachmentOutInterceptor());
             client.getOutInterceptors().add(new FixContentTypeOutInterceptor());            
         }
+
+        InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, client);
     }
 
-    
+
     /**
      * Helper method for installing of payload-collecting SOAP interceptors
      * for the given Client.

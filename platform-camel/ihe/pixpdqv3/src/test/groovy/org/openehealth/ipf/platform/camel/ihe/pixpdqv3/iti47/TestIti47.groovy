@@ -22,6 +22,7 @@ import org.junit.Test
 import org.junit.BeforeClass
 import org.apache.cxf.transport.servlet.CXFServlet
 
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
@@ -30,7 +31,9 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
  */
 class TestIti47 extends StandardTestContainer {
 
-     def SERVICE1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service1";
+     def SERVICE1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service1" +
+                    "?inInterceptors=#customInterceptorA, #customInterceptorB" +
+                    "&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC";
 
      @BeforeClass
      static void setUpClass() {
@@ -42,5 +45,9 @@ class TestIti47 extends StandardTestContainer {
          def response = send(SERVICE1, '<request/>', String.class)
          def slurper = new XmlSlurper().parseText(response)
          assert slurper.@from == 'PDSupplier'
+             
+         assert CustomInterceptor['a'] == 2
+         assert CustomInterceptor['b'] == 1
+         assert CustomInterceptor['c'] == 1
      }
 }

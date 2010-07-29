@@ -15,15 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
+import java.util.Collections;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapBindingConfiguration;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsSecurityUnderstandingInInterceptor;
-
-import java.util.Collections;
 
 /**
  * Factory for ITI web-services.
@@ -36,6 +37,10 @@ public class ItiServiceFactory {
     protected final ItiServiceInfo serviceInfo;
     /** The service address. */
     protected final String serviceAddress;
+    /**
+     * User-defined custom CXF interceptors.
+     */
+    protected final InterceptorProvider customInterceptors;
 
     /**
      * Constructs the factory.
@@ -43,10 +48,17 @@ public class ItiServiceFactory {
      *          the info about the service to produce.
      * @param serviceAddress
      *          the address of the service that it should be published with.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.
      */
-    public ItiServiceFactory(ItiServiceInfo serviceInfo, String serviceAddress) {
+    public ItiServiceFactory(
+            ItiServiceInfo serviceInfo, 
+            String serviceAddress,
+            InterceptorProvider customInterceptors) 
+    {
         this.serviceInfo = serviceInfo;
         this.serviceAddress = serviceAddress;
+        this.customInterceptors = customInterceptors;
     }
     
     /**
@@ -117,5 +129,6 @@ public class ItiServiceFactory {
      */
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
+        InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, svrFactory);
     }
 }

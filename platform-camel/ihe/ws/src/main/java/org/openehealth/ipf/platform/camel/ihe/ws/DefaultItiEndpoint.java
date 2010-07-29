@@ -20,6 +20,7 @@ import javax.xml.namespace.QName;
 import org.apache.camel.Component;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.cxf.headers.Header;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 
 /**
@@ -66,8 +67,7 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      * headers will be taken as a <code>List&lt;{@link Header}&gt</code>.
      */
     public static final String OUTGOING_SOAP_HEADERS = "ipf.ihe.soap.headers.outgoing";
-
-
+    
     private final String address;
 
     private String serviceAddress;
@@ -76,7 +76,7 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     private boolean audit = true;
     private boolean allowIncompleteAudit = false;
     private AsynchronyCorrelator correlator = null;
-
+    private InterceptorProvider customInterceptors = null; 
 
     /**
      * Constructs the endpoint.
@@ -87,9 +87,15 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      * @param component
      *          the component creating this endpoint.
      */
-    protected DefaultItiEndpoint(String endpointUri, String address, Component component) {
+    protected DefaultItiEndpoint(
+            String endpointUri, 
+            String address, 
+            Component component,
+            InterceptorProvider customInterceptors) 
+    {
         super(endpointUri, component);
         this.address = address;
+        this.customInterceptors = customInterceptors;
         configure();
     }
 
@@ -124,7 +130,6 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     public String getServiceAddress() {
         return serviceAddress;
     }
-
 
     /**
      * @return <code>true</code> if auditing is turned on. <code>true</code> by default.
@@ -188,5 +193,12 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      */
     public AsynchronyCorrelator getCorrelator() {
         return correlator;
+    }
+
+    /**
+     * Returns custom interceptors configured for this endpoint.
+     */
+    public InterceptorProvider getCustomInterceptors() {
+        return customInterceptors;
     }
 }

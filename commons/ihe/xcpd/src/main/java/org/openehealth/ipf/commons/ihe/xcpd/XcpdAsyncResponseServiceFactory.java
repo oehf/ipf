@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xcpd;
 
 import org.apache.commons.lang.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
+import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
@@ -43,14 +44,17 @@ public class XcpdAsyncResponseServiceFactory extends Hl7v3ServiceFactory {
      *          the address of the service that it should be published with.
      * @param correlator
      *          correlator for asynchronous interactions.
+     * @param customInterceptors
+     *          user-defined custom CXF interceptors.
      */
     public XcpdAsyncResponseServiceFactory(
             ItiServiceInfo serviceInfo,
             WsAuditStrategy auditStrategy,
             String serviceAddress,
-            AsynchronyCorrelator correlator) 
+            AsynchronyCorrelator correlator,
+            InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceAddress);
+        super(serviceInfo, serviceAddress, customInterceptors);
         
         Validate.notNull(correlator);
         this.correlator = correlator;
