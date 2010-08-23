@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.core.model;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
-import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.core.process.Interceptor;
@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.core.process.Interceptor;
 /**
  * @author Martin Krasser
  */
-public class InterceptDefinition extends OutputDefinition<ProcessorDefinition> {
+public class InterceptDefinition extends OutputDefinition<RouteDefinition> {
 
     private DelegateProcessor delegateProcessor;
     private String interceptorBean;

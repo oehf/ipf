@@ -21,7 +21,7 @@ import groovy.lang.Closure;
 import org.apache.camel.Expression;
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
-import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.language.ExpressionDefinition;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
  * @author Jens Riemschneider
  * @author Martin Krasser
  */
-public class SplitterDefinition extends OutputDefinition<ProcessorDefinition> {
+public class SplitterDefinition extends OutputDefinition<RouteDefinition> {
 
     private AggregationStrategy aggregationStrategy;
     private ExpressionDefinition expressionDefinition;

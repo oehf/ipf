@@ -16,7 +16,6 @@
 package org.apache.camel.processor;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
 import org.openehealth.ipf.commons.flow.history.SplitHistory;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessage;

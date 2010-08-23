@@ -36,12 +36,12 @@ import org.openehealth.ipf.commons.flow.history.SplitHistory;
 public class ExchangeCopy {
 
     @SuppressWarnings("unused")
-    @Pointcut("execution(Iterable<org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair> " +
+    @Pointcut("execution(Iterable<org.apache.camel.processor.ProcessorExchangePair> " +
             "org.apache.camel.processor.MulticastProcessor.createProcessorExchangePairs(org.apache.camel.Exchange)) && args(exchange)")
     private void multicastExchangeCopy(Exchange exchange) {}
     
     @SuppressWarnings("unused")
-    @Pointcut("execution(Iterable<org.apache.camel.processor.MulticastProcessor.ProcessorExchangePair> " +
+    @Pointcut("execution(Iterable<org.apache.camel.processor.ProcessorExchangePair> " +
             "org.apache.camel.processor.Splitter.createProcessorExchangePairs(org.apache.camel.Exchange)) && args(exchange)")
     private void splitterExchangeCopy(Exchange exchange) {}
     
@@ -64,6 +64,7 @@ public class ExchangeCopy {
      */
     @AfterReturning(pointcut="exchangeCopy(exchange)", returning="pairs")
     public void afterCopy(Exchange exchange, Iterable pairs) {
+        System.out.println("in afterCopy()");
         ExchangeCopyHelper.afterCopy(exchange, pairs);
     }
     

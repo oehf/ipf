@@ -28,7 +28,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInte
 
 import javax.net.ssl.SSLContext;
 import java.nio.charset.Charset;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -82,8 +81,6 @@ public abstract class MllpComponent extends MinaComponent {
 
         boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
         boolean mutualTLS = getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
-        String sslContextBean = getAndRemoveParameter(parameters, "sslContext", String.class, "");
-        String interceptorBeans = getAndRemoveParameter(parameters, "interceptors", String.class, "");
         String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
         String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
         
@@ -102,17 +99,13 @@ public abstract class MllpComponent extends MinaComponent {
         int segmentFragmentationThreshold = getAndRemoveParameter(
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
         
-        ContinuationStorage continuationStorage = null;
-        if (supportInteractiveContinuation) {
-            String storageBean = getAndRemoveParameter(
-                    parameters, "interactiveContinuationStorage", String.class, null);
-            if (storageBean == null) {
-                continuationStorage = new InMemoryContinuationStorage();
-            } else {
-                continuationStorage = getCamelContext().getRegistry().lookup(
-                        extractBeanName(storageBean), ContinuationStorage.class);
-            }
-        }
+        ContinuationStorage continuationStorage = supportInteractiveContinuation ?
+            continuationStorage = resolveAndRemoveReferenceParameter(
+                    parameters, 
+                    "interactiveContinuationStorage", 
+                    ContinuationStorage.class,
+                    new InMemoryContinuationStorage()) : null;
+                    
         
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
@@ -126,9 +119,8 @@ public abstract class MllpComponent extends MinaComponent {
         }
 
         // adopt character set configured for the HL7 codec
-        String codecBean = extractBeanName((String) parameters.get("codec"));
         ProtocolCodecFactory codecFactory = getCamelContext().getRegistry().lookup(
-                    codecBean, 
+                    extractBeanName((String) parameters.get("codec")), 
                     ProtocolCodecFactory.class);
         Charset charset = null;
         try {
@@ -145,8 +137,14 @@ public abstract class MllpComponent extends MinaComponent {
         Endpoint endpoint = super.createEndpoint(uri, remaining, parameters);
         MinaEndpoint minaEndpoint = (MinaEndpoint) endpoint;
 
-        SSLContext sslContext = secure ? lookupSSLContext(sslContextBean) : null;
-        List<MllpCustomInterceptor> customInterceptors = getCustomInterceptors(interceptorBeans);
+        SSLContext sslContext = secure ? resolveAndRemoveReferenceParameter(
+                parameters, 
+                "sslContext", 
+                SSLContext.class,
+                SSLContext.getDefault()) : null;
+
+        List<MllpCustomInterceptor> customInterceptors = resolveAndRemoveReferenceListParameter(
+                parameters, "interceptors", MllpCustomInterceptor.class);
 
         String[] sslProtocols = sslProtocolsString != null ? sslProtocolsString.split(",") : null;
         String[] sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;
@@ -174,28 +172,7 @@ public abstract class MllpComponent extends MinaComponent {
                 continuationStorage);
     }
 
-    private List<MllpCustomInterceptor> getCustomInterceptors(String interceptorBeans) {
-        if (interceptorBeans.equals("")) {
-            return Collections.emptyList();
-        }
-        List<MllpCustomInterceptor> interceptors = new ArrayList<MllpCustomInterceptor>();
-        for (String bean : interceptorBeans.split(",")) {
-            String beanName = extractBeanName(bean);
-            MllpCustomInterceptor interceptor =
-                getCamelContext().getRegistry().lookup(beanName, MllpCustomInterceptor.class);
-            interceptors.add(interceptor);
-        }
-        return interceptors;
-    }
-
-    private SSLContext lookupSSLContext(String sslContextBean) throws NoSuchAlgorithmException {
-        if (sslContextBean.equals("")) {
-            return SSLContext.getDefault();
-        }
-        return getCamelContext().getRegistry().lookup(extractBeanName(sslContextBean), SSLContext.class);
-    }
-
-    private String extractBeanName(String originalBeanName) {
+    private static String extractBeanName(String originalBeanName) {
         return originalBeanName.startsWith("#") ? originalBeanName.substring(1) : originalBeanName;
     }
 

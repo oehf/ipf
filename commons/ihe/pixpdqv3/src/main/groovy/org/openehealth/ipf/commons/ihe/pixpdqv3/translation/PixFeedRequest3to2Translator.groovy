@@ -222,41 +222,54 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // PID-11 = addresses
         for (address in person.addr) {
             def pid11 = nextRepetition(grp.PID[11])
-            pid11[1].value = address.streetAddressLine.text()
+            String streetName  = address.streetAddressLine.text()
+            String houseNumber = address.houseNumber.text() 
+            pid11[1].value = houseNumber ? "${streetName} ${houseNumber}" : streetName 
             pid11[3].value = address.city.text()
             pid11[4].value = address.state.text()
             pid11[5].value = address.postalCode.text()
             pid11[6].value = address.country.text()
         }
         
-        // PID-13 = telecom        
+        // PID-13 + PID-14 = telecom        
         for (telecom in person.telecom) {            
             String value = telecom.@value.text()
             if (value) {
                 int pos = value.indexOf(':')
                 String type   = value.substring(0, pos)
                 String number = value.substring(pos + 1)
-    
-                def pid13 = nextRepetition(grp.PID[13])
-    
+                String use    = telecom.@use.text()
+                
+                // Currently (as of Aug 13, 2010 -- yes, it's a Friday), 
+                // only telephone numbers are differentiated between  
+                // "home" and "work", i.e. between PID-13 and PID-14.
+                // Fax numbers and E-Mail addresses are always "home". 
+                boolean work = ((type == 'tel') && 
+                    (use.contains('WP') || use.contains('DIR') || use.contains('PUB')))
+                def container = nextRepetition(grp.PID[work ? 14 : 13])
+                
                 switch (type) {
                 case 'tel':
-                    pid13[3].value = (telecom.@use.text() == 'MC') ? 'MP' : 'PH'
-                    pid13[1].value = number
+                    container[1].value = number
+                    container[2].value = work ? 'WPN' : 'PRN'
+                    container[3].value = (use == 'MC') ? 'CP' : 'PH'
                     break
     
                 case 'mailto':
-                    pid13[3].value = 'Internet'
                     if (this.copyEmailAs == 'PID-13-1') {                           
-                        pid13[1].value = number
+                        container[1].value = number
                     } else if (this.copyEmailAs == 'PID-13-4'){
-                        pid13[4].value = number
+                        container[4].value = number
                     }
+
+                    container[2].value = 'NET'
+                    container[3].value = 'Internet'
                     break
                 
                 case 'fax':
-                    pid13[3].value = 'FX'
-                    pid13[1].value = number
+                    container[1].value = number
+                    container[2].value = 'PRN'
+                    container[3].value = 'FX'
                     break
                 
                 default:

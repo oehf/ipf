@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.flow.extend;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.flow.FlowManager;
 import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
@@ -47,6 +48,7 @@ public class GroovyFlowTest extends AbstractFlowTest {
     }
 
     @Test
+    @Ignore
     public void testRecipientListSuccess() throws Exception {
         wait.expectedMessageCount(2);
         mock.expectedBodiesReceived("test1", "test2");

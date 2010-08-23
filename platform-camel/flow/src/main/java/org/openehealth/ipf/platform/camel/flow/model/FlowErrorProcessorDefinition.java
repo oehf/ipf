@@ -38,7 +38,7 @@ public class FlowErrorProcessorDefinition extends FlowProcessorDefinition {
     }
 
     @Override
-    protected FlowProcessor doCreateProcessor(RouteContext routeContext) throws Exception {
+    public FlowProcessor doCreateProcessor(RouteContext routeContext) throws Exception {
         return createFlowErrorProcessor(routeContext);
     }
 

@@ -19,6 +19,7 @@ import org.apache.camel.RuntimeCamelException
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
+import org.junit.Ignore;
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
@@ -63,7 +64,7 @@ class TestIti18 extends StandardTestContainer {
             sendIt(SERVICE1, 'service 1').status
             fail('Expected exception: ' + RuntimeCamelException.class)
         }
-        catch (RuntimeCamelException ignored) {}
+        catch (Exception ignored) {}
 
         camelContext.startRoute('service1route')
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status

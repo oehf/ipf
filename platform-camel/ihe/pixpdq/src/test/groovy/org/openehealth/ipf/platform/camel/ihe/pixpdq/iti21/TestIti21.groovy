@@ -87,7 +87,7 @@ class TestIti21 extends MllpTestContainer {
         try {
             send('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (RuntimeCamelException expected) {}
+        } catch (CamelExchangeException expected) {}
     }
 
     @Test
@@ -95,7 +95,7 @@ class TestIti21 extends MllpTestContainer {
         try {
             send('pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (RuntimeCamelException expected) {}
+        } catch (CamelExchangeException expected) {}
 
         def messages = auditSender.messages
         assertEquals(3, messages.size)
@@ -108,7 +108,7 @@ class TestIti21 extends MllpTestContainer {
         try {
             send('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
-        } catch (RuntimeCamelException expected) {}
+        } catch (CamelExchangeException expected) {}
     }
 
     @Test
@@ -116,7 +116,7 @@ class TestIti21 extends MllpTestContainer {
         try {
             send('pdq-iti21://localhost:18211', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (RuntimeCamelException expected) {}
+        } catch (CamelExchangeException expected) {}
 
         def messages = auditSender.messages
         assertEquals(2, messages.size)

@@ -25,14 +25,15 @@ class AnimalOrderTransformerTest extends GroovyTestCase {
     void testSomething() {
         
         def input = new ClassPathResource('order/order-animals.xml').inputStream.text
-        def result = new ClassPathResource('order/order-animals-transformed.txt').inputStream.text
+        def result = new ClassPathResource('order/order-animals-transformed.txt').inputStream.text.replace('\r\n', '\n')
         def node = new XmlParser(false, false).parseText(input)
         
         def transformer = new AnimalOrderTransformer()
         transformer.templateResource = new ClassPathResource('order/order.template')
         transformer.init()
 
-        assertEquals(result, transformer.zap(node))
+        def expectedResult = transformer.zap(node)
+        assertEquals(result, expectedResult)
         
     }
     

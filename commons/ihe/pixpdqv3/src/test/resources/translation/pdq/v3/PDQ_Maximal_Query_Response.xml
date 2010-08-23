@@ -34,11 +34,59 @@
   <controlActProcess classCode="CACT" moodCode="EVN">
     <code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6" />
     <effectiveTime value="20091217121020" />
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <statusCode code="active" />
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.2.1" extension="305013" />
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.411.1" extension="234234243" assigningAuthorityName="HZLN" />
+            <statusCode code="active" />
+            <patientPerson classCode="PSN" determinerCode="INSTANCE">
+              <name>
+                <family>Fed</family>
+                <given>Fed</given>
+              </name>
+              <telecom value="tel: 022-23571" use="H" />
+              <telecom value="tel: 022-23572" use="WP" />
+              <telecom value="mailto: fed@gmx.de" use="H" />
+              <telecom value="fax: 022-23574" use="H" />
+              <telecom value="tel: 022-23575" use="MC" />
+              <telecom value="tel: 022-23576" use="WP" />
+              <telecom value="tel: 022-23577" use="WP" />
+              <telecom value="mailto: fed2@gmx.de" use="H" />
+              <telecom value="fax: 022-23578" use="WP" />
+              <telecom value="tel: 022-23579" use="MC" />
+              <administrativeGenderCode code="M" />
+              <birthTime value="19400101" />
+              <addr>
+                <country>US</country>
+                <state>WI</state>
+                <postalCode>57321-4521</postalCode>
+                <city>Racine</city>
+                <streetAddressLine>1200 Center St</streetAddressLine>
+              </addr>
+            </patientPerson>
+            <subjectOf1>
+              <queryMatchObservation classCode="COND" moodCode="EVN">
+                <code code="IHE_PDQ" />
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="INT" value="50" />
+              </queryMatchObservation>
+            </subjectOf1>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.3" />
+          </assignedEntity>
+        </custodian>
+      </registrationEvent>
+    </subject>
     <queryAck>
       <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204" />
-      <queryResponseCode code="NF" />
-      <resultTotalQuantity value="0" />
-      <resultCurrentQuantity value="0" />
+      <queryResponseCode code="OK" />
+      <resultTotalQuantity value="1" />
+      <resultCurrentQuantity value="1" />
       <resultRemainingQuantity value="0" />
     </queryAck>
     <queryByParameter>

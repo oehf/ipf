@@ -19,6 +19,7 @@ import groovy.lang.Closure;
 
 import org.apache.camel.Expression;
 import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
 
 /**
@@ -35,7 +36,7 @@ import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
  */
 public class IpfDefinition extends org.openehealth.ipf.platform.camel.core.model.IpfDefinition {
 
-	public IpfDefinition(ProcessorDefinition<ProcessorDefinition> processorDefinition) {
+	public IpfDefinition(ProcessorDefinition<RouteDefinition> processorDefinition) {
 		super(processorDefinition);
 	}
 	

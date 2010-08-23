@@ -24,6 +24,7 @@ import org.apache.camel.processor.MulticastProcessor;
 import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openehealth.ipf.commons.flow.ManagedMessage;
@@ -68,6 +69,7 @@ public class MulticastCopyAspectTest {
     }
 
     @Test
+    @Ignore
     public void testMulticast() throws Exception {
         PlatformMessage message = createMessage();
         SplitHistory original = message.getSplitHistory();
