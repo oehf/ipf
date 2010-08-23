@@ -63,6 +63,7 @@
                 <state>IL</state>
                 <postalCode>60523</postalCode>
 		<country>US</country>
+		          <houseNumber>5</houseNumber>
               </addr>
               <addr>
                 <streetAddressLine>1 SECOND ADDRESS</streetAddressLine>

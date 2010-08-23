@@ -51,7 +51,7 @@
                 <given>Michael</given>
                 <given>Joachim</given>
               </name>
-              <telecom value="tel: 089/2356395" />
+              <telecom value="tel: 089/2356395" use="H" />
               <administrativeGenderCode code="M" />
               <birthTime value="19350331" />
               <addr>
@@ -91,7 +91,7 @@
               <name>
                 <family>Mayer</family>
               </name>
-              <telecom value="tel: 021-75736" />
+              <telecom value="tel: 021-75736" use="H" />
               <administrativeGenderCode code="M" />
               <birthTime value="19451201" />
               <addr>
@@ -131,7 +131,7 @@
               <name>
                 <family>Meier</family>
               </name>
-              <telecom value="tel: 01727593714" />
+              <telecom value="tel: 01727593714" use="H" />
               <administrativeGenderCode code="M" />
               <birthTime value="19600606" />
               <addr>
@@ -210,7 +210,7 @@
               <name>
                 <family>Mueller</family>
               </name>
-              <telecom value="tel: 022/235715" />
+              <telecom value="tel: 022/235715" use="H" />
               <administrativeGenderCode code="M" />
               <birthTime value="19400101" />
               <addr>
@@ -250,7 +250,7 @@
               <name>
                 <family>Mueller</family>
               </name>
-              <telecom value="tel: 022/843274" />
+              <telecom value="tel: 022/843274" use="H" />
               <administrativeGenderCode code="M" />
               <birthTime value="19400101" />
               <addr>
@@ -291,9 +291,9 @@
               <name>
                 <family>Mueller</family>
               </name>
-              <telecom value="tel: 022/235715" />
-              <telecom value="tel: 022/874491" />
-              <telecom value="tel: 01732356265" />
+              <telecom value="tel: 022/235715" use="H" />
+              <telecom value="tel: 022/874491" use="H" />
+              <telecom value="tel: 01732356265" use="H" />
               <administrativeGenderCode code="M" />
               <birthTime value="19400101" />
               <addr>
@@ -333,7 +333,7 @@
               <name>
                 <family>Mueller</family>
               </name>
-              <telecom value="tel: 022/844275" />
+              <telecom value="tel: 022/844275" use="H" />
               <administrativeGenderCode code="M" />
               <birthTime value="19400101" />
               <addr>
@@ -373,9 +373,9 @@
               <name>
                 <family>Schmidt</family>
               </name>
-              <telecom value="tel: 06221/23657" />
-              <telecom value="tel: 06221/82548" />
-              <telecom value="tel: 0172873459873" />
+              <telecom value="tel: 06221/23657" use="H" />
+              <telecom value="tel: 06221/82548" use="H" />
+              <telecom value="tel: 0172873459873" use="H" />
               <administrativeGenderCode code="F" />
               <birthTime value="19800131" />
               <addr>

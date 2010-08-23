@@ -24,6 +24,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter;
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.modules.hl7dsl.SelectorClosure;
 
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
@@ -142,9 +143,8 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                                     createName(builder, pid5) 
                                                 }
 
-                                                qr.PID[13]().collect { it[1].value }.each { tel ->
-                                                    telecom(value: "tel: ${tel}")
-                                                }
+                                                translateTelecom(builder, qr.PID[13], 'H')
+                                                translateTelecom(builder, qr.PID[14], 'WP')
 
                                                 def gender = (qr.PID[8].value ?: '').mapReverse('bidi-administrativeGender-administrativeGender')
                                                 administrativeGenderCode(code: gender)
@@ -254,9 +254,8 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
         }
         return '/'
     }
-    
-    
-    
+
+
     /**
      * Default (dummy) creation of the queryMatchObservation element,
      * to be customized in derived classes.
@@ -267,6 +266,43 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
             value('xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance', 
                   'xsi:type': 'INT', 
                   value: this.defaultMatchQuality)
+        }
+    }
+
+
+    void translateTelecom(MarkupBuilder builder, SelectorClosure repeatableXTN, String defaultUse) {
+        repeatableXTN().each { telecom ->
+            String number = telecom[1].value ?: telecom[4].value
+            if (number) {
+                String use = defaultUse
+                String schema = 'tel'
+                
+                switch (telecom[2].value) {
+                case 'PRN':
+                    use = 'H'
+                    break
+                case 'WPN':
+                    use = 'WP'
+                    break
+                }
+                    
+                switch (telecom[3].value) {
+                case 'PH':
+                    // take the defaults
+                    break
+                case 'CP':
+                    use = 'MC'
+                    break
+                case 'FX':
+                    schema = 'fax'
+                    break
+                case 'Internet':
+                case 'X.400':
+                    schema = 'mailto'
+                    break
+                }
+                builder.telecom(value: "${schema}: ${number}", use: use)
+            }
         }
     }
 }
