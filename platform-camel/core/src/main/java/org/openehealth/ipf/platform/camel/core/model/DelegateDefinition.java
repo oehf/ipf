@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.core.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
-import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.processor.Pipeline;
 import org.apache.camel.spi.RouteContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An {@link OutputDefinition} that combines the {@link Processor} created by
@@ -36,7 +36,7 @@ import java.util.List;
  * 
  * @author Martin Krasser
  */
-public abstract class DelegateDefinition extends OutputDefinition<ProcessorDefinition> {
+public abstract class DelegateDefinition extends OutputDefinition<RouteDefinition> {
 
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {

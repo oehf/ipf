@@ -77,7 +77,7 @@ public class StatisticAccessorHandler extends AbstractHandler {
                     response.getWriter().println("<td>" + contextStatisticsHandler.getRequestsActiveMax() + "</td>");
                     //
                     response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeTotal() + "</td>");
-                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeAverage() + "</td>");
+                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMean() + "</td>");
 //                    response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMin() + "</td>");
                     response.getWriter().println("<td>" + contextStatisticsHandler.getRequestTimeMax() + "</td>");
                     //

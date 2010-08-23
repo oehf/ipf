@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.flow.model;
 
 import org.apache.camel.Processor;
 import org.apache.camel.model.OutputDefinition;
-import org.apache.camel.model.ProcessorDefinition;
+import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.platform.camel.flow.PlatformMessageRenderer;
@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.flow.process.FlowProcessor;
 /**
  * @author Martin Krasser
  */
-public abstract class FlowProcessorDefinition extends OutputDefinition<ProcessorDefinition> {
+public abstract class FlowProcessorDefinition extends OutputDefinition<RouteDefinition> {
 
     private PlatformMessageRenderer messageRenderer; 
     

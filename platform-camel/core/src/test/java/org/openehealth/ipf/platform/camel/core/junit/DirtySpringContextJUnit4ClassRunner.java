@@ -17,8 +17,8 @@ package org.openehealth.ipf.platform.camel.core.junit;
 
 import java.lang.reflect.Method;
 
-import org.junit.internal.runners.InitializationError;
 import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.model.InitializationError;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestExecutionListener;
 import org.springframework.test.context.TestExecutionListeners;
@@ -59,6 +59,7 @@ public class DirtySpringContextJUnit4ClassRunner extends SpringJUnit4ClassRunner
      *          see {@link SpringJUnit4ClassRunner}
      * @throws InitializationError
      *          see {@link SpringJUnit4ClassRunner}
+     * @throws org.junit.runners.model.InitializationError 
      */
     public DirtySpringContextJUnit4ClassRunner(Class<?> clazz)
             throws InitializationError {
@@ -66,8 +67,8 @@ public class DirtySpringContextJUnit4ClassRunner extends SpringJUnit4ClassRunner
     }
 
     @Override
-    protected void runMethods(RunNotifier notifier) {
-        super.runMethods(notifier);
+    public void run(RunNotifier notifier) {
+        super.run(notifier);
         dirtyContext();
     }
 

@@ -38,9 +38,15 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 public class ExchangeAggregate {
 
     @SuppressWarnings("unused")
-    @Pointcut("execution(void org.apache.camel.processor.MulticastProcessor.process(org.apache.camel.Exchange))")
+    @Pointcut("execution(void org.apache.camel.processor.MulticastProcessor.process" +
+    		  "(org.apache.camel.Exchange))")
     private void multicastExchangeProcess() {}
     
+    @SuppressWarnings("unused")
+    @Pointcut("execution(boolean org.apache.camel.processor.MulticastProcessor.process" +
+              "(org.apache.camel.Exchange, org.apache.camel.AsyncCallback))")
+    private void multicastExchangeProcessWithCallback() {}
+
     /**
      * Delegates to {@link #doAroundExchangeProcess(ProceedingJoinPoint)} only
      * if this aspect is activated.
@@ -54,6 +60,11 @@ public class ExchangeAggregate {
         doAroundExchangeProcess(pjp);
     }
     
+    @Around("multicastExchangeProcessWithCallback()")
+    public void aroundExchangeProcessWithCallback(ProceedingJoinPoint pjp) throws Throwable {
+        doAroundExchangeProcess(pjp);
+    }
+    
     /**
      * Preserves the {@link SplitHistory} of exchanges that are processed by the
      * {@link MulticastProcessor#process(Exchange)} method. 
@@ -63,6 +74,7 @@ public class ExchangeAggregate {
      * @throws Throwable
      */
     protected void doAroundExchangeProcess(ProceedingJoinPoint pjp) throws Throwable {
+        System.out.println("in aroundExchangeProcess()");
         ManagedMessage message = getMessage(pjp);
         SplitHistory original = message.getSplitHistory();
         pjp.proceed(pjp.getArgs());

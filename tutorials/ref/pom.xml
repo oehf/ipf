@@ -136,7 +136,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
-                                    <artifactId>spring-agent</artifactId>
+                                    <artifactId>spring-instrument</artifactId>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <destFileName>spring-agent.jar</destFileName>

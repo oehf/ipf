@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import org.apache.camel.CamelContext
+import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.impl.DefaultExchange
 import org.junit.After
@@ -106,7 +107,11 @@ class MllpTestContainer {
      static MessageAdapter send(String endpoint, Object body) {        
          def exchange = new DefaultExchange(camelContext)
          exchange.in.body = body
-         def response = Exchanges.resultMessage(producerTemplate.send(endpoint, exchange))
+         Exchange result = producerTemplate.send(endpoint, exchange)
+         if (result.exception) {
+             throw result.exception
+         }
+         def response = Exchanges.resultMessage(result)
          response.getBody(MessageAdapter.class)
      }
   

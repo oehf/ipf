@@ -168,8 +168,9 @@ class StandardTestContainer {
       *          the type of the output object.
       * @return the output object.
       */
-     def send(endpoint, input, outType) {        
-         Exchanges.resultMessage(send(endpoint, input)).getBody(outType)
+     def send(endpoint, input, outType) {
+         Exchange result = send(endpoint, input)
+         Exchanges.resultMessage(result).getBody(outType)
      }
 
      /**
@@ -183,7 +184,11 @@ class StandardTestContainer {
      def send(endpoint, input) {
          def exchange = new DefaultExchange(camelContext)
          exchange.in.body = input       
-         producerTemplate.send(endpoint, exchange)        
+         Exchange result = producerTemplate.send(endpoint, exchange)
+         if (result.exception) {
+             throw result.exception
+         }
+         return result
      }
 
      def getAudit(actionCode, addr) {
