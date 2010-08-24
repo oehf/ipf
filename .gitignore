@@ -1,0 +1,8 @@
+*.iml
+*.iws
+*.ipr
+MANIFEST.MF
+derby.log
+target
+commons/ihe/ws/work
+id_file
