@@ -28,9 +28,7 @@ import org.openehealth.ipf.platform.camel.flow.PlatformMessage;
 
 /**
  * An {@link Aspect} to preserve the {@link SplitHistory} of exchanges that are
- * processed by the {@link MulticastProcessor#process(Exchange)} method. This
- * aspect is by default not active unless {@link #ASPECT_ACTIVE_SYSTEM_PROPERTY}
- * is set to <code>true</code>.
+ * processed by the {@link MulticastProcessor#process(Exchange)} method. 
  * 
  * @author Martin Krasser
  */
@@ -41,7 +39,7 @@ public class ExchangeAggregate {
     @Pointcut("execution(void org.apache.camel.processor.MulticastProcessor.process" +
     		  "(org.apache.camel.Exchange))")
     private void multicastExchangeProcess() {}
-    
+
     @SuppressWarnings("unused")
     @Pointcut("execution(boolean org.apache.camel.processor.MulticastProcessor.process" +
               "(org.apache.camel.Exchange, org.apache.camel.AsyncCallback))")
@@ -60,11 +58,20 @@ public class ExchangeAggregate {
         doAroundExchangeProcess(pjp);
     }
     
+    /**
+     * Delegates to {@link #doAroundExchangeProcess(ProceedingJoinPoint)} only
+     * if this aspect is activated.
+     *
+     * @param pjp
+     *            proceeding join point.
+     * @return result of target method call
+     * @throws Throwable
+     */
     @Around("multicastExchangeProcessWithCallback()")
-    public void aroundExchangeProcessWithCallback(ProceedingJoinPoint pjp) throws Throwable {
-        doAroundExchangeProcess(pjp);
+    public boolean aroundExchangeProcessWithCallback(ProceedingJoinPoint pjp) throws Throwable {
+        return (Boolean)doAroundExchangeProcess(pjp);
     }
-    
+
     /**
      * Preserves the {@link SplitHistory} of exchanges that are processed by the
      * {@link MulticastProcessor#process(Exchange)} method. 
@@ -73,15 +80,15 @@ public class ExchangeAggregate {
      *            proceeding join point.
      * @throws Throwable
      */
-    protected void doAroundExchangeProcess(ProceedingJoinPoint pjp) throws Throwable {
-        System.out.println("in aroundExchangeProcess()");
+    protected Object doAroundExchangeProcess(ProceedingJoinPoint pjp) throws Throwable {
         ManagedMessage message = getMessage(pjp);
         SplitHistory original = message.getSplitHistory();
-        pjp.proceed(pjp.getArgs());
+        Object result = pjp.proceed(pjp.getArgs());
         SplitHistory current = message.getSplitHistory();
         if (!original.equals(current)) {
             message.setSplitHistory(original);
         }
+        return result;
     }
     
     private ManagedMessage getMessage(ProceedingJoinPoint pjp) {

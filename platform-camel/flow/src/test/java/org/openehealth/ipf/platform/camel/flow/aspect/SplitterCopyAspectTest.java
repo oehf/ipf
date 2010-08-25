@@ -72,7 +72,6 @@ public class SplitterCopyAspectTest {
     }
 
     @Test
-    @Ignore    
     public void testMulticast() throws Exception {
         PlatformMessage message = createMessage();
         SplitHistory original = message.getSplitHistory();

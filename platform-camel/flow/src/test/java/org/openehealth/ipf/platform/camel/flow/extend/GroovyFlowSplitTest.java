@@ -24,7 +24,6 @@ import org.springframework.test.context.ContextConfiguration;
  * @author Martin Krasser
  */
 @ContextConfiguration(locations = { "/context-flow-route-groovy.xml" })
-@Ignore
 public class GroovyFlowSplitTest extends AbstractFlowSplitTest {
 
 }

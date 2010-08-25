@@ -48,7 +48,6 @@ public class GroovyFlowTest extends AbstractFlowTest {
     }
 
     @Test
-    @Ignore
     public void testRecipientListSuccess() throws Exception {
         wait.expectedMessageCount(2);
         mock.expectedBodiesReceived("test1", "test2");

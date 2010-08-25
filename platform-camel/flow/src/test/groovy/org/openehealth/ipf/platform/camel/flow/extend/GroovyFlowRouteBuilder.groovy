@@ -19,6 +19,7 @@ import org.apache.camel.component.http.HttpOperationFailedException
 import org.apache.camel.impl.SerializationDataFormat
 import org.apache.camel.impl.StringDataFormat
 import org.apache.camel.spring.SpringRouteBuilder
+import org.apache.camel.processor.aggregate.UseLatestAggregationStrategy
 
 /**
  * @author Martin Krasser
@@ -105,7 +106,7 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
         // --------------------------------------------------------------
         //  Split Flows (original Camel splitter)
         // --------------------------------------------------------------
-        
+
         from("direct:flow-test-split")
             .initFlow("test-split")
                 .application("test")
@@ -143,7 +144,7 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
             .to('mock:mock')
 
         from('direct:flow-test-recipient-list')
-            .split().body()
+            .split().body().aggregationStrategy(new UseLatestAggregationStrategy())
             .initFlow('test-recipient-list')
             .application('test')
             .inOnly().to('seda:recipient')
