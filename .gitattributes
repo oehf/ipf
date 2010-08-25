@@ -1,0 +1,2 @@
+*.hl7* -crlf -diff
+keystore -crlf -diff

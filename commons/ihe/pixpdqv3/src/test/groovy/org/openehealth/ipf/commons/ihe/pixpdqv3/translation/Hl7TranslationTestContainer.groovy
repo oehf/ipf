@@ -29,7 +29,9 @@ import org.openehealth.ipf.commons.map.extend.MappingExtension
 
 import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator
 
-import org.custommonkey.xmlunit.XMLUnitimport org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.XMLUnit
+import org.custommonkey.xmlunit.Diff
+
 import org.springframework.core.io.ClassPathResource
 import org.apache.commons.io.IOUtils
 
@@ -104,7 +106,7 @@ class Hl7TranslationTestContainer {
             .append(v3 ? '/v3/' : '/v2/')
             .append(fn)
             .append(request ? '' : '_Response')
-            .append(v3 ? '.xml' : '.txt')
+            .append(v3 ? '.xml' : '.hl7')
             .toString()
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)
         return IOUtils.toString(inputStream)

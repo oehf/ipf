@@ -68,7 +68,7 @@ class TestDatatypes extends MllpTestContainer {
         send(endpointUri, body)
         
         // File
-        URL fileUrl = TestDatatypes.class.classLoader.getResource('iti8/hl7v2message.txt')
+        URL fileUrl = TestDatatypes.class.classLoader.getResource('iti8/hl7v2message.hl7')
         body = new File(fileUrl.toURI())
         send(endpointUri, body)
         
