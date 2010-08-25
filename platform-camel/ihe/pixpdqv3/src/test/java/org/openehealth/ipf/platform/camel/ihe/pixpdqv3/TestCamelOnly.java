@@ -38,7 +38,7 @@ public class TestCamelOnly extends StandardTestContainer {
     @BeforeClass
     public static void setUpClass() {
         requestMessage  = readFile("translation/pdq/v3/PDQ.xml");
-        responseMessage = readFile("translation/pdq/v2/PDQ_Response.txt");
+        responseMessage = readFile("translation/pdq/v2/PDQ_Response.hl7");
         startServer(new CXFServlet(), "camel-only.xml");
     }
     
