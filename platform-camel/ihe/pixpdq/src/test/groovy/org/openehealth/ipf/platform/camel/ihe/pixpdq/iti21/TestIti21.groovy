@@ -84,6 +84,7 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Test
+    @Ignore
     void testSSLFailureWithIncompatibleProtocols() {
         try {
             send('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
@@ -106,6 +107,7 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Test
+    @Ignore
     void testSSLFailureWithIncompatibleKeystores() {
         try {
             send('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
@@ -114,6 +116,7 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Test
+    @Ignore
     void testSSLFailureDueToNonSSLClient() {
         try {
             send('pdq-iti21://localhost:18211', getMessageString('QBP^Q22', '2.5'))
