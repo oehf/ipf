@@ -84,21 +84,27 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Test
-    @Ignore
     void testSSLFailureWithIncompatibleProtocols() {
         try {
             send('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=TLSv1', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (CamelExchangeException expected) {}
+        } catch (Exception expected) {
+          // FIXME: race condition throws one of two possible exceptions
+          // 1.) RuntimeIOException: Failed to get the session
+          // 2.) CamelExchangeException (expected)
+        }
     }
 
     @Test
-    @Ignore
     void testSSLFailureWithIncompatibleCiphers() {
         try {
             send('pdq-iti21://localhost:18218?secure=true&sslContext=#sslContext&sslCiphers=TLS_KRB5_WITH_3DES_EDE_CBC_MD5', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (CamelExchangeException expected) {}
+        } catch (Exception expected) {
+          // FIXME: race condition throws one of two possible exceptions
+          // 1.) RuntimeIOException: Failed to get the session
+          // 2.) CamelExchangeException (expected)
+        }
 
         def messages = auditSender.messages
         assertEquals(3, messages.size)
@@ -107,21 +113,27 @@ class TestIti21 extends MllpTestContainer {
     }
 
     @Test
-    @Ignore
     void testSSLFailureWithIncompatibleKeystores() {
         try {
             send('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextOther', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(RuntimeCamelException.class))
-        } catch (CamelExchangeException expected) {}
+        } catch (Exception expected) {
+          // FIXME: race condition throws one of two possible exceptions
+          // 1.) RuntimeIOException: Failed to get the session
+          // 2.) CamelExchangeException (expected)
+        }
     }
 
     @Test
-    @Ignore
     void testSSLFailureDueToNonSSLClient() {
         try {
             send('pdq-iti21://localhost:18211', getMessageString('QBP^Q22', '2.5'))
             fail('expected exception: ' + String.valueOf(CamelExchangeException.class))
-        } catch (CamelExchangeException expected) {}
+        } catch (Exception expected) {
+          // FIXME: race condition throws one of two possible exceptions
+          // 1.) RuntimeIOException: Failed to get the session
+          // 2.) CamelExchangeException (expected)
+        }
 
         def messages = auditSender.messages
         assertEquals(2, messages.size)
@@ -149,13 +161,13 @@ class TestIti21 extends MllpTestContainer {
     }
 
     /**
-     * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
+     * Inacceptable messages (wrong message type, wrong trigger event, wrong version),
      * on consumer side, audit enabled.
      * Expected results: NAK responses, no audit.
      * <p>
      * We do not use MLLP producers, because they perform their own acceptance
      * tests and do not pass inacceptable messages to the consumers
-     * (it is really a feature, not a bug! ;-)) 
+     * (it is really a feature, not a bug! ;-))
      */
     @Test
     public void testInacceptanceOnConsumer1() {
@@ -182,7 +194,7 @@ class TestIti21 extends MllpTestContainer {
         def endpointUri = 'pdq-iti21://localhost:18210'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
-            [process : { Exchange e -> /* nop */ }] as Processor  
+            [process : { Exchange e -> /* nop */ }] as Processor
         )
         def processor = consumer.processor
         
@@ -199,7 +211,7 @@ class TestIti21 extends MllpTestContainer {
     
 
     /**
-     * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
+     * Inacceptable messages (wrong message type, wrong trigger event, wrong version),
      * on producer side, audit enabled.
      * Expected results: raise of corresponding HL7-related exceptions, no audit.
      */
@@ -242,7 +254,7 @@ class TestIti21 extends MllpTestContainer {
         assertFalse(failed)
         assertEquals(0, auditSender.messages.size)
     }
-    
+
 
     /**
      * Auditing in case of automatically generated NAK.
