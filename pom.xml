@@ -226,9 +226,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</connection>
-        <developerConnection>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</developerConnection>
-        <url>scm:svn:http://gforge.openehealth.org/svn/ipf/trunk/ipf</url>
+        <connection>scm:git@github.com:krasserm/ipf.git</connection>
+        <developerConnection>scm:git@github.com:krasserm/ipf.git</developerConnection>
+        <url>scm:git@github.com:krasserm/ipf.git</url>
     </scm>
 
     <modules>
