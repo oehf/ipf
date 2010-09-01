@@ -15,7 +15,7 @@
         <surefire-report-plugin-version>2.4.3</surefire-report-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
         <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
-        <tools-maven-dsldoc-plugin-version>1.0.0</tools-maven-dsldoc-plugin-version>
+        <maven-dsldoc-plugin-version>1.1</maven-dsldoc-plugin-version>
 
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
@@ -746,9 +746,9 @@
                     <version>${project-info-reports-plugin-version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.openehealth.ipf.tools.maven</groupId>
-                    <artifactId>tools-maven-dsldoc</artifactId>
-                    <version>${tools-maven-dsldoc-plugin-version}</version>
+                    <groupId>org.openehealth.ipf.labs.maven</groupId>
+                    <artifactId>maven-dsldoc-plugin</artifactId>
+                    <version>${maven-dsldoc-plugin-version}</version>
                     <configuration>
                         <links>
                             <java>http://java.sun.com/javase/6/docs/api/java</java>
@@ -906,8 +906,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.openehealth.ipf.tools.maven</groupId>
-                <artifactId>tools-maven-dsldoc</artifactId>
+                <groupId>org.openehealth.ipf.labs.maven</groupId>
+                <artifactId>maven-dsldoc-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>gdsl</id>
@@ -976,8 +976,8 @@
                 <version>${project-info-reports-plugin-version}</version>
             </plugin>
             <plugin>
-                <groupId>org.openehealth.ipf.tools.maven</groupId>
-                <artifactId>tools-maven-dsldoc</artifactId>
+                <groupId>org.openehealth.ipf.labs.maven</groupId>
+                <artifactId>maven-dsldoc-plugin</artifactId>
                 <inherited>false</inherited>
             </plugin>
         </plugins>
