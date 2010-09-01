@@ -22,3 +22,7 @@ h2. Mailing Lists
 
 * IPF developer mailing list ("mailman":http://gforge.openehealth.org/mailman/listinfo/ipf-developer, "nabble":http://n2.nabble.com/IPF-developer-f2983467.html)
 * IPF user mailing list ("mailman":http://gforge.openehealth.org/mailman/listinfo/ipf-user, "nabble":http://n2.nabble.com/IPF-user-f2983354.html)
+
+h2. History
+
+The project was originally developed at the "Gforge IPF Subversion repository":http://gforge.openehealth.org/svn/ipf (requires access with username _anonymous_ and empty password). The project history has been imported partially. 
