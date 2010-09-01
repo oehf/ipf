@@ -96,7 +96,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
 
         // append current fragment to the accumulator
         int beginIndex = isEmpty(msh14) ? 0 : requestString.indexOf('\r');
-        int endIndex = isEmpty(dsc1) ? requestString.length() : requestString.indexOf("\rDSC") + 1;
+        int endIndex = isEmpty(dsc1) ? requestString.length() : (requestString.indexOf("\rDSC") + 1);
         accumulator.append(requestString, beginIndex, endIndex);
         
         // DSC-1 is empty -- finish accumulation, pass message to the marshaller
@@ -123,7 +123,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
         Terser ackTerser = new Terser(ack);
         ackTerser.set("MSA-1", "CA");
         ackTerser.set("MSA-2", requestTerser.get("MSH-10"));
-        Exchanges.resultMessage(exchange).setBody(ack);
+        Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
     }
     
 }
