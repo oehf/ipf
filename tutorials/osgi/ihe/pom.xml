@@ -152,7 +152,7 @@
             <param>mvn:org.apache.camel/camel-spring/${camel-version}@nostart</param>
             <param>mvn:org.apache.camel/camel-jms/${camel-version}@nostart</param>
             <param>mvn:org.apache.camel/camel-mina/${camel-version}@nostart</param>
-            <param>mvn:org.apache.camel/camel-core/${camel-version}@2</param>
+            <param>mvn:org.apache.camel/camel-core/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-http/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-jetty/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-hl7/${camel-version}@start</param>
