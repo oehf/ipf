@@ -9,6 +9,7 @@
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.*</osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.commons.ihe.pixpdq,
+            org.openehealth.ipf.platform.camel.core.process,
             *
         </osgi.import.pkg>
         <ipf.extension.classes>org.openehealth.ipf.platform.camel.ihe.mllp.core.extend.MllpModelExtension</ipf.extension.classes>		
