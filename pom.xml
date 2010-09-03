@@ -188,22 +188,14 @@
 
     <mailingLists>
         <mailingList>
-            <name>Development List</name>
-            <subscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-developer</subscribe>
-            <unsubscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-developer</unsubscribe>
-            <post>ipf-developer@gforge.openehealth.org</post>
-        </mailingList>
-        <mailingList>
             <name>User List</name>
-            <subscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-user</subscribe>
-            <unsubscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-user</unsubscribe>
-            <post>ipf-user@gforge.openehealth.org</post>
+            <subscribe>http://groups.google.com/group/ipf-user</subscribe>
+            <post>ipf-user@googlegroups.com</post>
         </mailingList>
         <mailingList>
-            <name>Commits List</name>
-            <subscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-commits</subscribe>
-            <unsubscribe>http://gforge.openehealth.org/mailman/listinfo/ipf-commits</unsubscribe>
-            <post>ipf-commits@gforge.openehealth.org</post>
+            <name>Developer List</name>
+            <subscribe>http://groups.google.com/group/ipf-dev</subscribe>
+            <post>ipf-dev@googlegroups.com</post>
         </mailingList>
     </mailingLists>
 
