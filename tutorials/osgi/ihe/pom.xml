@@ -149,7 +149,7 @@
             <param>mvn:xml-resolver/xml-resolver/${xml-resolver-version}@nostart</param>
             <param>mvn:org.apache.activemq/activemq-core/${activemq-version}@nostart</param>
             <param>mvn:org.apache.activemq/kahadb/${activemq-version}@nostart</param>
-            <param>mvn:org.apache.camel/camel-spring/${camel-version}@nostart</param>
+            <param>mvn:org.apache.camel/camel-spring/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-jms/${camel-version}@nostart</param>
             <param>mvn:org.apache.camel/camel-mina/${camel-version}@nostart</param>
             <param>mvn:org.apache.camel/camel-core/${camel-version}@start</param>
@@ -191,16 +191,16 @@
             <param>mvn:ca.uhn.hapi/hapi/${hapi-osgi-version}@nostart</param>
             <param>mvn:org.eclipse.jetty/jetty-client/${jetty-version}@nostart</param>
             <param>mvn:org.eclipse.jetty/jetty-http/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-server/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-io/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-jmx/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-xml/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-webapp/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-servlet/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-servlets/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-security/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-continuation/${jetty-version}@nostart</param>
-			<param>mvn:org.eclipse.jetty/jetty-util/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-server/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-io/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-jmx/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-xml/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-webapp/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-servlet/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-servlets/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-security/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-continuation/${jetty-version}@nostart</param>
+            <param>mvn:org.eclipse.jetty/jetty-util/${jetty-version}@nostart</param>
             <param>mvn:javax.jms/jms/${jms-version}@nostart</param>
             <param>mvn:xml-apis/xml-apis/${xml-apis-version}@nostart</param>
             <param>mvn:xalan/xalan/${xalan-version}@nostart</param>
