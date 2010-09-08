@@ -218,9 +218,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git@github.com:krasserm/ipf.git</connection>
-        <developerConnection>scm:git@github.com:krasserm/ipf.git</developerConnection>
-        <url>scm:git@github.com:krasserm/ipf.git</url>
+        <connection>scm:git:git@github.com:krasserm/ipf.git</connection>
+        <developerConnection>scm:git:git@github.com:krasserm/ipf.git</developerConnection>
+        <url>scm:git:git@github.com:krasserm/ipf.git</url>
     </scm>
 
     <modules>
