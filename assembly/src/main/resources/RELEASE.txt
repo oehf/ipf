@@ -1,3 +1,3 @@
-The IPF 2.2-m1 release notes are available at
+The IPF 2.2-m2 release notes are available at
 
-http://repo.openehealth.org/confluence/display/ipf2/IPF+2.2-m1
+http://repo.openehealth.org/confluence/display/ipf2/IPF+2.2-m2
