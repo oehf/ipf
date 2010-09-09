@@ -33,7 +33,6 @@ import org.springframework.test.context.ContextConfiguration;
         "/context-camel-transaction-process.xml",
         "/context-camel-transaction-delivery.xml"
 })
-@Ignore
 public class TransactionalMessagingTest extends TestSupport {
 
     private static final long TIMEOUT = 2000L;
@@ -65,7 +64,7 @@ public class TransactionalMessagingTest extends TestSupport {
         txmMock.assertIsSatisfied();
     }
 
-    @Test
+    @Test @Ignore
     public void testRollbackProcess() throws InterruptedException {
         txmMock.expectedMessageCount(0);
         txmError.expectedBodiesReceived("blah");

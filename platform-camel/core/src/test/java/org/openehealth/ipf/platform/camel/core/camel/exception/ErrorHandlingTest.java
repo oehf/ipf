@@ -56,7 +56,7 @@ public class ErrorHandlingTest extends TestSupport {
         super.tearDown();
     }
 
-    @Test @Ignore
+    @Test
     public void testGlobal() throws Exception {
         output.expectedMessageCount(0);
         inter.expectedMessageCount(1);
