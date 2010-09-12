@@ -23,7 +23,7 @@ h2. Mailing Lists
 Google groups (new since Sep 1st 2010):
 
 * "ipf-dev":http://groups.google.com/group/ipf-dev 
-* "ipf-user":http://groups.google.com/group/ipf-user:http
+* "ipf-user":http://groups.google.com/group/ipf-user
 
 Mailman Archives (up to Sep 1st 2010):
 
