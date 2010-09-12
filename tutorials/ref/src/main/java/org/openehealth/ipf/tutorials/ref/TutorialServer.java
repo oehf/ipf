@@ -24,9 +24,9 @@ public class TutorialServer {
 
     public static void main(String[] args) throws Exception {
         Main.main("-ac", 
+            "/context-camel.xml;" +
             "/context-tutorial.xml;" +
             "/context-flowmgr.xml;" + 
-            "/context-camel.xml;" +
             "/context-broker.xml;" +
             "/context-jms-process.xml;" + 
             "/context-jms-deliver.xml;"
