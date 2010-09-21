@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+﻿<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf</groupId>
@@ -44,7 +44,8 @@
         <javadoc-plugin-version>2.6.1</javadoc-plugin-version>
         <release-plugin-version>2.0</release-plugin-version>
         <resources-plugin-version>2.4.2</resources-plugin-version>
-
+        <eclipse-plugin-version>2.8</eclipse-plugin-version>
+        
         <!-- Dependency version properties -->
         <activemq-version>5.3.2</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
@@ -69,7 +70,7 @@
         <hibernate-search-version>3.0.1.GA</hibernate-search-version>
         <jasypt-version>1.5</jasypt-version>
         <jetty-version>7.1.4.v20100610</jetty-version>
-	<joda-time-version>1.5.2</joda-time-version>
+        <joda-time-version>1.5.2</joda-time-version>
         <junit-version>4.7</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.14</log4j-version>
@@ -133,7 +134,7 @@
             <timezone>+1</timezone>
         </developer>    
         <developer>
-            <id>kolev</id>
+            <id>mkolev</id>
             <name>Mitko Kolev</name>
             <email>mitko.kolev@icw.de</email>
             <organization>InterComponentWare AG</organization>
@@ -786,6 +787,11 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <version>${eclipse-plugin-version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -816,6 +822,10 @@
                 <archive>  
                   <manifestFile>META-INF/MANIFEST.MF</manifestFile>
                 </archive> 
+                <excludes>
+                    <!-- Do not include the .groovy files, that are declared as resources, in the binaries -->    
+                    <exclude>**/*.groovy</exclude>
+                </excludes>
               </configuration>
             </plugin>  
             <plugin>
@@ -911,10 +921,78 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>${eclipse-plugin-version}</version>
+                <configuration>
+                    <projectnatures>
+                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                        <projectnature>org.eclipse.jdt.groovy.core.groovyNature</projectnature>
+                    </projectnatures>
+                    <downloadSources>true</downloadSources>
+                    <preferredSourceCacheDir>${settings.localRepository}</preferredSourceCacheDir>
+                    <ajdtVersion>none</ajdtVersion>
+                    <sourceExcludes>
+                        <!-- Do not include the generated stubs, required by the maven compilcation, --> 
+                        <!-- in the Eclipse build path. The .groovy files will be compiled by the  -->
+                        <!-- Eclipse Groovy plugin, which requires no stub generation -->
+                        <sourceExclude>**/generated-sources/**</sourceExclude>
+                    </sourceExcludes>
+                    <classpathContainers>
+                        <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+                         <!-- Add explicitly the groovy libs. Groovy nature alone seems not to be enough. -->
+                        <classpathContainer>GROOVY_SUPPORT</classpathContainer>
+                    </classpathContainers>
+                 </configuration>
+            </plugin>
+            <plugin>
+               <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                         <!-- Explicitly set the phases for stub generation and compilation --> 
+                         <!-- This is needed for the Eclipse project generation with eclipse:eclipse -->
+                        <id>pre-compile-generate-stubs</id>
+                        <phase>process-resources</phase>
+       					<goals>
+       					    <goal>generateStubs</goal>
+       					</goals>
+    				</execution>
+                    <!-- Has to be included explicitly, only where needed -->
+                    <!-- execution>
+                        <id>pre-test-compile-generate-test-stubs</id>
+                        <phase>process-test-resources</phase>
+       					<goals>
+         					<goal>generateTestStubs</goal>
+       					</goals>
+    				</execution -->
+                    <execution>
+                        <id>on-compile</id>
+                        <phase>compile</phase>
+       					<goals>
+         					<goal>compile</goal>
+       					</goals>
+    				</execution>
+                    <execution>
+                        <id>on-test-compile</id>
+                        <phase>test-compile</phase>
+       					<goals>
+         					<goal>testCompile</goal>
+       					</goals>
+    				</execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                 <!-- This seems to be the only way to add the .groovy source files --> 
+                 <!-- in src/main/groovy to the Eclipse build path. -->
+                 <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
+                <directory>src/main/groovy</directory>
             </resource>
             <resource>
                 <directory>.</directory>
@@ -923,17 +1001,16 @@
                 </includes>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/groovy</directory>
+            </testResource>
+        </testResources>
     </build>
-    <profiles>
-        <profile>
-              <!-- Use this profile to build with Spring 3.x -->
-              <id>spring-3.x</id>
-              <properties>
-                  <spring-version>3.0.0.RELEASE</spring-version>
-                  <junit-version>4.6</junit-version>
-              </properties>
-        </profile>
-    </profiles>
+   
     <reporting>
         <plugins>
             <plugin>

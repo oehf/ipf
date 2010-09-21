@@ -39,5 +39,21 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+           <plugin>
+               <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>pre-test-compile-generate-test-stubs</id>
+                        <phase>process-test-resources</phase>
+       					<goals>
+         					<goal>generateTestStubs</goal>
+       					</goals>
+    				</execution>                  
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

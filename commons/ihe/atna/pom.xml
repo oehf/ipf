@@ -24,6 +24,11 @@
             <groupId>org.openhealthtools.ihe</groupId>
             <artifactId>org.openhealthtools.ihe.atna.nodeauth</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <scope>test</scope>
+        </dependency>        
     </dependencies>
 
     <build>
@@ -33,12 +38,14 @@
                 <artifactId>gmaven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>generateStubs</goal>
-                            <goal>compile</goal>
+                        <id>compile</id>
+                        <phase>compile</phase>
+       					<goals>
+       					    <goal>generateStubs</goal>
+         					<goal>compile</goal>
                             <goal>testCompile</goal>
-                        </goals>
-                    </execution>
+       					</goals>
+    				 </execution>
                 </executions>
             </plugin>
             <plugin>
