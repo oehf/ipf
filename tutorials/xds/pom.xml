@@ -106,8 +106,8 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
+                 <groupId>org.codehaus.gmaven</groupId>
+                 <artifactId>gmaven-plugin</artifactId>
                  <executions>
                     <execution>
                         <!-- Explicitly override the stub generation and replace it with compilation --> 

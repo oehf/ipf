@@ -53,9 +53,8 @@
     <build>
         <plugins>
                <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
+                    <groupId>org.codehaus.gmaven</groupId>
+                    <artifactId>gmaven-plugin</artifactId>                <executions>
                     <execution>
                         <id>compile</id>
                         <phase>compile</phase>
