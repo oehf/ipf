@@ -122,7 +122,9 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                     def queryId = xml.controlActProcess.queryByParameter.queryId
                     buildInstanceIdentifier(builder, 'queryId', false, 
                             queryId.@root.text(), queryId.@extension.text())
-                    queryResponseCode(code: rsp.QAK[2].value)
+
+                    String responseStatus = (rsp.MSH[9][1].value == 'RSP') ? rsp.QAK[2].value : 'AE'
+                    queryResponseCode(code: responseStatus)
                 }
                 XmlYielder.yieldElement(xml.controlActProcess.queryByParameter, builder, HL7V3_NSURI)
             }
@@ -133,7 +135,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 
      
     private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
-        def ackCode   = rsp.MSA[1].value
+        def ackCode   = (rsp.MSA[1].value.endsWith('A')) ? 'AA' : 'AE'
         def errorCode = rsp.ERR[3][1].value ?: ''
         def errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''} ${rsp.MSA[3].value ?: ''}]"
 
