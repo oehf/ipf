@@ -311,11 +311,19 @@
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy-version}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovytools-builder</artifactId>
                 <version>${metabuilder-version}</version>
+                <exclusions>
+                	<exclusion>
+                		<groupId>org.codehaus.groovy</groupId>
+                		<artifactId>groovy-all</artifactId>
+                	</exclusion>
+                </exclusions>
+                
             </dependency>
             <dependency>
                 <groupId>ca.uhn.hapi</groupId>
@@ -776,35 +784,35 @@
                     <version>${enforcer-plugin-version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.gmaven</groupId>
-                    <artifactId>gmaven-plugin</artifactId>
-                    <version>${gmaven-version}</version>
-                    <configuration> 
-                        <providerSelection>1.7</providerSelection> 
-                    </configuration> 
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.codehaus.gmaven.runtime</groupId>
-                            <artifactId>gmaven-runtime-1.7</artifactId>
-                            <version>1.2</version>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>org.codehaus.groovy</groupId>
-                                    <artifactId>groovy-all</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.codehaus.groovy</groupId>
-                            <artifactId>groovy-all</artifactId>
-                            <version>${groovy-version}</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <version>${eclipse-plugin-version}</version>
+                </plugin>
+                <plugin>
+	                <groupId>org.codehaus.gmaven</groupId>
+	                <artifactId>gmaven-plugin</artifactId>
+                    <version>${gmaven-version}</version>
+                    <configuration>
+                        <providerSelection>1.7</providerSelection>
+                    </configuration>
+	                <dependencies>
+	                    <dependency>
+	                        <groupId>org.codehaus.gmaven.runtime</groupId>
+	                        <artifactId>gmaven-runtime-1.7</artifactId>
+	                        <version>${gmaven-version}</version>
+	                        <exclusions>
+	                            <exclusion>
+	                                <groupId>org.codehaus.groovy</groupId>
+	                                <artifactId>groovy-all</artifactId>
+	                             </exclusion>
+	                        </exclusions>
+	                    </dependency>
+	                    <dependency>
+	                        <groupId>org.codehaus.groovy</groupId>
+	                        <artifactId>groovy-all</artifactId>
+	                        <version>${groovy-version}</version>
+	                    </dependency>
+	                </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -947,12 +955,6 @@
                     <downloadSources>false</downloadSources>
                     <preferredSourceCacheDir>${settings.localRepository}</preferredSourceCacheDir>
                     <ajdtVersion>none</ajdtVersion>
-                    <sourceExcludes>
-                        <!-- Do not include the generated stubs, required by the maven compilcation, --> 
-                        <!-- in the Eclipse build path. The .groovy files will be compiled by the  -->
-                        <!-- Eclipse Groovy plugin, which requires no stub generation -->
-                        <sourceExclude>**/generated-sources/**</sourceExclude>
-                    </sourceExcludes>
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
                          <!-- Add explicitly the groovy libs. Groovy nature alone seems not to be enough. -->
@@ -960,43 +962,7 @@
                     </classpathContainers>
                  </configuration>
             </plugin>
-            <plugin>
-               <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                         <!-- Explicitly set the phases for stub generation and compilation --> 
-                         <!-- This is needed for the Eclipse project generation with eclipse:eclipse -->
-                        <id>pre-compile-generate-stubs</id>
-                        <phase>process-resources</phase>
-       					<goals>
-       					    <goal>generateStubs</goal>
-       					</goals>
-    				</execution>
-                    <!-- Has to be included explicitly, only where needed -->
-                    <!-- execution>
-                        <id>pre-test-compile-generate-test-stubs</id>
-                        <phase>process-test-resources</phase>
-       					<goals>
-         					<goal>generateTestStubs</goal>
-       					</goals>
-    				</execution -->
-                    <execution>
-                        <id>on-compile</id>
-                        <phase>compile</phase>
-       					<goals>
-         					<goal>compile</goal>
-       					</goals>
-    				</execution>
-                    <execution>
-                        <id>on-test-compile</id>
-                        <phase>test-compile</phase>
-       					<goals>
-         					<goal>testCompile</goal>
-       					</goals>
-    				</execution>
-                </executions>
-            </plugin>
+            
         </plugins>
         <resources>
             <resource>
@@ -1115,15 +1081,26 @@
             </snapshots>
         </repository>
         <repository>
-            <id>java.net</id>
-            <name>java.net Maven Repository</name>
-            <url>http://download.java.net/maven/2/</url>
+            <id>codehaus nexus</id>
+            <name>Codehaus Nexus Maven Repository</name>
+            <url>https://nexus.codehaus.org/content/repositories/releases/</url>
+               <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>codehaus</id>
             <name>Codehaus Maven Repository</name>
             <url>http://repository.codehaus.org</url>
-        </repository>        
+        </repository>
+        <repository>
+            <id>java.net</id>
+            <name>java.net Maven Repository</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
         <repository>
             <id>jboss</id>
             <name>JBoss Maven Repository</name>

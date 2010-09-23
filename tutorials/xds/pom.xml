@@ -105,20 +105,6 @@
                     </descriptors>
                 </configuration>
             </plugin>
-            <plugin>
-                 <groupId>org.codehaus.gmaven</groupId>
-                 <artifactId>gmaven-plugin</artifactId>
-                 <executions>
-                    <execution>
-                        <!-- Explicitly override the stub generation and replace it with compilation --> 
-                        <id>pre-compile-generate-stubs</id>
-                        <phase>process-resources</phase>
-       					<goals>
-       					    <goal>compile</goal>
-       					</goals>
-    				</execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>

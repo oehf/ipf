@@ -40,20 +40,22 @@
         </dependency>
     </dependencies>
     <build>
-        <plugins>
-           <plugin>
-               <groupId>org.codehaus.groovy.maven</groupId>
+	    <plugins>
+	     	<plugin>
+                <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>pre-test-compile-generate-test-stubs</id>
+                   <execution>
+                        <!-- There is Java to Groovy dependency in the tests  -->
+                        <!-- so generate the test stubs to compile the Java stuff -->
+                		<id>generateTestStubs</id>
                         <phase>process-test-resources</phase>
        					<goals>
          					<goal>generateTestStubs</goal>
        					</goals>
-    				</execution>                  
+    				</execution> 
                 </executions>
             </plugin>
-        </plugins>
-    </build>
+    	</plugins>
+   </build> 
 </project>
