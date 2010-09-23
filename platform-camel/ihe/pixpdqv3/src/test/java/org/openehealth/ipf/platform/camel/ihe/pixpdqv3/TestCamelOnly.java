@@ -18,13 +18,19 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3;
 import java.io.IOException;
 import java.io.InputStream;
 
+import groovy.lang.Closure;
 import org.apache.camel.Exchange;
 import org.apache.commons.io.IOUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openehealth.ipf.commons.map.BidiMappingService;
+import org.openehealth.ipf.commons.map.extend.MappingExtension;
+import org.openehealth.ipf.modules.hl7.extend.HapiModelExtension;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * Test for Camel-only route.
@@ -37,6 +43,16 @@ public class TestCamelOnly extends StandardTestContainer {
     
     @BeforeClass
     public static void setUpClass() {
+        BidiMappingService mappingService = new BidiMappingService();
+        mappingService.setMappingScript(new ClassPathResource("META-INF/map/pdq-translation.map"));
+        MappingExtension mappingExtension = new MappingExtension();
+        mappingExtension.setMappingService(mappingService);
+        ((Closure) mappingExtension.getExtensions()).call();
+
+        HapiModelExtension hapiExtension = new HapiModelExtension();
+        hapiExtension.setMappingService(mappingService);
+        ((Closure) hapiExtension.getExtensions()).call();
+
         requestMessage  = readFile("translation/pdq/v3/PDQ.xml");
         responseMessage = readFile("translation/pdq/v2/PDQ_Response.hl7");
         startServer(new CXFServlet(), "camel-only.xml");
@@ -48,7 +64,7 @@ public class TestCamelOnly extends StandardTestContainer {
         String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service";
         Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage());
         String response = Exchanges.resultMessage(responseExchange).getBody(String.class);
-        assert response.contains("<text>Message validation failed");
+        Assert.assertTrue(response.contains("<typeCode code=\"CA\" />"));
     }
 
     

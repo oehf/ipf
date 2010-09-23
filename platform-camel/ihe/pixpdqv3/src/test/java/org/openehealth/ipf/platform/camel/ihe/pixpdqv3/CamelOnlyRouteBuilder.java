@@ -15,23 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3;
 
+import ca.uhn.hl7v2.parser.Parser;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.spring.SpringRouteBuilder;
+import org.apache.commons.lang.Validate;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PdqRequest3to2Translator;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PdqResponse2to3Translator;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
+import org.openehealth.ipf.platform.camel.ihe.pixpdq.iti21.Iti21Component;
+
 import static org.openehealth.ipf.platform.camel.ihe.pixpdq.PixPdqCamelValidators.iti21RequestValidator;
 import static org.openehealth.ipf.platform.camel.ihe.pixpdq.PixPdqCamelValidators.iti21ResponseValidator;
 import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelTranslators.translatorHL7v2toHL7v3;
 import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelTranslators.translatorHL7v3toHL7v2;
 import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelValidators.iti47RequestValidator;
 import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelValidators.iti47ResponseValidator;
-
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.spring.SpringRouteBuilder;
-import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PdqRequest3to2Translator;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PdqResponse2to3Translator;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 
 
 /**
@@ -40,10 +40,14 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
  */
 public class CamelOnlyRouteBuilder extends SpringRouteBuilder {
 
-    private static final Hl7TranslatorV3toV2 REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
-    private static final Hl7TranslatorV2toV3 RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();
+    private static final Parser PARSER = new Iti21Component().getParser();
+    private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
+    private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();
+    static {
+        RESPONSE_TRANSLATOR.setSupportQueryContinuation(true);
+    }
 
-    
+
     @Override
     public void configure() throws Exception {
         from("pdqv3-iti47:iti47Service")
@@ -51,18 +55,23 @@ public class CamelOnlyRouteBuilder extends SpringRouteBuilder {
                 .maximumRedeliveries(0)
                 .end()
             .process(iti47RequestValidator())
+            .setHeader("myHeader", constant("content-1"))
             .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
-            .process(typeChecker(MessageAdapter.class))
+            .process(typeAndHeaderChecker(MessageAdapter.class, "content-1"))
             .process(iti21RequestValidator())
-            .setBody(constant(MessageAdapters.make(TestCamelOnly.getResponseMessage())))
-            .process(iti21ResponseValidator())      // should fail and produce a NAK
+            .setBody(constant(MessageAdapters.make(PARSER, TestCamelOnly.getResponseMessage())))
+            .process(iti21ResponseValidator())
+            .setHeader("myHeader", constant("content-2"))
             .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
-            .process(typeChecker(String.class))
+            .process(typeAndHeaderChecker(String.class, "content-2"))
             .process(iti47ResponseValidator());
     }
     
     
-    private static Processor typeChecker(final Class<?> expectedClass) {
+    private static Processor typeAndHeaderChecker(
+            final Class<?> expectedClass,
+            final String expectedHeaderContent)
+    {
         Validate.notNull(expectedClass);
         return new Processor() {
             @Override
@@ -71,6 +80,13 @@ public class CamelOnlyRouteBuilder extends SpringRouteBuilder {
                 if (! expectedClass.equals(actualClass)) {
                     throw new RuntimeException("Wrong body class: expected " + 
                             expectedClass + ", got " + actualClass);
+                }
+
+                if (expectedHeaderContent != null) {
+                    String actualHeaderContent = exchange.getIn().getHeader("myHeader", String.class);
+                    if (! expectedHeaderContent.equals(actualHeaderContent)) {
+                        throw new RuntimeException("wrong headers");
+                    }
                 }
             }
         };

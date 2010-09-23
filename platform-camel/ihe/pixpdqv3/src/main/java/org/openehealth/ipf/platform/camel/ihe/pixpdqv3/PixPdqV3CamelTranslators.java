@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2;
@@ -46,7 +47,9 @@ abstract public class PixPdqV3CamelTranslators {
                 MessageAdapter initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, MessageAdapter.class);
                 String xmlText = exchange.getIn().getBody(String.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
-                Exchanges.resultMessage(exchange).setBody(translator.translateV3toV2(xmlText, initial));
+                Message resultMessage = Exchanges.resultMessage(exchange);
+                resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
+                resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
             }
         };
     }
@@ -63,7 +66,9 @@ abstract public class PixPdqV3CamelTranslators {
                 String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
                 MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
-                Exchanges.resultMessage(exchange).setBody(translator.translateV2toV3(msg, initial));
+                Message resultMessage = Exchanges.resultMessage(exchange);
+                resultMessage.setBody(translator.translateV2toV3(msg, initial));
+                resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
             }
         };
     }
