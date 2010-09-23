@@ -65,9 +65,6 @@
     <sch:pattern is-a="check-count-is-1" id="x11">
         <sch:param name="element" value="hl7:livingSubjectBirthTime" />
     </sch:pattern>
-    <sch:pattern is-a="check-count-is-1" id="x12">
-        <sch:param name="element" value="hl7:otherIDsScopingOrganization" />
-    </sch:pattern>
     <sch:pattern is-a="check-count-is-1" id="x13">
         <sch:param name="element" value="hl7:patientAddress" />
     </sch:pattern>
