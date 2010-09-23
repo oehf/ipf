@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.map.extend
 
-import org.codehaus.groovy.runtime.InvokerHelperimport org.openehealth.ipf.commons.map.MappingService
+import org.codehaus.groovy.runtime.InvokerHelper
+import org.openehealth.ipf.commons.map.MappingService
 
 /**
  * @author Martin Krasser
@@ -31,7 +32,7 @@ class MappingExtensionHelper {
             def key = name.minus('map').firstLower()
             result = InvokerHelper.invokeMethod(mappingService, 'get', [key, normalizer(delegate), *args])
         } else {
-            throw new MissingMethodException(name, delegate.class, args)
+            throw new RuntimeException(new MissingMethodException(name, delegate.class, args))
         }
         result
     }
