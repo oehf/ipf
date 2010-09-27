@@ -79,7 +79,7 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
         def params = queryByParameter.parameterList
         qry.QPD[1] = this.queryName
         qry.QPD[2] = constructQueryId(queryByParameter)
-        fillCx(qry.QPD[3], params.patientIdentifier.value)
+        fillCx(qry.QPD[3], params.patientIdentifier[0].value[0])
         for (source in params.dataSource) {
             def cx = nextRepetition(qry.QPD[4])
             cx[4][1] = source.value.@assigningAuthorityName.text()

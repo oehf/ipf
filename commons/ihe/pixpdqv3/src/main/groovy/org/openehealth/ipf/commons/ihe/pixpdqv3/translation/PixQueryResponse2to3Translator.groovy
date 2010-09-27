@@ -135,9 +135,9 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 
      
     private Map getStatusInformation(MessageAdapter rsp, GPathResult xml) {
-        def ackCode   = (rsp.MSA[1].value.endsWith('A')) ? 'AA' : 'AE'
+        def ackCode   = rsp.MSA[1].value.endsWith('A') ? 'AA' : 'AE'
         def errorCode = rsp.ERR[3][1].value ?: ''
-        def errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''} ${rsp.MSA[3].value ?: ''}]"
+        def errorText = "PIXv2 Interface Reported [${collectErrorInfo(rsp)}]"
 
         // collect error locations
         def errorLocations = rsp.ERR[2]()?.collect { err ->
@@ -149,12 +149,9 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 case '3':
                     return rootPath + 'patientIdentifier/value'
                 case '4':
-                    String elementIndexString
+                    String elementIndexString = ''
                     if (err[4].value) {
-                        int n = Integer.parseInt(err[4].value) + 1
-                        elementIndexString = "[${n}]"
-                    } else {
-                        elementIndexString = ''
+                        elementIndexString = "[${Integer.parseInt(err[4].value) + 1}]"
                     }
                     return rootPath + 'dataSource' + elementIndexString + '/value'
                 }

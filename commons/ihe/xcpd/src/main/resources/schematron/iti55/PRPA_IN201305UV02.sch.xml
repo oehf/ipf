@@ -146,14 +146,20 @@
 
         <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList">
             <!-- from Section 3.55.4.1.2.1, line #780 -->
-            <sch:assert test="hl7:livingSubjectId or (hl7:livingSubjectName and hl7:livingSubjectBirthTime)">
-                when no patient ID is provided, both patient name and birth time must be specified   
+            <sch:assert test="hl7:livingSubjectId/hl7:value/@root or (hl7:livingSubjectName and hl7:livingSubjectBirthTime)">
+                when no patient ID @root is provided, both patient name and birth time must be specified   
             </sch:assert>
         
             <sch:report test="hl7:id">parameterList.id must be omitted</sch:report>
             <sch:report test="hl7:patientStatusCode">patientStatusCode must be omitted</sch:report>
             <sch:report test="hl7:livingSubjectDeceaseTime">livingSubjectDeceaseTime must be omitted</sch:report>
             <sch:report test="hl7:otherIDsScopingOrganization">otherIDsScopingOrganization must be omitted</sch:report>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList/hl7:livingSubjectId/hl7:value">
+            <sch:assert test="(@root and @extension and not(@nullFlavor)) or (@nullFlavor and (count(@*) = 1))">
+                either both @root and @extension or @nullFlavor must be provided in a patient ID
+            </sch:assert>
         </sch:rule>
 
         <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList/hl7:principalCareProviderId">
