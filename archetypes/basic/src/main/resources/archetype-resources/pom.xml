@@ -29,6 +29,28 @@
     </dependencies>
 
     <build>
+         <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                 <!-- This seems to be the only way to add the .groovy source files --> 
+                 <!-- in src/main/groovy to the Eclipse build path. -->
+                 <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
+                <directory>src/main/groovy</directory>
+            </resource>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>META-INF/**/*</include>
+                </includes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -75,24 +97,24 @@
                     <execution>
                         <id>generateStubs</id>
                         <phase>process-resources</phase>
-       					<goals>
-       					    <goal>generateStubs</goal>
-       					</goals>
-    				</execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                        </goals>
+                    </execution>
                     <execution>
-                    	<id>compile</id>
+                        <id>compile</id>
                         <phase>compile</phase>
-       					<goals>
-         					<goal>compile</goal>
-       					</goals>
-    				</execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
                     <execution>
-                    	<id>testCompile</id>
+                        <id>testCompile</id>
                         <phase>test-compile</phase>
-       					<goals>
-         					<goal>testCompile</goal>
-       					</goals>
-    				</execution>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
