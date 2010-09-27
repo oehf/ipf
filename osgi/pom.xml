@@ -39,31 +39,14 @@
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
                 <executions>
-                    <!-- Explicitly set the phases for stub generation and compilation --> 
-                    <!-- This is needed for the Eclipse project generation with eclipse:eclipse -->
-                    <!-- Maven 2.2.1 was not able to override or dropp an execution phase --> 
-                    <execution>
-                         <!-- Declare generateStubs in the parent because all platform-camel projects have java to groovy dependencies --> 
+                        <execution>
+                        <!-- Declare generateStubs in the parent because all platform-camel projects have java to groovy dependencies --> 
                         <id>generateStubs</id>
                         <phase>process-resources</phase>
-       					<goals>
-       					    <goal>generateStubs</goal>
-       					</goals>
-    				</execution>
-                    <execution>
-                    	<id>compile</id>
-                        <phase>compile</phase>
-       					<goals>
-         					<goal>compile</goal>
-       					</goals>
-    				</execution>
-                    <execution>
-                    	<id>testCompile</id>
-                        <phase>test-compile</phase>
-       					<goals>
-         					<goal>testCompile</goal>
-       					</goals>
-    				</execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

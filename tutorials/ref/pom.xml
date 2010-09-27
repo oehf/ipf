@@ -134,19 +134,19 @@
                     </execution>
                 </executions>
             </plugin>
-	     	<plugin>
+            <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
                 <executions>
                    <execution>
                         <!-- There is Java to Groovy dependency in the tests  -->
                         <!-- so generate the test stubs to compile the Java stuff -->
-                		<id>generateTestStubs</id>
+                        <id>generateTestStubs</id>
                         <phase>process-test-resources</phase>
-       					<goals>
-         					<goal>generateTestStubs</goal>
-       					</goals>
-    				</execution> 
+                        <goals>
+                            <goal>generateTestStubs</goal>
+                        </goals>
+                    </execution> 
                 </executions>
             </plugin>
         </plugins>

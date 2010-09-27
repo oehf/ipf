@@ -20,10 +20,10 @@
         <module>atna</module> 
         <module>ws</module> 
         <module>xds</module>
-	<module>pixpdq</module>
-	<module>hl7v3</module>
-	<module>pixpdqv3</module>
-	<module>xcpd</module>
+    <module>pixpdq</module>
+    <module>hl7v3</module>
+    <module>pixpdqv3</module>
+    <module>xcpd</module>
     </modules>
 
 </project>

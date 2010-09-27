@@ -58,13 +58,13 @@
                     <execution>
                         <id>compile</id>
                         <phase>compile</phase>
-       					<goals>
-       					    <goal>generateStubs</goal>
-       					    <goal>generateTestStubs</goal>
-         					<goal>compile</goal>
+                        <goals>
+                            <goal>generateStubs</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>compile</goal>
                             <goal>testCompile</goal>
-       					</goals>
-    				 </execution>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

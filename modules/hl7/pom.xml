@@ -88,10 +88,10 @@
                         <!-- Additionally to the groovy compilation generate stubs here -->
                         <id>generateStubs</id>
                         <phase>process-resources</phase>
-       					<goals>
-       					    <goal>generateStubs</goal>
-       					</goals>
-    				</execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

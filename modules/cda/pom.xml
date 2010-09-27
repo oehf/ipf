@@ -46,14 +46,13 @@
                 <artifactId>gmaven-plugin</artifactId>
                 <executions>
                     <execution>
-                         <!-- Explicitly set the phases for stub generation and compilation --> 
-                         <!-- This is needed for the Eclipse project generation with eclipse:eclipse -->
+                        <!-- Additionally to the groovy compilation generate stubs here -->
                         <id>generateStubs</id>
                         <phase>process-resources</phase>
-       					<goals>
-       					    <goal>generateStubs</goal>
-       					</goals>
-    				</execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
