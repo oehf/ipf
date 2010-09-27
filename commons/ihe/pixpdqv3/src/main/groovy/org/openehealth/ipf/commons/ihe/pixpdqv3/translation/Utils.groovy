@@ -15,9 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
-import groovy.xml.MarkupBuilderimport groovy.util.slurpersupport.GPathResultimport groovy.util.slurpersupport.Node
+import groovy.xml.MarkupBuilder
+import groovy.util.slurpersupport.GPathResult
+
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosureimport org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /*
@@ -200,5 +203,27 @@ class Utils {
             field[2].value = facet.value
         }
     }
-    
+
+
+    /**
+     * Collects descriptions of occurred errors from all possible fields
+     * of the given HL7 v2 NAK message.
+     * <p>
+     * Multiple repetitions of the ERR segment are currently not supported. 
+     */
+    static String collectErrorInfo(MessageAdapter nak) {
+        def fields = [nak.MSA[3], nak.MSA[6], nak.ERR[7], nak.ERR[8]]
+        for (err1 in nak.ERR[1]()) {
+            [1, 2, 4, 5].each { i -> fields << err1[4][i] }
+        }
+        [3, 5].each { i ->
+            [2, 5, 9].each { j ->
+                fields << nak.ERR[i][j]
+            }
+        }
+        fields += nak.ERR[6]()
+
+        return fields*.value.findAll { it }.join('; ')
+    }
+
 }

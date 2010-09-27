@@ -281,42 +281,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // PID-16..                
         grp.PID[16] = person.maritalStatusCode.@code.text().map('patient-maritalStatus')
         grp.PID[17] = person.religiousAffiliationCode.@code.text().map('patient-religiousAffiliation')
-        /*
-        for (race in person.raceCode) {
-            nextRepetition(grp.PID[10])[1] = race.@code.text().map('patient-race')
-        }
-        for (ethnicGroup in person.ethnicGroupCode) {
-            nextRepetition(grp.PID[22])[1] = ethnicGroup.@code.text().map('patient-ethnic-groups')
-        }
-        
-        // siblings
-        grp.PID[24] = person.multipleBirthInd.@value.text().map('boolean')
-        grp.PID[25] = person.multipleBirthOrderNumber.@value.text()
 
-        // citizenshipd
-        for (citizen in person.asCitizen) {
-            nextRepetition(grp.PID[26])[1] = citizen.politicalNation.code.@code.text()
-        }
-        
-        // poor Yorick...
-        grp.PID[29] = dropTimeZone(person.deceasedTime.@value.text())
-        grp.PID[30] = person.deceasedInd.@value.text().map('boolean')
-        
-        
-        // Segment PD1
-        if (person.organDonorId.@value.text() == 'true') {
-            grp.PD1[8] = this.donorCardOnFile ? 'Y' : 'F'
-        } else (person.organDonorId.@value.text() == 'false') { 
-            grp.PD1[8] = 'N'
-        }
-        
-        grp.PD1[2] = person.livingArrangementCode.@code.text()
-        */
-        
-        
-        // Segment NK1
-        
-        
         // Segment PV1
         grp.PV1[2] = 'O'
         

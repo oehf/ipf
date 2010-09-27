@@ -229,7 +229,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
         } else {
             responseStatus = ackCode
             errorCode = rsp.ERR[3][1].value ?: ''
-            errorText = "PDQv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''}]"
+            errorText = "PDQv2 Interface Reported [${collectErrorInfo(rsp)}]"
             errorLocations = rsp.ERR[2]()?.collect { err2 -> getV3ErrorLocation(err2, xml) }
         } 
         
@@ -248,7 +248,10 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
         if ((err2[1].value == 'QPD') && (err2[2].value == '1')) {
             def location = '/' + xml.interactionId.@extension.text() + '/controlActProcess/queryByParameter'
             if (err2[3].value == '8') {
-                location += '/parameterList/otherIDsScopingOrganization' + (err2[4].value ? ('[' + (err2[4].value + 1) + ']') : '')
+                location += '/parameterList/otherIDsScopingOrganization'
+                if (err2[4].value) {
+                    location += "[${Integer.parseInt(err2[4].value) + 1}]"
+                } 
             }
             return location
         }

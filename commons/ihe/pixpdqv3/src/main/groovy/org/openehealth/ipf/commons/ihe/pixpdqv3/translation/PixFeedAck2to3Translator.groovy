@@ -86,7 +86,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
         
         if (ackCode[1] != 'A') {
             errorCode = rsp.ERR[3][1].value ?: ''
-            errorText = "PIXv2 Interface Reported [${rsp.ERR[6].value ?: ''} ${rsp.ERR[7].value ?: ''}]"
+            errorText = "PIXv2 Interface Reported [${collectErrorInfo(rsp)}]"
         } 
 
         return [ackCode:        ackCode, 
