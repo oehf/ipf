@@ -52,17 +52,22 @@
     
     <build>
         <plugins>
-               <plugin>
-                    <groupId>org.codehaus.gmaven</groupId>
-                    <artifactId>gmaven-plugin</artifactId>                <executions>
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>  
+                <executions>
                     <execution>
-                        <id>compile</id>
-                        <phase>compile</phase>
+                        <id>generateStubs</id>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>generateStubs</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generateTestStubs</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
                             <goal>generateTestStubs</goal>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
                         </goals>
                     </execution>
                 </executions>
