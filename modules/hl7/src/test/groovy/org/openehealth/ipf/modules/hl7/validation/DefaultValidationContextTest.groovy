@@ -28,8 +28,6 @@ import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureEncodingRule
 import org.openehealth.ipf.modules.hl7.parser.PipeParser
-
-import static org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule.PASS
 /**
  * @author Christian Ohr
  */
