@@ -27,6 +27,8 @@ import static org.openehealth.ipf.commons.xml.XmlYielder.*
  */
 class Hl7v3NakFactory {
 
+    String targetMessageIdRoot = '1.2.3'
+
     /**
      * Creates a HL7 v3 NAK message as XML String.
      * 
@@ -48,8 +50,7 @@ class Hl7v3NakFactory {
             String originalMessage, 
             Throwable t,
             String targetRootElementName,
-            boolean needControlActProcess,
-            String targetMessageIdRoot = '1.2.3') 
+            boolean needControlActProcess)
     {
         GPathResult xml
         try {

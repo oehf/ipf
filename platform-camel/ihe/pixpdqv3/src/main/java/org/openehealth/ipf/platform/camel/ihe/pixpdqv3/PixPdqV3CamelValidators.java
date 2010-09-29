@@ -25,20 +25,23 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
 
 /**
- * Validating processors for IPF PIXv3/PDQv3 components.
+ * Validating processors for HL7v3-based IPF components.
  * @author Dmytro Rud
  */
 abstract public class PixPdqV3CamelValidators {
     private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator();
 
-    private static final Processor ITI_44_REQUEST_VALIDATOR  = validatingProcessor(44, true);
-    private static final Processor ITI_44_RESPONSE_VALIDATOR = validatingProcessor(44, false);
-    private static final Processor ITI_45_REQUEST_VALIDATOR  = validatingProcessor(45, true);
-    private static final Processor ITI_45_RESPONSE_VALIDATOR = validatingProcessor(45, false);
-    private static final Processor ITI_46_REQUEST_VALIDATOR  = validatingProcessor(46, true);
-    private static final Processor ITI_46_RESPONSE_VALIDATOR = validatingProcessor(46, false);
-    private static final Processor ITI_47_REQUEST_VALIDATOR  = validatingProcessor(47, true);
-    private static final Processor ITI_47_RESPONSE_VALIDATOR = validatingProcessor(47, false);
+    private static final Processor ITI_44_REQUEST_VALIDATOR  = validatingProcessor("iti-44", true);
+    private static final Processor ITI_44_RESPONSE_VALIDATOR = validatingProcessor("iti-44", false);
+    private static final Processor ITI_45_REQUEST_VALIDATOR  = validatingProcessor("iti-45", true);
+    private static final Processor ITI_45_RESPONSE_VALIDATOR = validatingProcessor("iti-45", false);
+    private static final Processor ITI_46_REQUEST_VALIDATOR  = validatingProcessor("iti-46", true);
+    private static final Processor ITI_46_RESPONSE_VALIDATOR = validatingProcessor("iti-46", false);
+    private static final Processor ITI_47_REQUEST_VALIDATOR  = validatingProcessor("iti-47", true);
+    private static final Processor ITI_47_RESPONSE_VALIDATOR = validatingProcessor("iti-47", false);
+
+    private static final Processor PCC_1_REQUEST_VALIDATOR   = validatingProcessor("pcc-1", true);
+    private static final Processor PCC_1_RESPONSE_VALIDATOR  = validatingProcessor("pcc-1", false);
 
     
     /**
@@ -105,8 +108,24 @@ abstract public class PixPdqV3CamelValidators {
         return ITI_47_RESPONSE_VALIDATOR;
     }
     
-    
-    private static Processor validatingProcessor(final int transaction, final boolean request) {
+    /**
+     * Returns a validating processor for PCC-1 request messages
+     * (Query for Existing Data).
+     */
+    public static Processor pcc1RequestValidator() {
+        return PCC_1_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for PCC-1 response messages
+     * (Query for Existing Data).
+     */
+    public static Processor pcc1ResponseValidator() {
+        return PCC_1_RESPONSE_VALIDATOR;
+    }
+
+
+    private static Processor validatingProcessor(final String transaction, final boolean request) {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -115,9 +134,9 @@ abstract public class PixPdqV3CamelValidators {
         };
     }
 
-    private static void doValidation(Exchange exchange, int transaction, boolean request) {
+    private static void doValidation(Exchange exchange, String transaction, boolean request) {
         String message = exchange.getIn().getBody(String.class);
-        Map<Integer, Collection<List<String>>> profilesCollection =  
+        Map<String, Collection<List<String>>> profilesCollection =
             request ? Hl7v3ValidationProfiles.getREQUEST_TYPES()  
                     : Hl7v3ValidationProfiles.getRESPONSE_TYPES();
         VALIDATOR.validate(message, profilesCollection.get(transaction));

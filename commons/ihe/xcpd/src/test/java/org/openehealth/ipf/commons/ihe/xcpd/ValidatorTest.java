@@ -33,7 +33,7 @@ public class ValidatorTest {
         String message = IOUtils.readStringFromStream(getClass()
                 .getResourceAsStream("/schematron/prpa-valid.xml"));
         Hl7v3Validator validator = new Hl7v3Validator();
-        validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get(55));
+        validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-55"));
     }
     
     @Test
@@ -43,7 +43,7 @@ public class ValidatorTest {
         Hl7v3Validator validator = new Hl7v3Validator();
         boolean failed = false;
         try {
-            validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get(55));
+            validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-55"));
         } catch (ValidationException e) {
             failed = true;
         }

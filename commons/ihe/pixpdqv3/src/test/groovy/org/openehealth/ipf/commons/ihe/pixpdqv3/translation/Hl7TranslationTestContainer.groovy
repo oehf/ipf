@@ -18,8 +18,6 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 
-import org.openehealth.ipf.modules.hl7.parser.PipeParser
-import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
 import org.openehealth.ipf.modules.hl7.extend.HapiModelExtension
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
@@ -115,7 +113,7 @@ class Hl7TranslationTestContainer {
 
     String doTestV3toV2RequestTranslation(String fn, int v2index, int v3index) {
         String v3request = getFileContent(fn, V3, REQUEST)
-        V3_VALIDATOR.validate(v3request, Hl7v3ValidationProfiles.REQUEST_TYPES[v3index])
+        V3_VALIDATOR.validate(v3request, Hl7v3ValidationProfiles.REQUEST_TYPES["iti-${v3index}"])
         
         String expectedV2request = getFileContent(fn, V2, REQUEST)
         MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request)
@@ -133,7 +131,7 @@ class Hl7TranslationTestContainer {
 
         String expectedV3response = getFileContent(fn, V3, RESPONSE)
         String translatedV3response = v2tov3Translator.translateV2toV3(msg, v3request)
-        V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.RESPONSE_TYPES[v3index])
+        V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.RESPONSE_TYPES["iti-${v3index}"])
 
         Diff diff = new Diff(expectedV3response, translatedV3response)
         assert diff.identical()

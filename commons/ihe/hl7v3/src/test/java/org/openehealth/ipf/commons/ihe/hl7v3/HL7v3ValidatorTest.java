@@ -27,7 +27,7 @@ public class HL7v3ValidatorTest {
 		String message = IOUtils.readStringFromStream(getClass()
 				.getResourceAsStream("/xsd/prpa-valid.xml"));
         Hl7v3Validator validator = new Hl7v3Validator();
-        validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get(44));
+        validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-44"));
 	}
 	
 	@Test
@@ -37,7 +37,7 @@ public class HL7v3ValidatorTest {
 		Hl7v3Validator validator = new Hl7v3Validator();
         boolean failed = false;
         try {
-			validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get(44));
+			validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-44"));
 		} catch (ValidationException e) {
 		    failed = true;
 		}

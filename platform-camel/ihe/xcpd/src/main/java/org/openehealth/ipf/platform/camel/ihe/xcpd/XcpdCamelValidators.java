@@ -31,10 +31,10 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
 abstract public class XcpdCamelValidators {
     private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator();
 
-    private static final Processor ITI_55_REQUEST_VALIDATOR  = validatingProcessor(55, true);
-    private static final Processor ITI_55_RESPONSE_VALIDATOR = validatingProcessor(55, false);
-    private static final Processor ITI_56_REQUEST_VALIDATOR  = validatingProcessor(56, true);
-    private static final Processor ITI_56_RESPONSE_VALIDATOR = validatingProcessor(56, false);
+    private static final Processor ITI_55_REQUEST_VALIDATOR  = validatingProcessor("iti-55", true);
+    private static final Processor ITI_55_RESPONSE_VALIDATOR = validatingProcessor("iti-55", false);
+    private static final Processor ITI_56_REQUEST_VALIDATOR  = validatingProcessor("iti-56", true);
+    private static final Processor ITI_56_RESPONSE_VALIDATOR = validatingProcessor("iti-56", false);
 
 
     /**
@@ -70,7 +70,7 @@ abstract public class XcpdCamelValidators {
     }
     
     
-    private static Processor validatingProcessor(final int transaction, final boolean request) {
+    private static Processor validatingProcessor(final String transaction, final boolean request) {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
@@ -79,9 +79,9 @@ abstract public class XcpdCamelValidators {
         };
     }
 
-    private static void doValidation(Exchange exchange, int transaction, boolean request) {
+    private static void doValidation(Exchange exchange, String transaction, boolean request) {
         String message = exchange.getIn().getBody(String.class);
-        Map<Integer, Collection<List<String>>> profilesCollection =  
+        Map<String, Collection<List<String>>> profilesCollection =  
             request ? Hl7v3ValidationProfiles.getREQUEST_TYPES()  
                     : Hl7v3ValidationProfiles.getRESPONSE_TYPES();
         VALIDATOR.validate(message, profilesCollection.get(transaction));

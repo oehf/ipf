@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2010 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+
+<definitions
+        name="ClinicalDataSource"
+        targetNamespace="urn:ihe:pcc:qed:2007"
+        xmlns:qed="urn:ihe:pcc:qed:2007"
+        xmlns:hl7v3="urn:hl7-org:v3"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:wsoap11="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <documentation>IHE Patient Care Coordination (PCC) Query for Existing Data (QED) = PCC-1</documentation>
+
+    <types>
+        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:pcc:qed:2007">
+            <xsd:element name="rawData" type="xsd:anyType"/>
+        </xsd:schema>
+    </types>
+
+    <message name="QUPC_IN043100UV01_Message">
+        <part name="Body" element="qed:rawData"/>
+    </message>
+    <message name="QUPC_IN043200UV01_Message">
+        <part name="Body" element="qed:rawData"/>
+    </message>
+    <message name="QUQI_IN000003UV01_Message">
+        <part name="Body" element="qed:rawData"/>
+    </message>
+    <message name="QUQI_IN000003UV01_Cancel_Message">
+        <part name="Body" element="qed:rawData"/>
+    </message>
+    <message name="MCCI_IN000002UV01_Message">
+        <part name="Body" element="qed:rawData"/>
+    </message>
+
+    <portType name="ClinicalDataSource_PortType">
+        <operation name="ClinicalDataSource_QUPC_IN043100UV01">
+            <input message="qed:QUPC_IN043100UV01_Message"
+                   wsaw:Action="urn:hl7-org:v3:QUPC_IN043100UV01"/>
+            <output message="qed:QUPC_IN043200UV01_Message"
+                    wsaw:Action="urn:hl7-org:v3:QUPC_IN043200UV01"/>
+        </operation>
+
+        <operation name="ClinicalDataSource_QUQI_IN000003UV01_Continue">
+            <input message="qed:QUQI_IN000003UV01_Message"
+                   wsaw:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Continue"/>
+            <output message="qed:QUPC_IN043200UV01_Message"
+                    wsaw:Action="urn:hl7-org:v3:QUPC_IN043200UV01"/>
+        </operation>
+
+        <operation name="ClinicalDataSource_QUQI_IN000003UV01_Cancel">
+            <input message="qed:QUQI_IN000003UV01_Cancel_Message"
+                   wsaw:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Cancel"/>
+            <output message="qed:MCCI_IN000002UV01_Message"
+                    wsaw:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
+        </operation>
+    </portType>
+
+    <binding name="ClinicalDataSource_Binding_Soap12" type="qed:ClinicalDataSource_PortType">
+        <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="ClinicalDataSource_QUPC_IN043100UV01">
+            <input>
+                <wsoap12:body use="literal"/>
+            </input>
+            <output>
+                <wsoap12:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="ClinicalDataSource_QUQI_IN000003UV01_Continue">
+            <input>
+                <wsoap12:body use="literal"/>
+            </input>
+            <output>
+                <wsoap12:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="ClinicalDataSource_QUQI_IN000003UV01_Cancel">
+            <input>
+                <wsoap12:body use="literal"/>
+            </input>
+            <output>
+                <wsoap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <binding name="ClinicalDataSource_Binding_Soap11" type="qed:ClinicalDataSource_PortType">
+        <wsoap11:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="ClinicalDataSource_QUPC_IN043100UV01">
+            <input>
+                <wsoap12:body use="literal"/>
+            </input>
+            <output>
+                <wsoap12:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="ClinicalDataSource_QUQI_IN000003UV01_Continue">
+            <input>
+                <wsoap11:body use="literal"/>
+            </input>
+            <output>
+                <wsoap11:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="ClinicalDataSource_QUQI_IN000003UV01_Cancel">
+            <input>
+                <wsoap11:body use="literal"/>
+            </input>
+            <output>
+                <wsoap11:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="ClinicalDataSource_Service">
+        <port binding="qed:ClinicalDataSource_Binding_Soap12" name="ClinicalDataSource_Port_Soap12">
+            <wsoap12:address location="http://example.org/ClinicalDataSource_Soap12"/>
+        </port>
+        <port binding="qed:ClinicalDataSource_Binding_Soap11" name="ClinicalDataSource_Port_Soap11">
+            <wsoap11:address location="http://example.org/ClinicalDataSource_Soap11"/>
+        </port>
+    </service>
+
+</definitions>

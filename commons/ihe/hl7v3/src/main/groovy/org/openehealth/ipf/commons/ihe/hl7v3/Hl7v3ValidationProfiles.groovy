@@ -24,30 +24,35 @@ class Hl7v3ValidationProfiles {
     /**
      * Validation profiles for request messages.   
      */
-    static final Map<Integer, Collection<List<String>>> REQUEST_TYPES = [
-        44 : [['PRPA_IN201301UV02', null],
-              ['PRPA_IN201302UV02', null],
-              ['PRPA_IN201304UV02', null]],
-        45 : [['PRPA_IN201309UV02', null]],
-        46 : [['PRPA_IN201302UV02', null]],
-        47 : [['PRPA_IN201305UV02', 'iti47/PRPA_IN201305UV02'],
-              ['QUQI_IN000003UV01', null],
-              ['QUQI_IN000003UV01_Cancel', null]],
-        55 : [['PRPA_IN201305UV02', 'iti55/PRPA_IN201305UV02']],
-        56 : [['PatientLocationQueryRequest', null, 'IHE/XCPD_PLQ']],
-              ]
+    static final Map<String, Collection<List<String>>> REQUEST_TYPES = [
+        'iti-44' : [['PRPA_IN201301UV02', null],
+                    ['PRPA_IN201302UV02', null],
+                    ['PRPA_IN201304UV02', null]],
+        'iti-45' : [['PRPA_IN201309UV02', null]],
+        'iti-46' : [['PRPA_IN201302UV02', null]],
+        'iti-47' : [['PRPA_IN201305UV02', 'iti47/PRPA_IN201305UV02'],
+                    ['QUQI_IN000003UV01', null],
+                    ['QUQI_IN000003UV01_Cancel', null]],
+        'iti-55' : [['PRPA_IN201305UV02', 'iti55/PRPA_IN201305UV02']],
+        'iti-56' : [['PatientLocationQueryRequest', null, 'IHE/XCPD_PLQ']],
+        'pcc-1'  : [['QUPC_IN043100UV01', null],
+                    ['QUQI_IN000003UV01', null],
+                    ['QUQI_IN000003UV01_Cancel', null]],
+    ]
      
     /**
      * Validation profiles for response messages.   
      */
-    static final Map<Integer, Collection<List<String>>> RESPONSE_TYPES = [
-        44 : [['MCCI_IN000002UV01', null]],
-        45 : [['PRPA_IN201310UV02', null]],
-        46 : [['MCCI_IN000002UV01', null]],
-        47 : [['PRPA_IN201306UV02', 'iti47/PRPA_IN201306UV02'],
-              ['MCCI_IN000002UV01', null]],
-        55 : [['PRPA_IN201306UV02', 'iti55/PRPA_IN201306UV02']],
-        56 : [['PatientLocationQueryResponse', null, 'IHE/XCPD_PLQ']],
-              ]
+    static final Map<String, Collection<List<String>>> RESPONSE_TYPES = [
+        'iti-44' : [['MCCI_IN000002UV01', null]],
+        'iti-45' : [['PRPA_IN201310UV02', null]],
+        'iti-46' : [['MCCI_IN000002UV01', null]],
+        'iti-47' : [['PRPA_IN201306UV02', 'iti47/PRPA_IN201306UV02'],
+                    ['MCCI_IN000002UV01', null]],
+        'iti-55' : [['PRPA_IN201306UV02', 'iti55/PRPA_IN201306UV02']],
+        'iti-56' : [['PatientLocationQueryResponse', null, 'IHE/XCPD_PLQ']],
+        'pcc-1'  : [['QUPC_IN043200UV01', null],
+                    ['MCCI_IN000002UV01', null]],
+    ]
 
 }
