@@ -51,9 +51,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
             </list>
         </property>
     </bean>
-    
-    <bean id="correlator" 
-          class="org.openehealth.ipf.commons.ihe.ws.correlation.InMemoryAsynchronyCorrelator" />
 
-
+    <import resource="../ehcache-spring.xml" />
 </beans>

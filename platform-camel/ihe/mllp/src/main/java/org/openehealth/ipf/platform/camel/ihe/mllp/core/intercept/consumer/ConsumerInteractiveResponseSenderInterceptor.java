@@ -15,16 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.appendSegments;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isPresent;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.joinSegments;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.splitString;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.uniqueId;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang.Validate;
@@ -33,14 +26,15 @@ import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.ContinuationStorage;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
-import ca.uhn.hl7v2.util.Terser;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.*;
 
 
 /**
@@ -50,16 +44,16 @@ import ca.uhn.hl7v2.util.Terser;
  */
 public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor {
     private static final transient Log LOG = LogFactory.getLog(ConsumerInteractiveResponseSenderInterceptor.class);
-    private final ContinuationStorage storage;
-    
+    private final InteractiveContinuationStorage storage;
+
     public ConsumerInteractiveResponseSenderInterceptor(
             MllpEndpoint endpoint, 
             Processor wrappedProcessor,
-            ContinuationStorage storage) 
+            InteractiveContinuationStorage interactiveContinuationStorage)
     {
         super(endpoint, wrappedProcessor);
-        Validate.notNull(storage);
-        this.storage = storage;
+        Validate.notNull(interactiveContinuationStorage);
+        this.storage = interactiveContinuationStorage;
     }
 
 
@@ -72,15 +66,15 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         String requestMessageType = requestTerser.get("MSH-9-1");
 
         // get pieces of fragments' keys
-        String msh31 = requestTerser.get("MSH-3-1");
-        String msh32 = requestTerser.get("MSH-3-2");
-        String msh33 = requestTerser.get("MSH-3-3");
+        final String msh31 = requestTerser.get("MSH-3-1");
+        final String msh32 = requestTerser.get("MSH-3-2");
+        final String msh33 = requestTerser.get("MSH-3-3");
 
         // handle cancel messages; if there is nothing to cancel -- pass to the route
         if ("QCN".equals(requestMessageType)) {
             String queryTag = requestTerser.get("QID-1");
-            if (storage.deleteFragments(queryTag, msh31, msh32, msh33)) {
-                LOG.debug("Dropped response chain for query ID " + queryTag);
+            if (storage.deleteFragments(keyString(queryTag, msh31, msh32, msh33))) {
+                LOG.debug("Dropped response chain for query tag " + queryTag);
                 Message ack = MessageUtils.ack(parser.getFactory(), requestMessage);
                 Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
             } else {
@@ -97,7 +91,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
 
         // check whether requested unit type is supported
         String rcp22 = requestTerser.get("RCP-2-2");
-        if (!"RD".equals(rcp22)) {
+        if (! "RD".equals(rcp22)) {
             LOG.warn("Unit '" + rcp22 + "' in RCP-2-2 is not supported");
             getWrappedProcessor().process(exchange);
             return;
@@ -131,7 +125,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             return;
         }
         
-        String queryTag = requestTerser.get("QPD-2");
+        final String queryTag = requestTerser.get("QPD-2");
         if (isEmpty(queryTag)) {
             LOG.warn("Cannot perform interactive continuation: empty query tag in QPD-2");
             getWrappedProcessor().process(exchange);
@@ -139,7 +133,8 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         }
 
         // handle query
-        Message responseMessage = storage.getFragment(continuationPointer, queryTag, msh31, msh32, msh33);
+        final String chainId = keyString(queryTag, msh31, msh32, msh33);
+        Message responseMessage = storage.getFragment(continuationPointer, chainId);
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
             LOG.debug("Use prepared fragment for " + continuationPointer);
@@ -153,7 +148,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             // no fragment found --> run the route and create fragments if necessary
             getWrappedProcessor().process(exchange);
             MessageAdapter response = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
-            responseMessage = considerFragmentingResponse(response, threshold, queryTag, msh31, msh32, msh33);
+            responseMessage = considerFragmentingResponse(response, threshold, queryTag, chainId);
         }
         Exchanges.resultMessage(exchange).setBody(getMllpEndpoint().getParser().encode(responseMessage));
     }
@@ -170,8 +165,8 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     private Message considerFragmentingResponse(
             MessageAdapter response, 
             int threshold,
-            String queryTag, 
-            String msh31, String msh32, String msh33) throws Exception 
+            String queryTag,
+            String chainId) throws Exception
     {
         Message responseMessage = (Message) response.getTarget();
         Terser responseTerser = new Terser(responseMessage);  
@@ -223,7 +218,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             fragmentTerser.set("QAK-6", Integer.toString(
                     recordBoundaries.get(recordBoundaries.size() - 1) - endSegmentIndex));
 
-            storage.putFragment(continuationPointer, queryTag, msh31, msh32, msh33, fragment);
+            storage.putFragment(continuationPointer, chainId, fragment);
             continuationPointer = nextContinuationPointer;
 
             // remember the first fragment in order to return it

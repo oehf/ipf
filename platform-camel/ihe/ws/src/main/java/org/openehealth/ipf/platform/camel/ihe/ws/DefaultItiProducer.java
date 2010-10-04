@@ -41,6 +41,7 @@ import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 /**
@@ -84,9 +85,6 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
      *          the factory for clients to produce messages for the service.
      * @param allowAsynchrony
      *          whether asynchronous calls should be supported.
-     * @param needStoreRequestPayload
-     *          whether request payload should be stored in the correlator
-     *          when preparing asynchronous requests.
      */
     @SuppressWarnings("unchecked")
     public DefaultItiProducer(
@@ -134,16 +132,17 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         if (replyToUri != null) {
             String messageId = UUID.randomUUID().toString();
             configureWSAHeaders(messageId, replyToUri, requestContext);
-            
+
             DefaultItiEndpoint endpoint = (DefaultItiEndpoint) getEndpoint();
+            AsynchronyCorrelator correlator = endpoint.getCorrelator();
+            correlator.storeServiceEndpointUri(messageId, endpoint.getEndpointUri());
+            
             String correlationKey = exchange.getIn().getHeader(
                     DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME, 
                     String.class);
-
-            endpoint.getCorrelator().put(
-                    messageId, 
-                    endpoint.getEndpointUri(),
-                    correlationKey);
+            if (correlationKey != null) {
+                correlator.storeCorrelationKey(messageId, correlationKey);
+            }
         }
         
         // invoke

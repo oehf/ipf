@@ -53,7 +53,7 @@ import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
  * 
  * @author Christian Ohr
  */
-public class DefaultValidationContext implements ValidationContext{
+public class DefaultValidationContext implements ValidationContext, Serializable {
 	    
 	private Map ruleMap = [
 	'2.1'   : [:],

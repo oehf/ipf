@@ -65,7 +65,7 @@ public class XcpdProducerAuditInterceptor extends AuditInterceptor {
             if (Names.WSA_ANONYMOUS_ADDRESS.equals(apropo.getReplyTo().getAddress().getValue())) {
                 auditDataset.setRequestPayload(payload);
             } else {
-                correlator.setRequestPayload(apropo.getMessageID().getValue(), payload);
+                correlator.storeRequestPayload(apropo.getMessageID().getValue(), payload);
             }
         }
     }

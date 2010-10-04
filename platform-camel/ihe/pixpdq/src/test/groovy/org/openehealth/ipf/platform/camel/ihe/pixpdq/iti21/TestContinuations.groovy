@@ -47,10 +47,12 @@ class TestContinuations extends MllpTestContainer {
             boolean supportUnsolicitedFragmentation,
             boolean supportSegmentFragmentation) 
     {
-        def x = "pdq-iti21://localhost:${port}?timeout=30000000000" +
+        return "pdq-iti21://localhost:${port}?timeout=30000000000" +
                "&supportInteractiveContinuation=${supportInteractiveContinuation}" +
+               "&interactiveContinuationStorage=#interactiveContinuationStorage" +
                "&supportUnsolicitedFragmentation=${supportUnsolicitedFragmentation}" +
                "&unsolicitedFragmentationThreshold=3" +
+               "&unsolicitedFragmentationStorage=#unsolicitedFragmentationStorage" +
                "&supportSegmentFragmentation=${supportSegmentFragmentation}"
     }
     

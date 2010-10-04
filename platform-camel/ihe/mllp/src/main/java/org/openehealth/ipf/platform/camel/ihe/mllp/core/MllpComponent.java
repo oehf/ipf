@@ -99,14 +99,18 @@ public abstract class MllpComponent extends MinaComponent {
         int segmentFragmentationThreshold = getAndRemoveParameter(
                 parameters, "segmentFragmentationThreshold", int.class, -1);                // >= 5 characters
         
-        ContinuationStorage continuationStorage = supportInteractiveContinuation ?
-            continuationStorage = resolveAndRemoveReferenceParameter(
-                    parameters, 
-                    "interactiveContinuationStorage", 
-                    ContinuationStorage.class,
-                    new InMemoryContinuationStorage()) : null;
-                    
-        
+        InteractiveContinuationStorage interactiveContinuationStorage =
+                resolveAndRemoveReferenceParameter(
+                        parameters,
+                        "interactiveContinuationStorage",
+                        InteractiveContinuationStorage.class);
+
+        UnsolicitedFragmentationStorage unsolicitedFragmentationStorage = 
+                resolveAndRemoveReferenceParameter(
+                        parameters,
+                        "unsolicitedFragmentationStorage",
+                        UnsolicitedFragmentationStorage.class);
+
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
             parameters = new HashMap<String, Object>();
@@ -169,7 +173,8 @@ public abstract class MllpComponent extends MinaComponent {
                 interactiveContinuationDefaultThreshold,
                 unsolicitedFragmentationThreshold,
                 segmentFragmentationThreshold,
-                continuationStorage);
+                interactiveContinuationStorage,
+                unsolicitedFragmentationStorage);
     }
 
     private static String extractBeanName(String originalBeanName) {

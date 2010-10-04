@@ -23,21 +23,37 @@ package org.openehealth.ipf.commons.ihe.ws.correlation;
 public interface AsynchronyCorrelator {
 
     /**
-     * Stores informations about an asynchronous request.
+     * Stores a service endpoint URI.
      * @param messageId
      *      WS-Addressing message ID of the request.
-     * @param serviceEndpoint
+     * @param serviceEndpointUri
      *      URL of the endpoint the request is being sent to.
-     * @param correlationKey
-     *      correlation key provided by the user (optional).
      */
-    void put(String messageId, String serviceEndpoint, String correlationKey);
-    
+    void storeServiceEndpointUri(String messageId, String serviceEndpointUri);
+
     /**
-     * Returns the URL of the endpoint to which the message with the given 
+     * Stores a user-defined correlation key.
+     * @param messageId
+     *      WS-Addressing message ID of the request.
+     * @param correlationKey
+     *      correlation key provided by the user.
+     */
+    void storeCorrelationKey(String messageId, String correlationKey);
+
+    /**
+     * Stores request payload.
+     * @param messageId
+     *      WS-Addressing message ID of the request.
+     * @param requestPayload
+     *      request payload as XML string.
+     */
+    void storeRequestPayload(String messageId, String requestPayload);
+
+    /**
+     * Returns the URI of the endpoint to which the message with the given
      * ID has been sent, or <code>null</code> if the message is unknown.
      */
-    String getServiceEndpoint(String messageId);
+    String getServiceEndpointUri(String messageId);
 
     /**
      * Returns the user-defined correlation key for the message with the  
@@ -48,7 +64,8 @@ public interface AsynchronyCorrelator {
 
     /**
      * Returns the payload of the request message with the given ID, 
-     * or <code>null</code> if payload saving has been switched off.
+     * or <code>null</code> if the message is unknown or the
+     * payload saving has been switched off.
      */
     String getRequestPayload(String messageId);
 
@@ -63,11 +80,4 @@ public interface AsynchronyCorrelator {
      *      i.e. when the given ID was known; <code>false</code> otherwise.
      */
     boolean delete(String messageId);
-    
-    /**
-     * Stores payload of the request message with the given ID.
-     * <p>
-     * The message ID should be already known for the correlator.
-     */
-    void setRequestPayload(String messageId, String requestPayload);
 }

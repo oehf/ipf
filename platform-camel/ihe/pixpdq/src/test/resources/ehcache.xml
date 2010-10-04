@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+
+    <diskStore path="ehcache-store"/>
+
+    <defaultCache overflowToDisk="true" eternal="false" maxElementsInMemory="1000"/>
+
+    <cache name="interactiveContinuationCache"
+           timeToLiveSeconds="600"
+           maxElementsInMemory="1"
+           overflowToDisk="true"
+           maxElementsOnDisk="0"
+           eternal="false"
+           diskPersistent="true"
+            />
+
+    <cache name="unsolicitedFragmentationCache"
+           timeToLiveSeconds="60"
+           overflowToDisk="false"
+           maxElementsInMemory="1000"
+           eternal="false"
+           diskPersistent="true"
+            />
+
+</ehcache>
+

@@ -15,12 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.security.SslSocketConnector;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.web.context.ContextLoaderListener;
 
 /**
@@ -40,7 +40,7 @@ public class JettyServer extends ServletServer {
         server = new Server();
         server.addConnector(connector);
         connector.setPort(getPort());
-        Context context = new Context(Context.NO_SESSIONS);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         context.setResourceBase("/");
         ContextLoaderListener listener = new ContextLoaderListener();
 
