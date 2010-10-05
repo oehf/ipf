@@ -55,6 +55,7 @@
         <springsource-commons-pool-version>1.5.3</springsource-commons-pool-version>
         <springsource-derby-version>10.4.1000003.648739</springsource-derby-version>
         <springsource-dom4j-version>1.6.1</springsource-dom4j-version>
+        <springsource-ehcache-version>1.6.2</springsource-ehcache-version>
         <springsource-ejb-api-version>3.0.0</springsource-ejb-api-version>
         <springsource-jasypt-version>1.5.0</springsource-jasypt-version>
         <springsource-javassist-version>3.3.0.ga</springsource-javassist-version>
@@ -146,6 +147,7 @@
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.codec/${springsource-commons-codec-version}@nostart</param>
             <param>mvn:org.objectweb.asm/com.springsource.org.objectweb.asm/${springsource-asm-version}@nostart</param>
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.dbcp/${springsource-commons-dbcp-version}@nostart</param>
+            <param>mvn:net.sourceforge.ehcache/com.springsource.net.sf.ehcache/${springsource-ehcache-version}@nostart</param>
             <param>mvn:xml-resolver/xml-resolver/${xml-resolver-version}@nostart</param>
             <param>mvn:org.apache.activemq/activemq-core/${activemq-version}@nostart</param>
             <param>mvn:org.apache.activemq/kahadb/${activemq-version}@nostart</param>
