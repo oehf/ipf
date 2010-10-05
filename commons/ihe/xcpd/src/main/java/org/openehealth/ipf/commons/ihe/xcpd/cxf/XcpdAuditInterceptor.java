@@ -114,7 +114,7 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         if(asyncReceiver) {
             String messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
             if (messageId != null) {
-                String serviceEndpoint = correlator.getServiceEndpoint(messageId);
+                String serviceEndpoint = correlator.getServiceEndpointUri(messageId);
                 if (serviceEndpoint == null) {
                     LOG.warn("Unknown async response with target message ID " + messageId);
                 }

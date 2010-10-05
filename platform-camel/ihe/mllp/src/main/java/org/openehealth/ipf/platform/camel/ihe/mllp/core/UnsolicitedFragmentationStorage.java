@@ -15,20 +15,28 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.openehealth.ipf.commons.core.purgeable.PurgeableMap;
-
 /**
- * A storage of HL7 v2 unsolicited fragmentation accumulators.
+ * Interface for storages of of HL7 v2 unsolicited fragmentation accumulators.
  * @author Dmytro Rud
  */
-public class UnsolicitedFragmentationStorage extends PurgeableMap<String, UnsolicitedFragmentationAccumulator> {
-    
-    public void put(String key, StringBuilder accumulator) {
-        super.put(key, new UnsolicitedFragmentationAccumulator(accumulator));
-    }
+public interface UnsolicitedFragmentationStorage {
 
-    public StringBuilder getAndRemove(String key) {
-        UnsolicitedFragmentationAccumulator accu = remove(key);
-        return (accu == null) ? null : accu.getAccumulator(); 
-    }
+    /**
+     * Puts a fragment accumulator into the storage.
+     * @param key
+     *      Key consisting of MSH-14/DSC-1, MSH-3-1, MSH-3-2, MSH-3-3.
+     * @param accumulator
+     *      Accumulator to be stored.
+     */
+    void put(String key, StringBuilder accumulator);
+
+    /**
+     * Returns the fragment accumulator which corresponds to the given key
+     * and removes it from the storage.
+     * @param key
+     *      Key consisting of MSH-14/DCS-1, MSH-3-1, MSH-3-2, MSH-3-3.
+     * @return
+     *      Accumulator or <code>null</code> when none found.
+     */
+    StringBuilder getAndRemove(String key);
 }

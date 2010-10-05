@@ -54,4 +54,28 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
         <property name="charset" value="utf-8"/>
     </bean>
+
+
+    <!-- ========== Configuration of Caches and Storages ========== -->
+
+    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
+
+    <bean id="interactiveContinuationStorage"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage">
+        <constructor-arg>
+            <bean factory-bean="ehcacheManager" factory-method="getCache">
+                <constructor-arg value="interactiveContinuationCache" />
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="unsolicitedFragmentationStorage"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheUnsolicitedFragmentationStorage">
+        <constructor-arg>
+            <bean factory-bean="ehcacheManager" factory-method="getCache">
+                <constructor-arg value="unsolicitedFragmentationCache" />
+            </bean>
+        </constructor-arg>
+    </bean>
+
 </beans>

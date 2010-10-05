@@ -61,6 +61,7 @@
         <cxf-version>2.2.9</cxf-version>
         <derby-version>10.4.1.3</derby-version>
         <easymock-version>2.4</easymock-version> 
+	<ehcache-version>2.2.0</ehcache-version>
         <gmaven-version>1.0</gmaven-version>
         <groovy-version>1.6.7</groovy-version>
         <hapi-version>1.0.1</hapi-version>
@@ -296,6 +297,11 @@
                 <version>${easymock-version}</version>
                 <scope>test</scope>
             </dependency> 
+	    <dependency>
+		<groupId>net.sf.ehcache</groupId>
+		<artifactId>ehcache-core</artifactId>
+		<version>${ehcache-version}</version>
+	    </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
@@ -449,6 +455,12 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http-jetty</artifactId>
                 <version>${cxf-version}</version>
+                <exclusions>
+                    <exclusion>
+	                <groupId>org.mortbay.jetty</groupId>
+		        <artifactId>jetty</artifactId>
+                    </exclusion>
+                </exclusions>                
             </dependency>
             <dependency>
                 <groupId>org.apache.mina</groupId>
@@ -629,6 +641,11 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
+                <version>${jetty-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-servlet</artifactId>
                 <version>${jetty-version}</version>
             </dependency>
             <dependency>
