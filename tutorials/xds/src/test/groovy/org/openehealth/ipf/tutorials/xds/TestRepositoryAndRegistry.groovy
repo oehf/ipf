@@ -98,11 +98,14 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         retrieve.documents.add(doc1)
         def retrieveResponse = send(ITI43, retrieve, RetrievedDocumentSet.class)
         assertEquals(retrieveResponse.toString(), Status.SUCCESS, retrieveResponse.status)
-        assertEquals(2, retrieveResponse.documents.size())
 
+        def attachments = retrieveResponse.documents[0].dataHandler.dataSource.attachments
+        assertEquals(2, retrieveResponse.documents.size())
+        assertEquals(2, attachments.size())
         def expectedContents = read(SampleData.createDataHandler())
-        assertEquals(expectedContents, read(retrieveResponse.documents[0].dataHandler))
-        assertEquals(expectedContents, read(retrieveResponse.documents[1].dataHandler))
+        for (attachment in attachments) {
+            assertEquals(expectedContents, read(attachment.dataHandler))
+        }
     }
 
     def read(dataHandler) {

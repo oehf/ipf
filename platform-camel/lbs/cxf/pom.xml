@@ -30,6 +30,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- Jetty 6 is excluded from CXF dependencies in the root pom.xml,
+                 but we need it here because we use camel-cxf endpoints -->
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+            <version>6.1.22</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
             <version>${project.version}</version>
