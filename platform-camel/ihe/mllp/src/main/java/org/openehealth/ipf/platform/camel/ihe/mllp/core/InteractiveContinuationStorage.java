@@ -37,7 +37,7 @@ public interface InteractiveContinuationStorage {
      * @param fragment
      *      fragment as a HAPI message instance. 
      */
-    void putFragment(String continuationPointer, String chainId, Message fragment);
+    void put(String continuationPointer, String chainId, Message fragment);
     
     
     /**
@@ -55,7 +55,7 @@ public interface InteractiveContinuationStorage {
      * @return
      *      fragment as a HAPI message instance or <code>null</code> when none found.
      */
-    Message getFragment(String continuationPointer, String chainId);
+    Message get(String continuationPointer, String chainId);
     
     
     /**
@@ -69,6 +69,6 @@ public interface InteractiveContinuationStorage {
      *      <code>true</code>, when some fragments have been 
      *      actually deleted, i.e. when the given query tag is known.
      */
-    boolean deleteFragments(String chainId);
+    boolean delete(String chainId);
 
 }

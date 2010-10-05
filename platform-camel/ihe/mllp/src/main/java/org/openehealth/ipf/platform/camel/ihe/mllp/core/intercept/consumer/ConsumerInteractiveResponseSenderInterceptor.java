@@ -73,7 +73,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         // handle cancel messages; if there is nothing to cancel -- pass to the route
         if ("QCN".equals(requestMessageType)) {
             String queryTag = requestTerser.get("QID-1");
-            if (storage.deleteFragments(keyString(queryTag, msh31, msh32, msh33))) {
+            if (storage.delete(keyString(queryTag, msh31, msh32, msh33))) {
                 LOG.debug("Dropped response chain for query tag " + queryTag);
                 Message ack = MessageUtils.ack(parser.getFactory(), requestMessage);
                 Exchanges.resultMessage(exchange).setBody(parser.encode(ack));
@@ -134,7 +134,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
 
         // handle query
         final String chainId = keyString(queryTag, msh31, msh32, msh33);
-        Message responseMessage = storage.getFragment(continuationPointer, chainId);
+        Message responseMessage = storage.get(continuationPointer, chainId);
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
             LOG.debug("Use prepared fragment for " + continuationPointer);
@@ -218,7 +218,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             fragmentTerser.set("QAK-6", Integer.toString(
                     recordBoundaries.get(recordBoundaries.size() - 1) - endSegmentIndex));
 
-            storage.putFragment(continuationPointer, chainId, fragment);
+            storage.put(continuationPointer, chainId, fragment);
             continuationPointer = nextContinuationPointer;
 
             // remember the first fragment in order to return it

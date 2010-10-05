@@ -2,7 +2,7 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
 
-    <diskStore path="ehcache-store"/>
+    <diskStore path="target/ehcache-store"/>
 
     <defaultCache overflowToDisk="true" eternal="false" maxElementsInMemory="1000"/>
 

@@ -49,7 +49,7 @@ public class EhcacheInteractiveConfigurationStorage implements InteractiveContin
 
 
     @Override
-    public void putFragment(String continuationPointer, String chainId, Message fragment) {
+    public void put(String continuationPointer, String chainId, Message fragment) {
         InteractiveContinuationChain chain;
         Element element = ehcache.get(chainId);
         if (element != null) {
@@ -64,7 +64,7 @@ public class EhcacheInteractiveConfigurationStorage implements InteractiveContin
 
 
     @Override
-    public Message getFragment(
+    public Message get(
             String continuationPointer,
             String chainId)
     {
@@ -78,7 +78,7 @@ public class EhcacheInteractiveConfigurationStorage implements InteractiveContin
 
 
     @Override
-    public boolean deleteFragments(String chainId) {
+    public boolean delete(String chainId) {
         return ehcache.remove(chainId);
     }
 

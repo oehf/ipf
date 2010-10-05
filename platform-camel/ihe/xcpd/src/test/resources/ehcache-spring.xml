@@ -16,17 +16,7 @@ http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 ">
 
-    <bean id="ehcacheManagerConfigurationResource" class="org.springframework.core.io.ClassPathResource">
-        <constructor-arg value="ehcache.xml" />
-    </bean>
-
-    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create">
-        <constructor-arg>
-            <bean class="java.io.InputStream"
-                  factory-bean="ehcacheManagerConfigurationResource"
-                  factory-method="getInputStream" />
-        </constructor-arg>
-    </bean>
+    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
 
     <bean id="correlator"
           class="org.openehealth.ipf.commons.ihe.ws.correlation.EhcacheAsynchronyCorrelator">

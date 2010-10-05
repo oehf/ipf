@@ -28,7 +28,7 @@ public interface UnsolicitedFragmentationStorage {
      * @param accumulator
      *      Accumulator to be stored.
      */
-    public void put(String key, StringBuilder accumulator);
+    void put(String key, StringBuilder accumulator);
 
     /**
      * Returns the fragment accumulator which corresponds to the given key
@@ -38,5 +38,5 @@ public interface UnsolicitedFragmentationStorage {
      * @return
      *      Accumulator or <code>null</code> when none found.
      */
-    public StringBuilder getAndRemove(String key);
+    StringBuilder getAndRemove(String key);
 }

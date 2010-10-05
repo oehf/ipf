@@ -58,17 +58,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <!-- ========== Configuration of Caches and Storages ========== -->
 
-    <bean id="ehcacheManagerConfigurationResource" class="org.springframework.core.io.ClassPathResource">
-        <constructor-arg value="ehcache.xml" />
-    </bean>
-
-    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create">
-        <constructor-arg>
-            <bean class="java.io.InputStream"
-                  factory-bean="ehcacheManagerConfigurationResource"
-                  factory-method="getInputStream" />
-        </constructor-arg>
-    </bean>
+    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
 
     <bean id="interactiveContinuationStorage"
           class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage">
