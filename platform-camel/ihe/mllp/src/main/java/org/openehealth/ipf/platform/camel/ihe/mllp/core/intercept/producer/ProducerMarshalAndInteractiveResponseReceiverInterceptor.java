@@ -95,7 +95,23 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
             // continuations handling 
             if (supportContinuations) {
                 List<String> segments = splitString(responseString, '\r');
-                
+
+                // analyse whether this fragment is a positive response
+                boolean positiveResponse = false;
+                for (String segment : segments) {
+                    if (segment.startsWith("MSA")) {
+                        positiveResponse = (segment.length() >= 7) && (segment.charAt(5) == 'A');
+                        break;
+                    }
+                }
+                if (! positiveResponse) {
+                    // ignore all collected fragments, pass this response as is to the route
+                    LOG.debug("Not a positive response, cannot perform continuation");
+                    fragmentsCount = 0;
+                    recordsCount = 0;
+                    break;
+                }
+
                 // analyse whether we should request the next fragment   
                 if (segments.get(segments.size() - 1).startsWith("DSC")) {
                     List<String> dscFields = splitString(segments.get(segments.size() - 1), responseString.charAt(3));
