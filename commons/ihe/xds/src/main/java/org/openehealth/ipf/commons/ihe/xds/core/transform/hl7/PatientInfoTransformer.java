@@ -97,9 +97,12 @@ public class PatientInfoTransformer {
         for (Map.Entry<Integer, PIDTransformer> entry : pidTransformers.entrySet()) {
             String hl7Data = entry.getValue().toHL7(patientInfo);
             if (hl7Data != null && !hl7Data.isEmpty()) {
-                String pidNoStr = PID_PREFIX + entry.getKey();
-                String pidStr = HL7.render(HL7Delimiter.FIELD, pidNoStr, hl7Data);
-                hl7Strings.add(pidStr);
+                List<String> repetitions = HL7.parse(HL7Delimiter.REPETITION, hl7Data);
+                for ( String repetition : repetitions) {
+                    String pidNoStr = PID_PREFIX + entry.getKey();
+                    String pidStr = HL7.render(HL7Delimiter.FIELD, pidNoStr, repetition);
+                    hl7Strings.add(pidStr);
+                }
             }
         }
         

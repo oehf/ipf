@@ -29,7 +29,7 @@ public enum ValidationMessage {
     INVALID_TITLE_ENCODING("Invalid encoding for document entry title: %1s"),
     TITLE_TOO_LONG("Document entry title too long: %1s"),
     UNIQUE_ID_MISSING("Document entries, folders and submission sets are required to define a unique ID"),
-    UNIQUE_ID_TOO_LONG("Unique IDs must not be longer than 64 characters"),
+    UNIQUE_ID_TOO_LONG("Unique IDs must not be longer than 128 characters"),
     UNIQUE_ID_NOT_UNIQUE("Duplicate ID found"),
     UUID_NOT_UNIQUE("Duplicate UUID found"),
     DOC_ENTRY_PATIENT_ID_WRONG("Document entry and submission set must define the same patient ID", ErrorCode.PATIENT_ID_DOES_NOT_MATCH),
