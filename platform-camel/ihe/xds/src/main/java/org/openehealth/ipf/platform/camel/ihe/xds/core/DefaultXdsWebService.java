@@ -52,13 +52,18 @@ public class DefaultXdsWebService extends DefaultItiWebService {
         errorInfo.setSeverity(Severity.ERROR);
         errorResponse.getErrors().add(errorInfo);
 
-        if (throwable instanceof XDSMetaDataException)  {
-            XDSMetaDataException exception = (XDSMetaDataException) throwable;
-            if (exception.getValidationMessage().getErrorCode() == null) {
+        XDSMetaDataException metaDataException = null;
+        if ( throwable instanceof XDSMetaDataException)
+            metaDataException = (XDSMetaDataException)throwable;
+        else if ( throwable.getCause() instanceof XDSMetaDataException)
+            metaDataException = (XDSMetaDataException)throwable.getCause(); 
+
+        if (metaDataException != null)  {
+            if (metaDataException.getValidationMessage().getErrorCode() == null) {
                 errorInfo.setErrorCode(defaultMetaDataError);
             }
             else {
-                errorInfo.setErrorCode(exception.getValidationMessage().getErrorCode());
+                errorInfo.setErrorCode(metaDataException.getValidationMessage().getErrorCode());
             }
         }
         else {
