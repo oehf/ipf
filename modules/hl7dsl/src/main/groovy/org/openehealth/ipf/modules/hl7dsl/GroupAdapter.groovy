@@ -31,24 +31,24 @@ import ca.uhn.hl7v2.model.Group
  * @author Christian Ohr
  */
 class GroupAdapter extends StructureAdapter {
-
+    
     Group group
     
     private Set cachedNames
     
     GroupAdapter(Group group) {
         this.group = group
-		this.path = ''
+        this.path = ''
         this.cachedNames = group.names as HashSet
     }
-
+    
     def getTarget() {
         group
     }
-	
-	void wrapTarget(Group group) {
-		this.group = group
-	}
+    
+    void wrapTarget(Group group) {
+        this.group = group
+    }
     
     int count(String s) {
         group.getAll(s).length
@@ -62,14 +62,14 @@ class GroupAdapter extends StructureAdapter {
     public Object invokeMethod(String name, Object args) {
         if (cachedNames.contains(name)) {
             return getAt(name).call(args)
-		} else if (name.startsWith('findLastIndexOf')) {
-			return findLastIndexOf { it.name == name.substring(15) }
-		} else if (name.startsWith('findIndexOf')) {
-			return findIndexOf { it.name == name.substring(11) }
-		} else if (name.startsWith('findAll')) {
-        	return findAll { it.name == name.substring(7) }
+        } else if (name.startsWith('findLastIndexOf')) {
+            return findLastIndexOf { it.name == name.substring(15) }
+        } else if (name.startsWith('findIndexOf')) {
+            return findIndexOf { it.name == name.substring(11) }
+        } else if (name.startsWith('findAll')) {
+            return findAll { it.name == name.substring(7) }
         } else if (name.startsWith('find')) {
-        	return find { it.name == name.substring(4) }
+            return find { it.name == name.substring(4) }
         } else {
             return adapt(InvokerHelper.invokeMethod(group, name, args))
         }
@@ -98,69 +98,67 @@ class GroupAdapter extends StructureAdapter {
             return adaptStructure(group.get(s))
         }
     }
-
+    
     void from(def value) {
         throw new UnsupportedOperationException('group copying not implemented yet')
     }
-	
-	Iterator iterator() {
-		GroupAdapterIterator.iterator(this)
-	}
+    
+    Iterator iterator() {
+        GroupAdapterIterator.iterator(this)
+    }
     
     def call(object) {
         throw new AdapterException("The group ${group.class.simpleName} is not repeatable in this group or message")
     }
-	
-	/**
-	 * @return true if the group has only empty substructures
-	 */
-	boolean isEmpty() {
-		group.getNames().every { 
-			get(it).isEmpty() 
-		}
-	}
-		
-	Object eachWithIndex(Closure closure) {
-		for (Iterator iter = iterator(); iter.hasNext();) {
-			def next = iter.next()
-			closure.call(next, next.path)
-		}
-		this
-	}
-	
-	String findIndexOf(Closure closure) {
-		String result = ''
-		for (Iterator iter = iterator(); iter.hasNext();) {
-			def next = iter.next()
-			if (closure.call(next)) {
-				result = next.path
-				break
-			}
-		}
-		result
-	}
-	
-	String findLastIndexOf(Closure closure) {
-		String result = ''
-		for (Iterator iter = iterator(); iter.hasNext();) {
-			def next = iter.next()
-			if (closure.call(next)) {
-				result = next.path
-			}
-		}
-		result
-	}
-	
-	List<String> findIndexValues(Closure closure) {
-		List<String> result = []
-		for (Iterator iter = iterator(); iter.hasNext();) {
-			def next = iter.next()
-			if (closure.call(next)) {
-				result << next.path
-			}
-		}
-		result
-	}	
-		
     
+    /**
+     * @return true if the group has only empty substructures
+     */
+    boolean isEmpty() {
+        group.getNames().every { 
+            get(it).isEmpty()
+        }
+    }
+    
+    Object eachWithIndex(Closure closure) {
+        for (Iterator iter = iterator(); iter.hasNext();) {
+            def next = iter.next()
+            closure.call(next, next.path)
+        }
+        this
+    }
+    
+    String findIndexOf(Closure closure) {
+        String result = ''
+        for (Iterator iter = iterator(); iter.hasNext();) {
+            def next = iter.next()
+            if (closure.call(next)) {
+                result = next.path
+                break
+            }
+        }
+        result
+    }
+    
+    String findLastIndexOf(Closure closure) {
+        String result = ''
+        for (Iterator iter = iterator(); iter.hasNext();) {
+            def next = iter.next()
+            if (closure.call(next)) {
+                result = next.path
+            }
+        }
+        result
+    }
+    
+    List<String> findIndexValues(Closure closure) {
+        List<String> result = []
+        for (Iterator iter = iterator(); iter.hasNext();) {
+            def next = iter.next()
+            if (closure.call(next)) {
+                result << next.path
+            }
+        }
+        result
+    }
 }

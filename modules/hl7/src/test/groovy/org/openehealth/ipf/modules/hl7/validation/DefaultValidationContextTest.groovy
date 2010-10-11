@@ -33,11 +33,13 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser
  * @author Christian Ohr
  */
 public class DefaultValidationContextTest extends GroovyTestCase{
-	
+   
+    def noop = { String -> }
+    
 	void testGetPrimitiveRules(){
 	    DefaultValidationContext r = new DefaultValidationContext();
-	    PrimitiveTypeRule rule1 = new ClosurePrimitiveTypeRule() {}
-	    PrimitiveTypeRule rule2 = new ClosurePrimitiveTypeRule() {}
+	    PrimitiveTypeRule rule1 = new ClosurePrimitiveTypeRule(noop)
+	    PrimitiveTypeRule rule2 = new ClosurePrimitiveTypeRule(noop)
 	    r.addPrimitiveRule('2.5', 'ST', rule1)
 	    r.addPrimitiveRule('2.5', 'ST', rule2)
 	    assert r.getPrimitiveRules('2.5', 'ST', null)[0] == rule1
@@ -47,8 +49,8 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	
 	void testGetMessageRules(){
 	    DefaultValidationContext r = new DefaultValidationContext();
-	    MessageRule rule1 = new ClosureMessageRule() {}
-	    MessageRule rule2 = new ClosureMessageRule() {}
+	    MessageRule rule1 = new ClosureMessageRule (noop)
+	    MessageRule rule2 = new ClosureMessageRule (noop)
 	    r.addMessageRule('2.5', 'ADT', 'A01', rule1)
 	    r.addMessageRule('2.5', 'ADT', 'A01', rule2)
 	    assert r.getMessageRules('2.5', 'ADT', 'A01')[0] == rule1
@@ -58,8 +60,8 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	
 	void testGetMissingMessageRule(){
 	    DefaultValidationContext r = new DefaultValidationContext(requireMessageRule:true);
-	    MessageRule rule1 = new ClosureMessageRule() {}
-	    MessageRule rule2 = new ClosureMessageRule() {}
+	    MessageRule rule1 = new ClosureMessageRule(noop)
+	    MessageRule rule2 = new ClosureMessageRule(noop)
 	    r.addMessageRule('2.5', 'ADT', 'A01', rule1)
 	    r.addMessageRule('2.5', 'ADT', 'A01', rule2)
 	    assert r.getMessageRules('2.4', 'ADT', 'A01').size() == 1
@@ -69,8 +71,8 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	
 	void testGetEncodingRules(){
 	    DefaultValidationContext r = new DefaultValidationContext();
-	    EncodingRule rule1 = new ClosureEncodingRule() {}
-	    EncodingRule rule2 = new ClosureEncodingRule() {}
+	    EncodingRule rule1 = new ClosureEncodingRule(noop)
+	    EncodingRule rule2 = new ClosureEncodingRule(noop)
 	    r.addEncodingRule('2.5', 'bla', rule1)
 	    r.addEncodingRule('2.5', 'bla', rule2)
 	    assert r.getEncodingRules('2.5', 'bla')[0] == rule1

@@ -84,21 +84,5 @@
         </dependency>        
     </dependencies>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/groovy</directory>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>META-INF/**/*</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
-
 </project>
+

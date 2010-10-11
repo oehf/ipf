@@ -39,19 +39,22 @@
             <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
         </dependency>
     </dependencies>
-    
-    <!-- We require some more memory for the tests, because the
-         builder is cached and accumulates memory. -->
     <build>
         <plugins>
             <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <testFailureIgnore>false</testFailureIgnore>
-                    <forkMode>once</forkMode>
-                    <argLine>-Xmx128m</argLine>
-                </configuration>
-            </plugin> 
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- Additionally to the groovy compilation generate stubs here -->
+                        <id>generateStubs</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>generateStubs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-    </build>
+    </build>  
 </project>

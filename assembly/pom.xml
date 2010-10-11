@@ -327,7 +327,7 @@
                             <exec executable="svn" failonerror="true">
                                 <arg value="export" />
                                 <arg value="http://gforge.openehealth.org/svn/ipf/trunk/ipf" />
-						        <arg line="${project.build.directory}/ipf-sources" />
+                                <arg line="${project.build.directory}/ipf-sources" />
                                 <arg line="--username anonymous" />
                                 <arg line="--password" />
                                 <arg line="--no-auth-cache" />
@@ -339,7 +339,7 @@
                             </goals>
                           </execution>
                         </executions>
-                    </plugin>				
+                    </plugin>
                     <plugin>
                         <artifactId>maven-assembly-plugin</artifactId>
                         <inherited>false</inherited>

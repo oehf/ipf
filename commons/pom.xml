@@ -22,5 +22,22 @@
         <module>xml</module>
         <module>map</module>
     </modules>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                    <execution>
+                         <!-- Declare generateStubs in the parent because all commons projects have java to groovy dependencies --> 
+                        <id>generateStubs</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>generateStubs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
