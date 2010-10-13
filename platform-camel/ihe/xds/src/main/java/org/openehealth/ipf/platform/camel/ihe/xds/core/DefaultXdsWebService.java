@@ -72,7 +72,7 @@ public class DefaultXdsWebService extends DefaultItiWebService {
             return null;
         }
 
-        if ( throwable instanceof XDSMetaDataException) {
+        if (throwable instanceof XDSMetaDataException) {
             return (XDSMetaDataException)throwable;
         } else {
             return getXDSMetaDataException(throwable.getCause());
