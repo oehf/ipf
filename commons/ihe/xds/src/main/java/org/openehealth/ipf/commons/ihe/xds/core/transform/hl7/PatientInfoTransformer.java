@@ -98,7 +98,7 @@ public class PatientInfoTransformer {
             String hl7Data = entry.getValue().toHL7(patientInfo);
             if (hl7Data != null && !hl7Data.isEmpty()) {
                 List<String> repetitions = HL7.parse(HL7Delimiter.REPETITION, hl7Data);
-                for ( String repetition : repetitions) {
+                for (String repetition : repetitions) {
                     String pidNoStr = PID_PREFIX + entry.getKey();
                     String pidStr = HL7.render(HL7Delimiter.FIELD, pidNoStr, repetition);
                     hl7Strings.add(pidStr);

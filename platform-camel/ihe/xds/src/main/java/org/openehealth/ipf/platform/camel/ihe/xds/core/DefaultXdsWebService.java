@@ -56,12 +56,10 @@ public class DefaultXdsWebService extends DefaultItiWebService {
             errorInfo.setCodeContext(metaDataException.getMessage());
             if (metaDataException.getValidationMessage().getErrorCode() == null) {
                 errorInfo.setErrorCode(defaultMetaDataError);
-            }
-            else {
+            } else {
                 errorInfo.setErrorCode(metaDataException.getValidationMessage().getErrorCode());
             }
-        }
-        else {
+        } else {
             errorInfo.setCodeContext(throwable.getMessage());
             errorInfo.setErrorCode(defaultError);
         }
@@ -69,14 +67,15 @@ public class DefaultXdsWebService extends DefaultItiWebService {
         log.info("Configured error: " + errorResponse);
     }
 
-    private static XDSMetaDataException getXDSMetaDataException (Throwable throwable)
-    {
-        if ( throwable == null )
+    private static XDSMetaDataException getXDSMetaDataException (Throwable throwable) {
+        if (throwable == null) {
             return null;
+        }
 
-        if ( throwable instanceof XDSMetaDataException)
+        if ( throwable instanceof XDSMetaDataException) {
             return (XDSMetaDataException)throwable;
-        else
+        } else {
             return getXDSMetaDataException(throwable.getCause());
+        }
     }
 }
