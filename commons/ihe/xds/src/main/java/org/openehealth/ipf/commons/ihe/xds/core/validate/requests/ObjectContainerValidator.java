@@ -192,7 +192,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         for (EbXMLRegistryObject obj : objects) {
             String uniqueId = obj.getExternalIdentifierValue(scheme);
             metaDataAssert(uniqueId != null, UNIQUE_ID_MISSING);
-            metaDataAssert(uniqueId.length() <= 64, UNIQUE_ID_TOO_LONG);
+            metaDataAssert(uniqueId.length() <= 128, UNIQUE_ID_TOO_LONG);
 
             metaDataAssert(!uniqueIds.contains(uniqueId), UNIQUE_ID_NOT_UNIQUE);
             uniqueIds.add(uniqueId);

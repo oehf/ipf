@@ -48,23 +48,34 @@ public class DefaultXdsWebService extends DefaultItiWebService {
     protected void configureError(Response errorResponse, Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
         errorResponse.setStatus(Status.FAILURE);
         ErrorInfo errorInfo = new ErrorInfo();
-        errorInfo.setCodeContext(throwable.getMessage());
         errorInfo.setSeverity(Severity.ERROR);
         errorResponse.getErrors().add(errorInfo);
 
-        if (throwable instanceof XDSMetaDataException)  {
-            XDSMetaDataException exception = (XDSMetaDataException) throwable;
-            if (exception.getValidationMessage().getErrorCode() == null) {
+        XDSMetaDataException metaDataException = getXDSMetaDataException(throwable);
+        if (metaDataException != null)  {
+            errorInfo.setCodeContext(metaDataException.getMessage());
+            if (metaDataException.getValidationMessage().getErrorCode() == null) {
                 errorInfo.setErrorCode(defaultMetaDataError);
+            } else {
+                errorInfo.setErrorCode(metaDataException.getValidationMessage().getErrorCode());
             }
-            else {
-                errorInfo.setErrorCode(exception.getValidationMessage().getErrorCode());
-            }
-        }
-        else {
+        } else {
+            errorInfo.setCodeContext(throwable.getMessage());
             errorInfo.setErrorCode(defaultError);
         }
         
         log.info("Configured error: " + errorResponse);
+    }
+
+    private static XDSMetaDataException getXDSMetaDataException (Throwable throwable) {
+        if (throwable == null) {
+            return null;
+        }
+
+        if (throwable instanceof XDSMetaDataException) {
+            return (XDSMetaDataException)throwable;
+        } else {
+            return getXDSMetaDataException(throwable.getCause());
+        }
     }
 }

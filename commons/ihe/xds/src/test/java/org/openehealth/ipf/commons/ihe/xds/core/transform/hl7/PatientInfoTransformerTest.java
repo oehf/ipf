@@ -71,6 +71,39 @@ public class PatientInfoTransformerTest {
     }
     
     @Test
+    public void testToHL7MultiId() {
+        PatientInfo patientInfo = new PatientInfo();
+
+        Identifiable id = new Identifiable();
+        id.setId("abcdef");
+        patientInfo.getIds().add(id);
+        Identifiable id2 = new Identifiable();
+        id2.setId("ghijkl");
+        patientInfo.getIds().add(id2);
+
+        Name name = new Name();
+        name.setFamilyName("Joman");
+        patientInfo.setName(name);
+
+        Address address = new Address();
+        address.setStreetAddress("Jo Str. 3");
+        patientInfo.setAddress(address);
+
+        patientInfo.setDateOfBirth("1234");
+        patientInfo.setGender("A");
+
+        List<String> hl7Data = transformer.toHL7(patientInfo);
+        assertEquals(6, hl7Data.size());
+
+        assertEquals("PID-3|abcdef", hl7Data.get(0));
+        assertEquals("PID-3|ghijkl", hl7Data.get(1));
+        assertEquals("PID-5|Joman", hl7Data.get(2));
+        assertEquals("PID-7|1234", hl7Data.get(3));
+        assertEquals("PID-8|A", hl7Data.get(4));
+        assertEquals("PID-11|Jo Str. 3", hl7Data.get(5));
+    }
+
+    @Test
     public void testToHL7Empty() {
         PatientInfo patientInfo = new PatientInfo();        
         List<String> hl7Data = transformer.toHL7(patientInfo);
