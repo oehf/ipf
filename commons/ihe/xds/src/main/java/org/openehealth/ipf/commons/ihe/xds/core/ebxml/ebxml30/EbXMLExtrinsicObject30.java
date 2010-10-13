@@ -53,6 +53,6 @@ public class EbXMLExtrinsicObject30 extends EbXMLRegistryObject30<ExtrinsicObjec
 
     @Override
     public void setStatus(AvailabilityStatus status) {
-        getInternal().setStatus(AvailabilityStatus.toOpcode(status));
+        getInternal().setStatus(AvailabilityStatus.toQueryOpcode(status));
     }
 }
