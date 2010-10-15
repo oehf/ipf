@@ -18,11 +18,10 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
 
 /**
  * Factory for HL7 v3 Web Services.
@@ -40,7 +39,7 @@ public class Hl7v3ServiceFactory extends ItiServiceFactory {
      *          user-defined custom CXF interceptors.
      */
     public Hl7v3ServiceFactory(
-            ItiServiceInfo serviceInfo, 
+            Hl7v3ServiceInfo serviceInfo,
             String serviceAddress,
             InterceptorProvider customInterceptors) 
     {

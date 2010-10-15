@@ -15,14 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xcpd;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
+import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.xcpd.iti56.Iti56Endpoint;
 
 /**
  * Validating processors for IPF XCPD components.
@@ -31,10 +29,14 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
 abstract public class XcpdCamelValidators {
     private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator();
 
-    private static final Processor ITI_55_REQUEST_VALIDATOR  = validatingProcessor("iti-55", true);
-    private static final Processor ITI_55_RESPONSE_VALIDATOR = validatingProcessor("iti-55", false);
-    private static final Processor ITI_56_REQUEST_VALIDATOR  = validatingProcessor("iti-56", true);
-    private static final Processor ITI_56_RESPONSE_VALIDATOR = validatingProcessor("iti-56", false);
+    private static final Processor ITI_55_REQUEST_VALIDATOR =
+            validatingProcessor(Iti55Endpoint.ITI_55, true);
+    private static final Processor ITI_55_RESPONSE_VALIDATOR =
+            validatingProcessor(Iti55Endpoint.ITI_55, false);
+    private static final Processor ITI_56_REQUEST_VALIDATOR  =
+            validatingProcessor(Iti56Endpoint.ITI_56, true);
+    private static final Processor ITI_56_RESPONSE_VALIDATOR =
+            validatingProcessor(Iti56Endpoint.ITI_56, false);
 
 
     /**
@@ -70,20 +72,27 @@ abstract public class XcpdCamelValidators {
     }
     
     
-    private static Processor validatingProcessor(final String transaction, final boolean request) {
+    private static Processor validatingProcessor(
+            final Hl7v3ServiceInfo serviceInfo,
+            final boolean request)
+    {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidation(exchange, transaction, request);
+                doValidation(exchange, serviceInfo, request);
             }
         };
     }
 
-    private static void doValidation(Exchange exchange, String transaction, boolean request) {
+    private static void doValidation(
+            Exchange exchange,
+            Hl7v3ServiceInfo serviceInfo,
+            boolean request)
+    {
         String message = exchange.getIn().getBody(String.class);
-        Map<String, Collection<List<String>>> profilesCollection =  
-            request ? Hl7v3ValidationProfiles.getREQUEST_TYPES()  
-                    : Hl7v3ValidationProfiles.getRESPONSE_TYPES();
-        VALIDATOR.validate(message, profilesCollection.get(transaction));
+        String[][] profiles = request ?
+                serviceInfo.getRequestValidationProfiles() :
+                serviceInfo.getResponseValidationProfiles();
+        VALIDATOR.validate(message, profiles);
     }
 }

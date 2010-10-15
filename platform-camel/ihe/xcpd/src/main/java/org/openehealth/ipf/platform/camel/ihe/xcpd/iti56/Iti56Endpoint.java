@@ -25,9 +25,9 @@ import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdClientFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdServiceFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56ClientAuditStrategy;
@@ -42,14 +42,15 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  */
 public class Iti56Endpoint extends DefaultItiEndpoint {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    private final static ItiServiceInfo ITI_56 = new ItiServiceInfo(
+    public final static Hl7v3ServiceInfo ITI_56 = new Hl7v3ServiceInfo(
             new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
             Iti56PortType.class,
             new QName(NS_URI, "RespondingGateway_Binding_Soap12", "xcpd"),
             false,
             "wsdl/iti56/iti56-raw.wsdl",
-            true,
-            false);
+            new String[][] {new String[] {"PatientLocationQueryRequest", null, "IHE/XCPD_PLQ"}},
+            new String[][] {new String[] {"PatientLocationQueryResponse", null, "IHE/XCPD_PLQ"}}
+    );
 
     /**
      * Constructs the endpoint.

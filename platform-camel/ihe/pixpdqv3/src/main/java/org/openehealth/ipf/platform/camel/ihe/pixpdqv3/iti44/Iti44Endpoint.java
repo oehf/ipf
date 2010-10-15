@@ -24,11 +24,11 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44PixPortType;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44XdsPortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -39,25 +39,35 @@ import javax.xml.namespace.QName;
  * The Camel endpoint for the ITI-44 transaction.
  */
 public class Iti44Endpoint extends DefaultItiEndpoint {
+    private static final String[][] REQUEST_VALIDATION_PROFILES = new String[][] {
+            new String[] {"PRPA_IN201301UV02", null},
+            new String[] {"PRPA_IN201301UV02", null},
+            new String[] {"PRPA_IN201301UV02", null}
+    };
+
+    private static final String[][] RESPONSE_VALIDATION_PROFILES = new String[][] {
+            new String[] {"MCCI_IN000002UV01", null}
+    };
+
     private static final String NS_URI_PIX = "urn:ihe:iti:pixv3:2007";
-    private static final ItiServiceInfo ITI_44_PIX = new ItiServiceInfo(
+    public static final Hl7v3ServiceInfo ITI_44_PIX = new Hl7v3ServiceInfo(
             new QName(NS_URI_PIX, "PIXManager_Service", "ihe"),
             Iti44PixPortType.class,
             new QName(NS_URI_PIX, "PIXManager_Binding_Soap12", "ihe"),
             false,
             "wsdl/iti44/iti44-pix-raw.wsdl",
-            true,
-            false);
+            REQUEST_VALIDATION_PROFILES,
+            RESPONSE_VALIDATION_PROFILES);
 
     private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
-    private final static ItiServiceInfo ITI_44_XDS = new ItiServiceInfo(
+    public final static Hl7v3ServiceInfo ITI_44_XDS = new Hl7v3ServiceInfo(
             new QName(NS_URI_XDS, "DocumentRegistry_Service", "ihe"),
             Iti44XdsPortType.class,
             new QName(NS_URI_XDS, "DocumentRegistry_Binding_Soap12", "ihe"),
             false,
             "wsdl/iti44/iti44-xds-raw.wsdl",
-            true,
-            false);
+            REQUEST_VALIDATION_PROFILES,
+            RESPONSE_VALIDATION_PROFILES);
 
     private final boolean isPix;
 

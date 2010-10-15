@@ -32,6 +32,15 @@
             <artifactId>commons-ihe-hl7v3</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-hl7v3</artifactId>
+            <version>${project.version}</version>
+	        <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
     </dependencies>
 
 </project>

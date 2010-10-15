@@ -27,7 +27,7 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- Dependencies for main -->
+        <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-mllp</artifactId>

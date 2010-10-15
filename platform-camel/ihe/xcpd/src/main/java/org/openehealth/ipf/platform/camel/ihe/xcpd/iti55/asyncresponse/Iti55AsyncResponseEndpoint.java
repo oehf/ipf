@@ -25,6 +25,7 @@ import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAsyncResponseServiceFactory;
@@ -39,14 +40,14 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  */
 public class Iti55AsyncResponseEndpoint extends DefaultItiEndpoint {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    private final static ItiServiceInfo ITI_55_ASYNC_RESPONSE = new ItiServiceInfo(
+    private final static Hl7v3ServiceInfo ITI_55_ASYNC_RESPONSE = new Hl7v3ServiceInfo(
             new QName(NS_URI, "RespondingGateway_Response_Service", "xcpd"),
             Iti55AsyncResponsePortType.class,
             new QName(NS_URI, "RespondingGateway_Response_Binding_Soap12", "xcpd"),
             false,
             "wsdl/iti55/iti55-asyncresponse-raw.wsdl",
-            true,
-            false);
+            null,
+            null);
 
     /**
      * Constructs the endpoint.

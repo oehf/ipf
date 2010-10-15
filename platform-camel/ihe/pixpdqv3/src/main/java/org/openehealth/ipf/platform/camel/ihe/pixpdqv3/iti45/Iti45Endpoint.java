@@ -25,10 +25,10 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti45.Iti45PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -38,14 +38,14 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  */
 public class Iti45Endpoint extends DefaultItiEndpoint {
     private static final String NS_URI = "urn:ihe:iti:pixv3:2007";
-    private static final ItiServiceInfo ITI_45 = new ItiServiceInfo(
+    public static final Hl7v3ServiceInfo ITI_45 = new Hl7v3ServiceInfo(
             new QName(NS_URI, "PIXManager_Service", "ihe"),
             Iti45PortType.class,
             new QName(NS_URI, "PIXManager_Binding_Soap12", "ihe"),
             false,
             "wsdl/iti45/iti45-raw.wsdl",
-            false,
-            false);
+            new String[][] {new String[] {"PRPA_IN201309UV02", null}},
+            new String[][] {new String[] {"PRPA_IN201310UV02", null}} );
 
     /**
      * Constructs the endpoint.

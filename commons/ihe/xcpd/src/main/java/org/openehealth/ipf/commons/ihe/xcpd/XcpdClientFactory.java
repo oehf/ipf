@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xcpd;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
@@ -47,7 +47,7 @@ public class XcpdClientFactory extends Hl7v3ClientFactory {
      *          user-defined custom CXF interceptors.
      */
     public XcpdClientFactory(
-            ItiServiceInfo serviceInfo, 
+            Hl7v3ServiceInfo serviceInfo,
             WsAuditStrategy auditStrategy, 
             String serviceAddress,
             AsynchronyCorrelator correlator,
