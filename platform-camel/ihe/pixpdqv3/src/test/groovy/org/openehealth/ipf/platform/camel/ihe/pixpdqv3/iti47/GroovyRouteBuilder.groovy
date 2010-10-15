@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.apache.commons.io.IOUtils
 
 /**
  * @author Dmytro Rud
@@ -24,10 +25,20 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
-        from('pdqv3-iti47:pdqv3-iti47-service1')
+
+        from('pdqv3-iti47:pdqv3-iti47-service1' +
+             '?supportContinuation=true' +
+             '&defaultContinuationThreshold=1' +
+             '&continuationStorage=#continuationStorage')
+
             .process { 
-                Exchanges.resultMessage(it).body = '<response from="PDSupplier"/>'
+                Exchanges.resultMessage(it).body = IOUtils.toString(
+                        GroovyRouteBuilder.class.classLoader.getResourceAsStream('iti47/02_PDQQuery1Response.xml'))
             }
 
+        from('pdqv3-iti47:pdqv3-iti47-service2')
+            .process {
+                Exchanges.resultMessage(it).body = '<response from="PDSupplier"/>'
+            }
     }
 }

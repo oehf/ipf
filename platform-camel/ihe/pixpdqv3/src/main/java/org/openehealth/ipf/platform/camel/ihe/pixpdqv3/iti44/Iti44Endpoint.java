@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 the original author or authors.
+ * Copyright 2009 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.pcc1;
+package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
 
+import org.apache.camel.Component;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -23,31 +24,43 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.pcc1.Pcc1PortType;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44PixPortType;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44XdsPortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3ContinuationAwareProducer;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 import javax.xml.namespace.QName;
 
 /**
- * Camel endpoint for the PCC-1 transaction.
- * @author Dmytro Rud
+ * The Camel endpoint for the ITI-44 transaction.
  */
-public class Pcc1Endpoint extends Hl7v3Endpoint {
-    private final static String NS_URI = "urn:ihe:pcc:qed:2007";
-    private final static ItiServiceInfo PCC_1 = new ItiServiceInfo(
-            new QName(NS_URI, "ClinicalDataSource_Service", "qed"),
-            Pcc1PortType.class,
-            new QName(NS_URI, "ClinicalDataSource_Binding_Soap12", "qed"),
+public class Iti44Endpoint extends DefaultItiEndpoint {
+    private static final String NS_URI_PIX = "urn:ihe:iti:pixv3:2007";
+    private static final ItiServiceInfo ITI_44_PIX = new ItiServiceInfo(
+            new QName(NS_URI_PIX, "PIXManager_Service", "ihe"),
+            Iti44PixPortType.class,
+            new QName(NS_URI_PIX, "PIXManager_Binding_Soap12", "ihe"),
             false,
-            "wsdl/pcc1/pcc1-raw.wsdl",
+            "wsdl/iti44/iti44-pix-raw.wsdl",
             true,
             false);
+
+    private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
+    private final static ItiServiceInfo ITI_44_XDS = new ItiServiceInfo(
+            new QName(NS_URI_XDS, "DocumentRegistry_Service", "ihe"),
+            Iti44XdsPortType.class,
+            new QName(NS_URI_XDS, "DocumentRegistry_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti44/iti44-xds-raw.wsdl",
+            true,
+            false);
+
+    private final boolean isPix;
+
 
     /**
      * Constructs the endpoint.
@@ -55,47 +68,38 @@ public class Pcc1Endpoint extends Hl7v3Endpoint {
      *          the endpoint URI.
      * @param address
      *          the endpoint address from the URI.
-     * @param iti47Component
+     * @param component
      *          the component creating this endpoint.
+     * @param customInterceptors 
      */
-    public Pcc1Endpoint(
+    public Iti44Endpoint(
+            boolean isPix,
             String endpointUri, 
             String address, 
-            Pcc1Component iti47Component,
+            Component component,
             InterceptorProvider customInterceptors) 
     {
-        super(endpointUri, address, iti47Component, customInterceptors);
+        super(endpointUri, address, component, customInterceptors);
+        this.isPix = isPix;
     }
 
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new Hl7v3ClientFactory(
-                PCC_1, 
+                isPix ? ITI_44_PIX : ITI_44_XDS,
                 getServiceUrl(), 
                 getCustomInterceptors());
-        return new Hl7v3ContinuationAwareProducer(
-                this,
-                clientFactory,
-                isSupportContinuation(),
-                isAutoCancel(),
-                "QUPC_IN043100UV01",
-                "QUPC_IN043200UV01");
+        return new Iti44Producer(this, clientFactory);
     }
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
-                PCC_1, 
+                isPix ? ITI_44_PIX : ITI_44_XDS,
                 getServiceAddress(),
                 getCustomInterceptors());
-
-        Pcc1PortType portTypeImpl = isSupportContinuation() ?
-                new Pcc1ContinuationAwareService(
-                        getContinuationStorage(),
-                        getDefaultContinuationThreshold()) :
-                new Pcc1Service();
-
-        ServerFactoryBean serverFactory = serviceFactory.createServerFactory(portTypeImpl);
+        ServerFactoryBean serverFactory =
+            serviceFactory.createServerFactory(Iti44Service.class);
         Server server = serverFactory.create();
         DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
         return new DefaultItiConsumer(this, processor, service, server);

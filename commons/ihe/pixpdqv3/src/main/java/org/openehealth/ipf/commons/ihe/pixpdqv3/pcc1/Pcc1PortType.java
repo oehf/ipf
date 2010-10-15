@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.pcc1;
 
+import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3ContinuationsPortType;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -29,28 +31,31 @@ import javax.xml.ws.Action;
  */
 @WebService(targetNamespace = "urn:ihe:pcc:qed:2007", name = "ClinicalDataSource_PortType")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
-public interface Pcc1PortType {
+public interface Pcc1PortType extends Hl7v3ContinuationsPortType {
     
     @Action(input = "urn:hl7-org:v3:QUPC_IN043100UV01",
             output = "urn:hl7-org:v3:QUPC_IN043200UV01")
-    @WebMethod(operationName = "ClinicalDataSource_QUPC_IN043100UV01")
-    public String clinicalDataSourceQUPCIN043100UV01(
+    @WebMethod(operationName = "ClinicalDataSource_QUPC_IN043100UV01",
+               action = "urn:hl7-org:v3:QUPC_IN043100UV01")
+    String operation(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:pcc:qed:2007")
         String request
     );
 
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue",
             output = "urn:hl7-org:v3:QUPC_IN043200UV01")
-    @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Continue")
-    public String clinicalDataSourceQUQIIN000003UV01Continue(
+    @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Continue",
+               action = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue")
+    String continuation(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:pcc:qed:2007")
         String request
     );
 
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel",
             output = "urn:hl7-org:v3:MCCI_IN000002UV01")
-    @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Cancel")
-    public String clinicalDataSourceQUQIIN000003UV01Cancel(
+    @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Cancel",
+               action = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel")
+    String cancel(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:pcc:qed:2007")
         String request
     );

@@ -27,59 +27,80 @@ import static org.openehealth.ipf.commons.xml.XmlYielder.*
  */
 class Hl7v3NakFactory {
 
-    String targetMessageIdRoot = '1.2.3'
+    static String nakMessageIdRoot = '1.2.3'
 
     /**
      * Creates a HL7 v3 NAK message as XML String.
      * 
-     * @param originalMessage
+     * @param originalMessageString
      *      original request message as XML String.
      * @param t
      *      the occurred exception.
-     * @param targetRootElementName
+     * @param nakRootElementName
      *      root element name of the target NAK message, for example, 
      *      'MCCI_IN000002UV01' or 'PRPA_IN201306UV02'.
      * @param needControlActProcess
      *      whether a <tt>controlAckProcess</tt> element should be created in the NAK.
-     * @param targetMessageIdRoot
-     *      <tt>root</tt> attribute of the NAK's <tt>id</tt> element.
-     *      Per default, equals to '1.2.3'.
      * @return
      */
     static String createNak(
-            String originalMessage, 
+            String originalMessageString,
             Throwable t,
-            String targetRootElementName,
+            String nakRootElementName,
             boolean needControlActProcess)
     {
         GPathResult xml
         try {
-            xml = slurp(originalMessage)
+            xml = slurp(originalMessageString)
         } catch (Exception e) {
             xml = slurp('<dummy/>')
         }
-        
+
+        return createNak(xml, t, nakMessageIdRoot, needControlActProcess)
+    }
+
+
+    /**
+     * Creates a HL7 v3 NAK message as XML String.
+     *
+     * @param originalMessage
+     *      original request message as parsed XML.
+     * @param t
+     *      the occurred exception.
+     * @param nakRootElementName
+     *      root element name of the target NAK message, for example,
+     *      'MCCI_IN000002UV01' or 'PRPA_IN201306UV02'.
+     * @param needControlActProcess
+     *      whether a <tt>controlAckProcess</tt> element should be created in the NAK.
+     * @return
+     */
+    static String createNak(
+        GPathResult originalMessage,
+        Throwable t,
+        String nakRootElementName,
+        boolean needControlActProcess)
+    {
         OutputStream output = new ByteArrayOutputStream()
         MarkupBuilder builder = getBuilder(output)
-        
-        builder."${targetRootElementName}"(
+
+        builder."${nakRootElementName}"(
             'ITSVersion' : 'XML_1.0',
             'xmlns'      : HL7V3_NSURI,
             'xmlns:xsi'  : 'http://www.w3.org/2001/XMLSchema-instance',
-            'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') 
+            'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema')
         {
-            buildInstanceIdentifier(builder, 'id', false, targetMessageIdRoot, UUID.randomUUID().toString())
-            creationTime(value: hl7timestamp())      
+            buildInstanceIdentifier(builder, 'id', false, nakMessageIdRoot, UUID.randomUUID().toString())
+            creationTime(value: hl7timestamp())
             interactionId(root: '2.16.840.1.113883.1.6', extension: 'MCCI_IN000002UV01')
             processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
-            buildReceiverAndSender(builder, xml, HL7V3_NSURI)
-            
+            buildReceiverAndSender(builder, originalMessage, HL7V3_NSURI)
+
             acknowledgement {
                 typeCode(code: 'AE')
                 targetMessage {
-                    def quid = xml.id
+                    def quid = originalMessage.id
                     buildInstanceIdentifier(builder, 'id', false, quid.@root.text(), quid.@extension.text())
                 }
                 acknowledgementDetail(typeCode: 'E') {
@@ -87,10 +108,10 @@ class Hl7v3NakFactory {
                     text(t.getMessage())
                 }
             }
-            
+
             if (needControlActProcess) {
                 controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
-                    def qbp = xml.controlActProcess.queryByParameter
+                    def qbp = originalMessage.controlActProcess.queryByParameter
                     queryAck {
                         yieldElement(qbp.queryId, builder, HL7V3_NSURI)
                         queryResponseCode(code: 'AE')

@@ -16,30 +16,30 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.pcc1;
 
 import org.openehealth.ipf.commons.ihe.pixpdqv3.pcc1.Pcc1PortType;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHl7v3WebService;
 
 /**
  * Service implementation for the IHE PCC-1 transaction (QED).
  * @author Dmytro Rud
  */
-public class Pcc1Service extends DefaultPixPdqV3WebService implements Pcc1PortType {
+public class Pcc1Service extends DefaultHl7v3WebService implements Pcc1PortType {
 
     public Pcc1Service() {
         super("QUPC_IN043200UV01", true);
     }
 
     @Override
-    public String clinicalDataSourceQUPCIN043100UV01(String request) {
+    public String operation(String request) {
         return doProcess(request);
     }
 
     @Override
-    public String clinicalDataSourceQUQIIN000003UV01Continue(String request) {
+    public String continuation(String request) {
         return doProcess(request);
     }
 
     @Override
-    public String clinicalDataSourceQUQIIN000003UV01Cancel(String request) {
+    public String cancel(String request) {
         return doProcess(request);
     }
 }

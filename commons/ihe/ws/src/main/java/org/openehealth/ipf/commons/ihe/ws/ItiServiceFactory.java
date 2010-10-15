@@ -91,18 +91,24 @@ public class ItiServiceFactory {
      */
     public ServerFactoryBean createServerFactory(Class<?> serviceImplClass) {
         try {
-            ServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
-            configureService(svrFactory, serviceImplClass.newInstance());
-            configureBinding(svrFactory);
-            configureInterceptors(svrFactory);
-            svrFactory.setStart(false);
-            return svrFactory;
+            return createServerFactory(serviceImplClass.newInstance());
         } catch (InstantiationException e) {
             throw new IllegalStateException(e);
         } catch (IllegalAccessException e) {
             throw new IllegalStateException(e);
         }
     }
+
+
+    public ServerFactoryBean createServerFactory(Object serviceImpl) {
+        ServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
+        configureService(svrFactory, serviceImpl);
+        configureBinding(svrFactory);
+        configureInterceptors(svrFactory);
+        svrFactory.setStart(false);
+        return svrFactory;
+    }
+
 
     private void configureService(ServerFactoryBean svrFactory, Object service) {
         svrFactory.setServiceClass(serviceInfo.getServiceClass());

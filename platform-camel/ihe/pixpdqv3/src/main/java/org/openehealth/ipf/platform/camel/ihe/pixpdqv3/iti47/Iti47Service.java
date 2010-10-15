@@ -16,30 +16,30 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47;
 
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti47.Iti47PortType;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHl7v3WebService;
 
 /**
  * Service implementation for the IHE ITI-47 transaction (PDQ v3).
  * @author Dmytro Rud
  */
-public class Iti47Service extends DefaultPixPdqV3WebService implements Iti47PortType {
+public class Iti47Service extends DefaultHl7v3WebService implements Iti47PortType {
 
     public Iti47Service() {
         super("PRPA_IN201306UV02", true);
     }
 
     @Override
-    public String pdSupplierPRPAIN201305UV02(String body) {
+    public String operation(String body) {
         return doProcess(body);
     }
 
     @Override
-    public String pdSupplierQUQIIN000003UV01Cancel(String body) {
+    public String continuation(String body) {
         return doProcess(body);
     }
 
     @Override
-    public String pdSupplierQUQIIN000003UV01Continue(String body) {
+    public String cancel(String body) {
         return doProcess(body);
     }
 }

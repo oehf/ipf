@@ -17,45 +17,30 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
 
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44PixPortType;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44XdsPortType;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultPixPdqV3WebService;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHl7v3WebService;
 
 /**
  * Generic service class for the IHE ITI-44 transaction.
  * @author Dmytro Rud
  */
-public class Iti44Service extends DefaultPixPdqV3WebService implements Iti44XdsPortType, Iti44PixPortType {
+public class Iti44Service extends DefaultHl7v3WebService implements Iti44XdsPortType, Iti44PixPortType {
 
     public Iti44Service() {
         super("MCCI_IN000002UV01", false);
     }
 
     @Override
-    public String documentRegistryPRPAIN201301UV02(String body) {
+    public String recordAdded(String body) {
         return doProcess(body);
     }
 
     @Override
-    public String documentRegistryPRPAIN201302UV02(String body) {
+    public String recordRevised(String body) {
         return doProcess(body);
     }
 
     @Override
-    public String documentRegistryPRPAIN201304UV02(String body) {
-        return doProcess(body);
-    }
-
-    @Override
-    public String pixManagerPRPAIN201301UV02(String body) {
-        return doProcess(body);
-    }
-
-    @Override
-    public String pixManagerPRPAIN201302UV02(String body) {
-        return doProcess(body);
-    }
-
-    @Override
-    public String pixManagerPRPAIN201304UV02(String body) {
+    public String duplicatesResolved(String body) {
         return doProcess(body);
     }
 }

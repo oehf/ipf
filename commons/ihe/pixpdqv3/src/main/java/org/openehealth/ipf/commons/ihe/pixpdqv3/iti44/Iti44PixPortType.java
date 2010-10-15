@@ -23,33 +23,33 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.Action;
 
 /**
- * ITI-44 port type for PIX.
+ * ITI-44 port type for PIX Feed.
  */
 @WebService(targetNamespace = "urn:ihe:iti:pixv3:2007", name = "PIXManager_PortType")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-public interface Iti44PixPortType {
+public interface Iti44PixPortType extends GenericIti44PortType {
 
-    @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "body")
+    @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201301UV02", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
-    @WebMethod(operationName = "PIXManager_PRPA_IN201301UV02")
-    public String pixManagerPRPAIN201301UV02(
-        @WebParam(partName = "body", name = "PRPA_IN201301UV02", targetNamespace = "urn:hl7-org:v3")
-        String body
+    @WebMethod(operationName = "PIXManager_PRPA_IN201301UV02", action = "urn:hl7-org:v3:PRPA_IN201301UV02")
+    String recordAdded(
+        @WebParam(partName = "Body", name = "PRPA_IN201301UV02", targetNamespace = "urn:hl7-org:v3")
+        String request
     );
 
-    @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "body")
+    @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201302UV02", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
-    @WebMethod(operationName = "PIXManager_PRPA_IN201302UV02")
-    public String pixManagerPRPAIN201302UV02(
-        @WebParam(partName = "body", name = "PRPA_IN201302UV02", targetNamespace = "urn:hl7-org:v3")
-        String body
+    @WebMethod(operationName = "PIXManager_PRPA_IN201302UV02", action = "urn:hl7-org:v3:PRPA_IN201302UV02")
+    String recordRevised(
+        @WebParam(partName = "Body", name = "PRPA_IN201302UV02", targetNamespace = "urn:hl7-org:v3")
+        String request
     );
 
-    @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "body")
+    @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201304UV02", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
-    @WebMethod(operationName = "PIXManager_PRPA_IN201304UV02")
-    public String pixManagerPRPAIN201304UV02(
-        @WebParam(partName = "body", name = "PRPA_IN201304UV02", targetNamespace = "urn:hl7-org:v3")
-        String body
+    @WebMethod(operationName = "PIXManager_PRPA_IN201304UV02", action = "urn:hl7-org:v3:PRPA_IN201304UV02")
+    String duplicatesResolved(
+        @WebParam(partName = "Body", name = "PRPA_IN201304UV02", targetNamespace = "urn:hl7-org:v3")
+        String request
     );
 }

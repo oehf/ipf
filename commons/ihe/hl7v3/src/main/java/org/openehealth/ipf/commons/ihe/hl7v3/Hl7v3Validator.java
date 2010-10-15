@@ -15,33 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import java.io.ByteArrayInputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
 import org.openehealth.ipf.commons.xml.SchematronValidator;
 import org.openehealth.ipf.commons.xml.XsdValidator;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * XSD- and Schematron-based validator for HL7 v3 messages.
  * @author Dmytro Rud
  */
 public class Hl7v3Validator implements Validator<String, Collection<List<String>>> {
-
-    private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
-        "(?:\\s*<\\!--.*?-->)*"                             +  // optional comments before prolog (are they allowed?)
-        "(?:\\s*<\\?xml.+?\\?>(?:\\s*<\\!--.*?-->)*)?"      +  // optional prolog and comments after it 
-        "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))"    // open tag of the root element
-    );
 
     private static final String HL7V3_SCHEMAS_PATH = "HL7V3/NE2008/multicacheschemas/";
     
@@ -75,14 +67,8 @@ public class Hl7v3Validator implements Validator<String, Collection<List<String>
         Validate.notNull(message, "message");
         Validate.notEmpty(profiles, "list of profiles");
 
-        // determine the name of the message's root element
-        Matcher matcher = ROOT_ELEMENT_PATTERN.matcher(message);
-        if(( ! matcher.find()) || (matcher.start() != 0)) {
-            throw new ValidationException("Cannot extract root element, probably bad XML");
-        }
-
         // check whether the root element name is valid
-        String rootElementName = matcher.group(1);
+        String rootElementName = SoapUtils.getRootElementLocalName(message);
         List<String> profile = null;
         for (List<String> list : profiles) {
             if (list.get(0).equals(rootElementName)) {
@@ -90,7 +76,7 @@ public class Hl7v3Validator implements Validator<String, Collection<List<String>
                 break;
             }
         }
-        if(profile == null) {
+        if (profile == null) {
             throw new ValidationException("Invalid root element '" + rootElementName + "'");
         }
 

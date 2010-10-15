@@ -29,14 +29,15 @@ import org.openehealth.ipf.commons.ihe.pixpdqv3.iti47.Iti47PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3ContinuationAwareProducer;
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
  * The Camel endpoint for the ITI-47 transaction.
  */
-public class Iti47Endpoint extends DefaultItiEndpoint {
+public class Iti47Endpoint extends Hl7v3Endpoint {
     private final static String NS_URI = "urn:ihe:iti:pdqv3:2007";
     private final static ItiServiceInfo ITI_47 = new ItiServiceInfo(
             new QName(NS_URI, "PDSupplier_Service", "ihe"),
@@ -44,7 +45,7 @@ public class Iti47Endpoint extends DefaultItiEndpoint {
             new QName(NS_URI, "PDSupplier_Binding_Soap12", "ihe"),
             false,
             "wsdl/iti47/iti47-raw.wsdl",
-            false,
+            true,
             false);
 
     /**
@@ -71,7 +72,13 @@ public class Iti47Endpoint extends DefaultItiEndpoint {
                 ITI_47, 
                 getServiceUrl(), 
                 getCustomInterceptors());
-        return new Iti47Producer(this, clientFactory);
+        return new Hl7v3ContinuationAwareProducer(
+                this,
+                clientFactory,
+                isSupportContinuation(),
+                isAutoCancel(),
+                "PRPA_IN201305UV02",
+                "PRPA_IN201306UV02");
     }
 
     @Override
@@ -80,8 +87,14 @@ public class Iti47Endpoint extends DefaultItiEndpoint {
                 ITI_47, 
                 getServiceAddress(),
                 getCustomInterceptors());
-        ServerFactoryBean serverFactory =
-            serviceFactory.createServerFactory(Iti47Service.class);
+
+        Iti47PortType portTypeImpl = isSupportContinuation() ?
+                new Iti47ContinuationAwareService(
+                        getContinuationStorage(),
+                        getDefaultContinuationThreshold()) :
+                new Iti47Service();
+
+        ServerFactoryBean serverFactory = serviceFactory.createServerFactory(portTypeImpl);
         Server server = serverFactory.create();
         DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
         return new DefaultItiConsumer(this, processor, service, server);

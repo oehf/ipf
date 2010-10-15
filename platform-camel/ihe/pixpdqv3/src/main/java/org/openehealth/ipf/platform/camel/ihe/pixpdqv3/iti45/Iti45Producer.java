@@ -36,6 +36,6 @@ public class Iti45Producer extends DefaultItiProducer<String, String> {
 
     @Override
     protected String callService(Object client, String body) {
-        return ((Iti45PortType) client).pixManagerPRPAIN201309UV02(body);
+        return ((Iti45PortType) client).getIdentifiers(body);
     }
 }

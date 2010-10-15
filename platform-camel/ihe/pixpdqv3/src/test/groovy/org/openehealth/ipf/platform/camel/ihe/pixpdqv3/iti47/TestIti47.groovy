@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47
 
-import static org.junit.Assert.*
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.junit.Before
-import org.junit.Test
-import org.junit.BeforeClass
+import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
-
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor;
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import static org.junit.Assert.assertEquals
+import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.EhcacheHl7v3ContinuationStorage
 
 /**
  * Tests for ITI-47.
@@ -31,23 +31,56 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
  */
 class TestIti47 extends StandardTestContainer {
 
-     def SERVICE1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service1" +
-                    "?inInterceptors=#customInterceptorA, #customInterceptorB" +
-                    "&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC";
+    def SERVICE1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service1" +
+                   '?supportContinuation=true' +
+                   '&autoCancel=true'
 
-     @BeforeClass
-     static void setUpClass() {
-         startServer(new CXFServlet(), 'iti-47.xml')
-     }
-    
-     @Test
-     void testIti47() {
-         def response = send(SERVICE1, '<request/>', String.class)
-         def slurper = new XmlSlurper().parseText(response)
-         assert slurper.@from == 'PDSupplier'
-             
-         assert CustomInterceptor['a'] == 2
-         assert CustomInterceptor['b'] == 1
-         assert CustomInterceptor['c'] == 1
-     }
+    def SERVICE2 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service2" +
+                   '?inInterceptors=#customInterceptorA, #customInterceptorB' +
+                   '&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC'
+
+
+    @BeforeClass
+    static void setUpClass() {
+        startServer(new CXFServlet(), 'iti-47.xml')
+    }
+
+
+    @Test
+    void testContinuations() {
+        def request = IOUtils.toString(TestIti47.class.classLoader.getResourceAsStream('iti47/01_PDQQuery1.xml'))
+        String responseString = send(SERVICE1, request, String.class)
+
+        def response = Hl7v3Utils.slurp(responseString)
+        assertEquals('7', response.controlActProcess.queryAck.resultTotalQuantity.@value.text())
+        assertEquals('7', response.controlActProcess.queryAck.resultCurrentQuantity.@value.text())
+        assertEquals('0', response.controlActProcess.queryAck.resultRemainingQuantity.@value.text())
+
+        int subjectCount = 0
+        for (subject in response.controlActProcess.subject) {
+            ++subjectCount
+            assertEquals(subjectCount.toString(), subject.registrationEvent.subject1.patient.id.@extension.text())
+        }
+        assertEquals(7, subjectCount)
+
+        // check whether cancel message has had effect
+        EhcacheHl7v3ContinuationStorage storage = appContext.getBean('continuationStorage')
+        assertEquals(0, storage.ehcache.size)
+
+        println responseString
+    }
+
+
+    @Test
+    void testCustomInterceptors() {
+        def response = send(SERVICE2, '<PRPA_IN201305UV02 />', String.class)
+        def slurper = new XmlSlurper().parseText(response)
+        assert slurper.@from == 'PDSupplier'
+
+        assert CustomInterceptor['a'] == 2
+        assert CustomInterceptor['b'] == 1
+        assert CustomInterceptor['c'] == 1
+    }
+
+
 }
