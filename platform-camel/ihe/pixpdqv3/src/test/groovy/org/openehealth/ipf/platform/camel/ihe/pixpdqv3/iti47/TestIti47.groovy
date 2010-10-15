@@ -33,7 +33,8 @@ class TestIti47 extends StandardTestContainer {
 
     def SERVICE1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service1" +
                    '?supportContinuation=true' +
-                   '&autoCancel=true'
+                   '&autoCancel=true' +
+                   '&validationOnContinuation=true'
 
     def SERVICE2 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service2" +
                    '?inInterceptors=#customInterceptorA, #customInterceptorB' +

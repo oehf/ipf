@@ -35,7 +35,7 @@
                     <patient classCode="PAT">
                         <id root="1.2.840.114350.1.13.99998.8734" extension="1"/>
                         <statusCode code="active"/>
-                        <patientPerson>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
                             <name>
                                 <given>James</given>
                                 <family>Jones</family>
@@ -92,7 +92,7 @@
                     <patient classCode="PAT">
                         <id root="1.2.840.114350.1.13.99998.8734" extension="2"/>
                         <statusCode code="active"/>
-                        <patientPerson>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
                             <name>
                                 <given>Jim</given>
                                 <family>Jones</family>
@@ -142,7 +142,7 @@
                     <patient classCode="PAT">
                         <id root="1.2.840.114350.1.13.99998.8734" extension="3"/>
                         <statusCode code="active"/>
-                        <patientPerson>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
                             <name>
                                 <given>Jim</given>
                                 <family>Jones</family>
@@ -192,7 +192,7 @@
                     <patient classCode="PAT">
                         <id root="1.2.840.114350.1.13.99998.8734" extension="4"/>
                         <statusCode code="active"/>
-                        <patientPerson>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
                             <name>
                                 <given>Jim</given>
                                 <family>Jones</family>
@@ -242,7 +242,7 @@
                     <patient classCode="PAT">
                         <id root="1.2.840.114350.1.13.99998.8734" extension="5"/>
                         <statusCode code="active"/>
-                        <patientPerson>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
                             <name>
                                 <given>Jim</given>
                                 <family>Jones</family>
@@ -292,7 +292,7 @@
                     <patient classCode="PAT">
                         <id root="1.2.840.114350.1.13.99998.8734" extension="6"/>
                         <statusCode code="active"/>
-                        <patientPerson>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
                             <name>
                                 <given>Jim</given>
                                 <family>Jones</family>
@@ -342,7 +342,7 @@
                     <patient classCode="PAT">
                         <id root="1.2.840.114350.1.13.99998.8734" extension="7"/>
                         <statusCode code="active"/>
-                        <patientPerson>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
                             <name>
                                 <given>Jim</given>
                                 <family>Jones</family>

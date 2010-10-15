@@ -26,6 +26,9 @@ import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3ContinuationUtils.parseInt
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -41,23 +44,26 @@ public class Hl7v3ContinuationAwareWebService
 
     private static final String XSLT_TEMPLATE = 'xslt/hl7v3-continuations-fragmentize.xslt'
     private static final XsltTransmogrifier XSLT_TRANSMOGRIFIER = new XsltTransmogrifier(String.class)
+    private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator()
 
     private final Hl7v3ContinuationStorage storage
     private final int defaultThreshold
+    private final boolean validation
 
     
     public Hl7v3ContinuationAwareWebService(
-            String nakTargetRootElementName,
-            boolean nakNeedControlActProcess,
+            Hl7v3ServiceInfo serviceInfo,
             Hl7v3ContinuationStorage storage,
             int defaultThreshold,
-            String mainResponseRootElementName)
+            String mainResponseRootElementName,
+            boolean validation)
     {
-        super(nakTargetRootElementName, nakNeedControlActProcess);
+        super(serviceInfo);
 
         Validate.notNull(storage)
         this.storage = storage
         this.defaultThreshold = defaultThreshold
+        this.validation = validation
     }
 
 
@@ -65,8 +71,25 @@ public class Hl7v3ContinuationAwareWebService
      * Handles "main operation" requests of the IHE transaction.
      */
     String operation(String requestString) {
+        // validate request
+        if (validation) {
+            try {
+                VALIDATOR.validate(requestString, serviceInfo.getRequestValidationProfiles())
+            } catch (ValidationException e) {
+                LOG.error('operation(): invalid request')
+                return createNak(requestString, e)
+            }
+        }
+
+        // run the route
         final String responseString = doProcess(requestString)
 
+        // validate response -- exception will go to the service route
+        if (validation) {
+            VALIDATOR.validate(responseString, serviceInfo.getResponseValidationProfiles())
+        }
+
+        // process
         GPathResult request = slurp(requestString)
         int threshold = parseInt(request.controlActProcess.queryByParameter.initialQuantity.@value.text())
         if (threshold < 1) {
@@ -100,6 +123,18 @@ public class Hl7v3ContinuationAwareWebService
      * Handles continuation requests.
      */
     String continuation(String requestString) {
+        // validate
+        if (validation) {
+            try {
+                VALIDATOR.validate(requestString, serviceInfo.getRequestValidationProfiles())
+            } catch (ValidationException e) {
+                LOG.error('continuation(): invalid request')
+                def nak = createNak(requestString, e)
+                return nak
+            }
+        }
+
+        // process
         GPathResult request = slurp(requestString)
         String key = getQueryKey(request, true)
         String responseString = storage.getMessage(key)
@@ -140,6 +175,17 @@ public class Hl7v3ContinuationAwareWebService
      * Handles continuation cancel requests.
      */
     String cancel(String requestString) {
+        // validate
+        if (validation) {
+            try {
+                VALIDATOR.validate(requestString, serviceInfo.getRequestValidationProfiles())
+            } catch (ValidationException e) {
+                LOG.error('cancel(): invalid request')
+                return createNak(requestString, e)
+            }
+        }
+
+        // process
         GPathResult request = slurp(requestString)
         String key = getQueryKey(request, true)
         String responseString = storage.getMessage(key)
@@ -195,8 +241,7 @@ public class Hl7v3ContinuationAwareWebService
      */
     private String error(GPathResult request, String message, String key) {
         LOG.warn("${message} ${key}")
-        return Hl7v3NakFactory.createNak(request, new Exception(message),
-                nakRootElementName, nakNeedControlActProcess);
+        return createNak(request, new Exception(message))
     }
 
 

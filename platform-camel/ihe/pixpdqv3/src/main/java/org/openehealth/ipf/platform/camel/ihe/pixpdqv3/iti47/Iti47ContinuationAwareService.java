@@ -32,8 +32,9 @@ public class Iti47ContinuationAwareService
 {
     public Iti47ContinuationAwareService(
             Hl7v3ContinuationStorage storage,
-            int defaultThreshold)
+            int defaultThreshold,
+            boolean validationOnContinuation)
     {
-        super("PRPA_IN201306UV02", true, storage, defaultThreshold, "PRPA_IN201306UV02");
+        super(Iti47Endpoint.ITI_47, storage, defaultThreshold, "PRPA_IN201306UV02", validationOnContinuation);
     }
 }

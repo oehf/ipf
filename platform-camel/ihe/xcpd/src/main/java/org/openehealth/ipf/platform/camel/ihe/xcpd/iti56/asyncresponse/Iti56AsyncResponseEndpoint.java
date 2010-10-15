@@ -47,7 +47,9 @@ public class Iti56AsyncResponseEndpoint extends DefaultItiEndpoint {
             false,
             "wsdl/iti56/iti56-asyncresponse-raw.wsdl",
             null,
-            null);
+            null,
+            null,
+            false);
            
     /**
      * Constructs the endpoint.

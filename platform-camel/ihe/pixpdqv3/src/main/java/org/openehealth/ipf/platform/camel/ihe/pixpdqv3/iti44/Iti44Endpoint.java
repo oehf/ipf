@@ -57,7 +57,9 @@ public class Iti44Endpoint extends DefaultItiEndpoint {
             false,
             "wsdl/iti44/iti44-pix-raw.wsdl",
             REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES);
+            RESPONSE_VALIDATION_PROFILES,
+            "MCCI_IN000002UV01",
+            false);
 
     private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
     public final static Hl7v3ServiceInfo ITI_44_XDS = new Hl7v3ServiceInfo(
@@ -67,7 +69,9 @@ public class Iti44Endpoint extends DefaultItiEndpoint {
             false,
             "wsdl/iti44/iti44-xds-raw.wsdl",
             REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES);
+            RESPONSE_VALIDATION_PROFILES,
+            "MCCI_IN000002UV01",
+            false);
 
     private final boolean isPix;
 

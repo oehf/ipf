@@ -56,7 +56,7 @@ class Hl7v3NakFactory {
             xml = slurp('<dummy/>')
         }
 
-        return createNak(xml, t, nakMessageIdRoot, needControlActProcess)
+        return createNak(xml, t, nakRootElementName, needControlActProcess)
     }
 
 

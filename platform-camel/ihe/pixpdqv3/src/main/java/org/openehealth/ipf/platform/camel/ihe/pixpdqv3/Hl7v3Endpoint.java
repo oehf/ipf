@@ -50,6 +50,13 @@ abstract public class Hl7v3Endpoint extends DefaultItiEndpoint {
      */
     private Hl7v3ContinuationStorage continuationStorage = null;
 
+    /**
+     * Whether the system should validate messages which are internally handled
+     * when performing HL7v3 interactive continuation.
+
+     */
+    private boolean validationOnContinuation = false;
+
 
     public Hl7v3Endpoint(
             String endpointUri,
@@ -115,4 +122,17 @@ abstract public class Hl7v3Endpoint extends DefaultItiEndpoint {
     public void setAutoCancel(boolean autoCancel) {
         this.autoCancel = autoCancel;
     }
+
+    /**
+     * Returns <code>true</code> when messages, which are internally handled
+     * when performing HL7v3 interactive continuation, should be validated.
+     */
+    public boolean isValidationOnContinuation() {
+        return validationOnContinuation;
+    }
+
+    public void setValidationOnContinuation(boolean validationOnContinuation) {
+        this.validationOnContinuation = validationOnContinuation;
+    }
+
 }

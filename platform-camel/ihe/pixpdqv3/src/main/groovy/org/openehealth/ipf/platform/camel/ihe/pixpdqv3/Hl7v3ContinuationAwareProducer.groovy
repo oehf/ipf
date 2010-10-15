@@ -31,6 +31,7 @@ import org.w3c.dom.NodeList
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -46,6 +47,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class);
 
     private static final ThreadLocal<DocumentBuilder> DOM_BUILDERS = new DomBuildersThreadLocal()
+    private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator()
 
     /**
      * Whether continuations should be actually supported by this producer.
@@ -74,6 +76,8 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
      * should be automatically sent after the last fragment has been read.
      */
     private final boolean autoCancel
+
+    private final boolean validationOnContinuation
 
 
     /**
@@ -288,7 +292,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             id(root: initialRequest.id.@root,
                assigningAuthorityName: initialRequest.id.@assigningAuthorityName,
                extension: UUID.randomUUID().toString())
-            creationTimestamp(value: hl7timestamp())
+            creationTime(value: hl7timestamp())
 
             // root attribute: 2.16.840.1.113883.1.6    in PDQv3,
             //                 2.16.840.1.113883.5      in QED
@@ -300,7 +304,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             yieldElement(initialRequest.receiver, builder, HL7V3_NSURI)
             yieldElement(initialRequest.sender, builder, HL7V3_NSURI)
 
-            controlActProcess(classCode: 'CACT', moodCode: 'RQO') {
+            controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
                 code(code: 'QUQI_TE000003UV01')
                 queryContinuation {
                     yieldElement(initialRequest.controlActProcess.queryByParameter.queryId, builder, HL7V3_NSURI)

@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3;
 
+import groovy.util.slurpersupport.GPathResult;
 import org.apache.camel.Exchange;
+import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
@@ -26,19 +29,11 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  */
 public class DefaultHl7v3WebService extends DefaultItiWebService {
 
-    private final String nakRootElementName;
-    private final boolean nakNeedControlActProcess;
-    
-    /**
-     * @param nakRootElementName
-     *      root element name of NAK messages. 
-     * @param nakNeedControlActProcess
-     *      whether the <tt>controlActProcess</tt> element 
-     *      should be generated in NAK messages.
-     */
-    public DefaultHl7v3WebService(String nakRootElementName, boolean nakNeedControlActProcess) {
-        this.nakRootElementName = nakRootElementName;
-        this.nakNeedControlActProcess = nakNeedControlActProcess;
+    private final Hl7v3ServiceInfo serviceInfo;
+
+    public DefaultHl7v3WebService(Hl7v3ServiceInfo serviceInfo) {
+        Validate.notNull(serviceInfo);
+        this.serviceInfo = serviceInfo;
     }
     
     /**
@@ -51,19 +46,32 @@ public class DefaultHl7v3WebService extends DefaultItiWebService {
     protected String doProcess(String request) {
         Exchange result = process(request);
         if(result.getException() != null) {
-            return Hl7v3NakFactory.createNak(request, result.getException(), 
-                    this.nakRootElementName, this.nakNeedControlActProcess);
+            return Hl7v3NakFactory.createNak(request, result.getException(),
+                    serviceInfo.getNakRootElementName(),
+                    serviceInfo.isNakNeedControlActProcess());
         }
         return Exchanges.resultMessage(result).getBody(String.class);
     }
 
-
-    public String getNakRootElementName() {
-        return nakRootElementName;
+    /**
+     * Creates a transaction-specific NAK message.
+     */
+    protected String createNak(String requestString, Throwable t) {
+        return Hl7v3NakFactory.createNak(requestString, t,
+                serviceInfo.getNakRootElementName(),
+                serviceInfo.isNakNeedControlActProcess());
     }
 
-    public boolean isNakNeedControlActProcess() {
-        return nakNeedControlActProcess;
+    /**
+     * Creates a transaction-specific NAK message.
+     */
+    protected String createNak(GPathResult request, Throwable t) {
+        return Hl7v3NakFactory.createNak(request, t,
+                serviceInfo.getNakRootElementName(),
+                serviceInfo.isNakNeedControlActProcess());
     }
 
+    public Hl7v3ServiceInfo getServiceInfo() {
+        return serviceInfo;
+    }
 }

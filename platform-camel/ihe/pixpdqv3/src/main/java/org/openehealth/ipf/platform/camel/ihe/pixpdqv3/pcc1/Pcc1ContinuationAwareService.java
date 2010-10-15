@@ -32,8 +32,9 @@ public class Pcc1ContinuationAwareService
 {
     public Pcc1ContinuationAwareService(
             Hl7v3ContinuationStorage storage,
-            int defaultThreshold)
+            int defaultThreshold,
+            boolean validationOnContinuation)
     {
-        super("QUPC_IN043200UV01", true, storage, defaultThreshold, "QUPC_IN043200UV01");
+        super(Pcc1Endpoint.PCC_1, storage, defaultThreshold, "QUPC_IN043200UV01", validationOnContinuation);
     }
 }

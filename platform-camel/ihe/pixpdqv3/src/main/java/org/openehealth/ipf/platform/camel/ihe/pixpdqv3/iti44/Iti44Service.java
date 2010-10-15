@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHl7v3WebService;
 public class Iti44Service extends DefaultHl7v3WebService implements Iti44XdsPortType, Iti44PixPortType {
 
     public Iti44Service() {
-        super("MCCI_IN000002UV01", false);
+        super(Iti44Endpoint.ITI_44_PIX);
     }
 
     @Override

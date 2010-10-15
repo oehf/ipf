@@ -58,7 +58,9 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
             false,
             "wsdl/iti47/iti47-raw.wsdl",
             REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES);
+            RESPONSE_VALIDATION_PROFILES,
+            "PRPA_IN201306UV02",
+            true);
 
     /**
      * Constructs the endpoint.
@@ -103,7 +105,8 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
         Iti47PortType portTypeImpl = isSupportContinuation() ?
                 new Iti47ContinuationAwareService(
                         getContinuationStorage(),
-                        getDefaultContinuationThreshold()) :
+                        getDefaultContinuationThreshold(),
+                        isValidationOnContinuation()) :
                 new Iti47Service();
 
         ServerFactoryBean serverFactory = serviceFactory.createServerFactory(portTypeImpl);

@@ -45,7 +45,9 @@ public class Iti45Endpoint extends DefaultItiEndpoint {
             false,
             "wsdl/iti45/iti45-raw.wsdl",
             new String[][] {new String[] {"PRPA_IN201309UV02", null}},
-            new String[][] {new String[] {"PRPA_IN201310UV02", null}} );
+            new String[][] {new String[] {"PRPA_IN201310UV02", null}},
+            "PRPA_IN201310UV02",
+            true);
 
     /**
      * Constructs the endpoint.

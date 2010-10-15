@@ -59,7 +59,9 @@ public class Pcc1Endpoint extends Hl7v3Endpoint {
             false,
             "wsdl/pcc1/pcc1-raw.wsdl",
             REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES);
+            RESPONSE_VALIDATION_PROFILES,
+            "QUPC_IN043200UV01",
+            true);
 
     /**
      * Constructs the endpoint.
@@ -104,7 +106,8 @@ public class Pcc1Endpoint extends Hl7v3Endpoint {
         Pcc1PortType portTypeImpl = isSupportContinuation() ?
                 new Pcc1ContinuationAwareService(
                         getContinuationStorage(),
-                        getDefaultContinuationThreshold()) :
+                        getDefaultContinuationThreshold(),
+                        isValidationOnContinuation()) :
                 new Pcc1Service();
 
         ServerFactoryBean serverFactory = serviceFactory.createServerFactory(portTypeImpl);

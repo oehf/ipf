@@ -29,9 +29,9 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
         from('pdqv3-iti47:pdqv3-iti47-service1' +
              '?supportContinuation=true' +
              '&defaultContinuationThreshold=1' +
-             '&continuationStorage=#continuationStorage')
-
-            .process { 
+             '&continuationStorage=#continuationStorage' +
+             '&validationOnContinuation=true')
+            .process {
                 Exchanges.resultMessage(it).body = IOUtils.toString(
                         GroovyRouteBuilder.class.classLoader.getResourceAsStream('iti47/02_PDQQuery1Response.xml'))
             }

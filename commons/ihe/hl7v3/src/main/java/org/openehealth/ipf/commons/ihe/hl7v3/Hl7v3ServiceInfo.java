@@ -29,7 +29,8 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
 
     private final String[][] requestValidationProfiles;
     private final String[][] responseValidationProfiles;
-
+    private final String nakRootElementName;
+    private final boolean nakNeedControlActProcess;
 
     /**
      * Constructs the service info.
@@ -48,6 +49,11 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
      *      validation profiles for request messages.
      * @param responseValidationProfiles
      *      validation profiles for response messages.
+     * @param nakRootElementName
+     *      root element name of automatically generated NAKs.
+     * @param nakNeedControlActProcess
+     *      when {@code true}, the <code>&lt;controlActProcess&gt;</code>
+     *      of the request message will be included into the NAK.
      */
     public Hl7v3ServiceInfo(
             QName serviceName,
@@ -56,13 +62,16 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
             boolean mtom,
             String wsdlLocation,
             String[][] requestValidationProfiles,
-            String[][] responseValidationProfiles
-    )
+            String[][] responseValidationProfiles,
+            String nakRootElementName,
+            boolean nakNeedControlActProcess)
     {
         super(serviceName, serviceClass, bindingName, mtom, wsdlLocation, true, false);
 
         this.requestValidationProfiles = requestValidationProfiles;
         this.responseValidationProfiles = responseValidationProfiles;
+        this.nakRootElementName = nakRootElementName;
+        this.nakNeedControlActProcess = nakNeedControlActProcess;
     }
 
     public String[][] getRequestValidationProfiles() {
@@ -71,6 +80,14 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
 
     public String[][] getResponseValidationProfiles() {
         return responseValidationProfiles;
+    }
+
+    public boolean isNakNeedControlActProcess() {
+        return nakNeedControlActProcess;
+    }
+
+    public String getNakRootElementName() {
+        return nakRootElementName;
     }
 
 }
