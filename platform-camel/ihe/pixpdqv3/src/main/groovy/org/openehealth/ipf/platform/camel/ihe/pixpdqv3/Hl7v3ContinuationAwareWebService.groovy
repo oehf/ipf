@@ -241,7 +241,7 @@ public class Hl7v3ContinuationAwareWebService
             acceptAckCode(code: 'NE')
             buildReceiverAndSender(builder, request, HL7V3_NSURI)
             acknowledgement {
-                typeCode(code: 'CA')
+                typeCode(code: 'AA')
                 targetMessage {
                     buildInstanceIdentifier(builder, 'id', false,
                             request.id.@root.text(),

@@ -292,7 +292,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             //                 2.16.840.1.113883.5      in QED
             interactionId(root: initialRequest.interactionId.@root, extension: 'QUQI_IN000003UV01')
 
-            processingCode(code: 'T')
+            processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'AL')
             yieldElement(initialRequest.receiver, builder, HL7V3_NSURI)
