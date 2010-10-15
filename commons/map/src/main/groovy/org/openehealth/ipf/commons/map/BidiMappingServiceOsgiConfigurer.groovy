@@ -54,7 +54,7 @@ class BidiMappingServiceOsgiConfigurer implements BundleListener {
     }
     
     
-    @Override
+    
     void bundleChanged(BundleEvent event) {
         try {
             Bundle bundle = event.getBundle();
@@ -70,7 +70,6 @@ class BidiMappingServiceOsgiConfigurer implements BundleListener {
     }
     
     
-    @Override
     void initMappings() {
         for (Bundle bundle : context.getBundles()) {
             if (bundle.getState() == Bundle.RESOLVED

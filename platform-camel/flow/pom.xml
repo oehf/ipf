@@ -67,20 +67,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/groovy</directory>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <directory>.</directory>
-                <includes>
-                    <include>META-INF/**/*</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -113,6 +99,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>    
-    
+    </build>
 </project>

@@ -125,7 +125,7 @@ public class SubmitObjectsRequestValidatorTest {
 
     @Test
     public void testUniqueIdTooLong() {
-        request.getFolders().get(0).setUniqueId("12345678901234567890123456789012345678901234567890123456789012345");
+        request.getFolders().get(0).setUniqueId("123456789012345678901234567890123456789012345678901234567890123451234567890123456789012345678901234567890123456789012345678901234");
         expectFailure(UNIQUE_ID_TOO_LONG);
     }
 
@@ -253,6 +253,13 @@ public class SubmitObjectsRequestValidatorTest {
     }
     
     @Test    
+    public void testUniversalIDToo() {
+        EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
+        ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("12");
+        expectFailure(UNIVERSAL_ID_TYPE_MUST_BE_ISO, ebXML);
+    }
+
+    @Test
     public void testHDNeedsUniversalID() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getExternalIdentifiers().get(0).setValue("12^^^&&ISO");

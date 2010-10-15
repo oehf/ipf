@@ -15,19 +15,19 @@
  */
 package org.openehealth.ipf.tutorials.ref.transform
 
-import groovy.xml.Namespaceimport groovy.text.SimpleTemplateEngine
+import groovy.text.SimpleTemplateEngine
 import groovy.text.TemplateEngine
 import groovy.text.Template
 
-import javax.annotation.PostConstruct
 
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
+import org.springframework.beans.factory.InitializingBean 
 import org.springframework.core.io.Resource
 
 /**
  * @author Martin Krasser
  */
-class AnimalOrderTransformer implements Transmogrifier {
+class AnimalOrderTransformer implements Transmogrifier, InitializingBean {
      
     // --------------------------------------------------------
     //  Template setup
@@ -37,7 +37,8 @@ class AnimalOrderTransformer implements Transmogrifier {
     Template template
     Resource templateResource 
     
-    @PostConstruct
+    //@PostConstruct does not compile with stub generation with gmaven
+    //@PostConstruct
     void init() {
         template = engine.createTemplate(templateResource.inputStream.text)
     }
@@ -55,4 +56,7 @@ class AnimalOrderTransformer implements Transmogrifier {
         template.make(binding).toString()
     }
 
+    public void afterPropertiesSet(){
+        init();
+    }
 }

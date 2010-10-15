@@ -65,25 +65,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generateStubs</goal>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <includes>
                         <include>**/TestRouteBuilderJavaTest.*</include>
                         <include>**/TestRouteBuilderGroovyTest.*</include>
-                        <include>**/AnimalOrderTransformerTest.*</include>
+                        <include>**/AnimalOrderTransformerTest.groovy</include>
                     </includes>
                 </configuration>
             </plugin>
@@ -147,7 +134,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <executions>
+                   <execution>
+                        <!-- There is Java to Groovy dependency in the tests  -->
+                        <!-- so generate the test stubs to compile the Java stuff -->
+                        <id>generateTestStubs</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>generateTestStubs</goal>
+                        </goals>
+                    </execution> 
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
 </project>

@@ -18,13 +18,13 @@
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
-		    <groupId>org.openehealth.ipf.commons</groupId>
-		    <artifactId>commons-core</artifactId>
+            <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>commons-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-		    <groupId>org.openehealth.ipf.commons</groupId>
-		    <artifactId>commons-ihe-atna</artifactId>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-atna</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
