@@ -66,8 +66,6 @@ class TestIti47 extends StandardTestContainer {
         // check whether cancel message has had effect
         EhcacheHl7v3ContinuationStorage storage = appContext.getBean('continuationStorage')
         assertEquals(0, storage.ehcache.size)
-
-        println responseString
     }
 
 

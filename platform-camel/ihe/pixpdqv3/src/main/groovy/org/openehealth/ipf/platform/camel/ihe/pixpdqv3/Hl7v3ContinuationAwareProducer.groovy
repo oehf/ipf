@@ -157,10 +157,10 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
         }
 
         // accumulated response and some its elements
-        Document response = null
-        Element responseControlActProcess = null
-        Element responseTail = null
-        Element responseQueryAck = null
+        Document accumulator = null
+        Element accumulatorControlActProcess = null
+        Element accumulatorSubjectsTail = null
+        Element accumulatorQueryAck = null
 
         int fragmentsCount = 0
         int startResultNumber = 1
@@ -175,7 +175,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
                 (getAttribute(queryAck, 'queryResponseCode', 'code') != 'OK'))
             {
                 LOG.debug('Bad response type, continuation not possible')
-                response = null
+                accumulator = null
                 break
             }
 
@@ -185,34 +185,36 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             int remainingQuantity = getIntFromValueAttribute(queryAck, 'resultRemainingQuantity')
             if ((totalQuantity < 0) || (currentQuantity < 0) || (remainingQuantity < 0)) {
                 LOG.debug('Total/current/remaining quantity not specified, continuation not possible')
-                response = null
+                accumulator = null
                 break
             }
 
             ++fragmentsCount
-            if (response == null) {
+            if (accumulator == null) {
                 // check whether the response consists from a single fragment,
                 // i.e. whether aggregation is necessary at all
                 if (remainingQuantity == 0) {
+                    LOG.debug('Response not fragmented, return as is')
                     break
                 }
 
                 // first fragment serves as accumulator
-                response = fragment
-                responseControlActProcess = controlActProcess
-                responseQueryAck = queryAck
+                accumulator = fragment
+                accumulatorControlActProcess = controlActProcess
+                accumulatorQueryAck = queryAck
                 // TODO: transactions other than PDQv3 and QED may need different tail determination logic
-                responseTail = getElementNS(controlActProcess, HL7V3_NSURI_SET, 'reasonOf') ?: responseQueryAck
+                accumulatorSubjectsTail = getElementNS(controlActProcess, HL7V3_NSURI_SET, 'reasonOf') ?: accumulatorQueryAck
             } else {
                 // yield subjects from fragments 2..n into accumulated response
                 NodeList subjects = controlActProcess.getElementsByTagNameNS(HL7V3_NSURI, 'subject')
                 for (int i = 0; i < subjects.length; ++i) {
-                    def subject = response.importNode(subjects.item(i), true)
-                    responseControlActProcess.insertBefore(subject, responseTail)
+                    def subject = accumulator.importNode(subjects.item(i), true)
+                    accumulatorControlActProcess.insertBefore(subject, accumulatorSubjectsTail)
                 }
 
                 // check whether the next fragment should be requested
                 if (remainingQuantity == 0) {
+                    LOG.debug('Processed last fragment')
                     break
                 }
             }
@@ -226,7 +228,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
         }
 
         // finalize aggregation and return the aggregated response
-        if (response != null) {
+        if (accumulator != null) {
             if (autoCancel) {
                 // TODO: cancel on errors as well
                 String cancelRequest = createQuqiRequest(request, true, 0, 0)
@@ -235,19 +237,19 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             }
 
             // counts
-            int totalCount = responseControlActProcess.getElementsByTagNameNS(HL7V3_NSURI, 'subject').length
-            setQueryAckContinuationNumbers(responseQueryAck, 0, totalCount, totalCount)
+            int totalCount = accumulatorControlActProcess.getElementsByTagNameNS(HL7V3_NSURI, 'subject').length
+            setQueryAckContinuationNumbers(accumulatorQueryAck, 0, totalCount, totalCount)
 
             // additional message for the user
-            deleteIpfRelatedAcknowledgementDetails(response)
-            addAcknowledgementDetail(response, new StringBuilder()
+            deleteIpfRelatedAcknowledgementDetails(accumulator)
+            addAcknowledgementDetail(accumulator, new StringBuilder()
                     .append('This message has been created by the IPF by aggregating ')
                     .append(fragmentsCount)
                     .append(' interactive HL7v3 continuation fragments')
                     .toString())
 
             // return
-            return renderDom(response)
+            return renderDom(accumulator)
         }
 
         return fragmentString

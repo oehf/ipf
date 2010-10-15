@@ -105,7 +105,7 @@ public class Hl7v3ContinuationAwareWebService
         String responseString = storage.getMessage(key)
 
         if (! responseString) {
-            return error(request, 'Unknown continuation key', key)
+            return error(request, 'continuation(): Unknown continuation key', key)
         }
 
         def queryContinuation = request.controlActProcess.queryContinuation
@@ -121,7 +121,7 @@ public class Hl7v3ContinuationAwareWebService
         }
 
         if ((startResultNumber < 1) || (continuationQuantity < 1)) {
-            return error(request, 'Bad continuation request', key)
+            return error(request, 'continuation(): Bad continuation request', key)
         }
 
         try {
@@ -131,7 +131,7 @@ public class Hl7v3ContinuationAwareWebService
             storage.storeContinuationQuantity(key, continuationQuantity)
             return result
         } catch (Exception e) {
-            return error(request, 'Bad continuation request', key)
+            return error(request, 'continuation(): Bad continuation request', key)
         }
     }
 
@@ -150,7 +150,7 @@ public class Hl7v3ContinuationAwareWebService
             LOG.debug('cancel(): generated ACK ' + result)
             return result
         } else {
-            return error(request, 'Unknown continuation key', key)
+            return error(request, 'cancel(): Unknown continuation key', key)
         }
     }
 
