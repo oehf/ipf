@@ -32,6 +32,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -49,75 +50,45 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     private static final ThreadLocal<DocumentBuilder> DOM_BUILDERS = new DomBuildersThreadLocal()
     private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator()
 
-    /**
-     * Whether continuations should be actually supported by this producer.
-     */
-    private final boolean supportContinuations
+    private final Hl7v3ContinuationAwareServiceInfo serviceInfo;
 
-    /**
-     * Root element name for the "main" operation's request message.
-     */
-    private final String mainRequestRootElementName
+    private final boolean supportContinuation
+    private final boolean autoCancel
+    private final boolean validationOnContinuation
 
-    /**
-     * Root element name for the "main" operation's response message.
-     */
-    private final String mainResponseRootElementName
-
-    /**
-     * Quantity of data sets to be requested in the continuation
-     * requests when the main one did not specified any quantity.
-     */
     // TODO: make this value configurable
     private final int defaultContinuationQuantity = 10
-
-    /**
-     * When continuation is supported: Whether a "continuation cancel" message
-     * should be automatically sent after the last fragment has been read.
-     */
-    private final boolean autoCancel
-
-    private final boolean validationOnContinuation
 
 
     /**
      * Constructor.
      * @param endpoint
      * @param clientFactory
+     * @param serviceInfo
+     *      parameters of the transaction served by this producer.
      * @param supportContinuation
      *      whether this producer should support HL7v3 continuation.
      * @param autoCancel
      *      whether a "continuation cancel" message should be automatically
      *      sent after the last fragment has been read
      *      (relevant only when continuation support is turned on).
-     * @param mainRequestRootElementName
-     *      root XML element name for request messages which correspond
-     *      to the "main" operation of the transaction,
-     *      e.g. "PRPA_IN201305UV02" for PDQv3
-     *      (relevant only when continuation support is turned on).
-     * @param mainResponseRootElementName
-     *      root XML element name for response messages which correspond
-     *      to the "main" operation of the transaction,
-     *      e.g. "PRPA_IN201306UV02" for PDQv3
-     *      (relevant only when continuation support is turned on).
+     * @param validationOnContinuation
+     *      whether internally handled incoming messages should be validated.
      */
     public Hl7v3ContinuationAwareProducer(
             Hl7v3Endpoint endpoint,
             ItiClientFactory clientFactory,
+            Hl7v3ContinuationAwareServiceInfo serviceInfo,
             boolean supportContinuation,
             boolean autoCancel,
-            String mainRequestRootElementName,
-            String mainResponseRootElementName)
+            boolean validationOnContinuation)
     {
         super(endpoint, clientFactory)
 
-        this.supportContinuations = supportContinuation
+        Validate.notNull(serviceInfo)
+        this.serviceInfo = serviceInfo
+        this.supportContinuation = supportContinuation
         this.autoCancel = autoCancel
-
-        Validate.notEmpty(mainRequestRootElementName)
-        Validate.notEmpty(mainResponseRootElementName)
-        this.mainRequestRootElementName = mainRequestRootElementName
-        this.mainResponseRootElementName = mainResponseRootElementName
     }
 
 
@@ -130,10 +101,10 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
         String request = (String) requestObject
         String rootElementName = getRootElementLocalName(request)
         switch (rootElementName) {
-            case mainRequestRootElementName:
+            case serviceInfo.mainRequestRootElementName:
                 String response = client.operation(request)
-                return supportContinuations ?
-                    processContinuations(client, request, response) :
+                return supportContinuation ?
+                    processContinuation(client, request, response) :
                     response
             case 'QUQI_IN000003UV01':
                 // continuation is supported by the route, not by us
@@ -148,7 +119,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     /**
      * Performs HL7v3 continuation MEP.
      */
-    private String processContinuations(
+    private String processContinuation(
         Hl7v3ContinuationsPortType client,
         String requestString,
         String fragmentString)
@@ -170,12 +141,17 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
         int startResultNumber = 1
 
         while (true) {
+            // validate current fragment 
+            if (validationOnContinuation) {
+                VALIDATOR.validate(fragmentString, serviceInfo.responseValidationProfiles)
+            }
+
             Document fragment = DOM_BUILDERS.get().parse(new ByteArrayInputStream(fragmentString.getBytes()))
             Element controlActProcess = getElementNS(fragment.documentElement, HL7V3_NSURI_SET, 'controlActProcess')
             Element queryAck = getElementNS(controlActProcess, HL7V3_NSURI_SET, 'queryAck')
 
             // check whether the fragment is a valid and positive response
-            if ((fragment.documentElement.localName != mainResponseRootElementName) ||
+            if ((fragment.documentElement.localName != serviceInfo.mainResponseRootElementName) ||
                 (getAttribute(queryAck, 'queryResponseCode', 'code') != 'OK'))
             {
                 LOG.debug('Bad response type, continuation not possible')

@@ -35,6 +35,6 @@ public class Iti47ContinuationAwareService
             int defaultThreshold,
             boolean validationOnContinuation)
     {
-        super(Iti47Endpoint.ITI_47, storage, defaultThreshold, "PRPA_IN201306UV02", validationOnContinuation);
+        super(Iti47Endpoint.ITI_47, storage, defaultThreshold, validationOnContinuation);
     }
 }

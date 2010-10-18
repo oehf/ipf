@@ -55,7 +55,6 @@ public class Hl7v3ContinuationAwareWebService
             Hl7v3ServiceInfo serviceInfo,
             Hl7v3ContinuationStorage storage,
             int defaultThreshold,
-            String mainResponseRootElementName,
             boolean validation)
     {
         super(serviceInfo);

@@ -24,12 +24,12 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti47.Iti47PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3ContinuationAwareProducer;
 import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
@@ -51,7 +51,7 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
     };
 
     private final static String NS_URI = "urn:ihe:iti:pdqv3:2007";
-    public final static Hl7v3ServiceInfo ITI_47 = new Hl7v3ServiceInfo(
+    public final static Hl7v3ContinuationAwareServiceInfo ITI_47 = new Hl7v3ContinuationAwareServiceInfo(
             new QName(NS_URI, "PDSupplier_Service", "ihe"),
             Iti47PortType.class,
             new QName(NS_URI, "PDSupplier_Binding_Soap12", "ihe"),
@@ -60,7 +60,9 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
             REQUEST_VALIDATION_PROFILES,
             RESPONSE_VALIDATION_PROFILES,
             "PRPA_IN201306UV02",
-            true);
+            true,
+            "PRPA_IN201305UV02",
+            "PRPA_IN201306UV02");
 
     /**
      * Constructs the endpoint.
@@ -89,10 +91,10 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
         return new Hl7v3ContinuationAwareProducer(
                 this,
                 clientFactory,
+                ITI_47,
                 isSupportContinuation(),
                 isAutoCancel(),
-                "PRPA_IN201305UV02",
-                "PRPA_IN201306UV02");
+                isValidationOnContinuation());
     }
 
     @Override
