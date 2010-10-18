@@ -15,11 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3
 
-import groovy.util.slurpersupport.GPathResult;
-import groovy.xml.MarkupBuilder;
-
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import static org.openehealth.ipf.commons.xml.XmlYielder.*
+import groovy.util.slurpersupport.GPathResult
+import groovy.xml.MarkupBuilder
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 
 /**
  * Factory class for HL7 v3 NAK messages.
@@ -80,6 +80,38 @@ class Hl7v3NakFactory {
         String nakRootElementName,
         boolean needControlActProcess)
     {
+        String typeCode0 = 'AE'
+        String acknowledgementDetailCode0 = 'INTERR'
+        String queryResponseCode0 = 'AE'
+        String statusCode0
+
+        String detectedIssueEventCode0
+        String detectedIssueEventCodeSystem0 = '2.16.840.1.113883.5.4'
+        String detectedIssueManagementCode0
+        String detectedIssueManagementCodeSystem0 = '2.16.840.1.113883.5.4'
+
+        // special mode for some exception types
+        if (t instanceof Hl7v3Exception) {
+            Hl7v3Exception hl7v3exception = (Hl7v3Exception) t
+            typeCode0                          = hl7v3exception.typeCode
+            acknowledgementDetailCode0         = hl7v3exception.acknowledgementDetailCode
+            queryResponseCode0                 = hl7v3exception.queryResponseCode
+            statusCode0                        = hl7v3exception.statusCode
+            detectedIssueEventCode0            = hl7v3exception.detectedIssueEventCode
+            detectedIssueEventCodeSystem0      = hl7v3exception.detectedIssueEventCodeSystem
+            detectedIssueManagementCode0       = hl7v3exception.detectedIssueManagementCode
+            detectedIssueManagementCodeSystem0 = hl7v3exception.detectedIssueManagementCodeSystem
+        }
+        if (t instanceof ValidationException) {
+            typeCode0                    = 'AE'
+            acknowledgementDetailCode0   = 'SYN113'
+            queryResponseCode0           = 'QE'
+            statusCode0                  = 'aborted'
+            detectedIssueEventCode0      = 'ActAdministrativeIssueDetectedCode'
+            detectedIssueManagementCode0 = 'VALIDAT'
+        }
+
+        // build the NAK
         OutputStream output = new ByteArrayOutputStream()
         MarkupBuilder builder = getBuilder(output)
 
@@ -98,23 +130,42 @@ class Hl7v3NakFactory {
             buildReceiverAndSender(builder, originalMessage, HL7V3_NSURI)
 
             acknowledgement {
-                typeCode(code: 'AE')
+                typeCode(code: typeCode0)
                 targetMessage {
                     def quid = originalMessage.id
                     buildInstanceIdentifier(builder, 'id', false, quid.@root.text(), quid.@extension.text())
                 }
                 acknowledgementDetail(typeCode: 'E') {
-                    code(code: 'INTERR', codeSystem: '2.16.840.1.113883.5.1100')
+                    code(code: acknowledgementDetailCode0, codeSystem: '2.16.840.1.113883.5.1100')
                     text(t.getMessage())
                 }
             }
 
             if (needControlActProcess) {
                 controlActProcess(classCode: 'CACT', moodCode: 'EVN') {
+
+                    // (optionally) create reasonOf element
+                    if (detectedIssueEventCode0) {
+                        reasonOf(typeCode: 'RSON') {
+                            detectedIssueEvent(classCode: 'ALRT', moodCode: 'EVN') {
+                                code(code: detectedIssueEventCode0, codeSystem: detectedIssueEventCodeSystem0)
+                                mitigatedBy(typeCode: 'MITGT') {
+                                    detectedIssueManagement(classCode: 'ACT', moodCode: 'EVN') {
+                                        code(code: detectedIssueManagementCode0, codeSystem: detectedIssueManagementCodeSystem0)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // create queryAck element
                     def qbp = originalMessage.controlActProcess.queryByParameter
                     queryAck {
                         yieldElement(qbp.queryId, builder, HL7V3_NSURI)
-                        queryResponseCode(code: 'AE')
+                        if (statusCode0) {
+                            statusCode(code: statusCode0)
+                        }
+                        queryResponseCode(code: queryResponseCode0)
                     }
                     yieldElement(qbp, builder, HL7V3_NSURI)
                 }
