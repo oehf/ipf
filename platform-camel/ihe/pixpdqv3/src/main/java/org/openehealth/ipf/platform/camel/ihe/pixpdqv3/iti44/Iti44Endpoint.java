@@ -41,8 +41,8 @@ import javax.xml.namespace.QName;
 public class Iti44Endpoint extends DefaultItiEndpoint {
     private static final String[][] REQUEST_VALIDATION_PROFILES = new String[][] {
             new String[] {"PRPA_IN201301UV02", null},
-            new String[] {"PRPA_IN201301UV02", null},
-            new String[] {"PRPA_IN201301UV02", null}
+            new String[] {"PRPA_IN201302UV02", null},
+            new String[] {"PRPA_IN201304UV02", null}
     };
 
     private static final String[][] RESPONSE_VALIDATION_PROFILES = new String[][] {
