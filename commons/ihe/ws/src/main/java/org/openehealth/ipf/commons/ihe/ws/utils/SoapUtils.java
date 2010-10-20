@@ -41,7 +41,8 @@ public abstract class SoapUtils {
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
         "(?:\\s*<\\!--.*?-->)*"                             +  // optional comments before prolog (are they allowed?)
         "(?:\\s*<\\?xml.+?\\?>(?:\\s*<\\!--.*?-->)*)?"      +  // optional prolog and comments after it
-        "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))"    // open tag of the root element
+        "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
+        Pattern.DOTALL
     );
 
 
