@@ -16,8 +16,8 @@
         xmlns:xcpd="urn:ihe:iti:xcpd:2009" 
         xmlns:hl7v3="urn:hl7-org:v3"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-        xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+        xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
@@ -40,7 +40,7 @@
         <!-- Cross-Gateway Patient Discovery -->
         <operation name="RespondingGateway_PRPA_IN201305UV02">
             <input message="xcpd:PRPA_IN201306UV02_Message"
-                wsaw:Action="urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery" />
+                wsam:Action="urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery" />
             <output message="xcpd:Dummy_Response_Message" />
         </operation>
     </portType>

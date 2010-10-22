@@ -16,7 +16,7 @@
         xmlns:qed="urn:ihe:pcc:qed:2007"
         xmlns:hl7v3="urn:hl7-org:v3"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:wsoap11="http://schemas.xmlsoap.org/wsdl/soap/"
         xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -49,23 +49,23 @@
     <portType name="ClinicalDataSource_PortType">
         <operation name="ClinicalDataSource_QUPC_IN043100UV01">
             <input message="qed:QUPC_IN043100UV01_Message"
-                   wsaw:Action="urn:hl7-org:v3:QUPC_IN043100UV01"/>
+                   wsam:Action="urn:hl7-org:v3:QUPC_IN043100UV01"/>
             <output message="qed:QUPC_IN043200UV01_Message"
-                    wsaw:Action="urn:hl7-org:v3:QUPC_IN043200UV01"/>
+                    wsam:Action="urn:hl7-org:v3:QUPC_IN043200UV01"/>
         </operation>
 
         <operation name="ClinicalDataSource_QUQI_IN000003UV01_Continue">
             <input message="qed:QUQI_IN000003UV01_Message"
-                   wsaw:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Continue"/>
+                   wsam:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Continue"/>
             <output message="qed:QUPC_IN043200UV01_Message"
-                    wsaw:Action="urn:hl7-org:v3:QUPC_IN043200UV01"/>
+                    wsam:Action="urn:hl7-org:v3:QUPC_IN043200UV01"/>
         </operation>
 
         <operation name="ClinicalDataSource_QUQI_IN000003UV01_Cancel">
             <input message="qed:QUQI_IN000003UV01_Cancel_Message"
-                   wsaw:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Cancel"/>
+                   wsam:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Cancel"/>
             <output message="qed:MCCI_IN000002UV01_Message"
-                    wsaw:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
+                    wsam:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
         </operation>
     </portType>
 

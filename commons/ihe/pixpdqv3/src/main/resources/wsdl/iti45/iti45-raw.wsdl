@@ -16,7 +16,7 @@
         xmlns:ihe="urn:ihe:iti:pixv3:2007" 
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:hl7="urn:hl7-org:v3"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         >
@@ -41,9 +41,9 @@
         <!-- Patient Registry Get Identifiers Query -->    
         <operation name="PIXManager_PRPA_IN201309UV02">
             <input message="ihe:PRPA_IN201309UV02_Message"
-                   wsaw:Action="urn:hl7-org:v3:PRPA_IN201309UV02"/>
+                   wsam:Action="urn:hl7-org:v3:PRPA_IN201309UV02"/>
             <output message="ihe:PRPA_IN201310UV02_Message"
-                    wsaw:Action="urn:hl7-org:v3:PRPA_IN201310UV02"/>
+                    wsam:Action="urn:hl7-org:v3:PRPA_IN201310UV02"/>
         </operation>
     </portType>
 
