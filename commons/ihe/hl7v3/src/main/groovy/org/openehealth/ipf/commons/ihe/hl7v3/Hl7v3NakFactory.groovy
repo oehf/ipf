@@ -107,7 +107,7 @@ class Hl7v3NakFactory {
             acknowledgementDetailCode0   = 'SYN113'
             queryResponseCode0           = 'QE'
             statusCode0                  = 'aborted'
-            detectedIssueEventCode0      = 'ActAdministrativeIssueDetectedCode'
+            detectedIssueEventCode0      = 'ActAdministrativeDetectedIssueCode'
             detectedIssueManagementCode0 = 'VALIDAT'
         }
 

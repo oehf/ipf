@@ -15,7 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.PropertyAccessorFactory;
+
 import java.util.Map;
 
 /**
@@ -30,7 +31,7 @@ public class Hl7v3Exception extends RuntimeException {
     private String queryResponseCode = "AE";
     private String statusCode = "aborted";
 
-    private String detectedIssueEventCode = "ActAdministrativeIssueDetectedCode";
+    private String detectedIssueEventCode = "ActAdministrativeDetectedIssueCode";
     private String detectedIssueEventCodeSystem = "2.16.840.1.113883.5.4";
     private String detectedIssueManagementCode;
     private String detectedIssueManagementCodeSystem = "2.16.840.1.113883.5.4";
@@ -52,7 +53,7 @@ public class Hl7v3Exception extends RuntimeException {
     }
 
     private void initializeParams(Map<String, String> params) {
-        new BeanWrapperImpl(this).setPropertyValues(params);
+        PropertyAccessorFactory.forBeanPropertyAccess(this).setPropertyValues(params);
     }
 
 

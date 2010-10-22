@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -37,7 +38,10 @@ public class Iti55Service extends DefaultItiWebService implements Iti55PortType 
             }
             return Exchanges.resultMessage(result).getBody(String.class);
         } catch (Exception e) {
-            return Hl7v3NakFactory.createNak(request, e, "PRPA_IN201306UV02", true);
+            Hl7v3Exception hl7v3Exception = new Hl7v3Exception(e, null);
+            hl7v3Exception.setDetectedIssueManagementCode("InternalError");
+            hl7v3Exception.setDetectedIssueManagementCodeSystem("1.3.6.1.4.1.19376.1.2.27.3");
+            return Hl7v3NakFactory.createNak(request, hl7v3Exception, "PRPA_IN201306UV02", true);
         }
     }
 
