@@ -34,9 +34,11 @@ public class TimeValidator implements ValueValidator {
     private static final String REG_EX = 
         YEAR + "(" + MONTH + "(" + DAY + "(" + HOUR + "(" + MIN_SEC + "(" + MIN_SEC + ")?)?)?)?)?";
 
+    private static final Pattern TIME_PATTERN = Pattern.compile(REG_EX);
+
     @Override
     public void validate(String time) throws XDSMetaDataException {
         notNull(time, "time cannot be null");        
-        metaDataAssert(Pattern.matches(REG_EX, time), INVALID_TIME, time);
+        metaDataAssert(TIME_PATTERN.matcher(time).matches(), INVALID_TIME, time);
     }
 }

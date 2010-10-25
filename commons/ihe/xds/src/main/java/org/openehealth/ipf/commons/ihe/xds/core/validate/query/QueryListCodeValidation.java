@@ -33,6 +33,9 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class QueryListCodeValidation implements QueryParameterValidation {
+    private static final Pattern PATTERN =
+            Pattern.compile("\\(\\s*'.*'(\\s*,\\s*'.*')*\\s*\\)");
+
     private final QueryParameter param;
     private final QueryParameter schemeParam;
 
@@ -56,7 +59,7 @@ public class QueryListCodeValidation implements QueryParameterValidation {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
         for (String slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
-            metaDataAssert(Pattern.matches("\\(\\s*'.*'(\\s*,\\s*'.*')*\\s*\\)", slotValue), 
+            metaDataAssert(PATTERN.matcher(slotValue).matches(), 
                     PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 

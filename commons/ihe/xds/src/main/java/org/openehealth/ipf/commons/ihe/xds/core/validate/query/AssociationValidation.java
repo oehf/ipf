@@ -32,6 +32,9 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class AssociationValidation implements QueryParameterValidation {
+    private static final Pattern PATTERN =
+            Pattern.compile("\\('.*',\\s('.*')*\\)");
+
     private final QueryParameter param;
 
     /**
@@ -49,7 +52,8 @@ public class AssociationValidation implements QueryParameterValidation {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
         for (String slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
-            metaDataAssert(Pattern.matches("\\('.*',\\s('.*')*\\)", slotValue), PARAMETER_VALUE_NOT_STRING_LIST, param);
+            metaDataAssert(PATTERN.matcher(slotValue).matches(),
+                    PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);

@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class StringValidation implements QueryParameterValidation {
+    private static final Pattern PATTERN = Pattern.compile("'.*'");
+
     private final QueryParameter param;
     private final ValueValidator validator;
     private final boolean optional;
@@ -63,7 +65,7 @@ public class StringValidation implements QueryParameterValidation {
         if (slotValues.size() > 0) {
             String slotValue = slotValues.get(0);
             metaDataAssert(slotValue != null || optional, MISSING_REQUIRED_QUERY_PARAMETER, param);
-            metaDataAssert(Pattern.matches("'.*'", slotValue), PARAMETER_VALUE_NOT_STRING, param);
+            metaDataAssert(PATTERN.matcher(slotValue).matches(), PARAMETER_VALUE_NOT_STRING, param);
         }
         
         QuerySlotHelper slots = new QuerySlotHelper(request);        

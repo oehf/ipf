@@ -27,10 +27,12 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class PositiveNumberValidator implements ValueValidator {
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
+
     @Override
     public void validate(String value) throws XDSMetaDataException {
         notNull(value, "value cannot be null");
-        metaDataAssert(Pattern.matches("[0-9]+", value), 
+        metaDataAssert(NUMBER_PATTERN.matcher(value).matches(), 
                 INVALID_NUMBER_FORMAT, value);
     }
 }

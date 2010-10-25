@@ -145,7 +145,18 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.setId("lol");
         expectFailure(UNKNOWN_QUERY_TYPE, ebXML);        
     }
-    
+
+    @Test
+    public void testHomeCommunityIdAttributeValidation() {
+        request = SampleData.createGetDocumentsQuery();
+        // without prefix
+        ((GetDocumentsQuery)request.getQuery()).setHomeCommunityId("1.2.3");
+        expectFailure(INVALID_OID);
+        // wrong suffix
+        ((GetDocumentsQuery)request.getQuery()).setHomeCommunityId("urn:oid:foo");
+        expectFailure(INVALID_OID);
+    }
+
     private void expectFailure(ValidationMessage expectedMessage) {
         expectFailure(expectedMessage, transformer.toEbXML(request));
     }

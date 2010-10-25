@@ -93,6 +93,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         });
 
         QueryParameterValidation[] getDocumentsValidations = new QueryParameterValidation[] {
+                new HomeCommunityIdAttributeValidation(),
                 new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                 new StringListValidation(DOC_ENTRY_UUID, nopValidator),
                 new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator)
@@ -101,18 +102,21 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         validations.put(QueryType.GET_DOCUMENTS, getDocumentsValidations);
         validations.put(QueryType.GET_DOCUMENTS_AND_ASSOCIATIONS, getDocumentsValidations);
         validations.put(QueryType.GET_FOLDERS_FOR_DOCUMENT, new QueryParameterValidation[] {
+                new HomeCommunityIdAttributeValidation(),
                 new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                 new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                 new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
         });
         
         validations.put(QueryType.GET_FOLDERS, new QueryParameterValidation[] {
+                new HomeCommunityIdAttributeValidation(),
                 new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),
                 new StringListValidation(FOLDER_UUID, nopValidator),
                 new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
         });
         
         QueryParameterValidation[] uuidAndHomValidations = new QueryParameterValidation[] {
+                new HomeCommunityIdAttributeValidation(),
                 new StringListValidation(UUID, nopValidator),
         };
         
@@ -120,6 +124,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         validations.put(QueryType.GET_SUBMISSION_SETS, uuidAndHomValidations);
         
         validations.put(QueryType.GET_SUBMISSION_SET_AND_CONTENTS, new QueryParameterValidation[] {
+                new HomeCommunityIdAttributeValidation(),
                 new ChoiceValidation(SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
                 new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
                 new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
@@ -128,6 +133,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         });
 
         validations.put(QueryType.GET_FOLDER_AND_CONTENTS, new QueryParameterValidation[] {
+                new HomeCommunityIdAttributeValidation(),
                 new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),
                 new StringValidation(FOLDER_UUID, nopValidator, true),
                 new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
@@ -136,6 +142,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         });
         
         validations.put(QueryType.GET_RELATED_DOCUMENTS, new QueryParameterValidation[] {
+                new HomeCommunityIdAttributeValidation(),
                 new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                 new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                 new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
