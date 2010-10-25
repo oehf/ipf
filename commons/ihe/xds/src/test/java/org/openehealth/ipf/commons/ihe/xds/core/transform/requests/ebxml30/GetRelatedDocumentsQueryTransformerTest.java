@@ -62,13 +62,12 @@ public class GetRelatedDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));
 
-        assertEquals(Arrays.asList("'home'"),
-                ebXML.getSlotValues(QueryParameter.HOME.getSlotName()));
-        
+        assertEquals("home", ebXML.getHome());
+
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember')", "('urn:ihe:iti:2007:AssociationType:XFRM_RPLC')"),
                 ebXML.getSlotValues(QueryParameter.ASSOCIATION_TYPE.getSlotName()));
         
-        assertEquals(4, ebXML.getSlots().size());
+        assertEquals(3, ebXML.getSlots().size());
     }
     
     @Test

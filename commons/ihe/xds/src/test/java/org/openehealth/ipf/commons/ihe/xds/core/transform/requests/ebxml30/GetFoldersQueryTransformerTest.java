@@ -59,10 +59,8 @@ public class GetFoldersQueryTransformerTest {
         assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_UNIQUE_ID.getSlotName()));
 
-        assertEquals(Arrays.asList("'home'"),
-                ebXML.getSlotValues(QueryParameter.HOME.getSlotName()));
-        
-        assertEquals(3, ebXML.getSlots().size());
+        assertEquals("home", ebXML.getHome());
+        assertEquals(2, ebXML.getSlots().size());
     }
     
     @Test

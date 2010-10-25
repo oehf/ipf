@@ -51,6 +51,7 @@ abstract class Iti18AuditStrategy extends XdsAuditStrategy {
         AdhocQueryType adHocQuery = request.getAdhocQuery();
         if (adHocQuery != null) {
             xdsAuditDataset.setQueryUuid(adHocQuery.getId());
+            xdsAuditDataset.setHomeCommunityId(adHocQuery.getHome());
         }
     }
     

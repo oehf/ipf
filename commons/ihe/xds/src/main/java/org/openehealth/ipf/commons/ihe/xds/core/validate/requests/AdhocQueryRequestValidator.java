@@ -95,8 +95,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         QueryParameterValidation[] getDocumentsValidations = new QueryParameterValidation[] {
                 new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                 new StringListValidation(DOC_ENTRY_UUID, nopValidator),
-                new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
-                new StringValidation(HOME, nopValidator, true)                
+                new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator)
         };
         
         validations.put(QueryType.GET_DOCUMENTS, getDocumentsValidations);
@@ -105,19 +104,16 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                 new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                 new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
-                new StringValidation(HOME, nopValidator, true)                
         });
         
         validations.put(QueryType.GET_FOLDERS, new QueryParameterValidation[] {
                 new ChoiceValidation(FOLDER_UUID, FOLDER_UNIQUE_ID),
                 new StringListValidation(FOLDER_UUID, nopValidator),
                 new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-                new StringValidation(HOME, nopValidator, true)                
         });
         
         QueryParameterValidation[] uuidAndHomValidations = new QueryParameterValidation[] {
                 new StringListValidation(UUID, nopValidator),
-                new StringValidation(HOME, nopValidator, true)                
         };
         
         validations.put(QueryType.GET_ASSOCIATIONS, uuidAndHomValidations);
@@ -129,7 +125,6 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
                 new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                 new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),                
-                new StringValidation(HOME, nopValidator, true)                
         });
 
         validations.put(QueryType.GET_FOLDER_AND_CONTENTS, new QueryParameterValidation[] {
@@ -138,7 +133,6 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
                 new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                 new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),                
-                new StringValidation(HOME, nopValidator, true)                
         });
         
         validations.put(QueryType.GET_RELATED_DOCUMENTS, new QueryParameterValidation[] {
@@ -146,7 +140,6 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                 new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                 new AssociationValidation(ASSOCIATION_TYPE),
-                new StringValidation(HOME, nopValidator, true)                
         });
     }
 

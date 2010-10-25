@@ -31,10 +31,6 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  */
 public abstract class XdsAuditStrategy extends WsAuditStrategy {
 
-    /** Home community ID to use in audit strategies. */
-    public static String homeCommunityId = null;
-
-
     /**
      * Constructs an XDS audit strategy.
      *   

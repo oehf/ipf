@@ -15,12 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UNIQUE_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UUID;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.HOME;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFromDocumentQuery;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UNIQUE_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_UUID;
 
 /**
  * Base class for transformers based on {@link GetFromDocumentQuery}.
@@ -46,8 +45,8 @@ public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQ
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         ebXML.setId(query.getType().getId());
+        ebXML.setHome(query.getHomeCommunityId());
         
-        slots.fromString(HOME, query.getHomeCommunityId());
         slots.fromString(DOC_ENTRY_UUID, query.getUuid());
         slots.fromString(DOC_ENTRY_UNIQUE_ID, query.getUniqueId());
     }
@@ -70,7 +69,7 @@ public abstract class GetFromDocumentQueryTransformer<T extends GetFromDocumentQ
         
         query.setUniqueId(slots.toString(DOC_ENTRY_UNIQUE_ID));
         query.setUuid(slots.toString(DOC_ENTRY_UUID));
-        query.setHomeCommunityId(slots.toString(HOME));
+        query.setHomeCommunityId(ebXML.getHome());
     }
 
 }

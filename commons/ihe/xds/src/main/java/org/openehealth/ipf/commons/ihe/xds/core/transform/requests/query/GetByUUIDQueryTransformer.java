@@ -15,12 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.HOME;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByUuidQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * Base class of transformers for {@link GetByUuidQuery}.
@@ -58,9 +57,9 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         ebXML.setId(query.getType().getId());
+        ebXML.setHome(query.getHomeCommunityId());
         
         slots.fromStringList(uuidParam, query.getUuids());
-        slots.fromString(HOME, query.getHomeCommunityId());
 
         toEbXML(query, slots);
     }
@@ -82,7 +81,7 @@ public abstract class GetByUUIDQueryTransformer<T extends GetByUuidQuery> {
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         query.setUuids(slots.toStringList(uuidParam));
-        query.setHomeCommunityId(slots.toString(HOME));
+        query.setHomeCommunityId(ebXML.getHome());
 
         fromEbXML(query, slots);
     }

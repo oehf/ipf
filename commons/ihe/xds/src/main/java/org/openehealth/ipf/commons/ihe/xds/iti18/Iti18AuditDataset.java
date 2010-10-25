@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 public class Iti18AuditDataset extends XdsAuditDataset {
 
     private String queryUuid;
+    private String homeCommunityId;
 
     /**
      * Constructs the audit dataset.
@@ -51,4 +52,19 @@ public class Iti18AuditDataset extends XdsAuditDataset {
     public String getQueryUuid() {
         return queryUuid;
     }
+
+    /**
+     * Returns home community ID.
+     */
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    /**
+     * Sets home community ID.
+     */
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
+    }
+
 }

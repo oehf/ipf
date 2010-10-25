@@ -117,8 +117,6 @@ public enum QueryParameter {
     UUID("$uuid"),
     /** Used to filter {@link XDSMetaClass#getPatientId()}. */
     PATIENT_ID("$patientId"),
-    /** Used to filter {@link XDSMetaClass#getHomeCommunityId()}. */
-    HOME("$homeCommunityId"),
     /** Used to filter {@link Association#getAssociationType()}. */
     ASSOCIATION_TYPE("$AssociationTypes");
     
