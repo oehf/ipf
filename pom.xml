@@ -49,7 +49,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.3.2</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
-        <camel-version>2.4.0</camel-version>
+        <camel-version>2.5-SNAPSHOT</camel-version>
         <commons-codec-version>1.4</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.2.2</commons-dbcp-version>
@@ -59,7 +59,7 @@
         <commons-lang-version>2.4</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <commons-math-version>1.2</commons-math-version>
-        <cxf-version>2.2.9</cxf-version>
+        <cxf-version>2.2.11</cxf-version>
         <derby-version>10.4.1.3</derby-version>
         <easymock-version>2.4</easymock-version> 
         <ehcache-version>2.2.0</ehcache-version>
@@ -71,7 +71,7 @@
         <hibernate-annotations-version>3.3.0.ga</hibernate-annotations-version>
         <hibernate-search-version>3.0.1.GA</hibernate-search-version>
         <jasypt-version>1.5</jasypt-version>
-        <jetty-version>7.1.4.v20100610</jetty-version>
+        <jetty-version>7.1.6.v20100715</jetty-version>
         <joda-time-version>1.5.2</joda-time-version>
         <junit-version>4.7</junit-version>
         <junitperf-version>1.8</junitperf-version>
@@ -85,7 +85,7 @@
         <quartz-version>1.6.1</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.5.10</slf4j-version>
-        <spring-version>3.0.3.RELEASE</spring-version>
+        <spring-version>3.0.4.RELEASE</spring-version>
         <spring-osgi-version>1.2.0</spring-osgi-version>
         <tomcat-version>6.0.18</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>
@@ -1156,6 +1156,11 @@
             <id>hapi-sf</id>
             <name>HAPI Sourceforge Repository</name>
             <url>http://hl7api.sourceforge.net/m2</url>
+        </repository>
+        <repository>
+            <id>camel-staging</id>
+            <name>Camel Staging Repository</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
