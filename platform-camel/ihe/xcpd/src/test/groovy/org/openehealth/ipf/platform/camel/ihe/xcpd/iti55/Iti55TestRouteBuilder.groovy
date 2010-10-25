@@ -78,6 +78,14 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                 responseCount.incrementAndGet()
             }
             .validate().iti55Response()
+
+
+        // generates NAK
+        from('xcpd-iti55:iti55service2')
+            .process {
+                throw new RuntimeException('NAK')
+            }
+        
     }
 
 }

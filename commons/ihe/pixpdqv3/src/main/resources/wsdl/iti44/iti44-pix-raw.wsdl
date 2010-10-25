@@ -16,7 +16,7 @@
         xmlns:ihe="urn:ihe:iti:pixv3:2007" 
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:hl7="urn:hl7-org:v3"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         >
@@ -49,25 +49,25 @@
         <!-- Patient Registry Record Added -->
         <operation name="PIXManager_PRPA_IN201301UV02">
             <input message="ihe:PRPA_IN201301UV02_Message"
-                   wsaw:Action="urn:hl7-org:v3:PRPA_IN201301UV02"/>
+                   wsam:Action="urn:hl7-org:v3:PRPA_IN201301UV02"/>
             <output message="ihe:MCCI_IN000002UV01_Message"
-                    wsaw:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
+                    wsam:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
         </operation>
 
         <!-- Patient Registry Record Revised -->
         <operation name="PIXManager_PRPA_IN201302UV02">
             <input message="ihe:PRPA_IN201302UV02_Message"
-                   wsaw:Action="urn:hl7-org:v3:PRPA_IN201302UV02"/>
+                   wsam:Action="urn:hl7-org:v3:PRPA_IN201302UV02"/>
             <output message="ihe:MCCI_IN000002UV01_Message"
-                    wsaw:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
+                    wsam:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
         </operation>
 
         <!-- Patient Registry Duplicates Resolved -->
         <operation name="PIXManager_PRPA_IN201304UV02">
             <input message="ihe:PRPA_IN201304UV02_Message"
-                   wsaw:Action="urn:hl7-org:v3:PRPA_IN201304UV02"/>
+                   wsam:Action="urn:hl7-org:v3:PRPA_IN201304UV02"/>
             <output message="ihe:MCCI_IN000002UV01_Message"
-                    wsaw:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
+                    wsam:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
         </operation>
     </portType>
 
@@ -75,6 +75,7 @@
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
         <operation name="PIXManager_PRPA_IN201301UV02">
+            <wsoap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201301UV02"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -84,6 +85,7 @@
         </operation>
 
         <operation name="PIXManager_PRPA_IN201302UV02">
+            <wsoap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201302UV02"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -93,6 +95,7 @@
         </operation>
 
         <operation name="PIXManager_PRPA_IN201304UV02">
+            <wsoap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201304UV02"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>

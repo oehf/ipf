@@ -16,7 +16,7 @@
         xmlns:ihe="urn:ihe:iti:pdqv3:2007"
         xmlns:hl7="urn:hl7-org:v3"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
         xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     
@@ -48,31 +48,32 @@
         <!-- Get candidates -->
         <operation name="PDSupplier_PRPA_IN201305UV02">
             <input message="ihe:PRPA_IN201305UV02_Message"
-                wsaw:Action="urn:hl7-org:v3:PRPA_IN201305UV02"/>
+                wsam:Action="urn:hl7-org:v3:PRPA_IN201305UV02"/>
             <output message="ihe:PRPA_IN201306UV02_Message"
-                wsaw:Action="urn:hl7-org:v3:PRPA_IN201306UV02"/>
+                wsam:Action="urn:hl7-org:v3:PRPA_IN201306UV02"/>
         </operation>
     
         <!-- Continuation -->
         <operation name="PDSupplier_QUQI_IN000003UV01_Continue">
             <input message="ihe:QUQI_IN000003UV01_Message"
-                wsaw:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Continue"/>
+                wsam:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Continue"/>
             <output message="ihe:PRPA_IN201306UV02_Message"
-                wsaw:Action="urn:hl7-org:v3:PRPA_IN201306UV02"/>
+                wsam:Action="urn:hl7-org:v3:PRPA_IN201306UV02"/>
         </operation>
     
         <!-- Cancel -->
         <operation name="PDSupplier_QUQI_IN000003UV01_Cancel">
             <input message="ihe:QUQI_IN000003UV01_Cancel_Message"
-                wsaw:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Cancel"/>
+                wsam:Action="urn:hl7-org:v3:QUQI_IN000003UV01_Cancel"/>
             <output message="ihe:MCCI_IN000002UV01_Message"
-                wsaw:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
+                wsam:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
         </operation>
     </portType>
     
     <binding name="PDSupplier_Binding_Soap12" type="ihe:PDSupplier_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="PDSupplier_PRPA_IN201305UV02">
+            <wsoap12:operation soapAction="urn:hl7-org:v3:PRPA_IN201305UV02"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -81,6 +82,7 @@
             </output>
         </operation>
         <operation name="PDSupplier_QUQI_IN000003UV01_Continue">
+            <wsoap12:operation soapAction="urn:hl7-org:v3:PDSupplier_QUQI_IN000003UV01_Continue"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -89,6 +91,7 @@
             </output>
         </operation>
         <operation name="PDSupplier_QUQI_IN000003UV01_Cancel">
+            <wsoap12:operation soapAction="PDSupplier_QUQI_IN000003UV01_Cancel"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>

@@ -99,12 +99,6 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
 		</filter>    
     </appender>
 	
-    
-    
-	<!-- Logger for all ICW output -->
-    <logger name="com.icw.ehf.integration">
-        <level value="INFO"/>
-    </logger>
 
 	<!-- Logger for all Apache 3rd party lib output -->
     <logger name="org.apache">
@@ -116,23 +110,9 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
         <level value="WARN"/>
     </logger>
     
-	<!-- Logger for all transaction-related output -->
-    <logger name="org.jencks">
-        <level value="WARN"/>
-    </logger>
-    
-	<!-- Logger for all JMS messaging output -->
-    <logger name="org.apache.activemq">
-        <level value="INFO"/>
-    </logger>
-    
-    <logger name="org.apache.activemq.transport.discovery">
-        <level value="ERROR"/>
-    </logger>
-    
 	<!-- Logger for all native Camel output -->
     <logger name="org.apache.camel">
-        <level value="INFO"/>
+        <level value="WARN"/>
     </logger>
 	
     <!-- Logger for all Caching output -->
@@ -140,15 +120,14 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
         <level value="WARN"/>
     </logger>
     
-	<!-- Loggers for all Hibernate output -->
-	<logger name="org.hibernate.">
-		<level value="ERROR"/>
-	</logger>
-    
+    <!-- Logger for all IPF HL7v3 output -->
+    <logger name="org.openehealth.ipf.platform.camel.ihe.pixpdqv3">
+        <level value="INFO"/>
+    </logger>
+
     <root>
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
-<!--        <appender-ref ref="FILE"/>-->
     </root>
 
 </log4j:configuration>

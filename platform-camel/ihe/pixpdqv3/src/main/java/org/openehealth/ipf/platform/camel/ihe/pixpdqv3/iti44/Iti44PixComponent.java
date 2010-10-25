@@ -27,6 +27,6 @@ public class Iti44PixComponent extends DefaultWsComponent {
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti44PixEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Iti44Endpoint(true, uri, remaining, this, getCustomInterceptors(parameters));
     }
 }

@@ -25,9 +25,9 @@ import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdClientFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdServiceFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55ClientAuditStrategy;
@@ -42,14 +42,16 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  */
 public class Iti55Endpoint extends DefaultItiEndpoint {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    private final static ItiServiceInfo ITI_55 = new ItiServiceInfo(
+    public final static Hl7v3ServiceInfo ITI_55 = new Hl7v3ServiceInfo(
             new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
             Iti55PortType.class,
             new QName(NS_URI, "RespondingGateway_Binding_Soap12", "xcpd"),
             false,
             "wsdl/iti55/iti55-raw.wsdl",
-            true,
-            false);
+            new String[][] { new String[] {"PRPA_IN201305UV02", "iti55/PRPA_IN201305UV02"}},
+            new String[][] { new String[] {"PRPA_IN201306UV02", "iti55/PRPA_IN201306UV02"}},
+            "PRPA_IN201306UV02",
+            true);
 
     /**
      * Constructs the endpoint.

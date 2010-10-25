@@ -35,7 +35,7 @@ class TestPcc1 extends StandardTestContainer {
     
      @Test
      void testPcc1() {
-         def response = send(SERVICE1, '<request/>', String.class)
+         def response = send(SERVICE1, '<QUPC_IN043100UV01 />', String.class)
          def slurper = new XmlSlurper().parseText(response)
          assert slurper.@from == 'Clinical Data Source'
      }

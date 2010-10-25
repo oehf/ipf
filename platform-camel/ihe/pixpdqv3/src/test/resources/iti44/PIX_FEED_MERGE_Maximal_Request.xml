@@ -1,0 +1,75 @@
+<!-- ~ Copyright 2010 the original author or authors. 
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<PRPA_IN201304UV02 ITSVersion="XML_1.0" xmlns:urn="urn:hl7-org:v3" xmlns="urn:hl7-org:v3">
+  <id root="52918b99-dc72-4d17-8714-f39b9b6f16e8" extension="123"/>
+  <creationTime value="20091112115139"/>
+  <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201304UV02"/>
+  <processingCode code="P"/>
+  <processingModeCode code="T"/>
+  <acceptAckCode code="AL"/>
+  <receiver typeCode="RCV">
+    <device classCode="DEV" determinerCode="INSTANCE">
+      <id root="1.2.840.114350.1.13.99999.4567"/>
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.840.114350.1.13.99999.1234"/>
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </receiver>
+  <sender typeCode="SND">
+    <device classCode="DEV" determinerCode="INSTANCE">
+      <id root="1.2.840.114350.1.13.99998.8734"/>
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.840.114350.1.13.99998"/>
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </sender>
+  <controlActProcess classCode="CACT" moodCode="EVN">
+    <code code="PRPA_TE201304UV02" codeSystem="2.16.840.1.113883.1.6"/>
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <id nullFlavor="NA"/>
+        <statusCode code="active"/>
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id extension="120-01" root="1.2.3.4.5.1000"/>
+            <statusCode code="active"/>
+            <patientPerson determinerCode="INSTANCE">
+              <name/>
+            </patientPerson>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.840.114350.1.13.99998.8734"/>
+          </assignedEntity>
+        </custodian>
+        <replacementOf typeCode="RPLC">
+          <priorRegistration classCode="REG" moodCode="EVN">
+            <statusCode code="obsolete"/>
+            <subject1 typeCode="SBJ">
+              <priorRegisteredRole classCode="PAT">
+                <id extension="120-02" assigningAuthorityName="domain1"/>
+              </priorRegisteredRole>
+            </subject1>
+          </priorRegistration>
+        </replacementOf>
+      </registrationEvent>
+    </subject>
+  </controlActProcess>
+</PRPA_IN201304UV02>

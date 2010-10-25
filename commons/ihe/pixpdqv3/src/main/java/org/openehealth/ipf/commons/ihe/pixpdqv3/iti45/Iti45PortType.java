@@ -28,9 +28,9 @@ public interface Iti45PortType {
 
     @WebResult(name = "PRPA_IN201310UV02", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201309UV02", output = "urn:hl7-org:v3:PRPA_IN201310UV02")
-    @WebMethod(operationName = "PIXManager_PRPA_IN201309UV02")
-    public String pixManagerPRPAIN201309UV02(
+    @WebMethod(operationName = "PIXManager_PRPA_IN201309UV02", action = "urn:hl7-org:v3:PRPA_IN201309UV02")
+    public String getIdentifiers(
         @WebParam(partName = "Body", name = "PRPA_IN201309UV02", targetNamespace = "urn:hl7-org:v3")
-        String body
+        String request
     );
 }

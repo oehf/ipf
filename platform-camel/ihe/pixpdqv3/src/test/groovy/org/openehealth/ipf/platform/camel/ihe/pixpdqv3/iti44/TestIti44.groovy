@@ -40,14 +40,14 @@ class TestIti44 extends StandardTestContainer {
     
      @Test
      void testIti44Pix() {
-         def response = send(SERVICE1_PIX, '<request/>', String.class)
+         def response = send(SERVICE1_PIX, '<PRPA_IN201301UV02 />', String.class)
          def slurper = new XmlSlurper().parseText(response)
          assert slurper.@from == 'PIX Manager'
      }
 
      @Test
      void testIti44Xds() {
-         def response = send(SERVICE1_XDS, '<request/>', String.class)
+         def response = send(SERVICE1_XDS, '<PRPA_IN201304UV02 />', String.class)
          def slurper = new XmlSlurper().parseText(response)
          assert slurper.@from == 'Document Registry'
      }

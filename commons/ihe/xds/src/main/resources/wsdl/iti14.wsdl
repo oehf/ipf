@@ -18,7 +18,7 @@
         xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:ihe="urn:ihe:iti:xds:2007"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         xmlns:rs="urn:oasis:names:tc:ebxml-regrep:registry:xsd:2.1"
         targetNamespace="urn:ihe:iti:xds:2007"
         name="DocumentRegistry">
@@ -44,9 +44,9 @@
     <portType name="DocumentRegistry_PortType">
         <operation name="DocumentRegistry_RegisterDocumentSet">
             <input message="ihe:RegisterDocumentSet_Message"/>
-<!--                   wsaw:Action="urn:ihe:iti:2007:RegisterDocumentSet"/>-->
+<!--                   wsam:Action="urn:ihe:iti:2007:RegisterDocumentSet"/>-->
             <output message="ihe:RegisterDocumentSetResponse_Message"/>
-<!--                    wsaw:Action="urn:ihe:iti:2007:RegisterDocumentSetResponse"/>-->
+<!--                    wsam:Action="urn:ihe:iti:2007:RegisterDocumentSetResponse"/>-->
         </operation>
     </portType>
 

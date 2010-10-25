@@ -16,8 +16,8 @@
         xmlns:xcpd="urn:ihe:iti:xcpd:2009" 
         xmlns:hl7v3="urn:hl7-org:v3"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-        xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+        xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
@@ -39,7 +39,7 @@
     <portType name="RespondingGateway_Response_PortType">
 		<operation name="RespondingGateway_PatientLocationQuery">
 			<input message="xcpd:PatientLocationQueryResponse_Message" 
-		        wsaw:Action="urn:ihe:iti:2009:PatientLocationQueryResponse"/>
+		        wsam:Action="urn:ihe:iti:2009:PatientLocationQueryResponse"/>
             <output message="xcpd:Dummy_Response_Message" />
 		</operation>
     </portType>

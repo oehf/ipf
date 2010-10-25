@@ -20,7 +20,7 @@
         xmlns:ihe="urn:ihe:iti:xds-b:2007"
         xmlns:query="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0"
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl">
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
 
     <documentation>IHE XDS.b Document Registry = ITI-18 adaptor = Registry Stored Query</documentation>
 
@@ -43,9 +43,9 @@
     <portType name="DocumentRegistry_PortType">
         <operation name="DocumentRegistry_RegistryStoredQuery">
             <input message="ihe:RegistryStoredQuery_Message"
-                   wsaw:Action="urn:ihe:iti:2007:RegistryStoredQuery"/>
+                   wsam:Action="urn:ihe:iti:2007:RegistryStoredQuery"/>
             <output message="ihe:RegistryStoredQueryResponse_Message"
-                    wsaw:Action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
+                    wsam:Action="urn:ihe:iti:2007:RegistryStoredQueryResponse"/>
         </operation>
     </portType>
 

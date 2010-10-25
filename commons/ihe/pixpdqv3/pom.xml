@@ -47,6 +47,13 @@
             <groupId>xmlunit</groupId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-hl7v3</artifactId>
+            <version>${project.version}</version>
+	    <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
     </dependencies>
 
     <build>

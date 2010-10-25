@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
@@ -40,7 +41,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42Service;
  * The Camel endpoint for the ITI-42 transaction.
  */
 public class Iti42Endpoint extends DefaultItiEndpoint {
-    private final static XdsServiceInfo ITI_42 = new XdsServiceInfo(
+    protected final static XdsServiceInfo ITI_42 = new XdsServiceInfo(
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti42PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
@@ -81,7 +82,7 @@ public class Iti42Endpoint extends DefaultItiEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XdsServiceFactory(
-                ITI_42, 
+                ITI_42,
                 isAudit() ? new Iti42ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
                 getServiceAddress(),
                 getCustomInterceptors());

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PRPA_IN201305UV02 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:hl7-org:v3 ../../schema/HL7V3/NE2008/multicacheschemas/PRPA_IN201305UV02.xsd"
+ xmlns="urn:hl7-org:v3"
+ ITSVersion="XML_1.0">
+    <id root="1.2.840.114350.1.13.0.1.7.1.1" extension="35423"/>
+    <creationTime value="20070428150301"/>
+    <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201305UV02"/>
+    <processingCode code="T"/>
+    <processingModeCode code="I"/>
+    <acceptAckCode code="AL"/>
+    <receiver typeCode="RCV">
+        <device  classCode="DEV" determinerCode="INSTANCE">
+            <id root="1.2.840.114350.1.13.999.234"/>
+            <telecom value="http://servicelocation/PDQuery"/>
+        </device>
+    </receiver>
+    <sender typeCode="SND">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="1.2.840.114350.1.13.999.567"/>
+        </device>
+    </sender>
+    <controlActProcess  classCode="CACT" moodCode="EVN">
+        <code code="PRPA_TE201305UV02" codeSystem="2.16.840.1.113883.1.6"/>
+        <queryByParameter>
+            <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204"/>
+            <statusCode code="new"/>
+            <responseModalityCode code="R" />
+            <responsePriorityCode code="I" />
+            <initialQuantity value="2"/>
+            <matchCriterionList>
+                <minimumDegreeMatch>
+                    <value xsi:type="INT" value="75"/>
+                    <semanticsText>Degree of match requested</semanticsText>
+                </minimumDegreeMatch>
+            </matchCriterionList>
+            <parameterList>
+                <livingSubjectAdministrativeGender>
+                    <value code="M"/>
+                    <semanticsText>LivingSubject.administrativeGender</semanticsText>
+                </livingSubjectAdministrativeGender>
+                <livingSubjectBirthTime>
+                   <value value="19630804"/>
+                   <semanticsText>LivingSubject..birthTime</semanticsText>
+               </livingSubjectBirthTime>
+                <livingSubjectName>
+                    <value>
+                        <given>Jimmy</given>
+                        <family>Jones</family>
+                    </value>
+                    <semanticsText>LivingSubject.name</semanticsText>
+                </livingSubjectName>              
+                <otherIDsScopingOrganization>
+                    <value root="1.2.840.114350.1.13.99997.2.3412"/>
+                    <semanticsText>OtherIDs.scopingOrganization.id</semanticsText>
+                </otherIDsScopingOrganization>
+                <otherIDsScopingOrganization>
+                    <value root="2.16.840.1.113883.4.1"/>
+                    <semanticsText>OtherIDs.scopingOrganization.id</semanticsText>
+                </otherIDsScopingOrganization>
+                <otherIDsScopingOrganization>
+                    <value root="1.2.840.114350.1.13.99998.8734"/>
+                    <semanticsText>OtherIDs.scopingOrganization.id</semanticsText>
+                </otherIDsScopingOrganization>
+            </parameterList>
+        </queryByParameter>
+    </controlActProcess>
+</PRPA_IN201305UV02>
