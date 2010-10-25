@@ -59,7 +59,7 @@ public class StatusValidation implements QueryParameterValidation {
         QuerySlotHelper slots = new QuerySlotHelper(request);
         List<AvailabilityStatus> list = slots.toStatus(param);
         
-        metaDataAssert(!list.isEmpty(), MISSING_REQUIRED_QUERY_PARAMETER, param);
+        metaDataAssert((list != null ) && (! list.isEmpty()), MISSING_REQUIRED_QUERY_PARAMETER, param);
         
         for (AvailabilityStatus status : list) {
             metaDataAssert(status != null, INVALID_QUERY_PARAMETER_VALUE, param);                

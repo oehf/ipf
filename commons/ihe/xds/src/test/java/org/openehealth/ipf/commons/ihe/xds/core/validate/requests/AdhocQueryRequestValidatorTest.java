@@ -32,6 +32,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Tests for {@link AdhocQueryRequestValidator}.
@@ -114,10 +115,23 @@ public class AdhocQueryRequestValidatorTest {
     }
 
     @Test
-    public void testInvalidQueryParameterValue() {
+    public void testUnknownStatusCodes() {
         EbXMLAdhocQueryRequest ebXML = transformer.toEbXML(request);
-        ebXML.getSlots(QueryParameter.DOC_ENTRY_STATUS.getSlotName()).get(0).getValueList().set(1, "('lol')");
-        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML);
+        List<String> valueList = ebXML.getSlots(QueryParameter.DOC_ENTRY_STATUS.getSlotName()).get(0).getValueList();
+
+        // no codes at all -- should fail
+        valueList.clear();
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML);
+
+        // only unknown codes -- should fail
+        valueList.add("('lol')");
+        valueList.add("('foo')");
+        expectFailure(MISSING_REQUIRED_QUERY_PARAMETER, ebXML);
+
+        // at least one code -- should pass
+        valueList.set(0, "('bar')");
+        valueList.set(1, "('Approved')");
+        validator.validate(ebXML, null);
     }
     
     @Test

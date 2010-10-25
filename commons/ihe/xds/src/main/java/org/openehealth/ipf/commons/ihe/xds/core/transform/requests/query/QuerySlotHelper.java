@@ -282,7 +282,10 @@ public class QuerySlotHelper {
 
         List<AvailabilityStatus> list = new ArrayList<AvailabilityStatus>();
         for (String opcode : opcodes) {
-            list.add(AvailabilityStatus.valueOfOpcode(opcode));
+            AvailabilityStatus status = AvailabilityStatus.valueOfOpcode(opcode);
+            if (status != null) {
+                list.add(status);
+            }
         }
         return list;
     }
