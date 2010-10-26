@@ -48,12 +48,11 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
 
     public ConsumerInteractiveResponseSenderInterceptor(
             MllpEndpoint endpoint, 
-            Processor wrappedProcessor,
-            InteractiveContinuationStorage interactiveContinuationStorage)
+            Processor wrappedProcessor)
     {
         super(endpoint, wrappedProcessor);
-        Validate.notNull(interactiveContinuationStorage);
-        this.storage = interactiveContinuationStorage;
+        this.storage = getMllpEndpoint().getInteractiveContinuationStorage();
+        Validate.notNull(storage);
     }
 
 
@@ -71,8 +70,10 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         final String msh33 = requestTerser.get("MSH-3-3");
 
         // handle cancel messages; if there is nothing to cancel -- pass to the route
-        if ("QCN".equals(requestMessageType)) {
-            String queryTag = requestTerser.get("QID-1");
+        if ("QCN".equals(requestMessageType) || "CNQ".equals(requestTerser.get("MSH-9-2"))) {
+            String queryTag = "QCN".equals(requestMessageType) ? 
+                    requestTerser.get("QID-1") :
+                    requestTerser.get("QPD-2");
             if (storage.delete(keyString(queryTag, msh31, msh32, msh33))) {
                 LOG.debug("Dropped response chain for query tag " + queryTag);
                 Message ack = MessageUtils.ack(parser.getFactory(), requestMessage);
@@ -82,7 +83,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             }
             return;
         }
-        
+
         // check whether responses to messages of this type can even be splitted
         if (! getMllpEndpoint().getTransactionConfiguration().isContinuable(requestMessageType)) {
             getWrappedProcessor().process(exchange);

@@ -111,6 +111,8 @@ public abstract class MllpComponent extends MinaComponent {
                         "unsolicitedFragmentationStorage",
                         UnsolicitedFragmentationStorage.class);
 
+        boolean autoCancel = getAndRemoveParameter(parameters, "autoCancel", boolean.class, false);
+
         // explicitly overwrite some standard camel-mina parameters
         if (parameters == Collections.EMPTY_MAP) {
             parameters = new HashMap<String, Object>();
@@ -174,7 +176,8 @@ public abstract class MllpComponent extends MinaComponent {
                 unsolicitedFragmentationThreshold,
                 segmentFragmentationThreshold,
                 interactiveContinuationStorage,
-                unsolicitedFragmentationStorage);
+                unsolicitedFragmentationStorage,
+                autoCancel);
     }
 
     private static String extractBeanName(String originalBeanName) {
