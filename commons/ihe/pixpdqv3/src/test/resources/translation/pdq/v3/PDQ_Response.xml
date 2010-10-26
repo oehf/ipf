@@ -26,14 +26,10 @@
     </device>
   </sender>
   <acknowledgement>
-    <typeCode code="CE" />
+    <typeCode code="AA" />
     <targetMessage>
       <id root="1.2.840.114350.1.13.0.1.7.1.1" extension="35423" />
     </targetMessage>
-    <acknowledgementDetail typeCode="E">
-      <code code="INTERR" codeSystem="2.16.840.1.113883.12.357" />
-      <text>resultTotalQuantity &gt; initialQuantity, but query continuation not supported</text>
-    </acknowledgementDetail>
   </acknowledgement>
   <controlActProcess classCode="CACT" moodCode="EVN">
     <code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6" />
@@ -402,7 +398,7 @@
     </subject>
     <queryAck>
       <queryId root="1.2.840.114350.1.13.28.1.18.5.999" extension="18204" />
-      <queryResponseCode code="AE" />
+      <queryResponseCode code="OK" />
       <resultTotalQuantity value="9" />
       <resultCurrentQuantity value="9" />
       <resultRemainingQuantity value="0" />

@@ -36,7 +36,7 @@ class PixUpdateNotificationAck3to2Translator implements Hl7TranslatorV3toV2 {
      * <p>
      * Declared as String from technical reasons.
      */
-    String ackCodeFirstCharacter = 'C'
+    String ackCodeFirstCharacter = 'A'
 
         
     /**

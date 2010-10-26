@@ -21,10 +21,12 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage
 import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor
 import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.EhcacheHl7v3ContinuationStorage
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
 
 /**
  * Tests for ITI-47.
@@ -45,6 +47,7 @@ class TestIti47 extends StandardTestContainer {
 
     private final String SERVICE3 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service3"
     private final String SERVICE4 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service4"
+    private final String SERVICE5 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-service5"
 
     private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator()
 
@@ -74,7 +77,7 @@ class TestIti47 extends StandardTestContainer {
         assertEquals(7, subjectCount)
 
         // check whether cancel message has had effect
-        EhcacheHl7v3ContinuationStorage storage = appContext.getBean('continuationStorage')
+        EhcacheHl7v3ContinuationStorage storage = appContext.getBean('hl7v3ContinuationStorage')
         assertEquals(0, storage.ehcache.size)
     }
 
@@ -105,6 +108,7 @@ class TestIti47 extends StandardTestContainer {
         assert response.controlActProcess.queryAck.queryResponseCode.@code == 'YY'
     }
 
+
     @Test
     void testValidationNakGeneration() {
         String responseString = send(SERVICE4, REQUEST, String.class)
@@ -116,6 +120,22 @@ class TestIti47 extends StandardTestContainer {
         assert response.controlActProcess.reasonOf.detectedIssueEvent.mitigatedBy.detectedIssueManagement.code.@code == 'VALIDAT'
         assert response.controlActProcess.queryAck.statusCode.@code == 'aborted'
         assert response.controlActProcess.queryAck.queryResponseCode.@code == 'QE'
+    }
+
+
+    @Test
+    void testV2Continuation() {
+        String responseString = send(SERVICE5, REQUEST, String.class)
+
+        // check whether the response is full
+        def response = Hl7v3Utils.slurp(responseString)
+        assertEquals('4', response.controlActProcess.queryAck.resultTotalQuantity.@value.text())
+        assertEquals('4', response.controlActProcess.queryAck.resultCurrentQuantity.@value.text())
+        assertEquals('0', response.controlActProcess.queryAck.resultRemainingQuantity.@value.text())
+
+        // check whether HL7 v2 continuation has really been used
+        EhcacheInteractiveConfigurationStorage storage = appContext.getBean('hl7v2ContinuationStorage')
+        assertTrue(storage.ehcache.size > 0)
     }
 
 }

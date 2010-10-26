@@ -38,11 +38,35 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
 
-    <bean id="routeModelExtender" 
+    <bean id="pixpdqv3ModelExtension"
+          class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.extend.PixPdqV3ModelExtension">
+    </bean>
+
+    <bean id="mappingService" class="org.openehealth.ipf.commons.map.BidiMappingService">
+        <property name="mappingScripts">
+            <list>
+                 <value>classpath:META-INF/map/pixfeed-translation.map</value>
+                 <value>classpath:META-INF/map/pdq-translation.map</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="hapiModelExtension" class="org.openehealth.ipf.modules.hl7.extend.HapiModelExtension">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
+
+    <bean id="mappingModelExtension" class="org.openehealth.ipf.commons.map.extend.MappingExtension">
+        <property name="mappingService" ref="mappingService" />
+    </bean>
+
+    <bean id="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
         <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
+                <ref bean="pixpdqv3ModelExtension" />
+                <ref bean="hapiModelExtension" />
+                <ref bean="mappingModelExtension" />
             </list>
         </property>
     </bean>
@@ -63,5 +87,19 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <constructor-arg value="d" />
     </bean>
 
+    <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
+        <property name="charset" value="utf-8"/>
+    </bean>
+
     <import resource="ehcache-spring.xml"/>
+
+    <bean id="hl7v2ContinuationStorage"
+          class="org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage">
+        <constructor-arg>
+            <bean factory-bean="ehcacheManager" factory-method="getCache">
+                <constructor-arg value="hl7v2ContinuationCache" />
+            </bean>
+        </constructor-arg>
+    </bean>
+
 </beans>

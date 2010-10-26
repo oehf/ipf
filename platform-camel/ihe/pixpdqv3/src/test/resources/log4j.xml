@@ -120,13 +120,16 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
         <level value="WARN"/>
     </logger>
     
-    <!-- Logger for all IPF HL7v3 output -->
+    <!-- Loggers for IPF HL7 v2 and v3 output -->
+    <logger name="org.openehealth.ipf.platform.camel.ihe.mllp.core">
+        <level value="DEBUG"/>
+    </logger>
     <logger name="org.openehealth.ipf.platform.camel.ihe.pixpdqv3">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
     </logger>
 
     <root>
-        <level value="INFO"/>
+        <level value="WARN"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 

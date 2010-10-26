@@ -15,11 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation;
 
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7.message.MessageUtilsimport org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;import ca.uhn.hl7v2.parser.ModelClassFactory;
-import groovy.util.slurpersupport.GPathResult
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+
+import ca.uhn.hl7v2.parser.ModelClassFactory
+import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 
 /**
  * PDQ Query request translator HL7 v3 to v2.
@@ -60,59 +63,52 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 */
 	String accountNumberRoot = '1.2.3' 
 
-    /** 
-     * If true, interaction QUQI_IN000003UV01 will be accepted on the input. 
-     * Otherwise QUQI_IN000003UV01 on the input will cause an exception. 
+    /**
+     * If true, initial continuation quantity will be translated in to v2.
+     * This gives the possibility to use HL7v2 interactive continuation support
+     * from the IPF ITI-21 Camel component.
      */
-	boolean supportQueryContinuation = false 
-	
+	boolean translateInitialQuantity = false
+
 	private static final ModelClassFactory MODEL_CLASS_FACTORY =
 	    CustomModelClassUtils.createFactory('pdq', '2.5')
 
 
 	/**
-	 * Translates HL7 v3 request messages <tt>PRPA_IN201305UV01</tt> and 
-	 * <tt>QUQI_IN000003UV01</tt> into HL7 v2 message <tt>QBP^Q22</tt>.
+	 * Translates HL7 v3 request message <tt>PRPA_IN201305UV01</tt>
+     * into HL7 v2 message <tt>QBP^Q22</tt>.
+     * <p>
+     * Continuation and Cancel requests are not supported.
+     * Continuation support in the IPF ITI-21 or ITI-47 Camel components
+     * should be used instead.
 	 */
-    MessageAdapter translateV3toV2(String xmlText, MessageAdapter dummy = null) {
-	    def xml = slurp(xmlText)
-	    def interactionId = xml.interactionId.@extension.text()
-	    if ((interactionId == 'QUQI_IN000003UV01') && !this.supportQueryContinuation) {
-	        throw new UnsupportedOperationException('Query Continuation not supported')
-	    }
-	    
+    MessageAdapter translateV3toV2(String v3requestString, MessageAdapter dummy = null) {
+	    def v3request = slurp(v3requestString)
         def hapiMessage = MessageUtils.makeMessage(MODEL_CLASS_FACTORY, 'QBP', 'Q22', '2.5')
-        def qry = new MessageAdapter(hapiMessage)
+        def v2request = new MessageAdapter(hapiMessage)
         
         // Segment MSH
-        fillMshFromSlurper(xml, qry, this.useSenderDeviceName, this.useReceiverDeviceName)                       
-        if (!this.outputMessageStructure) {
-            qry.MSH[9][3] = ''
+        fillMshFromSlurper(v3request, v2request, useSenderDeviceName, useReceiverDeviceName)
+        if (! outputMessageStructure) {
+            v2request.MSH[9][3] = ''
         }
 
-        // PARSE HL7 V3 MESSAGE
-        def queryByParameter  = xml.controlActProcess.queryByParameter
-        def queryContinuation = xml.controlActProcess.queryContinuation
-
-        def queryId = constructQueryId(queryByParameter) ?: constructQueryId(queryContinuation)
-	    def queryInitialQuantity = queryByParameter.initialQuantity.@value.text()
-
         // determine data containers
+        def queryByParameter  = v3request.controlActProcess.queryByParameter
         def parameterList     = queryByParameter.parameterList
 	    def livingSubjectName = parameterList.livingSubjectName[0].value
-        def livingSubjectId   = parameterList.livingSubjectId.value
-        def patientAddress    = parameterList.patientAddress.value
+        def livingSubjectIds  = parameterList.livingSubjectId.value
+        def patientAddress    = parameterList.patientAddress[0].value[0]
 	    
         // find the first id with a root NOT identical to this.accountNumberRoot
-	    def patientId = livingSubjectId?.find { it.@root != this.accountNumberRoot }
+	    def patientId = livingSubjectIds?.find { it.@root != accountNumberRoot }
 
         // find the first id with a root identical to this.accountNumberRoot   
-        def accountNumber = livingSubjectId?.find { it.@root == this.accountNumberRoot }
+        def accountNumber = livingSubjectIds?.find { it.@root == accountNumberRoot }
         
         // fill query facets
         boolean needWildcard = (livingSubjectName.@use == 'SRCH')
-        // TODO: regarding (livingSubjectName.@use == 'SRCH'): consider CP-308 at
-        // ftp://ftp.ihe.net/IT_Infrastructure/TF_Maintenance-2009/CPs/FinalText/CP-ITI-308-FT.doc
+        // TODO: regarding (livingSubjectName.@use == 'SRCH'): consider CP-308
         def queryParams = [
             '@PID.3.1'    : patientId.@extension.text(),
             '@PID.3.4.1'  : patientId.@assigningAuthorityName.text(),
@@ -134,39 +130,32 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         ] 
         
         // Segment QPD
-        qry.QPD[1] = this.queryName
-        qry.QPD[2] = queryId
+        v2request.QPD[1] = queryName
+        v2request.QPD[2] = constructQueryId(queryByParameter)
         
-        fillFacets(queryParams, qry.QPD[3]) 
+        fillFacets(queryParams, v2request.QPD[3])
 
         for (scopingOrg in parameterList.otherIDsScopingOrganization) {
             def value = scopingOrg.value.@root.text()
             if (value) {
-                def qpd84 = nextRepetition(qry.QPD[8])[4]
+                def qpd84 = nextRepetition(v2request.QPD[8])[4]
                 qpd84[2].value = value
                 qpd84[3].value = 'ISO'
             }
 	    }
 
-        // Other segments: Handle continuations
-        def continuation = xml.controlActProcess.queryContinuation
-        def continuationQuantityValue = continuation.continuationQuantity.@value.text()
-        def resultStart = continuation.startResultNumber.@value.text()    
-                
         // Segment RCP
-        qry.RCP[1] = 'I'
-        qry.RCP[2] = continuationQuantityValue ? continuationQuantityValue : queryInitialQuantity
-
-        // Segment DSC
-	    if (resultStart) {
-	        qry.DSC[1].value = resultStart 
-	    }
+        v2request.RCP[1] = 'I'
+        if (translateInitialQuantity) {
+            v2request.RCP[2][1] = queryByParameter.initialQuantity.@value.text()
+            v2request.RCP[2][2] = 'RD'
+        }
 
         // user-defined enrichment/post-processing of the MessageAdapter
-        postprocess(qry, xml)
+        postprocess(v2request, v3request)
         
         // return MessageAdapter
-	    return qry
+	    return v2request
 	}
 
 
@@ -178,7 +167,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
     /**
      * To be customized in derived classes. 
      */
-    void postprocess(MessageAdapter qry, GPathResult xml) {
+    void postprocess(MessageAdapter v2request, GPathResult v3request) {
         // empty per default
     }
 }

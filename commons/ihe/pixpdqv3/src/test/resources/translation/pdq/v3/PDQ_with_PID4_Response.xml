@@ -26,7 +26,7 @@
     </device>
   </sender>
   <acknowledgement>
-    <typeCode code="CA" />
+    <typeCode code="AA" />
     <targetMessage>
       <id root="1.2.3.4.5" extension="0b0f509c-ffb4-4c46-88a2-473d558ac232" />
     </targetMessage>
