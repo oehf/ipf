@@ -59,7 +59,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from('pdqv3-iti47:pdqv3-iti47-service1' +
+        from('pdqv3-iti47:pdqv3-iti47-serviceConti' +
              '?supportContinuation=true' +
              '&defaultContinuationThreshold=1' +
              '&continuationStorage=#hl7v3ContinuationStorage' +
@@ -68,13 +68,13 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 Exchanges.resultMessage(it).body = V3_RESPONSE
             }
 
-        from('pdqv3-iti47:pdqv3-iti47-service2')
+        from('pdqv3-iti47:pdqv3-iti47-serviceIntercept')
             .process {
                 Exchanges.resultMessage(it).body = '<response from="PDSupplier"/>'
             }
 
-        // check Hl7v3 exception handling
-        from('pdqv3-iti47:pdqv3-iti47-service3')
+        // check Hl7v3 exception handling (NAK with issue management code)
+        from('pdqv3-iti47:pdqv3-iti47-serviceNak1')
             .process {
                 throw new Hl7v3Exception('message1', [
                     detectedIssueEventCode: 'ISSUE',
@@ -86,15 +86,28 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 ])
             }
 
+        // check Hl7v3 exception handling (NAK without issue management code)
+        from('pdqv3-iti47:pdqv3-iti47-serviceNak2')
+            .process {
+                throw new Hl7v3Exception('message1', [
+                    detectedIssueEventCode: 'ISSUE',
+                    typeCode: 'XX',
+                    statusCode: 'revised',
+                    queryResponseCode: 'YY',
+                    acknowledgementDetailCode: 'FEHLER'
+                ])
+            }
+
+
         // check validation exception handling
-        from('pdqv3-iti47:pdqv3-iti47-service4')
+        from('pdqv3-iti47:pdqv3-iti47-serviceNakValidate')
             .process {
                 throw new ValidationException('message2')
             }
 
 
         // routes for v3-v2 continuation interoperability test
-        from('pdqv3-iti47:pdqv3-iti47-service5')
+        from('pdqv3-iti47:pdqv3-iti47-serviceV2Conti')
             .validate().iti47Request()
             .translateHL7v3toHL7v2(REQUEST_TRANSLATOR)
             .to('pdq-iti21://localhost:8888?supportInteractiveContinuation=true')

@@ -123,7 +123,7 @@ class Hl7v3NakFactory {
         {
             buildInstanceIdentifier(builder, 'id', false, nakMessageIdRoot, UUID.randomUUID().toString())
             creationTime(value: hl7timestamp())
-            interactionId(root: '2.16.840.1.113883.1.6', extension: 'MCCI_IN000002UV01')
+            interactionId(root: originalMessage.interactionId.@root.text(), extension: nakRootElementName)
             processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
@@ -149,9 +149,12 @@ class Hl7v3NakFactory {
                         reasonOf(typeCode: 'RSON') {
                             detectedIssueEvent(classCode: 'ALRT', moodCode: 'EVN') {
                                 code(code: detectedIssueEventCode0, codeSystem: detectedIssueEventCodeSystem0)
-                                mitigatedBy(typeCode: 'MITGT') {
-                                    detectedIssueManagement(classCode: 'ACT', moodCode: 'EVN') {
-                                        code(code: detectedIssueManagementCode0, codeSystem: detectedIssueManagementCodeSystem0)
+
+                                if (detectedIssueManagementCode0) {
+                                    mitigatedBy(typeCode: 'MITGT') {
+                                        detectedIssueManagement(classCode: 'ACT', moodCode: 'EVN') {
+                                            code(code: detectedIssueManagementCode0, codeSystem: detectedIssueManagementCodeSystem0)
+                                        }
                                     }
                                 }
                             }
