@@ -330,6 +330,7 @@ class MessageUtils {
          StringBuffer buf = new StringBuffer("${msg.class.simpleName} Version $version\n")
          dumpStructure(msg, buf, INDENT_SIZE).toString()
      }
+	 
 
 	 private static def dumpStructure(Group group, StringBuffer buf, int indent) {
 		 group.names.each { name ->

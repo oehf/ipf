@@ -178,7 +178,23 @@ class HapiModelExtension {
 	    Message.metaClass.validate = { validationContext ->
     		MessageUtils.validate(delegate, validationContext)
 	    }
-	    
+		
+		Message.metaClass.addSegment = { String name, boolean required, boolean repeating ->
+			delegate.add(delegate.modelClassFactory.getSegmentClass(name, getVersion()), required, repeating)
+        }
+		
+		Message.metaClass.addSegment = { String name, boolean required, boolean repeating, int index ->
+			delegate.add(delegate.modelClassFactory.getSegmentClass(name, getVersion()), required, repeating, index)
+		}
+
+		Message.metaClass.addGroup = { String name, boolean required, boolean repeating ->
+			delegate.add(delegate.modelClassFactory.getGroupClass(name, getVersion()), required, repeating)
+		}
+
+		Message.metaClass.addGroup = { String name, boolean required, boolean repeating, int index ->
+			delegate.add(delegate.modelClassFactory.getGroupClass(name, getVersion()), required, repeating, index)
+		}
+		
         // ----------------------------------------------------------------
         //  Extensions to HAPI Segments
         // ----------------------------------------------------------------

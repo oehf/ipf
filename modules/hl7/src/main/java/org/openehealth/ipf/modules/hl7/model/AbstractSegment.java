@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.AbstractMessage;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Type;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
@@ -36,6 +37,16 @@ public abstract class AbstractSegment extends ca.uhn.hl7v2.model.AbstractSegment
     public AbstractSegment(Group parent, ModelClassFactory factory) {
         super(parent, factory);
     }
+    
+    protected void add(String typeName, boolean required, int maxReps, int length, Object[] constructorArgs) throws HL7Exception {
+    	add(typeName, required, maxReps, length, constructorArgs, null);
+    }
+    
+    protected void add(String typeName, boolean required, int maxReps, int length, Object[] constructorArgs, String name) throws HL7Exception {
+    	AbstractMessage message = (AbstractMessage)getMessage();
+    	Class<? extends Type> typeClass = message.getModelClassFactory().getTypeClass(typeName, message.getVersion());
+    	add(typeClass, required, maxReps, length, constructorArgs, name);
+    }    
 
     /**
      * Returns the field content casted to the type that is specified by the

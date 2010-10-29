@@ -47,11 +47,19 @@ public class CustomModelClassFactory implements ModelClassFactory{
 	private static Log LOG = LogFactory.getLog(CustomModelClassFactory.class)
 	
 	CustomModelClassFactory() {
-		defaultFactory = new DefaultModelClassFactory()
+		this(new DefaultModelClassFactory())
+	}
+	
+	CustomModelClassFactory(ModelClassFactory defaultFactory) {
+		this.defaultFactory = defaultFactory
 	}
 	
 	CustomModelClassFactory(Map<String, String[]> map) {
-		defaultFactory = new DefaultModelClassFactory()
+		this(new DefaultModelClassFactory(), map)
+	}
+	
+	CustomModelClassFactory(ModelClassFactory defaultFactory, Map<String, String[]> map) {
+		this.defaultFactory = defaultFactory
 		customModelClasses = map
 	}
 	
@@ -92,14 +100,15 @@ public class CustomModelClassFactory implements ModelClassFactory{
 			HL7Exception.UNSUPPORTED_VERSION_ID);
 		}
 		def classLoaded = null
+		def fullyQualifiedName = null
 		customModelClasses?.getAt(version)?.find {
 			try {
 				def sep = it.endsWith('.') ? '' : '.'
-				def fullyQualifiedName = "${it}${sep}${subpackage}.${name}"        		
+				fullyQualifiedName = "${it}${sep}${subpackage}.${name}"        		
 				classLoaded = Class.forName(fullyQualifiedName)
 				LOG.debug("Found ${fullyQualifiedName} in custom HL7 model definitions")
 			} catch (Exception e) {
-				// do nothing
+				// No warning. Caller searches in DefaultModelClassFactory
 			}
 			return classLoaded
 		}
