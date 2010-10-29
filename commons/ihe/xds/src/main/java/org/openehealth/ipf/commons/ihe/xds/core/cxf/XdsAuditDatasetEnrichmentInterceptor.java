@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.cxf;
 import java.util.List;
 
 import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.interceptor.OneWayProcessorInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
@@ -46,8 +47,10 @@ public class XdsAuditDatasetEnrichmentInterceptor extends AuditInterceptor {
      *      (<code>true</code>) or on the client side (<code>false</code>)  
      */
     public XdsAuditDatasetEnrichmentInterceptor(WsAuditStrategy auditStrategy, boolean serverSide) {
-        super(serverSide ? Phase.PRE_INVOKE : Phase.WRITE_ENDING, auditStrategy);
-        if (! serverSide) {
+        super(serverSide ? Phase.PRE_LOGICAL : Phase.WRITE_ENDING, auditStrategy);
+        if (serverSide) {
+            addBefore(OneWayProcessorInterceptor.class.getName());
+        } else {
             addAfter(OutPayloadExtractorInterceptor.class.getName());
         }
     }
