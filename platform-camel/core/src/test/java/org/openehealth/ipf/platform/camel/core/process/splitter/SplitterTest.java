@@ -31,11 +31,11 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.Expression;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
+import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.util.ObjectHelper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openehealth.ipf.platform.camel.core.process.splitter.Splitter;
 import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFileIterator;
 
@@ -44,12 +44,18 @@ import org.openehealth.ipf.platform.camel.core.process.splitter.support.TextFile
  * @author Jens Riemschneider
  */
 public class SplitterTest {
-    private Splitter splitter;
+    private static CamelContext camelContext;
 
+    private Splitter splitter;
     private TestSplitRule splitRule;
     private TestAggregationStrategy aggregationStrat;
     private TestProcessor dest;
-    
+
+    @BeforeClass
+    public static void setUpClass() {
+        camelContext = new DefaultCamelContext();
+    }
+
     @Before
     public void setUp() {
         splitRule = new TestSplitRule();
@@ -174,8 +180,8 @@ public class SplitterTest {
         assertEquals("blu", origExchange.getOut().getBody());
     }
 
-    private static Exchange createTestExchange() {
-        return new DefaultExchange((CamelContext)null, ExchangePattern.InOut);
+    private Exchange createTestExchange() {
+        return new DefaultExchange(camelContext, ExchangePattern.InOut);
     }
     
     private static String getContent(Exchange exchange) {

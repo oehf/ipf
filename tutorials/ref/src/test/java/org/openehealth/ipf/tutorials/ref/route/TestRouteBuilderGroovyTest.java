@@ -102,7 +102,7 @@ public class TestRouteBuilderGroovyTest {
     }
  
     @Test
-    public void testErrorApp() throws Exception {
+    public void testInvalidContent() throws Exception {
         mockErrorApp.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:order", 
                 createExchange(new ClassPathResource("order/order-invalid-content.xml").getInputStream()));
@@ -112,12 +112,12 @@ public class TestRouteBuilderGroovyTest {
     }
  
     @Test
-    public void testErrorSys() throws Exception {
-        mockErrorSys.expectedMessageCount(1);
+    public void testInvalidFormat() throws Exception {
+        mockErrorApp.expectedMessageCount(1);
         Exchange exchange = producerTemplate.send("direct:order", 
                 createExchange(new ClassPathResource("order/order-invalid-format.xml").getInputStream()));
-        assertTrue(exchange.getException() instanceof SAXParseException);
-        mockErrorSys.assertIsSatisfied();
+        assertTrue(exchange.getException() instanceof ValidationException);
+        mockErrorApp.assertIsSatisfied();
     }
  
     private Exchange createExchange(Object body) {
