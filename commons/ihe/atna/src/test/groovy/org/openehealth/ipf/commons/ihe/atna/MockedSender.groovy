@@ -25,7 +25,7 @@ import java.util.concurrent.CountDownLatch
  * @author Jens Riemschneider
  */
 class MockedSender implements AuditMessageSender {
-    List<AuditEventMessage> messages = []
+    List<AuditEventMessage> messages = Collections.synchronizedList(new ArrayList<AuditEventMessage>())
     CountDownLatch latch
 
     MockedSender() {
