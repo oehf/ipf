@@ -27,12 +27,14 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class OIDValidator implements ValueValidator {
+    private static final Pattern OID_PATTERN =
+            Pattern.compile("[1-9][0-9]*(\\.(0|([1-9][0-9]*)))+");
+
     @Override
     public void validate(String oid) throws XDSMetaDataException {
         notNull(oid, "oid cannot be null");
         
         metaDataAssert(oid.length() <= 64, OID_TOO_LONG, oid);
-        metaDataAssert(Pattern.matches("[1-9][0-9]*(\\.(0|([1-9][0-9]*)))+", oid),
-                INVALID_OID, oid);
+        metaDataAssert(OID_PATTERN.matcher(oid).matches(), INVALID_OID, oid);
     }
 }

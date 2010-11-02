@@ -43,9 +43,6 @@ public class CamelOnlyRouteBuilder extends SpringRouteBuilder {
     private static final Parser PARSER = new Iti21Component().getParser();
     private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
     private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();
-    static {
-        RESPONSE_TRANSLATOR.setSupportQueryContinuation(true);
-    }
 
 
     @Override

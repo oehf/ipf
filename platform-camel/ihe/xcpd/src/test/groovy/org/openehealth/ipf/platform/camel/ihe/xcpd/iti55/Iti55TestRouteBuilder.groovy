@@ -23,13 +23,15 @@ import org.apache.camel.Message;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils;
+import org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Test routes for ITI-55.
  * @author Dmytro Rud
  */
 class Iti55TestRouteBuilder extends SpringRouteBuilder {
+    private static final transient LOG = LogFactory.getLog(Iti55TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
@@ -37,7 +39,8 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
     static final String RESPONSE = XcpdTestUtils.readFile('iti55/iti55-sample-response.xml') 
 
     static final long ASYNC_DELAY = 10 * 1000L
-    
+
+    static boolean errorOccurred = false
     
     @Override
     public void configure() throws Exception {
@@ -46,13 +49,18 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
         from('xcpd-iti55-async-response:iti55service-response?correlator=#correlator')
             .validate().iti55Response()
             .process {
-                def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
-                assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
-                
-                assert it.pattern == ExchangePattern.InOnly
-                assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == 
-                    "corr ${asyncResponseCount.getAndIncrement() * 2}"
-                XcpdTestUtils.testPositiveAckCode(it.in.body)
+                try {
+                    def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                    assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+
+                    assert it.pattern == ExchangePattern.InOnly
+                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] ==
+                        "corr ${asyncResponseCount.getAndIncrement() * 2}"
+                    XcpdTestUtils.testPositiveAckCode(it.in.body)
+                } catch (Exception e) {
+                    errorOccurred = true
+                    LOG.error(e)
+                }
             }
             .delay(ASYNC_DELAY)
 
@@ -64,7 +72,13 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                 // check incoming SOAP and HTTP headers
                 Duration dura = TtlHeaderUtils.getTtl(it.in)
                 def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
-                assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
+
+                try {
+                    assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
+                } catch (Exception e) {
+                    errorOccurred = true
+                    LOG.error(e)
+                }
 
                 // create response, inclusive SOAP and HTTP headers
                 Message message = Exchanges.resultMessage(it)

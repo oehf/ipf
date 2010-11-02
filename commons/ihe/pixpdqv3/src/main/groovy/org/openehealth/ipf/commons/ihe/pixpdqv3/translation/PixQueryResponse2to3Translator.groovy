@@ -61,7 +61,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * <p>
      * Declared as String from technical reasons.
      */
-    String ackCodeFirstCharacter = 'C'
+    String ackCodeFirstCharacter = 'A'
 
 
     /**

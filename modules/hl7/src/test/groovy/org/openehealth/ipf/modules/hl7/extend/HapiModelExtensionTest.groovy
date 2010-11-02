@@ -18,6 +18,7 @@ package org.openehealth.ipf.modules.hl7.extend
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.model.*
 import ca.uhn.hl7v2.model.v25.segment.NK1
+import ca.uhn.hl7v2.util.Terser
 
 import org.openehealth.ipf.commons.core.extend.DefaultActivator
 import org.openehealth.ipf.commons.map.BidiMappingService
@@ -27,6 +28,7 @@ import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7.HL7v2Exception
 
 import org.springframework.core.io.ClassPathResource
+import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
 
 /**
  * @author Christian Ohr
@@ -37,6 +39,7 @@ public class HapiModelExtensionTest extends GroovyTestCase {
     static def mappingService
 	static def defMappingExtension
     static def hl7MappingExtension
+	static def customGroovyPackageName = 'org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v25'
 
     static {
         ExpandoMetaClass.enableGlobally()
@@ -260,5 +263,18 @@ public class HapiModelExtensionTest extends GroovyTestCase {
         assert msg.MSH.messageType.encode() == 'ADT^A01'
         assert msg.MSH.encode() == 'MSH|^~\\&|SAP-ISH|HZL|||20040805152637||ADT^A01|123456|T|2.2|||ER'    	
     }
+	
+	// Parse a message with a ModelClassFactory that dynamically loads Groovy HL7 Model Classes.
+	// This tests the Message#addSegment extension
+	void testParseWithCustomGroovyClasses() {
+		def msgText = this.class.classLoader.getResource('msg-09.hl7')?.text
+		def customModelClasses = ['2.5' : [customGroovyPackageName]]
+		def customFactory = new GroovyCustomModelClassFactory(customModelClasses)
+		def parser = new PipeParser(customFactory)
+		def hapiMessage = parser.parse(msgText)
+		Segment s = hapiMessage.get('ZBE')
+		assert s.class.name.contains(customGroovyPackageName)
+		assert '1234' == Terser.get(s, 1, 0, 1, 1)
+	}
 }
 

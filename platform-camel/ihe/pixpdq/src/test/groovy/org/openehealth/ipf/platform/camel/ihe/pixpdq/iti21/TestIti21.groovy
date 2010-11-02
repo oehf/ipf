@@ -107,7 +107,7 @@ class TestIti21 extends MllpTestContainer {
         }
 
         def messages = auditSender.messages
-        assertEquals(3, messages.size)
+        assertEquals(3, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
         assertTrue(messages[1] instanceof SecurityAlertEvent)
     }
@@ -136,7 +136,7 @@ class TestIti21 extends MllpTestContainer {
         }
 
         def messages = auditSender.messages
-        assertEquals(2, messages.size)
+        assertEquals(2, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
 
@@ -144,14 +144,14 @@ class TestIti21 extends MllpTestContainer {
         final String body = getMessageString('QBP^Q22', '2.5') 
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
         send('pdq-iti21://localhost:18214', getMessageString('QBP^Q22', '2.5'))
         def messages = auditSender.messages
-        assertEquals(3, messages.size)
+        assertEquals(3, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
 
@@ -206,7 +206,7 @@ class TestIti21 extends MllpTestContainer {
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -252,7 +252,7 @@ class TestIti21 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
 
 
@@ -264,7 +264,7 @@ class TestIti21 extends MllpTestContainer {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = 'pdq-iti21://localhost:18213'
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size)
+        assertEquals(2, auditSender.messages.size())
         assertNAK(msg)
     }
     
@@ -277,7 +277,7 @@ class TestIti21 extends MllpTestContainer {
             'QID|dummy|gummy||\n'
         def endpointUri = 'pdq-iti21://localhost:18212'
         def msg = send(endpointUri, body)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
         assertACK(msg)
     }
 

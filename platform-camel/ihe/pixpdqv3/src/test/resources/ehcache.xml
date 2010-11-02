@@ -31,5 +31,15 @@
            diskPersistent="true"
             />
 
+    <!-- for combined ITI-47 + ITI-21 continuation test -->
+    <cache name="hl7v2ContinuationCache"
+           timeToLiveSeconds="600"
+           maxElementsInMemory="1"
+           overflowToDisk="true"
+           maxElementsOnDisk="0"
+           eternal="false"
+           diskPersistent="true"
+            />
+
 </ehcache>
 

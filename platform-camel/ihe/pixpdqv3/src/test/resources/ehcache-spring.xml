@@ -23,7 +23,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 
     <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager" factory-method="create" />
 
-    <bean id="continuationStorage"
+    <bean id="hl7v3ContinuationStorage"
           class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.EhcacheHl7v3ContinuationStorage">
         <constructor-arg>
             <bean factory-bean="ehcacheManager" factory-method="getCache">

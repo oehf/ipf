@@ -62,6 +62,7 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final int segmentFragmentationThreshold;
     private final InteractiveContinuationStorage interactiveContinuationStorage;
     private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
+    private final boolean autoCancel;
 
 
     /**
@@ -106,6 +107,9 @@ public class MllpEndpoint extends DefaultEndpoint {
      *      consumer-side storage for interactive message continuation.
      * @param unsolicitedFragmentationStorage
      *      consumer-side storage for unsolicited message fragmentation.
+     * @param autoCancel
+     *      whether the producer should automatically send a cancel message
+     *      after it has collected all inetractive continuation pieces.
      */
     public MllpEndpoint(
             MinaEndpoint wrappedEndpoint, 
@@ -127,7 +131,8 @@ public class MllpEndpoint extends DefaultEndpoint {
             int unsolicitedFragmentationThreshold,
             int segmentFragmentationThreshold,
             InteractiveContinuationStorage interactiveContinuationStorage,
-            UnsolicitedFragmentationStorage unsolicitedFragmentationStorage)
+            UnsolicitedFragmentationStorage unsolicitedFragmentationStorage,
+            boolean autoCancel)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -157,6 +162,7 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.segmentFragmentationThreshold = segmentFragmentationThreshold;
         this.interactiveContinuationStorage = interactiveContinuationStorage;
         this.unsolicitedFragmentationStorage = unsolicitedFragmentationStorage;
+        this.autoCancel = autoCancel;
     }
 
 
@@ -185,7 +191,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             x = new CustomInterceptorWrapper(interceptor, this, x);
         }
         if (isAudit()) {
-            x = new ConsumerAuthenticationFailureInterceptor(this, x, getServerAuditStrategy());
+            x = new ConsumerAuthenticationFailureInterceptor(this, x);
         }
         x = new ConsumerAdaptingInterceptor(this, x);
         x = new ConsumerOutputAcceptanceInterceptor(this, x);
@@ -193,12 +199,12 @@ public class MllpEndpoint extends DefaultEndpoint {
             x = new ConsumerAuditInterceptor(this, x);
         }
         if (isSupportInteractiveContinuation()) {
-            x = new ConsumerInteractiveResponseSenderInterceptor(this, x, interactiveContinuationStorage);
+            x = new ConsumerInteractiveResponseSenderInterceptor(this, x);
         }
         x = new ConsumerInputAcceptanceInterceptor(this, x);
         x = new ConsumerMarshalInterceptor(this, x);
         if (isSupportUnsolicitedFragmentation()) {
-            x = new ConsumerRequestDefragmenterInterceptor(this, x, unsolicitedFragmentationStorage);
+            x = new ConsumerRequestDefragmenterInterceptor(this, x);
         }
         x = new ConsumerStringProcessorInterceptor(this, x);
         return wrappedEndpoint.createConsumer(x);
@@ -348,7 +354,7 @@ public class MllpEndpoint extends DefaultEndpoint {
     /**
      * Returns the interactive continuation storage bean. 
      */
-    public InteractiveContinuationStorage getContinuationStorage() {
+    public InteractiveContinuationStorage getInteractiveContinuationStorage() {
         return interactiveContinuationStorage;
     }
 
@@ -358,7 +364,15 @@ public class MllpEndpoint extends DefaultEndpoint {
     public UnsolicitedFragmentationStorage getUnsolicitedFragmentationStorage() {
         return unsolicitedFragmentationStorage;
     }
-    
+
+    /**
+     * Returns true, when the producer should automatically send a cancel
+     * message after it has colelcted all interactive continuation pieces.
+     */
+    public boolean isAutoCancel() {
+        return autoCancel;
+    }
+
 
     // ----- dumb delegation, nothing interesting below -----
 

@@ -55,10 +55,8 @@ public class GetAssociationsQueryTransformerTest {
         assertEquals(Arrays.asList("('uuid1')", "('uuid2')"),
                 ebXML.getSlotValues(QueryParameter.UUID.getSlotName()));
         
-        assertEquals(Arrays.asList("'home'"),
-                ebXML.getSlotValues(QueryParameter.HOME.getSlotName()));
-        
-        assertEquals(2, ebXML.getSlots().size());
+        assertEquals("home", ebXML.getHome());
+        assertEquals(1, ebXML.getSlots().size());
     }
     
     @Test

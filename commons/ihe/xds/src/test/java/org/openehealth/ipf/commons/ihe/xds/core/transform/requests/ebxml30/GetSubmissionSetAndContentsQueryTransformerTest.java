@@ -72,9 +72,8 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
         assertEquals(Arrays.asList("'uniqueId1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_UNIQUE_ID.getSlotName()));
 
-        assertEquals(Arrays.asList("'home'"),
-                ebXML.getSlotValues(QueryParameter.HOME.getSlotName()));
-        
+        assertEquals("home", ebXML.getHome());
+
         assertEquals(Arrays.asList("('code13')", "('code14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
         
@@ -83,7 +82,7 @@ public class GetSubmissionSetAndContentsQueryTransformerTest {
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
         assertEquals(Arrays.asList("('code12^^scheme12')"), slots.get(1).getValueList());
         
-        assertEquals(6, ebXML.getSlots().size());
+        assertEquals(5, ebXML.getSlots().size());
     }
     
     @Test

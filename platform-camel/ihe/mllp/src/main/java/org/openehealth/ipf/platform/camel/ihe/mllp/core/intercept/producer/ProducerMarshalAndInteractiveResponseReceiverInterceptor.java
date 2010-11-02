@@ -23,6 +23,10 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.
 
 import java.util.List;
 
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.Segment;
+import ca.uhn.hl7v2.model.v25.message.QCN_J01;
+import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
 import org.apache.commons.logging.Log;
@@ -167,6 +171,18 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         // get accumulated response
         if (fragmentsCount > 1) {
             responseString = fragmentAccumulator.toString();
+
+            // prepare and send automatic cancel request, if necessary.
+            // All errors will be ignored
+            if (getMllpEndpoint().isAutoCancel()) {
+                try {
+                    String cancel = createCancelMessage((Message) request.getTarget(), getMllpEndpoint().getParser());
+                    exchange.getIn().setBody(cancel);
+                    getWrappedProcessor().process(exchange);
+                } catch (Exception e) {
+                    LOG.warn("Error while preparing and sending automatic cancel message", e);
+                }
+            }
         }
 
         // unmarshal and return
@@ -183,4 +199,78 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
     }
 
 
+    /**
+     * Creates a continuation cancel message on the basis of the given request.
+     * <p>
+     * For requests with HL7 version (MSH-12) prior to 2.4, a <tt>CNQ</tt>
+     * message will be created.  For requests with version 2.4 and above,
+     * a <tt>QCN^J01</tt> message will be created.
+     * See paragraph 5.6.3 in HL7 v2.5 specification.
+     */
+    private static String createCancelMessage(Message request, Parser parser) throws HL7Exception {
+        return (request.getVersion().charAt(2) < '4') ?
+            createCnqMessage(request, parser) :
+            createQcnJ01Message(request, parser);
+    }
+
+
+    private static String createQcnJ01Message(Message request, Parser parser) throws HL7Exception {
+        Message cancel = new QCN_J01();
+
+        // ===== Segment MSH =====
+        Segment requestMsh = (Segment) request.get("MSH");
+        Segment cancelMsh = (Segment) cancel.get("MSH");
+
+        Terser.set(cancelMsh, 1, 0, 1, 1, Terser.get(requestMsh, 1, 0, 1, 1));
+        Terser.set(cancelMsh, 2, 0, 1, 1, Terser.get(requestMsh, 2, 0, 1, 1));
+
+        // sender & receiver
+        for (int field = 3; field <= 6; ++field) {
+            for (int component = 1; component <= 3; ++component) {
+               Terser.set(cancelMsh,  field, 0, component, 1,
+               Terser.get(requestMsh, field, 0, component, 1));
+            }
+        }
+        Terser.set(cancelMsh,  7, 0, 1, 1, MessageUtils.hl7Now());
+        Terser.set(cancelMsh,  9, 0, 1, 1, "QCN");
+        Terser.set(cancelMsh,  9, 0, 2, 1, "J01");
+        Terser.set(cancelMsh,  9, 0, 3, 1, "QCN_J01");
+        Terser.set(cancelMsh, 10, 0, 1, 1, uniqueId());
+        Terser.set(cancelMsh, 11, 0, 1, 1, "P");
+
+        // version
+        for (int component = 1; component <= 3; ++component) {
+           Terser.set(cancelMsh,  12, 0, component, 1,
+           Terser.get(requestMsh, 12, 0, component, 1));
+        }
+
+        // ===== Segment QID =====
+        Segment requestQpd = (Segment) request.get("QPD");
+        Segment cancelQid = (Segment) cancel.get("QID");
+
+        // query tag: QPD-2 --> QID-1
+        Terser.set(cancelQid, 1, 0, 1, 1, Terser.get(requestQpd, 2, 0, 1, 1));
+
+        // message query name: QPD-1 --> QID-2, 6 components
+        for (int component = 1; component <= 6; ++component) {
+            Terser.set(cancelQid,  2, 0, component, 1,
+            Terser.get(requestQpd, 1, 0, component, 1));
+        }
+
+        // return
+        return parser.encode(cancel);
+    }
+
+
+    private static String createCnqMessage(Message request, Parser parser) throws HL7Exception {
+        Message cancel = parser.parse(parser.encode(request));
+        Segment cancelMsh = (Segment) cancel.get("MSH");
+
+        Terser.set(cancelMsh,  7, 0, 1, 1, MessageUtils.hl7Now());
+        Terser.set(cancelMsh,  9, 0, 2, 1, "CNQ");
+        Terser.set(cancelMsh,  9, 0, 3, 1, "");
+        Terser.set(cancelMsh, 10, 0, 1, 1, uniqueId());
+
+        return parser.encode(cancel);
+    }
 }

@@ -104,7 +104,7 @@ class TestIti18 extends StandardTestContainer {
         
     @Test
     void testSample() {
-        def response = 
+        def response =
             send(SAMPLE_SERVICE, SampleData.createFindDocumentsQuery(), QueryResponse.class)
         assert SUCCESS == response.status
         assert 1 == response.references.size()
@@ -112,6 +112,18 @@ class TestIti18 extends StandardTestContainer {
 
         response = send(SAMPLE_SERVICE, SampleData.createGetDocumentsQuery(), QueryResponse.class)
         assert FAILURE == response.status
+
+        assert auditSender.messages.size() == 4
+        [2, 3].each { i ->
+            boolean found = false
+            def message = new XmlSlurper().parseText(auditSender.messages[i].auditMessage.toString())
+            for (detail in message.ParticipantObjectIdentification.ParticipantObjectDetail) {
+                if ((detail.@type.text() == 'ihe:homeCommunityID') && detail.@value.text()) {
+                    found = true
+                }
+            }
+            assert found
+        }
     }
 
     def sendIt(endpoint, value) {

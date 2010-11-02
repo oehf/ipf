@@ -27,10 +27,12 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class HashValidator implements ValueValidator {
+    private static final Pattern HASH_PATTERN = Pattern.compile("[a-fA-F0-9]{40}");
+
     @Override
     public void validate(String value) throws XDSMetaDataException {
         notNull(value, "value cannot be null");
-        metaDataAssert(Pattern.matches("[a-fA-F0-9]{40}", value), 
+        metaDataAssert(HASH_PATTERN.matcher(value).matches(),
                 INVALID_HASH_CODE, value);
     }
 }

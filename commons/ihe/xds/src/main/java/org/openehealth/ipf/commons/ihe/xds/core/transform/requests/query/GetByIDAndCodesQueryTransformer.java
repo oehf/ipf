@@ -15,12 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
-import static org.apache.commons.lang.Validate.notNull;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.HOME;
-
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByIdAndCodesQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+
+import static org.apache.commons.lang.Validate.notNull;
 
 /**
  * Base class of transformers for {@link GetByIdAndCodesQuery}.
@@ -82,10 +81,10 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         ebXML.setId(query.getType().getId());
+        ebXML.setHome(query.getHomeCommunityId());
         
         slots.fromCode(formatCodeParam, query.getFormatCodes());
         slots.fromCode(confCodeParam, query.getConfidentialityCodes());
-        slots.fromString(HOME, query.getHomeCommunityId());
         slots.fromString(uuidParam, query.getUuid());
         slots.fromString(uniqueIdParam, query.getUniqueId());
     }
@@ -110,7 +109,7 @@ public abstract class GetByIDAndCodesQueryTransformer<T extends GetByIdAndCodesQ
         query.setConfidentialityCodes(slots.toCodeQueryList(confCodeParam, confCodeSchemeParam));
         query.setUniqueId(slots.toString(uniqueIdParam));
         query.setUuid(slots.toString(uuidParam));
-        query.setHomeCommunityId(slots.toString(HOME));
+        query.setHomeCommunityId(ebXML.getHome());
     }
 
 }

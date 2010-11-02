@@ -58,9 +58,6 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
 
 -->
 
-	<!-- Appender for console. The log messages appear on the console from which
-	     DCS was started. -->
-
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <param name="threshold" value="TRACE"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -78,77 +75,13 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
         </filter>    
     </appender>
 
-	<!-- Use this appender for debug use - displays class names, line numbers -->
-
-	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="threshold" value="DEBUG"/>
-        <param name="File" value="testxds.log"/>
-        <param name="DatePattern" value="'.'EEE"/>
-		<layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern"
-                value="%d{yyyy-MM-dd'T'HH:mm:ss,SSS} [%t] %-5p - %C{1}.%M(%L) | %m%n"/>
-        </layout>
-        <!-- Remove Derby logs -->
-		<filter class="org.apache.log4j.varia.StringMatchFilter">
-			<param name="StringToMatch" value="not created, connection made to existing database instead" />
-			<param name="AcceptOnMatch" value="false" />
-		</filter>       
-		<filter class="org.apache.log4j.varia.StringMatchFilter">
-			<param name="StringToMatch" value="SQL Warning: 10000, SQLState: 01J01" />
-			<param name="AcceptOnMatch" value="false" />
-		</filter>    
-    </appender>
-	
-    
-    
-	<!-- Logger for all ICW output -->
-    <logger name="com.icw.ehf.integration">
-        <level value="INFO"/>
-    </logger>
-
-	<!-- Logger for all Apache 3rd party lib output -->
-    <logger name="org.apache">
-        <level value="WARN"/>
-    </logger>
-    
-	<!-- Logger for all Spring Framework output -->
-    <logger name="org.springframework">
-        <level value="WARN"/>
-    </logger>
-    
-	<!-- Logger for all transaction-related output -->
-    <logger name="org.jencks">
-        <level value="WARN"/>
-    </logger>
-    
-	<!-- Logger for all JMS messaging output -->
-    <logger name="org.apache.activemq">
-        <level value="INFO"/>
-    </logger>
-    
-    <logger name="org.apache.activemq.transport.discovery">
-        <level value="ERROR"/>
-    </logger>
-    
-	<!-- Logger for all native Camel output -->
-    <logger name="org.apache.camel">
-        <level value="INFO"/>
-    </logger>
-	
-    <!-- Logger for all Caching output -->
-    <logger name="net.sf.ehcache">
-        <level value="WARN"/>
-    </logger>
-    
-	<!-- Loggers for all Hibernate output -->
-	<logger name="org.hibernate.">
-		<level value="ERROR"/>
+	<logger name="org.openehealth.ipf.platform.camel.ihe.mllp.core">
+		<level value="DEBUG"/>
 	</logger>
     
     <root>
-        <level value="INFO"/>
+        <level value="WARN"/>
         <appender-ref ref="CONSOLE"/>
-<!--        <appender-ref ref="FILE"/>-->
     </root>
 
 </log4j:configuration>

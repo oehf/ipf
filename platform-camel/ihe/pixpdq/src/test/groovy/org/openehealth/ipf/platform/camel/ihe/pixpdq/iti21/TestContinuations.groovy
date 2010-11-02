@@ -20,6 +20,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer;
 import static org.junit.Assert.*
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage
 
 /**
  * Tests for HL7 continuations, see § 2.10.2 of the HL7 v.2.5 specification.
@@ -45,7 +46,8 @@ class TestContinuations extends MllpTestContainer {
             int port, 
             boolean supportInteractiveContinuation,
             boolean supportUnsolicitedFragmentation,
-            boolean supportSegmentFragmentation) 
+            boolean supportSegmentFragmentation,
+            boolean autoCancel)
     {
         return "pdq-iti21://localhost:${port}?timeout=30000000000" +
                "&supportInteractiveContinuation=${supportInteractiveContinuation}" +
@@ -53,25 +55,30 @@ class TestContinuations extends MllpTestContainer {
                "&supportUnsolicitedFragmentation=${supportUnsolicitedFragmentation}" +
                "&unsolicitedFragmentationThreshold=3" +
                "&unsolicitedFragmentationStorage=#unsolicitedFragmentationStorage" +
-               "&supportSegmentFragmentation=${supportSegmentFragmentation}"
+               "&supportSegmentFragmentation=${supportSegmentFragmentation}" +
+               "&autoCancel=${autoCancel}"
     }
     
     
     @Test
     void testHappyCaseAndAudit() {
-        def msg = send(endpointUri(28210, true, true, true), REQUEST_MESSAGE)
+        def msg = send(endpointUri(28210, true, true, true, true), REQUEST_MESSAGE)
         assert 4 == msg.QUERY_RESPONSE().size()
-        assert 2 == auditSender.messages.size
+        assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
+
+        // check whether "autoCancel" parameter works
+        EhcacheInteractiveConfigurationStorage storage = appContext.getBean('interactiveContinuationStorage')
+        assert storage.ehcache.size == 0
     }
     
     @Test
     void testInteractiveAssembly() {
-        def msg = send(endpointUri(28211, true, false, false), REQUEST_MESSAGE)
+        def msg = send(endpointUri(28211, true, false, false, false), REQUEST_MESSAGE)
         assert 4 == msg.QUERY_RESPONSE().size()
-        assert 2 == auditSender.messages.size
+        assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value

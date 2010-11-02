@@ -27,10 +27,13 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class LanguageCodeValidator implements ValueValidator {
+    private static final Pattern CODE_PATTERN =
+            Pattern.compile("[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*");
+
     @Override
     public void validate(String value) throws XDSMetaDataException {
         notNull(value, "value cannot be null");
-        metaDataAssert(Pattern.matches("[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*", value), 
+        metaDataAssert(CODE_PATTERN.matcher(value).matches(),
                 INVALID_LANGUAGE_CODE, value);
     }
 }

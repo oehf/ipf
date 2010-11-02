@@ -81,7 +81,7 @@ class TestIti8 extends MllpTestContainer {
         final String body = getMessageString('ADT^A01', '2.3.1') 
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 
     /**
@@ -130,7 +130,7 @@ class TestIti8 extends MllpTestContainer {
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -176,7 +176,7 @@ class TestIti8 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -209,7 +209,7 @@ class TestIti8 extends MllpTestContainer {
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 
 

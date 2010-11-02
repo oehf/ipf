@@ -62,8 +62,7 @@ public class SplitterCopyAspectTest {
                 context,
                 new TestExpression(),
                 new TestProcessor(),
-                new UseLatestAggregationStrategy(),
-                false, null, false, false);
+                new UseLatestAggregationStrategy());
     }
 
     @After

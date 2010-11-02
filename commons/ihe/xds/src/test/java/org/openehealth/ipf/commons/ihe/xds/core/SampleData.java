@@ -330,7 +330,7 @@ public abstract class SampleData {
      */
     public static QueryRegistry createGetDocumentsQuery() {
         GetDocumentsQuery query = new GetDocumentsQuery();
-        query.setHomeCommunityId("home1");
+        query.setHomeCommunityId("urn:oid:1.2.3.14.15.926");
         query.setUuids(Collections.singletonList("document01"));
         
         return new QueryRegistry(query);

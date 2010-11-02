@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.keyString;
 
+import ca.uhn.hl7v2.HL7Exception;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang.Validate;
@@ -46,14 +47,10 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
     private final UnsolicitedFragmentationStorage storage;
     
-    public ConsumerRequestDefragmenterInterceptor(
-            MllpEndpoint endpoint, 
-            Processor wrappedProcessor,
-            UnsolicitedFragmentationStorage storage) 
-    {
+    public ConsumerRequestDefragmenterInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
         super(endpoint, wrappedProcessor);
+        this.storage = getMllpEndpoint().getUnsolicitedFragmentationStorage();
         Validate.notNull(storage);
-        this.storage = storage;
     }
 
 
@@ -67,8 +64,15 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
         Message requestMessage = parser.parse(requestString);
         Terser requestTerser = new Terser(requestMessage);
         String msh14 = requestTerser.get("MSH-14");
-        String dsc1 = "I".equals(requestTerser.get("DSC-2")) ? null : requestTerser.get("DSC-1"); 
-        
+        String dsc1 = null;
+        try {
+            if (! "I".equals(requestTerser.get("DSC-2"))) {
+                dsc1 = requestTerser.get("DSC-1");
+            }
+        } catch (HL7Exception e) {
+            // segment DSC does not exist in cancel requests
+        }
+
         // pass when the message is not fragmented
         if (isEmpty(msh14) && isEmpty(dsc1)) {
             getWrappedProcessor().process(exchange);

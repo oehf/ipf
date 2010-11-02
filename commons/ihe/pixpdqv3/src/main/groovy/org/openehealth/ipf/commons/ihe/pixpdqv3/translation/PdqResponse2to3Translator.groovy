@@ -75,12 +75,6 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
     String errorCodeSystem = '2.16.840.1.113883.12.357'
 
     /**
-     * If true, the translation will handle DSC segments from the PDQv2 interface. 
-     * Otherwise the presence of the DSC segment will cause errors.
-     */
-    boolean supportQueryContinuation = false
-
-    /**
      * <tt>root</tt> attribute of message's <tt>id</tt> element.
      */
     String messageIdRoot = '1.2.3'
@@ -90,12 +84,14 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
      * <p>
      * Declared as String from technical reasons.
      */
-    String ackCodeFirstCharacter = 'C'
+    String ackCodeFirstCharacter = 'A'
 
         
     /**
      * Translates HL7 v2 response messages <tt>RSP^K22</tt> and <tt>ACK</tt> 
      * into HL7 v3 message <tt>PRPA_IN201306UV02</tt>.
+     * <p>
+     * Parameters related to interactive continuation are ignored.
      */
     String translateV2toV3(MessageAdapter rsp, String origMessage) {
         def output = new ByteArrayOutputStream()
@@ -217,14 +213,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
         
         if (ackCode[1] == 'A') {
             if (rsp.MSH[9][1].value == 'RSP') {
-                // continuations are not supported
-                if ((!this.supportQueryContinuation) && rsp.DSC[1].value) {
-                    ackCode = 'AE'
-                    responseStatus = 'AE'
-                    errorText = 'resultTotalQuantity > initialQuantity, but query continuation not supported'
-                } else {
-                    responseStatus = rsp.QAK[2].value ?: ''                    
-                }
+                responseStatus = rsp.QAK[2].value ?: ''
             }
         } else {
             responseStatus = ackCode
