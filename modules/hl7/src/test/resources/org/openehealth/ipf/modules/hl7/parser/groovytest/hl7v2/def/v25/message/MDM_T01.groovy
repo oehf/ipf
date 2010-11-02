@@ -15,8 +15,6 @@
 */
 package org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v25.message
 
-import org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v25.segment.ZBE
-
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.ModelClassFactory
 import ca.uhn.log.HapiLogFactory
@@ -54,9 +52,9 @@ public class MDM_T01 extends ca.uhn.hl7v2.model.v25.message.MDM_T01 {
 	   }
    }
 
-   public ZBE getZBE() {
+   public def getZBE() {
 	   try {
-		   return (ZBE) get("ZBE")
+		   return get("ZBE")
 	   } catch (HL7Exception e) {
 		   throw new RuntimeException(e)
 	   }
