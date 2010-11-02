@@ -74,7 +74,7 @@ class TestIti22 extends MllpTestContainer {
         final String body = getMessageString(msh9, '2.5') 
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 
     /**
@@ -123,7 +123,7 @@ class TestIti22 extends MllpTestContainer {
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -169,7 +169,7 @@ class TestIti22 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 }

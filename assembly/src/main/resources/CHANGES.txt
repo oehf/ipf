@@ -1,4 +1,4 @@
-Changes in IPF 2.2-m2
+Changes in IPF 2.2-m4
 ---------------------
 
-See http://repo.openehealth.org/confluence/display/ipf2/IPF+2.2-m2#IPF2.2-m2-Releasenotes
+See http://repo.openehealth.org/confluence/display/ipf2/IPF+2.2-m4#IPF2.2-m4-Releasenotes

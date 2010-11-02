@@ -65,7 +65,7 @@ class TestIti10 extends MllpTestContainer {
         final String body = getMessageString(needStructure ? 'ADT^A31^ADT_A05' : 'ADT^A31', '2.5') 
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 
     /**
@@ -114,7 +114,7 @@ class TestIti10 extends MllpTestContainer {
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -160,7 +160,7 @@ class TestIti10 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -193,6 +193,6 @@ class TestIti10 extends MllpTestContainer {
         def body = getMessageString('ADT^A31', '2.5', false)
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 }

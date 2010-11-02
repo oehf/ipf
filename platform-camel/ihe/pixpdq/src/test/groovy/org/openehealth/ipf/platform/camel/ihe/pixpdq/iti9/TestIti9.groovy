@@ -76,7 +76,7 @@ class TestIti9 extends MllpTestContainer {
         final String body = getMessageString('QBP^Q23', '2.5') 
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
 
     /**
@@ -125,7 +125,7 @@ class TestIti9 extends MllpTestContainer {
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -171,7 +171,7 @@ class TestIti9 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, auditSender.messages.size)
+        assertEquals(0, auditSender.messages.size())
     }
     
 
@@ -204,7 +204,7 @@ class TestIti9 extends MllpTestContainer {
         def body = getMessageString('QBP^Q23', '2.5', false)
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, auditSender.messages.size)
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
     
     /**
@@ -215,7 +215,7 @@ class TestIti9 extends MllpTestContainer {
         def body = getMessageString('QBP^Q23', '2.5')
         def endpointUri = 'pix-iti9://localhost:18093'
         def msg = send(endpointUri, body)
-        assertEquals(2, auditSender.messages.size)
+        assertEquals(2, auditSender.messages.size())
         assertNAK(msg)
     }
     

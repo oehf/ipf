@@ -64,7 +64,7 @@ class TestContinuations extends MllpTestContainer {
     void testHappyCaseAndAudit() {
         def msg = send(endpointUri(28210, true, true, true, true), REQUEST_MESSAGE)
         assert 4 == msg.QUERY_RESPONSE().size()
-        assert 2 == auditSender.messages.size
+        assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
@@ -78,7 +78,7 @@ class TestContinuations extends MllpTestContainer {
     void testInteractiveAssembly() {
         def msg = send(endpointUri(28211, true, false, false, false), REQUEST_MESSAGE)
         assert 4 == msg.QUERY_RESPONSE().size()
-        assert 2 == auditSender.messages.size
+        assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
