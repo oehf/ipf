@@ -20,13 +20,18 @@
 http://www.springframework.org/schema/beans 
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-  <bean id="customModelClassFactory" 
-        class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory">
+  <bean id="groovyCustomModelClassFactory"
+        class="org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory">
+      <constructor-arg ref="javaCustomModelClassFactory"/>
+  </bean>
+
+  <bean id="javaCustomModelClassFactory"
+        class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory" >
   </bean>
 
   <bean id="configurer" 
         class="org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer">
-    <property name="customModelClassFactory" ref="customModelClassFactory" />
+    <property name="customModelClassFactory" ref="groovyCustomModelClassFactory" />
   </bean>
   
   <bean id="postProcessor" 
