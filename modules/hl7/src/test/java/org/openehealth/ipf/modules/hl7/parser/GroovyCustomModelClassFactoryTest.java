@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.modules.hl7.config;
+package org.openehealth.ipf.modules.hl7.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,15 +31,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/context-custom-configurer.xml",
 		"/context-custom-classes.xml" })
-public class CustomModelClassFactoryConfigurerTest {
+public class GroovyCustomModelClassFactoryTest {
 
     @Autowired
     private CustomModelClassFactoryConfigurer configurer;
     
     @Test
     public void testMappings() {
-    	Map<String, String[]> map = configurer.getCustomModelClassFactory().getCustomModelClasses();
-    	assertTrue(map.containsKey("2.5"));
-    	assertEquals("org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25", map.get("2.5")[0]);
+        Map<String, String[]> map = configurer.getCustomModelClassFactory().getCustomModelClasses();
+        assertTrue(map.containsKey("2.5"));
+        assertTrue(map.containsKey("2.4"));
+        Class clazz = configurer.getCustomModelClassFactory()
+                .getMessageClass("MDM_T01", "2.5", false);
+        assertNotNull(clazz);
+        assertEquals("org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25.message.MDM_T01",
+                clazz.getCanonicalName());
+        Class clazz1 = configurer.getCustomModelClassFactory()
+                .getMessageClass("MDM_T02", "2.4", false);
+        assertNotNull(clazz1);
+        assertEquals("org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v24.message.MDM_T02",
+                clazz1.getCanonicalName());
     }	
 }

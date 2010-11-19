@@ -36,7 +36,8 @@ import org.apache.commons.logging.LogFactory
  * (DefaultModelClassFactory).
  * 
  * @author Christian Ohr
- * @author Marek Václavík
+ * @author Marek Vaclavik
+ * @author Boris Stanojevic
  * 
  */
 public class CustomModelClassFactory implements ModelClassFactory{
@@ -114,5 +115,32 @@ public class CustomModelClassFactory implements ModelClassFactory{
 		}
 		return classLoaded 
 	}
+
+    // adds the custom model classes to the CustomModelClassFactory
+    // on top of the existing ones
+    public void addModels(Map<String, String[]> extendedModelClasses) {
+        Map<String, String[]> existingModelClasses = getCustomModelClasses();
+
+        if (existingModelClasses == null) {
+            existingModelClasses = new HashMap<String, String[]>();
+            setCustomModelClasses(existingModelClasses);
+        }
+        for (String version : extendedModelClasses.keySet()) {
+            if (existingModelClasses.containsKey(version)) {
+                // the new packages must be added after the existing ones.
+                String[] existingPackageNames = existingModelClasses.get(version);
+                String[] newPackageNames = extendedModelClasses.get(version);
+                String[] allPackageNames = new String[existingPackageNames.length
+                        + newPackageNames.length];
+                System.arraycopy(existingPackageNames, 0, allPackageNames, 0,
+                        existingPackageNames.length);
+                System.arraycopy(newPackageNames, 0, allPackageNames,
+                        existingPackageNames.length, newPackageNames.length);
+                existingModelClasses.put(version, allPackageNames);
+            } else {
+                existingModelClasses.put(version, extendedModelClasses.get(version));
+            }
+        }
+    }
 	
 }

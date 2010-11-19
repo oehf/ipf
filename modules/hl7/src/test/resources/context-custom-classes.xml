@@ -27,7 +27,12 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
         <entry key="2.5">
           <list>
             <value>org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25</value>
-          </list>  
+          </list>
+        </entry>
+        <entry key="2.4">
+          <list>
+            <value>org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v24</value>
+          </list>
         </entry>
       </map>
     </property>

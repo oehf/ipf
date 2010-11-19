@@ -15,14 +15,18 @@
  */
 package org.openehealth.ipf.modules.hl7.config;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
+import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.core.config.SpringConfigurer;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
+import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
 
@@ -34,6 +38,7 @@ import org.springframework.beans.factory.ListableBeanFactory;
  * existing ones.
  * 
  * @author Boris Stanojevic
+ * @author Christian Ohr
  * 
  */
 public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomModelClasses> {
@@ -41,6 +46,8 @@ public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomMo
     private CustomModelClassFactory customModelClassFactory;
     
     private static final Log LOG = LogFactory.getLog(CustomModelClassFactoryConfigurer.class);
+
+    boolean configureRecursively = true;
     
     @SuppressWarnings("unchecked")
     @Override
@@ -51,30 +58,21 @@ public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomMo
 
     @Override
     public void configure(CustomModelClasses configuration) {
-        Map<String, String[]> existingModelClasses = customModelClassFactory.getCustomModelClasses();
-        
-        if (existingModelClasses == null) {
-            existingModelClasses = new HashMap<String, String[]>();
-            customModelClassFactory.setCustomModelClasses(existingModelClasses);
+        // update the top ModelClassFactory
+        ModelClassFactory delegateFactory = configureAndDelegate(customModelClassFactory, configuration);
+        // delegate if required
+        CustomModelClassFactory currentFactory;
+        while (isConfigureRecursively() && (delegateFactory instanceof CustomModelClassFactory)) {
+            currentFactory = (CustomModelClassFactory)delegateFactory;
+            delegateFactory = configureAndDelegate(currentFactory, configuration);
         }
-        for (String version : configuration.getModelClasses().keySet()) {
-            if (existingModelClasses.containsKey(version)) {
-                // the new packages must be added after the existing ones.
-                String[] existingPackageNames = existingModelClasses.get(version);
-                String[] newPackageNames = configuration.getModelClasses().get(version);
-                String[] allPackageNames = new String[existingPackageNames.length
-                        + newPackageNames.length];
-                System.arraycopy(existingPackageNames, 0, allPackageNames, 0,
-                        existingPackageNames.length);
-                System.arraycopy(newPackageNames, 0, allPackageNames,
-                        existingPackageNames.length, newPackageNames.length);
-                existingModelClasses.put(version, allPackageNames);
-            } else {
-                existingModelClasses.put(version, configuration
-                        .getModelClasses().get(version));
-            }
-        } 
         LOG.debug("Custom model classes configured: " + configuration);
+    }
+
+    private ModelClassFactory configureAndDelegate(CustomModelClassFactory factory,
+                                                   CustomModelClasses configuration) {
+       factory.addModels(configuration.getModelClasses());
+       return factory.getDefaultFactory();
     }
 
     public CustomModelClassFactory getCustomModelClassFactory() {
@@ -86,4 +84,11 @@ public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomMo
         this.customModelClassFactory = customModelClassFactory;
     }
 
+    public boolean isConfigureRecursively() {
+        return configureRecursively;
+    }
+
+    public void setConfigureRecursively(boolean configureRecursively) {
+        this.configureRecursively = configureRecursively;
+    }
 }
