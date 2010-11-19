@@ -24,10 +24,10 @@
          ========================================================================== -->
     <sch:pattern id="patient-constraints-section_3_55_4_2_2_2">
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient">
-            <sch:report test="hl7:patientNonPersonLivingSubject">result must relate to a person</sch:report>
+            <sch:assert test="not(hl7:patientNonPersonLivingSubject)">result must relate to a person</sch:assert>
             
-            <sch:report test="hl7:subjectOf2">subjectOf2 must be omitted</sch:report>
-            <sch:report test="hl7:coveredPartyOf">coveredPartyOf must be omitted</sch:report>
+            <sch:assert test="not(hl7:subjectOf2)">subjectOf2 must be omitted</sch:assert>
+            <sch:assert test="not(hl7:coveredPartyOf)">coveredPartyOf must be omitted</sch:assert>
 
             <sch:assert test="@classCode = 'PAT'">classCode must equal to 'PAT'</sch:assert>
             <sch:assert test="count(hl7:id) = 1">exactly one main patient ID must be present (use asOtherIds for additional IDs)</sch:assert>
@@ -39,13 +39,13 @@
         </sch:rule>
 
         <sch:rule context="/hl7:PRPA_IN201306UV02/hl7:controlActProcess/hl7:subject/hl7:registrationEvent/hl7:subject1/hl7:patient/hl7:patientPerson">
-            <sch:report test="hl7:asPatientOfOtherProvider">asPatientOfOtherProvider must be omitted</sch:report>
-            <sch:report test="hl7:guarantorRole">guarantorRole must be omitted</sch:report>
-            <sch:report test="hl7:guardian">guardian must be omitted</sch:report>
-            <sch:report test="hl7:contactParty">contactParty must be omitted</sch:report>
-            <sch:report test="hl7:asMember">asMember must be omitted</sch:report>
-            <sch:report test="hl7:careGiver">careGiver must be omitted</sch:report>
-            <sch:report test="hl7:asStudent">asStudent must be omitted</sch:report>
+            <sch:assert test="not(hl7:asPatientOfOtherProvider)">asPatientOfOtherProvider must be omitted</sch:assert>
+            <sch:assert test="not(hl7:guarantorRole)">guarantorRole must be omitted</sch:assert>
+            <sch:assert test="not(hl7:guardian)">guardian must be omitted</sch:assert>
+            <sch:assert test="not(hl7:contactParty)">contactParty must be omitted</sch:assert>
+            <sch:assert test="not(hl7:asMember)">asMember must be omitted</sch:assert>
+            <sch:assert test="not(hl7:careGiver)">careGiver must be omitted</sch:assert>
+            <sch:assert test="not(hl7:asStudent)">asStudent must be omitted</sch:assert>
             
             <sch:assert test="@classCode = 'PSN'">classCode must equal to 'PSN'</sch:assert>
             <sch:assert test="@determinerCode = 'INSTANCE'">determinerCode must equal to 'INSTANCE'</sch:assert>
@@ -118,9 +118,9 @@
             <sch:assert test="hl7:id/@root">
                 homeCommunityId must be specified in the attribute 'id/@root'
             </sch:assert>
-            <sch:report test="hl7:id/@nullFlavor or hl7:id/@extension or hl7:id/@assigningAuthorityName">
+            <sch:assert test="not(hl7:id/@nullFlavor or hl7:id/@extension or hl7:id/@assigningAuthorityName)">
                 only attribute 'root' is allowed in the sub-element 'id'
-            </sch:report>
+            </sch:assert>
         </sch:rule>
     </sch:pattern>
 

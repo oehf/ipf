@@ -109,12 +109,12 @@
     <sch:pattern id="qbp-constraints">
     
         <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter">
-            <sch:report test="hl7:matchCriterionList/hl7:id">matchCriterionList.id must be omitted</sch:report>
-            <sch:report test="hl7:responseElementGroupId">responseElementGroupId must be omitted</sch:report>
-            <sch:report test="hl7:modifyCode">modifyCode must be omitted</sch:report>
-            <sch:report test="hl7:executionAndDeliveryTime">executionAndDeliveryTime must be omitted</sch:report>
-            <sch:report test="hl7:sortControl">sortControl must be omitted</sch:report>
-            <sch:report test="hl7:matchCriterionList/hl7:matchWeight">matchCriterionList.matchWeight must be omitted</sch:report>
+            <sch:assert test="not(hl7:matchCriterionList/hl7:id)">matchCriterionList.id must be omitted</sch:assert>
+            <sch:assert test="not(hl7:responseElementGroupId)">responseElementGroupId must be omitted</sch:assert>
+            <sch:assert test="not(hl7:modifyCode)">modifyCode must be omitted</sch:assert>
+            <sch:assert test="not(hl7:executionAndDeliveryTime)">executionAndDeliveryTime must be omitted</sch:assert>
+            <sch:assert test="not(hl7:sortControl)">sortControl must be omitted</sch:assert>
+            <sch:assert test="not(hl7:matchCriterionList/hl7:matchWeight)">matchCriterionList.matchWeight must be omitted</sch:assert>
 
             <sch:assert test="hl7:responsePriorityCode/@code = 'I'">responsePriorityCode must equal to 'I'</sch:assert>
             <sch:assert test="hl7:responseModalityCode/@code = 'R'">responseModalityCode must equal to 'R'</sch:assert>
@@ -128,15 +128,15 @@
         </sch:rule>
 	    
         <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList">
-            <sch:report test="hl7:id">parameterList.id must be omitted</sch:report>
-            <sch:report test="hl7:patientTelecom">patientTelecom must be omitted</sch:report>
-            <sch:report test="hl7:principalCareProviderId">principalCareProviderId must be omitted</sch:report>
-            <sch:report test="hl7:principalCareProvisionId">principalCareProvisionId must be omitted</sch:report>
-            <sch:report test="hl7:mothersMaidenName">mothersMaidenName must be omitted</sch:report>
-            <sch:report test="hl7:livingSubjectDeceaseTime">livingSubjectDeceaseTime must be omitted</sch:report>
-            <sch:report test="hl7:patientStatusCode">patientStatusCode must be omitted</sch:report>
-            <sch:report test="hl7:livingSubjectBirthPlaceName">livingSubjectBirthPlaceName must be omitted</sch:report>
-            <sch:report test="hl7:livingSubjectBirthPlaceAddress">livingSubjectBirthPlaceAddress must be omitted</sch:report>
+            <sch:assert test="not(hl7:id)">parameterList.id must be omitted</sch:assert>
+            <sch:assert test="not(hl7:patientTelecom)">patientTelecom must be omitted</sch:assert>
+            <sch:assert test="not(hl7:principalCareProviderId)">principalCareProviderId must be omitted</sch:assert>
+            <sch:assert test="not(hl7:principalCareProvisionId)">principalCareProvisionId must be omitted</sch:assert>
+            <sch:assert test="not(hl7:mothersMaidenName)">mothersMaidenName must be omitted</sch:assert>
+            <sch:assert test="not(hl7:livingSubjectDeceaseTime)">livingSubjectDeceaseTime must be omitted</sch:assert>
+            <sch:assert test="not(hl7:patientStatusCode)">patientStatusCode must be omitted</sch:assert>
+            <sch:assert test="not(hl7:livingSubjectBirthPlaceName)">livingSubjectBirthPlaceName must be omitted</sch:assert>
+            <sch:assert test="not(hl7:livingSubjectBirthPlaceAddress)">livingSubjectBirthPlaceAddress must be omitted</sch:assert>
         </sch:rule>
 
         <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList/hl7:otherIDsScopingOrganization/hl7:value">
