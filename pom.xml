@@ -867,17 +867,13 @@
                 <version>${resources-plugin-version}</version>
             </plugin>
             <plugin>
-              <artifactId>maven-jar-plugin</artifactId>
-              <configuration>
-                <archive>  
-                  <manifestFile>META-INF/MANIFEST.MF</manifestFile>
-                </archive> 
-                <excludes>
-                    <!-- Do not include the .groovy files, that are declared as resources, in the binaries -->    
-                    <exclude>**/*.groovy</exclude>
-                </excludes>
-              </configuration>
-            </plugin>  
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -888,7 +884,7 @@
                             <goal>jar</goal>
                         </goals>
                     </execution>
-              </executions>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
