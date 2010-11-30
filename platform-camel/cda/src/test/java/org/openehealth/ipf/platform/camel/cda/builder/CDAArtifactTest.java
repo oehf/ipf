@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.cda.builder;
 
 import org.junit.Test;
-import org.openehealth.ipf.modules.cda.builder.CDAR2Builder;
+import org.openehealth.ipf.modules.cda.builder.content.document.CCDBuilder;
 
 /**
  * Ensures that the modules-cda artifact contains the required builder resources
@@ -27,11 +27,10 @@ import org.openehealth.ipf.modules.cda.builder.CDAR2Builder;
 public class CDAArtifactTest {
 
     /**
-     * Without the builder resources the CDAR2Builder can not be instantiated.
+     * Without the /builder resources in modules-cda the CCDBuilder can not be instantiated.
      */
     @Test
-    public void testModulesArtifactContainsCDABuilderResources() {
-        new CDAR2Builder(getClass().getClassLoader());
+    public void testArtifactContainsRequiredCCDBuilderResources() {
+        new CCDBuilder();
     }
-
 }
