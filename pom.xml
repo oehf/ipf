@@ -867,13 +867,18 @@
                 <version>${resources-plugin-version}</version>
             </plugin>
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
-            </plugin>
+              <artifactId>maven-jar-plugin</artifactId>
+              <configuration>
+                <archive>  
+                  <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                </archive> 
+                <excludes>
+                    <!-- The binaries should not include the .groovy files, that are declared as resources (src/main/groovy). -->
+                    <!-- Override (refine) this rule in the modules, if required to include groovy files in the jar (e.g. modules-cda) -->
+                    <exclude>**/*.groovy</exclude>
+                </excludes>
+              </configuration>
+            </plugin>  
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
