@@ -149,7 +149,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
     MessageAdapter translateV3toV2(String xmlText, MessageAdapter dummy = null) {
 	    def xml           = slurp(xmlText)
 	    def interactionId = xml.interactionId.@extension.text()
-        def triggerEvent  = interactionId.map('map-interactionId-eventStructure')[0]
+        def triggerEvent  = interactionId.map('hl7v2v3-interactionId-eventStructure')[0]
 	    
         def hapiMessage   = Message."ADT_${triggerEvent}"('2.3.1')        
         def adt           = new MessageAdapter(hapiMessage)
@@ -217,7 +217,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         
         // PID-7..8
         grp.PID[7][1].value = dropTimeZone(person.birthTime.@value.text())
-        grp.PID[8].value    = person.administrativeGenderCode.@code.text().map('bidi-administrativeGender-administrativeGender')
+        grp.PID[8].value    = person.administrativeGenderCode.@code.text().map('hl7v2v3-bidi-administrativeGender-administrativeGender')
         
         // PID-11 = addresses
         for (address in person.addr) {
@@ -279,8 +279,8 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
         }        
         
         // PID-16..                
-        grp.PID[16] = person.maritalStatusCode.@code.text().map('patient-maritalStatus')
-        grp.PID[17] = person.religiousAffiliationCode.@code.text().map('patient-religiousAffiliation')
+        grp.PID[16] = person.maritalStatusCode.@code.text().map('hl7v2v3-patient-maritalStatus')
+        grp.PID[17] = person.religiousAffiliationCode.@code.text().map('hl7v2v3-patient-religiousAffiliation')
 
         // Segment PV1
         grp.PV1[2] = 'O'

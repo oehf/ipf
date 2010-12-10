@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation;
 
-import java.util.Map
 import groovy.xml.MarkupBuilder
 import groovy.util.slurpersupport.GPathResult
 
@@ -86,6 +85,11 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
      */
     String ackCodeFirstCharacter = 'A'
 
+    /**
+     * Root for values from PID-19.
+     */
+    String nationalIdentifierRoot = '2.16.840.1.113883.4.1'
+
         
     /**
      * Translates HL7 v2 response messages <tt>RSP^K22</tt> and <tt>ACK</tt> 
@@ -142,7 +146,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                                 translateTelecom(builder, qr.PID[13], 'H')
                                                 translateTelecom(builder, qr.PID[14], 'WP')
 
-                                                def gender = (qr.PID[8].value ?: '').mapReverse('bidi-administrativeGender-administrativeGender')
+                                                def gender = (qr.PID[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
                                                 administrativeGenderCode(code: gender)
                                                 birthTime(value: qr.PID[7][1].value ?: '')
                                                 addr {
@@ -163,6 +167,15 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                                         }
                                                         scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
                                                             id(nullFlavor: 'UNK')
+                                                        }
+                                                    }
+                                                }
+
+                                                if (qr.PID[19].value) {
+                                                    asOtherIDs(classCode: 'PAT') {
+                                                        id(root: nationalIdentifierRoot, extension: qr.PID[19].value)
+                                                        scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                                                            id(root: nationalIdentifierRoot)
                                                         }
                                                     }
                                                 }
@@ -293,7 +306,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                     schema = 'mailto'
                     break
                 }
-                builder.telecom(value: "${schema}: ${number}", use: use)
+                builder.telecom(value: "${schema}:${number}", use: use)
             }
         }
     }

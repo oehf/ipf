@@ -28,8 +28,7 @@ class PixFeedTranslatorTest extends Hl7TranslationTestContainer {
     static void setUpClass() {
         doSetUp('pixfeed',
                 new PixFeedRequest3to2Translator(),
-                new PixFeedAck2to3Translator(),
-                'pixfeed-translation.map')
+                new PixFeedAck2to3Translator())
     }        
   
     @Test

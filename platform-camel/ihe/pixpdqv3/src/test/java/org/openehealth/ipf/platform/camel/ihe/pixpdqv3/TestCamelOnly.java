@@ -44,7 +44,7 @@ public class TestCamelOnly extends StandardTestContainer {
     @BeforeClass
     public static void setUpClass() {
         BidiMappingService mappingService = new BidiMappingService();
-        mappingService.setMappingScript(new ClassPathResource("META-INF/map/pdq-translation.map"));
+        mappingService.setMappingScript(new ClassPathResource("META-INF/map/hl7-v2-v3-translation.map"));
         MappingExtension mappingExtension = new MappingExtension();
         mappingExtension.setMappingService(mappingService);
         ((Closure) mappingExtension.getExtensions()).call();

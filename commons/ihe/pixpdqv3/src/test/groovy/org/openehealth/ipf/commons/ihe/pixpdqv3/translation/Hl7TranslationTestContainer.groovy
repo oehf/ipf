@@ -59,21 +59,18 @@ class Hl7TranslationTestContainer {
     static void doSetUp(
             String transactionName, 
             Hl7TranslatorV3toV2 v3tov2Translator,
-            Hl7TranslatorV2toV3 v2tov3Translator,
-            String mappingResourceName = null) 
+            Hl7TranslatorV2toV3 v2tov3Translator) 
     {
-        if (mappingResourceName) {
-            def mappingService = new BidiMappingService()
-            mappingService.mappingScript = new ClassPathResource('META-INF/map/' + mappingResourceName)
-            def mappingExtension = new MappingExtension()
-            mappingExtension.mappingService = mappingService
-            mappingExtension.extensions()
-            
-            def hapiExtension = new HapiModelExtension()
-            hapiExtension.setMappingService(mappingService)
-            hapiExtension.extensions()
-        }
-        
+        def mappingService = new BidiMappingService()
+        mappingService.mappingScript = new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map')
+        def mappingExtension = new MappingExtension()
+        mappingExtension.mappingService = mappingService
+        mappingExtension.extensions()
+
+        def hapiExtension = new HapiModelExtension()
+        hapiExtension.setMappingService(mappingService)
+        hapiExtension.extensions()
+
         Hl7TranslationTestContainer.transactionName = transactionName
         
         XMLUnit.setCompareUnmatched(true)

@@ -28,21 +28,6 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
  * @author Dmytro Rud, Marek Václavík
  */
 class Utils {
-
-    /**
-     * Maps v2 ERR-3 (table 0357) to v3 AcknowledgementDetailCode 
-     * (code system 2.16.840.1.113883.5.1100). 
-     */
-    private static final Map<String, String> V2_TO_V3_ERROR_CODE_MAP = [
-        '101' : 'SYN105',
-        '102' : 'SYN102',
-        '103' : 'SYN103',
-        '200' : 'NS200',
-        '201' : 'NS200',
-        '202' : 'NS202',
-        '203' : 'NS203',
-    ]
-
     
     /**
      * Returns the next repetition of the given HL7 v2 field/segment/etc.
@@ -178,7 +163,7 @@ class Utils {
             }
             if (ackCode[1] != 'A') {
                 acknowledgementDetail(typeCode: 'E') {
-                    def errorCode = V2_TO_V3_ERROR_CODE_MAP[status.errorCode] ?: 'INTERR'
+                    def errorCode = status.errorCode.map('hl7v2v3-error-codes')
                     code(code: errorCode, codeSystem: errorCodeSystem)
                     text(status.errorText)
                     status.errorLocations.each { location(it) }

@@ -47,16 +47,16 @@
                 <family>Fed</family>
                 <given>Fed</given>
               </name>
-              <telecom value="tel: 022-23571" use="H" />
-              <telecom value="tel: 022-23572" use="WP" />
-              <telecom value="mailto: fed@gmx.de" use="H" />
-              <telecom value="fax: 022-23574" use="H" />
-              <telecom value="tel: 022-23575" use="MC" />
-              <telecom value="tel: 022-23576" use="WP" />
-              <telecom value="tel: 022-23577" use="WP" />
-              <telecom value="mailto: fed2@gmx.de" use="H" />
-              <telecom value="fax: 022-23578" use="WP" />
-              <telecom value="tel: 022-23579" use="MC" />
+              <telecom value="tel:022-23571" use="H" />
+              <telecom value="tel:022-23572" use="WP" />
+              <telecom value="mailto:fed@gmx.de" use="H" />
+              <telecom value="fax:022-23574" use="H" />
+              <telecom value="tel:022-23575" use="MC" />
+              <telecom value="tel:022-23576" use="WP" />
+              <telecom value="tel:022-23577" use="WP" />
+              <telecom value="mailto:fed2@gmx.de" use="H" />
+              <telecom value="fax:022-23578" use="WP" />
+              <telecom value="tel:022-23579" use="MC" />
               <administrativeGenderCode code="M" />
               <birthTime value="19400101" />
               <addr>

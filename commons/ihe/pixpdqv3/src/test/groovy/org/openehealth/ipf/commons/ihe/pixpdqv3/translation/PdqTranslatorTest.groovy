@@ -31,8 +31,7 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
     static void setUpClass() {
         doSetUp('pdq',
                 new PdqRequest3to2Translator(), 
-                new PdqResponse2to3Translator(),
-                'pdq-translation.map')
+                new PdqResponse2to3Translator())
 
         parser = CustomModelClassUtils.createParser('pdq', '2.5')
     }      
