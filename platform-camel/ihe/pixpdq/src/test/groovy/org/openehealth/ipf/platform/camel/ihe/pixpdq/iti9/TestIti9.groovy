@@ -216,7 +216,18 @@ class TestIti9 extends MllpTestContainer {
         def endpointUri = 'pix-iti9://localhost:18093'
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
-        assertNAK(msg)
+        assertNAKwithQPD(msg, 'RSP', 'K23')
     }
     
+    /**
+     * Auditing in case of automatically generated NAK from magic header.
+     */
+    @Test
+    void testMagicNak() throws Exception {
+        def body = getMessageString('QBP^Q23', '2.5')
+        def endpointUri = 'pix-iti9://localhost:18094'
+        def msg = send(endpointUri, body)
+        assertEquals(2, auditSender.messages.size())
+        assertNAKwithQPD(msg, 'RSP', 'K23')
+    }
 }

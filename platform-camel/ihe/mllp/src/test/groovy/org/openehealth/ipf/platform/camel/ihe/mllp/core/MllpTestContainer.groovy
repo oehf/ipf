@@ -100,7 +100,18 @@ class MllpTestContainer {
          assertNotNull(msg.ERR)
      }
 
-     
+    /**
+     * Checks whether the message represents a NAK with segments QPD and QAK.
+     */
+    static void assertNAKwithQPD(MessageAdapter msg, String messageType, String triggerEvent) {
+        assertTrue(msg.MSH[9][1].value == messageType)
+        assertTrue(msg.MSH[9][2].value == triggerEvent)  
+        assertTrue(msg.MSA[1].value[1] in ['R', 'E'])
+        assertNotNull(msg.ERR)
+        assertNotNull(msg.QAK)
+        assertNotNull(msg.QPD)
+    }
+
      /**
       * Sends a request into the route.
       */

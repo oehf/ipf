@@ -95,6 +95,13 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
              .process {
                  resultMessage(it).body = rsp
              }
+
+         // for NAK with magic header
+         from('pdq-iti21://0.0.0.0:18219')
+             .process {
+                 it.out.body = null
+                 it.out.headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AE
+             }
      }
 }
  

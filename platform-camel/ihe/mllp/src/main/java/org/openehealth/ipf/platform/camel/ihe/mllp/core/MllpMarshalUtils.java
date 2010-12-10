@@ -220,14 +220,13 @@ public class MllpMarshalUtils {
      *      thrown exception.
      * @param original
      *      original HAPI request message.
-     * @param config
-     *      configuration parameters of the given transaction.                  
+     * @param endpoint
+     *      MLLP endpoint acting as transaction configuration holder.                  
      */
     public static MessageAdapter createNak(
             Throwable t, 
             ca.uhn.hl7v2.model.Message original,
-            MllpTransactionConfiguration config,
-            ModelClassFactory classFactory)  
+            MllpEndpoint endpoint)
     {
         AbstractHL7v2Exception hl7Exception;
         if(t instanceof AbstractHL7v2Exception) {
@@ -237,15 +236,15 @@ public class MllpMarshalUtils {
         } else {
             hl7Exception = new HL7v2Exception(
                     MllpMarshalUtils.formatErrorMessage(t), 
-                    config.getRequestErrorDefaultErrorCode(), 
+                    endpoint.getTransactionConfiguration().getRequestErrorDefaultErrorCode(),
                     t); 
         }
 
-        ca.uhn.hl7v2.model.Message nak = MessageUtils.nak(
-                classFactory,
+        ca.uhn.hl7v2.model.Message nak = endpoint.getNakFactory().createNak(
+                endpoint.getParser().getFactory(),
                 original, 
                 hl7Exception, 
-                config.getRequestErrorDefaultAckTypeCode());
+                endpoint.getTransactionConfiguration().getRequestErrorDefaultAckTypeCode());
 
         return new MessageAdapter(nak);
     }

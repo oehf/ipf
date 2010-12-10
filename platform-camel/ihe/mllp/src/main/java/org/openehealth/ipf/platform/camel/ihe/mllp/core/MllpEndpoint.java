@@ -64,6 +64,7 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
     private final boolean autoCancel;
 
+    private final NakFactory nakFactory;
 
     /**
      * Constructor.
@@ -110,6 +111,8 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param autoCancel
      *      whether the producer should automatically send a cancel message
      *      after it has collected all inetractive continuation pieces.
+     * @param nakFactory
+     *      HL7v2 NAK factory.
      */
     public MllpEndpoint(
             MinaEndpoint wrappedEndpoint, 
@@ -132,7 +135,8 @@ public class MllpEndpoint extends DefaultEndpoint {
             int segmentFragmentationThreshold,
             InteractiveContinuationStorage interactiveContinuationStorage,
             UnsolicitedFragmentationStorage unsolicitedFragmentationStorage,
-            boolean autoCancel)
+            boolean autoCancel,
+            NakFactory nakFactory)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
@@ -140,7 +144,8 @@ public class MllpEndpoint extends DefaultEndpoint {
         Validate.notNull(transactionConfiguration);
         Validate.notNull(parser);
         Validate.noNullElements(customInterceptors);
-        
+        Validate.notNull(nakFactory);
+
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
         this.allowIncompleteAudit = allowIncompleteAudit;
@@ -163,6 +168,8 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.interactiveContinuationStorage = interactiveContinuationStorage;
         this.unsolicitedFragmentationStorage = unsolicitedFragmentationStorage;
         this.autoCancel = autoCancel;
+
+        this.nakFactory = nakFactory;
     }
 
 
@@ -246,7 +253,7 @@ public class MllpEndpoint extends DefaultEndpoint {
         return x;
     }
 
-    
+
     private class HandshakeFailureCallback implements HandshakeCallbackSSLFilter.Callback {
         @Override
         public void run(IoSession session) {
@@ -373,6 +380,12 @@ public class MllpEndpoint extends DefaultEndpoint {
         return autoCancel;
     }
 
+    /**
+     * Returns HL7v2 NAK factory for this enspoint.
+     */
+    public NakFactory getNakFactory() {
+        return nakFactory;
+    }
 
     // ----- dumb delegation, nothing interesting below -----
 

@@ -92,8 +92,7 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
                 resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
                         e, 
                         (Message) originalAdapter.getTarget(), 
-                        getMllpEndpoint().getTransactionConfiguration(),
-                        parser.getFactory()));
+                        getMllpEndpoint()));
             }
         }
         

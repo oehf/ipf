@@ -70,7 +70,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
         } catch(Exception e) {
             LOG.error("Message processing failed", e);
             resultMessage(exchange).setBody(
-                    MllpMarshalUtils.createNak(e, originalMessage, config, classFactory));
+                    MllpMarshalUtils.createNak(e, originalMessage, getMllpEndpoint()));
         }
 
         org.apache.camel.Message m = Exchanges.resultMessage(exchange);
@@ -84,7 +84,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
         
         // additionally: an Exception in the body?
         if((msg == null) && (body instanceof Exception)) {
-            msg = MllpMarshalUtils.createNak((Exception) body, originalMessage, config, classFactory);
+            msg = MllpMarshalUtils.createNak((Exception) body, originalMessage, getMllpEndpoint());
         }
         
         // no known data type --> determine user's intention on the basis of a header 
@@ -119,7 +119,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
             HL7v2Exception exception = new HL7v2Exception(
                     "Error in PIX/PDQ route", 
                     getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
-            Message nak = MessageUtils.nak(
+            Message nak = getMllpEndpoint().getNakFactory().createNak(
                     classFactory,
                     originalMessage, 
                     exception, 
@@ -151,10 +151,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
             }
             LOG.error("Message processing failed", t);
             resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
-                    t, 
-                    original, 
-                    getMllpEndpoint().getTransactionConfiguration(),
-                    classFactory));
+                    t, original, getMllpEndpoint()));
         }
     }
     

@@ -21,6 +21,8 @@ import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.pixpdq.QpdAwareNakFactory;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqTransactionConfiguration;
@@ -52,7 +54,9 @@ public class Iti22Component extends MllpComponent {
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new PdqServerAuditStrategy("PDVQ");
     private static final Parser PARSER = CustomModelClassUtils.createParser("pdq", "2.5");
-    
+    private static final NakFactory NAK_FACTORY = new QpdAwareNakFactory("RSP", "ZV2");
+
+
     public Iti22Component() {
         super();
     }
@@ -79,5 +83,10 @@ public class Iti22Component extends MllpComponent {
     @Override
     public Parser getParser() {
         return PARSER;
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return NAK_FACTORY;
     }
 }

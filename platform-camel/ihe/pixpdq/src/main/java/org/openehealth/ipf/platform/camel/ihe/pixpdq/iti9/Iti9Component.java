@@ -23,6 +23,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
 import ca.uhn.hl7v2.parser.Parser;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.pixpdq.QpdAwareNakFactory;
 
 /**
  * Camel component for ITI-9 (PIX Query).
@@ -49,7 +51,9 @@ public class Iti9Component extends MllpComponent {
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new Iti9ServerAuditStrategy();
     private static final Parser PARSER = CustomModelClassUtils.createParser("pix", "2.5");
-    
+    private static final NakFactory NAK_FACTORY = new QpdAwareNakFactory("RSP", "K23");
+
+
     public Iti9Component() {
         super();
     }
@@ -76,5 +80,10 @@ public class Iti9Component extends MllpComponent {
     @Override
     public Parser getParser() {
         return PARSER;
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return NAK_FACTORY;
     }
 }

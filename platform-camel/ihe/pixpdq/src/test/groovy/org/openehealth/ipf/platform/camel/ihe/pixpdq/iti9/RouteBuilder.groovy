@@ -18,7 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti9
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessageimport java.io.File
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import java.io.File
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent
+import org.openehealth.ipf.modules.hl7.AckTypeCode
 
 /**
  * Camel route for generic unit tests.
@@ -71,6 +74,13 @@ class RouteBuilder extends SpringRouteBuilder {
                  throw new RuntimeException('12345')
              }
          
+         // for NAK with magic header
+         from('pix-iti9://0.0.0.0:18094')
+             .process {
+                 it.out.body = null
+                 it.out.headers[MllpComponent.ACK_TYPE_CODE_HEADER] = AckTypeCode.AE
+             }
+
      }
 }
  

@@ -177,7 +177,8 @@ public abstract class MllpComponent extends MinaComponent {
                 segmentFragmentationThreshold,
                 interactiveContinuationStorage,
                 unsolicitedFragmentationStorage,
-                autoCancel);
+                autoCancel,
+                getNakFactory());
     }
 
     private static String extractBeanName(String originalBeanName) {
@@ -207,4 +208,9 @@ public abstract class MllpComponent extends MinaComponent {
      */
     public abstract Parser getParser();
 
+    /**
+     * Returns NAK factory.
+     * @return
+     */
+    public abstract NakFactory getNakFactory();
 }

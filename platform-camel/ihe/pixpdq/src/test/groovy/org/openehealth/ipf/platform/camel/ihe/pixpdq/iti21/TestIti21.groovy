@@ -72,7 +72,7 @@ class TestIti21 extends MllpTestContainer {
     void testHappyCaseWithSSLv3() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3', 2)
     }
-    
+
     @Test
     void testHappyCaseWithSSLv3AndTLSv1() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:18217?secure=true&sslContext=#sslContext&sslProtocols=SSLv3,TLSv1', 2)
@@ -265,10 +265,22 @@ class TestIti21 extends MllpTestContainer {
         def endpointUri = 'pdq-iti21://localhost:18213'
         def msg = send(endpointUri, body)
         assertEquals(2, auditSender.messages.size())
-        assertNAK(msg)
+        assertNAKwithQPD(msg, 'RSP', 'K22')
     }
     
-    
+    /**
+     * Auditing in case of automatically generated NAK with magic header.
+     */
+    @Test
+    void testMagicNak() throws Exception {
+        def body = getMessageString('QBP^Q22', '2.5')
+        def endpointUri = 'pdq-iti21://localhost:18219'
+        def msg = send(endpointUri, body)
+        assertEquals(2, auditSender.messages.size())
+        assertNAKwithQPD(msg, 'RSP', 'K22')
+    }
+
+
     @Test
     void testCancel() {
         def body = 
