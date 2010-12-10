@@ -155,7 +155,7 @@ public class Hl7v3ContinuationAwareWebService
         }
 
         if ((startResultNumber < 1) || (continuationQuantity < 1)) {
-            return error(request, 'continuation(): Bad continuation request', key)
+            return error(request, 'continuation(): startResultNumber and/or continuationQuantity not set', key)
         }
 
         try {
@@ -165,7 +165,7 @@ public class Hl7v3ContinuationAwareWebService
             storage.storeContinuationQuantity(key, continuationQuantity)
             return result
         } catch (Exception e) {
-            return error(request, 'continuation(): Bad continuation request', key)
+            return error(request, 'continuation(): Internal error: ' + e.message, key)
         }
     }
 
