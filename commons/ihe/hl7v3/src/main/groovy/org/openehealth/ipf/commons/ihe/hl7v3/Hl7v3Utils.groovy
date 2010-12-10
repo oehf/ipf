@@ -15,8 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import groovy.xml.MarkupBuilderimport groovy.util.XmlSlurper
-import groovy.util.slurpersupport.GPathResultimport groovy.util.slurpersupport.Node
+import groovy.xml.MarkupBuilder
+import groovy.util.XmlSlurper
+import groovy.util.slurpersupport.GPathResult
+import groovy.util.slurpersupport.Node
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -150,7 +153,7 @@ class Hl7v3Utils {
      */
     static void fakePatientPerson(MarkupBuilder builder) {
         builder.patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-            name(nullFlavor: 'UNK')
+            name(nullFlavor: 'NA')
         }
     }
 
