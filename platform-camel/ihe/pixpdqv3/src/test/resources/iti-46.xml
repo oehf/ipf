@@ -19,31 +19,9 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
 
-    <!-- Importing the CXF configuration -->
-    <import resource="classpath:META-INF/cxf/cxf.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-extension-addr.xml"/>
-
-    <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true"/>
-        <camel:routeBuilder ref="routeBuilder"/>        
-    </camel:camelContext>
+    <import resource="common-beans.xml" />
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti46.GroovyRouteBuilder">
-    </bean>
-
-    <bean id="coreModelExtension"
-        class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender" 
-        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
-        <property name="routeModelExtensions">
-            <list>
-                <ref bean="coreModelExtension" />
-            </list>
-        </property>
     </bean>
 </beans>
