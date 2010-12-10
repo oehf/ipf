@@ -87,7 +87,7 @@ public class HL7v2Exception extends AbstractHL7v2Exception {
 	 *      org.openehealth.ipf.modules.hl7.AckTypeCode)
 	 */
 	@Override
-	protected Message populateMessage(Message m, AckTypeCode code) {
+	public Message populateMessage(Message m, AckTypeCode code) {
 
 		try {
 			Segment errorSegment = (Segment) m.get("ERR");

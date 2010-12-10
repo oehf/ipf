@@ -71,6 +71,6 @@ public abstract class AbstractHL7v2Exception extends RuntimeException {
 	 * @param code the ack code
 	 * @return the populated HAPI message
 	 */
-	protected abstract Message populateMessage(Message m, AckTypeCode code);
+	public abstract Message populateMessage(Message m, AckTypeCode code);
 
 }
