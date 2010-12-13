@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti9;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
@@ -37,8 +36,7 @@ public class Iti9Component extends MllpComponent {
                 "PIX adapter", 
                 "IPF",
                 207, 
-                AckTypeCode.AR, 
-                207, 
+                207,
                 new String[] {"QBP"},
                 new String[] {"Q23"},
                 new String[] {"RSP"},

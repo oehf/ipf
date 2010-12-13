@@ -27,12 +27,11 @@ import org.apache.camel.Message;
 import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.converter.IOConverter;
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
+import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 
-import ca.uhn.hl7v2.parser.ModelClassFactory;
 import ca.uhn.hl7v2.parser.Parser;
 
 
@@ -243,8 +242,8 @@ public class MllpMarshalUtils {
         ca.uhn.hl7v2.model.Message nak = endpoint.getNakFactory().createNak(
                 endpoint.getParser().getFactory(),
                 original, 
-                hl7Exception, 
-                endpoint.getTransactionConfiguration().getRequestErrorDefaultAckTypeCode());
+                hl7Exception,
+                (t instanceof MllpAcceptanceException) ? AckTypeCode.AR : AckTypeCode.AE);
 
         return new MessageAdapter(nak);
     }

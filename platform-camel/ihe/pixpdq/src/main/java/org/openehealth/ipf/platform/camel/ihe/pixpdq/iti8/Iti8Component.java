@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8;
 
 import org.apache.camel.CamelContext;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
@@ -37,7 +36,6 @@ public class Iti8Component extends MllpComponent {
                 "PIX adapter", 
                 "IPF", 
                 207, 
-                AckTypeCode.AR, 
                 207, 
                 new String[] {"ADT"},
                 new String[] {"A01 A04 A05 A08 A40"},

@@ -35,7 +35,6 @@ public class MllpTransactionConfiguration {
     private final String sendingFacility;
     
     private final int requestErrorDefaultErrorCode;
-    private final AckTypeCode requestErrorDefaultAckTypeCode;
     private final int responseErrorDefaultErrorCode;
 
     private final String[] allowedRequestMessageTypes;
@@ -59,8 +58,6 @@ public class MllpTransactionConfiguration {
      *      sending application for default NAKs (MSH-4).
      * @param requestErrorDefaultErrorCode
      *      default error code for request-related NAKs.
-     * @param requestErrorDefaultAckTypeCode
-     *      default ack type code for request-related NAKs.
      * @param responseErrorDefaultErrorCode
      *      default error code for response-related NAKs.
      * @param allowedRequestMessageTypes
@@ -84,7 +81,6 @@ public class MllpTransactionConfiguration {
             String sendingApplication,
             String sendingFacility,
             int requestErrorDefaultErrorCode,
-            AckTypeCode requestErrorDefaultAckTypeCode,
             int responseErrorDefaultErrorCode,
             String[] allowedRequestMessageTypes,
             String[] allowedRequestTriggerEvents,
@@ -96,7 +92,6 @@ public class MllpTransactionConfiguration {
         notNull(hl7Version);
         notNull(sendingApplication);
         notNull(sendingFacility);
-        notNull(requestErrorDefaultAckTypeCode);
 
         noNullElements(allowedRequestMessageTypes);
         noNullElements(allowedRequestTriggerEvents);
@@ -119,7 +114,6 @@ public class MllpTransactionConfiguration {
         this.sendingFacility = sendingFacility;
         
         this.requestErrorDefaultErrorCode = requestErrorDefaultErrorCode;
-        this.requestErrorDefaultAckTypeCode = requestErrorDefaultAckTypeCode;
         this.responseErrorDefaultErrorCode = responseErrorDefaultErrorCode;
 
         this.allowedRequestMessageTypes = allowedRequestMessageTypes;
@@ -254,10 +248,6 @@ public class MllpTransactionConfiguration {
     
     public int getRequestErrorDefaultErrorCode() {
         return requestErrorDefaultErrorCode;
-    }
-
-    public AckTypeCode getRequestErrorDefaultAckTypeCode() {
-        return requestErrorDefaultAckTypeCode;
     }
 
     public int getResponseErrorDefaultErrorCode() {

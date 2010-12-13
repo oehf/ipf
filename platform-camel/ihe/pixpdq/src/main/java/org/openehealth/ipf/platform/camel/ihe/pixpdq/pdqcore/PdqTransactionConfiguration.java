@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore;
 
 import java.util.List;
-
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
 /**
@@ -30,7 +28,6 @@ public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
             String sendingApplication, 
             String sendingFacility,
             int requestErrorDefaultErrorCode,
-            AckTypeCode requestErrorDefaultAckTypeCode,
             int responseErrorDefaultErrorCode,
             String[] allowedRequestMessageTypes,
             String[] allowedRequestTriggerEvents,
@@ -40,7 +37,7 @@ public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
             boolean[] responseContinuabilityFlags) 
     {
         super(hl7Version, sendingApplication, sendingFacility,
-                requestErrorDefaultErrorCode, requestErrorDefaultAckTypeCode,
+                requestErrorDefaultErrorCode,
                 responseErrorDefaultErrorCode, allowedRequestMessageTypes,
                 allowedRequestTriggerEvents, allowedResponseMessageTypes,
                 allowedResponseTriggerEvents, auditabilityFlags,

@@ -21,6 +21,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -118,8 +119,8 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
                 t);
         
         Object nak = MessageUtils.defaultNak(
-                hl7e, 
-                config.getRequestErrorDefaultAckTypeCode(), 
+                hl7e,
+                AckTypeCode.AR, 
                 config.getHl7Version(),
                 config.getSendingApplication(),
                 config.getSendingFacility());

@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti21;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
@@ -40,8 +39,7 @@ public class Iti21Component extends MllpComponent {
                 "PDQ adapter", 
                 "IPF",
                 207, 
-                AckTypeCode.AR, 
-                207, 
+                207,
                 new String[] {"QBP", "QCN"},
                 new String[] {"Q22", "J01"},
                 new String[] {"RSP", "ACK"},
