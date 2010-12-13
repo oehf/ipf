@@ -21,14 +21,14 @@ import javax.xml.transform.stream.StreamSource
 import org.apache.commons.lang.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
 import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3ContinuationsPortType
+import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3ContinuationUtils.parseInt
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
-import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -52,7 +52,7 @@ public class Hl7v3ContinuationAwareWebService
 
     
     public Hl7v3ContinuationAwareWebService(
-            Hl7v3ServiceInfo serviceInfo,
+            Hl7v3ContinuationAwareServiceInfo serviceInfo,
             Hl7v3ContinuationStorage storage,
             int defaultThreshold,
             boolean validation)
@@ -66,10 +66,31 @@ public class Hl7v3ContinuationAwareWebService
     }
 
 
+    String process0(String requestString) {
+        String rootElementName = SoapUtils.getRootElementLocalName(requestString)
+        switch (rootElementName) {
+            case serviceInfo.mainRequestRootElementName:
+                return operation0(requestString)
+            case 'QUQI_IN000003UV01':
+                return continuation0(requestString)
+            case 'QUQI_IN000003UV01_Cancel':
+                return cancel0(requestString)
+        }
+        throw new RuntimeException('Cannot dispatch request message with root element ' + rootElementName)
+    }
+
+
+    String operation    (String requestString) { return process0(requestString) }
+    String continuation (String requestString) { return process0(requestString) }
+    String cancel       (String requestString) { return process0(requestString) }
+
+
     /**
      * Handles "main operation" requests of the IHE transaction.
      */
-    String operation(String requestString) {
+    String operation0(String requestString) {
+        LOG.debug('operation(): Got request ' + requestString)
+
         // validate request
         if (validation) {
             try {
@@ -121,7 +142,9 @@ public class Hl7v3ContinuationAwareWebService
     /**
      * Handles continuation requests.
      */
-    String continuation(String requestString) {
+    String continuation0(String requestString) {
+        LOG.debug('continuation(): Got request ' + requestString)
+
         // validate
         if (validation) {
             try {
@@ -173,7 +196,9 @@ public class Hl7v3ContinuationAwareWebService
     /**
      * Handles continuation cancel requests.
      */
-    String cancel(String requestString) {
+    String cancel0(String requestString) {
+        LOG.debug('cancel(): Got request ' + requestString)
+
         // validate
         if (validation) {
             try {
@@ -285,7 +310,7 @@ public class Hl7v3ContinuationAwareWebService
             acceptAckCode(code: 'NE')
             buildReceiverAndSender(builder, request, HL7V3_NSURI)
             acknowledgement {
-                typeCode(code: 'AA')
+                typeCode(code: 'CA')
                 targetMessage {
                     buildInstanceIdentifier(builder, 'id', false,
                             request.id.@root.text(),
