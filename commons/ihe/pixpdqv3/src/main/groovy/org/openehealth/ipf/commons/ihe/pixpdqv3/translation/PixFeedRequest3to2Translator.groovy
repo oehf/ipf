@@ -101,12 +101,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
 	 */
 	boolean useOtherIds = true
 	
-	/**
-	 * If true, donor card will be assumed to be on file (for PD1-8).
-	 */
-	boolean donorCardOnFile = true
-	
-	
+
 	/**
 	 * Adds patient identifiers from the given GPath source.
 	 */
