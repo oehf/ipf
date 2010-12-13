@@ -90,6 +90,12 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
      */
     String nationalIdentifierRoot = '2.16.840.1.113883.4.1'
 
+    /**
+     * When not empty, an element asOtherIDs with ID.nullFlavor=. will be created
+     * for each domain not represented in PID-3 patient IDs.
+     */
+    String nullFlavorWhenScopingOrganizationIdNotFound = 'NA'
+
         
     /**
      * Translates HL7 v2 response messages <tt>RSP^K22</tt> and <tt>ACK</tt> 
@@ -125,8 +131,11 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 effectiveTime(value: messageTimestamp)
                 
                 if (rsp.MSH[9][1].value == 'RSP') {
+                    final Set<String> requestedDomains = rsp.QPD[8]().collect { it[4][2].value } as Set
+
                     rsp.QUERY_RESPONSE().each { qr ->
-                        def pid3collection = qr.PID[3]() 
+                        def pid3collection = qr.PID[3]()
+                        Set<String> remainingDomains = (Set<String>) requestedDomains.clone()
                         if (pid3collection) {
                             subject(typeCode: 'SUBJ') {
                                 registrationEvent(classCode: 'REG', moodCode: 'EVN') {
@@ -135,7 +144,8 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                         patient(classCode: 'PAT') {
                                             for(pid3 in pid3collection) {   
                                                 buildInstanceIdentifier(builder, 'id', false, 
-                                                        pid3[4][2].value, pid3[1].value, pid3[4][1].value) 
+                                                        pid3[4][2].value, pid3[1].value, pid3[4][1].value)
+                                                remainingDomains.remove(pid3[4][2].value)
                                             }
                                             statusCode(code: 'active')
                                             patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
@@ -176,6 +186,17 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                                         id(root: nationalIdentifierRoot, extension: qr.PID[19].value)
                                                         scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
                                                             id(root: nationalIdentifierRoot)
+                                                        }
+                                                    }
+                                                }
+
+                                                if (nullFlavorWhenScopingOrganizationIdNotFound) {
+                                                    for (oid in remainingDomains) {
+                                                        asOtherIDs(classCode: 'PAT') {
+                                                            id(nullFlavor: nullFlavorWhenScopingOrganizationIdNotFound)
+                                                            scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
+                                                                id(root: oid)
+                                                            }
                                                         }
                                                     }
                                                 }

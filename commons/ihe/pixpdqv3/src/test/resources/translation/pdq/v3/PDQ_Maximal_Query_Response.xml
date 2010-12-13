@@ -66,6 +66,12 @@
                 <city>Racine</city>
                 <streetAddressLine>1200 Center St</streetAddressLine>
               </addr>
+              <asOtherIDs classCode="PAT">
+                <id nullFlavor="NA" />
+                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id root="1.3.6.1.4.1.21367.2005.1.2" />
+                </scopingOrganization>
+              </asOtherIDs>
             </patientPerson>
             <subjectOf1>
               <queryMatchObservation classCode="COND" moodCode="EVN">
