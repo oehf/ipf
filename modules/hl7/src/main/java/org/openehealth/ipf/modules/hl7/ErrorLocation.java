@@ -97,19 +97,19 @@ public class ErrorLocation {
 		this.subcomponentNumber = subcomponentNumber;
 	}
 
-    public int getSegmentRepetitionIndexingBase() {
+    public static int getSegmentRepetitionIndexingBase() {
         return segmentRepetitionIndexingBase;
     }
 
-    public void setSegmentRepetitionIndexingBase(int segmentRepetitionIndexingBase) {
+    public static void setSegmentRepetitionIndexingBase(int segmentRepetitionIndexingBase) {
         ErrorLocation.segmentRepetitionIndexingBase = segmentRepetitionIndexingBase;
     }
 
-    public int getFieldRepetitionIndexingBase() {
+    public static int getFieldRepetitionIndexingBase() {
         return fieldRepetitionIndexingBase;
     }
 
-    public void setFieldRepetitionIndexingBase(int fieldRepetitionIndexingBase) {
+    public static void setFieldRepetitionIndexingBase(int fieldRepetitionIndexingBase) {
         ErrorLocation.fieldRepetitionIndexingBase = fieldRepetitionIndexingBase;
     }
 }
