@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7;
 
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.Segment;
+import ca.uhn.hl7v2.util.Terser;
 
 /**
  * Abstract base exception class for HL7 message processing. In contrast to
@@ -73,4 +76,14 @@ public abstract class AbstractHL7v2Exception extends RuntimeException {
 	 */
 	public abstract Message populateMessage(Message m, AckTypeCode code);
 
+
+    protected void fillErr347(Segment errorSegment) throws HL7Exception {
+        Terser.set(errorSegment, 3, 0, 1, 1, String.valueOf(getErrCode()));
+        Terser.set(errorSegment, 3, 0, 2, 1, getErrorMessage());
+        Terser.set(errorSegment, 3, 0, 3, 1, "HL70357");
+        Terser.set(errorSegment, 3, 0, 5, 1, getMessage());
+
+        Terser.set(errorSegment, 4, 0, 1, 1, "E");
+        Terser.set(errorSegment, 7, 0, 1, 1, getMessage());
+    }
 }

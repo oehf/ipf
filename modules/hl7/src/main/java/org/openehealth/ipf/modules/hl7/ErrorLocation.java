@@ -31,6 +31,9 @@ public class ErrorLocation {
 	private int componentNumber = -1;
 	private int subcomponentNumber = -1;
 
+    public static int segmentRepetitionIndexingBase = 0;
+    public static int fieldRepetitionIndexingBase = 0;
+
 	public ErrorLocation() {
 	}
 
@@ -39,9 +42,9 @@ public class ErrorLocation {
 			int subcomponentNumber) {
 		super();
 		this.segmentName = segmentName;
-		this.segmentRepetition = segmentRepetition;
+		this.segmentRepetition = segmentRepetition + segmentRepetitionIndexingBase;
 		this.fieldPosition = fieldPosition;
-		this.fieldRepetition = fieldRepetition;
+		this.fieldRepetition = fieldRepetition + fieldRepetitionIndexingBase;
 		this.componentNumber = componentNumber;
 		this.subcomponentNumber = subcomponentNumber;
 	}
@@ -94,4 +97,19 @@ public class ErrorLocation {
 		this.subcomponentNumber = subcomponentNumber;
 	}
 
+    public int getSegmentRepetitionIndexingBase() {
+        return segmentRepetitionIndexingBase;
+    }
+
+    public void setSegmentRepetitionIndexingBase(int segmentRepetitionIndexingBase) {
+        ErrorLocation.segmentRepetitionIndexingBase = segmentRepetitionIndexingBase;
+    }
+
+    public int getFieldRepetitionIndexingBase() {
+        return fieldRepetitionIndexingBase;
+    }
+
+    public void setFieldRepetitionIndexingBase(int fieldRepetitionIndexingBase) {
+        ErrorLocation.fieldRepetitionIndexingBase = fieldRepetitionIndexingBase;
+    }
 }

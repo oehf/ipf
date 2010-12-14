@@ -161,14 +161,7 @@ public class HL7v2Exception extends AbstractHL7v2Exception {
 			Terser.set(errorSegment, 2, rep, 6, 1, String.valueOf(getLocation()
 					.getSubcomponentNumber()));
 
-		Terser.set(errorSegment, 3, 0, 1, 1, String.valueOf(getErrCode()));
-		Terser.set(errorSegment, 3, 0, 2, 1, getErrorMessage());
-		Terser.set(errorSegment, 3, 0, 3, 1, "HL70357");
-		Terser.set(errorSegment, 3, 0, 5, 1, getMessage());
-
-		Terser.set(errorSegment, 4, 0, 1, 1, "E");
-		Terser.set(errorSegment, 7, 0, 1, 1, getMessage());
-
+        fillErr347(errorSegment);
 	}
 
 }

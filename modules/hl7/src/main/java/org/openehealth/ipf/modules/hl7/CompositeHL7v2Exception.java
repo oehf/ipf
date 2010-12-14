@@ -86,12 +86,19 @@ public class CompositeHL7v2Exception extends AbstractHL7v2Exception implements
 	 */
 	@Override
 	public Message populateMessage(Message m, AckTypeCode code) {
-		for (AbstractHL7v2Exception exception : wrapped) {
-			exception.populateMessage(m, code);
-		}
 		try {
-			Segment msaSegment = (Segment) m.get("MSA");
-			Terser.set(msaSegment, 3, 0, 1, 1, getMessage());
+            if (m.getVersion().compareTo("2.5") < 0) {
+                Segment msaSegment = (Segment) m.get("MSA");
+                Terser.set(msaSegment, 3, 0, 1, 1, getMessage());
+            } else {
+                Segment errorSegment = (Segment) m.get("ERR");
+                fillErr347(errorSegment);
+            }
+            
+            for (AbstractHL7v2Exception exception : wrapped) {
+                exception.populateMessage(m, code);
+            }
+
 			return m;
 		} catch (HL7Exception e) {
 			// TODO Auto-generated catch block
