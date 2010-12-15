@@ -27,7 +27,8 @@ import org.openehealth.ipf.modules.hl7dsl.SelectorClosure;
 
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import org.openehealth.ipf.commons.xml.XmlYielder;
+import org.openehealth.ipf.commons.xml.XmlYielder
+import org.openehealth.ipf.modules.hl7.ErrorLocation;
 
 /**
  * PDQ Response translator HL7 v2 to v3.
@@ -273,7 +274,7 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
             if (err2[3].value == '8') {
                 location += '/parameterList/otherIDsScopingOrganization'
                 if (err2[4].value) {
-                    location += "[${Integer.parseInt(err2[4].value) + 1}]"
+                    location += "[${Integer.parseInt(err2[4].value) + 1 - ErrorLocation.fieldRepetitionIndexingBase}]"
                 } 
             }
             return location
