@@ -45,7 +45,7 @@ class TutorialModelExtension {
         // ------------------------------------------------------------
         
         ProcessorDefinition.metaClass.toFile = { String dir, String filePrefix, String fileExtension ->
-            def header = 'org.apache.camel.file.name'
+            def header = 'CamelFileName'
             def expression = filenameExpression(filePrefix, fileExtension) 
             delegate.setHeader(header, expression).to('file:' + dir);
         }

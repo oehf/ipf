@@ -12,10 +12,13 @@ rem --------------------------------------------------------
 set PORT=%2
 if "%PORT%" == "" set PORT=1801
 
+set REGPORT=%3
+if "%REGPORT%" == "" set REGPORT=1091
+
 rem --------------------------------------------------------
 rem  JMX and cluster node system properties
 rem --------------------------------------------------------
-set JAVA_OPTS=-Xmx256m -Dcluster.node.dir=%NODE% -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=%PORT% -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
+set JAVA_OPTS=-Xmx256m -Dcluster.node.dir=%NODE% -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=%PORT% -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dorg.apache.camel.jmx.rmiConnector.registryPort=%REGPORT%
 
 rem --------------------------------------------------------
 rem  Startup tutorial server (cluster node)

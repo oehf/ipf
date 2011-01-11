@@ -23,6 +23,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import org.openehealth.ipf.modules.hl7.ErrorLocation
 
 /**
  * PIX Query Response translator HL7 v2 to v3.
@@ -151,7 +152,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                 case '4':
                     String elementIndexString = ''
                     if (err[4].value) {
-                        elementIndexString = "[${Integer.parseInt(err[4].value) + 1}]"
+                        elementIndexString = "[${Integer.parseInt(err[4].value) + 1 - ErrorLocation.fieldRepetitionIndexingBase}]"
                     }
                     return rootPath + 'dataSource' + elementIndexString + '/value'
                 }
