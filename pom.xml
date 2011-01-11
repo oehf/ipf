@@ -64,6 +64,7 @@
         <easymock-version>2.4</easymock-version> 
         <ehcache-version>2.2.0</ehcache-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
+        <geronimo-spec-servlet-api-version>1.2</geronimo-spec-servlet-api-version> 
         <gmaven-version>1.2</gmaven-version>
         <groovy-version>1.7.5</groovy-version>
         <hapi-version>1.0.1</hapi-version>
@@ -608,6 +609,11 @@
                 <version>${geronimo-spec-jta-version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                <version>${geronimo-spec-servlet-api-version}</version>
+            </dependency>			
+            <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-annotations</artifactId>
                 <version>${hibernate-annotations-version}</version>
@@ -661,6 +667,12 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
                 <version>${jetty-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>				
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
