@@ -8,3 +8,5 @@ commons/ihe/ws/work
 activemq-data
 id_file
 .idea
+
+/platform-camel/cda/bin
