@@ -28,7 +28,7 @@
   <controlActProcess classCode="CACT" moodCode="EVN">
     <code code="PRPA_IN201309UV02" codeSystem="2.16.840.1.113883.1.6"/>
     <queryByParameter>
-      <queryId root="10501Q2"/>
+      <queryId root="1.2.3.4.5"/>
       <statusCode code="new"/>
       <responsePriorityCode code="I"/>
       <parameterList>
@@ -44,4 +44,3 @@
     </queryByParameter>
   </controlActProcess>
 </PRPA_IN201309UV02>
- 
