@@ -15,15 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdq.definitions.v25.pix.message;
 
+import java.util.Map;
+
 import org.openehealth.ipf.commons.ihe.pixpdq.definitions.v25.pix.segment.QPD;
+import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.model.AbstractMessage;
+import ca.uhn.hl7v2.model.Structure;
+import ca.uhn.hl7v2.model.v25.segment.DSC;
+import ca.uhn.hl7v2.model.v25.segment.SFT;
 import ca.uhn.hl7v2.model.v25.segment.MSH;
 import ca.uhn.hl7v2.model.v25.segment.RCP;
-import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
 
 /**
  * <p>Represents a QBP_Q21 message structure (see chapter 3.3.56). This structure contains the
@@ -36,67 +39,82 @@ import ca.uhn.log.HapiLogFactory;
  */
 @SuppressWarnings("serial")
 public class QBP_Q21 extends AbstractMessage {
-
     /**
-     * Creates a new QBP_Q21 Group with custom ModelClassFactory.
-     */
+      * Creates a new QBP_Q21 Group with custom ModelClassFactory.
+      */
     public QBP_Q21(ModelClassFactory factory) {
         super(factory);
-        init();
     }
 
     /**
-     * Creates a new QBP_Q21 Group with DefaultModelClassFactory.
-     */
+      * Creates a new QBP_Q21 Group with DefaultModelClassFactory.
+      */
     public QBP_Q21() {
-        super(new DefaultModelClassFactory());
-        init();
+        super();
     }
 
-    private void init() {
-        try {
-            add(MSH.class, true, false);
-            add(QPD.class, true, false);
-            add(RCP.class, true, false);
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error creating QBP_Q21 - this is probably a bug in the source code generator.", e);
-        }
+    @Override
+    protected Map<Class<? extends Structure>, Cardinality> structures(
+              Map<Class<? extends Structure>, Cardinality> s) {
+        s.put(MSH.class, Cardinality.REQUIRED);
+        s.put(SFT.class, Cardinality.OPTIONAL_REPEATING);
+        s.put(QPD.class, Cardinality.REQUIRED);
+        s.put(RCP.class, Cardinality.REQUIRED);
+        s.put(DSC.class, Cardinality.OPTIONAL);
+        return s;
     }
+
 
     /**
-     * Returns MSH (Message Header) - creates it if necessary
-     */
+      * Returns MSH (Message Header) - creates it if necessary
+      */
     public MSH getMSH() {
-        try {
-            return (MSH) get("MSH");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(MSH.class);
     }
 
+    /**
+      * Returns  first repetition of SFT (Software Segment) - creates it if necessary
+      */
+    public SFT getSFT() {
+        return get(SFT.class);
+    }
 
     /**
-     * Returns QPD (Query Parameter Definition) - creates it if necessary
-     */
+      * Returns a specific repetition of SFT
+      * (Software Segment) - creates it if necessary
+      * throws HL7Exception if the repetition requested is more than one
+      * greater than the number of existing repetitions.
+      */
+    public SFT getSFT(int rep) throws HL7Exception {
+        return get(SFT.class, rep);
+    }
+
+    /**
+      * Returns the number of existing repetitions of SFT
+      */
+    public int getSFTReps() {
+        return getReps(SFT.class);
+    }
+
+    /**
+      * Returns QPD (Query Parameter Definition) - creates it if necessary
+      */
     public QPD getQPD() {
-        try {
-            return (QPD) get("QPD");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(QPD.class);
     }
 
     /**
-     * Returns RCP (Response Control Parameter) - creates it if necessary
-     */
+      * Returns RCP (Response Control Parameter) - creates it if necessary
+      */
     public RCP getRCP() {
-        try {
-            return (RCP) get("RCP");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(RCP.class);
     }
+
+    /**
+      * Returns DSC (Continuation Pointer) - creates it if necessary
+      */
+    public DSC getDSC() {
+        return get(DSC.class);
+    }
+
 }

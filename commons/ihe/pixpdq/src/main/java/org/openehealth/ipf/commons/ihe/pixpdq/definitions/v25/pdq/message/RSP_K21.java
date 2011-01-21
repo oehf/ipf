@@ -15,10 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdq.definitions.v25.pdq.message;
 
+import java.util.Map;
+
 import org.openehealth.ipf.commons.ihe.pixpdq.definitions.v25.pdq.segment.QPD;
+import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.model.AbstractMessage;
+import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.model.v25.group.RSP_K21_QUERY_RESPONSE;
 import ca.uhn.hl7v2.model.v25.segment.DSC;
 import ca.uhn.hl7v2.model.v25.segment.ERR;
@@ -26,9 +29,7 @@ import ca.uhn.hl7v2.model.v25.segment.MSA;
 import ca.uhn.hl7v2.model.v25.segment.MSH;
 import ca.uhn.hl7v2.model.v25.segment.QAK;
 import ca.uhn.hl7v2.model.v25.segment.SFT;
-import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.log.HapiLogFactory;
 
 /**
  * <p>Represents a RSP_K21 message structure (see chapter 3.3.56). This structure contains the
@@ -50,171 +51,119 @@ public class RSP_K21 extends AbstractMessage {
      */
     public RSP_K21(ModelClassFactory factory) {
         super(factory);
-        init();
     }
 
     /**
      * Creates a new RSP_K21 Group with DefaultModelClassFactory.
      */
     public RSP_K21() {
-        super(new DefaultModelClassFactory());
-        init();
+        super();
     }
 
-    private void init() {
-        try {
-            add(MSH.class, true, false);
-            add(SFT.class, false, true);
-            add(MSA.class, true, false);
-            add(ERR.class, false, false);
-            add(QAK.class, true, false);
-            add(QPD.class, true, false);
-            add(RSP_K21_QUERY_RESPONSE.class, false, true);
-            add(DSC.class, false, false);
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error creating RSP_K21 - this is probably a bug in the source code generator.", e);
-        }
+
+    @Override
+    protected Map<Class<? extends Structure>, Cardinality> structures(
+             Map<Class<? extends Structure>, Cardinality> s) {
+        s.put(MSH.class, Cardinality.REQUIRED);
+        s.put(SFT.class, Cardinality.OPTIONAL_REPEATING);
+        s.put(MSA.class, Cardinality.REQUIRED);
+        s.put(ERR.class, Cardinality.OPTIONAL);
+        s.put(QAK.class, Cardinality.REQUIRED);
+        s.put(QPD.class, Cardinality.REQUIRED);
+        s.put(RSP_K21_QUERY_RESPONSE.class, Cardinality.OPTIONAL_REPEATING);
+        s.put(DSC.class, Cardinality.OPTIONAL);
+        return s;
     }
+
 
     /**
-     * Returns MSH (Message Header) - creates it if necessary
-     */
+      * Returns MSH (Message Header) - creates it if necessary
+      */
     public MSH getMSH() {
-        try {
-            return (MSH) get("MSH");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(MSH.class);
     }
 
     /**
-     * Returns  first repetition of SFT (Software Segment) - creates it if necessary
-     */
+      * Returns  first repetition of SFT (Software Segment) - creates it if necessary
+      */
     public SFT getSFT() {
-        try {
-            return (SFT) get("SFT");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(SFT.class);
     }
 
     /**
-     * Returns a specific repetition of SFT
-     * (Software Segment) - creates it if necessary
-     * throws HL7Exception if the repetition requested is more than one
-     * greater than the number of existing repetitions.
-     */
+      * Returns a specific repetition of SFT
+      * (Software Segment) - creates it if necessary
+      * throws HL7Exception if the repetition requested is more than one
+      * greater than the number of existing repetitions.
+      */
     public SFT getSFT(int rep) throws HL7Exception {
-        return (SFT) get("SFT", rep);
+        return get(SFT.class, rep);
     }
 
     /**
-     * Returns the number of existing repetitions of SFT
-     */
+      * Returns the number of existing repetitions of SFT
+      */
     public int getSFTReps() {
-        try {
-            return getAll("SFT").length;
-        } catch (HL7Exception e) {
-            String message = "Unexpected error accessing data - this is probably a bug in the source code generator.";
-            HapiLogFactory.getHapiLog(getClass()).error(message, e);
-            throw new RuntimeException(message);
-        }
+        return getReps(SFT.class);
     }
 
     /**
-     * Returns MSA (Message Acknowledgment) - creates it if necessary
-     */
+      * Returns MSA (Message Acknowledgment) - creates it if necessary
+      */
     public MSA getMSA() {
-        try {
-            return (MSA) get("MSA");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(MSA.class);
     }
 
     /**
-     * Returns ERR (Error) - creates it if necessary
-     */
+      * Returns ERR (Error) - creates it if necessary
+      */
     public ERR getERR() {
-        try {
-            return (ERR) get("ERR");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(ERR.class);
     }
 
     /**
-     * Returns QAK (Query Acknowledgment) - creates it if necessary
-     */
+      * Returns QAK (Query Acknowledgment) - creates it if necessary
+      */
     public QAK getQAK() {
-        try {
-            return (QAK) get("QAK");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(QAK.class);
     }
 
     /**
-     * Returns QPD (Query Parameter Definition) - creates it if necessary
-     */
+      * Returns QPD (Query Parameter Definition) - creates it if necessary
+      */
     public QPD getQPD() {
-        try {
-            return (QPD) get("QPD");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(QPD.class);
     }
 
     /**
-     * Returns  first repetition of RSP_K21_QUERY_RESPONSE (a Group object) - creates it if necessary
-     */
-    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE() {
-        try {
-            return (RSP_K21_QUERY_RESPONSE) get("QUERY_RESPONSE");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+      * Returns  first repetition of RSP_K21_QUERY_RESPONSE (a Group object) - creates it if necessary
+      */
+    public RSP_K21_QUERY_RESPONSE getRSP_K21_QUERY_RESPONSE() {
+        return get(RSP_K21_QUERY_RESPONSE.class);
     }
 
     /**
-     * Returns a specific repetition of RSP_K21_QUERY_RESPONSE
-     * (a Group object) - creates it if necessary
-     * throws HL7Exception if the repetition requested is more than one
-     * greater than the number of existing repetitions.
-     */
-    public RSP_K21_QUERY_RESPONSE getQUERY_RESPONSE(int rep) throws HL7Exception {
-        return (RSP_K21_QUERY_RESPONSE) get("QUERY_RESPONSE", rep);
+      * Returns a specific repetition of RSP_K21_QUERY_RESPONSE
+      * (a Group object) - creates it if necessary
+      * throws HL7Exception if the repetition requested is more than one
+      * greater than the number of existing repetitions.
+      */
+    public RSP_K21_QUERY_RESPONSE getRSP_K21_QUERY_RESPONSE(int rep) throws HL7Exception {
+        return get(RSP_K21_QUERY_RESPONSE.class, rep);
     }
 
     /**
-     * Returns the number of existing repetitions of RSP_K21_QUERY_RESPONSE
-     */
-    public int getQUERY_RESPONSEReps() {
-        try {
-            return getAll("QUERY_RESPONSE").length;
-        } catch (HL7Exception e) {
-            String message = "Unexpected error accessing data - this is probably a bug in the source code generator.";
-            HapiLogFactory.getHapiLog(getClass()).error(message, e);
-            throw new RuntimeException(message);
-        }
+      * Returns the number of existing repetitions of RSP_K21_QUERY_RESPONSE
+      */
+    public int getRSP_K21_QUERY_RESPONSEReps() {
+        return getReps(RSP_K21_QUERY_RESPONSE.class);
     }
 
     /**
-     * Returns DSC (Continuation Pointer) - creates it if necessary
-     */
+      * Returns DSC (Continuation Pointer) - creates it if necessary
+      */
     public DSC getDSC() {
-        try {
-            return (DSC) get("DSC");
-        } catch (HL7Exception e) {
-            HapiLogFactory.getHapiLog(getClass()).error("Unexpected error accessing data - this is probably a bug in the source code generator.", e);
-            throw new RuntimeException(e);
-        }
+        return get(DSC.class);
     }
+
 }
