@@ -51,7 +51,7 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-hl7v3</artifactId>
             <version>${project.version}</version>
-	    <scope>test</scope>
+	        <scope>test</scope>
             <type>test-jar</type>
         </dependency>
     </dependencies>

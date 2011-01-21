@@ -18,7 +18,9 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
 
 /**
  * Test for PIX Query translator.
@@ -51,5 +53,6 @@ class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
 	    String v2response = getFileContent('ok-4', false, false)
 		MessageAdapter abrakadapter = MessageAdapters.make(v2response)
 		String v3response = v2tov3Translator.translateV2toV3(abrakadapter, v3request)
+        new Hl7v3Validator().validate(v3response, Hl7v3ValidationProfiles.RESPONSE_TYPES['iti-45'])
 	}
 }

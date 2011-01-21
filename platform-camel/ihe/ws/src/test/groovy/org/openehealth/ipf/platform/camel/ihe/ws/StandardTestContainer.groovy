@@ -21,7 +21,7 @@ import java.net.ServerSocket
 
 import javax.servlet.Servlet
 import javax.servlet.ServletContext
- 
+
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
@@ -49,6 +49,7 @@ import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor
 import org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor
 import org.openhealthtools.ihe.atna.auditor.XDSRepositoryAuditor
 import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor
+import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
 
 /**
  * Base class for tests that are run within an embedded web container.
@@ -57,16 +58,16 @@ import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor
  * @author Jens Riemschneider
  */
 class StandardTestContainer {
-     def static log = LogFactory.getLog(StandardTestContainer.class)
+     private static final transient Log log = LogFactory.getLog(StandardTestContainer.class)
      
-     def static producerTemplate
-     def static servletServer
-     def static appContext
+     static ProducerTemplate producerTemplate
+     static ServletServer servletServer
+     static ApplicationContext appContext
 
-     def static auditSender
-     def static camelContext
+     static AuditMessageSender auditSender
+     static CamelContext camelContext
      
-     def static port
+     static int port
     
      
      static void startServer(servlet, appContextName, secure) {
