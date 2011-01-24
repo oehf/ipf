@@ -19,7 +19,17 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>${project.build.directory}/ipf-sources</directory>
+            <directory>../.</directory>
+			<useDefaultExcludes>false</useDefaultExcludes>
+            <excludes>
+                <exclude>**/*.iml</exclude>
+				<exclude>**/*.ipr</exclude>
+				<exclude>**/*.iws</exclude>
+				<exclude>**/.gitignore</exclude>
+				<exclude>**/.gitattributes</exclude>
+				<exclude>**/.git/**</exclude>				
+                <exclude>**/target/**</exclude>
+            </excludes>
             <outputDirectory>/</outputDirectory>
         </fileSet>    
     </fileSets>
