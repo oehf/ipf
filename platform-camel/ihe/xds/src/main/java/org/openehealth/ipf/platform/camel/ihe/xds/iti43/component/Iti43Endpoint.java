@@ -25,9 +25,9 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti43.service.Iti43Service;
  * The Camel endpoint for the ITI-43 transaction.
  */
 public class Iti43Endpoint extends DefaultItiEndpoint {
-    private final static XdsServiceInfo ITI_43 = new XdsServiceInfo(
+    private final static ItiServiceInfo ITI_43 = new ItiServiceInfo(
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
             Iti43PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),

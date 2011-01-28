@@ -18,11 +18,11 @@ package org.openehealth.ipf.commons.ihe.xcpd.cxf;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 
 
 /**
@@ -34,17 +34,16 @@ import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
  * @author Dmytro Rud
  */
 public class XcpdServiceAuditInterceptor extends AuditInterceptor {
-    
+    private final ItiServiceInfo serviceInfo;
+
     /**
      * Constructor.
-     * 
-     * @param auditStrategy
-     *      an audit strategy instance
      */
-    public XcpdServiceAuditInterceptor(WsAuditStrategy auditStrategy) {
+    public XcpdServiceAuditInterceptor(WsAuditStrategy auditStrategy, ItiServiceInfo serviceInfo) {
         // must be executed before the splitting of the the message flow into sync ack + async response  
         super(Phase.PRE_STREAM, auditStrategy);
         addAfter(InPayloadExtractorInterceptor.class.getName());
+        this.serviceInfo = serviceInfo;
     }
 
     
@@ -58,7 +57,7 @@ public class XcpdServiceAuditInterceptor extends AuditInterceptor {
         XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
         
-        if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
+        if (serviceInfo.isAuditRequestPayload()) {
             auditDataset.setRequestPayload(message.getContent(String.class));
         }
     }

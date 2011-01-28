@@ -29,7 +29,6 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 
 
 /**

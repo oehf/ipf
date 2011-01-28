@@ -23,34 +23,34 @@ import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.apache.cxf.ws.addressing.Names;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 
 
 /**
  * CXF interceptor which stores the URL of the target endpoint into 
  * audit dataset.  
- * <p>
- * Usable only for synchronous clients, because asynchronous clients use 
- * correlation, and services get request URLs from HTTP Servlet contexts.
  *
  * @author Dmytro Rud
  */
 public class XcpdProducerAuditInterceptor extends AuditInterceptor {
     private final AsynchronyCorrelator correlator;
-    
+    private final ItiServiceInfo serviceInfo;
+
     /**
      * Constructor.
-     * 
-     * @param auditStrategy
-     *      an audit strategy instance
      */
-    public XcpdProducerAuditInterceptor(WsAuditStrategy auditStrategy, AsynchronyCorrelator correlator) {
+    public XcpdProducerAuditInterceptor(
+            WsAuditStrategy auditStrategy,
+            AsynchronyCorrelator correlator,
+            ItiServiceInfo serviceInfo)
+    {
         super(Phase.WRITE_ENDING, auditStrategy);
         this.correlator = correlator;
+        this.serviceInfo = serviceInfo;
     }
 
     
@@ -58,8 +58,8 @@ public class XcpdProducerAuditInterceptor extends AuditInterceptor {
     protected void process(SoapMessage message) throws Exception {
         XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
-        
-        if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
+
+        if (serviceInfo.isAuditRequestPayload()) {
             String payload = (String) message.getContent(List.class).get(0);
             auditDataset.setRequestPayload(payload);
         }

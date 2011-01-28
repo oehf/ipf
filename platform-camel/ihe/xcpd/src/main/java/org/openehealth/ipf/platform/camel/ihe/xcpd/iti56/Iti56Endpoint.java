@@ -51,8 +51,8 @@ public class Iti56Endpoint extends DefaultItiEndpoint {
             new String[][] {new String[] {"PatientLocationQueryRequest", null, "IHE/XCPD_PLQ"}},
             new String[][] {new String[] {"PatientLocationQueryResponse", null, "IHE/XCPD_PLQ"}},
             null,
-            false
-    );
+            false,
+            true);
 
     /**
      * Constructs the endpoint.

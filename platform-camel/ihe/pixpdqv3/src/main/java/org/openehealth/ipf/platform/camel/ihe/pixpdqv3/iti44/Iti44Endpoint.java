@@ -59,6 +59,7 @@ public class Iti44Endpoint extends DefaultItiEndpoint {
             REQUEST_VALIDATION_PROFILES,
             RESPONSE_VALIDATION_PROFILES,
             "MCCI_IN000002UV01",
+            false,
             false);
 
     private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
@@ -71,6 +72,7 @@ public class Iti44Endpoint extends DefaultItiEndpoint {
             REQUEST_VALIDATION_PROFILES,
             RESPONSE_VALIDATION_PROFILES,
             "MCCI_IN000002UV01",
+            false,
             false);
 
     private final boolean isPix;

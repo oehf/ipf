@@ -16,21 +16,20 @@
 package org.openehealth.ipf.commons.ihe.xcpd.iti56;
 
 import groovy.util.slurpersupport.GPathResult;
-import groovy.util.slurpersupport.NoChildren;
 import groovy.util.slurpersupport.NodeChild;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 
 /**
  * Generic audit strategy for ITI-56 (XCPD).
  * @author Dmytro Rud
  */
-abstract class Iti56AuditStrategy extends XcpdAuditStrategy {
+abstract class Iti56AuditStrategy extends WsAuditStrategy {
     private static final transient Log LOG = LogFactory.getLog(Iti56AuditStrategy.class);
 
     Iti56AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
@@ -43,11 +42,6 @@ abstract class Iti56AuditStrategy extends XcpdAuditStrategy {
     }    
     
 
-    public boolean needStoreRequestPayload() {
-        return true
-    }
-    
-    
     /**
      * Returns ATNA response code -- SUCCESS if the name of the root element
      * is "PatientLocationQueryResponse", SERIOUS_FAILURE otherwise,

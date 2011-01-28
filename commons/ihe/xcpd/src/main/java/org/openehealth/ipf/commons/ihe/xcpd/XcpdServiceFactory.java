@@ -57,7 +57,8 @@ public class XcpdServiceFactory extends Hl7v3ServiceFactory {
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            svrFactory.getInInterceptors().add(new XcpdServiceAuditInterceptor(auditStrategy));
+            svrFactory.getInInterceptors().add(new XcpdServiceAuditInterceptor(
+                    auditStrategy, getServiceInfo()));
             
             XcpdAuditInterceptor auditInterceptor = 
                 new XcpdAuditInterceptor(auditStrategy, true, null, false);
