@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.atna;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Dmytro Rud
  */
-public class AuditDataset {
+public class AuditDataset implements Serializable {
     private static final transient Log LOG = LogFactory.getLog(AuditDataset.class);
     
     // whether we audit on server (true) or on client (false)

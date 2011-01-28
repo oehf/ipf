@@ -61,12 +61,13 @@ public class XcpdProducerAuditInterceptor extends AuditInterceptor {
         
         if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
             String payload = (String) message.getContent(List.class).get(0);
-            AddressingProperties apropo = (AddressingProperties) message.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
-            if (Names.WSA_ANONYMOUS_ADDRESS.equals(apropo.getReplyTo().getAddress().getValue())) {
-                auditDataset.setRequestPayload(payload);
-            } else {
-                correlator.storeRequestPayload(apropo.getMessageID().getValue(), payload);
-            }
+            auditDataset.setRequestPayload(payload);
+        }
+
+        // when the invocation is asynchronous: store audit dataset into the correlator
+        AddressingProperties props = (AddressingProperties) message.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
+        if (! Names.WSA_ANONYMOUS_ADDRESS.equals(props.getReplyTo().getAddress().getValue())) {
+            correlator.storeAuditDataset(props.getMessageID().getValue(), auditDataset);
         }
     }
 

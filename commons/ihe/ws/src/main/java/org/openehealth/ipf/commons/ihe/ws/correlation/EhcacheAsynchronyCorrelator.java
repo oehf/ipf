@@ -18,6 +18,9 @@ package org.openehealth.ipf.commons.ihe.ws.correlation;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import org.apache.commons.lang.Validate;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+
+import java.io.Serializable;
 
 /**
  * Ehcache-based implementation of asynchronous message correlator.
@@ -27,7 +30,7 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
 
     private final String SERVICE_ENDPOINT_URI_SUFFIX = ".serviceEndpoint";
     private final String CORRELATION_KEY_SUFFIX      = ".correlationKey";
-    private final String REQUEST_PAYLOAD_SUFFIX      = ".requestPayload";
+    private final String AUDIT_DATASET_SUFFIX        = ".auditDataset";
 
     private final Ehcache ehcache;
 
@@ -36,13 +39,13 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
         this.ehcache = ehcache;
     }
 
-    private void put(String messageId, String suffix, String value) {
+    private void put(String messageId, String suffix, Serializable value) {
         ehcache.put(new Element(messageId + suffix, value));
     }
 
-    private String get(String messageId, String suffix) {
+    private <T extends Serializable> T get(String messageId, String suffix) {
         Element element = ehcache.get(messageId + suffix);
-        return (element != null) ? (String) element.getValue() : null;
+        return (element != null) ? (T) element.getValue() : null;
     }
 
     @Override
@@ -56,8 +59,8 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
     }
 
     @Override
-    public void storeRequestPayload(String messageId, String requestPayload) {
-        put(messageId, REQUEST_PAYLOAD_SUFFIX, requestPayload);
+    public void storeAuditDataset(String messageId, WsAuditDataset auditDataset) {
+        put(messageId, AUDIT_DATASET_SUFFIX, auditDataset);
     }
 
     @Override
@@ -71,14 +74,14 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
     }
 
     @Override
-    public String getRequestPayload(String messageId) {
-        return get(messageId, REQUEST_PAYLOAD_SUFFIX);
+    public WsAuditDataset getAuditDataset(String messageId) {
+        return get(messageId, AUDIT_DATASET_SUFFIX);
     }
 
     @Override
     public boolean delete(String messageId) {
         ehcache.remove(messageId + CORRELATION_KEY_SUFFIX);
-        ehcache.remove(messageId + REQUEST_PAYLOAD_SUFFIX);
+        ehcache.remove(messageId + AUDIT_DATASET_SUFFIX);
         return ehcache.remove(messageId + SERVICE_ENDPOINT_URI_SUFFIX);
     }
 }

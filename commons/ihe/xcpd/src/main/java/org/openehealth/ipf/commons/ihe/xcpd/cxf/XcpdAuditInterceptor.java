@@ -80,7 +80,7 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
     /**
      * Returns <code>true</code> when the combination of parameters does mean
      * that this interceptor instance is deployed on the client side, i.e.
-     * either on producer or on asyncronous response receiver. 
+     * either on producer or on asynchronous response receiver.
      */
     private static boolean isClient(boolean asyncReceiver, boolean serverSide) {
         return (asyncReceiver || (! serverSide));
@@ -94,7 +94,28 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
             return;
         }
 
-        XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
+        List<?> list = message.getContent(List.class);
+        String payload = (list == null) ? null : (String) list.get(0);
+
+        String messageId = null;
+        XcpdAuditDataset auditDataset = null;
+
+        // try to get the audit dataset from the asynchrony correlator --
+        // will work only when we are on asynchronous receiver, and the WSA
+        // RelatesTo header has been properly initialized, and the dataset
+        // has not been purged from the asynchrony correlator yet.
+        if (asyncReceiver) {
+            messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
+            if (messageId != null) {
+                auditDataset = (XcpdAuditDataset) correlator.getAuditDataset(messageId);
+            } else {
+                LOG.error("Cannot determine WSA message ID");
+            }
+        }
+        if (auditDataset == null) {
+            auditDataset = (XcpdAuditDataset) getAuditDataset(message);
+            auditDataset.setPayload(payload);
+        }
 
         // extract user ID from WSA "To" header (not "ReplyTo" due to direction inversion!)
         extractUserIdFromWSAddressing(
@@ -103,32 +124,8 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
                 serverSide, 
                 auditDataset);
 
-        // save XML payload to the dataset
-        // (list will be null in case of SOAP fault in ITI-56)
-        List<?> list = message.getContent(List.class);
-        String payload = (list == null) ? null : (String) list.get(0); 
-        auditDataset.setPayload(payload);
-        
-        // determine service address when we are on async receiver 
-        // side and have got an async response
-        if(asyncReceiver) {
-            String messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
-            if (messageId != null) {
-                String serviceEndpoint = correlator.getServiceEndpointUri(messageId);
-                if (serviceEndpoint == null) {
-                    LOG.warn("Unknown async response with target message ID " + messageId);
-                }
-                auditDataset.setServiceEndpointUrl(serviceEndpoint);
-                
-                if (((XcpdAuditStrategy) getAuditStrategy()).needStoreRequestPayload()) {
-                    auditDataset.setRequestPayload(correlator.getRequestPayload(messageId));
-                }
-            } else {
-                LOG.error("Cannot determine WSA message ID");
-            } 
-        } 
-        
-        // perform transaction-specific enrichment of the audit dataset 
+        // Perform transaction-specific enrichment of the audit dataset.
+        // Depending on the side, the payload will be either request or response one.
         getAuditStrategy().enrichDataset(payload, auditDataset);
         
         // perform transaction-specific auditing

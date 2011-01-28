@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.correlation;
 
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+
 /**
  * Interface for message correlators in asynchronous 
  * Web Service-based IHE transactions. 
@@ -41,13 +43,13 @@ public interface AsynchronyCorrelator {
     void storeCorrelationKey(String messageId, String correlationKey);
 
     /**
-     * Stores request payload.
+     * Stores audit dataset.
      * @param messageId
      *      WS-Addressing message ID of the request.
-     * @param requestPayload
-     *      request payload as XML string.
+     * @param auditDataset
+     *      audit dataset.
      */
-    void storeRequestPayload(String messageId, String requestPayload);
+    void storeAuditDataset(String messageId, WsAuditDataset auditDataset);
 
     /**
      * Returns the URI of the endpoint to which the message with the given
@@ -63,11 +65,10 @@ public interface AsynchronyCorrelator {
     String getCorrelationKey(String messageId);
 
     /**
-     * Returns the payload of the request message with the given ID, 
-     * or <code>null</code> if the message is unknown or the
-     * payload saving has been switched off.
+     * Returns the audit dataset for the request message with the
+     * given ID, or <code>null</code> if the message is unknown.
      */
-    String getRequestPayload(String messageId);
+    WsAuditDataset getAuditDataset(String messageId);
 
     /**
      * Deletes informations about the message with the given ID.
