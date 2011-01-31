@@ -26,9 +26,9 @@ import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InRelatesToHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
 
 
 /**
@@ -97,7 +97,7 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         String payload = (list == null) ? null : (String) list.get(0);
 
         String messageId = null;
-        XcpdAuditDataset auditDataset = null;
+        WsAuditDataset auditDataset = null;
 
         // try to get the audit dataset from the asynchrony correlator --
         // will work only when we are on asynchronous receiver, and the WSA
@@ -106,13 +106,13 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         if (asyncReceiver) {
             messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
             if (messageId != null) {
-                auditDataset = (XcpdAuditDataset) correlator.getAuditDataset(messageId);
+                auditDataset = correlator.getAuditDataset(messageId);
             } else {
                 LOG.error("Cannot determine WSA message ID");
             }
         }
         if (auditDataset == null) {
-            auditDataset = (XcpdAuditDataset) getAuditDataset(message);
+            auditDataset = getAuditDataset(message);
             auditDataset.setRequestPayload(payload);
         }
 
@@ -128,9 +128,8 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         getAuditStrategy().enrichDataset(payload, auditDataset);
         
         // perform transaction-specific auditing
-        // (the first parameter is null because the outcome code
-        // will be taken from the audit dataset)
-        getAuditStrategy().audit(null, auditDataset);
+        auditDataset.setEventOutcomeCode(getAuditStrategy().getEventOutcomeCode(payload));
+        getAuditStrategy().audit(auditDataset);
     }
     
 }

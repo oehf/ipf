@@ -85,14 +85,12 @@ public abstract class WsAuditStrategy {
      * Performs transaction-specific auditing using 
      * information containing in the dataset.
      *   
-     * @param eventOutcomeCode
-     *      event outcome code as defined in RFC 3881
      * @param auditDataset
-     *      audit dataset with all the information needed 
+     *      audit dataset with all the information needed
      * @throws Exception
      *      any exception that occurred during this operation
      */
-    public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcomeCode, WsAuditDataset auditDataset)
+    public abstract void doAudit(WsAuditDataset auditDataset)
         throws Exception;
 
     
@@ -104,14 +102,12 @@ public abstract class WsAuditStrategy {
      * when the user allows us to audit with incomplete data,
      * @see #allowIncompleteAudit
      * 
-     * @param eventOutcomeCode
-     *      event outcome code as defined in RFC 3881
      * @param auditDataset
      *      audit dataset  
      * @throws Exception
      *      any exception that occurred during auditing
      */
-    public void audit(RFC3881EventOutcomeCodes eventOutcomeCode, WsAuditDataset auditDataset) throws Exception {
+    public void audit(WsAuditDataset auditDataset) throws Exception {
         Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
         if(! missing.isEmpty()) {
             StringBuilder sb = new StringBuilder("Missing audit fields: ");
@@ -124,7 +120,7 @@ public abstract class WsAuditStrategy {
             LOG.error(sb.toString());
         }
         if(missing.isEmpty() || isAllowIncompleteAudit()) {
-            doAudit(eventOutcomeCode, auditDataset);
+            doAudit(auditDataset);
         }
     }
         

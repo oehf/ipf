@@ -26,8 +26,8 @@ import org.apache.cxf.ws.addressing.Names;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
 
 
 /**
@@ -56,7 +56,7 @@ public class XcpdProducerAuditInterceptor extends AuditInterceptor {
     
     @Override
     protected void process(SoapMessage message) throws Exception {
-        XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
+        WsAuditDataset auditDataset = getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
 
         if (serviceInfo.isAuditRequestPayload()) {

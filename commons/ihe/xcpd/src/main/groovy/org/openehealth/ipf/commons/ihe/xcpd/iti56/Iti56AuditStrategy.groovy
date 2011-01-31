@@ -81,8 +81,6 @@ abstract class Iti56AuditStrategy extends WsAuditStrategy {
             GPathResult patientId = Hl7v3Utils.slurp(auditDataset.requestPayload).RequestedPatientId
             auditDataset.patientId = Hl7v3Utils.iiToCx(patientId)
         }
-
-        auditDataset.outcomeCode = getEventOutcomeCode(auditDataset.requestPayload)
     }
 
 }

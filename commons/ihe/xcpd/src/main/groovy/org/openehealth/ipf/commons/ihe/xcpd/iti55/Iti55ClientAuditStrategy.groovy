@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xcpd.iti55;
 
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Client-side audit strategy for ITI-55 (XCPD).
@@ -26,8 +25,12 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 class Iti55ClientAuditStrategy extends Iti55AuditStrategy {
 
     private static final String[] NECESSARY_FIELD_NAMES = [
-       'UserId', 'ServiceEndpointUrl', 'RequestPayload',
-       'QueryId', 'HomeCommunityId'            
+            'EventOutcomeCode',
+            'UserId',
+            'ServiceEndpointUrl',
+            'RequestPayload',
+            'QueryId',
+            'HomeCommunityId',
     ]
 
     
@@ -37,12 +40,9 @@ class Iti55ClientAuditStrategy extends Iti55AuditStrategy {
     
     
     @Override
-    void doAudit(
-            RFC3881EventOutcomeCodes eventOutcomeCode, 
-            WsAuditDataset auditDataset) throws Exception 
-    {
+    void doAudit(WsAuditDataset auditDataset) throws Exception {
         AuditorManager.getXCPDInitiatingGatewayAuditor().auditXCPDPatientDiscoveryQueryEvent(
-                auditDataset.outcomeCode,
+                auditDataset.eventOutcomeCode,
                 auditDataset.userId,
                 auditDataset.serviceEndpointUrl,
                 auditDataset.requestPayload,

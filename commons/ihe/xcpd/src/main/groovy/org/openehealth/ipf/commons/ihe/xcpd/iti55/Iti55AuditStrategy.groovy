@@ -115,9 +115,6 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
         
         auditDataset.patientIds = patientIds.toArray() ?: null
 
-        // event outcome code
-        auditDataset.outcomeCode = getEventOutcomeCode(xml)
-        
         // contents of <queryBaParameter>
         auditDataset.requestPayload = extractQueryByParameterElement(xml)
     }

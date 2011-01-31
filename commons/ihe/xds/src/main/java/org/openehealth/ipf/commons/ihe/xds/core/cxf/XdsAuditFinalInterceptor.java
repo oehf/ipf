@@ -62,22 +62,21 @@ public class XdsAuditFinalInterceptor extends AuditInterceptor {
         
         // determine event outcome code
         Exchange exchange = message.getExchange();
-        Message wrappedMessage = ((AbstractWrappedMessage) message).getMessage();
-        
-        RFC3881EventOutcomeCodes eventOutcomeCode;
-        if((message == exchange.getInFaultMessage()) ||
+        Message wrappedMessage = message.getMessage();
+
+        boolean fault =
+           (message == exchange.getInFaultMessage()) ||
            (message == exchange.getOutFaultMessage()) ||
            (wrappedMessage == exchange.getInFaultMessage()) ||
            (wrappedMessage == exchange.getOutFaultMessage()) ||
-           (pojo == null)) 
-        {
-            eventOutcomeCode = RFC3881EventOutcomeCodes.SERIOUS_FAILURE; 
-        } else {
-            eventOutcomeCode = getAuditStrategy().getEventOutcomeCode(pojo); 
-        }
+           (pojo == null);
+
+        auditDataset.setEventOutcomeCode(fault ?
+                RFC3881EventOutcomeCodes.SERIOUS_FAILURE :
+                getAuditStrategy().getEventOutcomeCode(pojo));
 
         // perform transaction-specific auditing
-        getAuditStrategy().audit(eventOutcomeCode, auditDataset);
+        getAuditStrategy().audit(auditDataset);
     }
     
 }

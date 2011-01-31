@@ -17,6 +17,9 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
 import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+
 
 /**
  * A data structure that contains various ATNA audit information pieces
@@ -29,6 +32,8 @@ import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
  */
 public class WsAuditDataset extends AuditDataset {
 
+    // event outcome code as defined in RFC 3881
+    private RFC3881EventOutcomeCodes eventOutcomeCode;
     // request SOAP Body (XML) payload
     private String requestPayload;
     // client user ID (WS-Addressing <Reply-To> header)
@@ -136,6 +141,22 @@ public class WsAuditDataset extends AuditDataset {
      */
     public String getServiceEndpointUrl() {
         return serviceEndpointUrl;
+    }
+
+    /**
+     * @return RFC 3881 event outcome code.
+     */
+    public RFC3881EventOutcomeCodes getEventOutcomeCode() {
+        return eventOutcomeCode;
+    }
+
+    /**
+     * Sets the RFC 3881 event outcome code.
+     * @param eventOutcomeCode
+     *      RFC 3881 event outcome code.
+     */
+    public void setEventOutcomeCode(RFC3881EventOutcomeCodes eventOutcomeCode) {
+        this.eventOutcomeCode = eventOutcomeCode;
     }
 
 }

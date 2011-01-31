@@ -20,9 +20,9 @@ import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
 
 
 /**
@@ -54,7 +54,7 @@ public class XcpdServiceAuditInterceptor extends AuditInterceptor {
             return;
         }
 
-        XcpdAuditDataset auditDataset = (XcpdAuditDataset) getAuditDataset(message);
+        WsAuditDataset auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
         
         if (serviceInfo.isAuditRequestPayload()) {
