@@ -28,7 +28,7 @@ public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ServiceEndpointUrl",
         "QueryUuid",
-        "Payload"
+        "RequestPayload"
         /*"PatientId"*/};
 
 

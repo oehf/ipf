@@ -29,7 +29,7 @@ public class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
         "ClientIpAddress",
         "ServiceEndpointUrl",
-        "Payload"
+        "RequestPayload"
         /*"PatientId"*/};
     
     public Iti16ServerAuditStrategy(boolean allowIncompleteAudit) {

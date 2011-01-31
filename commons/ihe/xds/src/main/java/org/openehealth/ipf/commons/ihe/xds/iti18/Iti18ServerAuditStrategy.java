@@ -29,7 +29,7 @@ public class Iti18ServerAuditStrategy extends Iti18AuditStrategy {
         "ClientIpAddress",
         "ServiceEndpointUrl",
         "QueryUuid",
-        "Payload"
+        "RequestPayload"
         /*"PatientId"*/};
 
     
