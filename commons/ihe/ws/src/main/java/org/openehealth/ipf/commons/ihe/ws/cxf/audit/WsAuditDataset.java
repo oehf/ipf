@@ -29,8 +29,8 @@ import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
  */
 public class WsAuditDataset extends AuditDataset {
 
-    // SOAP Body (XML) payload
-    private String payload;
+    // request SOAP Body (XML) payload
+    private String requestPayload;
     // client user ID (WS-Addressing <Reply-To> header)
     private String userId;
     // client user name (WS-Security <Username> header)
@@ -53,19 +53,19 @@ public class WsAuditDataset extends AuditDataset {
     }
 
     /**
-     * Sets the SOAP Body (XML) payload.
-     * @param payload
+     * Sets the request SOAP Body (XML) payload.
+     * @param requestPayload
      *          SOAP Body (XML) payload.
      */
-    public void setPayload(String payload) {
-        this.payload = payload;
+    public void setRequestPayload(String requestPayload) {
+        this.requestPayload = requestPayload;
     }
 
     /**
-     * @return SOAP Body (XML) payload.
+     * @return request SOAP Body (XML) payload.
      */
-    public String getPayload() {
-        return payload;
+    public String getRequestPayload() {
+        return requestPayload;
     }
 
     /**

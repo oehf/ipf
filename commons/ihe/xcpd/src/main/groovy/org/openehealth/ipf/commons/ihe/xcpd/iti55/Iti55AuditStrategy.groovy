@@ -119,7 +119,7 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
         auditDataset.outcomeCode = getEventOutcomeCode(xml)
         
         // contents of <queryBaParameter>
-        auditDataset.payload = extractQueryByParameterElement(xml)
+        auditDataset.requestPayload = extractQueryByParameterElement(xml)
     }
 
     

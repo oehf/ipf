@@ -45,7 +45,7 @@ public class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
                 xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getClientIpAddress(),
                 xdsAuditDataset.getServiceEndpointUrl(),
-                xdsAuditDataset.getPayload(),
+                xdsAuditDataset.getRequestPayload(),
                 /*auditDataset.getPatientId()*/ null);
     }
 

@@ -82,7 +82,7 @@ abstract class Iti56AuditStrategy extends WsAuditStrategy {
             auditDataset.patientId = Hl7v3Utils.iiToCx(patientId)
         }
 
-        auditDataset.outcomeCode = getEventOutcomeCode(auditDataset.payload)
+        auditDataset.outcomeCode = getEventOutcomeCode(auditDataset.requestPayload)
     }
 
 }

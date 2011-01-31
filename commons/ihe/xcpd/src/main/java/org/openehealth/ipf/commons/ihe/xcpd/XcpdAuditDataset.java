@@ -28,9 +28,6 @@ public class XcpdAuditDataset extends WsAuditDataset {
     // enrichment, in order to not parse the payload twice.
     private RFC3881EventOutcomeCodes outcomeCode;
     
-    // request payload
-    private String requestPayload;
-    
     public XcpdAuditDataset(boolean serverSide) {
         super(serverSide);
     }
@@ -41,13 +38,5 @@ public class XcpdAuditDataset extends WsAuditDataset {
 
     public RFC3881EventOutcomeCodes getOutcomeCode() {
         return outcomeCode;
-    }
-
-    public void setRequestPayload(String requestPayload) {
-        this.requestPayload = requestPayload;
-    }
-
-    public String getRequestPayload() {
-        return requestPayload;
     }
 }

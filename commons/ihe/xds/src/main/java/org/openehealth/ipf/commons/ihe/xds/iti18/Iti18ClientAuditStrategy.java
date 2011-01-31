@@ -50,7 +50,7 @@ public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
                 eventOutcome,
                 xdsAuditDataset.getServiceEndpointUrl(), 
                 xdsAuditDataset.getQueryUuid(),
-                xdsAuditDataset.getPayload(), 
+                xdsAuditDataset.getRequestPayload(),
                 xdsAuditDataset.getHomeCommunityId(),
                 xdsAuditDataset.getPatientId());
     }

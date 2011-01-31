@@ -72,7 +72,7 @@ public class XdsAuditDatasetEnrichmentInterceptor extends AuditInterceptor {
         }
 
         // extract value prepared by (Client|Server)PayloadExctactorInterceptor
-        auditDataset.setPayload(message.getContent(String.class));
+        auditDataset.setRequestPayload(message.getContent(String.class));
         
         // perform transaction-specific audit dataset enrichment
         Object pojo = message.getContent(List.class).get(0);

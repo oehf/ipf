@@ -53,7 +53,7 @@ public class Iti18ServerAuditStrategy extends Iti18AuditStrategy {
                 xdsAuditDataset.getClientIpAddress(), 
                 xdsAuditDataset.getServiceEndpointUrl(),
                 xdsAuditDataset.getQueryUuid(), 
-                xdsAuditDataset.getPayload(), 
+                xdsAuditDataset.getRequestPayload(),
                 xdsAuditDataset.getHomeCommunityId(),
                 xdsAuditDataset.getPatientId());
     }

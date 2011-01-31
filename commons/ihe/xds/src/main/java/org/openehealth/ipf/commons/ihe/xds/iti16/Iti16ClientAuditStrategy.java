@@ -41,7 +41,7 @@ public class Iti16ClientAuditStrategy extends Iti16AuditStrategy {
         AuditorManager.getConsumerAuditor().auditRegistryQueryEvent(
                 eventOutcome, 
                 xdsAuditDataset.getServiceEndpointUrl(),
-                xdsAuditDataset.getPayload(),
+                xdsAuditDataset.getRequestPayload(),
                 /*auditDataset.getPatientId()*/ null);
     }
 

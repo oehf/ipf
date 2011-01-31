@@ -113,7 +113,7 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         }
         if (auditDataset == null) {
             auditDataset = (XcpdAuditDataset) getAuditDataset(message);
-            auditDataset.setPayload(payload);
+            auditDataset.setRequestPayload(payload);
         }
 
         // extract user ID from WSA "To" header (not "ReplyTo" due to direction inversion!)
