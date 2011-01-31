@@ -69,9 +69,9 @@ public class WsAuditDataset extends AuditDataset {
     }
 
     /**
-     * Sets the client user ID (WS-Addressing <Reply-To> header).
+     * Sets the client user ID (WS-Addressing &gt;Reply-To&lt; header).
      * @param userId
-     *          client user ID (WS-Addressing <Reply-To> header).
+     *          client user ID (WS-Addressing &gt;Reply-To&lt; header).
      */
     public void setUserId(String userId) {
         this.userId = userId;
@@ -84,23 +84,23 @@ public class WsAuditDataset extends AuditDataset {
      * &lt;ReplyTo&gt;, the special "WS-Addressing anonymous address" 
      * will be returned, as prescribed in 
      * http://www.w3.org/TR/2006/REC-ws-addr-soap-20060509/#anonaddress
-     * @return client user ID (WS-Addressing <Reply-To> header).
+     * @return client user ID (WS-Addressing &lt;Reply-To&gt; header).
      */
     public String getUserId() {
         return (userId != null) ? userId : EndpointReferenceUtils.ANONYMOUS_ADDRESS;
     }
 
     /**
-     * Sets the client user name (WS-Security <Username> header).
+     * Sets the client user name (WS-Security &lt;Username&gt; header).
      * @param userName
-     *          client user name (WS-Security <Username> header).
+     *          client user name (WS-Security &lt;Username&gt; header).
      */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
     /**
-     * @return client user name (WS-Security <Username> header).
+     * @return client user name (WS-Security &lt;Username&gt; header).
      */
     public String getUserName() {
         return userName;
