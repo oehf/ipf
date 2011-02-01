@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.cxf;
 
-import java.util.List;
-
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.interceptor.OneWayProcessorInterceptor;
 import org.apache.cxf.message.Message;
@@ -75,8 +73,7 @@ public class XdsAuditDatasetEnrichmentInterceptor extends AuditInterceptor {
         auditDataset.setRequestPayload(message.getContent(String.class));
         
         // perform transaction-specific audit dataset enrichment
-        Object request = message.getContent(List.class).get(0);
-        getAuditStrategy().enrichDatasetFromRequest(request, auditDataset);
+        getAuditStrategy().enrichDatasetFromRequest(extractPojo(message), auditDataset);
     }
 
 }

@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
@@ -103,6 +101,7 @@ public class AsyncAuditResponseInterceptor extends AuditInterceptor {
             String messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
             if (messageId != null) {
                 auditDataset = correlator.getAuditDataset(messageId);
+                // message.getExchange().put(CXF_EXCHANGE_KEY, auditDataset);
             } else {
                 LOG.error("Cannot determine WSA message ID");
             }
@@ -118,13 +117,9 @@ public class AsyncAuditResponseInterceptor extends AuditInterceptor {
                 serverSide, 
                 auditDataset);
 
-        // get the response (XML string for XCPD, ebXML POJO for XCA...)
-        List<?> list = message.getContent(List.class);
-        Object response = (list == null) ? null : list.get(0);
-
         // perform transaction-specific enrichment of the audit dataset
         WsAuditStrategy auditStrategy = getAuditStrategy();
-        auditStrategy.enrichDatasetFromResponse(response, auditDataset);
+        auditStrategy.enrichDatasetFromResponse(extractPojo(message), auditDataset);
         
         // perform transaction-specific auditing
         auditStrategy.audit(auditDataset);

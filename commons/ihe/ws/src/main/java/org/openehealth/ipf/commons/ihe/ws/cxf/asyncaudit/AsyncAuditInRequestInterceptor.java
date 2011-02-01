@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
-
 /**
  * CXF interceptor for ATNA auditing in WS-based IHE transactions with
  * WSA asynchrony support.  Handles <b>incoming</b> requests
@@ -59,6 +58,8 @@ public class AsyncAuditInRequestInterceptor extends AuditInterceptor {
         if (serviceInfo.isAuditRequestPayload()) {
             auditDataset.setRequestPayload(message.getContent(String.class));
         }
+
+        getAuditStrategy().enrichDatasetFromRequest(extractPojo(message), auditDataset);
     }
 
 }

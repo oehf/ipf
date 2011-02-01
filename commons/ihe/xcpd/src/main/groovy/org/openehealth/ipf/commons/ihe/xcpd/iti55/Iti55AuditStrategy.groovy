@@ -121,7 +121,7 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
 
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
-        throw new IllegalStateException('enrichDatasetFromRequest() is not used in XCPD')
+        // is not used in XCPD
     }
 
 

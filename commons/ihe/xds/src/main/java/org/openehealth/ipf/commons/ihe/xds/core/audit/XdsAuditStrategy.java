@@ -93,6 +93,6 @@ public abstract class XdsAuditStrategy extends WsAuditStrategy {
 
     @Override
     public void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset) throws Exception {
-        throw new IllegalStateException("enrichDatasetFromResponse() is not used in XDS");
+        // not used in XDS
     }
 }

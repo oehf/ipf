@@ -27,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 
-
 /**
  * CXF interceptor for ATNA auditing in WS-based IHE transactions with
  * WSA asynchrony support.  Handles </b>outgoing</b> requests
@@ -58,10 +57,19 @@ public class AsyncAuditOutRequestInterceptor extends AuditInterceptor {
         WsAuditDataset auditDataset = getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
 
+        Object request = extractPojo(message);
+
+        // Get request payload, handle different variants thereby:
+        //   a) for HL7v3-based transactions, payload corresponds to the "main" message;
+        //   b) for ebXML-based transactions, rely on the {@link OutPayloadExtractorInterceptor}.
         if (serviceInfo.isAuditRequestPayload()) {
-            String payload = message.getContent(String.class);
+            String payload = (request instanceof String) ?
+                    (String) request :
+                    message.getContent(String.class);
             auditDataset.setRequestPayload(payload);
         }
+
+        getAuditStrategy().enrichDatasetFromRequest(request, auditDataset);
 
         // when the invocation is asynchronous: store audit dataset into the correlator
         AddressingProperties props = (AddressingProperties) message.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES_OUTBOUND);
