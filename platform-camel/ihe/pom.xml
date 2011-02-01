@@ -45,6 +45,7 @@
         <module>pixpdq</module>
         <module>pixpdqv3</module>
         <module>xcpd</module>
+        <module>xca</module>
     </modules>
 
 </project>
