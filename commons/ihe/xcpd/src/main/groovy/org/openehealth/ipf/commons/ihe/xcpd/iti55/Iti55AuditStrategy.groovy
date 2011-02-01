@@ -83,7 +83,7 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
      *      target audit dataset.
      */
     @Override
-    void enrichDataset(Object pojo, WsAuditDataset auditDataset) throws Exception {
+    void enrichDatasetFromResponse(Object pojo, WsAuditDataset auditDataset) throws Exception {
         GPathResult xml = Hl7v3Utils.slurp((String) pojo)
         
         // query ID
@@ -114,12 +114,17 @@ abstract class Iti55AuditStrategy extends WsAuditStrategy {
         }
         
         auditDataset.patientIds = patientIds.toArray() ?: null
-
-        // contents of <queryBaParameter>
         auditDataset.requestPayload = extractQueryByParameterElement(xml)
+        auditDataset.eventOutcomeCode = getEventOutcomeCode(xml)
     }
 
-    
+
+    @Override
+    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
+        throw new IllegalStateException('enrichDatasetFromRequest() is not used in XCPD')
+    }
+
+
     private static void addPatientIds(GPathResult source, Set<String> target) {
         for (node in source) {
             target << Hl7v3Utils.iiToCx(node)

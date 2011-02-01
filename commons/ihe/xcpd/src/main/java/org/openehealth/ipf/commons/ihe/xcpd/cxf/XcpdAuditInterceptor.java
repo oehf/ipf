@@ -93,10 +93,6 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
             return;
         }
 
-        List<?> list = message.getContent(List.class);
-        String payload = (list == null) ? null : (String) list.get(0);
-
-        String messageId = null;
         WsAuditDataset auditDataset = null;
 
         // try to get the audit dataset from the asynchrony correlator --
@@ -104,7 +100,7 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         // RelatesTo header has been properly initialized, and the dataset
         // has not been purged from the asynchrony correlator yet.
         if (asyncReceiver) {
-            messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
+            String messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
             if (messageId != null) {
                 auditDataset = correlator.getAuditDataset(messageId);
             } else {
@@ -113,7 +109,6 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
         }
         if (auditDataset == null) {
             auditDataset = getAuditDataset(message);
-            auditDataset.setRequestPayload(payload);
         }
 
         // extract user ID from WSA "To" header (not "ReplyTo" due to direction inversion!)
@@ -123,13 +118,16 @@ public class XcpdAuditInterceptor extends AuditInterceptor {
                 serverSide, 
                 auditDataset);
 
-        // Perform transaction-specific enrichment of the audit dataset.
-        // Depending on the side, the payload will be either request or response one.
-        getAuditStrategy().enrichDataset(payload, auditDataset);
+        // get the response as XML string
+        List<?> list = message.getContent(List.class);
+        String responsePayload = (list == null) ? null : (String) list.get(0);
+
+        // perform transaction-specific enrichment of the audit dataset
+        WsAuditStrategy auditStrategy = getAuditStrategy();
+        auditStrategy.enrichDatasetFromResponse(responsePayload, auditDataset);
         
         // perform transaction-specific auditing
-        auditDataset.setEventOutcomeCode(getAuditStrategy().getEventOutcomeCode(payload));
-        getAuditStrategy().audit(auditDataset);
+        auditStrategy.audit(auditDataset);
     }
     
 }

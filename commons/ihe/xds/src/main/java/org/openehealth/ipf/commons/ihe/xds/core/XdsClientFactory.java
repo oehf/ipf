@@ -65,7 +65,7 @@ public class XdsClientFactory extends ItiClientFactory {
             client.getInFaultInterceptors().add(finalInterceptor);
 
             // install payload collecting interceptors  
-            if(((ItiServiceInfo) serviceInfo).isAuditRequestPayload()) {
+            if(serviceInfo.isAuditRequestPayload()) {
                 installPayloadInterceptors(client);
             }
         }

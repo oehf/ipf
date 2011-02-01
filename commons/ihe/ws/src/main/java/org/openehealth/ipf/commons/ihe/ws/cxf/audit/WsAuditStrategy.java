@@ -68,19 +68,33 @@ public abstract class WsAuditStrategy {
 
     
     /**
-     * Enriches the dataset with transaction-specific information from the given POJO.
-     *   
-     * @param pojo
-     *      POJO extracted from the message
+     * Enriches the dataset with transaction-specific information from the given request POJO.
+     *
+     * @param request
+     *      request as POJO extracted from the message
      * @param auditDataset
      *      audit dataset to be enriched
      * @throws Exception
      *      any exception that occurred during this operation
      */
-    public abstract void enrichDataset(Object pojo, WsAuditDataset auditDataset) 
+    public abstract void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset)
         throws Exception;
-    
-    
+
+
+    /**
+     * Enriches the dataset with transaction-specific information from the given response POJO.
+     *
+     * @param response
+     *      response as POJO extracted from the message
+     * @param auditDataset
+     *      audit dataset to be enriched
+     * @throws Exception
+     *      any exception that occurred during this operation
+     */
+    public abstract void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset)
+        throws Exception;
+
+
     /**
      * Performs transaction-specific auditing using 
      * information containing in the dataset.
@@ -138,12 +152,12 @@ public abstract class WsAuditStrategy {
     /**
      * Determines which RFC 3881 event outcome code corresponds to the
      * given response POJO.  
-     * @param pojo
-     *      ebXML object.
+     * @param response
+     *      response ebXML POJO.
      * @return
      *      RFC 3881 event outcome code.
      */
-    public abstract RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo);
+    public abstract RFC3881EventOutcomeCodes getEventOutcomeCode(Object response);
     
 
     /* ----- automatically generated getters and setters ----- */

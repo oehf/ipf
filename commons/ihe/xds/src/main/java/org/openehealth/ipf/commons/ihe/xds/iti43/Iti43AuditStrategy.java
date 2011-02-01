@@ -38,7 +38,7 @@ abstract class Iti43AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
         RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
         Iti43AuditDataset xdsAuditDataset = (Iti43AuditDataset) auditDataset;
 

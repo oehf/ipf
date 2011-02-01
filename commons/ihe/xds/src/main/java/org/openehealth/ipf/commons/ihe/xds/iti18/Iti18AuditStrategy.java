@@ -44,7 +44,7 @@ abstract public class Iti18AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
         AdhocQueryRequest request = (AdhocQueryRequest) pojo;
         Iti18AuditDataset xdsAuditDataset = (Iti18AuditDataset) auditDataset;
 

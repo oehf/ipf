@@ -74,13 +74,18 @@ abstract class Iti56AuditStrategy extends WsAuditStrategy {
      *      target audit dataset.
      */
     @Override
-    void enrichDataset(Object pojo, WsAuditDataset auditDataset) throws Exception {
-
+    void enrichDatasetFromResponse(Object pojo, WsAuditDataset auditDataset) throws Exception {
         // payload can be missing when the request is not valid
         if (auditDataset.requestPayload) {
             GPathResult patientId = Hl7v3Utils.slurp(auditDataset.requestPayload).RequestedPatientId
             auditDataset.patientId = Hl7v3Utils.iiToCx(patientId)
         }
+        auditDataset.eventOutcomeCode = getEventOutcomeCode(pojo)
     }
 
+
+    @Override
+    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
+        throw new IllegalStateException('enrichDatasetFromRequest() is not used in XCPD')
+    }
 }
