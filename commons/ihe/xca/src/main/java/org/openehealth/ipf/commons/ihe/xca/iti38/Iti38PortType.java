@@ -29,7 +29,7 @@ import javax.xml.ws.Action;
 /**
  * ITI-38 Service Endpoint Interface.
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "DocumentRegistry_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "RespondingGateway_PortType")
 @XmlSeeAlso({
         org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
         org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,

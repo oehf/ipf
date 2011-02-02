@@ -42,7 +42,7 @@ public class Iti38AsyncResponseEndpoint extends DefaultItiEndpoint {
             Iti38AsyncResponsePortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Response_Binding_Soap12", "ihe"),
             false,
-            "wsdl/iti38-async-response.wsdl",
+            "wsdl/iti38-asyncresponse.wsdl",
             true,
             false,
             false);

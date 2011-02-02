@@ -16,13 +16,12 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit;
 
 import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.message.MessageUtils;
+import org.apache.cxf.interceptor.DocLiteralInInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
 /**
  * CXF interceptor for ATNA auditing in WS-based IHE transactions with
@@ -38,20 +37,14 @@ public class AsyncAuditInRequestInterceptor extends AuditInterceptor {
      * Constructor.
      */
     public AsyncAuditInRequestInterceptor(WsAuditStrategy auditStrategy, ItiServiceInfo serviceInfo) {
-        // must be executed before the splitting of the the message flow into sync ack + async response  
-        super(Phase.PRE_STREAM, auditStrategy);
-        addAfter(InPayloadExtractorInterceptor.class.getName());
+        super(Phase.UNMARSHAL, auditStrategy);
+        addAfter(DocLiteralInInterceptor.class.getName());
         this.serviceInfo = serviceInfo;
     }
 
     
     @Override
     protected void process(SoapMessage message) throws Exception {
-        // partial responses are for us out of interest
-        if (MessageUtils.isPartialResponse(message)) {
-            return;
-        }
-
         WsAuditDataset auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
         
