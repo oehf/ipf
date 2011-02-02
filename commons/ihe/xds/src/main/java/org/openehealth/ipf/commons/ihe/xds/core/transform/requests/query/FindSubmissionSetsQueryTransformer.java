@@ -46,7 +46,8 @@ public class FindSubmissionSetsQueryTransformer {
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         ebXML.setId(query.getType().getId());
-        
+        ebXML.setHome(query.getHomeCommunityId());
+
         String value = identifiableTransformer.toEbXML(query.getPatientId());
         slots.fromString(SUBMISSION_SET_PATIENT_ID, value);
         
@@ -91,5 +92,6 @@ public class FindSubmissionSetsQueryTransformer {
         query.setContentTypeCodes(slots.toCodeList(SUBMISSION_SET_CONTENT_TYPE_CODE));
         
         query.setStatus(slots.toStatus(SUBMISSION_SET_STATUS));
+        query.setHomeCommunityId(ebXML.getHome());
     }
 }

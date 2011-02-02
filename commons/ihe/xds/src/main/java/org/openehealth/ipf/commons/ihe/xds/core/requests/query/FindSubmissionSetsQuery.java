@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import java.io.Serializable;
@@ -135,7 +133,7 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((authorPerson == null) ? 0 : authorPerson.hashCode());
         result = prime * result + ((contentTypeCodes == null) ? 0 : contentTypeCodes.hashCode());
         result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
@@ -149,7 +147,7 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
@@ -185,10 +183,5 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
         } else if (!submissionTime.equals(other.submissionTime))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

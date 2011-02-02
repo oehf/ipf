@@ -15,16 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindFolders.
@@ -107,7 +101,7 @@ public class FindFoldersQuery extends StoredQuery implements Serializable {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((codes == null) ? 0 : codes.hashCode());
         result = prime * result + ((lastUpdateTime == null) ? 0 : lastUpdateTime.hashCode());
         result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
@@ -119,7 +113,7 @@ public class FindFoldersQuery extends StoredQuery implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
@@ -145,10 +139,5 @@ public class FindFoldersQuery extends StoredQuery implements Serializable {
         } else if (!status.equals(other.status))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

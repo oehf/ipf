@@ -46,7 +46,8 @@ public class FindDocumentsQueryTransformer {
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         ebXML.setId(query.getType().getId());
-        
+        ebXML.setHome(query.getHomeCommunityId());
+
         String value = identifiableTransformer.toEbXML(query.getPatientId());
         slots.fromString(DOC_ENTRY_PATIENT_ID, value);
         
@@ -111,5 +112,6 @@ public class FindDocumentsQueryTransformer {
         query.getServiceStopTime().setTo(slots.toNumber(DOC_ENTRY_SERVICE_STOP_TIME_TO));
         
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
+        query.setHomeCommunityId(ebXML.getHome());
     }
 }

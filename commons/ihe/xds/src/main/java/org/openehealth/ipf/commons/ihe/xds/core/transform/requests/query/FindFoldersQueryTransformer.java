@@ -46,7 +46,8 @@ public class FindFoldersQueryTransformer {
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         ebXML.setId(query.getType().getId());
-        
+        ebXML.setHome(query.getHomeCommunityId());
+
         String value = identifiableTransformer.toEbXML(query.getPatientId());
         slots.fromString(FOLDER_PATIENT_ID, value);
         
@@ -82,5 +83,6 @@ public class FindFoldersQueryTransformer {
         query.getLastUpdateTime().setTo(slots.toNumber(FOLDER_LAST_UPDATE_TIME_TO));
         
         query.setStatus(slots.toStatus(FOLDER_STATUS));
+        query.setHomeCommunityId(ebXML.getHome());
     }
 }

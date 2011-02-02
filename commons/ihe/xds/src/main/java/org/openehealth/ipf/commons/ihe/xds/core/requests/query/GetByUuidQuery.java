@@ -15,12 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by a list of UUIDs. 
@@ -30,7 +28,6 @@ public abstract class GetByUuidQuery extends StoredQuery implements Serializable
     private static final long serialVersionUID = -7962722576557371093L;
     
     private List<String> uuids;
-    private String homeCommunityId;
 
     /**
      * Constructs the query.
@@ -39,21 +36,6 @@ public abstract class GetByUuidQuery extends StoredQuery implements Serializable
      */
     protected GetByUuidQuery(QueryType type) {
         super(type);
-    }
-
-    /**
-     * @return the home community ID.
-     */
-    public String getHomeCommunityId() {
-        return homeCommunityId;
-    }
-
-    /**
-     * @param homeCommunityId   
-     *          the home community ID.
-     */
-    public void setHomeCommunityId(String homeCommunityId) {
-        this.homeCommunityId = homeCommunityId;
     }
 
     /**
@@ -74,8 +56,7 @@ public abstract class GetByUuidQuery extends StoredQuery implements Serializable
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
-        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
+        int result = super.hashCode();
         result = prime * result + ((uuids == null) ? 0 : uuids.hashCode());
         return result;
     }
@@ -84,26 +65,16 @@ public abstract class GetByUuidQuery extends StoredQuery implements Serializable
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
         GetByUuidQuery other = (GetByUuidQuery) obj;
-        if (homeCommunityId == null) {
-            if (other.homeCommunityId != null)
-                return false;
-        } else if (!homeCommunityId.equals(other.homeCommunityId))
-            return false;
         if (uuids == null) {
             if (other.uuids != null)
                 return false;
         } else if (!uuids.equals(other.uuids))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

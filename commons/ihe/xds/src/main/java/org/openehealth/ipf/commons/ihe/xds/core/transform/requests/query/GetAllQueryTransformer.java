@@ -46,7 +46,8 @@ public class GetAllQueryTransformer {
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         
         ebXML.setId(query.getType().getId());
-        
+        ebXML.setHome(query.getHomeCommunityId());
+
         String value = identifiableTransformer.toEbXML(query.getPatientId());
         slots.fromString(PATIENT_ID, value);
         
@@ -82,5 +83,6 @@ public class GetAllQueryTransformer {
         
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
+        query.setHomeCommunityId(ebXML.getHome());
     }
 }

@@ -15,17 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
 /**
  * Represents a stored query for GetAll.
@@ -148,7 +141,7 @@ public class GetAllQuery extends StoredQuery implements Serializable {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result
                 + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
         result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
@@ -164,7 +157,7 @@ public class GetAllQuery extends StoredQuery implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
@@ -200,10 +193,5 @@ public class GetAllQuery extends StoredQuery implements Serializable {
         } else if (!statusSubmissionSets.equals(other.statusSubmissionSets))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
