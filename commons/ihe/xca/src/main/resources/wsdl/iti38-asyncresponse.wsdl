@@ -27,7 +27,7 @@
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
         xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl">
 
-    <documentation>IHE XCA Responding Gateway = ITI-38 adaptor = Cross-Gateway Query</documentation>
+    <documentation>IHE XCA Initiating Gateway Asynchronous Response Receiver = ITI-38 adaptor = Cross-Gateway Query</documentation>
 
     <types>
         <xsd:schema elementFormDefault="qualified">
