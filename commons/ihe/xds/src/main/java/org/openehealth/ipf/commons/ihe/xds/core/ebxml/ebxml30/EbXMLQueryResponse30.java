@@ -139,6 +139,7 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
             if (objRefEbXML != null) {
                 ObjectReference objRef = new ObjectReference();
                 objRef.setId(objRefEbXML.getId());
+                objRef.setHome(objRefEbXML.getHome());
                 results.add(objRef);
             }
         }
