@@ -15,47 +15,49 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-        
-<definitions 
-        targetNamespace="urn:ihe:iti:xds-b:2007" 
-        name="RespondingGateway"
+
+<definitions
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:ihe="urn:ihe:iti:xds-b:2007"
-        xmlns:query="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0"
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata">
+        xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+        targetNamespace="urn:ihe:iti:xds-b:2007"
+        name="RespondingGateway">
 
-    <documentation>IHE XCA Responding Gateway = ITI-38 adaptor = Cross-Gateway Query</documentation>
+    <documentation>IHE XCA Responding Gateway = ITI-39 adaptor = Cross-Gateway Retrieve</documentation>
 
     <types>
         <xsd:schema elementFormDefault="qualified">
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/query.xsd"/>
+            <xsd:import namespace="urn:ihe:iti:xds-b:2007" schemaLocation="classpath:wsdl/schema/IHE/IHEXDSB.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rs.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/lcm.xsd"/>
+            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rim.xsd"/>
         </xsd:schema>
     </types>
 
-    <message name="CrossGatewayQuery_Message">
-        <documentation>Cross-Gateway Query</documentation>
-        <part name="body" element="query:AdhocQueryRequest"/>
+    <message name="CrossGatewayRetrieve_Message">
+        <documentation>Cross-Gateway Retrieve</documentation>
+        <part name="body" element="ihe:RetrieveDocumentSetRequest"/>
     </message>
 
-    <message name="CrossGatewayQueryResponse_Message">
-        <documentation>Cross-Gateway Query Response</documentation>
-        <part name="body" element="query:AdhocQueryResponse"/>
+    <message name="CrossGatewayRetrieveResponse_Message">
+        <documentation>Cross-Gateway Retrieve Response</documentation>
+        <part name="body" element="ihe:RetrieveDocumentSetResponse"/>
     </message>
 
     <portType name="RespondingGateway_PortType">
-        <operation name="RespondingGateway_CrossGatewayQuery">
-            <input message="ihe:CrossGatewayQuery_Message"
-                   wsam:Action="urn:ihe:iti:2007:CrossGatewayQuery"/>
-            <output message="ihe:CrossGatewayQueryResponse_Message"
-                    wsam:Action="urn:ihe:iti:2007:CrossGatewayQueryResponse"/>
+        <operation name="RespondingGateway_CrossGatewayRetrieve">
+            <input message="ihe:CrossGatewayRetrieve_Message"
+                   wsam:Action="urn:ihe:iti:2007:CrossGatewayRetrieve"/>
+            <output message="ihe:CrossGatewayRetrieveResponse_Message"
+                    wsam:Action="urn:ihe:iti:2007:CrossGatewayRetrieveResponse"/>
         </operation>
     </portType>
 
     <binding name="RespondingGateway_Binding_Soap12" type="ihe:RespondingGateway_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="RespondingGateway_CrossGatewayQuery">
+        <operation name="RespondingGateway_CrossGatewayRetrieve">
             <input>
                 <soap12:body use="literal"/>
             </input>

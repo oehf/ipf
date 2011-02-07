@@ -31,9 +31,9 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Audit strategy for ITI-43.
  * @author Dmytro Rud
  */
-abstract class Iti43AuditStrategy extends XdsAuditStrategy {
+abstract public class Iti43AuditStrategy extends XdsAuditStrategy {
 
-    Iti43AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    public Iti43AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
