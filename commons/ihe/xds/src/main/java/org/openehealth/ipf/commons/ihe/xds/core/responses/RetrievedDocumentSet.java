@@ -58,7 +58,20 @@ public class RetrievedDocumentSet extends Response implements Serializable {
         super(status);
         this.documents.addAll(documents);
     }
-    
+
+    /**
+     * Constructs an error response object with the data from an exception.
+     * @param throwable
+     *          the exception that occurred.
+     * @param defaultMetaDataError
+     *          the default error code for {@link org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException}.
+     * @param defaultError
+     *          the default error code for any other exception.
+     */
+    public RetrievedDocumentSet(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
+        super(throwable, defaultMetaDataError, defaultError);
+    }
+
     /**
      * @return the documents.
      */

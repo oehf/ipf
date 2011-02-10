@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14PortType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultXdsWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Converters;
 
 /**
@@ -33,13 +33,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Convert
  *
  * @author Jens Riemschneider
  */
-public class Iti14Service extends DefaultXdsWebService implements Iti14PortType {
+public class Iti14Service extends DefaultItiWebService implements Iti14PortType {
     @Override
     public RegistryResponse documentRegistryRegisterDocumentSet(SubmitObjectsRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            Response errorResponse = new Response();
-            configureError(errorResponse, result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
+            Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
             return EbXML21Converters.convert(errorResponse);
         }
         

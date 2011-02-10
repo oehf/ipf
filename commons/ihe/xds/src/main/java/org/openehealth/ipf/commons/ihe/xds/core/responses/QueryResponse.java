@@ -55,7 +55,20 @@ public class QueryResponse extends Response implements Serializable {
     public QueryResponse(Status status) {        
         super(status);
     }
-    
+
+    /**
+     * Constructs an error response object with the data from an exception.
+     * @param throwable
+     *          the exception that occurred.
+     * @param defaultMetaDataError
+     *          the default error code for {@link org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException}.
+     * @param defaultError
+     *          the default error code for any other exception.
+     */
+    public QueryResponse(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
+        super(throwable, defaultMetaDataError, defaultError);
+    }
+
     /**
      * @return the object references representing the results of a query using
      *          a non-leaf-object return type {@link QueryRegistry#setReturnLeafObjects(boolean)}.

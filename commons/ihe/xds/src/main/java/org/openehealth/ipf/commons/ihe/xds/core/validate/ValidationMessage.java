@@ -98,8 +98,10 @@ public enum ValidationMessage {
     INCORRECT_SIZE("Size of submitted document does not match value supplied in the meta data"),
     DOC_CODE_NOT_ALLOWED_ON_HAS_MEMBER("HasMember association may not specify a relationship type"),
     RESULT_NOT_SINGLE_PATIENT("Query result contains entries for multiple patients", ErrorCode.RESULT_NOT_SINGLE_PATIENT),
-    HOME_COMMUNITY_ID_MUST_BE_SPECIFIED("Home community ID is missing", ErrorCode.MISSING_HOME_COMMUNITY_ID);
-    
+    HOME_COMMUNITY_ID_MUST_BE_SPECIFIED("Home community ID is missing", ErrorCode.MISSING_HOME_COMMUNITY_ID),
+    UNKNOWN_HOME_COMMUNITY_ID("Unknown home community ID: %1", ErrorCode.UNKNOWN_COMMUNITY);
+
+
     private final String text;
     private final ErrorCode errorCode;
     

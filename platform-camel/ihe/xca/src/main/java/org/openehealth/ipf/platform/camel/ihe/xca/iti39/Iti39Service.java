@@ -22,22 +22,19 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultXdsWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
-
-import javax.jws.WebParam;
 
 /**
  * Service implementation for the IHE ITI-39 transaction.
  */
-public class Iti39Service extends DefaultXdsWebService implements Iti39PortType {
+public class Iti39Service extends DefaultItiWebService implements Iti39PortType {
 
     @Override
-    public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(@WebParam(partName = "body", name = "RetrieveDocumentSetRequest", targetNamespace = "urn:ihe:iti:xds-b:2007") RetrieveDocumentSetRequestType body) {
+    public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet();
-            configureError(errorResponse, result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR);
+            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR);
             return EbXML30Converters.convert(errorResponse);
         }
 

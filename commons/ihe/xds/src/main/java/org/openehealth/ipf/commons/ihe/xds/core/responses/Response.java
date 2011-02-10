@@ -22,6 +22,8 @@ import java.util.List;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
 /**
  * Basic response information.
  * <p>
@@ -48,7 +50,36 @@ public class Response implements Serializable {
     public Response(Status status) {        
         this.status = status;
     }
-    
+
+    /**
+     * Constructs an error response object with the data from an exception.
+     * @param throwable
+     *          the exception that occurred.
+     * @param defaultMetaDataError
+     *          the default error code for {@link XDSMetaDataException}.
+     * @param defaultError
+     *          the default error code for any other exception.
+     */
+    public Response(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
+        this.status = Status.FAILURE;
+        ErrorInfo errorInfo = new ErrorInfo();
+        errorInfo.setSeverity(Severity.ERROR);
+        this.errors.add(errorInfo);
+
+        XDSMetaDataException metaDataException = getXDSMetaDataException(throwable);
+        if (metaDataException != null)  {
+            errorInfo.setCodeContext(metaDataException.getMessage());
+            if (metaDataException.getValidationMessage().getErrorCode() == null) {
+                errorInfo.setErrorCode(defaultMetaDataError);
+            } else {
+                errorInfo.setErrorCode(metaDataException.getValidationMessage().getErrorCode());
+            }
+        } else {
+            errorInfo.setCodeContext(throwable.getMessage());
+            errorInfo.setErrorCode(defaultError);
+        }
+    }
+
     /**
      * @return the status of the request execution.
      */
@@ -77,6 +108,18 @@ public class Response implements Serializable {
      */
     public void setErrors(List<ErrorInfo> errors) {
         this.errors = errors;
+    }
+
+    private static XDSMetaDataException getXDSMetaDataException (Throwable throwable) {
+        if (throwable == null) {
+            return null;
+        }
+
+        if (throwable instanceof XDSMetaDataException) {
+            return (XDSMetaDataException)throwable;
+        } else {
+            return getXDSMetaDataException(throwable.getCause());
+        }
     }
 
     @Override

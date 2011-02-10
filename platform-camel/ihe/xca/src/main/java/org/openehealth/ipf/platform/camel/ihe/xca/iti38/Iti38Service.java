@@ -22,19 +22,18 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultXdsWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
  * Service implementation for the IHE ITI-38 transaction.
  */
-public class Iti38Service extends DefaultXdsWebService implements Iti38PortType {
+public class Iti38Service extends DefaultItiWebService implements Iti38PortType {
     @Override
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            QueryResponse errorResponse = new QueryResponse();
-            configureError(errorResponse, result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
+            QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
             return EbXML30Converters.convert(errorResponse);
         }
         
