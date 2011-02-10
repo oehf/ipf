@@ -64,9 +64,16 @@ public class QueryResponse extends Response implements Serializable {
      *          the default error code for {@link org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException}.
      * @param defaultError
      *          the default error code for any other exception.
+     * @param location
+     *          error location.
      */
-    public QueryResponse(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
-        super(throwable, defaultMetaDataError, defaultError);
+    public QueryResponse(
+            Throwable throwable,
+            ErrorCode defaultMetaDataError,
+            ErrorCode defaultError,
+            String location)
+    {
+        super(throwable, defaultMetaDataError, defaultError, location);
     }
 
     /**

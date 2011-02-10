@@ -38,7 +38,7 @@ public class Iti14Service extends DefaultItiWebService implements Iti14PortType 
     public RegistryResponse documentRegistryRegisterDocumentSet(SubmitObjectsRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
+            Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML21Converters.convert(errorResponse);
         }
         

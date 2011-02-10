@@ -59,10 +59,17 @@ public class Response implements Serializable {
      *          the default error code for {@link XDSMetaDataException}.
      * @param defaultError
      *          the default error code for any other exception.
+     * @param location
+     *          error location.
      */
-    public Response(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
+    public Response(
+            Throwable throwable,
+            ErrorCode defaultMetaDataError,
+            ErrorCode defaultError,
+            String location)
+    {
         this.status = Status.FAILURE;
-        this.errors.add(new ErrorInfo(throwable, defaultMetaDataError, defaultError));
+        this.errors.add(new ErrorInfo(throwable, defaultMetaDataError, defaultError, location));
     }
 
     /**

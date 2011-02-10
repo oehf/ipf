@@ -51,7 +51,7 @@ class TestIti43 extends StandardTestContainer {
     
     @Test
     void testIti43() {
-        def response1 = sendIt(SERVICE1, 'service 1')
+        def response1 = sendIt(SERVICE1 + 'x', 'service 1')
         assert SUCCESS == response1.status
         checkForMTOM(response1)
         

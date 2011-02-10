@@ -37,7 +37,7 @@ public class Iti42Service extends DefaultItiWebService implements Iti42PortType 
     @Override public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
+            Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

@@ -63,7 +63,7 @@ public class Iti15Service extends DefaultItiWebService implements Iti15PortType 
         
         Exchange result = process(request);
         if (result.getException() != null) {
-            Response errorResponse = new Response(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR);
+            Response errorResponse = new Response(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
             return EbXML21Converters.convert(errorResponse);
         }
         

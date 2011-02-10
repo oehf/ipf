@@ -65,9 +65,17 @@ public class ErrorInfo implements Serializable {
      *          the default error code for {@link XDSMetaDataException}.
      * @param defaultError
      *          the default error code for any other exception.
+     * @param location
+     *          error location.
      */
-    public ErrorInfo(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
+    public ErrorInfo(
+            Throwable throwable,
+            ErrorCode defaultMetaDataError,
+            ErrorCode defaultError,
+            String location)
+    {
         this.severity = Severity.ERROR;
+        this.location = location;
 
         XDSMetaDataException metaDataException = getXDSMetaDataException(throwable);
         if (metaDataException != null)  {
