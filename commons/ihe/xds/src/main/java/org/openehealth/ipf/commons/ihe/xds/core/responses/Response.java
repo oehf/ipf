@@ -62,22 +62,7 @@ public class Response implements Serializable {
      */
     public Response(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
         this.status = Status.FAILURE;
-        ErrorInfo errorInfo = new ErrorInfo();
-        errorInfo.setSeverity(Severity.ERROR);
-        this.errors.add(errorInfo);
-
-        XDSMetaDataException metaDataException = getXDSMetaDataException(throwable);
-        if (metaDataException != null)  {
-            errorInfo.setCodeContext(metaDataException.getMessage());
-            if (metaDataException.getValidationMessage().getErrorCode() == null) {
-                errorInfo.setErrorCode(defaultMetaDataError);
-            } else {
-                errorInfo.setErrorCode(metaDataException.getValidationMessage().getErrorCode());
-            }
-        } else {
-            errorInfo.setCodeContext(throwable.getMessage());
-            errorInfo.setErrorCode(defaultError);
-        }
+        this.errors.add(new ErrorInfo(throwable, defaultMetaDataError, defaultError));
     }
 
     /**
@@ -108,18 +93,6 @@ public class Response implements Serializable {
      */
     public void setErrors(List<ErrorInfo> errors) {
         this.errors = errors;
-    }
-
-    private static XDSMetaDataException getXDSMetaDataException (Throwable throwable) {
-        if (throwable == null) {
-            return null;
-        }
-
-        if (throwable instanceof XDSMetaDataException) {
-            return (XDSMetaDataException)throwable;
-        } else {
-            return getXDSMetaDataException(throwable.getCause());
-        }
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Contains information about an error.
@@ -54,6 +55,31 @@ public class ErrorInfo implements Serializable {
         this.codeContext = codeContext;
         this.severity = severity;
         this.location = location;
+    }
+
+    /**
+     * Constructs an error info from the given exception.
+     * @param throwable
+     *          the exception that occurred.
+     * @param defaultMetaDataError
+     *          the default error code for {@link XDSMetaDataException}.
+     * @param defaultError
+     *          the default error code for any other exception.
+     */
+    public ErrorInfo(Throwable throwable, ErrorCode defaultMetaDataError, ErrorCode defaultError) {
+        this.severity = Severity.ERROR;
+
+        XDSMetaDataException metaDataException = getXDSMetaDataException(throwable);
+        if (metaDataException != null)  {
+            this.codeContext = metaDataException.getMessage();
+            this.errorCode = metaDataException.getValidationMessage().getErrorCode();
+            if (this.errorCode == null) {
+                this.errorCode = defaultMetaDataError;
+            }
+        } else {
+            this.codeContext = throwable.getMessage();
+            this.errorCode = defaultError;
+        }
     }
 
     /**
@@ -114,6 +140,18 @@ public class ErrorInfo implements Serializable {
      */
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    private static XDSMetaDataException getXDSMetaDataException(Throwable throwable) {
+        if (throwable == null) {
+            return null;
+        }
+
+        if (throwable instanceof XDSMetaDataException) {
+            return (XDSMetaDataException) throwable;
+        } else {
+            return getXDSMetaDataException(throwable.getCause());
+        }
     }
 
     @Override
