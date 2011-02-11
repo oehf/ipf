@@ -80,7 +80,9 @@ public enum ErrorCode {
     /** A register transaction was rejected because it submitted an association referencing 
      *  a deprecated document. */
     REGISTRY_DEPRECATED_DOCUMENT_ERROR("XDSRegistryDeprecatedDocumentError"),
-    /** The unique ID of a repository could not be resolved to a valid document repository 
+    /** The document associated with the DocumentUniqueId is not available. */
+    DOCUMENT_UNIQUE_ID_ERROR("XDSDocumentUniqueIdError"),
+    /** The unique ID of a repository could not be resolved to a valid document repository
      *  or the value does not match that of the document repository. */
     UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId"),
     /** A query resulted in returning information about multiple patients, which is forbidden
