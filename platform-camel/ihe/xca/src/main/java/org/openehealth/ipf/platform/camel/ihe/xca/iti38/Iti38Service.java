@@ -33,7 +33,7 @@ public class Iti38Service extends DefaultItiWebService implements Iti38PortType 
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
+            QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
         

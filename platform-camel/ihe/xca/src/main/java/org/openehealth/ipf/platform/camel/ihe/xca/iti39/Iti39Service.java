@@ -34,7 +34,7 @@ public class Iti39Service extends DefaultItiWebService implements Iti39PortType 
     public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR);
+            RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);
         }
 

@@ -21,7 +21,10 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 /**
@@ -38,12 +41,17 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
         regResponseValidator.validate(response, profile);
         
         for (RetrievedDocument doc : response.getDocuments()) {
-            String repoId = doc.getRequestData().getRepositoryUniqueId();
+            RetrieveDocument requestData = doc.getRequestData();
+
+            String repoId = requestData.getRepositoryUniqueId();
             metaDataAssert(repoId != null && !repoId.isEmpty(), REPO_ID_MUST_BE_SPECIFIED);
             
-            String docId = doc.getRequestData().getDocumentUniqueId();
+            String docId = requestData.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
             
+            String hcId = requestData.getHomeCommunityId();
+            new HomeCommunityIdValidator(profile.getIheProfile() == IheProfile.XCA).validate(hcId);
+
             metaDataAssert(doc.getDataHandler() != null, MISSING_DOCUMENT_FOR_DOC_ENTRY, docId);
         }
     }
