@@ -24,11 +24,9 @@ import java.util.List;
  * Represents a stored query for FindSubmissionSets.
  * @author Jens Riemschneider
  */
-public class FindSubmissionSetsQuery extends StoredQuery implements Serializable {
+public class FindSubmissionSetsQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = 1712346604151312305L;
 
-    private Identifiable patientId;
-    
     private List<AvailabilityStatus> status;
     private List<String> sourceIds;
     private List<Code> contentTypeCodes;
@@ -41,21 +39,6 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
      */
     public FindSubmissionSetsQuery() {
         super(QueryType.FIND_SUBMISSION_SETS);
-    }
-
-    /**
-     * @return the patient ID to search for.
-     */
-    public Identifiable getPatientId() {
-        return patientId;
-    }
-
-    /**
-     * @param patientId 
-     *          the patient ID to search for.
-     */
-    public void setPatientId(Identifiable patientId) {
-        this.patientId = patientId;
     }
 
     /**
@@ -136,7 +119,6 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
         int result = super.hashCode();
         result = prime * result + ((authorPerson == null) ? 0 : authorPerson.hashCode());
         result = prime * result + ((contentTypeCodes == null) ? 0 : contentTypeCodes.hashCode());
-        result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
         result = prime * result + ((sourceIds == null) ? 0 : sourceIds.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + ((submissionTime == null) ? 0 : submissionTime.hashCode());
@@ -161,11 +143,6 @@ public class FindSubmissionSetsQuery extends StoredQuery implements Serializable
             if (other.contentTypeCodes != null)
                 return false;
         } else if (!contentTypeCodes.equals(other.contentTypeCodes))
-            return false;
-        if (patientId == null) {
-            if (other.patientId != null)
-                return false;
-        } else if (!patientId.equals(other.patientId))
             return false;
         if (sourceIds == null) {
             if (other.sourceIds != null)

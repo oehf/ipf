@@ -24,11 +24,9 @@ import java.util.List;
  * Represents a stored query for FindFolders.
  * @author Jens Riemschneider
  */
-public class FindFoldersQuery extends StoredQuery implements Serializable {
+public class FindFoldersQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = 4156643982985304259L;
 
-    private Identifiable patientId;
-    
     private List<AvailabilityStatus> status;
     private QueryList<Code> codes;
     
@@ -39,21 +37,6 @@ public class FindFoldersQuery extends StoredQuery implements Serializable {
      */
     public FindFoldersQuery() {
         super(QueryType.FIND_FOLDERS);
-    }
-
-    /**
-     * @return the patient ID to search for.
-     */
-    public Identifiable getPatientId() {
-        return patientId;
-    }
-    
-    /**
-     * @param patientId 
-     *          the patient ID to search for.
-     */
-    public void setPatientId(Identifiable patientId) {
-        this.patientId = patientId;
     }
 
     /**
@@ -104,7 +87,6 @@ public class FindFoldersQuery extends StoredQuery implements Serializable {
         int result = super.hashCode();
         result = prime * result + ((codes == null) ? 0 : codes.hashCode());
         result = prime * result + ((lastUpdateTime == null) ? 0 : lastUpdateTime.hashCode());
-        result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
         result = prime * result + ((status == null) ? 0 : status.hashCode());
         return result;
     }
@@ -127,11 +109,6 @@ public class FindFoldersQuery extends StoredQuery implements Serializable {
             if (other.lastUpdateTime != null)
                 return false;
         } else if (!lastUpdateTime.equals(other.lastUpdateTime))
-            return false;
-        if (patientId == null) {
-            if (other.patientId != null)
-                return false;
-        } else if (!patientId.equals(other.patientId))
             return false;
         if (status == null) {
             if (other.status != null)

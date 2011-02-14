@@ -24,11 +24,9 @@ import java.util.List;
  * Represents a stored query for GetAll.
  * @author Jens Riemschneider
  */
-public class GetAllQuery extends StoredQuery implements Serializable {
+public class GetAllQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = -4161172318244319631L;
 
-    private Identifiable patientId;
-    
     private List<AvailabilityStatus> statusDocuments;
     private List<AvailabilityStatus> statusSubmissionSets;
     private List<AvailabilityStatus> statusFolders;
@@ -41,21 +39,6 @@ public class GetAllQuery extends StoredQuery implements Serializable {
      */
     public GetAllQuery() {
         super(QueryType.GET_ALL);
-    }
-
-    /**
-     * @return the patient ID to search for.
-     */
-    public Identifiable getPatientId() {
-        return patientId;
-    }
-
-    /**
-     * @param patientId 
-     *          the patient ID to search for.
-     */
-    public void setPatientId(Identifiable patientId) {
-        this.patientId = patientId;
     }
 
     /**
@@ -145,7 +128,6 @@ public class GetAllQuery extends StoredQuery implements Serializable {
         result = prime * result
                 + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
         result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
-        result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
         result = prime * result + ((statusDocuments == null) ? 0 : statusDocuments.hashCode());
         result = prime * result + ((statusFolders == null) ? 0 : statusFolders.hashCode());
         result = prime * result
@@ -171,11 +153,6 @@ public class GetAllQuery extends StoredQuery implements Serializable {
             if (other.formatCodes != null)
                 return false;
         } else if (!formatCodes.equals(other.formatCodes))
-            return false;
-        if (patientId == null) {
-            if (other.patientId != null)
-                return false;
-        } else if (!patientId.equals(other.patientId))
             return false;
         if (statusDocuments == null) {
             if (other.statusDocuments != null)
