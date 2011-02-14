@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
@@ -65,28 +66,35 @@ public class ErrorInfo implements Serializable {
      *          the default error code for {@link XDSMetaDataException}.
      * @param defaultError
      *          the default error code for any other exception.
-     * @param location
-     *          error location.
+     * @param defaultLocation
+     *          default error location.
      */
     public ErrorInfo(
             Throwable throwable,
             ErrorCode defaultMetaDataError,
             ErrorCode defaultError,
-            String location)
+            String defaultLocation)
     {
-        this.severity = Severity.ERROR;
-        this.location = location;
-
-        XDSMetaDataException metaDataException = getXDSMetaDataException(throwable);
-        if (metaDataException != null)  {
-            this.codeContext = metaDataException.getMessage();
-            this.errorCode = metaDataException.getValidationMessage().getErrorCode();
-            if (this.errorCode == null) {
-                this.errorCode = defaultMetaDataError;
+        this(defaultError, throwable.getMessage(), Severity.ERROR, defaultLocation);
+        while (throwable != null) {
+            if (throwable instanceof XDSMetaDataException) {
+                XDSMetaDataException metaDataException = (XDSMetaDataException) throwable;
+                this.errorCode = metaDataException.getValidationMessage().getErrorCode();
+                if (this.errorCode == null) {
+                    this.errorCode = defaultMetaDataError;
+                }
+                this.codeContext = metaDataException.getMessage();
+                return;
             }
-        } else {
-            this.codeContext = throwable.getMessage();
-            this.errorCode = defaultError;
+            if (throwable instanceof XdsRuntimeException) {
+                XdsRuntimeException exception = (XdsRuntimeException) throwable;
+                this.errorCode = exception.getErrorCode();
+                this.codeContext = exception.getCodeContext();
+                this.severity = exception.getSeverity();
+                this.location = exception.getLocation();
+                return;
+            }
+            throwable = throwable.getCause();
         }
     }
 
@@ -148,18 +156,6 @@ public class ErrorInfo implements Serializable {
      */
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    private static XDSMetaDataException getXDSMetaDataException(Throwable throwable) {
-        if (throwable == null) {
-            return null;
-        }
-
-        if (throwable instanceof XDSMetaDataException) {
-            return (XDSMetaDataException) throwable;
-        } else {
-            return getXDSMetaDataException(throwable.getCause());
-        }
     }
 
     @Override
