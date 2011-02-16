@@ -79,7 +79,7 @@
         <log4j-version>1.2.14</log4j-version>
         <metabuilder-version>1.1.6</metabuilder-version>
         <mina-version>1.1.7</mina-version>
-        <oht-atna-version>1.1.0-v200912010000</oht-atna-version>
+        <oht-atna-version>1.2.0-v20110214</oht-atna-version>
         <oht-cdar-version>1.0.0-rc1</oht-cdar-version>
         <osgi-api-version>1.2.0</osgi-api-version>
         <persistence-api-version>1.0</persistence-api-version>
@@ -702,7 +702,7 @@
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
                 <artifactId>org.openhealthtools.ihe.atna.auditor</artifactId>
-                <version>${oht-atna-version}</version>
+                <version>${oht-atna-version}-p1</version>
             </dependency>
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
