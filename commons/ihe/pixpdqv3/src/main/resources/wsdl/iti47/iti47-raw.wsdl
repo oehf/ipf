@@ -82,7 +82,7 @@
             </output>
         </operation>
         <operation name="PDSupplier_QUQI_IN000003UV01_Continue">
-            <wsoap12:operation soapAction="urn:hl7-org:v3:PDSupplier_QUQI_IN000003UV01_Continue"/>
+            <wsoap12:operation soapAction="urn:hl7-org:v3:QUQI_IN000003UV01_Continue"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
@@ -91,7 +91,7 @@
             </output>
         </operation>
         <operation name="PDSupplier_QUQI_IN000003UV01_Cancel">
-            <wsoap12:operation soapAction="PDSupplier_QUQI_IN000003UV01_Cancel"/>
+            <wsoap12:operation soapAction="urn:hl7-org:v3:QUQI_IN000003UV01_Cancel"/>
             <input>
                 <wsoap12:body use="literal"/>
             </input>
