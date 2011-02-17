@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.extend;
 
-import org.apache.camel.model.ProcessorDefinition
-import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3
-import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import static org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExchangeValidator.definition
-import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelTranslators.translatorHL7v2toHL7v3
-import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelTranslators.translatorHL7v3toHL7v2
-import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelValidators.*
+import org.apache.camel.model.ProcessorDefinition;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV2toV3;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Hl7TranslatorV3toV2;
+import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
+import static org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExchangeValidator.definition;
+import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelTranslators.translatorHL7v2toHL7v3;
+import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelTranslators.translatorHL7v3toHL7v2;
+import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelValidators.*;
 
 /**
  * HL7 v3 DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} 
@@ -106,8 +106,7 @@ class PixPdqV3Extension {
       */
      public static ProcessorDefinition translateHL7v3toHL7v2(
              ProcessorDefinition self, 
-             Hl7TranslatorV3toV2 translator) 
-     {
+             Hl7TranslatorV3toV2 translator) {
          return self.process(translatorHL7v3toHL7v2(translator));
      }
      
@@ -117,8 +116,7 @@ class PixPdqV3Extension {
       */
      public static ProcessorDefinition translateHL7v2toHL7v3(
              ProcessorDefinition self, 
-             Hl7TranslatorV2toV3 translator) 
-     {
+             Hl7TranslatorV2toV3 translator) {
          return self.process(translatorHL7v2toHL7v3(translator));
      }
 }
