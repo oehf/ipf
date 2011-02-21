@@ -25,7 +25,7 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
 
-    <camel:camelContext id="camelContext">
+    <camel:camelContext id="camelContextAuditor">
         <camel:routeBuilder ref="routeBuilder"/>        
     </camel:camelContext>
 
@@ -34,7 +34,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <bean id="camelEndpointSender"
         class="org.openehealth.ipf.platform.camel.ihe.atna.util.CamelEndpointSender">
         <!-- autowired if not explicitly configured -->
-        <property name="camelContext" ref="camelContext" />
+        <property name="camelContext" ref="camelContextAuditor" />
         <!-- endpoint registered in the Camel context -->
         <property name="endpointUri" value="direct:atnaEndpointSender" />
     </bean>

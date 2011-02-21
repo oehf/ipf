@@ -44,7 +44,7 @@
         <springsource-aspectj-version>1.6.2.RELEASE</springsource-aspectj-version>
         <springsource-cglib-version>2.1.3</springsource-cglib-version>
         <springsource-commons-cli-version>1.1.0</springsource-commons-cli-version>
-        <springsource-commons-codec-version>1.3.0</springsource-commons-codec-version>
+        <springsource-commons-codec-version>1.4.0</springsource-commons-codec-version>
         <springsource-commons-collections-version>3.2.0</springsource-commons-collections-version>
         <springsource-commons-dbcp-version>1.2.2.osgi</springsource-commons-dbcp-version>
         <springsource-commons-fileupload-version>1.2.1</springsource-commons-fileupload-version>
@@ -71,7 +71,7 @@
         <servlet-api-version>2.5-p1</servlet-api-version>
         <serializer-version>2.7.1-v200806030322</serializer-version>
         <slf4j-version>1.5.0</slf4j-version>
-        <spring-framework-version>3.0.3.RELEASE</spring-framework-version>
+        <spring-framework-version>3.0.4.RELEASE</spring-framework-version>
         <xalan-version>2.7.1-p1</xalan-version>
         <xerces-impl-osgi-version>2.9.0-v200805270400</xerces-impl-osgi-version>
         <xml-apis-version>1.3.4-v200806030440</xml-apis-version>

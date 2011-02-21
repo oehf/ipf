@@ -16,7 +16,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd
 http://www.springframework.org/schema/osgi
 http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
-    <camel-osgi:camelContext id="camelContext">
+    <camel-osgi:camelContext id="camelContextXds">
         <camel-spring:routeBuilder ref="routeBuilderIti14"/>
         <camel-spring:routeBuilder ref="routeBuilderIti15"/>
         <camel-spring:routeBuilder ref="routeBuilderIti17"/>
@@ -36,6 +36,6 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
     <bean id="iti17Servlet"
         class="org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet">
-        <property name="context" ref="camelContext" />
+        <property name="context" ref="camelContextXds" />
     </bean>
 </beans>

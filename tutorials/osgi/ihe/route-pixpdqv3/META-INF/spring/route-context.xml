@@ -25,7 +25,7 @@ http://camel.apache.org/schema/spring
 http://camel.apache.org/schema/spring/camel-spring.xsd 
 ">
 
-    <camel:camelContext id="camelContext">
+    <camel:camelContext id="camelContextPixpdqv3">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
