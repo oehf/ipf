@@ -22,6 +22,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 /**
@@ -39,6 +41,9 @@ public class RetrieveDocumentSetRequestValidator implements Validator<EbXMLRetri
             
             String docId = document.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
+
+            String hcId = document.getHomeCommunityId();
+            new HomeCommunityIdValidator(profile.getIheProfile() == IheProfile.XCA).validate(hcId);
         }
     }
 }

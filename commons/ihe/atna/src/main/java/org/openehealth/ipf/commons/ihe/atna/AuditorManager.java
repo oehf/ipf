@@ -20,14 +20,7 @@ import java.net.UnknownHostException;
 
 import org.openehealth.ipf.commons.ihe.atna.custom.XCPDInitiatingGatewayAuditor;
 import org.openehealth.ipf.commons.ihe.atna.custom.XCPDRespondingGatewayAuditor;
-import org.openhealthtools.ihe.atna.auditor.PDQConsumerAuditor;
-import org.openhealthtools.ihe.atna.auditor.PIXConsumerAuditor;
-import org.openhealthtools.ihe.atna.auditor.PIXManagerAuditor;
-import org.openhealthtools.ihe.atna.auditor.PIXSourceAuditor;
-import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor;
-import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor;
-import org.openhealthtools.ihe.atna.auditor.XDSRepositoryAuditor;
-import org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor;
+import org.openhealthtools.ihe.atna.auditor.*;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig;
 
 /**
@@ -108,6 +101,18 @@ public abstract class AuditorManager {
     public static XCPDRespondingGatewayAuditor getXCPDRespondingGatewayAuditor() {
         synchronized (sync) {
             return XCPDRespondingGatewayAuditor.getAuditor();
+        }
+    }
+
+    public static XCAInitiatingGatewayAuditor getXCAInitiatingGatewayAuditor() {
+        synchronized (sync) {
+            return XCAInitiatingGatewayAuditor.getAuditor();
+        }
+    }
+
+    public static XCARespondingGatewayAuditor getXCARespondingGatewayAuditor() {
+        synchronized (sync) {
+            return XCARespondingGatewayAuditor.getAuditor();
         }
     }
 }

@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Base class for queries that are defined by:
@@ -105,10 +103,5 @@ public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery implemen
         } else if (!formatCodes.equals(other.formatCodes))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

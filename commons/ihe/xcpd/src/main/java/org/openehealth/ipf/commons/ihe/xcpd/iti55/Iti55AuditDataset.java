@@ -15,13 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xcpd.iti55;
 
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditDataset;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 /**
  * ATNA Audit dataset for ITI-55.
  * @author Dmytro Rud
  */
-public class Iti55AuditDataset extends XcpdAuditDataset {
+public class Iti55AuditDataset extends WsAuditDataset {
 
     private String queryId;
     private String homeCommunityId;

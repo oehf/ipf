@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.xds.core.DefaultXdsWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Converters;
 
 /**
@@ -32,13 +32,12 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML21Convert
  *
  * @author Jens Riemschneider
  */
-public class Iti16Service extends DefaultXdsWebService implements Iti16PortType {
+public class Iti16Service extends DefaultItiWebService implements Iti16PortType {
     @Override
     public RegistryResponse documentRegistryQueryRegistry(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            QueryResponse errorResponse = new QueryResponse();
-            configureError(errorResponse, result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR);
+            QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML21Converters.convert(errorResponse);
         }
         

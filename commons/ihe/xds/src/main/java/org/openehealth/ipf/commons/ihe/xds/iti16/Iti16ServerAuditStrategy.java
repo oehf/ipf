@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.iti16;
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Server audit strategy for ITI-16.
@@ -27,9 +26,10 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 public class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
+        "EventOutcomeCode",
         "ClientIpAddress",
         "ServiceEndpointUrl",
-        "Payload"
+        "RequestPayload"
         /*"PatientId"*/};
     
     public Iti16ServerAuditStrategy(boolean allowIncompleteAudit) {
@@ -37,15 +37,15 @@ public class Iti16ServerAuditStrategy extends Iti16AuditStrategy {
     }
     
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, WsAuditDataset auditDataset) {
+    public void doAudit(WsAuditDataset auditDataset) {
         XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
         AuditorManager.getRegistryAuditor().auditRegistryQueryEvent(
-                eventOutcome,
+                xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getClientIpAddress(), // Must be set to something, otherwise schema is broken
                 xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getClientIpAddress(),
                 xdsAuditDataset.getServiceEndpointUrl(),
-                xdsAuditDataset.getPayload(),
+                xdsAuditDataset.getRequestPayload(),
                 /*auditDataset.getPatientId()*/ null);
     }
 

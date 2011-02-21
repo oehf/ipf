@@ -60,6 +60,7 @@ public class GetAllQueryTransformerTest {
         query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setStatusFolders(Arrays.asList(AvailabilityStatus.DEPRECATED));
         query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.SUBMITTED));
+        query.setHomeCommunityId("12.21.41");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -68,6 +69,8 @@ public class GetAllQueryTransformerTest {
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.GET_ALL.getId(), ebXML.getId());
+        assertEquals("12.21.41", ebXML.getHome());
+
         assertEquals(Arrays.asList("'id1^^^name1&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.PATIENT_ID.getSlotName()));
         

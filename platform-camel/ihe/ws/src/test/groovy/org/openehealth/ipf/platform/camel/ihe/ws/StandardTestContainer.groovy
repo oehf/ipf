@@ -15,41 +15,32 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws
 
-import java.io.IOException
-import java.lang.reflect.Constructor
-import java.net.ServerSocket
-
-import javax.servlet.Servlet
-import javax.servlet.ServletContext
-
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.ProducerTemplate
 import org.apache.camel.impl.DefaultExchange
 import org.apache.commons.codec.binary.Base64
-import org.apache.commons.lang.math.RandomUtils
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean
-import org.junit.AfterClass
+
 import org.junit.After
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
-import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
+import org.junit.AfterClass
+
 import org.openehealth.ipf.commons.ihe.atna.MockedSender
-import org.openehealth.ipf.commons.ihe.atna.custom.XCPDInitiatingGatewayAuditor;
-import org.openehealth.ipf.commons.ihe.atna.custom.XCPDRespondingGatewayAuditor;
+import org.openehealth.ipf.commons.ihe.atna.custom.XCPDInitiatingGatewayAuditor
+import org.openehealth.ipf.commons.ihe.atna.custom.XCPDRespondingGatewayAuditor
+import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
+import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+
+import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
+import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
+import org.openhealthtools.ihe.atna.auditor.*
+
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.WebApplicationContextUtils
-
-import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
-import org.openhealthtools.ihe.atna.auditor.XDSRegistryAuditor
-import org.openhealthtools.ihe.atna.auditor.XDSSourceAuditor
-import org.openhealthtools.ihe.atna.auditor.XDSRepositoryAuditor
-import org.openhealthtools.ihe.atna.auditor.XDSConsumerAuditor
-import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
 
 /**
  * Base class for tests that are run within an embedded web container.
@@ -64,7 +55,7 @@ class StandardTestContainer {
      static ServletServer servletServer
      static ApplicationContext appContext
 
-     static AuditMessageSender auditSender
+     static MockedSender auditSender
      static CamelContext camelContext
      
      static int port
@@ -95,49 +86,63 @@ class StandardTestContainer {
          producerTemplate = appContext.getBean('template')  
          camelContext = appContext.getBean('camelContext')  
 
-         def port = 514
+         def auditPort = 514
          
          XDSRegistryAuditor.auditor.config = new AuditorModuleConfig()
          XDSRegistryAuditor.auditor.config.auditSourceId = 'registryId'
          XDSRegistryAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSRegistryAuditor.auditor.config.auditRepositoryPort = port
+         XDSRegistryAuditor.auditor.config.auditRepositoryPort = auditPort
          XDSRegistryAuditor.auditor.config.systemUserId = 'registryUserId'
          XDSRegistryAuditor.auditor.config.systemAltUserId = 'registryAltUserId'
 
          XDSSourceAuditor.auditor.config = new AuditorModuleConfig()
          XDSSourceAuditor.auditor.config.auditSourceId = 'sourceId'
          XDSSourceAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSSourceAuditor.auditor.config.auditRepositoryPort = port
+         XDSSourceAuditor.auditor.config.auditRepositoryPort = auditPort
          XDSSourceAuditor.auditor.config.systemUserId = 'sourceUserId'
          XDSSourceAuditor.auditor.config.systemAltUserId = 'sourceAltUserId'
 
          XDSConsumerAuditor.auditor.config = new AuditorModuleConfig()
          XDSConsumerAuditor.auditor.config.auditSourceId = 'consumerId'
          XDSConsumerAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSConsumerAuditor.auditor.config.auditRepositoryPort = port
+         XDSConsumerAuditor.auditor.config.auditRepositoryPort = auditPort
          XDSConsumerAuditor.auditor.config.systemUserId = 'consumerUserId'
          XDSConsumerAuditor.auditor.config.systemAltUserId = 'consumerAltUserId'
 
          XDSRepositoryAuditor.auditor.config = new AuditorModuleConfig()
          XDSRepositoryAuditor.auditor.config.auditSourceId = 'repositoryId'
          XDSRepositoryAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XDSRepositoryAuditor.auditor.config.auditRepositoryPort = port
+         XDSRepositoryAuditor.auditor.config.auditRepositoryPort = auditPort
          XDSRepositoryAuditor.auditor.config.systemUserId = 'repositoryUserId'
          XDSRepositoryAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
              
          XCPDInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
          XCPDInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'
          XCPDInitiatingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XCPDInitiatingGatewayAuditor.auditor.config.auditRepositoryPort = port
+         XCPDInitiatingGatewayAuditor.auditor.config.auditRepositoryPort = auditPort
          XCPDInitiatingGatewayAuditor.auditor.config.systemUserId = 'initiatingGwUserId'
          XCPDInitiatingGatewayAuditor.auditor.config.systemAltUserId = 'initiatingGwAltUserId'
-             
+
          XCPDRespondingGatewayAuditor.auditor.config = new AuditorModuleConfig()
          XCPDRespondingGatewayAuditor.auditor.config.auditSourceId = 'respondingGwId'
          XCPDRespondingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XCPDRespondingGatewayAuditor.auditor.config.auditRepositoryPort = port
+         XCPDRespondingGatewayAuditor.auditor.config.auditRepositoryPort = auditPort
          XCPDRespondingGatewayAuditor.auditor.config.systemUserId = 'respondingGwUserId'
          XCPDRespondingGatewayAuditor.auditor.config.systemAltUserId = 'respondingGwAltUserId'
+
+         XCAInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
+         XCAInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'
+         XCAInitiatingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XCAInitiatingGatewayAuditor.auditor.config.auditRepositoryPort = auditPort
+         XCAInitiatingGatewayAuditor.auditor.config.systemUserId = 'initiatingGwUserId'
+         XCAInitiatingGatewayAuditor.auditor.config.systemAltUserId = 'initiatingGwAltUserId'
+
+         XCARespondingGatewayAuditor.auditor.config = new AuditorModuleConfig()
+         XCARespondingGatewayAuditor.auditor.config.auditSourceId = 'respondingGwId'
+         XCARespondingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         XCARespondingGatewayAuditor.auditor.config.auditRepositoryPort = auditPort
+         XCARespondingGatewayAuditor.auditor.config.systemUserId = 'respondingGwUserId'
+         XCARespondingGatewayAuditor.auditor.config.systemAltUserId = 'respondingGwAltUserId'
 
          auditSender = new MockedSender()
          AuditorModuleContext.context.sender = auditSender

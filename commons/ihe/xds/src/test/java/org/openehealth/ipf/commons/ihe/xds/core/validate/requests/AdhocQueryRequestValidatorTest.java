@@ -27,8 +27,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Collections;
@@ -42,17 +45,20 @@ public class AdhocQueryRequestValidatorTest {
     private AdhocQueryRequestValidator validator;
     private QueryRegistry request;
     private QueryRegistryTransformer transformer;
+    private ValidationProfile profile;
 
     @Before
     public void setUp() {
         validator = new AdhocQueryRequestValidator();
         transformer = new QueryRegistryTransformer();
         request = SampleData.createFindDocumentsQuery();
+        profile = new ValidationProfile();
+        profile.setIheProfile(IheProfile.XDS_B);
     }
     
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(request), null);
+        validator.validate(transformer.toEbXML(request), profile);
     }
     
     @Test
@@ -102,7 +108,7 @@ public class AdhocQueryRequestValidatorTest {
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(0, "('code1')");
         ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE.getSlotName()).get(0).getValueList().set(1, "('code2')");
         ebXML.addSlot(QueryParameter.DOC_ENTRY_CLASS_CODE_SCHEME.getSlotName(), "('scheme1','scheme2')");
-        validator.validate(transformer.toEbXML(request), null);
+        validator.validate(transformer.toEbXML(request), profile);
     }
 
     @Test
@@ -131,7 +137,7 @@ public class AdhocQueryRequestValidatorTest {
         // at least one code -- should pass
         valueList.set(0, "('bar')");
         valueList.set(1, "('Approved')");
-        validator.validate(ebXML, null);
+        validator.validate(ebXML, profile);
     }
     
     @Test
@@ -143,7 +149,7 @@ public class AdhocQueryRequestValidatorTest {
     
     @Test
     public void testGoodCaseSql() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(SampleData.createSqlQuery()), null);
+        validator.validate(transformer.toEbXML(SampleData.createSqlQuery()), profile);
     }
     
     @Test
@@ -177,7 +183,7 @@ public class AdhocQueryRequestValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLAdhocQueryRequest request) {
         try {
-            validator.validate(request, null);
+            validator.validate(request, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import java.io.Serializable;
-import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a stored query for GetRelatedDocuments.
@@ -82,10 +80,5 @@ public class GetRelatedDocumentsQuery extends GetFromDocumentQuery implements Se
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

@@ -84,9 +84,10 @@ class TestIti55 extends StandardTestContainer {
 
 
     private void send(
-    String endpointUri,
-    int n,
-    String responseEndpointUri = null) {
+            String endpointUri,
+            int n,
+            String responseEndpointUri = null)
+    {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
 

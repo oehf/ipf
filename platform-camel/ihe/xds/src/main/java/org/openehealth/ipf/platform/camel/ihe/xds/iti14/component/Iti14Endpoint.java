@@ -25,9 +25,9 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14ServerAuditStrategy;
@@ -40,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti14.service.Iti14Service;
  * The Camel endpoint for the ITI-14 transaction.
  */
 public class Iti14Endpoint extends DefaultItiEndpoint {
-    private final static XdsServiceInfo ITI_14 = new XdsServiceInfo(
+    private final static ItiServiceInfo ITI_14 = new ItiServiceInfo(
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti14PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),

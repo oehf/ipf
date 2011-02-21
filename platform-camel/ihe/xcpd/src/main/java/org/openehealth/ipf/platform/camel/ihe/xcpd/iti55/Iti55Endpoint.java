@@ -51,7 +51,8 @@ public class Iti55Endpoint extends DefaultItiEndpoint {
             new String[][] { new String[] {"PRPA_IN201305UV02", "iti55/PRPA_IN201305UV02"}},
             new String[][] { new String[] {"PRPA_IN201306UV02", "iti55/PRPA_IN201306UV02"}},
             "PRPA_IN201306UV02",
-            true);
+            true,
+            false);
 
     /**
      * Constructs the endpoint.

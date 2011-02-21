@@ -60,7 +60,7 @@ public enum ErrorCode {
     /** A request produced too many results to finish the request. */
     TOO_MANY_RESULTS("XDSTooManyResults"),
     /** Warning returned if extra meta data was present but not saved in the registry. */
-    EXTRA_METADATA_NO_SAVED("XDSExtraMetadataNotSaved"),
+    EXTRA_METADATA_NOT_SAVED("XDSExtraMetadataNotSaved"),
     /** The patient ID referenced in the meta data is not known to the registry actor 
      *  via the Patient Identity Feed or is unknown because of patient identifier merge 
      *  or other reasons. The code context includes the value of the problematic patient ID. */
@@ -80,7 +80,9 @@ public enum ErrorCode {
     /** A register transaction was rejected because it submitted an association referencing 
      *  a deprecated document. */
     REGISTRY_DEPRECATED_DOCUMENT_ERROR("XDSRegistryDeprecatedDocumentError"),
-    /** The unique ID of a repository could not be resolved to a valid document repository 
+    /** The document associated with the DocumentUniqueId is not available. */
+    DOCUMENT_UNIQUE_ID_ERROR("XDSDocumentUniqueIdError"),
+    /** The unique ID of a repository could not be resolved to a valid document repository
      *  or the value does not match that of the document repository. */
     UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId"),
     /** A query resulted in returning information about multiple patients, which is forbidden

@@ -22,7 +22,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
  */
 public class ValidationProfile {
     private boolean query;
-    private boolean xdsb;
+    private IheProfile iheProfile;
     private Actor actor;
     
     /**
@@ -35,14 +35,14 @@ public class ValidationProfile {
      * Constructs a profile.
      * @param query
      *          <code>true</code> if checks are done for query transactions.
-     * @param xdsb
-     *          <code>true</code> if XDS.b is validated.
+     * @param iheProfile
+     *          IHE profile which rules should be applied.
      * @param actor
      *          defines the actor that validates messages.
      */
-    public ValidationProfile(boolean query, boolean xdsb, Actor actor) {
+    public ValidationProfile(boolean query, IheProfile iheProfile, Actor actor) {
         this.query = query;
-        this.xdsb = xdsb;
+        this.iheProfile = iheProfile;
         this.actor = actor;
     }
 
@@ -55,7 +55,7 @@ public class ValidationProfile {
     public ValidationProfile(ValidationProfile profile) {
         if (profile != null) {
             query = profile.query;
-            xdsb = profile.xdsb;
+            iheProfile = profile.iheProfile;
             actor = profile.actor;
         }
     }
@@ -76,18 +76,18 @@ public class ValidationProfile {
     }
 
     /**
-     * @return <code>true</code> if XDS.b is validated.
+     * @return IHE Profile which rules should be applied.
      */
-    public boolean isXdsb() {
-        return xdsb;
+    public IheProfile getIheProfile() {
+        return iheProfile;
     }
 
     /**
-     * @param xdsb
-     *          <code>true</code> if XDS.b is validated.
+     * @param iheProfile
+     *          IHE Profile which rules should be applied.
      */
-    public void setXdsb(boolean xdsb) {
-        this.xdsb = xdsb;
+    public void setIheProfile(IheProfile iheProfile) {
+        this.iheProfile = iheProfile;
     }
 
     /**
@@ -104,4 +104,6 @@ public class ValidationProfile {
     public void setActor(Actor actor) {
         this.actor = actor;
     }
+
+    public boolean isXdsb() {throw new RuntimeException(); };
 }

@@ -33,7 +33,7 @@ abstract class Iti16AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
         // no additional steps necessary
     }
 

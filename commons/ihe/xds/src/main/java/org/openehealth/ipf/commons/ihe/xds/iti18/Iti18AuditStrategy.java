@@ -29,7 +29,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Base audit strategy for ITI-18.
  * @author Dmytro Rud
  */
-abstract class Iti18AuditStrategy extends XdsAuditStrategy {
+abstract public class Iti18AuditStrategy extends XdsAuditStrategy {
 
     /**
      * Constructs the audit strategy.
@@ -39,12 +39,12 @@ abstract class Iti18AuditStrategy extends XdsAuditStrategy {
      *      whether this strategy should allow incomplete audit records
      *      (parameter initially configurable via endpoint URL).
      */
-    Iti18AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    public Iti18AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
         AdhocQueryRequest request = (AdhocQueryRequest) pojo;
         Iti18AuditDataset xdsAuditDataset = (Iti18AuditDataset) auditDataset;
 

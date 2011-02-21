@@ -15,12 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
-
 import javax.xml.namespace.QName;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Dmytro Rud
@@ -54,6 +50,8 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
      * @param nakNeedControlActProcess
      *      when {@code true}, the <code>&lt;controlActProcess&gt;</code>
      *      of the request message will be included into the NAK.
+     * @param auditRequestPayload
+     *      whether request payload is needed for ATNA audit.
      */
     public Hl7v3ServiceInfo(
             QName serviceName,
@@ -64,9 +62,10 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
             String[][] requestValidationProfiles,
             String[][] responseValidationProfiles,
             String nakRootElementName,
-            boolean nakNeedControlActProcess)
+            boolean nakNeedControlActProcess,
+            boolean auditRequestPayload)
     {
-        super(serviceName, serviceClass, bindingName, mtom, wsdlLocation, true, false);
+        super(serviceName, serviceClass, bindingName, mtom, wsdlLocation, true, false, auditRequestPayload);
 
         this.requestValidationProfiles = requestValidationProfiles;
         this.responseValidationProfiles = responseValidationProfiles;

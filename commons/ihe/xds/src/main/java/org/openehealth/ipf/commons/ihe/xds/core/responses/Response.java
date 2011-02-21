@@ -22,6 +22,8 @@ import java.util.List;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
 /**
  * Basic response information.
  * <p>
@@ -48,7 +50,28 @@ public class Response implements Serializable {
     public Response(Status status) {        
         this.status = status;
     }
-    
+
+    /**
+     * Constructs an error response object with the data from an exception.
+     * @param throwable
+     *          the exception that occurred.
+     * @param defaultMetaDataError
+     *          the default error code for {@link XDSMetaDataException}.
+     * @param defaultError
+     *          the default error code for any other exception.
+     * @param location
+     *          error location.
+     */
+    public Response(
+            Throwable throwable,
+            ErrorCode defaultMetaDataError,
+            ErrorCode defaultError,
+            String location)
+    {
+        this.status = Status.FAILURE;
+        this.errors.add(new ErrorInfo(throwable, defaultMetaDataError, defaultError, location));
+    }
+
     /**
      * @return the status of the request execution.
      */

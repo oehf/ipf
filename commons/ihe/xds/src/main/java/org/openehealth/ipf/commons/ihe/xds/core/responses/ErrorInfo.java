@@ -19,6 +19,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Contains information about an error.
@@ -54,6 +56,46 @@ public class ErrorInfo implements Serializable {
         this.codeContext = codeContext;
         this.severity = severity;
         this.location = location;
+    }
+
+    /**
+     * Constructs an error info from the given exception.
+     * @param throwable
+     *          the exception that occurred.
+     * @param defaultMetaDataError
+     *          the default error code for {@link XDSMetaDataException}.
+     * @param defaultError
+     *          the default error code for any other exception.
+     * @param defaultLocation
+     *          default error location.
+     */
+    public ErrorInfo(
+            Throwable throwable,
+            ErrorCode defaultMetaDataError,
+            ErrorCode defaultError,
+            String defaultLocation)
+    {
+        this(defaultError, throwable.getMessage(), Severity.ERROR, defaultLocation);
+        while (throwable != null) {
+            if (throwable instanceof XDSMetaDataException) {
+                XDSMetaDataException metaDataException = (XDSMetaDataException) throwable;
+                this.errorCode = metaDataException.getValidationMessage().getErrorCode();
+                if (this.errorCode == null) {
+                    this.errorCode = defaultMetaDataError;
+                }
+                this.codeContext = metaDataException.getMessage();
+                return;
+            }
+            if (throwable instanceof XdsRuntimeException) {
+                XdsRuntimeException exception = (XdsRuntimeException) throwable;
+                this.errorCode = exception.getErrorCode();
+                this.codeContext = exception.getCodeContext();
+                this.severity = exception.getSeverity();
+                this.location = exception.getLocation();
+                return;
+            }
+            throwable = throwable.getCause();
+        }
     }
 
     /**

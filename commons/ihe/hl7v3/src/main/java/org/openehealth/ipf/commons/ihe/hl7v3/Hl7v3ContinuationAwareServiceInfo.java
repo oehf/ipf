@@ -38,12 +38,13 @@ public class Hl7v3ContinuationAwareServiceInfo extends Hl7v3ServiceInfo {
             String[][] responseValidationProfiles,
             String nakRootElementName,
             boolean nakNeedControlActProcess,
+            boolean auditRequestPayload,
             String mainRequestRootElementName,
             String mainResponseRootElementName)
     {
         super(serviceName, serviceClass, bindingName, mtom, wsdlLocation,
                 requestValidationProfiles, responseValidationProfiles,
-                nakRootElementName, nakNeedControlActProcess);
+                nakRootElementName, nakNeedControlActProcess, auditRequestPayload);
 
         Validate.notEmpty(mainRequestRootElementName);
         Validate.notEmpty(mainResponseRootElementName);

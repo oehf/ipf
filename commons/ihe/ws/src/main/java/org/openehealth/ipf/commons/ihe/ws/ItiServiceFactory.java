@@ -137,4 +137,10 @@ public class ItiServiceFactory {
         svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
         InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, svrFactory);
     }
+
+
+    protected ItiServiceInfo getServiceInfo() {
+        return serviceInfo;
+    }
+
 }

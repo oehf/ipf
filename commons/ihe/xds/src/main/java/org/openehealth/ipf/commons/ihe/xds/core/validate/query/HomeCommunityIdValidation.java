@@ -16,11 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.OIDValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_OID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validator for home community ID attribute in stored queries.
@@ -28,14 +25,15 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * See Section 3.18.4.1.2.3.8 in IHE ITI TF Vol. 2a.
  * @author Dmytro Rud
  */
-public class HomeCommunityIdAttributeValidation implements QueryParameterValidation {
+public class HomeCommunityIdValidation implements QueryParameterValidation {
+    private final HomeCommunityIdValidator validator;
+
+    public HomeCommunityIdValidation(boolean required) {
+        this.validator = new HomeCommunityIdValidator(required);
+    }
 
     @Override
     public void validate(EbXMLAdhocQueryRequest request) throws XDSMetaDataException {
-        String oid = request.getHome();
-        if (oid != null) {
-            metaDataAssert(oid.startsWith("urn:oid:"), INVALID_OID, oid);
-            new OIDValidator().validate(oid.substring(8));
-        }
+        validator.validate(request.getHome());
     }
 }

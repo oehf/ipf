@@ -23,10 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.Actor;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -439,7 +436,7 @@ public class SubmitObjectsRequestValidatorTest {
     @Test
     public void testRepositoryUniqueIdIsNecessaryInXDSB() {
         docEntry.setRepositoryUniqueId(null);
-        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, new ValidationProfile(false, true, Actor.REGISTRY));
+        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, new ValidationProfile(false, IheProfile.XDS_B, Actor.REGISTRY));
     }
     
     private void expectFailure(ValidationMessage expectedMessage) {

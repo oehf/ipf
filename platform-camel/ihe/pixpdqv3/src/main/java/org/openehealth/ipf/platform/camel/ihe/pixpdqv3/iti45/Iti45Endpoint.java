@@ -47,7 +47,8 @@ public class Iti45Endpoint extends DefaultItiEndpoint {
             new String[][] {new String[] {"PRPA_IN201309UV02", null}},
             new String[][] {new String[] {"PRPA_IN201310UV02", null}},
             "PRPA_IN201310UV02",
-            true);
+            true,
+            false);
 
     /**
      * Constructs the endpoint.

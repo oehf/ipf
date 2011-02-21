@@ -81,7 +81,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     @Test
     public void testRepositoryUniqueIdIsNotNecessary() {
         docEntry.setRepositoryUniqueId(null);
-        validator.validate(transformer.toEbXML(request), new ValidationProfile(false, true, Actor.REPOSITORY));
+        validator.validate(transformer.toEbXML(request), new ValidationProfile(false, IheProfile.XDS_B, Actor.REPOSITORY));
     }
     
     private void expectFailure(ValidationMessage expectedMessage) {

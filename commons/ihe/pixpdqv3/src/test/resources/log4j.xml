@@ -75,14 +75,9 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
         </filter>    
     </appender>
 
-	
-    <!-- Logger for all Caching output -->
-    <logger name="org.openehealth.">
-        <level value="DEBUG"/>
-    </logger>
-    
+
     <root>
-        <level value="DEBUG"/>
+        <level value="WARN"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 

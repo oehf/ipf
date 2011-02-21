@@ -52,12 +52,12 @@ public class RetrieveDocumentSetRequestTransformerTest {
         
         RetrieveDocument doc = ebXML.getDocuments().get(0);        
         assertEquals("doc1", doc.getDocumentUniqueId());
-        assertEquals("home1", doc.getHomeCommunityId());
+        assertEquals("urn:oid:1.2.3", doc.getHomeCommunityId());
         assertEquals("repo1", doc.getRepositoryUniqueId());
  
         doc = ebXML.getDocuments().get(1);
         assertEquals("doc2", doc.getDocumentUniqueId());
-        assertEquals("home2", doc.getHomeCommunityId());
+        assertEquals("urn:oid:1.2.4", doc.getHomeCommunityId());
         assertEquals("repo2", doc.getRepositoryUniqueId());
      }
     

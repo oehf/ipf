@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -27,9 +25,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
  * Tests for {@link RetrieveDocumentSetResponseValidator}.
@@ -39,6 +42,7 @@ public class RetrieveDocumentResponseValidatorTest {
     private RetrieveDocumentSetResponseValidator validator;
     private RetrievedDocumentSet response;
     private RetrieveDocumentSetResponseTransformer transformer;
+    private ValidationProfile profile;
 
     @Before
     public void setUp() {
@@ -46,11 +50,13 @@ public class RetrieveDocumentResponseValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         response = SampleData.createRetrievedDocumentSet();
+        profile = new ValidationProfile();
+        profile.setIheProfile(IheProfile.XDS_B);
     }
 
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(response), null);
+        validator.validate(transformer.toEbXML(response), profile);
     }
     
     @Test
@@ -84,7 +90,7 @@ public class RetrieveDocumentResponseValidatorTest {
     
     @Test
     public void testDocumentMustBeSpecfied() {
-        RetrieveDocument requestData = new RetrieveDocument("repo3", "doc3", "home3");
+        RetrieveDocument requestData = new RetrieveDocument("repo3", "doc3", "urn:oid:1.2.5");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(null);
@@ -99,7 +105,7 @@ public class RetrieveDocumentResponseValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveDocumentSetResponse ebXMLRegistryResponse) {
         try {
-            validator.validate(ebXMLRegistryResponse, null);
+            validator.validate(ebXMLRegistryResponse, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {
