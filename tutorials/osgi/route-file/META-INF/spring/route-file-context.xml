@@ -15,7 +15,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
     <context:annotation-config />
     
-    <camel-osgi:camelContext id="camelContext">
+    <camel-osgi:camelContext id="camelContextFile">
         <camel-spring:routeBuilder ref="routeBuilder"/>
     </camel-osgi:camelContext>
 
