@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 
 /**
  * CXF interceptor for ATNA auditing in WS-based IHE transactions with
- * WSA asynchrony support.  Handles </b>outgoing</b> requests
+ * WSA asynchrony support.  Handles <b>outgoing</b> requests
  * on <b>producer</b> side.
  *
  * @author Dmytro Rud
