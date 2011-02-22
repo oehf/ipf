@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.message.Message;
 
 /**
  * Helper methods for handling user-defined custom interceptors.
@@ -47,10 +48,9 @@ abstract public class InterceptorUtils {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private static void copyInterceptorsFromList(
-            List<Interceptor> source, 
-            List<Interceptor> target) 
+            List<Interceptor<? extends Message>> source, 
+            List<Interceptor<? extends Message>> target) 
     {
         if (source != null) {
             target.addAll(source);

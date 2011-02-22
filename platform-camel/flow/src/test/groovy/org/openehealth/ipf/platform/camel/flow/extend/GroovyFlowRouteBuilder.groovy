@@ -29,7 +29,29 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
     void configure() {
         
         def serialization = new SerializationDataFormat()
-                
+        
+		// --------------------------------------------------------------
+		//  Recipient lists
+		// --------------------------------------------------------------
+		
+		onException(HttpOperationFailedException.class)
+			.handled(true)
+			.nakFlow()
+			.to('mock:mock')
+
+		from('direct:flow-test-recipient-list')
+			.split().body().aggregationStrategy(new UseLatestAggregationStrategy())
+			.initFlow('test-recipient-list')
+			.application('test')
+			.inOnly().to('seda:recipient')
+			
+		from('seda:recipient')
+			.recipientList().header('recipient')
+			.ackFlow()
+			.to('mock:wait') // avoid race conditions
+			
+		from('jetty:http://localhost:7799/recipient').to('mock:mock')
+		        
         // --------------------------------------------------------------
         //  Linear Flows
         // --------------------------------------------------------------
@@ -133,28 +155,6 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
                 .outType(String.class)
             .to("direct:out-1")
             .to("direct:out-2")
-        
-        // --------------------------------------------------------------
-        //  Recipient lists
-        // --------------------------------------------------------------
-        
-        onException(HttpOperationFailedException.class)
-            .handled(true)
-            .nakFlow()
-            .to('mock:mock')
-
-        from('direct:flow-test-recipient-list')
-            .split().body().aggregationStrategy(new UseLatestAggregationStrategy())
-            .initFlow('test-recipient-list')
-            .application('test')
-            .inOnly().to('seda:recipient')
-            
-        from('seda:recipient')
-            .recipientList().header('recipient')
-            .ackFlow()
-            .to('mock:wait') // avoid race conditions
-            
-        from('jetty:http://localhost:7799/recipient').to('mock:mock')
     }
     
 }

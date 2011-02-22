@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.cxf;
 
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Exchange;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
@@ -56,13 +55,10 @@ public class XdsAuditFinalInterceptor extends AuditInterceptor {
         
         // determine event outcome code
         Exchange exchange = message.getExchange();
-        Message wrappedMessage = message.getMessage();
-
+        
         boolean fault =
            (message == exchange.getInFaultMessage()) ||
            (message == exchange.getOutFaultMessage()) ||
-           (wrappedMessage == exchange.getInFaultMessage()) ||
-           (wrappedMessage == exchange.getOutFaultMessage()) ||
            (response == null);
 
         auditDataset.setEventOutcomeCode(fault ?

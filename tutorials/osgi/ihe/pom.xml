@@ -22,7 +22,6 @@
         <hapi-osgi-version>0.6-p1</hapi-osgi-version>
         <hibernate-annotations-common-version>3.3.0.ga-p1</hibernate-annotations-common-version>
         <jdom-version>1.0.0</jdom-version>
-        <jetty-server-version>6.1.16-p1</jetty-server-version>
         <jms-version>1.1-p1</jms-version>
         <joda-time-osgi-version>1.5.2-p1</joda-time-osgi-version>
         <pax-web-version>0.7.2</pax-web-version>
