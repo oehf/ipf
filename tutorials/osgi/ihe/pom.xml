@@ -50,7 +50,7 @@
         <springsource-commons-fileupload-version>1.2.1</springsource-commons-fileupload-version>
         <springsource-commons-httpclient-version>3.1.0</springsource-commons-httpclient-version>
         <springsource-commons-io-version>1.4.0</springsource-commons-io-version>
-        <springsource-commons-lang-version>2.4.0</springsource-commons-lang-version>
+        <springsource-commons-lang-version>2.5.0</springsource-commons-lang-version>
         <springsource-commons-logging-version>1.1.1</springsource-commons-logging-version>
         <springsource-commons-pool-version>1.5.3</springsource-commons-pool-version>
         <springsource-derby-version>10.4.1000003.648739</springsource-derby-version>
