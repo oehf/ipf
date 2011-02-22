@@ -64,7 +64,7 @@ public class TestCamelOnly extends StandardTestContainer {
         String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service";
         Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage());
         String response = Exchanges.resultMessage(responseExchange).getBody(String.class);
-        Assert.assertTrue(response.contains("<typeCode code=\"AA\" />"));
+        Assert.assertTrue(response.contains("<typeCode code=\"AA\"/>"));
     }
 
     
