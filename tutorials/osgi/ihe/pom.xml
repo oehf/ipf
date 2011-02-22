@@ -19,7 +19,7 @@
         <geronimo-javamail-api-version>1.2</geronimo-javamail-api-version>
         <geronimo-ws-api-version>1.1.2</geronimo-ws-api-version>
         <geronimo-management-spec-version>1.0.1</geronimo-management-spec-version>
-        <hapi-osgi-version>0.6-p1</hapi-osgi-version>
+        <hapi-osgi-version>1.0.1</hapi-osgi-version>
         <hibernate-annotations-common-version>3.3.0.ga-p1</hibernate-annotations-common-version>
         <jdom-version>1.0.0</jdom-version>
         <jetty-server-version>6.1.16-p1</jetty-server-version>
@@ -190,7 +190,7 @@
             <param>mvn:org.springframework.osgi/org.springframework.osgi.extender/${spring-osgi-version}@2</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.core/${spring-osgi-version}@nostart</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.io/${spring-osgi-version}@nostart</param>
-            <param>mvn:ca.uhn.hapi/hapi/${hapi-osgi-version}@nostart</param>
+            <param>mvn:ca.uhn.hapi/hapi-osgi/${hapi-osgi-version}@nostart</param>
             <param>mvn:org.eclipse.jetty/jetty-client/${jetty-version}@nostart</param>
             <param>mvn:org.eclipse.jetty/jetty-http/${jetty-version}@nostart</param>
             <param>mvn:org.eclipse.jetty/jetty-server/${jetty-version}@nostart</param>
