@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-config-ihe-xcpd</artifactId>
-    <name>osgi-config-ihe-xcpd</name>
+    <artifactId>osgi-config-ihe-xca</artifactId>
+    <name>osgi-config-ihe-xca</name>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
@@ -49,10 +49,10 @@
             org.springframework.beans.factory.config,
             org.springframework.context,
             org.springframework.osgi.context.support,
-            org.openehealth.ipf.platform.camel.ihe.xcpd.iti55,
-			org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.asyncresponse,
-			org.openehealth.ipf.platform.camel.ihe.xcpd.iti56,
-			org.openehealth.ipf.platform.camel.ihe.xcpd.iti56.asyncresponse,
+            org.openehealth.ipf.platform.camel.ihe.xca.iti38,
+			org.openehealth.ipf.platform.camel.ihe.xca.iti38.asyncresponse,
+			org.openehealth.ipf.platform.camel.ihe.xca.iti39,
+			org.openehealth.ipf.platform.camel.ihe.xca.iti39.asyncresponse,
             *
         </osgi.import.pkg>
     </properties>
