@@ -114,9 +114,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
     protected static boolean isInboundMessage(SoapMessage message) {
         Exchange exchange = message.getExchange();
         return message == exchange.getInMessage()
-                || message == exchange.getInFaultMessage()
-                || message.getMessage() == exchange.getInMessage()
-                || message.getMessage() == exchange.getInFaultMessage();
+                || message == exchange.getInFaultMessage();
     }
     
     
@@ -216,7 +214,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
      *      POJO or <code>null</code> when none found.
      */
     protected static Object extractPojo(Message message) {
-        List list = message.getContent(List.class);
+        List<?> list = message.getContent(List.class);
         return ((list == null) || list.isEmpty()) ? null : list.get(0);
     }
 }

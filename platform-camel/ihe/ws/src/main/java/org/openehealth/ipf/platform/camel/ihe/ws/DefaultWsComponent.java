@@ -15,12 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.camel.impl.DefaultComponent;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.message.Message;
 
 /**
  * Base component class for Web Service-based IHE components.
@@ -31,15 +33,21 @@ abstract public class DefaultWsComponent extends DefaultComponent {
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
         AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {};
         
-        provider.setInInterceptors(resolveAndRemoveReferenceListParameter(
-                parameters, "inInterceptors", Interceptor.class));
-        provider.setInFaultInterceptors(resolveAndRemoveReferenceListParameter(
-                parameters, "inFaultInterceptors", Interceptor.class));
-        provider.setOutInterceptors(resolveAndRemoveReferenceListParameter(
-                parameters, "outInterceptors", Interceptor.class));
-        provider.setOutFaultInterceptors(resolveAndRemoveReferenceListParameter(
-                parameters, "outFaultInterceptors", Interceptor.class));
+        provider.setInInterceptors(castList(resolveAndRemoveReferenceListParameter(
+                parameters, "inInterceptors", Interceptor.class)));
+        provider.setInFaultInterceptors(castList(resolveAndRemoveReferenceListParameter(
+                parameters, "inFaultInterceptors", Interceptor.class)));
+        provider.setOutInterceptors(castList(resolveAndRemoveReferenceListParameter(
+                parameters, "outInterceptors", Interceptor.class)));
+        provider.setOutFaultInterceptors(castList(resolveAndRemoveReferenceListParameter(
+                parameters, "outFaultInterceptors", Interceptor.class)));
         
         return provider;
     }
+    
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private List<Interceptor<? extends Message>> castList(
+			List<Interceptor> param) {
+		return (List<Interceptor<? extends Message>>) (List<?>) param;
+	}
 }
