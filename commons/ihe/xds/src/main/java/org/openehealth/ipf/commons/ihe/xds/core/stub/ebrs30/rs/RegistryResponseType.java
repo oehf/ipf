@@ -45,7 +45,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.SlotListType;
  * 
  * 
  */
-@XmlRootElement
+@XmlRootElement(name = "RegistryResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RegistryResponseType", propOrder = {
     "responseSlotList",

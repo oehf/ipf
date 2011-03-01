@@ -59,6 +59,7 @@ import java.util.List;
  * 
  * 
  */
+@XmlRootElement(name = "RetrieveDocumentSetResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveDocumentSetResponseType", propOrder = {
     "registryResponse",

@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +51,7 @@ import java.util.List;
  * 
  * 
  */
+@XmlRootElement(name = "RetrieveDocumentSetRequest")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "RetrieveDocumentSetRequestType", propOrder = {
     "documentRequest"
