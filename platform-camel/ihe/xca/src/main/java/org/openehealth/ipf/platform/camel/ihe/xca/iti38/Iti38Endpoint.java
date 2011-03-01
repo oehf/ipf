@@ -80,7 +80,7 @@ public class Iti38Endpoint extends DefaultItiEndpoint {
                 getServiceAddress(),
                 getCustomInterceptors());
         ServerFactoryBean serverFactory =
-            serviceFactory.createServerFactory(Iti38Service.class);
+            serviceFactory.createServerFactory(new Iti38Service(this));
         Server server = serverFactory.create();
         DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
         return new DefaultItiConsumer(this, processor, service, server);

@@ -76,7 +76,8 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
     private boolean audit = true;
     private boolean allowIncompleteAudit = false;
     private AsynchronyCorrelator correlator = null;
-    private InterceptorProvider customInterceptors = null; 
+    private InterceptorProvider customInterceptors = null;
+    private String homeCommunityId = null;
 
     /**
      * Constructs the endpoint.
@@ -200,5 +201,22 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      */
     public InterceptorProvider getCustomInterceptors() {
         return customInterceptors;
+    }
+
+    /**
+     * @return
+     *      homeCommunityId of this endpoint.
+     */
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    /**
+     * Configures homeCommunityId for this endpoint.
+     * @param homeCommunityId
+     *      homeCommunityId in format "urn:oid:1.2.3.4.5".
+     */
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
     }
 }
