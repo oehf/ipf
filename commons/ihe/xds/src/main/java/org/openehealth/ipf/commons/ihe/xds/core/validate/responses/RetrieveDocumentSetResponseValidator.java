@@ -33,6 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  */
 public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetrieveDocumentSetResponse, ValidationProfile>{
     private final RegistryResponseValidator regResponseValidator = new RegistryResponseValidator();
+    private final HomeCommunityIdValidator hcValidator = new HomeCommunityIdValidator(true);
     
     @Override
     public void validate(EbXMLRetrieveDocumentSetResponse response, ValidationProfile profile) {
@@ -48,9 +49,10 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
             
             String docId = requestData.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
-            
-            String hcId = requestData.getHomeCommunityId();
-            new HomeCommunityIdValidator(profile.getIheProfile() == IheProfile.XCA).validate(hcId);
+
+            if (profile.getIheProfile() == IheProfile.XCA) {
+                hcValidator.validate(requestData.getHomeCommunityId());
+            }
 
             metaDataAssert(doc.getDataHandler() != null, MISSING_DOCUMENT_FOR_DOC_ENTRY, docId);
         }

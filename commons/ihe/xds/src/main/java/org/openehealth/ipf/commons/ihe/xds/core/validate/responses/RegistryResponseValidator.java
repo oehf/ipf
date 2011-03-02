@@ -31,6 +31,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  * @author Jens Riemschneider
  */
 public class RegistryResponseValidator implements Validator<EbXMLRegistryResponse, ValidationProfile>{
+    private final HomeCommunityIdValidator hcValidator = new HomeCommunityIdValidator(true);
+
     @Override
     public void validate(EbXMLRegistryResponse response, ValidationProfile profile) {
         notNull(response, "response cannot be null");
@@ -42,7 +44,7 @@ public class RegistryResponseValidator implements Validator<EbXMLRegistryRespons
             metaDataAssert(errorInfo.getSeverity() != null, INVALID_SEVERITY_IN_RESPONSE);
 
             if (profile.getIheProfile() == IheProfile.XCA) {
-                new HomeCommunityIdValidator(true).validate(errorInfo.getLocation());
+                hcValidator.validate(errorInfo.getLocation());
             }
         }
     }
