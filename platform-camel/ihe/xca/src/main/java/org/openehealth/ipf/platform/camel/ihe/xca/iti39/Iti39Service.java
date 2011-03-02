@@ -46,6 +46,7 @@ public class Iti39Service extends DefaultItiWebService implements Iti39PortType 
                     ErrorCode.REPOSITORY_METADATA_ERROR,
                     ErrorCode.REPOSITORY_ERROR,
                     endpoint.getHomeCommunityId());
+            errorResponse.getErrors().get(0).setLocation(endpoint.getHomeCommunityId());
             return EbXML30Converters.convert(errorResponse);
         }
 
