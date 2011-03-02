@@ -28,8 +28,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
@@ -40,6 +43,7 @@ public class RegistryResponseValidatorTest {
     private RegistryResponseValidator validator;
     private Response response;
     private ResponseTransformer transformer;
+    private ValidationProfile profile;
 
     @Before
     public void setUp() {
@@ -47,11 +51,13 @@ public class RegistryResponseValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new ResponseTransformer(factory);
         response = SampleData.createResponse();
+        profile = new ValidationProfile();
+        profile.setIheProfile(IheProfile.XDS_B);
     }
 
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(response), null);
+        validator.validate(transformer.toEbXML(response), profile);
     }
     
     @Test
@@ -85,7 +91,7 @@ public class RegistryResponseValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRegistryResponse ebXMLRegistryResponse) {
         try {
-            validator.validate(ebXMLRegistryResponse, null);
+            validator.validate(ebXMLRegistryResponse, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {
