@@ -20,7 +20,7 @@
             *
         </osgi.import.pkg>
     </properties>
-    
+
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>

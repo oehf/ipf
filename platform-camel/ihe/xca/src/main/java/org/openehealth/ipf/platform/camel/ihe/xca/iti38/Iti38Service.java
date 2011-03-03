@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
@@ -29,11 +30,21 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  * Service implementation for the IHE ITI-38 transaction.
  */
 public class Iti38Service extends DefaultItiWebService implements Iti38PortType {
+    private final DefaultItiEndpoint endpoint;
+
+    public Iti38Service(DefaultItiEndpoint endpoint) {
+        this.endpoint = endpoint;
+    }
+
     @Override
     public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryRequest body) {
         Exchange result = process(body);
         if (result.getException() != null) {
-            QueryResponse errorResponse = new QueryResponse(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
+            QueryResponse errorResponse = new QueryResponse(
+                    result.getException(),
+                    ErrorCode.REGISTRY_METADATA_ERROR,
+                    ErrorCode.REGISTRY_ERROR,
+                    endpoint.getHomeCommunityId());
             return EbXML30Converters.convert(errorResponse);
         }
         
