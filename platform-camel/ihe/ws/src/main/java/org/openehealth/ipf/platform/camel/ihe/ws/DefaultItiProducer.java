@@ -152,6 +152,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         // for synchronous interaction: handle response
         if (replyToUri == null) {
             Message responseMessage = Exchanges.resultMessage(exchange);
+            responseMessage.getHeaders().putAll(exchange.getIn().getHeaders());
             Map<String, Object> responseContext = bindingProvider.getResponseContext();
             processIncomingHeaders(responseContext, responseMessage);
             enrichResponseMessage(responseMessage, responseContext);

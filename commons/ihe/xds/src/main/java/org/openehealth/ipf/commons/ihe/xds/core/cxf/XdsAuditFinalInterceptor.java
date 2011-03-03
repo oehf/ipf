@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.cxf;
 
-import java.util.List;
-
 import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.message.AbstractWrappedMessage;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
@@ -55,29 +52,25 @@ public class XdsAuditFinalInterceptor extends AuditInterceptor {
     @Override
     protected void process(SoapMessage message) throws Exception {
         WsAuditDataset auditDataset = getAuditDataset(message);
-
-        // try to extract response as POJO 
-        List<?> list = message.getContent(List.class);
-        Object pojo = ((list != null) && (list.size() > 0)) ? list.get(0) : null;
+        Object response = extractPojo(message);
         
         // determine event outcome code
         Exchange exchange = message.getExchange();
-        Message wrappedMessage = ((AbstractWrappedMessage) message).getMessage();
-        
-        RFC3881EventOutcomeCodes eventOutcomeCode;
-        if((message == exchange.getInFaultMessage()) ||
+        Message wrappedMessage = message.getMessage();
+
+        boolean fault =
+           (message == exchange.getInFaultMessage()) ||
            (message == exchange.getOutFaultMessage()) ||
            (wrappedMessage == exchange.getInFaultMessage()) ||
            (wrappedMessage == exchange.getOutFaultMessage()) ||
-           (pojo == null)) 
-        {
-            eventOutcomeCode = RFC3881EventOutcomeCodes.SERIOUS_FAILURE; 
-        } else {
-            eventOutcomeCode = getAuditStrategy().getEventOutcomeCode(pojo); 
-        }
+           (response == null);
+
+        auditDataset.setEventOutcomeCode(fault ?
+                RFC3881EventOutcomeCodes.SERIOUS_FAILURE :
+                getAuditStrategy().getEventOutcomeCode(response));
 
         // perform transaction-specific auditing
-        getAuditStrategy().audit(eventOutcomeCode, auditDataset);
+        getAuditStrategy().audit(auditDataset);
     }
     
 }

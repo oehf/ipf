@@ -20,16 +20,16 @@ import groovy.util.slurpersupport.GPathResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xcpd.XcpdAuditStrategy;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.xml.XmlYielder
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 
 /**
  * Generic audit strategy for ITI-55 (XCPD).
  * @author Dmytro Rud
  */
-abstract class Iti55AuditStrategy extends XcpdAuditStrategy {
+abstract class Iti55AuditStrategy extends WsAuditStrategy {
     private static final transient Log LOG = LogFactory.getLog(Iti55AuditStrategy.class);
 
     Iti55AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
@@ -41,12 +41,7 @@ abstract class Iti55AuditStrategy extends XcpdAuditStrategy {
         return new Iti55AuditDataset(isServerSide());
     }    
     
-    
-    public boolean needStoreRequestPayload() {
-        return false
-    }
-    
-    
+
     /**
      * Returns ATNA response code on the basis of Acknowledgement.typeCode  
      * of the HL7 v3 output message:
@@ -88,7 +83,7 @@ abstract class Iti55AuditStrategy extends XcpdAuditStrategy {
      *      target audit dataset.
      */
     @Override
-    void enrichDataset(Object pojo, WsAuditDataset auditDataset) throws Exception {
+    void enrichDatasetFromResponse(Object pojo, WsAuditDataset auditDataset) throws Exception {
         GPathResult xml = Hl7v3Utils.slurp((String) pojo)
         
         // query ID
@@ -119,15 +114,17 @@ abstract class Iti55AuditStrategy extends XcpdAuditStrategy {
         }
         
         auditDataset.patientIds = patientIds.toArray() ?: null
-
-        // event outcome code
-        auditDataset.outcomeCode = getEventOutcomeCode(xml)
-        
-        // contents of <queryBaParameter>
-        auditDataset.payload = extractQueryByParameterElement(xml)
+        auditDataset.requestPayload = extractQueryByParameterElement(xml)
+        auditDataset.eventOutcomeCode = getEventOutcomeCode(xml)
     }
 
-    
+
+    @Override
+    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
+        // is not used in XCPD
+    }
+
+
     private static void addPatientIds(GPathResult source, Set<String> target) {
         for (node in source) {
             target << Hl7v3Utils.iiToCx(node)

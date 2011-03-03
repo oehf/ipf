@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Exchange;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
@@ -32,6 +33,7 @@ import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.List;
 
 /**
  * Base class for all ATNA audit-related CXF interceptors.
@@ -206,5 +208,15 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
         auditDataset.setClientIpAddress(request.getRemoteAddr());
         auditDataset.setServiceEndpointUrl(request.getRequestURL().toString());
     }
-    
+
+
+    /**
+     * Extracts POJO from the given CXF message.
+     * @return
+     *      POJO or <code>null</code> when none found.
+     */
+    protected static Object extractPojo(Message message) {
+        List list = message.getContent(List.class);
+        return ((list == null) || list.isEmpty()) ? null : list.get(0);
+    }
 }

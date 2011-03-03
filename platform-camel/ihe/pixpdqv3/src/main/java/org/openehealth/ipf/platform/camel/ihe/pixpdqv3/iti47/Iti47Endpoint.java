@@ -61,6 +61,7 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
             RESPONSE_VALIDATION_PROFILES,
             "PRPA_IN201306UV02",
             true,
+            false,
             "PRPA_IN201305UV02",
             "PRPA_IN201306UV02");
 

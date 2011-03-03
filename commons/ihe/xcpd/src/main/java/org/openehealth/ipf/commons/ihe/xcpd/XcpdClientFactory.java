@@ -21,9 +21,9 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditOutRequestInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xcpd.cxf.XcpdAuditInterceptor;
-import org.openehealth.ipf.commons.ihe.xcpd.cxf.XcpdProducerAuditInterceptor;
 
 /**
  * Client factory for XCPD transactions.
@@ -66,10 +66,11 @@ public class XcpdClientFactory extends Hl7v3ClientFactory {
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            client.getOutInterceptors().add(new XcpdProducerAuditInterceptor(auditStrategy, correlator));
+            client.getOutInterceptors().add(new AsyncAuditOutRequestInterceptor(
+                    auditStrategy, correlator, getServiceInfo()));
             
-            XcpdAuditInterceptor auditInterceptor = 
-                new XcpdAuditInterceptor(auditStrategy, false, correlator, false);
+            AsyncAuditResponseInterceptor auditInterceptor =
+                new AsyncAuditResponseInterceptor(auditStrategy, false, correlator, false);
             client.getInInterceptors().add(auditInterceptor);
             client.getInFaultInterceptors().add(auditInterceptor);
         }

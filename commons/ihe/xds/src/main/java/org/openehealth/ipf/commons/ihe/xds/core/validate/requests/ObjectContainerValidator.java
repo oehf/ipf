@@ -154,7 +154,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE)) {
             runValidations(docEntry, docEntrySlotValidations);
-            if (profile.isXdsb() && profile.getActor() == Actor.REGISTRY) {
+            if (((profile.getIheProfile() == IheProfile.XDS_B) ||
+                 (profile.getIheProfile() == IheProfile.XCA)) &&
+                (profile.getActor() == Actor.REGISTRY))
+            {
                 runValidations(docEntry, docEntrySlotValidations30);
             }
             

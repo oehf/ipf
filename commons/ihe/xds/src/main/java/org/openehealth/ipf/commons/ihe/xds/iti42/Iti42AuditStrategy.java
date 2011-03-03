@@ -45,7 +45,7 @@ abstract class Iti42AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDataset(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
         XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
         SubmitObjectsRequest submitObjectsRequest = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest30(submitObjectsRequest);

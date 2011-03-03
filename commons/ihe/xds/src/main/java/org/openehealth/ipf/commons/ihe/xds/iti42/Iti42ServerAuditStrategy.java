@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.iti42;
 import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Server audit strategy for ITI-42.
@@ -27,6 +26,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 public class Iti42ServerAuditStrategy extends Iti42AuditStrategy {
 
     private static final String[] NECESSARY_AUDIT_FIELDS = new String[] {
+        "EventOutcomeCode",
         "ClientIpAddress",
         "ServiceEndpointUrl",
         "SubmissionSetUuid",
@@ -44,10 +44,10 @@ public class Iti42ServerAuditStrategy extends Iti42AuditStrategy {
     }
 
     @Override
-    public void doAudit(RFC3881EventOutcomeCodes eventOutcome, WsAuditDataset auditDataset) {
+    public void doAudit(WsAuditDataset auditDataset) {
         XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
         AuditorManager.getRegistryAuditor().auditRegisterDocumentSetBEvent(
-                eventOutcome, 
+                xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getUserId(),
                 xdsAuditDataset.getClientIpAddress(),
                 xdsAuditDataset.getServiceEndpointUrl(),

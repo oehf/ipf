@@ -15,17 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REGISTRY;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REPOSITORY;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLAdhocQueryRequest21;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLProvideAndRegisterDocumentSetRequest21;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLQueryResponse21;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLRegistryResponse21;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLSubmitObjectsRequest21;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
@@ -35,6 +27,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegi
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REGISTRY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REPOSITORY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.XDS_A;
 
 /**
  * Validating processors for ebXML 2.1-based IPF XDS.a components.
@@ -51,7 +47,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLSubmitObjectsRequest21 message = 
                 new EbXMLSubmitObjectsRequest21(exchange.getIn().getBody(SubmitObjectsRequest.class));
-            ValidationProfile profile = new ValidationProfile(false, false, REGISTRY);
+            ValidationProfile profile = new ValidationProfile(false, XDS_A, REGISTRY);
             new SubmitObjectsRequestValidator().validate(message, profile);
         }
     };
@@ -61,7 +57,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRegistryResponse21 message = 
                 new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));     
-            ValidationProfile profile = new ValidationProfile(false, false, REGISTRY);
+            ValidationProfile profile = new ValidationProfile(false, XDS_A, REGISTRY);
             new RegistryResponseValidator().validate(message, profile);
         }
     };
@@ -72,7 +68,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLProvideAndRegisterDocumentSetRequest21 message = 
                 new EbXMLProvideAndRegisterDocumentSetRequest21(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));            
-            ValidationProfile profile = new ValidationProfile(false, false, REPOSITORY);
+            ValidationProfile profile = new ValidationProfile(false, XDS_A, REPOSITORY);
             new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
         }
     };        
@@ -82,7 +78,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRegistryResponse21 message = 
                 new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));            
-            ValidationProfile profile = new ValidationProfile(false, false, REPOSITORY);
+            ValidationProfile profile = new ValidationProfile(false, XDS_A, REPOSITORY);
             new RegistryResponseValidator().validate(message, profile);
         }
     };
@@ -92,7 +88,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLAdhocQueryRequest21 message = 
                 new EbXMLAdhocQueryRequest21(exchange.getIn().getBody(AdhocQueryRequest.class));            
-            ValidationProfile profile = new ValidationProfile(true, false, REGISTRY);
+            ValidationProfile profile = new ValidationProfile(true, XDS_A, REGISTRY);
             new AdhocQueryRequestValidator().validate(message, profile);
         }
     };        
@@ -102,7 +98,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLQueryResponse21 message = 
                 new EbXMLQueryResponse21(exchange.getIn().getBody(RegistryResponse.class));            
-            ValidationProfile profile = new ValidationProfile(true, false, REGISTRY);
+            ValidationProfile profile = new ValidationProfile(true, XDS_A, REGISTRY);
             new QueryResponseValidator().validate(message, profile);
         }
     };         

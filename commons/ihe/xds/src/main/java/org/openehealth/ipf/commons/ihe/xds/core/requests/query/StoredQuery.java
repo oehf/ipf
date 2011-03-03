@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import java.io.Serializable;
 
 /**
@@ -24,6 +27,8 @@ import java.io.Serializable;
 public abstract class StoredQuery extends Query implements Serializable {
     private static final long serialVersionUID = -8296981156625412818L;
 
+    private String homeCommunityId;
+
     /**
      * Constructs the query.
      * @param type
@@ -31,5 +36,50 @@ public abstract class StoredQuery extends Query implements Serializable {
      */
     protected StoredQuery(QueryType type) {
         super(type);
+    }
+
+    /**
+     * @return the home community ID.
+     */
+    public String getHomeCommunityId() {
+        return homeCommunityId;
+    }
+
+    /**
+     * @param homeCommunityId
+     *          the home community ID.
+     */
+    public void setHomeCommunityId(String homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        StoredQuery other = (StoredQuery) obj;
+        if (homeCommunityId == null) {
+            if (other.homeCommunityId != null)
+                return false;
+        } else if (!homeCommunityId.equals(other.homeCommunityId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

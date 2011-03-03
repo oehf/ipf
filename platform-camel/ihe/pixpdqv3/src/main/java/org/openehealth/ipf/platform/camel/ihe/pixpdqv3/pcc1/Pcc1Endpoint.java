@@ -62,6 +62,7 @@ public class Pcc1Endpoint extends Hl7v3Endpoint {
             RESPONSE_VALIDATION_PROFILES,
             "QUPC_IN043200UV01",
             true,
+            false,
             "QUPC_IN043100UV01",
             "QUPC_IN043200UV01");
 

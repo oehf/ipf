@@ -68,31 +68,43 @@ public abstract class WsAuditStrategy {
 
     
     /**
-     * Enriches the dataset with transaction-specific information from the given POJO.
-     *   
-     * @param pojo
-     *      POJO extracted from the message
+     * Enriches the dataset with transaction-specific information from the given request POJO.
+     *
+     * @param request
+     *      request as POJO extracted from the message
      * @param auditDataset
      *      audit dataset to be enriched
      * @throws Exception
      *      any exception that occurred during this operation
      */
-    public abstract void enrichDataset(Object pojo, WsAuditDataset auditDataset) 
+    public abstract void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset)
         throws Exception;
-    
-    
+
+
+    /**
+     * Enriches the dataset with transaction-specific information from the given response POJO.
+     *
+     * @param response
+     *      response as POJO extracted from the message
+     * @param auditDataset
+     *      audit dataset to be enriched
+     * @throws Exception
+     *      any exception that occurred during this operation
+     */
+    public abstract void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset)
+        throws Exception;
+
+
     /**
      * Performs transaction-specific auditing using 
      * information containing in the dataset.
      *   
-     * @param eventOutcomeCode
-     *      event outcome code as defined in RFC 3881
      * @param auditDataset
-     *      audit dataset with all the information needed 
+     *      audit dataset with all the information needed
      * @throws Exception
      *      any exception that occurred during this operation
      */
-    public abstract void doAudit(RFC3881EventOutcomeCodes eventOutcomeCode, WsAuditDataset auditDataset)
+    public abstract void doAudit(WsAuditDataset auditDataset)
         throws Exception;
 
     
@@ -104,14 +116,12 @@ public abstract class WsAuditStrategy {
      * when the user allows us to audit with incomplete data,
      * @see #allowIncompleteAudit
      * 
-     * @param eventOutcomeCode
-     *      event outcome code as defined in RFC 3881
      * @param auditDataset
      *      audit dataset  
      * @throws Exception
      *      any exception that occurred during auditing
      */
-    public void audit(RFC3881EventOutcomeCodes eventOutcomeCode, WsAuditDataset auditDataset) throws Exception {
+    public void audit(WsAuditDataset auditDataset) throws Exception {
         Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
         if(! missing.isEmpty()) {
             StringBuilder sb = new StringBuilder("Missing audit fields: ");
@@ -124,7 +134,7 @@ public abstract class WsAuditStrategy {
             LOG.error(sb.toString());
         }
         if(missing.isEmpty() || isAllowIncompleteAudit()) {
-            doAudit(eventOutcomeCode, auditDataset);
+            doAudit(auditDataset);
         }
     }
         
@@ -142,12 +152,12 @@ public abstract class WsAuditStrategy {
     /**
      * Determines which RFC 3881 event outcome code corresponds to the
      * given response POJO.  
-     * @param pojo
-     *      ebXML object.
+     * @param response
+     *      response ebXML POJO.
      * @return
      *      RFC 3881 event outcome code.
      */
-    public abstract RFC3881EventOutcomeCodes getEventOutcomeCode(Object pojo);
+    public abstract RFC3881EventOutcomeCodes getEventOutcomeCode(Object response);
     
 
     /* ----- automatically generated getters and setters ----- */

@@ -26,10 +26,10 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RetrieveDocumentSetRequestTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.DOC_ID_MUST_BE_SPECIFIED;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.REPO_ID_MUST_BE_SPECIFIED;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Validates {@link RetrieveDocumentSetRequestValidator}.
@@ -39,6 +39,7 @@ public class RetrieveDocumentSetRequestValidatorTest {
     private RetrieveDocumentSetRequestValidator validator;
     private RetrieveDocumentSet request;
     private RetrieveDocumentSetRequestTransformer transformer;
+    private ValidationProfile profile;
 
     @Before
     public void setUp() {
@@ -46,11 +47,13 @@ public class RetrieveDocumentSetRequestValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetRequestTransformer(factory);
         request = SampleData.createRetrieveDocumentSet();
+        profile = new ValidationProfile();
+        profile.setIheProfile(IheProfile.XDS_B);
     }
     
     @Test
     public void testGoodCase() throws XDSMetaDataException {
-        validator.validate(transformer.toEbXML(request), null);
+        validator.validate(transformer.toEbXML(request), profile);
     }
     
     @Test
@@ -69,7 +72,7 @@ public class RetrieveDocumentSetRequestValidatorTest {
         
     private void expectFailure(ValidationMessage expectedMessage, EbXMLRetrieveDocumentSetRequest ebXML) {
         try {
-            validator.validate(ebXML, null);
+            validator.validate(ebXML, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

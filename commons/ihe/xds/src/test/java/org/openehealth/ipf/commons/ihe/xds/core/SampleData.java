@@ -93,7 +93,7 @@ public abstract class SampleData {
     public static RetrievedDocumentSet createRetrievedDocumentSet() {
         RetrieveDocument requestData1 = new RetrieveDocument();
         requestData1.setDocumentUniqueId("doc1");
-        requestData1.setHomeCommunityId("home1");
+        requestData1.setHomeCommunityId("urn:oid:1.2.3");
         requestData1.setRepositoryUniqueId("repo1");
         
         DataHandler dataHandler1 = createDataHandler();
@@ -104,7 +104,7 @@ public abstract class SampleData {
 
         RetrieveDocument requestData2 = new RetrieveDocument();
         requestData2.setDocumentUniqueId("doc2");
-        requestData2.setHomeCommunityId("home2");
+        requestData2.setHomeCommunityId("urn:oid:1.2.4");
         requestData2.setRepositoryUniqueId("repo2");
         
         DataHandler dataHandler2 = createDataHandler();        
@@ -311,8 +311,8 @@ public abstract class SampleData {
      */
     public static RetrieveDocumentSet createRetrieveDocumentSet() {
         RetrieveDocumentSet request = new RetrieveDocumentSet();
-        request.getDocuments().add(new RetrieveDocument("repo1", "doc1", "home1"));
-        request.getDocuments().add(new RetrieveDocument("repo2", "doc2", "home2"));
+        request.getDocuments().add(new RetrieveDocument("repo1", "doc1", "urn:oid:1.2.3"));
+        request.getDocuments().add(new RetrieveDocument("repo2", "doc2", "urn:oid:1.2.4"));
         return request;
     }
     
@@ -342,6 +342,7 @@ public abstract class SampleData {
     public static QueryRegistry createFindDocumentsQuery() {
         FindDocumentsQuery query = new FindDocumentsQuery();
         
+        query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.setClassCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
         query.setTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
@@ -378,6 +379,7 @@ public abstract class SampleData {
     public static QueryRegistry createFindFoldersQuery() {
         FindFoldersQuery query = new FindFoldersQuery();
         
+        query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.getLastUpdateTime().setFrom("1980");
         query.getLastUpdateTime().setTo("1981");
@@ -398,6 +400,7 @@ public abstract class SampleData {
     public static QueryRegistry createFindSubmissionSetsQuery() {
         FindSubmissionSetsQuery query = new FindSubmissionSetsQuery();
         
+        query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.getSubmissionTime().setFrom("1980");
         query.getSubmissionTime().setTo("1981");
@@ -415,6 +418,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetAllQuery() {
         GetAllQuery query = new GetAllQuery();
         
+        query.setHomeCommunityId("12.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         QueryList<Code> codes = new QueryList<Code>();
         codes.getOuterList().add(

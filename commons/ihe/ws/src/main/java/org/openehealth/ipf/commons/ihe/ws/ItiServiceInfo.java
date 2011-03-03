@@ -33,6 +33,7 @@ public class ItiServiceInfo {
     private final boolean mtom;
     private final boolean addressing;
     private final boolean swaOutSupport;
+    private final boolean auditRequestPayload;
 
     /**
      * Constructs the service info.
@@ -50,6 +51,8 @@ public class ItiServiceInfo {
      *          {@code true} if this service requires WS-Addressing.
      * @param swaOutSupport
      *          <code>true</code> if this service requires SwA for its output.
+     * @param auditRequestPayload
+     *          <code>true</code> if this service must save payload in audit record.
      */
     public ItiServiceInfo(QName serviceName, 
                           Class<?> serviceClass,
@@ -57,7 +60,8 @@ public class ItiServiceInfo {
                           boolean mtom, 
                           String wsdlLocation, 
                           boolean addressing, 
-                          boolean swaOutSupport) 
+                          boolean swaOutSupport,
+                          boolean auditRequestPayload)
     {
         Validate.notNull(serviceName, "serviceName");
         Validate.notNull(serviceClass, "serviceClass");
@@ -71,6 +75,7 @@ public class ItiServiceInfo {
         this.wsdlLocation = wsdlLocation;
         this.addressing = addressing;
         this.swaOutSupport = swaOutSupport;
+        this.auditRequestPayload = auditRequestPayload;
     }
 
     /**
@@ -123,5 +128,12 @@ public class ItiServiceInfo {
      */
     public boolean isSwaOutSupport() {
         return swaOutSupport;
+    }
+
+    /**
+     * @return <code>true</code> if this service must save payload in audit record.
+     */
+    public boolean isAuditRequestPayload() {
+        return auditRequestPayload;
     }
 }

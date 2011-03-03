@@ -15,12 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by a list of UUIDs or unique IDs. 
@@ -78,10 +76,5 @@ public abstract class GetByIdQuery extends GetByUuidQuery implements Serializabl
         } else if (!uniqueIds.equals(other.uniqueIds))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

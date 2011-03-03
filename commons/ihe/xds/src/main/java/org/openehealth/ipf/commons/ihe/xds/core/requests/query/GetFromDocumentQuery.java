@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import java.io.Serializable;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+
+import java.io.Serializable;
 
 /**
  * Base class for queries that retrieve results via a document entry.
@@ -30,7 +28,6 @@ public abstract class GetFromDocumentQuery extends StoredQuery implements Serial
     
     private String uuid;
     private String uniqueId;
-    private String homeCommunityId;
 
     /**
      * Constructs the query.
@@ -71,26 +68,11 @@ public abstract class GetFromDocumentQuery extends StoredQuery implements Serial
         this.uniqueId = uniqueId;
     }
 
-    /**
-     * @return the home community ID.
-     */
-    public String getHomeCommunityId() {
-        return homeCommunityId;
-    }
 
-    /**
-     * @param homeCommunityId   
-     *          the home community ID.
-     */
-    public void setHomeCommunityId(String homeCommunityId) {
-        this.homeCommunityId = homeCommunityId;
-    }
-    
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
-        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
+        int result = super.hashCode();
         result = prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
         result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
         return result;
@@ -100,16 +82,11 @@ public abstract class GetFromDocumentQuery extends StoredQuery implements Serial
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
         GetFromDocumentQuery other = (GetFromDocumentQuery) obj;
-        if (homeCommunityId == null) {
-            if (other.homeCommunityId != null)
-                return false;
-        } else if (!homeCommunityId.equals(other.homeCommunityId))
-            return false;
         if (uniqueId == null) {
             if (other.uniqueId != null)
                 return false;
@@ -121,10 +98,5 @@ public abstract class GetFromDocumentQuery extends StoredQuery implements Serial
         } else if (!uuid.equals(other.uuid))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }

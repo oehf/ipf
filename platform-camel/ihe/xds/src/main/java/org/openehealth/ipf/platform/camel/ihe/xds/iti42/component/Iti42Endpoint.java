@@ -25,10 +25,9 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
@@ -41,7 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti42.service.Iti42Service;
  * The Camel endpoint for the ITI-42 transaction.
  */
 public class Iti42Endpoint extends DefaultItiEndpoint {
-    protected final static XdsServiceInfo ITI_42 = new XdsServiceInfo(
+    protected final static ItiServiceInfo ITI_42 = new ItiServiceInfo(
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti42PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),

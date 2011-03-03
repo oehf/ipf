@@ -64,7 +64,7 @@ public class XdsServiceFactory extends ItiServiceFactory {
             svrFactory.getOutInterceptors().add(auditOutInterceptor);
             svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
             
-            if(((XdsServiceInfo) serviceInfo).isAuditPayload()) {
+            if(serviceInfo.isAuditRequestPayload()) {
                 svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor());
             }        
         }

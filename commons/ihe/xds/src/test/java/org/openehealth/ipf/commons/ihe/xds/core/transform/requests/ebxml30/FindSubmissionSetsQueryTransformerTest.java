@@ -51,6 +51,7 @@ public class FindSubmissionSetsQueryTransformerTest {
         query.getSubmissionTime().setTo("2");
         query.setAuthorPerson("per'son1");
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setHomeCommunityId("12.21.41");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -59,7 +60,8 @@ public class FindSubmissionSetsQueryTransformerTest {
     public void testToEbXML() {
         transformer.toEbXML(query, ebXML);
         assertEquals(QueryType.FIND_SUBMISSION_SETS.getId(), ebXML.getId());
-        
+        assertEquals("12.21.41", ebXML.getHome());
+
         assertEquals(Arrays.asList("'id1^^^name1&uni1&uniType1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_PATIENT_ID.getSlotName()));
         

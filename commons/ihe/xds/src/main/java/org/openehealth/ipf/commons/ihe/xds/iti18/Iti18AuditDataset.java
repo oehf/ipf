@@ -33,7 +33,7 @@ public class Iti18AuditDataset extends XdsAuditDataset {
      *            server side (<code>true</code>) or on the client side (
      *            <code>false</code>)
      */
-    Iti18AuditDataset(boolean serverSide) {
+    public Iti18AuditDataset(boolean serverSide) {
         super(serverSide);
     }
 
@@ -42,7 +42,7 @@ public class Iti18AuditDataset extends XdsAuditDataset {
      * @param queryUuid
      *          the UUID of the query being audited.
      */
-    void setQueryUuid(String queryUuid) {
+    public void setQueryUuid(String queryUuid) {
         this.queryUuid = queryUuid;
     }
 

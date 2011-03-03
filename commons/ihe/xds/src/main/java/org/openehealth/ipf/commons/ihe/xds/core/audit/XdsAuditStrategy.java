@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 
 import java.util.List;
 
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
@@ -89,4 +90,9 @@ public abstract class XdsAuditStrategy extends WsAuditStrategy {
         return RFC3881EventOutcomeCodes.MINOR_FAILURE;
     }
 
+
+    @Override
+    public void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset) throws Exception {
+        // not used in XDS
+    }
 }

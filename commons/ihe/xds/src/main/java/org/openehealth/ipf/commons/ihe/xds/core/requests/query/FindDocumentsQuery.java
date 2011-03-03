@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 import java.io.Serializable;
@@ -26,11 +24,9 @@ import java.util.List;
  * Represents a stored query for FindDocuments.
  * @author Jens Riemschneider
  */
-public class FindDocumentsQuery extends StoredQuery implements Serializable {
+public class FindDocumentsQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = -5765363916663583605L;
 
-    private Identifiable patientId;
-    
     private List<AvailabilityStatus> status;
     private List<Code> typeCodes;
     private List<Code> classCodes;
@@ -50,21 +46,6 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
      */
     public FindDocumentsQuery() {
         super(QueryType.FIND_DOCUMENTS);
-    }
-
-    /**
-     * @return the patient ID to search for.
-     */
-    public Identifiable getPatientId() {
-        return patientId;
-    }
-    
-    /**
-     * @param patientId 
-     *          the patient ID to search for.
-     */
-    public void setPatientId(Identifiable patientId) {
-        this.patientId = patientId;
     }
 
     /**
@@ -231,7 +212,7 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((authorPersons == null) ? 0 : authorPersons.hashCode());
         result = prime * result + ((classCodes == null) ? 0 : classCodes.hashCode());
         result = prime * result + ((typeCodes == null) ? 0 : typeCodes.hashCode());
@@ -244,7 +225,6 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
                 * result
                 + ((healthcareFacilityTypeCodes == null) ? 0 : healthcareFacilityTypeCodes
                         .hashCode());
-        result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
         result = prime * result
                 + ((practiceSettingCodes == null) ? 0 : practiceSettingCodes.hashCode());
         result = prime * result + ((serviceStartTime == null) ? 0 : serviceStartTime.hashCode());
@@ -257,7 +237,7 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
+        if (!super.equals(obj))
             return false;
         if (getClass() != obj.getClass())
             return false;
@@ -302,11 +282,6 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
                 return false;
         } else if (!healthcareFacilityTypeCodes.equals(other.healthcareFacilityTypeCodes))
             return false;
-        if (patientId == null) {
-            if (other.patientId != null)
-                return false;
-        } else if (!patientId.equals(other.patientId))
-            return false;
         if (practiceSettingCodes == null) {
             if (other.practiceSettingCodes != null)
                 return false;
@@ -328,10 +303,5 @@ public class FindDocumentsQuery extends StoredQuery implements Serializable {
         } else if (!status.equals(other.status))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
