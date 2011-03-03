@@ -11,5 +11,7 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
     <osgi:reference id="osgiServlet" bean-name="osgiServlet" interface="javax.servlet.Servlet"/>
 
     <osgi:service ref="xcpd-iti55" interface="org.apache.camel.Component"/>
-
+    <osgi:service ref="xcpd-iti56" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xcpd-iti55-async-response" interface="org.apache.camel.Component"/>
+    <osgi:service ref="xcpd-iti56-async-response" interface="org.apache.camel.Component"/>
 </beans>

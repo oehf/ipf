@@ -50,6 +50,9 @@
             org.springframework.context,
             org.springframework.osgi.context.support,
             org.openehealth.ipf.platform.camel.ihe.xcpd.iti55,
+            org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.asyncresponse,
+            org.openehealth.ipf.platform.camel.ihe.xcpd.iti56,
+            org.openehealth.ipf.platform.camel.ihe.xcpd.iti56.asyncresponse,
             *
         </osgi.import.pkg>
     </properties>
