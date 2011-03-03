@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.osgi</groupId>
+    <artifactId>osgi-config-ihe-xca</artifactId>
+    <name>osgi-config-ihe-xca</name>
+    
+    <parent>
+        <groupId>org.openehealth.ipf.osgi</groupId>
+        <artifactId>osgi-config-ihe</artifactId>
+        <version>2.3-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <osgi.import.pkg>
+            META-INF.cxf,
+            META-INF.cxf.osgi,
+            javax.xml.bind,
+            javax.jws,
+            javax.jws.soap,
+            javax.xml.bind.annotation,
+            javax.xml.namespace,
+            javax.xml.stream,
+            javax.xml.ws,
+            javax.servlet,
+            org.apache.camel,
+            org.apache.cxf.binding,
+            org.apache.cxf.binding.soap,
+            org.apache.cxf.binding.soap.spring,
+            org.apache.cxf.bus,
+            org.apache.cxf.bus.resource,
+            org.apache.cxf.bus.spring,
+            org.apache.cxf.buslifecycle,
+            org.apache.cxf.catalog,
+            org.apache.cxf.configuration,
+            org.apache.cxf.configuration.spring,
+            org.apache.cxf.endpoint,
+            org.apache.cxf.headers,
+            org.apache.cxf.phase,
+            org.apache.cxf.resource,
+            org.apache.cxf.transport,
+            org.apache.cxf.transport.http,
+            org.apache.cxf.transport.http_osgi,
+            org.apache.cxf.workqueue,
+            org.apache.cxf.wsdl,
+            org.apache.cxf.wsdl11,
+            org.apache.cxf.ws.addressing.policy,
+            org.apache.cxf.ws.policy.builder.primitive,
+            org.springframework.beans.factory.config,
+            org.springframework.context,
+            org.springframework.osgi.context.support,
+            org.openehealth.ipf.platform.camel.ihe.xca.iti38,
+			org.openehealth.ipf.platform.camel.ihe.xca.iti38.asyncresponse,
+			org.openehealth.ipf.platform.camel.ihe.xca.iti39,
+			org.openehealth.ipf.platform.camel.ihe.xca.iti39.asyncresponse,
+            *
+        </osgi.import.pkg>
+    </properties>
+</project>
