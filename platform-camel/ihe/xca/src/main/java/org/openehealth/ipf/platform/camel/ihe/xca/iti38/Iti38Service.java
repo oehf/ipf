@@ -45,9 +45,10 @@ public class Iti38Service extends DefaultItiWebService implements Iti38PortType 
                     ErrorCode.REGISTRY_METADATA_ERROR,
                     ErrorCode.REGISTRY_ERROR,
                     endpoint.getHomeCommunityId());
+            errorResponse.getErrors().get(0).setLocation(endpoint.getHomeCommunityId());
             return EbXML30Converters.convert(errorResponse);
         }
-        
+
         return Exchanges.resultMessage(result).getBody(AdhocQueryResponse.class);            
     }
 }

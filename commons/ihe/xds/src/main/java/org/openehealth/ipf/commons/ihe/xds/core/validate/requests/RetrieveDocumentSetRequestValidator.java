@@ -30,7 +30,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  * Validates a {@link EbXMLRetrieveDocumentSetRequest}.
  * @author Jens Riemschneider
  */
-public class RetrieveDocumentSetRequestValidator implements Validator<EbXMLRetrieveDocumentSetRequest, ValidationProfile>{
+public class RetrieveDocumentSetRequestValidator implements Validator<EbXMLRetrieveDocumentSetRequest, ValidationProfile> {
+    private final HomeCommunityIdValidator hcValidator = new HomeCommunityIdValidator(true);
+
     @Override
     public void validate(EbXMLRetrieveDocumentSetRequest request, ValidationProfile profile) {
         notNull(request, "request cannot be null");
@@ -42,8 +44,9 @@ public class RetrieveDocumentSetRequestValidator implements Validator<EbXMLRetri
             String docId = document.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
 
-            String hcId = document.getHomeCommunityId();
-            new HomeCommunityIdValidator(profile.getIheProfile() == IheProfile.XCA).validate(hcId);
+            if (profile.getIheProfile() == IheProfile.XCA) {
+                hcValidator.validate(document.getHomeCommunityId());
+            }
         }
     }
 }

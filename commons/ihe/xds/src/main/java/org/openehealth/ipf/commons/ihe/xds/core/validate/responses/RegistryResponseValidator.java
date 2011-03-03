@@ -22,6 +22,8 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 /**
@@ -29,6 +31,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
  * @author Jens Riemschneider
  */
 public class RegistryResponseValidator implements Validator<EbXMLRegistryResponse, ValidationProfile>{
+    private final HomeCommunityIdValidator hcValidator = new HomeCommunityIdValidator(true);
+
     @Override
     public void validate(EbXMLRegistryResponse response, ValidationProfile profile) {
         notNull(response, "response cannot be null");
@@ -38,6 +42,10 @@ public class RegistryResponseValidator implements Validator<EbXMLRegistryRespons
             metaDataAssert(errorInfo != null, INVALID_ERROR_INFO_IN_RESPONSE);
             metaDataAssert(errorInfo.getErrorCode() != null, INVALID_ERROR_CODE_IN_RESPONSE);
             metaDataAssert(errorInfo.getSeverity() != null, INVALID_SEVERITY_IN_RESPONSE);
+
+            if (profile.getIheProfile() == IheProfile.XCA) {
+                hcValidator.validate(errorInfo.getLocation());
+            }
         }
     }
 }
