@@ -16,6 +16,7 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
+import ca.uhn.hl7v2.parser.EncodingCharacters
 
 /**
  * @author Martin Krasser
@@ -151,5 +152,34 @@ class SegmentAdapterTest extends GroovyTestCase {
 		assert pv2.isEmpty() == true
 		assert pv1.isEmpty() == false
 	}
-        
+
+    void testSettingObx5Type() {
+        // create a new OBX segment from scratch
+        MessageAdapter msg = load('msg-02.hl7')
+        SelectorClosure observations = msg.PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION
+        SegmentAdapter obx = observations(observations().size()).OBX
+
+        VariesAdapter obx5 = obx[5](0)
+
+        // before OBX-5 type has been set, it should be impossible
+        // to set this field using IPF DSL
+        boolean failed = false
+        try {
+            obx5[1] = 'T57000'
+            obx5[2] = 'GALLBLADDER'
+            obx5[3] = 'SNM'
+        } catch (Exception e) {
+            failed = true
+        }
+        assert failed
+
+        // set OBX-5 type and prove that this filed is now accessible in default manner
+        obx.setObx5Type('CE')
+        obx5[1] = 'T57000'
+        obx5[2] = 'GALLBLADDER'
+        obx5[3] = 'SNM'
+
+        String obxString = msg.parser.doEncode(obx.target, new EncodingCharacters('|' as char, '^~\\&'))
+        assert obxString == 'OBX||CE|||T57000^GALLBLADDER^SNM'
+    }
 }
