@@ -15,20 +15,11 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptTypes
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.selector
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.stringValue
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
-
-import org.codehaus.groovy.runtime.InvokerHelper
-
-import ca.uhn.hl7v2.model.DataTypeException
-import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Segment
-import ca.uhn.hl7v2.model.Type
+import ca.uhn.hl7v2.model.Varies
 import ca.uhn.hl7v2.util.DeepCopy
+import org.codehaus.groovy.runtime.InvokerHelper
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
 
 /**
  * @author Martin Krasser
@@ -114,4 +105,29 @@ class SegmentAdapter extends StructureAdapter {
 		}
 		!found
 	}
+
+    /**
+     * Only when this segment adapter represents an OBX segment: sets the
+     * data type of OBX-5 repetitions to the given one and ensures that
+     * the count of existing OBX-5 repetitions is not less than the given
+     * number.  This method will throw an exception when the segment
+     * adapter does not represent an OBX segment.
+     *
+     * @param type
+     *      HL7v2 type name, e.g. 'CE'.
+     * @param desiredRepetitionsCount
+     *      minimal count of available OBX-5 repetitions.
+     */
+    void setObx5Type(String type, int desiredRepetitionsCount = 1) {
+        if (! segment.getClass().name.endsWith('.OBX')) {
+            throw new AdapterException('only OBX segments can be served by this method')
+        }
+
+        for (int i = 0; i < desiredRepetitionsCount - count(5); ++i) {
+            nrp(5)
+        }
+
+        putAt(2, type)
+        Varies.fixOBX5(target, target.message.parser.factory)
+    }
 }
