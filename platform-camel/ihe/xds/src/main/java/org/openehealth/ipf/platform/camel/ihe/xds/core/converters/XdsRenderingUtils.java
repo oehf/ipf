@@ -20,9 +20,11 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.TypeConverter;
 
+import javax.activation.DataHandler;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.attachment.AttachmentMarshaller;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -184,11 +186,58 @@ abstract public class XdsRenderingUtils {
         try {
             StringWriter writer = new StringWriter();
             Marshaller marshaller = JAXB_CONTEXT.createMarshaller();
+            marshaller.setAttachmentMarshaller(new NonReadingAttachmentMarshaller());
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(ebXml, writer);
             return writer.toString();
         } catch (JAXBException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * An attachment marshaller implementation which does not read any data
+     * from the provided data handlers in order to keep all streams usable.
+     */
+    private static class NonReadingAttachmentMarshaller extends AttachmentMarshaller {
+        @Override
+        public boolean isXOPPackage() {
+            return true;
+        }
+
+        @Override
+        public String addMtomAttachment(DataHandler data, String elementNamespace, String elementLocalName) {
+            return attachmentDescription(data.getName(), null, data.getContentType());
+        }
+
+        @Override
+        public String addMtomAttachment(byte[] data, int offset, int length, String mimeType,
+                                        String elementNamespace, String elementLocalName)
+        {
+            String size = Integer.toString(Math.min(length, data.length - offset));
+            return attachmentDescription(null, size, mimeType);
+        }
+
+        @Override
+        public String addSwaRefAttachment(DataHandler data) {
+            return attachmentDescription(data.getName(), null, data.getContentType());
+        }
+
+        private static String attachmentDescription(String name, String size, String contentType) {
+            return new StringBuilder()
+                    .append("Attachment: name='")
+                    .append(whenKnown(name))
+                    .append("', size='")
+                    .append(whenKnown(size))
+                    .append("', content type='")
+                    .append(whenKnown(contentType))
+                    .append('\'')
+                    .toString();
+        }
+
+        private static String whenKnown(String s) {
+            return (s != null) ? s : "[unknown]";
         }
     }
 
