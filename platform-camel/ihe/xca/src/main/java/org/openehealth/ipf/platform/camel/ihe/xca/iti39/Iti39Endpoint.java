@@ -43,7 +43,7 @@ public class Iti39Endpoint extends DefaultItiEndpoint {
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
             Iti39PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
-            false,
+            true,
             "wsdl/iti39.wsdl",
             true,
             false,
