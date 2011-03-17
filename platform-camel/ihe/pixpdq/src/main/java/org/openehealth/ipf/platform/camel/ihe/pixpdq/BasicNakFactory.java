@@ -23,10 +23,19 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 
 /**
- * Basic NAK factory for PIX Feed and PIX Update Notification.
+ * Basic NAK factory for HL7v2-based transactions.
  * @author Dmytro Rud
  */
 public class BasicNakFactory implements NakFactory {
+
+    @Override
+    public Message createAck(
+            ModelClassFactory classFactory,
+            Message originalMessage,
+            AckTypeCode ackTypeCode)
+    {
+            return MessageUtils.ack(classFactory, originalMessage);
+    }
 
     @Override
     public Message createNak(
