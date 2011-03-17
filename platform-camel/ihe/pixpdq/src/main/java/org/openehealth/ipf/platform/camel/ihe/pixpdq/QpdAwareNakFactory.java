@@ -109,4 +109,10 @@ public class QpdAwareNakFactory extends BasicNakFactory implements NakFactory {
 
         return ack;
     }
+
+
+    @Override
+    public Message createAck(ModelClassFactory classFactory, Message originalMessage, AckTypeCode ackTypeCode) {
+        throw new IllegalStateException("This transaction cannot return a simple ACK");
+    }
 }
