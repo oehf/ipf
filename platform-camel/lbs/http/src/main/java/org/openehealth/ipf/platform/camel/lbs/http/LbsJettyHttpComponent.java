@@ -1,5 +1,11 @@
 package org.openehealth.ipf.platform.camel.lbs.http;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.http.CamelServlet;
 import org.apache.camel.component.http.DefaultHttpBinding;
@@ -13,11 +19,6 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerWrapper;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 public class LbsJettyHttpComponent extends JettyHttpComponent {
     @Override
@@ -51,6 +52,7 @@ public class LbsJettyHttpComponent extends JettyHttpComponent {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         JettyHttpEndpoint endpoint = (JettyHttpEndpoint) super.createEndpoint(uri, remaining, parameters);
         endpoint.setBinding(new LbsHttpBinding());
+		endpoint.setEnableMultipartFilter(Boolean.FALSE);
         return endpoint;
     }
 
