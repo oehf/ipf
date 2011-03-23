@@ -14,7 +14,22 @@
         <artifactId>platform-camel-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
-        
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- we need this dependency to automatically obtain the version
+                 of the org.codehaus.woodstox artifact which is used by CXF
+                 but not provided to us transitively -->
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-parent</artifactId>
+                <version>${cxf-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
@@ -26,6 +41,11 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-ws</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
         </dependency>
 
         <!-- Dependencies for test -->

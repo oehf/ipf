@@ -25,7 +25,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPFaultException;
 
+import com.ctc.wstx.exc.WstxEOFException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
@@ -147,8 +149,16 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         
         // invoke
         exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
-        OutType result = callService(client, body);
-        
+        OutType result = null;
+        try {
+             result = callService(client, body);
+        } catch (SOAPFaultException fault) {
+            // handle http://www.w3.org/TR/2006/NOTE-soap11-ror-httpbinding-20060321/
+            if (! ((replyToUri != null) && (fault.getCause() instanceof WstxEOFException))) {
+                throw fault;
+            }
+        }
+
         // for synchronous interaction: handle response
         if (replyToUri == null) {
             Message responseMessage = Exchanges.resultMessage(exchange);
@@ -216,6 +226,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         AttributedURIType uri = new AttributedURIType();
         uri.setValue(messageId);
         maps.setMessageID(uri);
+        log.debug("Set WS-Addressing message ID: " + messageId);
 
         // ReplyTo header
         AttributedURIType uri2 = new AttributedURIType();
