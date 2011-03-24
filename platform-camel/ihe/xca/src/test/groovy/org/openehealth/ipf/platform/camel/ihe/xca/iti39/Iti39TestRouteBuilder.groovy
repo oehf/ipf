@@ -16,11 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.xca.iti39;
 
 import java.util.concurrent.atomic.AtomicInteger
+import javax.activation.DataHandler
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -38,8 +40,6 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
     
-    static final RetrievedDocumentSet RESPONSE = SampleData.createRetrievedDocumentSet()
-
     static final long ASYNC_DELAY = 10 * 1000L
 
     static boolean errorOccurred = false
@@ -84,14 +84,44 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
 
                 // create response, inclusive SOAP and HTTP headers
                 Message message = Exchanges.resultMessage(it)
-                message.body = RESPONSE
+                message.body = createRetrievedDocumentSet()
                 message.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] =
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 
                 responseCount.incrementAndGet()
             }
             .process(iti43ResponseValidator())
-
     }
+
+
+    private static RetrievedDocumentSet createRetrievedDocumentSet() {
+        RetrieveDocument requestData1 = new RetrieveDocument();
+        requestData1.setDocumentUniqueId("doc1");
+        requestData1.setHomeCommunityId("urn:oid:1.2.3");
+        requestData1.setRepositoryUniqueId("repo1");
+
+        DataHandler dataHandler1 = new DataHandler('Hund ' * 1500, "text/plain");
+        RetrievedDocument doc1 = new RetrievedDocument();
+        doc1.setRequestData(requestData1);
+        doc1.setDataHandler(dataHandler1);
+
+        RetrieveDocument requestData2 = new RetrieveDocument();
+        requestData2.setDocumentUniqueId("doc2");
+        requestData2.setHomeCommunityId("urn:oid:1.2.4");
+        requestData2.setRepositoryUniqueId("repo2");
+
+        DataHandler dataHandler2 = new DataHandler('Katz ' * 1500, "text/plain");
+        RetrievedDocument doc2 = new RetrievedDocument();
+        doc2.setRequestData(requestData2);
+        doc2.setDataHandler(dataHandler2);
+
+        RetrievedDocumentSet response = new RetrievedDocumentSet();
+        response.getDocuments().add(doc1);
+        response.getDocuments().add(doc2);
+        response.setStatus(Status.SUCCESS);
+
+        return response;
+    }
+
 
 }

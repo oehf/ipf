@@ -26,6 +26,11 @@ import org.openehealth.ipf.modules.hl7.AckTypeCode;
  */
 public interface NakFactory {
 
+    Message createAck(
+            ModelClassFactory classFactory,
+            Message originalMessage,
+            AckTypeCode ackTypeCode);
+
     Message createNak(
             ModelClassFactory classFactory,
             Message originalMessage,
