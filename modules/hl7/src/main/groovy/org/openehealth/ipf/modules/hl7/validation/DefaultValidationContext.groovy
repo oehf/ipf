@@ -22,7 +22,6 @@ import ca.uhn.hl7v2.validation.MessageRule
 import ca.uhn.hl7v2.validation.PrimitiveTypeRule
 import ca.uhn.hl7v2.validation.ValidationContext
 import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
-
 import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
 
 /**
@@ -172,11 +171,11 @@ public class DefaultValidationContext implements ValidationContext, Serializable
 	    this
 	}
 	
-	private void addToRules(String version, String scope, Rule rule) {
+	protected void addToRules(String version, String scope, Rule rule) {
 		version.tokenize().each { v -> addRule(v, scope, rule) }
 	}
 	
-	private void addRule(String version, String scope, Rule rule) {
+	protected void addRule(String version, String scope, Object rule) {
 		if (ruleMap[version].containsKey(scope)) {
 			ruleMap[version][scope].add(rule)
 		} else {

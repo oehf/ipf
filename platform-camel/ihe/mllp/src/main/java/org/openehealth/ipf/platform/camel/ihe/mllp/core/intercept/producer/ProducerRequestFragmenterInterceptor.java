@@ -131,7 +131,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterc
             // catch and analyse the response, if this was not the last fragment
             if(currentSegmentIndex < segments.size()) {
                 String responseString = Exchanges.resultMessage(exchange).getBody(String.class);
-                Terser responseTerser = new Terser(getMllpEndpoint().getParser().parse(responseString));
+                Terser responseTerser = new Terser(getMllpEndpoint().getTransactionConfiguration().getParser().parse(responseString));
                 
                 String messageType = responseTerser.get("MSH-9-1");
                 String acknowledgementCode = responseTerser.get("MSA-1");

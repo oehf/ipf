@@ -57,7 +57,7 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
     public void process(Exchange exchange) throws Exception {
         String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         MessageAdapter originalAdapter = null;
-        Parser parser = getMllpEndpoint().getParser();
+        Parser parser = getMllpEndpoint().getTransactionConfiguration().getParser();
         
         // unmarshal
         boolean unmarshallingFailed = false;
@@ -93,7 +93,7 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
                 resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
                         e, 
                         (Message) originalAdapter.getTarget(), 
-                        getMllpEndpoint()));
+                        getMllpEndpoint().getTransactionConfiguration()));
             }
         }
         
@@ -101,7 +101,7 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
         String s = MllpMarshalUtils.marshalStandardTypes(
             resultMessage(exchange), 
             charset, 
-            getMllpEndpoint().getParser());
+            parser);
         resultMessage(exchange).setBody(s);
     }
     
@@ -111,20 +111,7 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
      * and stores it into the exchange.
      */
     private void processUnmarshallingException(Exchange exchange, Throwable t) {
-        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
-        
-        HL7v2Exception hl7e = new HL7v2Exception(
-                MllpMarshalUtils.formatErrorMessage(t),
-                config.getRequestErrorDefaultErrorCode(), 
-                t);
-        
-        Object nak = MessageUtils.defaultNak(
-                hl7e,
-                AckTypeCode.AR, 
-                config.getHl7Version(),
-                config.getSendingApplication(),
-                config.getSendingFacility());
-        
+        Message nak = MllpMarshalUtils.createDefaultNak(t, getMllpEndpoint().getTransactionConfiguration());
         resultMessage(exchange).setBody(nak);
     }
 

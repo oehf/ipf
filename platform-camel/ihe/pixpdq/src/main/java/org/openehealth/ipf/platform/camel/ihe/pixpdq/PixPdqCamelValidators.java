@@ -35,11 +35,11 @@ import ca.uhn.hl7v2.parser.Parser;
 abstract public class PixPdqCamelValidators {
     private static final MessageAdapterValidator VALIDATOR = new MessageAdapterValidator(); 
 
-    private static final Parser ITI_8_PARSER  = new Iti8Component().getParser();
-    private static final Parser ITI_9_PARSER  = new Iti9Component().getParser();
-    private static final Parser ITI_10_PARSER = new Iti10Component().getParser();
-    private static final Parser ITI_21_PARSER = new Iti21Component().getParser();
-    private static final Parser ITI_22_PARSER = new Iti22Component().getParser();
+    private static final Parser ITI_8_PARSER  = Iti8Component.CONFIGURATION.getParser();
+    private static final Parser ITI_9_PARSER  = Iti9Component.CONFIGURATION.getParser();
+    private static final Parser ITI_10_PARSER = Iti10Component.CONFIGURATION.getParser();
+    private static final Parser ITI_21_PARSER = Iti21Component.CONFIGURATION.getParser();
+    private static final Parser ITI_22_PARSER = Iti22Component.CONFIGURATION.getParser();
     
     private static final Processor ITI_8_VALIDATOR  = validatingProcessor(ITI_8_PARSER);
     private static final Processor ITI_9_VALIDATOR  = validatingProcessor(ITI_9_PARSER);

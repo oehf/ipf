@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.hl7.HL7MLLPCodec;
@@ -163,7 +162,6 @@ public abstract class MllpComponent extends MinaComponent {
                 getServerAuditStrategy(), 
                 getClientAuditStrategy(),
                 getTransactionConfiguration(),
-                getParser(),
                 sslContext,
                 mutualTLS,
                 customInterceptors,
@@ -177,8 +175,7 @@ public abstract class MllpComponent extends MinaComponent {
                 segmentFragmentationThreshold,
                 interactiveContinuationStorage,
                 unsolicitedFragmentationStorage,
-                autoCancel,
-                getNakFactory());
+                autoCancel);
     }
 
     private static String extractBeanName(String originalBeanName) {
@@ -202,15 +199,4 @@ public abstract class MllpComponent extends MinaComponent {
      * Returns component configuration. 
      */
     public abstract MllpTransactionConfiguration getTransactionConfiguration();
-    
-    /**
-     * Returns HL7 parser. 
-     */
-    public abstract Parser getParser();
-
-    /**
-     * Returns NAK factory.
-     * @return
-     */
-    public abstract NakFactory getNakFactory();
 }

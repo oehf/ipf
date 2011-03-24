@@ -61,10 +61,10 @@ class StandardTestContainer {
      static int port
     
      
-     static void startServer(servlet, appContextName, secure) {
+     static void startServer(servlet, String appContextName, boolean secure, int serverPort) {
          def contextResource = new ClassPathResource(appContextName)
          
-         port = JettyServer.freePort
+         port = serverPort
          log.info("Publishing services on port: ${port}")
          
          servletServer = new JettyServer(
@@ -148,9 +148,14 @@ class StandardTestContainer {
          AuditorModuleContext.context.sender = auditSender
      }
 
-     static void startServer(servlet, appContextName) {
+     static void startServer(servlet, String appContextName) {
          startServer(servlet, appContextName, false)
      }
+     
+     static void startServer(servlet, String appContextName, boolean secure) {
+         startServer(servlet, appContextName, secure, JettyServer.freePort)
+     }
+
      
      @AfterClass
      static void stopServer() {

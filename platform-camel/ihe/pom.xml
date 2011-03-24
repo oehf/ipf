@@ -46,6 +46,7 @@
         <module>pixpdqv3</module>
         <module>xcpd</module>
         <module>xca</module>
+        <module>hl7v2ws</module>
     </modules>
 
 </project>
