@@ -115,7 +115,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
     {
         Object header = m.getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
         if(header == AckTypeCode.AA) {
-            Message ack = getMllpEndpoint().getNakFactory().createAck(
+            Message ack = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createAck(
                     classFactory,
                     originalMessage,
                     (AckTypeCode) header);
