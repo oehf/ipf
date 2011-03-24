@@ -24,7 +24,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Feed Requests translator v3 to v2.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek Vï¿½clavï¿½k, Dmytro Rud
  */
 class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
     
@@ -115,7 +115,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             case this.accountNumberRoot:
                 if (this.copyAccountNumberAs == 'PID-18') {
                     if (grp.PID[18].value) {
-                        throw new IllegalStateException('PID-18 already filled')
+                        throw new Hl7TranslationException('PID-18 already filled')
                     }
                     fillCx(grp.PID[18], root, extension, assigningAuthority)
                 }
@@ -124,7 +124,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             case this.nationalIdentifierRoot:
                 if (this.copyNationalIdentifierAs == 'PID-19') {
                     if (grp.PID[19].value) {
-                        throw new IllegalStateException('PID-19 already filled')
+                        throw new Hl7TranslationException('PID-19 already filled')
                     }
                     grp.PID[19] = extension
                 }
@@ -194,7 +194,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             def birthName = family?.find { it.@qualifier.text() == 'BR' }?.text()
             if (birthName) {
                 if (birthNameProcessed) {
-                    throw new IllegalStateException('A person can have only one birth name')
+                    throw new Hl7TranslationException('A person can have only one birth name')
                 }
                 birthNameProcessed = true
                 if (this.birthNameCopyTo == 'PID-5') {
@@ -231,6 +231,10 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
             String value = telecom.@value.text()
             if (value) {
                 int pos = value.indexOf(':')
+                if (pos < 0) {
+                    throw new Hl7TranslationException('Missing telecom scheme, see HL7v3 NE 2008, section 2.19')
+                }
+
                 String type   = value.substring(0, pos)
                 String number = value.substring(pos + 1)
                 String use    = telecom.@use.text()
@@ -268,7 +272,7 @@ class PixFeedRequest3to2Translator implements Hl7TranslatorV3toV2 {
                     break
                 
                 default:
-                    throw new IllegalStateException("Unknown telecom type ${type}")
+                    throw new Hl7TranslationException("Unknown telecom scheme ${type}, see HL7v3 NE 2008, section 2.19")
                 }
             }
         }        
