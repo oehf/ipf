@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.*;
 import org.apache.camel.component.mina.MinaConfiguration;
 import org.apache.camel.component.mina.MinaEndpoint;
@@ -46,8 +45,7 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final MllpAuditStrategy serverStrategy;
     private final MllpAuditStrategy clientStrategy;
     private final MllpTransactionConfiguration transactionConfiguration;
-    private final Parser parser;
-    
+
     private final SSLContext sslContext;
     private final List<MllpCustomInterceptor> customInterceptors;
     private final boolean mutualTLS;
@@ -64,8 +62,6 @@ public class MllpEndpoint extends DefaultEndpoint {
     private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
     private final boolean autoCancel;
 
-    private final NakFactory nakFactory;
-
     /**
      * Constructor.
      * @param wrappedEndpoint
@@ -80,8 +76,6 @@ public class MllpEndpoint extends DefaultEndpoint {
      *      Client-side audit strategy.
      * @param transactionConfiguration
      *      Configuration of the transaction exposed by this endpoint.
-     * @param parser
-     *      HL7 v2 parser instance for using in (un-)marshalling.      
      * @param sslContext
      *      the SSL context to use; {@code null} if secure communication is not used.
      * @param mutualTLS
@@ -111,8 +105,6 @@ public class MllpEndpoint extends DefaultEndpoint {
      * @param autoCancel
      *      whether the producer should automatically send a cancel message
      *      after it has collected all inetractive continuation pieces.
-     * @param nakFactory
-     *      HL7v2 NAK factory.
      */
     public MllpEndpoint(
             MinaEndpoint wrappedEndpoint, 
@@ -121,8 +113,7 @@ public class MllpEndpoint extends DefaultEndpoint {
             MllpAuditStrategy serverStrategy, 
             MllpAuditStrategy clientStrategy, 
             MllpTransactionConfiguration transactionConfiguration, 
-            Parser parser, 
-            SSLContext sslContext, 
+            SSLContext sslContext,
             boolean mutualTLS, 
             List<MllpCustomInterceptor> customInterceptors, 
             String[] sslProtocols, 
@@ -135,16 +126,13 @@ public class MllpEndpoint extends DefaultEndpoint {
             int segmentFragmentationThreshold,
             InteractiveContinuationStorage interactiveContinuationStorage,
             UnsolicitedFragmentationStorage unsolicitedFragmentationStorage,
-            boolean autoCancel,
-            NakFactory nakFactory)
+            boolean autoCancel)
     {
         Validate.notNull(wrappedEndpoint);
         Validate.notNull(serverStrategy);
         Validate.notNull(clientStrategy);
         Validate.notNull(transactionConfiguration);
-        Validate.notNull(parser);
         Validate.noNullElements(customInterceptors);
-        Validate.notNull(nakFactory);
 
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
@@ -152,7 +140,6 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.serverStrategy = serverStrategy;
         this.clientStrategy = clientStrategy;
         this.transactionConfiguration = transactionConfiguration;
-        this.parser = parser;
         this.sslContext = sslContext;
         this.mutualTLS = mutualTLS;
         this.customInterceptors = customInterceptors;
@@ -168,8 +155,6 @@ public class MllpEndpoint extends DefaultEndpoint {
         this.interactiveContinuationStorage = interactiveContinuationStorage;
         this.unsolicitedFragmentationStorage = unsolicitedFragmentationStorage;
         this.autoCancel = autoCancel;
-
-        this.nakFactory = nakFactory;
     }
 
 
@@ -303,13 +288,6 @@ public class MllpEndpoint extends DefaultEndpoint {
     }
 
     /**
-     * Returns HL7 parser instance.
-     */
-    public Parser getParser() {
-        return parser;
-    }
-
-    /**
      * Returns <code>true</code> if this endpoint supports interactive continuation.
      */
     public boolean isSupportInteractiveContinuation() {
@@ -378,13 +356,6 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     public boolean isAutoCancel() {
         return autoCancel;
-    }
-
-    /**
-     * Returns HL7v2 NAK factory for this enspoint.
-     */
-    public NakFactory getNakFactory() {
-        return nakFactory;
     }
 
     // ----- dumb delegation, nothing interesting below -----

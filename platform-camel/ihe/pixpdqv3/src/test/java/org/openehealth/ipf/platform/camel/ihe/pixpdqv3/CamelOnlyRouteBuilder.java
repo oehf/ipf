@@ -40,7 +40,7 @@ import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelValid
  */
 public class CamelOnlyRouteBuilder extends SpringRouteBuilder {
 
-    private static final Parser PARSER = new Iti21Component().getParser();
+    private static final Parser PARSER = Iti21Component.CONFIGURATION.getParser();
     private static final PdqRequest3to2Translator REQUEST_TRANSLATOR = new PdqRequest3to2Translator();
     private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR = new PdqResponse2to3Translator();
 

@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdq.BasicNakFactory;
  * @author Dmytro Rud
  */
 public class Iti8Component extends MllpComponent {
-    private static final MllpTransactionConfiguration CONFIGURATION =
+    public static final MllpTransactionConfiguration CONFIGURATION =
         new MllpTransactionConfiguration(
                 "2.3.1", 
                 "PIX adapter", 
@@ -42,7 +42,9 @@ public class Iti8Component extends MllpComponent {
                 new String[] {"ACK"},
                 new String[] {"*"},
                 new boolean[] {true},
-                new boolean[] {false}); 
+                new boolean[] {false},
+                new PipeParser(),
+                new BasicNakFactory());
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti8ClientAuditStrategy();
@@ -73,15 +75,5 @@ public class Iti8Component extends MllpComponent {
     @Override
     public MllpTransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
-    }
-
-    @Override
-    public Parser getParser() {
-        return PARSER;
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return NAK_FACTORY;
     }
 }

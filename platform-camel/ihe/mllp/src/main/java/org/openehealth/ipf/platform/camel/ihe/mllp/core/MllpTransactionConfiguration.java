@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
+import ca.uhn.hl7v2.parser.Parser;
+
 import static org.apache.commons.lang.Validate.isTrue;
 import static org.apache.commons.lang.Validate.noNullElements;
 import static org.apache.commons.lang.Validate.notEmpty;
@@ -22,14 +24,13 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.List;
 
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
-
 
 /**
  * Endpoint-agnostic parameters of an MLLP-based transaction.
  * @author Dmytro Rud
  */
 public class MllpTransactionConfiguration {
+    
     private final String hl7Version;
     private final String sendingApplication;
     private final String sendingFacility;
@@ -46,6 +47,8 @@ public class MllpTransactionConfiguration {
     private final boolean[] auditabilityFlags;
     private final boolean[] responseContinuabilityFlags;
 
+    private final Parser parser;
+    private final NakFactory nakFactory;
 
     /**
      * Constructor.
@@ -74,7 +77,13 @@ public class MllpTransactionConfiguration {
      *      ignored for messages of type "ACK".  
      * @param auditabilityFlags
      *      flags of whether the messages of corresponding 
-     *      type should be audited.
+     *      type should be audited. 
+     *      If <code>null</code>, the transaction will not perform any auditing.
+     * @param responseContinuabilityFlags
+     *      flags of whether the messages of corresponding 
+     *      type should support HL7 response continuations. 
+     *      If <code>null</code>, no continuations will be supported.
+     *
      */
     public MllpTransactionConfiguration(
             String hl7Version,
@@ -87,7 +96,9 @@ public class MllpTransactionConfiguration {
             String[] allowedResponseMessageTypes,
             String[] allowedResponseTriggerEvents,
             boolean[] auditabilityFlags,
-            boolean[] responseContinuabilityFlags)
+            boolean[] responseContinuabilityFlags,
+            Parser parser,
+            NakFactory nakFactory)
     {
         notNull(hl7Version);
         notNull(sendingApplication);
@@ -97,15 +108,19 @@ public class MllpTransactionConfiguration {
         noNullElements(allowedRequestTriggerEvents);
         noNullElements(allowedResponseMessageTypes);
         noNullElements(allowedResponseTriggerEvents);
-        notNull(auditabilityFlags);
-        notNull(responseContinuabilityFlags);
+        notNull(parser);
+        notNull(nakFactory);
 
         notEmpty(allowedRequestMessageTypes);
         isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
         isTrue(allowedRequestMessageTypes.length == allowedResponseMessageTypes.length);
         isTrue(allowedRequestMessageTypes.length == allowedResponseTriggerEvents.length);
-        isTrue(allowedRequestMessageTypes.length == auditabilityFlags.length);
-        isTrue(allowedRequestMessageTypes.length == responseContinuabilityFlags.length);
+        if (auditabilityFlags != null) {
+            isTrue(allowedRequestMessageTypes.length == auditabilityFlags.length);
+        }
+        if (responseContinuabilityFlags != null){
+            isTrue(allowedRequestMessageTypes.length == responseContinuabilityFlags.length);
+        }
         
         // QC passed ;)
         
@@ -123,6 +138,9 @@ public class MllpTransactionConfiguration {
 
         this.auditabilityFlags = auditabilityFlags;
         this.responseContinuabilityFlags = responseContinuabilityFlags;
+
+        this.parser = parser;
+        this.nakFactory = nakFactory;
     }
 
     
@@ -182,8 +200,11 @@ public class MllpTransactionConfiguration {
      * Returns <code>true</code> when messages of the given type are auditable.
      */
     public boolean isAuditable(String messageType) {
+        if (auditabilityFlags == null) {
+            return false;
+        }
         int index = indexOf(messageType, allowedRequestMessageTypes);
-        if(index != -1) {
+        if (index != -1) {
             return auditabilityFlags[index];
         }
         throw new IllegalArgumentException("Unknown message type " + messageType);
@@ -192,15 +213,18 @@ public class MllpTransactionConfiguration {
 
     /**
      * Returns <code>true</code> when messages of the given [request] type 
-     * can be splitted by means of interactive continuation.
+     * can be split by means of interactive continuation.
      * <p>
      * When this method returns true, the request message structure must 
      * be able to contain segments RCP, QPD, DSC; and the response message
      * structure -- segments DSC, QAK.
      */
     public boolean isContinuable(String messageType) {
+        if (responseContinuabilityFlags == null) {
+            return false;
+        }
         int index = indexOf(messageType, allowedRequestMessageTypes);
-        if(index != -1) {
+        if (index != -1) {
             return responseContinuabilityFlags[index];
         }
         throw new IllegalArgumentException("Unknown message type " + messageType);
@@ -260,6 +284,22 @@ public class MllpTransactionConfiguration {
 
     public String getSendingFacility() {
         return sendingFacility;
+    }
+    
+    public String[] getAllowedRequestMessageTypes() {
+        return allowedRequestMessageTypes;
+    }
+
+    public String[] getAllowedResponseMessageTypes() {
+        return allowedResponseMessageTypes;
+    }
+
+    public Parser getParser() {
+        return parser;
+    }
+
+    public NakFactory getNakFactory() {
+        return nakFactory;
     }
 }
 

@@ -46,7 +46,7 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
         MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
                 exchange.getIn(), 
                 getMllpEndpoint().getConfiguration().getCharsetName(),
-                getMllpEndpoint().getParser());
+                getMllpEndpoint().getTransactionConfiguration().getParser());
         
         if(msg == null) {
             Object body = exchange.getIn().getBody();

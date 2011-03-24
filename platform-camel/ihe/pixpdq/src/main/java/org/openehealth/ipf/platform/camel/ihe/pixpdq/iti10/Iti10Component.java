@@ -20,9 +20,6 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-
-import ca.uhn.hl7v2.parser.Parser;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.BasicNakFactory;
 
 /**
@@ -30,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdq.BasicNakFactory;
  * @author Dmytro Rud
  */
 public class Iti10Component extends MllpComponent {
-    private static final MllpTransactionConfiguration CONFIGURATION =
+    public static final MllpTransactionConfiguration CONFIGURATION =
         new MllpTransactionConfiguration(
                 "2.5", 
                 "PIX adapter", 
@@ -42,15 +39,15 @@ public class Iti10Component extends MllpComponent {
                 new String[] {"ACK"},
                 new String[] {"*"}, 
                 new boolean[] {true},
-                new boolean[] {false});
+                new boolean[] {false},
+                new PipeParser(),
+                new BasicNakFactory());
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti10ClientAuditStrategy();
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new Iti10ServerAuditStrategy();
-    private static final Parser PARSER = new PipeParser();
-    private static final NakFactory NAK_FACTORY = new BasicNakFactory();
-    
+
 
     public Iti10Component() {
         super();
@@ -73,15 +70,5 @@ public class Iti10Component extends MllpComponent {
     @Override
     public MllpTransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
-    }
-
-    @Override
-    public Parser getParser() {
-        return PARSER;
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return NAK_FACTORY;
     }
 }

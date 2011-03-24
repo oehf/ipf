@@ -30,7 +30,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdq.QpdAwareNakFactory;
  * @author Dmytro Rud
  */
 public class Iti9Component extends MllpComponent {
-    private static final MllpTransactionConfiguration CONFIGURATION =
+    public static final MllpTransactionConfiguration CONFIGURATION =
         new MllpTransactionConfiguration(
                 "2.5", 
                 "PIX adapter", 
@@ -42,14 +42,14 @@ public class Iti9Component extends MllpComponent {
                 new String[] {"RSP"},
                 new String[] {"K23"}, 
                 new boolean[] {true},
-                new boolean[] {false});
+                new boolean[] {false},
+                CustomModelClassUtils.createParser("pix", "2.5"),
+                new QpdAwareNakFactory("RSP", "K23"));
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti9ClientAuditStrategy();
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new Iti9ServerAuditStrategy();
-    private static final Parser PARSER = CustomModelClassUtils.createParser("pix", "2.5");
-    private static final NakFactory NAK_FACTORY = new QpdAwareNakFactory("RSP", "K23");
 
 
     public Iti9Component() {
@@ -73,15 +73,5 @@ public class Iti9Component extends MllpComponent {
     @Override
     public MllpTransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
-    }
-
-    @Override
-    public Parser getParser() {
-        return PARSER;
-    }
-
-    @Override
-    public NakFactory getNakFactory() {
-        return NAK_FACTORY;
     }
 }

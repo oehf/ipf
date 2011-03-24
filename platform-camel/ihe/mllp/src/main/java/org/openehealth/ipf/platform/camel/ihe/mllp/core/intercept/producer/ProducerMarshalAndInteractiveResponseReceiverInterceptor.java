@@ -176,7 +176,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
             // All errors will be ignored
             if (getMllpEndpoint().isAutoCancel()) {
                 try {
-                    String cancel = createCancelMessage((Message) request.getTarget(), getMllpEndpoint().getParser());
+                    String cancel = createCancelMessage((Message) request.getTarget(), config.getParser());
                     exchange.getIn().setBody(cancel);
                     getWrappedProcessor().process(exchange);
                 } catch (Exception e) {
@@ -186,7 +186,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         }
 
         // unmarshal and return
-        MessageAdapter rsp = MessageAdapters.make(getMllpEndpoint().getParser(), responseString);
+        MessageAdapter rsp = MessageAdapters.make(config.getParser(), responseString);
         if (recordsCount != 0) {
             Terser responseTerser = new Terser((Message) rsp.getTarget());
             String recordsCountString = Integer.toString(recordsCount);

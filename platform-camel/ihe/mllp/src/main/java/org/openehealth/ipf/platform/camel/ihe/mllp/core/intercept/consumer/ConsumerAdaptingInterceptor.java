@@ -60,7 +60,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
         MessageAdapter originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, MessageAdapter.class); 
         Message originalMessage = (Message) originalAdapter.getTarget();
         MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
-        Parser parser = getMllpEndpoint().getParser();
+        Parser parser = config.getParser();
         ModelClassFactory classFactory = parser.getFactory();
         
         // run the route
@@ -69,8 +69,8 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
             checkExchangeFailed(exchange, originalMessage, classFactory);
         } catch(Exception e) {
             LOG.error("Message processing failed", e);
-            resultMessage(exchange).setBody(
-                    MllpMarshalUtils.createNak(e, originalMessage, getMllpEndpoint()));
+            resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
+                    e, originalMessage, getMllpEndpoint().getTransactionConfiguration()));
         }
 
         org.apache.camel.Message m = Exchanges.resultMessage(exchange);
@@ -84,7 +84,8 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
         
         // additionally: an Exception in the body?
         if((msg == null) && (body instanceof Exception)) {
-            msg = MllpMarshalUtils.createNak((Exception) body, originalMessage, getMllpEndpoint());
+            msg = MllpMarshalUtils.createNak((Exception) body, originalMessage,
+                    getMllpEndpoint().getTransactionConfiguration());
         }
         
         // no known data type --> determine user's intention on the basis of a header 
@@ -119,7 +120,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
             HL7v2Exception exception = new HL7v2Exception(
                     "Error in PIX/PDQ route", 
                     getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
-            Message nak = getMllpEndpoint().getNakFactory().createNak(
+            Message nak = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createNak(
                     classFactory,
                     originalMessage, 
                     exception, 
@@ -151,7 +152,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
             }
             LOG.error("Message processing failed", t);
             resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
-                    t, original, getMllpEndpoint()));
+                    t, original, getMllpEndpoint().getTransactionConfiguration()));
         }
     }
     

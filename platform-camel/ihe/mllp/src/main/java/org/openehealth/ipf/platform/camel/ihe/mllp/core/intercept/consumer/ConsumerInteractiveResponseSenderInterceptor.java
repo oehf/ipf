@@ -58,7 +58,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Parser parser = getMllpEndpoint().getParser();
+        Parser parser = getMllpEndpoint().getTransactionConfiguration().getParser();
         MessageAdapter request = (MessageAdapter) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
         Message requestMessage = (Message) request.getTarget();
         Terser requestTerser = new Terser(requestMessage);
@@ -151,7 +151,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             MessageAdapter response = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
             responseMessage = considerFragmentingResponse(response, threshold, queryTag, chainId);
         }
-        Exchanges.resultMessage(exchange).setBody(getMllpEndpoint().getParser().encode(responseMessage));
+        Exchanges.resultMessage(exchange).setBody(parser.encode(responseMessage));
     }
      
     
@@ -193,7 +193,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         final int fragmentsCount = (recordBoundaries.size() + threshold - 2) / threshold; 
         
         // create a new chain of fragments
-        Parser parser = getMllpEndpoint().getParser();
+        Parser parser = getMllpEndpoint().getTransactionConfiguration().getParser();
         String continuationPointer = null;
         for (int currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
             // create the current fragment as String 

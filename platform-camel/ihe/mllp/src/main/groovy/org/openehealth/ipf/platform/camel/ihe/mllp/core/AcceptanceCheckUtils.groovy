@@ -16,11 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core
 
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAcceptanceException;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
-import ca.uhn.hl7v2.parser.Parser
 
 /**
  * Groovy subroutines for HL7 message acceptance checks.
@@ -38,10 +34,9 @@ class AcceptanceCheckUtils {
      */
      static void checkRequestAcceptance(
              MessageAdapter msg, 
-             MllpTransactionConfiguration config,
-             Parser parser) throws MllpAcceptanceException 
+             MllpTransactionConfiguration config) throws MllpAcceptanceException
      {
-         checkMessageAcceptance(msg, config, parser, 'Request')
+         checkMessageAcceptance(msg, config, 'Request')
      }
      
      
@@ -50,10 +45,9 @@ class AcceptanceCheckUtils {
       */
      static void checkResponseAcceptance(
              MessageAdapter msg, 
-             MllpTransactionConfiguration config,
-             Parser parser) throws MllpAcceptanceException 
+             MllpTransactionConfiguration config) throws MllpAcceptanceException
      {
-         checkMessageAcceptance(msg, config, parser, 'Response')
+         checkMessageAcceptance(msg, config, 'Response')
          
          if( ! ['AA', 'AR', 'AE', 'CA', 'CR', 'CE'].contains(msg.MSA[1]?.value)) {
              throw new MllpAcceptanceException("Bad response: missing or invalid MSA segment")
@@ -67,8 +61,6 @@ class AcceptanceCheckUtils {
       *          {@link MessageAdapter} representing the message.
       * @param config
       *          transaction-specific parameters.
-      * @param parser
-      *          HL7 parser.
       * @param direction
       *          either 'Resuest' or 'Response'.
       * @throws MllpAcceptanceException
@@ -77,8 +69,7 @@ class AcceptanceCheckUtils {
      private static void checkMessageAcceptance(
              MessageAdapter msg, 
              MllpTransactionConfiguration config,
-             Parser parser,
-             String direction) throws MllpAcceptanceException 
+             String direction) throws MllpAcceptanceException
      {
          def version = msg.MSH[12].value 
          if(version != config.hl7Version) {
@@ -97,7 +88,7 @@ class AcceptanceCheckUtils {
 
          def structure = msg.MSH[9][3].value
          if(structure) {
-             def expected = parser.getMessageStructureForEvent("${msgType}_${triggerEvent}", version)
+             def expected = config.parser.getMessageStructureForEvent("${msgType}_${triggerEvent}", version)
              
              // the expected structure must be equal to the actual one,
              // but second components may be omitted in acknowledgements 
