@@ -30,7 +30,10 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
  * @author Jens Riemschneider
  */
 class TestIti43 extends StandardTestContainer {
-    def SERVICE1 = "xds-iti43://localhost:${port}/xds-iti43-service1"
+    def SERVICE1 = "xds-iti43://localhost:${port}/xds-iti43-service1" +
+            '?inInterceptors=#clientInPayloadLoggingInterceptor' +
+            '&outInterceptors=#clientOutPayloadLoggingInterceptor,#outStreamSubstituteInterceptor'
+
     def SERVICE2 = "xds-iti43://localhost:${port}/xds-iti43-service2"
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti43-service2"

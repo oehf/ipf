@@ -50,5 +50,20 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
             </list>
         </property>
     </bean>
+
+    <bean id="clientInPayloadLoggingInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
+        <constructor-arg value="XDS.b Document Consumer: Incoming ITI-43 response" />
+    </bean>
+    <bean id="clientOutPayloadLoggingInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
+        <constructor-arg value="XDS.b Document Consumer: Outgoing ITI-43 request" />
+    </bean>
+    <bean id="serviceInPayloadLoggingInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
+        <constructor-arg value="XDS.b Document Repository: Incoming ITI-43 request" />
+    </bean>
+    <bean id="serviceOutPayloadLoggingInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
+        <constructor-arg value="XDS.b Document Repository: Outgoing ITI-43 response" />
+    </bean>
+    <bean id="outStreamSubstituteInterceptor" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor" />
+
 </beans>
         
