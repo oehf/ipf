@@ -227,6 +227,8 @@ public class FlowRepositoryImpl extends HibernateDaoSupport implements FlowRepos
 
         int purgeCount = flowPurgeCriteria.getMaxPurgeCount();
         if (purgeCount != FlowPurgeCriteria.DEFAULT_MAX_PURGE_COUNT) {
+            // Setting max results adds "fetch first 100 rows only" to the select query
+            // Works on Derby version 1.5.x and above with Hibernate version 3.5.x and above
             criteria.setMaxResults(purgeCount);
         }
         return criteria.list();

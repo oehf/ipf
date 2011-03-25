@@ -16,9 +16,17 @@
 package org.openehealth.ipf.commons.flow.derby;
 
 /**
+ * <b>Note: This dialect should not be used with Hibernate version 3.5.x and
+ * above.</b><br>
+ * Starting with Hibernate 3.5.x use the
+ * {@link org.hibernate.dialect.DerbyDialect} implementation. It includes the
+ * repeatable read isolation level below, as well as many other improvements for
+ * Derby.
+ * 
  * @author Martin Krasser
  */
-public class DerbyDialect extends org.hibernate.dialect.DerbyDialect{
+@Deprecated
+public class DerbyDialect extends org.hibernate.dialect.DerbyDialect {
 
     @Override
     public String getForUpdateString() {
@@ -26,6 +34,6 @@ public class DerbyDialect extends org.hibernate.dialect.DerbyDialect{
         // read isolation level (rs).
         // (see also Derby dev. guide)
         return " for update with rs";
-    } 
-    
+    }
+
 }
