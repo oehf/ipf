@@ -33,7 +33,10 @@ import javax.activation.DataHandler;
 public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
-        from('xds-iti43:xds-iti43-service1')
+        from('xds-iti43:xds-iti43-service1' +
+             '?inInterceptors=#serviceInPayloadLoggingInterceptor' +
+             '&outInterceptors=#serviceOutPayloadLoggingInterceptor,#outStreamSubstituteInterceptor'
+        )
             .validate().iti43Request()
             .process { checkValue(it, 'service 1') } 
             .validate().iti43Response()

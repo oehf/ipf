@@ -108,7 +108,7 @@ abstract public class AuditInterceptor extends AbstractSafeInterceptor {
     
     
     /**
-     * Returns <code>true</code> when the given XCF message is an inbound one
+     * Returns <code>true</code> when the given CXF message is an inbound one
      * (i.e. input or input-fault).
      */
     protected static boolean isInboundMessage(SoapMessage message) {
