@@ -55,6 +55,7 @@ class ExtensionMethodActivator implements ConditionalActivator {
              .findAll{it.modifiers & Modifier.PUBLIC}
              .findAll{it.name != 'getExtensions'}
              .findAll{it.name != 'setExtensions'}
+             .findAll{it.name != '__$swapInit'}
      }
 
      private static def activateExtensionCode(def clazz, def code) {
