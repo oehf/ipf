@@ -46,9 +46,11 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
                 '&outInterceptors=#outLogInterceptor')
             .validate().iti56Response()
             .process {
-                assert it.pattern == ExchangePattern.InOnly
-                assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == 
-                    "corr ${asyncResponseCount.getAndIncrement() * 2}"
+                if (! it.in.body.contains('<soap:Fault')) {
+                    assert it.pattern == ExchangePattern.InOnly
+                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] ==
+                        "corr ${asyncResponseCount.getAndIncrement() * 2}"
+                }
             }
             .delay(ASYNC_DELAY)
 
