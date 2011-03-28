@@ -21,8 +21,6 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.ihe.ws.cxf.async.InFaultHackInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.async.InRelatesToHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
@@ -66,9 +64,7 @@ public class XcaAsyncResponseServiceFactory extends ItiServiceFactory {
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
-        svrFactory.getInInterceptors().add(new InRelatesToHackInterceptor());
-        svrFactory.getInInterceptors().add(new InFaultHackInterceptor());
-        
+
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
             if (serviceInfo.isAuditRequestPayload()) {

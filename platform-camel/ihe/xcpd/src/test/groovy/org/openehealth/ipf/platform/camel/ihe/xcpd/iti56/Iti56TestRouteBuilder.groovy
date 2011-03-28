@@ -16,9 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti56;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
@@ -42,7 +40,10 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
 
         // receiver of asynchronous responses
-        from('xcpd-iti56-async-response:iti56service-response?correlator=#correlator')
+        from('xcpd-iti56-async-response:iti56service-response' +
+                '?correlator=#correlator' +
+                '&inInterceptors=#inLogInterceptor' +
+                '&outInterceptors=#outLogInterceptor')
             .validate().iti56Response()
             .process {
                 assert it.pattern == ExchangePattern.InOnly
@@ -53,13 +54,22 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
 
 
         // responding route
-        from('xcpd-iti56:iti56service')
+        from('xcpd-iti56:iti56service' +
+                '?inInterceptors=#inLogInterceptor' +
+                '&outInterceptors=#outLogInterceptor')
             .validate().iti56Request()
             .process {
                 Exchanges.resultMessage(it).body = RESPONSE
                 responseCount.incrementAndGet()
             }
             .validate().iti56Response()
+
+
+        // responding route for testing errors
+        from('xcpd-iti56:iti56service-error' +
+                '?inInterceptors=#inLogInterceptor' +
+                '&outInterceptors=#outLogInterceptor')
+            .throwException(new RuntimeException("abcd"))
     }
 
 }

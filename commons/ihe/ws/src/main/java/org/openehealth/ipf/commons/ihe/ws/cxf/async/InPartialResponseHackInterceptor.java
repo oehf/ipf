@@ -35,7 +35,7 @@ public class InPartialResponseHackInterceptor extends AbstractPhaseInterceptor<M
     @Override
     public void handleMessage(Message message) {
         /* 
-         * See line #727 in org.apache.cxf.endpoint.ClientImpl.java (CXF 2.2.8) --
+         * See line #783 in org.apache.cxf.endpoint.ClientImpl.java (CXF 2.3.2) --
          * on partial responses, the exchange's waiters will be not notified 
          * and thus keep waiting until a timeout occurs.
          */
