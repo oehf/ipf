@@ -49,7 +49,9 @@ public class Iti56Endpoint extends DefaultItiEndpoint {
             false,
             "wsdl/iti56/iti56-raw.wsdl",
             new String[][] {new String[] {"PatientLocationQueryRequest", null, "IHE/XCPD_PLQ"}},
-            new String[][] {new String[] {"PatientLocationQueryResponse", null, "IHE/XCPD_PLQ"}},
+            new String[][] {new String[]
+                    {"PatientLocationQueryResponse", null, "IHE/XCPD_PLQ"},
+                    {"Fault", null, "soap-1.2-envelope"}},
             null,
             false,
             true);

@@ -54,4 +54,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     
     <import resource="../ehcache-spring.xml" />
 
+    <bean id="inLogInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+    <bean id="outLogInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+
 </beans>

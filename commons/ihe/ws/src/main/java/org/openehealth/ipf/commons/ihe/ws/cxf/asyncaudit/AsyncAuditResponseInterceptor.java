@@ -17,16 +17,19 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.binding.soap.SoapHeader;
 import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.ServiceInvokerInterceptor;
 import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.Phase;
+import org.apache.cxf.ws.addressing.VersionTransformer;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.ihe.ws.cxf.async.InRelatesToHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+import org.w3c.dom.Element;
 
 
 /**
@@ -38,7 +41,9 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorIntercept
  */
 public class AsyncAuditResponseInterceptor extends AuditInterceptor {
     private static final transient Log LOG = LogFactory.getLog(AsyncAuditResponseInterceptor.class);
-    
+
+    private static final VersionTransformer WSA_VERSION_HELPER = new VersionTransformer();
+
     private final AsynchronyCorrelator correlator;
     private final boolean asyncReceiver;
     private final boolean serverSide;
@@ -98,7 +103,15 @@ public class AsyncAuditResponseInterceptor extends AuditInterceptor {
         // RelatesTo header has been properly initialized, and the dataset
         // has not been purged from the asynchrony correlator yet.
         if (asyncReceiver) {
-            String messageId = InRelatesToHackInterceptor.retrieveMessageId(message.getHeaders());
+            String messageId = null;
+            for (Header header : message.getHeaders()) {
+                if ("RelatesTo".equals(header.getName().getLocalPart())
+                        && WSA_VERSION_HELPER.isSupported(header.getName().getNamespaceURI()))
+                {
+                    messageId = ((Element) header.getObject()).getTextContent();
+                    break;
+                }
+            }
             if (messageId != null) {
                 auditDataset = correlator.getAuditDataset(messageId);
                 // message.getExchange().put(CXF_EXCHANGE_KEY, auditDataset);

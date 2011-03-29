@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti56;
 
-import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
@@ -24,6 +23,8 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import static org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils.*
+import javax.xml.ws.soap.SOAPFaultException
+import org.apache.camel.ExchangePattern
 
 /**
  * Tests for ITI-56.
@@ -33,6 +34,8 @@ class TestIti56 extends StandardTestContainer {
 
      final String SERVICE1_URI =    "xcpd-iti56://localhost:${port}/iti56service?correlator=#correlator";
      final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti56service-response";
+
+     final String SERVICE_URI_ERROR = "xcpd-iti56://localhost:${port}/iti56service-error?correlator=#correlator";
 
      static final String REQUEST = readFile('iti56/iti56-sample-request.xml')
 
@@ -75,7 +78,28 @@ class TestIti56 extends StandardTestContainer {
          
          assert auditSender.messages.size() == N * 4
      }
-     
+
+
+    @Test
+    void testSyncError() {
+        def requestExchange = new DefaultExchange(camelContext)
+        requestExchange.in.body = REQUEST
+        def responseExchange = producerTemplate.send(SERVICE_URI_ERROR, requestExchange)
+        assert responseExchange.exception instanceof SOAPFaultException
+        assert responseExchange.exception.message == 'abcd'
+    }
+
+
+    @Test
+    void testAsyncError() {
+        def requestExchange = new DefaultExchange(camelContext)
+        requestExchange.in.body = REQUEST
+        requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = SERVICE1_RESPONSE_URI
+        def responseExchange = producerTemplate.send(SERVICE_URI_ERROR, requestExchange)
+        assert responseExchange.exception == null
+        assert responseExchange.pattern == ExchangePattern.InOnly
+    }
+
 
      private void send(
              String endpointUri, 

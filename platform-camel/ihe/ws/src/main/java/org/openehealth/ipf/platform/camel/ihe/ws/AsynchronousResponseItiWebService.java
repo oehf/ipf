@@ -25,9 +25,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.headers.Header;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
-import org.openehealth.ipf.commons.ihe.ws.cxf.async.InRelatesToHackInterceptor;
+import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
+import org.apache.cxf.ws.addressing.JAXWSAConstants;
 
 /**
  * Base class for receivers of asynchronous responses for Web Service-based IHE transactions.
@@ -48,8 +48,10 @@ public class AsynchronousResponseItiWebService extends DefaultItiWebService {
             ExchangePattern exchangePattern) 
     {
         MessageContext messageContext = new WebServiceContextImpl().getMessageContext();
-        List<Header> messageHeaders = (List<Header>) messageContext.get(Header.HEADER_LIST);        
-        String messageId = InRelatesToHackInterceptor.retrieveMessageId(messageHeaders);
+        AddressingPropertiesImpl apropos = (AddressingPropertiesImpl) messageContext.get(JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND);
+        String messageId = ((apropos != null) && (apropos.getRelatesTo() != null))
+                ? apropos.getRelatesTo().getValue()
+                : null;
 
         if (messageId != null) {
             DefaultItiEndpoint endpoint = (DefaultItiEndpoint) getConsumer().getEndpoint();

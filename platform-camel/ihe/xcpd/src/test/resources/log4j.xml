@@ -73,7 +73,11 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
     <logger name="org.openehealth.ipf.commons.ihe">
          <level value="DEBUG"/>
     </logger>
-        
+
+    <logger name="org.apache.cxf.interceptor.AbstractLoggingInterceptor">
+         <level value="ERROR"/>
+    </logger>
+
     <root>
         <level value="WARN"/>
         <appender-ref ref="CONSOLE"/>
