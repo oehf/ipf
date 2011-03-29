@@ -1018,8 +1018,6 @@
                     <ajdtVersion>none</ajdtVersion>
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                         <!-- Add explicitly the groovy libs. Groovy nature alone seems not to be enough. -->
-                        <classpathContainer>GROOVY_SUPPORT</classpathContainer>
                     </classpathContainers>
                  </configuration>
             </plugin>
