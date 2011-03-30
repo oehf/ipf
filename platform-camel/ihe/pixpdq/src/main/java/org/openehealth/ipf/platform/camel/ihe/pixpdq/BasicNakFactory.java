@@ -19,7 +19,10 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
+import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 
 /**
@@ -42,12 +45,31 @@ public class BasicNakFactory implements NakFactory {
             ModelClassFactory classFactory,
             Message originalMessage,
             AbstractHL7v2Exception exception,
-            AckTypeCode ackTypeCode) 
+            AckTypeCode ackTypeCode)
     {
         return MessageUtils.nak(
                 classFactory,
                 originalMessage,
                 exception,
                 ackTypeCode);
+    }
+
+    @Override
+    public Message createDefaultNak(
+            MllpTransactionConfiguration config,
+            Throwable exception)
+    {
+        HL7v2Exception hl7v2Exception = new HL7v2Exception(
+                MllpMarshalUtils.formatErrorMessage(exception),
+                config.getRequestErrorDefaultErrorCode(),
+                exception);
+
+        return MessageUtils.defaultNak(
+                hl7v2Exception,
+                config.isCAckTypeCodes() ? AckTypeCode.CR : AckTypeCode.AR,
+                config.getHl7Version(),
+                config.getSendingApplication(),
+                config.getSendingFacility(),
+                config.getDefaultNakMsh9());
     }
 }

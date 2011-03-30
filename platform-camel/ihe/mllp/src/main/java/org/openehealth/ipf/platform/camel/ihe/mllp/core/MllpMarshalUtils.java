@@ -239,33 +239,17 @@ public class MllpMarshalUtils {
                     t); 
         }
 
+        AckTypeCode ackTypeCode = (t instanceof MllpAcceptanceException) ? AckTypeCode.AR : AckTypeCode.AE;
+        if (config.isCAckTypeCodes()) {
+            ackTypeCode = (ackTypeCode == AckTypeCode.AR) ? AckTypeCode.CR : AckTypeCode.CE;
+        }
         ca.uhn.hl7v2.model.Message nak = config.getNakFactory().createNak(
                 config.getParser().getFactory(),
                 original, 
                 hl7Exception,
-                (t instanceof MllpAcceptanceException) ? AckTypeCode.AR : AckTypeCode.AE);
+                ackTypeCode);
 
         return new MessageAdapter(nak);
-    }
-
-
-    public static ca.uhn.hl7v2.model.Message createDefaultNak(
-            Throwable t,
-            MllpTransactionConfiguration config)
-    {
-        HL7v2Exception hl7e = new HL7v2Exception(
-                MllpMarshalUtils.formatErrorMessage(t),
-                config.getRequestErrorDefaultErrorCode(),
-                t);
-
-        ca.uhn.hl7v2.model.Message nak = MessageUtils.defaultNak(
-                hl7e,
-                AckTypeCode.AR,
-                config.getHl7Version(),
-                config.getSendingApplication(),
-                config.getSendingFacility());
-
-        return nak;
     }
 
 

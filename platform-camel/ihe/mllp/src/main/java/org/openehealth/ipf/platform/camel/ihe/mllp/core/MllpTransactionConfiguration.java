@@ -50,9 +50,12 @@ public class MllpTransactionConfiguration {
     private final Parser parser;
     private final NakFactory nakFactory;
 
+    private final boolean cAckTypeCodes;
+    private final String defaultNakMsh9;
+
     /**
      * Constructor.
-     * 
+     *
      * @param hl7Version
      *      HL7 version for acceptance checks and default NAKs (MSH-12).
      * @param sendingApplication
@@ -64,26 +67,35 @@ public class MllpTransactionConfiguration {
      * @param responseErrorDefaultErrorCode
      *      default error code for response-related NAKs.
      * @param allowedRequestMessageTypes
-     *      array of allowed request message types, 
+     *      array of allowed request message types,
      *      e.g. <code>{"ADT", "MDM"}</code>.
      * @param allowedRequestTriggerEvents
-     *      array of allowed request trigger events  
-     *      for each request message type,  
+     *      array of allowed request trigger events
+     *      for each request message type,
      *      e.g. <code>{"A01 A02 A03", "T06 T07 T08"}</code>.
      * @param allowedResponseMessageTypes
      *      array of allowed response message types, e.g. <code>{"ACK", "RSP"}</code>.
      * @param allowedResponseTriggerEvents
      *      array of allowed response trigger events for each message type,
-     *      ignored for messages of type "ACK".  
+     *      ignored for messages of type "ACK".
      * @param auditabilityFlags
-     *      flags of whether the messages of corresponding 
-     *      type should be audited. 
+     *      flags of whether the messages of corresponding
+     *      type should be audited.
      *      If <code>null</code>, the transaction will not perform any auditing.
      * @param responseContinuabilityFlags
-     *      flags of whether the messages of corresponding 
-     *      type should support HL7 response continuations. 
+     *      flags of whether the messages of corresponding
+     *      type should support HL7 response continuations.
      *      If <code>null</code>, no continuations will be supported.
-     *
+     * @param parser
+     *      transaction-specific HL7v2 NAK parser.
+     * @param nakFactory
+     *      transaction-specific HL7v2 NAK factory.
+     * @param cAckTypeCodes
+     *      if <code>true</code>, HL7v2 acknowledgement codes
+     *      <tt>CA</tt>, <tt>CE</tt>, <tt>CR</tt> will be used instead of the default
+     *      <tt>AA</tt>, <tt>AE</tt>, <tt>AR</tt>.
+     * @param defaultNakMsh9
+     *      desired contents of MSH-9 in this transaction's default NAKs.
      */
     public MllpTransactionConfiguration(
             String hl7Version,
@@ -98,7 +110,9 @@ public class MllpTransactionConfiguration {
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags,
             Parser parser,
-            NakFactory nakFactory)
+            NakFactory nakFactory,
+            boolean cAckTypeCodes,
+            String defaultNakMsh9)
     {
         notNull(hl7Version);
         notNull(sendingApplication);
@@ -110,6 +124,7 @@ public class MllpTransactionConfiguration {
         noNullElements(allowedResponseTriggerEvents);
         notNull(parser);
         notNull(nakFactory);
+        notNull(defaultNakMsh9);
 
         notEmpty(allowedRequestMessageTypes);
         isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
@@ -141,6 +156,9 @@ public class MllpTransactionConfiguration {
 
         this.parser = parser;
         this.nakFactory = nakFactory;
+
+        this.cAckTypeCodes = cAckTypeCodes;
+        this.defaultNakMsh9 = defaultNakMsh9;
     }
 
     
@@ -300,6 +318,14 @@ public class MllpTransactionConfiguration {
 
     public NakFactory getNakFactory() {
         return nakFactory;
+    }
+
+    public boolean isCAckTypeCodes() {
+        return cAckTypeCodes;
+    }
+
+    public String getDefaultNakMsh9() {
+        return defaultNakMsh9;
     }
 }
 

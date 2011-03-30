@@ -47,7 +47,8 @@ public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
                 responseErrorDefaultErrorCode, allowedRequestMessageTypes,
                 allowedRequestTriggerEvents, allowedResponseMessageTypes,
                 allowedResponseTriggerEvents, auditabilityFlags,
-                responseContinuabilityFlags, parser, nakFactory);
+                responseContinuabilityFlags, parser, nakFactory,
+                false, "ACK");
     }
     
     @Override

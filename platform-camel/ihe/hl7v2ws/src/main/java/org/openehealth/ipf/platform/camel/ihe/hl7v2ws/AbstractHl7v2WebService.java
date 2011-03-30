@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkRequestAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkResponseAcceptance;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.createDefaultNak;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.createNak;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.extractMessageAdapter;
 
@@ -148,7 +147,7 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      *      NAK as a String ready for WS transport.
      */
     protected String defaultNakString(Throwable exception) {
-        Message nak = createDefaultNak(exception, config);
+        Message nak = config.getNakFactory().createDefaultNak(config, exception);
         return renderForWs(nak);
     }
     

@@ -113,25 +113,28 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
             Message originalMessage,
             ModelClassFactory classFactory) 
     {
-        Object header = m.getHeader(MllpComponent.ACK_TYPE_CODE_HEADER);
-        if(header == AckTypeCode.AA) {
-            Message ack = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createAck(
+        Object header = m.getHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AckTypeCode.class);
+        if (header == null) {
+            return null;
+        }
+
+        Message ack;
+        if ((header == AckTypeCode.AA) || (header == AckTypeCode.CA)) {
+            ack = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createAck(
                     classFactory,
                     originalMessage,
                     (AckTypeCode) header);
-            return new MessageAdapter(ack);
-        } else if((header == AckTypeCode.AE) || (header == AckTypeCode.AR)) {
+        } else {
             HL7v2Exception exception = new HL7v2Exception(
                     "Error in PIX/PDQ route", 
                     getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
-            Message nak = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createNak(
+            ack = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createNak(
                     classFactory,
                     originalMessage, 
                     exception, 
                     (AckTypeCode) header); 
-            return new MessageAdapter(nak);
         }
-        return null;
+        return new MessageAdapter(ack);
     }
     
     

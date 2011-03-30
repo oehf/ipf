@@ -55,7 +55,9 @@ public class Pcd01Component extends DefaultWsComponent {
             null,
             null,
             new PipeParser(),
-            new BasicNakFactory());
+            new BasicNakFactory(),
+            false,
+            "ACK^R01^ACK");
 
 
     @Override
