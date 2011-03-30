@@ -21,8 +21,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
-import ca.uhn.hl7v2.parser.Parser;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.QpdAwareNakFactory;
 
 /**
@@ -44,7 +42,9 @@ public class Iti9Component extends MllpComponent {
                 new boolean[] {true},
                 new boolean[] {false},
                 CustomModelClassUtils.createParser("pix", "2.5"),
-                new QpdAwareNakFactory("RSP", "K23"));
+                new QpdAwareNakFactory("RSP", "K23"),
+                false,
+                "ACK");
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti9ClientAuditStrategy();

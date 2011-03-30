@@ -41,7 +41,9 @@ public class Iti10Component extends MllpComponent {
                 new boolean[] {true},
                 new boolean[] {false},
                 new PipeParser(),
-                new BasicNakFactory());
+                new BasicNakFactory(),
+                false,
+                "ACK");
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti10ClientAuditStrategy();

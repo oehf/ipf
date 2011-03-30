@@ -111,7 +111,8 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
      * and stores it into the exchange.
      */
     private void processUnmarshallingException(Exchange exchange, Throwable t) {
-        Message nak = MllpMarshalUtils.createDefaultNak(t, getMllpEndpoint().getTransactionConfiguration());
+        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
+        Message nak = config.getNakFactory().createDefaultNak(config, t);
         resultMessage(exchange).setBody(nak);
     }
 

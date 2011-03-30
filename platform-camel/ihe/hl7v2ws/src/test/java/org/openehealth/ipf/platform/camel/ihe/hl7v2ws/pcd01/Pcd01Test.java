@@ -69,6 +69,7 @@ public class Pcd01Test extends StandardTestContainer {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST.replace("MSH", "ERROR"));
         assertTrue(response.startsWith("MSH|^~\\&|"));
+        assertTrue(response.contains("|ACK^R01^ACK|"));
         assertTrue(response.contains("Application internal error"));
     }
     

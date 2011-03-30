@@ -31,6 +31,10 @@ public interface NakFactory {
             Message originalMessage,
             AckTypeCode ackTypeCode);
 
+    Message createDefaultNak(
+            MllpTransactionConfiguration config,
+            Throwable exception);
+
     Message createNak(
             ModelClassFactory classFactory,
             Message originalMessage,

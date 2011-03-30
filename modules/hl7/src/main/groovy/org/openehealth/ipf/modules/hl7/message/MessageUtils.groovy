@@ -39,7 +39,7 @@ import org.joda.time.DateTime
  * methods directly to the affected classes.
  * 
  * @author Christian Ohr
- * @author Marek Václavík
+ * @author Marek Vï¿½clavï¿½k
  */
 class MessageUtils {
 
@@ -158,12 +158,13 @@ class MessageUtils {
             AckTypeCode ackType, 
             String version,
             String sendingApplication,
-            String sendingFacility) 
+            String sendingFacility,
+            String msh9)
 	{
     	def cause = encodeHL7String(e.message, null)
     	def now = hl7Now()
     	
-		def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||ACK|unknown|T|$version|\r" +
+		def cannedNak = "MSH|^~\\&|${sendingApplication}|${sendingFacility}|unknown|unknown|$now||${msh9}|unknown|T|$version|\r" +
 						"MSA|AE|MsgIdUnknown|$cause|\r"
 		def nak = new GenericParser().parse(cannedNak)
 		e.populateMessage(nak, ackType)
@@ -174,7 +175,7 @@ class MessageUtils {
      *  @return a negative ACK response message constructed from scratch
      */
     static Message defaultNak(AbstractHL7v2Exception e, AckTypeCode ackType, String version) {
-        defaultNak(e, ackType, version, 'unknown', 'unknown')
+        defaultNak(e, ackType, version, 'unknown', 'unknown', 'ACK')
     }
     
     /** 
