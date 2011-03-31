@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2wsCamelValidators.pcd01RequestValidator;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2wsCamelValidators.pcd01ResponseValidator;
 
@@ -23,7 +24,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 /**
  * @author Mitko Kolev
  *
@@ -32,13 +32,16 @@ public class Pcd01RouteBuilder extends SpringRouteBuilder {
    
     public static final String PCD_01_SPEC_REQUEST = load("pcd01/pcd01-request.hl7").toString();
     public static final String PCD_01_SPEC_RESPONSE = load("pcd01/pcd01-response.hl7").toString();
+    public static final String PCD_01_SPEC_RESPONSE_INVALID = load(
+            "pcd01/pcd01-response-invalid.hl7").toString();
 
     /* (non-Javadoc)
      * @see org.apache.camel.builder.RouteBuilder#configure()
      */
     @Override
     public void configure() throws Exception {
-        from("pcd-pcd01:devicedata")
+        
+    from("pcd-pcd01:devicedata")
         .onException(Exception.class).maximumRedeliveries(0).end()
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
@@ -46,10 +49,13 @@ public class Pcd01RouteBuilder extends SpringRouteBuilder {
         .throwException(new RuntimeException())
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
+    from("pcd-pcd01:route_unacceptable_response")
+        .process(setOutBody(PCD_01_SPEC_RESPONSE_INVALID));
+
     from("pcd-pcd01:route_inbound_validation")
-     .onException(ValidationException.class)
-         .maximumRedeliveries(0)
-         .end()
+        .onException(ValidationException.class)
+        .maximumRedeliveries(0)
+        .end()
         .process(pcd01RequestValidator())
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     

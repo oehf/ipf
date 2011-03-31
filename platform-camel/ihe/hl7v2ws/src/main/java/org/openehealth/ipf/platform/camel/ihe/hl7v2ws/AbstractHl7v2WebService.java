@@ -16,12 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.util.MessageRenderer.render;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkRequestAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkResponseAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.createNak;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.extractMessageAdapter;
 
 import org.apache.camel.Exchange;
+import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -29,13 +31,13 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
-import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 
 /**
  * Generic implementation of an HL7v2-based Web Service.
  * 
  * @author Dmytro Rud
+ * @author Mitko Kolev
  * @author Stefan Ivanov
  */
 public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
@@ -48,79 +50,69 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
         this.config = config;
     }
 
-
-    protected String doProcess(String hl7RequestString) {
-        hl7RequestString = hl7RequestString.trim();
-        
-        // message acceptance and validation
-        MessageAdapter msg;
+    protected String doProcess(String request) {
+        Validate.notEmpty(request, "Empty request!");
+        // preprocess
+        MessageAdapter msgAdapter;
         try {
-            msg = MessageAdapters.make(config.getParser(), hl7RequestString);
-            checkRequestAcceptance(msg, config);
+            msgAdapter = MessageAdapters.make(config.getParser(),
+                    request.trim());
+            checkRequestAcceptance(msgAdapter, config);
         } catch (Exception e) {
-            LOG.error(msg("unacceptable request, return NAK"));
-            return defaultNakString(e);
+            return populatePreProcessingNak(e);
         }
-       
-        // delegate message processing to the route
-        MessageAdapter originalRequest = msg.copy();
-        Exchange exchange = super.process(msg);
-        Exception exchangeException = exchange.getException();
+        // process
+        MessageAdapter originalRequest = msgAdapter.copy();
+        Exchange exchange = super.process(msgAdapter);
 
-        // check processing results after the route
-        if (exchangeException != null) {
-            LOG.error(msg("exchange failed, return NAK"));
-            return nakString(originalRequest, exchangeException);
+        if (exchange.getException() != null) {
+            return populateProcessingNak(originalRequest,
+                    exchange.getException());
         }
-
-        // create result from the outbound message
+        // postprocess
         try {
-            MessageAdapter responseMsg = extractMessageAdapter(
+            msgAdapter = extractMessageAdapter(
                     resultMessage(exchange),
                     exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                     config.getParser());
-
-            checkResponseAcceptance(responseMsg, config);
-            return renderForWs(responseMsg);
-        } catch (Exception formatException) {
-            LOG.error(msg("unacceptable response, return NAK"),
-                    formatException);
-            return nakString(originalRequest, formatException);
+            checkResponseAcceptance(msgAdapter, config);
+            return render(msgAdapter);
+        } catch (Exception e) {
+            return populatePostProcessingNak(originalRequest, e);
         }
     }
 
 
     /**
-     * Creates a message from the input <code>text</code >with prefix the sending
-     * application in the transaction configuration.
      * 
-     * @param text
-     *            input text used for logging
-     * @return a String with prefix the sending application
+     * @param cause
+     * @return Encoded HAPI Message AR negative acknowledgment
      */
-    protected String msg(String text) {
-        return config.getSendingApplication() + ": " + text;
+    protected String populatePreProcessingNak(Throwable cause) {
+        LOG.error(formatErrMsg("Request rejected returns NAK(AR)"));
+        return defaultNakString(cause);
     }
-
-
-    protected String renderForWs(MessageAdapter adapter) {
-        return renderForWs((Message) adapter.getTarget());
-    }
-
 
     /**
-     * Converts the given HAPI Message to a String suitable for WS transport.
-     * @param message
-     *      a {@link Message} to convert.
-     * @return a String representation of the given HAPI message.
+     * 
+     * @param msgAdapter
+     * @param cause
+     * @return Encoded HAPI Message AE negative acknowledgment
      */
-    protected String renderForWs(Message message) {
-        try {
-            return config.getParser().encode(message).replaceAll("\r", "\r\n");
-        } catch (HL7Exception e) {
-            // actually cannot occur
-            throw new RuntimeException(e);
-        }
+    protected String populateProcessingNak(MessageAdapter msgAdapter,
+            Throwable cause) {
+        LOG.error(formatErrMsg("Exchange failed returns NAK(AE)"));
+        return nakString(msgAdapter, cause);
+    }
+
+    /**
+     * 
+     * @return Encoded HAPI Message AE negative acknowledgment
+     */
+    protected String populatePostProcessingNak(MessageAdapter msgAdapter,
+            Throwable cause) {
+        LOG.error(formatErrMsg("Unacceptable response, return NAK"), cause);
+        return defaultNakString(cause);
     }
 
 
@@ -133,11 +125,11 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      * @return
      *      NAK as a String ready for WS transport.
      */
-    protected String nakString(MessageAdapter originalRequest, Exception exception) {
-        MessageAdapter nak = createNak(exception, (Message) originalRequest.getTarget(), config);
-        return renderForWs((Message) nak.getTarget());
+    protected String nakString(MessageAdapter msgAdapter, Throwable cause) {
+        MessageAdapter nak = createNak(cause,
+                (Message) msgAdapter.getTarget(), config);
+        return render(nak);
     }
-
 
     /**
      * Creates a "default" HL7v2 NAK message.
@@ -148,7 +140,18 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      */
     protected String defaultNakString(Throwable exception) {
         Message nak = config.getNakFactory().createDefaultNak(config, exception);
-        return renderForWs(nak);
+        return render(nak, config.getParser());
     }
     
+    /**
+     * Creates a message from the input <code>text</code >with prefix the sending
+     * application in the transaction configuration.
+     * 
+     * @param text
+     *            input text used for logging
+     * @return a String with prefix the sending application
+     */
+    protected String formatErrMsg(String text) {
+        return config.getSendingApplication() + ": " + text;
+    }
 }
