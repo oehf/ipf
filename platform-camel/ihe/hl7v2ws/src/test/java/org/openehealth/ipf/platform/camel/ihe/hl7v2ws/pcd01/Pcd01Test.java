@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 
+import javax.xml.ws.soap.SOAPFaultException;
+
 import org.apache.camel.Exchange;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
@@ -42,6 +44,12 @@ public class Pcd01Test extends StandardTestContainer {
         startServer(new CXFServlet(), "pcd-01.xml");
     }
     
+    @Test(expected = SOAPFaultException.class)
+    public void testEmptyPayload() throws Exception {
+        String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
+        requestBody(uri, "");
+    }
+
     @Test
     public void testHappyCase() throws Exception {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
@@ -97,6 +105,7 @@ public class Pcd01Test extends StandardTestContainer {
         String invalidMSG = PCD_01_SPEC_REQUEST.replace("|1.0.1|", "||");
         String response = requestBody(uri, invalidMSG);
         assertTrue(response.startsWith("MSH|^~\\&|"));
+        assertTrue(response.contains("MSA|AE"));
         assertTrue(response.contains("Missing OBX-4"));
     }
     
@@ -110,6 +119,16 @@ public class Pcd01Test extends StandardTestContainer {
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
     }
     
+    @Test
+    public void testDefaultAcceptedResponse() throws Exception {
+        String uri = "pcd-pcd01://localhost:" + getPort()
+                + "/route_unacceptable_response";
+        String response = requestBody(uri, PCD_01_SPEC_REQUEST);
+        assertTrue(response.startsWith("MSH|^~\\&|"));
+        assertTrue(response
+                .contains("MSA|AR|MsgIdUnknown|Invalid HL7 version 2.5"));
+    }
+
     private String requestBody(String uri, String msg) {
         Object  response = send(uri, msg);
         return Exchanges.resultMessage((Exchange)response).getBody(String.class);
