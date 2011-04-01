@@ -89,7 +89,7 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      * @return Encoded HAPI Message AR negative acknowledgment
      */
     protected String populatePreProcessingNak(Throwable cause) {
-        LOG.error(formatErrMsg("Request rejected returns NAK(AR)"));
+        LOG.error(formatErrMsg("Request rejected returns NAK"));
         return defaultNakString(cause);
     }
 
@@ -101,7 +101,7 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      */
     protected String populateProcessingNak(MessageAdapter msgAdapter,
             Throwable cause) {
-        LOG.error(formatErrMsg("Exchange failed returns NAK(AE)"));
+        LOG.error(formatErrMsg("Exchange failed returns NAK"));
         return nakString(msgAdapter, cause);
     }
 
@@ -111,7 +111,7 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      */
     protected String populatePostProcessingNak(MessageAdapter msgAdapter,
             Throwable cause) {
-        LOG.error(formatErrMsg("Unacceptable response, return NAK"), cause);
+        LOG.error(formatErrMsg("Response not accepted returns NAK"), cause);
         return defaultNakString(cause);
     }
 
