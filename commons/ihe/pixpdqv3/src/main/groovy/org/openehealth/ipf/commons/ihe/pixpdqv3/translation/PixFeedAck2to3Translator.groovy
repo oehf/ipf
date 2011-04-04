@@ -65,7 +65,7 @@ class PixFeedAck2to3Translator implements Hl7TranslatorV2toV3 {
             'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') 
         {         
             buildInstanceIdentifier(builder, 'id', false, this.messageIdRoot, rsp.MSH[10].value)    
-            creationTime(value: (rsp.MSH[7][1] ? MessageUtils.hl7Now() : dropTimeZone(rsp.MSH[7][1].value)))      
+            creationTime(value: (rsp.MSH[7][1] ? dropTimeZone(rsp.MSH[7][1].value) : MessageUtils.hl7Now()))      
             interactionId(root: '2.16.840.1.113883.1.6', extension: 'MCCI_IN000002UV01')
             processingCode(code: 'P')
             processingModeCode(code: 'T')
