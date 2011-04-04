@@ -110,9 +110,16 @@ class MessageUtils {
      *  @return a positive ACK response message
      */
     static Message ack(ModelClassFactory factory, Message msg) {
+        ack(factory, msg, AckTypeCode.AA)
+    }
+    
+    /**
+     *  @return a positive ACK response message
+     */
+    static Message ack(ModelClassFactory factory, Message msg, AckTypeCode ackType ) {
         def ack = response(factory, msg, 'ACK', triggerEvent(msg))
         Terser terser = new Terser(ack)
-        terser.set("MSA-1", "AA");
+        terser.set("MSA-1", ackType.name());
         ack
     }
     
