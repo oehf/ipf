@@ -33,6 +33,13 @@ import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 public abstract class AbstractMessageAdapterValidator implements Validator<Object, Object> {
 
     /**
+     * Indicates any arbitrary value. <b>For use only in checkSegmentValues</b><br>
+     * Set an element of the 4-th parameter in checkSegmentValues to <code>ANY</code>
+     * to allow arbitrary value for its corresponding field
+     */
+    public static String ANY = null
+    
+    /**
     * List of relevant segments for particular message types.
     */
     public abstract Map<String, Map<String, String>> getRules();
@@ -96,27 +103,14 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     // --------------- Highest-level validation objects ---------------
 
     /**
-     * Validates a message.
-     */
-    void checkMessage(msg, String segmentNames, Collection<Exception> violations) {
-        checkUnrecognizedSegments(msg.group, violations)
-        for(segmentName in segmentNames.tokenize()) {
-            "check${segmentName}"(msg, violations)
-        }
-    }
-
-    /**
-     * Validates structure of a message segment.
-     */
-    void checkSegmentStructure(msg, String segmentName, Collection<Integer> fieldNumbers, Collection<Exception> violations) {
-        def segment = msg."${segmentName}"
-        for(i in fieldNumbers) {
-            if( ! segment[i].value) {
-                violations.add(new Exception("Missing ${segmentName}-${i}"))
-            }
-        }
-    }
-
+    * Validates a message.
+    */
+   void checkMessage(msg, String segmentNames, Collection<Exception> violations) {
+       checkUnrecognizedSegments(msg.group, violations)
+       for(segmentName in segmentNames.tokenize()) {
+           "check${segmentName}"(msg, violations)
+       }
+   }
     /**
      * Searches for unrecognized segments in a Group.
      */
@@ -130,9 +124,70 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
             }
         }
     }
+    // --------------- Reusable validation functions ---------------
+    
+    /**
+     * Checks that a segment value is one in a list
+     */
+    void checkFieldInAllowedDomain(msg, String segmentName, int field, Collection<String> allowedDomain, Collection<Exception> violations){
+        String value = msg."${segmentName}"[field].toString()
+        for (allowedValue in allowedDomain){
+            if (allowedValue.equals(value)){
+                return;
+            }
+        }
+        violations.add(new Exception("Expected one of ${allowedDomain} in ${segmentName}-${field}"))
+    }
+
+    /**
+     * Validates structure of a message segment.
+     */
+    void checkSegmentStructure(msg, String segmentName, Collection<Integer> fieldNumbers, Collection<Exception> violations) {
+        def segment = msg."${segmentName}"
+        for(i in fieldNumbers) {
+            if( ! segment[i].value) {
+                violations.add(new Exception("Missing ${msg.path} ${segmentName}-${i}"))
+            }
+        }
+    }
+
+    /**
+     *  Validate the structure of the segment <code>segmentName</code> at repetition <code>segmentRepetition</code>.<br>
+     *  <b><code>segmentRepetition</code> start from 1!</b>
+     *
+     */
+    void checkSegmentStructureAtRepetition(struct, String segmentName, int segmentRepetition, Collection<Integer> fields, Collection<Exception> violations) {
+        def segment = struct."${segmentName}"()[segmentRepetition - 1]
+        for(i in fields) {
+            if( ! segment[i].value) {
+                violations.add(new Exception("${struct.path} missing ${segmentName}(${repetition})-${i}"))
+            }
+        }
+    }
+
+    /**
+     * Validates structure of a message segment. Elements must be equals to the given ones
+     */
+    void checkSegmentValues(msg, String segmentName, Collection<Integer> fieldNumbers, Collection<String> values, Collection<Exception> violations) {
+        def segment = msg."${segmentName}"
+        for(i in fieldNumbers) {
+            if( ! segment[i].value) {
+                violations.add(new Exception("Missing ${msg.path} ${segmentName}-${i}"))
+            }
+            if(values [i] != ANY && !values [i].toString().equals(segment[i]?.value)) {
+                violations.add(new Exception("${msg.path} ${segmentName}-${i} must be values [i]"))
+            }
+        }
+    }
 
     // --------------- Segments, ordered alphabetically ---------------
-
+	/**
+	 * Validates segment ERR.
+	 */
+	void checkERR(msg, Collection<Exception> violations){
+		checkSegmentStructure(msg, 'ERR', [3, 4], violations)
+	}
+   
     /**
      * Validates segment MSA.
      */
