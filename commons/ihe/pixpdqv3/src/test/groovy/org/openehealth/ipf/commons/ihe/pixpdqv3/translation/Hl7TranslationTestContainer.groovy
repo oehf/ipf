@@ -115,7 +115,6 @@ class Hl7TranslationTestContainer {
         String expectedV2request = getFileContent(fn, V2, REQUEST)
         MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request)
         V2_VALIDATOR.validate(translatedV2request, null)
-        
         assert translatedV2request.toString().trim() == expectedV2request.trim()
     }
 
@@ -133,5 +132,18 @@ class Hl7TranslationTestContainer {
         Diff diff = new Diff(expectedV3response, translatedV3response)
         assert diff.identical()
     }
+    
+    String doTestV2toV3RequestTranslation(String fn, int v2index, int v3index, Parser parser) {
+        String v2request = getFileContent(fn, V2, REQUEST)
+        MessageAdapter msg = MessageAdapters.make(parser, v2request)
+        V2_VALIDATOR.validate(msg, null)
+
+        String expectedV3response = getFileContent(fn, V3, RESPONSE)
+        String translatedV3response = v2tov3Translator.translateV2toV3(msg)
+        V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.REQUEST_TYPES["iti-${v3index}"])
+
+        Diff diff = new Diff(expectedV3response, translatedV3response)
+        assert diff.identical()
+    }    
 
 }
