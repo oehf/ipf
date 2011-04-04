@@ -107,14 +107,14 @@ class MessageUtils {
     }
     
     /** 
-     *  @return a positive ACK response message
+     *  @return a positive ACK response message from type AA
      */
     static Message ack(ModelClassFactory factory, Message msg) {
         ack(factory, msg, AckTypeCode.AA)
     }
     
     /**
-     *  @return a positive ACK response message
+     *  @return a ACK response message from the requested type (no ERR segment)
      */
     static Message ack(ModelClassFactory factory, Message msg, AckTypeCode ackType ) {
         def ack = response(factory, msg, 'ACK', triggerEvent(msg))
