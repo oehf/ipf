@@ -1,0 +1,81 @@
+<PRPA_IN201304UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <id root="1.2.3" extension="00000000000396814" />
+  <creationTime value="20100419105103" />
+  <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201304UV02" />
+  <processingCode code="P" />
+  <processingModeCode code="T" />
+  <acceptAckCode code="AL" />
+  <receiver typeCode="RCV">
+    <device determinerCode="INSTANCE" classCode="DEV">
+      <id root="1.2.3.6" extension="RE" assigningAuthorityName="RA" />
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.3.7" extension="RAE" assigningAuthorityName="RAA" />
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </receiver>
+  <sender typeCode="SND">
+    <device determinerCode="INSTANCE" classCode="DEV">
+      <id root="1.2.3.4" extension="SE" assigningAuthorityName="SA" />
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.3.5" extension="SAE" assigningAuthorityName="SAA" />
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </sender>
+  <controlActProcess classCode="CACT" moodCode="EVN">
+    <code code="PRPA_TE201304UV02" />
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <id nullFlavor="NA" />
+        <statusCode code="active" />
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id extension="142025" />
+            <statusCode code="active" />
+            <patientPerson classCode="PSN" determinerCode="INSTANCE">
+              <name>
+                <family>LENNON</family>
+                <given>JOHN</given>
+              </name>
+              <telecom value="tel:(607)752-6466" use="H" />
+              <administrativeGenderCode code="M" />
+              <birthTime value="19730811" />
+              <addr>
+                <state>GB</state>
+                <postalCode>13850</postalCode>
+                <city>LONDON</city>
+                <streetAddressLine>999 PENNY LANE</streetAddressLine>
+              </addr>
+            </patientPerson>
+            <providerOrganization classCode="ORG" determinerCode="INSTANCE">
+              <id root="1.2.3" />
+              <contactParty classCode="CON">
+                <contactPerson classCode="PSN" determinerCode="INSTANCE">
+                  <name nullFlavor="UNK" />
+                </contactPerson>
+              </contactParty>
+            </providerOrganization>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.3" />
+          </assignedEntity>
+        </custodian>
+        <replacementOf typeCode="RPLC">
+          <priorRegistration classCode="REG" moodCode="EVN">
+            <statusCode code="obsolete" />
+            <subject1 typeCode="SBJ">
+              <priorRegisteredRole classCode="PAT">
+                <id root="1.2.3" extension="704686" assigningAuthorityName="130" />
+              </priorRegisteredRole>
+            </subject1>
+          </priorRegistration>
+        </replacementOf>
+      </registrationEvent>
+    </subject>
+  </controlActProcess>
+</PRPA_IN201304UV02>

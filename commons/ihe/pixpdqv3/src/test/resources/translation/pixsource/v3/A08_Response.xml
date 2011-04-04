@@ -1,0 +1,72 @@
+<PRPA_IN201302UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <id root="1.2.3" extension="387352" />
+  <creationTime value="20100803211816" />
+  <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201302UV02" />
+  <processingCode code="P" />
+  <processingModeCode code="T" />
+  <acceptAckCode code="AL" />
+  <receiver typeCode="RCV">
+    <device determinerCode="INSTANCE" classCode="DEV">
+      <id root="1.2.3.6" extension="RE" assigningAuthorityName="RA" />
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.3.7" extension="RAE" assigningAuthorityName="RAA" />
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </receiver>
+  <sender typeCode="SND">
+    <device determinerCode="INSTANCE" classCode="DEV">
+      <id root="1.2.3.4" extension="SE" assigningAuthorityName="SA" />
+      <asAgent classCode="AGNT">
+        <representedOrganization determinerCode="INSTANCE" classCode="ORG">
+          <id root="1.2.3.5" extension="SAE" assigningAuthorityName="SAA" />
+        </representedOrganization>
+      </asAgent>
+    </device>
+  </sender>
+  <controlActProcess classCode="CACT" moodCode="EVN">
+    <code code="PRPA_TE201302UV02" />
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <id nullFlavor="NA" />
+        <statusCode code="active" />
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.1.1" extension="306567" />
+            <statusCode code="active" />
+            <patientPerson classCode="PSN" determinerCode="INSTANCE">
+              <name>
+                <family>BEST</family>
+                <given>XML</given>
+                <given>2</given>
+              </name>
+              <telecom value="tel:6078652191" use="H" />
+              <administrativeGenderCode code="M" />
+              <birthTime value="19470101" />
+              <addr>
+                <state>NY</state>
+                <postalCode>13856</postalCode>
+                <city>WALTON</city>
+                <streetAddressLine>2 TITUS PLACE</streetAddressLine>
+              </addr>
+            </patientPerson>
+            <providerOrganization classCode="ORG" determinerCode="INSTANCE">
+              <id root="1.2.3" />
+              <contactParty classCode="CON">
+                <contactPerson classCode="PSN" determinerCode="INSTANCE">
+                  <name nullFlavor="UNK" />
+                </contactPerson>
+              </contactParty>
+            </providerOrganization>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.3" />
+          </assignedEntity>
+        </custodian>
+      </registrationEvent>
+    </subject>
+  </controlActProcess>
+</PRPA_IN201302UV02>
