@@ -27,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
  * Translator for PIX Feed v2 to v3.
  * @author Boris Stanojevic
  */
-class PixFeedSource2to3Translator implements Hl7TranslatorV2toV3 {
+class PixFeedRequest2to3Translator implements Hl7TranslatorV2toV3 {
 
     /**
      * <tt>root</tt> attribute of message's <tt>id</tt> element.
