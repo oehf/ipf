@@ -34,7 +34,6 @@
         <osgi.bundle.vendor>Open eHealth Foundation</osgi.bundle.vendor>
         <osgi.bundle.license>Apache License, Version 2.0;url=http://www.apache.org/licenses/LICENSE-2.0;description=OpenSource license provided by the Apache foundation</osgi.bundle.license>
         <osgi.bundle.category>healthcare</osgi.bundle.category>
-        
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
@@ -68,8 +67,7 @@
         <geronimo-spec-servlet-api-version>1.2</geronimo-spec-servlet-api-version> 
         <gmaven-version>1.2</gmaven-version>
         <groovy-version>1.7.8</groovy-version>
-        <hapi-version>1.0.1</hapi-version>
-        
+        <hapi-version>1.1</hapi-version>
         <hibernate-version>3.5.6-Final</hibernate-version>
         <hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
@@ -344,37 +342,37 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v22</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v23</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v231</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v24</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v25</artifactId>
                 <version>${hapi-version}</version>
             </dependency>                                                
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v251</artifactId>
                 <version>${hapi-version}</version>
             </dependency>
-                  <dependency>
+            <dependency>
                 <groupId>ca.uhn.hapi</groupId>
                 <artifactId>hapi-structures-v26</artifactId>
                 <version>${hapi-version}</version>
@@ -537,13 +535,6 @@
                 <artifactId>spring-test</artifactId>
                 <version>${spring-version}</version>
             </dependency>        
-            <!--
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-agent</artifactId>
-                <version>${spring-version}</version>
-            </dependency>        
-            -->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-instrument</artifactId>
@@ -649,7 +640,6 @@
                 <artifactId>geronimo-jpa_2.0_spec</artifactId>
                 <version>${geronimo-jpa_2.0_spec.version}</version>
             </dependency>
-    
             <dependency>
                 <groupId>org.apache.derby</groupId>
                 <artifactId>derby</artifactId>
@@ -1159,6 +1149,16 @@
             </snapshots>
         </repository>
         <repository>
+            <id>repo1</id>
+            <name>Maven Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>repo2</id>
+            <name>Maven Repository</name>
+            <url>http://repo2.maven.org/maven2</url>
+        </repository>
+        <repository>
             <id>codehaus nexus</id>
             <name>Codehaus Nexus Maven Repository</name>
             <url>https://nexus.codehaus.org/content/repositories/releases/</url>
@@ -1183,11 +1183,6 @@
             <id>jboss</id>
             <name>JBoss Maven Repository</name>
             <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-        </repository>
-        <repository>
-            <id>hapi-sf</id>
-            <name>HAPI Sourceforge Repository</name>
-            <url>http://hl7api.sourceforge.net/m2</url>
         </repository>
     </repositories>
 
