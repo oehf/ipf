@@ -35,15 +35,13 @@ import static junit.framework.Assert.assertTrue
  */
 class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
 
-	PixFeedSource2to3Translator translator
-
     static def parser
     
     @BeforeClass
     static void setUpClass() {
         doSetUp('pixsource',
                 null,
-                new PixFeedSource2to3Translator())
+                new PixFeedRequest2to3Translator())
 
         parser = CustomModelClassUtils.createParser('pixsource', '2.5')
     }
