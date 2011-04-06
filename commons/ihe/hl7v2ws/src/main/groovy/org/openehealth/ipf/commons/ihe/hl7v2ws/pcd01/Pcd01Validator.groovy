@@ -122,7 +122,7 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
 		
 		ooGroup.OBSERVATION().eachWithIndex() { obs, i ->
 			obs.withPath(ooGroup, i)
-			checkOBSERVATION(obs, i + 1, checkTime, violations)
+			checkOBSERVATION(obs, checkTime, violations)
 		}
 		
 		if (ooGroup.SPECIMEN().isEmpty()){
@@ -147,38 +147,23 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
 		checkSegmentValues(ooGroup, 'OBR', [1, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
 	}
 	/*
-	 * The <code>obxIndex</code> is the observation index (required).
-	 * It starts from 1 and is incremeted by one on every obx.
 	 * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
 	 */
-	void checkOBSERVATION(obs, int obxIndex, boolean checkTime, Collection<Exception> violations) {
+	void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
 		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(obs.OBX, checkTime), violations);
-		checkObservationIndex(obs.OBX, obs.path ,obxIndex, violations)
 		if (obs.OBX[2].value){
 			//OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
 			checkFieldInAllowedDomain(obs,  'OBX', 2, ['CD', 'CF', 'DT', 'ED', 'FT', 'NA', 'NM', 'PN', 'SN', 'ST', 'TM', 'DTM', 'XCN'], violations);
 		}
 		
 	}
-    
-    /*
-	* The <code>obxIndex</code> is the observation index (required).
-	* It starts from 1 and is incremeted by one on every obx.
-	*/
-	void checkObservationIndex(obx, String path, int obxIndex, Collection<Exception> violations){
-		if (!String.valueOf(obxIndex).equals (obx[1].value)){
-			violations.add(new Exception("OBX-1 of observation ${path} must be ${obxIndex}."))
-		}
-	}
 	
 	void checkSPECIMEN(specimen, int specimenIndex, boolean checkTime, Collection<Exception> violations) {
 		checkSegmentValues(specimen, 'SPM', [1, 4], [specimenIndex, ANY], violations)
-		
 		Collection obs = specimen.OBX();
 		if(!obs.isEmpty()){
 			obs.eachWithIndex() { obx, i ->
 				checkSegmentStructureAtRepetition(specimen, 'OBX', i + 1, getOBXRequiredFields(obx,checkTime), violations)
-				checkObservationIndex(obx, specimen.path + ".OBX(${i})", i + 1, violations)
 			}
 		}
 	}
@@ -203,7 +188,8 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
 	
  
 	boolean shouldValidateOBXTime(ooGroup, int obrIndex, Collection<Exception> violations) {
-		return '0000'.equals(ooGroup.OBR[7]?.value)? true: false;
+		def val = ooGroup.OBR[7].value;
+		return val == null || '0000'.equals(val)
 	}
 	
 	 /////////////////////// Response //////////////////////////
