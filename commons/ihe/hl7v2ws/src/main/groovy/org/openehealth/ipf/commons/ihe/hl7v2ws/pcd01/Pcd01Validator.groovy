@@ -27,6 +27,11 @@ import org.openehealth.ipf.modules.hl7.validation.support.DefaultTypeRulesValida
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.validation.MessageValidator
 /**
+ * Implements more strict validaton for PCD-01
+ * 
+ * There must be at least one ORDER_OBSERVATION in the message
+ * There must be at least one PATIENT_RESULT
+ * 
  * @author Mitko Kolev
  *
  */
@@ -91,32 +96,109 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
    * Validates segment PID in PATIENT_RESULT.PATIENT.
    */
     void checkPATIENT_RESULT(msg, Collection<Exception> violations) {
-        checkStructure(msg, violations)
-        for (prGroup in msg.PATIENT_RESULT()){
-            if (!prGroup.PATIENT.PID.isEmpty()) {
-                checkPID(prGroup.PATIENT, violations)
-            }
-            if (prGroup.ORDER_OBSERVATION().isEmpty()){
-                violations.add(new Exception("Missing OBR segment"))
-            }
-            for (ooGroup in prGroup.ORDER_OBSERVATION()){
-                checkSegmentStructure(ooGroup, 'OBR', [1, 3, 4], violations)
-                if (ooGroup.OBSERVATION().isEmpty()){
-                    violations.add(new Exception("Missing OBX segment"))
-                }
-                for (obsGroup in ooGroup.OBSERVATION()){
-                    checkSegmentStructure(obsGroup, 'OBX', [1, 3, 4, 11], violations)
-                }
-            }
-        }
+        
+        msg.PATIENT_RESULT().eachWithIndex(){  prGroup, i ->
+			prGroup.withPath(msg, i)
+			
+			//allow empty patient groups
+			if (!prGroup.PATIENT.isEmpty()){
+				checkPID(prGroup.PATIENT, i + 1, violations)
+			}
+			
+			if (prGroup.ORDER_OBSERVATION().isEmpty()){
+				violations.add(new Exception("No ORDER_OBSERVATIONs found."))
+			}
+			
+			prGroup.ORDER_OBSERVATION().eachWithIndex(){  ooGroup, t ->
+				ooGroup.withPath(prGroup, t)
+				checkORDER_OBSERVATION(ooGroup, t + 1, violations)
+			}
+		}
     }
+	
+	void checkORDER_OBSERVATION(ooGroup, int obrIndex, Collection<Exception> violations) {
+		checkOBR(ooGroup, obrIndex, violations)
+		boolean checkTime = shouldValidateOBXTime(ooGroup, obrIndex, violations)
+		
+		ooGroup.OBSERVATION().eachWithIndex() { obs, i ->
+			obs.withPath(ooGroup, i)
+			checkOBSERVATION(obs, checkTime, violations)
+		}
+		
+		if (ooGroup.SPECIMEN().isEmpty()){
+			return;
+		}
+		ooGroup.SPECIMEN().eachWithIndex() { specimen, i ->
+			specimen.withPath(ooGroup, i)
+			checkSPECIMEN(specimen, i + 1, checkTime, violations)
+		}
+	}
     
-    private void checkStructure(Object msg, Collection<Exception> violations){
-        try {
-            new MessageValidator(VALIDATION_CONTEXT, true).validate(msg.target)
-        }catch (Exception e) {
-            //Note, that it if the structure is incorrect, no validation should be done
-            violations.add(e)
-        }
-    }
+	/*
+	* Check patient name only for structure.
+	*/
+	void checkPID(patientGroup, setId, Collection<Exception> violations) {
+		checkSegmentValues( patientGroup, 'PID', [3, 5], [setId, ANY, ANY], violations)
+	}
+	
+   
+	void checkOBR(ooGroup, int obrIndex, Collection<Exception> violations) {
+		checkSegmentValues(ooGroup, 'OBR', [1, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
+	}
+	
+	void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
+		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(obs.OBX, checkTime), violations);
+		if (obs.OBX[2].value){
+			//OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
+			checkFieldInAllowedDomain(obs,  'OBX', 2, ['CD', 'CF', 'DT', 'ED', 'FT', 'NA', 'NM', 'PN', 'SN', 'ST', 'TM', 'DTM', 'XCN'], violations);
+		}
+		
+	}
+	
+	void checkSPECIMEN(specimen, int specimenIndex, boolean checkTime, Collection<Exception> violations) {
+		checkSegmentValues(specimen, 'SPM', [1, 4], [specimenIndex, ANY], violations)
+		
+		Collection obs = specimen.OBX();
+		if(!obs.isEmpty()){
+			for (int i in 1..obs.size()){
+				checkSegmentStructureAtRepetition(specimen, 'OBX', i, getOBXRequiredFields(obs[i - 1],checkTime), violations)
+			}
+		}
+	}
+	
+	Collection getOBXRequiredFields(obx, boolean checkTime){
+		boolean shouldValidateOBX6 = obx[5].value == null ? false : true;
+		
+		if (shouldValidateOBX6){
+			if (checkTime){
+				return  [1, 3, 4, 6, 11, 14]
+			 } else {
+				   return [1, 3, 4, 6, 11]
+			 }
+		}else {
+			if (checkTime){
+			   return  [1, 3, 4, 11, 14]
+			} else {
+				  return [1, 3, 4, 11]
+			}
+		}
+	}
+	
+ 
+	boolean shouldValidateOBXTime(ooGroup, int obrIndex, Collection<Exception> violations) {
+		return '0000'.equals(ooGroup.OBR[7]?.value)? true: false;
+	}
+	
+	 /////////////////////// Response //////////////////////////
+	 
+	 void checkMSA(msg, Collection<Exception> violations) {
+		 super.checkMSA(msg, violations)
+		 checkFieldInAllowedDomain(msg, 'MSA', 1, ['CA', 'CE', 'CR', 'AA', 'AR'], violations)
+		 
+		 String errorCode = msg.MSA[1].toString();
+		 if (!('AA'.equals(errorCode) || 'CA'.equals(errorCode))){
+			 checkERR(msg,violations)
+		 }
+	 }
+	 
 }

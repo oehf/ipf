@@ -34,95 +34,124 @@ public class Pcd01ValidatorTest {
     MessageAdapter msg1 = load("pcd01/valid-pcd01-request.hl7v2");
     MessageAdapter msg2 = load("pcd01/valid-pcd01-request2.hl7v2");
     MessageAdapter rsp = load("pcd01/valid-pcd01-response.hl7v2");
+    MessageAdapter rsp2 = load("pcd01/valid-pcd01-response2.hl7v2");
 
-    private static String MSH = "MSH|^~\\&|AcmeInc^ACDE48234567ABCD^EUI-64||||20090713090030+0500||ORU^R01^ORU_R01|MSGID1234|P|2.6|||NE|AL|||||IHE PCD ORU-R01 2006^HL7^2.16.840.1.113883.9.n.m^HL7\r";
-    private static String PID = "PID|||789567^^^Imaginary Hospital^PI||Doe^John^Joseph^^^^L^A|||M\r";
-    private static String OBR = "OBR|1|AB12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|528391^MDC_DEV_SPEC_PROFILE_BP^MDC|||20090813095715+0500\r";
-    private static String OBX1 = "OBX|1||528391^MDC_DEV_SPEC_PROFILE_BP^MDC|1|||||||R|||||||0123456789ABCDEF^EUI-64\r";
-    private static String OBX2 = "OBX|2||150020^MDC_PRESS_BLD_NONINV^MDC|1.0.1|||||||R|||20090813095715+0500\r";
-    private static String OBX3 = "OBX|3|NM|150021^MDC_PRESS_BLD_NONINV_SYS^MDC|1.0.1.1|120|266016^MDC_DIM_MMHG^MDC|||||R\r";
-    private static String OBX4 = "OBX|4|NM|150022^MDC_PRESS_BLD_NONINV_DIA^MDC|1.0.1.2|80|266016^MDC_DIM_MMHG^MDC|||||R\r";
-    private static String VALID = MSH + PID + OBR + OBX1 + OBX2 + OBX3 + OBX4;
-    private Pcd01Validator validator = new Pcd01Validator();
+    static String MSH = "MSH|^~\\&|AcmeInc^ACDE48234567ABCD^EUI-64||||20090713090030+0500||ORU^R01^ORU_R01|MSGID1234|P|2.6|||NE|AL|||||IHE PCD ORU-R01 2006^HL7^2.16.840.1.113883.9.n.m^HL7\r";
+    static String PID = "PID|||789567^^^Imaginary Hospital^PI||Doe^John^Joseph^^^^L^A|||M\r";
+    static String OBR = "OBR|1|AB12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|528391^MDC_DEV_SPEC_PROFILE_BP^MDC|||20090813095715+0500\r";
+    static String OBX1 = "OBX|1||528391^MDC_DEV_SPEC_PROFILE_BP^MDC|1|||||||R|||||||0123456789ABCDEF^EUI-64\r";
+    static String OBX2 = "OBX|2||150020^MDC_PRESS_BLD_NONINV^MDC|1.0.1|||||||R|||20090813095715+0500\r";
+    static String OBX3 = "OBX|3|NM|150021^MDC_PRESS_BLD_NONINV_SYS^MDC|1.0.1.1|120|266016^MDC_DIM_MMHG^MDC|||||R\r";
+    static String OBX4 = "OBX|4|NM|150022^MDC_PRESS_BLD_NONINV_DIA^MDC|1.0.1.2|80|266016^MDC_DIM_MMHG^MDC|||||R\r";
+    static String VALID = MSH + PID + OBR + OBX1 + OBX2 + OBX3 + OBX4;
+    
+    static String ACK_MSH = "MSH|^~\\&|Stepstone||AcmeInc^ACDE48234567ABCD^EUI64||20090726095731+0500||ACK^A01^ACK|AMSGID1234|P|2.6\r";
+    static String MSA = "MSA|CE|20070701132554000008\r";
+    static String ERR = "ERR|||100|E|||Missing required OBR segment\r";
+    static String VALID_RESPONSE =  ACK_MSH + MSA + ERR;
+    
+    Pcd01Validator validator = new Pcd01Validator();
 
+    public Pcd01Validator getValiadtor(){
+    	return validator;
+    }
+    
     @Test
     public void testMessageSectionJ2() {
-        validator.validate(msg1);
+    	getValiadtor().validate(msg1);
     }
 
     @Test
     public void testMessageSectionE11() {
-        validator.validate(msg2);
+    	getValiadtor().validate(msg2);
     }
 
     @Test
     public void testSyntheticMessage() throws HL7Exception{
         MessageAdapter adapter = make(VALID);
-        validator.validate(adapter);
+        getValiadtor().validate(adapter);
         assertObservationCount(4, adapter);
     }
     
     @Test
     public void testSyntheticMessageTrimmed() throws HL7Exception{
         MessageAdapter adapter = make(VALID.trim());
-        validator.validate(adapter);
+        getValiadtor().validate(adapter);
         assertObservationCount(4, adapter);
     }
     
     @Test
     public void testResponseMessage() {
-        validator.validate(rsp);
+    	getValiadtor().validate(rsp);
     }
+    
+    @Test
+    public void testResponseMessage2() {
+    	getValiadtor().validate(rsp2);
+    }
+    
+    @Test
+    public void testSyntheticResponseMessage() {
+    	getValiadtor().validate(make(VALID_RESPONSE));
+    }
+    
+    
     
     @Test
     public void testNoPID() {
         //no PID is allowed (see the definition of ORU^R01) 
-        validator.validate(make(VALID.replace(PID,"")));
+    	getValiadtor().validate(make(VALID.replace(PID,"")));
     }
     
     @Test
     public void testOnlyFamilyName() {
         MessageAdapter msg = make(VALID.replace("Doe^John^Joseph", "Doe^^"));
-        validator.validate(msg);
+        getValiadtor().validate(msg);
     }
     
 
     // ///////// Negative tests
     @Test(expected = ValidationException.class)
     public void testNoOBR() {
-        validator.validate(make(VALID.replace(OBR,"")));
+    	getValiadtor().validate(make(VALID.replace(OBR,"")));
     }
 
+    @Test(expected = ValidationException.class)
+    public void testSyntheticResponseUnsupportedCODE() {
+    	//code SN is not supported
+    	getValiadtor().validate(make(VALID_RESPONSE.replace("MSA|CE|","MSA|SN|")));
+    }
+    
     /////////////////// Field cheks
     @Test(expected = ValidationException.class)
     public void testIncompletePatientId() {
         MessageAdapter msg = make(VALID.replace("789567", ""));
-        validator.validate(msg);
+        getValiadtor().validate(msg);
     }
 
     @Test(expected = ValidationException.class)
     public void testNotPresentPatientName() {
         MessageAdapter msg = make(VALID.replace("Doe^John^Joseph", "^^"));
-        validator.validate(msg);
+        getValiadtor().validate(msg);
     }
     
     
     @Test(expected = ValidationException.class)
     public void testObservationIdentifierNotPresent() {
         MessageAdapter msg = make(VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", ""));
-        validator.validate(msg);
+        getValiadtor().validate(msg);
     }
     
     @Test(expected = ValidationException.class)
     public void testObservationWithNoSubId() {
         MessageAdapter msg = make(VALID.replace("PROFILE_BP^MDC|1|", "PROFILE_BP^MDC||"));
-        validator.validate(msg);
+        getValiadtor().validate(msg);
     }
     
     @Test(expected = ValidationException.class)
     public void testObservationWithNoSubId2() {
         MessageAdapter msg = make(VALID.replace("|1.0.1|", "||"));
-        validator.validate(msg);
+        getValiadtor().validate(msg);
     }
     
     private void assertObservationCount(int expected, MessageAdapter adapter){
