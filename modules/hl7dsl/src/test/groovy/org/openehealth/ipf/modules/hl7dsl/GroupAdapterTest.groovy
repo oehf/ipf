@@ -81,24 +81,11 @@ class GroupAdapterTest extends GroovyTestCase {
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(0).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(0).OBX'
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX'
          
+         //OBSERVATION(2) is created even though it is not in the message.
          //This is a feature of the DSL, see SelectorClosure call implementation 
          assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(2).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(2).OBX'
-         
     }
 
-    void testRepetitions1(){
-        assert 2 == message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION().size()
-    }
-    
-    void testRepetitions2(){
-        message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION().size()
-        assert 2 == message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION().size()
-    }
-        
-    void testGetAtPath1(){
-        assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBSERVATION(1).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(1).OBX'
-        assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBSERVATION(1).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(1).OBX'
-    }
     void testCount() {
         assert message.PATIENT_RESULT(0).count('ORDER_OBSERVATION') == 2
         
