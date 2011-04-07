@@ -25,7 +25,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /*
  * Generic routines for HL7 v2-to-v3 transformation.
- * @author Dmytro Rud, Marek Václavík
+ * @author Dmytro Rud, Marek VÃ¡clavÃ­k
  */
 class Utils {
     
@@ -209,6 +209,21 @@ class Utils {
         fields += nak.ERR[6]()
 
         return fields*.value.findAll { it }.join('; ')
+    }
+
+
+    /**
+     * Creates an XML element that represents an instance identifier with given contents
+     * (shortcut for using a single CX parameter instead of three Strings).
+     */
+    static void buildInstanceIdentifier(
+            MarkupBuilder builder,
+            String elementName,
+            boolean useNullFlavor,
+            CompositeAdapter cx)
+    {
+        buildInstanceIdentifier(builder, elementName, useNullFlavor,
+                cx[4][2].value, cx[1].value, cx[4][1].value)
     }
 
 }

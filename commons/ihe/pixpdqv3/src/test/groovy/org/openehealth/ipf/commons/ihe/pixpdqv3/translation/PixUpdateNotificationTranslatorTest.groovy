@@ -24,14 +24,14 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
 
 /**
  * Test for PIX Update Notification translator.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek Vï¿½clavï¿½k, Dmytro Rud
  */
 class PixUpdateNotificationTranslatorTest extends Hl7TranslationTestContainer {
 
     @BeforeClass
     static void setUpClass() {
         doSetUp('pixupdatenotification',
-                new PixUpdateNotificationAck3to2Translator(),
+                new PixAck3to2Translator(),
                 new PixUpdateNotification2to3Translator())
     } 
 

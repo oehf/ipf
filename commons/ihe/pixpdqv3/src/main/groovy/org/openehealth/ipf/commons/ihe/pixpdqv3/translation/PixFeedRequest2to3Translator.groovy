@@ -17,60 +17,17 @@ package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 import groovy.xml.MarkupBuilder
 
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
+import org.openehealth.ipf.modules.hl7dsl.SegmentAdapter
 
 /**
- * Translator for PIX Feed v2 to v3.
+ * Translator for PIX Feed requests v2 to v3.
  * @author Boris Stanojevic
  */
-class PixFeedRequest2to3Translator implements Hl7TranslatorV2toV3 {
-
-    /**
-     * <tt>root</tt> attribute of message's <tt>id</tt> element.
-     */
-    String messageIdRoot = '1.2.3'
-
-    // 4*3 parameters for generation of elements "sender" and "receiver"
-    String senderIdRoot = '1.2.3.4'
-    String senderIdExtension = 'SE'
-    String senderIdAssigningAuthority = 'SA'
-
-    String senderAgentIdRoot = '1.2.3.5'
-    String senderAgentIdExtension = 'SAE'
-    String senderAgentIdAssigningAuthority = 'SAA'
-
-    String receiverIdRoot = '1.2.3.6'
-    String receiverIdExtension = 'RE'
-    String receiverIdAssigningAuthority = 'RA'
-
-    String receiverAgentIdRoot = '1.2.3.7'
-    String receiverAgentIdExtension = 'RAE'
-    String receiverAgentIdAssigningAuthority = 'RAA'
-
-    /**
-     * Predefined fix value of
-     * <code>//registrationEvent/custodian/assignedEntity/id/@root</code>.
-     * In productive environments to be set to the <code>id/@root</code>
-     * of the device representing the MPI.
-     */
-    String mpiSystemIdRoot = '1.2.3'
-
-    /**
-     * Predefined fix value of
-     * <code>//registrationEvent/custodian/assignedEntity/id/@extension</code>.
-     * In productive environments to be set to the <code>id/@extension</code>
-     * of the device representing the MPI.
-     */
-    String mpiSystemIdExtension = ''
-
-    /**
-     * Root for values from PID-19.
-     */
-    String nationalIdentifierRoot = '2.16.840.1.113883.4.1'
+class PixFeedRequest2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
     static final String CREATE_MSG = 'PRPA_IN201301UV02'
     static final String UPDATE_MSG = 'PRPA_IN201302UV02'
@@ -84,12 +41,13 @@ class PixFeedRequest2to3Translator implements Hl7TranslatorV2toV3 {
         A40: { MessageAdapter adt -> translate(adt, MERGE_MSG) }
     ]
 
+
     String translateV2toV3(MessageAdapter adt, String dummy = null) {
-        def msh = adt.MSH[9][2].value
-        if (translators.containsKey(msh)){
-            translators[msh](adt)
+        def triggerEvent = adt.MSH[9][2].value
+        if (translators.containsKey(triggerEvent)){
+            return translators[triggerEvent](adt)
         } else {
-            throw new Exception('Not supported HL7 message event')
+            throw new Hl7TranslationException('Not supported HL7 message event')
         }
     }
 
@@ -129,50 +87,11 @@ class PixFeedRequest2to3Translator implements Hl7TranslatorV2toV3 {
                             def PIDSegment = getPID(adt)
                             patient(classCode: 'PAT') {
                                 for (pid3 in PIDSegment[3]()) {
-                                    buildInstanceIdentifier(builder, 'id', false, pid3[4][2].value, pid3[1].value)
+                                    buildInstanceIdentifier(builder, 'id', false, pid3)
                                 }
                                 statusCode(code: 'active')
                                 patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-                                    for (pid5 in PIDSegment[5]()) {
-                                        createName(builder, pid5)
-                                    }
-
-                                    translateTelecom(builder, PIDSegment[13], 'H')
-                                    translateTelecom(builder, PIDSegment[14], 'WP')
-
-                                    def gender = (PIDSegment[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
-                                    administrativeGenderCode(code: gender)
-                                    birthTime(value: PIDSegment[7][1].value ?: '')
-                                    addr {
-                                        def pid11 = PIDSegment[11]
-                                        conditional(builder, 'country',           pid11[6].value)
-                                        conditional(builder, 'state',             pid11[4].value)
-                                        conditional(builder, 'postalCode',        pid11[5].value)
-                                        conditional(builder, 'city',              pid11[3].value)
-                                        conditional(builder, 'streetAddressLine', pid11[1].value)
-                                    }
-
-                                    def pid4collection = PIDSegment[4]()
-                                    if (pid4collection) {
-                                        asOtherIDs(classCode: 'PAT') {
-                                            for(pid4 in pid4collection) {
-                                                buildInstanceIdentifier(builder, 'id', false,
-                                                    pid4[4][2].value, pid4[1].value, pid4[4][1].value)
-                                            }
-                                            scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                                                id(nullFlavor: 'UNK')
-                                            }
-                                        }
-                                    }
-
-                                    if (PIDSegment[19].value) {
-                                        asOtherIDs(classCode: 'PAT') {
-                                            id(root: nationalIdentifierRoot, extension: PIDSegment[19].value)
-                                            scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                                                id(root: nationalIdentifierRoot)
-                                            }
-                                        }
-                                    }
+                                    createPatientPersonElements(builder, PIDSegment)
                                 }
                                 providerOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
                                     buildInstanceIdentifier(builder, 'id', false,
@@ -197,82 +116,13 @@ class PixFeedRequest2to3Translator implements Hl7TranslatorV2toV3 {
     }
 
 
-
-    /**
-     * Creates sender or receiver element.
-     */
-    private void createAgent(MarkupBuilder builder, boolean sender) {
-        String name = (sender ? 'sender' : 'receiver')
-
-        String idRoot = this."${name}IdRoot"
-        String idExtension = this."${name}IdExtension"
-        String idAssigningAuthority = this."${name}IdAssigningAuthority"
-
-        String agentIdRoot = this."${name}AgentIdRoot"
-        String agentIdExtension = this."${name}AgentIdExtension"
-        String agentIdAssigningAuthority = this."${name}AgentIdAssigningAuthority"
-
-        builder."${name}"(typeCode: (sender ? 'SND' : 'RCV')) {
-            device(determinerCode: 'INSTANCE', classCode: 'DEV') {
-                buildInstanceIdentifier(builder, 'id', true, idRoot, idExtension, idAssigningAuthority)
-                if (agentIdRoot || agentIdExtension || agentIdAssigningAuthority) {
-                    asAgent(classCode: 'AGNT') {
-                        representedOrganization(determinerCode: 'INSTANCE', classCode: 'ORG') {
-                            buildInstanceIdentifier(builder, 'id', false,
-                                agentIdRoot, agentIdExtension, agentIdAssigningAuthority)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    void translateTelecom(MarkupBuilder builder, SelectorClosure repeatableXTN, String defaultUse) {
-        repeatableXTN().each { telecom ->
-          String number = telecom[1].value ?: telecom[4].value
-          if (number) {
-              String use = defaultUse
-              String schema = 'tel'
-
-              switch (telecom[2].value) {
-              case 'PRN':
-                  use = 'H'
-                  break
-              case 'WPN':
-                  use = 'WP'
-                  break
-              }
-
-              switch (telecom[3].value) {
-              case 'PH':
-                  // take the defaults
-                  break
-              case 'CP':
-                  use = 'MC'
-                  break
-              case 'FX':
-                  schema = 'fax'
-                  break
-              case 'Internet':
-              case 'X.400':
-                  schema = 'mailto'
-                  break
-              }
-              builder.telecom(value: "${schema}:${number}", use: use)
-          }
-        }
-    }
-
     void createReplacementOf(MarkupBuilder builder, MessageAdapter adt){
         builder.replacementOf(typeCode: 'RPLC'){
             priorRegistration(classCode: 'REG', moodCode: 'EVN'){
                 statusCode(code: 'obsolete')
                 subject1(typeCode: 'SBJ'){
                     priorRegisteredRole(classCode: 'PAT'){
-                      buildInstanceIdentifier(builder, 'id', false,
-                          adt.PIDPD1MRGPV1.MRG[1][4][2].value,
-                          adt.PIDPD1MRGPV1.MRG[1][1].value,
-                          adt.PIDPD1MRGPV1.MRG[1][4][1].value)
+                        buildInstanceIdentifier(builder, 'id', false, adt.PIDPD1MRGPV1.MRG[1](0))
                     }
                 }
             }
@@ -280,22 +130,22 @@ class PixFeedRequest2to3Translator implements Hl7TranslatorV2toV3 {
     }
 
 
-     /**
+    /**
      * Returns a PID that is either directly in the PID segment
      * or within a PATIENT group.
      */
-    static def getPID(MessageAdapter msg) {
+    static SegmentAdapter getPID(MessageAdapter msg) {
         def names = msg.names
-        if (names.find { it == 'PID' } != null) {
+        if ('PID' in names) {
             return msg.PID
         }
-        if (names.find { it == 'PATIENT' } != null) {
+        if ('PATIENT' in names) {
             return msg.PATIENT.PID
         }
-        if (names.find { it == 'PIDPD1MRGPV1' } != null) {
+        if ('PIDPD1MRGPV1' in names) {
             return msg.PIDPD1MRGPV1.PID
         }
-        throw new IllegalArgumentException('Cannot find PID segment in: ' + msg)
+        throw new Hl7TranslationException('Cannot find PID segment in: ' + msg)
     }
 
 }

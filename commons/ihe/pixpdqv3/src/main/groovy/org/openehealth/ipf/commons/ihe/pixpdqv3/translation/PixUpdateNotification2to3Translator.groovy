@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
-import groovy.xml.MarkupBuilder;
-
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
@@ -24,49 +22,10 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * Translator for PIX Update notification v2 to v3.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek VÃ¡clavÃ­k, Dmytro Rud
  */
-class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
+class PixUpdateNotification2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
-	/**
-	 * <tt>root</tt> attribute of message's <tt>id</tt> element.
-	 */
-	String messageIdRoot = '1.2.3'
-
-    // 4*3 parameters for generation of elements "sender" and "receiver"
-    String senderIdRoot = '1.2.3.4'
-    String senderIdExtension = 'SE'
-    String senderIdAssigningAuthority = 'SA'
-        
-    String senderAgentIdRoot = '1.2.3.5'
-    String senderAgentIdExtension = 'SAE'
-    String senderAgentIdAssigningAuthority = 'SAA'
-    
-    String receiverIdRoot = '1.2.3.6'
-    String receiverIdExtension = 'RE'
-    String receiverIdAssigningAuthority = 'RA'
-        
-    String receiverAgentIdRoot = '1.2.3.7'
-    String receiverAgentIdExtension = 'RAE'
-    String receiverAgentIdAssigningAuthority = 'RAA'
-
-    /**
-     * Predefined fix value of
-     * <code>//registrationEvent/custodian/assignedEntity/id/@root</code>.
-     * In productive environments to be set to the <code>id/@root</code>
-     * of the device representing the MPI.
-     */
-    String mpiSystemIdRoot = '1.2.3'
-
-    /**
-     * Predefined fix value of
-     * <code>//registrationEvent/custodian/assignedEntity/id/@extension</code>.
-     * In productive environments to be set to the <code>id/@extension</code>
-     * of the device representing the MPI.
-     */
-    String mpiSystemIdExtension = ''
-
-	
     /**
      * Translates an HL7 v2 <tt>ADT^A31</tt> message 
      * into HL7 v3 <tt>PRPA_IN201302UV02</tt> message.
@@ -100,7 +59,7 @@ class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
                         subject1(typeCode: 'SBJ') {
                             patient(classCode: 'PAT') {
                                 for (pid3 in adt.PID[3]()) {
-                                    buildInstanceIdentifier(builder, 'id', false, pid3[4][2].value, pid3[1].value)
+                                    buildInstanceIdentifier(builder, 'id', false, pid3)
                                 }
                                 statusCode(code: 'active')
                                 fakePatientPerson(builder)
@@ -115,36 +74,4 @@ class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
         return output.toString()
     }
 	
-	
-	
-	/**
-	 * Creates sender or receiver element.
-	 */
-    private void createAgent(MarkupBuilder builder, boolean sender) {
-        String name = (sender ? 'sender' : 'receiver')
-        
-        String idRoot = this."${name}IdRoot"
-        String idExtension = this."${name}IdExtension"
-        String idAssigningAuthority = this."${name}IdAssigningAuthority"
-        
-        String agentIdRoot = this."${name}AgentIdRoot"
-        String agentIdExtension = this."${name}AgentIdExtension"
-        String agentIdAssigningAuthority = this."${name}AgentIdAssigningAuthority"
-        
-        builder."${name}"(typeCode: (sender ? 'SND' : 'RCV')) {
-            device(determinerCode: 'INSTANCE', classCode: 'DEV') {
-                buildInstanceIdentifier(builder, 'id', true, idRoot, idExtension, idAssigningAuthority)
-                if (agentIdRoot || agentIdExtension || agentIdAssigningAuthority) {
-                    asAgent(classCode: 'AGNT') {
-                        representedOrganization(determinerCode: 'INSTANCE', classCode: 'ORG') {
-                            buildInstanceIdentifier(builder, 'id', false, 
-                                    agentIdRoot, agentIdExtension, agentIdAssigningAuthority)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
 }

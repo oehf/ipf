@@ -23,7 +23,6 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter;
 import org.openehealth.ipf.modules.hl7dsl.CompositeAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosure;
 
 import static org.openehealth.ipf.commons.ihe.pixpdqv3.translation.Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
@@ -32,25 +31,9 @@ import org.openehealth.ipf.modules.hl7.ErrorLocation;
 
 /**
  * PDQ Response translator HL7 v2 to v3.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek VÃ¡clavÃ­k, Dmytro Rud
  */
-class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
-
-    /**
-     * Predefined fix value of
-     * <code>//registrationEvent/custodian/assignedEntity/id/@root</code>.
-     * In productive environments to be set to the <code>id/@root</code>
-     * of the device representing the MPI.
-     */
-    String mpiSystemIdRoot = '1.2.3'
-
-    /**
-     * Predefined fix value of
-     * <code>//registrationEvent/custodian/assignedEntity/id/@extension</code>.
-     * In productive environments to be set to the <code>id/@extension</code>
-     * of the device representing the MPI.
-     */
-    String mpiSystemIdExtension = ''
+class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
 
     /**
      * If true, <code>&lt;resultTotalQuantity nullFlavor="UNK"/&gt;</code>
@@ -75,21 +58,11 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
     String errorCodeSystem = '2.16.840.1.113883.12.357'
 
     /**
-     * <tt>root</tt> attribute of message's <tt>id</tt> element.
-     */
-    String messageIdRoot = '1.2.3'
-
-    /**
      * First character of the acknowledgment code.  Possible values are 'A' and 'C'.
      * <p>
      * Declared as String from technical reasons.
      */
     String ackCodeFirstCharacter = 'A'
-
-    /**
-     * Root for values from PID-19.
-     */
-    String nationalIdentifierRoot = '2.16.840.1.113883.4.1'
 
     /**
      * When not empty, an element asOtherIDs with ID.nullFlavor=. will be created
@@ -144,53 +117,12 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                     subject1(typeCode: 'SBJ') {
                                         patient(classCode: 'PAT') {
                                             for(pid3 in pid3collection) {   
-                                                buildInstanceIdentifier(builder, 'id', false, 
-                                                        pid3[4][2].value, pid3[1].value, pid3[4][1].value)
+                                                buildInstanceIdentifier(builder, 'id', false, pid3)
                                                 remainingDomains.remove(pid3[4][2].value)
                                             }
                                             statusCode(code: 'active')
                                             patientPerson(classCode: 'PSN', determinerCode: 'INSTANCE') {
-                                                for (pid5 in qr.PID[5]()) {
-                                                    createName(builder, pid5) 
-                                                }
-
-                                                translateTelecom(builder, qr.PID[13], 'H')
-                                                translateTelecom(builder, qr.PID[14], 'WP')
-
-                                                def gender = (qr.PID[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
-                                                administrativeGenderCode(code: gender)
-                                                birthTime(value: qr.PID[7][1].value ?: '')
-                                                addr {
-                                                    def pid11 = qr.PID[11]
-                                                    conditional(builder, 'country',           pid11[6].value)
-                                                    conditional(builder, 'state',             pid11[4].value)
-                                                    conditional(builder, 'postalCode',        pid11[5].value)
-                                                    conditional(builder, 'city',              pid11[3].value)
-                                                    conditional(builder, 'streetAddressLine', pid11[1][1].value)
-                                                }
-                                                
-                                                def pid4collection = qr.PID[4]()
-                                                if (pid4collection) {
-                                                    asOtherIDs(classCode: 'PAT') {
-                                                        for(pid4 in pid4collection) {   
-                                                            buildInstanceIdentifier(builder, 'id', false, 
-                                                                    pid4[4][2].value, pid4[1].value, pid4[4][1].value) 
-                                                        }
-                                                        scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                                                            id(nullFlavor: 'UNK')
-                                                        }
-                                                    }
-                                                }
-
-                                                if (qr.PID[19].value) {
-                                                    asOtherIDs(classCode: 'PAT') {
-                                                        id(root: nationalIdentifierRoot, extension: qr.PID[19].value)
-                                                        scopingOrganization(classCode: 'ORG', determinerCode: 'INSTANCE') {
-                                                            id(root: nationalIdentifierRoot)
-                                                        }
-                                                    }
-                                                }
-
+                                                createPatientPersonElements(builder, qr.PID)
                                                 if (nullFlavorWhenScopingOrganizationIdNotFound) {
                                                     for (oid in remainingDomains) {
                                                         asOtherIDs(classCode: 'PAT') {
@@ -296,40 +228,4 @@ class PdqResponse2to3Translator implements Hl7TranslatorV2toV3 {
         }
     }
 
-
-    void translateTelecom(MarkupBuilder builder, SelectorClosure repeatableXTN, String defaultUse) {
-        repeatableXTN().each { telecom ->
-            String number = telecom[1].value ?: telecom[4].value
-            if (number) {
-                String use = defaultUse
-                String schema = 'tel'
-                
-                switch (telecom[2].value) {
-                case 'PRN':
-                    use = 'H'
-                    break
-                case 'WPN':
-                    use = 'WP'
-                    break
-                }
-                    
-                switch (telecom[3].value) {
-                case 'PH':
-                    // take the defaults
-                    break
-                case 'CP':
-                    use = 'MC'
-                    break
-                case 'FX':
-                    schema = 'fax'
-                    break
-                case 'Internet':
-                case 'X.400':
-                    schema = 'mailto'
-                    break
-                }
-                builder.telecom(value: "${schema}:${number}", use: use)
-            }
-        }
-    }
 }
