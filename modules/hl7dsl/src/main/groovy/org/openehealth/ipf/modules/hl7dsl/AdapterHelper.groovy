@@ -28,6 +28,7 @@ import ca.uhn.hl7v2.model.Type
 /**
  * @author Martin Krasser
  * @author Christian Ohr
+ * @author Mitko Kolev
  */
 class AdapterHelper {
 
@@ -45,6 +46,11 @@ class AdapterHelper {
     static List adaptStructures(Structure[] structures) {
         structures.collect { adaptStructure(it) }
     }
+    
+    static List adaptStructures(Structure[] structures, String path) {
+        structures.collect { adaptStructure(it, path) }
+    }
+
 
     static List<TypeAdapter> adaptTypes(Type[] types) {
         types.collect { adaptType(it) }
@@ -58,6 +64,12 @@ class AdapterHelper {
         }
     }
 
+    static StructureAdapter adaptStructure(Structure structure, String path) {
+        StructureAdapter result = adaptStructure(structure)
+        result.setPath(path)
+        return result
+    }
+    
     static TypeAdapter adaptType(Type type) {
         switch (type) {
             case Primitive : return new PrimitiveAdapter(type)
@@ -76,6 +88,14 @@ class AdapterHelper {
             case Type            : return adaptType(object)
             default              : return object
         }    
+    }
+    
+    static Object adapt(Object object, String path) {
+        switch(object) {
+            case Structure[]     : return adaptStructures(object, path)
+            case Structure       : return adaptStructure(object, path)
+            default : return adapt(object)
+        }
     }
     
     static String stringValue(def object) {
