@@ -35,12 +35,12 @@ class GroupAdapter extends StructureAdapter {
     Group group
     
     private Set cachedNames
-    
+
     GroupAdapter(Group group) {
-        this.group = group
-        this.path = ''
-        this.cachedNames = group.names as HashSet
-    }
+		this.group = group
+		this.path = ''
+		this.cachedNames = group.names as HashSet
+	}
     
     def getTarget() {
         group
@@ -56,7 +56,7 @@ class GroupAdapter extends StructureAdapter {
     
     StructureAdapter nrp(String s) {
         // create new structure within repeating group
-        adaptStructure(group.get(s, count(s))) 
+        adaptStructure(group.get(s, count(s)), elementPath(s))
     }
     
     public Object invokeMethod(String name, Object args) {
@@ -92,11 +92,14 @@ class GroupAdapter extends StructureAdapter {
     }
     
     def getAt(String s) {
+        def result;
+        def resultElementPath = elementPath(s)
         if (group.isRepeating(s)) {
-            return selector(adaptStructures(group.getAll(s)), this, s)
+            result = selector(adaptStructures(group.getAll(s), resultElementPath), this, s);
         } else {
-            return adaptStructure(group.get(s))
+            result = adaptStructure(group.get(s), resultElementPath)
         }
+        result
     }
     
     void from(def value) {
@@ -160,5 +163,9 @@ class GroupAdapter extends StructureAdapter {
             }
         }
         result
+    }
+    
+    private def elementPath(String element){
+        path == '' ?  element : "${path}.${element}"
     }
 }
