@@ -126,7 +126,7 @@ class Utils {
     /**
      * Creates a HL7 v3 name element from a v2 XPN.
      */
-    static createName(MarkupBuilder builder, CompositeAdapter xpn) {
+    static void createName(MarkupBuilder builder, CompositeAdapter xpn) {
         builder.name {
             def family = xpn[1][1].value
             def given  = xpn[2].value
@@ -145,7 +145,7 @@ class Utils {
     /**
      * Creates an HL7 v3 "acknowledgement" element.
      */
-    static createQueryAcknowledgementElement(
+    static void createQueryAcknowledgementElement(
             MarkupBuilder builder, 
             GPathResult xml, 
             Map status,
