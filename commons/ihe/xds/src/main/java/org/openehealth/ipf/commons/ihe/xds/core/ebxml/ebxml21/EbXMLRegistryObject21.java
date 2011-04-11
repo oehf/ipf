@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.*;
 
 import java.util.ArrayList;
@@ -147,6 +148,28 @@ public abstract class EbXMLRegistryObject21<E extends RegistryObjectType> implem
     @Override
     public void setId(String id) {
         registryEntry.setId(id);
+    }
+
+    @Override
+    public String getLid() {
+        // Not available in 2.1
+        return null;
+    }
+
+    @Override
+    public void setLid(String lid) {
+        // Not available in 2.1
+    }
+
+    @Override
+    public Version getVersionInfo() {
+        // Not available in 2.1
+        return null;
+    }
+
+    @Override
+    public void setVersionInfo(Version version) {
+        // Not available in 2.1
     }
 
     @Override

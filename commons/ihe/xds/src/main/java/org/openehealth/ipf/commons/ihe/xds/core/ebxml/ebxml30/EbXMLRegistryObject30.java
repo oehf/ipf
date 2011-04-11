@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 import static org.apache.commons.lang.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ClassificationType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExternalIdentifierType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.InternationalStringType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,6 +150,37 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     @Override
     public void setId(String id) {
         registryEntry.setId(id);
+    }
+
+    @Override
+    public String getLid() {
+        return registryEntry.getLid();
+    }
+
+    @Override
+    public void setLid(String lid) {
+        registryEntry.setLid(lid);
+    }
+
+    @Override
+    public Version getVersionInfo() {
+        VersionInfoType versionInfo = registryEntry.getVersionInfo();
+        if (versionInfo == null) {
+            return null;
+        }
+
+        return new Version(versionInfo.getVersionName(), versionInfo.getComment());
+    }
+
+    @Override
+    public void setVersionInfo(Version version) {
+        VersionInfoType versionInfo = null;
+        if (version != null) {
+            versionInfo = EbXMLFactory30.RIM_FACTORY.createVersionInfoType();
+            versionInfo.setVersionName(version.getVersionName());
+            versionInfo.setComment(version.getComment());
+        }
+        registryEntry.setVersionInfo(versionInfo);
     }
 
     @Override
