@@ -83,7 +83,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
             externalIdentifier.setValue(value);
             externalIdentifier.setIdentificationScheme(scheme);
             externalIdentifier.setRegistryObject(registryEntry.getId());
-            externalIdentifier.setId(UUID.randomUUID().toString());
+            externalIdentifier.setId("urn:uuid:" + UUID.randomUUID().toString());
                         
             LocalizedString localized = new LocalizedString(name, null, null);
             externalIdentifier.setName(new EbXMLInternationalString30(localized));
