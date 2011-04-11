@@ -43,6 +43,6 @@ public class EbXMLRegistryPackage30 extends EbXMLRegistryObject30<RegistryPackag
 
     @Override
     public void setStatus(AvailabilityStatus status) {
-        getInternal().setStatus(AvailabilityStatus.toOpcode(status));
+        getInternal().setStatus(AvailabilityStatus.toQueryOpcode(status));
     }
 }
