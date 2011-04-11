@@ -52,8 +52,6 @@ public class StatusValidation implements QueryParameterValidation {
         List<String> slotValues = request.getSlotValues(param.getSlotName());
         for (String slotValue : slotValues) {
             metaDataAssert(slotValue != null, MISSING_REQUIRED_QUERY_PARAMETER, param);
-            metaDataAssert(PATTERN.matcher(slotValue).matches(), 
-                    PARAMETER_VALUE_NOT_STRING_LIST, param);
         }
 
         QuerySlotHelper slots = new QuerySlotHelper(request);
