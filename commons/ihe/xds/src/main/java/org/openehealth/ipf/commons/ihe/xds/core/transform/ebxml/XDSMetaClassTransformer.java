@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,12 +134,14 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
     protected void addAttributes(C metaData, E ebXML, EbXMLObjectLibrary objectLibrary) {
         ebXML.setDescription(metaData.getComments());
         ebXML.setName(metaData.getTitle());
+        ebXML.setLid(metaData.getLogicalUuid());
+        ebXML.setVersionInfo(metaData.getVersion());
     }
-    
+
     /**
      * Called by the base class to add attributes to the meta data.
      * @param metaData
-     *          the meta data instance receiving the attributes. 
+     *          the meta data instance receiving the attributes.
      * @param ebXML
      *          the ebXML instance containing the attributes.
      */
@@ -147,8 +149,10 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
         metaData.setComments(ebXML.getDescription());
         metaData.setTitle(ebXML.getName());
         metaData.setEntryUuid(ebXML.getId());
+        metaData.setLogicalUuid(ebXML.getLid());
+        metaData.setVersion(ebXML.getVersionInfo());
     }
-    
+
     /**
      * Called by the base class to add slots to the ebXML instance.
      * @param metaData
