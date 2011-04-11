@@ -36,6 +36,8 @@ public abstract class XDSMetaClass implements Serializable {
     private LocalizedString title;
     private String uniqueId;
     private String homeCommunityId;
+    private String logicalUuid;
+    private Version version;
 
     /**
      * @return the availability status.
@@ -142,6 +144,36 @@ public abstract class XDSMetaClass implements Serializable {
         this.homeCommunityId = homeCommunityId;
     }
 
+    /**
+     * @return the logical UUID of the entry.
+     */
+    public String getLogicalUuid() {
+        return logicalUuid;
+    }
+
+    /**
+     * @param logicalUuid
+     *          the logical UUID of the entry.
+     */
+    public void setLogicalUuid(String logicalUuid) {
+        this.logicalUuid = logicalUuid;
+    }
+
+    /**
+     * @return the version of the entry.
+     */
+    public Version getVersion() {
+        return version;
+    }
+
+    /**
+     * @param version
+     *          the version of the entry.
+     */
+    public void setVersion(Version version) {
+        this.version = version;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -154,6 +186,8 @@ public abstract class XDSMetaClass implements Serializable {
         result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
+        result = prime * result + ((logicalUuid == null) ? 0 : logicalUuid.hashCode());
+        result = prime * result + ((version == null) ? 0 : version.hashCode());
         return result;
     }
 
@@ -200,6 +234,16 @@ public abstract class XDSMetaClass implements Serializable {
             if (other.uniqueId != null)
                 return false;
         } else if (!uniqueId.equals(other.uniqueId))
+            return false;
+        if (logicalUuid == null) {
+            if (other.logicalUuid != null)
+                return false;
+        } else if (!logicalUuid.equals(other.logicalUuid))
+            return false;
+        if (version == null) {
+            if (other.version != null)
+                return false;
+        } else if (!version.equals(other.version))
             return false;
         return true;
     }
