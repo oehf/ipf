@@ -1,80 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.openehealth.ipf.modules</groupId>
+    <groupId>org.openehealth.ipf.modules.cda</groupId>
     <artifactId>modules-cda</artifactId>
     <name>modules-cda</name>
+	<packaging>pom</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>modules</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
+    	
+	<modules>
+        <module>oht</module>
+		<module>mdht</module>
+    </modules>
     
-    <properties>
-        <osgi.export.pkg>org.openehealth.ipf.modules.cda.*</osgi.export.pkg>
-        <ipf.extension.beans>cdaModelExtension</ipf.extension.beans>
-    </properties>
-    
-    <dependencies>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>  
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>         
-       <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovytools-builder</artifactId>
-        </dependency>
-       <dependency>
-            <groupId>org.openhealthtools.ihe</groupId>
-            <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <testFailureIgnore>false</testFailureIgnore>
-                    <forkMode>once</forkMode>
-                    <argLine>-Xmx256m</argLine>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <!-- Additionally to the groovy compilation generate stubs here -->
-                        <id>generateStubs</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>generateStubs</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>  
-                      <manifestFile>META-INF/MANIFEST.MF</manifestFile>
-                    </archive> 
-                    <excludes>
-                        <!-- Include only the /builder/**/*.groovy files, exclude the compiled ones --> 
-                        <exclude>org/**/*.groovy</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>  
 </project>

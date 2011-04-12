@@ -35,12 +35,18 @@ public class CDAR2ParserTest {
         parser = new CDAR2Parser();
     }
 
-
-
     @Test
     public void testParseSampleDocument() throws IOException {
         InputStream is = getClass().getResourceAsStream(
                 "/builders/content/document/SampleCDADocument.xml");
+        POCDMT000040ClinicalDocument clinicalDocument = parser.parse(is);
+        Assert.assertNotNull(clinicalDocument);
+    }
+    
+    @Test
+    public void testParseSampleCCDDocument() throws IOException {
+        InputStream is = getClass().getResourceAsStream(
+                "/builders/content/document/SampleCCDDocument.xml");
         POCDMT000040ClinicalDocument clinicalDocument = parser.parse(is);
         Assert.assertNotNull(clinicalDocument);
     }
