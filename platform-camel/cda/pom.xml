@@ -40,8 +40,8 @@
             <version>${camel-version}</version>
         </dependency>        
         <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-cda</artifactId>
+            <groupId>org.openehealth.ipf.modules.cda.oht</groupId>
+            <artifactId>modules-cda-oht</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

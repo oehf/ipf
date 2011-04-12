@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.modules.cda.mdht</groupId>
+    <artifactId>modules-cda-mdht</artifactId>
+    <name>modules-cda-mdht</name>
+    
+    <parent>
+        <groupId>org.openehealth.ipf.modules.cda</groupId>
+        <artifactId>modules-cda</artifactId>
+        <version>2.2-SNAPSHOT</version>
+    </parent>
+    
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.modules.cda.mdht*</osgi.export.pkg>
+        <ipf.extension.beans>cdaModelExtension</ipf.extension.beans>
+    </properties>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>  
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+       <dependency>
+            <groupId>org.openhealthtools.mdht</groupId>
+            <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
+			<version>0.7.0.201012100720</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>  
+                      <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                    </archive> 
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>  
+</project>
