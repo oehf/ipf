@@ -136,7 +136,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
                 return;
             }
         }
-        violations.add(new Exception("Expected one of ${allowedDomain} in ${segmentName}-${field}"))
+        violations.add(new Exception("Expected one of ${allowedDomain} in ${segmentName}-${field}, found ${value}"))
     }
 
     /**

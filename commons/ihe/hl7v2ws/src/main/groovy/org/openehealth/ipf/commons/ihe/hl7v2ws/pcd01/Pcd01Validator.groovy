@@ -19,13 +19,11 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
 import java.util.Collection
 import java.util.Map
 
-import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.pixpdq.AbstractMessageAdapterValidator
-import org.openehealth.ipf.modules.hl7.HL7v2Exception
 import org.openehealth.ipf.modules.hl7.validation.support.DefaultTypeRulesValidationContext
 
-import ca.uhn.hl7v2.HL7Exception
-import ca.uhn.hl7v2.validation.MessageValidator
+import ca.uhn.hl7v2.model.v26.datatype.NM
+import ca.uhn.hl7v2.model.v26.datatype.TX
 /**
  * Implements more strict validaton for PCD-01
  * 
@@ -184,21 +182,27 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
 	}
 	
 	Collection getOBXRequiredFields(obx, boolean checkTime){
-		boolean shouldValidateOBX6 = obx[5].value == null ? false : true;
-		
+        
+        def obx5 = obx[5].target?.data;
+        boolean shouldValidateOBX6;
+        if (   obx5 instanceof NM
+            || obx5 instanceof TX){
+            shouldValidateOBX6 = true;
+        } else {
+		    shouldValidateOBX6 = false;
+        }
+		Collection fields = [1, 3, 4]
+        
 		if (shouldValidateOBX6){
-			if (checkTime){
-				return  [1, 3, 4, 6, 11, 14]
-			 } else {
-				   return [1, 3, 4, 6, 11]
-			 }
-		}else {
-			if (checkTime){
-			   return  [1, 3, 4, 11, 14]
-			} else {
-				  return [1, 3, 4, 11]
-			}
+            fields.add (6)
 		}
+        //some messages in the continua spec do not have field 11. uncomment and run the ContinuaWanValidatorTest
+
+        //fields.add(11)
+        if (checkTime){
+            fields.add(14)
+        }   
+        fields
 	}
 	
  
