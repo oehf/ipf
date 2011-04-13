@@ -16,14 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.util.MessageRenderer.render;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkRequestAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkResponseAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.createNak;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.extractMessageAdapter;
 
 import org.apache.camel.Exchange;
-import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -31,7 +29,9 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.Parser;
 
 /**
  * Generic implementation of an HL7v2-based Web Service.
@@ -51,23 +51,22 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
     }
 
     protected String doProcess(String request) {
-        Validate.notEmpty(request, "Empty request!");
         // preprocess
         MessageAdapter msgAdapter;
         try {
-            msgAdapter = MessageAdapters.make(config.getParser(),
-                    request.trim());
+            msgAdapter = MessageAdapters.make(config.getParser(), request.trim());
             checkRequestAcceptance(msgAdapter, config);
         } catch (Exception e) {
-            return populatePreProcessingNak(e);
+            LOG.error(formatErrMsg("Request rejected, returning NAK"));
+            return defaultNakString(e);
         }
         // process
         MessageAdapter originalRequest = msgAdapter.copy();
         Exchange exchange = super.process(msgAdapter);
 
         if (exchange.getException() != null) {
-            return populateProcessingNak(originalRequest,
-                    exchange.getException());
+            LOG.error(formatErrMsg("Exchange failed, returning NAK"));
+            return nakString(originalRequest, exchange.getException());
         }
         // postprocess
         try {
@@ -77,42 +76,10 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
                     config.getParser());
             checkResponseAcceptance(msgAdapter, config);
             return render(msgAdapter);
-        } catch (Exception e) {
-            return populatePostProcessingNak(originalRequest, e);
+        } catch (Exception noMessageAdapterInOutBody) {
+            LOG.error(formatErrMsg("Response not accepted, returning NAK"), noMessageAdapterInOutBody);
+            return defaultNakString(noMessageAdapterInOutBody);
         }
-    }
-
-
-    /**
-     * 
-     * @param cause
-     * @return Encoded HAPI Message AR negative acknowledgment
-     */
-    protected String populatePreProcessingNak(Throwable cause) {
-        LOG.error(formatErrMsg("Request rejected returns NAK"));
-        return defaultNakString(cause);
-    }
-
-    /**
-     * 
-     * @param msgAdapter
-     * @param cause
-     * @return Encoded HAPI Message AE negative acknowledgment
-     */
-    protected String populateProcessingNak(MessageAdapter msgAdapter,
-            Throwable cause) {
-        LOG.error(formatErrMsg("Exchange failed returns NAK"));
-        return nakString(msgAdapter, cause);
-    }
-
-    /**
-     * 
-     * @return Encoded HAPI Message AE negative acknowledgment
-     */
-    protected String populatePostProcessingNak(MessageAdapter msgAdapter,
-            Throwable cause) {
-        LOG.error(formatErrMsg("Response not accepted returns NAK"), cause);
-        return defaultNakString(cause);
     }
 
 
@@ -140,7 +107,7 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      */
     protected String defaultNakString(Throwable exception) {
         Message nak = config.getNakFactory().createDefaultNak(config, exception);
-        return render(nak, config.getParser());
+        return render(nak);
     }
     
     /**
@@ -153,5 +120,25 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      */
     protected String formatErrMsg(String text) {
         return config.getSendingApplication() + ": " + text;
+    }
+    
+    /**
+     * Converts the given HAPI Message to a String suitable for WS transport.
+     * 
+     * @param message
+     *            a {@link Message} to convert.
+     * @param parser
+     *            a {@link Parser} to convert.
+     * @return a String representation of the given HAPI message.
+     */
+    protected String render(Message message) {
+        try {
+            return message.getParser().encode(message).replaceAll("\r", "\r\n");
+        } catch (HL7Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    protected String render(MessageAdapter msgAdapter) {
+        return render((Message) msgAdapter.getTarget());
     }
 }

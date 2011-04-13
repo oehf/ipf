@@ -19,6 +19,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01Validator;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.ContinuaWanValidator;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.Pcd01Component;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
@@ -32,6 +33,8 @@ import ca.uhn.hl7v2.parser.Parser;
 public class Hl7v2wsCamelValidators {
     
     private static final Validator<Object, Object> pcd01Validator = new Pcd01Validator();
+    
+    private static final Validator<Object, Object> continuaWanValidator = new ContinuaWanValidator();
     /**
      * Returns a validating processor for PCD-01 request messages
      * (Communicate Patient Care Device (PCD) data).
@@ -47,7 +50,19 @@ public class Hl7v2wsCamelValidators {
     public static Processor pcd01ResponseValidator() {
         return newValidatingProcessor(pcd01Validator, Pcd01Component.HL7V2_CONFIG.getParser());
     }
-    
+    /**
+     * Returns a validating processor for Continua WAN - conform request messages.
+     */
+    public static Processor continuaWanRequestValidator() {
+        return newValidatingProcessor(continuaWanValidator, Pcd01Component.HL7V2_CONFIG.getParser());
+    }
+
+    /**
+     * Returns a validating processor for Continua WAN - conform response messages.
+     */
+    public static Processor continuaWanResponseValidator() {
+        return newValidatingProcessor(continuaWanValidator, Pcd01Component.HL7V2_CONFIG.getParser());
+    }
     
     private static Processor newValidatingProcessor(final Validator<Object,Object> validator , final Parser parser) {
         return new Processor() {

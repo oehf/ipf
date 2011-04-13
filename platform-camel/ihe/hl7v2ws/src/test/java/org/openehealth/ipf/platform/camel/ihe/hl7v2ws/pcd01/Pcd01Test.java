@@ -19,8 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 
-import javax.xml.ws.soap.SOAPFaultException;
-
 import org.apache.camel.Exchange;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
@@ -44,10 +42,11 @@ public class Pcd01Test extends StandardTestContainer {
         startServer(new CXFServlet(), "pcd-01.xml");
     }
     
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testEmptyPayload() throws Exception {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        requestBody(uri, "");
+        String response = requestBody(uri, "");
+        assertTrue(response.contains("MSA|AR"));
     }
 
     @Test
