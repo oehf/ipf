@@ -35,24 +35,14 @@ class ContinuaWanValidator extends  Pcd01Validator {
     void checkMSH(msg, Collection<Exception> violations) {
         checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12, 15, 16, 21], violations)
     }
-    
-	/*
-	* Check patient name only for structure.
-	*/
-	void checkPID(patientGroup, Collection<Exception> violations) {
-		checkSegmentStructure( patientGroup, 'PID', [3, 5], violations)
-	}
-	
    
 	void checkOBR(ooGroup, int obrIndex, Collection<Exception> violations) {
 		checkSegmentValues(ooGroup, 'OBR', [1, 2, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
 	}
 	/*
-	 * The <code>obxIndex</code> is the observation index (required).
-	 * It starts from 1 and is incremeted by one on every obx.
 	 * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
 	 */
-	void checkOBSERVATION(obs, int obxIndex, boolean checkTime, Collection<Exception> violations) {
+    void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
 		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(obs.OBX, checkTime), violations);
 		if (obs.OBX[2].value){
 			//OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
