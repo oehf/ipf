@@ -26,20 +26,19 @@
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.openhealthtools.mdht</groupId>
             <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
-			<version>0.7.0.201012100720</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
-
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <archive>  
-                      <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
                     </archive> 
                 </configuration>
             </plugin>

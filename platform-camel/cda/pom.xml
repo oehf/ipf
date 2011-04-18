@@ -37,8 +37,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
-            <version>${camel-version}</version>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules.cda.oht</groupId>
             <artifactId>modules-cda-oht</artifactId>
