@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 import java.io.OutputStream;
 
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
+import org.apache.cxf.io.CacheAndWriteOutputStream;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
@@ -39,7 +40,17 @@ public class OutPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mes
     
     @Override
     public void handleMessage(Message message) {
-        WrappedOutputStream wrapper = (WrappedOutputStream) message.getContent(OutputStream.class);
+        WrappedOutputStream wrapper;
+        OutputStream outputStream =  message.getContent(OutputStream.class);
+        if (outputStream instanceof CacheAndWriteOutputStream) {
+            // Extract what we need from the wrapper added by CXF. CXF sometimes adds the wrapper for diagnostics.
+            outputStream = ((CacheAndWriteOutputStream)outputStream).getFlowThroughStream();
+        }
+        if (outputStream instanceof WrappedOutputStream) {
+            wrapper = (WrappedOutputStream) outputStream;
+        } else {
+            throw new IllegalStateException("Message output stream is not of expected type");
+        }
         String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate();
         String payload = SoapUtils.extractSoapBody(soapEnvelope);
         message.setContent(String.class, payload);

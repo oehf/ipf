@@ -112,7 +112,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         validateSubmissionSet(container, profile);
         if (!profile.isQuery()) {
             validateUniquenessOfUUIDs(container);
-            validateUniquenessOfUniqueIds(container);
+            validateUniqueIds(container);
         }
         validateAssociations(container, profile);
         validateDocumentEntries(container, profile);
@@ -184,21 +184,17 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateUniquenessOfUniqueIds(EbXMLObjectContainer container) throws XDSMetaDataException {
-        Set<String> uniqueIds = new HashSet<String>();
-        addUniqueIds(container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE), uniqueIds, DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
-        addUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), uniqueIds, FOLDER_UNIQUE_ID_EXTERNAL_ID);
-        addUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), uniqueIds, SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
+    private void validateUniqueIds(EbXMLObjectContainer container) throws XDSMetaDataException {
+        validateUniqueIds(container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
+        validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID);
+        validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
     }
 
-    private void addUniqueIds(List<? extends EbXMLRegistryObject> objects, Set<String> uniqueIds, String scheme) throws XDSMetaDataException {
+    private void validateUniqueIds(List<? extends EbXMLRegistryObject> objects, String scheme) throws XDSMetaDataException {
         for (EbXMLRegistryObject obj : objects) {
             String uniqueId = obj.getExternalIdentifierValue(scheme);
             metaDataAssert(uniqueId != null, UNIQUE_ID_MISSING);
             metaDataAssert(uniqueId.length() <= 128, UNIQUE_ID_TOO_LONG);
-
-            metaDataAssert(!uniqueIds.contains(uniqueId), UNIQUE_ID_NOT_UNIQUE);
-            uniqueIds.add(uniqueId);
         }
     }
 

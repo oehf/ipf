@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Version;
 
 import java.util.List;
 
@@ -137,7 +138,27 @@ public interface EbXMLRegistryObject extends EbXMLSlotList {
      * @param id  the id of this entry.
      */
     void setId(String id);
-    
+
+    /**
+     * @return the lid of this entry.
+     */
+    String getLid();
+
+    /**
+     * @param lid  the lid of this entry.
+     */
+    void setLid(String lid);
+
+    /**
+     * @return the id of this entry.
+     */
+    Version getVersionInfo();
+
+    /**
+     * @param version  the versionInfo of this entry.
+     */
+    void setVersionInfo(Version version);
+
     /**
      * @return the ebXML object being wrapped by this entry.
      */

@@ -127,13 +127,6 @@ public class SubmitObjectsRequestValidatorTest {
     }
 
     @Test
-    public void testUniqueIdNotUnique() {
-        request.getFolders().get(0).setUniqueId("id");
-        docEntry.setUniqueId("id");
-        expectFailure(UNIQUE_ID_NOT_UNIQUE);
-    }
-
-    @Test
     public void testUUIDNotUnique() {
         request.getFolders().get(0).setEntryUuid("id");
         docEntry.setEntryUuid("id");
