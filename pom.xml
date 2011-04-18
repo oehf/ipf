@@ -78,6 +78,7 @@
         <junit-version>4.8.1</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.16</log4j-version>
+        <mdht-version>0.7.0.201012100720</mdht-version>
         <metabuilder-version>1.1.6</metabuilder-version>
         <mina-version>1.1.7</mina-version>
         <oht-atna-version>1.2.0-v20110214</oht-atna-version>
@@ -725,6 +726,11 @@
                 <groupId>org.openhealthtools.ihe</groupId>
                 <artifactId>org.openhealthtools.ihe.common.cdar2</artifactId>
                 <version>${oht-cdar-version}</version>
+            </dependency>
+            <dependency>
+                 <groupId>org.openhealthtools.mdht</groupId>
+                 <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
+                 <version>${mdht-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
