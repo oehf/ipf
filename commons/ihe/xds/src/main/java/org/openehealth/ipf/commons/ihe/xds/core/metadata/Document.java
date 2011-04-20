@@ -16,11 +16,14 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.activation.DataHandler;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.util.DocumentContentHelper;
 
 /**
  * Represents the contents of a document and the describing entry.
@@ -32,12 +35,10 @@ public class Document implements Serializable {
     private static final long serialVersionUID = 5206884085835642756L;
     
     private DocumentEntry documentEntry;
-    private transient DataHandler dataHandler;
-    
-    /**
-     * Constructs a document.
-     */
-    public Document() {}
+    private transient Map<Class<?>, Object> contents = new HashMap<Class<?>, Object>();
+
+    public Document() {
+    }
 
     /**
      * Constructs a document.
@@ -48,22 +49,8 @@ public class Document implements Serializable {
      */
     public Document(DocumentEntry documentEntry, DataHandler dataHandler) {
         this.documentEntry = documentEntry;
-        this.dataHandler = dataHandler;
-    }
-
-    /**
-     * @return the data handler allowing access to the contents of the document.
-     */
-    public DataHandler getDataHandler() {
-        return dataHandler;
-    }
-    
-    /**
-     * @param dataHandler
-     *          the data handler allowing access to the contents of the document.
-     */
-    public void setDataHandler(DataHandler dataHandler) {
-        this.dataHandler = dataHandler;
+        if (dataHandler != null)
+            addContents(DataHandler.class, dataHandler);
     }
 
     /**
@@ -72,20 +59,59 @@ public class Document implements Serializable {
     public DocumentEntry getDocumentEntry() {
         return documentEntry;
     }
-
+    
     /**
      * @param documentEntry
-     *          the document entry describing the meta data of the document.
+     *            the document entry describing the meta data of the document.
      */
     public void setDocumentEntry(DocumentEntry documentEntry) {
         this.documentEntry = documentEntry;
     }
+
+    /**
+     * @return the data handler allowing access to the contents of the document.
+     */
+    @Deprecated
+    public DataHandler getDataHandler() {
+        return getContents(DataHandler.class);
+    }
     
+    /**
+     * @param dataHandler
+     *          the data handler allowing access to the contents of the document.
+     */
+    @Deprecated
+    public void setDataHandler(DataHandler dataHandler) {
+        addContents(DataHandler.class, dataHandler);
+    }
+    
+    public Map<Class<?>, Object> getContents() {
+        return contents;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T> T getContents(Class<T> key) {
+        if (contents.isEmpty())
+            return null;
+        if (!contents.containsKey(key)) {
+            T result = DocumentContentHelper.convert(contents, key);
+            if (result != null)
+                addContents(key, result);
+        }
+        return (T) contents.get(key);
+    }
+    
+    public Object addContents(Class<?> clazz, Object content) {
+        return contents.put(clazz, content);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((dataHandler == null) ? 0 : dataHandler.hashCode());
+        result = prime * result
+            + ((getContents(DataHandler.class) == null) ?
+                0 : getContents(DataHandler.class).hashCode());
         result = prime * result + ((documentEntry == null) ? 0 : documentEntry.hashCode());
         return result;
     }
@@ -99,11 +125,6 @@ public class Document implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Document other = (Document) obj;
-        if (dataHandler == null) {
-            if (other.dataHandler != null)
-                return false;
-        } else if (!dataHandler.equals(other.dataHandler))
-            return false;
         if (documentEntry == null) {
             if (other.documentEntry != null)
                 return false;

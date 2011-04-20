@@ -19,6 +19,7 @@ import static org.apache.commons.lang.Validate.notNull;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.activation.DataHandler;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
@@ -84,7 +85,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
             DocumentEntry docEntry = doc.getDocumentEntry();
             if (docEntry != null) {
                 ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
-                ebXML.addDocument(docEntry.getEntryUuid(), doc.getDataHandler());
+                ebXML.addDocument(docEntry.getEntryUuid(), doc.getContents(DataHandler.class));
             }
         }
         
@@ -126,7 +127,8 @@ public class ProvideAndRegisterDocumentSetTransformer {
                 document.setDocumentEntry(docEntry);
                 if (docEntry.getEntryUuid() != null) {
                     String id = docEntry.getEntryUuid();
-                    document.setDataHandler(documents.get(id));
+                    DataHandler data = documents.get(id);
+                    document.addContents(DataHandler.class, data);
                 }
                 request.getDocuments().add(document);
             }
