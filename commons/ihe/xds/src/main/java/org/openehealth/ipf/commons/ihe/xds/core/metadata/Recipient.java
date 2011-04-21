@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -29,6 +32,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * expected to be a member of the specified organization.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Recipient", propOrder = {"person", "organization"})
 public class Recipient implements Serializable {
     private static final long serialVersionUID = -8192511869759795939L;
     

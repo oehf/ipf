@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +37,17 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "PatientInfo", propOrder = {"ids", "name", "gender", "dateOfBirth", "address"})
 public class PatientInfo implements Serializable {
     private static final long serialVersionUID = 7202574584233259959L;
-    
+
+    @XmlElement(name = "id")
     private final List<Identifiable> ids = new ArrayList<Identifiable>();   // PID-3
     private Name name;                                                      // PID-5
+    @XmlElement(name = "birthTime")
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String dateOfBirth;                                             // PID-7
     private String gender;                                                  // PID-8
     private Address address;                                                // PID-11

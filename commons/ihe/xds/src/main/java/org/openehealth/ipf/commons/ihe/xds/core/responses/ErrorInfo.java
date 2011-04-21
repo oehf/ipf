@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -27,6 +30,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ErrorInfo", propOrder = {"errorCode", "codeContext", "severity", "location"})
 public class ErrorInfo implements Serializable {
     private static final long serialVersionUID = 7615868122051414551L;
     

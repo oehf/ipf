@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -27,17 +29,25 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "LocalizedString")
 public class LocalizedString implements Serializable {
     private static final long serialVersionUID = 4876325465142358849L;
     
+    @XmlAttribute(name = "language")
     private String lang;
+    @XmlTransient
     private String charset;
+    @XmlValue
     private String value;
     
     /**
      * Constructs a localized string.
      */
-    public LocalizedString() {}
+    public LocalizedString() {
+        lang = "en-US";
+        charset = "UTF-8";
+    }
 
     /**
      * Constructs a localized string.
@@ -62,7 +72,7 @@ public class LocalizedString implements Serializable {
     public LocalizedString(String value) {
         this.value = value;
         lang = "en-US";
-        charset = "UTF8";
+        charset = "UTF-8";
     }
 
     /**

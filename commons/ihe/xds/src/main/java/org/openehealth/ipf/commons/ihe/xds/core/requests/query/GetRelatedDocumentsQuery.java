@@ -15,19 +15,24 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
-
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 
 /**
  * Represents a stored query for GetRelatedDocuments.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetRelatedDocumentsQuery")
+@XmlRootElement(name = "getRelatedDocumentsQuery")
 public class GetRelatedDocumentsQuery extends GetFromDocumentQuery implements Serializable {
     private static final long serialVersionUID = -8768793068458839362L;
-    
+
+    @XmlElement(name = "associationType")
     private List<AssociationType> associationTypes;
 
     /**

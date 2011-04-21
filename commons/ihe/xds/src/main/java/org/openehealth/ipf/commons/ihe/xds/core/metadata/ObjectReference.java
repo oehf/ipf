@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -24,10 +25,14 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Represents an object reference.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ObjectReference", propOrder = {"home", "id"})
 public class ObjectReference implements Serializable {
     private static final long serialVersionUID = 5442558815484966722L;
-    
+
+    @XmlAttribute(name = "uuid")
     private String id;
+    @XmlAttribute(name = "homeCommunityId")
     private String home;
     
     /**

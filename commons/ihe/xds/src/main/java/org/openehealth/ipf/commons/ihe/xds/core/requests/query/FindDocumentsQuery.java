@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -24,19 +25,33 @@ import java.util.List;
  * Represents a stored query for FindDocuments.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "FindDocumentsQuery", propOrder = {
+        "status", "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime", "classCodes",
+        "confidentialityCodes", "eventCodes", "formatCodes", "healthcareFacilityTypeCodes", "practiceSettingCodes",
+        "typeCodes"})
+@XmlRootElement(name = "findDocumentsQuery")
 public class FindDocumentsQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = -5765363916663583605L;
 
     private List<AvailabilityStatus> status;
+    @XmlElement(name = "typeCode")
     private List<Code> typeCodes;
+    @XmlElement(name = "classCode")
     private List<Code> classCodes;
+    @XmlElement(name = "practiceSettingCode")
     private List<Code> practiceSettingCodes;
+    @XmlElement(name = "healthcareFacilityTypeCode")
     private List<Code> healthcareFacilityTypeCodes;
+    @XmlElement(name = "eventCode")
     private QueryList<Code> eventCodes;
+    @XmlElement(name = "confidentialityCode")
     private QueryList<Code> confidentialityCodes;
+    @XmlElement(name = "formatCode")
     private List<Code> formatCodes;
+    @XmlElement(name = "authorPerson")
     private List<String> authorPersons;
-    
+
     private final TimeRange creationTime = new TimeRange();
     private final TimeRange serviceStartTime = new TimeRange();
     private final TimeRange serviceStopTime = new TimeRange();

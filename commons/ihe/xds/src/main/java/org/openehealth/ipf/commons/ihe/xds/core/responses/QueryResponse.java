@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +34,22 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "QueryResponse", propOrder = {
+        "references", "submissionSets", "folders", "documentEntries", "associations"})
+@XmlRootElement(name = "queryResponse")
 public class QueryResponse extends Response implements Serializable {
     private static final long serialVersionUID = -435462523350768903L;
     
+    @XmlElement(name = "reference")
     private List<ObjectReference> references = new ArrayList<ObjectReference>();
+    @XmlElementRef
     private List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();
+    @XmlElementRef
     private List<Folder> folders = new ArrayList<Folder>();
+    @XmlElementRef
     private List<SubmissionSet> submissionSets = new ArrayList<SubmissionSet>();
+    @XmlElementRef
     private List<Association> associations = new ArrayList<Association>();
     
     /**
@@ -55,7 +65,7 @@ public class QueryResponse extends Response implements Serializable {
     public QueryResponse(Status status) {        
         super(status);
     }
-
+    
     /**
      * Constructs an error response object with the data from an exception.
      * @param throwable

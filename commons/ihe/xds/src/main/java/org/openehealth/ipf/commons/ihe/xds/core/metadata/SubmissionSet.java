@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,21 @@ import java.util.List;
  * 
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "SubmissionSet", propOrder = {
+        "sourceId", "submissionTime", "authors", "intendedRecipients", "contentTypeCode"})
+@XmlRootElement(name = "submissionSet")
 public class SubmissionSet extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = 5961980266312684583L;
     
+    @XmlElement(name = "author")
     private final List<Author> authors = new ArrayList<Author>();
     private Code contentTypeCode;
+    @XmlElement(name = "intendedRecipient")
     private final List<Recipient> intendedRecipients = new ArrayList<Recipient>(); 
     private String sourceId;
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String submissionTime;
 
     /**

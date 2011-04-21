@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -26,9 +27,12 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "SQLQuery")
+@XmlRootElement(name = "sqlQuery")
 public class SqlQuery extends Query implements Serializable {
     private static final long serialVersionUID = -4059622155305044092L;
-    
+
     private String sql;
 
     /**

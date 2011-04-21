@@ -18,8 +18,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Version")
 public class Version implements Serializable {
     private static final long serialVersionUID = 4876325465142352011L;
 

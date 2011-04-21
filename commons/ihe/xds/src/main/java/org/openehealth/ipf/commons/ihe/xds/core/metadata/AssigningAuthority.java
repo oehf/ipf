@@ -20,6 +20,8 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
+
 /**
  * Represents an authority that assigns IDs.
  * <p>
@@ -35,11 +37,16 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * removed from the HL7 string.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "AssigningAuthority")
 public class AssigningAuthority implements Serializable {
     private static final long serialVersionUID = 5350057820250191032L;
     
+    @XmlAttribute
     private String namespaceId;     // HD.1
+    @XmlValue
     private String universalId;     // HD.2
+    @XmlAttribute
     private String universalIdType; // HD.3
 
     /**

@@ -15,19 +15,28 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 
 /**
  * Base class for queries that retrieve results via a document entry.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetFromDocumentQuery", propOrder = {"uuid", "uniqueId" })
 public abstract class GetFromDocumentQuery extends StoredQuery implements Serializable {
     private static final long serialVersionUID = 627720659958894242L;
     
     private String uuid;
     private String uniqueId;
+
+    /**
+     * For JAXB serialization only.
+     */
+    public GetFromDocumentQuery() {
+    }
 
     /**
      * Constructs the query.
@@ -67,7 +76,6 @@ public abstract class GetFromDocumentQuery extends StoredQuery implements Serial
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
     }
-
 
     @Override
     public int hashCode() {

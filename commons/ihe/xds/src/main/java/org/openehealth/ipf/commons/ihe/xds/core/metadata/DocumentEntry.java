@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,25 @@ import java.util.List;
  * 
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "DocumentEntry", propOrder = {
+        "sourcePatientId", "sourcePatientInfo", "creationTime", "authors", "legalAuthenticator", "serviceStartTime",
+        "serviceStopTime", "classCode", "confidentialityCodes", "eventCodeList", "formatCode",
+        "healthcareFacilityTypeCode", "languageCode", "practiceSettingCode", "typeCode", "repositoryUniqueId",
+        "mimeType", "size", "hash", "uri"})
+@XmlRootElement(name = "documentEntry")
 public class DocumentEntry extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = -4779500440504776909L;
     
+    @XmlElement(name = "author")
     private final List<Author> authors = new ArrayList<Author>();
     private Code classCode;
+    @XmlElement(name = "confidentialityCode")
     private final List<Code> confidentialityCodes = new ArrayList<Code>();
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String creationTime;
+    @XmlElement(name = "eventCode")
     private final List<Code> eventCodeList = new ArrayList<Code>();
     private Code formatCode;
     private String hash;
@@ -45,7 +59,11 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     private Person legalAuthenticator;
     private String mimeType;
     private Code practiceSettingCode;
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String serviceStartTime;
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String serviceStopTime;
     private Long size;
     private Identifiable sourcePatientId;

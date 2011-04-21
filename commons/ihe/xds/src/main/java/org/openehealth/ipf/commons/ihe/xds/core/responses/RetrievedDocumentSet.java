@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +29,13 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "RetrievedDocumentSet")
+@XmlRootElement(name = "retrievedDocumentSet")
 public class RetrievedDocumentSet extends Response implements Serializable {    
     private static final long serialVersionUID = 4389321453383292730L;
     
+    @XmlElementRef
     private final List<RetrievedDocument> documents = new ArrayList<RetrievedDocument>();
 
     /**
@@ -58,7 +63,7 @@ public class RetrievedDocumentSet extends Response implements Serializable {
         super(status);
         this.documents.addAll(documents);
     }
-
+    
     /**
      * Constructs an error response object with the data from an exception.
      * @param throwable

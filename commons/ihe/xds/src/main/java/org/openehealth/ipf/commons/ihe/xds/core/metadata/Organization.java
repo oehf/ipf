@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -30,12 +31,14 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * removed from the HL7 string.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Organization", propOrder = {"id", "organizationName"})
 public class Organization implements Serializable {
     private static final long serialVersionUID = 8283797476558181158L;
-    
+
+    @XmlElement(name = "name")
     private String organizationName;                // XON.1
-    private AssigningAuthority assigningAuthority;  // XON.6
-    private String idNumber;                        // XON.10
+    private Identifiable id;
 
     /**
      * Constructs the organization.
@@ -62,15 +65,15 @@ public class Organization implements Serializable {
      */
     public Organization(String organizationName, String idNumber, AssigningAuthority assigningAuthority) {
         this.organizationName = organizationName;
-        this.idNumber = idNumber;
-        this.assigningAuthority = assigningAuthority;
+        this.id = new Identifiable(idNumber, assigningAuthority);
+        normalizeEmptyId();
     }
 
     /**
      * @return the assigning authority (XON.6).
      */
     public AssigningAuthority getAssigningAuthority() {
-        return assigningAuthority;
+        return id == null ? null : id.getAssigningAuthority();
     }
     
     /**
@@ -78,7 +81,9 @@ public class Organization implements Serializable {
      *          the assigning authority (XON.6).
      */
     public void setAssigningAuthority(AssigningAuthority assigningAuthority) {
-        this.assigningAuthority = assigningAuthority;
+        lazilyCreateIdIfNecessary();
+        id.setAssigningAuthority(assigningAuthority);
+        normalizeEmptyId();
     }
 
     /**
@@ -100,7 +105,7 @@ public class Organization implements Serializable {
      * @return the id of the organization (XON.10).
      */
     public String getIdNumber() {
-        return idNumber;
+        return id == null ? null : id.getId();
     }
 
     /**
@@ -108,16 +113,16 @@ public class Organization implements Serializable {
      *          the id of the organization (XON.10).
      */
     public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+        lazilyCreateIdIfNecessary();
+        id.setId(idNumber);
+        normalizeEmptyId();
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((assigningAuthority == null) ? 0 : assigningAuthority.hashCode());
-        result = prime * result + ((idNumber == null) ? 0 : idNumber.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((organizationName == null) ? 0 : organizationName.hashCode());
         return result;
     }
@@ -131,15 +136,10 @@ public class Organization implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Organization other = (Organization) obj;
-        if (assigningAuthority == null) {
-            if (other.assigningAuthority != null)
+        if (id == null) {
+            if (other.id != null)
                 return false;
-        } else if (!assigningAuthority.equals(other.assigningAuthority))
-            return false;
-        if (idNumber == null) {
-            if (other.idNumber != null)
-                return false;
-        } else if (!idNumber.equals(other.idNumber))
+        } else if (!id.equals(other.id))
             return false;
         if (organizationName == null) {
             if (other.organizationName != null)
@@ -152,5 +152,18 @@ public class Organization implements Serializable {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+    private void normalizeEmptyId() {
+        if ( id.getId() == null && id.getAssigningAuthority() == null) {
+            id = null;
+        }
+    }
+
+    private void lazilyCreateIdIfNecessary()
+    {
+        if ( id == null ) {
+            id = new Identifiable();
+        }
     }
 }

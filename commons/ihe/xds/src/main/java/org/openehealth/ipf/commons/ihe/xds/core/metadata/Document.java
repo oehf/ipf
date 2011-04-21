@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import java.io.Serializable;
 
 import javax.activation.DataHandler;
+import javax.xml.bind.annotation.*;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -28,6 +29,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Document")
+@XmlRootElement(name = "document")
 public class Document implements Serializable {
     private static final long serialVersionUID = 5206884085835642756L;
     

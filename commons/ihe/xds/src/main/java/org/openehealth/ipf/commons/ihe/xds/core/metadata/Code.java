@@ -20,17 +20,26 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 /**
  * Represents a code.
  * <p> 
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Code", propOrder = {"code", "schemeName", "displayName"})
 public class Code implements Serializable {
     private static final long serialVersionUID = 7603534956639945984L;
     
+    @XmlAttribute
     private String code;
+    @XmlAttribute
+    @XmlJavaTypeAdapter(value = SimplifiedLocalizedStringAdapter.class)
     private LocalizedString displayName;
+    @XmlAttribute(name="codeSystemName")
     private String schemeName;
     
     /**

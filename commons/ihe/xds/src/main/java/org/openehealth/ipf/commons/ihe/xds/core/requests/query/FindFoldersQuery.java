@@ -15,19 +15,27 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
-
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindFolders.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "FindFoldersQuery", propOrder = {"status", "lastUpdateTime", "codes"})
+@XmlRootElement(name = "findFoldersQuery")
 public class FindFoldersQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = 4156643982985304259L;
 
     private List<AvailabilityStatus> status;
+    @XmlElement(name = "code")
     private QueryList<Code> codes;
     
     private final TimeRange lastUpdateTime = new TimeRange();

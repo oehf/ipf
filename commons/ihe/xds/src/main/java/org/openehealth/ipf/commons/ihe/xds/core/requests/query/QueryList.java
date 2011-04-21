@@ -17,9 +17,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import static org.apache.commons.lang.Validate.noNullElements;
 import static org.apache.commons.lang.Validate.notNull;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +33,7 @@ import java.util.List;
  * <p>
  * The list allows AND and OR semantics via two levels of lists.
  * The inner lists of parameters have OR semantics. The outer list
- * contains the inner lists and uses AND semantics. E.g. the query 
+ * contains the inner lists and uses AND semantics. E.g. the query
  * list <code>(a, b), (c, d)</code> contains two inner lists and the
  * parameters are evaluated (a OR b) AND (c OR d).
  * @param <T>
@@ -38,16 +41,19 @@ import java.util.List;
  *
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "QueryList")
 public class QueryList<T> implements Serializable {
     private static final long serialVersionUID = -2729640243221349924L;
     
-    private final List<List<T>> outerList = new ArrayList<List<T>>();
-    
+    @XmlJavaTypeAdapter(ListOfListAdapter.class)
+    private List<List<T>> outerList = new ArrayList<List<T>>();
+
     /**
      * Constructs a query list.
      */
     public QueryList() {}
-    
+
     /**
      * Constructs a query list using another list.
      * <p>
@@ -59,11 +65,11 @@ public class QueryList<T> implements Serializable {
         notNull(other, "other cannot be null");
         noNullElements(other.getOuterList(), "other.getOuterList() cannot contain null elements");
         for (List<T> innerList : other.getOuterList()) {
-            noNullElements(innerList, "innerList cannot contain null elements");            
+            noNullElements(innerList, "innerList cannot contain null elements");
             outerList.add(new ArrayList<T>(innerList));
         }
     }
-    
+
     /**
      * Constructs a query list.
      * @param singleElement

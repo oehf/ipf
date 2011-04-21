@@ -17,16 +17,27 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 /**
  * Base class for stored queries by patient ID.
  * @author Dmytro Rud
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "PatientIdBasedStoredQuery", propOrder = { "patientId" })
 abstract public class PatientIdBasedStoredQuery extends StoredQuery implements Serializable {
     private static final long serialVersionUID = 8640351939561728468L;
 
     private Identifiable patientId;
+
+    /**
+     * For JAXB serialization only.
+     */
+    public PatientIdBasedStoredQuery() {
+    }
 
     /**
      * Constructs the query.

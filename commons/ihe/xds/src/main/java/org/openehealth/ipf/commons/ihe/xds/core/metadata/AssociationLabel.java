@@ -15,15 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Association labeling values used for the associations of submission sets.
  * @author Jens Riemschneider
  */
+@XmlType(name = "AssociationLabel")
+@XmlEnum(String.class)
 public enum AssociationLabel {
     /** Label for associations to documents that are contained in the request. */
-    ORIGINAL("Original"),
+    @XmlEnumValue("Original") ORIGINAL("Original"),
     /** Label for associations to documents that are only referenced in the request. */
-    REFERENCE("Reference");
+    @XmlEnumValue("Reference") REFERENCE("Reference");
     
     private final String opcode;
 
