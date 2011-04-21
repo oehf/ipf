@@ -75,8 +75,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         //     3. The user must not have already filled the DSC segment.
         boolean supportContinuations = false;
         if (getMllpEndpoint().isSupportInteractiveContinuation()) {
-            Message requestMessage = (Message) request.getTarget();
-            requestTerser = new Terser(requestMessage);
+            requestTerser = new Terser(request.getHapiMessage());
             if (config.isContinuable(requestTerser.get("MSH-9-1")) && isEmpty(requestTerser.get("DSC-1"))) {
                 supportContinuations = true;
                 fragmentAccumulator = new StringBuilder();
@@ -176,7 +175,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
             // All errors will be ignored
             if (getMllpEndpoint().isAutoCancel()) {
                 try {
-                    String cancel = createCancelMessage((Message) request.getTarget(), config.getParser());
+                    String cancel = createCancelMessage(request.getHapiMessage(), config.getParser());
                     exchange.getIn().setBody(cancel);
                     getWrappedProcessor().process(exchange);
                 } catch (Exception e) {
@@ -188,7 +187,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         // unmarshal and return
         MessageAdapter rsp = MessageAdapters.make(config.getParser(), responseString);
         if (recordsCount != 0) {
-            Terser responseTerser = new Terser((Message) rsp.getTarget());
+            Terser responseTerser = new Terser(rsp.getHapiMessage());
             String recordsCountString = Integer.toString(recordsCount);
             responseTerser.set("QAK-4", recordsCountString);
             responseTerser.set("QAK-5", recordsCountString);

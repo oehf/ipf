@@ -66,5 +66,7 @@ class MessageAdapter extends GroupAdapter implements Writable {
     	(v == '*' || v == version)    
     }
 
-    
+    Message getHapiMessage() {
+        return (Message) target
+    }
 }

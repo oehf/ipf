@@ -19,8 +19,9 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.pixpdq.BasicNakFactory;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
 
 import javax.xml.namespace.QName;
@@ -30,7 +31,7 @@ import java.util.Map;
 /**
  * Camel component for the IHE PCD-01 transaction.
  */
-public class Pcd01Component extends DefaultWsComponent {
+public class Pcd01Component extends DefaultWsComponent implements Hl7v2ConfigurationHolder {
     private static final String NS_URI = "urn:ihe:pcd:dec:2010";
     public static final ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
             new QName(NS_URI, "DeviceObservationConsumer_Service", "ihe"),
@@ -54,10 +55,9 @@ public class Pcd01Component extends DefaultWsComponent {
             new String[] {"*"},
             null,
             null,
-            new PipeParser(),
-            new BasicNakFactory(),
-            false,
-            "ACK^R01^ACK");
+            new PipeParser());
+
+    private static final NakFactory NAK_FACTORY = new NakFactory(HL7V2_CONFIG, false, "ACK^R01^ACK");
 
 
     @Override
@@ -65,5 +65,14 @@ public class Pcd01Component extends DefaultWsComponent {
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Pcd01Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
-    
+
+    @Override
+    public MllpTransactionConfiguration getTransactionConfiguration() {
+        return HL7V2_CONFIG;
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return NAK_FACTORY;
+    }
 }

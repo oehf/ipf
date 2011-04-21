@@ -42,7 +42,9 @@ public class Pcd01RouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         
     from("pcd-pcd01:devicedata")
-        .onException(Exception.class).maximumRedeliveries(0).end()
+        .onException(Exception.class)
+            .maximumRedeliveries(0)
+            .end()
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
     from("pcd-pcd01:route_throws_exception")
@@ -54,19 +56,18 @@ public class Pcd01RouteBuilder extends SpringRouteBuilder {
 
     from("pcd-pcd01:route_inbound_validation")
         .onException(ValidationException.class)
-        .maximumRedeliveries(0)
-        .end()
+            .maximumRedeliveries(0)
+            .end()
         .process(pcd01RequestValidator())
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
     from("pcd-pcd01:route_inbound_and_outbound_validation")
-    .onException(ValidationException.class)
-        .maximumRedeliveries(0)
-        .end()
-       .process(pcd01RequestValidator())
-       .process(setOutBody(PCD_01_SPEC_RESPONSE))
-       .process(pcd01ResponseValidator());
-        
+        .onException(ValidationException.class)
+            .maximumRedeliveries(0)
+            .end()
+        .process(pcd01RequestValidator())
+        .process(setOutBody(PCD_01_SPEC_RESPONSE))
+        .process(pcd01ResponseValidator());
     }
 
     /**

@@ -26,8 +26,6 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqClientAuditStrat
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqTransactionConfiguration;
 
-import ca.uhn.hl7v2.parser.Parser;
-
 /**
  * Camel component for ITI-22 (PDQ).
  * @author Dmytro Rud
@@ -46,13 +44,14 @@ public class Iti22Component extends MllpComponent {
                 new String[] {"ZV2", "*"}, 
                 new boolean[] {true, false},                
                 new boolean[] {true, false},
-                CustomModelClassUtils.createParser("pdq", "2.5"),
-                new QpdAwareNakFactory("RSP", "ZV2"));
+                CustomModelClassUtils.createParser("pdq", "2.5"));
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new PdqClientAuditStrategy("PDVQ");
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new PdqServerAuditStrategy("PDVQ");
+    private static final NakFactory NAK_FACTORY =
+        new QpdAwareNakFactory(CONFIGURATION, "RSP", "ZV2");
 
 
     public Iti22Component() {
@@ -76,5 +75,10 @@ public class Iti22Component extends MllpComponent {
     @Override
     public MllpTransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return NAK_FACTORY;
     }
 }

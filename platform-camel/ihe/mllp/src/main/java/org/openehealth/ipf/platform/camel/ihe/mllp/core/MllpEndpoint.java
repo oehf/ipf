@@ -39,12 +39,10 @@ import java.util.Map;
  */
 public class MllpEndpoint extends DefaultEndpoint {
 
+    private final MllpComponent mllpComponent;
     private final MinaEndpoint wrappedEndpoint;
     private final boolean audit;
     private final boolean allowIncompleteAudit;
-    private final MllpAuditStrategy serverStrategy;
-    private final MllpAuditStrategy clientStrategy;
-    private final MllpTransactionConfiguration transactionConfiguration;
 
     private final SSLContext sslContext;
     private final List<MllpCustomInterceptor> customInterceptors;
@@ -64,18 +62,14 @@ public class MllpEndpoint extends DefaultEndpoint {
 
     /**
      * Constructor.
+     * @param mllpComponent
+     *      MLLP Component instance which is creating this endpoint.
      * @param wrappedEndpoint
      *      The original camel-mina endpoint instance.
      * @param audit
      *      Whether ATNA auditing should be performed.
      * @param allowIncompleteAudit
      *      Whether incomplete ATNA auditing are allowed as well.
-     * @param serverStrategy
-     *      Server-side audit strategy.
-     * @param clientStrategy
-     *      Client-side audit strategy.
-     * @param transactionConfiguration
-     *      Configuration of the transaction exposed by this endpoint.
      * @param sslContext
      *      the SSL context to use; {@code null} if secure communication is not used.
      * @param mutualTLS
@@ -107,12 +101,10 @@ public class MllpEndpoint extends DefaultEndpoint {
      *      after it has collected all inetractive continuation pieces.
      */
     public MllpEndpoint(
+            MllpComponent mllpComponent,
             MinaEndpoint wrappedEndpoint, 
             boolean audit, 
             boolean allowIncompleteAudit, 
-            MllpAuditStrategy serverStrategy, 
-            MllpAuditStrategy clientStrategy, 
-            MllpTransactionConfiguration transactionConfiguration, 
             SSLContext sslContext,
             boolean mutualTLS, 
             List<MllpCustomInterceptor> customInterceptors, 
@@ -128,18 +120,14 @@ public class MllpEndpoint extends DefaultEndpoint {
             UnsolicitedFragmentationStorage unsolicitedFragmentationStorage,
             boolean autoCancel)
     {
+        Validate.notNull(mllpComponent);
         Validate.notNull(wrappedEndpoint);
-        Validate.notNull(serverStrategy);
-        Validate.notNull(clientStrategy);
-        Validate.notNull(transactionConfiguration);
         Validate.noNullElements(customInterceptors);
 
+        this.mllpComponent = mllpComponent;
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
         this.allowIncompleteAudit = allowIncompleteAudit;
-        this.serverStrategy = serverStrategy;
-        this.clientStrategy = clientStrategy;
-        this.transactionConfiguration = transactionConfiguration;
         this.sslContext = sslContext;
         this.mutualTLS = mutualTLS;
         this.customInterceptors = customInterceptors;
@@ -270,21 +258,28 @@ public class MllpEndpoint extends DefaultEndpoint {
      * Returns client-side audit strategy instance.
      */
     public MllpAuditStrategy getClientAuditStrategy() {
-        return clientStrategy;
+        return mllpComponent.getClientAuditStrategy();
     }
 
     /**
      * Returns server-side audit strategy instance.
      */
     public MllpAuditStrategy getServerAuditStrategy() {
-        return serverStrategy;
+        return mllpComponent.getServerAuditStrategy();
     }
     
     /**
      * Returns transaction configuration.
      */
     public MllpTransactionConfiguration getTransactionConfiguration() {
-        return transactionConfiguration;
+        return mllpComponent.getTransactionConfiguration();
+    }
+
+    /**
+     * Returns transaction-specific ACK and NAK factory.
+     */
+    public NakFactory getNakFactory() {
+        return mllpComponent.getNakFactory();
     }
 
     /**
@@ -357,6 +352,8 @@ public class MllpEndpoint extends DefaultEndpoint {
     public boolean isAutoCancel() {
         return autoCancel;
     }
+
+
 
     // ----- dumb delegation, nothing interesting below -----
 

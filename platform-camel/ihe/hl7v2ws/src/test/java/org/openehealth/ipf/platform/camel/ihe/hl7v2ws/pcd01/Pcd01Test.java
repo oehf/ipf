@@ -124,8 +124,9 @@ public class Pcd01Test extends StandardTestContainer {
                 + "/route_unacceptable_response";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
-        assertTrue(response
-                .contains("MSA|AR|MsgIdUnknown|Invalid HL7 version 2.5"));
+        assertTrue(response.contains("|ACK^R01^ACK|"));
+        assertTrue(response.contains("MSA|AR|MSGID1234"));
+        assertTrue(response.contains("ERR|||203^Unsupported version id^HL70357^^Invalid HL7 version 2.5|E|||Invalid HL7 version 2.5"));
     }
 
     private String requestBody(String uri, String msg) {

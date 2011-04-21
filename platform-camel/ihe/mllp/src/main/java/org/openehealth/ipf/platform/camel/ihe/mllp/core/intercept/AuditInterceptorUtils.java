@@ -89,7 +89,7 @@ public class AuditInterceptorUtils  {
      */
     private static boolean isAuditable(AuditInterceptor interceptor, MessageAdapter msg) {
         try {
-            Message message = (Message) msg.getTarget();
+            Message message = msg.getHapiMessage();
             Terser terser = new Terser(message);
             
             // no audit for fragments 2..n

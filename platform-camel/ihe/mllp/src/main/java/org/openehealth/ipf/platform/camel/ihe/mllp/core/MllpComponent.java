@@ -35,7 +35,7 @@ import java.util.*;
  * 
  * @author Dmytro Rud
  */
-public abstract class MllpComponent extends MinaComponent {
+public abstract class MllpComponent extends MinaComponent implements Hl7v2ConfigurationHolder {
     private static final transient Log LOG = LogFactory.getLog(MllpComponent.class);
     
     public static final String ACK_TYPE_CODE_HEADER = "pixpdqAckTypeCode"; 
@@ -156,12 +156,10 @@ public abstract class MllpComponent extends MinaComponent {
 
         // wrap and return
         return new MllpEndpoint(
+                this,
                 minaEndpoint,
                 audit,
                 allowIncompleteAudit,
-                getServerAuditStrategy(), 
-                getClientAuditStrategy(),
-                getTransactionConfiguration(),
                 sslContext,
                 mutualTLS,
                 customInterceptors,
@@ -198,5 +196,12 @@ public abstract class MllpComponent extends MinaComponent {
     /**
      * Returns component configuration. 
      */
+    @Override
     public abstract MllpTransactionConfiguration getTransactionConfiguration();
+
+    /**
+     * Returns transaction-specific NAK factory.
+     */
+    @Override
+    public abstract NakFactory getNakFactory();
 }

@@ -48,10 +48,7 @@ public class MllpTransactionConfiguration {
     private final boolean[] responseContinuabilityFlags;
 
     private final Parser parser;
-    private final NakFactory nakFactory;
 
-    private final boolean cAckTypeCodes;
-    private final String defaultNakMsh9;
 
     /**
      * Constructor.
@@ -88,14 +85,6 @@ public class MllpTransactionConfiguration {
      *      If <code>null</code>, no continuations will be supported.
      * @param parser
      *      transaction-specific HL7v2 NAK parser.
-     * @param nakFactory
-     *      transaction-specific HL7v2 NAK factory.
-     * @param cAckTypeCodes
-     *      if <code>true</code>, HL7v2 acknowledgement codes
-     *      <tt>CA</tt>, <tt>CE</tt>, <tt>CR</tt> will be used instead of the default
-     *      <tt>AA</tt>, <tt>AE</tt>, <tt>AR</tt>.
-     * @param defaultNakMsh9
-     *      desired contents of MSH-9 in this transaction's default NAKs.
      */
     public MllpTransactionConfiguration(
             String hl7Version,
@@ -109,10 +98,7 @@ public class MllpTransactionConfiguration {
             String[] allowedResponseTriggerEvents,
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags,
-            Parser parser,
-            NakFactory nakFactory,
-            boolean cAckTypeCodes,
-            String defaultNakMsh9)
+            Parser parser)
     {
         notNull(hl7Version);
         notNull(sendingApplication);
@@ -123,8 +109,6 @@ public class MllpTransactionConfiguration {
         noNullElements(allowedResponseMessageTypes);
         noNullElements(allowedResponseTriggerEvents);
         notNull(parser);
-        notNull(nakFactory);
-        notNull(defaultNakMsh9);
 
         notEmpty(allowedRequestMessageTypes);
         isTrue(allowedRequestMessageTypes.length == allowedRequestTriggerEvents.length);
@@ -155,10 +139,6 @@ public class MllpTransactionConfiguration {
         this.responseContinuabilityFlags = responseContinuabilityFlags;
 
         this.parser = parser;
-        this.nakFactory = nakFactory;
-
-        this.cAckTypeCodes = cAckTypeCodes;
-        this.defaultNakMsh9 = defaultNakMsh9;
     }
 
     
@@ -314,18 +294,6 @@ public class MllpTransactionConfiguration {
 
     public Parser getParser() {
         return parser;
-    }
-
-    public NakFactory getNakFactory() {
-        return nakFactory;
-    }
-
-    public boolean isCAckTypeCodes() {
-        return cAckTypeCodes;
-    }
-
-    public String getDefaultNakMsh9() {
-        return defaultNakMsh9;
     }
 }
 

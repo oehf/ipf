@@ -19,7 +19,6 @@ import java.util.List;
 
 import ca.uhn.hl7v2.parser.Parser;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 
 /**
  * A MLLP transaction configuration with PDQ-specific methods for continuation support.
@@ -39,16 +38,14 @@ public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
             String[] allowedResponseTriggerEvents, 
             boolean[] auditabilityFlags,
             boolean[] responseContinuabilityFlags,
-            Parser parser,
-            NakFactory nakFactory)
+            Parser parser)
     {
         super(hl7Version, sendingApplication, sendingFacility,
                 requestErrorDefaultErrorCode,
                 responseErrorDefaultErrorCode, allowedRequestMessageTypes,
                 allowedRequestTriggerEvents, allowedResponseMessageTypes,
                 allowedResponseTriggerEvents, auditabilityFlags,
-                responseContinuabilityFlags, parser, nakFactory,
-                false, "ACK");
+                responseContinuabilityFlags, parser);
     }
     
     @Override
