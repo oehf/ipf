@@ -17,13 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
 
 import ca.uhn.hl7v2.parser.Parser;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.pixpdq.BasicNakFactory;
 
 /**
  * Camel component for ITI-8 (PIX Feed).
@@ -43,17 +40,13 @@ public class Iti8Component extends MllpComponent {
                 new String[] {"*"},
                 new boolean[] {true},
                 new boolean[] {false},
-                new PipeParser(),
-                new BasicNakFactory(),
-                false,
-                "ACK");
+                new PipeParser());
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti8ClientAuditStrategy();
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new Iti8ServerAuditStrategy();
-    private static final Parser PARSER = new PipeParser();
-    private static final NakFactory NAK_FACTORY = new BasicNakFactory();
+    private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
     
     public Iti8Component() {
@@ -77,5 +70,10 @@ public class Iti8Component extends MllpComponent {
     @Override
     public MllpTransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return NAK_FACTORY;
     }
 }

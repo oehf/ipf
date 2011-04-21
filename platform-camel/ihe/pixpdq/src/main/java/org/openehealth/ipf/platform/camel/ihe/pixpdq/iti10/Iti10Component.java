@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti10;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.pixpdq.BasicNakFactory;
 
 /**
  * Camel component for ITI-10 (PIX Update Notification).
@@ -40,15 +40,13 @@ public class Iti10Component extends MllpComponent {
                 new String[] {"*"}, 
                 new boolean[] {true},
                 new boolean[] {false},
-                new PipeParser(),
-                new BasicNakFactory(),
-                false,
-                "ACK");
+                new PipeParser());
   
     private static final MllpAuditStrategy CLIENT_AUDIT_STRATEGY = 
         new Iti10ClientAuditStrategy();
     private static final MllpAuditStrategy SERVER_AUDIT_STRATEGY = 
         new Iti10ServerAuditStrategy();
+    private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
 
     public Iti10Component() {
@@ -72,5 +70,10 @@ public class Iti10Component extends MllpComponent {
     @Override
     public MllpTransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
+    }
+
+    @Override
+    public NakFactory getNakFactory() {
+        return NAK_FACTORY;
     }
 }

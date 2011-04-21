@@ -24,14 +24,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAdaptingException;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
@@ -58,19 +53,15 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
     @Override
     public void process(Exchange exchange) throws Exception {
         MessageAdapter originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, MessageAdapter.class); 
-        Message originalMessage = (Message) originalAdapter.getTarget();
-        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
-        Parser parser = config.getParser();
-        ModelClassFactory classFactory = parser.getFactory();
-        
+        Message originalMessage = originalAdapter.getHapiMessage();
+
         // run the route
         try {
             getWrappedProcessor().process(exchange);
-            checkExchangeFailed(exchange, originalMessage, classFactory);
+            checkExchangeFailed(exchange, originalMessage);
         } catch(Exception e) {
             LOG.error("Message processing failed", e);
-            resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
-                    e, originalMessage, getMllpEndpoint().getTransactionConfiguration()));
+            resultMessage(exchange).setBody(getMllpEndpoint().getNakFactory().createNak(originalMessage, e));
         }
 
         org.apache.camel.Message m = Exchanges.resultMessage(exchange);
@@ -80,17 +71,17 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
         MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
                 m,
                 getMllpEndpoint().getConfiguration().getCharsetName(),
-                parser);
+                getMllpEndpoint().getTransactionConfiguration().getParser());
         
         // additionally: an Exception in the body?
-        if((msg == null) && (body instanceof Exception)) {
-            msg = MllpMarshalUtils.createNak((Exception) body, originalMessage,
-                    getMllpEndpoint().getTransactionConfiguration());
+        if((msg == null) && (body instanceof Throwable)) {
+            Message message = getMllpEndpoint().getNakFactory().createNak(originalMessage, (Throwable) body);
+            msg = new MessageAdapter(message);
         }
         
         // no known data type --> determine user's intention on the basis of a header 
         if(msg == null) {
-            msg = analyseMagicHeader(m, originalMessage, classFactory);
+            msg = analyseMagicHeader(m, originalMessage);
         }
 
         // unable to create a MessageAdaper :-(
@@ -108,11 +99,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
      * Considers a specific header to determine whether the route author want us to generate
      * an automatic acknowledgment, and generates the latter when the author really does.   
      */
-    private MessageAdapter analyseMagicHeader(
-            org.apache.camel.Message m, 
-            Message originalMessage,
-            ModelClassFactory classFactory) 
-    {
+    private MessageAdapter analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) {
         Object header = m.getHeader(MllpComponent.ACK_TYPE_CODE_HEADER, AckTypeCode.class);
         if (header == null) {
             return null;
@@ -120,17 +107,15 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
 
         Message ack;
         if ((header == AckTypeCode.AA) || (header == AckTypeCode.CA)) {
-            ack = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createAck(
-                    classFactory,
+            ack = getMllpEndpoint().getNakFactory().createAck(
                     originalMessage,
                     (AckTypeCode) header);
         } else {
             HL7v2Exception exception = new HL7v2Exception(
                     "Error in PIX/PDQ route", 
                     getMllpEndpoint().getTransactionConfiguration().getResponseErrorDefaultErrorCode());
-            ack = getMllpEndpoint().getTransactionConfiguration().getNakFactory().createNak(
-                    classFactory,
-                    originalMessage, 
+            ack = getMllpEndpoint().getNakFactory().createNak(
+                    originalMessage,
                     exception, 
                     (AckTypeCode) header); 
         }
@@ -143,10 +128,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
      * If yes, substitutes the exception object with a HL7 NAK  
      * and marks the exchange as successful. 
      */
-    private void checkExchangeFailed(
-            Exchange exchange, 
-            Message original, 
-            ModelClassFactory classFactory) {
+    private void checkExchangeFailed(Exchange exchange, Message original) {
         if (exchange.isFailed()) {
             Throwable t; 
             if(exchange.getException() != null) {
@@ -158,8 +140,7 @@ public class ConsumerAdaptingInterceptor extends AbstractMllpInterceptor {
                 m.setBody(null);
             }
             LOG.error("Message processing failed", t);
-            resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
-                    t, original, getMllpEndpoint().getTransactionConfiguration()));
+            resultMessage(exchange).setBody(getMllpEndpoint().getNakFactory().createNak(original, t));
         }
     }
     

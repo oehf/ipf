@@ -21,15 +21,11 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAdaptingException;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import ca.uhn.hl7v2.model.GenericMessage;
@@ -78,7 +74,8 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
         } catch (Exception e) {
             unmarshallingFailed = true;
             LOG.error("Unmarshalling failed, message processing not possible", e);
-            processUnmarshallingException(exchange, e);
+            Message nak = getMllpEndpoint().getNakFactory().createDefaultNak(e);
+            resultMessage(exchange).setBody(nak);
         }
         
         // run the route
@@ -90,10 +87,8 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
                 throw mae;
             } catch (Exception e) {
                 LOG.error("Message processing failed", e);
-                resultMessage(exchange).setBody(MllpMarshalUtils.createNak(
-                        e, 
-                        (Message) originalAdapter.getTarget(), 
-                        getMllpEndpoint().getTransactionConfiguration()));
+                resultMessage(exchange).setBody(getMllpEndpoint().getNakFactory().
+                        createNak(originalAdapter.getHapiMessage(), e));
             }
         }
         
@@ -103,17 +98,6 @@ public class ConsumerMarshalInterceptor extends AbstractMllpInterceptor {
             charset, 
             parser);
         resultMessage(exchange).setBody(s);
-    }
-    
-    
-    /**
-     * Generates a default NAK message on unmarshalling errors 
-     * and stores it into the exchange.
-     */
-    private void processUnmarshallingException(Exchange exchange, Throwable t) {
-        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
-        Message nak = config.getNakFactory().createDefaultNak(config, t);
-        resultMessage(exchange).setBody(nak);
     }
 
 }

@@ -18,13 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.*;
 import ca.uhn.hl7v2.model.v25.datatype.ST;
-import ca.uhn.hl7v2.parser.ModelClassFactory;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAcceptanceException;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 
 import java.lang.reflect.Field;
@@ -35,12 +34,13 @@ import java.util.HashMap;
  * NAK factory for PDQ, PDVQ and PIX Query.
  * @author Dmytro Rud
  */
-public class QpdAwareNakFactory extends BasicNakFactory implements NakFactory {
-
+public class QpdAwareNakFactory extends NakFactory {
     private final String messageType, triggerEvent;
 
 
-    public QpdAwareNakFactory(String messageType, String triggerEvent) {
+    public QpdAwareNakFactory(MllpTransactionConfiguration config, String messageType, String triggerEvent) {
+        super(config);
+
         Validate.notEmpty(messageType);
         Validate.notEmpty(triggerEvent);
 
@@ -50,41 +50,28 @@ public class QpdAwareNakFactory extends BasicNakFactory implements NakFactory {
 
 
     @Override
-    public Message createNak(
-            ModelClassFactory classFactory,
-            Message originalMessage,
-            AbstractHL7v2Exception exception,
-            AckTypeCode ackTypeCode)
-    {
+    public Message createNak(Message originalMessage, Throwable t, AckTypeCode ackTypeCode) {
         try {
-            return (exception instanceof MllpAcceptanceException)
-                    ? super.createNak(classFactory, originalMessage, exception, ackTypeCode)
-                    : createNak0(classFactory, originalMessage, exception, ackTypeCode);
-
-        } catch (HL7Exception e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchFieldException e) {
+            return (t instanceof MllpAcceptanceException)
+                ? super.createNak(originalMessage, t, ackTypeCode)
+                : createNak0(originalMessage, t, ackTypeCode);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
 
     @SuppressWarnings("unchecked")
-    public Message createNak0(
-            ModelClassFactory classFactory,
-            Message originalMessage,
-            AbstractHL7v2Exception exception,
-            AckTypeCode ackTypeCode)
+    public Message createNak0(Message originalMessage, Throwable t, AckTypeCode ackTypeCode)
         throws HL7Exception, IllegalAccessException, NoSuchFieldException
     {
         AbstractMessage ack = (AbstractMessage) MessageUtils.response(
-                classFactory,
+                getConfig().getParser().getFactory(),
                 originalMessage,
                 messageType,
                 triggerEvent);
-        exception.populateMessage(ack, ackTypeCode);
+
+        getHl7Exception(t).populateMessage(ack, ackTypeCode);
 
         Segment ackQak = (Segment) ack.get("QAK");
         Terser.set(ackQak, 2, 0, 1, 1, "AE");
@@ -112,7 +99,7 @@ public class QpdAwareNakFactory extends BasicNakFactory implements NakFactory {
 
 
     @Override
-    public Message createAck(ModelClassFactory classFactory, Message originalMessage, AckTypeCode ackTypeCode) {
+    public Message createAck(Message originalMessage, AckTypeCode ackTypeCode) {
         throw new IllegalStateException("This transaction cannot return a simple ACK");
     }
 }

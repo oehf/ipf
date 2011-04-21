@@ -26,10 +26,6 @@ import java.util.UUID;
 import org.apache.camel.Message;
 import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.converter.IOConverter;
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
-import org.openehealth.ipf.modules.hl7.AckTypeCode;
-import org.openehealth.ipf.modules.hl7.HL7v2Exception;
-import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 
@@ -191,67 +187,6 @@ public class MllpMarshalUtils {
         return msg;
     }
     
-    /**
-     * Formats and returns error message of an exception.
-     * <p>
-     * In particular, all line break characters must be removed, 
-     * otherwise they will break the structure of an HL7 NAK.
-     * @param t
-     *      thrown exception.
-     * @return
-     *      formatted error message from the given exception.
-     */
-    public static String formatErrorMessage(Throwable t) { 
-        String s = t.getMessage();
-        if(s == null) {
-            s = t.getClass().getName();
-        }
-        s = s.replace('\n', ';'); 
-        s = s.replace('\r', ';');
-        return s;
-    }
-
-    
-    /**
-     * Generates a NAK message on processing errors on the basis of  
-     * of the thrown exception and the original HAPI request message.
-     * @param t
-     *      thrown exception.
-     * @param original
-     *      original HAPI request message.
-     * @param config
-     *      configuration of the MLLP endpoint.
-     */
-    public static MessageAdapter createNak(
-            Throwable t, 
-            ca.uhn.hl7v2.model.Message original,
-            MllpTransactionConfiguration config)
-    {
-        AbstractHL7v2Exception hl7Exception;
-        if(t instanceof AbstractHL7v2Exception) {
-            hl7Exception = (AbstractHL7v2Exception) t; 
-        } else if(t.getCause() instanceof AbstractHL7v2Exception) {
-            hl7Exception = (AbstractHL7v2Exception) t.getCause();
-        } else {
-            hl7Exception = new HL7v2Exception(
-                    formatErrorMessage(t),
-                    config.getRequestErrorDefaultErrorCode(),
-                    t); 
-        }
-
-        AckTypeCode ackTypeCode = (t instanceof MllpAcceptanceException) ? AckTypeCode.AR : AckTypeCode.AE;
-        if (config.isCAckTypeCodes()) {
-            ackTypeCode = (ackTypeCode == AckTypeCode.AR) ? AckTypeCode.CR : AckTypeCode.CE;
-        }
-        ca.uhn.hl7v2.model.Message nak = config.getNakFactory().createNak(
-                config.getParser().getFactory(),
-                original, 
-                hl7Exception,
-                ackTypeCode);
-
-        return new MessageAdapter(nak);
-    }
-
 
     /**
      * Splits the given String at occurrences of the given character.

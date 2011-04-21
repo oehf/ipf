@@ -60,7 +60,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     public void process(Exchange exchange) throws Exception {
         Parser parser = getMllpEndpoint().getTransactionConfiguration().getParser();
         MessageAdapter request = (MessageAdapter) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
-        Message requestMessage = (Message) request.getTarget();
+        Message requestMessage = request.getHapiMessage();
         Terser requestTerser = new Terser(requestMessage);
         String requestMessageType = requestTerser.get("MSH-9-1");
 
@@ -169,7 +169,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
             String queryTag,
             String chainId) throws Exception
     {
-        Message responseMessage = (Message) response.getTarget();
+        Message responseMessage = response.getHapiMessage();
         Terser responseTerser = new Terser(responseMessage);  
         if (isPresent(responseTerser.get("DSC-1"))) {
             LOG.warn("Cannot perform interactive continuation: DSC-1 already " +

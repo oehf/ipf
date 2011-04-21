@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
-
-import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WebService;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 /**
- * Service implementation for the IHE PCD-01 transaction.
+ * Interface for Camel components which handle HL7v2 messages,
+ * independent of transport protocol.
+ *
  * @author Dmytro Rud
- * @author Mitko Kolev
  */
-public class Pcd01Service extends AbstractHl7v2WebService implements Pcd01PortType {
+public interface Hl7v2ConfigurationHolder {
 
-    public Pcd01Service() {
-        super(new Pcd01Component());
-    }
+    /**
+     * Returns component configuration.
+     */
+    public MllpTransactionConfiguration getTransactionConfiguration();
 
-    @Override
-    public String communicate(String requestXmlString){
-        return doProcess(requestXmlString);
-    }
+    /**
+     * Returns transaction-specific NAK factory.
+     */
+    public NakFactory getNakFactory();
+
 }
-
-
