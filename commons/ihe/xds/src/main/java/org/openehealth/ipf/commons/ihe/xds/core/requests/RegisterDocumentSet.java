@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,20 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
  * The lists are pre-created and can therefore never be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "RegisterDocumentSet", propOrder = {
+        "submissionSet", "folders", "documentEntries", "associations"})
+@XmlRootElement(name = "registerDocumentSet")
 public class RegisterDocumentSet implements Serializable {
     private static final long serialVersionUID = 4029172072096691799L;
     
+    @XmlElementRef
     private SubmissionSet submissionSet;
+    @XmlElementRef
     private final List<Folder> folders = new ArrayList<Folder>();
+    @XmlElementRef
     private final List<DocumentEntry> documentEntries = new ArrayList<DocumentEntry>();
+    @XmlElementRef
     private final List<Association> associations = new ArrayList<Association>();
 
     /**

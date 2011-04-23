@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 
 /**
  * Base class for queries that are defined by:
@@ -28,12 +29,22 @@ import java.util.List;
  * <li> a list of confidentiality codes
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetByIdAndCodesQuery", propOrder = {"confidentialityCodes", "formatCodes"})
 public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery implements Serializable {
     private static final long serialVersionUID = -8311996966550912396L;
-    
+
+    @XmlElement(name = "confidentialityCode")
     private QueryList<Code> confidentialityCodes;
+    @XmlElement(name = "formatCode")
     private List<Code> formatCodes;
-    
+
+    /**
+     * For JAXB serialization only.
+     */
+    public GetByIdAndCodesQuery() {
+    }
+
     /**
      * Constructs the query.
      * @param type

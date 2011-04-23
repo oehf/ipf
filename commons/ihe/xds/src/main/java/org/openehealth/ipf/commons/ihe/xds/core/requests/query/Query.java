@@ -17,16 +17,25 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import static org.apache.commons.lang.Validate.notNull;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 /**
  * Base class for all query requests.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Query")
 public abstract class Query implements Serializable {
     private static final long serialVersionUID = 7597105342752455732L;
-    
-    private final QueryType type;
+    @XmlAttribute
+    private QueryType type;
+
+    /**
+     * For JAXB serialization only.
+     */
+    public Query() {
+    }
 
     /**
      * Constructs the query.

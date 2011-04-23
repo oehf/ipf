@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -24,10 +26,18 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * Represents a date and time range used in queries.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "TimeRange", propOrder = {"from", "to"})
 public class TimeRange implements Serializable {
     private static final long serialVersionUID = -5468726370729209318L;
     
+    @XmlAttribute
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String from;
+    @XmlAttribute
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String to;
     
     /**

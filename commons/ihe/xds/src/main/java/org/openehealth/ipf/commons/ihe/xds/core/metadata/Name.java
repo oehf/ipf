@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -31,11 +32,16 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * removed from the HL7 string.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Name", propOrder = {"prefix", "givenName", "secondAndFurtherGivenNames", "familyName", "suffix"})
 public class Name implements Serializable {
     private static final long serialVersionUID = -3455779057944896901L;
-    
+
+    @XmlElement(name = "family")
     private String familyName;                  // XCN.2.1, XPN.1.1
+    @XmlElement(name = "given")
     private String givenName;                   // XCN.3, XPN.2
+    @XmlElement(name = "secondAndFurtherGiven")
     private String secondAndFurtherGivenNames;  // XCN.4, XPN.3
     private String suffix;                      // XCN.5, XPN.4
     private String prefix;                      // XCN.6, XPN.5

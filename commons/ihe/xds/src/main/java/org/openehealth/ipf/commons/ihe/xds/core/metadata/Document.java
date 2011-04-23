@@ -15,12 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehealth.ipf.commons.core.ContentMap;
 
 import javax.activation.DataHandler;
-import java.io.Serializable;
+import javax.xml.bind.annotation.*;
 
 /**
  * Represents the contents of a document and the describing entry.
@@ -30,6 +31,9 @@ import java.io.Serializable;
  * @author Stefan Ivanov
  * @author Dmytro Rud
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Document")
+@XmlRootElement(name = "document")
 public class Document extends ContentMap implements Serializable {
     private static final long serialVersionUID = 5206884085835642756L;
 

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +32,16 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * 
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Folder", propOrder = {"lastUpdateTime", "codeList"})
+@XmlRootElement(name = "folder")
 public class Folder extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = -1923451867453561796L;
     
+    @XmlElement(name = "code")
     private final List<Code> codeList = new ArrayList<Code>();
+    @XmlSchemaType(name = "dateTime")
+    @XmlJavaTypeAdapter(value = IHEDateAdapter.class)
     private String lastUpdateTime;
 
     /**

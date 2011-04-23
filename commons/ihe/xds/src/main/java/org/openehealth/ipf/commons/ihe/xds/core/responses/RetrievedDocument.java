@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 import javax.activation.DataHandler;
@@ -29,10 +30,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "RetrievedDocument")
+@XmlRootElement(name = "retrievedDocument")
 public class RetrievedDocument implements Serializable {
     private static final long serialVersionUID = -3950026651885804263L;
     
     private transient DataHandler dataHandler;
+    @XmlElementRef
     private RetrieveDocument requestData;
     
     /**

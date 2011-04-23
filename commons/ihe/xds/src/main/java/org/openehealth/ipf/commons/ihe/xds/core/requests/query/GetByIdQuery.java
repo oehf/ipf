@@ -15,19 +15,28 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
-
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by a list of UUIDs or unique IDs. 
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetByIdQuery")
 public abstract class GetByIdQuery extends GetByUuidQuery implements Serializable {
     private static final long serialVersionUID = -3955280836816390271L;
-    
+    @XmlElement(name = "uniqueId")
     private List<String> uniqueIds;
+
+    /**
+     * For JAXB serialization only.
+     */
+    public GetByIdQuery() {
+    }
 
     /**
      * Constructs the query.

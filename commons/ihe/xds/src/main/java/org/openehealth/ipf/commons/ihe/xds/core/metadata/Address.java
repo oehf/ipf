@@ -20,6 +20,8 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
+
 /**
  * Represents the address of a patient.
  * <p>
@@ -30,17 +32,25 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * removed from the HL7 string.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Address", propOrder = {
+        "streetAddress", "otherDesignation", "city", "countyParishCode", "stateOrProvince", "country", 
+        "zipOrPostalCode"})
 public class Address implements Serializable {
     private static final long serialVersionUID = -5050715144917393181L;
-    
+
     private String streetAddress;               // XAD.1  
-    private String otherDesignation;            // XAD.2  
+    @XmlElement(name = "additionalLocator")
+    private String otherDesignation;            // XAD.2
     private String city;                        // XAD.3  
-    private String stateOrProvince;             // XAD.4  
-    private String zipOrPostalCode;             // XAD.5  
+    @XmlElement(name = "state")
+    private String stateOrProvince;             // XAD.4
+    @XmlElement(name = "postalCode")
+    private String zipOrPostalCode;             // XAD.5
     private String country;                     // XAD.6  
+    @XmlElement(name = "county")
     private String countyParishCode;            // XAD.9  
-    
+
     /**
      * @return the street address (XAD.1).
      */

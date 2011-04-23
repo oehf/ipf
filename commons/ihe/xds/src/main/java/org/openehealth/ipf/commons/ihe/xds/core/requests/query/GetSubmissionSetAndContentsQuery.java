@@ -15,12 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 /**
  * Represents a stored query for GetSubmissionSetAndContents.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetSubmissionSetAndContentsQuery")
+@XmlRootElement(name = "getSubmissionSetAndContentsQuery")
 public class GetSubmissionSetAndContentsQuery extends GetByIdAndCodesQuery implements Serializable {
     private static final long serialVersionUID = -4883836034076616558L;
 

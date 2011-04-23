@@ -15,12 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 /**
  * Represents a stored query for GetDocuments.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetDocumentsQuery")
+@XmlRootElement(name = "getDocumentsQuery")
 public class GetDocumentsQuery extends GetByIdQuery implements Serializable {
     private static final long serialVersionUID = 3610389657970005956L;
 

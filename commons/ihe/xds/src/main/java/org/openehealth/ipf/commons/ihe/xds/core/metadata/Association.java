@@ -20,12 +20,18 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.xml.bind.annotation.*;
+
 /**
  * Represents an association between two documents.
  * <p>
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Association", propOrder = {
+        "entryUuid", "sourceUuid", "targetUuid", "associationType", "label", "docCode"})
+@XmlRootElement(name = "association")
 public class Association implements Serializable {
     private static final long serialVersionUID = -4556980177483609469L;
     

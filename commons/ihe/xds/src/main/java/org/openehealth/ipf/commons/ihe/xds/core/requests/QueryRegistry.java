@@ -18,20 +18,45 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 import static org.apache.commons.lang.Validate.notNull;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 /**
  * Request object for the Query Registry and Registry Stored Query transactions.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "QueryRegistry")
+@XmlRootElement(name = "queryRegistry")
 public class QueryRegistry implements Serializable {
     private static final long serialVersionUID = -7089029668323133489L;
 
-    private final Query query;
-    
+    @XmlElementRefs({
+            @XmlElementRef(type = FindDocumentsQuery.class),
+            @XmlElementRef(type = FindFoldersQuery.class),
+            @XmlElementRef(type = FindSubmissionSetsQuery.class),
+            @XmlElementRef(type = GetAllQuery.class),
+            @XmlElementRef(type = GetAssociationsQuery.class),
+            @XmlElementRef(type = GetDocumentsAndAssociationsQuery.class),
+            @XmlElementRef(type = GetDocumentsQuery.class),
+            @XmlElementRef(type = GetFolderAndContentsQuery.class),
+            @XmlElementRef(type = GetFoldersForDocumentQuery.class),
+            @XmlElementRef(type = GetFoldersQuery.class),
+            @XmlElementRef(type = GetFromDocumentQuery.class),
+            @XmlElementRef(type = GetRelatedDocumentsQuery.class),
+            @XmlElementRef(type = GetSubmissionSetAndContentsQuery.class),
+            @XmlElementRef(type = GetSubmissionSetsQuery.class)})
+    private Query query;
+    @XmlAttribute
     private boolean returnLeafObjects;
+
+    /**
+     * For JAXB serialization only.
+     */
+    public QueryRegistry() {
+    }
 
     /**
      * Constructs the request.

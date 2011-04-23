@@ -15,12 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 /**
  * Represents a stored query for GetFolderAndContents.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetFolderAndContentsQuery")
+@XmlRootElement(name = "getFolderAndContentsQuery")
 public class GetFolderAndContentsQuery extends GetByIdAndCodesQuery implements Serializable {
     private static final long serialVersionUID = -5400326849236563094L;
 

@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -32,6 +35,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * values are removed from the HL7 string.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Person", propOrder = {"id", "name"})
 public class Person implements Serializable {    
     private static final long serialVersionUID = 1775227207521668959L;
     

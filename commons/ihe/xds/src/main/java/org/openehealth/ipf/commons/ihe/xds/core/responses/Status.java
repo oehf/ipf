@@ -15,17 +15,22 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
 /**
  * Status information according to the XDS specification.
  * @author Jens Riemschneider
  */
+@XmlType(name = "Status")
+@XmlEnum(String.class)
 public enum Status {
     /** The request execution failed. */
-    FAILURE("Failure", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure"),
+    @XmlEnumValue("Failure") FAILURE("Failure", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Failure"),
     /** The request execution succeeded. */
-    SUCCESS("Success", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success"),
+    @XmlEnumValue("Success") SUCCESS("Success", "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success"),
     /** The request execution partially succeeded. */
-    PARTIAL_SUCCESS("PartialSuccess", "urn:ihe:iti:2007:ResponseStatusType:PartialSuccess");
+    @XmlEnumValue("PartialSuccess") PARTIAL_SUCCESS("PartialSuccess", "urn:ihe:iti:2007:ResponseStatusType:PartialSuccess");
     
     private final String opcode21;
     private final String opcode30;

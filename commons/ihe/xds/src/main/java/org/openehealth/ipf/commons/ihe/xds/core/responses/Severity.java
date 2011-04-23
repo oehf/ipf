@@ -17,15 +17,20 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.ErrorType;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
 /**
  * Severities defined by the XDS specification.
  * @author Jens Riemschneider
  */
+@XmlType(name = "Severity")
+@XmlEnum(String.class)
 public enum Severity {
     /** An error. */
-    ERROR(ErrorType.ERROR, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),
+    @XmlEnumValue("Error") ERROR(ErrorType.ERROR, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Error"),
     /** A warning. */
-    WARNING(ErrorType.WARNING, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning");
+    @XmlEnumValue("Warning") WARNING(ErrorType.WARNING, "urn:oasis:names:tc:ebxml-regrep:ErrorSeverityType:Warning");
     
     private final ErrorType ebXML21;
     private final String opcode30;

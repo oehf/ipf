@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -24,14 +25,20 @@ import java.util.List;
  * Represents a stored query for FindSubmissionSets.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "FindSubmissionSetsQuery", propOrder = {
+        "status", "sourceIds", "authorPerson", "submissionTime", "contentTypeCodes"})
+@XmlRootElement(name = "findSubmissionSetsQuery")
 public class FindSubmissionSetsQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = 1712346604151312305L;
 
     private List<AvailabilityStatus> status;
+    @XmlElement(name = "sourceId")
     private List<String> sourceIds;
+    @XmlElement(name = "contentTypeCode")
     private List<Code> contentTypeCodes;
     private String authorPerson;
-    
+
     private final TimeRange submissionTime = new TimeRange();
 
     /**

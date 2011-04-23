@@ -15,23 +15,37 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
-
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
 /**
  * Represents a stored query for GetAll.
  * @author Jens Riemschneider
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetAllQuery", propOrder = {
+        "statusDocuments", "statusSubmissionSets", "statusFolders", "confidentialityCodes", "formatCodes"})
+@XmlRootElement(name = "getAllQuery")
 public class GetAllQuery extends PatientIdBasedStoredQuery implements Serializable {
     private static final long serialVersionUID = -4161172318244319631L;
 
+    @XmlElement(name = "documentStatus")
     private List<AvailabilityStatus> statusDocuments;
+    @XmlElement(name = "submissionSetStatus")
     private List<AvailabilityStatus> statusSubmissionSets;
+    @XmlElement(name = "folderStatus")
     private List<AvailabilityStatus> statusFolders;
 
+    @XmlElement(name = "confidentialityCode")
     private QueryList<Code> confidentialityCodes;
+    @XmlElement(name = "formatCode")
     private List<Code> formatCodes;
 
     /**
