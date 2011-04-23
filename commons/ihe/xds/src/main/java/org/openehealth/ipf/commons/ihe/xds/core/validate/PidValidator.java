@@ -28,12 +28,13 @@ import java.util.regex.Pattern;
  * @author Jens Riemschneider
  */
 public class PidValidator implements ValueValidator {
+    private static final Pattern PID_PATTERN = Pattern.compile("PID-([1-9][0-9]*)\\|(.*)", 0);
+
     @Override
     public void validate(String value) throws XDSMetaDataException {
         notNull(value, "value cannot be null");
         
-        Pattern pattern = Pattern.compile("PID-([1-9][0-9]*)\\|(.*)", 0);
-        Matcher matcher = pattern.matcher(value);
+        Matcher matcher = PID_PATTERN.matcher(value);
         metaDataAssert(matcher.matches(), INVALID_PID, value);
                 
         int number = Integer.parseInt(matcher.group(1));

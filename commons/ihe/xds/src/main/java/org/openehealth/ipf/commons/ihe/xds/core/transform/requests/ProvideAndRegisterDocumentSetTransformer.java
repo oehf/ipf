@@ -85,7 +85,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
             DocumentEntry docEntry = doc.getDocumentEntry();
             if (docEntry != null) {
                 ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
-                ebXML.addDocument(docEntry.getEntryUuid(), doc.getContents(DataHandler.class));
+                ebXML.addDocument(docEntry.getEntryUuid(), doc.getContent(DataHandler.class));
             }
         }
         
@@ -128,7 +128,7 @@ public class ProvideAndRegisterDocumentSetTransformer {
                 if (docEntry.getEntryUuid() != null) {
                     String id = docEntry.getEntryUuid();
                     DataHandler data = documents.get(id);
-                    document.addContents(DataHandler.class, data);
+                    document.setContent(DataHandler.class, data);
                 }
                 request.getDocuments().add(document);
             }
