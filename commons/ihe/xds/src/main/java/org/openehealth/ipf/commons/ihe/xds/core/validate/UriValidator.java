@@ -32,6 +32,8 @@ import java.net.URL;
  * @author Jens Riemschneider
  */
 public class UriValidator implements ValueListValidator {
+    private static final Pattern PATTERN = Pattern.compile("([1-9])\\|(.*)");
+
     @Override
     public void validate(List<String> values) throws XDSMetaDataException {
         if (values.size() > 0) {
@@ -68,14 +70,12 @@ public class UriValidator implements ValueListValidator {
             }
         }
         
-        Pattern pattern = Pattern.compile("([1-9])\\|(.*)");
-        
         String[] uriParts = new String[10];
         int highestIdx = 0;
         for (String slotValue : values) {
             metaDataAssert(slotValue != null, NULL_URI_PART);
             
-            Matcher matcher = pattern.matcher(slotValue);
+            Matcher matcher = PATTERN.matcher(slotValue);
             metaDataAssert(matcher.matches(), INVALID_URI_PART, slotValue);
             
             int uriIdx = Integer.parseInt(matcher.group(1));

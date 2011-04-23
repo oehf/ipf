@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,27 +15,25 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.activation.DataHandler;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.util.DocumentContentHelper;
+import org.openehealth.ipf.commons.core.ContentMap;
+
+import javax.activation.DataHandler;
+import java.io.Serializable;
 
 /**
  * Represents the contents of a document and the describing entry.
  * <p> 
  * All members of this class are allowed to be <code>null</code>.
  * @author Jens Riemschneider
+ * @author Stefan Ivanov
+ * @author Dmytro Rud
  */
-public class Document implements Serializable {
+public class Document extends ContentMap implements Serializable {
     private static final long serialVersionUID = 5206884085835642756L;
-    
+
     private DocumentEntry documentEntry;
-    private transient Map<Class<?>, Object> contents = new HashMap<Class<?>, Object>();
 
     public Document() {
     }
@@ -49,8 +47,9 @@ public class Document implements Serializable {
      */
     public Document(DocumentEntry documentEntry, DataHandler dataHandler) {
         this.documentEntry = documentEntry;
-        if (dataHandler != null)
-            addContents(DataHandler.class, dataHandler);
+        if (dataHandler != null) {
+            setContent(DataHandler.class, dataHandler);
+        }
     }
 
     /**
@@ -69,49 +68,35 @@ public class Document implements Serializable {
     }
 
     /**
+     * This method is deprecated.
+     * Use <code>getContent(DataHandler.class)</code> instead.
+     *
      * @return the data handler allowing access to the contents of the document.
      */
     @Deprecated
     public DataHandler getDataHandler() {
-        return getContents(DataHandler.class);
+        return getContent(DataHandler.class);
     }
     
     /**
+     * This method is deprecated.
+     * Use <code>setContent(DataHandler.class, dataHandler)</code> instead.
+     *
      * @param dataHandler
      *          the data handler allowing access to the contents of the document.
      */
     @Deprecated
     public void setDataHandler(DataHandler dataHandler) {
-        addContents(DataHandler.class, dataHandler);
+        setContent(DataHandler.class, dataHandler);
     }
     
-    public Map<Class<?>, Object> getContents() {
-        return contents;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public <T> T getContents(Class<T> key) {
-        if (contents.isEmpty())
-            return null;
-        if (!contents.containsKey(key)) {
-            T result = DocumentContentHelper.convert(contents, key);
-            if (result != null)
-                addContents(key, result);
-        }
-        return (T) contents.get(key);
-    }
-    
-    public Object addContents(Class<?> clazz, Object content) {
-        return contents.put(clazz, content);
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result
-            + ((getContents(DataHandler.class) == null) ?
-                0 : getContents(DataHandler.class).hashCode());
+            + ((getContent(DataHandler.class) == null) ?
+                0 : getContent(DataHandler.class).hashCode());
         result = prime * result + ((documentEntry == null) ? 0 : documentEntry.hashCode());
         return result;
     }

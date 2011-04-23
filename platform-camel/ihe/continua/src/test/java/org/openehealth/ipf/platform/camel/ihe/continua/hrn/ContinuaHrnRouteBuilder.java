@@ -15,45 +15,63 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import static org.openehealth.ipf.platform.camel.ihe.continua.hrn.ContinuaHrnCamelValidators.continuaHrnResponseValidator;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.continua.hrn.processors.ClinicalDocumentEnricher;
+import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
+
+import javax.activation.DataHandler;
 
 /**
  * Test Continua HRN Route Builder.
  * 
  * @author Stefan Ivanov
- * 
  */
 public class ContinuaHrnRouteBuilder extends RouteBuilder {
     
+    private static final Processor CHECK_PROCESSOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Object body = exchange.getIn().getBody();
+            if (! (body instanceof ProvideAndRegisterDocumentSet)) {
+                throw new Exception("wrong body type");
+            }
+
+            Class<?>[] expectedContentTypes = new Class<?>[] {
+                    DataHandler.class,
+                    byte[].class,
+                    ClinicalDocument.class
+            };
+            Document document = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
+            for (Class<?> contentType : expectedContentTypes) {
+                if (! document.hasContent(contentType)) {
+                    throw new Exception("Missing content type: " + contentType);
+                }
+            }
+
+            if (document.getContentsCount() != expectedContentTypes.length) {
+                throw new Exception("Expected " + expectedContentTypes.length +
+                        " content types, found " + document.getContentsCount());
+            }
+        }
+    };
+
+
     @Override
     public void configure() throws Exception {
         
         from("xds-iti41:continuaHRNService")
-            // .process(continuaHrnRequestValidator())
-            .convertBodyTo(ProvideAndRegisterDocumentSet.class)
-            .process(new ClinicalDocumentEnricher())
-            .to("log:org.openehealth?level=ERROR&showAll=true&multiline=true")
-            .process(SUCCESS_RESPONSE_PROCESSOR)
-            .process(continuaHrnResponseValidator());
+            .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+            .process(ContinuaHrnCamelProcessors.continuaHrnRequestTransformerAndValidator())
+            .process(CHECK_PROCESSOR)
+            .setBody(constant(new Response(Status.SUCCESS)))
+            .process(ContinuaHrnCamelProcessors.continuaHrnResponseValidator());
     }
-    
-    private static Processor SUCCESS_RESPONSE_PROCESSOR = new Processor() {
-        
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Exchanges.resultMessage(exchange).setBody(new Response(Status.SUCCESS), Response.class);
-        }
-    };
-    
-    
-    
+
 }

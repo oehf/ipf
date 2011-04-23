@@ -46,7 +46,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
     
     @BeforeClass
     public static void setUpClass() throws JAXBException {
-        startServer(new CXFServlet(), "continua-hrn.xml");
+        startServer(new CXFServlet(), "continua-hrn-context.xml");
         jaxbContext = JAXBContext
             .newInstance("org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30");
     }
