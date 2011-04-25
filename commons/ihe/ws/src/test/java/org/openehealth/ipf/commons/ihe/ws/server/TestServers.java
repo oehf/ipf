@@ -35,40 +35,42 @@ import java.io.IOException;
  * @author Jens Riemschneider
  */
 public class TestServers {
-    /** Tests the embedded Tomcat server
+    /**
+     * Tests the embedded Tomcat server
      * @throws Exception
      *          for anything problematic.
      */
     @Test
     public void testTomcat() throws Exception {
-        checkServer(new TomcatServer());
+        checkServer(new TomcatServer(), 9090);
     }
 
-    /** Tests the embedded Jetty server
+    /**
+     * Tests the embedded Jetty server
      * @throws Exception
      *          for anything problematic.
      */
     @Test
     public void testJetty() throws Exception {
-        checkServer(new JettyServer());
+        checkServer(new JettyServer(), 9091);
     }
 
-    private void checkServer(ServletServer server) throws Exception {
+    private void checkServer(ServletServer server, int port) throws Exception {
         ClassPathResource contextResource = new ClassPathResource("test.xml");
 
         server.setServlet(new Servlet());
-        server.setPort(9090);
+        server.setPort(port);
         server.setContextPath("/testContext");
         server.setServletPath("/testServlet/*");
         server.setContextResource(contextResource.getURI().toString());
         server.start();
-        checkPostRequest();
+        checkPostRequest(port);
         server.stop();
     }
 
-    private void checkPostRequest() throws Exception {
+    private void checkPostRequest(int port) throws Exception {
         HttpClient client = new HttpClient();
-        PostMethod method = new PostMethod("http://localhost:9090/testContext/testServlet/bla");
+        PostMethod method = new PostMethod("http://localhost:" + port + "/testContext/testServlet/bla");
         RequestEntity requestEntity = new StringRequestEntity("hello world", "text/plain", null);
         method.setRequestEntity(requestEntity);
         try {

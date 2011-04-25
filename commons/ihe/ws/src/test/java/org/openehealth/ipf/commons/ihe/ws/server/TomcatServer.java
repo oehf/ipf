@@ -16,17 +16,14 @@
 package org.openehealth.ipf.commons.ihe.ws.server;
 
 import org.apache.catalina.Context;
-import org.apache.catalina.Engine;
-import org.apache.catalina.Host;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.loader.VirtualWebappLoader;
-import org.apache.catalina.startup.Embedded;
+import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.ContextLoaderListener;
-
-import java.net.InetAddress;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A servlet server based on the embedded Tomcat.
@@ -37,50 +34,49 @@ import java.net.InetAddress;
 public class TomcatServer extends ServletServer {
     private static final Log log = LogFactory.getLog(TomcatServer.class);
 
-    private Embedded embedded;
+    private static final AtomicInteger SERVLET_COUNTER = new AtomicInteger(0);
+    private Tomcat embedded;
     private Wrapper wrapper;
 
     @Override
     public void start() {
-        embedded = new Embedded();
+        embedded = new Tomcat();
 
-        Context context = embedded.createContext(getContextPath(), "/");
-        TomcatServletWrapper.setServlet(getServlet());
-        context.setWrapperClass(TomcatServletWrapper.class.getName());
+        Context context = embedded.addContext(getContextPath(), "/");
         context.addParameter("contextConfigLocation", getContextResource());
         context.addApplicationListener(ContextLoaderListener.class.getName());
 
+        embedded.getHost().setAppBase("");
+
+        // Each servlet should get an unique name, otherwise all servers will reuse
+        // one and the same servlet instance.  Note that name clashes with servlets
+        // created somewhere else are still possible.
+        String servletName = "ipf-servlet-" + SERVLET_COUNTER.getAndIncrement();
+
         wrapper = context.createWrapper();
-        wrapper.setName("servlet");
+        wrapper.setName(servletName);
         wrapper.setServletClass(getServlet().getClass().getName());
 
         context.addChild(wrapper);
-        context.addServletMapping(getServletPath(), "servlet");
+        context.addServletMapping(getServletPath(), servletName);
 
         VirtualWebappLoader loader = new VirtualWebappLoader(this.getClass().getClassLoader());
         loader.setVirtualClasspath(System.getProperty("java.class.path"));
         context.setLoader(loader);
-        
-        Host host = embedded.createHost("localhost", "/");
-        host.addChild(context);
-        
-        Engine engine = embedded.createEngine();
-        engine.addChild(host);
-        engine.setDefaultHost(host.getName());
-        embedded.addEngine(engine);
-        
-        Connector connector = embedded.createConnector((InetAddress)null, getPort(), isSecure());
+
+        Connector connector = embedded.getConnector();
+        connector.setPort(getPort());
         if (isSecure()) {
+            connector.setSecure(true);
             connector.setScheme("https");
+            connector.setProperty("SSLEnabled", "true");
             connector.setProperty("sslProtocol", "TLS");
             connector.setProperty("keystoreFile", getKeystoreFile());
             connector.setProperty("keystorePass", getKeystorePass());
             connector.setProperty("truststoreFile", getTruststoreFile());
             connector.setProperty("truststorePass", getTruststorePass());
         }
-        embedded.addConnector(connector);
 
-        embedded.setAwait(true);
         try {
             embedded.start();
             wrapper.allocate();

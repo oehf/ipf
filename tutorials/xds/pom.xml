@@ -68,17 +68,17 @@
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
-            <artifactId>catalina</artifactId>
+            <artifactId>tomcat-catalina</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
-            <artifactId>coyote</artifactId>
+            <artifactId>tomcat-coyote</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
-            <artifactId>jasper</artifactId>
+            <artifactId>tomcat-jasper</artifactId>
             <scope>compile</scope>
         </dependency>
 
