@@ -27,28 +27,15 @@ import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xca.XcaClientFactory;
 import org.openehealth.ipf.commons.ihe.xca.XcaServiceFactory;
 import org.openehealth.ipf.commons.ihe.xca.iti38.Iti38ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xca.iti38.Iti38PortType;
 import org.openehealth.ipf.commons.ihe.xca.iti38.Iti38ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
-import javax.xml.namespace.QName;
-
 /**
  * The endpoint implementation for the ITI-38 component.
  */
-public class Iti38Endpoint extends DefaultItiEndpoint {
-    private final static ItiServiceInfo ITI_38 = new ItiServiceInfo(
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
-            Iti38PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti38.wsdl",
-            true,
-            false,
-            true);
-
+public class Iti38Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
 
     public Iti38Endpoint(
             String endpointUri,
@@ -63,7 +50,7 @@ public class Iti38Endpoint extends DefaultItiEndpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new XcaClientFactory(
-                ITI_38,
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti38ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceUrl(),
                 getCorrelator(),
@@ -75,7 +62,7 @@ public class Iti38Endpoint extends DefaultItiEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XcaServiceFactory(
-                ITI_38,
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti38ServerAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
                 getCustomInterceptors());

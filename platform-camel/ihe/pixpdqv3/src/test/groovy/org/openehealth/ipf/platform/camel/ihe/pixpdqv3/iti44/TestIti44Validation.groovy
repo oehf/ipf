@@ -33,7 +33,7 @@ class TestIti44Validation {
     @Test
     void testIti44Validation() {
         Hl7v3Validator validator = new Hl7v3Validator()
-        String[][] validationProfiles = Iti44Endpoint.ITI_44_PIX.getRequestValidationProfiles()
+        String[][] validationProfiles = Iti44PixComponent.WS_CONFIG.getRequestValidationProfiles()
         String message
 
         // 301

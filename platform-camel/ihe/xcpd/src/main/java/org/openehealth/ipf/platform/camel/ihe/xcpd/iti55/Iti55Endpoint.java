@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
 import java.net.URISyntaxException;
 
-import javax.xml.namespace.QName;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -31,7 +29,6 @@ import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdClientFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdServiceFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55PortType;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
@@ -40,19 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-55 transaction.
  */
-public class Iti55Endpoint extends DefaultItiEndpoint {
-    private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    public final static Hl7v3ServiceInfo ITI_55 = new Hl7v3ServiceInfo(
-            new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
-            Iti55PortType.class,
-            new QName(NS_URI, "RespondingGateway_Binding_Soap12", "xcpd"),
-            false,
-            "wsdl/iti55/iti55-raw.wsdl",
-            new String[][] { new String[] {"PRPA_IN201305UV02", "iti55/PRPA_IN201305UV02"}},
-            new String[][] { new String[] {"PRPA_IN201306UV02", "iti55/PRPA_IN201306UV02"}},
-            "PRPA_IN201306UV02",
-            true,
-            false);
+public class Iti55Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
 
     /**
      * Constructs the endpoint.
@@ -76,7 +61,7 @@ public class Iti55Endpoint extends DefaultItiEndpoint {
 
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new XcpdClientFactory(
-                ITI_55,
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti55ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceUrl(),
                 getCorrelator(),
@@ -86,7 +71,7 @@ public class Iti55Endpoint extends DefaultItiEndpoint {
 
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XcpdServiceFactory(
-                ITI_55,
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti55ServerAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
                 getCustomInterceptors());

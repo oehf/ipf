@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41.component;
 
-import javax.xml.namespace.QName;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -29,7 +27,6 @@ import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
@@ -39,17 +36,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti41.service.Iti41Service;
 /**
  * The Camel endpoint for the ITI-41 transaction.
  */
-public class Iti41Endpoint extends DefaultItiEndpoint {
-    private final static ItiServiceInfo ITI_41 = new ItiServiceInfo(
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Service", "ihe"),
-            Iti41PortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "DocumentRepository_Binding_Soap12", "ihe"),
-            true,
-            "wsdl/iti41.wsdl",
-            true,
-            false,
-            false);
-           
+public class Iti41Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -71,7 +59,7 @@ public class Iti41Endpoint extends DefaultItiEndpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new XdsClientFactory(
-                ITI_41, 
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti41ClientAuditStrategy(isAllowIncompleteAudit()) : null, 
                 getServiceUrl(),
                 getCustomInterceptors());
@@ -81,7 +69,7 @@ public class Iti41Endpoint extends DefaultItiEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XdsServiceFactory(
-                ITI_41, 
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti41ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
                 getServiceAddress(),
                 getCustomInterceptors());

@@ -16,17 +16,23 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17.component;
 
 import org.apache.camel.Endpoint;
-import org.apache.camel.impl.DefaultComponent;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
 import java.util.Map;
 
 /**
  * The Camel component for the ITI-17 transaction.
  */
-public class Iti17Component extends DefaultComponent {
+public class Iti17Component extends AbstractWsComponent<ItiServiceInfo> {
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Iti17Endpoint(uri, remaining, this);
+    }
+
+    @Override
+    public ItiServiceInfo getWebServiceConfiguration() {
+        return null;
     }
 }

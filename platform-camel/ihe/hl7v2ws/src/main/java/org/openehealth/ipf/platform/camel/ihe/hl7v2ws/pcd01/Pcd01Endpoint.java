@@ -23,6 +23,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -30,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * Camel endpoint for the PCD-01 transaction.
  */
-public class Pcd01Endpoint extends DefaultItiEndpoint {
+public class Pcd01Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
 
     /**
      * Constructs the endpoint.
@@ -53,7 +54,7 @@ public class Pcd01Endpoint extends DefaultItiEndpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new ItiClientFactory(
-                Pcd01Component.WS_CONFIG,
+                getWebServiceConfiguration(),
                 getServiceUrl(), 
                 getCustomInterceptors());
         return new Pcd01Producer(this, clientFactory);
@@ -62,7 +63,7 @@ public class Pcd01Endpoint extends DefaultItiEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new ItiServiceFactory(
-                Pcd01Component.WS_CONFIG,
+                getWebServiceConfiguration(),
                 getServiceAddress(),
                 getCustomInterceptors());
         ServerFactoryBean serverFactory =

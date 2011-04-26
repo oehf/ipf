@@ -22,7 +22,7 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
 import javax.xml.namespace.QName;
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Map;
 /**
  * Camel component for the IHE PCD-01 transaction.
  */
-public class Pcd01Component extends DefaultWsComponent implements Hl7v2ConfigurationHolder {
+public class Pcd01Component extends AbstractWsComponent<ItiServiceInfo> implements Hl7v2ConfigurationHolder {
     private static final String NS_URI = "urn:ihe:pcd:dec:2010";
     public static final ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
             new QName(NS_URI, "DeviceObservationConsumer_Service", "ihe"),
@@ -74,5 +74,10 @@ public class Pcd01Component extends DefaultWsComponent implements Hl7v2Configura
     @Override
     public NakFactory getNakFactory() {
         return NAK_FACTORY;
+    }
+
+    @Override
+    public ItiServiceInfo getWebServiceConfiguration() {
+        return WS_CONFIG;
     }
 }

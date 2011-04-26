@@ -18,16 +18,37 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti56;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.xcpd.iti56.Iti56PortType;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+
+import javax.xml.namespace.QName;
 
 /**
  * The Camel component for the ITI-56 transaction (XCPD).
  */
-public class Iti56Component extends DefaultWsComponent {
-    
+public class Iti56Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
+    private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
+    public final static Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+            new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
+            Iti56PortType.class,
+            new QName(NS_URI, "RespondingGateway_Binding_Soap12", "xcpd"),
+            false,
+            "wsdl/iti56/iti56-raw.wsdl",
+            new String[][] {new String[] {"PatientLocationQueryRequest", null, "IHE/XCPD_PLQ"}},
+            new String[][] {new String[] {"PatientLocationQueryResponse", null, "IHE/XCPD_PLQ"}},
+            null,
+            false,
+            true);
+
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Iti56Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+    }
+
+    @Override
+    public Hl7v3ServiceInfo getWebServiceConfiguration() {
+        return WS_CONFIG;
     }
 }

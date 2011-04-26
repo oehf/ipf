@@ -38,20 +38,8 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-56 async response.
  */
-public class Iti56AsyncResponseEndpoint extends DefaultItiEndpoint {
-    private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    private final static Hl7v3ServiceInfo ITI_56_ASYNC_RESPONSE = new Hl7v3ServiceInfo(
-            new QName(NS_URI, "RespondingGateway_Response_Service", "xcpd"),
-            Iti56AsyncResponsePortType.class,
-            new QName(NS_URI, "RespondingGateway_Response_Binding_Soap12", "xcpd"),
-            false,
-            "wsdl/iti56/iti56-asyncresponse-raw.wsdl",
-            null,
-            null,
-            null,
-            false,
-            false);
-           
+public class Iti56AsyncResponseEndpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -78,7 +66,7 @@ public class Iti56AsyncResponseEndpoint extends DefaultItiEndpoint {
 
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XcpdAsyncResponseServiceFactory(
-                ITI_56_ASYNC_RESPONSE,
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti56ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
                 getCorrelator(),

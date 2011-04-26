@@ -35,6 +35,6 @@ public class Iti47ContinuationAwareService
             int defaultThreshold,
             boolean validationOnContinuation)
     {
-        super(Iti47Endpoint.ITI_47, storage, defaultThreshold, validationOnContinuation);
+        super(Iti47Component.WS_CONFIG, storage, defaultThreshold, validationOnContinuation);
     }
 }

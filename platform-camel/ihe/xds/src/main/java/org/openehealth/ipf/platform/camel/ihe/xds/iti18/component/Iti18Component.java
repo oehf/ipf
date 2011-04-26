@@ -19,15 +19,34 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18.component;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+
+import javax.xml.namespace.QName;
 
 /**
  * The Camel component for the ITI-18 transaction.
  */
-public class Iti18Component extends DefaultWsComponent {
+public class Iti18Component extends AbstractWsComponent<ItiServiceInfo> {
+    private final static ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
+            Iti18PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti18.wsdl",
+            true,
+            false,
+            true);
+
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Iti18Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+    }
+
+    @Override
+    public ItiServiceInfo getWebServiceConfiguration() {
+        return WS_CONFIG;
     }
 }
