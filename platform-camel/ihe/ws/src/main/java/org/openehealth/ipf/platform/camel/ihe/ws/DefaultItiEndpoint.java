@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import javax.xml.namespace.QName;
 
-import org.apache.camel.Component;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 
 /**
@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiEndpoint extends DefaultEndpoint {
+public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends DefaultEndpoint {
     private static final String ENDPOINT_PROTOCOL = "http://";
     private static final String ENDPOINT_PROTOCOL_SECURE = "https://";
 
@@ -87,17 +87,27 @@ public abstract class DefaultItiEndpoint extends DefaultEndpoint {
      *          the endpoint address from the URI.
      * @param component
      *          the component creating this endpoint.
+     * @param customInterceptors
+     *          user-defined set of additional CXF interceptors.
      */
     protected DefaultItiEndpoint(
             String endpointUri, 
             String address, 
-            Component component,
+            AbstractWsComponent<C> component,
             InterceptorProvider customInterceptors) 
     {
         super(endpointUri, component);
         this.address = address;
         this.customInterceptors = customInterceptors;
         configure();
+    }
+
+    /**
+     * @return Web Service parameters of the component to
+     *      which this endpoint belongs.
+     */
+    protected C getWebServiceConfiguration() {
+        return ((AbstractWsComponent<C>) getComponent()).getWebServiceConfiguration();
     }
 
     private void configure() {

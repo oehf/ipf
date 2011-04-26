@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,6 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfigura
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
+import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkRequestAcceptance;
 import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkResponseAcceptance;
@@ -100,20 +99,5 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
      */
     protected String formatErrMsg(String text) {
         return config.getSendingApplication() + ": " + text;
-    }
-
-
-    /**
-     * Converts the given HAPI Message to a String suitable for WS transport.
-     * @param message
-     *            a {@link Message} to convert.
-     * @return a String representation of the given HAPI message.
-     */
-    protected static String render(Message message) {
-        try {
-            return message.getParser().encode(message).replaceAll("\r", "\r\n");
-        } catch (HL7Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

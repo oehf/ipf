@@ -49,8 +49,6 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.openehealth.ipf.platform.camel.ihe.xds.iti42.component.Iti42Endpoint.ITI_42;
-
 public class CxfEndpointTest {
     private final EbXMLFactory factory = new EbXMLFactory30();
 
@@ -85,7 +83,8 @@ public class CxfEndpointTest {
     public void test() throws Exception {
         runRequestAndExpectFailure();
 
-        ItiServiceFactory serviceFactory = new XdsServiceFactory(ITI_42, null, "/iti-42", null);
+        ItiServiceFactory serviceFactory = new XdsServiceFactory(
+                Iti42Component.WS_CONFIG, null, "/iti-42", null);
         ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
         Server serviceServer = factory.create();
 
@@ -114,7 +113,7 @@ public class CxfEndpointTest {
 
     private Response runRequest() {
         ItiClientFactory clientFactory = new XdsClientFactory(
-                ITI_42, null, "http://localhost:" + port + "/iti-42", null);
+                Iti42Component.WS_CONFIG, null, "http://localhost:" + port + "/iti-42", null);
 
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
         RegisterDocumentSet request = SampleData.createRegisterDocumentSet();

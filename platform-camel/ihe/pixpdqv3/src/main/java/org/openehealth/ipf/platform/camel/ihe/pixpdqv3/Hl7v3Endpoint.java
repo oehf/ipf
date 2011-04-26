@@ -15,15 +15,16 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3;
 
-import org.apache.camel.Component;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
 /**
  * Camel endpoint class for HL7v3-based IHE components.
  * @author Dmytro Rud
  */
-abstract public class Hl7v3Endpoint extends DefaultItiEndpoint {
+abstract public class Hl7v3Endpoint<C extends Hl7v3ServiceInfo> extends DefaultItiEndpoint<C> {
 
     /**
      * Whether this endpoint should support HL7v3 continuation.
@@ -61,7 +62,7 @@ abstract public class Hl7v3Endpoint extends DefaultItiEndpoint {
     public Hl7v3Endpoint(
             String endpointUri,
             String address,
-            Component component,
+            AbstractWsComponent<C> component,
             InterceptorProvider customInterceptors)
     {
         super(endpointUri, address, component, customInterceptors);

@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHl7v3WebService;
 public class Pcc1Service extends DefaultHl7v3WebService implements Pcc1PortType {
 
     public Pcc1Service() {
-        super(Pcc1Endpoint.PCC_1);
+        super(Pcc1Component.WS_CONFIG);
     }
 
     @Override

@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti45;
 
-import javax.xml.namespace.QName;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -26,7 +24,6 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
-import org.openehealth.ipf.commons.ihe.pixpdqv3.iti45.Iti45PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
@@ -36,19 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-45 transaction.
  */
-public class Iti45Endpoint extends DefaultItiEndpoint {
-    private static final String NS_URI = "urn:ihe:iti:pixv3:2007";
-    public static final Hl7v3ServiceInfo ITI_45 = new Hl7v3ServiceInfo(
-            new QName(NS_URI, "PIXManager_Service", "ihe"),
-            Iti45PortType.class,
-            new QName(NS_URI, "PIXManager_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti45/iti45-raw.wsdl",
-            new String[][] {new String[] {"PRPA_IN201309UV02", null}},
-            new String[][] {new String[] {"PRPA_IN201310UV02", null}},
-            "PRPA_IN201310UV02",
-            true,
-            false);
+public class Iti45Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
 
     /**
      * Constructs the endpoint.
@@ -71,7 +56,7 @@ public class Iti45Endpoint extends DefaultItiEndpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new Hl7v3ClientFactory(
-                ITI_45, 
+                getWebServiceConfiguration(),
                 getServiceUrl(), 
                 getCustomInterceptors());
         return new Iti45Producer(this, clientFactory);
@@ -80,7 +65,7 @@ public class Iti45Endpoint extends DefaultItiEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
-                ITI_45, 
+                getWebServiceConfiguration(),
                 getServiceAddress(),
                 getCustomInterceptors());
         ServerFactoryBean serverFactory =

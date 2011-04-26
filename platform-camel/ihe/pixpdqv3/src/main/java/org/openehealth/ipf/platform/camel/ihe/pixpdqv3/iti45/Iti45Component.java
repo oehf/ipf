@@ -18,15 +18,37 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti45;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.iti45.Iti45PortType;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+
+import javax.xml.namespace.QName;
 
 /**
  * The Camel component for the ITI-45 transaction (PIX v3).
  */
-public class Iti45Component extends DefaultWsComponent {
+public class Iti45Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
+    private static final String NS_URI = "urn:ihe:iti:pixv3:2007";
+    public static final Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+            new QName(NS_URI, "PIXManager_Service", "ihe"),
+            Iti45PortType.class,
+            new QName(NS_URI, "PIXManager_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti45/iti45-raw.wsdl",
+            new String[][] {new String[] {"PRPA_IN201309UV02", null}},
+            new String[][] {new String[] {"PRPA_IN201310UV02", null}},
+            "PRPA_IN201310UV02",
+            true,
+            false);
+
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Iti45Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+    }
+
+    @Override
+    public Hl7v3ServiceInfo getWebServiceConfiguration() {
+        return WS_CONFIG;
     }
 }

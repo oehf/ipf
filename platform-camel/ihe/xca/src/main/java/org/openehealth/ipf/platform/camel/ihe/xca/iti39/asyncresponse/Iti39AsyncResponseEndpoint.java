@@ -25,27 +25,16 @@ import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xca.XcaAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.xca.iti39.Iti39ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xca.iti39.asyncresponse.Iti39AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
-import javax.xml.namespace.QName;
 import java.net.URISyntaxException;
 
 /**
  * The Camel endpoint for the ITI-39 async response.
  */
-public class Iti39AsyncResponseEndpoint extends DefaultItiEndpoint {
-    private final static ItiServiceInfo ITI_39_ASYNC_RESPONSE = new ItiServiceInfo(
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Response_Service", "ihe"),
-            Iti39AsyncResponsePortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Response_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti39-asyncresponse.wsdl",
-            true,
-            false,
-            false);
+public class Iti39AsyncResponseEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
 
     /**
      * Constructs the endpoint.
@@ -65,7 +54,7 @@ public class Iti39AsyncResponseEndpoint extends DefaultItiEndpoint {
 
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XcaAsyncResponseServiceFactory(
-                ITI_39_ASYNC_RESPONSE,
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti39ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
                 getCorrelator(),

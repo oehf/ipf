@@ -19,8 +19,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
-import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.xcpd.iti56.Iti56Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55Component;
+import org.openehealth.ipf.platform.camel.ihe.xcpd.iti56.Iti56Component;
 
 /**
  * Validating processors for IPF XCPD components.
@@ -30,13 +30,13 @@ abstract public class XcpdCamelValidators {
     private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator();
 
     private static final Processor ITI_55_REQUEST_VALIDATOR =
-            validatingProcessor(Iti55Endpoint.ITI_55, true);
+            validatingProcessor(Iti55Component.WS_CONFIG, true);
     private static final Processor ITI_55_RESPONSE_VALIDATOR =
-            validatingProcessor(Iti55Endpoint.ITI_55, false);
+            validatingProcessor(Iti55Component.WS_CONFIG, false);
     private static final Processor ITI_56_REQUEST_VALIDATOR  =
-            validatingProcessor(Iti56Endpoint.ITI_56, true);
+            validatingProcessor(Iti56Component.WS_CONFIG, true);
     private static final Processor ITI_56_RESPONSE_VALIDATOR =
-            validatingProcessor(Iti56Endpoint.ITI_56, false);
+            validatingProcessor(Iti56Component.WS_CONFIG, false);
 
 
     /**

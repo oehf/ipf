@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.DefaultHl7v3WebService;
 public class Iti45Service extends DefaultHl7v3WebService implements Iti45PortType {
 
     public Iti45Service() {
-        super(Iti45Endpoint.ITI_45);
+        super(Iti45Component.WS_CONFIG);
     }
 
     @Override

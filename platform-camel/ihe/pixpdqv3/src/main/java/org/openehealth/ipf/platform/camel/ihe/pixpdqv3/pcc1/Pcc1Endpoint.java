@@ -24,7 +24,6 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
@@ -33,38 +32,11 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
-import javax.xml.namespace.QName;
-
 /**
  * Camel endpoint for the PCC-1 transaction.
  * @author Dmytro Rud
  */
-public class Pcc1Endpoint extends Hl7v3Endpoint {
-    private static final String[][] REQUEST_VALIDATION_PROFILES = new String[][] {
-            new String[] {"QUPC_IN043100UV01", null},
-            new String[] {"QUQI_IN000003UV01", null},
-            new String[] {"QUQI_IN000003UV01_Cancel", null}
-    };
-
-    private static final String[][] RESPONSE_VALIDATION_PROFILES = new String[][] {
-            new String[] {"QUPC_IN043200UV01", null},
-            new String[] {"MCCI_IN000002UV01", null}
-    };
-
-    private final static String NS_URI = "urn:ihe:pcc:qed:2007";
-    public final static Hl7v3ContinuationAwareServiceInfo PCC_1 = new Hl7v3ContinuationAwareServiceInfo(
-            new QName(NS_URI, "ClinicalDataSource_Service", "qed"),
-            Pcc1PortType.class,
-            new QName(NS_URI, "ClinicalDataSource_Binding_Soap12", "qed"),
-            false,
-            "wsdl/pcc1/pcc1-raw.wsdl",
-            REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES,
-            "QUPC_IN043200UV01",
-            true,
-            false,
-            "QUPC_IN043100UV01",
-            "QUPC_IN043200UV01");
+public class Pcc1Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceInfo> {
 
     /**
      * Constructs the endpoint.
@@ -87,13 +59,13 @@ public class Pcc1Endpoint extends Hl7v3Endpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new Hl7v3ClientFactory(
-                PCC_1, 
+                getWebServiceConfiguration(),
                 getServiceUrl(), 
                 getCustomInterceptors());
         return new Hl7v3ContinuationAwareProducer(
                 this,
                 clientFactory,
-                PCC_1,
+                getWebServiceConfiguration(),
                 isSupportContinuation(),
                 isAutoCancel(),
                 isValidationOnContinuation());
@@ -102,7 +74,7 @@ public class Pcc1Endpoint extends Hl7v3Endpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
-                PCC_1, 
+                getWebServiceConfiguration(),
                 getServiceAddress(),
                 getCustomInterceptors());
 

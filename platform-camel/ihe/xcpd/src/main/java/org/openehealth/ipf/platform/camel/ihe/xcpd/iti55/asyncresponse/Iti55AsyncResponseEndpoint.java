@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.asyncresponse;
 
 import java.net.URISyntaxException;
 
-import javax.xml.namespace.QName;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -27,10 +25,8 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.xcpd.XcpdAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.Iti55ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xcpd.iti55.asyncresponse.Iti55AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -38,19 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-55 async response.
  */
-public class Iti55AsyncResponseEndpoint extends DefaultItiEndpoint {
-    private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    private final static Hl7v3ServiceInfo ITI_55_ASYNC_RESPONSE = new Hl7v3ServiceInfo(
-            new QName(NS_URI, "RespondingGateway_Response_Service", "xcpd"),
-            Iti55AsyncResponsePortType.class,
-            new QName(NS_URI, "RespondingGateway_Response_Binding_Soap12", "xcpd"),
-            false,
-            "wsdl/iti55/iti55-asyncresponse-raw.wsdl",
-            null,
-            null,
-            null,
-            false,
-            false);
+public class Iti55AsyncResponseEndpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
 
     /**
      * Constructs the endpoint.
@@ -78,7 +62,7 @@ public class Iti55AsyncResponseEndpoint extends DefaultItiEndpoint {
 
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XcpdAsyncResponseServiceFactory(
-                ITI_55_ASYNC_RESPONSE,
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti55ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
                 getCorrelator(),

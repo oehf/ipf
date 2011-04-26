@@ -39,17 +39,8 @@ import org.openehealth.ipf.platform.camel.ihe.xds.iti15.service.Iti15Service;
 /**
  * The Camel endpoint for the ITI-15 transaction.
  */
-public class Iti15Endpoint extends DefaultItiEndpoint {
-    private final static ItiServiceInfo ITI_15 = new ItiServiceInfo(
-            new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Service", "ihe"),
-            Iti15PortType.class,
-            new QName("urn:ihe:iti:xds:2007", "DocumentRepository_Binding_Soap11", "ihe"),
-            false,
-            "wsdl/iti15.wsdl",
-            false,
-            true,
-            false);
-           
+public class Iti15Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+
     /**
      * Constructs the endpoint.
      * @param endpointUri
@@ -71,7 +62,7 @@ public class Iti15Endpoint extends DefaultItiEndpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new XdsClientFactory(
-                ITI_15, 
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti15ClientAuditStrategy(isAllowIncompleteAudit()) : null, 
                 getServiceUrl(),
                 getCustomInterceptors());
@@ -81,7 +72,7 @@ public class Iti15Endpoint extends DefaultItiEndpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XdsServiceFactory(
-                ITI_15, 
+                getWebServiceConfiguration(),
                 isAudit() ? new Iti15ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
                 getServiceAddress(),
                 getCustomInterceptors());

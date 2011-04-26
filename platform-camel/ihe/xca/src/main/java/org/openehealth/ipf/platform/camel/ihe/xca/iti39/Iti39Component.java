@@ -18,15 +18,34 @@ package org.openehealth.ipf.platform.camel.ihe.xca.iti39;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.xca.iti39.Iti39PortType;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+
+import javax.xml.namespace.QName;
 
 /**
  * The Camel component for the ITI-39 transaction.
  */
-public class Iti39Component extends DefaultWsComponent {
+public class Iti39Component extends AbstractWsComponent<ItiServiceInfo> {
+    private final static ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
+            Iti39PortType.class,
+            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
+            true,
+            "wsdl/iti39.wsdl",
+            true,
+            false,
+            false);
+
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
         return new Iti39Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+    }
+
+    @Override
+    public ItiServiceInfo getWebServiceConfiguration() {
+        return WS_CONFIG;
     }
 }

@@ -35,6 +35,6 @@ public class Pcc1ContinuationAwareService
             int defaultThreshold,
             boolean validationOnContinuation)
     {
-        super(Pcc1Endpoint.PCC_1, storage, defaultThreshold, validationOnContinuation);
+        super(Pcc1Component.WS_CONFIG, storage, defaultThreshold, validationOnContinuation);
     }
 }

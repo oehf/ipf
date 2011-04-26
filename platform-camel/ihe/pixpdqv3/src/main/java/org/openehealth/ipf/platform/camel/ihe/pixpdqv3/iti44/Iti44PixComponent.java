@@ -15,18 +15,30 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
 
-import java.util.Map;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44PixPortType;
 
-import org.apache.camel.Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsComponent;
+import javax.xml.namespace.QName;
 
 /**
  * The Camel component for the ITI-44 transaction (PIX Feed v3).
  */
-public class Iti44PixComponent extends DefaultWsComponent {
-    @SuppressWarnings("unchecked") // Required because of base class
+public class Iti44PixComponent extends AbstractIti44Component {
+    private static final String NS_URI_PIX = "urn:ihe:iti:pixv3:2007";
+    public static final Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+            new QName(NS_URI_PIX, "PIXManager_Service", "ihe"),
+            Iti44PixPortType.class,
+            new QName(NS_URI_PIX, "PIXManager_Binding_Soap12", "ihe"),
+            false,
+            "wsdl/iti44/iti44-pix-raw.wsdl",
+            REQUEST_VALIDATION_PROFILES,
+            RESPONSE_VALIDATION_PROFILES,
+            "MCCI_IN000002UV01",
+            false,
+            false);
+
     @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti44Endpoint(true, uri, remaining, this, getCustomInterceptors(parameters));
+    public Hl7v3ServiceInfo getWebServiceConfiguration() {
+        return WS_CONFIG;
     }
 }

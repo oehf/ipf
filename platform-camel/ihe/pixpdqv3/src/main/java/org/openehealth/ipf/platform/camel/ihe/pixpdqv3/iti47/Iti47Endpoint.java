@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47;
 
-import javax.xml.namespace.QName;
-
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -26,7 +24,6 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti47.Iti47PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
@@ -38,32 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-47 transaction.
  */
-public class Iti47Endpoint extends Hl7v3Endpoint {
-    private static final String[][] REQUEST_VALIDATION_PROFILES = new String[][] {
-            new String[] {"PRPA_IN201305UV02", "iti47/PRPA_IN201305UV02"},
-            new String[] {"QUQI_IN000003UV01", null},
-            new String[] {"QUQI_IN000003UV01_Cancel", null}
-    };
-
-    private static final String[][] RESPONSE_VALIDATION_PROFILES = new String[][] {
-            new String[] {"PRPA_IN201306UV02", "iti47/PRPA_IN201306UV02"},
-            new String[] {"MCCI_IN000002UV01", null}
-    };
-
-    private final static String NS_URI = "urn:ihe:iti:pdqv3:2007";
-    public final static Hl7v3ContinuationAwareServiceInfo ITI_47 = new Hl7v3ContinuationAwareServiceInfo(
-            new QName(NS_URI, "PDSupplier_Service", "ihe"),
-            Iti47PortType.class,
-            new QName(NS_URI, "PDSupplier_Binding_Soap12", "ihe"),
-            false,
-            "wsdl/iti47/iti47-raw.wsdl",
-            REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES,
-            "PRPA_IN201306UV02",
-            true,
-            false,
-            "PRPA_IN201305UV02",
-            "PRPA_IN201306UV02");
+public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceInfo> {
 
     /**
      * Constructs the endpoint.
@@ -86,13 +58,13 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
     @Override
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new Hl7v3ClientFactory(
-                ITI_47, 
-                getServiceUrl(), 
+                getWebServiceConfiguration(),
+                getServiceUrl(),
                 getCustomInterceptors());
         return new Hl7v3ContinuationAwareProducer(
                 this,
                 clientFactory,
-                ITI_47,
+                getWebServiceConfiguration(),
                 isSupportContinuation(),
                 isAutoCancel(),
                 isValidationOnContinuation());
@@ -101,7 +73,7 @@ public class Iti47Endpoint extends Hl7v3Endpoint {
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
-                ITI_47, 
+                getWebServiceConfiguration(),
                 getServiceAddress(),
                 getCustomInterceptors());
 
