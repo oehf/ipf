@@ -45,12 +45,12 @@ abstract public class AbstractWsComponent<C extends ItiServiceInfo> extends Defa
         
         return provider;
     }
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private List<Interceptor<? extends Message>> castList(
 			List<Interceptor> param) {
 		return (List<Interceptor<? extends Message>>) (List<?>) param;
 	}
-
 
     public abstract C getWebServiceConfiguration();
 }
