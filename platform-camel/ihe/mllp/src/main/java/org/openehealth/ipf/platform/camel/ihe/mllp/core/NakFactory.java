@@ -72,7 +72,10 @@ public class NakFactory {
      *      original HAPI request message.
      */
     public Message createAck(Message originalMessage, AckTypeCode ackTypeCode) {
-        return MessageUtils.ack(config.getParser().getFactory(), originalMessage);
+        return MessageUtils.ack(
+                config.getParser().getFactory(),
+                originalMessage,
+                useCAckTypeCodes ? AckTypeCode.CA : AckTypeCode.AA);
     }
 
 
