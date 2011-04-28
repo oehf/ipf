@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
 /**
- * Validating processors for ebXML 3.0-based Continua HRN transaction.
+ * Validating and transformation processors for the Continua HRN transaction.
  * 
  * @author Dmytro Rud
  * @author Stefan Ivanov

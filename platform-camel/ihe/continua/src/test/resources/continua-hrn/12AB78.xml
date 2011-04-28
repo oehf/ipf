@@ -1,0 +1,920 @@
+<?xml version="1.0" encoding="ASCII"?>
+<?xml-stylesheet type="text/xsl" href="cda.xsl"?>
+<ClinicalDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:hl7-org:v3">
+  <typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3"/>
+  <templateId root="2.16.840.1.113883.10.20.9"/>
+  <id root="1.2.820.99999.107006103090100085.1238188387609.1"/>
+  <code code="53576-5" codeSystem="2.16.840.1.113883.6.1"/>
+  <effectiveTime value="20090327051307"/>
+  <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25"/>
+  <languageCode code="en-US"/>
+  <recordTarget>
+    <patientRole>
+      <id extension="IBM-0" root="1.3.6.1.4.1.21367.2009.1.2.300"/>
+      <addr>
+        <country>USA</country>
+      </addr>
+      <patient>
+        <name><family>Schmoe</family><given>Joe</given></name>
+        <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1"/>
+        <birthTime value="19040101"/>
+      </patient>
+    </patientRole>
+  </recordTarget>
+  <author>
+    <time value="20090327051307"/>
+    <assignedAuthor>
+      <id extension="996-756-498" root="2.16.840.1.113883.19.5"/>
+      <assignedPerson>
+        <name>REPLACE_ME</name>
+      </assignedPerson>
+      <representedOrganization>
+        <id root="8a54f393-8015-460c-abd2-f29aad15481c"/>
+        <name>Good Health Disease Management</name>
+      </representedOrganization>
+    </assignedAuthor>
+  </author>
+  <custodian>
+    <assignedCustodian>
+      <representedCustodianOrganization>
+        <id root="0.0.0.0.0"/>
+        <name>Good Health Disease Management</name>
+        <addr>
+          <country>USA</country>
+        </addr>
+      </representedCustodianOrganization>
+    </assignedCustodian>
+  </custodian>
+  <component>
+    <structuredBody>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.1.7"/>
+          <templateId root="2.16.840.1.113883.10.20.9.1"/>
+          <code code="46264-8" codeSystem="2.16.840.1.113883.6.1"/>
+          <title>Medical Equipment</title>
+          <text>
+            <!-- Device information -->
+            <table border="1" width="100%">
+              <tbody>
+                <tr>
+                  <th>System Type</th>
+                  <th>System Model</th>
+                  <th>System Manufacturer</th>
+                  <th>System ID</th>
+                  <th>Production Spec</th>
+                  <th>Regulated</th>
+                </tr>
+                <tr>
+                  <td>REPLACE_ME</td>
+                  <td>REPLACE_ME</td>
+                  <td>REPLACE_ME</td>
+                  <td>REPLACE_ME</td>
+                  <td>REPLACE_ME</td>
+                  <td>Not Regulated</td>
+                </tr>
+              </tbody>
+            </table>
+          </text>
+        </section>
+      </component>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.1.16"/>
+          <templateId root="2.16.840.1.113883.10.20.9.2"/>
+          <code code="8716-3" codeSystem="2.16.840.1.113883.6.1"/>
+          <title>Vital Signs</title>
+          <text>
+            <!-- Observation Entries Go Here -->
+          <paragraph>Temperature Readings</paragraph><table ID="Temperature Readings">
+              <thead>
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>20090202115600</td>
+                  <td>41.34 [degF]</td>
+                </tr>
+                <tr>
+                  <td>20090202055510</td>
+                  <td>42.0 [degF]</td>
+                </tr>
+                <tr>
+                  <td>20090203054742</td>
+                  <td>45.0 [degF]</td>
+                </tr>
+                <tr>
+                  <td>20090206035929</td>
+                  <td>43.0 [degF]</td>
+                </tr>
+                <tr>
+                  <td>20090310035319</td>
+                  <td>41.34 [degF]</td>
+                </tr>
+              </tbody>
+            </table><paragraph>Blood Pressure Readings</paragraph><table ID="Blood Pressure Readings">
+              <thead>
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>20090203122340</td>
+                  <td>114.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203122340</td>
+                  <td>72.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203122340</td>
+                  <td>0.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203122340</td>
+                  <td> </td>
+                </tr>
+                <tr>
+                  <td>20090203025435</td>
+                  <td>120.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203025435</td>
+                  <td>80.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203025435</td>
+                  <td>0.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203025435</td>
+                  <td> </td>
+                </tr>
+                <tr>
+                  <td>20090203054627</td>
+                  <td>114.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203054627</td>
+                  <td>72.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203054627</td>
+                  <td>0.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090203054627</td>
+                  <td> </td>
+                </tr>
+                <tr>
+                  <td>20090209052227</td>
+                  <td>114.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090209052227</td>
+                  <td>72.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090209052227</td>
+                  <td>0.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090209052227</td>
+                  <td> </td>
+                </tr>
+                <tr>
+                  <td>20090306111625</td>
+                  <td>114.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090306111625</td>
+                  <td>72.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090306111625</td>
+                  <td>0.0 mm[hg]</td>
+                </tr>
+                <tr>
+                  <td>20090306111625</td>
+                  <td> </td>
+                </tr>
+              </tbody>
+            </table><paragraph>Blood Glucose Readings</paragraph><table ID="Blood Glucose Readings">
+              <thead>
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>20081213045100</td>
+                  <td>373.0 mmol/l</td>
+                </tr>
+                <tr>
+                  <td>20081213045100</td>
+                  <td>373.0 mmol/l</td>
+                </tr>
+                <tr>
+                  <td>20081213045100</td>
+                  <td>373.0 mmol/l</td>
+                </tr>
+              </tbody>
+            </table><paragraph>Weight Readings</paragraph><table ID="Weight Readings">
+              <thead>
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>20090129113951</td>
+                  <td>79.34 kg</td>
+                </tr>
+                <tr>
+                  <td>20090129122605</td>
+                  <td>79.34 kg</td>
+                </tr>
+                <tr>
+                  <td>20090129013407</td>
+                  <td>79.34 kg</td>
+                </tr>
+                <tr>
+                  <td>20090129013413</td>
+                  <td>80.0 kg</td>
+                </tr>
+                <tr>
+                  <td>20090129030341</td>
+                  <td>80.0 kg</td>
+                </tr>
+                <tr>
+                  <td>20090203111809</td>
+                  <td>81.0 kg</td>
+                </tr>
+                <tr>
+                  <td>20090203113234</td>
+                  <td>79.34 kg</td>
+                </tr>
+                <tr>
+                  <td>20090203123631</td>
+                  <td>78.0 kg</td>
+                </tr>
+                <tr>
+                  <td>20090203123744</td>
+                  <td>79.34 kg</td>
+                </tr>
+                <tr>
+                  <td>20090204120521</td>
+                  <td>80.0 kg</td>
+                </tr>
+                <tr>
+                  <td>20090209052539</td>
+                  <td>79.34 kg</td>
+                </tr>
+                <tr>
+                  <td>20090219034907</td>
+                  <td>79.34 kg</td>
+                </tr>
+                <tr>
+                  <td>20090311093913</td>
+                  <td>79.34 kg</td>
+                </tr>
+              </tbody>
+            </table></text>
+          <entry typeCode="DRIV">
+            <organizer classCode="CLUSTER" moodCode="EVN">
+              <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
+              <id/>
+              <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Temperature Readings"/>
+              <statusCode code="completed"/>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="386725007" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body Temperature">
+                    <translation code="MDC_TEMP_BODY" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Body Temperature"/>
+                  </code>
+                  <effectiveTime value="20090202115600"/>
+                  <value xsi:type="PQ" unit="[degF]" value="41.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <templateId/>
+                      <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="386725007" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body Temperature">
+                    <translation code="MDC_TEMP_BODY" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Body Temperature"/>
+                  </code>
+                  <effectiveTime value="20090202055510"/>
+                  <value xsi:type="PQ" unit="[degF]" value="42.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <templateId/>
+                      <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="386725007" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body Temperature">
+                    <translation code="MDC_TEMP_BODY" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Body Temperature"/>
+                  </code>
+                  <effectiveTime value="20090203054742"/>
+                  <value xsi:type="PQ" unit="[degF]" value="45.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <templateId/>
+                      <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="386725007" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body Temperature">
+                    <translation code="MDC_TEMP_BODY" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Body Temperature"/>
+                  </code>
+                  <effectiveTime value="20090206035929"/>
+                  <value xsi:type="PQ" unit="[degF]" value="43.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <templateId/>
+                      <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="386725007" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body Temperature">
+                    <translation code="MDC_TEMP_BODY" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Body Temperature"/>
+                  </code>
+                  <effectiveTime value="20090310035319"/>
+                  <value xsi:type="PQ" unit="[degF]" value="41.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <templateId/>
+                      <id assigningAuthorityName="EUI-64" extension="1A-34-46-78-9A-BC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+            </organizer>
+          </entry>
+          <entry typeCode="DRIV">
+            <organizer classCode="CLUSTER" moodCode="EVN">
+              <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
+              <id/>
+              <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Blood Pressure Readings"/>
+              <statusCode code="completed"/>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_SYS" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Systolic BP"/>
+                  </code>
+                  <effectiveTime value="20090203122340"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="114.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_DIA" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Diastolic BP"/>
+                  </code>
+                  <effectiveTime value="20090203122340"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="72.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="6797001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Mean blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_MEAN" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mean BP"/>
+                  </code>
+                  <effectiveTime value="20090203122340"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="0.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="78564009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Pulse rate">
+                    <translation code="MDC_BPM_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Pulse"/>
+                  </code>
+                  <effectiveTime value="20090203122340"/>
+                  <value xsi:type="RTO_PQ_PQ">
+                    <numerator value="67.0"/>
+                    <denominator unit="min" value="1.0"/>
+                  </value>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_SYS" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Systolic BP"/>
+                  </code>
+                  <effectiveTime value="20090203025435"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="120.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_DIA" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Diastolic BP"/>
+                  </code>
+                  <effectiveTime value="20090203025435"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="80.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="6797001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Mean blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_MEAN" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mean BP"/>
+                  </code>
+                  <effectiveTime value="20090203025435"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="0.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="78564009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Pulse rate">
+                    <translation code="MDC_BPM_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Pulse"/>
+                  </code>
+                  <effectiveTime value="20090203025435"/>
+                  <value xsi:type="RTO_PQ_PQ">
+                    <numerator value="80.0"/>
+                    <denominator unit="min" value="1.0"/>
+                  </value>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_SYS" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Systolic BP"/>
+                  </code>
+                  <effectiveTime value="20090203054627"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="114.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_DIA" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Diastolic BP"/>
+                  </code>
+                  <effectiveTime value="20090203054627"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="72.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="6797001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Mean blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_MEAN" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mean BP"/>
+                  </code>
+                  <effectiveTime value="20090203054627"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="0.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="78564009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Pulse rate">
+                    <translation code="MDC_BPM_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Pulse"/>
+                  </code>
+                  <effectiveTime value="20090203054627"/>
+                  <value xsi:type="RTO_PQ_PQ">
+                    <numerator value="67.0"/>
+                    <denominator unit="min" value="1.0"/>
+                  </value>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_SYS" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Systolic BP"/>
+                  </code>
+                  <effectiveTime value="20090209052227"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="114.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_DIA" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Diastolic BP"/>
+                  </code>
+                  <effectiveTime value="20090209052227"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="72.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="6797001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Mean blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_MEAN" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mean BP"/>
+                  </code>
+                  <effectiveTime value="20090209052227"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="0.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="78564009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Pulse rate">
+                    <translation code="MDC_BPM_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Pulse"/>
+                  </code>
+                  <effectiveTime value="20090209052227"/>
+                  <value xsi:type="RTO_PQ_PQ">
+                    <numerator value="67.0"/>
+                    <denominator unit="min" value="1.0"/>
+                  </value>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_SYS" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Systolic BP"/>
+                  </code>
+                  <effectiveTime value="20090306111625"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="114.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_DIA" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Diastolic BP"/>
+                  </code>
+                  <effectiveTime value="20090306111625"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="72.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="6797001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Mean blood pressure">
+                    <translation code="MDC_PRESS_BLD_NONINV_MEAN" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mean BP"/>
+                  </code>
+                  <effectiveTime value="20090306111625"/>
+                  <value xsi:type="PQ" unit="mm[hg]" value="0.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="78564009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Pulse rate">
+                    <translation code="MDC_BPM_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Pulse"/>
+                  </code>
+                  <effectiveTime value="20090306111625"/>
+                  <value xsi:type="RTO_PQ_PQ">
+                    <numerator value="67.0"/>
+                    <denominator unit="min" value="1.0"/>
+                  </value>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+            </organizer>
+          </entry>
+          <entry typeCode="DRIV">
+            <organizer classCode="CLUSTER" moodCode="EVN">
+              <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
+              <id/>
+              <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Blood Glucose Readings"/>
+              <statusCode code="completed"/>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration">
+                    <translation code="MDC_CONC_GLU_CAPILLARY_WHOLEBLOOD" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Blood Glucose Level"/>
+                  </code>
+                  <effectiveTime value="20081213045100"/>
+                  <value xsi:type="PQ" unit="mmol/l" value="373.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration">
+                    <translation code="MDC_CONC_GLU_CAPILLARY_WHOLEBLOOD" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Blood Glucose Level"/>
+                  </code>
+                  <effectiveTime value="20081213045100"/>
+                  <value xsi:type="PQ" unit="mmol/l" value="373.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration">
+                    <translation code="MDC_CONC_GLU_CAPILLARY_WHOLEBLOOD" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Blood Glucose Level"/>
+                  </code>
+                  <effectiveTime value="20081213045100"/>
+                  <value xsi:type="PQ" unit="mmol/l" value="373.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+            </organizer>
+          </entry>
+          <entry typeCode="DRIV">
+            <organizer classCode="CLUSTER" moodCode="EVN">
+              <templateId root="b606a959-baab-4836-84a8-97c4e9857533"/>
+              <id/>
+              <code code="46680005" codeSystem="2.16.840.1.113883.6.96" displayName="Weight Readings"/>
+              <statusCode code="completed"/>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090129113951"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090129122605"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090129013407"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090129013413"/>
+                  <value xsi:type="PQ" unit="kg" value="80.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090129030341"/>
+                  <value xsi:type="PQ" unit="kg" value="80.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090203111809"/>
+                  <value xsi:type="PQ" unit="kg" value="81.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090203113234"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090203123631"/>
+                  <value xsi:type="PQ" unit="kg" value="78.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090203123744"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090204120521"/>
+                  <value xsi:type="PQ" unit="kg" value="80.0"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090209052539"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090219034907"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight">
+                    <translation code="MDC_MASS_BODY_ACTUAL" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="Mass Body Actual"/>
+                  </code>
+                  <effectiveTime value="20090311093913"/>
+                  <value xsi:type="PQ" unit="kg" value="79.34"/>
+                  <participant typeCode="DEV">
+                    <participantRole>
+                      <id assigningAuthorityName="EUI-64" extension="12-32-56-78-9A-AC-DE-F3" root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680"/>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </component>
+            </organizer>
+          </entry>
+        </section>
+      </component>
+    </structuredBody>
+  </component>
+</ClinicalDocument>
