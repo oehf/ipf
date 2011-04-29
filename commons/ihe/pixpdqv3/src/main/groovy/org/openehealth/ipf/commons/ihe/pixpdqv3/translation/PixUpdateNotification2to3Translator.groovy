@@ -82,7 +82,6 @@ class PixUpdateNotification2to3Translator implements Hl7TranslatorV2toV3 {
             'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema') 
         {         
             buildInstanceIdentifier(builder, 'id', false, this.messageIdRoot, adt.MSH[10].value)    
-            //creationTime(value: (adt.MSH[7][1] ? dropTimeZone(adt.MSH[7][1].value) : MessageUtils.hl7Now()))      
             creationTime(value: MessageUtils.hl7Now())
             interactionId(root: '2.16.840.1.113883.1.6', extension: 'PRPA_IN201302UV02')
             processingCode(code: 'P')
