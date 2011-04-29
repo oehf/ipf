@@ -29,6 +29,8 @@ import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator
 
 import org.custommonkey.xmlunit.XMLUnit
 import org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.DetailedDiff
+import org.custommonkey.xmlunit.Difference
 
 import org.springframework.core.io.ClassPathResource
 import org.apache.commons.io.IOUtils
@@ -130,7 +132,10 @@ class Hl7TranslationTestContainer {
         V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.RESPONSE_TYPES["iti-${v3index}"])
 
         Diff diff = new Diff(expectedV3response, translatedV3response)
-        assert diff.identical()
+        DetailedDiff detDiff = new DetailedDiff(diff)
+        List differences = detDiff.getAllDifferences()
+        assert differences.size() == 1
+        assert differences[0].toString().contains('creationTime')
     }
     
     String doTestV2toV3RequestTranslation(String fn, int v2index, int v3index, Parser parser) {
@@ -143,7 +148,10 @@ class Hl7TranslationTestContainer {
         V3_VALIDATOR.validate(translatedV3response, Hl7v3ValidationProfiles.REQUEST_TYPES["iti-${v3index}"])
 
         Diff diff = new Diff(expectedV3response, translatedV3response)
-        assert diff.identical()
+        DetailedDiff detDiff = new DetailedDiff(diff)
+        List differences = detDiff.getAllDifferences()
+        assert differences.size() == 1
+        assert differences[0].toString().contains('creationTime')
     }    
 
 }
