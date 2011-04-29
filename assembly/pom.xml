@@ -50,6 +50,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-hl7v2ws</artifactId>
+            <version>${project.version}</version>
+        </dependency>		
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-hl7v3</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -201,6 +206,16 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-mllp</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-hl7v2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-hl7v2ws</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
