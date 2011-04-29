@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti9;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.QpdAwareNakFactory;
 
 /**
@@ -28,8 +28,8 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdq.QpdAwareNakFactory;
  * @author Dmytro Rud
  */
 public class Iti9Component extends MllpComponent {
-    public static final MllpTransactionConfiguration CONFIGURATION =
-        new MllpTransactionConfiguration(
+    public static final Hl7v2TransactionConfiguration CONFIGURATION =
+        new Hl7v2TransactionConfiguration(
                 "2.5", 
                 "PIX adapter", 
                 "IPF",
@@ -70,7 +70,7 @@ public class Iti9Component extends MllpComponent {
     }
     
     @Override
-    public MllpTransactionConfiguration getTransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
     }
 

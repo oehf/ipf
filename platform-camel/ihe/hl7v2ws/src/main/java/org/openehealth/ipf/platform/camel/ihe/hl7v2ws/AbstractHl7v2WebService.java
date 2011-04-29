@@ -20,16 +20,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.Hl7v2ConfigurationHolder;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkRequestAcceptance;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.AcceptanceCheckUtils.checkResponseAcceptance;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.extractMessageAdapter;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkRequestAcceptance;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.checkResponseAcceptance;
 
 /**
  * Generic implementation of an HL7v2-based Web Service.
@@ -41,7 +41,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.
 public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
     private static final Log LOG = LogFactory.getLog(AbstractHl7v2WebService.class);
 
-    private final MllpTransactionConfiguration config;
+    private final Hl7v2TransactionConfiguration config;
     private final NakFactory nakFactory;
 
 
@@ -75,7 +75,7 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
             }
 
             // check response existence and acceptance
-            msg = extractMessageAdapter(
+            msg = Hl7v2MarshalUtils.extractMessageAdapter(
                     resultMessage(exchange),
                     exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                     config.getParser());

@@ -41,6 +41,7 @@
         <module>atna</module> 
         <module>ws</module> 
         <module>xds</module> 
+        <module>hl7v2</module>
         <module>mllp</module>
         <module>pixpdq</module>
         <module>pixpdqv3</module>

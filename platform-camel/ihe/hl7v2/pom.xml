@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.openehealth.ipf.platform-camel</groupId>
+    <artifactId>platform-camel-ihe-hl7v2</artifactId>
+    <name>platform-camel-ihe-hl7v2</name>
+
+    <properties>
+        <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.hl7v2.*</osgi.export.pkg>
+        <osgi.import.pkg>
+            org.openehealth.ipf.platform.camel.core.process,
+            *
+        </osgi.import.pkg>
+    </properties>
+
+    <parent>
+        <groupId>org.openehealth.ipf.platform-camel</groupId>
+        <artifactId>platform-camel-ihe</artifactId>
+        <version>2.2-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.openehealth.ipf.modules</groupId>
+            <artifactId>modules-hl7dsl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.modules</groupId>
+            <artifactId>modules-hl7</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

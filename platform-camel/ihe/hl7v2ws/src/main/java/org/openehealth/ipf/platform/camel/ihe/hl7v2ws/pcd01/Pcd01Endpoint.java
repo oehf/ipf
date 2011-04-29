@@ -24,6 +24,8 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsProducerWrapper;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -57,7 +59,9 @@ public class Pcd01Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
                 getWebServiceConfiguration(),
                 getServiceUrl(), 
                 getCustomInterceptors());
-        return new Pcd01Producer(this, clientFactory);
+        return Hl7v2WsProducerWrapper.wrapProducer(
+                (Hl7v2ConfigurationHolder) getComponent(),
+                new Pcd01Producer(this, clientFactory));
     }
 
     @Override

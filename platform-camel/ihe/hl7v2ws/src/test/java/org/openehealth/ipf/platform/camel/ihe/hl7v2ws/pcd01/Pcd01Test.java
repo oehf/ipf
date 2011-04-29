@@ -25,6 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 /**
  * 
@@ -42,13 +43,6 @@ public class Pcd01Test extends StandardTestContainer {
         startServer(new CXFServlet(), "pcd-01.xml");
     }
     
-    @Test
-    public void testEmptyPayload() throws Exception {
-        String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        String response = requestBody(uri, "");
-        assertTrue(response.contains("MSA|AR"));
-    }
-
     @Test
     public void testHappyCase() throws Exception {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
@@ -70,14 +64,11 @@ public class Pcd01Test extends StandardTestContainer {
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
     }
-    
-    @Test
-    public void testParseError() throws Exception {
+
+    @Test(expected = Hl7v2AcceptanceException.class)
+    public void testInacceptableRequest() throws Exception {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST.replace("MSH", "ERROR"));
-        assertTrue(response.startsWith("MSH|^~\\&|"));
-        assertTrue(response.contains("|ACK^R01^ACK|"));
-        assertTrue(response.contains("Application internal error"));
+        String response = requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
     }
     
     @Test

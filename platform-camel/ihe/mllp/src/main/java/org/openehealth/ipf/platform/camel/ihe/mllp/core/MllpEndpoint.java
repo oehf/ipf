@@ -21,13 +21,26 @@ import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang.Validate;
 import org.apache.mina.common.*;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerInputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerOutputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.*;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerSegmentFragmentationInterceptor;
 
 import javax.net.ssl.SSLContext;
-import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +50,7 @@ import java.util.Map;
  * which provides support for IHE PIX/PDQ-related extensions.
  * @author Dmytro Rud
  */
-public class MllpEndpoint extends DefaultEndpoint {
+public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationHolder {
 
     private final MllpComponent mllpComponent;
     private final MinaEndpoint wrappedEndpoint;
@@ -154,6 +167,8 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
+        String charsetName = getConfiguration().getCharsetName();
+
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
             if (!filterChain.contains("ssl")) {
@@ -173,7 +188,7 @@ public class MllpEndpoint extends DefaultEndpoint {
         if (isAudit()) {
             x = new ConsumerAuthenticationFailureInterceptor(this, x);
         }
-        x = new ConsumerAdaptingInterceptor(this, x);
+        x = new ConsumerAdaptingInterceptor(this, charsetName, x);
         x = new ConsumerOutputAcceptanceInterceptor(this, x);
         if (isAudit()) {
             x = new ConsumerAuditInterceptor(this, x);
@@ -182,11 +197,11 @@ public class MllpEndpoint extends DefaultEndpoint {
             x = new ConsumerInteractiveResponseSenderInterceptor(this, x);
         }
         x = new ConsumerInputAcceptanceInterceptor(this, x);
-        x = new ConsumerMarshalInterceptor(this, x);
+        x = new ConsumerMarshalInterceptor(this, charsetName, x);
         if (isSupportUnsolicitedFragmentation()) {
             x = new ConsumerRequestDefragmenterInterceptor(this, x);
         }
-        x = new ConsumerStringProcessorInterceptor(this, x);
+        x = new ConsumerSegmentFragmentationInterceptor(this, x);
         return wrappedEndpoint.createConsumer(x);
     }
 
@@ -197,6 +212,8 @@ public class MllpEndpoint extends DefaultEndpoint {
      */
     @Override
     public Producer createProducer() throws Exception {
+        String charsetName = getConfiguration().getCharsetName();
+
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
             if (!filterChain.contains("ssl")) {
@@ -210,19 +227,19 @@ public class MllpEndpoint extends DefaultEndpoint {
         }
 
         Producer x = wrappedEndpoint.createProducer();
-        x = new ProducerStringProcessorInterceptor(this, x);
+        x = new ProducerSegmentFragmentationInterceptor(this, x);
         if (isSupportUnsolicitedFragmentation()) {
             x = new ProducerRequestFragmenterInterceptor(this, x);
         }
         x = isSupportInteractiveContinuation() 
                 ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor(this, x)
-                : new ProducerMarshalInterceptor(this, x);
+                : new ProducerMarshalInterceptor(this, charsetName, x);
         x = new ProducerOutputAcceptanceInterceptor(this, x);
         if (isAudit()) {
             x = new ProducerAuditInterceptor(this, x);
         }
         x = new ProducerInputAcceptanceInterceptor(this, x);
-        x = new ProducerAdaptingInterceptor(this, x);
+        x = new ProducerAdaptingInterceptor(this, charsetName, x);
         return x;
     }
 
@@ -271,13 +288,15 @@ public class MllpEndpoint extends DefaultEndpoint {
     /**
      * Returns transaction configuration.
      */
-    public MllpTransactionConfiguration getTransactionConfiguration() {
+    @Override
+    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
         return mllpComponent.getTransactionConfiguration();
     }
 
     /**
      * Returns transaction-specific ACK and NAK factory.
      */
+    @Override
     public NakFactory getNakFactory() {
         return mllpComponent.getNakFactory();
     }
@@ -378,10 +397,6 @@ public class MllpEndpoint extends DefaultEndpoint {
         return wrappedEndpoint.createExchange(pattern);
     }
 
-    public Exchange createExchange(IoSession session, Object payload) {
-        return wrappedEndpoint.createExchange(session, payload);
-    }
-
     @Override
     public PollingConsumer createPollingConsumer() throws Exception {
         return wrappedEndpoint.createPollingConsumer();
@@ -390,18 +405,6 @@ public class MllpEndpoint extends DefaultEndpoint {
     @Override
     public boolean equals(Object object) {
         return wrappedEndpoint.equals(object);
-    }
-
-    public IoAcceptor getAcceptor() {
-        return wrappedEndpoint.getAcceptor();
-    }
-
-    public IoAcceptorConfig getAcceptorConfig() {
-        return wrappedEndpoint.getAcceptorConfig();
-    }
-
-    public SocketAddress getAddress() {
-        return wrappedEndpoint.getAddress();
     }
 
     @Override
@@ -416,14 +419,6 @@ public class MllpEndpoint extends DefaultEndpoint {
 
     public MinaConfiguration getConfiguration() {
         return wrappedEndpoint.getConfiguration();
-    }
-
-    public IoConnector getConnector() {
-        return wrappedEndpoint.getConnector();
-    }
-
-    public IoConnectorConfig getConnectorConfig() {
-        return wrappedEndpoint.getConnectorConfig();
     }
 
     @Override
@@ -461,33 +456,9 @@ public class MllpEndpoint extends DefaultEndpoint {
         return wrappedEndpoint.isSingleton();
     }
 
-    public void setAcceptor(IoAcceptor acceptor) {
-        wrappedEndpoint.setAcceptor(acceptor);
-    }
-
-    public void setAcceptorConfig(IoAcceptorConfig acceptorConfig) {
-        wrappedEndpoint.setAcceptorConfig(acceptorConfig);
-    }
-
-    public void setAddress(SocketAddress address) {
-        wrappedEndpoint.setAddress(address);
-    }
-
     @Override
     public void setCamelContext(CamelContext camelContext) {
         wrappedEndpoint.setCamelContext(camelContext);
-    }
-
-    public void setConfiguration(MinaConfiguration configuration) {
-        wrappedEndpoint.setConfiguration(configuration);
-    }
-
-    public void setConnector(IoConnector connector) {
-        wrappedEndpoint.setConnector(connector);
-    }
-
-    public void setConnectorConfig(IoConnectorConfig connectorConfig) {
-        wrappedEndpoint.setConnectorConfig(connectorConfig);
     }
 
     @Override

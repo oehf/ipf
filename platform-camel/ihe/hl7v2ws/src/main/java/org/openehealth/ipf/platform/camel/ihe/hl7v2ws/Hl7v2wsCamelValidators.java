@@ -21,8 +21,8 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01Validator;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.ContinuaWanValidator;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.Pcd01Component;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 
 import ca.uhn.hl7v2.parser.Parser;
 
@@ -74,7 +74,7 @@ public class Hl7v2wsCamelValidators {
     }
     
     private static void doValidate(Exchange exchange, Validator<Object,Object> validator, Parser parser) throws Exception {
-        MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
+        MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                 parser);  

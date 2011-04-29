@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.keyString;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isEmpty;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.keyString;
 
 import ca.uhn.hl7v2.HL7Exception;
 import org.apache.camel.Exchange;
@@ -28,11 +28,11 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 
 /**
@@ -60,7 +60,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
     @Override
     public void process(Exchange exchange) throws Exception {
         String requestString = exchange.getIn().getBody(String.class);
-        Parser parser = getMllpEndpoint().getTransactionConfiguration().getParser();
+        Parser parser = getTransactionConfiguration().getParser();
         Message requestMessage = parser.parse(requestString);
         Terser requestTerser = new Terser(requestMessage);
         String msh14 = requestTerser.get("MSH-14");

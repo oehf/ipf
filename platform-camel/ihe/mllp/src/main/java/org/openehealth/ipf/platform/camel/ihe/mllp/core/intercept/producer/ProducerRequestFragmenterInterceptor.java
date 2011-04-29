@@ -15,13 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.appendSplittedSegment;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isPresent;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.splitString;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.uniqueId;
-
-import java.util.List;
-
+import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
 import org.apache.commons.logging.Log;
@@ -30,15 +24,17 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
-import ca.uhn.hl7v2.util.Terser;
+import java.util.List;
 
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isPresent;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
 /**
  * A producer-side interceptor which implements non-interactive request 
  * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
-public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterceptor {
+public class ProducerRequestFragmenterInterceptor extends AbstractMllpProducerInterceptor {
     private static final transient Log LOG = LogFactory.getLog(ProducerRequestFragmenterInterceptor.class);
     
     public ProducerRequestFragmenterInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
@@ -131,7 +127,7 @@ public class ProducerRequestFragmenterInterceptor extends AbstractProducerInterc
             // catch and analyse the response, if this was not the last fragment
             if(currentSegmentIndex < segments.size()) {
                 String responseString = Exchanges.resultMessage(exchange).getBody(String.class);
-                Terser responseTerser = new Terser(getMllpEndpoint().getTransactionConfiguration().getParser().parse(responseString));
+                Terser responseTerser = new Terser(getTransactionConfiguration().getParser().parse(responseString));
                 
                 String messageType = responseTerser.get("MSH-9-1");
                 String acknowledgementCode = responseTerser.get("MSA-1");

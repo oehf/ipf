@@ -19,7 +19,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.iti10.Iti10Component;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.iti21.Iti21Component;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.iti22.Iti22Component;
@@ -138,7 +138,7 @@ abstract public class PixPdqCamelValidators {
     }
     
     private static void doValidate(Exchange exchange, Parser parser) throws Exception {
-        MessageAdapter msg = MllpMarshalUtils.extractMessageAdapter(
+        MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                 parser);  

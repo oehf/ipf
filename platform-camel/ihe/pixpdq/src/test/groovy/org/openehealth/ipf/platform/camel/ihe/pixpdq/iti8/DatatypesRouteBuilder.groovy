@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8
 
 import static junit.framework.Assert.*
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.typeSupported
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.typeSupported
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent

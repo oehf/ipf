@@ -15,18 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.appendSegments;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isEmpty;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.isPresent;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.splitString;
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.uniqueId;
-
-import java.util.List;
-
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.model.v25.message.QCN_J01;
 import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
 import org.apache.commons.logging.Log;
@@ -35,19 +29,21 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.util.Terser;
+import java.util.List;
 
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isEmpty;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isPresent;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
 /**
  * Producer-side Hl7 marshalling/unmarshalling interceptor 
  * with support for interactive continuation.
  * @author Dmytro Rud
  */
-public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractProducerInterceptor {
+public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpProducerInterceptor {
     private static final transient Log LOG = LogFactory.getLog(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
     
     public ProducerMarshalAndInteractiveResponseReceiverInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
@@ -60,7 +56,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
+        Hl7v2TransactionConfiguration config = getTransactionConfiguration();
         String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         MessageAdapter request = exchange.getIn().getBody(MessageAdapter.class);
         

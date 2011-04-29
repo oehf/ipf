@@ -23,6 +23,7 @@ import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 
 import javax.net.ssl.SSLContext;
@@ -193,15 +194,4 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
      */
     public abstract MllpAuditStrategy getClientAuditStrategy();
 
-    /**
-     * Returns component configuration. 
-     */
-    @Override
-    public abstract MllpTransactionConfiguration getTransactionConfiguration();
-
-    /**
-     * Returns transaction-specific NAK factory.
-     */
-    @Override
-    public abstract NakFactory getNakFactory();
 }

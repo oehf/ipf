@@ -17,18 +17,17 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
-
-import ca.uhn.hl7v2.parser.Parser;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 
 /**
  * Camel component for ITI-8 (PIX Feed).
  * @author Dmytro Rud
  */
 public class Iti8Component extends MllpComponent {
-    public static final MllpTransactionConfiguration CONFIGURATION =
-        new MllpTransactionConfiguration(
+    public static final Hl7v2TransactionConfiguration CONFIGURATION =
+        new Hl7v2TransactionConfiguration(
                 "2.3.1", 
                 "PIX adapter", 
                 "IPF", 
@@ -68,7 +67,7 @@ public class Iti8Component extends MllpComponent {
     }
     
     @Override
-    public MllpTransactionConfiguration getTransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
     }
 

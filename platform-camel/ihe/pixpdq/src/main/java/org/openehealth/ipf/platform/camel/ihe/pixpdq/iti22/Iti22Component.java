@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti22;
 
 import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.QpdAwareNakFactory;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqServerAuditStrategy;
@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore.PdqTransactionConfi
  * @author Dmytro Rud
  */
 public class Iti22Component extends MllpComponent {
-    public static final MllpTransactionConfiguration CONFIGURATION =
+    public static final Hl7v2TransactionConfiguration CONFIGURATION =
         new PdqTransactionConfiguration(
                 "2.5", 
                 "PDQ adapter", 
@@ -73,7 +73,7 @@ public class Iti22Component extends MllpComponent {
     }
     
     @Override
-    public MllpTransactionConfiguration getTransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
         return CONFIGURATION;
     }
 

@@ -16,20 +16,16 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 
 import org.apache.camel.Processor;
-import org.apache.commons.lang.Validate;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
 
 /**
- * Abstract Camel interceptor for PIX/PDQ transactions.
+ * Abstract Camel interceptor for MLLP-based HL7v2 transactions.
  * @author Dmytro Rud
  */
-public abstract class AbstractMllpInterceptor implements MllpInterceptor {
+public abstract class AbstractMllpInterceptor extends AbstractHl7v2Interceptor {
 
-    private final MllpEndpoint endpoint;
-    private final Processor wrappedProcessor;
-
-    
     /**
      * Constructor.
      * @param endpoint
@@ -38,21 +34,10 @@ public abstract class AbstractMllpInterceptor implements MllpInterceptor {
      *      Original camel-mina processor.
      */
     public AbstractMllpInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        Validate.notNull(wrappedProcessor);
-        Validate.notNull(endpoint);
-
-        this.endpoint = endpoint;
-        this.wrappedProcessor = wrappedProcessor;
+        super(endpoint, wrappedProcessor);
     }
 
-    @Override
     public MllpEndpoint getMllpEndpoint() {
-        return endpoint;
+        return (MllpEndpoint) getConfigurationHolder();
     }
-
-    @Override
-    public Processor getWrappedProcessor() {
-        return wrappedProcessor;
-    }
-    
 }
