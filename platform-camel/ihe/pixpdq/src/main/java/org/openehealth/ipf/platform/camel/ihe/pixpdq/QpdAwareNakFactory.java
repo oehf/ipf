@@ -22,9 +22,9 @@ import ca.uhn.hl7v2.util.Terser;
 import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAcceptanceException;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class QpdAwareNakFactory extends NakFactory {
     private final String messageType, triggerEvent;
 
 
-    public QpdAwareNakFactory(MllpTransactionConfiguration config, String messageType, String triggerEvent) {
+    public QpdAwareNakFactory(Hl7v2TransactionConfiguration config, String messageType, String triggerEvent) {
         super(config);
 
         Validate.notEmpty(messageType);
@@ -52,7 +52,7 @@ public class QpdAwareNakFactory extends NakFactory {
     @Override
     public Message createNak(Message originalMessage, Throwable t, AckTypeCode ackTypeCode) {
         try {
-            return (t instanceof MllpAcceptanceException)
+            return (t instanceof Hl7v2AcceptanceException)
                 ? super.createNak(originalMessage, t, ackTypeCode)
                 : createNak0(originalMessage, t, ackTypeCode);
         } catch (Exception e) {

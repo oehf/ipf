@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pixpdq</artifactId>
+            <artifactId>platform-camel-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
      

@@ -15,20 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8
 
-import static org.junit.Assert.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.net.URL;
-import java.nio.ByteBuffer;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
+import ca.uhn.hl7v2.parser.PipeParser
+import java.nio.ByteBuffer
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-
-import ca.uhn.hl7v2.parser.PipeParser;
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
 
 /**
  * Unit test for datatypes handling.
@@ -51,7 +46,7 @@ class TestDatatypes extends MllpTestContainer {
         def body
     
         /*
-         * Refer to {@link MllpMarshalUtils#typeSupported()} 
+         * Refer to {@link Hl7v2MarshalUtils#typeSupported()}
          * for the list of currently supported types. 
          */
         

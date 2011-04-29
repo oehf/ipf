@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 import ca.uhn.hl7v2.model.Message;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import net.sf.ehcache.config.CacheConfiguration;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,8 +26,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.keyString;
 
 /**
  * An Ehcache-based implementation of

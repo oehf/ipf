@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 
-import org.apache.camel.Processor;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
 
@@ -24,31 +23,11 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
  * Camel interceptor interface for PIX/PDQ transactions.
  * @author Dmytro Rud
  */
-public interface MllpInterceptor extends Processor {
-
-    /**
-     * Name of the Camel message header where a copy of the original request  
-     * message (as a {@link MessageAdapter} instance) will be saved.  
-     */
-    public static final String ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME = "pixPdqOriginalMessageAdapter";
-
-    
-    /**
-     * Name of the Camel message header where a copy of the original request
-     * message (as a {@link String} instance) will be saved.  
-     */
-    public static final String ORIGINAL_MESSAGE_STRING_HEADER_NAME  = "pixPdqOriginalMessageString";
-    
+public interface MllpInterceptor extends Hl7v2Interceptor {
 
     /**
      * Returns the endpoint instance to which this interceptor belongs.
      */
     public MllpEndpoint getMllpEndpoint();
 
-    
-    /**
-     * Returns the processor instance wrapped by this interceptor.
-     */
-    public Processor getWrappedProcessor();
-    
 }

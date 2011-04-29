@@ -18,13 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdq.pdqcore;
 import java.util.List;
 
 import ca.uhn.hl7v2.parser.Parser;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 /**
  * A MLLP transaction configuration with PDQ-specific methods for continuation support.
  * @author Dmytro Rud
  */
-public class PdqTransactionConfiguration extends MllpTransactionConfiguration {
+public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration {
    
     public PdqTransactionConfiguration(
             String hl7Version,

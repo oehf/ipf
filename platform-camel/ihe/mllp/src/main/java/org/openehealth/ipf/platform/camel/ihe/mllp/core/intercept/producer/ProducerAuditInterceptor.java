@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditIntercept
  * @author Dmytro Rud
  */
 public class ProducerAuditInterceptor 
-        extends AbstractProducerInterceptor 
+        extends AbstractMllpProducerInterceptor
         implements AuditInterceptor
 {
     public ProducerAuditInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {

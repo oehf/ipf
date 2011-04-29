@@ -24,13 +24,13 @@
     <dependencies>
         <!-- Dependencies for main -->
         <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7dsl</artifactId>
+            <groupId>org.openehealth.ipf.platform-camel</groupId>
+            <artifactId>platform-camel-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7</artifactId>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-pixpdq</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -48,36 +48,6 @@
         <dependency>
             <groupId>org.apache.mina</groupId>
             <artifactId>mina-filter-ssl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-pixpdq</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>

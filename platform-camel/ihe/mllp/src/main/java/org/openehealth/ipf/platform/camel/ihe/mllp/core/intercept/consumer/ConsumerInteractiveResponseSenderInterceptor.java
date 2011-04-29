@@ -26,15 +26,17 @@ import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils.*;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isEmpty;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils.isPresent;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils.*;
 
 
 /**
@@ -58,7 +60,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Parser parser = getMllpEndpoint().getTransactionConfiguration().getParser();
+        Parser parser = getTransactionConfiguration().getParser();
         MessageAdapter request = (MessageAdapter) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
         Message requestMessage = request.getHapiMessage();
         Terser requestTerser = new Terser(requestMessage);
@@ -85,7 +87,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         }
 
         // check whether responses to messages of this type can even be splitted
-        if (! getMllpEndpoint().getTransactionConfiguration().isContinuable(requestMessageType)) {
+        if (! getTransactionConfiguration().isContinuable(requestMessageType)) {
             getWrappedProcessor().process(exchange);
             return;
         }
@@ -193,7 +195,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         final int fragmentsCount = (recordBoundaries.size() + threshold - 2) / threshold; 
         
         // create a new chain of fragments
-        Parser parser = getMllpEndpoint().getTransactionConfiguration().getParser();
+        Parser parser = getTransactionConfiguration().getParser();
         String continuationPointer = null;
         for (int currentFragmentIndex = 0; currentFragmentIndex < fragmentsCount; ++currentFragmentIndex) {
             // create the current fragment as String 
@@ -241,7 +243,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
      * For N data records there will be N+1 boundaries.
      */
     private List<Integer> getRecordBoundaries(List<String> segments) {
-        MllpTransactionConfiguration config = getMllpEndpoint().getTransactionConfiguration();
+        Hl7v2TransactionConfiguration config = getTransactionConfiguration();
         List<Integer> recordBoundaries = new ArrayList<Integer>(); 
         boolean foundFooter = false;
         for (int i = 1; i < segments.size(); ++i) {

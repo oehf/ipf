@@ -16,13 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.extend;
 
 import java.lang.reflect.Method;
-
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.pixpdq.MessageAdapterValidator;
 import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
 import org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExchangeValidator;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpMarshalUtils;
 
 /**
  * PIX/PDQ DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.

@@ -18,10 +18,10 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 
 /**
- * Wrapper to use a {@link MllpCustomInterceptor} as an {@link MllpInterceptor}.
+ * Wrapper to use a {@link MllpCustomInterceptor} as an
+ * {@link org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor}.
  */
 public class CustomInterceptorWrapper extends AbstractMllpInterceptor {
     private final MllpCustomInterceptor wrappedInterceptor;
