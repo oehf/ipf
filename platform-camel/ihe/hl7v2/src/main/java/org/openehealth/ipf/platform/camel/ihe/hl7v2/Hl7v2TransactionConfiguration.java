@@ -26,7 +26,7 @@ import java.util.List;
 
 
 /**
- * Endpoint-agnostic parameters of an MLLP-based transaction.
+ * Endpoint-agnostic parameters of an HL7v2-based transaction.
  * @author Dmytro Rud
  */
 public class Hl7v2TransactionConfiguration {

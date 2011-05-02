@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 
 /**
- * An exception class for message acceptance checks in MLLP consumer and producer.
+ * An exception class for HL7v2 acceptance checks.
  * @author Dmytro Rud
  */
 public class Hl7v2AcceptanceException extends HL7v2Exception {

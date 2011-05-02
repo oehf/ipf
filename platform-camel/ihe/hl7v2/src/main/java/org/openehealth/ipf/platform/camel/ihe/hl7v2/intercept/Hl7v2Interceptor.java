@@ -29,14 +29,14 @@ public interface Hl7v2Interceptor extends Processor, Hl7v2ConfigurationHolder {
      * Name of the Camel message header where a copy of the original request
      * message (as a {@link org.openehealth.ipf.modules.hl7dsl.MessageAdapter} instance) will be saved.
      */
-    public static final String ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME = "pixPdqOriginalMessageAdapter";
+    public static final String ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME = "ipf.hl7v2.OriginalMessageAdapter";
 
     
     /**
      * Name of the Camel message header where a copy of the original request
      * message (as a {@link String} instance) will be saved.  
      */
-    public static final String ORIGINAL_MESSAGE_STRING_HEADER_NAME  = "pixPdqOriginalMessageString";
+    public static final String ORIGINAL_MESSAGE_STRING_HEADER_NAME  = "ipf.hl7v2.OriginalMessageString";
     
 
     /**

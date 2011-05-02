@@ -27,16 +27,14 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerO
  */
 public class Hl7v2WsProducerWrapper {
 
-    private static final String CHARSET = "UTF-8";
-
     public static Producer wrapProducer(
             Hl7v2ConfigurationHolder configurationHolder,
             Producer producer)
     {
-        producer = new ProducerMarshalInterceptor(configurationHolder, CHARSET, producer);
+        producer = new ProducerMarshalInterceptor(configurationHolder, producer);
         producer = new ProducerOutputAcceptanceInterceptor(configurationHolder, producer);
         producer = new ProducerInputAcceptanceInterceptor(configurationHolder, producer);
-        producer = new ProducerAdaptingInterceptor(configurationHolder, CHARSET, producer);
+        producer = new ProducerAdaptingInterceptor(configurationHolder, producer);
         return producer;
     }
 }

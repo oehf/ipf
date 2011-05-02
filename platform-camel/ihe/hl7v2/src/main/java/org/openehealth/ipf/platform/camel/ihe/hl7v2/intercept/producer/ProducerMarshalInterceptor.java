@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Producer;
-import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -31,16 +30,11 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
  */
 public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
 
-    private final String charsetName;
-
     public ProducerMarshalInterceptor(
             Hl7v2ConfigurationHolder configurationHolder,
-            String charsetName,
             Producer wrappedProducer)
     {
         super(configurationHolder, wrappedProducer);
-        Validate.notEmpty(charsetName);
-        this.charsetName = charsetName;
     }
 
     
@@ -63,6 +57,5 @@ public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
         message = Exchanges.resultMessage(exchange);
         String responseString = message.getBody(String.class);
         message.setBody(MessageAdapters.make(getTransactionConfiguration().getParser(), responseString));
-        exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
     }
 }
