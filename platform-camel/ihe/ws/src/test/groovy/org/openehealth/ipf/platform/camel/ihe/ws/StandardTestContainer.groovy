@@ -22,22 +22,17 @@ import org.apache.camel.impl.DefaultExchange
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-
 import org.junit.After
 import org.junit.AfterClass
-
 import org.openehealth.ipf.commons.ihe.atna.MockedSender
 import org.openehealth.ipf.commons.ihe.atna.custom.XCPDInitiatingGatewayAuditor
 import org.openehealth.ipf.commons.ihe.atna.custom.XCPDRespondingGatewayAuditor
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-
+import org.openhealthtools.ihe.atna.auditor.*
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleConfig
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
-import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
-import org.openhealthtools.ihe.atna.auditor.*
-
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.WebApplicationContextUtils
@@ -59,7 +54,10 @@ class StandardTestContainer {
      static CamelContext camelContext
      
      static int port
-    
+    /*
+     *  Port to be used, when the test is subclassed by java applications.
+     */
+    public static int DEMO_APP_PORT = 8999
      
      static void startServer(servlet, String appContextName, boolean secure, int serverPort) {
          def contextResource = new ClassPathResource(appContextName)
@@ -166,6 +164,11 @@ class StandardTestContainer {
 
      @After
      void tearDown() {
+         if (servletServer  == null){
+             String msg = "The test server is not started!\n"
+             msg += "You should call startServer(...) in the @BeforeClass method of your test to initialize the server."
+             throw new IllegalStateException(msg)
+         }
          auditSender.messages.clear()
      }
           
