@@ -65,12 +65,22 @@ public class DefaultItiWebService {
             inputMessage.getHeaders().putAll(additionalHeaders);
         }
 
+        // set Camel exchange property based on request encoding
+        exchange.setProperty(Exchange.CHARSET_NAME,
+                messageContext.get(org.apache.cxf.message.Message.ENCODING));
+
         // process
         consumer.process(exchange);
 
         // handle resulting message and headers
         Message resultMessage = Exchanges.resultMessage(exchange);
         processUserDefinedOutgoingHeaders(messageContext, resultMessage, false);
+
+        // set response encoding based on Camel exchange property
+        String responseEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+        if (responseEncoding != null) {
+            messageContext.put(org.apache.cxf.message.Message.ENCODING, responseEncoding);
+        }
         return exchange;
     }
 
