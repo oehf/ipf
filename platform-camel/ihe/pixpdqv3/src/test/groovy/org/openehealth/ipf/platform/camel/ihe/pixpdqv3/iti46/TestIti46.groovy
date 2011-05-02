@@ -24,6 +24,8 @@ import org.junit.BeforeClass
 import org.apache.cxf.transport.servlet.CXFServlet
 
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.Exchange
 
 /**
  * Tests for ITI-46.
@@ -31,17 +33,37 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
  */
 class TestIti46 extends StandardTestContainer {
 
-     def SERVICE1 = "pixv3-iti46://localhost:${port}/pixv3-iti46-service1";
+    def SERVICE1 = "pixv3-iti46://localhost:${port}/pixv3-iti46-service1"
+    def SERVICE_CHARSET = "pixv3-iti46://localhost:${port}/pixv3-iti46-charset"
 
-     @BeforeClass
-     static void setUpClass() {
-         startServer(new CXFServlet(), 'iti-46.xml')
-     }
-    
-     @Test
-     void testIti46() {
-         def response = send(SERVICE1, '<request/>', String.class)
-         def slurper = new XmlSlurper().parseText(response)
-         assert slurper.@from == 'PIX Consumer'
-     }
+    @BeforeClass
+    static void setUpClass() {
+        startServer(new CXFServlet(), 'iti-46.xml')
+    }
+
+    @Test
+    void testIti46() {
+        def response = send(SERVICE1, '<request/>', String.class)
+        def slurper = new XmlSlurper().parseText(response)
+        assert slurper.@from == 'PIX Consumer'
+    }
+
+    /**
+     * Test whether setting and retrieving character sets
+     * via Camel exchange property works.
+     */
+    @Test
+    void testCharsets() {
+        def exchange = new DefaultExchange(camelContext)
+        exchange.in.body = '<request/>'
+        exchange.properties[Exchange.CHARSET_NAME] = "koi8-r"
+        Exchange result = producerTemplate.send(SERVICE_CHARSET, exchange)
+        if (result.exception) {
+            throw result.exception
+        }
+        assert result.properties[Exchange.CHARSET_NAME] == "windows-1251"
+        def slurper = new XmlSlurper().parseText(Exchanges.resultMessage(result).body)
+        assert slurper.@from == 'PIX Consumer'
+    }
+
 }

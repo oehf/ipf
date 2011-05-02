@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti46
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.apache.camel.Exchange
 
 /**
  * @author Dmytro Rud
@@ -29,5 +30,14 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 Exchanges.resultMessage(it).body = '<response from="PIX Consumer"/>'
             }
 
+
+        from('pixv3-iti46:pixv3-iti46-charset')
+            .process {
+                if (it.properties[Exchange.CHARSET_NAME] != 'KOI8-R') {
+                    throw new RuntimeException('KOI-8 character set expected')
+                }
+                it.properties[Exchange.CHARSET_NAME] = 'Windows-1251'
+                Exchanges.resultMessage(it).body = '<response from="PIX Consumer"/>'
+            }
     }
 }
