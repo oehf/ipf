@@ -67,8 +67,6 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
 
         // play the route, handle its outcomes and check response acceptance
         try {
-            // TODO: set exchange property "Exchange.CHARSET_NAME" ?
-
             Exchange exchange = super.process(msg);
             if (exchange.getException() != null) {
                 throw exchange.getException();

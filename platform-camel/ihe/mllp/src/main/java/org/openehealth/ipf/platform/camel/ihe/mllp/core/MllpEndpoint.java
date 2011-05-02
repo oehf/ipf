@@ -38,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerSegmentFragmentationInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerStringProcessingInterceptor;
 
 import javax.net.ssl.SSLContext;
 import java.util.List;
@@ -167,7 +167,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      */
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        String charsetName = getConfiguration().getCharsetName();
+        final String charsetName = getConfiguration().getCharsetName();
 
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
@@ -188,7 +188,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
         if (isAudit()) {
             x = new ConsumerAuthenticationFailureInterceptor(this, x);
         }
-        x = new ConsumerAdaptingInterceptor(this, charsetName, x);
+        x = new ConsumerAdaptingInterceptor(this, x, charsetName);
         x = new ConsumerOutputAcceptanceInterceptor(this, x);
         if (isAudit()) {
             x = new ConsumerAuditInterceptor(this, x);
@@ -197,11 +197,11 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             x = new ConsumerInteractiveResponseSenderInterceptor(this, x);
         }
         x = new ConsumerInputAcceptanceInterceptor(this, x);
-        x = new ConsumerMarshalInterceptor(this, charsetName, x);
+        x = new ConsumerMarshalInterceptor(this, x);
         if (isSupportUnsolicitedFragmentation()) {
             x = new ConsumerRequestDefragmenterInterceptor(this, x);
         }
-        x = new ConsumerSegmentFragmentationInterceptor(this, x);
+        x = new ConsumerStringProcessingInterceptor(this, x);
         return wrappedEndpoint.createConsumer(x);
     }
 
@@ -212,7 +212,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      */
     @Override
     public Producer createProducer() throws Exception {
-        String charsetName = getConfiguration().getCharsetName();
+        final String charsetName = getConfiguration().getCharsetName();
 
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
@@ -227,19 +227,19 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
         }
 
         Producer x = wrappedEndpoint.createProducer();
-        x = new ProducerSegmentFragmentationInterceptor(this, x);
+        x = new ProducerStringProcessingInterceptor(this, x);
         if (isSupportUnsolicitedFragmentation()) {
             x = new ProducerRequestFragmenterInterceptor(this, x);
         }
         x = isSupportInteractiveContinuation() 
                 ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor(this, x)
-                : new ProducerMarshalInterceptor(this, charsetName, x);
+                : new ProducerMarshalInterceptor(this, x);
         x = new ProducerOutputAcceptanceInterceptor(this, x);
         if (isAudit()) {
             x = new ProducerAuditInterceptor(this, x);
         }
         x = new ProducerInputAcceptanceInterceptor(this, x);
-        x = new ProducerAdaptingInterceptor(this, charsetName, x);
+        x = new ProducerAdaptingInterceptor(this, x, charsetName);
         return x;
     }
 

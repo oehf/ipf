@@ -57,7 +57,6 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
     @Override
     public void process(Exchange exchange) throws Exception {
         Hl7v2TransactionConfiguration config = getTransactionConfiguration();
-        String charset = getMllpEndpoint().getConfiguration().getCharsetName();
         MessageAdapter request = exchange.getIn().getBody(MessageAdapter.class);
         
         Terser requestTerser = null;
@@ -190,7 +189,6 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
             responseTerser.set("QAK-6", "0");
         }
         Exchanges.resultMessage(exchange).setBody(rsp);
-        exchange.setProperty(Exchange.CHARSET_NAME, charset);
     }
 
 

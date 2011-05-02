@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 
 import javax.net.ssl.SSLContext;
@@ -39,7 +40,7 @@ import java.util.*;
 public abstract class MllpComponent extends MinaComponent implements Hl7v2ConfigurationHolder {
     private static final transient Log LOG = LogFactory.getLog(MllpComponent.class);
     
-    public static final String ACK_TYPE_CODE_HEADER = "pixpdqAckTypeCode"; 
+    public static final String ACK_TYPE_CODE_HEADER = ConsumerAdaptingInterceptor.ACK_TYPE_CODE_HEADER;
     
     private static final String DEFAULT_HL7_CODEC_FACTORY_BEAN_NAME = "#hl7codec";
 

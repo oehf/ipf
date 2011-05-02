@@ -15,12 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 
+import java.nio.charset.Charset;
 
 /**
  * Abstract Camel interceptor for Hl7v2-based transactions.
@@ -32,7 +34,7 @@ public abstract class AbstractHl7v2Interceptor implements Hl7v2Interceptor {
     private final Processor wrappedProcessor;
 
     /**
-     * Constructor, non-MLLP specific.
+     * Constructor.
      * @param configurationHolder
      *      The Camel endpoint to which this interceptor belongs.
      * @param wrappedProcessor
@@ -66,5 +68,17 @@ public abstract class AbstractHl7v2Interceptor implements Hl7v2Interceptor {
     @Override
     public NakFactory getNakFactory() {
         return configurationHolder.getNakFactory();
+    }
+
+    /**
+     * Returns character set configured in the given Camel exchange,
+     * or, when none found, the system default character set.
+     * @param exchange
+     *      Camel exchange.
+     * @return
+     *      character set name.
+     */
+    protected static String characterSet(Exchange exchange) {
+        return exchange.getProperty(Exchange.CHARSET_NAME, Charset.defaultCharset().name(), String.class);
     }
 }
