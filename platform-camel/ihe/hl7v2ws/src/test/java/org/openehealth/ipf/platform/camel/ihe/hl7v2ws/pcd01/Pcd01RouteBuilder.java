@@ -17,8 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2wsCamelValidators.pcd01RequestValidator;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2wsCamelValidators.pcd01ResponseValidator;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators1.pcd01RequestValidator;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsCamelValidators1.pcd01ResponseValidator;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
