@@ -99,12 +99,12 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
+            <groupId>org.openehealth.ipf.modules.cda.mdht</groupId>
             <artifactId>modules-cda-mdht</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
+            <groupId>org.openehealth.ipf.modules.cda.oht</groupId>
             <artifactId>modules-cda-oht</artifactId>
             <version>${project.version}</version>
         </dependency>
