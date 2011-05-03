@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
 import org.openehealth.ipf.tutorials.xds.ContentUtils
 import org.openehealth.ipf.tutorials.xds.SearchDefinition
+import javax.activation.DataHandler
 
 /**
  * The DSL for the registry and repository route implementations.
@@ -58,8 +59,9 @@ class RegRepModelExtension {
         ProcessorDefinition.metaClass.updateWithRepositoryData = {
             delegate.process {
                 def documentEntry = it.in.body.entry.documentEntry
-                documentEntry.hash = ContentUtils.sha1(it.in.body.entry.dataHandler)
-                documentEntry.size = ContentUtils.size(it.in.body.entry.dataHandler)
+                def dataHandler = it.in.body.entry.getContent(DataHandler)
+                documentEntry.hash = ContentUtils.sha1(dataHandler)
+                documentEntry.size = ContentUtils.size(dataHandler)
                 documentEntry.repositoryUniqueId = '1.19.6.24.109.42.1'
             }
         }

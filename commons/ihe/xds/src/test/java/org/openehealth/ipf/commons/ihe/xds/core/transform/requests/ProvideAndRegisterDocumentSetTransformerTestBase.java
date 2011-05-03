@@ -51,7 +51,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         transformer = new ProvideAndRegisterDocumentSetTransformer(factory);        
 
         request = SampleData.createProvideAndRegisterDocumentSet();
-        dataHandler = request.getDocuments().get(0).getDataHandler();
+        dataHandler = request.getDocuments().get(0).getContent(DataHandler.class);
     }
 
     @Test

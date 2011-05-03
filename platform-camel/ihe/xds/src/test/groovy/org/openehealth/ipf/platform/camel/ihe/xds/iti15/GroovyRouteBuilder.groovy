@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.apache.commons.io.IOUtils
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
-
+import javax.activation.DataHandler
 
 /**
  * @author Jens Riemschneider
@@ -44,9 +44,10 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
         def doc = exchange.in.getBody(ProvideAndRegisterDocumentSet.class).documents[0]
         def value = doc.documentEntry.comments.value
         def status = FAILURE
-        if (expected == value && doc.dataHandler != null) {
+        def dataHandler = doc.getContent(DataHandler)
+        if (expected == value && dataHandler != null) {
             def length = 0
-            def inputStream = doc.dataHandler.inputStream
+            def inputStream = dataHandler.inputStream
             while (inputStream.read() != -1) {
                 ++length
             }
