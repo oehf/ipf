@@ -37,7 +37,7 @@
 
         <!-- Plugin version properties -->
         <assembly-plugin-version>2.2</assembly-plugin-version>
-        <bundle-plugin-version>2.3.4</bundle-plugin-version>
+        <bundle-plugin-version>2.0.1</bundle-plugin-version>
         <enforcer-plugin-version>1.0-beta-1</enforcer-plugin-version>
         <jar-plugin-version>2.3.1</jar-plugin-version>
         <javadoc-plugin-version>2.7</javadoc-plugin-version>
