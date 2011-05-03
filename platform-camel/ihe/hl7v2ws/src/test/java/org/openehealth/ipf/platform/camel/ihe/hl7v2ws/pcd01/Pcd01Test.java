@@ -68,7 +68,7 @@ public class Pcd01Test extends StandardTestContainer {
     @Test(expected = Hl7v2AcceptanceException.class)
     public void testInacceptableRequest() throws Exception {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
-        String response = requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
+        requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
     }
     
     @Test
@@ -131,6 +131,6 @@ public class Pcd01Test extends StandardTestContainer {
     }
  
     public static void main(String args []){
-        startServer(new CXFServlet(), "pcd-01.xml", false, 8999);
+        startServer(new CXFServlet(), "pcd-01.xml", false, DEMO_APP_PORT);
     }
 }

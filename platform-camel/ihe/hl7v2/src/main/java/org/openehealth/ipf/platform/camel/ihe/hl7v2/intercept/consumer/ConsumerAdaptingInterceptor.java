@@ -36,25 +36,57 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 /**
  * Consumer-side Camel interceptor which creates a {@link MessageAdapter} 
  * from various possible response types.
- *  
+ *
  * @author Dmytro Rud
  */
 public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
     private static final transient Log LOG = LogFactory.getLog(ConsumerAdaptingInterceptor.class);
-    public static final String ACK_TYPE_CODE_HEADER = "pixpdqAckTypeCode";
+    public static final String ACK_TYPE_CODE_HEADER = "ipf.hl7v2.AckTypeCode";
 
     private final String charsetName;
 
+
+    /**
+     * Constructor which enforces the use of a particular character set.
+     * The given value will be propagated to the Camel exchange property
+     * {@link Exchange#CHARSET_NAME}, rewriting its old content.
+     *
+     * @param configurationHolder
+     *      HL7v2 configuration holder.
+     * @param wrappedProcessor
+     *      wrapped Camel processor.
+     * @param charsetName
+     *      character set to use in all data transformations.
+     */
     public ConsumerAdaptingInterceptor(
             Hl7v2ConfigurationHolder configurationHolder,
-            String charsetName,
-            Processor wrappedProcessor)
+            Processor wrappedProcessor,
+            String charsetName)
     {
         super(configurationHolder, wrappedProcessor);
         Validate.notEmpty(charsetName);
         this.charsetName = charsetName;
     }
-    
+
+
+    /**
+     * Constructor which does not enforce the use of a particular character set.
+     * When the Camel exchange does not contain property {@link Exchange#CHARSET_NAME},
+     * the default system character set will be used.
+     *
+     * @param configurationHolder
+     *      HL7v2 configuration holder.
+     * @param wrappedProcessor
+     *      wrapped Camel processor.
+     */
+    public ConsumerAdaptingInterceptor(
+            Hl7v2ConfigurationHolder configurationHolder,
+            Processor wrappedProcessor)
+    {
+        super(configurationHolder, wrappedProcessor);
+        charsetName = null;
+    }
+
     
     /**
      * Converts response to a {@link MessageAdapter}, throws 
@@ -78,9 +110,12 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         Object body = m.getBody();
 
         // try to convert route response from a known type
+        if (charsetName != null) {
+            exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
+        }
         MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 m,
-                charsetName,
+                characterSet(exchange),
                 getTransactionConfiguration().getParser());
         
         // additionally: an Exception in the body?
