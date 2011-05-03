@@ -70,7 +70,7 @@
         <saxon-osgi-version>9.1.0.1-p1</saxon-osgi-version>
         <servlet-api-version>2.5-p1</servlet-api-version>
         <serializer-version>2.7.1-v200806030322</serializer-version>
-        <slf4j-version>1.5.10</slf4j-version>
+        <slf4j-version>1.6.1</slf4j-version>
         <spring-framework-version>3.0.5.RELEASE</spring-framework-version>
         <xalan-version>2.7.1-p1</xalan-version>
         <xerces-impl-osgi-version>2.9.0-v200805270400</xerces-impl-osgi-version>
@@ -121,6 +121,7 @@
             <param>mvn:org.slf4j/com.springsource.slf4j.api/${slf4j-version}@start</param>
             <param>mvn:org.slf4j/com.springsource.slf4j.log4j/${slf4j-version}@nostart</param>
             <param>mvn:org.slf4j/com.springsource.slf4j.org.apache.commons.logging/${slf4j-version}@start</param>
+            <param>mvn:org.slf4j/com.springsource.slf4j.nop/${slf4j-version}@start</param>
             <param>mvn:org.jasypt/com.springsource.org.jasypt.encryption/${springsource-jasypt-version}@start</param>
             <param>mvn:org.dom4j/com.springsource.org.dom4j/${springsource-dom4j-version}@start</param>
             <param>mvn:javax.annotation/com.springsource.javax.annotation/${springsource-annotations-api-version}@start</param>
