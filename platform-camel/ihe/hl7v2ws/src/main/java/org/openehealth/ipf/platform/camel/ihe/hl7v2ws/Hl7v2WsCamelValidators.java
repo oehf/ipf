@@ -30,7 +30,7 @@ import ca.uhn.hl7v2.parser.Parser;
  * @author Mitko Kolev
  *
  */
-public class Hl7v2WsCamelValidators1 {
+public class Hl7v2WsCamelValidators {
     
     private static final Validator<Object, Object> PCD01_VALIDATOR = new Pcd01Validator();
     private static final Validator<Object, Object> CONTINUA_WAN_VALIDATOR = new ContinuaWanValidator();
