@@ -115,13 +115,13 @@ class Iti4142RouteBuilder extends SpringRouteBuilder {
             .choice()
                 .when {
                     def hash = it.in.body.entry.documentEntry.hash
-                    hash != null && hash != ContentUtils.sha1(it.in.body.entry.dataHandler)
+                    hash != null && hash != ContentUtils.sha1(it.in.body.entry.getContent(DataHandler))
                 }.fail(INCORRECT_HASH)
             .end()
             .choice()
                 .when {
                     def size = it.in.body.entry.documentEntry.size
-                    size != null && size != ContentUtils.size(it.in.body.entry.dataHandler)
+                    size != null && size != ContentUtils.size(it.in.body.entry.getContent(DataHandler))
                 }.fail(INCORRECT_SIZE)
             .end()
 
@@ -136,8 +136,10 @@ class Iti4142RouteBuilder extends SpringRouteBuilder {
         from('direct:makeDocsReReadable')
             .splitEntries { it.req.documents }
             .processBody {
-                def content = ContentUtils.getContent(it.entry.dataHandler)
-                it.entry.dataHandler = new DataHandler(new ByteArrayDataSource(content, it.entry.dataHandler.contentType))
+                def dataHandler = it.entry.getContent(DataHandler)
+                def content = ContentUtils.getContent(dataHandler)
+                it.entry.setContent(DataHandler,
+                        new DataHandler(new ByteArrayDataSource(content, dataHandler.contentType)))
             }
 
         // Put all documents in the store

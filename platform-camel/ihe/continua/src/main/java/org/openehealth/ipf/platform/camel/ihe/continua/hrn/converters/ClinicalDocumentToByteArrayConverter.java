@@ -15,15 +15,25 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
+import org.openehealth.ipf.modules.cda.CDAR2Renderer;
+import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.springframework.core.convert.converter.Converter;
 
+import java.io.ByteArrayOutputStream;
+
 /**
- * @author Stefan Ivanov
+ * @author Dmytro Rud
  */
-public class ByteArrayToStringConverter implements Converter<byte[], String> {
+public class ClinicalDocumentToByteArrayConverter implements Converter<ClinicalDocument, byte[]> {
 
     @Override
-    public String convert(byte[] source) {
-        return new String(source);
+    public byte[] convert(ClinicalDocument clinicalDocument) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            new CDAR2Renderer().render(clinicalDocument, os);
+            return os.toByteArray();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

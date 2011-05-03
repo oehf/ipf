@@ -97,14 +97,6 @@ public class DocumentTest {
         assertNotNull(doc.getContent(String.class));
     }
 
-    /*
-    @Test
-    public final void addNullContents() {
-        Document doc = new Document(docEntry, null);
-        assertNull(doc.setContent(DataHandler.class, null));
-    }
-    */
-
     @Test
     public final void getContentsClassOfT() {
         String testContent = "data";

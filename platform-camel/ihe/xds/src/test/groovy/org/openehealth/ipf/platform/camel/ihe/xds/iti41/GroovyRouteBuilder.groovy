@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import javax.activation.DataHandler
 
 /**
  * @author Jens Riemschneider
@@ -43,9 +44,10 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
         def doc = exchange.in.getBody(ProvideAndRegisterDocumentSet.class).documents[0]
         def value = doc.documentEntry.comments.value        
         def status = FAILURE;
-        if (expected == value && doc.dataHandler != null) {
-            Collection attachments = doc.dataHandler.dataSource.attachments
-            def inputStream = doc.dataHandler.inputStream
+        def dataHandler = doc.getContent(DataHandler)
+        if (expected == value && dataHandler != null) {
+            Collection attachments = dataHandler.dataSource.attachments
+            def inputStream = dataHandler.inputStream
             try {
                 if (attachments.size() == 1 && attachments.iterator().next().xop) {
                     def length = 0

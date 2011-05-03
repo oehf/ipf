@@ -20,25 +20,22 @@
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-ihe-atna</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>${spring-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring-version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

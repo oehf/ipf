@@ -16,6 +16,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static junit.framework.Assert.assertEquals
+import javax.activation.DataHandler
 
 /**
  * Tests against the registry/repository.
@@ -39,8 +40,8 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()
         docEntry.uniqueId = '4.3.2.1'
-        docEntry.hash = ContentUtils.sha1(provide.documents[0].dataHandler)
-        docEntry.size = ContentUtils.size(provide.documents[0].dataHandler)
+        docEntry.hash = ContentUtils.sha1(provide.documents[0].getContent(DataHandler))
+        docEntry.size = ContentUtils.size(provide.documents[0].getContent(DataHandler))
 
         def response = send(ITI41, provide, Response.class)
         assertEquals(response.toString(), Status.SUCCESS, response.status)

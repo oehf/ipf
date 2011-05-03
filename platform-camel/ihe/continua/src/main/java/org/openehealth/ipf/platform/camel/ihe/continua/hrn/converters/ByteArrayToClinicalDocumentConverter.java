@@ -35,7 +35,7 @@ public class ByteArrayToClinicalDocumentConverter implements Converter<byte[], C
         try {
             return CDAUtil.load(new ByteArrayInputStream(source));
         } catch (Exception e) {
-            throw new IllegalStateException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 

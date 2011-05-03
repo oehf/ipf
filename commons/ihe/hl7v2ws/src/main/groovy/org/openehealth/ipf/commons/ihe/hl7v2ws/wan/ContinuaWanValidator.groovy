@@ -15,12 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.wan
 
-
-import java.util.Collection
-
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01Validator
+
 /**
- * Implements more strict validaton for PCD-01
+ * Implements more strict validation for PCD-01.
  * 
  * There must be at least one ORDER_OBSERVATION in the message
  * There must be at least one PATIENT_RESULT
@@ -29,9 +27,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01Validator
  *
  */
 class ContinuaWanValidator extends  Pcd01Validator {
-    
-    
-    
+
     void checkMSH(msg, Collection<Exception> violations) {
         checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12, 15, 16, 21], violations)
     }
@@ -39,10 +35,12 @@ class ContinuaWanValidator extends  Pcd01Validator {
 	void checkOBR(ooGroup, int obrIndex, Collection<Exception> violations) {
 		checkSegmentValues(ooGroup, 'OBR', [1, 2, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
 	}
-	/*
+
+	/**
 	 * The <code>obxIndex</code> is the observation index (required).
-	 * It starts from 1 and is incremeted by one on every obx.
-	 * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
+	 * It starts from 1 and is incremented by one on every obx.
+	 * The <code>checkTime</code> tells if the OBX-14 will be checked.
+	 * It is required when OBX-7 is not given
 	 */
 	void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
 		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(obs.OBX, checkTime), violations);
