@@ -15,33 +15,21 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.helpers.XMLUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 /**
  * @author Stefan Ivanov
  */
 public class ByteArrayToDomConverter implements Converter<byte[], Document> {
-    private final static transient Log LOG = LogFactory.getLog(ByteArrayToDomConverter.class);
 
     @Override
     public Document convert(byte[] source) {
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            InputStream stream = new ByteArrayInputStream(source);
-            return builder.parse(stream);
+            return XMLUtils.parse(source);
         } catch (Exception e) {
-            LOG.error(e);
-            return null;
+            throw new IllegalArgumentException(e);
         }
     }
 }

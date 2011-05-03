@@ -15,15 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
+import org.apache.cxf.attachment.ByteDataSource;
 import org.springframework.core.convert.converter.Converter;
+import javax.activation.DataHandler;
 
 /**
- * @author Stefan Ivanov
+ * @author Dmytro Rud
  */
-public class ByteArrayToStringConverter implements Converter<byte[], String> {
+public class ByteArrayToDataHandlerConverter implements Converter<byte[], DataHandler> {
 
     @Override
-    public String convert(byte[] source) {
-        return new String(source);
+    public DataHandler convert(byte[] source) {
+        return new DataHandler(new ByteDataSource(source));
     }
 }
