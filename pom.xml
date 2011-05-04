@@ -1066,6 +1066,7 @@
                     <aggregate>true</aggregate>
                     <linksource>true</linksource>
                     <excludePackageNames>*.tutorials,*.test</excludePackageNames>
+                    <additionalJOption>-J-Xmx256m</additionalJOption>
                 </configuration>
             </plugin>
             <plugin>
