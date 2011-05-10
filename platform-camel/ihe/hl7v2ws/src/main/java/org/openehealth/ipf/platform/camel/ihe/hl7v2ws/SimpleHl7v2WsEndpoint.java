@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
+package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.commons.lang.Validate;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
@@ -25,15 +26,21 @@ import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsProducerWrapper;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
- * Camel endpoint for the PCD-01 transaction.
+ * Camel endpoint for HL7v2-WS transaction with a single operation.
  */
-public class Pcd01Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+
+    private final Class<? extends AbstractHl7v2WebService> serviceClass;
 
     /**
      * Constructs the endpoint.
@@ -43,15 +50,35 @@ public class Pcd01Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
      *          the endpoint address from the URI.
      * @param component
      *          the component creating this endpoint.
+     * @param customInterceptors
+     *          user-defined CXF interceptors.
+     * @param serviceClass
+     *          service class.
      */
-    public Pcd01Endpoint(
+    public SimpleHl7v2WsEndpoint(
             String endpointUri,
             String address,
-            Pcd01Component component,
-            InterceptorProvider customInterceptors) 
+            AbstractWsComponent component,
+            InterceptorProvider customInterceptors,
+            Class<? extends AbstractHl7v2WebService> serviceClass)
     {
         super(endpointUri, address, component, customInterceptors);
+        Validate.notNull(serviceClass);
+        this.serviceClass = serviceClass;
     }
+
+
+    protected static Producer wrapProducer(
+            Hl7v2ConfigurationHolder configurationHolder,
+            Producer producer)
+    {
+        producer = new ProducerMarshalInterceptor(configurationHolder, producer);
+        producer = new ProducerOutputAcceptanceInterceptor(configurationHolder, producer);
+        producer = new ProducerInputAcceptanceInterceptor(configurationHolder, producer);
+        producer = new ProducerAdaptingInterceptor(configurationHolder, producer);
+        return producer;
+    }
+
 
     @Override
     public Producer createProducer() throws Exception {
@@ -59,9 +86,8 @@ public class Pcd01Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
                 getWebServiceConfiguration(),
                 getServiceUrl(), 
                 getCustomInterceptors());
-        return Hl7v2WsProducerWrapper.wrapProducer(
-                (Hl7v2ConfigurationHolder) getComponent(),
-                new Pcd01Producer(this, clientFactory));
+        return wrapProducer((Hl7v2ConfigurationHolder) getComponent(),
+                new SimpleHl7v2WsProducer(this, clientFactory));
     }
 
     @Override
@@ -70,8 +96,10 @@ public class Pcd01Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
                 getWebServiceConfiguration(),
                 getServiceAddress(),
                 getCustomInterceptors());
-        ServerFactoryBean serverFactory =
-            serviceFactory.createServerFactory(Pcd01Service.class);
+
+        AbstractHl7v2WebService serviceInstance = serviceClass.newInstance();
+        serviceInstance.setHl7v2Configuration((Hl7v2ConfigurationHolder) getComponent());
+        ServerFactoryBean serverFactory = serviceFactory.createServerFactory(serviceInstance);
         Server server = serverFactory.create();
         DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
         return new DefaultItiConsumer(this, processor, service, server);

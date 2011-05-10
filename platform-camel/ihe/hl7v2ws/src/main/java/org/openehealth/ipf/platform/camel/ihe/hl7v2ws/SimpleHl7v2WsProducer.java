@@ -13,29 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
+package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.SimpleHl7v2WsPortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
- * Producer implementation for the PCD-01 component.
+ * Producer implementation of a HL7v2 WS transaction with a single operation.
  */
-public class Pcd01Producer extends DefaultItiProducer<String, String> {
-    /**
-     * Constructs the producer.
-     * @param endpoint
-     *          the endpoint creating this producer.
-     * @param clientFactory
-     *          the factory for clients to produce messages for the service.              
-     */
-    public Pcd01Producer(Pcd01Endpoint endpoint, ItiClientFactory clientFactory) {
+public class SimpleHl7v2WsProducer extends DefaultItiProducer<String, String> {
+
+    public SimpleHl7v2WsProducer(DefaultItiEndpoint endpoint, ItiClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 
     @Override
-    protected String callService(Object client, String body) {
-        return ((Pcd01PortType) client).communicate(body);
+    protected String callService(Object client, String request) {
+        return ((SimpleHl7v2WsPortType) client).operation(request);
     }
 }

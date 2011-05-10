@@ -15,23 +15,21 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
 
 import javax.xml.namespace.QName;
-import java.util.Map;
 
 
 /**
  * Camel component for the IHE PCD-01 transaction.
  */
-public class Pcd01Component extends AbstractWsComponent<ItiServiceInfo> implements Hl7v2ConfigurationHolder {
+public class Pcd01Component extends AbstractHl7v2WsComponent {
     private static final String NS_URI = "urn:ihe:pcd:dec:2010";
     public static final ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
             new QName(NS_URI, "DeviceObservationConsumer_Service", "ihe"),
@@ -61,12 +59,6 @@ public class Pcd01Component extends AbstractWsComponent<ItiServiceInfo> implemen
 
 
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Pcd01Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
-    }
-
-    @Override
     public Hl7v2TransactionConfiguration getTransactionConfiguration() {
         return HL7V2_CONFIG;
     }
@@ -79,5 +71,10 @@ public class Pcd01Component extends AbstractWsComponent<ItiServiceInfo> implemen
     @Override
     public ItiServiceInfo getWebServiceConfiguration() {
         return WS_CONFIG;
+    }
+
+    @Override
+    protected Class<? extends AbstractHl7v2WebService> getServiceClass() {
+        return Pcd01Service.class;
     }
 }

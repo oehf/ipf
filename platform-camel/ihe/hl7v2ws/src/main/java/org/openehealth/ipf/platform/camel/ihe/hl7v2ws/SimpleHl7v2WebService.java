@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
+package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.SimpleHl7v2WebService;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.SimpleHl7v2WsPortType;
 
 /**
+ * Web Service for HL7v2 components with a single operation.
  * @author Dmytro Rud
  */
-public class Pcd01Service extends SimpleHl7v2WebService implements Pcd01PortType {
+public class SimpleHl7v2WebService extends AbstractHl7v2WebService implements SimpleHl7v2WsPortType {
+
+    @Override
+    public String operation(String request) {
+        return doProcess(request);
+    }
 }
