@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
+import org.openehealth.ipf.commons.ihe.hl7v2ws.SimpleHl7v2WsPortType;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -24,12 +26,12 @@ import javax.xml.ws.Action;
 
 @WebService(targetNamespace = "urn:ihe:pcd:dec:2010", name = "DeviceObservationConsumer_PortType")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-public interface Pcd01PortType {
+public interface Pcd01PortType extends SimpleHl7v2WsPortType {
 
     @WebResult(name = "CommunicatePCDDataResponse", targetNamespace = "urn:ihe:pcd:dec:2010", partName = "Body")
     @Action(input = "urn:ihe:pcd:2010:CommunicatePCDData", output = "urn:ihe:pcd:2010:CommunicatePCDDataResponse")
     @WebMethod(operationName = "CommunicatePCDData", action = "urn:ihe:pcd:2010:CommunicatePCDData")
-    public String communicate(
+    public String operation(
         @WebParam(partName = "Body", name = "CommunicatePCDData", targetNamespace = "urn:ihe:pcd:dec:2010")
         String request
     );
