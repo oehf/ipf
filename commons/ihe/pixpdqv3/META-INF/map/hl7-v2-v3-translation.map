@@ -69,4 +69,9 @@ mappings = {
         (ELSE) : { it }
     )
 
+    'hl7v2v3_familyNameType-familyNameQualifier' (
+        'B'    : 'BR',
+        (ELSE) : ''
+    )
+
 }

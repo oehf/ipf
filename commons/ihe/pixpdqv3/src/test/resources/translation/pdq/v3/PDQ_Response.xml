@@ -85,7 +85,7 @@
                 <given>Hans</given>
               </name>
               <name>
-                <family>Mayer</family>
+                <family qualifier="BR">Mayer</family>
               </name>
               <telecom value="tel:021-75736" use="H" />
               <administrativeGenderCode code="M" />
@@ -125,7 +125,7 @@
                 <given>Alexander</given>
               </name>
               <name>
-                <family>Meier</family>
+                <family qualifier="BR">Meier</family>
               </name>
               <telecom value="tel:01727593714" use="H" />
               <administrativeGenderCode code="M" />
@@ -165,7 +165,7 @@
                 <given>Heidi</given>
               </name>
               <name>
-                <family>Meier</family>
+                <family qualifier="BR">Meier</family>
               </name>
               <administrativeGenderCode code="F" />
               <birthTime value="19801130" />
@@ -204,7 +204,7 @@
                 <given>Hans</given>
               </name>
               <name>
-                <family>Mueller</family>
+                <family qualifier="BR">Mueller</family>
               </name>
               <telecom value="tel:022/235715" use="H" />
               <administrativeGenderCode code="M" />
@@ -244,7 +244,7 @@
                 <given>Hannes</given>
               </name>
               <name>
-                <family>Mueller</family>
+                <family qualifier="BR">Mueller</family>
               </name>
               <telecom value="tel:022/843274" use="H" />
               <administrativeGenderCode code="M" />
@@ -285,7 +285,7 @@
                 <given>Hans</given>
               </name>
               <name>
-                <family>Mueller</family>
+                <family qualifier="BR">Mueller</family>
               </name>
               <telecom value="tel:022/235715" use="H" />
               <telecom value="tel:022/874491" use="H" />
@@ -333,7 +333,7 @@
                 <given>Joachim</given>
               </name>
               <name>
-                <family>Mueller</family>
+                <family qualifier="BR">Mueller</family>
               </name>
               <telecom value="tel:022/844275" use="H" />
               <administrativeGenderCode code="M" />
@@ -373,7 +373,7 @@
                 <given>Heidi</given>
               </name>
               <name>
-                <family>Schmidt</family>
+                <family qualifier="BR">Schmidt</family>
               </name>
               <telecom value="tel:06221/23657" use="H" />
               <telecom value="tel:06221/82548" use="H" />
