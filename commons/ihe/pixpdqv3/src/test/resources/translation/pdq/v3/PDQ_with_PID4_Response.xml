@@ -90,7 +90,7 @@
                 <given>Heidi</given>
               </name>
               <name>
-                <family>Schmidt</family>
+                <family qualifier="BR">Schmidt</family>
               </name>
               <telecom value="tel:+49622123457" use="H" />
               <administrativeGenderCode code="F" />

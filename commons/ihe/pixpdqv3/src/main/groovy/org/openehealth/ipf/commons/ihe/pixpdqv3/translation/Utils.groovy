@@ -128,11 +128,13 @@ class Utils {
      */
     static createName(MarkupBuilder builder, CompositeAdapter xpn) {
         builder.name {
-            def family = xpn[1][1].value
-            def given  = xpn[2].value
-            def middle = xpn[3].value
-                                 
-            conditional(builder, 'family', family)
+            def family    = xpn[1][1].value
+            def given     = xpn[2].value
+            def middle    = xpn[3].value
+            def qualifier = (xpn[7].value ?: '').map('hl7v2v3_familyNameType-familyNameQualifier')
+            
+            Map qualifierAttrs = ['qualifier':qualifier]
+            conditionalWithAttributes(builder, 'family', family, qualifierAttrs)
             conditional(builder, 'given', given)
             if (middle && ! given) {
                 given('')
