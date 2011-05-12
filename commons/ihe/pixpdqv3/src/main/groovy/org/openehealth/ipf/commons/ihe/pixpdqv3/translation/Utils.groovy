@@ -134,7 +134,7 @@ class Utils {
             def qualifier = (xpn[7].value ?: '').map('hl7v2v3_familyNameType-familyNameQualifier')
             
             Map qualifierAttrs = ['qualifier':qualifier]
-            conditionalWithAttributes(builder, 'family', family, qualifierAttrs)
+            conditional(builder, 'family', family, qualifierAttrs)
             conditional(builder, 'given', given)
             if (middle && ! given) {
                 given('')

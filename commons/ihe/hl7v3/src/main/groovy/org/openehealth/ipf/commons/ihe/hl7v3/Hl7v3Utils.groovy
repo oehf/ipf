@@ -113,26 +113,15 @@ class Hl7v3Utils {
 
     
     /**
-     * Inserts an XML element with the given name if the corresponding content is present.
-     */
-    static void conditional(MarkupBuilder builder, String elementName, String content) {
-        if (content) {
-            builder."${elementName}"(content)
-        }
-    }
-    
-    /**
      * Inserts an XML element with the given name and given attributes from the map.
      */
-    static void conditionalWithAttributes(
+    static void conditional(
     		MarkupBuilder builder,
     		String elementName,
     		String content,
-    		Map attributes) {
-        if (attributes) {
+    		Map attributes = [:]) {
+        if (content) {
             builder."${elementName}"(attributes, content)
-        }else{
-        	conditional(builder, elementName, content)
         }
     }
     
