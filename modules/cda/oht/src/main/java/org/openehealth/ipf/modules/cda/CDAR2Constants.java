@@ -23,6 +23,8 @@ public interface CDAR2Constants {
     // W3C XML Schema
 
     static final String CDAR2_SCHEMA = "schema/cdar2/infrastructure/cda/CDA.xsd";
+    
+    static final String IHE_LAB_SCHEMA = "schema/ihe_lab/infrastructure/cda/LabCDA.xsd";
 
     static final String HITSP_24_SCHEMA = "schema/itspc32_v2.4_20090414/infrastructure/cda/C32_CDA.xsd";
 
@@ -35,6 +37,8 @@ public interface CDAR2Constants {
     static final String CDA4CDT_SCHEMATRON_RULES = "schematron/cda4cdt_20090206/HandP.sch";
 
     static final String IHE_BPPC_SCHEMATRON_RULES = "schematron/ihe_bppc_20090518/BPPC.sch";
+    
+    static final String IHE_LAB_SCHEMATRON_RULES = "schematron/ihe_lab_v21_20080803/IHE_LAB.sch";
 
     static final String IHE_PCC_ANTEPARTUM_EDUCATION_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/ape.sch";
 

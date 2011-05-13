@@ -1,0 +1,21 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+2.3.3.13.2 Non-Human Subject 1.3.6.1.4.1.19376.1.3.3.1.2.
+ -->
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.2-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.2"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='parent::cda:ClinicalDocument
+             and self::cda:recordTarget'>
+     Error: The templateId  1.3.6.1.4.1.19376.1.3.3.1.2 is a child element of recordTarget and represents a human patient directly impacted by a non-human subject of laboratory testing.
+   </assert> 
+
+   <assert test='cda:patientRole/cda:id'>
+      Error: The patientRole/id element shall be present and shall represent the id of the non-human subject.</assert> 
+
+   <assert test='cda:patientRole/cda:patient[@nullFlavor = "OTH"]'>
+      Error: The patientRole/patient shall be present with as a nullFlavor set to "OTH".</assert>
+
+ </rule>
+</pattern>
