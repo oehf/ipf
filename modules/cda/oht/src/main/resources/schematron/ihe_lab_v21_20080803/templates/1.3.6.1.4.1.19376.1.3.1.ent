@@ -1,0 +1,96 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+ They are used in conjunction with the LabCDA.xsd file. An instance of a lab document must first validate to the LabCDA schema. 
+ Then these rules are applied for additional checks to insure conformance to the profile.
+ -->
+ 
+<pattern id='p-1.3.6.1.4.1.19376.1.3.1-errors'>
+
+ <!--  TF_Vol3_Ref_2.3.5.1.1 Derivation of the Text Block of a Section from the Data of an Entry -->
+    
+  <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1"]'>  
+        
+        <assert test='ancestor::cda:component
+             and parent::cda:section
+             and self::cda:entry'>
+           Error: The templateId  1.3.6.1.4.1.19376.1.3.1 is a child element of component/section/entry.
+        </assert>
+        
+        <assert test='@typeCode="DRIV"'>
+           Error: The entry/@typeCode equals "DRIV".
+       </assert> 
+       
+        <assert test='count(following-sibling::cda:entry) = 0 and count(preceding-sibling::cda:entry) = 0'>
+           Error: A leaf section shall contain one entry containing the machine-readable result data rendered in the section.
+         </assert>   
+   
+       <assert test='cda:act[@classCode="ACT"] and cda:act[@moodCode="EVN"]'>Error: The act/@classCode shall be "ACT" and the act/@moodCode shall be "EVN" for a laboratory report.</assert>  
+       <assert test='cda:act/cda:statusCode'>Error: The act/statusCode element shall be present</assert>
+       <assert test='cda:act/cda:statusCode[@code="completed"] or cda:statusCode[@code="active"] or cda:statusCode[@code="aborted"]'>
+              Error: the act/statusCode/@code value shall be "completed", "active", or "aborted". 
+       </assert>
+   
+   </rule>
+   
+   <rule context='cda:entry/cda:act'>    
+      <assert test='descendant::cda:entryRelationship/@typeCode="COMP"'>Error: The act/entryRelationship/@typeCode shall be "COMP".</assert>
+      <assert test='count(descendant::*/cda:observation/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.6"]) &gt;=1'>
+          Error: Every root act under an entry shall contain at least one observation element identified with templateId = "1.3.6.1.4.1.19376.1.3.1.6" in it's subordinate tree. Missing an observation element.</assert>
+   </rule>   
+   
+   <!--
+   <rule context='cda:entry/cda:act//cda:observation'>  
+      <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.6"] or cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.1.1"] or cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.1.2"]'>
+         Error: The observation/templateId/@root shall equal "1.3.6.1.4.1.19376.1.3.1.6" and identifies a Laboratory Observation. It shall be present.         
+      </assert>  
+      
+   </rule>    
+  -->
+  
+ </pattern>
+ 
+<pattern id='p-1.3.6.1.4.1.19376.1.3.1-warnings'>
+
+ <!-- 2.3.5.1.3 List of Content Modules Available for Level 3 -->
+ <!-- Checking for R2 modules -->
+ 
+   <rule context='/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component'>
+      
+      <assert test='descendant::*//cda:entryRelationship/cda:act/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.2"]'>
+           Warning: The entryRelationship/act/templateId="1.3.6.1.4.1.19376.1.3.1.2" identifies a Specimen Collection. It shall be present if known.
+      </assert>   
+ 
+      <assert test='descendant::*//cda:entryRelationship/cda:act/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.3"]'>
+           Warning: The entryRelationship/act/templateId="1.3.6.1.4.1.19376.1.3.1.3" identifies a Specimen Received. It shall be present if known.
+      </assert>   
+      
+      <assert test='descendant::*//cda:entryRelationship/cda:procedure/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.8"]'>
+           Warning: The entryRelationship/procedure/templateId="1.3.6.1.4.1.19376.1.3.1.8" identifies a Specimen Site. It shall be present if known.
+      </assert>   
+        
+      <assert test='descendant::*//cda:entryRelationship/cda:organizer/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.1"]'>
+           Warning: The entryRelationship/organizer/templateId="1.3.6.1.4.1.19376.1.3.1.1" identifies a Notification Organization. It shall be present if known.
+      </assert>   
+         
+       <assert test='descendant::*//cda:entryRelationship/cda:organizer/cda:component/cda:observation/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.1.1"]'>
+           Warning: The entryRelationship/cda:organizer/cda:component/cda:observation/templateId="1.3.6.1.4.1.19376.1.3.1.1.1" identifies a Notifiable Condition. It shall be present if known.
+      </assert>   
+    
+      <assert test='descendant::*//cda:entryRelationship/cda:organizer/cda:component/cda:observation/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.1.2"]'>
+           Warning: The entryRelationship/organizer/component/observation/templateId="1.3.6.1.4.1.19376.1.3.1.1.2" identifies a Case Identifier. It shall be present if known.
+      </assert>   
+    
+       <assert test='descendant::*//cda:entryRelationship/cda:organizer/cda:component/cda:observation/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.1.3"]'>
+           Warning: The entryRelationship/organizer/component/observation/templateId="1.3.6.1.4.1.19376.1.3.1.1.3" identifies an Outbreak Identifier. It shall be present if known.
+      </assert>   
+    
+      <assert test='descendant::*//cda:entryRelationship/cda:organizer/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.5"]'>
+           Warning: The entryRelationship/organizer/templateId="1.3.6.1.4.1.19376.1.3.1.5" identifies a Laboratory Isolate Organizer. It shall be present if known.
+      </assert>   
+    
+      <assert test='descendant::*//cda:entryRelationship/cda:organizer/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1.4"]'>
+           Warning: The entryRelationship/organizer/templateId="1.3.6.1.4.1.19376.1.3.1.4" identifies a Laboratory Battery Organizer. It shall be present if known.
+      </assert>   
+       
+      </rule>
+   </pattern>
+ 

@@ -1,0 +1,45 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+2.3.5.8.1 Notifiable Condition 1.3.6.1.4.1.19376.1.3.1.1.1.
+ -->
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.1.1-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.1.1"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='ancestor::cda:organizer and
+                 parent::cda:component and 
+                 self::cda:observation'>
+     Error: The templateId  1.3.6.1.4.1.19376.1.3.1.1.1 is a child element of organizer/component/observation and identifies a Notifiable Condition.
+   </assert>      
+     
+   <assert test='@classCode="COND"'>Error: An observation/classCode shall be "COND" for Notifiable Condition.</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: An observation/moodCode shall be "EVN" for Notifiable Condition.</assert>
+   
+   <assert test='cda:code'>
+           Error: The observation/code element shall be present for Notifiable Condition.</assert>
+            
+   <assert test='cda:code/cda:qualifier'>
+            Error: The observation/code/qualifier element shall be present for Notifiable Condition.
+   </assert>   
+   
+    <assert test='cda:code/cda:qualifier/cda:name'>
+            Error: The observation/code/qualifier/name element shall be present for Notifiable Condition.
+   </assert>   
+   
+    <assert test='cda:code/cda:qualifier/cda:value'>
+            Error: The observation/code/qualifier/value element shall be present for Notifiable Condition.
+   </assert>   
+      
+  <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="aborted"]'>
+           Error: The observation/statusCode/@code shall be "completed" or "aborted" for Notifiable Condition.</assert>
+  
+  <assert test='cda:value'>Error: The observation/value element shall be present for Notifiable Condition.</assert>
+  
+  <assert test='cda:value[@xsi:type="CE"]'>Error: The observation/value/@xsi:type shall have the value of "CE" for Notifiable Condition.</assert>
+ 
+  
+ </rule>
+ 
+</pattern>
+
