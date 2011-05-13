@@ -1,0 +1,37 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+2.3.5.3 Non-Human Subject 1.3.6.1.4.1.19376.1.3.3.1.3.1.
+ -->
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.3.1-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.3.1"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:subject'>
+     Error: The templateId  1.3.6.1.4.1.19376.1.3.3.1.3.1 is a child element of subject and represents a non-human subject of laboratory testing.
+   </assert> 
+   
+   <assert test='cda:relatedSubject'>
+      Error: The subject/relatedSubject element shall be present.
+   </assert>
+   
+   <assert test='cda:relatedSubject/cda:code'>
+       Error: The subject/relatedSubject/code element shall be present.
+   </assert>
+   
+   <assert test='cda:relatedSubject/cda:addr'>
+       Error: The subject/relatedSubject/addr element shall be present.
+   </assert>
+   
+    
+ </rule>
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.3.1-warning'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.3.1"]'>
+      <assert test='(cda:relatedSubject/cda:addr) and (normalize-space(cda:relatedSubject/cda:addr) 
+                 or count(cda:relatedSubject/cda:addr/child::*) &gt; 0)
+                 or (cda:relatedSubject/cda:addr/@nullFlavor)'>
+           Warning: A subject/relatedSubject/addr should have a non-blank addr element or nullFlavor.</assert> 
+</rule>
+</pattern>

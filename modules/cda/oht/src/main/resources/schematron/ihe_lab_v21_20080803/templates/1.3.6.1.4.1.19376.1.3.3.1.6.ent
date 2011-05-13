@@ -1,0 +1,61 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+2.3.3.19 Ordering Provider 1.3.6.1.4.1.19376.1.3.3.1.6.
+ -->
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.6-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.6"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='parent::cda:participant
+             and self::cda:associatedEntity'>
+     Error: The templateId  1.3.6.1.4.1.19376.1.3.3.1.6 is a child of participant/associatedEntity. The participant may be present.
+   </assert> 
+
+     <assert test='parent::cda:participant[@typeCode="REF"]'>
+      Error: When the ordering provider templateId "1.3.6.1.4.1.19376.1.3.3.1.6" is indicated in participant, then the particpant 
+           element shall have a typeCode of "REF".
+   </assert>
+   <assert test='cda:addr'>Error: The participant/associatedEntity/addr element shall be present.</assert>
+   
+   <assert test='cda:telecom'>Error: The participant/associatedEntity/telecom shall be present.</assert>
+   
+   <assert test='cda:associatedPerson/cda:name'>
+      Error: The participant/associatedEntity/associatedPerson/name element shall be present.
+   </assert>
+   
+   <!-- These rules are in accordance with 2.3.3.1 - The general constraints applied to organizations when a receivedOrganization is present -->
+  
+   <assert test='not(cda:scopingOrganization) or 
+                 cda:scopingOrganization/cda:name'>
+      Error: The participant/associatedEntity/scopingOrganization/name element shall be present.
+   </assert>
+ 
+   <assert test='not(cda:scopingOrganization) or 
+                 cda:scopingOrganization/cda:telecom'>
+      Error: The participant/associatedEntity/scopingOrganization/telecom element shall be present.
+   </assert>
+ 
+   <assert test='not(cda:scopingOrganization) or 
+                 cda:scopingOrganization/cda:addr'>
+      Error: The participant/associatedEntity/scopingOrganization/addr element shall be present.
+   </assert>
+ </rule>
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.1.6-warnings'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.1.6"]'>
+      <assert test='(cda:addr) and (normalize-space(cda:addr) 
+                 or count(cda:addr/child::*) &gt; 0)
+                 or (cda:addr/@nullFlavor)'>
+           Warning: A participant/associatedEntity should have a non-blank addr element or nullFlavor.</assert> 
+   <assert test='(cda:telecom/@value) and normalize-space(cda:telecom/@value)
+                 or (cda:telecom/@nullFlavor)'>
+           Warning: A participant/associatedEntity/telecom/@value should have a non-blank value or nullFlavor.</assert>    
+    <assert test='(cda:name) and (normalize-space(cda:name)
+                 or count(cda:name/child::*) &gt; 0)
+                 or (cda:name/@nullFlavor)'>
+           Warning: A participant/associatedEntity entity should have a non-blank name element or nullFlavor.</assert>
+   
+ </rule>
+ </pattern>

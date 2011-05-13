@@ -1,0 +1,49 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+ They are used in conjunction with the LabCDA.xsd file. An instance of a lab document must first validate to the LabCDA schema. 
+ Then these rules are applied for additional checks to insure conformance to the profile.
+ -->
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.2.2-errors'>
+
+<!-- TF_Vol3_Ref_2.3.4.2 Laboratory Report Item Section 1.3.6.1.4.1.19376.1.3.3.2.2 Section -->
+<!--
+    <rule context='cda:structuredBody/cda:component/cda:section/cda:component/cda:section'> 
+      <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.2.2"]'>
+         Error: The component/section/templateId/@root shall equal 1.3.6.1.4.1.19376.1.3.3.2.2 and identifies the section as a Laboratory Report Item Section under a Laboratory Speciality Section.           
+      </assert>  
+    </rule>
+-->
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.2.2"]'>  
+         
+       <assert test='ancestor::cda:section
+             and parent::cda:component
+             and self::cda:section'>
+        Error: The templateId  1.3.6.1.4.1.19376.1.3.3.2.2 identifies a section as a Laboratory Report Item Section under a Laboratory Specialty Section.
+       </assert> 
+    
+   <!-- rule context='//cda:structuredBody/cda:component/cda:section/cda:component/child::cda:section'--> 
+    
+   <assert test='count(cda:component/cda:section) = 0'>
+          Error: The body of a laboratory report is organized as a tree of up to two levels of section.
+    </assert>
+   <assert test='cda:code'>Error:The Laboratory Report Item Section shall have a code element.</assert>
+   <assert test='cda:code[@code]'>Error: The Laboratory Report Item Section code/@code shall be present.</assert>
+   <assert test='cda:code[@codeSystem]'>Error: The Laboratory Report Item Section code/@codeSystem shall be present.</assert>
+   <assert test='cda:code[@displayName]'>Error: The Laboratory Report Item Section code/@displayName shall be present.</assert>   
+   
+<!-- Checking for the narrative non-blank text box and the entry element for a leaf section -->   
+ 
+   <assert test='normalize-space(cda:text) or count(cda:text/child::*) &gt; 0'>Error:The Laboratory Report Item Section shall contain a non-blank text block that presents the human-readable rendering of the lab report.</assert>
+   
+   <assert test='cda:entry[@typeCode="DRIV"]'>Error: The Laboratory Report Item Section entry element shall have a typeCode of "DRIV"</assert>       
+  
+   
+   <assert test='not(cda:entry) or cda:entry/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1"]'>
+           Error: The templateId for component/section/section/entry/templateId/@root shall be "1.3.6.1.4.1.19376.1.3.1".
+   </assert>      
+   
+   </rule>      
+      
+ </pattern>
+ 
+ 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The following definitions define laboratory extensions to the CDA_R2 -->
+<xs:schema xmlns="urn:oid:1.3.6.1.4.1.19376.1.3.2" targetNamespace="urn:oid:1.3.6.1.4.1.19376.1.3.2" xmlns:cda="urn:hl7-org:v3" 
+    xmlns:mif="urn:hl7-org:v3/mif" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"> 
+    <xs:include schemaLocation="../../processable/coreschemas/datatypes.xsd"/>
+    <!-- xs:include schemaLocation="../../processable/coreschemas/voc.xsd"/ -->
+    
+    <xs:import  namespace="urn:hl7-org:v3" schemaLocation="LabPOCD_MT000040.xsd"></xs:import>
+    
+    <!-- NIST The labStatusCode is used to include the extension for IHE-TF-Vol3 documentOf/serviceEvent/statusCode -->
+    
+    <!--xs:element name="labServiceEvent" type="labStatusCode"></xs:element-->
+       <xs:complexType name="labStatusCode">
+           <xs:complexContent>
+               <xs:extension base="cda:POCD_MT000040.ServiceEvent">
+                <xs:sequence>
+                    <xs:element name="statusCode" type="cda:CS" minOccurs="0"/>
+                </xs:sequence>
+          
+           </xs:extension>
+           </xs:complexContent>
+       </xs:complexType>
+
+    <!-- NIST The labproductOftypeCode is used to include the extension for IHE-TF-Vol3 specimen/specimenRole -->
+    
+    <xs:complexType name="labSpecimenRole">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.SpecimenRole">
+                <xs:sequence>
+                    <xs:element name="productOf" type="labProcedure" minOccurs="0"></xs:element>
+                </xs:sequence>
+                
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!--xs:element name="procedure" type="labProcedure"></xs:element -->
+    <xs:complexType name="labProcedure">
+                <xs:sequence>
+                    <xs:element name="procedure" type="cda:POCD_MT000040.Procedure"/>
+                </xs:sequence>    
+                <xs:attribute name="typeCode" type="ParticipationType" fixed="PRD"/>
+    </xs:complexType>
+ 
+    <!-- NIST The lab:precondition is used to include the extension for IHE-TF-Vol3 Observation/referenceRange/precondition -->
+ 
+    <xs:complexType name="labReferenceRange">
+        <xs:complexContent>
+            <xs:extension base="cda:POCD_MT000040.ReferenceRange">
+                <xs:sequence>              
+                    <xs:element name="precondition" type="labPrecondition" minOccurs="0" maxOccurs="unbounded"/>                
+                </xs:sequence>     
+            </xs:extension>
+        </xs:complexContent>  
+    </xs:complexType>
+ 
+    <xs:complexType name="labPrecondition">
+        <xs:sequence>
+            <xs:element name="typeId" type="cda:POCD_MT000040.InfrastructureRoot.typeId" minOccurs="0"/>      
+            <xs:element name="criterion" type="labCriterion" minOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipType" use="optional" fixed="PRCN"/>
+        </xs:complexType>
+    
+    <xs:complexType name="labCriterion">
+        <xs:sequence>
+            <xs:element name="code" type="CD" minOccurs="0"/>         
+            <xs:element name="value" type="ANY" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassObservation" use="optional" default="OBS"/>
+        <xs:attribute name="moodCode" type="ActMood" use="optional" fixed="EVN"/>
+    </xs:complexType>
+    
+</xs:schema>
