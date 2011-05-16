@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.hl7.validation
 
-import ca.uhn.hl7v2.validation.ValidationContext
-
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
 import org.openehealth.ipf.modules.hl7.validation.builder.ValidationContextBuilder
 
@@ -27,7 +26,7 @@ public class SampleRulesBuilder extends ValidationContextBuilder {
 
     // We define only a subset of the segments defined in the HL7 2.2 spec
     
-    public RuleBuilder forContext(ValidationContext context) {
+    public RuleBuilder forContext(DefaultValidationContext context) {
         new RuleBuilder(context)
           .forVersion('2.2')
             .message('ADT', 'A01').abstractSyntax(
