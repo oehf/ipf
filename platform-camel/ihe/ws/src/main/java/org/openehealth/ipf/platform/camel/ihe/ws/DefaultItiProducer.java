@@ -108,7 +108,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
     
     @Override
     public void process(Exchange exchange) throws Exception {
-        log.debug("Calling webservice on '" + getServiceInfo().getServiceName() + "' with " + exchange);
+        log.debug("Calling web service on '" + getServiceInfo().getServiceName() + "' with " + exchange);
         
         // prepare
         InType body = exchange.getIn().getBody(inTypeClass);
@@ -120,7 +120,13 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
 
         enrichRequestExchange(exchange, requestContext);
         processUserDefinedOutgoingHeaders(requestContext, exchange.getIn(), true);
-        
+
+        // set request encoding based on Camel exchange property
+        String requestEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+        if (requestEncoding != null) {
+            requestContext.put(org.apache.cxf.message.Message.ENCODING, requestEncoding);
+        }
+
         // get and analyse WS-Addressing asynchrony configuration
         String replyToUri = 
             allowAsynchrony 
@@ -166,6 +172,11 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
             Map<String, Object> responseContext = bindingProvider.getResponseContext();
             processIncomingHeaders(responseContext, responseMessage);
             enrichResponseMessage(responseMessage, responseContext);
+
+            // set Camel exchange property based on response encoding
+            exchange.setProperty(Exchange.CHARSET_NAME,
+                    responseContext.get(org.apache.cxf.message.Message.ENCODING));
+
             responseMessage.setBody(result);
         } 
     }

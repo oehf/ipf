@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 
 /**
- * An exception class for message adapting in MLLP consumer and producer.
+ * An exception class for HL7v2 message adapting.
  * @author Dmytro Rud
  */
 public class Hl7v2AdaptingException extends RuntimeException {

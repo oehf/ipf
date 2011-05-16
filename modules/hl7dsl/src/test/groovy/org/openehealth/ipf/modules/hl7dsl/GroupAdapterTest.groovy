@@ -15,12 +15,15 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import ca.uhn.hl7v2.model.v24.group.ORU_R01_PATIENT;
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
+import ca.uhn.hl7v2.model.v24.group.ORU_R01_OBSERVATION
+import ca.uhn.hl7v2.model.v24.group.ORU_R01_ORDER_OBSERVATION
+import ca.uhn.hl7v2.model.v24.group.ORU_R01_PATIENT
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 /**
  * @author Martin Krasser
  * @author Christian Ohr
+ * @author Mitko Kolev
  */
 class GroupAdapterTest extends GroovyTestCase {
     
@@ -58,6 +61,31 @@ class GroupAdapterTest extends GroovyTestCase {
         assert message['PATIENT_RESULT'](0)['PATIENT']['PID'] instanceof SegmentAdapter
     }
     
+    void testPath(){
+         assert message.path == ''
+         assert message.PATIENT_RESULT(0).path == 'PATIENT_RESULT(0)'
+         assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT.PID'
+         assert message.PATIENT_RESULT(0).PATIENT.PID.path == 'PATIENT_RESULT(0).PATIENT.PID'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0)'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(0).path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0)'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBR.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBR'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBR.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBR'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBSERVATION.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0)'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBSERVATION(0).path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0)'
+         
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION.OBSERVATION(0).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX'
+         
+         assert 2 == message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION().size()
+         
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(0).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(0).OBX'
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX'
+         
+         //OBSERVATION(2) is created even though it is not in the message.
+         //This is a feature of the DSL, see SelectorClosure call implementation 
+         assert message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(2).OBX.path == 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(2).OBX'
+    }
+
     void testCount() {
         assert message.PATIENT_RESULT(0).count('ORDER_OBSERVATION') == 2
         

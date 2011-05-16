@@ -40,8 +40,14 @@ http://cxf.apache.org/schemas/configuration/security.xsd
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
-                <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.DataHandlerToByteArrayConverter" />
+                <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ClinicalDocumentToByteArrayConverter" />
                 <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToClinicalDocumentConverter" />
+
+                <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.DomToByteArrayConverter" />
+                <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToDomConverter" />
+
+                <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.ByteArrayToDataHandlerConverter" />
+                <bean class="org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.DataHandlerToByteArrayConverter" />
             </list>
         </property>
     </bean>

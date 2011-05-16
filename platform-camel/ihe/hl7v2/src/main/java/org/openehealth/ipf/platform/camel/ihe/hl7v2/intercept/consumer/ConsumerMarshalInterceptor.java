@@ -20,7 +20,6 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
@@ -35,21 +34,20 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
 
 /**
  * Consumer-side HL7 marshaling/unmarshaling interceptor.
+ * <p>
+ * When the Camel exchange does not contain property {@link Exchange#CHARSET_NAME},
+ * the default system character set will be used.
+ *
  * @author Dmytro Rud
  */
 public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
     private static final transient Log LOG = LogFactory.getLog(ConsumerMarshalInterceptor.class);
 
-    private final String charsetName;
-
     public ConsumerMarshalInterceptor(
             Hl7v2ConfigurationHolder configurationHolder,
-            String charsetName,
             Processor wrappedProcessor)
     {
         super(configurationHolder, wrappedProcessor);
-        Validate.notEmpty(charsetName);
-        this.charsetName = charsetName;
     }
 
 
@@ -88,7 +86,6 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
         // run the route
         if( ! unmarshallingFailed) {
             try {
-                exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
                 getWrappedProcessor().process(exchange);
             } catch (Hl7v2AdaptingException mae) {
                 throw mae;
@@ -102,7 +99,7 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
         // marshal if necessary
         String s = Hl7v2MarshalUtils.marshalStandardTypes(
                 resultMessage(exchange),
-                charsetName,
+                characterSet(exchange),
                 parser);
         resultMessage(exchange).setBody(s);
     }

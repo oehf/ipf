@@ -53,11 +53,24 @@ class SelectorClosure extends Closure {
 	}	
 	
 	protected Object doCall(Object argument) {
-		argument != null ? 
-				(elements.size <= argument ? 
-						adapter.nrp(index) :
-						elements[argument]) : 
-				elements
+		if (argument != null){
+            return elementAt(argument)
+		}else {	
+            return elements
+		}
 	}
 	
+    def elementAt(argument){
+        def element
+        if (elements.size <= argument){
+            element = adapter.nrp(index)
+        } else {
+            element = elements[argument]
+        }
+        switch (element){
+            case SegmentAdapter :
+            case GroupAdapter   : element.setPath(element.path + "(${argument})")
+        }
+        element
+    }
 }

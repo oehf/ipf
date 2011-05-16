@@ -113,15 +113,19 @@ class Hl7v3Utils {
 
     
     /**
-     * Inserts an XML element with the given name if the corresponding content is present.
+     * Inserts an XML element with the given name and given attributes from the map.
      */
-    static void conditional(MarkupBuilder builder, String elementName, String content) {
+    static void conditional(
+    		MarkupBuilder builder,
+    		String elementName,
+    		String content,
+    		Map attributes = [:]) {
         if (content) {
-            builder."${elementName}"(content)
+            builder."${elementName}"(attributes, content)
         }
     }
     
-
+    
     /**
      * Removes time zone from date/time representation (i.e. suffix "[+-].*").
      */

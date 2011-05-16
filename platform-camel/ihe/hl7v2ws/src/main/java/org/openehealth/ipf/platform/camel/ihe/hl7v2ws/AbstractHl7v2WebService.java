@@ -41,12 +41,24 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v2.AcceptanceCheckUtils.
 public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
     private static final Log LOG = LogFactory.getLog(AbstractHl7v2WebService.class);
 
-    private final Hl7v2TransactionConfiguration config;
-    private final NakFactory nakFactory;
+    private Hl7v2TransactionConfiguration config = null;
+    private NakFactory nakFactory = null;
 
 
-    public AbstractHl7v2WebService(Hl7v2ConfigurationHolder configurationHolder) {
-        super();
+    /**
+     * Configures HL7v2-related parameters of this Web Service.
+     * This method is supposed to be called only once, directly after
+     * an instance of this class has been created.  In other words,
+     * this is a kind of "post-constructor".
+     *
+     * @param configurationHolder
+     *      source of HL7v2-related configuration parameters.
+     */
+    void setHl7v2Configuration(Hl7v2ConfigurationHolder configurationHolder) {
+        if ((this.config != null) || (this.nakFactory != null)) {
+            throw new IllegalStateException("multiple calls to this method are not allowed");
+        }
+
         this.config = configurationHolder.getTransactionConfiguration();
         this.nakFactory = configurationHolder.getNakFactory();
     }
@@ -67,8 +79,6 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
 
         // play the route, handle its outcomes and check response acceptance
         try {
-            // TODO: set exchange property "Exchange.CHARSET_NAME" ?
-
             Exchange exchange = super.process(msg);
             if (exchange.getException() != null) {
                 throw exchange.getException();

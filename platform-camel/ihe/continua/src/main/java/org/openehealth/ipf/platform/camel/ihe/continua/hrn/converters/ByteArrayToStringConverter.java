@@ -15,15 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.core.convert.converter.Converter;
 
 /**
  * @author Stefan Ivanov
  */
 public class ByteArrayToStringConverter implements Converter<byte[], String> {
-    private final static transient Log LOG = LogFactory.getLog(ByteArrayToStringConverter.class);
 
     @Override
     public String convert(byte[] source) {

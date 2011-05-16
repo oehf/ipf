@@ -16,26 +16,20 @@
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.core.convert.converter.Converter;
-
 import javax.activation.DataHandler;
-import java.io.IOException;
 
 /**
  * @author Stefan Ivanov
  */
 public class DataHandlerToByteArrayConverter implements Converter<DataHandler, byte[]> {
-    private final static transient Log LOG = LogFactory.getLog(DataHandlerToByteArrayConverter.class);
 
     @Override
     public byte[] convert(DataHandler source) {
         try {
             return IOUtils.toByteArray(source.getInputStream());
-        } catch (IOException e) {
-            LOG.error(e);
-            return null;
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
         }
     }
 }

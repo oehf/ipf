@@ -16,23 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.SimpleHl7v2WebService;
 
 /**
- * Service implementation for the IHE PCD-01 transaction.
  * @author Dmytro Rud
- * @author Mitko Kolev
  */
-public class Pcd01Service extends AbstractHl7v2WebService implements Pcd01PortType {
-
-    public Pcd01Service() {
-        super(new Pcd01Component());
-    }
-
-    @Override
-    public String communicate(String requestXmlString){
-        return doProcess(requestXmlString);
-    }
+public class Pcd01Service extends SimpleHl7v2WebService implements Pcd01PortType {
 }
-
-

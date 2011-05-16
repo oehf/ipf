@@ -1,0 +1,286 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+ They are used in conjunction with the LabCDA.xsd file. An instance of a lab document must first validate to the LabCDA schema. 
+ Then these rules are applied for additional checks to insure conformance to the profile.
+ -->
+ 
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3-errors'>
+  
+  
+   <rule context='/cda:ClinicalDocument'>   
+   
+    <!-- TF_Vol3_Ref_2.3.3.3 ClinicalDocument/Realm Code-->
+    <assert test='cda:realmCode'>
+           Error: The ClinicalDocument/realmCode element shall be present and is valued from the RealmOfUse 2.16.840.1.113883.1.11.11050 subset, within the VocabularyDomainQualifier value set.</assert>       
+  
+   <!-- TF_Vol3_Ref_2.3.3.4 ClinicalDocument/typeId-->
+   
+   <assert test='cda:typeId[@extension="POCD_HD000040"]'>
+          Error: The ClinicalDocument/typeId/@extension shall equal "POCD_HD000040" (which is the unique identifier for the CDA, Release Two Hierarchical Description.</assert>       
+  
+  <!-- TF_Vol3_Ref_2.3.3.5 ClinicalDocument/templateId -->
+   
+   <assert test='cda:templateId and cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3"]'>
+          Error: The templateId element shall be present with a root attribute equal to "1.3.6.1.4.1.19376.1.3.3".</assert>
+ 
+ <!-- TF_Vol3_Ref_2.3.3.7 ClinicalDocument/code
+   Checking  code and displayName for 2.3.3.7.1 Multi-disciplinary [code = 11502-2] Laboratory Report or 2.3.3.7.2 Single Discipline Laboratory Report [code list of Laboratory Specialities in section 2.3.4.1.1] -->
+  
+    <assert test='( cda:code[@codeSystem="2.16.840.1.113883.6.1"] and cda:code[@codeSystemName="LOINC"]) and 
+     (cda:code[@code="11502-2"] or (cda:code[@code="18717-9"]) or (cda:code[@code="18718-7"]) 
+     or (cda:code[@code="18719-5"]) or (cda:code[@code="18720-3"]) or (cda:code[@code="18721-1"]) 
+     or (cda:code[@code="18722-9"]) or (cda:code[@code="18723-7"]) or (cda:code[@code="18724-5"]) 
+     or (cda:code[@code="18725-2"]) or (cda:code[@code="18727-8"]) or (cda:code[@code="18728-6"]) 
+     or (cda:code[@code="18729-4"]) or (cda:code[@code="18767-4"]) or (cda:code[@code="18768-2"]) 
+     or (cda:code[@code="18769-0"]) or (cda:code[@code="26435-8"]) or (cda:code[@code="26436-6"]) 
+     or (cda:code[@code="26437-4"]) or (cda:code[@code="26438-2"]))'>
+              Error: The ClinicalDocument/code/@codeSystem shall be 2.16.840.1.113883.6.1 with the @codeSystemName equal to LOINC. 
+              The @code values shall be one of the following: 
+              "11502-2", "18717-9","18718-7", "18719-5", 
+              "18720-3", "18721-1", "18722-9", "18723-7",  
+              "18724-5", "18725-2", "18727-8", "18728-6",
+              "18729-4", "18767-4", "18768-2", "18769-0", 
+              "26435-8", "26436-6", "26437-4", "26438-2". 
+   </assert> 
+ 
+ 
+ <!-- TF_Vol3_Ref_2.3.3.8 ClinicalDocument/effectiveTime -->
+ 
+   <assert test='cda:effectiveTime'>Error: The ClinicalDocument/effectiveTime element shall be present.</assert>
+  
+  
+<!-- TF_Vol3_Ref_2.3.3.9 ClinicalDocument/confidentialityCode -->
+<!-- Element check done by schema -->
+ 
+ <!-- TF_Vol3_Ref_2.3.3.10 ClinicalDocument/languageCode -->
+   <assert test='cda:languageCode'>Error: The ClinicalDocument/languageCode element shall be present.</assert>
+ 
+<!-- TF_Vol3_Ref_2.3.3.11 ClinicalDocument/setId --> 
+
+   <assert test='cda:setId'>Error: The ClinicalDocument/setId element shall be present.</assert> 
+
+<!-- TF_Vol3_Ref_2.3.3.12 ClinicalDocument/versionNumber --> 
+<!-- Optional element Not checked -->
+
+<!-- TF_Vol3_Ref_2.3.3.13 ClinicalDocument/recordTarget -->
+<!-- TF_Vol3_Ref_2.3.3.13.1 ClinicalDocument/recordTarget Human Patient -->
+    
+   <assert test='cda:recordTarget/cda:patientRole/cda:addr'>Error: The recordTarget/patientRole shall have an address.</assert>
+   <assert test='cda:recordTarget/cda:patientRole/cda:telecom'>Error: The recordTarget/patientRole shall have a telecom.</assert>  
+   <assert test='(//cda:patientRole/cda:patient/cda:name)'>Error: The recordTarget/patientRole/patient element shall have a name.</assert> 
+   <assert test='cda:recordTarget/cda:patientRole/cda:patient/cda:administrativeGenderCode'>Error: The recordTarget/patientRole/patient/adminstrativeGenderCode element shall be present.</assert>
+   <assert test='cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime'>Error: The recordTarget/patientRole/patient/birthTime element shall be present.</assert>
+
+
+<!-- TF_Vol3_Ref_2.3.3.14 ClinicalDocument/author -->
+    
+   <assert test='cda:author'>Error: A ClinicalDocument/author shall be present.</assert>
+   <assert test='cda:author/cda:time'> The ClinicalDocument/author/time element shall be present</assert>
+   <assert test='cda:author/cda:assignedAuthor/cda:assignedPerson | cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice'>Error: An assignedAuthor element shall contain at least one assignedPerson or assignedAuthoringDevice element.</assert>
+   
+   <assert test='cda:author/cda:assignedAuthor/cda:addr'>Error: The author/assignedAuthor/addr element shall be present.</assert> 
+   <assert test='cda:author/cda:assignedAuthor/cda:telecom'>Error: The author/assignedAuthor/telecom element shall be present.</assert>
+  
+   <assert test='(cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name) or (cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice/cda:softwareName)'>
+           Error: The author/assignedAuthor/assignedPerson shall have a name element or author/assignedAuthor/assignedAuthoringDevice shall have a softwareName element.</assert>
+    
+
+<!-- TF_Vol3_Ref_2.3.3.15 ClinicalDocument/custodian -->
+ 
+    <assert test='cda:custodian'>Error: A ClinicalDocument/custodian shall be present.</assert>
+   <assert test='cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:id'>
+           Error: custodian/assignedCustodian/representedCustodianOrganization/id element shall be present.</assert>
+   
+   <assert test='cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr'>Error: The custodian/assignedCustodian/representedCustodianOrganization/address element shall be present.</assert>
+   <assert test='cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:telecom'>Error: The custodian/assignedCustodian/representedCustodianOrganization/telecom element shall be present.</assert>
+   
+   <assert test='(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:name)'> Error: A custodian/assignedCustodian/representedCustodianOrganization/name element shall be present.</assert> 
+  
+  
+  </rule>
+       
+<!-- TF_Vol3_Ref_2.3.3.17 ClinicalDocument/legalAuthenticator -->
+     
+   <rule context='/cda:ClinicalDocument/cda:legalAuthenticator'>   
+
+      <assert test='(cda:signatureCode[@code="S"])'>Error: The legalAuthenticator/signatureCode carries the signed "S" status.</assert>   
+      <assert test='cda:assignedEntity/cda:addr'>Error: The legalAuthenticator/assignedEntity shall have an address.</assert>
+      <assert test='cda:assignedEntity/cda:telecom'>Error: The legalAuthenticator/assignedEntity shall have a telecom.</assert>
+      <assert test='cda:assignedEntity/cda:assignedPerson/cda:name'>Error: A legalAuthenticator/assignedEntity/assignedPerson should have a non-blank name element.</assert>
+     
+   </rule>
+   
+<!-- TF_Vol3_Ref_2.3.21 serviceEvent/statusCode -->
+  
+   <rule context='/cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent/lab:statusCode'>  
+      <assert test='(@code="completed") or (@code="active")'>Error: the serviceEvent/statusCode code shall be "completed" or "active".</assert>      
+   </rule>
+   
+<!-- TF_Vol3_Ref_2.3.3.23 ClinicalDocument/relatedDocument/parentDocument --> 
+
+   <rule context='/cda:ClinicalDocument/cda:relatedDocument'>   
+      <assert test='(@typeCode="RPLC")'>Error: The typeCode for relatedDocument shall be "RPLC" for an update to a previous report and the parentDocument element shall be present. The new report replaces the parent one.</assert>  
+   </rule>     
+ 
+ <!-- TF_Vol3_Ref_2.3.3.24 ClinicalDocument/componentOf/encompassingEncounter -->
+ 
+   <rule context='/cda:ClinicalDocument/cda:componentOf/cda:encompassingEncounter'>  
+      <assert test='cda:id'>Error: The id for componentOf/encompassingEncounter shall be present.</assert>
+   
+ <!-- Testing effectiveTime -->    
+      <assert test='cda:effectiveTime'>Error: The effectiveTime for componentOf/encompassingEncounter shall be present.</assert>
+  
+  </rule>
+
+<!-- TF_Vol3_Ref_2.3.4 Content Modules for CDA Sections (Level 2)  -->
+
+   
+   <rule context='cda:structuredBody/cda:component/cda:section'> 
+        <assert test='.'>
+           Error: The component/structuredBody element shall be present.
+         </assert>   
+         <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.2.1"]'>
+           Error: The section/templateId/@root="1.3.6.1.4.1.19376.1.3.3.2.1" is required.
+       </assert>    
+   </rule>
+
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3-warnings'>
+
+ <!-- TF_Vol3_Ref_2.3.13.3 ClinicalDocument/recordTarget -->
+ <!-- testing for required templateId's -->
+ 
+   <rule context='/cda:ClinicalDocument'>
+      
+      <assert test='cda:recordTarget/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.1.2.1"]'>
+           Warning: The recordTarget/templateId="1.3.6.1.4.1.19376.1.3.3.1.2.1" identifies a non-human subject of laboratory testing. It shall be present if known.
+      </assert>     
+    
+     <assert test='cda:recordTarget/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.1.2.2"]'>
+           Warning: The recordTarget/templateId="1.3.6.1.4.1.19376.1.3.3.1.2.2" identifies a human patient directly impacted by a non-human subject of laboratory testing. It shall be present if known.
+      </assert>
+      
+      <assert test='count(cda:recordTarget/cda:patientRole/cda:patient) &gt; 0'>Warning: A recordTarget/patientRole should identify a patient.</assert> 
+       
+      <assert test='(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value) and (normalize-space(cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@value)) 
+            or (cda:recordTarget/cda:patientRole/cda:patient/cda:birthTime/@nullFlavor)'>
+           Warning: recordTarget/patientRole/patient/birthTime should have a non-blank value or nullFlavor.
+      </assert>   
+       
+<!--Checking for addr, telecom and name values -->
+      <assert test='(//cda:patientRole/cda:addr) and (normalize-space(//cda:patientRole/cda:addr) or 
+          count(//cda:patientRole/cda:addr/child::*) &gt; 0) or //cda:patientRole/cda:addr/@nullFlavor'>
+           Warning: A recordTarget/patientRole should have a non-blank addr element or nullFlavor.</assert> 
+     
+     <assert test='(//cda:patientRole/cda:telecom/@value) and normalize-space(//cda:patientRole/cda:telecom/@value) or //cda:patientRole/cda:telecom/@nullFlavor'>
+           Warning: A recordTarget/patientRole/telecom/@value should have a non-blank value or nullFlavor.</assert>   
+     
+     <assert test='(//cda:patientRole/cda:patient/cda:name) and (normalize-space(//cda:patientRole/cda:patient/cda:name) or count(//cda:patientRole/cda:patient/cda:name/child::*) &gt; 0)
+                   or //cda:patientRole/cda:patient/cda:name/@nullFlavor'>
+           Warning: A recordTarget/patientRole/patient should have a non-blank name element or nullFlavor.</assert>
+
+
+<!-- TF_Vol3_Ref_2.3.3.14 ClinicalDocument/author -->
+<!-- checking for addr, telecom elements and name values-->
+
+   <assert test='(cda:author/cda:assignedAuthor/cda:addr) and (normalize-space(cda:author/cda:assignedAuthor/cda:addr) or count(cda:author/cda:assignedAuthor/cda:addr/child::*) &gt; 0)
+                or cda:author/cda:assignedAuthor/cda:addr/@nullFlavor'>
+           Warning: A author/assignedAuthor should have a non-blank addr element or nullFlavor.</assert> 
+   
+   <assert test='(cda:author/cda:assignedAuthor/cda:telecom/@value) and normalize-space(cda:author/cda:assignedAuthor/cda:telecom/@value)
+                or cda:author/cda:assignedAuthor/cda:telecom/@nullFlavor'>
+           Warning: A author/assignedAuthor/telecom/@value should have a non-blank value or nullFlavor.</assert>  
+  
+   <assert test='(cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name and 
+                 (normalize-space(cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name) or count(cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name/child::*) &gt; 0))
+                 or (cda:author/cda:assignedAuthor/cda:assignedPerson/cda:name/@nullFlavor)
+                 or (cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice/cda:softwareName)
+                 or (cda:author/cda:assignedAuthor/cda:assignedAuthoringDevice/cda:softwareName/@nullFlavor)'>
+           Warning: A non-blank name element or nullFlavor should be present for author/assignedAuthor/assignedPerson or a non-blank softwareName or nullFlavor should be present for author/assignedAuthor/assignedAuthoringDevice.
+   </assert>  
+  
+<!-- TF_Vol3_Ref_2.3.3.15 ClinicalDocument/custodian -->  
+<!-- checking for addr and telecom -->
+   
+   <assert test='(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr) and 
+           (normalize-space(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr) or 
+           count(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr/child::*) &gt; 0) or
+           cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:addr/@nullFlavor'>
+           Warning: A custodian/assignedCustodian/representedCustodianOrganization should have a non-blank addr element or nullFlavor.</assert> 
+  
+  <assert test='(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:telecom/@value) 
+           and normalize-space(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:telecom/@value)
+           or (cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:telecom/@nullFlavor)'>
+           Warning: A custodian/assignedCustodian/representedCustodianOrganization/telecom/@value should have a non-blank value or nullFlavor.</assert>    
+
+    <assert test='(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:name) 
+           and (normalize-space(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:name) or count(cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:name/child::*) &gt; 0)
+           or (cda:custodian/cda:assignedCustodian/cda:representedCustodianOrganization/cda:name/@nullFlavor)'>
+           Warning: A custodian/assignedCustodian/representedCustodianOrganization should have a non-blank name element or nullFlavor.</assert>
+  
+    </rule>
+    
+<!-- TF_Vol3_Ref_2.3.3.17 ClinicalDocument/legalAuthenticator -->
+     
+   <rule context='/cda:ClinicalDocument/cda:legalAuthenticator'>   
+
+<!-- checking for addr, telecom  and name flavors -->
+   
+   <assert test='(cda:assignedEntity/cda:addr) and (normalize-space(cda:assignedEntity/cda:addr) or count(cda:assignedEntity/cda:addr/child::*) &gt; 0)
+             or cda:assignedEntity/cda:addr/@nullFlavor'>
+           Warning: A legalAuthenticator/assignedEntity should have a non-blank addr element or nullFlavor.</assert> 
+   
+   <assert test='(cda:assignedEntity/cda:telecom/@value) and normalize-space(cda:assignedEntity/cda:telecom/@value) or cda:assignedEntity/cda:telecom/@nullFlavor'>
+           Warning: A legalAuthenticator/assignedEntity/telecom/@value should have a non-blank value or nullFlavor.</assert>    
+   
+   <assert test='(cda:assignedEntity/cda:assignedPerson/cda:name) and (normalize-space(cda:assignedEntity/cda:assignedPerson//cda:name) 
+            or count(cda:assignedEntity/cda:assignedPerson//cda:name/child::*) &gt; 0) or cda:assignedEntity/cda:assignedPerson//cda:name/@nullFlavor'>
+           Warning: A legalAuthenticator/assignedEntity/assignedPerson should have a non-blank name element or nullFlavor.</assert>
+   
+   </rule>
+    
+<!--TF_Vol3_Ref_4.1.24 serviceEvent/performer -->  
+
+   <rule context='/cda:ClinicalDocument/cda:documentationOf/cda:serviceEvent/cda:performer'>   
+
+<!-- Testing time -->
+     
+    <assert test='(cda:time/cda:low) and (cda:time/cda:low/@value)'>
+           Warning: A documentationOf/serviceEvent/performer/time/low element used to represent a time interval should have a value.</assert>    
+    <assert test='(cda:time/cda:high) and (cda:time/cda:high/@value)'>
+           Warning: A documentationOf/serviceEvent/performer/time/high element used to represent a time interval should have a value.</assert>    
+  
+<!-- checking for addr and telecom -->
+   <assert test='(cda:assignedEntity/cda:addr) and (normalize-space(cda:assignedEntity/cda:addr) or count(cda:assignedEntity/cda:addr/child::*) &gt; 0)'>
+           Warning: A documentOf/serviceEvent/performer/assignedEntity should have a non-blank addr element or nullFlavor.</assert> 
+ 
+   <assert test='(cda:assignedEntity/cda:telecom/@value) and normalize-space(cda:assignedEntity/cda:telecom/@value)'>
+           Warning: A documentOf/serviceEvent/performer/assignedEntity/telecom/@value should have a non-blank value or nullFlavor.</assert>    
+       
+<!-- check for  name -->
+   <assert test='(cda:assignedEntity/cda:assignedPerson/cda:name) and (normalize-space(cda:assignedEntity/cda:assignedPerson//cda:name) or count(cda:assignedEntity/cda:assignedPerson//cda:name/child::*) &gt; 0)'>
+           Warning: A documentOf/serviceEvent/performer/assignedEntity/assignedPerson should have a non-blank name element or nullFlavor.</assert>
+   
+   </rule>
+   
+ <!-- TF_Vol3_Ref_4.1.27 componentOf/encompassingEncounter -->
+ 
+   <rule context='/cda:ClinicalDocument/cda:componentOf/cda:encompassingEncounter'>  
+     
+<!-- Testing effectiveTime -->
+     
+   <assert test='(cda:effectiveTime/cda:low) and (cda:effectiveTime/cda:low/@value)'>
+           Warning: A componentOf/encompassingEncounter/effectiveTime/low element used to represent a time interval should have a value.</assert>    
+  
+  <assert test='(cda:effectiveTime/cda:high) and (cda:effectiveTime/cda:high/@value)'>
+           Warning: A componentOf/encompassingEncounter/effectiveTime/high element used to represent a time interval should have a value.</assert>    
+  
+  </rule>
+
+</pattern>
+
+
+
+
+
+

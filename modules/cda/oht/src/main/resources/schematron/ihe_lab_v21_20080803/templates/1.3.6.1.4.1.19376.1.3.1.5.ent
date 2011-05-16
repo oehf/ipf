@@ -1,0 +1,39 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+2.3.5.9 Laboratory Isolate Organizer 1.3.6.1.4.1.19376.1.3.1.5.
+ -->
+ <pattern id='p-1.3.6.1.4.1.19376.1.3.1.5-errors'>
+
+ <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.1.5"]'>
+
+   <!-- Verify that templateId is used on the appropriate type of object -->
+   <assert test='self::cda:organizer'>
+     Error: The templateId  1.3.6.1.4.1.19376.1.3.1.5 is a child element of organizer and identifies a Laboratory Isolate Organizer.
+   </assert>      
+     
+   <assert test='@classCode="CLUSTER"'>Error: An organizer/@classCode shall be "CLUSTER" for Laboratory Isolate Organizer.</assert>
+  
+   <assert test='@moodCode="EVN"'>Error: An organizer/@moodCode shall be "EVN" for Laboratory Isolate Organizer.</assert>
+   
+   <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="active"] or cda:statusCode[@code="aborted"]'>
+           Error: The organizer/statusCode/@code shall be "completed", "active" or "aborted" for Laboratory Isolate Organizer.</assert> 
+  
+   <assert test='cda:specimen'>Error: The organizer/specimen element shall be present for Laboratory Isolate Organizer.</assert>
+   <assert test='cda:specimen[@typeCode="SPC"]'>Error: The specimen/@typeCode shall be "SPC" for Laboratory Isolate Organizer.</assert>        
+   <assert test='cda:specimen/cda:specimenRole[@classCode="SPEC"]'>Error: The specimen/specimenRole/@classCode shall be "SPEC" for Laboratory Isolate Organizer.</assert>  
+   <assert test='cda:specimen/cda:specimenRole/cda:specimenPlayingEntity'>Error: The specimen/specimenRole/specimenPlayingEntity shall be present Laboratory Isolate Organizer.</assert>
+   <assert test='cda:specimen/cda:specimenRole/cda:specimenPlayingEntity[@classCode="MIC"]'>Error: The specimen/specimenRole/specimenPlayingEntity/@classCode shall be "MIC" Laboratory Isolate Organizer.</assert>  
+   <assert test='cda:specimen/cda:specimenRole/cda:specimenPlayingEntity/cda:code'>Error: The specimen/specimenRole/specimenPlayingEntity shall be present Laboratory Isolate Organizer.</assert>
+  
+    <assert test='not(cda:performer) or cda:performer[@typeCode="PRF"]'>Error: The performer/@typeCode shall be "PRF" Laboratory Isolate Organizer.</assert> 
+
+   <assert test='not(cda:author) or cda:author[@typeCode="AUT"]'>Error: The author/@typeCode shall be "AUT" for Laboratory Isolate Organizer.</assert>  
+  
+   <assert test='not(cda:participant) or cda:participant[@typeCode="AUTHEN"] or cda:participant[@typeCode="RESP"] or cda:participant[@typeCode="DEV"]'>
+        Error: The participant/@typeCode for shall be "AUTHEN", "RESP" or "DEV" Laboratory Isolate Organizer.</assert>
+
+  <assert test='not(cda:component) or cda:component[@typeCode="COMP"]'>Error: The component/@typeCode for shall be "COMP" for Laboratory Isolate Organizer.</assert>
+
+</rule>
+ 
+</pattern>
+

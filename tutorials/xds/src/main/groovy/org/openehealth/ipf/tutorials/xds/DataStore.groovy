@@ -49,7 +49,7 @@ public class DataStore {
       */
      def store(Document document) {
          def uniqueId = document.documentEntry.uniqueId
-         def contents = ContentUtils.getContent(document.dataHandler)     
+         def contents = ContentUtils.getContent(document.getContent(DataHandler))
          documents.put(uniqueId, contents)
          log.info("Stored document: " + uniqueId) 
      }

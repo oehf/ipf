@@ -20,6 +20,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.responses;
  * @author Jens Riemschneider
  */
 public enum ErrorCode {
+
+    /* ----- codes from IHE ITI TF, Revision 7.0, Vol. 3, Table 4.1-11 ----- */
     /** Document entry exists in metadata with no corresponding attached document. */
     MISSING_DOCUMENT("XDSMissingDocument"),
     /** MIME package contains MIME part with content-id header not found in metadata. */
@@ -75,28 +77,36 @@ public enum ErrorCode {
     STORED_QUERY_MISSING_PARAM("XDSStoredQueryMissingParam"),
     /** A parameter which only accepts a single value is coded with multiple values. */
     STORED_QUERY_PARAM_NUMBER("XDSStoredQueryParamNumber"),
-    /** An error occurred when executing an SQL query. */
-    SQL_ERROR("XDSSqlError"),
-    /** A register transaction was rejected because it submitted an association referencing 
+    /** A register transaction was rejected because it submitted an association referencing
      *  a deprecated document. */
     REGISTRY_DEPRECATED_DOCUMENT_ERROR("XDSRegistryDeprecatedDocumentError"),
-    /** The document associated with the DocumentUniqueId is not available. */
-    DOCUMENT_UNIQUE_ID_ERROR("XDSDocumentUniqueIdError"),
     /** The unique ID of a repository could not be resolved to a valid document repository
      *  or the value does not match that of the document repository. */
     UNKNOWN_REPOSITORY_ID("XDSUnknownRepositoryId"),
+    /** The document associated with the DocumentUniqueId is not available. */
+    DOCUMENT_UNIQUE_ID_ERROR("XDSDocumentUniqueIdError"),
     /** A query resulted in returning information about multiple patients, which is forbidden
      *  because of security reasons. */ 
     RESULT_NOT_SINGLE_PATIENT("XDSResultNotSinglePatient"),
+    /** An XDR Document Recipient did not process some part of the content.
+     * Specifically the parts not processed are Folder semantics */
+    PARTIAL_FOLDER_CONTENT_NOT_PROCESSED("PartialFolderContentNotProcessed"),
+    /** An XDR Document Recipient did not process some part of the content.
+     * Specifically the parts not processed are Replacement semantics */
+    PARTIAL_REPLACE_CONTENT_NOT_PROCESSED("PartialReplaceContentNotProcessed"),
 
-    /* Some additional error codes from XCA, dealing with homeCommunityIDs */
-    
+    /* --- codes for XCA --- */
     /** A value for the homeCommunityId is not recognized */
     UNKNOWN_COMMUNITY("XDSUnknownCommunity"),
     /** A value for the homeCommunityId is required and has not been specified */
     MISSING_HOME_COMMUNITY_ID("XDSMissingHomeCommunityId"),
     /** A community which would have been contacted was not available */
-    UNAVAILABLE_COMMUNITY("XDSUnavailableCommunity");
+    UNAVAILABLE_COMMUNITY("XDSUnavailableCommunity"),
+
+    /* --- codes for ITI-16 (obsolete XDS.a profile) --- */
+    /** An error occurred when executing an SQL query. */
+    SQL_ERROR("XDSSqlError");
+
     
     private final String opcode;
     

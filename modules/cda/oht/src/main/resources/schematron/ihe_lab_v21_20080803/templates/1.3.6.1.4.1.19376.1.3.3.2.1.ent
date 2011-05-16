@@ -1,0 +1,87 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 08, 2008". 
+ They are used in conjunction with the LabCDA.xsd file. An instance of a lab document must first validate to the LabCDA schema. 
+ Then these rules are applied for additional checks to insure conformance to the profile.
+ 
+ -->
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.3.2.1-errors'>
+
+  <!-- TF_Vol3_Ref_2.3.4.2 Laboratory Report Item Section 1.3.6.1.4.1.19376.1.3.3.2.2 Section -->
+      
+    <rule context='//cda:component/cda:structuredBody/cda:component/cda:section/cda:component/cda:section'> 
+      
+       <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.2.2"]'>
+         Error: The component/section/templateId/@root shall equal "1.3.6.1.4.1.19376.1.3.3.2.2" and identifies the section as a Laboratory Report Item Section under a Laboratory Speciality Section.           
+      </assert>  
+    </rule>
+    
+
+ <!-- TF_Vol3_Ref_2.3.4 Content Modules for CDA Sections (Level 2)  -->
+
+<!--   
+   <rule context='cda:structuredBody/cda:component/cda:section'> 
+        <assert test='.'>
+           Error: The component/structuredBody element shall be present.
+         </assert>   
+         <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.3.3.2.1"]'>
+           Error: The section/templateId/@root=1.3.6.1.4.1.19376.1.3.3.2.1 is required.
+       </assert>    
+   </rule>
+-->
+<!-- TF_Vol3_Ref_2.3.4.1 Laboratory Speciality Section 1.3.6.1.4.1.19376.1.3.3.2.1  -->
+
+<!-- TF_Vol3_Ref_2.3.4.1.1 List of Laboratory Specialities -->
+<!-- 2.3.4.1.2 Specification -->
+
+ 
+    <rule context='*[cda:templateId/@root="1.3.6.1.4.1.19376.1.3.3.2.1"]'>  
+        
+        <assert test='ancestor::cda:structuredBody
+             and parent::cda:component
+             and self::cda:section'>
+        Error: The templateId  1.3.6.1.4.1.19376.1.3.3.2.1 is a child element of section and is used to identify the section as a Laboratory Specialty Section.
+       </assert> 
+
+   <!-- rule context='/cda:ClinicalDocument/cda:component/cda:structuredBody/cda:component/cda:section' --> 
+    
+    <assert test='(cda:code[@codeSystem="2.16.840.1.113883.6.1"] and cda:code[@codeSystemName="LOINC"]) and 
+     (cda:code[@code="11502-2"] or (cda:code[@code="18717-9"]) or (cda:code[@code="18718-7"]) 
+     or (cda:code[@code="18719-5"]) or (cda:code[@code="18720-3"]) or (cda:code[@code="18721-1"]) 
+     or (cda:code[@code="18722-9"]) or (cda:code[@code="18723-7"]) or (cda:code[@code="18724-5"]) 
+     or (cda:code[@code="18725-2"]) or (cda:code[@code="18727-8"]) or (cda:code[@code="18728-6"]) 
+     or (cda:code[@code="18729-4"]) or (cda:code[@code="18767-4"]) or (cda:code[@code="18768-2"]) 
+     or (cda:code[@code="18769-0"]) or (cda:code[@code="26435-8"]) or (cda:code[@code="26436-6"]) 
+     or (cda:code[@code="26437-4"]) or (cda:code[@code="26438-2"]))'>
+              Error: The structuredBody/component/section/code/@codeSystem shall be 2.16.840.1.113883.6.1 with the @codeSystemName equal to LOINC. 
+              The @code values shall be one of the following: 
+              "11502-2", "18717-9","18718-7", "18719-5", 
+              "18720-3", "18721-1", "18722-9", "18723-7",  
+              "18724-5", "18725-2", "18727-8", "18728-6",
+              "18729-4", "18767-4", "18768-2", "18769-0", 
+              "26435-8", "26436-6", "26437-4", "26438-2". 
+   
+   </assert>
+   
+   <assert test='cda:code/@displayName'>
+          Error: The structuredBody/component/section/code/@displayName shall be present.
+   </assert>
+    
+    <assert test='(count(cda:component/cda:section) &gt;= 1 and count(cda:text) = 0 and count(cda:entry) = 0) or 
+           (count(cda:component/cda:section) = 0 and count(cda:text) = 1 and count(cda:entry) = 1)'>
+           Error: The top section shall contain one or more component elements which introduces a leaf section representing a reported item or
+           one text block with non-blank text and one mandatory entry containing the full structured data of the report in a machine readable format.
+   </assert>
+  
+   <assert test='not(cda:text) or normalize-space(cda:text)'>
+         Error: The structuredBody/component/section/text element shall not be blank.
+    </assert> 
+
+  <assert test='not(cda:entry) or cda:entry/cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1"]'>
+           Error: The templateId for component/section/section/entry/templateId/@root shall be "1.3.6.1.4.1.19376.1.3.1".
+   </assert>      
+   
+   </rule>         
+       
+ </pattern>
+ 
+ 

@@ -35,26 +35,61 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
 
     private final String charsetName;
 
+
+    /**
+     * Constructor which enforces the use of a particular character set.
+     * The given value will be propagated to the Camel exchange property
+     * {@link Exchange#CHARSET_NAME}, rewriting its old content.
+     *
+     * @param configurationHolder
+     *      HL7v2 configuration holder.
+     * @param wrappedProducer
+     *      wrapped Camel producer.
+     * @param charsetName
+     *      character set to use in all data transformations.
+     */
     public ProducerAdaptingInterceptor(
             Hl7v2ConfigurationHolder configurationHolder,
-            String charsetName,
-            Producer wrappedProducer)
+            Producer wrappedProducer,
+            String charsetName)
     {
         super(configurationHolder, wrappedProducer);
         Validate.notEmpty(charsetName);
         this.charsetName = charsetName;
     }
-    
-    
+
+
+    /**
+     * Constructor which does not enforce the use of a particular character set.
+     * When the Camel exchange does not contain property {@link Exchange#CHARSET_NAME},
+     * the default system character set will be used.
+     *
+     * @param configurationHolder
+     *      HL7v2 configuration holder.
+     * @param wrappedProducer
+     *      wrapped Camel producer.
+     */
+    public ProducerAdaptingInterceptor(
+            Hl7v2ConfigurationHolder configurationHolder,
+            Producer wrappedProducer)
+    {
+        super(configurationHolder, wrappedProducer);
+        this.charsetName = null;
+    }
+
+
     /**
      * Converts outgoing request to a {@link MessageAdapter}  
      * and performs some exchange configuration.
      */
     @Override
     public void process(Exchange exchange) throws Exception {
+        if (charsetName != null) {
+            exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
+        }
         MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
-                charsetName,
+                characterSet(exchange),
                 getTransactionConfiguration().getParser());
         
         if (msg == null) {

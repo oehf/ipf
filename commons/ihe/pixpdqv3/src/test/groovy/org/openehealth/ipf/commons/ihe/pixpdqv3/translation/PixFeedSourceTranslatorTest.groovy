@@ -50,6 +50,7 @@ class PixFeedSourceTranslatorTest extends Hl7TranslationTestContainer {
 	void testCreateMessage() {
 		doTestV2toV3RequestTranslation('A01', 8, 44, parser)
         doTestV2toV3RequestTranslation('A04', 8, 44, parser)
+        doTestV2toV3RequestTranslation('A01_with_BR', 8, 44, parser)
 	}
 
 	@Test

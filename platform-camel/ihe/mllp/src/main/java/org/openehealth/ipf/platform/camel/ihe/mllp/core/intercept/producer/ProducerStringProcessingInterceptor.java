@@ -13,51 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
+package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 
 /**
- * Interceptor that reads in the HL7 request String using the configured 
- * character set and handles segment fragmentation (\rADD|...). 
+ * Producer-side MLLP interceptor that sets character encoding configured
+ * for the given endpoint, and handles segment fragmentation (\rADD|...).
  * @author Dmytro Rud
  */
-public class ConsumerSegmentFragmentationInterceptor extends AbstractMllpInterceptor {
+public class ProducerStringProcessingInterceptor extends AbstractMllpProducerInterceptor {
 
-    public ConsumerSegmentFragmentationInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        super(endpoint, wrappedProcessor);
+    public ProducerStringProcessingInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
+        super(endpoint, wrappedProducer);
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        final String charsetName = getMllpEndpoint().getConfiguration().getCharsetName();
+        exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
+
         boolean supportSegmentFragmentation = getMllpEndpoint().isSupportSegmentFragmentation();
         int segmentFragmentationThreshold = getMllpEndpoint().getSegmentFragmentationThreshold();
-        
-        // read in the request
-        Message message = exchange.getIn();
-        message.setBody(Hl7v2MarshalUtils.convertBodyToString(
-                message,
-                getMllpEndpoint().getConfiguration().getCharsetName(),
-                supportSegmentFragmentation));
-        
-        // run the route
-        getWrappedProcessor().process(exchange);
+        Message message;
         
         // preprocess output
         if (supportSegmentFragmentation && (segmentFragmentationThreshold >= 5)) {
-            message = Exchanges.resultMessage(exchange);
+            message = exchange.getIn();
             String s = message.getBody(String.class);
             s = FragmentationUtils.ensureMaximalSegmentsLength(s, segmentFragmentationThreshold);
             message.setBody(s);
         }
-
+        
+        // run the route
+        getWrappedProcessor().process(exchange);
+        
+        // read in the response
+        message = Exchanges.resultMessage(exchange);
+        message.setBody(Hl7v2MarshalUtils.convertBodyToString(
+                message,
+                charsetName,
+                supportSegmentFragmentation));
     }
 }

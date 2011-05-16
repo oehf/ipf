@@ -91,7 +91,8 @@ class TestThreading extends StandardTestContainer {
     
     def provideTask = {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
-        provide.documents[0].dataHandler = new DataHandler(new ByteArrayDataSource('test', 'text/plain'))
+        provide.documents[0].setContent(DataHandler,
+                new DataHandler(new ByteArrayDataSource('test', 'text/plain')))
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()            
@@ -134,7 +135,8 @@ class TestThreading extends StandardTestContainer {
     
     def retrieveTask = {
         def provide = SampleData.createProvideAndRegisterDocumentSet()
-        provide.documents[0].dataHandler = new DataHandler(new ByteArrayDataSource('test', 'text/plain'))
+        provide.documents[0].setContent(DataHandler,
+                    new DataHandler(new ByteArrayDataSource('test', 'text/plain')))
         def docEntry = provide.documents[0].documentEntry
         def patientId = docEntry.patientId
         patientId.id = UUID.randomUUID().toString()
@@ -153,8 +155,8 @@ class TestThreading extends StandardTestContainer {
         assertEquals(retrieveResponse.toString(), SUCCESS, retrieveResponse.status)
         assertEquals(2, retrieveResponse.documents.size())
 
-        assertEquals('test', read(retrieveResponse.documents[0].dataHandler))
-        assertEquals('test', read(retrieveResponse.documents[1].dataHandler))
+        assertEquals('test', read(retrieveResponse.documents[0].getContent(DataHandler)))
+        assertEquals('test', read(retrieveResponse.documents[1].getContent(DataHandler)))
     }
 
     def read(dataHandler) {

@@ -31,7 +31,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.modules.cda.mdht</groupId>
+            <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-cda-mdht</artifactId>
             <version>${project.version}</version>
         </dependency>

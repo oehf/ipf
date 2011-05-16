@@ -39,7 +39,7 @@
             <artifactId>camel-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.openehealth.ipf.modules.cda.oht</groupId>
+            <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-cda-oht</artifactId>
             <version>${project.version}</version>
         </dependency>
