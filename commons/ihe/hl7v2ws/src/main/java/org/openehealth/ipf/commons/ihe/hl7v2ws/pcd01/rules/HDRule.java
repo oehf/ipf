@@ -42,6 +42,10 @@ public class HDRule extends AbstractCompositeTypeRule<HD> {
             mustBeNonEmpty(hd, 2, path, violations);
             mustBeNonEmpty(hd, 3, path, violations);
         }
+        if (isEmpty(hd, 3) || isEmpty(hd, 4)) {
+            mustBeNonEmpty(hd, 1, path, violations);
+        }
+        
         if (isEqual("ISO", hd, 3)) {
             mustMatchIsoOid(hd, 2, path, violations);
         }

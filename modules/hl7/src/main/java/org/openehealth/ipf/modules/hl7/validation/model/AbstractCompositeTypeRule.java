@@ -115,7 +115,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      */
     public void mustBeNonEmpty(T element, int component, String path, Collection<ValidationException> violations) {
         if (isEmpty(element, component)) {
-            violations.add(violation(msg("not-empty element", element, component, path)));
+            violations.add(violation(msg("non-empty value", element, component, path)));
         }
     }
     
@@ -130,7 +130,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      */
     public void mustBeEmpty(T element, int component, String path, Collection<ValidationException> violations) {
         if (!isEmpty(element, component)) {
-            violations.add(violation(msg("empty element", element, component, path)));
+            violations.add(violation(msg("empty value", element, component, path)));
         }
     }
 
@@ -250,7 +250,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
             reference = "Validation rule for type" + elementType;
         }
         return "Validation error " + reference == null ? "" : reference + ", type " + elementType + " : "
-                + expected + " is expected in " + component + "-th component of " + path;
+                + expected + " is expected in component " + component + " of " + path;
     }
     
     @Override

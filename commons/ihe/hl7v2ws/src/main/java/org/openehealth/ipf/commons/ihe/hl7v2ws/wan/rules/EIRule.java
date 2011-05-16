@@ -37,15 +37,14 @@ class EIRule extends AbstractCompositeTypeRule<EI> {
     @Override
     public void validate(EI ei, String path, Collection<ValidationException> violations) {
         mustBeNonEmpty(ei, 1, path, violations);
-
-        boolean allNonEmpty = !isEmpty(ei, 2) && !isEmpty(ei, 3) && !isEmpty(ei, 4);
         
         // Either EI-2 or both EI-3 and EI-4 shall be non-empty.
-        if (!allNonEmpty){
-            if (isEmpty(ei, 2)) {
-                mustBeNonEmpty(ei, 3, path, violations);
-                mustBeNonEmpty(ei, 4, path, violations);
-            }
+        if (isEmpty(ei, 2)) {
+            mustBeNonEmpty(ei, 3, path, violations);
+            mustBeNonEmpty(ei, 4, path, violations);
+        }
+        if (isEmpty(ei, 3) || isEmpty(ei, 4)) {
+            mustBeNonEmpty(ei, 2, path, violations);
         }
     }
    

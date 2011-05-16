@@ -207,7 +207,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
         def segment = msg."${segmentName}"
         for(i in fieldNumbers) {
             if( ! segment[i].value) {
-                violations.add(new Exception("Missing ${msg.path} ${segmentName}-${i}"))
+                violations.add(new Exception("Missing ${msg.path}.${segmentName}[${i}]"))
             }
         }
     }
@@ -221,7 +221,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
         def segment = struct."${segmentName}"()[segmentRepetition - 1]
         for(i in fields) {
             if( ! segment[i].value) {
-                violations.add(new Exception("${struct.path} missing ${segmentName}(${repetition})-${i}"))
+                violations.add(new Exception("Missing ${struct.path}.${segmentName}(${repetition})[${i}]"))
             }
         }
     }
@@ -233,10 +233,10 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
         def segment = msg."${segmentName}"
         for(i in fieldNumbers) {
             if( ! segment[i].value) {
-                violations.add(new Exception("Missing ${msg.path} ${segmentName}-${i}"))
+                violations.add(new Exception("Missing ${msg.path}.${segmentName}[${i}]"))
             }
             if(values [i] != ANY && !values [i].toString().equals(segment[i]?.value)) {
-                violations.add(new Exception("${msg.path} ${segmentName}-${i} must be values [i]"))
+                violations.add(new Exception("Expected ${values[i]} of ${msg.path}.${segmentName}[${i}], found ${segment[i]?.value}"))
             }
         }
     }
