@@ -96,7 +96,7 @@ public class Pcd01Test extends StandardTestContainer {
         String response = requestBody(uri, invalidMSG);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertTrue(response.contains("MSA|AE"));
-        assertTrue(response.contains("OBX-4"));
+        assertTrue(response.contains("OBX[4]"));
     }
     
     
