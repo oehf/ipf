@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
-import ca.uhn.hl7v2.validation.ValidationContext
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
+
+import ca.uhn.hl7v2.validation.ValidationContext
 
 /**
  * @author Christian Ohr
@@ -26,7 +28,7 @@ public class PrimitiveRuleBuilder extends VersionBuilder{
 	String typeName
 	
 	
-	PrimitiveRuleBuilder(String version, ValidationContext context, String typeName) {
+	PrimitiveRuleBuilder(String version, DefaultValidationContext context, String typeName) {
 		super(version, context)
 		this.typeName = typeName
 	}

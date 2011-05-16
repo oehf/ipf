@@ -15,14 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdq
 
-import java.util.Map;
-import java.util.Collection;
+import java.util.Collection
+import java.util.Map
 
-import ca.uhn.hl7v2.model.GenericSegment
-import ca.uhn.hl7v2.model.Group
-import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.commons.core.modules.api.Validator
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
 
 /**
@@ -50,8 +46,12 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
       public Map<String, Map<String, String>> getRules(){
           return RULES;    
       }
-     
-    
+      
+      public DefaultValidationContext getValidationContext(){
+          //adds default primitive checks
+          return new DefaultValidationContext();
+      }
+      
      // --------------- Groups, ordered alphabetically ---------------
 
      /**

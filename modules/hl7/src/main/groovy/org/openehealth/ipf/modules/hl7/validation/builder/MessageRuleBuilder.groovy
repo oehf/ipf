@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
-import ca.uhn.hl7v2.validation.MessageRule
-import ca.uhn.hl7v2.validation.impl.ConformanceProfileRule
-import ca.uhn.hl7v2.validation.ValidationContext
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureMessageRule
+import org.openehealth.ipf.modules.hl7.validation.model.CompositeTypeRule
+
 import ca.uhn.hl7v2.validation.Rule
+import ca.uhn.hl7v2.validation.impl.ConformanceProfileRule
 
 /**
  * @author Christian Ohr
@@ -33,29 +34,43 @@ public class MessageRuleBuilder extends VersionBuilder{
         super(null)
 	}
 	
-	MessageRuleBuilder(String version, ValidationContext context, String messageType, triggerEvent) {
+	MessageRuleBuilder(String version, DefaultValidationContext context, String messageType, triggerEvent) {
 		super(version, context)
 		this.messageType = messageType
 		this.triggerEvent = triggerEvent
 	}
-	
-	RuleBuilder checkIf(Closure c) {
-		if (!rule) {
-			rule = new ClosureMessageRule(c)
-			addMessageRule(rule)
-		} else {
-			rule.testClosure = c
-		}
-		this
+    
+    @Deprecated
+	MessageRuleBuilder checkIf(Closure c) {
+        checkMessageWithClosure(c)
 	}
 	
+    MessageRuleBuilder checkMessageWithClosure(Closure c) {
+        if (!rule) {
+            rule = new ClosureMessageRule(c)
+            addMessageRule(rule)
+        } else {
+            rule.testClosure = c
+        }
+        this
+    }
+    PrimitiveRuleBuilder checkPrimitive(String name){
+        return new PrimitiveRuleBuilder(version, context, name)
+    }
+    
+    MessageRuleBuilder checkCompositesWith(CompositeTypeRule typeRule){
+        context.addCompositeTypeRule(version, messageType, triggerEvent, typeRule)
+        return this
+    }
+    
+          
 	/**
 	 * Adds an existing HAPI {@link ConformanceProfileRule} to the set of rules.
 	 *
 	 * @param profileID the profile ID or null, if the ID shall
 	 * be taken from MSH-22.
 	 */
-	RuleBuilder conformsToProfile(String profileID) {
+	MessageRuleBuilder conformsToProfile(String profileID) {
 	     addMessageRule(new ConformanceProfileRule(profileID))
 	     this
 	}
@@ -64,7 +79,7 @@ public class MessageRuleBuilder extends VersionBuilder{
 	 * Adds an check for a HL7 Abstract Syntax of a message. For details of the format,
 	 * see {@link AbstractSyntaxRuleBuilder}.
 	 */
-	RuleBuilder abstractSyntax(Object... args) {
+	AbstractSyntaxRuleBuilder abstractSyntax(Object... args) {
 	    new AbstractSyntaxRuleBuilder(version, context, messageType, triggerEvent, args)
 	}
 	 

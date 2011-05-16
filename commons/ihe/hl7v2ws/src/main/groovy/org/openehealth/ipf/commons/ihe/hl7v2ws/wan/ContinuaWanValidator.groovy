@@ -19,6 +19,15 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.wan
 import java.util.Collection
 
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01Validator
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.CWERule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.CXRule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.EIRule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.NARule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.SNRule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XADRule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XPNRule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XTNRule;
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 /**
  * Implements more strict validaton for PCD-01
  * 
@@ -30,7 +39,60 @@ import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01Validator
  */
 class ContinuaWanValidator extends  Pcd01Validator {
     
+    static DefaultValidationContext CONTINUA_CONTEXT = new DefaultValidationContext()
+    static {
+        CONTINUA_CONTEXT.configure()
+        .forVersion('2.6')
+           .message('ORU', 'R01').abstractSyntax(
+        'MSH',
+        [  {  'SFT'  }  ],
+        {PATIENT_RESULT(
+           [PATIENT(
+              'PID',
+              [  'PD1'  ],
+              [  {  'NTE'  }  ],
+              [  {  'NK1'  }  ],
+              [VISIT(
+                 'PV1',
+                 [  'PV2'  ]
+             )]
+           )],
+           {ORDER_OBSERVATION(
+              [  'ORC'  ],
+               'OBR',
+               [{  'NTE'  }],
+               [{TIMING_QTY(
+                  'TQ1',
+                  [{  'TQ2'  }]
+               )}],
+ 
+               [  'CTD'  ],
+               [{OBSERVATION(
+                  'OBX',
+                  [  {  'NTE'  }  ]
+               )}],
+ 
+               [{  'FT1'  }],
+               [{  'CTI'  }],
+               [{SPECIMEN(
+                  'SPM',
+                  [{  'OBX'  }]
+               )}]
+            )}
+         )},
+         [ 'DSC' ]).checkCompositesWith(new CWERule())
+                   .checkCompositesWith(new CXRule())
+                   .checkCompositesWith(new EIRule())
+                   .checkCompositesWith(new NARule())
+                   .checkCompositesWith(new SNRule())
+                   .checkCompositesWith(new XADRule())
+                   .checkCompositesWith(new XPNRule())
+                   .checkCompositesWith(new XTNRule())
+    }
     
+    DefaultValidationContext getValidationContext(){
+        return CONTINUA_CONTEXT;
+    }
     
     void checkMSH(msg, Collection<Exception> violations) {
         checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12, 15, 16, 21], violations)
@@ -48,9 +110,7 @@ class ContinuaWanValidator extends  Pcd01Validator {
 			//OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
 			checkFieldInAllowedDomain(obs,  'OBX', 2, ['CF', 'CWE', 'DT', 'DTM', 'ED', 'FT', 'NA', 'NM','ST','SN', 'TM', 'TX', 'XAD', 'XCN', 'XON', 'XPN'], violations);
 		}
-		
 	}
-  
 
 	 /////////////////////// Response //////////////////////////
 	 

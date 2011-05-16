@@ -15,14 +15,21 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdq
 
-import java.util.Collection;
+import java.util.Collection
 
-import ca.uhn.hl7v2.model.GenericSegment
-import ca.uhn.hl7v2.model.Group
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.core.modules.api.Validator
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext;
+import org.openehealth.ipf.modules.hl7.validation.model.CompositeTypeRule
+import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
-import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
+import org.openehealth.ipf.modules.hl7dsl.SegmentAdapter
+
+import ca.uhn.hl7v2.model.Composite
+import ca.uhn.hl7v2.model.GenericSegment
+import ca.uhn.hl7v2.model.Group
+import ca.uhn.hl7v2.model.Segment
+import ca.uhn.hl7v2.model.Structure
 
 /**
  * Basic validator for HL7 v.2. 
@@ -41,10 +48,16 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     
     /**
     * List of relevant segments for particular message types.
+    * TODO add these rules to the validation context as closures
     */
     public abstract Map<String, Map<String, String>> getRules();
 
-
+   /**
+    *  @return the rules for type validation
+    */
+    public abstract DefaultValidationContext getValidationContext();
+  
+    
     /**
      * Performs validation of a HL7 message.</br>
      * Override the method to employ validation based on profiles.
@@ -98,7 +111,55 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
             throw new ValidationException("No validation rules defined for ${msh91}^${msh92}")
         }
         checkMessage(msg, segmentNames, violations)
+        validateGroup(msg, 1, violations);
     }
+    
+    void validateGroup(final GroupAdapter group, int groupRepetition, final Collection<Exception> violations){
+        Group groupTarget = group.target;
+        def names = group.names;
+        for(name in names) {
+              Structure[] structs = groupTarget.getAll(name);
+              structs.eachWithIndex { struct, repetition ->
+                  def type
+                  def adapter
+                  if (Segment.class.isAssignableFrom(struct.getClass())){
+                      type = 'Segment'
+                      adapter = new SegmentAdapter(struct)
+                  } else {//it can be only Group.class or Segment.class
+                      type = 'Group'
+                      adapter = new GroupAdapter(struct)
+                  }
+                  adapter.withPath(group, repetition)
+                  String methodName = "validate${type}"
+                  "${methodName}"(adapter, repetition, violations)
+              }
+          }
+     }
+     
+     void validateSegment(SegmentAdapter segment, int segmentRepetition, Collection<Exception> violations){
+         def seg = segment.target;
+         int numFields = seg.numFields();
+         for (int i in 1..numFields){
+             def fields = seg.getField(i);
+             //for repeatable fields, the number of elements in the "fields" array are > 1.
+             fields.eachWithIndex { t, repetition ->
+                 if (Composite.class.isAssignableFrom (t.getClass())){
+                     validateCompositeType(t, i, repetition, "${segment.path}" , violations)
+                 }
+             }
+         }
+     }
+     
+      void validateCompositeType(Composite t, int fieldIndnex, int typeRepetition, String path, Collection<Exception> violations){
+          def msg = new MessageAdapter(t.getMessage());
+          String version = msg.target.getVersion();
+          String messageType = msg.MSH[9][1];
+          String triggerEvent = msg.MSH[9][2];
+          def rules = getValidationContext().getCompositeTypeRules(version, messageType, triggerEvent, t.getClass());
+          for (rule in rules){
+              violations.addAll(rule.test(t, fieldIndnex, typeRepetition, path) as List)
+          }
+      }
 
     // --------------- Highest-level validation objects ---------------
 

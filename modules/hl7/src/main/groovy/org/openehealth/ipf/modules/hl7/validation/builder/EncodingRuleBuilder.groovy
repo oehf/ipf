@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
-import ca.uhn.hl7v2.validation.ValidationContext
-import ca.uhn.hl7v2.validation.impl.XMLSchemaRule
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.model.ClosureEncodingRule
+
+import ca.uhn.hl7v2.validation.impl.XMLSchemaRule
 
 /**
  * @author Christian Ohr
@@ -26,7 +27,7 @@ public class EncodingRuleBuilder extends VersionBuilder{
 	
 	String encoding
 	
-	EncodingRuleBuilder(String version, ValidationContext context, String encoding) {
+	EncodingRuleBuilder(String version, DefaultValidationContext context, String encoding) {
 		super(version, context)
 		this.encoding = encoding
 	}
