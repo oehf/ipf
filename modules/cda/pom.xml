@@ -11,10 +11,11 @@
         <artifactId>modules</artifactId>
         <version>2.2-SNAPSHOT</version>
     </parent>
-    	
+    
     <modules>
-        <module>oht</module>
+        <module>core</module>
         <module>mdht</module>
+        <module>oht</module>
     </modules>
     
 </project>

@@ -1,0 +1,21 @@
+<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.3.1 Medical Equipment Contents -->
+
+<!-- ERRORS -->
+<pattern id='p-2.16.840.1.113883.10.20.9.1-errors' see='#p-2.16.840.1.113883.10.20.9.1-errors'>
+    <title>PHMR Templates Medical Equipment - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.1"]'>
+
+    </rule>
+</pattern>
+
+<!-- WARNINGS -->
+<pattern id="p-2.16.840.1.113883.10.20.9.1-warning" see='#p-2.16.840.1.113883.10.20.9.1-warning'>
+    <title>PHMR Templates Medical Equipment - warning validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.1"]'>
+        
+        <assert test="count(descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.9.4']) >= 1">
+        Warning CONF-PHMR-50: One or more Device Definition Organizers (templateId 2.16.840.1.113883.10.20.9.4) SHOULD be present.
+        </assert>
+        
+    </rule>
+</pattern>
