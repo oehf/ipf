@@ -20,6 +20,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Composite;
 import ca.uhn.hl7v2.model.DataTypeException;
 import ca.uhn.hl7v2.model.Primitive;
@@ -39,8 +43,10 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
     public static final String ISO_OID_PATTERN = "[1-9][0-9]*(\\.(0|([1-9][0-9]*)))+";
 
     public static final String EUI_64_PATTERN = "[0-9a-zA-Z]+";
+    
+    private static final Log LOG = LogFactory.getLog(AbstractCompositeTypeRule.class);
 
-    public AbstractCompositeTypeRule(Class<?> compositeTypeClass) {
+    public AbstractCompositeTypeRule(Class<T> compositeTypeClass) {
         this.appliesFor = compositeTypeClass.getSimpleName();
     }
     
@@ -57,7 +63,9 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
     public ValidationException[] test(T struct, int fieldIndex, int repetition, String path) {
         ArrayList<ValidationException> violations = new ArrayList<ValidationException>();
         if(appliesFor(struct.getClass())){
-            validate(struct, path + "(" + repetition + ")[" + fieldIndex + "]", violations);
+            //Use the HL7 DSL convention for the repetition
+            String rep = repetition == 0? "" :("(" + repetition + ")");
+            validate(struct, path + rep + "[" + fieldIndex + "]", violations);
         }else {
             throw new IllegalArgumentException("The rule " + this.getClass().getSimpleName() + " does not apply for class " + struct.getClass().getName());
         }
@@ -76,7 +84,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      * false otherwise; 
      */
     public boolean isEmpty(T element, int component) {
-        Object val = val(element, component);
+        String val = val(element, component);
         if (val == null || val.equals("")) {
             return true;
         }
@@ -115,7 +123,8 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      */
     public void mustBeNonEmpty(T element, int component, String path, Collection<ValidationException> violations) {
         if (isEmpty(element, component)) {
-            violations.add(violation(msg("non-empty value", element, component, path)));
+            String prefix = msgPrefix("non-empty value", "");
+            violations.add(violation(msg(prefix, element, component, path)));
         }
     }
     
@@ -130,7 +139,8 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      */
     public void mustBeEmpty(T element, int component, String path, Collection<ValidationException> violations) {
         if (!isEmpty(element, component)) {
-            violations.add(violation(msg("empty value", element, component, path)));
+            String prefix = msgPrefix("empty value", val(element, component));
+            violations.add(violation(msg(prefix, element, component, path)));
         }
     }
 
@@ -146,16 +156,16 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      * @param violations where to store the validation violations
      */
     public void mustBeOneOf(String[] expected, T element, int component, String path, Collection<ValidationException> violations) {
-        Object val = val(element, component);
+        String found = val(element, component);
         boolean isAllowed = false;
         for (String allowed : expected) {
-            if (allowed.equals(val.toString())) {
+            if (allowed.equals(found)) {
                 isAllowed = true;
             }
         }
         if (!isAllowed) {
-            violations.add(violation(msg("expected one of " + Arrays.toString(expected) + ", found "
-                            + String.valueOf(val), element, component, path)));
+            String prefix = msgPrefix("one of " + Arrays.toString(expected), found);
+            violations.add(violation(msg(prefix, element, component, path)));
         }
     }
     /**
@@ -170,10 +180,10 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      * @param violations where to store the validation violations
      */
     public void mustBeEqualTo(String expected, T element, int component, String path, Collection<ValidationException> violations) {
-        Object val = val(element, component);
-        if (!expected.equals(val.toString())){
-            violations.add(violation(msg("expected " + expected + ", found "
-                    + String.valueOf(val), element, component, path)));
+        String found = val(element, component);
+        if (!expected.equals(found)){
+            String prefix = msgPrefix(expected, found);
+            violations.add(violation(msg(prefix, element, component, path)));
         }
     }
     
@@ -188,12 +198,16 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
      * @param violations where to store the validation violations
      */
     public void mustMatchIsoOid(T element, int component, String path, Collection<ValidationException> violations) {
-        Object val = val(element, component);
-        boolean patternMatches = Pattern.compile(ISO_OID_PATTERN).matcher(val.toString()).matches();
+        String found = val(element, component);
+        boolean patternMatches = Pattern.compile(ISO_OID_PATTERN).matcher(found.toString()).matches();
+        
         if (isEmpty(element, component) || !patternMatches) {
-            violations.add(violation(msg(ISO_OID_PATTERN + "pattern", element, component, path)));
+            String prefix = msgPrefix("ISO_OID pattern " + ISO_OID_PATTERN, found);
+            violations.add(violation(msg(prefix, element, component, path)));
         }
     }
+
+   
 
    /**
     * If the component at <code>component</code> is not an EUI-64 identifier, a new
@@ -206,51 +220,53 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> implements 
     * @param violations where to store the validation violations
     */
     public void mustMatchEui64(T element, int component, String path, Collection<ValidationException> violations) {
-        Object val = val(element, component);
-        boolean patternMatches = Pattern.compile(EUI_64_PATTERN)
-                .matcher(val.toString()).matches();
+        String found = val(element, component);
+        boolean patternMatches = Pattern.compile(EUI_64_PATTERN).matcher(found).matches();
 
         if (isEmpty(element, component) || !patternMatches) {
-            violations.add(violation(msg(EUI_64_PATTERN + "pattern", element,
-                    component, path)));
+            String prefix = msgPrefix("EUI_64 patttern" +  EUI_64_PATTERN, found);
+            violations.add(violation(msg(prefix, element, component, path)));
         }
     }
 
     protected ValidationException violation(String msg) {
         return new ValidationException(msg);
     }
-
-    /**
-     * @param element
-     *            a {@link Composite} instance
-     * @param component
-     *            the component of this composite at the specified position
-     *            (starting at 1)
-     * @return
-     */
-    protected Object val(T element, int component) {
+   /**
+    * @return a not-null String
+    */
+    protected String val(T element, int component) {
+        String result = "";
         try {
             // components are starting at 0 in Composite
             Type res =  element.getComponent(component - 1);
             if (res instanceof Primitive){
-                String value = ((Primitive) res).getValue();
-                return value;
+                result = ((Primitive) res).getValue();
+            } else if (res != null){
+                result = res.encode();
             }
-            return res;
-            
         } catch (DataTypeException dte) {
-            return "";
+            LOG.warn("Unable to extract the value of the HL7 type.", dte);
+        } catch (HL7Exception e) {
+            LOG.error("Unable to get the fieldSeparatorValue.", e);
         }
+        return result == null ? "" : result;
     }
-
-    protected String msg(String expected, Composite element, int component, String path) {
+    
+    private String msgPrefix(String expected, String found) {
+        String val = "".equals(found) ? " empty value " : found;
+        return "Expected " + expected + ", found " + val;
+    }
+    
+    protected String msg(String prefix, Composite element, int component, String path) {
         String reference = getSectionReference();
         String elementType = element.getClass().getSimpleName();
         if (reference == null){
-            reference = "Validation rule for type" + elementType;
+            reference = " rule for type " + elementType;
         }
-        return "Validation error " + reference == null ? "" : reference + ", type " + elementType + " : "
-                + expected + " is expected in component " + component + " of " + path;
+        //TODO
+        return "Validation error " + reference == null ? "" : reference + " : "
+                + prefix +  " of type " + elementType +" ,component " + component + ", path " + path;
     }
     
     @Override

@@ -19,17 +19,18 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.wan
 import java.util.Collection
 
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01Validator
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.CWERule;
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.CXRule;
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.EIRule;
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.NARule;
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.SNRule;
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XADRule;
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XPNRule;
-import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XTNRule;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.CWERule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.CXRule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.EIRule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.NARule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.SNRule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XADRule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XPNRule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XTNRule
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
+import org.openehealth.ipf.modules.hl7.validation.builder.MessageRuleBuilder
 /**
- * Implements more strict validaton for PCD-01
+ * Implements validation for Continua WAN
  * 
  * There must be at least one ORDER_OBSERVATION in the message
  * There must be at least one PATIENT_RESULT
@@ -40,7 +41,20 @@ import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 class ContinuaWanValidator extends  Pcd01Validator {
     
     static DefaultValidationContext CONTINUA_CONTEXT = new DefaultValidationContext()
+    
     static {
+        MessageRuleBuilder.metaClass.applyContinuaWANTypeValidation = {
+            delegate.checkCompositesWith(new CWERule())
+            delegate.checkCompositesWith(new CXRule())
+            delegate.checkCompositesWith(new EIRule())
+            delegate.checkCompositesWith(new NARule())
+            delegate.checkCompositesWith(new SNRule())
+            delegate.checkCompositesWith(new XADRule())
+            delegate.checkCompositesWith(new XPNRule())
+            delegate.checkCompositesWith(new XTNRule())
+            delegate
+        }
+        
         CONTINUA_CONTEXT.configure()
         .forVersion('2.6')
            .message('ORU', 'R01').abstractSyntax(
@@ -80,14 +94,7 @@ class ContinuaWanValidator extends  Pcd01Validator {
                )}]
             )}
          )},
-         [ 'DSC' ]).checkCompositesWith(new CWERule())
-                   .checkCompositesWith(new CXRule())
-                   .checkCompositesWith(new EIRule())
-                   .checkCompositesWith(new NARule())
-                   .checkCompositesWith(new SNRule())
-                   .checkCompositesWith(new XADRule())
-                   .checkCompositesWith(new XPNRule())
-                   .checkCompositesWith(new XTNRule())
+         [ 'DSC' ]).applyContinuaWANTypeValidation()
     }
     
     DefaultValidationContext getValidationContext(){
@@ -105,7 +112,7 @@ class ContinuaWanValidator extends  Pcd01Validator {
 	 * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
 	 */
     void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
-		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(obs.OBX, checkTime), violations);
+		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(checkTime), violations);
 		if (obs.OBX[2].value){
 			//OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
 			checkFieldInAllowedDomain(obs,  'OBX', 2, ['CF', 'CWE', 'DT', 'DTM', 'ED', 'FT', 'NA', 'NM','ST','SN', 'TM', 'TX', 'XAD', 'XCN', 'XON', 'XPN'], violations);

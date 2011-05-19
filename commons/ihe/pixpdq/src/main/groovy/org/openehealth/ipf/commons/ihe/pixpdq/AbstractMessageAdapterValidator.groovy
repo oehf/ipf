@@ -307,6 +307,4 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
             violations.add(new Exception('Missing patient ID'))
         }
     }
-    
 }
-
