@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.pixpdq.definitions.v25.pdq.segment;
 
 import java.util.Collection;
 
-import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
-
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Varies;
@@ -31,37 +29,35 @@ import ca.uhn.hl7v2.HL7Exception;
 
 /**
  * <p>Represents an HL7 QPD message segment.
- * This segment has the following fields:</p><p>
+ * The fields contained in this segment:</p><p>
  * QPD-1: Message Query Name (CE)<br>
  * QPD-2: Query Tag (ST)<br>
- * QPD-3: User Parameters (in successive fields) (varies)<br>
- * </p><p>The get...() methods return data from individual fields.  These methods
- * do not throw exceptions and may therefore have to handle exceptions internally.
- * If an exception is handled internally, it is logged and null is returned.
- * This is not expected to happen - if it does happen this indicates not so much
- * an exceptional circumstance as a bug in the code for this class.</p>
+ * QPD-3: Hierarchic Designator (HD)<br>
+ * QPD-4: Query Input Parameter List (QIP)<br>
+ * QPD-5,6,7: User Parameters (in successive fields) (varies)<br>
+ * QPD-8: Extended Composite ID with Check Digit (CX)<br>
  */
 @SuppressWarnings("serial")
-public class QPD extends AbstractSegment {
+public class QPD extends org.openehealth.ipf.modules.hl7.model.AbstractSegment {
 
     /**
-     * Creates a QPD (Query Parameter Definition) segment object that belongs to the given
-     * message.
+     * Creates a QPD (Query Parameter Definition) segment object
+     * which belongs to the given message
      */
-    public QPD(Group parent, ModelClassFactory factory) {
-        super(parent, factory);
-        Message message = getMessage();
+    public QPD(Group parentGroup, ModelClassFactory modelFactory) {
+        super(parentGroup, modelFactory);
+        Message msg = getMessage();
         try {
-            add(CE.class, true, 1, 250, new Object[]{message}, null);
-            add(ST.class, false, 1, 32, new Object[]{message}, null);
-            add(HD.class, true, 0, 256, new Object[]{message}, null);
-            add(QIP.class, false, 0, 256, new Object[]{message}, null);
-            add(Varies.class, false, 0, 256, new Object[]{message}, null);
-            add(Varies.class, false, 0, 256, new Object[]{message}, null);
-            add(Varies.class, false, 0, 256, new Object[]{message}, null);
-            add(CX.class, true, 0, 256, new Object[]{message}, null);
-        } catch (HL7Exception he) {
-            HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), he);
+            add("CE", true, 1, 250, new Object[]{msg});
+            add("ST", false, 1, 32, new Object[]{msg});
+            add("HD", true, 0, 256, new Object[]{msg});
+            add("QIP", false, 0, 256, new Object[]{msg});
+            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
+            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
+            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
+            add("CX", true, 0, 256, new Object[]{msg}, null);
+        } catch (HL7Exception e) {
+            HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), e);
         }
     }
 
