@@ -222,5 +222,17 @@ public class PHMRValidationTest {
             assertEquals(24, ex.getCauses().length);
         }
     }
+    
+    @Test
+    public void validateAllCompleteWrong() throws Exception {
+        Source testXml = new StreamSource(new ClassPathResource(sample_wrong).getInputStream());
+        try {
+            schematron.validate(testXml, new SchematronProfile(
+                CDAR2Constants.CDA_PHMR_SCHEMATRON_RULES));
+            fail();
+        } catch (ValidationException ex) {
+            assertEquals(33, ex.getCauses().length);
+        }
+    }
 
 }
