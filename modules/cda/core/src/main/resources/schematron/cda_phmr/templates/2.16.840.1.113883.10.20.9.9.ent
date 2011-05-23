@@ -1,0 +1,47 @@
+<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.5.3 PHMR  Product Instance Contents -->
+
+<!-- ERRORS -->
+<pattern id='p-2.16.840.1.113883.10.20.9.9-errors' see='#p-2.16.840.1.113883.10.20.9.9-errors'>
+    <title>PHMR Templates PHMR Product Instance - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.9"]'>
+    
+        <assert test="cda:templateId[@root='2.16.840.1.113883.10.20.1.52']">
+        Error CONF-PHMR-76: A PHMR Product Instance SHALL conform to the constraints of the 
+        CCD Product Instance template (CCD templateId 2.16.840.1.113883.10.20.1.52).
+        </assert>
+        
+        <assert test="cda:id[@root='1.2.840.10004.1.1.1.0.0.1.0.0.1.2680'][matches(@extension, '^([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})-([0-9A-F]{1,2})$', 'i')]">
+        Error CONF-PHMR-78: An id element SHALL be present where @root is OID of device numbering space 
+        and @extension is a valid device ID within that space. (e.g. @root is 1.2.840.10004.1.1.1.0.0.1.0.0.1.2680 
+        and @extension is a valid EUI-64 device ID).
+        </assert>
+        
+        <assert test="cda:playingDevice/cda:code and cda:playingDevice/cda:code[@codeSystem='2.16.840.1.113883.6.24']">
+        Error CONF-PHMR-80: A playingDevice/code element SHALL be present indicating the type of device, where @code SHALL be drawn from code system 2.16.840.1.113883.6.24 MDC DYNAMIC. An equivalent SNOMED CT® code MAY be used as a translation.
+        </assert>
+        
+        <assert test="cda:playingDevice/cda:manufacturerModelName  and 
+                      cda:playingDevice/cda:manufacturerModelName[string-length(text()) > 0]">
+        CONF-PHMR-81: A playingDevice/manufacturerModelName element SHALL be present. It SHALL contain the following data 
+        items from the Continua data model: ...
+        </assert>
+        
+        
+    </rule>
+</pattern>
+
+<!-- WARNINGS -->
+<pattern id="p-2.16.840.1.113883.10.20.9.9-warning" see='#p-2.16.840.1.113883.10.20.9.9-warning'>
+    <title>PHMR Templates Product Instance - warning validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.9"]'>
+
+    </rule>
+</pattern>
+
+<!--
+<pattern id="p-2.16.840.1.113883.10.20.9.9-note">
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1.52"]'>
+       
+	</rule>	
+</pattern>
+-->

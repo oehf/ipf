@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml-stylesheet type="text/xsl" href="cda.xsl"?> -->
+<ClinicalDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:hl7-org:v3" xsi:schemaLocation="urn:hl7-org:v3 ../../main/resources/schema/cdar2/infrastructure/cda/CDA.xsd">
+	<typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3"/>
+	<templateId root="2.16.840.1.113883.10.20.9"/>
+	<id root="1.2.820.99999.101013147001228071.1268039749061.1"/>
+	<code code="53576-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Personal Health Monitoring Report"/>
+	<title>IBM Connected Home Health Monitoring Report</title>
+	<effectiveTime value="20100308041549-0500"/>
+	<confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" displayName="Normal"/>
+	<languageCode code="en-US"/>
+	<recordTarget>
+		<patientRole>
+			<id extension="245296" root="1.3.6.1.4.1.21367.2010.1.2.300"/>
+			<patient>
+				<name>
+					<family>Rodgers</family>
+					<given>Rich</given>
+				</name>
+				<administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1000"/>
+				<birthTime value="1975"/>
+			</patient>
+		</patientRole>
+	</recordTarget>
+	<author>
+		<time value="20100308041549-0500"/>
+		<assignedAuthor>
+			<id extension="996-756-498" root="2.16.840.1.113883.19.5"/>
+			<addr nullFlavor="OTH"/>
+			<telecom nullFlavor="NA"/>
+			<assignedPerson>
+				<name>
+					<given>IBM</given>
+					<family>WSE</family>
+				</name>
+			</assignedPerson>
+		</assignedAuthor>
+	</author>
+	<custodian>
+		<assignedCustodian>
+			<representedCustodianOrganization>
+				<id root="8a54f393-8015-460c-abd2-f29aad15481c"/>
+				<name nullFlavor="NAV"/>
+				<telecom nullFlavor="ASKU" use="WP"/>
+				<addr nullFlavor="UNK"/>
+			</representedCustodianOrganization>
+		</assignedCustodian>
+	</custodian>
+	<informationRecipient>
+		<intendedRecipient>
+			<id extension="4" root="2.16.840.1.113883.19"/>
+			<addr>
+				<streetAddressLine>1001 Hospital Lane</streetAddressLine>
+				<city>Ann Arbor</city>
+				<state>MI</state>
+				<postalCode>99999</postalCode>
+				<country>USA</country>
+			</addr>
+			<telecom value="tel:555-555-1003" use="WP"/>
+			<informationRecipient>
+				<name>
+					<prefix>Dr.</prefix>
+					<given>Harold</given>
+					<family>Hippocrates</family>
+				</name>
+			</informationRecipient>
+		</intendedRecipient>
+	</informationRecipient>
+	<documentationOf>
+		<serviceEvent classCode="MPROT">
+			<effectiveTime>
+				<low value="20100209034000"/>
+				<high value="20100217130000"/>
+			</effectiveTime>
+		</serviceEvent>
+	</documentationOf>
+	<component>
+		<structuredBody>
+			<component>
+				<section>
+					<templateId root="2.16.840.1.113883.10.20.1.7"/>
+					<templateId root="2.16.840.1.113883.10.20.9.1"/>
+					<code code="46264-8" codeSystem="2.16.840.1.113883.6.1"/>
+					<title>Medical Equipment</title>
+					<text>
+					   <!-- Device information -->
+                        <table border="1" width="100%">
+                            <tbody>
+                                <tr>
+                                    <th>System Type</th>
+                                    <th>System Model</th>
+                                    <th>System Manufacturer</th>
+                                    <th>System ID</th>
+                                    <th>Production Spec</th>
+                                    <th>Regulated</th>
+                                </tr>
+                                <tr>
+                                    <td>Blood Pressure Monitor</td>
+                                    <td>Pulse Master 2000</td>
+                                    <td>Acme</td>
+                                    <td>1F-3E-46-78-9A-BC-DE-F1</td>
+                                    <td>
+                                        Unspecified:
+                                        Serial Number: 584216<br/>
+                                        Part Number: 69854<br/>
+                                        Hardware Revision: 2.1<br/>
+                                        Software Revision: 1.1<br/>
+                                        Protocol Revision: 1.0<br/>
+                                        Prod Spec GMDN:
+                                    </td>
+                                    <td>Regulated</td>
+                                </tr>
+                            </tbody>
+                        </table></text>
+					<entry typeCode="COMP">
+						<organizer classCode="CLUSTER" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.9.4"/>
+							<statusCode code="completed"/>
+							<effectiveTime value="20070801"/>
+							<participant typeCode="SBJ">
+								<participantRole classCode="MANU">
+									<templateId root="2.16.840.1.113883.10.20.1.52"/>
+									<templateId root="2.16.840.1.113883.10.20.9.9"/>
+									<id root="1.2.840.10004.1.1.1.0.0.1.0.0.1.2680" assigningAuthorityName="EUI-64" extension="1F-3E-46-78-9A-BC-DE-F1"/>
+									<code nullFlavor="OTH">
+										<originalText>Regulated Device</originalText>
+									</code>
+									<playingDevice>
+                                        <code code="MDC_DEV_SPEC_PROFILE_BP" codeSystem="2.16.840.1.113883.6.24" codeSystemName="MDC" displayName="BloodPressure Monitor">
+                                            <translation code="32033000" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Arterial pressure monitor"/>
+                                        </code>
+										<manufacturerModelName>
+											<!-- these will be unstructured, the text below is an example (no shalls for the labels used below -->
+											Model: Pulse Master 2000
+											Serial number:584216
+											Part number: 69854
+											Hardware revision: 2.1
+											Software revision: 1.1
+											Protocol revision: 1.0
+											Unspecified (free text comment):
+										</manufacturerModelName>
+									</playingDevice>
+									<scopingEntity>
+										<desc>Acme</desc>
+									</scopingEntity>
+								</participantRole>
+							</participant>
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!--... all our device observations go here -->
+									<code/>
+								</observation>
+							</component>
+						</organizer>
+					</entry>
+				</section>
+			</component>
+			<component>
+				<section>
+					<templateId root="2.16.840.1.113883.10.20.1.16"/>
+					<templateId root="2.16.840.1.113883.10.20.9.2"/>
+					<code code="8716-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+					<title>Vital Signs</title>
+					<text>
+						<!-- Vital sign tables go here -->
+						<paragraph>Home Health Observations</paragraph>
+						<table>
+							<thead>
+								<tr>
+									<th>Observation Type</th>
+									<th>Date/Time</th>
+									<th>Value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-16 04:00:00</td>
+									<td>181.0 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-15 02:45:00</td>
+									<td>181.0 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-14 03:30:00</td>
+									<td>181.0 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-13 03:15:00</td>
+									<td>180.9 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-12 03:05:00</td>
+									<td>180.6 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-11 04:05:00</td>
+									<td>180.7 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-10 02:45:00</td>
+									<td>180.5 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-09 03:40:00</td>
+									<td>180.0 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-17 04:00:00</td>
+									<td>180.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-17 04:00:00</td>
+									<td>100.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-16 03:30:01</td>
+									<td>149.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-16 03:30:01</td>
+									<td>103.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-15 02:45:02</td>
+									<td>148.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-15 02:45:02</td>
+									<td>101.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-14 03:30:05</td>
+									<td>130.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-14 03:30:05</td>
+									<td>85.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-13 03:15:09</td>
+									<td>132.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-13 03:15:09</td>
+									<td>82.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-12 03:05:07</td>
+									<td>131.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-12 03:05:07</td>
+									<td>93.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-11 04:05:04</td>
+									<td>135.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-11 04:05:04</td>
+									<td>97.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-10 02:45:01</td>
+									<td>122.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-10 02:45:01</td>
+									<td>94.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Systolic blood pressure</td>
+									<td>2010-02-09 03:40:08</td>
+									<td>139.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Diastolic blood pressure</td>
+									<td>2010-02-09 03:40:08</td>
+									<td>88.0 mm[Hg]</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-17 01:00:00</td>
+									<td>203.0 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-17 04:00:00</td>
+									<td>204.0 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-16 09:00:00</td>
+									<td>202.5 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-16 04:00:00</td>
+									<td>189.0 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-16 04:00:00</td>
+									<td>152.5 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-15 02:45:00</td>
+									<td>150.0 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-14 03:30:00</td>
+									<td>136.0 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-13 03:15:00</td>
+									<td>125.5 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-12 03:05:00</td>
+									<td>138.0 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-11 04:05:00</td>
+									<td>143.5 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-10 02:45:00</td>
+									<td>121.5 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Blood glucose concentration</td>
+									<td>2010-02-09 03:40:00</td>
+									<td>120.5 mg/dL</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-16 04:00:00</td>
+									<td>181.0 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-16 04:00:00</td>
+									<td>181.0 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-16 04:00:00</td>
+									<td>181.0 [lb_av]</td>
+								</tr>
+								<tr>
+									<td>Body weight</td>
+									<td>2010-02-16 04:00:00</td>
+									<td>181.0 [lb_av]</td>
+								</tr>
+							</tbody>
+						</table>
+					</text>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.9.8"/>
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100216040000"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="181.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100215024500"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="181.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100214033000"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="181.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100213031500"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="180.9"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100212030500"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="180.6"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100211040500"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="180.7"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100210024500"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="180.5"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100209034000"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="180.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100217040000"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="180.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100217040000"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="100.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100216033001"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="149.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100216033001"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="103.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100215024502"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="148.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100215024502"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="101.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100214033005"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="130.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100214033005"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="85.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100213031509"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="132.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100213031509"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="82.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100212030507"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="131.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100212030507"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="93.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100211040504"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="135.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100211040504"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="97.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100210024501"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="122.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100210024501"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="94.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271649006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Systolic blood pressure"/>
+							<effectiveTime value="20100209034008"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="139.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="271650006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Diastolic blood pressure"/>
+							<effectiveTime value="20100209034008"/>
+							<value xsi:type="PQ" unit="mm[Hg]" value="88.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100217130000"/>
+							<value xsi:type="PQ" unit="mg/dL" value="203.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100217040000"/>
+							<value xsi:type="PQ" unit="mg/dL" value="204.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100216090000"/>
+							<value xsi:type="PQ" unit="mg/dL" value="202.5"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100216040000"/>
+							<value xsi:type="PQ" unit="mg/dL" value="189.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100216040000"/>
+							<value xsi:type="PQ" unit="mg/dL" value="152.5"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100215024500"/>
+							<value xsi:type="PQ" unit="mg/dL" value="150.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100214033000"/>
+							<value xsi:type="PQ" unit="mg/dL" value="136.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100213031500"/>
+							<value xsi:type="PQ" unit="mg/dL" value="125.5"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100212030500"/>
+							<value xsi:type="PQ" unit="mg/dL" value="138.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100211040500"/>
+							<value xsi:type="PQ" unit="mg/dL" value="143.5"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100210024500"/>
+							<value xsi:type="PQ" unit="mg/dL" value="121.5"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="434912009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Blood glucose concentration"/>
+							<effectiveTime value="20100209034000"/>
+							<value xsi:type="PQ" unit="mg/dL" value="120.5"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100216040000"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="181.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100216040000"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="181.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100216040000"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="181.0"/>
+						</observation>
+					</entry>
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<code code="27113001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Body weight"/>
+							<effectiveTime value="20100216040000"/>
+							<value xsi:type="PQ" unit="[lb_av]" value="181.0"/>
+						</observation>
+					</entry>
+				</section>
+			</component>
+		</structuredBody>
+	</component>
+</ClinicalDocument>
