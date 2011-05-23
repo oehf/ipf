@@ -31,10 +31,10 @@ import ca.uhn.hl7v2.model.v26.message.ORU_R01;
  * 
  */
 public class Pcd01ValidatorTest {
-    MessageAdapter msg1 = load("pcd01/valid-pcd01-request.hl7v2");
-    MessageAdapter msg2 = load("pcd01/valid-pcd01-request2.hl7v2");
-    MessageAdapter rsp = load("pcd01/valid-pcd01-response.hl7v2");
-    MessageAdapter rsp2 = load("pcd01/valid-pcd01-response2.hl7v2");
+    protected MessageAdapter msg1 = load("pcd01/valid-pcd01-request.hl7v2");
+    protected MessageAdapter msg2 = load("pcd01/valid-pcd01-request2.hl7v2");
+    protected MessageAdapter rsp = load("pcd01/valid-pcd01-response.hl7v2");
+    protected MessageAdapter rsp2 = load("pcd01/valid-pcd01-response2.hl7v2");
 
     static String MSH = "MSH|^~\\&|AcmeInc^ACDE48234567ABCD^EUI-64||||20090713090030+0500||ORU^R01^ORU_R01|MSGID1234|P|2.6|||NE|AL|||||IHE PCD ORU-R01 2006^HL7^2.16.840.1.113883.9.n.m^HL7\r";
     static String PID = "PID|||789567^^^Imaginary Hospital^PI||Doe^John^Joseph^^^^L^A|||M\r";
@@ -55,6 +55,8 @@ public class Pcd01ValidatorTest {
     public Pcd01Validator getValiadtor(){
     	return validator;
     }
+    
+  
     
     @Test
     public void testMessageSectionJ2() {

@@ -16,7 +16,6 @@
 package org.openehealth.ipf.modules.hl7.validation.builder
 
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
-import ca.uhn.hl7v2.validation.ValidationContext
 
 /**
  * A set of rules that check all primitive type constraints defined in
@@ -26,29 +25,29 @@ import ca.uhn.hl7v2.validation.ValidationContext
  */
 public class DefaultTypeRulesBuilder extends ValidationContextBuilder{
 
-    public RuleBuilder forContext(ValidationContext context) {
+    public RuleBuilder forContext(DefaultValidationContext context) {
         new RuleBuilder(context)
         .forVersion().before('2.3')
             // .type('ST').omitLeadingWhitespace()
             // .type('ID').omitLeadingWhitespace()
             // .type('TX').omitTrailingWhitespace()
-            .type('DT').matches(/(\d{4}[01]\d(\d{2})?/)
-            .type('TM').matches(/([012]\d[0-5]\d([0-5]\d(\.\d{4})?)([+-]\d{4})?)/)
-            .type('TSComponentOne').matches(/(\d{4}[01]\d\d{2}([012]\d[0-5]\d([0-5]\d(\.\d{4}?)?)?)([+-]\d{4})?)?/)
+            .primitiveType('DT').matches(/(\d{4}[01]\d(\d{2})?/)
+            .primitiveType('TM').matches(/([012]\d[0-5]\d([0-5]\d(\.\d{4})?)([+-]\d{4})?)/)
+            .primitiveType('TSComponentOne').matches(/(\d{4}[01]\d\d{2}([012]\d[0-5]\d([0-5]\d(\.\d{4}?)?)?)([+-]\d{4})?)?/)
         .forVersion().asOf('2.3')
-            .type('ST')[1..199] // .omitLeadingWhitespace()
-            .type('ID')[1..199] // .omitLeadingWhitespace()
-            .type('IS')[1..199] // .omitLeadingWhitespace()
-            .type('TX')[1..65535] // .omitTrailingWhitespace()
-            .type('DT').matches(/(\d{4}([01]\d(\d{2})?)?)?/)
-            .type('TM').matches(/([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?([+-]\d{4})?/)
-            .type('TSComponentOne').matches(/(\d{4}([01]\d(\d{2}([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?)?)?([+-]\d{4})?)?/)
+            .primitiveType('ST')[1..199] // .omitLeadingWhitespace()
+            .primitiveType('ID')[1..199] // .omitLeadingWhitespace()
+            .primitiveType('IS')[1..199] // .omitLeadingWhitespace()
+            .primitiveType('TX')[1..65535] // .omitTrailingWhitespace()
+            .primitiveType('DT').matches(/(\d{4}([01]\d(\d{2})?)?)?/)
+            .primitiveType('TM').matches(/([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?([+-]\d{4})?/)
+            .primitiveType('TSComponentOne').matches(/(\d{4}([01]\d(\d{2}([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?)?)?([+-]\d{4})?)?/)
         .forVersion().asOf('2.5')
-            .type('DTM').matches(/(\d{4}([01]\d(\d{2}([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?)?)?([+-]\d{4})?)?/)
+            .primitiveType('DTM').matches(/(\d{4}([01]\d(\d{2}([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?)?)?([+-]\d{4})?)?/)
         .forAllVersions()
-            .type('FT')[1..65535]
-            .type('NM').isNumber()
-            .type('SI').matches(/\d*/)
+            .primitiveType('FT')[1..65535]
+            .primitiveType('NM').isNumber()
+            .primitiveType('SI').matches(/\d*/)
     }
     
 }

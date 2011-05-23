@@ -15,8 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
-import java.util.Map
-import ca.uhn.hl7v2.validation.ValidationContext
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
 /**
  * RuleBuilder together with its subclasses allows the create validation
@@ -26,9 +25,9 @@ import ca.uhn.hl7v2.validation.ValidationContext
  */
 public class RuleBuilder {
 	
-     ValidationContext context
+    DefaultValidationContext context
 	
-	RuleBuilder(ValidationContext context) {
+	RuleBuilder(DefaultValidationContext context) {
 		this.context = context
 	}
 	
@@ -43,10 +42,20 @@ public class RuleBuilder {
 	/**
 	 * @return a builder that allows to formulate validation rules for the 
 	 * given Primitive type and message version.
+	 * Use for forVersionAndPrimitiveType
 	 */    
+    @Deprecated
 	PrimitiveRuleBuilder forVersionAndType(String version, String typeName) {
 		new VersionBuilder(version, context).type(typeName)
 	}
+    
+    /**
+    * @return a builder that allows to formulate validation rules for the
+    * given Primitive type and message version.
+    */
+    PrimitiveRuleBuilder forVersionAndPrimitiveType(String version, String typeName) {
+        new VersionBuilder(version, context).primitiveType(typeName)
+    }
 	
 	/**
 	 * @return a builder that allows to formulate validation rules for the 

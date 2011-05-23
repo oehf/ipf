@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.modules.hl7.validation
 
+import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
+import org.openehealth.ipf.modules.hl7.validation.model.CompositeTypeRule
+import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
+
+import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Primitive
-import ca.uhn.hl7v2.validation.Rule
 import ca.uhn.hl7v2.validation.EncodingRule
 import ca.uhn.hl7v2.validation.MessageRule
 import ca.uhn.hl7v2.validation.PrimitiveTypeRule
+import ca.uhn.hl7v2.validation.Rule
 import ca.uhn.hl7v2.validation.ValidationContext
-import org.openehealth.ipf.modules.hl7.validation.model.MissingMessageRule
-import org.openehealth.ipf.modules.hl7.validation.builder.RuleBuilder
 
 /**
  * IPF implementation of a HAPI validation context. It's strongly recommended
@@ -114,7 +117,35 @@ public class DefaultValidationContext implements ValidationContext, Serializable
 		}
 		rules as MessageRule[]
 	}
-	
+    
+   public <T extends Composite> CompositeTypeRule<T> [] getCompositeTypeRules(String version, String messageType, String triggerEvent, Class<T> clazz){
+       def rules = []
+       def matchingRules = ruleMap[version]["_C_$messageType^$triggerEvent"]
+       if (matchingRules) {
+           rules.addAll(matchingRules)
+       }
+       matchingRules = ruleMap[version]["_C_$messageType^*"]
+       if (matchingRules) {
+           rules.addAll(matchingRules)
+       }
+       for (ValidationContext context : nestedValidationContexts) {
+           if (context instanceof DefaultValidationContext){
+               matchingRules = context.getCompositeTypeRules(version, messageType, triggerEvent).toList()
+               if (matchingRules) {
+                   rules.addAll(matchingRules)
+               }
+           }
+       }
+       def result = [];
+       for(rule in rules){
+           if(rule.appliesFor(clazz)){
+               result.add(rule)
+           }
+       }
+       result as CompositeTypeRule<T>[]
+   }
+   
+   
 	/**
 	 * @see ca.uhn.hl7v2.validation.ValidationContext#getEncodingRules(java.lang.String, java.lang.String)
 	 */
@@ -139,8 +170,15 @@ public class DefaultValidationContext implements ValidationContext, Serializable
 	public void addPrimitiveRule(String version, String typeName, PrimitiveTypeRule rule) {
 		addToRules(version, "_P_$typeName", rule)
 	}
-	
-	/**
+    
+    /**
+    * Adds a rule validating a Composite to the registry
+    */
+    public void addCompositeTypeRule(String version, String messageType, String triggerEvent, CompositeTypeRule rule) {
+        addToRules(version, "_C_$messageType^$triggerEvent", rule)
+    }
+
+    /**
 	 * Adds a rule validating a Message to the registry
 	 */
 	public void addMessageRule(String version, String messageType, String triggerEvent, MessageRule rule) {

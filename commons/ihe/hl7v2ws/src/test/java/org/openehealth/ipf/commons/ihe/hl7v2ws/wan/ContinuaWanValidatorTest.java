@@ -17,7 +17,10 @@ package org.openehealth.ipf.commons.ihe.hl7v2ws.wan;
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 
+import org.junit.Ignore;
 import org.junit.Test;
+import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01ValidatorTest;
 
 import ca.uhn.hl7v2.HL7Exception;
 
@@ -25,7 +28,7 @@ import ca.uhn.hl7v2.HL7Exception;
  * @author Mitko Kolev
  * 
  */
-public class ContinuaWanValidatorTest {
+public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
     ContinuaWanValidator validator = new ContinuaWanValidator();
 
     public ContinuaWanValidator getValiadtor() {
@@ -41,7 +44,8 @@ public class ContinuaWanValidatorTest {
     public void testWeightScaleMessage() {
         getValiadtor().validate(load("wan/valid-scale-continua-wan.hl7v2"));
     }
-
+    
+    
     @Test
     public void testBPMessage() {
         getValiadtor().validate(load("wan/valid-bp-continua-wan.hl7v2"));
@@ -64,6 +68,27 @@ public class ContinuaWanValidatorTest {
     @Test
     public void testGlucoseMessage() {
         getValiadtor().validate(load("wan/valid-glucose-continua-wan.hl7v2"));
+    }
+    
+    @Test
+    public void testResponseMessage() {
+        getValiadtor().validate(load("wan/valid-wan-response.hl7v2"));
+    }
+    
+    @Test(expected=ValidationException.class)
+    public void testResponseMessage2() {
+        getValiadtor().validate(rsp2);
+    }
+    
+    @Test(expected=ValidationException.class)
+    public void testInvalidResponseMessage() {
+        getValiadtor().validate(load("wan/invalid-wan-response.hl7v2"));
+    }
+    
+    
+    @Ignore
+    @Override
+    public void testSyntheticResponseMessage() {
     }
 
     @Test(expected = HL7Exception.class)

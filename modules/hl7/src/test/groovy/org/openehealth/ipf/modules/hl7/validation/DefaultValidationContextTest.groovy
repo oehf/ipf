@@ -86,24 +86,23 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	void testComplete(){
 	    ValidationContext context = new DefaultValidationContext().configure()        
             .forVersion().asOf('2.3')
-                .type('DT')
+                .primitiveType('DT')
                     .matches(/(\d{4}([01]\d(\d{2})?)?)?/)				// YYYY[MM[DD]]
                     .withReference('Version 2.5 Section 2.A.21')
-                
             .forVersion().before('2.3')
-                .type('DT')
+                .primitiveType('DT')
                     .matches(/(\d{4}[01]\d(\d{2})?/)					// YYYYMMDD
                             .withReference('Version 2.5 Section 2.A.21')
       
             .forAllVersions()
-                .type('FT')[1..65535]
-                .type('ST').omitLeadingWhitespace()
-                .type('TX').omitTrailingWhitespace()
-                .type('ID')[1..1].withDescription('IDs may not be longer than 1')     // NONSENSE. Will throw
-                .type('IS').checkIf { it.value.size <= 20 }		    // same as maxSize(20)
-                .type('SI').matches(/\d*/)							// non-negative integer
-                .type('NM').matches(/(+|-)?\d*\.?\d*/)				// number
-                .type('TM')
+                .primitiveType('FT')[1..65535]
+                .primitiveType('ST').omitLeadingWhitespace()
+                .primitiveType('TX').omitTrailingWhitespace()
+                .primitiveType('ID')[1..1].withDescription('IDs may not be longer than 1')     // NONSENSE. Will throw
+                .primitiveType('IS').checkIf { it.value.size <= 20 }		    // same as maxSize(20)
+                .primitiveType('SI').matches(/\d*/)							// non-negative integer
+                .primitiveType('NM').matches(/(+|-)?\d*\.?\d*/)				// number
+                .primitiveType('TM')
                     .matches(/([012]\d([0-5]\d([0-5]\d(\.\d(\d(\d(\d)?)?)?)?)?)?)?([+-]\d{4})?/)	//HH[MM[SS[.S[S[S[S]]]]]][+/-ZZZZ]
                     .withReference('Version 2.5 Section 2.16.79')
             .context
@@ -210,52 +209,52 @@ public class DefaultValidationContextTest extends GroovyTestCase{
 	    parser.parse(msgText)
 	}
 
-void testValidAbstractSyntax2() {
-    DefaultValidationContext context = new DefaultValidationContext()
-    context.configure()        
-        .forVersion('2.5')
-            .message('ORU', 'R01').abstractSyntax(
-                    'MSH',
-                    [  {  'SFT'  }  ],
-                    {PATIENT_RESULT(
-                            [PATIENT(
-                                    'PID',
-                                    [  'PD1'  ],  
-                                    [  {  'NTE'  }  ],  
-                                    [  {  'NK1'  }  ],  
-                                    [VISIT(
-                                            'PV1',  
-                                            [  'PV2'  ]  
-                                    )]
-                             )],
-                             {ORDER_OBSERVATION(
-                                     [  'ORC'  ],
-                                     'OBR',
-                                     [{  'NTE'  }],
-                                     [{TIMING_QTY(
-                                             'TQ1',
-                                             [{  'TQ2'  }]
-                                     )}],
-                                     [  'CTD'  ],  
-                                     [{OBSERVATION(
-                                            'OBX',
-                                            [  {  'NTE'  }  ] 
-                                     )}],
-                                     [{  'FT1'  }],
-                                     [{  'CTI'  }],
-                                     [{SPECIMEN(
-                                             'SPM',
-                                             [{  'OBX'  }]
-                                     )}]
-                              )}
-                     )},
-                     [ 'DSC' ]
-                )
-
-    def msgText = this.class.classLoader.getResource('msg-07.hl7')?.text
-    def parser = new PipeParser(context)
-    Message m = parser.parse(msgText)
-}
+    void testValidAbstractSyntax2() {
+        DefaultValidationContext context = new DefaultValidationContext()
+        context.configure()        
+            .forVersion('2.5')
+                .message('ORU', 'R01').abstractSyntax(
+                        'MSH',
+                        [  {  'SFT'  }  ],
+                        {PATIENT_RESULT(
+                                [PATIENT(
+                                        'PID',
+                                        [  'PD1'  ],  
+                                        [  {  'NTE'  }  ],  
+                                        [  {  'NK1'  }  ],  
+                                        [VISIT(
+                                                'PV1',  
+                                                [  'PV2'  ]  
+                                        )]
+                                 )],
+                                 {ORDER_OBSERVATION(
+                                         [  'ORC'  ],
+                                         'OBR',
+                                         [{  'NTE'  }],
+                                         [{TIMING_QTY(
+                                                 'TQ1',
+                                                 [{  'TQ2'  }]
+                                         )}],
+                                         [  'CTD'  ],  
+                                         [{OBSERVATION(
+                                                'OBX',
+                                                [  {  'NTE'  }  ] 
+                                         )}],
+                                         [{  'FT1'  }],
+                                         [{  'CTI'  }],
+                                         [{SPECIMEN(
+                                                 'SPM',
+                                                 [{  'OBX'  }]
+                                         )}]
+                                  )}
+                         )},
+                         [ 'DSC' ]
+                    )
+    
+        def msgText = this.class.classLoader.getResource('msg-07.hl7')?.text
+        def parser = new PipeParser(context)
+        Message m = parser.parse(msgText)
+    }
 
 	void testInvalidAbstractSyntax() {
 	    DefaultValidationContext context = new DefaultValidationContext()

@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
+
 import ca.uhn.hl7v2.validation.Rule
 import ca.uhn.hl7v2.validation.ValidationContext
 
@@ -24,14 +26,16 @@ import ca.uhn.hl7v2.validation.ValidationContext
 public class VersionBuilder extends RuleBuilder{
 	
 	String version
+    
 	Rule rule
+    
 	static def versions = [ '2.1', '2.2', '2.3', '2.3.1', '2.4', '2.5', '2.5.1', '2.6']
 	
-	VersionBuilder(ValidationContext context) {
+	VersionBuilder(DefaultValidationContext context) {
 		super(context)	    
 	}
 	
-	VersionBuilder(String version, ValidationContext context) {
+	VersionBuilder(String version, DefaultValidationContext context) {
 	    this(context)
 	    if (!version) {
 	        throw IllegalArgumentException("Version must not be empty")
@@ -71,14 +75,23 @@ public class VersionBuilder extends RuleBuilder{
 	    this
 	}
 	
-      /**
-       * @param typeName name of the Primitive type
-       * @return builder that allows to add a Primitive validation rule
-       */
+   /**
+    * @param typeName name of the Primitive type
+    * @return builder that allows to add a Primitive validation rule
+    */
+    @Deprecated
 	PrimitiveRuleBuilder type(String typeName) {
-		new PrimitiveRuleBuilder(version, context, typeName)
+		primitiveType(typeName)
 	}	
-	
+    
+   /**
+    * @param typeName name of the Primitive type
+    * @return builder that allows to add a Primitive validation rule
+    */
+    PrimitiveRuleBuilder primitiveType(String typeName) {
+        new PrimitiveRuleBuilder(version, context, typeName)
+    }
+    
     /**
      * @param messageType
      * @param triggerEvent

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.validation.builder
 
-import ca.uhn.hl7v2.validation.ValidationContext
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
 /**
  * Abstract helper class to separate ValidationContext creation from
@@ -29,6 +29,6 @@ public abstract class ValidationContextBuilder{
      * @return a RuleBuilder instance that defines the validation rules
      * for the 
      */
-    public abstract RuleBuilder forContext(ValidationContext context)
+    public abstract RuleBuilder forContext(DefaultValidationContext context)
     
 }
