@@ -1,0 +1,26 @@
+<!--  PHMR Selected CCD v1.0 Templates Root: 2.16.840.1.113883.10.20.1 Allows single step PHMR validation-->
+
+<!-- ERRORS -->
+<pattern id='p-2.16.840.1.113883.10.20.1-errors' see='#p-2.16.840.1.113883.10.20.1-errors'>
+    <title>Selected CCD v1.0 Templates Root - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1"]'>
+        <assert test='count(.//cda:templateId[@root="2.16.840.1.113883.10.20.1.7"])  &lt;= 1'>
+        CCD SHALL NOT contain more than one Medical Equipment section (templateId 2.16.840.1.113883.10.20.1.7).
+        </assert>
+        
+        <assert test='count(.//cda:templateId[@root="2.16.840.1.113883.10.20.1.16"])  &lt;= 1'>
+        CCD SHALL NOT contain more than one Vital Signs section (templateId 2.16.840.1.113883.10.20.1.16).
+        </assert>
+    
+    </rule>
+    
+</pattern>
+
+<!-- WARNING -->
+
+<pattern id='p-2.16.840.1.113883.10.20.1-warning' see='#p-2.16.840.1.113883.10.20.1-warning'>
+    <title>Selected CCD v1.0 Templates Root - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.1"]'>
+    <report test='.'></report>
+    </rule>
+</pattern>
