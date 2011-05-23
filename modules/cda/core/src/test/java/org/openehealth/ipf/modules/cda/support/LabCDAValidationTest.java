@@ -28,6 +28,9 @@ public class LabCDAValidationTest {
     private XsdValidator validator;
     private SchematronValidator schematron;
     private Map<String, Object> params;
+    
+    private String sample = "IHE_LabReport_20080103.xml";
+    private String sample2 = "IHE_LabReport_20080103_Errored.xml";
 
     @Before
     public void setUp() throws Exception {
@@ -43,27 +46,27 @@ public class LabCDAValidationTest {
     
     @Test
     public void testSchemaValidate() throws Exception {
-        Source testXml = new StreamSource(new ClassPathResource(
-            "builders/content/document/IHE_LabReport_20080103.xml")
-                .getInputStream());
+        Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
         validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
     }
     
     @Test
     public void testValidateErrors() throws Exception {
-        Source testXml = new StreamSource(new ClassPathResource(
-            "builders/content/document/IHE_LabReport_20080103.xml")
-                .getInputStream());
-        schematron
-            .validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES,
-                params));
+        Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
+        schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES,
+            params));
     }
     
     @Test(expected = ValidationException.class)
+    public void testValidateOnlyErrors() throws Exception {
+        Source testXml = new StreamSource(new ClassPathResource(sample2).getInputStream());
+        schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES,
+            params));
+    }
+
+    @Test(expected = ValidationException.class)
     public void testValidateWarnings() throws Exception {
-        Source testXml = new StreamSource(new ClassPathResource(
-            "builders/content/document/IHE_LabReport_20080103.xml")
-                .getInputStream());
+        Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
         schematron
             .validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES));
     }

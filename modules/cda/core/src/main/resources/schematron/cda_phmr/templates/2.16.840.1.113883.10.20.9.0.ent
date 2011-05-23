@@ -1,0 +1,81 @@
+<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 BODY Contents -->
+
+<!-- ERRORS -->
+<pattern id='p-2.16.840.1.113883.10.20.9.0-errors' see='#p-2.16.840.1.113883.10.20.9.0-errors'>
+    <title>PHMR Templates Body - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9"]'>
+    
+        <assert test="cda:component/cda:structuredBody and
+                      cda:component/cda:structuredBody/*/cda:section">
+        Error CONF-PHMR-43: A Personal Healthcare Monitoring Report SHALL have a structuredBody element. 
+        The content of this element makes up the human-readable text of the document. This information SHALL 
+        be organized into sections.
+        </assert>
+        
+        <assert test="count(descendant::*[cda:component/cda:section/cda:code[@code='46264-8' and @codeSystem='2.16.840.1.113883.6.1']])=1">
+        Error CONF-PHMR-47: A personal healthcare monitoring report SHALL contain a Medical Equipment section.
+        </assert>
+
+        <assert test="count(descendant::*[cda:component/cda:section/cda:code[@code='8716-3' and @codeSystem='2.16.840.1.113883.6.1']])=1 or
+                      count(descendant::*[cda:component/cda:section/cda:code[@code='30954-2' and @codeSystem='2.16.840.1.113883.6.1']])=1">
+        Error CONF-PHMR-48: A personal healthcare monitoring report SHALL contain either a 
+        Vital Signs section or Results section, and MAY contain both.
+        </assert>
+    </rule>
+    
+    <rule context="*[self::cda:section[ancestor::cda:structuredBody]]">
+        <assert test="cda:code">
+        Error CONF-PHMR-45: All section elements in the body of the document SHALL have a code element.
+        </assert>
+        
+        <assert test="child::cda:entry or (cda:text and string-length(normalize-space(cda:text/text())) > 0)">        
+        Error CONF-PHMR-46: All section elements in the body of the document SHALL have some nonblank text or one or more subsections, 
+        even if the purpose of the text is only to indicate that information is unknown.   
+        </assert>
+    </rule>
+
+    <rule context="*[self::cda:section[ancestor::cda:structuredBody]]/cda:code[@code='46264-8' and @codeSystem='2.16.840.1.113883.6.1']">
+        <assert test="preceding::cda:templateId[@root='2.16.840.1.113883.10.20.1.7'] and 
+                      preceding::cda:templateId[@root='2.16.840.1.113883.10.20.9.1']">
+        Error CONF-PHMR-49: A Medical Equipment section SHALL contain two templateIds. CCD templateId 2.16.840.1.113883.10.20.1.7 
+        SHALL be present and the section SHALL conform to all the constraints specified in CCD for that template. An additional 
+        templateId SHALL be present where the value of @root is 2.16.840.1.113883.10.20.9.1, indicating conformance to the constraints 
+        specified in this DSTU.
+        </assert>
+    </rule>
+    
+    <rule context="*[self::cda:section[ancestor::cda:structuredBody]]/cda:code[@code='8716-3' and @codeSystem='2.16.840.1.113883.6.1']">
+        <assert test="preceding::cda:templateId[@root='2.16.840.1.113883.10.20.1.16'] and 
+                      preceding::cda:templateId[@root='2.16.840.1.113883.10.20.9.2']">
+        Error CONF-PHMR-52: A Vital Signs section SHALL contain two templateIds. CCD templateId 2.16.840.1.113883.10.20.1.16 SHALL 
+        be present and the section SHALL conform to all the constraints specified in CCD for that template. An additional templateId 
+        SHALL be present where the value of @root is 2.16.840.1.113883.10.20.9.2, indicating conformance to the constraints specified 
+        in this DSTU.
+        </assert>
+    </rule>
+
+    <rule context="*[self::cda:section[ancestor::cda:structuredBody]]/cda:code[@code='30954-2' and @codeSystem='2.16.840.1.113883.6.1']">
+        <assert test="preceding::cda:templateId[@root='2.16.840.1.113883.10.20.1.14'] and 
+                      preceding::cda:templateId[@root='2.16.840.1.113883.10.20.9.14']">
+        Error CONF-PHMR-57: A Results section SHALL contain two templateIds. CCD templateId 2.16.840.1.113883.10.20.1.14 
+        SHALL be present and the section SHALL conform to all the constraints specified in CCD for that template. An additional 
+        templateId SHALL be present where the value of @root is 2.16.840.1.113883.10.20.9.14, indicating conformance to 
+        the constraintspecified in this DSTU.
+        </assert>
+    </rule>
+
+</pattern>
+
+<!-- WARNINGS -->
+<pattern id="p-2.16.840.1.113883.10.20.9.0-warning" see='#p-2.16.840.1.113883.10.20.9.0-warnings'>
+    <title>PHMR Templates Body - warnings validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9"]'>
+                
+    </rule>
+</pattern>
+
+<pattern id="p-2.16.840.1.113883.10.20.9.0-note">
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9"]'>
+       
+	</rule>
+</pattern>

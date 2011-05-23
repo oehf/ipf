@@ -31,6 +31,8 @@ public interface CDAR2Constants {
     // Schematron
 
     static final String CCD_SCHEMATRON_RULES = "schematron/ccd/ccd.sch";
+    
+    static final String CDA_PHMR_SCHEMATRON_RULES = "schematron/cda_phmr/PHMR.sch";
 
     static final String HITSP_24_SCHEMATRON_RULES = "schematron/hitspc32_v2.4_20090414/HITSP_C32.sch";
 

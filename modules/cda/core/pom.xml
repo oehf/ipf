@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.modules</groupId>
-    <artifactId>modules-cda-mdht</artifactId>
-    <name>modules-cda-mdht</name>
+    <artifactId>modules-cda-core</artifactId>
+    <name>modules-cda-core</name>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
@@ -12,7 +12,7 @@
     </parent>
     
     <properties>
-        <osgi.export.pkg>org.openehealth.ipf.modules.cda.mdht*</osgi.export.pkg>
+        <osgi.export.pkg>org.openehealth.ipf.modules.cda.oht*</osgi.export.pkg>
         <ipf.extension.beans>cdaModelExtension</ipf.extension.beans>
     </properties>
     
@@ -21,32 +21,17 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-core</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-cda-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        </dependency>  
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
+       
         <dependency>
-            <groupId>org.openhealthtools.mdht</groupId>
-            <artifactId>org.openhealthtools.mdht.uml.cda.ccd</artifactId>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-xml</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>  
-                        <manifestFile>META-INF/MANIFEST.MF</manifestFile>
-                    </archive> 
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>  
 </project>

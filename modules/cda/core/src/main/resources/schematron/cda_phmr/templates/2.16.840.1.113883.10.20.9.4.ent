@@ -1,0 +1,26 @@
+<!-- HL7 PHMR Rel. 1, Nov 2008 Templates Root: 2.16.840.1.113883.10.20.9 Capitel 3.5.2 Device Definition Organizer Contents -->
+
+<!-- ERRORS -->
+<pattern id='p-2.16.840.1.113883.10.20.9.4-errors' see='#p-2.16.840.1.113883.10.20.9.4-errors'>
+    <title>PHMR Templates Device Definition Organizer - errors validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.4"]'>
+    
+        <assert test="self::cda:organizer and self::cda:organizer[@moodCode='EVN'][@classCode='CLUSTER']">
+        Error CONF-PHMR-69: A Device Definition Organizer SHALL be represented with an organizer element where @classCode is CLUSTER and @moodCode is EVN.
+        </assert>
+        
+        <assert test="cda:participant and cda:participant[@typeCode='SBJ'] and 
+                      count(descendant::*[cda:templateId/@root='2.16.840.1.113883.10.20.9.9']) = 1">
+        Error CONF-PHMR-71: A participant element where @typeCode is SBJ SHALL be present. It SHALL contain a 
+        single PHMR Product Instance template (templateId 2.16.840.1.113883.10.20.9.9).
+        </assert>
+    </rule>
+</pattern>
+
+<!-- WARNINGS -->
+<pattern id="p-2.16.840.1.113883.10.20.9.4-warning" see='#p-2.16.840.1.113883.10.20.9.4-warning'>
+    <title>PHMR Templates Device Definition Organizer - warning validation phase</title>
+    <rule context='*[cda:templateId/@root="2.16.840.1.113883.10.20.9.4"]'>
+
+    </rule>
+</pattern>
