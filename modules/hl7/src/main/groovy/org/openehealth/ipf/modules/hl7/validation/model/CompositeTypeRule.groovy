@@ -22,12 +22,13 @@ import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * Rule for validating {@link Composite} types.
+ * FIXME declared as abstract class to satisfy the Eclpse Groovy plugin
  * 
  * @author Mitko Kolev
  * 
  * @see PrimitiveTypeRule
  */
-public interface CompositeTypeRule<T extends Composite> extends Rule {
+public abstract class CompositeTypeRule<T extends Composite> implements Rule {
 
     /**
      * Tests the given (fully populated) message against the criteria defined by
@@ -36,13 +37,13 @@ public interface CompositeTypeRule<T extends Composite> extends Rule {
      * @return a list of exceptions indicating points at which the given message
      *         failed to validate (empty if validation succeeds;
      */
-    public ValidationException[] test(T composite, int fieldIndex, int repetition, String path);
+    public abstract ValidationException[] test(T composite, int fieldIndex, int repetition, String path);
 
     /**
      * Returns if the rule should check the given class.
      * 
      * @return a class instance.
      */
-    boolean appliesFor(Class<? extends Composite> clazz);
+    public abstract boolean appliesFor(Class<? extends Composite> clazz);
     
 }

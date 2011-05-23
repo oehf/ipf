@@ -34,7 +34,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-public abstract class AbstractCompositeTypeRule<T extends Composite> implements CompositeTypeRule<T> {
+public abstract class AbstractCompositeTypeRule<T extends Composite> extends CompositeTypeRule<T> {
 
     private static final long serialVersionUID = 1861386949211093806L;
 
