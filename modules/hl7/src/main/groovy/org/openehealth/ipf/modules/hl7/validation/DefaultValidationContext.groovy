@@ -130,12 +130,13 @@ public class DefaultValidationContext implements ValidationContext, Serializable
        }
        for (ValidationContext context : nestedValidationContexts) {
            if (context instanceof DefaultValidationContext){
-               matchingRules = context.getCompositeTypeRules(version, messageType, triggerEvent).toList()
+               matchingRules = ((DefaultValidationContext)context).getCompositeTypeRules(version, messageType, triggerEvent, clazz).toList()
                if (matchingRules) {
                    rules.addAll(matchingRules)
                }
            }
        }
+       //filter only the rules that apply for clazz
        def result = [];
        for(rule in rules){
            if(rule.appliesFor(clazz)){
