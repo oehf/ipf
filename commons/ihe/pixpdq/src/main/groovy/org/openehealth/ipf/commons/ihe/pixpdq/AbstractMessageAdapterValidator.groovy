@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdq
 
-import java.util.Collection
-
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.core.modules.api.Validator
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext;
@@ -87,6 +85,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     void validate(final MessageAdapter msg){
         validate(msg, null);
     }
+
     /**
      * Performs validation of an HL7 message.
      * @param msg
@@ -164,14 +163,15 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     // --------------- Highest-level validation objects ---------------
 
     /**
-    * Validates a message.
-    */
-   void checkMessage(msg, String segmentNames, Collection<Exception> violations) {
-       checkUnrecognizedSegments(msg.group, violations)
-       for(segmentName in segmentNames.tokenize()) {
-           "check${segmentName}"(msg, violations)
-       }
-   }
+     * Validates a message.
+     */
+    void checkMessage(msg, String segmentNames, Collection<Exception> violations) {
+        checkUnrecognizedSegments(msg.group, violations)
+        for (segmentName in segmentNames.tokenize()) {
+            "check${segmentName}"(msg, violations)
+        }
+    }
+
     /**
      * Searches for unrecognized segments in a Group.
      */
@@ -185,6 +185,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
             }
         }
     }
+
     // --------------- Reusable validation functions ---------------
     
     /**
@@ -221,7 +222,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
         def segment = struct."${segmentName}"()[segmentRepetition - 1]
         for(i in fields) {
             if( ! segment[i].value) {
-                violations.add(new Exception("Missing ${struct.path}.${segmentName}(${repetition})[${i}]"))
+                violations.add(new Exception("Missing ${struct.path}.${segmentName}(${segmentRepetition})[${i}]"))
             }
         }
     }
@@ -242,6 +243,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     }
 
     // --------------- Segments, ordered alphabetically ---------------
+
 	/**
 	 * Validates segment ERR.
 	 */
@@ -255,6 +257,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     void checkMSA(msg, Collection<Exception> violations) {
         checkSegmentStructure(msg, 'MSA', [1, 2], violations)
     }
+
     /**
      * Validates segment MSH.
      */

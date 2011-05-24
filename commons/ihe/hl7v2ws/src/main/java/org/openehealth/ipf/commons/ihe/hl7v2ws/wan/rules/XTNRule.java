@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class XTNRule extends AbstractCompositeTypeRule<XTN> {
+public class XTNRule extends AbstractCompositeTypeRule<XTN> {
 
     private static final long serialVersionUID = -2689901635637437625L;
 

@@ -26,8 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class CWERule extends AbstractCompositeTypeRule<CWE> {
-
+public class CWERule extends AbstractCompositeTypeRule<CWE> {
     private static final long serialVersionUID = -6690036932481564190L;
 
     public CWERule() {

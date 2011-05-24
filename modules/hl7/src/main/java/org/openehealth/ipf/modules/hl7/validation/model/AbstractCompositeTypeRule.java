@@ -85,11 +85,9 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
      */
     public boolean isEmpty(T element, int component) {
         String val = val(element, component);
-        if (val == null || val.equals("")) {
-            return true;
-        }
-        return false;
+        return (val == null) || (val.length() == 0);
     }
+
     /**
      * Returns true if the element at component is <b>not</b> empty, false otherwise;
      * 
@@ -168,6 +166,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
             violations.add(violation(msg(prefix, element, component, path)));
         }
     }
+
     /**
      * If the component at <code>component</code> is <b>not equal</b> to 
      * <code>expected</code>, a new {@link ValidationException} 
@@ -199,7 +198,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
      */
     public void mustMatchIsoOid(T element, int component, String path, Collection<ValidationException> violations) {
         String found = val(element, component);
-        boolean patternMatches = Pattern.compile(ISO_OID_PATTERN).matcher(found.toString()).matches();
+        boolean patternMatches = Pattern.compile(ISO_OID_PATTERN).matcher(found).matches();
         
         if (isEmpty(element, component) || !patternMatches) {
             String prefix = msgPrefix("ISO_OID pattern " + ISO_OID_PATTERN, found);
@@ -209,22 +208,22 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
 
    
 
-   /**
-    * If the component at <code>component</code> is not an EUI-64 identifier, a new
-    * {@link ValidationException} will be added to the Collection of
-    * <code>violations</code>
-    * 
-    * @param element a {@link Composite} instance
-    * @param component (starting at 1)
-    * @param path a path to the element
-    * @param violations where to store the validation violations
-    */
+    /**
+     * If the component at <code>component</code> is not an EUI-64 identifier, a new
+     * {@link ValidationException} will be added to the Collection of
+     * <code>violations</code>
+     *
+     * @param element a {@link Composite} instance
+     * @param component (starting at 1)
+     * @param path a path to the element
+     * @param violations where to store the validation violations
+     */
     public void mustMatchEui64(T element, int component, String path, Collection<ValidationException> violations) {
         String found = val(element, component);
         boolean patternMatches = Pattern.compile(EUI_64_PATTERN).matcher(found).matches();
 
         if (isEmpty(element, component) || !patternMatches) {
-            String prefix = msgPrefix("EUI_64 patttern" +  EUI_64_PATTERN, found);
+            String prefix = msgPrefix("EUI_64 pattern " +  EUI_64_PATTERN, found);
             violations.add(violation(msg(prefix, element, component, path)));
         }
     }
@@ -232,9 +231,10 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
     protected ValidationException violation(String msg) {
         return new ValidationException(msg);
     }
-   /**
-    * @return a not-null String
-    */
+
+    /**
+     * @return a not-null String
+     */
     protected String val(T element, int component) {
         String result = "";
         try {
@@ -261,12 +261,18 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
     protected String msg(String prefix, Composite element, int component, String path) {
         String reference = getSectionReference();
         String elementType = element.getClass().getSimpleName();
-        if (reference == null){
-            reference = " rule for type " + elementType;
-        }
-        //TODO
-        return "Validation error " + reference == null ? "" : reference + " : "
-                + prefix +  " of type " + elementType +" ,component " + component + ", path " + path;
+        return new StringBuilder()
+                .append("Validation error: ")
+                .append((reference == null) ? ("rule for type " + elementType) : reference)
+                .append(" : ")
+                .append(prefix)
+                .append(" of type ")
+                .append(elementType)
+                .append(", component ")
+                .append(component)
+                .append(", path ")
+                .append(path)
+                .toString();
     }
     
     @Override

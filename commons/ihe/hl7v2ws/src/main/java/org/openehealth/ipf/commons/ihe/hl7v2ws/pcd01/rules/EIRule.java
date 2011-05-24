@@ -26,10 +26,8 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class EIRule extends AbstractCompositeTypeRule<EI> {
-
+public class EIRule extends AbstractCompositeTypeRule<EI> {
     private static final long serialVersionUID = -3955263429919793537L;
-    private static String REFERENE = "PCD Rev. 2, Vol. 2 App. C.5 ";
 
     public EIRule() {
         super(EI.class);
@@ -58,6 +56,6 @@ class EIRule extends AbstractCompositeTypeRule<EI> {
    
     @Override
     public String getSectionReference() {
-        return REFERENE;
+        return "PCD Rev. 2, Vol. 2 App. C.5 ";
     }
 }

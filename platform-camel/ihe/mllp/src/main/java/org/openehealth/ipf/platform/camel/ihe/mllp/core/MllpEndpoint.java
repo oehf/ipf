@@ -20,7 +20,8 @@ import org.apache.camel.component.mina.MinaConfiguration;
 import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.apache.commons.lang.Validate;
-import org.apache.mina.common.*;
+import org.apache.mina.common.DefaultIoFilterChainBuilder;
+import org.apache.mina.common.IoSession;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
@@ -111,7 +112,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      *      consumer-side storage for unsolicited message fragmentation.
      * @param autoCancel
      *      whether the producer should automatically send a cancel message
-     *      after it has collected all inetractive continuation pieces.
+     *      after it has collected all interactive continuation pieces.
      */
     public MllpEndpoint(
             MllpComponent mllpComponent,
@@ -366,12 +367,19 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
 
     /**
      * Returns true, when the producer should automatically send a cancel
-     * message after it has colelcted all interactive continuation pieces.
+     * message after it has collected all interactive continuation pieces.
      */
     public boolean isAutoCancel() {
         return autoCancel;
     }
 
+    /**
+     * @return
+     *      the wrapped MINA endpoint.
+     */
+    public MinaEndpoint getWrappedEndpoint() {
+        return wrappedEndpoint;
+    }
 
 
     // ----- dumb delegation, nothing interesting below -----

@@ -58,14 +58,14 @@ import ca.uhn.hl7v2.validation.ValidationContext
 public class DefaultValidationContext implements ValidationContext, Serializable {
 	    
 	private Map ruleMap = [
-	'2.1'   : [:],
-	'2.2'   : [:],
-	'2.3'   : [:],
-	'2.3.1' : [:],
-	'2.4'   : [:],
-	'2.5'   : [:],
-	'2.5.1' : [:],
-	'2.6'   : [:]
+        '2.1'   : [:],
+        '2.2'   : [:],
+        '2.3'   : [:],
+        '2.3.1' : [:],
+        '2.4'   : [:],
+        '2.5'   : [:],
+        '2.5.1' : [:],
+        '2.6'   : [:]
 	]
 	
 	private def nestedValidationContexts = []

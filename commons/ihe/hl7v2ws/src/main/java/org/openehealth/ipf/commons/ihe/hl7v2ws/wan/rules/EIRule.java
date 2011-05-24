@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class EIRule extends AbstractCompositeTypeRule<EI> {
+public class EIRule extends AbstractCompositeTypeRule<EI> {
 
     private static final long serialVersionUID = -9200002672506824129L;
 

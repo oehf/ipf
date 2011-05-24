@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class XADRule extends AbstractCompositeTypeRule<XAD> {
+public class XADRule extends AbstractCompositeTypeRule<XAD> {
 
     private static final long serialVersionUID = 7818625807638987635L;
 

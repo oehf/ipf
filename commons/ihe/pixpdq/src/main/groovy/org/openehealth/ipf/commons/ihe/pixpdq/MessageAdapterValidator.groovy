@@ -122,7 +122,7 @@ class MessageAdapterValidator extends AbstractMessageAdapterValidator {
      /**
       * Validates segment QID.
       */
-    void checkQID(msg, Collection<Exception> violations) {
+     void checkQID(msg, Collection<Exception> violations) {
          checkSegmentStructure(msg, 'QID', [1, 2], violations)
      }
          

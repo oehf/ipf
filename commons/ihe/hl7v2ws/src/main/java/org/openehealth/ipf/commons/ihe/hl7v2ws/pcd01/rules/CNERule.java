@@ -26,8 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class CNERule extends AbstractCompositeTypeRule<CNE> {
-
+public class CNERule extends AbstractCompositeTypeRule<CNE> {
     private static final long serialVersionUID = -4355783034721382060L;
 
     public CNERule() {

@@ -15,10 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
 
-
-import java.util.Collection
-import java.util.Map
-
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CNERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CWERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CXRule
@@ -95,20 +91,21 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
    public static  Map<String, Map<String, String>> RULES = 
                [ 'ORU' : ['R01' : 'MSH PATIENT_RESULT'],
                  'ACK' : ['*'   : 'MSH MSA']
-               ] 
-   //TODO integrate within the validation context with closure rules
-   //based on groups or segments
-   Map<String, Map<String, String>> getRules(){
-       return RULES
-   } 
-   
-   DefaultValidationContext getValidationContext(){
-      PCD01_CONTEXT
-   }     
+               ]
 
-  /**
-   * Validates segment PID in PATIENT_RESULT.PATIENT.
-   */
+    //TODO integrate within the validation context with closure rules
+    //based on groups or segments
+    Map<String, Map<String, String>> getRules(){
+        return RULES
+    }
+   
+    DefaultValidationContext getValidationContext(){
+       PCD01_CONTEXT
+    }
+
+    /**
+     * Validates segment PID in PATIENT_RESULT.PATIENT.
+     */
     void checkPATIENT_RESULT(msg, Collection<Exception> violations) {
         
         msg.PATIENT_RESULT().eachWithIndex(){  prGroup, i ->
@@ -149,21 +146,22 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
     void checkOBR(ooGroup, int obrIndex, Collection<Exception> violations) {
         checkSegmentValues(ooGroup, 'OBR', [1, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
     }
+
     /*
-     * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
+     * The <code>checkTime</code> tells if the OBX-14 will be checked. It is required when OBX-7 is not given
      */
     void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
         checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(checkTime), violations);
-        if (obs.OBX[2].value){
+        if (obs.OBX[2].value) {
             //OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
-            checkFieldInAllowedDomain(obs,  'OBX', 2, ['CD', 'CF', 'DT', 'ED', 'FT', 'NA', 'NM', 'PN', 'SN', 'ST', 'TM', 'DTM', 'XCN'], violations);
+            checkFieldInAllowedDomain(obs, 'OBX', 2, ['CD', 'CF', 'DT', 'ED', 'FT', 'NA', 'NM', 'PN', 'SN', 'ST', 'TM', 'DTM', 'XCN'], violations);
         }
         
     }
     
     Collection getOBXRequiredFields(boolean checkTime){
         Collection fields = [1, 3, 4]
-        if (checkTime){
+        if (checkTime) {
             fields.add(14)
         }
         fields
@@ -171,20 +169,20 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
     
  
     boolean shouldValidateOBXTime(ooGroup, Collection<Exception> violations) {
-        def val = ooGroup?.OBR[7]?.value;
-        return val == null || ''.equals(val) || '0000'.equals(val)
+        def val = ooGroup?.OBR[7]?.value
+        return (! val) || '0000'.equals(val)
     }
     
      /////////////////////// Response //////////////////////////
      
-     void checkMSA(msg, Collection<Exception> violations) {
-         super.checkMSA(msg, violations)
-         checkFieldInAllowedDomain(msg, 'MSA', 1, ['CA', 'CE', 'CR', 'AA', 'AR'], violations)
-         
-         String errorCode = msg.MSA[1].toString();
-         if (!('AA'.equals(errorCode) || 'CA'.equals(errorCode))){
-             checkERR(msg,violations)
-         }
-     }
+    void checkMSA(msg, Collection<Exception> violations) {
+        super.checkMSA(msg, violations)
+        checkFieldInAllowedDomain(msg, 'MSA', 1, ['CA', 'CE', 'CR', 'AA', 'AR'], violations)
+
+        String errorCode = msg.MSA[1].toString();
+        if (!('AA'.equals(errorCode) || 'CA'.equals(errorCode))){
+            checkERR(msg,violations)
+        }
+    }
  
 }
