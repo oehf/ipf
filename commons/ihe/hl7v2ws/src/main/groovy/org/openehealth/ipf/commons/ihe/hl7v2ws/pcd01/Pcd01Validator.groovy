@@ -1,23 +1,19 @@
 /*
-* Copyright 2011 the original author or authors.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2011 the original author or authors.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
-
-
-import java.util.Collection
-import java.util.Map
 
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CNERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CWERule
@@ -30,13 +26,13 @@ import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.builder.MessageRuleBuilder
 
 /**
-* Implements validaton for PCD, PCD-01 as defined in
-* "IHE Patient Care Device (PCD) Technical Framework 5 Volume 2 (PCD TF-2) Revision 1.2"
-*
-* @author Mitko Kolev
-*
-*/
-class Pcd01Validator extends AbstractMessageAdapterValidator {
+ * Implements validaton for PCD, PCD-01 as defined in 
+ * "IHE Patient Care Device (PCD) Technical Framework 5  Volume 2  (PCD TF-2)  Revision 1.2"
+ * 
+ * @author Mitko Kolev
+ *
+ */
+class Pcd01Validator extends  AbstractMessageAdapterValidator {
  
    static DefaultValidationContext PCD01_CONTEXT = new DefaultValidationContext()
    static {
@@ -54,64 +50,65 @@ class Pcd01Validator extends AbstractMessageAdapterValidator {
        .forVersion('2.6')
           .message('ORU', 'R01').abstractSyntax(
        'MSH',
-       [ { 'SFT' } ],
+       [  {  'SFT'  }  ],
        {PATIENT_RESULT(
           [PATIENT(
              'PID',
-             [ 'PD1' ],
-             [ { 'NTE' } ],
-             [ { 'NK1' } ],
+             [  'PD1'  ],
+             [  {  'NTE'  }  ],
+             [  {  'NK1'  }  ],
              [VISIT(
                 'PV1',
-                [ 'PV2' ]
+                [  'PV2'  ]
             )]
           )],
           {ORDER_OBSERVATION(
-             [ 'ORC' ],
+             [  'ORC'  ],
               'OBR',
-              [{ 'NTE' }],
+              [{  'NTE'  }],
               [{TIMING_QTY(
                  'TQ1',
-                 [{ 'TQ2' }]
+                 [{  'TQ2'  }]
               )}],
 
-              [ 'CTD' ],
+              [  'CTD'  ],
               [{OBSERVATION(
                  'OBX',
-                 [ { 'NTE' } ]
+                 [  {  'NTE'  }  ]
               )}],
 
-              [{ 'FT1' }],
-              [{ 'CTI' }],
+              [{  'FT1'  }],
+              [{  'CTI'  }],
               [{SPECIMEN(
                  'SPM',
-                 [{ 'OBX' }]
+                 [{  'OBX'  }]
               )}]
            )}
         )},
         [ 'DSC' ]).applyPCD01TypeValidation()
    }
  
-   public static Map<String, Map<String, String>> RULES =
+   public static  Map<String, Map<String, String>> RULES = 
                [ 'ORU' : ['R01' : 'MSH PATIENT_RESULT'],
-                 'ACK' : ['*' : 'MSH MSA']
+                 'ACK' : ['*'   : 'MSH MSA']
                ]
-   //TODO integrate within the validation context with closure rules
-   //based on groups or segments
-   Map<String, Map<String, String>> getRules(){
-       return RULES
-   }
-   
-   DefaultValidationContext getValidationContext(){
-      PCD01_CONTEXT
-   }
 
-  /**
-   * Validates segment PID in PATIENT_RESULT.PATIENT.
-   */
+    //TODO integrate within the validation context with closure rules
+    //based on groups or segments
+    Map<String, Map<String, String>> getRules(){
+        return RULES
+    }
+   
+    DefaultValidationContext getValidationContext(){
+       PCD01_CONTEXT
+    }
+
+    /**
+     * Validates segment PID in PATIENT_RESULT.PATIENT.
+     */
     void checkPATIENT_RESULT(msg, Collection<Exception> violations) {
         
-        msg.PATIENT_RESULT().eachWithIndex(){ prGroup, i ->
+        msg.PATIENT_RESULT().eachWithIndex(){  prGroup, i ->
            
             //allow empty patient groups
             if (!prGroup.PATIENT.isEmpty()){
@@ -122,7 +119,7 @@ class Pcd01Validator extends AbstractMessageAdapterValidator {
                 violations.add(new Exception("No ORDER_OBSERVATIONs found."))
             }
             
-            prGroup.ORDER_OBSERVATION().eachWithIndex(){ ooGroup, t ->
+            prGroup.ORDER_OBSERVATION().eachWithIndex(){  ooGroup, t ->
                 ooGroup.withPath(prGroup, t)
                 checkORDER_OBSERVATION(ooGroup, t + 1, violations)
             }
@@ -139,7 +136,7 @@ class Pcd01Validator extends AbstractMessageAdapterValidator {
         }
     }
     
-   /*
+    /*
     * Check patient name only for structure.
     */
     void checkPID(patientGroup, Collection<Exception> violations) {
@@ -149,12 +146,13 @@ class Pcd01Validator extends AbstractMessageAdapterValidator {
     void checkOBR(ooGroup, int obrIndex, Collection<Exception> violations) {
         checkSegmentValues(ooGroup, 'OBR', [1, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
     }
-   /*
-    * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
-    */
+
+    /*
+     * The <code>checkTime</code> tells if the OBX-14 will be checked. It is required when OBX-7 is not given
+     */
     void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
         checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(checkTime), violations);
-        if (obs.OBX[2].value){
+        if (obs.OBX[2].value) {
             //OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
             checkFieldInAllowedDomain(obs, 'OBX', 2, ['CD', 'CF', 'DT', 'ED', 'FT', 'NA', 'NM', 'PN', 'SN', 'ST', 'TM', 'DTM', 'XCN'], violations);
         }
@@ -163,7 +161,7 @@ class Pcd01Validator extends AbstractMessageAdapterValidator {
     
     Collection getOBXRequiredFields(boolean checkTime){
         Collection fields = [1, 3, 4]
-        if (checkTime){
+        if (checkTime) {
             fields.add(14)
         }
         fields
@@ -171,20 +169,20 @@ class Pcd01Validator extends AbstractMessageAdapterValidator {
     
  
     boolean shouldValidateOBXTime(ooGroup, Collection<Exception> violations) {
-        def val = ooGroup?.OBR[7]?.value;
-        return val == null || ''.equals(val) || '0000'.equals(val)
+        def val = ooGroup?.OBR[7]?.value
+        return (! val) || '0000'.equals(val)
     }
     
      /////////////////////// Response //////////////////////////
      
-     void checkMSA(msg, Collection<Exception> violations) {
-         super.checkMSA(msg, violations)
-         checkFieldInAllowedDomain(msg, 'MSA', 1, ['CA', 'CE', 'CR', 'AA', 'AR'], violations)
-         
-         String errorCode = msg.MSA[1].toString();
-         if (!('AA'.equals(errorCode) || 'CA'.equals(errorCode))){
-             checkERR(msg,violations)
-         }
-     }
+    void checkMSA(msg, Collection<Exception> violations) {
+        super.checkMSA(msg, violations)
+        checkFieldInAllowedDomain(msg, 'MSA', 1, ['CA', 'CE', 'CR', 'AA', 'AR'], violations)
+
+        String errorCode = msg.MSA[1].toString();
+        if (!('AA'.equals(errorCode) || 'CA'.equals(errorCode))){
+            checkERR(msg,violations)
+        }
+    }
  
 }

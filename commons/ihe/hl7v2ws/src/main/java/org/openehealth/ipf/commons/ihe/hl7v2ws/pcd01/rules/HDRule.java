@@ -27,9 +27,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * 
  */
 public class HDRule extends AbstractCompositeTypeRule<HD> {
-
     private static final long serialVersionUID = -9037983867502164173L;
-    private static String REFERENCE = "PCD Rev. 2, Vol. 2 App C.6";
 
     public HDRule() {
         super(HD.class);
@@ -56,6 +54,6 @@ public class HDRule extends AbstractCompositeTypeRule<HD> {
 
     @Override
     public String getSectionReference() {
-        return REFERENCE;
+        return "PCD Rev. 2, Vol. 2 App C.6";
     }
 }

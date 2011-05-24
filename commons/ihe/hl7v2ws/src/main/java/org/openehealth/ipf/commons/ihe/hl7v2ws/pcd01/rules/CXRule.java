@@ -26,8 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class CXRule extends AbstractCompositeTypeRule<CX> {
-
+public class CXRule extends AbstractCompositeTypeRule<CX> {
     private static final long serialVersionUID = -2018302245569873008L;
 
     public CXRule() {

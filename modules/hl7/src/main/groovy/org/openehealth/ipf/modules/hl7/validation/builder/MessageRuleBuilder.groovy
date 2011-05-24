@@ -54,6 +54,7 @@ public class MessageRuleBuilder extends VersionBuilder{
         }
         this
     }
+
     PrimitiveRuleBuilder checkPrimitive(String name){
         return new PrimitiveRuleBuilder(version, context, name)
     }

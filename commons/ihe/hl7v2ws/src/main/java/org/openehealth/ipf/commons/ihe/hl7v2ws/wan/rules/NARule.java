@@ -26,7 +26,7 @@ import ca.uhn.hl7v2.validation.ValidationException;
  * @author Mitko Kolev
  * 
  */
-class NARule extends AbstractCompositeTypeRule<NA> {
+public class NARule extends AbstractCompositeTypeRule<NA> {
 
     private static final long serialVersionUID = 6024938536050294035L;
 
