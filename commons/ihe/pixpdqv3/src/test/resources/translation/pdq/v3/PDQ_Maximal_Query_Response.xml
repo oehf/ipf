@@ -119,6 +119,8 @@
         <livingSubjectName>
           <value>
             <given>MARY</given>
+            <given qualifier="AD">Annemarie</given>
+            <family qualifier="BR">Wurm</family>
             <family>Heidi</family>
           </value>
           <semanticsText>LivingSubject.name</semanticsText>

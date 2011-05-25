@@ -26,7 +26,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 
 /**
  * PDQ Query request translator HL7 v3 to v2.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek Vï¿½clavï¿½k, Dmytro Rud
  */
 class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
 
@@ -96,7 +96,7 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         // determine data containers
         def queryByParameter  = v3request.controlActProcess.queryByParameter
         def parameterList     = queryByParameter.parameterList
-	    def livingSubjectName = parameterList.livingSubjectName[0].value
+	    def livingSubjectName = parameterList.livingSubjectName[0].value[0]
         def livingSubjectIds  = parameterList.livingSubjectId.value
         def patientAddress    = parameterList.patientAddress[0].value[0]
 	    
@@ -108,15 +108,16 @@ class PdqRequest3to2Translator implements Hl7TranslatorV3toV2 {
         
         // fill query facets
         boolean needWildcard = (livingSubjectName.@use == 'SRCH')
+        def usableGivenNames = livingSubjectName.given.findAll { it.@qualifier.text() in ['', 'CL', 'IN'] }
         // TODO: regarding (livingSubjectName.@use == 'SRCH'): consider CP-308
         def queryParams = [
             '@PID.3.1'    : patientId.@extension.text(),
             '@PID.3.4.1'  : patientId.@assigningAuthorityName.text(),
             '@PID.3.4.2'  : patientId.@root.text(), 
             '@PID.3.4.3'  : getIso(patientId),
-            '@PID.5.1'    : wildcardize(livingSubjectName.family.text(), needWildcard),
-            '@PID.5.2'    : wildcardize(livingSubjectName.given[0].text(), needWildcard),
-            '@PID.5.3'    : wildcardize(livingSubjectName.given[1].text(), needWildcard),
+            '@PID.5.1'    : wildcardize(livingSubjectName.family.find { ! it.@qualifier.text() }.text(), needWildcard),
+            '@PID.5.2'    : wildcardize(usableGivenNames[0].text(), needWildcard),
+            '@PID.5.3'    : wildcardize(usableGivenNames[1].text(), needWildcard),
             '@PID.7'      : parameterList.livingSubjectBirthTime.value.@value.text(),
             '@PID.8'      : parameterList.livingSubjectAdministrativeGender.value.@code.text(),   
             '@PID.11.1'   : patientAddress.streetAddressLine.text(),
