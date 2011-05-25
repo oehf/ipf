@@ -110,7 +110,7 @@ class Hl7TranslationTestContainer {
     }
 
 
-    String doTestV3toV2RequestTranslation(String fn, int v2index, int v3index) {
+    void doTestV3toV2RequestTranslation(String fn, int v2index, int v3index) {
         String v3request = getFileContent(fn, V3, REQUEST)
         V3_VALIDATOR.validate(v3request, Hl7v3ValidationProfiles.REQUEST_TYPES["iti-${v3index}"])
         
@@ -121,7 +121,7 @@ class Hl7TranslationTestContainer {
     }
 
 
-    String doTestV2toV3ResponseTranslation(String fn, int v2index, int v3index, Parser parser) {
+    void doTestV2toV3ResponseTranslation(String fn, int v2index, int v3index, Parser parser) {
         String v3request = getFileContent(fn, V3, REQUEST)
         String v2response = getFileContent(fn, V2, RESPONSE)
         MessageAdapter msg = MessageAdapters.make(parser, v2response)
@@ -138,7 +138,7 @@ class Hl7TranslationTestContainer {
         assert differences[0].toString().contains('creationTime')
     }
     
-    String doTestV2toV3RequestTranslation(String fn, int v2index, int v3index, Parser parser) {
+    void doTestV2toV3RequestTranslation(String fn, int v2index, int v3index, Parser parser) {
         String v2request = getFileContent(fn, V2, REQUEST)
         MessageAdapter msg = MessageAdapters.make(parser, v2request)
         V2_VALIDATOR.validate(msg, null)
@@ -152,6 +152,6 @@ class Hl7TranslationTestContainer {
         List differences = detDiff.getAllDifferences()
         assert differences.size() == 1
         assert differences[0].toString().contains('creationTime')
-    }    
+    }
 
 }
