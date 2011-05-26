@@ -105,12 +105,22 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
         addNamespacesFromElement(body, namespaces);
 
         if (!namespaces.isEmpty()) {
-            // ignore namespaces which are (re)defined in the payload
+            // determine boundaries of the body's root element, ignore leading comments
+            int startPos = 0;
             int endPos = target.indexOf('>');
+            while ((endPos != -1) && "--".equals(target.substring(endPos - 2, endPos))) {
+                startPos = endPos + 1;
+                endPos = target.indexOf('>', startPos);
+            }
+            if (endPos == -1) {
+                return target;
+            }
             if (target.charAt(endPos - 1) == '/') {
                 --endPos;
             }
-            String startTag = target.substring(0, endPos);
+
+            // ignore namespaces which are (re)defined in the payload
+            String startTag = target.substring(startPos, endPos);
             Matcher matcher = XMLNS_PATTERN.matcher(startTag);
             while (matcher.find()) {
                 namespaces.remove(matcher.group(1));
