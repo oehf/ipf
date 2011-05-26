@@ -26,7 +26,12 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
     public void configure() throws Exception {
         from('pixv3-iti45:pixv3-iti45-service1')
             .process { 
-                Exchanges.resultMessage(it).body = '<response from="PIX Manager"/>'
+                Exchanges.resultMessage(it).body = '''
+                    <!-- comment 1 -->
+                    <!-- comment 2 -->
+                    <response from="PIX Manager"/>
+                    <!-- comment 3 -->
+                '''
             }
 
     }
