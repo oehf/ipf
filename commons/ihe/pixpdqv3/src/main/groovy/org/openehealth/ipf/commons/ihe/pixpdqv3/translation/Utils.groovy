@@ -127,19 +127,62 @@ class Utils {
      * Creates a HL7 v3 name element from a v2 XPN.
      */
     static void createName(MarkupBuilder builder, CompositeAdapter xpn) {
-        builder.name {
-            def family    = xpn[1][1].value
-            def given     = xpn[2].value
-            def middle    = xpn[3].value
-            def qualifier = (xpn[7].value ?: '').map('hl7v2v3_familyNameType-familyNameQualifier')
-            
-            Map qualifierAttrs = ['qualifier':qualifier]
-            conditional(builder, 'family', family, qualifierAttrs)
-            conditional(builder, 'given', given)
+        String use = null, qualifier = null
+
+        switch (xpn[7].value) {
+            case 'A':
+            case 'S':
+                use = 'P'
+                break
+            case 'B':
+            case 'M':
+                qualifier = 'BR'
+                break
+            case 'C':
+                use = 'L'
+                qualifier = 'AD'
+                break
+            case 'D':
+                // TODO
+                break
+            case 'I':
+                use = 'C'
+                break
+            case 'L':
+                use = 'L'
+                break
+            case 'N':
+                qualifier = 'CL'
+                break
+            case 'P':
+                qualifier = 'SP'
+                break
+            case 'T':
+                use = 'I'
+                break
+        }
+
+        builder.name(use: use) {
+            def family = xpn[1][1].value
+            def given  = xpn[2].value
+            def middle = xpn[3].value
+            def suffix = xpn[4].value
+            def prefix = xpn[5].value
+            def degree = xpn[6].value
+            def profSuffix = (xpn.target.message.version == '2.5') ? xpn[14].value : null
+
+            Map qualifierAttrs = [qualifier: qualifier]
+
+            conditional(builder, 'family', family,     qualifierAttrs)
+            conditional(builder, 'given',  given,      qualifierAttrs)
             if (middle && ! given) {
-                given('')
+                builder.given('', qualifier: qualifier)
             }
-            conditional(builder, 'given', middle)
+            conditional(builder, 'given',  middle,     qualifierAttrs)
+            conditional(builder, 'prefix', prefix,     qualifierAttrs)
+            conditional(builder, 'suffix', suffix,     qualifierAttrs)
+            conditional(builder, 'suffix', profSuffix, [qualifier: 'PR'])
+            conditional(builder, 'suffix', degree,     [qualifier: 'AC'])
         }
     }
 
