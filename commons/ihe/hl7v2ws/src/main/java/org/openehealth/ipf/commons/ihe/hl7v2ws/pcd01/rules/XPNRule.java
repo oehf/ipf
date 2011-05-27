@@ -19,41 +19,28 @@ import java.util.Collection;
 
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractCompositeTypeRule;
 
-import ca.uhn.hl7v2.model.v26.datatype.HD;
+import ca.uhn.hl7v2.model.v26.datatype.XPN;
 import ca.uhn.hl7v2.validation.ValidationException;
 
 /**
  * @author Mitko Kolev
- * 
+ *
  */
-public class HDRule extends AbstractCompositeTypeRule<HD> {
-    private static final long serialVersionUID = -9037983867502164173L;
+public class XPNRule extends AbstractCompositeTypeRule<XPN> {
 
-    public HDRule() {
-        super(HD.class);
+    private static final long serialVersionUID = 8151972073853015127L;
+
+    public XPNRule() {
+        super(XPN.class);
     }
 
     @Override
-    public void validate(HD hd, String path, Collection<ValidationException> violations) {
-        // Either HD-1 or both HD-2 and HD-3 shall be non-empty
-        if (isEmpty(hd, 1)) {
-            mustBeNonEmpty(hd, 2, path, violations);
-            mustBeNonEmpty(hd, 3, path, violations);
-        }
-        if (isEmpty(hd, 2) || isEmpty(hd, 3)) {
-            mustBeNonEmpty(hd, 1, path, violations);
-        }
-        
-        if (isEqual("ISO", hd, 3)) {
-            mustMatchIsoOid(hd, 2, path, violations);
-        }
-        if (isEqual("EUI-64", hd, 3)) {
-            mustMatchEui64(hd, 2, path, violations);
-        }
+    public void validate(XPN xpn, String path, Collection<ValidationException> violations) {
+        mustBeNonEmpty(xpn, 7, path, violations);
     }
 
     @Override
     public String getSectionReference() {
-        return "PCD Rev. 2, Vol. 2 App C.6";
+        return "PCD Rev. 2, Vol. 2 App. C.8";
     }
 }
