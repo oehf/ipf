@@ -176,7 +176,7 @@ class Utils {
             conditional(builder, 'family', family,     qualifierAttrs)
             conditional(builder, 'given',  given,      qualifierAttrs)
             if (middle && ! given) {
-                given('', *qualifierAttrs)
+                builder.given('', qualifier: qualifier)
             }
             conditional(builder, 'given',  middle,     qualifierAttrs)
             conditional(builder, 'prefix', prefix,     qualifierAttrs)

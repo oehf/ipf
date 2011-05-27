@@ -45,6 +45,7 @@
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
               <name use="L">
                 <family>Fed</family>
+                <given />
                 <given>Fed</given>
               </name>
               <telecom value="tel:022-23571" use="H" />
