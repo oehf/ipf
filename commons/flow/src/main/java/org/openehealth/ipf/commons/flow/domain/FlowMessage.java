@@ -34,7 +34,7 @@ import org.hibernate.search.annotations.Store;
  * @author Mitko Kolev
  */
 @Entity
-@Table(name = "T_FLOW_MESSAGE", schema = "PLATFORM")
+@Table(name = "T_FLOW_MESSAGE")
 public class FlowMessage implements TextMessage {
 
     @Id

@@ -29,7 +29,7 @@ import org.quartz.CronTrigger;
  * @author Martin Krasser
  */
 @Entity
-@Table(name = "T_APPLICATION_CONFIG", schema = "PLATFORM")
+@Table(name = "T_APPLICATION_CONFIG")
 public class ApplicationConfig {
 
     public static final boolean FLOW_FILTER_ENABLED_DEFAULT = true;
