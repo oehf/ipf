@@ -15,12 +15,26 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.apache.camel.*;
+import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.Component;
+import org.apache.camel.Consumer;
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.apache.camel.PollingConsumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.component.mina.MinaConfiguration;
 import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.spi.ManagementAware;
 import org.apache.commons.lang.Validate;
-import org.apache.mina.common.*;
+import org.apache.mina.common.DefaultIoFilterChainBuilder;
+import org.apache.mina.common.IoSession;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
@@ -34,15 +48,16 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerM
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuthenticationFailureInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInteractiveResponseSenderInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerRequestDefragmenterInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerStringProcessingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerStringProcessingInterceptor;
-
-import javax.net.ssl.SSLContext;
-import java.util.List;
-import java.util.Map;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.ManagedMllpItiEndpoint;
 
 
 /**
@@ -50,7 +65,8 @@ import java.util.Map;
  * which provides support for IHE PIX/PDQ-related extensions.
  * @author Dmytro Rud
  */
-public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationHolder {
+public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationHolder,
+    ManagementAware<MllpEndpoint> {
 
     private final MllpComponent mllpComponent;
     private final MinaEndpoint wrappedEndpoint;
@@ -254,6 +270,9 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
         }
     }
     
+    public Object getManagedObject(MllpEndpoint endpoint) {
+        return new ManagedMllpItiEndpoint(endpoint, getConfiguration());
+    }
     
     // ----- getters -----
     
@@ -371,8 +390,41 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     public boolean isAutoCancel() {
         return autoCancel;
     }
-
-
+    
+    /**
+     * @return the sslContext
+     */
+    public SSLContext getSslContext() {
+        return sslContext;
+    }
+    
+    /**
+     * @return the customInterceptors
+     */
+    public List<MllpCustomInterceptor> getCustomInterceptors() {
+        return customInterceptors;
+    }
+    
+    /**
+     * @return the mutualTLS
+     */
+    public boolean isMutualTLS() {
+        return mutualTLS;
+    }
+    
+    /**
+     * @return the sslProtocols
+     */
+    public String[] getSslProtocols() {
+        return sslProtocols;
+    }
+    
+    /**
+     * @return the sslCiphers
+     */
+    public String[] getSslCiphers() {
+        return sslCiphers;
+    }
 
     // ----- dumb delegation, nothing interesting below -----
 
@@ -475,4 +527,6 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     public String toString() {
         return wrappedEndpoint.toString();
     }
+
+
 }
