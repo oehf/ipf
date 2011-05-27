@@ -45,7 +45,7 @@ public class Pcd01ValidatorTest {
     static String OBX4 = "OBX|4|NM|150022^MDC_PRESS_BLD_NONINV_DIA^MDC|1.0.1.2|80|266016^MDC_DIM_MMHG^MDC|||||R\r";
     static String VALID = MSH + PID + OBR + OBX1 + OBX2 + OBX3 + OBX4;
     
-    static String ACK_MSH = "MSH|^~\\&|Stepstone||AcmeInc^ACDE48234567ABCD^EUI64||20090726095731+0500||ACK^A01^ACK|AMSGID1234|P|2.6\r";
+    static String ACK_MSH = "MSH|^~\\&|Stepstone||AcmeInc^ACDE48234567ABCD^EUI64||20090726095731+0500||ACK^A01^ACK|AMSGID1234|P|2.6|||NE|AL|||||IHE PCD ORU-R01 2006^HL7^2.16.840.1.113883.9.n.m^HL7\r";
     static String MSA = "MSA|CE|20070701132554000008\r";
     static String ERR = "ERR|||100|E|||Missing required OBR segment\r";
     static String VALID_RESPONSE =  ACK_MSH + MSA + ERR;
@@ -55,9 +55,7 @@ public class Pcd01ValidatorTest {
     public Pcd01Validator getValiadtor(){
     	return validator;
     }
-    
-  
-    
+
     @Test
     public void testMessageSectionJ2() {
     	getValiadtor().validate(msg1);
@@ -111,6 +109,12 @@ public class Pcd01ValidatorTest {
         getValiadtor().validate(msg);
     }
     
+    @Test
+    public void testNotPresentPatientName() {
+        MessageAdapter msg = make(VALID.replace("Doe^John^Joseph", "^^"));
+        getValiadtor().validate(msg);
+    }
+    
 
     // ///////// Negative tests
     @Test(expected = ValidationException.class)
@@ -124,6 +128,7 @@ public class Pcd01ValidatorTest {
     	getValiadtor().validate(make(VALID_RESPONSE.replace("MSA|CE|","MSA|SN|")));
     }
     
+
     /////////////////// Field cheks
     @Test(expected = ValidationException.class)
     public void testIncompletePatientId() {
@@ -131,13 +136,6 @@ public class Pcd01ValidatorTest {
         getValiadtor().validate(msg);
     }
 
-    @Test(expected = ValidationException.class)
-    public void testNotPresentPatientName() {
-        MessageAdapter msg = make(VALID.replace("Doe^John^Joseph", "^^"));
-        getValiadtor().validate(msg);
-    }
-    
-    
     @Test(expected = ValidationException.class)
     public void testObservationIdentifierNotPresent() {
         MessageAdapter msg = make(VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", ""));

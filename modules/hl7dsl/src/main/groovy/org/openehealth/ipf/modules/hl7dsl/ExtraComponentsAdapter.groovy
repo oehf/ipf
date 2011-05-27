@@ -17,8 +17,10 @@ package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.isVariesEmpty
 
 
+import ca.uhn.hl7v2.model.AbstractType;
 import ca.uhn.hl7v2.model.ExtraComponents
 import ca.uhn.hl7v2.model.DataTypeException
 
@@ -27,7 +29,7 @@ import org.codehaus.groovy.runtime.InvokerHelper
 /**
  * @author Christian Ohr
  */
-class ExtraComponentsAdapter {
+class ExtraComponentsAdapter implements AbstractAdapter {
 
 	ExtraComponents extraComponents
 	
@@ -51,5 +53,12 @@ class ExtraComponentsAdapter {
         componentValue(this)
     }
   
-    
+    boolean isEmpty(){
+        boolean result = false;
+        int numComponents = extraComponents.numComponents();
+        for (int t = 0; t < numComponents; t ++){
+            result |= isEmpty(extraComponents.getComponent(t))
+        }
+        return result;
+    }
 }

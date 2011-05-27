@@ -15,15 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
 
+import java.util.Collection
+
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CNERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CWERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CXRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.EIRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.HDRule
+import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.XPNRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.XTNRule
 import org.openehealth.ipf.commons.ihe.pixpdq.AbstractMessageAdapterValidator
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.builder.MessageRuleBuilder
+import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 
 /**
  * Implements validaton for PCD, PCD-01 as defined in 
@@ -42,6 +47,7 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
            delegate.checkCompositesWith(new CWERule())
            delegate.checkCompositesWith(new EIRule())
            delegate.checkCompositesWith(new HDRule())
+           delegate.checkCompositesWith(new XPNRule())
            delegate.checkCompositesWith(new XTNRule())
            delegate
        }
@@ -103,6 +109,8 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
        PCD01_CONTEXT
     }
 
+   
+    
     /**
      * Validates segment PID in PATIENT_RESULT.PATIENT.
      */
@@ -113,6 +121,7 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
             //allow empty patient groups
             if (!prGroup.PATIENT.isEmpty()){
                 checkPID(prGroup.PATIENT, violations)
+                checkVISIT(prGroup.PATIENT, violations)
             }
             
             if (prGroup.ORDER_OBSERVATION().isEmpty()){
@@ -126,7 +135,7 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
         }
     }
     
-    void checkORDER_OBSERVATION(ooGroup, int obrIndex, Collection<Exception> violations) {
+    void checkORDER_OBSERVATION(GroupAdapter ooGroup, int obrIndex, Collection<Exception> violations) {
         checkOBR(ooGroup, obrIndex, violations)
         boolean checkTime = shouldValidateOBXTime(ooGroup, violations)
         
@@ -139,18 +148,26 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
     /*
     * Check patient name only for structure.
     */
-    void checkPID(patientGroup, Collection<Exception> violations) {
+    void checkPID(GroupAdapter patientGroup, Collection<Exception> violations) {
         checkSegmentStructure( patientGroup, 'PID', [3, 5], violations)
     }
     
-    void checkOBR(ooGroup, int obrIndex, Collection<Exception> violations) {
+    void checkVISIT(GroupAdapter patient, Collection<Exception> violations) {
+        if (!patient.VISIT.isEmpty()){
+            if (!patient.VISIT.PV1.isEmpty()){
+                checkSegmentStructure( patient.VISIT, 'PV1', [2], violations)
+            }
+        }
+    }
+    
+    void checkOBR(GroupAdapter ooGroup, int obrIndex, Collection<Exception> violations) {
         checkSegmentValues(ooGroup, 'OBR', [1, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
     }
 
     /*
      * The <code>checkTime</code> tells if the OBX-14 will be checked. It is required when OBX-7 is not given
      */
-    void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
+    void checkOBSERVATION(GroupAdapter obs, boolean checkTime, Collection<Exception> violations) {
         checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(checkTime), violations);
         if (obs.OBX[2].value) {
             //OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
@@ -168,14 +185,14 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
     }
     
  
-    boolean shouldValidateOBXTime(ooGroup, Collection<Exception> violations) {
+    boolean shouldValidateOBXTime(GroupAdapter ooGroup, Collection<Exception> violations) {
         def val = ooGroup?.OBR[7]?.value
         return (! val) || '0000'.equals(val)
     }
     
      /////////////////////// Response //////////////////////////
      
-    void checkMSA(msg, Collection<Exception> violations) {
+    void checkMSA(MessageAdapter msg, Collection<Exception> violations) {
         super.checkMSA(msg, violations)
         checkFieldInAllowedDomain(msg, 'MSA', 1, ['CA', 'CE', 'CR', 'AA', 'AR'], violations)
 
@@ -185,4 +202,8 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
         }
     }
  
+    void checkMSH(MessageAdapter msg, Collection<Exception> violations) {
+        checkSegmentStructure(msg, 'MSH', [1, 2, 3, 7, 9, 10, 11, 12, 15, 16, 21], violations)
+    }
+   
 }

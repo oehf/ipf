@@ -16,16 +16,23 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.isEmpty
 
 import org.codehaus.groovy.runtime.InvokerHelper
 
-import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.model.AbstractPrimitive
+import ca.uhn.hl7v2.model.AbstractType
+import ca.uhn.hl7v2.model.Composite
+import ca.uhn.hl7v2.model.ExtraComponents
+import ca.uhn.hl7v2.model.GenericComposite
+import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Type
+import ca.uhn.hl7v2.model.Varies
 
 /**
  * @author Martin Krasser
  */
-class TypeAdapter {
+class TypeAdapter implements AbstractAdapter {
 
     Type type
     
@@ -53,4 +60,7 @@ class TypeAdapter {
         throw new AdapterException("The type ${type.class.simpleName} is not repeatable for this field")
     }
     
+    boolean isEmpty(){
+      return isEmpty(type)
+    }
 }

@@ -17,8 +17,7 @@ package org.openehealth.ipf.commons.ihe.pixpdq
 
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.core.modules.api.Validator
-import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext;
-import org.openehealth.ipf.modules.hl7.validation.model.CompositeTypeRule
+import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.SegmentAdapter
@@ -165,7 +164,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     /**
      * Validates a message.
      */
-    void checkMessage(msg, String segmentNames, Collection<Exception> violations) {
+    void checkMessage(MessageAdapter msg, String segmentNames, Collection<Exception> violations) {
         checkUnrecognizedSegments(msg.group, violations)
         for (segmentName in segmentNames.tokenize()) {
             "check${segmentName}"(msg, violations)
@@ -192,7 +191,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
      * Checks that a segment value is one in a list
      */
     void checkFieldInAllowedDomain(msg, String segmentName, int field, Collection<String> allowedDomain, Collection<Exception> violations){
-        String value = msg."${segmentName}"[field].toString()
+        String value = msg."${segmentName}"[field].encode()
         for (allowedValue in allowedDomain){
             if (allowedValue.equals(value)){
                 return;
@@ -207,7 +206,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
     void checkSegmentStructure(msg, String segmentName, Collection<Integer> fieldNumbers, Collection<Exception> violations) {
         def segment = msg."${segmentName}"
         for(i in fieldNumbers) {
-            if( ! segment[i].value) {
+            if(segment[i].isEmpty()) {
                 violations.add(new Exception("Missing ${msg.path}.${segmentName}-${i}"))
             }
         }
@@ -218,11 +217,10 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
      */
     void checkSegmentValues(msg, String segmentName, Collection<Integer> fieldNumbers, Collection<String> values, Collection<Exception> violations) {
         def segment = msg."${segmentName}"
+        checkSegmentStructure(msg, segmentName, fieldNumbers, violations)
+        
         for(i in fieldNumbers) {
-            if( ! segment[i].value) {
-                violations.add(new Exception("Missing ${msg.path}.${segmentName}-${i}"))
-            }
-            if(values [i] != ANY && !values [i].toString().equals(segment[i]?.value)) {
+            if(values [i] != ANY && !values [i].toString().equals(segment[i]?.encode())) {
                 violations.add(new Exception("Expected ${values[i]} of ${msg.path}.${segmentName}-${i}, found ${segment[i]?.value}"))
             }
         }
@@ -233,21 +231,21 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
 	/**
 	 * Validates segment ERR.
 	 */
-	void checkERR(msg, Collection<Exception> violations){
+	void checkERR(MessageAdapter msg, Collection<Exception> violations){
 		checkSegmentStructure(msg, 'ERR', [3, 4], violations)
 	}
    
     /**
      * Validates segment MSA.
      */
-    void checkMSA(msg, Collection<Exception> violations) {
+    void checkMSA(MessageAdapter msg, Collection<Exception> violations) {
         checkSegmentStructure(msg, 'MSA', [1, 2], violations)
     }
 
     /**
      * Validates segment MSH.
      */
-    void checkMSH(msg, Collection<Exception> violations) {
+    void checkMSH(MessageAdapter msg, Collection<Exception> violations) {
         checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12], violations)
     }
 

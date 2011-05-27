@@ -45,7 +45,6 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
         getValiadtor().validate(load("wan/valid-scale-continua-wan.hl7v2"));
     }
     
-    
     @Test
     public void testBPMessage() {
         getValiadtor().validate(load("wan/valid-bp-continua-wan.hl7v2"));
@@ -85,12 +84,17 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
         getValiadtor().validate(load("wan/invalid-wan-response.hl7v2"));
     }
     
-    
     @Ignore
     @Override
     public void testSyntheticResponseMessage() {
     }
 
+    @Override
+    @Test(expected=ValidationException.class)
+    public void testNotPresentPatientName() {
+        super.testNotPresentPatientName();
+    }
+    
     @Test(expected = HL7Exception.class)
     public void testInvalidGlucoseMessage() {
         // When OBX-5 is filled, obx-2 mus not be null. The message can not be parsed.

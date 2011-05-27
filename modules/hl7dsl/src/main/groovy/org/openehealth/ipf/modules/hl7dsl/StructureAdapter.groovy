@@ -19,11 +19,9 @@ package org.openehealth.ipf.modules.hl7dsl
  * @author Martin Krasser
  * @author Christian Ohr
  */
-abstract class StructureAdapter {
+abstract class StructureAdapter implements AbstractAdapter {
 	
 	String path
-	
-	abstract boolean isEmpty()
 	
 	StructureAdapter withPath(def parent, int idx) {
 		String pp = parent.path

@@ -29,6 +29,8 @@ import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XPNRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.wan.rules.XTNRule
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.builder.MessageRuleBuilder
+import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 /**
  * Implements validation for Continua WAN
  * 
@@ -101,18 +103,18 @@ class ContinuaWanValidator extends  Pcd01Validator {
         return CONTINUA_CONTEXT;
     }
     
-    void checkMSH(msg, Collection<Exception> violations) {
+    void checkMSH(MessageAdapter msg, Collection<Exception> violations) {
         checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12, 15, 16, 21], violations)
     }
    
-	void checkOBR(ooGroup, int obrIndex, Collection<Exception> violations) {
+	void checkOBR(GroupAdapter ooGroup, int obrIndex, Collection<Exception> violations) {
 		checkSegmentValues(ooGroup, 'OBR', [1, 2, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
 	}
 
 	/*
 	 * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
 	 */
-    void checkOBSERVATION(obs, boolean checkTime, Collection<Exception> violations) {
+    void checkOBSERVATION(GroupAdapter obs, boolean checkTime, Collection<Exception> violations) {
 		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(checkTime), violations);
 		if (obs.OBX[2].value){
 			//OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
@@ -122,7 +124,7 @@ class ContinuaWanValidator extends  Pcd01Validator {
 
 	 /////////////////////// Response //////////////////////////
 	 
-	 void checkMSA(msg, Collection<Exception> violations) {
+	 void checkMSA(MessageAdapter msg, Collection<Exception> violations) {
 		 checkSegmentStructure(msg, 'MSA', [1, 2], violations)
 		 checkFieldInAllowedDomain(msg, 'MSA', 1, ['AE', 'AA', 'AR'], violations)
 		 

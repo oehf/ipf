@@ -24,7 +24,7 @@ import org.codehaus.groovy.runtime.InvokerHelper
  * 
  * @author Christian Ohr
  */
-class SelectorClosure extends Closure {
+class SelectorClosure extends Closure implements AbstractAdapter {
 	
 	def elements	
 	def adapter
@@ -61,7 +61,7 @@ class SelectorClosure extends Closure {
 	}
 	
     def elementAt(argument){
-        def element
+        AbstractAdapter element
         if (elements.size <= argument){
             element = adapter.nrp(index)
         } else {
@@ -72,5 +72,21 @@ class SelectorClosure extends Closure {
             case GroupAdapter   : element.setPath(element.path + "(${argument})")
         }
         element
+    }
+    
+    boolean isEmpty(){
+        boolean result = true;
+        for (int index = 0; index < elements.size; index ++) {
+            AbstractAdapter el = elements[index];
+            if (el != null && !el.isEmpty()){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+    
+    Object getTarget(){
+        return adapter.target
     }
 }

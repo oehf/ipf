@@ -93,8 +93,8 @@ class SegmentAdapter extends StructureAdapter {
     def getValue() {
         componentValue(this)
     }
-	
-	/**
+    
+    /**
 	 * @return true if the segment is empty
 	 */
 	boolean isEmpty() {
