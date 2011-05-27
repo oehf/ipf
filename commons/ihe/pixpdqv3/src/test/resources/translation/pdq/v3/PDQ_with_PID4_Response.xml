@@ -43,7 +43,7 @@
             <id root="2.16.840.1.113883.3.37.4.1.1.2.511.1" extension="PDQ113XX0001" assigningAuthorityName="PKLN" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
-              <name>
+              <name use="L">
                 <family>MOHR</family>
                 <given>ALICE</given>
               </name>
@@ -85,7 +85,7 @@
             <id root="2.16.840.1.113883.3.37.4.1.1.2.511.1" extension="78007" assigningAuthorityName="PKLN" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
-              <name>
+              <name use="L">
                 <family>Mueller</family>
                 <given>Heidi</given>
               </name>

@@ -33,11 +33,11 @@
         <statusCode code="active" />
         <subject1 typeCode="SBJ">
           <patient classCode="PAT">
-            <id root="2.16.840.1.113883.3.37.4.1.1.2.1.1" extension="306563" />
-            <id root="2.16.840.1.113883.3.37.4.1.1.2.611.1" extension="30753" />
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.1.1" extension="306563" assigningAuthorityName="MPI" />
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.611.1" extension="30753" assigningAuthorityName="KHKN" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
-              <name>
+              <name use="L">
                 <family>Bob</family>
                 <given>Barker</given>
                 <given>R.</given>

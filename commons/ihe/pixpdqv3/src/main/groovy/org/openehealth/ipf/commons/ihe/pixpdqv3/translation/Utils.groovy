@@ -25,7 +25,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /*
  * Generic routines for HL7 v2-to-v3 transformation.
- * @author Dmytro Rud, Marek Václavík
+ * @author Dmytro Rud, Marek VÃ¡clavÃ­k
  */
 class Utils {
     
@@ -126,20 +126,63 @@ class Utils {
     /**
      * Creates a HL7 v3 name element from a v2 XPN.
      */
-    static createName(MarkupBuilder builder, CompositeAdapter xpn) {
-        builder.name {
-            def family    = xpn[1][1].value
-            def given     = xpn[2].value
-            def middle    = xpn[3].value
-            def qualifier = (xpn[7].value ?: '').map('hl7v2v3_familyNameType-familyNameQualifier')
-            
-            Map qualifierAttrs = ['qualifier':qualifier]
-            conditional(builder, 'family', family, qualifierAttrs)
-            conditional(builder, 'given', given)
+    static void createName(MarkupBuilder builder, CompositeAdapter xpn) {
+        String use = null, qualifier = null
+
+        switch (xpn[7].value) {
+            case 'A':
+            case 'S':
+                use = 'P'
+                break
+            case 'B':
+            case 'M':
+                qualifier = 'BR'
+                break
+            case 'C':
+                use = 'L'
+                qualifier = 'AD'
+                break
+            case 'D':
+                // TODO
+                break
+            case 'I':
+                use = 'C'
+                break
+            case 'L':
+                use = 'L'
+                break
+            case 'N':
+                qualifier = 'CL'
+                break
+            case 'P':
+                qualifier = 'SP'
+                break
+            case 'T':
+                use = 'I'
+                break
+        }
+
+        builder.name(use: use) {
+            def family = xpn[1][1].value
+            def given  = xpn[2].value
+            def middle = xpn[3].value
+            def suffix = xpn[4].value
+            def prefix = xpn[5].value
+            def degree = xpn[6].value
+            def profSuffix = (xpn.target.message.version == '2.5') ? xpn[14].value : null
+
+            Map qualifierAttrs = [qualifier: qualifier]
+
+            conditional(builder, 'family', family,     qualifierAttrs)
+            conditional(builder, 'given',  given,      qualifierAttrs)
             if (middle && ! given) {
-                given('')
+                given('', *qualifierAttrs)
             }
-            conditional(builder, 'given', middle)
+            conditional(builder, 'given',  middle,     qualifierAttrs)
+            conditional(builder, 'prefix', prefix,     qualifierAttrs)
+            conditional(builder, 'suffix', suffix,     qualifierAttrs)
+            conditional(builder, 'suffix', profSuffix, [qualifier: 'PR'])
+            conditional(builder, 'suffix', degree,     [qualifier: 'AC'])
         }
     }
 
@@ -147,7 +190,7 @@ class Utils {
     /**
      * Creates an HL7 v3 "acknowledgement" element.
      */
-    static createQueryAcknowledgementElement(
+    static void createQueryAcknowledgementElement(
             MarkupBuilder builder, 
             GPathResult xml, 
             Map status,
@@ -211,6 +254,21 @@ class Utils {
         fields += nak.ERR[6]()
 
         return fields*.value.findAll { it }.join('; ')
+    }
+
+
+    /**
+     * Creates an XML element that represents an instance identifier with given contents
+     * (shortcut for using a single CX parameter instead of three Strings).
+     */
+    static void buildInstanceIdentifier(
+            MarkupBuilder builder,
+            String elementName,
+            boolean useNullFlavor,
+            CompositeAdapter cx)
+    {
+        buildInstanceIdentifier(builder, elementName, useNullFlavor,
+                cx[4][2].value, cx[1].value, cx[4][1].value)
     }
 
 }

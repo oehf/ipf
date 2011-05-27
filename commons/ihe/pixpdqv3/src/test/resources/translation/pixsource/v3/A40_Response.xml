@@ -33,7 +33,7 @@
         <statusCode code="active" />
         <subject1 typeCode="SBJ">
           <patient classCode="PAT">
-            <id extension="142025" />
+            <id extension="142025" assigningAuthorityName="130" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
               <name>

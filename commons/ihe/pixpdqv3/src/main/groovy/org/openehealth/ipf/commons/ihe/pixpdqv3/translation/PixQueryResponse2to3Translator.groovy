@@ -27,7 +27,7 @@ import org.openehealth.ipf.modules.hl7.ErrorLocation
 
 /**
  * PIX Query Response translator HL7 v2 to v3.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek Vï¿½clavï¿½k, Dmytro Rud
  */
 class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
 
@@ -106,8 +106,7 @@ class PixQueryResponse2to3Translator implements Hl7TranslatorV2toV3 {
                                 subject1(typeCode: 'SBJ') {
                                     patient(classCode: 'PAT') {
                                         for(pid3 in pid3collection) {   
-                                            buildInstanceIdentifier(builder, 'id', false, 
-                                                    pid3[4][2].value, pid3[1].value, pid3[4][1].value) 
+                                            buildInstanceIdentifier(builder, 'id', false, pid3)
                                         }
 										statusCode(code: 'active')
 										fakePatientPerson(builder)

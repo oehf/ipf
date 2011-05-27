@@ -33,12 +33,12 @@
         <statusCode code="active" />
         <subject1 typeCode="SBJ">
           <patient classCode="PAT">
-            <id root="2.16.840.1.113883.3.37.4.1.1.2.1.1" extension="305090" />
-            <id root="2.16.840.1.113883.3.37.4.1.1.2.411.1" extension="13278" />
-            <id root="1.3.6.1.4.1.21367.2005.1.2" extension="02777" />
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.1.1" extension="305090" assigningAuthorityName="MPI" />
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.411.1" extension="13278" assigningAuthorityName="HZLN" />
+            <id root="1.3.6.1.4.1.21367.2005.1.2" extension="02777" assigningAuthorityName="XREF2005" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
-              <name>
+              <name use="L">
                 <family>Hiccock</family>
                 <given>WildBill</given>
               </name>

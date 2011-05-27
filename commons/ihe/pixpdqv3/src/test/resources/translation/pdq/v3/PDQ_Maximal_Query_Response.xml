@@ -43,7 +43,7 @@
             <id root="2.16.840.1.113883.3.37.4.1.1.2.411.1" extension="234234243" assigningAuthorityName="HZLN" />
             <statusCode code="active" />
             <patientPerson classCode="PSN" determinerCode="INSTANCE">
-              <name>
+              <name use="L">
                 <family>Fed</family>
                 <given>Fed</given>
               </name>
