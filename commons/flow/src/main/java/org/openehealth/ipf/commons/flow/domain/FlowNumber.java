@@ -24,7 +24,7 @@ import javax.persistence.Table;
  * @author Martin Krasser
  */
 @Entity
-@Table(name = "T_FLOW_NUMBER", schema = "PLATFORM")
+@Table(name = "T_FLOW_NUMBER")
 public class FlowNumber {
     
     public static final String DEFAULT_SEQUENCE = "default";
