@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.core.extend;
 
-
+import groovy.lang.Closure;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.DataFormatClause;
 import org.apache.camel.builder.ExpressionClause;
