@@ -22,13 +22,14 @@ import org.apache.camel.impl.DefaultComponent;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.apache.cxf.message.Message;
+import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 
 /**
  * Base component class for Web Service-based IHE components.
  * @author Dmytro Rud
  */
+@SuppressWarnings("deprecation")
 abstract public class AbstractWsComponent<C extends ItiServiceInfo> extends DefaultComponent {
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
@@ -53,4 +54,5 @@ abstract public class AbstractWsComponent<C extends ItiServiceInfo> extends Defa
 	}
 
     public abstract C getWebServiceConfiguration();
+    
 }

@@ -53,6 +53,18 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-core</artifactId>
         </dependency>
+        <!-- dependencies for test -->
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-integration-spring</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -68,6 +80,7 @@
                     </execution>
                 </executions>
             </plugin>
+            
         </plugins>
     </build>
 

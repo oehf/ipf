@@ -18,17 +18,22 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 import javax.xml.namespace.QName;
 
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.spi.ManagementAware;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.platform.camel.ihe.ws.mbean.ManagedWsItiEndpoint;
 
 /**
  * Camel endpoint used to create producers and consumers based on webservice calls.
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends DefaultEndpoint {
+@SuppressWarnings("deprecation")
+public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends DefaultEndpoint
+    implements ManagementAware<DefaultItiEndpoint<C>> {
+
     private static final String ENDPOINT_PROTOCOL = "http://";
     private static final String ENDPOINT_PROTOCOL_SECURE = "https://";
 
@@ -106,8 +111,13 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
      * @return Web Service parameters of the component to
      *      which this endpoint belongs.
      */
+    @SuppressWarnings("unchecked")
     protected C getWebServiceConfiguration() {
         return ((AbstractWsComponent<C>) getComponent()).getWebServiceConfiguration();
+    }
+    
+    public Object getManagedObject(DefaultItiEndpoint<C> endpoint) {
+        return new ManagedWsItiEndpoint(endpoint, getWebServiceConfiguration());
     }
 
     private void configure() {
