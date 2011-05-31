@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.event.extend;
 
-import org.apache.camel.model.ProcessorDefinition;
 
+import groovy.lang.Closure;
+import org.apache.camel.model.ProcessorDefinition;
 import org.openehealth.ipf.platform.camel.event.model.PublishProcessorDefinition;
 
 /**

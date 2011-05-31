@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.cda.extend;
 
-
+import java.util.Map;
 import org.apache.camel.builder.DataFormatClause;
 import org.apache.camel.model.ProcessorDefinition;
 import org.openehealth.ipf.commons.xml.SchematronProfile;
