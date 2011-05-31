@@ -30,8 +30,8 @@ import org.apache.camel.spi.DataFormat;
 
 /**
  * Flow DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
- *
- * @dsl
+ * 
+ * @DSL
  * 
  * @author Martin Krasser
  * @author Jens Riemschneider
@@ -39,7 +39,7 @@ import org.apache.camel.spi.DataFormat;
 public class FlowExtension {
     /**
      * Starts recording a message flow
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-initflowextension
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-initflowextension
      */
     public static FlowBeginProcessorDefinition initFlow(ProcessorDefinition self) {
         FlowBeginProcessorDefinition answer = new FlowBeginProcessorDefinition();
@@ -51,7 +51,7 @@ public class FlowExtension {
      * Starts recording a message flow with a specific identifier
      * @param identifier
      * 			the identifier to use
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-initflowextension
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-initflowextension
      */
     public static FlowBeginProcessorDefinition initFlow(ProcessorDefinition self, String identifier) {
         FlowBeginProcessorDefinition answer = new FlowBeginProcessorDefinition(identifier);
@@ -61,7 +61,7 @@ public class FlowExtension {
     
     /**
      * Logs the successful delivery of a message
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-ackflowextension
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-ackflowextension
      */
     public static FlowEndProcessorDefinition ackFlow(ProcessorDefinition self) {
         FlowEndProcessorDefinition answer = new FlowEndProcessorDefinition();
@@ -71,7 +71,7 @@ public class FlowExtension {
 
     /**
      * Logs the erroneous processing of a message
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-nakflowextension
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-nakflowextension
      */
     public static FlowErrorProcessorDefinition nakFlow(ProcessorDefinition self) {
         FlowErrorProcessorDefinition answer = new FlowErrorProcessorDefinition();
@@ -81,7 +81,7 @@ public class FlowExtension {
     
     /**
      * Filters messages during flow replay operations to avoid delivery of duplicates
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-dedupeextension
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Flow+management#Flowmanagement-dedupeextension
      */
     public static DedupeDefinition dedupeFlow(ProcessorDefinition self) {
         DedupeDefinition answer = new DedupeDefinition();
@@ -92,7 +92,7 @@ public class FlowExtension {
     /**
      * Allows adding of extensions that replace existing extensions provided by Camel (e.g.
      * {@code split})
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Splitter
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features#Corefeatures-Splitter
      */
     public static IpfDefinition ipf(ProcessorDefinition self) {
         return new IpfDefinition(self)

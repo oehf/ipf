@@ -23,14 +23,14 @@ import org.openehealth.ipf.platform.camel.lbs.core.model.StoreProcessorDefinitio
 /**
  * LBS DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  *
- * @dsl
+ * @DSL
  *
  * @author Jens Riemschneider
  */
 public class LbsExtension {
     /**
      * Stores content within a large binary store
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Large+binary+support#Largebinarysupport-DSLextensions
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Large+binary+support#Largebinarysupport-DSLextensions
      */
     public static StoreProcessorDefinition store(ProcessorDefinition self) {
         StoreProcessorDefinition answer = new StoreProcessorDefinition();
@@ -40,7 +40,7 @@ public class LbsExtension {
 
     /**
      * Fetches content from a large binary store
-     * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/Large+binary+support#Largebinarysupport-DSLextensions
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Large+binary+support#Largebinarysupport-DSLextensions
      */
     public static FetchProcessorDefinition fetch(ProcessorDefinition self) {
         FetchProcessorDefinition answer = new FetchProcessorDefinition();

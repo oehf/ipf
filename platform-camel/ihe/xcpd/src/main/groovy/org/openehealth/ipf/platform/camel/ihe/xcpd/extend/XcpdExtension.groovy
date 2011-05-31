@@ -24,7 +24,7 @@ import static org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExch
  * XCPD DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} 
  * using the {@code use} keyword.
  *
- * @dsl
+ * @DSL
  *
  * @author Dmytro Rud
  */
@@ -32,7 +32,7 @@ class XcpdExtension {
      
      /**
       * Validates an ITI-55 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti55Request(ValidatorAdapterDefinition self) {
          return definition(self, iti55RequestValidator());
@@ -40,7 +40,7 @@ class XcpdExtension {
      
      /**
       * Validates an ITI-55 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti55Response(ValidatorAdapterDefinition self) {
          return definition(self, iti55ResponseValidator());
@@ -48,7 +48,7 @@ class XcpdExtension {
 
      /**
       * Validates an ITI-56 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti56Request(ValidatorAdapterDefinition self) {
          return definition(self, iti56RequestValidator());
@@ -56,7 +56,7 @@ class XcpdExtension {
      
      /**
       * Validates an ITI-56 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-XCPD
       */
      public static ValidatorAdapterDefinition iti56Response(ValidatorAdapterDefinition self) {
          return definition(self, iti56ResponseValidator());
