@@ -28,7 +28,7 @@ import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.PixPdqV3CamelValid
  * HL7 v3 DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} 
  * using the {@code use} keyword.
  * 
- * @dsl
+ * @DSL
  *
  * @author Jens Riemschneider
  * @author Dmytro Rud
@@ -37,7 +37,7 @@ class PixPdqV3Extension {
 
      /**
       * Validates an ITI-44 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti44Request(ValidatorAdapterDefinition self) {
          return definition(self, iti44RequestValidator());
@@ -45,7 +45,7 @@ class PixPdqV3Extension {
      
      /**
       * Validates an ITI-44 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti44Response(ValidatorAdapterDefinition self) {
          return definition(self, iti44ResponseValidator());
@@ -53,7 +53,7 @@ class PixPdqV3Extension {
      
      /**
       * Validates an ITI-45 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti45Request(ValidatorAdapterDefinition self) {
          return definition(self, iti45RequestValidator());
@@ -61,7 +61,7 @@ class PixPdqV3Extension {
      
      /**
       * Validates an ITI-45 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti45Response(ValidatorAdapterDefinition self) {
          return definition(self, iti45ResponseValidator());
@@ -69,7 +69,7 @@ class PixPdqV3Extension {
      
      /**
       * Validates an ITI-46 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti46Request(ValidatorAdapterDefinition self) {
          return definition(self, iti46RequestValidator());
@@ -77,7 +77,7 @@ class PixPdqV3Extension {
      
      /**
       * Validates an ITI-46 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti46Response(ValidatorAdapterDefinition self) {
          return definition(self, iti46ResponseValidator());
@@ -85,7 +85,7 @@ class PixPdqV3Extension {
      
      /**
       * Validates an ITI-47 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti47Request(ValidatorAdapterDefinition self) {
          return definition(self, iti47RequestValidator());
@@ -93,7 +93,7 @@ class PixPdqV3Extension {
      
      /**
       * Validates an ITI-47 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti47Response(ValidatorAdapterDefinition self) {
          return definition(self, iti47ResponseValidator());
@@ -102,7 +102,7 @@ class PixPdqV3Extension {
 
      /**
       * Translates a HL7v3 message to HL7v2 using the given translator.
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-UsingDSLExtensions
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-UsingDSLExtensions
       */
      public static ProcessorDefinition translateHL7v3toHL7v2(
              ProcessorDefinition self, 
@@ -112,7 +112,7 @@ class PixPdqV3Extension {
      
      /**
       * Translates a HL7v2 message to HL7v3 using the given translator.
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-UsingDSLExtensions
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-UsingDSLExtensions
       */
      public static ProcessorDefinition translateHL7v2toHL7v3(
              ProcessorDefinition self, 

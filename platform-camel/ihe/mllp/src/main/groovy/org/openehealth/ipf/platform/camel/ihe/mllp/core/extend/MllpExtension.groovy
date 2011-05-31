@@ -23,14 +23,14 @@ import org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExchangeVal
 /**
  * PIX/PDQ DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
  *
- * @dsl
+ * @DSL
  *
  * @author Jens Riemschneider
  */
 class MllpExtension {
      /**
       * Validates an ITI-8 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti8Request(ValidatorAdapterDefinition self) {
          return definition(self, 8, true);
@@ -38,7 +38,7 @@ class MllpExtension {
      
      /**
       * Validates an ITI-8 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti8Response(ValidatorAdapterDefinition self) {
          return definition(self, 8, false);
@@ -46,7 +46,7 @@ class MllpExtension {
      
      /**
       * Validates an ITI-9 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti9Request(ValidatorAdapterDefinition self) {
          return definition(self, 9, true);
@@ -54,7 +54,7 @@ class MllpExtension {
      
      /**
       * Validates an ITI-9 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti9Response(ValidatorAdapterDefinition self) {
          return definition(self, 9, false);
@@ -62,7 +62,7 @@ class MllpExtension {
      
      /**
       * Validates an ITI-10 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti10Request(ValidatorAdapterDefinition self) {
          return definition(self, 10, true);
@@ -70,7 +70,7 @@ class MllpExtension {
      
      /**
       * Validates an ITI-10 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti10Response(ValidatorAdapterDefinition self) {
          return definition(self, 10, false);
@@ -78,7 +78,7 @@ class MllpExtension {
      
      /**
       * Validates an ITI-21 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti21Request(ValidatorAdapterDefinition self) {
          return definition(self, 21, true);
@@ -86,7 +86,7 @@ class MllpExtension {
 
      /**
       * Validates an ITI-21 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti21Response(ValidatorAdapterDefinition self) {
          return definition(self, 21, false);
@@ -94,7 +94,7 @@ class MllpExtension {
 
      /**
       * Validates an ITI-22 request
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti22Request(ValidatorAdapterDefinition self) {
          return definition(self, 22, true);
@@ -102,7 +102,7 @@ class MllpExtension {
      
      /**
       * Validates an ITI-22 response
-      * @ipfdoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
+      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
      public static ValidatorAdapterDefinition iti22Response(ValidatorAdapterDefinition self) {
          return definition(self, 22, false);

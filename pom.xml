@@ -15,7 +15,7 @@
         <surefire-report-plugin-version>2.4.3</surefire-report-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
         <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
-        <maven-dsldoc-plugin-version>1.2</maven-dsldoc-plugin-version>
+        <maven-dsldoc-plugin-version>1.3</maven-dsldoc-plugin-version>
 
         <!-- Default Bundle Properties -->
         <osgi.export.pkg>*</osgi.export.pkg>
@@ -997,11 +997,11 @@
                 <artifactId>maven-dsldoc-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>gdsl</id>
+                        <id>dsldoc</id>
                         <phase>compile</phase>
                         <goals>
-                            <goal>gdsl</goal>
-                            <goal>dslindex</goal>
+                            <goal>dsld</goal>
+                            <goal>dsldoc</goal>
                         </goals>
                     </execution>
                 </executions>
