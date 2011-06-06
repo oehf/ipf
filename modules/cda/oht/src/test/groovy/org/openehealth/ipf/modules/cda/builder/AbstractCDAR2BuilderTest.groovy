@@ -15,30 +15,20 @@
  */
 package org.openehealth.ipf.modules.cda.builder
 
-import org.openehealth.ipf.modules.cda.AbstractCDAR2Testimport org.junit.Before
-import org.openehealth.ipf.modules.cda.CDAR2Renderer
-import org.eclipse.emf.ecore.xmi.XMLResource
+import org.junit.Before
+import org.openehealth.ipf.modules.cda.AbstractCDAR2Test
 
 /**
  * @author Christian Ohr
  */
 public abstract class AbstractCDAR2BuilderTest extends AbstractCDAR2Test {
-	
-	static def builder
-	static def loaded = []
-	
-	@Before
-	public void setUp() throws Exception {
-		if (!builder)
-            builder = new CDAR2Builder(getClass().getClassLoader()) 
-	}
-	
-	void showDocument(def document){
-        CDAR2Renderer renderer = new CDAR2Renderer()
-        def opts = [:]
-        opts[XMLResource.OPTION_DECLARE_XML] = true
-        opts[XMLResource.OPTION_ENCODING] = 'utf-8'
-        println(renderer.render(document, opts))
+    
+    static def builder
+    static def loaded = []
+    
+    @Before
+    public void setUp() throws Exception {
+        if (!builder)
+            builder = new CDAR2Builder(getClass().getClassLoader())
     }
-		
 }
