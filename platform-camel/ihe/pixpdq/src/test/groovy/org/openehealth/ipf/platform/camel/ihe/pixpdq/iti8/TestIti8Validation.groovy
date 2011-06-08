@@ -15,30 +15,27 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.*
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.net.URL;
-import java.nio.ByteBuffer;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
+import org.junit.BeforeClass
+import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-
-import ca.uhn.hl7v2.parser.PipeParser;
 
 /**
  * Unit test for validation DSL extensions.
  * @author Dmytro Rud
  */
-class TestValidation extends MllpTestContainer {
+class TestIti8Validation extends MllpTestContainer {
+    
+    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-validation.xml'
+    
+    static void main(args) {
+        init(CONTEXT_DESCRIPTOR)
+    }
     
     @BeforeClass
     static void setUpClass() {
-        init('iti8/iti-8-validation.xml')
+        init(CONTEXT_DESCRIPTOR)
     }
     
     @Test
@@ -67,7 +64,7 @@ class TestValidation extends MllpTestContainer {
         assertNAK(msg)
         assertTrue(msg.toString().contains('Missing patient ID'))
     }
-
+    
     @Test
     void testHandledError() {
         def endpointUri = 'pix-iti8://localhost:18089?audit=false'
@@ -75,6 +72,4 @@ class TestValidation extends MllpTestContainer {
         def msg = send(endpointUri, body)
         assertACK(msg)
     }
-
-
 }

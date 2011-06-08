@@ -15,38 +15,39 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti22
 
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.*
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.Endpoint;
-import org.apache.camel.Exchange;
-import org.apache.camel.Message;
-import org.apache.camel.Processor;
-import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.mina.MinaConsumer;
-import org.apache.camel.impl.DefaultExchange;
-
-import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
+import org.apache.camel.Exchange
+import org.apache.camel.Processor
+import org.apache.camel.impl.DefaultExchange
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
-import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.parser.PipeParser;
+import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.parser.PipeParser
 
 /**
  * Unit tests for the PDQ transaction aka ITI-22.
  * @author Dmytro Rud
  */
 class TestIti22 extends MllpTestContainer {
-   
+    
+    
+    def static CONTEXT_DESCRIPTOR = 'iti22/iti-22.xml'
+    
+    static void main(args) {
+        init(CONTEXT_DESCRIPTOR)
+    }
+    
     @BeforeClass
     static void setUpClass() {
-        init('iti22/iti-22.xml')
+        init(CONTEXT_DESCRIPTOR)
     }
-
+    
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|'+
                 "20081031112704||${msh9}|324406609|P|${msh12}|||ER|||||\n"
@@ -71,12 +72,12 @@ class TestIti22 extends MllpTestContainer {
     }
     
     def doTestHappyCaseAndAudit(String msh9, String endpointUri, int expectedAuditItemsCount) {
-        final String body = getMessageString(msh9, '2.5') 
+        final String body = getMessageString(msh9, '2.5')
         def msg = send(endpointUri, body)
         assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
-
+    
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on consumer side, audit enabled.
@@ -106,19 +107,19 @@ class TestIti22 extends MllpTestContainer {
     public void testInacceptanceOnConsumer5() {
         doTestInacceptanceOnConsumer('QBP^ZV1^QBP_Q26', '2.5')
     }
-
+    
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = 'pdq-iti22://localhost:18221'
         def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
-            [process : { Exchange e -> /* nop */ }] as Processor  
-        )
+                [process : { Exchange e -> /* nop */ }] as Processor
+                )
         def processor = consumer.processor
         
         def body = getMessageString(msh9, msh12);
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
-
+        
         processor.process(exchange)
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
@@ -126,7 +127,7 @@ class TestIti22 extends MllpTestContainer {
         assertEquals(0, auditSender.messages.size())
     }
     
-
+    
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version), 
      * on producer side, audit enabled.
@@ -163,13 +164,11 @@ class TestIti22 extends MllpTestContainer {
         } catch (Exception e) {
             def cause = e.getCause()
             if((e instanceof HL7Exception) || (cause instanceof HL7Exception) ||
-               (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception))
-            {
+            (e instanceof AbstractHL7v2Exception) || (cause instanceof AbstractHL7v2Exception)) {
                 failed = false
             }
         }
         assertFalse(failed)
         assertEquals(0, auditSender.messages.size())
     }
-    
 }

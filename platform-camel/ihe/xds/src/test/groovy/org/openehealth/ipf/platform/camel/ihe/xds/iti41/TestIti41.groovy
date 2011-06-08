@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -23,25 +26,29 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-41 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
 class TestIti41 extends StandardTestContainer {
+    
+    def static CONTEXT_DESCRIPTOR = 'iti-41.xml'
+    
     def SERVICE1 = "xds-iti41://localhost:${port}/xds-iti41-service1"
     def SERVICE2 = "xds-iti41://localhost:${port}/xds-iti41-service2"
-
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti41-service2"
     
     def request
     def docEntry
-
+    
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
     @BeforeClass
     static void classSetUp() {
-        startServer(new CXFServlet(), 'iti-41.xml')
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
     @Before
@@ -65,9 +72,9 @@ class TestIti41 extends StandardTestContainer {
         checkAudit('8')
     }
     
-    void checkAudit(outcome) {        
+    void checkAudit(outcome) {
         def message = getAudit('C', SERVICE2_ADDR)[0]
-
+        
         assert message.AuditSourceIdentification.size() == 1
         assert message.ActiveParticipant.size() == 2
         assert message.ParticipantObjectIdentification.size() == 2
@@ -81,7 +88,7 @@ class TestIti41 extends StandardTestContainer {
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
         
         message = getAudit('R', SERVICE2_ADDR)[0]
-
+        
         assert message.AuditSourceIdentification.size() == 1
         assert message.ActiveParticipant.size() == 2
         assert message.ParticipantObjectIdentification.size() == 2

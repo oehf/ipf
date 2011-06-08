@@ -106,7 +106,7 @@ class ContinuationsRouteBuilder extends SpringRouteBuilder {
         /**
          * Full automatism.
          */
-        from(TestContinuations.endpointUri(28210, true, true, true, false))
+        from(TestIti21Continuations.endpointUri(28210, true, true, true, false))
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
@@ -121,7 +121,7 @@ class ContinuationsRouteBuilder extends SpringRouteBuilder {
          * Test interactive continuations on client side.
          * A special case are fragments without data records (c, e).
          */
-        from(TestContinuations.endpointUri(28211, false, false, false, false))
+        from(TestIti21Continuations.endpointUri(28211, false, false, false, false))
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()

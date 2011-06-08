@@ -16,12 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti45
 
 import static org.junit.Assert.*
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.junit.Before
-import org.junit.Test
-import org.junit.BeforeClass
-import org.apache.cxf.transport.servlet.CXFServlet
 
+import org.apache.cxf.transport.servlet.CXFServlet
+import org.junit.BeforeClass
+import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
@@ -29,18 +27,24 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
  * @author Dmytro Rud
  */
 class TestIti45 extends StandardTestContainer {
-
-     def SERVICE1 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service1";
-
-     @BeforeClass
-     static void setUpClass() {
-         startServer(new CXFServlet(), 'iti-45.xml')
-     }
     
-     @Test
-     void testIti45() {
-         def response = send(SERVICE1, '<request/>', String.class)
-         def slurper = new XmlSlurper().parseText(response)
-         assert slurper.@from == 'PIX Manager'
-     }
+    def static CONTEXT_DESCRIPTOR = 'iti-45.xml'
+    
+    def SERVICE1 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service1";
+    
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
+    @BeforeClass
+    static void setUpClass() {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
+    }
+    
+    @Test
+    void testIti45() {
+        def response = send(SERVICE1, '<request/>', String.class)
+        def slurper = new XmlSlurper().parseText(response)
+        assert slurper.@from == 'PIX Manager'
+    }
 }

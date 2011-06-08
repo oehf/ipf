@@ -20,9 +20,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.activation.DataHandler;
 
 import org.junit.Before;
@@ -39,8 +36,9 @@ import org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters.DataHandle
 import org.springframework.core.convert.support.GenericConversionService;
 
 /**
- * @author Stefan Ivanov
+ * Tests conversion services
  * 
+ * @author Stefan Ivanov
  */
 public class DocumentTest {
     private DocumentEntry docEntry;
@@ -111,19 +109,18 @@ public class DocumentTest {
     @Test
     public final void getContentsSize() {
         Document doc = new Document(docEntry, someData);
-        doc.setContent(String.class, new String("data1"));
-        doc.setContent(Integer.class, new Integer(2));
-        doc.setContent(Integer.class, new Integer(4));
+        doc.setContent(String.class, "data1");
+        doc.setContent(Integer.class, Integer.valueOf(2));
+        doc.setContent(Integer.class, Integer.valueOf(4));
         assertEquals("Size of the contents should be 3!", 3, doc.getContentsCount());
     }
 
     @Test
     public final void getContentsKeySet() {
         Document doc = new Document(docEntry, someData);
-        doc.setContent(String.class, new String("data1"));
-        doc.setContent(Integer.class, new Integer(2));
-        doc.setContent(Integer.class, new Integer(4));
-        Set<Class<?>> expectedKeySet = new HashSet<Class<?>>(3);
+        doc.setContent(String.class, "data1");
+        doc.setContent(Integer.class, Integer.valueOf(2));
+        doc.setContent(Integer.class, Integer.valueOf(4));
         Class<?>[] classArray = new Class<?>[] {String.class, Integer.class, DataHandler.class};
         for (Class<?> clazz : classArray) {
             assertTrue(doc.hasContent(clazz));

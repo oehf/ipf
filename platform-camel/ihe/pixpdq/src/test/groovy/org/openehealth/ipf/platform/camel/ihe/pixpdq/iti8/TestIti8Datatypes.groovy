@@ -15,27 +15,35 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8
 
-import ca.uhn.hl7v2.parser.PipeParser
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertTrue
+
 import java.nio.ByteBuffer
+
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
 
+import ca.uhn.hl7v2.parser.PipeParser
 /**
  * Unit test for datatypes handling.
  * @author Dmytro Rud
  */
-class TestDatatypes extends MllpTestContainer {
+class TestIti8Datatypes extends MllpTestContainer {
+    
+    def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-datatypes.xml'
+    
+    def static main(args) {
+        init(CONTEXT_DESCRIPTOR)
+    }
     
     @BeforeClass
     static void setUpClass() {
-        init('iti8/iti-8-datatypes.xml')
+        init(CONTEXT_DESCRIPTOR)
     }
-        
+    
     /**
      * Checks whether various request data types are being handled properly.
      */
@@ -44,7 +52,7 @@ class TestDatatypes extends MllpTestContainer {
         def endpointUri = 'pix-iti8://localhost:18088?audit=false'
         def originalBody = getMessageString('ADT^A01', '2.3.1')
         def body
-    
+        
         /*
          * Refer to {@link Hl7v2MarshalUtils#typeSupported()}
          * for the list of currently supported types. 
@@ -57,13 +65,13 @@ class TestDatatypes extends MllpTestContainer {
         // MessageAdapter
         body = MessageAdapters.make(new PipeParser(), originalBody)
         send(endpointUri, body)
-    
+        
         // HAPI message
         body = body.target
         send(endpointUri, body)
         
         // File
-        URL fileUrl = TestDatatypes.class.classLoader.getResource('iti8/hl7v2message.hl7')
+        URL fileUrl = TestIti8Datatypes.class.classLoader.getResource('iti8/hl7v2message.hl7')
         body = new File(fileUrl.toURI())
         send(endpointUri, body)
         
@@ -89,7 +97,7 @@ class TestDatatypes extends MllpTestContainer {
             exceptionThrown = true
         }
         assertTrue(exceptionThrown)
-    
+        
         exceptionThrown = false
         try {
             body = new Integer(12345)
@@ -116,7 +124,7 @@ class TestDatatypes extends MllpTestContainer {
             assertACK(msg)
         }
         
-        // 9-12 should throw exceptions 
+        // 9-12 should throw exceptions
         def exceptionsCount = 0;
         for(int i = 9; i <= 12; ++i) {
             try {
@@ -133,7 +141,7 @@ class TestDatatypes extends MllpTestContainer {
             assertNAK(msg)
         }
         
-        // prove that we have not missed any of the pre-configured data types 
+        // prove that we have not missed any of the pre-configured data types
         assertTrue(DatatypesRouteBuilder.allContentTypesChecked())
     }
     

@@ -18,13 +18,19 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiCompone
 
 public class ManagedMllpItiEndpointTest extends MllpTestContainer {
     
+    def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
+    
+    static void main(args) {
+        init(CONTEXT_DESCRIPTOR)
+    }
+    
     @BeforeClass
     static void setUpClass() {
-        init('some-mllp-iti-context.xml')
+        init(CONTEXT_DESCRIPTOR)
     }
     
     @Test
-    void init() throws Exception {
+    void initContext() throws Exception {
         ObjectName on = queryForNamedObjects(
                 'org.apache.camel:context=*/camelContext,type=context,name=\"camelContext\"')
         ObjectInstance oi = getMBeanServer().getObjectInstance(on)

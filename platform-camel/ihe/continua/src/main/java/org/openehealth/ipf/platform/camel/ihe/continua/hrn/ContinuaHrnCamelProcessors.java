@@ -48,7 +48,7 @@ abstract public class ContinuaHrnCamelProcessors {
 
             // Content type enrichment: create byte array and MDHT CDA pojo
             Document document = request.getDocuments().get(0);
-            byte[] bytes = document.getContent(byte[].class);
+            document.getContent(byte[].class);
             ClinicalDocument ccd = document.getContent(ClinicalDocument.class);
             if (ccd == null) {
                 throw new ValidationException("cannot convert document content to CCD");

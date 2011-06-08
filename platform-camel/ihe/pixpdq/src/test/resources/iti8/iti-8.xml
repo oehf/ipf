@@ -16,14 +16,13 @@
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans
-http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/lang
-http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+http://www.springframework.org/schema/lang/spring-lang.xsd
 http://www.springframework.org/schema/util
-http://www.springframework.org/schema/util/spring-util-2.5.xsd
+http://www.springframework.org/schema/util/spring-util.xsd
 http://camel.apache.org/schema/spring 
-http://camel.apache.org/schema/spring/camel-spring.xsd 
-">
+http://camel.apache.org/schema/spring/camel-spring.xsd ">
 
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
@@ -54,4 +53,19 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <bean id="alternativeCodec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
         <property name="charset" value="utf-8"/>
     </bean>
+    
+    <!-- configure the server -->
+    <bean id="sslContext" class="org.apache.mina.integration.spring.ssl.SSLContextFactoryBean">
+        <property name="keyManagerFactoryAlgorithm" value="SunX509"/>
+        <property name="keyManagerFactoryKeyStore" ref="keyStore"/>
+        <property name="keyManagerFactoryKeyStorePassword" value="changeit"/>
+        <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
+        <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
+    </bean>
+    
+    <bean id="keyStore" class="org.apache.mina.integration.spring.ssl.KeyStoreFactoryBean">
+        <property name="resource" value="some-keystore"/>
+        <property name="password" value="changeit"/>
+    </bean>
+    
 </beans>

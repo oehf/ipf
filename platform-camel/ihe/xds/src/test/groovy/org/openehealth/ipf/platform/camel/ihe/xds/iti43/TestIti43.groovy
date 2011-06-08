@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -22,27 +25,32 @@ import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 
 /**
  * Tests the ITI-43 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
 class TestIti43 extends StandardTestContainer {
+    
+    def static CONTEXT_DESCRIPTOR = 'iti-43.xml'
+    
     def SERVICE1 = "xds-iti43://localhost:${port}/xds-iti43-service1"
     def SERVICE2 = "xds-iti43://localhost:${port}/xds-iti43-service2"
-
+    
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti43-service2"
     
     def request
     def doc
     
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
     @BeforeClass
     public static void classSetUp() throws Exception {
-        startServer(new CXFServlet(), 'iti-43.xml')
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-
+    
     @Before
     void setUp() {
         request = SampleData.createRetrieveDocumentSet()
@@ -62,7 +70,7 @@ class TestIti43 extends StandardTestContainer {
         
         checkAudit('0', 'service 2')
     }
-     
+    
     @Test
     void testIti43FailureAudit() {
         def response2 = sendIt(SERVICE2, 'falsch')
@@ -71,7 +79,7 @@ class TestIti43 extends StandardTestContainer {
         
         checkAudit('8', 'falsch')
     }
-     
+    
     def checkAudit(outcome, docIdValue) {
         def message = getAudit('R', SERVICE2_ADDR)[0]
         
@@ -108,7 +116,7 @@ class TestIti43 extends StandardTestContainer {
         assert attachments.size() == 1
         assert attachments.iterator().next().xop
     }
-
+    
     def sendIt(endpoint, value) {
         doc.documentUniqueId = value
         send(endpoint, request, RetrievedDocumentSet.class)

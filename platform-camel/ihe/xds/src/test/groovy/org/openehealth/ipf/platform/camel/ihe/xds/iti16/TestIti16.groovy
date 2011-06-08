@@ -23,10 +23,8 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 
 /**
@@ -34,23 +32,27 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
  * @author Jens Riemschneider
  */
 class TestIti16 extends StandardTestContainer {
-
+    
+    def static CONTEXT_DESCRIPTOR = 'iti-16.xml'
+    
     def SERVICE1 = "xds-iti16://localhost:${port}/xds-iti16-service1"
     def SERVICE2 = "xds-iti16://localhost:${port}/xds-iti16-service2"
-
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti16-service2"
-    
     def request
     def query
     
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
     @BeforeClass
     static void classSetUp() throws Exception {
-        startServer(new CXFServlet(), 'iti-16.xml')
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-
+    
     @Before
     void setUp() {
-        request = SampleData.createSqlQuery()      
+        request = SampleData.createSqlQuery()
         query = request.query
     }
     
@@ -69,7 +71,7 @@ class TestIti16 extends StandardTestContainer {
         checkAudit('8', 'service falsch')
     }
     
-    void checkAudit(outcome, expectedQueryText) {        
+    void checkAudit(outcome, expectedQueryText) {
         def messages = getAudit('E', SERVICE2_ADDR)
         assert messages.size() == 2
         
@@ -83,7 +85,7 @@ class TestIti16 extends StandardTestContainer {
             checkSource(message.ActiveParticipant[0], 'true')
             checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
             checkQuery(message.ParticipantObjectIdentification[0], 'ITI-16', expectedQueryText, '')
-//            checkPatient(message.ParticipantObjectIdentification[0])
+            //            checkPatient(message.ParticipantObjectIdentification[0])
         }
     }
     

@@ -25,18 +25,24 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
  * @author Dmytro Rud
  */
 class TestPcc1 extends StandardTestContainer {
-
-     def SERVICE1 = "qed-pcc1://localhost:${org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer.port}/qed-pcc1-service1";
-
-     @BeforeClass
-     static void setUpClass() {
-         startServer(new CXFServlet(), 'pcc-1.xml')
-     }
     
-     @Test
-     void testPcc1() {
-         def response = send(SERVICE1, '<QUPC_IN043100UV01 />', String.class)
-         def slurper = new XmlSlurper().parseText(response)
-         assert slurper.@from == 'Clinical Data Source'
-     }
+    def static CONTEXT_DESCRIPTOR = 'pcc-1.xml'
+    
+    def SERVICE1 = "qed-pcc1://localhost:${port}/qed-pcc1-service1";
+    
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
+    @BeforeClass
+    static void setUpClass() {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
+    }
+    
+    @Test
+    void testPcc1() {
+        def response = send(SERVICE1, '<QUPC_IN043100UV01 />', String.class)
+        def slurper = new XmlSlurper().parseText(response)
+        assert slurper.@from == 'Clinical Data Source'
+    }
 }

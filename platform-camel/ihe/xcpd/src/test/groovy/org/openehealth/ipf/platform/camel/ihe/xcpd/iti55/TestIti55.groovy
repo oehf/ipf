@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xcpd.iti55;
 
 import java.util.concurrent.atomic.AtomicInteger
+
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
@@ -31,21 +32,27 @@ import org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils
  * @author Dmytro Rud
  */
 class TestIti55 extends StandardTestContainer {
-
+    
+    def static CONTEXT_DESCRIPTOR = 'iti55/iti-55.xml'
+    
     final String SERVICE1_URI = "xcpd-iti55://localhost:${port}/iti55service?correlator=#correlator"
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti55service-response"
     final String SERVICE2_URI = "xcpd-iti55://localhost:${port}/iti55service2"
-
+    
     static final String REQUEST = XcpdTestUtils.readFile('iti55/iti55-sample-request.xml')
-
-    static final Set<Integer> CALLS_WITH_TTL_HEADER = [1, 5, 9] as Set
+    
+    static final Set<Integer> CALLS_WITH_TTL_HEADER = [1, 5, 9]as Set
     static final AtomicInteger ttlResponsesCount = new AtomicInteger(0)
-
+    
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
     @BeforeClass
     static void setUpClass() {
-        startServer(new CXFServlet(), 'iti55/iti-55.xml')
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-
+    
     /**
      * Test whether:
      * <ol>
@@ -63,82 +70,81 @@ class TestIti55 extends StandardTestContainer {
         final int N = 5
         auditSender.reset(N * 4)
         int i = 0
-
+        
         N.times {
             send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
             send(SERVICE1_URI, i++)
         }
-
+        
         // wait for completion of asynchronous routes
         Thread.currentThread().sleep(1000 + Iti55TestRouteBuilder.ASYNC_DELAY)
         auditSender.latch.await()
-
+        
         assert Iti55TestRouteBuilder.responseCount.get() == N * 2
         assert Iti55TestRouteBuilder.asyncResponseCount.get() == N
-
+        
         assert auditSender.messages.size() == N * 4
         assert ttlResponsesCount.get() == CALLS_WITH_TTL_HEADER.size()
-
+        
         assert ! Iti55TestRouteBuilder.errorOccurred
     }
-
-
+    
+    
     private void send(
-            String endpointUri,
-            int n,
-            String responseEndpointUri = null)
-    {
+    String endpointUri,
+    int n,
+    String responseEndpointUri = null) {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
-
+        
         // set WSA ReplyTo header, when necessary
         if (responseEndpointUri) {
             requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
         }
-
+        
         // set correlation key
         requestExchange.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
-
+        
         // set TTL SOAP header
         // we do it not on each message to check whether message context is being properly cleared
         // between invocations
         if (n in CALLS_WITH_TTL_HEADER) {
             XcpdTestUtils.setTtl(requestExchange.in, n)
         }
-
+        
         // set request HTTP headers
         requestExchange.in.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] =
-            ['MyRequestHeader': "Number ${n}".toString()]
-
+                ['MyRequestHeader': "Number ${n}".toString()]
+        
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
         def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti55TestRouteBuilder.ASYNC_DELAY)
-
+        
         // for sync messages -- check acknowledgement code and incoming TTL header
         if (!responseEndpointUri) {
             XcpdTestUtils.testPositiveAckCode(resultMessage.body)
-
+            
             def dura = TtlHeaderUtils.getTtl(resultMessage)
             if (dura) {
                 assert dura.toString() == "P${n * 2}Y"
                 ttlResponsesCount.incrementAndGet()
             }
-
+            
             def inHttpHeaders = resultMessage.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
     }
-
-
+    
+    
     @Test
     void testNakGeneration() {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = '<test />'
         def responseMessage = Exchanges.resultMessage(producerTemplate.send(SERVICE2_URI, requestExchange))
         def response = Hl7v3Utils.slurp(responseMessage.body)
-
+        
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'INTERR'
         assert response.controlActProcess.reasonOf.detectedIssueEvent.code.@code == 'ActAdministrativeDetectedIssueCode'

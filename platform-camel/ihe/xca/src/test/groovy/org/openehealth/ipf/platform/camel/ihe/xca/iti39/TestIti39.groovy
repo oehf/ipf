@@ -20,31 +20,36 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
-import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 
 /**
  * Tests for ITI-39.
  * @author Dmytro Rud
  */
 class TestIti39 extends StandardTestContainer {
-
+    
+    def static CONTEXT_DESCRIPTOR = 'iti-39.xml'
+    
     final String SERVICE1_URI = "xca-iti39://localhost:${port}/iti39service?correlator=#correlator"
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti39service-response"
     final String SERVICE2_URI = "xca-iti39://localhost:${port}/iti39service2"
-
+    
     static final RetrieveDocumentSet REQUEST = SampleData.createRetrieveDocumentSet()
-
-
+    
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
     @BeforeClass
     static void setUpClass() {
-        startServer(new CXFServlet(), 'iti-39.xml')
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-
+    
     /**
      * Test whether:
      * <ol>
@@ -62,58 +67,57 @@ class TestIti39 extends StandardTestContainer {
         final int N = 5
         auditSender.reset(N * 4)
         int i = 0
-
+        
         N.times {
             send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
             send(SERVICE1_URI, i++)
         }
-
+        
         // wait for completion of asynchronous routes
         Thread.currentThread().sleep(1000 + Iti39TestRouteBuilder.ASYNC_DELAY)
         auditSender.latch.await()
-
+        
         assert Iti39TestRouteBuilder.responseCount.get() == N * 2
         assert Iti39TestRouteBuilder.asyncResponseCount.get() == N
-
+        
         assert auditSender.messages.size() == N * 4
-
+        
         assert ! Iti39TestRouteBuilder.errorOccurred
     }
-
-
+    
+    
     private void send(
-            String endpointUri,
-            int n,
-            String responseEndpointUri = null)
-    {
+    String endpointUri,
+    int n,
+    String responseEndpointUri = null) {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
-
+        
         // set WSA ReplyTo header, when necessary
         if (responseEndpointUri) {
             requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
         }
-
+        
         // set correlation key
         requestExchange.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
-
+        
         // set request HTTP headers
         requestExchange.in.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] =
-            ['MyRequestHeader': "Number ${n}".toString()]
-
+                ['MyRequestHeader': "Number ${n}".toString()]
+        
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
         def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti39TestRouteBuilder.ASYNC_DELAY)
-
+        
         // for sync messages -- check acknowledgement code and incoming TTL header
         if (!responseEndpointUri) {
             assert resultMessage.getBody(RetrievedDocumentSet.class).status == Status.SUCCESS
-
+            
             def inHttpHeaders = resultMessage.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
     }
-
+    
 }

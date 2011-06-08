@@ -98,7 +98,7 @@ public class ManagedMllpItiEndpoint extends ManagedEndpoint {
     @ManagedAttribute(description = "Interactive Continuation Storage Cache Type")
     public String getInteractiveContinuationStorageType() {
         return getEndpoint().isSupportInteractiveContinuation() ?
-            getEndpoint().getInteractiveContinuationStorage().getClass().getName() : new String();
+            getEndpoint().getInteractiveContinuationStorage().getClass().getName() : "";
     }
     
     @ManagedAttribute(description = "Support Unsolicited Fragmentation Enabled")
@@ -114,7 +114,7 @@ public class ManagedMllpItiEndpoint extends ManagedEndpoint {
     @ManagedAttribute(description = "Unsolicited Fragmentation Storage Cache Type")
     public String getUnsolicitedFragmentationStorageType() {
         return getEndpoint().isSupportUnsolicitedFragmentation() ?
-            getEndpoint().getUnsolicitedFragmentationStorage().getClass().getName() : new String();
+            getEndpoint().getUnsolicitedFragmentationStorage().getClass().getName() : "";
     }
 
     @ManagedAttribute(description = "Support Segment Fragmentation Enabled")

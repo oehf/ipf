@@ -15,27 +15,34 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17
 
+import static junit.framework.Assert.assertEquals
+
 import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet
-import static junit.framework.Assert.assertEquals
 
 /**
  * Tests the ITI-17 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
 class TestIti17 extends StandardTestContainer {
+    
+    def static CONTEXT_DESCRIPTOR = 'iti-17.xml'
+    
     def SERVICE1 = "xds-iti17://localhost:${port}/xds-iti17-service1"
     def SERVICE2 = "xds-iti17://localhost:${port}/xds-iti17-service2"
-
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti17-service2?service2"
     def SERVICE2_FALSCH_ADDR = "http://localhost:${port}/xds-iti17-service2?falsch"
     
+    static void main(args) {
+        startServer(new Iti17Servlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
     @BeforeClass
     static void setUp() {
-        startServer(new Iti17Servlet(), 'iti-17.xml')
+        startServer(new Iti17Servlet(), CONTEXT_DESCRIPTOR)
     }
     
     @Test
@@ -44,12 +51,12 @@ class TestIti17 extends StandardTestContainer {
         def content1 = IOUtils.toString(response1)
         response1.close()
         assertEquals('service1', content1)
-
+        
         def response2 = send(SERVICE2, '?service2', InputStream.class)
         def content2 = IOUtils.toString(response2)
         response2.close()
         assertEquals('service2', content2)
-
+        
         assert auditSender.messages.size() == 4
         
         checkAudit('0', SERVICE2_ADDR)
@@ -58,15 +65,15 @@ class TestIti17 extends StandardTestContainer {
     @Test
     void testIti17FailureAudit() {
         send(SERVICE2, '?falsch', InputStream.class)
-
+        
         assert auditSender.messages.size() == 2
         
         checkAudit('12', SERVICE2_FALSCH_ADDR)
     }
     
-    void checkAudit(outcome, addr) {        
-        def message = getAudit('R', addr)[0]        
-
+    void checkAudit(outcome, addr) {
+        def message = getAudit('R', addr)[0]
+        
         assert message.AuditSourceIdentification.size() == 1
         assert message.ActiveParticipant.size() == 2
         assert message.ParticipantObjectIdentification.size() == 1

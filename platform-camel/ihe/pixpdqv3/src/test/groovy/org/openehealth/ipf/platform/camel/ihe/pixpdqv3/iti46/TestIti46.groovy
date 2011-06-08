@@ -16,38 +16,42 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti46
 
 import static org.junit.Assert.*
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
-import org.junit.Before
-import org.junit.Test
-import org.junit.BeforeClass
-import org.apache.cxf.transport.servlet.CXFServlet
-
-import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.apache.camel.impl.DefaultExchange
 import org.apache.camel.Exchange
+import org.apache.camel.impl.DefaultExchange
+import org.apache.cxf.transport.servlet.CXFServlet
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * Tests for ITI-46.
  * @author Dmytro Rud
  */
 class TestIti46 extends StandardTestContainer {
-
+    
+    def static CONTEXT_DESCRIPTOR = 'iti-46.xml'
+    
     def SERVICE1 = "pixv3-iti46://localhost:${port}/pixv3-iti46-service1"
     def SERVICE_CHARSET = "pixv3-iti46://localhost:${port}/pixv3-iti46-charset"
-
+    
+    static void main(args) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+    
     @BeforeClass
     static void setUpClass() {
-        startServer(new CXFServlet(), 'iti-46.xml')
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-
+    
     @Test
     void testIti46() {
         def response = send(SERVICE1, '<request/>', String.class)
         def slurper = new XmlSlurper().parseText(response)
         assert slurper.@from == 'PIX Consumer'
     }
-
+    
     /**
      * Test whether setting and retrieving character sets
      * via Camel exchange property works.
@@ -65,5 +69,4 @@ class TestIti46 extends StandardTestContainer {
         def slurper = new XmlSlurper().parseText(Exchanges.resultMessage(result).body)
         assert slurper.@from == 'PIX Consumer'
     }
-
 }

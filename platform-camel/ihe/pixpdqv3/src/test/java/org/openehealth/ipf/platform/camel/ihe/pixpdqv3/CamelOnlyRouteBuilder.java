@@ -56,7 +56,7 @@ public class CamelOnlyRouteBuilder extends SpringRouteBuilder {
             .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
             .process(typeAndHeaderChecker(MessageAdapter.class, "content-1"))
             .process(iti21RequestValidator())
-            .setBody(constant(MessageAdapters.make(PARSER, TestCamelOnly.getResponseMessage())))
+            .setBody(constant(MessageAdapters.make(PARSER, TestIti47CamelOnly.getResponseMessage())))
             .process(iti21ResponseValidator())
             .setHeader("myHeader", constant("content-2"))
             .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))

@@ -15,61 +15,66 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.pixpdq.iti8
 
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.apache.camel.Exchange
+import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+
 import org.apache.camel.spring.SpringRouteBuilder
-import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+
 
 /**
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
 class RouteBuilder extends SpringRouteBuilder {
-
-     void configure() throws Exception {
-
-         // normal processing without auditing
-         from('xds-iti8://0.0.0.0:18081?audit=false')
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-             
-         // normal processing with auditing
-         from('pix-iti8://0.0.0.0:18082')
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-         
-         // normal processing with support for incomplete auditing
-         from('xds-iti8://0.0.0.0:18083?allowIncompleteAudit=true')
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-         
-         // fictive route to test producer-side acceptance checking
-         from('pix-iti8://0.0.0.0:18084')
-             .process {
-                 resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
-                 resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
-             }
-
-         // route with normal exception
-         from('xds-iti8://0.0.0.0:18085')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 throw new Exception('Why do you cry, Willy?')
-             }
-
-         // route with runtime exception
-         from('pix-iti8://0.0.0.0:18086')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process {
-                 throw new RuntimeException('Jump over the lazy dog, you fox.')
-             }
-     }
+    
+    void configure() throws Exception {
+        
+        // normal processing without auditing
+        from('xds-iti8://0.0.0.0:18081?audit=false')
+                .process {
+                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                }
+        
+        // normal processing with auditing
+        from('pix-iti8://0.0.0.0:18082')
+                .process {
+                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                }
+        
+        // normal processing with support for incomplete auditing
+        from('xds-iti8://0.0.0.0:18083?allowIncompleteAudit=true')
+                .process {
+                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                }
+        
+        // fictive route to test producer-side acceptance checking
+        from('pix-iti8://0.0.0.0:18084')
+                .process {
+                    resultMessage(it).body.MSH[9][1] = 'DOES NOT MATTER'
+                    resultMessage(it).body.MSH[9][2] = 'SHOULD FAIL IN INTERCEPTORS'
+                }
+        
+        // route with normal exception
+        from('xds-iti8://0.0.0.0:18085')
+                .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+                .process { throw new Exception('Why do you cry, Willy?') }
+        
+        // route with runtime exception
+        from('pix-iti8://0.0.0.0:18086')
+                .onException(Exception.class)
+                .maximumRedeliveries(0)
+                .end()
+                .process { throw new RuntimeException('Jump over the lazy dog, you fox.') }
+        
+        from('xds-iti8://0.0.0.0:18087?audit=false&'+
+                'secure=true&sslContext=#sslContext&' +
+                'sslProtocols=SSLv3,TLSv1&' +
+                'sslCiphers=SSL_RSA_WITH_NULL_SHA,TLS_RSA_WITH_AES_128_CBC_SHA')
+                .process {
+                    resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                }
+    }
 }
- 
+

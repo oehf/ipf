@@ -15,29 +15,28 @@
  */
 package org.openehealth.ipf.modules.cda.builder.content.section
 
-import org.openehealth.ipf.modules.cda.builder.content.entry.*
-import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
 import org.junit.Before
 import org.junit.Test
-import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoaderimport org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
+import org.openehealth.ipf.modules.cda.builder.AbstractCDAR2BuilderTest
+import org.openehealth.ipf.modules.cda.builder.content.document.CCDDefinitionLoader
 import org.openehealth.ipf.modules.cda.builder.content.entry.*
+import org.openhealthtools.ihe.common.cdar2.POCDMT000040Section
 
 /**
  * @author Stefan Ivanov
  */
 public class CCDVitalSignsBuilderTest extends AbstractCDAR2BuilderTest {
-	
-	@Before
-	void initialize() throws Exception {
-	    new CCDDefinitionLoader(builder).loadVitalSigns(loaded)
-		new CCDVitalSignsExtension(builder).register(registered)
-	}
-	
-	@Test
-	public void testCCDVitalSigns() {
-		POCDMT000040Section signs = builder.build(
-	        getClass().getResource('/builders/content/section/CCDVitalSignsExample.groovy'))
-		new CCDVitalSignsValidator().validate(signs, null)
-	}
-	
+    
+    @Before
+    void initialize() throws Exception {
+        new CCDDefinitionLoader(builder).loadVitalSigns(loaded)
+        new CCDVitalSignsExtension(builder).register(registered)
+    }
+    
+    @Test
+    public void testCCDVitalSigns() {
+        POCDMT000040Section signs = builder.build(
+                getClass().getResource('/builders/content/section/CCDVitalSignsExample.groovy'))
+        new CCDVitalSignsValidator().validate(signs, null)
+    }
 }

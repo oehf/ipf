@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 
@@ -42,18 +42,22 @@ import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
 /**
  * Tests the Continua HRN transaction.
- * 
  * @author Stefan Ivanov
- * 
  */
 public class ContinuaHrnTransactionTest extends StandardTestContainer {
     
+    public static final String CONTEXT_DESCRIPTOR = "continua-hrn-context.xml";
+
     private static JAXBContext jaxbContext;
     private ProvideAndRegisterDocumentSetRequestType hrnRequest;
     
+    public static void main(String args[]) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
+
     @BeforeClass
     public static void setUpClass() throws JAXBException {
-        startServer(new CXFServlet(), "continua-hrn-context.xml");
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
         jaxbContext = JAXBContext.newInstance("org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30");
     }
     

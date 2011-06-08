@@ -29,7 +29,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <import resource="classpath:META-INF/cxf/cxf-extension-addr.xml"/>
 
     <camel:camelContext id="camelContext">
-        <camel:jmxAgent id="agent" disabled="true"/>
+        <camel:jmxAgent id="agent" disabled="false"/>
         <camel:routeBuilder ref="routeBuilder"/>
     </camel:camelContext>
 

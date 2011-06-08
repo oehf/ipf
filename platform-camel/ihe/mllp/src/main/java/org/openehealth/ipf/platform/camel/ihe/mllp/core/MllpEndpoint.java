@@ -465,7 +465,12 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
 
     @Override
     public boolean equals(Object object) {
-        return wrappedEndpoint.equals(object);
+        if (object instanceof MllpEndpoint) {
+            MllpEndpoint that = (MllpEndpoint) object;
+            return this.getWrappedEndpoint().equals(that.getWrappedEndpoint());
+        }
+        else
+            return false;
     }
 
     @Override

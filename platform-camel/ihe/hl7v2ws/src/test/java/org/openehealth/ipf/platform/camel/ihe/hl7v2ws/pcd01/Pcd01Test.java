@@ -16,10 +16,17 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 
+import java.util.Set;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
 import org.apache.camel.Exchange;
+import org.apache.camel.util.CastUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,14 +40,18 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
  * 
  */
 public class Pcd01Test extends StandardTestContainer {
+    public static final String CONTEXT_DESCRIPTOR = "pcd-01.xml";
     
     public static final String PCD_01_SPEC_REQUEST = load("pcd01/pcd01-request.hl7").toString();
     public static final String PCD_01_SPEC_RESPONSE = load("pcd01/pcd01-response.hl7").toString();
-   
+    
+    public static void main(String args[]) {
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
+    }
 
     @BeforeClass
     public static void setUpClass() {
-        startServer(new CXFServlet(), "pcd-01.xml");
+        startServer(new CXFServlet(), CONTEXT_DESCRIPTOR);
     }
     
     @Test
@@ -119,6 +130,18 @@ public class Pcd01Test extends StandardTestContainer {
         assertTrue(response.contains("MSA|AR|MSGID1234"));
         assertTrue(response.contains("ERR|||203^Unsupported version id^HL70357^^Invalid HL7 version 2.5|E|||Invalid HL7 version 2.5"));
     }
+    
+    @Test
+    public void jmxAttribute() throws Exception {
+        MBeanServer mbsc = getCamelContext().getManagementStrategy().getManagementAgent()
+            .getMBeanServer();
+        Set<ObjectName> s = CastUtils.cast(mbsc.queryNames(new ObjectName(
+            "org.apache.camel:*,type=endpoints,name=\"pcd-pcd01://devicedata\""), null));
+        assertEquals(1, s.size());
+        ObjectName object = (ObjectName) s.toArray()[0];
+        assertNotNull(object);
+        assertTrue((Boolean) mbsc.getAttribute(object, "Addressing"));
+    }
 
     private String requestBody(String uri, String msg) {
         Object  response = send(uri, msg);
@@ -128,9 +151,5 @@ public class Pcd01Test extends StandardTestContainer {
     private void assertResponseEquals(String expected, String response){
         //use the same algorithm to parse the String message
         assertEquals(expected, MessageAdapters.make(response).toString());
-    }
- 
-    public static void main(String args []){
-        startServer(new CXFServlet(), "pcd-01.xml", false, DEMO_APP_PORT);
     }
 }

@@ -36,7 +36,7 @@ import org.springframework.core.io.ClassPathResource;
  * Test for Camel-only route.
  * @author Dmytro Rud
  */
-public class TestCamelOnly extends StandardTestContainer {
+public class TestIti47CamelOnly extends StandardTestContainer {
 
     private static String requestMessage, responseMessage;
 
