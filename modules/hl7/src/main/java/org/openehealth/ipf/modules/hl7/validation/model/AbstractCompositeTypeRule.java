@@ -102,7 +102,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
     
     public boolean isEqual(String expected, T element, int component) {
         boolean result = false;
-        Object val = val(element, component);
+        String val = val(element, component);
         if (expected.equals(val)) {
             result = true;
         }
@@ -254,7 +254,7 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
     }
     
     private String msgPrefix(String expected, String found) {
-        String val = "".equals(found) ? " empty value " : found;
+        String val = "".equals(found) ? "empty value" : found;
         return "Expected " + expected + ", found " + val;
     }
     
@@ -262,16 +262,16 @@ public abstract class AbstractCompositeTypeRule<T extends Composite> extends Com
         String reference = getSectionReference();
         String elementType = element.getClass().getSimpleName();
         return new StringBuilder()
-                .append("Validation error: ")
+                .append("Validation error - ")
                 .append((reference == null) ? ("rule for type " + elementType) : reference)
                 .append(" : ")
                 .append(prefix)
-                .append(" of type ")
+                .append(" in type ")
                 .append(elementType)
-                .append(", component ")
-                .append(component)
                 .append(", path ")
                 .append(path)
+                .append(", component ")
+                .append(component)
                 .toString();
     }
     
