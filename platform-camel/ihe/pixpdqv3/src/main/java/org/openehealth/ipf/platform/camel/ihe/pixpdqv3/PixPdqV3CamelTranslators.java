@@ -48,8 +48,8 @@ abstract public class PixPdqV3CamelTranslators {
                 String xmlText = exchange.getIn().getBody(String.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
                 Message resultMessage = Exchanges.resultMessage(exchange);
-                resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
                 resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+                resultMessage.setBody(translator.translateV3toV2(xmlText, initial));
             }
         };
     }
@@ -67,8 +67,8 @@ abstract public class PixPdqV3CamelTranslators {
                 MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
                 Message resultMessage = Exchanges.resultMessage(exchange);
-                resultMessage.setBody(translator.translateV2toV3(msg, initial));
                 resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());
+                resultMessage.setBody(translator.translateV2toV3(msg, initial));
             }
         };
     }
