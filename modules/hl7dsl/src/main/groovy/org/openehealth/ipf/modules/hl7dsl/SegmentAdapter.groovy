@@ -25,16 +25,16 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.*
  * @author Martin Krasser
  * @author Christian Ohr
  */
-class SegmentAdapter extends StructureAdapter {
+class SegmentAdapter<T extends Segment> extends StructureAdapter {
 
-    Segment segment
+    T segment
     
-    SegmentAdapter(Segment segment) {
+    SegmentAdapter(T segment) {
         this.segment = segment
 		this.path = ''
     }
 
-    def getTarget() {
+    T getTarget() {
         segment
     }
     
@@ -55,18 +55,25 @@ class SegmentAdapter extends StructureAdapter {
     }
 
     def getAt(int idx) {
+        def result;
         def adapters = adaptTypes(segment.getField(idx))
         if (segment.getMaxCardinality(idx) == 1) { 
             // non-repeating field
             if (adapters.empty) {
-                return adaptType(segment.getField(idx, 0))
+                //HAPI expects 0 as index for the first element
+                result = adaptType(segment.getField(idx, 0))
             } else {
-                return adapters[0]
-            }            
+                result = adapters[0]
+            }
+            result.setPath(typePath(this, idx));
         } else { 
             // repeating field
-            return selector(adapters, this, idx)
+            for(AbstractAdapter adapter : adapters){
+                adapter.setPath(typePath(this, idx));
+            }
+            result = selector(adapters, this, idx)
         }
+        result
     }
     
     void putAt(int idx, def value) {
@@ -105,7 +112,7 @@ class SegmentAdapter extends StructureAdapter {
 		}
 		!found
 	}
-
+    
     /**
      * Only when this segment adapter represents an OBX segment: sets the
      * data type of OBX-5 repetitions to the given one and ensures that

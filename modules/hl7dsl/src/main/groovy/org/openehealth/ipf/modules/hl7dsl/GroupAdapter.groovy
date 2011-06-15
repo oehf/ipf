@@ -23,30 +23,29 @@ import static org.openehealth.ipf.modules.hl7dsl.util.Messages.copyMessage
 
 import org.codehaus.groovy.runtime.InvokerHelper
 
-import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.model.Group
 
 /**
  * @author Martin Krasser
  * @author Christian Ohr
  */
-class GroupAdapter extends StructureAdapter {
+class GroupAdapter<T extends Group> extends StructureAdapter {
     
-    Group group
+    T group
     
     private Set cachedNames
 
     GroupAdapter(Group group) {
-		this.group = group
-		this.path = ''
-		this.cachedNames = group.names as HashSet
-	}
-    
-    def getTarget() {
+        this.group = group
+        this.path = ''
+        this.cachedNames = group.names as HashSet
+    }
+   
+    T getTarget() {
         group
     }
     
-    void wrapTarget(Group group) {
+    void wrapTarget(T group) {
         this.group = group
     }
     
@@ -56,7 +55,7 @@ class GroupAdapter extends StructureAdapter {
     
     StructureAdapter nrp(String s) {
         // create new structure within repeating group
-        adaptStructure(group.get(s, count(s)), elementPath(s))
+        adaptStructure(group.get(s, count(s)), structurePath(s))
     }
     
     public Object invokeMethod(String name, Object args) {
@@ -93,7 +92,7 @@ class GroupAdapter extends StructureAdapter {
     
     def getAt(String s) {
         def result;
-        def resultElementPath = elementPath(s)
+        def resultElementPath = structurePath(s)
         if (group.isRepeating(s)) {
             result = selector(adaptStructures(group.getAll(s), resultElementPath), this, s);
         } else {
@@ -165,7 +164,7 @@ class GroupAdapter extends StructureAdapter {
         result
     }
     
-    private def elementPath(String element){
+    private def structurePath(String element){
         path == '' ?  element : "${path}.${element}"
     }
 }

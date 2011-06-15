@@ -35,12 +35,14 @@ import ca.uhn.hl7v2.model.Varies
 class TypeAdapter implements AbstractAdapter {
 
     Type type
+    String path
     
     TypeAdapter(Type type) {
         this.type = type
+        this.path = ''
     }
  
-    def getTarget() {
+    Type getTarget() {
         type
     }
 
@@ -51,7 +53,7 @@ class TypeAdapter implements AbstractAdapter {
     Object get(String s) {
         adapt(InvokerHelper.getProperty(type, s))
     }
-
+   
     void set(String s, Object v) {
         InvokerHelper.setProperty(type, s, v)
     }
@@ -63,4 +65,9 @@ class TypeAdapter implements AbstractAdapter {
     boolean isEmpty(){
       return isEmpty(type)
     }
+    
+    String getPath(){
+        return path
+    }
+  
 }

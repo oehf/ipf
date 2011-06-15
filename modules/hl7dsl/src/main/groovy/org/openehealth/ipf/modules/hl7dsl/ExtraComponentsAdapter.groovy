@@ -15,16 +15,15 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adapt
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.isVariesEmpty
-
-
-import ca.uhn.hl7v2.model.AbstractType;
-import ca.uhn.hl7v2.model.ExtraComponents
-import ca.uhn.hl7v2.model.DataTypeException
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.typePath
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
 
 import org.codehaus.groovy.runtime.InvokerHelper
+
+import ca.uhn.hl7v2.model.ExtraComponents
 
 /**
  * @author Christian Ohr
@@ -32,12 +31,15 @@ import org.codehaus.groovy.runtime.InvokerHelper
 class ExtraComponentsAdapter implements AbstractAdapter {
 
 	ExtraComponents extraComponents
+    
+    String path
 	
 	ExtraComponentsAdapter(ExtraComponents extraComponents) {
 		this.extraComponents = extraComponents
+        this.path = ''
     }
 
-    def getTarget() {
+    ExtraComponents getTarget() {
     	extraComponents
     }
     
@@ -46,7 +48,9 @@ class ExtraComponentsAdapter implements AbstractAdapter {
     }
     
     def getAt(int idx) {
-        adaptType(target.getComponent(idx))
+        def result = adaptType(target.getComponent(idx))
+        result.setPath(typePath(this, idx))
+        result
     }
     
     def getValue() {

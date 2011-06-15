@@ -30,4 +30,14 @@ public interface AbstractAdapter {
     */
     Object getTarget();
     
+    /**
+    * @return the position of the element target in the message
+    */
+    String getPath();
+   
+    /**
+    * @return sets the position of the element target in the message
+    */
+    void setPath(String path);
+
 }
