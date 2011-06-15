@@ -18,12 +18,8 @@ package org.openehealth.ipf.modules.hl7dsl;
 import static org.junit.Assert.*
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 import groovy.util.GroovyTestCase
-
-import org.junit.Ignore
-
-import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.model.Varies
-import ca.uhn.hl7v2.model.v24.datatype.ST
+import ca.uhn.hl7v2.model.Composite
+import ca.uhn.hl7v2.model.v24.message.ORU_R01
 /**
  * @author Mitko Kolev
  *
@@ -33,7 +29,7 @@ class TypeAdapterTest extends GroovyTestCase{
     SegmentAdapter obx2
     SegmentAdapter obx3
     SegmentAdapter obr
-    def msg2
+    MessageAdapter<ORU_R01> msg2
     
     void setUp() {
         msg2 = load('msg-02.hl7')
@@ -116,7 +112,7 @@ class TypeAdapterTest extends GroovyTestCase{
     void testDelimetersAreRemoved() {
         String msgCopy = msg2.copy().toString()
         msgCopy = msgCopy.replace('25026500^CREATININE, RANDOM URINE^^25026500^CREATININE, RANDOM URINE', '^^^^')
-        MessageAdapter emptyObx3Msg = make(msgCopy)
+        MessageAdapter<ORU_R01> emptyObx3Msg = make(msgCopy)
         def emptyObx3 = emptyObx3Msg.PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX
         String val = emptyObx3[3].encode()
         assertFieldsEmpty(emptyObx3, 3)
@@ -147,5 +143,34 @@ class TypeAdapterTest extends GroovyTestCase{
         for (field in fields){
             assertTrue("${simpleName}[${field}] must be empty, but isEmpty() returns false", adapter[field].isEmpty())
         }
+    }
+    
+    void testTypeAdapterPath(){
+        String encoded =  msg2.MSH.encode()
+        assertNotNull(encoded);
+        
+        String path =  msg2.MSH.getPath()
+        assertEquals("MSH", path)
+        Boolean empty =  msg2.MSH.isEmpty()
+        assertFalse(empty)
+        
+        path = msg2.MSH[9].path
+        assertEquals("MSH-9", path)
+        
+        path = msg2.MSH[9][1].path
+        assertEquals("MSH-9-1", path)
+        
+        Boolean emtpy = msg2.PATIENT_RESULT.isEmpty()
+        assertFalse(empty)
+
+        assertTrue(msg2.PATIENT_RESULT.PATIENT.PID[5] instanceof SelectorClosure)
+        assertEquals(CompositeAdapter.class, msg2.PATIENT_RESULT.PATIENT.PID[5].class)
+        assertEquals(PrimitiveAdapter.class, msg2.PATIENT_RESULT.PATIENT.PID[5][2].class)
+        path = msg2.PATIENT_RESULT.PATIENT.PID[5].path
+        assertEquals('PATIENT_RESULT(0).PATIENT.PID-5', path);
+        
+        path = msg2.PATIENT_RESULT.PATIENT.PID[5][2].path
+        assertEquals('PATIENT_RESULT(0).PATIENT.PID-5-2', path);
+        
     }
 }

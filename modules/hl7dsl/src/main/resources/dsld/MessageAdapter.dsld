@@ -1,0 +1,197 @@
+/*
+ * Copyright 2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import org.codehaus.groovy.ast.ASTNode
+import org.codehaus.groovy.ast.ClassNode
+import org.codehaus.groovy.ast.MethodNode
+import org.codehaus.groovy.ast.Parameter
+import org.codehaus.groovy.ast.GenericsType
+import org.codehaus.groovy.ast.ClassHelper
+import org.codehaus.groovy.ast.expr.MapEntryExpression
+import org.openehealth.ipf.modules.hl7dsl.*;
+import java.util.List
+
+/*
+ * @author Mitko Kolev
+ */
+
+String GET_PREFIX = 'get'
+int GET_PREFIX_LEN = GET_PREFIX.length()
+String dslPackage = "org.openehealth.ipf.modules.hl7dsl."
+String SELECTOR = "org.openehealth.ipf.modules.hl7dsl.SelectorClosure"
+
+String GROUP_ADAPTER ='org.openehealth.ipf.modules.hl7dsl.GroupAdapter'
+String SEGMENT_ADAPTER = 'org.openehealth.ipf.modules.hl7dsl.SegmentAdapter'
+String MESSAGE_ADAPTER = 'org.openehealth.ipf.modules.hl7dsl.MessageAdapter'
+String TYPE_ADAPTER = 'org.openehealth.ipf.modules.hl7dsl.TypeAdapter'
+
+String GROUP = 'ca.uhn.hl7v2.model.AbstractGroup'
+String SEGMENT = 'ca.uhn.hl7v2.model.Segment'
+String TYPE = 'ca.uhn.hl7v2.model.Type'
+String COMPOSITE = 'ca.uhn.hl7v2.model.Composite'
+
+/*
+ *  Trims the 'get' of the method to mimic the HL7 DSL style
+ */
+def buildDSLName = { MethodNode method ->
+    String methodName = method.getName();
+    String trimmed = methodName
+    if (methodName.contains(GET_PREFIX)){
+        trimmed = methodName.substring(GET_PREFIX_LEN);
+    }
+    trimmed
+}
+/*
+ *  Returns a filled map, if the method is considered to have an int argument
+ */
+def buildParams = { MethodNode method ->
+    def params = [:];
+    for (Parameter p : method.getParameters()){
+        params.put("repetition", ClassHelper.getWrapper(p.getType()))
+    }
+    params
+}
+
+def printGenericType = {String context,  GenericsType gt ->
+    print(context)
+    println("    GenericType " + gt)
+    println("        name " + gt.getName())
+    println("        reference  " + gt.type.redirect().is(gt.type))
+    println("        placeHoder  " + gt.isPlaceholder())
+    println("        resolved " + gt.isResolved())
+
+}
+
+//Checks if the given cn is a reference to class declaration
+//Possible options are class declaration and a reference to class declaration
+//The class declaration is meant to be a singleton (for a
+//given run of the inferencing engine) and should not be changed.  The
+//class references are mutable, but there are also multiple instances of  them (one for each reference).
+def isReferenceToClassDeclaration = {ClassNode cn ->
+    return cn.redirect().is(cn)
+}
+
+def printClassNode = {String context, ClassNode cn ->
+    print(context)
+    println("ClassNode ");
+    println("    name " +  cn.name)
+    println("    reference " + isReferenceToClassDeclaration(cn))
+}
+
+/*
+ * Parses the return type of the method to infer the target extension class.
+ */
+def buildReturnType = { MethodNode method ->
+    String methodReturnType = method.getReturnType().getName()
+    return ClassHelper.getWrapper(ClassHelper.make(methodReturnType))
+}
+
+
+def isGroupReturnType = { MethodNode m ->
+    String returnType = m.getReturnType().getName()
+    return returnType.contains('.group.')
+}
+
+def isSegmentReturnType = { MethodNode m ->
+    String returnType = m.getReturnType().getName()
+    return returnType.contains('.segment.')
+}
+
+def isPublicGetter = { MethodNode m ->
+    String returnType = m.getReturnType().getName()
+    String name = m.getName()
+    return m.isPublic() & !m.isStatic() & name.startsWith(GET_PREFIX)
+}
+
+def returnValue = { MethodNode method ->
+    method.getReturnType().getName()
+}
+
+def isGroup = { ClassNode node ->
+    return node.name.contains('.group.')
+}
+def isSegment= { ClassNode node ->
+    return node.name.contains('.segment.')
+}
+def isType = { ClassNode node ->
+    return node.name.contains('.datatype.')
+}
+
+def adapter = { ClassNode node ->
+    ClassNode res = node;
+    if (isSegment(node)){
+        res = ClassHelper.make(SEGMENT_ADAPTER)
+    }
+    if (isGroup(node)){
+        res = ClassHelper.make(GROUP_ADAPTER)
+    }
+    if (isType(node)){
+        res = ClassHelper.make(TYPE_ADAPTER)
+    }
+    //res.setRedirect(node)
+    return res
+}
+
+/*
+ *  Triggered when we have a parametrized MessageAdapter
+ */
+currentType(subType(MESSAGE_ADAPTER) | subType(GROUP_ADAPTER) | subType(SEGMENT_ADAPTER)).accept {
+    printClassNode("----------- Adapter", currentType)
+    
+    def gen = currentType?.genericsTypes
+    if (gen && (gen.length == 1)) {
+        def genericsType = gen[0]
+        currentType.setRedirect(genericsType.getType())
+        printGenericType("MessageAdapter  ", genericsType)
+    }
+}
+
+
+/*
+ * Group
+ */
+currentType(subType(GROUP) & fileExtension('groovy')).accept {
+    printClassNode("Group ", currentType)
+
+    for (MethodNode m: currentType.getMethods()){
+        if (isPublicGetter(m)){
+            String dslName = buildDSLName(m);
+            ClassNode returnType = buildReturnType(m);
+            Map paramsMap = buildParams(m);
+            if (isGroupReturnType(m) | isSegmentReturnType(m)){
+                if (paramsMap.isEmpty()){
+                    property name: dslName, type: adapter(returnType), declaringType : adapter(currentType), provider : "IPF DSL - GroupAdapter", doc : "Navigates to the first repetition of ${dslName}";
+                } else {
+                    method name: dslName, type: adapter(returnType), declaringType: adapter(currentType),  params : paramsMap, provider : "IPF DSL - GroupAdapter", doc : "Access a repetition of ${dslName}";
+                    method name: dslName, type:'java.util.List', declaringType:  adapter(currentType), provider : "IPF DSL - GroupAdapter",  doc : "Access all repetitions of ${dslName}";
+                }
+            }
+        }
+    }
+}
+
+/*
+ * Segment
+ */
+currentType(subType(SEGMENT)).accept {
+    printClassNode("Segment ", currentType)
+    def declType = ClassHelper.make(SEGMENT_ADAPTER)
+    
+    method name: 'getAt', type: ClassHelper.make(TYPE_ADAPTER), declaringType: declType, params : [field : Integer], provider : "IPF DSL - SegmentAdapter", doc : "Access with repetition";
+    method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns true if the element is empty"
+    property name:'path', type : String, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "The path of the structure"
+    method name:'getPath', type : String, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "The path of the structure in the message"
+}
+

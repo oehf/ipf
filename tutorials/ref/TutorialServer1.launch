@@ -6,6 +6,8 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${workspace_loc:/tutorials-ref}"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_OUTPUT_ON" value="false"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
@@ -18,5 +20,5 @@
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.openehealth.ipf.tutorials.ref.TutorialServer"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="tutorials-ref"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dcluster.node.dir=node1&#13;&#10;-Dcom.sun.management.jmxremote&#13;&#10;-Dcom.sun.management.jmxremote.port=1801&#13;&#10;-Dcom.sun.management.jmxremote.authenticate=false&#13;&#10;-Dcom.sun.management.jmxremote.ssl=false&#13;&#10;-Dorg.apache.camel.jmx.rmiConnector.registryPort=1091&#13;&#10;-javaagent:target/lib/spring-agent.jar"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-mx256m&#13;&#10;-Dcluster.node.dir=node1&#13;&#10;-Dcom.sun.management.jmxremote&#13;&#10;-Dcom.sun.management.jmxremote.port=1801&#13;&#10;-Dcom.sun.management.jmxremote.authenticate=false&#13;&#10;-Dcom.sun.management.jmxremote.ssl=false&#13;&#10;-Dorg.apache.camel.jmx.rmiConnector.registryPort=1091&#13;&#10;-javaagent:target/lib/spring-agent.jar"/>
 </launchConfiguration>

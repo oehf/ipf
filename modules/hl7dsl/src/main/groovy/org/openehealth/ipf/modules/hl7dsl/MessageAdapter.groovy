@@ -17,14 +17,14 @@ package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptStructure
 import static org.openehealth.ipf.modules.hl7dsl.util.Messages.copyMessage
-
-import ca.uhn.hl7v2.model.Message
-import ca.uhn.hl7v2.parser.Parser
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.model.AbstractMessage;
 
 /**
  * @author Martin Krasser
  */
-class MessageAdapter extends GroupAdapter implements Writable {
+class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implements Writable {
 
     Parser parser
 

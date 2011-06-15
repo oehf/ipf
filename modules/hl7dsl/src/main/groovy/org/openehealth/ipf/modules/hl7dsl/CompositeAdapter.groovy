@@ -19,6 +19,7 @@ import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptType
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.adaptTypes
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentIndex
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentValue
+import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.typePath
 import static org.openehealth.ipf.modules.hl7dsl.AdapterHelper.componentOriginalValue
 
 import ca.uhn.hl7v2.model.Composite
@@ -57,7 +58,9 @@ class CompositeAdapter extends TypeAdapter {
     }
     
     def getAt(int idx) {
-        adaptType(target.getComponent(componentIndex(idx)))
+        TypeAdapter result = adaptType(target.getComponent(componentIndex(idx)))
+        result.setPath(typePath(this, idx))
+        result
     }
 
     void putAt(int idx, Object value) {
@@ -75,6 +78,6 @@ class CompositeAdapter extends TypeAdapter {
     boolean isNullValue() {
         componentOriginalValue(this) == '""'
     }
-
+  
 
 }

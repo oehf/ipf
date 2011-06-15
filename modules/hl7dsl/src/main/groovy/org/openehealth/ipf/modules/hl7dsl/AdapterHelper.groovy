@@ -33,6 +33,12 @@ import ca.uhn.hl7v2.model.Varies
  */
 class AdapterHelper {
 
+    
+    static String typePath(AbstractAdapter target, Integer repetition){
+        String targetPath = target.path;
+        return targetPath == '' ?  "${target.name}-${repetition}" : "${targetPath}-${repetition}"
+    }
+    
     static componentIndex(int index) {
         if (index < 1) {
             throw new AdapterException('component index must be in range 1..n')

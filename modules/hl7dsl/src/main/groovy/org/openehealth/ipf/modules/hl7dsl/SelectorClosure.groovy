@@ -17,6 +17,8 @@ package org.openehealth.ipf.modules.hl7dsl
 
 import org.codehaus.groovy.runtime.InvokerHelper
 
+import ca.uhn.hl7v2.model.DataTypeException
+
 /**
  * Special closure that helps in the cases of HL7 DSL to allow for a default
  * repetition (0) and (sub-)component [1]. This is necessary for addressing
@@ -27,7 +29,7 @@ import org.codehaus.groovy.runtime.InvokerHelper
 class SelectorClosure extends Closure implements AbstractAdapter {
 	
 	def elements	
-	def adapter
+	AbstractAdapter adapter
 	def index
 	
 	SelectorClosure(owner, elements, adapter, index) {
@@ -88,5 +90,13 @@ class SelectorClosure extends Closure implements AbstractAdapter {
     
     Object getTarget(){
         return adapter.target
+    }
+    
+    String getPath(){
+        elementAt(index).path
+    }
+    
+    void setPath(String path){
+        throw new DataTypeException("Cannot set the path of a selector closure")
     }
 }
