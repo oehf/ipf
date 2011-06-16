@@ -48,6 +48,7 @@ public class Iti41ClientAuditStrategy extends Iti41AuditStrategy {
         AuditorManager.getSourceAuditor().auditProvideAndRegisterDocumentSetBEvent(
                 xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getServiceEndpointUrl(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getSubmissionSetUuid(),
                 xdsAuditDataset.getPatientId());
     }
