@@ -172,18 +172,18 @@ currentType(subType(GROUP) & fileExtension('groovy')).accept {
             Map paramsMap = buildParams(m);
             if (isGroupReturnType(m) | isSegmentReturnType(m)){
                 if (paramsMap.isEmpty()){
-                    property name: dslName, type: adapter(returnType), declaringType : adapter(currentType), provider : "IPF DSL - GroupAdapter", doc : "Navigates to the first repetition of ${dslName}";
+                    property name: dslName, type: adapter(returnType), declaringType : adapter(currentType), provider : "HL7 2.x DSL - GroupAdapter", doc : "Navigates to the first repetition of ${dslName}";
                 } else {
-                    method name: dslName, type: adapter(returnType), declaringType: adapter(currentType),  params : paramsMap, provider : "IPF DSL - GroupAdapter", doc : "Access a repetition of ${dslName}";
-                    method name: dslName, type:'java.util.List', declaringType:  adapter(currentType), provider : "IPF DSL - GroupAdapter",  doc : "Access all repetitions of ${dslName}";
+                    method name: dslName, type: adapter(returnType), declaringType: adapter(currentType),  params : paramsMap, provider : "HL7 2.x DSL - GroupAdapter", doc : "Access a repetition of ${dslName}";
+                    method name: dslName, type:'java.util.List', declaringType:  adapter(currentType), provider : "HL7 2.x DSL - GroupAdapter",  doc : "Access all repetitions of ${dslName}";
                 }
             }
         }
     }
     def declType = ClassHelper.make(GROUP_ADAPTER)
-    method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns true if the group is empty. Example: msgAdapter.PATIENT_RESULT(1).isEmpty()"
-    property name:'path', type : String, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns the path of the group in the message.Example: msgAdapter.PATIENT_RESULT(1).path"
-    method name:'getPath', type : String, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns the path of the group in the message. Example: msgAdapter.PATIENT_RESULT(1).getPath()"
+    method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns true if the group is empty. Example: msgAdapter.PATIENT_RESULT(1).isEmpty()"
+    property name:'path', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the group in the message.Example: msgAdapter.PATIENT_RESULT(1).path"
+    method name:'getPath', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the group in the message. Example: msgAdapter.PATIENT_RESULT(1).getPath()"
 }
 
 /*
@@ -193,12 +193,12 @@ currentType(subType(SEGMENT)).accept {
     printClassNode("Segment ", currentType)
     def declType = ClassHelper.make(SEGMENT_ADAPTER)
     
-    method name: 'getAt', type: ClassHelper.make(TYPE_ADAPTER), declaringType: declType, params : [field : Integer], provider : "IPF DSL - SegmentAdapter", doc : "Access with repetition";
-    method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns true if the segment is empty. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.isEmpty()"
-    property name:'path', type : String, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.path returns \'PATIENT_RESULT(1).PATIENT.PID\'"
-    method name:'getPath', type : String, declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.getPath() returns \'PATIENT_RESULT(1).PATIENT.PID\'"
-    method name:'nrp', type : TYPE, params : [field : Integer], declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Adds a number of repetitions of the field to the segment. Example: message.PATIENT_RESULT(0).PATIENT.NK1(0).nrp(5) adds a repetition to NK1[5]"
-    method name:'from', type: Void, params : [copy : currentType], declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Copy the argument in the current segment.Example: def mySegment = ...;     msg1.NK1(0).from(mySegment)"
-    method name:'count', type: Integer, params : [field : Integer], declaringType:  declType, provider : "IPF DSL - SegmentAdapter",  doc : "Returns the number of repetitions of the j-th field. Example: segment.count(j)"
+    method name: 'getAt', type: ClassHelper.make(TYPE_ADAPTER), declaringType: declType, params : [field : Integer], provider : "HL7 2.x DSL - SegmentAdapter", doc : "Access with repetition";
+    method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns true if the segment is empty. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.isEmpty()"
+    property name:'path', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.path returns \'PATIENT_RESULT(1).PATIENT.PID\'"
+    method name:'getPath', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.getPath() returns \'PATIENT_RESULT(1).PATIENT.PID\'"
+    method name:'nrp', type : TYPE, params : [field : Integer], declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Adds a number of repetitions of the field to the segment. Example: message.PATIENT_RESULT(0).PATIENT.NK1(0).nrp(5) adds a repetition to NK1[5]"
+    method name:'from', type: Void, params : [copy : currentType], declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Copy the argument in the current segment.Example: def mySegment = ...;     msg1.NK1(0).from(mySegment)"
+    method name:'count', type: Integer, params : [field : Integer], declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the number of repetitions of the j-th field. Example: segment.count(j)"
 }
 
