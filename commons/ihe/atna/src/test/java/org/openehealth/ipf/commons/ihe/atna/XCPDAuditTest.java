@@ -39,6 +39,7 @@ public class XCPDAuditTest extends TestCase {
         new XCPDInitiatingGatewayAuditor().auditXCPDPatientDiscoveryQueryEvent(
                 RFC3881EventOutcomeCodes.SUCCESS,
                 "http://141.44.162.126:8090/services/iti55-response",
+                "alias<user@issuer>",
                 "http://www.icw.int/pxs/iti55-service",
                 "<query><coffee /></query>",
                 "queryId-12345",
@@ -56,6 +57,7 @@ public class XCPDAuditTest extends TestCase {
                 RFC3881EventOutcomeCodes.SUCCESS,
                 "http://141.44.162.126:8090/services/iti55-response",
                 "http://requestorUri",
+                "alias<user@issuer>",
                 "http://www.icw.int/pxs/iti55-service",
                 "<query><coffee /></query>",
                 "queryId-12345",
@@ -73,7 +75,8 @@ public class XCPDAuditTest extends TestCase {
                 RFC3881EventOutcomeCodes.SUCCESS,
                 "http://141.44.162.126:8090/services/iti56-response",
                 "http://www.icw.int/pxs/iti56-service",
-                "<query><kakao /></query>", 
+                "alias<user@issuer>",
+                "<query><kakao /></query>",
                 "31415926^^^&1.2.3.4.5.6&ISO"
             );
     }
@@ -84,6 +87,7 @@ public class XCPDAuditTest extends TestCase {
                 RFC3881EventOutcomeCodes.SUCCESS,
                 "http://141.44.162.126:8090/services/iti56-response",
                 "http://requestorUri",
+                "alias<user@issuer>",
                 "http://www.icw.int/pxs/iti56-service",
                 "<query><kakao /></query>", 
                 "31415927^^^&1.2.3.4.5.6&ISO"

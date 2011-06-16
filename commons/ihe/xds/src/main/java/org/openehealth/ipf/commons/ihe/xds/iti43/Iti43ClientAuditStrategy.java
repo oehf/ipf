@@ -42,6 +42,7 @@ public class Iti43ClientAuditStrategy extends Iti43AuditStrategy {
         AuditorManager.getConsumerAuditor().auditRetrieveDocumentSetEvent(
                 xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getServiceEndpointUrl(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getDocumentUuids(),
                 xdsAuditDataset.getRepositoryUuids(),
                 xdsAuditDataset.getHomeCommunityUuids(),

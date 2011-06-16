@@ -41,6 +41,7 @@ public class Iti15ClientAuditStrategy extends Iti15AuditStrategy {
         AuditorManager.getSourceAuditor().auditProvideAndRegisterDocumentSetEvent(
                 xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getServiceEndpointUrl(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getSubmissionSetUuid(),
                 xdsAuditDataset.getPatientId());
     }

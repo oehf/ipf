@@ -48,6 +48,7 @@ public class Iti42ClientAuditStrategy extends Iti42AuditStrategy {
         AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetBEvent(
                 xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getUserId(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getServiceEndpointUrl(),
                 xdsAuditDataset.getSubmissionSetUuid(),
                 xdsAuditDataset.getPatientId());

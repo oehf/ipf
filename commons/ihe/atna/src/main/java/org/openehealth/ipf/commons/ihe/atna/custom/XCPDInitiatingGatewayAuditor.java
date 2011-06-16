@@ -47,19 +47,12 @@ public class XCPDInitiatingGatewayAuditor extends PIXAuditor
 	/**
      * Audits an ITI-55 XCPD Cross-Gateway Patient Discovery Query 
      * event for XCPD Initiating Gateway actors.
-	 * 
-	 * @param eventOutcome
-	 * @param replyToUri
-	 * @param respondingGatewayUri
-	 * @param queryPayload
-	 * @param queryId
-	 * @param homeCommunityId
-	 * @param patientIds
 	 */
 	public void auditXCPDPatientDiscoveryQueryEvent(
 	        RFC3881EventOutcomeCodes eventOutcome,
 	        String replyToUri,
-			String respondingGatewayUri, 
+            String userName,
+			String respondingGatewayUri,
 			String queryPayload,
 			String queryId,
 			String homeCommunityId,
@@ -86,12 +79,11 @@ public class XCPDInitiatingGatewayAuditor extends PIXAuditor
                 null, 
                 getSystemNetworkId(), 
                 true);
-        
-        // Set the human requestor active participant
-        if (!EventUtils.isEmptyOrNull(humanRequestor)) {
-            queryEvent.addHumanRequestorActiveParticipant(
-                    humanRequestor, 
-                    null, null, null);
+
+
+        // Set the human requestor active participant (from XUA)
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            queryEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
         }
         
         // Set the destination active participant
@@ -123,17 +115,12 @@ public class XCPDInitiatingGatewayAuditor extends PIXAuditor
 	/**
      * Audits an ITI-56 XCPD Patient Location Query 
      * event for XCPD Initiating Gateway actors.
-	 * 
-	 * @param eventOutcome
-	 * @param replyToUri
-	 * @param respondingGatewayUri
-	 * @param queryPayload
-	 * @param patientId
 	 */
     public void auditXCPDPatientLocationQueryEvent(
             RFC3881EventOutcomeCodes eventOutcome,
             String replyToUri,
-            String respondingGatewayUri, 
+            String respondingGatewayUri,
+            String userName,
             String queryPayload,
             String patientId)
     {
@@ -159,11 +146,9 @@ public class XCPDInitiatingGatewayAuditor extends PIXAuditor
                 getSystemNetworkId(), 
                 true);
         
-        // Set the human requestor active participant
-        if (!EventUtils.isEmptyOrNull(humanRequestor)) {
-            queryEvent.addHumanRequestorActiveParticipant(
-                    humanRequestor, 
-                    null, null, null);
+        // Set the human requestor active participant (from XUA)
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            queryEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
         }
         
         // Set the destination active participant

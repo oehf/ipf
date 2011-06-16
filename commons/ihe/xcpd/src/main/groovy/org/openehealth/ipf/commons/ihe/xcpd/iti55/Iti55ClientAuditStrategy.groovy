@@ -44,6 +44,7 @@ class Iti55ClientAuditStrategy extends Iti55AuditStrategy {
         AuditorManager.getXCPDInitiatingGatewayAuditor().auditXCPDPatientDiscoveryQueryEvent(
                 auditDataset.eventOutcomeCode,
                 auditDataset.userId,
+                auditDataset.userName,
                 auditDataset.serviceEndpointUrl,
                 auditDataset.requestPayload,
                 auditDataset.queryId,
