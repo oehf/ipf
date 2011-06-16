@@ -42,7 +42,8 @@ public class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
         XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
         AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetEvent(
                 xdsAuditDataset.getEventOutcomeCode(),
-                InetAddress.getLocalHost().getHostAddress(),   
+                InetAddress.getLocalHost().getHostAddress(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getServiceEndpointUrl(),
                 xdsAuditDataset.getSubmissionSetUuid(),
                 xdsAuditDataset.getPatientId());

@@ -112,7 +112,8 @@ public class Iti17Servlet extends HttpServlet {
     private void audit(boolean successful, String clientIpAddress, String documentUri) {
         AuditorManager.getRepositoryAuditor().auditRetrieveDocumentEvent(
                 successful ? RFC3881EventOutcomeCodes.SUCCESS : RFC3881EventOutcomeCodes.MAJOR_FAILURE,
-                clientIpAddress, 
+                clientIpAddress,
+                /*userName*/ null,
                 documentUri, 
                 /*documentUniqueId*/ null);
     }

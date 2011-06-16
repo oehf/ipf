@@ -52,6 +52,7 @@ public class XCPDRespondingGatewayAuditor extends PIXAuditor
 	        RFC3881EventOutcomeCodes eventOutcome,
 	        String replyToUri,
 	        String initiatingGatewayIp,
+            String userName,
 			String respondingGatewayUri, 
 			String queryPayload,
 			String queryId,
@@ -80,6 +81,11 @@ public class XCPDRespondingGatewayAuditor extends PIXAuditor
                 initiatingGatewayIp, 
                 true);
         
+        // Set the human requestor active participant (from XUA)
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            queryEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
         // Set the destination active participant
         queryEvent.addDestinationActiveParticipant(
                 respondingGatewayUri, 
@@ -114,7 +120,8 @@ public class XCPDRespondingGatewayAuditor extends PIXAuditor
             RFC3881EventOutcomeCodes eventOutcome,
             String replyToUri,
             String initiatingGatewayIp,
-            String respondingGatewayUri, 
+            String userName,
+            String respondingGatewayUri,
             String queryPayload,
             String patientId)
     {
@@ -140,6 +147,11 @@ public class XCPDRespondingGatewayAuditor extends PIXAuditor
                 initiatingGatewayIp, 
                 true);
         
+        // Set the human requestor active participant (from XUA)
+        if (!EventUtils.isEmptyOrNull(userName)) {
+            queryEvent.addHumanRequestorActiveParticipant(userName, null, userName, null);
+        }
+
         // Set the destination active participant
         queryEvent.addDestinationActiveParticipant(
                 respondingGatewayUri, 

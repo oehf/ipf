@@ -70,7 +70,8 @@ public class Iti17Producer extends DefaultProducer {
             
             AuditorManager.getConsumerAuditor().auditRetrieveDocumentEvent(
                     eventOutcome, 
-                    uri, 
+                    uri,
+                    /*userName*/ null,
                     /*documentUniqueId*/ null, 
                     /*patientId*/ null);
         }

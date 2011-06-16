@@ -47,7 +47,8 @@ public class Iti18ClientAuditStrategy extends Iti18AuditStrategy {
         Iti18AuditDataset xdsAuditDataset = (Iti18AuditDataset) auditDataset;
         AuditorManager.getConsumerAuditor().auditRegistryStoredQueryEvent(
                 xdsAuditDataset.getEventOutcomeCode(),
-                xdsAuditDataset.getServiceEndpointUrl(), 
+                xdsAuditDataset.getServiceEndpointUrl(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getQueryUuid(),
                 xdsAuditDataset.getRequestPayload(),
                 xdsAuditDataset.getHomeCommunityId(),
