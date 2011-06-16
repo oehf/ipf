@@ -44,6 +44,7 @@ class Iti56ClientAuditStrategy extends Iti56AuditStrategy {
                 auditDataset.eventOutcomeCode,
                 auditDataset.userId,
                 auditDataset.serviceEndpointUrl,
+                auditDataset.userName,
                 auditDataset.requestPayload,
                 auditDataset.patientId)
     }

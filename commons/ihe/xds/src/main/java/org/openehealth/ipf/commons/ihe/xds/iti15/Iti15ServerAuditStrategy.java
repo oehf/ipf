@@ -43,6 +43,7 @@ public class Iti15ServerAuditStrategy extends Iti15AuditStrategy {
                 xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
                 xdsAuditDataset.getClientIpAddress(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getServiceEndpointUrl(),
                 xdsAuditDataset.getSubmissionSetUuid(),
                 xdsAuditDataset.getPatientId());

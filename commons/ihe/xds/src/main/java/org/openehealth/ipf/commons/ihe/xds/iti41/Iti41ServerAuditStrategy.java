@@ -50,6 +50,7 @@ public class Iti41ServerAuditStrategy extends Iti41AuditStrategy {
                 xdsAuditDataset.getEventOutcomeCode(),
                 xdsAuditDataset.getUserId(),
                 xdsAuditDataset.getClientIpAddress(),
+                xdsAuditDataset.getUserName(),
                 xdsAuditDataset.getServiceEndpointUrl(),
                 xdsAuditDataset.getSubmissionSetUuid(),
                 xdsAuditDataset.getPatientId());

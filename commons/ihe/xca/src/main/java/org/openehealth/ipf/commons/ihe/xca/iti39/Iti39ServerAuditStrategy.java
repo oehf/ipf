@@ -48,6 +48,7 @@ public class Iti39ServerAuditStrategy extends Iti39AuditStrategy {
                 xcaAuditDataset.getUserId(),
                 xcaAuditDataset.getClientIpAddress(),
                 xcaAuditDataset.getServiceEndpointUrl(),
+                xcaAuditDataset.getUserName(),
                 xcaAuditDataset.getDocumentUuids(),
                 xcaAuditDataset.getRepositoryUuids(),
                 ((homeCommunityIds != null) && (homeCommunityIds.length != 0)) ? homeCommunityIds[0] : null);

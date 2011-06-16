@@ -46,6 +46,7 @@ class Iti55ServerAuditStrategy extends Iti55AuditStrategy {
                 auditDataset.eventOutcomeCode,
                 auditDataset.userId,
                 auditDataset.clientIpAddress,
+                auditDataset.userName,
                 auditDataset.serviceEndpointUrl,
                 auditDataset.requestPayload,
                 auditDataset.queryId,
