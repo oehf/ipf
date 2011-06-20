@@ -52,7 +52,7 @@ import org.openehealth.ipf.commons.flow.transfer.FlowInfo;
  */
 @Indexed(index="messages.idx")
 @Entity
-@Table(name = "T_FLOW")
+@Table(name = "T_FLOW", schema = "PLATFORM")
 public class Flow {
 
     // We currently use our own sequence number generation strategy because

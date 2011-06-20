@@ -20,7 +20,6 @@
 
 <hibernate-configuration> 
   <session-factory> 
-    <property name="hibernate.default_schema">PLATFORM</property>
     <mapping class="org.openehealth.ipf.commons.flow.domain.Flow"/>  
     <mapping class="org.openehealth.ipf.commons.flow.domain.FlowPart"/>  
     <mapping class="org.openehealth.ipf.commons.flow.domain.FlowNumber"/>  

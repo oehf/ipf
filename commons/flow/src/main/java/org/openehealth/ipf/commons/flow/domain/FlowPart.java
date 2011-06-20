@@ -39,7 +39,7 @@ import org.openehealth.ipf.commons.flow.transfer.FlowPartInfo;
  */
 @Indexed(index="messages.idx")
 @Entity
-@Table(name = "T_FLOW_PART")
+@Table(name = "T_FLOW_PART", schema = "PLATFORM")
 public class FlowPart {
 
     @DocumentId
