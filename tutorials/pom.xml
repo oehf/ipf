@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf</artifactId>
-        <version>2.2-20110620</version>
+        <version>2.2-SNAPSHOT</version>
     </parent>
 
     <modules>
