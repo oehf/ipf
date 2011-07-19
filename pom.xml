@@ -171,6 +171,17 @@
             <timezone>+1</timezone>
         </developer>
         <developer>
+            <id>4effo</id>
+            <name>Stefan Ivanov</name>
+            <email>stefan.ivanov@icw.de</email>
+            <organization>InterComponentWare AG</organization>
+            <organizationUrl>http://www.icw-global.com/</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
             <id>mirkojahn</id>
             <name>Mirko Jahn</name>
             <email>mirko.jahn@icw.de</email>
