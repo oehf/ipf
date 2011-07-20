@@ -50,7 +50,7 @@ public class SNRule extends AbstractCompositeTypeRule<SN> {
         String [] allowed1 = new String [] {">", "<", ">=", "<=", "=", "<>"};
         mustBeOneOf(allowed1,sn, 1, path, violations);
         
-        String [] allowed3 = new String [] {"-", "+", ".", ":"};
+        String [] allowed3 = new String [] {"-", "+", "/", ".", ":"};
         mustBeOneOf(allowed3,sn, 3, path, violations);
        
     }

@@ -43,7 +43,7 @@ public class EIRule extends AbstractCompositeTypeRule<EI> {
             mustBeNonEmpty(ei, 3, path, violations);
             mustBeNonEmpty(ei, 4, path, violations);
         }
-        if (isEmpty(ei, 3) || isEmpty(ei, 4)) {
+        if (isEmpty(ei, 3) && isEmpty(ei, 4)) {
             mustBeNonEmpty(ei, 2, path, violations);
         }
     }
