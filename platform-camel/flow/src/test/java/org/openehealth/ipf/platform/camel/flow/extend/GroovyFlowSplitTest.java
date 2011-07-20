@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend;
 
-import org.junit.Ignore;
 import org.openehealth.ipf.platform.camel.flow.process.AbstractFlowSplitTest;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -23,7 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 /**
  * @author Martin Krasser
  */
-@ContextConfiguration(locations = { "/context-flow-route-groovy.xml" })
+@ContextConfiguration(locations = { "/context-weaver.xml", "/context-flow-route-groovy.xml" })
 public class GroovyFlowSplitTest extends AbstractFlowSplitTest {
 
 }

@@ -136,6 +136,14 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
             .multicast()
             .to("direct:out-1")
             .to("direct:out-2")
+            
+        from("direct:flow-test-split-camel")
+            .initFlow("test-split-camel")
+                .application("test")
+                .outType(String.class)
+           .split(body().tokenize(",")).aggregationStrategy(new UseLatestAggregationStrategy())
+            .to("direct:out-1")
+            
     
         from("direct:out-1")
             .to("mock:mock-1")

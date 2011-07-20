@@ -32,7 +32,14 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
   <!--  Load-time weaving                                                -->
   <!-- ================================================================= -->
 
-  <ctx:load-time-weaver/>
+  <!--  ctx:load-time-weaver / -->
+  
+  <!-- ================================================================= -->
+  <!-- Processor factory - alternative to load-time weaving                                               -->
+  <!-- ================================================================= -->
+  
+  <bean id="flowHistoryTracker" class="org.openehealth.ipf.platform.camel.flow.util.FlowHistoryProcessorFactory"/>
+  
 
   <!-- ================================================================= -->
   <!--  Declarative Transaction Management                               -->
