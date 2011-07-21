@@ -1,0 +1,2316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:hl7-org:v3 LAB_CDAR2\infrastructure\cda\LabCDA.xsd">
+	<realmCode code="US"/>
+	<typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040"/>
+	<templateId root="1.3.6.1.4.1.19376.1.3.3" extension="Lab.Report.Clinical.Document" assigningAuthorityName="IHE C37"/>
+	<id extension="LenGalla_TestLabReport_#1" root="2.16.840.1.113883.3.72.5" assigningAuthorityName="NIST Test Laboratory"/>
+	<code code="26436-6" displayName="LABORATORY STUDIES" codeSystemName="LOINC" codeSystem="2.16.840.1.113883.6.1"/>
+	<effectiveTime value="20071127132600-0500"/>
+	<confidentialityCode code="N" displayName="Normal" codeSystemName="HL7 Confidentiality" codeSystem="2.16.840.1.113883.5.25"/>
+	<setId extension="LenGalla_TestLabReport_Original_SetId#1" root="2.16.840.1.113883.3.72.5" assigningAuthorityName="NIST Test Laboratory"/>
+	<versionNumber value="1"/>
+	<recordTarget>
+		<patientRole classCode="PAT">
+			<id extension="JustReflectedBackInResponseMessages" root="ProbablyLocalToPlacerOrg"/>
+			<addr>Patient Name, His Town, His state, USA 101900</addr>
+			<telecom nullFlavor="ASKU"/>
+			<patient classCode="PSN" determinerCode="INSTANCE">
+				<name>My Patient Name - Unstructured</name>
+				<administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 Administrative Gender" displayName="Male"/>
+				<birthTime value="19611021"/>
+				<maritalStatusCode code="M" codeSystem="2.16.840.1.113883.5.2" codeSystemName="HL7 Marital Status" displayName="Married"/>
+				<religiousAffiliationCode>
+					<originalText>Local Self-Declared Sect</originalText>
+				</religiousAffiliationCode>
+				<raceCode nullFlavor="ASKU"/>
+				<ethnicGroupCode nullFlavor="ASKU"/>
+				<birthplace classCode="BIRTHPL">
+					<place nullFlavor="NASK"/>
+				</birthplace>
+			</patient>
+		</patientRole>
+	</recordTarget>
+	<author typeCode="AUT">
+		<time value="20071114152917"/>
+		<assignedAuthor classCode="ASSIGNED">
+			<id extension="Len" assigningAuthorityName="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5"/>
+			<addr>Bldg 222 Room A305</addr>
+			<telecom value="+1-975-3251"/>
+			<assignedPerson>
+				<name>Len Gallagher</name>
+			</assignedPerson>
+			<representedOrganization classCode="ORG">
+				<id assigningAuthorityName="NIST HL7 Test Laboratory" root="2.16.840.1.113883.3.72.5"/>
+				<addr>
+					<streetAddressLine>Mail Drop 8970</streetAddressLine>
+					<city>Gaithersburg</city>
+					<state>MD</state>
+					<postalCode>20899</postalCode>
+				</addr>
+			</representedOrganization>
+		</assignedAuthor>
+	</author>
+	<custodian typeCode="CST">
+		<assignedCustodian>
+			<representedCustodianOrganization>
+				<id assigningAuthorityName="NIST HL7 Test Laboratory" root="2.16.840.1.113883.3.72.5"/>
+				<name>NIST Healthcare Test Laboratory</name>
+				<telecom value="+1-975-3251"/>
+				<addr>
+					<streetAddressLine>Mail Drop 8970</streetAddressLine>
+					<city>Gaithersburg</city>
+					<state>MD</state>
+					<postalCode>20899</postalCode>
+				</addr>
+			</representedCustodianOrganization>
+		</assignedCustodian>
+	</custodian>
+	<inFulfillmentOf typeCode="FLFS">
+		<order>
+			<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="POLB_OBS_RQO_LenGalla_CBC_20071123" root="2.16.840.1.113883.3.72.5"/>
+		</order>
+	</inFulfillmentOf>
+	<inFulfillmentOf typeCode="FLFS">
+		<order>
+			<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="POLB_OBS_RQO_LenGalla_GTT_20071126" root="2.16.840.1.113883.3.72.5"/>
+		</order>
+	</inFulfillmentOf>
+	<inFulfillmentOf typeCode="FLFS">
+		<order>
+			<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="POLB_OBS_RQO_LenGalla_CULTSENSRPT_20071126" root="2.16.840.1.113883.3.72.5"/>
+		</order>
+	</inFulfillmentOf>
+	<component>
+		<structuredBody>
+			<component>
+				<section>
+					<code code="18768-2" displayName="CELL COUNTS+DIFFERENTIAL STUDIES" codeSystemName="LOINC" codeSystem="2.16.840.1.113883.6.1"/>
+					<text>Human readable text goes here to explain and present all of what is carried below.</text>
+					<entry typeCode="DRIV">
+						<templateId root="1.3.6.1.4.1.19376.1.3.1" extension="Lab.Report.Data.Processing.Entry" assigningAuthorityName="IHE C37"/>
+						<act classCode="ACT" moodCode="EVN">
+							<code code="24317-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemogram and Platelets Panel"/>
+							<statusCode code="completed"/>
+							<effectiveTime value="20071123115501"/>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="BATTERY" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="6be473d1-2fb8-4b39-8a10-c0527d017366" root="2.16.840.1.113883.3.72.5"/>
+									<code code="24317-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemogram and Platelets Panel">
+										<translation code="CBC_PLTC_AM" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Complete Blood Count with Platelets - Adult Male"/>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071123115501"/>
+									<specimen typeCode="SPC">
+										<specimenRole classCode="ISLT">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5"/>
+											<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+												<code displayName="Human Blood"/>
+											</specimenPlayingEntity>
+											<lab:productOf typeCode="PRD">
+												<lab:procedure classCode="PROC" moodCode="EVN">
+													<id extension="IdOfProcessThatProducedSpecimenIfKnown"/>
+													<code>
+														<originalText>ProcessThatProducedSpecimenIfKnown</originalText>
+													</code>
+												</lab:procedure>
+											</lab:productOf>
+										</specimenRole>
+									</specimen>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="f833f003-962f-46cd-8bd0-7b602b0b6616" root="2.16.840.1.113883.3.72.5"/>
+											<code code="6690-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Leukocytes">
+												<translation code="7002" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Leukocytes"/>
+												<translation code="WBC_A" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="White Blood Count - Adult"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071123115501"/>
+											<value unit="10*9/L" value="8.9" xsi:type="PQ"/>
+											<interpretationCode code="N"/>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="true" unit="10*9/L" value="4.5"/>
+														<high inclusive="true" unit="10*9/L" value="11.0"/>
+													</value>
+													<interpretationCode code="N"/>
+												</observationRange>
+												<lab:precondition typeCode="PRCN">
+													<lab:criterion classCode="COND" moodCode="EVN">
+														<lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
+														<lab:value xsi:type="lab:BXIT_IVL_PQ">
+															<lab:low inclusive="true" unit="a" value="18"/>
+														</lab:value>
+													</lab:criterion>
+												</lab:precondition>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="10*9/L" value="11.0"/>
+													</value>
+													<interpretationCode code="H"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="10*9/L" value="4.5"/>
+													</value>
+													<interpretationCode code="L"/>
+												</observationRange>
+											</referenceRange>
+										</observation>
+									</component>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="62aa5dfd-fb22-445c-8db3-caee47eccd9e" root="2.16.840.1.113883.3.72.5"/>
+											<code code="789-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Erythrocytes">
+												<translation code="5502" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Erythrocytes"/>
+												<translation code="RBC_AM" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Red Blood Count - Adult Male"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071123115501"/>
+											<value unit="10*12/L" value="5.9" xsi:type="PQ"/>
+											<interpretationCode code="N"/>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="true" unit="10*12/L" value="4.6"/>
+														<high inclusive="true" unit="10*12/L" value="6.2"/>
+													</value>
+													<interpretationCode code="N"/>
+												</observationRange>
+												<lab:precondition typeCode="PRCN">
+													<lab:criterion classCode="COND" moodCode="EVN">
+														<lab:code codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
+														<lab:value code="M" displayName="Male" xsi:type="lab:CD"/>
+													</lab:criterion>
+												</lab:precondition>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="10*12/L" value="6.2"/>
+													</value>
+													<interpretationCode code="H"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="10*12/L" value="4.6"/>
+													</value>
+													<interpretationCode code="L"/>
+												</observationRange>
+											</referenceRange>
+										</observation>
+									</component>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="9f061318-cbae-4ce3-9905-64eecd7edb83" root="2.16.840.1.113883.3.72.5"/>
+											<code code="4544-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocrit">
+												<translation code="2514" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Hematocrit"/>
+												<translation code="HCT_AM" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Hematocrit - Adult Male"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071123115501"/>
+											<value unit="%" value="46" xsi:type="PQ"/>
+											<interpretationCode code="N"/>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="true" unit="%" value="40"/>
+														<high inclusive="true" unit="%" value="54"/>
+													</value>
+													<interpretationCode code="N"/>
+												</observationRange>
+												<lab:precondition typeCode="PRCN">
+													<lab:criterion classCode="COND" moodCode="EVN">
+														<lab:code codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
+														<lab:value code="M" displayName="Male" xsi:type="lab:CD"/>
+													</lab:criterion>
+												</lab:precondition>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="%" value="54"/>
+													</value>
+													<interpretationCode code="H"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="%" value="40"/>
+													</value>
+													<interpretationCode code="L"/>
+												</observationRange>
+											</referenceRange>
+										</observation>
+									</component>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="15545035-4e76-4342-b2d6-ff4efbe80c41" root="2.16.840.1.113883.3.72.5"/>
+											<code code="777-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Platelets">
+												<translation code="4908" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Platelets"/>
+												<translation code="PLTC_A" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Platelet Count - Adult"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071123115501"/>
+											<value unit="10*9/L" value="363" xsi:type="PQ"/>
+											<interpretationCode code="N"/>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="true" unit="10*9/L" value="150"/>
+														<high inclusive="true" unit="10*9/L" value="400"/>
+													</value>
+													<interpretationCode code="N"/>
+												</observationRange>
+												<lab:precondition typeCode="PRCN">
+													<lab:criterion classCode="COND" moodCode="EVN">
+														<lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
+														<lab:value xsi:type="lab:BXIT_IVL_PQ">
+															<lab:low inclusive="true" unit="a" value="18"/>
+														</lab:value>
+													</lab:criterion>
+												</lab:precondition>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="10*9/L" value="400"/>
+													</value>
+													<interpretationCode code="H"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="10*9/L" value="150"/>
+													</value>
+													<interpretationCode code="L"/>
+												</observationRange>
+											</referenceRange>
+										</observation>
+									</component>
+								</organizer>
+							</entryRelationship>
+							<entryRelationship typeCode="REFR">
+								<act classCode="ACT" moodCode="EVN">
+									<code code="24317-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemogram and Platelets Panel"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071114152917"/>
+									<entryRelationship typeCode="COMP">
+										<organizer classCode="BATTERY" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="255aef00-d88d-4e35-a4f5-29bcb5c0fd2e" root="2.16.840.1.113883.3.72.5"/>
+											<code code="24317-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hemogram and Platelets Panel"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071114152917"/>
+											<component>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="b1443993-aad7-4d06-8422-f39fba4f446b" root="2.16.840.1.113883.3.72.5"/>
+													<code code="6690-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Leukocytes">
+														<translation code="7002" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Leukocytes"/>
+														<translation code="WBC_A" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="White Blood Count - Adult"/>
+													</code>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071114152917"/>
+													<value unit="10*9/L" value="3.5" xsi:type="PQ"/>
+													<interpretationCode code="L"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="10*9/L" value="4.5"/>
+																<high inclusive="true" unit="10*9/L" value="11.0"/>
+															</value>
+															<interpretationCode code="N"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="10*9/L" value="11.0"/>
+															</value>
+															<interpretationCode code="H"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="10*9/L" value="4.5"/>
+															</value>
+															<interpretationCode code="L"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="fd22ef99-3cbd-49d3-9a28-c189b5557b85" root="2.16.840.1.113883.3.72.5"/>
+													<code code="789-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Erythrocytes">
+														<translation code="5502" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Erythrocytes"/>
+														<translation code="RBC_AM" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Red Blood Count - Adult Male"/>
+													</code>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071114152917"/>
+													<value unit="10*12/L" value="5.6" xsi:type="PQ"/>
+													<interpretationCode code="N"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="10*12/L" value="4.6"/>
+																<high inclusive="true" unit="10*12/L" value="6.2"/>
+															</value>
+															<interpretationCode code="N"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="10*12/L" value="6.2"/>
+															</value>
+															<interpretationCode code="H"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="10*12/L" value="4.6"/>
+															</value>
+															<interpretationCode code="L"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="a2b1108e-ec75-4c0d-846b-3cf4efc369d5" root="2.16.840.1.113883.3.72.5"/>
+													<code code="4544-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocrit">
+														<translation code="2514" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Hematocrit"/>
+														<translation code="HCT_AM" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Hematocrit - Adult Male"/>
+													</code>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071114152917"/>
+													<value unit="%" value="50" xsi:type="PQ"/>
+													<interpretationCode code="N"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="%" value="40"/>
+																<high inclusive="true" unit="%" value="54"/>
+															</value>
+															<interpretationCode code="N"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="%" value="54"/>
+															</value>
+															<interpretationCode code="H"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="%" value="40"/>
+															</value>
+															<interpretationCode code="L"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="cd543535-8592-4acf-b454-52eb3613c51e" root="2.16.840.1.113883.3.72.5"/>
+													<code code="777-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Platelets">
+														<translation code="4908" codeSystem="2.16.840.1.113883.6.58" codeSystemName="U.S. Center for Disease Control - Methods/Instruments Codes (CDCM)" displayName="Platelets"/>
+														<translation code="PLTC_A" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Platelet Count - Adult"/>
+													</code>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071114152917"/>
+													<value unit="10*9/L" value="408" xsi:type="PQ"/>
+													<interpretationCode code="H"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="10*9/L" value="150"/>
+																<high inclusive="true" unit="10*9/L" value="400"/>
+															</value>
+															<interpretationCode code="N"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="10*9/L" value="400"/>
+															</value>
+															<interpretationCode code="H"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="10*9/L" value="150"/>
+															</value>
+															<interpretationCode code="L"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+										</organizer>
+									</entryRelationship>
+								</act>
+							</entryRelationship>
+						</act>
+					</entry>
+				</section>
+			</component>
+			<component>
+				<section>
+					<code code="26437-4" displayName="CHEMISTRY CHALLENGE STUDIES" codeSystemName="LOINC" codeSystem="2.16.840.1.113883.6.1"/>
+					<text>Human readable text goes here to explain and present all of what is carried below.</text>
+					<entry typeCode="DRIV">
+						<templateId root="1.3.6.1.4.1.19376.1.3.1" extension="Lab.Report.Data.Processing.Entry" assigningAuthorityName="IHE C37"/>
+						<act classCode="ACT" moodCode="EVN">
+							<code code="14768-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="GLUCOSE^BS">
+								<translation code="GTT_75g" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Glucose Tolerance Test Battery"/>
+							</code>
+							<statusCode code="completed"/>
+							<effectiveTime value="20071126144735"/>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="BATTERY" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="a28d11b7-7146-4e79-a69b-1c88341aa01c" root="2.16.840.1.113883.3.72.5"/>
+									<code code="14768-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="GLUCOSE^BS">
+										<translation code="GTT_75g" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Glucose Tolerance Test Battery"/>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126144735"/>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="88faedf9-2d2c-4336-a302-8729167eccf0" root="2.16.840.1.113883.3.72.5"/>
+											<code code="10450-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="GLUCOSE^POST 10H CFST">
+												<translation code="GTT_10H_CFST" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Glucose test post 10 hour complete fast"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126144735"/>
+											<value unit="mg/dL" value="74" xsi:type="PQ"/>
+											<interpretationCode code="N"/>
+											<specimen typeCode="SPC">
+												<specimenRole classCode="SPEC">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="cefcdec2-4432-435e-a07f-00023d96b621" root="2.16.840.1.113883.3.72.5"/>
+													<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+														<code codeSystemName="NotKnownYet-Add" displayName="Human Blood"/>
+													</specimenPlayingEntity>
+												</specimenRole>
+											</specimen>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low unit="mg/dL" value="65"/>
+														<high unit="mg/dL" value="99"/>
+													</value>
+													<interpretationCode code="N"/>
+												</observationRange>
+												<lab:precondition typeCode="PRCN">
+													<lab:criterion classCode="COND" moodCode="EVN">
+														<lab:code code="FAST" codeSystem="2.16.840.1.113883.5.4.10376" codeSystemName="ActCode_ActDietCode" displayName="fasting"/>
+														<lab:value xsi:type="lab:BXIT_IVL_PQ">
+															<lab:low unit="hr" value="10"/>
+														</lab:value>
+													</lab:criterion>
+												</lab:precondition>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="mg/dL" value="99"/>
+													</value>
+													<interpretationCode code="H"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="mg/dL" value="110"/>
+													</value>
+													<interpretationCode code="HH"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="mg/dL" value="65"/>
+													</value>
+													<interpretationCode code="L"/>
+												</observationRange>
+											</referenceRange>
+										</observation>
+									</component>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="1c32d9f9-7b1d-4313-8933-1e04fc860492" root="2.16.840.1.113883.3.72.5"/>
+											<code code="1507-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="GLUCOSE^1H POST 75 G GLUCOSE PO">
+												<translation code="GTT_1H_P75G" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="GTT 1 hour"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126144735"/>
+											<value unit="mg/dL" value="138" xsi:type="PQ"/>
+											<interpretationCode code="N"/>
+											<specimen typeCode="SPC">
+												<specimenRole classCode="SPEC">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="855a2f48-b2d9-4773-afbe-bc9fae1c9183" root="2.16.840.1.113883.3.72.5"/>
+													<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+														<code codeSystemName="NotKnownYet-Add" displayName="Human Blood"/>
+													</specimenPlayingEntity>
+												</specimenRole>
+											</specimen>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="mg/dL" value="200"/>
+													</value>
+													<interpretationCode code="N"/>
+												</observationRange>
+												<lab:precondition typeCode="PRCN">
+													<lab:criterion classCode="COND" moodCode="EVN">
+														<lab:code displayName="Post Challenge Wait Time"/>
+														<lab:value unit="hr" value="1" xsi:type="lab:PQ"/>
+													</lab:criterion>
+												</lab:precondition>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low unit="mg/dL" value="200"/>
+														<high unit="mg/DL" value="215"/>
+													</value>
+													<interpretationCode code="H"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="mg/dL" value="215"/>
+													</value>
+													<interpretationCode code="HH"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="mg/dL" value="90"/>
+													</value>
+													<interpretationCode code="L"/>
+												</observationRange>
+											</referenceRange>
+										</observation>
+									</component>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="d3c5a6df-ab38-4ed8-8ba6-facb46c26846" root="2.16.840.1.113883.3.72.5"/>
+											<code code="1518-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="GLUCOSE^2H POST 75 G GLUCOSE PO">
+												<translation code="GTT_2H_P75G" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="GTT 2 hour"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126144735"/>
+											<value unit="mg/dL" value="122" xsi:type="PQ"/>
+											<interpretationCode code="N"/>
+											<specimen typeCode="SPC">
+												<specimenRole classCode="SPEC">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="64041a30-6d62-43f3-8396-f91daa97e67d" root="2.16.840.1.113883.3.72.5"/>
+													<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+														<code codeSystemName="NotKnownYet-Add" displayName="Human Blood"/>
+													</specimenPlayingEntity>
+												</specimenRole>
+											</specimen>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="mg/dL" value="140"/>
+													</value>
+													<interpretationCode code="N"/>
+												</observationRange>
+												<lab:precondition typeCode="PRCN">
+													<lab:criterion classCode="COND" moodCode="EVN">
+														<lab:code displayName="Post Challenge Wait Time"/>
+														<lab:value unit="hr" value="2" xsi:type="lab:PQ"/>
+													</lab:criterion>
+												</lab:precondition>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low unit="mg/dL" value="140"/>
+														<high unit="mg/DL" value="200"/>
+													</value>
+													<interpretationCode code="H"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<low inclusive="false" unit="mg/dL" value="200"/>
+													</value>
+													<interpretationCode code="HH"/>
+												</observationRange>
+											</referenceRange>
+											<referenceRange typeCode="REFV">
+												<observationRange classCode="OBS" moodCode="EVN.CRT">
+													<value xsi:type="IVL_PQ">
+														<high inclusive="false" unit="mg/dL" value="90"/>
+													</value>
+													<interpretationCode code="L"/>
+												</observationRange>
+											</referenceRange>
+										</observation>
+									</component>
+								</organizer>
+							</entryRelationship>
+						</act>
+					</entry>
+				</section>
+			</component>
+			<component>
+				<section>
+					<code code="18769-0" displayName="MICROBIAL SUSCEPTIBILITY TESTS" codeSystemName="LOINC" codeSystem="2.16.840.1.113883.6.1"/>
+					<text>Human readable text goes here to explain and present all of what is carried below.</text>
+					<entry typeCode="DRIV">
+						<templateId root="1.3.6.1.4.1.19376.1.3.1" extension="Lab.Report.Data.Processing.Entry" assigningAuthorityName="IHE C37"/>
+						<act classCode="ACT" moodCode="EVN">
+							<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="fd9f1f66-ae1f-4dc4-850d-b2cb439850ff" root="2.16.840.1.113883.3.72.5"/>
+							<code code="CULTSENSRPT" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Culture and Susceptibility Report"/>
+							<statusCode code="completed"/>
+							<effectiveTime value="20071126154846"/>
+							<specimen typeCode="SPC">
+								<specimenRole classCode="SPEC">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="b61352cc-5f00-4220-922a-fc8e9b823746" root="2.16.840.1.113883.3.72.5"/>
+									<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+										<code code="XXX" codeSystem="2.16.840.1.113883.5.1060.19464" codeSystemName="EntityCode - SpecimenEntityType" displayName="XXXX">
+											<originalText>From any of:  Wound, Genital mucus, CSF, Aspirate, Periton Fl, Pleur Fl, Vag, Throat, Synov Fl, Eye, Ear, Bronch, Dialisis fl, Fld, Nose, Pus, Cervix, Genital fl, Urthera, Sputum, Stool, Urine, Tissue</originalText>
+										</code>
+									</specimenPlayingEntity>
+								</specimenRole>
+							</specimen>
+							<entryRelationship typeCode="COMP">
+								<observation classCode="OBS" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="75fa0803-08c6-4b7c-b176-e2f19ce1734a" root="2.16.840.1.113883.3.72.5"/>
+									<code code="664-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Micro_GramStainXXX">
+										<translation code="87205" codeSystem="2.16.840.1.113883.6.12" codeSystemName="AMA Current Procedure Terminology 4 (CPT-4)" displayName="Gram Stain "/>
+										<translation code="GS_Generic" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="GramStain_Generic"/>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154842"/>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="c0a85e63-f79a-4abf-b687-afd95d052b2c" root="2.16.840.1.113883.3.72.5"/>
+											<code displayName="Observed Entity"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154842"/>
+											<value codeSystemName="NotKnownYet_Add" displayName="Preponderance of White Blood Cells" xsi:type="CD"/>
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="1660eb1e-2cab-4289-ac04-61cb0d4ac849" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Observed Entity"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154842"/>
+											<value codeSystemName="NotKnownYet_Add" displayName="Gram Positive cocci" xsi:type="CD"/>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="71de57ee-4b3d-423f-8e9c-6c3c3bc7a9e1" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotKnownYet_Add" displayName="Observed Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154842"/>
+													<value code="+" codeSystemName="NotKnownYet_Add" displayName="normal growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="f8112837-3530-4879-9857-750ef5f28e01" root="2.16.840.1.113883.3.72.5"/>
+													<code code="45034-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Catalase.bacteria Isolate Ql"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154842"/>
+													<value codeSystemName="NotKnownYet_Add" displayName="catalase produced" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="4277c26f-2d2b-49e9-b2e4-3be4977faaba" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Observed Entity"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154842"/>
+											<value codeSystemName="NotKnownYet_Add" displayName="Gram positive bacilli" xsi:type="CD"/>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="17deb9bf-e847-4907-ba70-3a9bc8ded7e1" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotKnownYet_Add" displayName="Observed Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154842"/>
+													<value code="++" codeSystemName="NotKnownYet_Add" displayName="excessive growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+								</observation>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<observation classCode="OBS" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="6695c322-6434-4925-96b0-11da1e54dd11" root="2.16.840.1.113883.3.72.5"/>
+									<code code="634-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="AerobicCulture - Bacteria XXX Aerobe Cult">
+										<translation code="87075" codeSystem="2.16.840.1.113883.6.12" codeSystemName="AMA Current Procedure Terminology 4 (CPT-4)" displayName="Aerobic Culture"/>
+										<translation code="Aerobic_GSP_Bacilli" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Post GS Aerobic Culture"/>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154842"/>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="1d0659d6-a74f-4e31-b459-5a00f220aa80" root="2.16.840.1.113883.3.72.5"/>
+											<code code="23667-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria identified"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154842"/>
+											<value displayName="Staphylococcus aureus" xsi:type="CD"/>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="664-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Micro_GramStainXXX"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="Gram Positive cocci" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="45034-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Catalase.bacteria Isolate Ql"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="catalase produced" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="28082a87-3b1e-4866-9ca7-86cd6e3f4bd7" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotYetKnown-Add" displayName="Growth Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154843"/>
+													<value code="+" codeSystemName="NotYetKnown-Add" displayName="normal growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="99768f83-d9fe-4a3a-b4d7-f113c01d5d3b" root="2.16.840.1.113883.3.72.5"/>
+											<code code="23667-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria identified"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154843"/>
+											<value displayName="Staphylococcus epidermidis" xsi:type="CD"/>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="664-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Micro_GramStainXXX"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="Gram Positive cocci" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="45034-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Catalase.bacteria Isolate Ql"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="catalase produced" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="a908bf41-8fcf-4d2d-bb56-faae8dac09fb" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotYetKnown-Add" displayName="Growth Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154843"/>
+													<value code="++" codeSystemName="NotYetKnown-Add" displayName="excessive growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="5ac739c8-6e35-44b0-bd17-714863ef679b" root="2.16.840.1.113883.3.72.5"/>
+											<code code="23667-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria identified"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154843"/>
+											<value displayName="Erysipelothrix rhusiopathiae" xsi:type="CD"/>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="664-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Micro_GramStainXXX"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="Gram Positive bacilli" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="c24bbb6b-07b6-4391-bdb8-eb570c316556" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotYetKnown-Add" displayName="Growth Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154843"/>
+													<value code="++" codeSystemName="NotYetKnown-Add" displayName="excessive growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="c8768e1a-a90f-456b-8710-56c1fe9f3799" root="2.16.840.1.113883.3.72.5"/>
+											<code code="23667-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria identified"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154843"/>
+											<value displayName="Corynebacterium diphtheriae" xsi:type="CD"/>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="664-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Micro_GramStainXXX"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="Gram Positive bacilli" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="COMP">
+												<sequenceNumber value="1"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="f1543b4b-69db-427c-8641-966ee2fdf7dd" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotYetKnown-Add" displayName="Growth Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154843"/>
+													<value code="++" codeSystemName="NotYetKnown-Add" displayName="excessive growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+								</observation>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<observation classCode="OBS" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="ff521e9f-9384-4a3d-9968-53531410064b" root="2.16.840.1.113883.3.72.5"/>
+									<code code="635-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria XXX Anaerobe Culture">
+										<translation code="87070" codeSystem="2.16.840.1.113883.6.12" codeSystemName="AMA Current Procedure Terminology 4 (CPT-4)" displayName="Anaerobic Culture"/>
+										<translation code="Anaerobic_GSN_Cocci" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Post GS Anaerobic Culture"/>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154844"/>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="947c97c9-809a-483b-90c1-3f34d0790e65" root="2.16.840.1.113883.3.72.5"/>
+											<code code="23667-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria identified"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154844"/>
+											<value displayName="Eubacterium sp" xsi:type="CD"/>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="664-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Micro_GramStainXXX"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="Gram Positive bacilli" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="ae7189f9-2643-4105-8a8d-699ce40638e9" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotYetKnown-Add" displayName="Growth Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154844"/>
+													<value code="+" codeSystemName="NotYetKnown-Add" displayName="normal growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+									<entryRelationship typeCode="COMP">
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="1bbfafe2-9009-4311-9a15-55ec1a6e318a" root="2.16.840.1.113883.3.72.5"/>
+											<code code="23667-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria identified"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154844"/>
+											<value displayName="Bifidobacterium sp" xsi:type="CD"/>
+											<entryRelationship typeCode="RSON">
+												<observation classCode="OBS" moodCode="EVN">
+													<code code="664-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Micro_GramStainXXX"/>
+													<statusCode code="completed"/>
+													<value codeSystemName="NotYetKnown-Add" displayName="Gram Positive bacilli" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+											<entryRelationship typeCode="COMP">
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="e84ed47d-b789-4b0e-a5e2-54ff8e867e7e" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotYetKnown-Add" displayName="Growth Quantity"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154844"/>
+													<value code="++" codeSystemName="NotYetKnown-Add" displayName="above normal growth" xsi:type="CD"/>
+												</observation>
+											</entryRelationship>
+										</observation>
+									</entryRelationship>
+								</observation>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="CLUSTER" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="a2e7243c-661a-4922-93c5-e6c958a35932" root="2.16.840.1.113883.3.72.5"/>
+									<code code="42803-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria Isolate">
+										<originalText>Issue: The code for the requested susceptibility panel does not appear here as might be expected. Instead, it appears in a Battery that is a subordinate part of this Cluster. The reason is that RMIM POLB_RM004000 implies that isolates should always be associated with a SpecimenObservationCluster, and the Subject of the Cluster is always the Isolate. Cluster.code then confirms that the isolate has been identified.</originalText>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154845"/>
+									<specimen typeCode="SPC">
+										<specimenRole classCode="ISLT">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="7dc471a0-83d2-493c-9d93-d127ff52c2e7" root="2.16.840.1.113883.3.72.5"/>
+											<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+												<code code="XXX" codeSystem="2.16.840.1.113883.5.1060.19464" codeSystemName="EntityCode - SpecimenEntityType" displayName="Staphylococcus aureus">
+													<originalText>From any of:  Wound, Genital mucus, CSF, Aspirate, Periton Fl, Pleur Fl, Vag, Throat, Synov Fl, Eye, Ear, Bronch, Dialisis fl, Fld, Nose, Pus, Cervix, Genital fl, Urthera, Sputum, Stool, Urine, Tissue</originalText>
+												</code>
+											</specimenPlayingEntity>
+											<lab:productOf>
+												<lab:procedure classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="1d0659d6-a74f-4e31-b459-5a00f220aa80" root="2.16.840.1.113883.3.72.5"/>
+												</lab:procedure>
+											</lab:productOf>
+										</specimenRole>
+									</specimen>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Staphylococcus aureus"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Gram Positive cocci"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="catalase produced"/>
+										</externalObservation>
+									</reference>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="dba3aa26-6a78-4aa9-99cc-1446f28935f5" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Growth Amount"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154845"/>
+											<value code="+" codeSystemName="NotKnownYet_Add" displayName="normal growth" xsi:type="CD"/>
+										</observation>
+									</component>
+									<component>
+										<organizer classCode="BATTERY" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="9d450905-74ef-4e18-9955-e8afc642f906" root="2.16.840.1.113883.3.72.5"/>
+											<code code="29576-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacterial Susceptibility Panel Isolate">
+												<translation code="Isolate_BSP_Cluster" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Bacteria Susceptibility Panel Isolate Cluster"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154845"/>
+											<component>
+												<sequenceNumber value="1"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="11491deb-5b90-4801-9649-f0293102f554" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Cefadroxil"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="13" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="2"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="41b434db-42b1-4ddb-b964-51ff1020abab" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Erythromycin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="20" xsi:type="PQ"/>
+													<interpretationCode code="R"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="3"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="0b768d81-41e8-4d47-8bb2-2815d5d11b00" root="2.16.840.1.113883.3.72.5"/>
+													<code codeSystemName="NotKnownYet_Add" displayName="Amoxicillin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="20" xsi:type="PQ"/>
+													<interpretationCode code="R"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+										</organizer>
+									</component>
+								</organizer>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="CLUSTER" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="e9d35002-8f59-42bb-acd6-e4624335e83f" root="2.16.840.1.113883.3.72.5"/>
+									<code code="42803-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria Isolate">
+										<originalText>Issue: The code for the requested susceptibility panel does not appear here as might be expected. Instead, it appears in a Battery that is a subordinate part of this Cluster. The reason is that RMIM POLB_RM004000 implies that isolates should always be associated with a SpecimenObservationCluster, and the Subject of the Cluster is always the Isolate. Cluster.code then confirms that the isolate has been identified.</originalText>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154845"/>
+									<specimen typeCode="SPC">
+										<specimenRole classCode="ISLT">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="3a5af887-220b-42aa-adad-c8a415c501ca" root="2.16.840.1.113883.3.72.5"/>
+											<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+												<code code="XXX" codeSystem="2.16.840.1.113883.5.1060.19464" codeSystemName="EntityCode - SpecimenEntityType" displayName="Staphylococcus epidermidis">
+													<originalText>From any of:  Wound, Genital mucus, CSF, Aspirate, Periton Fl, Pleur Fl, Vag, Throat, Synov Fl, Eye, Ear, Bronch, Dialisis fl, Fld, Nose, Pus, Cervix, Genital fl, Urthera, Sputum, Stool, Urine, Tissue</originalText>
+												</code>
+											</specimenPlayingEntity>
+											<lab:productOf>
+												<lab:procedure classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="99768f83-d9fe-4a3a-b4d7-f113c01d5d3b" root="2.16.840.1.113883.3.72.5"/>
+												</lab:procedure>
+											</lab:productOf>
+										</specimenRole>
+									</specimen>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Staphylococcus epidermidis"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Gram Positive cocci"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="catalase produced"/>
+										</externalObservation>
+									</reference>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="8e31cc60-3f80-4485-9e4d-0410e11adb43" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Growth Amount"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154845"/>
+											<value code="+" codeSystemName="NotKnownYet_Add" displayName="normal growth" xsi:type="CD"/>
+										</observation>
+									</component>
+									<component>
+										<organizer classCode="BATTERY" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="a7571b44-e980-444a-8c8a-628d45f083bb" root="2.16.840.1.113883.3.72.5"/>
+											<code code="29576-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacterial Susceptibility Panel Isolate">
+												<translation code="Isolate_BSP_Cluster" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Bacteria Susceptibility Panel Isolate Cluster"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154845"/>
+											<component>
+												<sequenceNumber value="1"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="32e8d1dd-a2c8-47ef-8147-edc8dd33b397" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Sulfacetamide"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="13" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="2"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="e5c3b090-ea6b-4f10-9ce5-5d553616e3e8" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Amoxicillin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="9" xsi:type="PQ"/>
+													<interpretationCode code="MS"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="3"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="d9bd7b12-fd38-40cb-b088-abcab2e7d592" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Rifabutin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="17" xsi:type="PQ"/>
+													<interpretationCode code="R"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+										</organizer>
+									</component>
+								</organizer>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="CLUSTER" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="7b362d30-91a6-42ee-a7c7-fa219a3a2f15" root="2.16.840.1.113883.3.72.5"/>
+									<code code="42803-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria Isolate">
+										<originalText>Issue: The code for the requested susceptibility panel does not appear here as might be expected. Instead, it appears in a Battery that is a subordinate part of this Cluster. The reason is that RMIM POLB_RM004000 implies that isolates should always be associated with a SpecimenObservationCluster, and the Subject of the Cluster is always the Isolate. Cluster.code then confirms that the isolate has been identified.</originalText>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154845"/>
+									<specimen typeCode="SPC">
+										<specimenRole classCode="ISLT">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="a6126c2e-5a6a-4b6e-b0de-9e405c4c81ac" root="2.16.840.1.113883.3.72.5"/>
+											<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+												<code code="XXX" codeSystem="2.16.840.1.113883.5.1060.19464" codeSystemName="EntityCode - SpecimenEntityType" displayName="Erysipelothrix rhusiopathiae">
+													<originalText>From any of:  Wound, Genital mucus, CSF, Aspirate, Periton Fl, Pleur Fl, Vag, Throat, Synov Fl, Eye, Ear, Bronch, Dialisis fl, Fld, Nose, Pus, Cervix, Genital fl, Urthera, Sputum, Stool, Urine, Tissue</originalText>
+												</code>
+											</specimenPlayingEntity>
+											<lab:productOf>
+												<lab:procedure classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="5ac739c8-6e35-44b0-bd17-714863ef679b" root="2.16.840.1.113883.3.72.5"/>
+												</lab:procedure>
+											</lab:productOf>
+										</specimenRole>
+									</specimen>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Erysipelothrix rhusiopathiae"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Gram Positive bacilli"/>
+										</externalObservation>
+									</reference>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="4d51df02-5c6b-4968-a516-51f79ead625c" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Growth Amount"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154845"/>
+											<value code="+" codeSystemName="NotKnownYet_Add" displayName="normal growth" xsi:type="CD"/>
+										</observation>
+									</component>
+									<component>
+										<organizer classCode="BATTERY" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="0a42772e-2825-49ee-9726-e5e8b9430747" root="2.16.840.1.113883.3.72.5"/>
+											<code code="29576-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacterial Susceptibility Panel Isolate">
+												<translation code="Isolate_BSP_Cluster" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Bacteria Susceptibility Panel Isolate Cluster"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154845"/>
+											<component>
+												<sequenceNumber value="1"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="7ecf0de3-239d-4973-a4f4-6cfd7c16f263" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Nitrofurantoin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="14" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="2"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="06278a3c-992e-4527-b24f-bf2730102aee" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Cephapirin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="9" xsi:type="PQ"/>
+													<interpretationCode code="MS"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="3"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="c7daf7dc-1d83-4780-ae89-7df8e71e6f6b" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Colistin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="13" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="4"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="668e3662-44ea-4b8c-892c-6ec20a29d8f2" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Rifabutin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154845"/>
+													<value unit="ug/ml" value="10" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+										</organizer>
+									</component>
+								</organizer>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="CLUSTER" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="f8fbf748-d494-4740-84c8-4652a611c358" root="2.16.840.1.113883.3.72.5"/>
+									<code code="42803-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria Isolate">
+										<originalText>Issue: The code for the requested susceptibility panel does not appear here as might be expected. Instead, it appears in a Battery that is a subordinate part of this Cluster. The reason is that RMIM POLB_RM004000 implies that isolates should always be associated with a SpecimenObservationCluster, and the Subject of the Cluster is always the Isolate. Cluster.code then confirms that the isolate has been identified.</originalText>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154846"/>
+									<specimen typeCode="SPC">
+										<specimenRole classCode="ISLT">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="84162ee7-334b-46d9-be96-92cfc1f5cf8c" root="2.16.840.1.113883.3.72.5"/>
+											<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+												<code code="XXX" codeSystem="2.16.840.1.113883.5.1060.19464" codeSystemName="EntityCode - SpecimenEntityType" displayName="Corynebacterium diphtheriae">
+													<originalText>From any of:  Wound, Genital mucus, CSF, Aspirate, Periton Fl, Pleur Fl, Vag, Throat, Synov Fl, Eye, Ear, Bronch, Dialisis fl, Fld, Nose, Pus, Cervix, Genital fl, Urthera, Sputum, Stool, Urine, Tissue</originalText>
+												</code>
+											</specimenPlayingEntity>
+											<lab:productOf>
+												<lab:procedure classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="c8768e1a-a90f-456b-8710-56c1fe9f3799" root="2.16.840.1.113883.3.72.5"/>
+												</lab:procedure>
+											</lab:productOf>
+										</specimenRole>
+									</specimen>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Corynebacterium diphtheriae"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Gram Positive bacilli"/>
+										</externalObservation>
+									</reference>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="5d985abf-1799-41d7-b9d3-3cb90fe0e6e3" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Growth Amount"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154846"/>
+											<value code="+++" codeSystemName="NotKnownYet_Add" displayName="uncontrolled growth" xsi:type="CD"/>
+										</observation>
+									</component>
+									<component>
+										<organizer classCode="BATTERY" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="e44222b1-d73b-4800-b26d-dc0cda813ebf" root="2.16.840.1.113883.3.72.5"/>
+											<code code="29576-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacterial Susceptibility Panel Isolate">
+												<translation code="Isolate_BSP_Cluster" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Bacteria Susceptibility Panel Isolate Cluster"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154846"/>
+											<component>
+												<sequenceNumber value="1"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="23d1ef0d-ae41-4e15-9208-1c4ab2d6809e" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Ampicillin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="17" xsi:type="PQ"/>
+													<interpretationCode code="R"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="2"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="511f956f-a8c7-43ab-9700-a2a9aedceaec" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Linezolid"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="23" xsi:type="PQ"/>
+													<interpretationCode code="R"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+										</organizer>
+									</component>
+								</organizer>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="CLUSTER" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="6a80fea8-a949-484d-a6c6-bc6eadc035f6" root="2.16.840.1.113883.3.72.5"/>
+									<code code="42803-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria Isolate">
+										<originalText>Issue: The code for the requested susceptibility panel does not appear here as might be expected. Instead, it appears in a Battery that is a subordinate part of this Cluster. The reason is that RMIM POLB_RM004000 implies that isolates should always be associated with a SpecimenObservationCluster, and the Subject of the Cluster is always the Isolate. Cluster.code then confirms that the isolate has been identified.</originalText>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154846"/>
+									<specimen typeCode="SPC">
+										<specimenRole classCode="ISLT">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="36778fc7-871e-4cfe-917c-386c0867ee32" root="2.16.840.1.113883.3.72.5"/>
+											<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+												<code code="XXX" codeSystem="2.16.840.1.113883.5.1060.19464" codeSystemName="EntityCode - SpecimenEntityType" displayName="Eubacterium sp">
+													<originalText>From any of:  Wound, Genital mucus, CSF, Aspirate, Periton Fl, Pleur Fl, Vag, Throat, Synov Fl, Eye, Ear, Bronch, Dialisis fl, Fld, Nose, Pus, Cervix, Genital fl, Urthera, Sputum, Stool, Urine, Tissue</originalText>
+												</code>
+											</specimenPlayingEntity>
+											<lab:productOf>
+												<lab:procedure classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="947c97c9-809a-483b-90c1-3f34d0790e65" root="2.16.840.1.113883.3.72.5"/>
+												</lab:procedure>
+											</lab:productOf>
+										</specimenRole>
+									</specimen>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Eubacterium sp"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Gram Positive bacilli"/>
+										</externalObservation>
+									</reference>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="6fdef10c-a34a-4174-abd5-f447745740c0" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Growth Amount"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154846"/>
+											<value code="+" codeSystemName="NotKnownYet_Add" displayName="normal growth" xsi:type="CD"/>
+										</observation>
+									</component>
+									<component>
+										<organizer classCode="BATTERY" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="e2c67a9e-8a48-42e8-a817-fe40415a5c40" root="2.16.840.1.113883.3.72.5"/>
+											<code code="29576-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacterial Susceptibility Panel Isolate">
+												<translation code="Isolate_BSP_Cluster" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Bacteria Susceptibility Panel Isolate Cluster"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154846"/>
+											<component>
+												<sequenceNumber value="1"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="df382f62-33ee-4316-8c60-de8ad2a3963c" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Penicillin V"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="15" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="2"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="79d695c3-b0b0-40b9-ae58-eee6a65cf44b" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Ampicillin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="15" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="3"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="4765d973-8269-4331-b21c-84949e729013" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Fosfomycin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="7" xsi:type="PQ"/>
+													<interpretationCode code="S"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+										</organizer>
+									</component>
+								</organizer>
+							</entryRelationship>
+							<entryRelationship typeCode="COMP">
+								<organizer classCode="CLUSTER" moodCode="EVN">
+									<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="ca1ce63c-8273-4d51-8e92-e5c4eebdfe64" root="2.16.840.1.113883.3.72.5"/>
+									<code code="42803-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacteria Isolate">
+										<originalText>Issue: The code for the requested susceptibility panel does not appear here as might be expected. Instead, it appears in a Battery that is a subordinate part of this Cluster. The reason is that RMIM POLB_RM004000 implies that isolates should always be associated with a SpecimenObservationCluster, and the Subject of the Cluster is always the Isolate. Cluster.code then confirms that the isolate has been identified.</originalText>
+									</code>
+									<statusCode code="completed"/>
+									<effectiveTime value="20071126154846"/>
+									<specimen typeCode="SPC">
+										<specimenRole classCode="ISLT">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="d60d8860-ab47-4ddf-9833-83cfe54d8045" root="2.16.840.1.113883.3.72.5"/>
+											<specimenPlayingEntity classCode="NAT" determinerCode="INSTANCE">
+												<code code="XXX" codeSystem="2.16.840.1.113883.5.1060.19464" codeSystemName="EntityCode - SpecimenEntityType" displayName="Bifidobacterium sp">
+													<originalText>From any of:  Wound, Genital mucus, CSF, Aspirate, Periton Fl, Pleur Fl, Vag, Throat, Synov Fl, Eye, Ear, Bronch, Dialisis fl, Fld, Nose, Pus, Cervix, Genital fl, Urthera, Sputum, Stool, Urine, Tissue</originalText>
+												</code>
+											</specimenPlayingEntity>
+											<lab:productOf>
+												<lab:procedure classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="1bbfafe2-9009-4311-9a15-55ec1a6e318a" root="2.16.840.1.113883.3.72.5"/>
+												</lab:procedure>
+											</lab:productOf>
+										</specimenRole>
+									</specimen>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Bifidobacterium sp"/>
+										</externalObservation>
+									</reference>
+									<reference typeCode="REFR">
+										<externalObservation>
+											<code displayName="Gram Positive bacilli"/>
+										</externalObservation>
+									</reference>
+									<component>
+										<observation classCode="OBS" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="10620977-97d0-44ff-b9fe-0d17be8e131f" root="2.16.840.1.113883.3.72.5"/>
+											<code codeSystemName="NotKnownYet_Add" displayName="Growth Amount"/>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154846"/>
+											<value code="+" codeSystemName="NotKnownYet_Add" displayName="normal growth" xsi:type="CD"/>
+										</observation>
+									</component>
+									<component>
+										<organizer classCode="BATTERY" moodCode="EVN">
+											<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="34696694-a13c-40ef-80ab-8f9f35a47abc" root="2.16.840.1.113883.3.72.5"/>
+											<code code="29576-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Bacterial Susceptibility Panel Isolate">
+												<translation code="Isolate_BSP_Cluster" codeSystem="2.16.840.1.113883.3.72.4.1" codeSystemName="Local Laboratory Test Codes" displayName="Bacteria Susceptibility Panel Isolate Cluster"/>
+											</code>
+											<statusCode code="completed"/>
+											<effectiveTime value="20071126154846"/>
+											<component>
+												<sequenceNumber value="1"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="6a0e6c9a-a76f-447e-ba10-afc490aa87f9" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Nitrofurantoin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="11" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="2"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="bd085627-3ae8-4493-932b-7661ad7d8bb6" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Meropenem"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="12" xsi:type="PQ"/>
+													<interpretationCode code="I"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="3"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="1c9279af-10eb-4832-b7c2-425a8ddf4fd0" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Ciprofloxacin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="20" xsi:type="PQ"/>
+													<interpretationCode code="R"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+											<component>
+												<sequenceNumber value="4"/>
+												<observation classCode="OBS" moodCode="EVN">
+													<id assigningAuthorityName="NIST HL7 Test Laboratory" extension="7d34f25e-05a2-4a81-982b-b9fc297f6324" root="2.16.840.1.113883.3.72.5"/>
+													<code displayName="Fosfomycin"/>
+													<statusCode code="completed"/>
+													<effectiveTime value="20071126154846"/>
+													<value unit="ug/ml" value="19" xsi:type="PQ"/>
+													<interpretationCode code="R"/>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="2"/>
+																<high inclusive="true" unit="ug/ml" value="8"/>
+															</value>
+															<interpretationCode code="S"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="10"/>
+																<high inclusive="true" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="I"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="false" unit="ug/ml" value="16"/>
+															</value>
+															<interpretationCode code="R"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<low inclusive="true" unit="ug/ml" value="8"/>
+																<high inclusive="false" unit="ug/ml" value="10"/>
+															</value>
+															<interpretationCode code="MS"/>
+														</observationRange>
+													</referenceRange>
+													<referenceRange typeCode="REFV">
+														<observationRange classCode="OBS" moodCode="EVN.CRT">
+															<value xsi:type="IVL_PQ">
+																<high inclusive="false" unit="ug/ml" value="2"/>
+															</value>
+															<interpretationCode code="VS"/>
+														</observationRange>
+													</referenceRange>
+												</observation>
+											</component>
+										</organizer>
+									</component>
+								</organizer>
+							</entryRelationship>
+						</act>
+					</entry>
+				</section>
+			</component>
+		</structuredBody>
+	</component>
+</ClinicalDocument>
