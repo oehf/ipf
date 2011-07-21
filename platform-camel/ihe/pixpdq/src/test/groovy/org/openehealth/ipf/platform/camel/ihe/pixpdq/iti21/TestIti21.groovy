@@ -73,7 +73,29 @@ class TestIti21 extends MllpTestContainer {
     void testHappyCaseAndAuditSecure() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContext', 2)
     }
-    
+
+    // Client without certificates (empty key store in SSL context) should fail
+    // when trying to access an endpoint with clientAuth=MUST, but should have
+    // success when accessing an endpoint with clientAuth=WANT.
+    @Test
+    void testHappyCaseAndAuditSecureWant() {
+        boolean failed = false
+        try {
+            doTestHappyCaseAndAudit('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore', 666)
+        } catch (Exception e) {
+            failed = true
+        }
+        assert failed
+
+        // Here we expect five ATNA audit messages:
+        // 1. Three from the failed invocation in the above try-catch block:
+        //      * server-side SSL handshake error,
+        //      * client-side SSL handshake error,
+        //      * client-side transaction failure.
+        // 2. Two from the current transaction: client-side & server-side transaction success.
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore', 5)
+    }
+
     @Test
     void testHappyCaseWithSSLv3() {
         doTestHappyCaseAndAudit('pdq-iti21://localhost:18216?secure=true&sslContext=#sslContext&sslProtocols=SSLv3', 2)

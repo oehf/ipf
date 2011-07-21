@@ -75,7 +75,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
 
     private final SSLContext sslContext;
     private final List<MllpCustomInterceptor> customInterceptors;
-    private final boolean mutualTLS;
+    private final MllpClientAuthType clientAuthType;
     private final String[] sslProtocols;
     private final String[] sslCiphers;
     
@@ -101,8 +101,8 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      *      Whether incomplete ATNA auditing are allowed as well.
      * @param sslContext
      *      the SSL context to use; {@code null} if secure communication is not used.
-     * @param mutualTLS
-     *      {@code true} when client authentication for mutual TLS is required.
+     * @param clientAuthType
+     *      type of desired client authentication (NONE/WANT/MUST).
      * @param customInterceptors
      *      the interceptors defined in the endpoint URI.
      * @param sslProtocols
@@ -135,7 +135,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             boolean audit, 
             boolean allowIncompleteAudit, 
             SSLContext sslContext,
-            boolean mutualTLS, 
+            MllpClientAuthType clientAuthType,
             List<MllpCustomInterceptor> customInterceptors, 
             String[] sslProtocols, 
             String[] sslCiphers,
@@ -152,13 +152,14 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
         Validate.notNull(mllpComponent);
         Validate.notNull(wrappedEndpoint);
         Validate.noNullElements(customInterceptors);
+        Validate.notNull(clientAuthType);
 
         this.mllpComponent = mllpComponent;
         this.wrappedEndpoint = wrappedEndpoint;
         this.audit = audit;
         this.allowIncompleteAudit = allowIncompleteAudit;
         this.sslContext = sslContext;
-        this.mutualTLS = mutualTLS;
+        this.clientAuthType = clientAuthType;
         this.customInterceptors = customInterceptors;
         this.sslProtocols = sslProtocols;
         this.sslCiphers = sslCiphers;
@@ -189,7 +190,8 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
             if (!filterChain.contains("ssl")) {
                 HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
-                filter.setNeedClientAuth(mutualTLS);
+                filter.setNeedClientAuth(clientAuthType == MllpClientAuthType.MUST);
+                filter.setWantClientAuth(clientAuthType == MllpClientAuthType.WANT);
                 filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
                 filter.setEnabledProtocols(sslProtocols);
                 filter.setEnabledCipherSuites(sslCiphers);
@@ -406,10 +408,10 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     }
     
     /**
-     * @return the mutualTLS
+     * @return the client authentication type.
      */
-    public boolean isMutualTLS() {
-        return mutualTLS;
+    public MllpClientAuthType getClientAuthType() {
+        return clientAuthType;
     }
     
     /**

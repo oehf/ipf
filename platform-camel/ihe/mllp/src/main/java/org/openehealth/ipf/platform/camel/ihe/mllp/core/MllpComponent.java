@@ -81,7 +81,8 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
                 getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false);
 
         boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
-        boolean mutualTLS = getAndRemoveParameter(parameters, "mutualTLS", boolean.class, false);
+        MllpClientAuthType clientAuthType = getAndRemoveParameter(parameters, "clientAuth",
+                MllpClientAuthType.class, MllpClientAuthType.NONE);
         String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
         String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
         
@@ -163,7 +164,7 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
                 audit,
                 allowIncompleteAudit,
                 sslContext,
-                mutualTLS,
+                clientAuthType,
                 customInterceptors,
                 sslProtocols,
                 sslCiphers,

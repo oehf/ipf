@@ -63,6 +63,11 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
     </bean>
 
+    <bean id="sslContextWithoutKeyStore" class="org.apache.mina.integration.spring.ssl.SSLContextFactoryBean">
+        <property name="trustManagerFactoryAlgorithmUseDefault" value="true"/>
+        <property name="trustManagerFactoryKeyStore" ref="keyStore"/>
+    </bean>
+
     <bean id="keyStore" class="org.apache.mina.integration.spring.ssl.KeyStoreFactoryBean">
         <property name="resource" value="iti21/keystore"/>
         <property name="password" value="changeit"/>
