@@ -32,18 +32,12 @@ import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
-import org.openehealth.ipf.commons.ihe.atna.MockedSender
-import org.apache.commons.logging.LogFactory
-import org.apache.commons.logging.Log
 
 /**
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
 class TestIti21 extends MllpTestContainer {
-    private static final Log LOG = LogFactory.getLog(TestIti21.class)
-
-    
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
     
     static void main(args) {
@@ -86,22 +80,13 @@ class TestIti21 extends MllpTestContainer {
     void testHappyCaseAndAuditSecureWant() {
         boolean failed = false
         try {
-            doTestHappyCaseAndAudit('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore', 666)
+            doTestHappyCaseAndAudit('pdq-iti21://localhost:18211?secure=true&sslContext=#sslContextWithoutKeyStore', 3)
         } catch (Exception e) {
             failed = true
         }
         assert failed
 
-        // Here we expect five ATNA audit messages:
-        // 1. Three from the failed invocation in the above try-catch block:
-        //      * server-side SSL handshake error,
-        //      * client-side SSL handshake error,
-        //      * client-side transaction failure.
-        // 2. Two from the current transaction: client-side & server-side transaction success.
-
-        ((MockedSender) auditSender).messages.each { LOG.warn(it) }
-        doTestHappyCaseAndAudit('pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore', 5)
-        ((MockedSender) auditSender).messages.each { LOG.warn(it) }
+        doTestHappyCaseAndAudit('pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore', 2)
     }
 
     @Test
@@ -178,6 +163,7 @@ class TestIti21 extends MllpTestContainer {
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5')
+        auditSender.reset(expectedAuditItemsCount)
         def msg = send(endpointUri, body)
         assertRSP(msg)
         assertEquals(expectedAuditItemsCount, auditSender.messages.size())
