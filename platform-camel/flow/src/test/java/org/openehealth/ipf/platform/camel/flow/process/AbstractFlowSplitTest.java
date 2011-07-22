@@ -43,25 +43,25 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @ContextConfiguration(locations = { 
         "/context-flow-platform.xml",
         "/context-flow-processor.xml",
-        "/context-flow-support.xml"
-       
+        "/context-flow-support.xml",
+        "/context-weaver.xml"
 })
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class})
 public abstract class AbstractFlowSplitTest {
 
     @Autowired
-    protected CamelContext camelContext;
+    private CamelContext camelContext;
     
     @Autowired
-    protected ProducerTemplate producerTemplate;
+    private ProducerTemplate producerTemplate;
     
     @EndpointInject(uri="mock:mock-1")
-    protected MockEndpoint mock1;
+    private MockEndpoint mock1;
     
     @EndpointInject(uri="mock:mock-2")
-    protected MockEndpoint mock2;
+    private MockEndpoint mock2;
 
-    protected SplitHistory initial;
+    private SplitHistory initial;
     
     @Before
     public void setUp() throws Exception {
@@ -102,13 +102,13 @@ public abstract class AbstractFlowSplitTest {
         assertEquals(initial, new PlatformMessage(result).getSplitHistory()); 
     }
     
-    protected PlatformMessage createMessage(String body) {
+    private PlatformMessage createMessage(String body) {
         PlatformMessage platformMessage = new PlatformMessage(createExchange(body));
         platformMessage.setSplitHistory(initial);
         return platformMessage;
     }
     
-    protected Exchange createExchange(String body) {
+    private Exchange createExchange(String body) {
         Exchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(body);
         return exchange;

@@ -1,7 +1,7 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
 <aspectj>
 
-    <weaver options="-verbose -showWeaveInfo">
+    <weaver>
         <include within="org.apache.camel..*" />
     </weaver>
 
