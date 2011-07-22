@@ -32,12 +32,17 @@ import org.openhealthtools.ihe.atna.auditor.events.dicom.SecurityAlertEvent
 
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
+import org.openehealth.ipf.commons.ihe.atna.MockedSender
+import org.apache.commons.logging.LogFactory
+import org.apache.commons.logging.Log
 
 /**
  * Unit tests for the PDQ transaction aka ITI-21.
  * @author Dmytro Rud
  */
 class TestIti21 extends MllpTestContainer {
+    private static final Log LOG = LogFactory.getLog(TestIti21.class)
+
     
     def static CONTEXT_DESCRIPTOR = 'iti21/iti-21.xml'
     
@@ -93,7 +98,10 @@ class TestIti21 extends MllpTestContainer {
         //      * client-side SSL handshake error,
         //      * client-side transaction failure.
         // 2. Two from the current transaction: client-side & server-side transaction success.
+
+        ((MockedSender) auditSender).messages.each { LOG.warn(it) }
         doTestHappyCaseAndAudit('pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore', 5)
+        ((MockedSender) auditSender).messages.each { LOG.warn(it) }
     }
 
     @Test
