@@ -16,13 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import ca.uhn.hl7v2.model.Message;
+import org.apache.camel.util.ObjectHelper;
 import org.apache.commons.lang.Validate;
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 
 
 /**
@@ -109,7 +108,8 @@ public class NakFactory {
      *      original HAPI request message.
      */
     public Message createNak(Message originalMessage, Throwable t) {
-        return createNak(originalMessage, t, getAckTypeCode(t));
+        AbstractHL7v2Exception hl7Exception = getHl7Exception(t);
+        return createNak(originalMessage, hl7Exception, getAckTypeCode(hl7Exception));
     }
 
 
@@ -140,12 +140,8 @@ public class NakFactory {
      * to the given instance of {@link Throwable}.
      */
     protected AbstractHL7v2Exception getHl7Exception(Throwable t) {
-        AbstractHL7v2Exception hl7Exception;
-        if(t instanceof AbstractHL7v2Exception) {
-            hl7Exception = (AbstractHL7v2Exception) t;
-        } else if(t.getCause() instanceof AbstractHL7v2Exception) {
-            hl7Exception = (AbstractHL7v2Exception) t.getCause();
-        } else {
+        AbstractHL7v2Exception hl7Exception = ObjectHelper.getException(AbstractHL7v2Exception.class, t);
+        if (hl7Exception == null) {
             hl7Exception = new HL7v2Exception(
                     formatErrorMessage(t),
                     config.getRequestErrorDefaultErrorCode(),
