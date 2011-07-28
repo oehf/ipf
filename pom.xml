@@ -47,9 +47,9 @@
         <resources-plugin-version>2.4.3</resources-plugin-version>
         
         <!-- Dependency version properties -->
-        <activemq-version>5.3.2</activemq-version>
+        <activemq-version>5.5.0</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
-        <camel-version>2.7.1</camel-version>
+        <camel-version>2.8.0</camel-version>
         <commons-codec-version>1.4</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.3</commons-dbcp-version>
@@ -59,7 +59,7 @@
         <commons-lang-version>2.4</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <commons-math-version>1.2</commons-math-version>
-        <cxf-version>2.3.3</cxf-version>
+        <cxf-version>2.4.1</cxf-version>
         <derby-version>10.6.2.1</derby-version>
         <easymock-version>2.5.2</easymock-version> 
         <ehcache-version>2.2.0</ehcache-version>
@@ -73,7 +73,7 @@
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
         <hibernate-search-version>3.1.0.GA</hibernate-search-version>
         <jasypt-version>1.7</jasypt-version>
-        <jetty-version>7.2.2.v20101205</jetty-version>
+        <jetty-version>7.4.2.v20110526</jetty-version>
         <joda-time-version>1.5.2</joda-time-version>
         <junit-version>4.8.1</junit-version>
         <junitperf-version>1.8</junitperf-version>

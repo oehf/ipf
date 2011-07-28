@@ -38,7 +38,7 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.cxf.spring.CxfEndpointBean;
+import org.apache.camel.component.cxf.CxfSpringEndpoint;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.processor.DelegateProcessor;
@@ -67,22 +67,22 @@ public abstract class AbstractLbsCxfTest {
     protected static final String FILE_CONTENT = "blu bla";
 
     @Autowired @Qualifier("soapEndpointNoExtract")
-    private CxfEndpointBean endpointNoExtract;
+    private CxfSpringEndpoint endpointNoExtract;
     
     @Autowired @Qualifier("soapEndpointExtract")
-    private CxfEndpointBean endpointExtract;
+    private CxfSpringEndpoint endpointExtract;
 
     @Autowired @Qualifier("soapEndpointExtractRouter")
-    private CxfEndpointBean endpointExtractRouter; 
+    private CxfSpringEndpoint endpointExtractRouter; 
     
     @Autowired @Qualifier("soapEndpointExtractRouterRealServer")
-    private CxfEndpointBean endpointExtractRouterRealServer; 
+    private CxfSpringEndpoint endpointExtractRouterRealServer; 
     
     @Autowired @Qualifier("soapEndpointRealServer")
-    private CxfEndpointBean endpointRealServer; 
+    private CxfSpringEndpoint endpointRealServer; 
     
     @Autowired @Qualifier("soapEndpointExtractSwA")
-    private CxfEndpointBean endpointExtractSwA; 
+    private CxfSpringEndpoint endpointExtractSwA; 
     
     private static final String ENDPOINT_NON_CXF = 
         "direct:cxflbs";
@@ -328,7 +328,7 @@ public abstract class AbstractLbsCxfTest {
         assertEquals(FILE_CONTENT + FILE_CONTENT, toString(handlerHolder));
     }
     
-    protected void setEndpoint(CxfEndpointBean endpoint) {
+    protected void setEndpoint(CxfSpringEndpoint endpoint) {
         provider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint.getAddress());
     }
 

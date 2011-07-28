@@ -23,7 +23,7 @@ import javax.xml.ws.Holder;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.component.cxf.spring.CxfEndpointBean;
+import org.apache.camel.component.cxf.CxfSpringEndpoint;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.cxf.message.MessageContentsList;
 import org.junit.Test;
@@ -60,7 +60,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class GroovyLbsCxfTest extends AbstractLbsCxfTest {
     
     @Autowired @Qualifier("soapEndpointExample1")
-    private CxfEndpointBean endpointExample1;
+    private CxfSpringEndpoint endpointExample1;
     
     @Test
     public void testExample1() throws Exception {

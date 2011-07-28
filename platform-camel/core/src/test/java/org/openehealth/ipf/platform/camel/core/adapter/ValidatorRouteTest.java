@@ -79,13 +79,9 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     public void testValidator3() throws InterruptedException, IOException {
         final String xml = IOUtils.toString(new ClassPathResource("xsd/test.xml")
                 .getInputStream());
-        Exchange exchange = producerTemplate.send("direct:validator-xml-test",
-                ExchangePattern.InOut, new Processor() {
-                    public void process(Exchange exchange) {
-                        exchange.getIn().setBody(xml);
-                    }
-                });
-        assertEquals(xml, exchange.getIn().getBody());
+        String response = (String)producerTemplate.sendBody(
+        		"direct:validator-xml-test", ExchangePattern.InOut, xml);
+        assertEquals("passed", response);
      }
 
     @Test
@@ -110,13 +106,9 @@ public class ValidatorRouteTest extends AbstractRouteTest {
     public void testValidator5() throws InterruptedException, IOException {
         final String xml = IOUtils.toString(new ClassPathResource("schematron/schematron-test.xml")
                 .getInputStream());
-        Exchange exchange = producerTemplate.send("direct:validator-schematron-test",
-                ExchangePattern.InOut, new Processor() {
-                    public void process(Exchange exchange) {
-                        exchange.getIn().setBody(xml);
-                    }
-                });
-        assertEquals(xml, exchange.getIn().getBody());
+        String response = (String)producerTemplate.sendBody(
+        		"direct:validator-schematron-test", ExchangePattern.InOut, xml);
+        assertEquals("passed", response);
      }
 
     @Test

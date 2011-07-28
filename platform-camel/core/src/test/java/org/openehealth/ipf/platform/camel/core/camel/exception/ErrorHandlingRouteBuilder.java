@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.core.camel.exception;
 
+
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.support.processor.FailureProcessor;
 
@@ -26,6 +27,7 @@ public class ErrorHandlingRouteBuilder extends SpringRouteBuilder {
 
     private FailureProcessor failure = new FailureProcessor("blah");
     
+        
     @Override
     public void configure() throws Exception {
 
@@ -39,7 +41,8 @@ public class ErrorHandlingRouteBuilder extends SpringRouteBuilder {
         
         from("direct:input-2")
         // defines local error handler (placed before every node in this route)
-        .errorHandler(deadLetterChannel("mock:error").maximumRedeliveries(2).handled(false))
+        .errorHandler(deadLetterChannel("mock:error").maximumRedeliveries(2))
+        .onException(Exception.class).handled(false).end()
         .to("mock:inter")   // no redeliveries here
         .to("direct:temp"); // the error handler of this node redelivers
         
