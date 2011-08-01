@@ -186,7 +186,10 @@ public class FlowBeginProcessor extends FlowProcessor implements ReplayStrategy 
     @Override
     public PlatformPacket replay(PlatformPacket packet) throws Exception {
         Exchange exchange = createExchange(packet);
-        getProcessor().process(exchange);
+        try {
+			getProcessor().process(exchange);
+		} catch (Exception e) {
+		}
         if (exchange.isFailed()) {
             setFailureHandled(exchange);
             replayErrorProcessor.process(exchange);
