@@ -111,6 +111,7 @@ public abstract class AbstractLbsHttpTest {
     
     @Before
     public void setUp() throws Exception {
+        camelContext.getShutdownStrategy().setTimeout(5);
         file = File.createTempFile(getClass().getName(), "txt");
         FileWriter writer = new FileWriter(file);
         writer.write("blu bla");
@@ -127,7 +128,7 @@ public abstract class AbstractLbsHttpTest {
         mock.whenAnyExchangeReceived(null);
         
         file.delete();
-        store.deleteAll();
+        //store.deleteAll();
     }
     
     @Test
