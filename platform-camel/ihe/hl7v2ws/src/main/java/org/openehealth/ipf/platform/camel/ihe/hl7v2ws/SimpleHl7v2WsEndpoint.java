@@ -23,7 +23,6 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
@@ -41,6 +40,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
 
     private final Class<? extends AbstractHl7v2WebService> serviceClass;
+    private Hl7v2WsFailureHandler failureHandler = null;
 
     /**
      * Constructs the endpoint.
@@ -58,7 +58,7 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
     public SimpleHl7v2WsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent component,
+            AbstractWsComponent<ItiServiceInfo> component,
             InterceptorProvider customInterceptors,
             Class<? extends AbstractHl7v2WebService> serviceClass)
     {
@@ -92,10 +92,11 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new ItiServiceFactory(
+        SimpleHl7v2WsServiceFactory serviceFactory = new SimpleHl7v2WsServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getFailureHandler());
 
         AbstractHl7v2WebService serviceInstance = serviceClass.newInstance();
         serviceInstance.setHl7v2Configuration((Hl7v2ConfigurationHolder) getComponent());
@@ -103,5 +104,22 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
         Server server = serverFactory.create();
         DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
         return new DefaultItiConsumer(this, processor, service, server);
+    }
+
+
+    /**
+     * @return
+     *      the HL7v2 WS fault handler, if any configured.
+     */
+    public Hl7v2WsFailureHandler getFailureHandler() {
+        return failureHandler;
+    }
+
+    /**
+     * @param failureHandler
+     *      HL7v2 WS fault handler instance.
+     */
+    public void setFailureHandler(Hl7v2WsFailureHandler failureHandler) {
+        this.failureHandler = failureHandler;
     }
 }

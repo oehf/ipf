@@ -68,7 +68,7 @@ public class XcaAsyncResponseServiceFactory extends ItiServiceFactory {
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
             if (serviceInfo.isAuditRequestPayload()) {
-                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor());
+                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(true));
             }
 
             AsyncAuditResponseInterceptor auditInterceptor =
