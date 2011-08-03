@@ -50,7 +50,7 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
     @Override
     protected void configureInterceptors(Client client) {
         super.configureInterceptors(client);
-        client.getInInterceptors().add(new InPayloadExtractorInterceptor());
+        client.getInInterceptors().add(new InPayloadExtractorInterceptor(true));
         client.getInInterceptors().add(new InNamespaceMergeInterceptor());
         client.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
         client.getEndpoint().getService().setDataBinding(new PlainXmlDataBinding());

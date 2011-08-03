@@ -49,7 +49,7 @@ public class Hl7v3ServiceFactory extends ItiServiceFactory {
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
-        svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor());
+        svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(true));
         svrFactory.getInInterceptors().add(new InNamespaceMergeInterceptor());
         svrFactory.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
         svrFactory.setDataBinding(new PlainXmlDataBinding());

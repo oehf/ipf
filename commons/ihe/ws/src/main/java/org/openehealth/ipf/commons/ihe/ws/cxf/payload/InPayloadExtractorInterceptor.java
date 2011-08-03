@@ -38,10 +38,20 @@ import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
  */
 public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Message> {
 
-    public InPayloadExtractorInterceptor() {
+    private final boolean needExtractSoapBody;
+
+    /**
+     * Constructor.
+     * @param needExtractSoapBody
+     *      whether the proper SOAP body should be extracted from
+     *      the payload (<code>true</code>), or the payload should
+     *      be saved as-is (<code>false</code>).
+     */
+    public InPayloadExtractorInterceptor(boolean needExtractSoapBody) {
         super(Phase.PRE_STREAM);
         addAfter(AttachmentInInterceptor.class.getName());
         addBefore(StaxInInterceptor.class.getName());
+        this.needExtractSoapBody = needExtractSoapBody;
     }
 
     @Override
@@ -49,7 +59,10 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
         try {
             InputStream stream = message.getContent(InputStream.class);
             byte[] streamBytes = IOUtils.readBytesFromStream(stream);
-            String payload = SoapUtils.extractSoapBody(new String(streamBytes));
+            String payload = new String(streamBytes);
+            if (needExtractSoapBody) {
+                payload = SoapUtils.extractSoapBody(payload);
+            }
             message.setContent(String.class, payload);
             message.setContent(InputStream.class, new ByteArrayInputStream(streamBytes));
         } catch (IOException e) {

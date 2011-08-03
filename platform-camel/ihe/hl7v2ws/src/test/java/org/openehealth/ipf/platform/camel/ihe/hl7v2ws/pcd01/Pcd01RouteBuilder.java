@@ -30,7 +30,6 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
  */
 public class Pcd01RouteBuilder extends SpringRouteBuilder {
    
-    public static final String PCD_01_SPEC_REQUEST = load("pcd01/pcd01-request.hl7").toString();
     public static final String PCD_01_SPEC_RESPONSE = load("pcd01/pcd01-response.hl7").toString();
     public static final String PCD_01_SPEC_RESPONSE_INVALID = load(
             "pcd01/pcd01-response-invalid.hl7").toString();
@@ -41,17 +40,17 @@ public class Pcd01RouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         
-    from("pcd-pcd01:devicedata")
+    from("pcd-pcd01:devicedata?failureHandler=#failureHandler")
         .onException(Exception.class)
             .maximumRedeliveries(0)
             .end()
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
-    from("pcd-pcd01:route_throws_exception")
+    from("pcd-pcd01:route_throws_exception?failureHandler=#failureHandler")
         .throwException(new RuntimeException())
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
-    from("pcd-pcd01:route_unacceptable_response")
+    from("pcd-pcd01:route_unacceptable_response?failureHandler=#failureHandler")
         .process(setOutBody(PCD_01_SPEC_RESPONSE_INVALID));
 
     from("pcd-pcd01:route_inbound_validation")
