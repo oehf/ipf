@@ -89,12 +89,6 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
     public void testSyntheticResponseMessage() {
     }
 
-    @Override
-    @Test(expected=ValidationException.class)
-    public void testNotPresentPatientName() {
-        super.testNotPresentPatientName();
-    }
-    
     @Test(expected = HL7Exception.class)
     public void testInvalidGlucoseMessage() {
         // When OBX-5 is filled, obx-2 mus not be null. The message can not be parsed.
