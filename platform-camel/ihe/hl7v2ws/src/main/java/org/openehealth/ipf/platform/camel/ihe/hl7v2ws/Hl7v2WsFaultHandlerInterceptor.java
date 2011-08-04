@@ -20,7 +20,6 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Exchange;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
@@ -46,8 +45,7 @@ public class Hl7v2WsFaultHandlerInterceptor extends AbstractSoapInterceptor {
 
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
-        Message wrappedMessage = message.getMessage();
-        Exchange exchange = wrappedMessage.getExchange();
+        Exchange exchange = message.getExchange();
 
         // exchange contains SOAP fault
         boolean failed = (SoapUtils.extractOutgoingException(exchange) != null);

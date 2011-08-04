@@ -15,20 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
-
-<<<<<<< .mineimport java.util.Set;
-
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-
+import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
-=======import org.apache.camel.*;
+import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultExchange;
->>>>>>> .theirsimport org.apache.camel.util.CastUtils;
+import org.apache.camel.util.CastUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -37,9 +28,16 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.AbstractProducerInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.util.Set;
+
+import static org.junit.Assert.*;
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
+
+
 /**
  * 
  * @author Mitko Kolev
@@ -164,11 +162,11 @@ public class Pcd01Test extends StandardTestContainer {
     }
     
     @Test
-    public void jmxAttribute() throws Exception {
+    public void testJmxAttribute() throws Exception {
         MBeanServer mbsc = getCamelContext().getManagementStrategy().getManagementAgent()
             .getMBeanServer();
         Set<ObjectName> s = CastUtils.cast(mbsc.queryNames(new ObjectName(
-            "org.apache.camel:*,type=endpoints,name=\"pcd-pcd01://devicedata\""), null));
+                "org.apache.camel:*,type=endpoints,name=\"pcd-pcd01://devicedata\\?failureHandler=%23failureHandler\""), null));
         assertEquals(1, s.size());
         ObjectName object = (ObjectName) s.toArray()[0];
         assertNotNull(object);
