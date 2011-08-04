@@ -22,7 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsFailureHandler;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsFaultHandlerInterceptor.*;
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*;
 
 /**
  * Sample failure handler.
