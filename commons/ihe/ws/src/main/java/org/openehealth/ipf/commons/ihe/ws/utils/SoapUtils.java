@@ -19,6 +19,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.Soap11;
 import org.apache.cxf.binding.soap.Soap12;
+import org.apache.cxf.message.Exchange;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.ws.addressing.Names;
 import org.apache.cxf.ws.addressing.VersionTransformer.Names200403;
 import org.apache.cxf.ws.addressing.VersionTransformer.Names200408;
@@ -27,6 +29,7 @@ import org.w3c.dom.Node;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -228,4 +231,28 @@ public abstract class SoapUtils {
         Matcher matcher = ROOT_ELEMENT_PATTERN.matcher(xml);
         return (matcher.find() && (matcher.start() == 0)) ? matcher.group(1) : null;
     }
+
+
+    /**
+     * Returns Exception object from the outgoing fault message contained in the given
+     * CXF exchange, or <code>null</code>, when no exception could be extracted.
+     */
+    public static Exception extractOutgoingException(Exchange exchange) {
+        Message outFaultMessage = exchange.getOutFaultMessage();
+        return (outFaultMessage != null) ? outFaultMessage.getContent(Exception.class) : null;
+    }
+
+
+    /**
+     * Returns String payload of the outgoing message contained in the given
+     * CXF exchange, or <code>null</code>, when no String payload could be extracted.
+     */
+    public static String extractOutgoingPayload(Exchange exchange) {
+        try {
+            return (String) exchange.getOutMessage().getContent(List.class).get(0);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

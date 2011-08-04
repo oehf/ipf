@@ -22,10 +22,16 @@ import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
-import java.util.List;
 
 /**
+ * CXF interceptor which sends all failed CXF exchanges and all
+ * exchanges which contain HL7v2 NAKs with code 'AR' or 'CR'
+ * to the user-defined failure handler.
+ * <p>
+ * Usable in outgoing chains (normal and fault) on server side.
+ *
  * @author Dmytro Rud
  */
 public class Hl7v2WsFaultHandlerInterceptor extends AbstractSoapInterceptor {
@@ -37,27 +43,6 @@ public class Hl7v2WsFaultHandlerInterceptor extends AbstractSoapInterceptor {
         this.faultHandler = faultHandler;
     }
 
-    /**
-     * Returns Exception object from the outgoing fault message contained in the given
-     * CXF exchange, or <code>null</code>, when no exception could be extracted.
-     */
-    public static Exception extractOutgoingException(Exchange exchange) {
-        Message outFaultMessage = exchange.getOutFaultMessage();
-        return (outFaultMessage != null) ? outFaultMessage.getContent(Exception.class) : null;
-    }
-
-    /**
-     * Returns String payload of the outgoing message contained in the given
-     * CXF exchange, or <code>null</code>, when no String payload could be extracted.
-     */
-    public static String extractOutgoingPayload(Exchange exchange) {
-        try {
-            return (String) exchange.getOutMessage().getContent(List.class).get(0);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
 
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
@@ -65,14 +50,14 @@ public class Hl7v2WsFaultHandlerInterceptor extends AbstractSoapInterceptor {
         Exchange exchange = wrappedMessage.getExchange();
 
         // exchange contains SOAP fault
-        boolean failed = (extractOutgoingException(exchange) != null);
+        boolean failed = (SoapUtils.extractOutgoingException(exchange) != null);
 
         // exchange does not contain a valid HL7v2 message at all
         // or does contain an HL7v2 NAK with code 'AR' or 'CR'
         if (! failed) {
-            String response = extractOutgoingPayload(exchange);
+            String response = SoapUtils.extractOutgoingPayload(exchange);
             try {
-                int pos = response.indexOf("\r\nMSA" + response.charAt(3));
+                int pos = response.indexOf("\r\nMSA");
                 failed = ((pos < 0) || (response.charAt(pos + 7) == 'R'));
             } catch (Exception e) {
                 failed = true;
