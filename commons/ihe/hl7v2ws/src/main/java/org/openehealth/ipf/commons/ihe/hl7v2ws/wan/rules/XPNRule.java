@@ -36,11 +36,11 @@ public class XPNRule extends AbstractCompositeTypeRule<XPN> {
 
     @Override
     public void validate(XPN xpn, String path, Collection<ValidationException> violations) {
-        mustBeNonEmpty(xpn, 1, path, violations);
+        mustBeNonEmpty(xpn, 7, path, violations);
     }
    
     @Override
     public String getSectionReference() {
-        return "Continua Design Guidelines 2010, Section K.2.7";
+        return "Continua Design Guidelines 2010, Section K.2.7, Table K-14";
     }
 }
