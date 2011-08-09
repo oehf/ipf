@@ -26,9 +26,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.QueryResponseTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
+
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 /**
  * Test for {@link QueryResponseValidator}.
@@ -39,6 +39,7 @@ public class QueryResponseValidatorTest {
     private QueryResponse response;
     private QueryResponseTransformer transformer;
     private DocumentEntry docEntry;
+    private ValidationProfile profile = new ValidationProfile(false, IheProfile.XDS_B, Actor.REGISTRY);
 
     @Before
     public void setUp() {
@@ -53,13 +54,13 @@ public class QueryResponseValidatorTest {
     
     @Test
     public void testValidateGoodCase() {
-        validator.validate(transformer.toEbXML(response), null);
+        validator.validate(transformer.toEbXML(response), profile);
     }
 
     @Test
     public void testQueryResponseDoesNotHaveSubmissionSetLimitations() {
         response.getSubmissionSets().clear();
-        validator.validate(transformer.toEbXML(response), null);
+        validator.validate(transformer.toEbXML(response), profile);
     }
     
     @Test
@@ -112,7 +113,7 @@ public class QueryResponseValidatorTest {
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLQueryResponse ebXMLQueryResponse) {
         try {
-            validator.validate(ebXMLQueryResponse, null);
+            validator.validate(ebXMLQueryResponse, profile);
             fail("Expected exception: " + XDSMetaDataException.class);
         }
         catch (XDSMetaDataException e) {

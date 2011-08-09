@@ -31,11 +31,16 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-xml</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
             <artifactId>modules-cda-mdht</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

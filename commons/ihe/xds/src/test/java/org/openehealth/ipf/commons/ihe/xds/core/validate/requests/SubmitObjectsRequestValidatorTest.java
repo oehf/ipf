@@ -39,7 +39,8 @@ public class SubmitObjectsRequestValidatorTest {
     private EbXMLFactory factory;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
-    
+    private ValidationProfile profile = new ValidationProfile(false, IheProfile.XDS_B, Actor.REGISTRY);
+
     private DocumentEntry docEntry;
 
     @Before
@@ -55,7 +56,7 @@ public class SubmitObjectsRequestValidatorTest {
     
     @Test
     public void testValidateGoodCase() {
-        validator.validate(transformer.toEbXML(request), null);
+        validator.validate(transformer.toEbXML(request), profile);
     }
     
     @Test
@@ -409,7 +410,7 @@ public class SubmitObjectsRequestValidatorTest {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.getExtrinsicObjects().get(0).getClassifications(Vocabulary.DOC_ENTRY_AUTHOR_CLASS_SCHEME).get(0).getSlots().get(0).getValueList().set(0, "lol");
         // The spec allows this case: "If component 1 (ID Number) is specified, component 9 (Assigning Authority) shall be present if available"
-        validator.validate(transformer.toEbXML(request), null);
+        validator.validate(transformer.toEbXML(request), profile);
     }
         
     @Test    
@@ -429,11 +430,11 @@ public class SubmitObjectsRequestValidatorTest {
     @Test
     public void testRepositoryUniqueIdIsNecessaryInXDSB() {
         docEntry.setRepositoryUniqueId(null);
-        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES, new ValidationProfile(false, IheProfile.XDS_B, Actor.REGISTRY));
+        expectFailure(WRONG_NUMBER_OF_SLOT_VALUES);
     }
     
     private void expectFailure(ValidationMessage expectedMessage) {
-        expectFailure(expectedMessage, transformer.toEbXML(request), null);
+        expectFailure(expectedMessage, transformer.toEbXML(request));
     }
 
     private void expectFailure(ValidationMessage expectedMessage, ValidationProfile profile) {
@@ -441,9 +442,9 @@ public class SubmitObjectsRequestValidatorTest {
     }
 
     private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML) {
-        expectFailure(expectedMessage, ebXML, null);
+        expectFailure(expectedMessage, ebXML, profile);
     }
-    
+
     private void expectFailure(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);

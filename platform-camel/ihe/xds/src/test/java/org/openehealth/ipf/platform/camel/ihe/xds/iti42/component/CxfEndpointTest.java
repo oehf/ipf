@@ -41,6 +41,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsReq
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
@@ -48,6 +49,9 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.Arrays;
+
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REGISTRY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.XDS_B;
 
 public class CxfEndpointTest {
     private final EbXMLFactory factory = new EbXMLFactory30();
@@ -141,8 +145,10 @@ public class CxfEndpointTest {
 
         @Override
         public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest rawReq) {
+            ValidationProfile profile = new ValidationProfile(false, XDS_B, REGISTRY);
+
             EbXMLSubmitObjectsRequest30 ebXMLReq = new EbXMLSubmitObjectsRequest30(rawReq);
-            reqValidator.validate(ebXMLReq, null);
+            reqValidator.validate(ebXMLReq, profile);
             RegisterDocumentSet request = reqTransformer.fromEbXML(ebXMLReq);
 
             Response response = new Response(Status.SUCCESS);
@@ -152,7 +158,7 @@ public class CxfEndpointTest {
             }
 
             EbXMLRegistryResponse ebXMLResp = respTransformer.toEbXML(response);
-            respValidator.validate(ebXMLResp, null);
+            respValidator.validate(ebXMLResp, profile);
             return (RegistryResponseType) ebXMLResp.getInternal();
         }
     }
