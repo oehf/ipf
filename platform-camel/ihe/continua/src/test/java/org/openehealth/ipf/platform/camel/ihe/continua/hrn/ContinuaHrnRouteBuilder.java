@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
-import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 
 import javax.activation.DataHandler;
 
@@ -44,7 +43,6 @@ public class ContinuaHrnRouteBuilder extends RouteBuilder {
             Class<?>[] expectedContentTypes = new Class<?>[] {
                     DataHandler.class,
                     byte[].class,
-                    ClinicalDocument.class
             };
             Document document = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
             for (Class<?> contentType : expectedContentTypes) {

@@ -20,5 +20,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate;
  * @author Dmytro Rud
  */
 public enum IheProfile {
-    XDS_A, XDS_B, XCA
+    XDS_A, XDS_B, XCA, ContinuaHRN;
+
+    public boolean isEbXml30Based() {
+        return (this == XDS_B) || (this == XCA) || (this == ContinuaHRN);
+    }
 }

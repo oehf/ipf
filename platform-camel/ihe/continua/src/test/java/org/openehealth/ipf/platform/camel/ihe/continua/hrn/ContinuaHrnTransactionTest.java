@@ -29,6 +29,7 @@ import org.apache.cxf.helpers.XMLUtils;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
@@ -104,6 +105,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
      * Test whether MDHT POJO can be used as input for Continua HRN.
      */
     @Test
+    @Ignore    // probably we will abandon MDHT
     public void testMdhtInputDatatype() throws Exception {
         String uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
 

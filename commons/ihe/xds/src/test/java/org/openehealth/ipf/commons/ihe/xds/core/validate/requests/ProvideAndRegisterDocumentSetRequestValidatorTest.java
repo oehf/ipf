@@ -38,6 +38,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     private ProvideAndRegisterDocumentSetRequestValidator validator;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
+    private ValidationProfile profile = new ValidationProfile(false, IheProfile.XDS_B, Actor.REPOSITORY);
     
     private DocumentEntry docEntry;
 
@@ -54,7 +55,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     
     @Test
     public void testValidateGoodCase() {
-        validator.validate(transformer.toEbXML(request), null);
+        validator.validate(transformer.toEbXML(request), profile);
     }
     
     @Test
@@ -68,30 +69,26 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     public void testValidateMissingDocEntryForDocument() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.addDocument("lol", SampleData.createDataHandler());
-        expectFailure(MISSING_DOC_ENTRY_FOR_DOCUMENT, ebXML);
+        expectFailure(MISSING_DOC_ENTRY_FOR_DOCUMENT, ebXML, profile);
     }
     
     @Test
     public void testValidateMissingDocumentForDocEntry() {
         EbXMLProvideAndRegisterDocumentSetRequest ebXML = transformer.toEbXML(request);
         ebXML.removeDocument("document01");
-        expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML);
+        expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML, profile);
     }
     
     @Test
     public void testRepositoryUniqueIdIsNotNecessary() {
         docEntry.setRepositoryUniqueId(null);
-        validator.validate(transformer.toEbXML(request), new ValidationProfile(false, IheProfile.XDS_B, Actor.REPOSITORY));
+        validator.validate(transformer.toEbXML(request), profile);
     }
     
     private void expectFailure(ValidationMessage expectedMessage) {
-        expectFailure(expectedMessage, transformer.toEbXML(request), null);
+        expectFailure(expectedMessage, transformer.toEbXML(request), profile);
     }
 
-    private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest ebXML) {
-        expectFailure(expectedMessage, ebXML, null);
-    }
-    
     private void expectFailure(ValidationMessage expectedMessage, EbXMLProvideAndRegisterDocumentSetRequest ebXML, ValidationProfile profile) {
         try {
             validator.validate(ebXML, profile);
