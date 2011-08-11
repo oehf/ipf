@@ -88,7 +88,7 @@ public class CxfEndpointTest {
         runRequestAndExpectFailure();
 
         ItiServiceFactory serviceFactory = new XdsServiceFactory(
-                Iti42Component.WS_CONFIG, null, "/iti-42", null);
+                Iti42Component.WS_CONFIG, null, "/iti-42", null, null);
         ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
         Server serviceServer = factory.create();
 

@@ -19,10 +19,12 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditDatasetEnrichmentInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditFinalInterceptor;
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 /**
  * Factory for XDS web-services.
@@ -41,14 +43,17 @@ public class XdsServiceFactory extends ItiServiceFactory {
      *          the address of the service that it should be published with.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
+     * @param rejectionHandlingStrategy
+     *          user-defined rejection handling strategy.
      */
     public XdsServiceFactory(
             ItiServiceInfo serviceInfo, 
             XdsAuditStrategy auditStrategy, 
             String serviceAddress,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors,
+            WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(serviceInfo, serviceAddress, customInterceptors);
+        super(serviceInfo, serviceAddress, customInterceptors, rejectionHandlingStrategy);
         this.auditStrategy = auditStrategy;
     }
     
@@ -65,7 +70,7 @@ public class XdsServiceFactory extends ItiServiceFactory {
             svrFactory.getOutFaultInterceptors().add(auditOutInterceptor);
             
             if(serviceInfo.isAuditRequestPayload()) {
-                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(true));
+                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
             }        
         }
     }

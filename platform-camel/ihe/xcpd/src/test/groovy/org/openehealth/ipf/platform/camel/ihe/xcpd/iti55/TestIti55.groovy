@@ -26,6 +26,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils
+import org.openehealth.ipf.platform.camel.xcpd.MyRejectionHandlingStrategy
 
 /**
  * Tests for ITI-55.
@@ -152,5 +153,21 @@ class TestIti55 extends StandardTestContainer {
         assert response.controlActProcess.reasonOf.detectedIssueEvent.mitigatedBy.detectedIssueManagement.code.@codeSystem == '1.3.6.1.4.1.19376.1.2.27.3'
         assert response.controlActProcess.queryAck.statusCode.@code == 'aborted'
         assert response.controlActProcess.queryAck.queryResponseCode.@code == 'AE'
+    }
+
+
+    /**
+     * Send some garbage to an XCPD endpoint (via raw HTTP, because we want to test
+     * consumer behaviour and therefore should avoid checks on the producer side),
+     * and check whether the rejection handling strategy works well.
+     */
+    @Test
+    void testRejectionHandling() {
+        def requestExchange = new DefaultExchange(camelContext)
+        requestExchange.in.body = '< some ill-formed XML !'
+        Exchanges.resultMessage(producerTemplate.send(
+                "http://localhost:${port}/iti55service",
+                requestExchange))
+        assert MyRejectionHandlingStrategy.count == 1
     }
 }

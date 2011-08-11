@@ -66,7 +66,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
 
 
         // responding route
-        from('xcpd-iti55:iti55service')
+        from('xcpd-iti55:iti55service?rejectionHandlingStrategy=#rejectionHandlingStrategy')
             .validate().iti55Request()
             .process {
                 // check incoming SOAP and HTTP headers

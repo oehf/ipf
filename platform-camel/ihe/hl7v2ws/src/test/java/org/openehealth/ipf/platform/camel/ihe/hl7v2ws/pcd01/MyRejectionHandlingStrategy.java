@@ -18,18 +18,20 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.message.Exchange;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsFailureHandler;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsRejectionHandlingStrategy;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*;
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractOutgoingException;
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractOutgoingPayload;
 
 /**
- * Sample failure handler.
+ * Sample rejection handling strategy.
  * @author Dmytro Rud
  */
-public class MyFailureHandler implements Hl7v2WsFailureHandler {
-    private static final Log LOG = LogFactory.getLog(MyFailureHandler.class);
+public class MyRejectionHandlingStrategy extends Hl7v2WsRejectionHandlingStrategy {
+    private static final Log LOG = LogFactory.getLog(MyRejectionHandlingStrategy.class);
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
@@ -42,12 +44,13 @@ public class MyFailureHandler implements Hl7v2WsFailureHandler {
     }
 
     @Override
-    public void handleFailedExchange(Exchange cxfExchange) {
+    public void handleRejectedExchange(Exchange cxfExchange) {
         StringBuilder sb = new StringBuilder()
-                .append("Handler invocation # ")
+                .append("Rejection strategy invocation # ")
                 .append(COUNTER.getAndIncrement())
                 .append(": request\n")
-                .append(cxfExchange.getInMessage().getContent(String.class))
+                .append(cxfExchange.getInMessage().getContent(StringPayloadHolder.class)
+                        .get(StringPayloadHolder.PayloadType.SOAP_BODY))
                 .append("\n lead to ");
 
         Exception exception = extractOutgoingException(cxfExchange);

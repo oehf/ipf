@@ -32,6 +32,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.Pcd01RouteBuilder">
     </bean>
 
-    <bean id="failureHandler" class="org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.MyFailureHandler" />
+    <bean id="rejectionHandlingStrategy"
+          class="org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.MyRejectionHandlingStrategy" />
 
 </beans>

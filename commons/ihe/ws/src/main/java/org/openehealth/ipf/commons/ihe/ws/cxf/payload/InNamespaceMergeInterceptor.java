@@ -32,6 +32,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
+
 /**
  * CXF interceptor which inserts XML namespace declarations from incoming 
  * SOAP Envelope and SOAP Body elements into the String payload.
@@ -49,7 +51,8 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        String payload = message.getContent(String.class);
+        StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
+        String payload = (payloadHolder != null) ? payloadHolder.get(SOAP_BODY) : null;
         if (isXmlContent(payload)) {
             Document document = (Document) message.getContent(Node.class);
             message.setContent(String.class, enrichNamespaces(document, payload));

@@ -26,37 +26,40 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import org.apache.camel.impl.DefaultExchange
+import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 
 /**
  * Tests the ITI-41 transaction with a webservice and client adapter defined via URIs.
  * @author Jens Riemschneider
  */
 class TestIti41 extends StandardTestContainer {
-    
+
     def static CONTEXT_DESCRIPTOR = 'iti-41.xml'
-    
+
     def SERVICE1 = "xds-iti41://localhost:${port}/xds-iti41-service1"
     def SERVICE2 = "xds-iti41://localhost:${port}/xds-iti41-service2"
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti41-service2"
-    
+
     def request
     def docEntry
-    
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
-    
+
     @BeforeClass
     static void classSetUp() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-    
+
     @Before
     void setUp() {
         request = SampleData.createProvideAndRegisterDocumentSet()
         docEntry = request.documents[0].documentEntry
     }
-    
+
     @Test
     void testIti41() {
         assert SUCCESS == sendIt(SERVICE1, 'service 1').status
@@ -64,17 +67,29 @@ class TestIti41 extends StandardTestContainer {
         assert auditSender.messages.size() == 4
         checkAudit('0')
     }
-    
+
     @Test
     void testIti41FailureAudit() {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 2
         checkAudit('8')
     }
-    
+
+    /**
+     * Send some garbage to an XDS endpoint (via raw HTTP, because we want to test
+     * consumer behaviour and therefore should avoid checks on the producer side),
+     * and check whether the rejection handling strategy works well.
+     */
+    @Test
+    void testRejectionHandling() {
+        def exchange = new DefaultExchange(camelContext)
+        exchange.in.body = '< some ill-formed XML !'
+        producerTemplate.send("http://localhost:${port}/xds-iti41-service1", exchange)
+        assert MyRejectionHandlingStrategy.count == 1
+    }
+
     void checkAudit(outcome) {
         def message = getAudit('C', SERVICE2_ADDR)[0]
-        
         assert message.AuditSourceIdentification.size() == 1
         assert message.ActiveParticipant.size() == 2
         assert message.ParticipantObjectIdentification.size() == 2
@@ -88,7 +103,6 @@ class TestIti41 extends StandardTestContainer {
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
         
         message = getAudit('R', SERVICE2_ADDR)[0]
-        
         assert message.AuditSourceIdentification.size() == 1
         assert message.ActiveParticipant.size() == 2
         assert message.ParticipantObjectIdentification.size() == 2
@@ -100,7 +114,7 @@ class TestIti41 extends StandardTestContainer {
         checkPatient(message.ParticipantObjectIdentification[0])
         checkSubmissionSet(message.ParticipantObjectIdentification[1])
     }
-    
+
     def sendIt(String endpoint, String value) {
         docEntry.comments = new LocalizedString(value)
         send(endpoint, request, Response.class)

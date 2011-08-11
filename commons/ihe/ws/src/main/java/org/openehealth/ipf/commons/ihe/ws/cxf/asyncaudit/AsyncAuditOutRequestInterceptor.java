@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
 /**
  * CXF interceptor for ATNA auditing in WS-based IHE transactions with
@@ -63,10 +64,11 @@ public class AsyncAuditOutRequestInterceptor extends AuditInterceptor {
         //   a) for HL7v3-based transactions, payload corresponds to the "main" message;
         //   b) for ebXML-based transactions, rely on the {@link OutPayloadExtractorInterceptor}.
         if (serviceInfo.isAuditRequestPayload()) {
-            String payload = (request instanceof String) ?
-                    (String) request :
-                    message.getContent(String.class);
-            auditDataset.setRequestPayload(payload);
+            if (request instanceof String) {
+                auditDataset.setRequestPayload((String) request);
+            } else {
+                auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));
+            }
         }
 
         getAuditStrategy().enrichDatasetFromRequest(request, auditDataset);

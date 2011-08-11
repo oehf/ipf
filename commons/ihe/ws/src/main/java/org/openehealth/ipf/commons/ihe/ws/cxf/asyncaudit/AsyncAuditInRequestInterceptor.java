@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
 /**
  * CXF interceptor for ATNA auditing in WS-based IHE transactions with
@@ -49,7 +50,7 @@ public class AsyncAuditInRequestInterceptor extends AuditInterceptor {
         extractAddressesFromServletRequest(message, auditDataset);
         
         if (serviceInfo.isAuditRequestPayload()) {
-            auditDataset.setRequestPayload(message.getContent(String.class));
+            auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));
         }
 
         getAuditStrategy().enrichDatasetFromRequest(extractPojo(message), auditDataset);

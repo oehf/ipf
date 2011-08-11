@@ -23,6 +23,7 @@ import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 /**
  * CXF interceptor that reads outgoing payload collected by the output 
@@ -53,6 +54,8 @@ public class OutPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mes
         }
         String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate();
         String payload = SoapUtils.extractSoapBody(soapEnvelope);
-        message.setContent(String.class, payload);
+        StringPayloadHolder payloadHolder = new StringPayloadHolder();
+        payloadHolder.put(SOAP_BODY, payload);
+        message.setContent(StringPayloadHolder.class, payloadHolder);
     }
 }

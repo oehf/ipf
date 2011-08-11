@@ -24,6 +24,7 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.ihe.ws.mbean.ManagedWsItiEndpoint;
+import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 
 /**
  * Camel endpoint used to create producers and consumers based on webservice calls.
@@ -83,6 +84,7 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     private AsynchronyCorrelator correlator = null;
     private InterceptorProvider customInterceptors = null;
     private String homeCommunityId = null;
+    private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
 
     /**
      * Constructs the endpoint.
@@ -115,7 +117,7 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     protected C getWebServiceConfiguration() {
         return ((AbstractWsComponent<C>) getComponent()).getWebServiceConfiguration();
     }
-    
+
     public Object getManagedObject(DefaultItiEndpoint<C> endpoint) {
         return new ManagedWsItiEndpoint(endpoint, getWebServiceConfiguration());
     }
@@ -158,7 +160,7 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     public boolean isAudit() {
         return audit;
     }
-    
+
     /**
      * @param audit
      *          <code>true</code> if auditing is turned on.
@@ -187,7 +189,6 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     /**
      * @return <code>true</code> if https should be used instead of http. Defaults
      *          to <code>false</code>.
-     *          
      */
     public boolean isSecure() {
         return secure;
@@ -208,7 +209,7 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     public void setCorrelator(AsynchronyCorrelator correlator) {
         this.correlator = correlator;
     }
-    
+
     /**
      * Returns the correlator.
      */
@@ -239,4 +240,21 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     public void setHomeCommunityId(String homeCommunityId) {
         this.homeCommunityId = homeCommunityId;
     }
+
+    /**
+     * @return
+     *      rejection handling strategy, if any configured.
+     */
+    public WsRejectionHandlingStrategy getRejectionHandlingStrategy() {
+        return rejectionHandlingStrategy;
+    }
+
+    /**
+     * @param rejectionHandlingStrategy
+     *      a rejection handling strategy instance.
+     */
+    public void setRejectionHandlingStrategy(WsRejectionHandlingStrategy rejectionHandlingStrategy) {
+        this.rejectionHandlingStrategy = rejectionHandlingStrategy;
+    }
+
 }

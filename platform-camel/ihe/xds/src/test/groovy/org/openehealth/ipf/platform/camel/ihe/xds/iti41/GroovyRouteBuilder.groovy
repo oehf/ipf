@@ -31,7 +31,7 @@ import javax.activation.DataHandler
 public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
-        from('xds-iti41:xds-iti41-service1')
+        from('xds-iti41:xds-iti41-service1?rejectionHandlingStrategy=#rejectionHandlingStrategy')
             .validate().iti41Request()
             .process { checkValue(it, 'service 1') }
             .validate().iti41Response()

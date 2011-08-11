@@ -20,6 +20,8 @@ import java.util.List;
 import org.apache.cxf.interceptor.ServiceInvokerInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
+
 import org.apache.cxf.phase.Phase;
 
 /**
@@ -48,9 +50,9 @@ public class InPayloadInjectorInterceptor extends AbstractPhaseInterceptor<Messa
     @Override
     public void handleMessage(Message message) {
         List list = message.getContent(List.class);
-        if (list != null) {
-            String payload = message.getContent(String.class);
-            list.set(position, payload);
+        StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
+        if ((list != null) && (payloadHolder != null)) {
+            list.set(position, payloadHolder.get(SOAP_BODY));
         }
     }
 }

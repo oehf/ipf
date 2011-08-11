@@ -51,8 +51,8 @@ http://cxf.apache.org/schemas/configuration/security.xsd
                 <sec:exclude>.*_DH_anon_.*</sec:exclude>
             </sec:cipherSuitesFilter>
         </http:tlsClientParameters>
-    </http:conduit> 
-      
+    </http:conduit>
+
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true" />
         <camel:routeBuilder ref="routeBuilder"/>        
@@ -79,5 +79,8 @@ http://cxf.apache.org/schemas/configuration/security.xsd
             </list>
         </property>
     </bean>
+
+    <bean id="rejectionHandlingStrategy"
+          class="org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy" />
 </beans>
         
