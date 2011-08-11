@@ -166,7 +166,7 @@ public class Pcd01Test extends StandardTestContainer {
         MBeanServer mbsc = getCamelContext().getManagementStrategy().getManagementAgent()
             .getMBeanServer();
         Set<ObjectName> s = CastUtils.cast(mbsc.queryNames(new ObjectName(
-                "org.apache.camel:*,type=endpoints,name=\"pcd-pcd01://devicedata\\?failureHandler=%23failureHandler\""), null));
+                "org.apache.camel:*,type=endpoints,name=\"pcd-pcd01://devicedata\\?rejectionHandlingStrategy=%23rejectionHandlingStrategy\""), null));
         assertEquals(1, s.size());
         ObjectName object = (ObjectName) s.toArray()[0];
         assertNotNull(object);

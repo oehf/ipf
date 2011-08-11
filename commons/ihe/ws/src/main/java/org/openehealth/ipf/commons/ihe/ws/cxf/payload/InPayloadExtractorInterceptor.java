@@ -77,7 +77,7 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
             bytes = IOUtils.readBytesFromStream(stream);
             message.setContent(InputStream.class, new ByteArrayInputStream(bytes));
         } catch (IOException e) {
-            throw new RuntimeException("Error when extracting SOAP payload", e);
+            throw new RuntimeException("Error when extracting payload", e);
         }
 
         // optionally extract SOAP Body from the SOAP Envelope
