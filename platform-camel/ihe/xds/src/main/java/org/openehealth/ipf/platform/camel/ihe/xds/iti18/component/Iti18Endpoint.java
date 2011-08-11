@@ -72,7 +72,8 @@ public class Iti18Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
                 getWebServiceConfiguration(),
                 isAudit() ? new Iti18ServerAuditStrategy(isAllowIncompleteAudit()) : null, 
                 getServiceAddress(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getRejectionHandlingStrategy());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti18Service.class);
         Server server = serverFactory.create();

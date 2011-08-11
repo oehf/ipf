@@ -17,8 +17,10 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
 import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
+
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 
 /**
@@ -64,6 +66,15 @@ public class WsAuditDataset extends AuditDataset {
      */
     public void setRequestPayload(String requestPayload) {
         this.requestPayload = requestPayload;
+    }
+
+    /**
+     * Sets the request SOAP Body (XML) payload.
+     * @param payloadHolder
+     *          POJO containing SOAP Body (XML) payload.
+     */
+    public void setRequestPayload(StringPayloadHolder payloadHolder) {
+        this.requestPayload = (payloadHolder != null) ? payloadHolder.get(SOAP_BODY) : null;
     }
 
     /**

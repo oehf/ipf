@@ -22,6 +22,7 @@ import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 
 /**
  * Camel endpoint used to create producers and consumers based on webservice calls.
@@ -78,6 +79,7 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     private AsynchronyCorrelator correlator = null;
     private InterceptorProvider customInterceptors = null;
     private String homeCommunityId = null;
+    private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
 
     /**
      * Constructs the endpoint.
@@ -229,4 +231,21 @@ public abstract class DefaultItiEndpoint<C extends ItiServiceInfo> extends Defau
     public void setHomeCommunityId(String homeCommunityId) {
         this.homeCommunityId = homeCommunityId;
     }
+
+    /**
+     * @return
+     *      rejection handling strategy, if any configured.
+     */
+    public WsRejectionHandlingStrategy getRejectionHandlingStrategy() {
+        return rejectionHandlingStrategy;
+    }
+
+    /**
+     * @param rejectionHandlingStrategy
+     *      a rejection handling strategy instance.
+     */
+    public void setRejectionHandlingStrategy(WsRejectionHandlingStrategy rejectionHandlingStrategy) {
+        this.rejectionHandlingStrategy = rejectionHandlingStrategy;
+    }
+
 }

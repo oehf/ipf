@@ -74,7 +74,8 @@ public class Iti56Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
                 getWebServiceConfiguration(),
                 isAudit() ? new Iti56ServerAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getRejectionHandlingStrategy());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti56Service.class);
         Server server = serverFactory.create();

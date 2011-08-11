@@ -18,10 +18,13 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
+
 
 /**
  * Factory for HL7 v3 Web Services.
@@ -37,19 +40,22 @@ public class Hl7v3ServiceFactory extends ItiServiceFactory {
      *          the address of the service that it should be published with.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
+     * @param rejectionHandlingStrategy
+     *          user-defined rejection handling strategy.
      */
     public Hl7v3ServiceFactory(
             Hl7v3ServiceInfo serviceInfo,
             String serviceAddress,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors,
+            WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(serviceInfo, serviceAddress, customInterceptors);
+        super(serviceInfo, serviceAddress, customInterceptors, rejectionHandlingStrategy);
     }
     
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
-        svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(true));
+        svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
         svrFactory.getInInterceptors().add(new InNamespaceMergeInterceptor());
         svrFactory.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
         svrFactory.setDataBinding(new PlainXmlDataBinding());

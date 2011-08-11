@@ -69,7 +69,8 @@ public class Iti44Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getRejectionHandlingStrategy());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti44Service.class);
         Server server = serverFactory.create();

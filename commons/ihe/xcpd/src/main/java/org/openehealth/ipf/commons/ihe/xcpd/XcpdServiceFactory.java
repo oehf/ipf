@@ -19,6 +19,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
@@ -40,14 +41,17 @@ public class XcpdServiceFactory extends Hl7v3ServiceFactory {
      *          the address of the service that it should be published with.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
+     * @param rejectionHandlingStrategy
+     *          user-defined rejection handling strategy.
      */
     public XcpdServiceFactory(
             Hl7v3ServiceInfo serviceInfo,
             WsAuditStrategy auditStrategy,
             String serviceAddress,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors,
+            WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(serviceInfo, serviceAddress, customInterceptors);
+        super(serviceInfo, serviceAddress, customInterceptors, rejectionHandlingStrategy);
         this.auditStrategy = auditStrategy;
     }
 

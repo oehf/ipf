@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.async.InRelatesToHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 /**
  * Service factory for receivers of asynchronous XCA responses.
@@ -55,7 +56,7 @@ public class XcaAsyncResponseServiceFactory extends ItiServiceFactory {
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceAddress, customInterceptors);
+        super(serviceInfo, serviceAddress, customInterceptors, null);
         
         Validate.notNull(correlator);
         this.correlator = correlator;
@@ -72,7 +73,7 @@ public class XcaAsyncResponseServiceFactory extends ItiServiceFactory {
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
             if (serviceInfo.isAuditRequestPayload()) {
-                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(true));
+                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
             }
 
             AsyncAuditResponseInterceptor auditInterceptor =

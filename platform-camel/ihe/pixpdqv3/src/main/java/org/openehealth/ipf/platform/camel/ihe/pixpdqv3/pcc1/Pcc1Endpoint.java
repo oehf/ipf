@@ -76,7 +76,8 @@ public class Pcc1Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceInf
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getRejectionHandlingStrategy());
 
         Pcc1PortType portTypeImpl = isSupportContinuation() ?
                 new Pcc1ContinuationAwareService(

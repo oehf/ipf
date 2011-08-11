@@ -70,7 +70,8 @@ public class Iti43Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
                 getWebServiceConfiguration(),
                 isAudit() ? new Iti43ServerAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getRejectionHandlingStrategy());
         ServerFactoryBean serverFactory =
             serviceFactory.createServerFactory(Iti43Service.class);
         Server server = serverFactory.create();

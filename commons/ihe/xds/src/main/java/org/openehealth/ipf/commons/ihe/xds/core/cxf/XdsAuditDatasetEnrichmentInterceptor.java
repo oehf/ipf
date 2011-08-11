@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
 
 /**
@@ -70,7 +71,7 @@ public class XdsAuditDatasetEnrichmentInterceptor extends AuditInterceptor {
         }
 
         // extract value prepared by (Client|Server)PayloadExctactorInterceptor
-        auditDataset.setRequestPayload(message.getContent(String.class));
+        auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));
         
         // perform transaction-specific audit dataset enrichment
         getAuditStrategy().enrichDatasetFromRequest(extractPojo(message), auditDataset);

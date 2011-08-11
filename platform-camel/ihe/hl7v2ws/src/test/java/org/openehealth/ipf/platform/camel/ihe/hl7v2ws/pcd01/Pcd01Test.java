@@ -29,8 +29,6 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.AbstractProducerInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 /**
  * 
@@ -50,7 +48,7 @@ public class Pcd01Test extends StandardTestContainer {
 
     @Before
     public void setUp() {
-        MyFailureHandler.resetCounter();
+        MyRejectionHandlingStrategy.resetCounter();
     }
 
     @Test
@@ -58,7 +56,7 @@ public class Pcd01Test extends StandardTestContainer {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
     
     @Test
@@ -66,7 +64,7 @@ public class Pcd01Test extends StandardTestContainer {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_validation";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
     
     @Test
@@ -74,14 +72,14 @@ public class Pcd01Test extends StandardTestContainer {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/route_inbound_and_outbound_validation";
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test(expected = Hl7v2AcceptanceException.class)
     public void testInacceptableRequestOnProducer() throws Exception {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         requestBody(uri, PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test
@@ -95,7 +93,7 @@ public class Pcd01Test extends StandardTestContainer {
         Exchange exchange = new DefaultExchange(getCamelContext());
         exchange.getIn().setBody(PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));
         processor.process(exchange);
-        assertEquals(1, MyFailureHandler.getCount());
+        assertEquals(1, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test
@@ -105,7 +103,7 @@ public class Pcd01Test extends StandardTestContainer {
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertTrue("The response message must contain the cause", response.contains("java.lang.RuntimeException"));
         assertTrue("On application error the request message id must be returned.", response.contains("MSA|AE|MSGID1234"));
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
     
     @Test
@@ -114,7 +112,7 @@ public class Pcd01Test extends StandardTestContainer {
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
     
     @Test
@@ -126,7 +124,7 @@ public class Pcd01Test extends StandardTestContainer {
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertTrue(response.contains("MSA|AE"));
         assertTrue(response.contains("OBX-4"));
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
 
     @Test
@@ -136,7 +134,7 @@ public class Pcd01Test extends StandardTestContainer {
         String response = requestBody(uri, PCD_01_SPEC_REQUEST);
         assertTrue(response.startsWith("MSH|^~\\&|"));
         assertResponseEquals(PCD_01_SPEC_RESPONSE, response);
-        assertEquals(0, MyFailureHandler.getCount());
+        assertEquals(0, MyRejectionHandlingStrategy.getCount());
     }
     
     @Test
@@ -148,7 +146,7 @@ public class Pcd01Test extends StandardTestContainer {
         assertTrue(response.contains("|ACK^R01^ACK|"));
         assertTrue(response.contains("MSA|AR|MSGID1234"));
         assertTrue(response.contains("ERR|||203^Unsupported version id^HL70357^^Invalid HL7 version 2.5|E|||Invalid HL7 version 2.5"));
-        assertEquals(1, MyFailureHandler.getCount());
+        assertEquals(1, MyRejectionHandlingStrategy.getCount());
     }
 
     private String requestBody(String uri, String msg) {

@@ -40,17 +40,17 @@ public class Pcd01RouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         
-    from("pcd-pcd01:devicedata?failureHandler=#failureHandler")
+    from("pcd-pcd01:devicedata?rejectionHandlingStrategy=#rejectionHandlingStrategy")
         .onException(Exception.class)
             .maximumRedeliveries(0)
             .end()
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
-    from("pcd-pcd01:route_throws_exception?failureHandler=#failureHandler")
+    from("pcd-pcd01:route_throws_exception?rejectionHandlingStrategy=#rejectionHandlingStrategy")
         .throwException(new RuntimeException())
         .process(setOutBody(PCD_01_SPEC_RESPONSE));
     
-    from("pcd-pcd01:route_unacceptable_response?failureHandler=#failureHandler")
+    from("pcd-pcd01:route_unacceptable_response?rejectionHandlingStrategy=#rejectionHandlingStrategy")
         .process(setOutBody(PCD_01_SPEC_RESPONSE_INVALID));
 
     from("pcd-pcd01:route_inbound_validation")

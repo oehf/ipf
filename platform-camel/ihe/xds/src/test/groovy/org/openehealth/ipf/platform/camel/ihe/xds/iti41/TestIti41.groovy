@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import org.apache.camel.impl.DefaultExchange
+import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 
 /**
  * Tests the ITI-41 transaction with a webservice and client adapter defined via URIs.
@@ -63,6 +65,19 @@ class TestIti41 extends StandardTestContainer {
         assert FAILURE == sendIt(SERVICE2, 'falsch').status
         assert auditSender.messages.size() == 2
         checkAudit('8')
+    }
+
+    /**
+     * Send some garbage to an XDS endpoint (via raw HTTP, because we want to test
+     * consumer behaviour and therefore should avoid checks on the producer side),
+     * and check whether the rejection handling strategy works well.
+     */
+    @Test
+    void testRejectionHandling() {
+        def exchange = new DefaultExchange(camelContext)
+        exchange.in.body = '< some ill-formed XML !'
+        producerTemplate.send("http://localhost:${port}/xds-iti41-service1", exchange)
+        assert MyRejectionHandlingStrategy.count == 1
     }
     
     void checkAudit(outcome) {        

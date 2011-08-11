@@ -75,7 +75,8 @@ public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceIn
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
-                getCustomInterceptors());
+                getCustomInterceptors(),
+                getRejectionHandlingStrategy());
 
         Iti47PortType portTypeImpl = isSupportContinuation() ?
                 new Iti47ContinuationAwareService(

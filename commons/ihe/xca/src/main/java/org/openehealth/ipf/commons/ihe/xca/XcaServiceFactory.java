@@ -19,10 +19,12 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.asyncaudit.AsyncAuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 /**
  * Service factory for XCPD.
@@ -41,14 +43,17 @@ public class XcaServiceFactory extends ItiServiceFactory {
      *          the address of the service that it should be published with.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
+     * @param rejectionHandlingStrategy
+     *          user-defined rejection handling strategy.
      */
     public XcaServiceFactory(
             ItiServiceInfo serviceInfo,
             WsAuditStrategy auditStrategy,
             String serviceAddress,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors,
+            WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(serviceInfo, serviceAddress, customInterceptors);
+        super(serviceInfo, serviceAddress, customInterceptors, rejectionHandlingStrategy);
         this.auditStrategy = auditStrategy;
     }
 
@@ -59,7 +64,7 @@ public class XcaServiceFactory extends ItiServiceFactory {
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
             if (serviceInfo.isAuditRequestPayload()) {
-                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(true));
+                svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
             }
 
             svrFactory.getInInterceptors().add(new AsyncAuditInRequestInterceptor(

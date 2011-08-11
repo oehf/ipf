@@ -52,9 +52,9 @@ public class XcpdAsyncResponseServiceFactory extends Hl7v3ServiceFactory {
             WsAuditStrategy auditStrategy,
             String serviceAddress,
             AsynchronyCorrelator correlator,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors)
     {
-        super(serviceInfo, serviceAddress, customInterceptors);
+        super(serviceInfo, serviceAddress, customInterceptors, null);
         
         Validate.notNull(correlator);
         this.correlator = correlator;

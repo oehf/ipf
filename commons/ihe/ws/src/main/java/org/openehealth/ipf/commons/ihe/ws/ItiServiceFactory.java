@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
-import java.util.Collections;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapBindingConfiguration;
@@ -24,7 +22,14 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.ws.addressing.WSAddressingFeature;
+import org.openehealth.ipf.commons.ihe.ws.cxf.RejectionHandlerInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsSecurityUnderstandingInInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+
+import java.util.Collections;
+
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.HTTP;
 
 /**
  * Factory for ITI web-services.
@@ -41,6 +46,11 @@ public class ItiServiceFactory {
      * User-defined custom CXF interceptors.
      */
     protected final InterceptorProvider customInterceptors;
+    /**
+     * User-defined strategy for handling rejected messages.
+     */
+    protected final WsRejectionHandlingStrategy rejectionHandlingStrategy;
+
 
     /**
      * Constructs the factory.
@@ -50,15 +60,20 @@ public class ItiServiceFactory {
      *          the address of the service that it should be published with.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
+     * @param rejectionHandlingStrategy
+     *          user-defined rejection handling strategy.
+     *
      */
     public ItiServiceFactory(
             ItiServiceInfo serviceInfo, 
             String serviceAddress,
-            InterceptorProvider customInterceptors) 
+            InterceptorProvider customInterceptors,
+            WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
         this.serviceInfo = serviceInfo;
         this.serviceAddress = serviceAddress;
         this.customInterceptors = customInterceptors;
+        this.rejectionHandlingStrategy = rejectionHandlingStrategy;
     }
     
     /**
@@ -136,6 +151,17 @@ public class ItiServiceFactory {
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
         InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, svrFactory);
+
+        if (rejectionHandlingStrategy != null) {
+            svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(HTTP));
+
+            RejectionHandlerInterceptor rejectionHandlerInterceptor =
+                    new RejectionHandlerInterceptor(rejectionHandlingStrategy);
+
+            svrFactory.getOutInterceptors().add(rejectionHandlerInterceptor);
+            svrFactory.getOutFaultInterceptors().add(rejectionHandlerInterceptor);
+        }
+
     }
 
 
