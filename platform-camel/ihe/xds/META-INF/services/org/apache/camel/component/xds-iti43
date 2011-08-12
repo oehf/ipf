@@ -9,4 +9,4 @@
 
 # Camel registration for the xds-iti43 component
  
-class=org.openehealth.ipf.platform.camel.ihe.xds.iti43.component.Iti43Component
+class=org.openehealth.ipf.platform.camel.ihe.xds.iti43.Iti43Component

@@ -21,7 +21,6 @@ import org.apache.commons.io.IOUtils
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet
 
 /**
  * Tests the ITI-17 transaction with a webservice and client adapter defined via URIs.

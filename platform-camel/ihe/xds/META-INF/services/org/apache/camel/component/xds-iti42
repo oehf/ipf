@@ -9,4 +9,4 @@
 
 # Camel registration for the xds-iti42 component
  
-class=org.openehealth.ipf.platform.camel.ihe.xds.iti42.component.Iti42Component
+class=org.openehealth.ipf.platform.camel.ihe.xds.iti42.Iti42Component

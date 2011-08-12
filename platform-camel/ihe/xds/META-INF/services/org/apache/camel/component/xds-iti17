@@ -9,4 +9,4 @@
 
 # Camel registration for the xds-iti17 component
 
-class=org.openehealth.ipf.platform.camel.ihe.xds.iti17.component.Iti17Component
+class=org.openehealth.ipf.platform.camel.ihe.xds.iti17.Iti17Component

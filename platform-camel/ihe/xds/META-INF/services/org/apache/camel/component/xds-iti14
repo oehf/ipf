@@ -9,4 +9,4 @@
 
 # Camel registration for the xds-iti14 component
  
-class=org.openehealth.ipf.platform.camel.ihe.xds.iti14.component.Iti14Component
+class=org.openehealth.ipf.platform.camel.ihe.xds.iti14.Iti14Component

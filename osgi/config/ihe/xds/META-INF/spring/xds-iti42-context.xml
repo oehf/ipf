@@ -10,6 +10,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="classpath:META-INF/cxf/osgi/cxf-extension-osgi.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-extension-addr.xml"/>
 
-    <bean id="xds-iti42" class="org.openehealth.ipf.platform.camel.ihe.xds.iti42.component.Iti42Component"/>
+    <bean id="xds-iti42" class="org.openehealth.ipf.platform.camel.ihe.xds.iti42.Iti42Component"/>
 
 </beans>

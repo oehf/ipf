@@ -33,6 +33,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RetrieveDocum
 
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REGISTRY;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REPOSITORY;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.XCA;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.XDS_B;
 
 /**
@@ -63,6 +64,46 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         }
     };    
     
+    private static final Processor ITI_38_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            EbXMLAdhocQueryRequest30 message =
+                new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
+            ValidationProfile profile = new ValidationProfile(true, XCA, REGISTRY);
+            new AdhocQueryRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_38_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            EbXMLQueryResponse30 message =
+                new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
+            ValidationProfile profile = new ValidationProfile(true, XCA, REGISTRY);
+            new QueryResponseValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_39_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            EbXMLRetrieveDocumentSetRequest30 message =
+                new EbXMLRetrieveDocumentSetRequest30(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
+            ValidationProfile profile = new ValidationProfile(false, XCA, REPOSITORY);
+            new RetrieveDocumentSetRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_39_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            EbXMLRetrieveDocumentSetResponse30 message =
+                new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
+            ValidationProfile profile = new ValidationProfile(false, XCA, REPOSITORY);
+            new RetrieveDocumentSetResponseValidator().validate(message, profile);
+        }
+    };
+
     private static final Processor ITI_41_REQUEST_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
@@ -134,6 +175,34 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
      */
     public static Processor iti18ResponseValidator() {
         return ITI_18_RESPONSE_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-38 request messages.
+     */
+    public static Processor iti38RequestValidator() {
+        return ITI_38_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-38 response messages.
+     */
+    public static Processor iti38ResponseValidator() {
+        return ITI_38_RESPONSE_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-39 request messages.
+     */
+    public static Processor iti39RequestValidator() {
+        return ITI_39_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-39 response messages.
+     */
+    public static Processor iti39ResponseValidator() {
+        return ITI_39_RESPONSE_VALIDATOR;
     }
 
     /**

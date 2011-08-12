@@ -1,12 +1,12 @@
 /*
- * Copyright 2009 the original author or authors.
- * 
+ * Copyright 2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,55 +19,65 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditDatasetEnrichmentInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.cxf.XdsAuditFinalInterceptor;
 
 /**
- * Factory for XDS web-service stubs.
- * @author Jens Riemschneider
+ * Client factory for XDS and XCA transactions.
+ * @author Jens Riemschneide
+ * @author Dmytro Rud
  */
 public class XdsClientFactory extends ItiClientFactory {
     private final XdsAuditStrategy auditStrategy;
-
+    private final AsynchronyCorrelator correlator;
+    
     /**
      * Constructs the factory.
      * @param serviceInfo
      *          the info about the web-service.
      * @param auditStrategy
      *          the audit strategy to use.
-     * @param serviceUrl
+     * @param serviceAddress
      *          the URL of the web-service.
+     * @param correlator
+     *          asynchrony correlator.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
      */
     public XdsClientFactory(
             ItiServiceInfo serviceInfo,
-            XdsAuditStrategy auditStrategy, 
-            String serviceUrl,
+            XdsAuditStrategy auditStrategy,
+            String serviceAddress,
+            AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceUrl, customInterceptors);
+        super(serviceInfo, serviceAddress, customInterceptors);
         this.auditStrategy = auditStrategy;
+        this.correlator = correlator;
     }
 
-
+    
     @Override
     protected void configureInterceptors(Client client) {
         super.configureInterceptors(client);
-        
-        // install auditing-related interceptors if the user has not switched
-        // auditing off
-        if (auditStrategy != null) {
-            client.getOutInterceptors().add(new XdsAuditDatasetEnrichmentInterceptor(auditStrategy, false));
-            XdsAuditFinalInterceptor finalInterceptor = new XdsAuditFinalInterceptor(auditStrategy, false);
-            client.getInInterceptors().add(finalInterceptor);
-            client.getInFaultInterceptors().add(finalInterceptor);
+        client.getInInterceptors().add(new InPartialResponseHackInterceptor());
 
-            // install payload collecting interceptors  
-            if(serviceInfo.isAuditRequestPayload()) {
+        // install auditing-related interceptors if the user has not switched auditing off
+        if (auditStrategy != null) {
+            if (serviceInfo.isAuditRequestPayload()) {
                 installPayloadInterceptors(client);
             }
+
+            client.getOutInterceptors().add(new AuditOutRequestInterceptor(
+                    auditStrategy, correlator, getServiceInfo()));
+
+            AuditResponseInterceptor auditInterceptor =
+                new AuditResponseInterceptor(auditStrategy, false, correlator, false);
+            client.getInInterceptors().add(auditInterceptor);
+            client.getInFaultInterceptors().add(auditInterceptor);
         }
     }
 }

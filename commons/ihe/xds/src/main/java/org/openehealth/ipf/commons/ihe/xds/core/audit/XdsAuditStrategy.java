@@ -93,6 +93,6 @@ public abstract class XdsAuditStrategy extends WsAuditStrategy {
 
     @Override
     public void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset) throws Exception {
-        // not used in XDS
+        auditDataset.setEventOutcomeCode(getEventOutcomeCode(response));
     }
 }

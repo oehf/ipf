@@ -32,7 +32,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Audit strategy for ITI-41.
  * @author Dmytro Rud
  */
-abstract public class Iti41AuditStrategy extends XdsAuditStrategy {
+abstract class Iti41AuditStrategy extends XdsAuditStrategy {
 
     /**
      * Constructs the audit strategy.

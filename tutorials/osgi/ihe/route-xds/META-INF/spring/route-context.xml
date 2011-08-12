@@ -35,7 +35,7 @@ http://www.springframework.org/schema/osgi/spring-osgi.xsd">
     </bean>
 
     <bean id="iti17Servlet"
-        class="org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet.Iti17Servlet">
+        class="org.openehealth.ipf.platform.camel.ihe.xds.iti17.Iti17Servlet">
         <property name="context" ref="camelContext" />
     </bean>
 </beans>
