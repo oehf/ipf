@@ -13,21 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
-
-import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-
-import java.util.Map;
+package org.openehealth.ipf.commons.ihe.hl7v3;
 
 /**
+ * IDs of interactions (transactions) supported in IPF out-of-the-box.
  * @author Dmytro Rud
  */
-abstract public class AbstractIti44Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
-    @SuppressWarnings("unchecked") // Required because of base class
-    @Override
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti44Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
-    }
+public enum IpfInteractionId {
+    ITI_8,
+    ITI_9,
+    ITI_10,
+    ITI_14,
+    ITI_15,
+    ITI_16,
+    ITI_17,
+    ITI_18,
+    ITI_21,
+    ITI_22,
+    ITI_38,
+    ITI_39,
+    ITI_41,
+    ITI_42,
+    ITI_43,
+    ITI_44_PIX,
+    ITI_44_XDS,
+    ITI_45,
+    ITI_46,
+    ITI_47,
+    ITI_55,
+    ITI_56,
+
+    PCC_1,
+
+    PCD_01,
+
+    Continua_WAN,
+    Continua_HRN
 }

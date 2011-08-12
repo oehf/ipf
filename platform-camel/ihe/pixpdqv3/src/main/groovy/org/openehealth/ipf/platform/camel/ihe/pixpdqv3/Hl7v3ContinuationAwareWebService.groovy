@@ -23,12 +23,13 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.pixpdqv3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.platform.camel.ihe.pixpdqv3.Hl7v3ContinuationUtils.parseInt
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -44,7 +45,7 @@ public class Hl7v3ContinuationAwareWebService
 
     private static final String XSLT_TEMPLATE = 'xslt/hl7v3-continuations-fragmentize.xslt'
     private static final XsltTransmogrifier XSLT_TRANSMOGRIFIER = new XsltTransmogrifier(String.class)
-    private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator()
+    private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
     private final Hl7v3ContinuationStorage storage
     private final int defaultThreshold
@@ -94,7 +95,8 @@ public class Hl7v3ContinuationAwareWebService
         // validate request
         if (validation) {
             try {
-                VALIDATOR.validate(requestString, serviceInfo.getRequestValidationProfiles())
+                VALIDATOR.validate(requestString,
+                        Hl7v3ValidationProfiles.getRequestValidationProfile(serviceInfo.getInteractionId()))
             } catch (ValidationException e) {
                 LOG.error('operation(): invalid request')
                 return createNak(requestString, e)
@@ -106,7 +108,8 @@ public class Hl7v3ContinuationAwareWebService
 
         // validate response -- exception will go to the service route
         if (validation) {
-            VALIDATOR.validate(responseString, serviceInfo.getResponseValidationProfiles())
+            VALIDATOR.validate(responseString,
+                    Hl7v3ValidationProfiles.getResponseValidationProfile(serviceInfo.getInteractionId()))
         }
 
         // process
@@ -148,7 +151,8 @@ public class Hl7v3ContinuationAwareWebService
         // validate
         if (validation) {
             try {
-                VALIDATOR.validate(requestString, serviceInfo.getRequestValidationProfiles())
+                VALIDATOR.validate(requestString,
+                        Hl7v3ValidationProfiles.getRequestValidationProfile(serviceInfo.getInteractionId()))
             } catch (ValidationException e) {
                 LOG.error('continuation(): invalid request')
                 def nak = createNak(requestString, e)
@@ -202,7 +206,8 @@ public class Hl7v3ContinuationAwareWebService
         // validate
         if (validation) {
             try {
-                VALIDATOR.validate(requestString, serviceInfo.getRequestValidationProfiles())
+                VALIDATOR.validate(requestString,
+                        Hl7v3ValidationProfiles.getRequestValidationProfile(serviceInfo.getInteractionId()))
             } catch (ValidationException e) {
                 LOG.error('cancel(): invalid request')
                 return createNak(requestString, e)

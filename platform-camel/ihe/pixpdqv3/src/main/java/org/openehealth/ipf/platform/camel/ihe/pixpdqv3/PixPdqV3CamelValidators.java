@@ -17,42 +17,30 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44.Iti44PixComponent;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti45.Iti45Component;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti46.Iti46Component;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti47.Iti47Component;
-import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.pcc1.Pcc1Component;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.*;
 
 /**
  * Validating processors for HL7v3-based IPF components.
  * @author Dmytro Rud
  */
 abstract public class PixPdqV3CamelValidators {
-    private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator();
+    private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator();
 
-    private static final Processor ITI_44_REQUEST_VALIDATOR = 
-            validatingProcessor(Iti44PixComponent.WS_CONFIG, true);
-    private static final Processor ITI_44_RESPONSE_VALIDATOR = 
-            validatingProcessor(Iti44PixComponent.WS_CONFIG, false);
-    private static final Processor ITI_45_REQUEST_VALIDATOR = 
-            validatingProcessor(Iti45Component.WS_CONFIG, true);
-    private static final Processor ITI_45_RESPONSE_VALIDATOR = 
-            validatingProcessor(Iti45Component.WS_CONFIG, false);
-    private static final Processor ITI_46_REQUEST_VALIDATOR = 
-            validatingProcessor(Iti46Component.WS_CONFIG, true);
-    private static final Processor ITI_46_RESPONSE_VALIDATOR = 
-            validatingProcessor(Iti46Component.WS_CONFIG, false);
-    private static final Processor ITI_47_REQUEST_VALIDATOR = 
-            validatingProcessor(Iti47Component.WS_CONFIG, true);
-    private static final Processor ITI_47_RESPONSE_VALIDATOR = 
-            validatingProcessor(Iti47Component.WS_CONFIG, false);
+    private static final Processor ITI_44_REQUEST_VALIDATOR =  validatingProcessor(ITI_44_PIX, true);
+    private static final Processor ITI_44_RESPONSE_VALIDATOR = validatingProcessor(ITI_44_PIX, false);
+    private static final Processor ITI_45_REQUEST_VALIDATOR =  validatingProcessor(ITI_45, true);
+    private static final Processor ITI_45_RESPONSE_VALIDATOR = validatingProcessor(ITI_45, false);
+    private static final Processor ITI_46_REQUEST_VALIDATOR =  validatingProcessor(ITI_46, true);
+    private static final Processor ITI_46_RESPONSE_VALIDATOR = validatingProcessor(ITI_46, false);
+    private static final Processor ITI_47_REQUEST_VALIDATOR =  validatingProcessor(ITI_47, true);
+    private static final Processor ITI_47_RESPONSE_VALIDATOR = validatingProcessor(ITI_47, false);
 
-    private static final Processor PCC_1_REQUEST_VALIDATOR =
-            validatingProcessor(Pcc1Component.WS_CONFIG, true);
-    private static final Processor PCC_1_RESPONSE_VALIDATOR =
-            validatingProcessor(Pcc1Component.WS_CONFIG, false);
+    private static final Processor PCC_1_REQUEST_VALIDATOR =   validatingProcessor(PCC_1, true);
+    private static final Processor PCC_1_RESPONSE_VALIDATOR =  validatingProcessor(PCC_1, false);
 
     
     /**
@@ -137,26 +125,25 @@ abstract public class PixPdqV3CamelValidators {
 
 
     private static Processor validatingProcessor(
-            final Hl7v3ServiceInfo serviceInfo,
+            final IpfInteractionId interactionId,
             final boolean request)
     {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidation(exchange, serviceInfo, request);
+                doValidation(exchange, interactionId, request);
             }
         };
     }
 
     private static void doValidation(
             Exchange exchange,
-            Hl7v3ServiceInfo serviceInfo,
+            IpfInteractionId interactionId,
             boolean request)
     {
         String message = exchange.getIn().getBody(String.class);
-        String[][] profiles = request ?
-                serviceInfo.getRequestValidationProfiles() :
-                serviceInfo.getResponseValidationProfiles();
-        VALIDATOR.validate(message, profiles);
+        VALIDATOR.validate(message, request
+                ? Hl7v3ValidationProfiles.getRequestValidationProfile(interactionId)
+                : Hl7v3ValidationProfiles.getResponseValidationProfile(interactionId));
     }
 }

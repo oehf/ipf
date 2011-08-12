@@ -15,13 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.pixpdqv3.translation
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils;
+import org.junit.BeforeClass
+import org.junit.Test
+import org.openehealth.ipf.commons.ihe.pixpdq.definitions.CustomModelClassUtils
+import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.ITI_47
 
 /**
  * Unit test for PDQ translator.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek VÃ¡clavÃ­k, Dmytro Rud
  */
 class PdqTranslatorTest extends Hl7TranslationTestContainer {
 
@@ -38,13 +39,13 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
 
     @Test
     void testPdqQuery() {
-        doTestV3toV2RequestTranslation('PDQ_Maximal_Query', 21, 47)
-        doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, 47, parser)
-        doTestV2toV3ResponseTranslation('PDQ', 21, 47, parser)
+        doTestV3toV2RequestTranslation('PDQ_Maximal_Query', 21, ITI_47)
+        doTestV2toV3ResponseTranslation('PDQ_Maximal_Query', 21, ITI_47, parser)
+        doTestV2toV3ResponseTranslation('PDQ', 21, ITI_47, parser)
     }
      
     @Test
     void testResponseWithPid4() {
-        doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, 47, parser)
+        doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, ITI_47, parser)
     }
 }

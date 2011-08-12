@@ -31,8 +31,9 @@ import org.w3c.dom.NodeList
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -48,7 +49,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class);
 
     private static final ThreadLocal<DocumentBuilder> DOM_BUILDERS = new DomBuildersThreadLocal()
-    private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator()
+    private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
     private final Hl7v3ContinuationAwareServiceInfo serviceInfo;
 
@@ -143,7 +144,8 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
         while (true) {
             // validate current fragment 
             if (validationOnContinuation) {
-                VALIDATOR.validate(fragmentString, serviceInfo.responseValidationProfiles)
+                VALIDATOR.validate(fragmentString,
+                        Hl7v3ValidationProfiles.getResponseValidationProfile(serviceInfo.getInteractionId()))
             }
 
             Document fragment = DOM_BUILDERS.get().parse(new ByteArrayInputStream(fragmentString.getBytes()))

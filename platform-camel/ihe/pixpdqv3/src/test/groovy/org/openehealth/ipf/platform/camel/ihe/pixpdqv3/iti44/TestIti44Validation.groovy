@@ -17,7 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44
 
 import org.junit.Test
 import org.apache.commons.io.IOUtils
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
+import org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId
 
 /**
  * @author Dmytro Rud
@@ -32,20 +35,21 @@ class TestIti44Validation {
 
     @Test
     void testIti44Validation() {
-        Hl7v3Validator validator = new Hl7v3Validator()
-        String[][] validationProfiles = Iti44PixComponent.WS_CONFIG.getRequestValidationProfiles()
+        CombinedXmlValidator validator = new CombinedXmlValidator()
+        CombinedXmlValidationProfile validationProfile =
+            Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX)
         String message
 
         // 301
         message = readFile('iti44/PIX_FEED_REG_Maximal_Request.xml')
-        validator.validate(message, validationProfiles)
+        validator.validate(message, validationProfile)
 
         // 302
         message = readFile('iti44/PIX_FEED_REV_Maximal_Request.xml')
-        validator.validate(message, validationProfiles)
+        validator.validate(message, validationProfile)
 
         // 304
         message = readFile('iti44/PIX_FEED_MERGE_Maximal_Request.xml')
-        validator.validate(message, validationProfiles)
+        validator.validate(message, validationProfile)
     }
 }

@@ -17,26 +17,24 @@ package org.openehealth.ipf.platform.camel.ihe.xcpd;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
-import org.openehealth.ipf.platform.camel.ihe.xcpd.iti55.Iti55Component;
-import org.openehealth.ipf.platform.camel.ihe.xcpd.iti56.Iti56Component;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.ITI_55;
+import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.ITI_56;
 
 /**
  * Validating processors for IPF XCPD components.
  * @author Dmytro Rud
  */
 abstract public class XcpdCamelValidators {
-    private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator();
+    private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator();
 
-    private static final Processor ITI_55_REQUEST_VALIDATOR =
-            validatingProcessor(Iti55Component.WS_CONFIG, true);
-    private static final Processor ITI_55_RESPONSE_VALIDATOR =
-            validatingProcessor(Iti55Component.WS_CONFIG, false);
-    private static final Processor ITI_56_REQUEST_VALIDATOR  =
-            validatingProcessor(Iti56Component.WS_CONFIG, true);
-    private static final Processor ITI_56_RESPONSE_VALIDATOR =
-            validatingProcessor(Iti56Component.WS_CONFIG, false);
+    private static final Processor ITI_55_REQUEST_VALIDATOR =  validatingProcessor(ITI_55, true);
+    private static final Processor ITI_55_RESPONSE_VALIDATOR = validatingProcessor(ITI_55, false);
+    private static final Processor ITI_56_REQUEST_VALIDATOR =  validatingProcessor(ITI_56, true);
+    private static final Processor ITI_56_RESPONSE_VALIDATOR = validatingProcessor(ITI_56, false);
 
 
     /**
@@ -73,26 +71,25 @@ abstract public class XcpdCamelValidators {
     
     
     private static Processor validatingProcessor(
-            final Hl7v3ServiceInfo serviceInfo,
+            final IpfInteractionId interactionId,
             final boolean request)
     {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                doValidation(exchange, serviceInfo, request);
+                doValidation(exchange, interactionId, request);
             }
         };
     }
 
     private static void doValidation(
             Exchange exchange,
-            Hl7v3ServiceInfo serviceInfo,
+            IpfInteractionId interactionId,
             boolean request)
     {
         String message = exchange.getIn().getBody(String.class);
-        String[][] profiles = request ?
-                serviceInfo.getRequestValidationProfiles() :
-                serviceInfo.getResponseValidationProfiles();
-        VALIDATOR.validate(message, profiles);
+        VALIDATOR.validate(message, request
+                ? Hl7v3ValidationProfiles.getRequestValidationProfile(interactionId)
+                : Hl7v3ValidationProfiles.getResponseValidationProfile(interactionId));
     }
 }

@@ -24,9 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
-import org.openehealth.ipf.commons.xml.SchematronProfile;
-import org.openehealth.ipf.commons.xml.SchematronValidator;
-import org.openehealth.ipf.commons.xml.XsdValidator;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 import org.openehealth.ipf.modules.cda.CDAR2Constants;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators;
 
@@ -34,6 +33,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.util.Collections;
+import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REPOSITORY;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.ContinuaHRN;
@@ -65,13 +65,11 @@ abstract public class ContinuaHrnCamelProcessors {
 
             // Document content type enrichment: create byte array and String
             Document document = request.getDocuments().get(0);
-            byte[] bytes = document.getContent(byte[].class);
+            byte[] documentBytes = document.getContent(byte[].class);
+            String documentString = document.getContent(String.class);
 
-            // perform PHMR-specific XML Schema and Schematron validations
-            new XsdValidator().validate(getSource(bytes), CDAR2Constants.CDAR2_SCHEMA);
-            new SchematronValidator().validate(getSource(bytes),
-                    new SchematronProfile(CDAR2Constants.CDA_PHMR_SCHEMATRON_RULES,
-                            Collections.<String, Object> singletonMap("phase", "errors")));
+            // perform PHMR-specific validations
+            new CombinedXmlValidator().validate(documentString, new PhmrValidationProfile());
         }
     };
 
@@ -101,4 +99,27 @@ abstract public class ContinuaHrnCamelProcessors {
         return XdsCamelValidators.iti41ResponseValidator();
     }
 
+
+
+    private static class PhmrValidationProfile implements CombinedXmlValidationProfile {
+        @Override
+        public boolean isValidRootElement(String rootElementName) {
+            return "ClinicalDocument".equals(rootElementName);
+        }
+
+        @Override
+        public String getXsdPath(String rootElementName) {
+            return CDAR2Constants.CDAR2_SCHEMA;
+        }
+
+        @Override
+        public String getSchematronPath(String rootElementName) {
+            return CDAR2Constants.CDA_PHMR_SCHEMATRON_RULES;
+        }
+
+        @Override
+        public Map<String, Object> getCustomSchematronParameters() {
+            return Collections.<String, Object>singletonMap("phase", "errors");
+        }
+    }
 }

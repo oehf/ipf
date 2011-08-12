@@ -19,12 +19,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.ITI_46;
 
 /**
  * Test for PIX Update Notification translator.
- * @author Marek V�clav�k, Dmytro Rud
+ * @author Marek Václavík, Dmytro Rud
  */
 class PixUpdateNotificationTranslatorTest extends Hl7TranslationTestContainer {
 
@@ -39,8 +39,8 @@ class PixUpdateNotificationTranslatorTest extends Hl7TranslationTestContainer {
     void test1() {
         String v2notification = getFileContent('adt-a31-1', false, true)
         MessageAdapter msg = MessageAdapters.make(v2notification)
-        String v3notification = v2tov3Translator.translateV2toV3(msg)
-        new Hl7v3Validator().validate(v3notification, Hl7v3ValidationProfiles.REQUEST_TYPES['iti-46'])
+        String v3notification = v2tov3Translator.translateV2toV3(msg, null)
+        V3_VALIDATOR.validate(v3notification, Hl7v3ValidationProfiles.getRequestValidationProfile(ITI_46))
     }
     
 }

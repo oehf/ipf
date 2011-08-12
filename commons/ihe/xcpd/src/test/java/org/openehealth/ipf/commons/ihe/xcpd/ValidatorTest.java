@@ -16,37 +16,31 @@
 package org.openehealth.ipf.commons.ihe.xcpd;
 
 import org.apache.cxf.helpers.IOUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
+
+import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.ITI_55;
 
 /**
- * 
- * @author Boris Stanoojevic
+ * @author Boris Stanojevic
  */
 public class ValidatorTest {
     
     @Test
     public void testValidateSchematronOk() throws Exception {
-        String message = IOUtils.readStringFromStream(getClass()
-                .getResourceAsStream("/schematron/prpa-valid.xml"));
-        Hl7v3Validator validator = new Hl7v3Validator();
-        validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-55"));
+        String message = IOUtils.readStringFromStream(
+                getClass().getResourceAsStream("/schematron/prpa-valid.xml"));
+        CombinedXmlValidator validator = new CombinedXmlValidator();
+        validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(ITI_55));
     }
     
-    @Test
+    @Test(expected = ValidationException.class)
     public void testValidateSchematronError() throws Exception {
-        String message = IOUtils.readStringFromStream(getClass()
-                .getResourceAsStream("/schematron/prpa-invalid.xml"));
-        Hl7v3Validator validator = new Hl7v3Validator();
-        boolean failed = false;
-        try {
-            validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-55"));
-        } catch (ValidationException e) {
-            failed = true;
-        }
-        Assert.assertTrue(failed);
+        String message = IOUtils.readStringFromStream(
+                getClass().getResourceAsStream("/schematron/prpa-invalid.xml"));
+        CombinedXmlValidator validator = new CombinedXmlValidator();
+        validator.validate(message, Hl7v3ValidationProfiles.getRequestValidationProfile(ITI_55));
     }
 }

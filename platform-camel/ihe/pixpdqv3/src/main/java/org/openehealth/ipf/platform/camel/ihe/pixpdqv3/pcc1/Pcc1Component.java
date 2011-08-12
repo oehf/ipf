@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,26 +29,15 @@ import javax.xml.namespace.QName;
  * The Camel component for the PCC-1 transaction (QED).
  */
 public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareServiceInfo> {
-    private static final String[][] REQUEST_VALIDATION_PROFILES = new String[][] {
-            new String[] {"QUPC_IN043100UV01", null},
-            new String[] {"QUQI_IN000003UV01", null},
-            new String[] {"QUQI_IN000003UV01_Cancel", null}
-    };
-
-    private static final String[][] RESPONSE_VALIDATION_PROFILES = new String[][] {
-            new String[] {"QUPC_IN043200UV01", null},
-            new String[] {"MCCI_IN000002UV01", null}
-    };
 
     private final static String NS_URI = "urn:ihe:pcc:qed:2007";
     public final static Hl7v3ContinuationAwareServiceInfo WS_CONFIG = new Hl7v3ContinuationAwareServiceInfo(
+            IpfInteractionId.PCC_1,
             new QName(NS_URI, "ClinicalDataSource_Service", "qed"),
             Pcc1PortType.class,
             new QName(NS_URI, "ClinicalDataSource_Binding_Soap12", "qed"),
             false,
             "wsdl/pcc1/pcc1-raw.wsdl",
-            REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES,
             "QUPC_IN043200UV01",
             true,
             false,

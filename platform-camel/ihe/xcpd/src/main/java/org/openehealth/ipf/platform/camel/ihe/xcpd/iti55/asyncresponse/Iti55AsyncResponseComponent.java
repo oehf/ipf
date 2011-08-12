@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xcpd.iti55.asyncresponse.Iti55AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -30,13 +31,12 @@ import javax.xml.namespace.QName;
 public class Iti55AsyncResponseComponent extends AbstractWsComponent<Hl7v3ServiceInfo> {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
     private final static Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+            IpfInteractionId.ITI_55,
             new QName(NS_URI, "RespondingGateway_Response_Service", "xcpd"),
             Iti55AsyncResponsePortType.class,
             new QName(NS_URI, "RespondingGateway_Response_Binding_Soap12", "xcpd"),
             false,
             "wsdl/iti55/iti55-asyncresponse-raw.wsdl",
-            null,
-            null,
             null,
             false,
             false);

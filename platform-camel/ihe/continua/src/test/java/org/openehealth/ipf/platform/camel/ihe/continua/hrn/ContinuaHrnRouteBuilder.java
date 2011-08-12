@@ -43,6 +43,7 @@ public class ContinuaHrnRouteBuilder extends RouteBuilder {
             Class<?>[] expectedContentTypes = new Class<?>[] {
                     DataHandler.class,
                     byte[].class,
+                    String.class
             };
             Document document = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class).getDocuments().get(0);
             for (Class<?> contentType : expectedContentTypes) {

@@ -23,11 +23,12 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage
 import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.CustomInterceptor
 import org.openehealth.ipf.platform.camel.ihe.pixpdqv3.EhcacheHl7v3ContinuationStorage
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfile
 
 /**
  * Tests for ITI-47.
@@ -38,15 +39,15 @@ class TestIti47 extends StandardTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti-47.xml'
     
     private final String SERVICE_CONTI =
-    "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceConti" +
-    '?supportContinuation=true' +
-    '&autoCancel=true' +
-    '&validationOnContinuation=true'
+        "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceConti" +
+        '?supportContinuation=true' +
+        '&autoCancel=true' +
+        '&validationOnContinuation=true'
     
     private final String SERVICE_INTERCEPT =
-    "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceIntercept" +
-    '?inInterceptors=#customInterceptorA, #customInterceptorB' +
-    '&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC'
+        "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceIntercept" +
+        '?inInterceptors=#customInterceptorA, #customInterceptorB' +
+        '&outInterceptors=#customInterceptorA, #customInterceptorA, #customInterceptorC'
     
     private final String SERVICE_NAK_1 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNak1"
     private final String SERVICE_NAK_2 = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceNak2"
@@ -54,11 +55,12 @@ class TestIti47 extends StandardTestContainer {
     
     private final String SERVICE_V2_CONTI = "pdqv3-iti47://localhost:${port}/pdqv3-iti47-serviceV2Conti"
     
-    
-    private static final Hl7v3Validator VALIDATOR = new Hl7v3Validator()
-    
+    private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
+    private static final Hl7v3ValidationProfile VALIDATION_PROFILE = new Hl7v3ValidationProfile(
+            [['PRPA_IN201306UV02', 'iti47/PRPA_IN201306UV02']] as String[][])
+
     private static final String REQUEST =
-    IOUtils.toString(TestIti47.class.classLoader.getResourceAsStream('iti47/01_PDQQuery1.xml'))
+        IOUtils.toString(TestIti47.class.classLoader.getResourceAsStream('iti47/01_PDQQuery1.xml'))
     
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
@@ -107,12 +109,7 @@ class TestIti47 extends StandardTestContainer {
     @Test
     void testCustomNakGeneration() {
         String responseString = send(SERVICE_NAK_1, REQUEST, String.class)
-        VALIDATOR.validate(responseString, [
-            [
-                'PRPA_IN201306UV02',
-                'iti47/PRPA_IN201306UV02'
-            ]]
-        as String[][])
+        VALIDATOR.validate(responseString, VALIDATION_PROFILE)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.interactionId.@root == '2.16.840.1.113883.1.6'
         assert response.interactionId.@extension == 'PRPA_IN201306UV02'
@@ -129,12 +126,7 @@ class TestIti47 extends StandardTestContainer {
     @Test
     void testCustomNakGenerationWithoutIssueManagement() {
         String responseString = send(SERVICE_NAK_2, REQUEST, String.class)
-        VALIDATOR.validate(responseString, [
-            [
-                'PRPA_IN201306UV02',
-                'iti47/PRPA_IN201306UV02'
-            ]]
-        as String[][])
+        VALIDATOR.validate(responseString, VALIDATION_PROFILE)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.interactionId.@root == '2.16.840.1.113883.1.6'
         assert response.interactionId.@extension == 'PRPA_IN201306UV02'
@@ -151,12 +143,7 @@ class TestIti47 extends StandardTestContainer {
     @Test
     void testValidationNakGeneration() {
         String responseString = send(SERVICE_NAK_VALIDATE, REQUEST, String.class)
-        VALIDATOR.validate(responseString, [
-            [
-                'PRPA_IN201306UV02',
-                'iti47/PRPA_IN201306UV02'
-            ]]
-        as String[][])
+        VALIDATOR.validate(responseString, VALIDATION_PROFILE)
         def response = Hl7v3Utils.slurp(responseString)
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'SYN113'

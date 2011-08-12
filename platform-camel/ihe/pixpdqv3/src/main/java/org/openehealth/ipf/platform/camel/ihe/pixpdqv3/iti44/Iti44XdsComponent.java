@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.pixpdqv3.iti44;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.pixpdqv3.iti44.Iti44XdsPortType;
 
 import javax.xml.namespace.QName;
@@ -26,13 +27,12 @@ import javax.xml.namespace.QName;
 public class Iti44XdsComponent extends AbstractIti44Component {
     private static final String NS_URI_XDS = "urn:ihe:iti:xds-b:2007";
     public final static Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+            IpfInteractionId.ITI_44_XDS,
             new QName(NS_URI_XDS, "DocumentRegistry_Service", "ihe"),
             Iti44XdsPortType.class,
             new QName(NS_URI_XDS, "DocumentRegistry_Binding_Soap12", "ihe"),
             false,
             "wsdl/iti44/iti44-xds-raw.wsdl",
-            REQUEST_VALIDATION_PROFILES,
-            RESPONSE_VALIDATION_PROFILES,
             "MCCI_IN000002UV01",
             false,
             false);

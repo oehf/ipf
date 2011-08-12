@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+
 import javax.xml.namespace.QName;
 
 /**
@@ -23,14 +24,15 @@ import javax.xml.namespace.QName;
  */
 public class Hl7v3ServiceInfo extends ItiServiceInfo {
 
-    private final String[][] requestValidationProfiles;
-    private final String[][] responseValidationProfiles;
+    private final IpfInteractionId interactionId;
     private final String nakRootElementName;
     private final boolean nakNeedControlActProcess;
 
     /**
      * Constructs the service info.
      *
+     * @param interactionId
+     *      id of the interaction (transaction) which corresponds to this service info.
      * @param serviceName
      *      the qualified name of the service.
      * @param serviceClass
@@ -41,10 +43,6 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
      *      {@code true} if this service requires MTOM.
      * @param wsdlLocation
      *      the location of the WSDL of this webservice.
-     * @param requestValidationProfiles
-     *      validation profiles for request messages.
-     * @param responseValidationProfiles
-     *      validation profiles for response messages.
      * @param nakRootElementName
      *      root element name of automatically generated NAKs.
      * @param nakNeedControlActProcess
@@ -54,31 +52,25 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
      *      whether request payload is needed for ATNA audit.
      */
     public Hl7v3ServiceInfo(
+            IpfInteractionId interactionId,
             QName serviceName,
             Class<?> serviceClass,
             QName bindingName,
             boolean mtom,
             String wsdlLocation,
-            String[][] requestValidationProfiles,
-            String[][] responseValidationProfiles,
             String nakRootElementName,
             boolean nakNeedControlActProcess,
             boolean auditRequestPayload)
     {
         super(serviceName, serviceClass, bindingName, mtom, wsdlLocation, true, false, auditRequestPayload);
 
-        this.requestValidationProfiles = requestValidationProfiles;
-        this.responseValidationProfiles = responseValidationProfiles;
+        this.interactionId = interactionId;
         this.nakRootElementName = nakRootElementName;
         this.nakNeedControlActProcess = nakNeedControlActProcess;
     }
 
-    public String[][] getRequestValidationProfiles() {
-        return requestValidationProfiles;
-    }
-
-    public String[][] getResponseValidationProfiles() {
-        return responseValidationProfiles;
+    public IpfInteractionId getInteractionId() {
+        return interactionId;
     }
 
     public boolean isNakNeedControlActProcess() {

@@ -19,12 +19,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Validator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
+import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.ITI_45
 
 /**
  * Test for PIX Query translator.
- * @author Marek Václavík, Dmytro Rud
+ * @author Marek VÃ¡clavik, Dmytro Rud
  */
 class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
  
@@ -38,13 +38,13 @@ class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
     @Test
     void test1() {
         String v3request = getFileContent('NistPixpdq_Mesa10501-04_Example_01', true, true)
-        MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request)
+        MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
     }
 
 	@Test
 	void test2() {
 		String v3request = getFileContent('NistPixpdq_Mesa10501-05_Example_01', true, true)
-		MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request)
+		MessageAdapter translatedV2request = v3tov2Translator.translateV3toV2(v3request, null)
 	}
 	
 	@Test
@@ -53,6 +53,6 @@ class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
 	    String v2response = getFileContent('ok-4', false, false)
 		MessageAdapter abrakadapter = MessageAdapters.make(v2response)
 		String v3response = v2tov3Translator.translateV2toV3(abrakadapter, v3request)
-        new Hl7v3Validator().validate(v3response, Hl7v3ValidationProfiles.RESPONSE_TYPES['iti-45'])
+        V3_VALIDATOR.validate(v3response, Hl7v3ValidationProfiles.getResponseValidationProfile(ITI_45))
 	}
 }

@@ -19,6 +19,7 @@ import org.apache.cxf.helpers.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 
 public class HL7v3ValidatorTest {
 
@@ -26,18 +27,20 @@ public class HL7v3ValidatorTest {
 	public void testValidateOk() throws Exception {
 		String message = IOUtils.readStringFromStream(getClass()
 				.getResourceAsStream("/xsd/prpa-valid.xml"));
-        Hl7v3Validator validator = new Hl7v3Validator();
-        validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-44"));
+        CombinedXmlValidator validator = new CombinedXmlValidator();
+        validator.validate(message,
+                Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX));
 	}
 	
 	@Test
 	public void testValidateError() throws Exception {
 		String message = IOUtils.readStringFromStream(getClass()
 				.getResourceAsStream("/xsd/prpa-invalid.xml"));
-		Hl7v3Validator validator = new Hl7v3Validator();
+        CombinedXmlValidator validator = new CombinedXmlValidator();
         boolean failed = false;
         try {
-			validator.validate(message, Hl7v3ValidationProfiles.getREQUEST_TYPES().get("iti-44"));
+			validator.validate(message,
+                    Hl7v3ValidationProfiles.getRequestValidationProfile(IpfInteractionId.ITI_44_PIX));
 		} catch (ValidationException e) {
 		    failed = true;
 		}

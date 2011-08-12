@@ -29,21 +29,19 @@ public class Hl7v3ContinuationAwareServiceInfo extends Hl7v3ServiceInfo {
 
 
     public Hl7v3ContinuationAwareServiceInfo(
+            IpfInteractionId interactionId,
             QName serviceName,
             Class<?> serviceClass,
             QName bindingName,
             boolean mtom,
             String wsdlLocation,
-            String[][] requestValidationProfiles,
-            String[][] responseValidationProfiles,
             String nakRootElementName,
             boolean nakNeedControlActProcess,
             boolean auditRequestPayload,
             String mainRequestRootElementName,
             String mainResponseRootElementName)
     {
-        super(serviceName, serviceClass, bindingName, mtom, wsdlLocation,
-                requestValidationProfiles, responseValidationProfiles,
+        super(interactionId, serviceName, serviceClass, bindingName, mtom, wsdlLocation,
                 nakRootElementName, nakNeedControlActProcess, auditRequestPayload);
 
         Validate.notEmpty(mainRequestRootElementName);
