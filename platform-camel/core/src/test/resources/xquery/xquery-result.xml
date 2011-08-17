@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+   <row>
+      <item name="pid">someid</item>
+      <item name="name">Bose</item>
+      <item name="family">Gocpodin</item>
+      <item name="middle"/>
+      <item name="dob">19611021</item>
+      <item name="serviceProviderId">1.3.6.4.1.4.1.2835.3/custodianid</item>
+      <item name="orderingProviderId"/>
+      <item name="dos"/>
+      <item name="result">Leukocytes</item>
+      <item name="loinc">6690-2</item>
+      <item name="value">8.9</item>
+      <item name="unit">10*9/L</item>
+      <item name="refHigh"/>
+      <item name="refLow"/>
+   </row>
+   <row>
+      <item name="pid">someid</item>
+      <item name="name">Bose</item>
+      <item name="family">Gocpodin</item>
+      <item name="middle"/>
+      <item name="dob">19611021</item>
+      <item name="serviceProviderId">1.3.6.4.1.4.1.2835.3/custodianid</item>
+      <item name="orderingProviderId"/>
+      <item name="dos"/>
+      <item name="result">Erythrocytes</item>
+      <item name="loinc">789-8</item>
+      <item name="value">5.9</item>
+      <item name="unit">10*12/L</item>
+      <item name="refHigh"/>
+      <item name="refLow"/>
+   </row>
+   <row>
+      <item name="pid">someid</item>
+      <item name="name">Bose</item>
+      <item name="family">Gocpodin</item>
+      <item name="middle"/>
+      <item name="dob">19611021</item>
+      <item name="serviceProviderId">1.3.6.4.1.4.1.2835.3/custodianid</item>
+      <item name="orderingProviderId"/>
+      <item name="dos"/>
+      <item name="result">Hematocrit</item>
+      <item name="loinc">4544-3</item>
+      <item name="value">46</item>
+      <item name="unit">%</item>
+      <item name="refHigh"/>
+      <item name="refLow"/>
+   </row>
+   <row>
+      <item name="pid">someid</item>
+      <item name="name">Bose</item>
+      <item name="family">Gocpodin</item>
+      <item name="middle"/>
+      <item name="dob">19611021</item>
+      <item name="serviceProviderId">1.3.6.4.1.4.1.2835.3/custodianid</item>
+      <item name="orderingProviderId"/>
+      <item name="dos"/>
+      <item name="result">Platelets</item>
+      <item name="loinc">777-3</item>
+      <item name="value">363</item>
+      <item name="unit">10*9/L</item>
+      <item name="refHigh"/>
+      <item name="refLow"/>
+   </row>
+</result>

@@ -22,6 +22,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.camel.spi.RouteContext;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
 import org.openehealth.ipf.commons.xml.SchematronTransmogrifier;
+import org.openehealth.ipf.commons.xml.XqjTransmogrifier;
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier;
 import org.openehealth.ipf.platform.camel.core.adapter.ProcessorAdapter;
 import org.openehealth.ipf.platform.camel.core.adapter.TransmogrifierAdapter;
@@ -65,14 +66,37 @@ public class TransmogrifierAdapterDefinition extends ProcessorAdapterDefinition 
     
     /**
      * Specifies that the transformation is done via XSLT
+     * 
      * @param clazz
-     *          the resulting type of the message bodyf after the transformation
+     *            the resulting type of the message body after the
+     *            transformation
      */
     public <T> TransmogrifierAdapterDefinition xslt(Class<T> clazz) {
         transmogrifier = new XsltTransmogrifier<T>(clazz);
         return (TransmogrifierAdapterDefinition)input(bodyAs(StreamSource.class));
     }
     
+    /**
+     * Specifies that the transformation is done via XQuery
+     * 
+     */
+    public TransmogrifierAdapterDefinition xquery() {
+        transmogrifier = new XqjTransmogrifier<String>(String.class);
+        return (TransmogrifierAdapterDefinition) input(bodyAs(StreamSource.class));
+    }
+
+    /**
+     * Specifies that the transformation is done via XQuery
+     * 
+     * @param clazz
+     *            the resulting type of the message body after the
+     *            transformation
+     */
+    public <T> TransmogrifierAdapterDefinition xquery(Class<T> clazz) {
+        transmogrifier = new XqjTransmogrifier<T>(clazz);
+        return (TransmogrifierAdapterDefinition) input(bodyAs(StreamSource.class));
+    }
+
     /**
      * Specifies that a schematron validation report is generated
      */

@@ -711,7 +711,18 @@
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>saxon-dom</artifactId>
                 <version>${saxon-version}</version>
-            </dependency>                        
+            </dependency>
+            <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>saxon-xqj</artifactId>
+                <version>${saxon-version}</version>
+            </dependency>
+            <dependency>
+               <groupId>net.sourceforge.saxon</groupId>
+                <artifactId>saxon</artifactId>
+                <version>${saxon-version}</version>
+                <classifier>s9api</classifier>
+            </dependency>
             <dependency>
                 <groupId>org.openhealthtools.ihe</groupId>
                 <artifactId>org.openhealthtools.ihe.atna.auditor</artifactId>

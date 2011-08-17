@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings loinc="2.16.840.1.113883.6.1">
+    <map code="6690-2" group="lab" displayName="Leukocytes"/>
+    <map code="789-8" group="lab" displayName="Erythrocytes"/>
+    <map code="4544-3" group="lab" displayName="Hematocrit"/>
+    <map code="777-3" group="ignore" displayName="Platelets"/>
+</mappings>

@@ -16,12 +16,14 @@
 package org.openehealth.ipf.platform.camel.core.extend;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.xml.transform.dom.DOMResult;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -29,9 +31,11 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
+import org.xml.sax.SAXException;
 
 /**
  * @author Martin Krasser
+ * @author Stefan Ivanov
  */
 @ContextConfiguration(locations = { "/context-core-extend-transmogrifier.xml" })
 public class TransmogrifierExtensionTest extends AbstractExtensionTest {
@@ -225,7 +229,7 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testSchematronTransmogrifier() throws InterruptedException,
             IOException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input23", schematronInput());
+        producerTemplate.sendBody("direct:input23", content("schematron/schematron-test.xml"));
         mockOutput.assertIsSatisfied();
         String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertFalse(result.contains("svrl:failed-assert"));
@@ -235,34 +239,99 @@ public class TransmogrifierExtensionTest extends AbstractExtensionTest {
     public void testInvalidSchematronTransmogrifier() throws InterruptedException,
             IOException {
         mockOutput.expectedMessageCount(1);
-        producerTemplate.sendBody("direct:input23", invalidSchematronInput());
+        producerTemplate.sendBody("direct:input23", content("schematron/schematron-test-fail.xml"));
         mockOutput.assertIsSatisfied();
         String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertTrue(result.contains("svrl:failed-assert"));
     }
     
+    @Test
+    public void testXqueryDedicatedTransmogrifier()
+            throws InterruptedException,
+            IOException, SAXException {
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input24", content("xquery/labreport.xml"));
+        assertXqueryOutput("someid");
+    }
 
+    @Test
+    public void testXqueryTransmogrifier() throws InterruptedException,
+            IOException, SAXException {
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input25", content("xquery/labreport.xml"));
+        assertXqueryOutput("headerId");
+    }
+
+    @Test
+    public void testXqueryTransmogrifierReturningInputStream()
+            throws InterruptedException, IOException, SAXException {
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input26", content("xquery/labreport.xml"));
+        mockOutput.assertIsSatisfied();
+        InputStream result = mockOutput.getExchanges().get(0).getIn()
+                .getBody(InputStream.class);
+        assertNotNull(result);
+    }
+    
+    @Test
+    public void testXqueryTransmogrifierReturningDOMResult()
+            throws InterruptedException, IOException {
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input27", content("xquery/labreport.xml"));
+        mockOutput.assertIsSatisfied();
+        DOMResult result = mockOutput.getExchanges().get(0).getIn()
+                .getBody(DOMResult.class);
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testXqueryTransmogrifierExternalRessource()
+            throws InterruptedException, IOException, SAXException {
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input28", content("xquery/labreport.xml"));
+        assertXqueryOutput("mapid");
+    }
+
+    @Test
+    public void testXqueryTransmogrifierExternalSourceParam()
+            throws InterruptedException, IOException, SAXException {
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input29", content("xquery/labreport.xml"));
+        assertXqueryOutput("externalid");
+    }
+
+    @Test
+    public void testXqueryWithHeaderParams()
+            throws InterruptedException, IOException, SAXException {
+        mockOutput.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:input30", content("xquery/labreport.xml"));
+        assertXqueryOutput("otherId");
+    }
+
+    
     private String xsltInput() throws IOException {
         return IOUtils.toString(new ClassPathResource("xslt/createPatient.xml")
                 .getInputStream());
     }
-    
+
+    private void assertXqueryOutput(String resultXml) throws InterruptedException, SAXException, IOException {
+        mockOutput.assertIsSatisfied();
+        String result = mockOutput.getExchanges().get(0).getIn()
+                .getBody(String.class);
+        assertNotNull(result);
+        assertTrue(result.contains("<item name=\"pid\">" + resultXml + "</item>"));
+    }
+
     private void assertXsltOutput(String processingCode, String processingMode) throws IOException, InterruptedException {
         mockOutput.assertIsSatisfied();
         String result = (String)mockOutput.getExchanges().get(0).getIn().getBody();
         assertNotNull(result);
         assertTrue(result.contains("<processingCode code=\"" + processingCode + "\""));
         assertTrue(result.contains("<processingModeCode code=\"" + processingMode + "\""));
-    }    
-
-    private String schematronInput() throws IOException {
-        return IOUtils.toString(new ClassPathResource(
-                "schematron/schematron-test.xml").getInputStream());
     }
 
-    private String invalidSchematronInput() throws IOException {
-        return IOUtils.toString(new ClassPathResource(
-                "schematron/schematron-test-fail.xml").getInputStream());
+    private String content(String path) throws IOException {
+        return IOUtils.toString(new ClassPathResource(path).getInputStream());
     }
 
 }
