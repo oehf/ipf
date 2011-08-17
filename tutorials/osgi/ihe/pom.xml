@@ -213,17 +213,16 @@
             <param>mvn:org.openehealth.ipf.osgi/osgi-config-jms/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.osgi/osgi-config-log/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-atna/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pixpdq/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-pixpdqv3/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-hl7v2/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-hl7v3/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/commons-core/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/commons-xml/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/commons-map/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-atna/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-pixpdq/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-pixpdqv3/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v2/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v3/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v2ws/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v3/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/commons-ihe-ws/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-hl7v2/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-hl7v2ws/${project.version}@3</param>
@@ -235,8 +234,7 @@
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-ws/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdq/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-pixpdqv3/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-hl7v3/${project.version}@3</param>
             <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-atna/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.tutorials/tutorials-xds/${project.version}@start</param>
             <param>mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}@start</param>

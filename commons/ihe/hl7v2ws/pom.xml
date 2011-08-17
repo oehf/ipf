@@ -20,7 +20,7 @@
         <osgi.import.pkg>
             org.openehealth.ipf.modules.hl7.message,
             org.openehealth.ipf.commons.core.modules.api,
-            org.openehealth.ipf.commons.ihe.pixpdq,
+            org.openehealth.ipf.commons.ihe.hl7v2,
             org.openehealth.ipf.modules.hl7,
             groovy.util,
             ca.uhn.hl7v2,
@@ -37,11 +37,10 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-pixpdq</artifactId>
+            <artifactId>commons-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- Dependencies for test -->
-        
+
     </dependencies>
 
     <build>

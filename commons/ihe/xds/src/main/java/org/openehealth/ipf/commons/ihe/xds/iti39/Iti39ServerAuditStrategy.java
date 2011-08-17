@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti39;
 
-import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43AuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43AuditStrategy;

@@ -45,7 +45,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
-import org.openehealth.ipf.platform.camel.ihe.xds.iti42.Iti42Component;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -118,9 +117,9 @@ public class CxfEndpointTest {
 
     private Response runRequest() {
         ItiClientFactory clientFactory = new XdsClientFactory(
-                Iti42Component.WS_CONFIG, null,
+                Iti42Component.WS_CONFIG,
                 "http://localhost:" + port + "/iti-42",
-                null, null);
+                null, null, null);
 
         Iti42PortType client = (Iti42PortType) clientFactory.getClient();
         RegisterDocumentSet request = SampleData.createRegisterDocumentSet();

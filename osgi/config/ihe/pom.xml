@@ -14,9 +14,8 @@
     
     <modules>
         <module>atna</module>
-        <module>pixpdq</module>
-        <module>pixpdqv3</module>
-        <module>xcpd</module>
+        <module>hl7v2</module>
+        <module>hl7v3</module>
         <module>xds</module>
     </modules>
     

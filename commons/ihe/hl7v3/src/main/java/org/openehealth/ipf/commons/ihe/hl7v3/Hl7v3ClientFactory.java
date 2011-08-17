@@ -18,6 +18,11 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
@@ -29,22 +34,30 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * @author Dmytro Rud
  */
 public class Hl7v3ClientFactory extends ItiClientFactory {
+    private final AsynchronyCorrelator correlator;
 
     /**
      * Constructs the factory.
      * @param serviceInfo
-     *          the info about the web-service.
+     *          the info about the Web Service.
      * @param serviceUrl
-     *          the URL of the web-service.
+     *          the URL of the Web Service.
+     * @param auditStrategy
+     *          the audit strategy to use.
+     * @param correlator
+     *          optional asynchrony correlator.
      * @param customInterceptors
-     *          user-defined custom CXF interceptors.          
+     *          user-defined custom CXF interceptors.
      */
     public Hl7v3ClientFactory(
             Hl7v3ServiceInfo serviceInfo,
-            String serviceUrl, 
-            InterceptorProvider customInterceptors) 
+            String serviceUrl,
+            WsAuditStrategy auditStrategy,
+            AsynchronyCorrelator correlator,
+            InterceptorProvider customInterceptors)
     {
-        super(serviceInfo, serviceUrl, customInterceptors);
+        super(serviceInfo, serviceUrl, auditStrategy, customInterceptors);
+        this.correlator = correlator;
     }
 
     
@@ -55,5 +68,18 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
         client.getInInterceptors().add(new InNamespaceMergeInterceptor());
         client.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
         client.getEndpoint().getService().setDataBinding(new PlainXmlDataBinding());
+
+        client.getInInterceptors().add(new InPartialResponseHackInterceptor());
+
+        // install auditing-related interceptors if the user has not switched auditing off
+        if (auditStrategy != null) {
+            client.getOutInterceptors().add(new AuditOutRequestInterceptor(
+                    auditStrategy, correlator, getServiceInfo()));
+
+            AuditResponseInterceptor auditInterceptor =
+                new AuditResponseInterceptor(auditStrategy, false, correlator, false);
+            client.getInInterceptors().add(auditInterceptor);
+            client.getInFaultInterceptors().add(auditInterceptor);
+        }
     }
 }

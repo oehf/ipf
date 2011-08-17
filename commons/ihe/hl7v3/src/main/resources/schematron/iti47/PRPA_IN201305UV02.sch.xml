@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2010 the original author or authors. Licensed under the Apache
+    License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
+    law or agreed to in writing, software distributed under the License is
+    distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the specific
+    language governing permissions and limitations under the License.
+-->
+
+<!--
+    Schematron rules for ITI-47 request message.
+    @author Dmytro Rud 
+-->
+
+<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    <sch:ns uri="http://www.w3.org/2001/XMLSchema-instance" prefix="xsi" />
+    <sch:ns uri="urn:hl7-org:v3" prefix="hl7" />
+
+    <!-- ========================================================================== 
+                                RULES FOR xsi:DATATYPE CHECKS 
+         ========================================================================== -->
+    <sch:pattern abstract="true" id="check-type">
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/$element/hl7:value">
+            <sch:assert test="not(.) or (@xsi:type = '$type')">
+                sub-element 'value' is constrained to data type $type
+            </sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern is-a="check-type" id="x1">
+        <sch:param name="element" value="hl7:matchCriterionList/hl7:matchAlgorithm" />
+        <sch:param name="type" value="ST" />
+    </sch:pattern>
+
+    <sch:pattern is-a="check-type" id="x2">
+        <sch:param name="element" value="hl7:matchCriterionList/hl7:minimumDegreeMatch" />
+        <sch:param name="type" value="INT" />
+    </sch:pattern>
+
+    <!--  
+    <sch:pattern is-a="check-type">
+        <sch:param name="element" value="hl7:parameterList/hl7:livingSubjectName" />
+        <sch:param name="type" value="PN" />
+    </sch:pattern>
+    -->
+    
+    
+    <!-- ========================================================================== 
+                    RULES FOR CHECKS THAT count(SOMETHING) <= 1
+         ========================================================================== -->
+    <sch:pattern abstract="true" id="check-count-is-1">
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList">
+            <sch:assert test="count($element) &lt;= 1">
+                only one sub-element '$element' is allowed here
+            </sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern is-a="check-count-is-1" id="x10">
+        <sch:param name="element" value="hl7:livingSubjectAdministrativeGender" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-is-1" id="x11">
+        <sch:param name="element" value="hl7:livingSubjectBirthTime" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-is-1" id="x13">
+        <sch:param name="element" value="hl7:patientAddress" />
+    </sch:pattern>
+    <sch:pattern is-a="check-count-is-1" id="x14">
+        <sch:param name="element" value="hl7:patientStatusCode" />
+    </sch:pattern>
+
+    <!-- ========================================================================== 
+                    RULES FOR CHECKS THAT count(SOMETHING/hl7:value) <= 1
+         ========================================================================== -->
+    <sch:pattern abstract="true" id="check-value-count-is-1">
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList/$element">
+            <sch:assert test="count(hl7:value) &lt;= 1">
+                only one 'value' sub-element is allowed here
+            </sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern is-a="check-value-count-is-1" id="x3">
+        <sch:param name="element" value="hl7:livingSubjectAdministrativeGender" />
+    </sch:pattern>
+    <sch:pattern is-a="check-value-count-is-1" id="x4">
+        <sch:param name="element" value="hl7:patientAddress" />
+    </sch:pattern>
+    <sch:pattern is-a="check-value-count-is-1" id="x5">
+        <sch:param name="element" value="hl7:livingSubjectBirthTime" />
+    </sch:pattern>
+    <sch:pattern is-a="check-value-count-is-1" id="x6">
+        <sch:param name="element" value="hl7:livingSubjectId" />
+    </sch:pattern>
+    <sch:pattern is-a="check-value-count-is-1" id="x7">
+        <sch:param name="element" value="hl7:livingSubjectName" />
+    </sch:pattern>
+    <sch:pattern is-a="check-value-count-is-1" id="x8">
+        <sch:param name="element" value="hl7:otherIDsScopingOrganization" />
+    </sch:pattern>
+
+
+    <!-- ========================================================================== 
+                                 RULES FOR ALL OTHER CHECKS  
+         ========================================================================== -->
+    <sch:pattern id="qbp-constraints">
+    
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter">
+            <sch:assert test="not(hl7:matchCriterionList/hl7:id)">matchCriterionList.id must be omitted</sch:assert>
+            <sch:assert test="not(hl7:responseElementGroupId)">responseElementGroupId must be omitted</sch:assert>
+            <sch:assert test="not(hl7:modifyCode)">modifyCode must be omitted</sch:assert>
+            <sch:assert test="not(hl7:executionAndDeliveryTime)">executionAndDeliveryTime must be omitted</sch:assert>
+            <sch:assert test="not(hl7:sortControl)">sortControl must be omitted</sch:assert>
+            <sch:assert test="not(hl7:matchCriterionList/hl7:matchWeight)">matchCriterionList.matchWeight must be omitted</sch:assert>
+
+            <sch:assert test="hl7:responsePriorityCode/@code = 'I'">responsePriorityCode must equal to 'I'</sch:assert>
+            <sch:assert test="hl7:responseModalityCode/@code = 'R'">responseModalityCode must equal to 'R'</sch:assert>
+            <sch:assert test="hl7:statusCode/@code = 'new'">statusCode must equal to 'new'</sch:assert>
+        </sch:rule>
+            
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:matchCriterionList/hl7:minimumDegreeMatch/hl7:value">
+            <sch:assert test="not(@value) or ((number(@value) &gt;= 0) and (number(@value) &lt;= 100))">
+                minimumDegreeMatch.value must be between 0 and 100
+            </sch:assert>
+        </sch:rule>
+	    
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList">
+            <sch:assert test="not(hl7:id)">parameterList.id must be omitted</sch:assert>
+            <sch:assert test="not(hl7:patientTelecom)">patientTelecom must be omitted</sch:assert>
+            <sch:assert test="not(hl7:principalCareProviderId)">principalCareProviderId must be omitted</sch:assert>
+            <sch:assert test="not(hl7:principalCareProvisionId)">principalCareProvisionId must be omitted</sch:assert>
+            <sch:assert test="not(hl7:mothersMaidenName)">mothersMaidenName must be omitted</sch:assert>
+            <sch:assert test="not(hl7:livingSubjectDeceaseTime)">livingSubjectDeceaseTime must be omitted</sch:assert>
+            <sch:assert test="not(hl7:patientStatusCode)">patientStatusCode must be omitted</sch:assert>
+            <sch:assert test="not(hl7:livingSubjectBirthPlaceName)">livingSubjectBirthPlaceName must be omitted</sch:assert>
+            <sch:assert test="not(hl7:livingSubjectBirthPlaceAddress)">livingSubjectBirthPlaceAddress must be omitted</sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList/hl7:otherIDsScopingOrganization/hl7:value">
+            <sch:assert test="@root and not(@extension)">
+                otherIDsScopingOrganization.value must contain an attribute @root and no attribute @extension
+            </sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+</sch:schema>

@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-atna</artifactId>
+            <artifactId>commons-ihe-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

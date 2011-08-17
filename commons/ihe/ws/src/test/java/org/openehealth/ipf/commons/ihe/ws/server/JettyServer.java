@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
+import org.eclipse.jetty.http.ssl.SslContextFactory;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
@@ -61,12 +62,12 @@ public class JettyServer extends ServletServer {
     }
 
     private SslSocketConnector createSecureConnector() {
-        SslSocketConnector sslConnector = new SslSocketConnector();
-        sslConnector.setKeystore(getKeystoreFile());
-        sslConnector.setKeyPassword(getKeystorePass());
-        sslConnector.setTruststore(getTruststoreFile());
-        sslConnector.setTrustPassword(getTruststorePass());
-        return sslConnector;
+        SslContextFactory sslContextFactory = new SslContextFactory();
+        sslContextFactory.setKeyStore(getKeystoreFile());
+        sslContextFactory.setKeyStorePassword(getKeystorePass());
+        sslContextFactory.setTrustStore(getTruststoreFile());
+        sslContextFactory.setTrustStorePassword(getTruststorePass());
+        return new SslSocketConnector(sslContextFactory);
     }
 
     @Override

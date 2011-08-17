@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti14;
 
 import java.net.InetAddress;
 
-import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 

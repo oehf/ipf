@@ -24,9 +24,9 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.junit.After
 import org.junit.AfterClass
-import org.openehealth.ipf.commons.ihe.atna.MockedSender
-import org.openehealth.ipf.commons.ihe.atna.custom.XCPDInitiatingGatewayAuditor
-import org.openehealth.ipf.commons.ihe.atna.custom.XCPDRespondingGatewayAuditor
+import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
+import org.openehealth.ipf.commons.ihe.core.atna.custom.XCPDInitiatingGatewayAuditor
+import org.openehealth.ipf.commons.ihe.core.atna.custom.XCPDRespondingGatewayAuditor
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.platform.camel.core.util.Exchanges

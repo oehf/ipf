@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.commons.lang.Validate;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 
 import javax.xml.namespace.QName;
 

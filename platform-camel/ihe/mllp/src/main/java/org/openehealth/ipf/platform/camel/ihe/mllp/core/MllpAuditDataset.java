@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 
 /**

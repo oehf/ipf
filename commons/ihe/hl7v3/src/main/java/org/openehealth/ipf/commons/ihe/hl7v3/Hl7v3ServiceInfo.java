@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 
 import javax.xml.namespace.QName;

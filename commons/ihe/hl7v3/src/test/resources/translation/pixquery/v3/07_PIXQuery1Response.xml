@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PRPA_IN201310UV02 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="urn:hl7-org:v3 ../../schema/HL7V3/NE2008/multicacheschemas/PRPA_IN201310UV02.xsd"
+ xmlns="urn:hl7-org:v3"
+ ITSVersion="XML_1.0">
+    <id root="d474eb7c-898c-11dc-bf74-3603d6866807"/>
+    <creationTime value="20070810140901"/>
+    <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201310UV02 "/>
+    <processingCode code="P"/>
+    <processingModeCode code="T"/>
+    <acceptAckCode code="NE"/>
+    <receiver typeCode="RCV">
+        <device classCode="DEV" determinerCode="INSTANCE">
+        <id root="1.2.840.114350.1.13.99997.2.7788"/>
+        </device>
+    </receiver>
+    <sender typeCode="SND">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="1.2.840.114350.1.13.99999.4567"/>
+            <telecom value="https://example.org/PIXQuery"></telecom>
+        </device>
+    </sender>
+    <acknowledgement>
+        <typeCode code="CA"/>
+        <targetMessage>
+            <id root="2220c1c4-87ef-11dc-b865-3603d6866807"/>
+        </targetMessage>
+    </acknowledgement>
+    <controlActProcess classCode="CACT" moodCode="EVN">
+        <code code="PRPA_TE201310UV02"/>
+        <subject typeCode="SUBJ">
+            <registrationEvent classCode="REG" moodCode="EVN">
+                <id nullFlavor="NA"/>
+                <statusCode code="active"/>
+                <subject1 typeCode="SBJ">
+                    <patient classCode="PAT">
+                        <id root="1.2.840.114350.1.13.99998.8734" extension="34827G409"/>
+                        <statusCode code="active"/>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
+                            <name nullFlavor="NA">
+                            </name>
+                            <asOtherIDs classCode="PAT">
+                                <id root="1.2.840.114350.1.13.99997.2.3412" extension="38273N237"/>
+                                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                                    <id root="1.2.840.114350.1.13.99997.2.3412"/>
+                                </scopingOrganization>
+                            </asOtherIDs>
+                            <asOtherIDs classCode="CIT">
+                                <id root="2.16.840.1.113883.4.1" extension="999-99-4452"/>
+                                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                                    <id root="2.16.840.1.113883.4.1"/>
+                                </scopingOrganization>
+                            </asOtherIDs>
+                        </patientPerson>
+                        <providerOrganization classCode="ORG" determinerCode="INSTANCE">
+                            <id root="1.2.840.114350.1.13.99998.8734"/>
+                            <name>Good Health Clinic</name>
+                            <contactParty classCode="CON">
+                                <telecom value="tel:+1-342-555-8394"></telecom>
+                            </contactParty>
+                        </providerOrganization>
+                    </patient>
+                </subject1>
+                <custodian typeCode="CST">
+                    <assignedEntity classCode="ASSIGNED">
+                        <id root="1.2.840.114350.1.13.99998.8734" />
+                    </assignedEntity>
+                </custodian>
+            </registrationEvent>
+        </subject>
+        <queryAck>
+            <queryId root="1.2.840.114350.1.13.99999.4567.34" extension="33452"/>
+            <queryResponseCode code="OK"/>
+        </queryAck>
+        <queryByParameter>
+            <queryId root="1.2.840.114350.1.13.99999.4567.34" extension="33452"/>
+            <statusCode code="new"/>
+            <responsePriorityCode code="I"/>
+            <parameterList>
+                <patientIdentifier>
+                    <value root="1.2.840.114350.1.13.99997.2.3412" extension="38273N237"/>
+                    <semanticsText>Patient.Id</semanticsText>
+                </patientIdentifier>
+            </parameterList>
+        </queryByParameter>
+    </controlActProcess>
+</PRPA_IN201310UV02>

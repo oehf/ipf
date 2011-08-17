@@ -31,17 +31,16 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
  * @author Dmytro Rud
  */
 public class XdsClientFactory extends ItiClientFactory {
-    private final XdsAuditStrategy auditStrategy;
     private final AsynchronyCorrelator correlator;
     
     /**
      * Constructs the factory.
      * @param serviceInfo
      *          the info about the web-service.
-     * @param auditStrategy
-     *          the audit strategy to use.
      * @param serviceAddress
      *          the URL of the web-service.
+     * @param auditStrategy
+     *          the audit strategy to use.
      * @param correlator
      *          asynchrony correlator.
      * @param customInterceptors
@@ -49,13 +48,12 @@ public class XdsClientFactory extends ItiClientFactory {
      */
     public XdsClientFactory(
             ItiServiceInfo serviceInfo,
-            XdsAuditStrategy auditStrategy,
             String serviceAddress,
+            XdsAuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceAddress, customInterceptors);
-        this.auditStrategy = auditStrategy;
+        super(serviceInfo, serviceAddress, auditStrategy, customInterceptors);
         this.correlator = correlator;
     }
 

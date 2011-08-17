@@ -33,7 +33,6 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * @author Dmytro Rud
  */
 public class XdsServiceFactory extends ItiServiceFactory {
-    private final XdsAuditStrategy auditStrategy;
 
     /**
      * Constructs the factory.
@@ -55,8 +54,8 @@ public class XdsServiceFactory extends ItiServiceFactory {
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(serviceInfo, serviceAddress, customInterceptors, rejectionHandlingStrategy);
-        this.auditStrategy = auditStrategy;
+        super(serviceInfo, serviceAddress, auditStrategy,
+                customInterceptors, rejectionHandlingStrategy);
     }
 
     @Override

@@ -18,7 +18,7 @@
         </osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.platform.camel.core.util,
-            org.openehealth.ipf.commons.ihe.pixpdqv3.translation,
+            org.openehealth.ipf.commons.ihe.hl7v3.translation,
             org.apache.camel.component.hl7,
             *
         </osgi.import.pkg>
@@ -27,7 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-pixpdqv3</artifactId>
+            <artifactId>platform-camel-ihe-hl7v3</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

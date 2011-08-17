@@ -8,7 +8,9 @@
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.*</osgi.export.pkg>
         <osgi.import.pkg>
-            org.openehealth.ipf.commons.ihe.pixpdq,
+            org.openehealth.ipf.commons.ihe.atna,
+            org.openehealth.ipf.modules.hl7.message,
+            org.openehealth.ipf.commons.ihe.hl7v2,
             org.openehealth.ipf.platform.camel.core.process,
             *
         </osgi.import.pkg>
@@ -30,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-pixpdq</artifactId>
+            <artifactId>commons-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

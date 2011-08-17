@@ -15,17 +15,27 @@
         <osgi.import.pkg>
             groovy.util,
             org.joda.time,
+            org.openehealth.ipf.modules.hl7.message,
+            ca.uhn.hl7v2.model,
             *
         </osgi.import.pkg>
         <osgi.export.pkg>
             org.openehealth.ipf.commons.ihe.hl7v3.*,
             '=schema.HL7V3.NE2008.coreschemas',
             '=schema.HL7V3.NE2008.multicacheschemas'
+            schematron.*,
+            wsdl.*
         </osgi.export.pkg>
+        <osgi.fragment.host>org.apache.cxf.bundle</osgi.fragment.host>
     </properties>
     
     <dependencies>
         <!-- Dependencies for main -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>commons-ihe-hl7v2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>commons-ihe-ws</artifactId>
@@ -40,6 +50,13 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>        
+
+        <!-- Dependencies for test -->
+        <dependency>
+            <artifactId>xmlunit</artifactId>
+            <groupId>xmlunit</groupId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

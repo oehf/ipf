@@ -32,7 +32,6 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * @author Dmytro Rud
  */
 public class XdsAsyncResponseServiceFactory extends ItiServiceFactory {
-    private final XdsAuditStrategy auditStrategy;
     private final AsynchronyCorrelator correlator;
 
     /**
@@ -50,16 +49,15 @@ public class XdsAsyncResponseServiceFactory extends ItiServiceFactory {
      */
     public XdsAsyncResponseServiceFactory(
             ItiServiceInfo serviceInfo,
-            XdsAuditStrategy auditStrategy,
             String serviceAddress,
+            XdsAuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceAddress, customInterceptors, null);
+        super(serviceInfo, serviceAddress, auditStrategy, customInterceptors, null);
         
         Validate.notNull(correlator);
         this.correlator = correlator;
-        this.auditStrategy = auditStrategy;
     }
 
     

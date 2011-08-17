@@ -36,12 +36,13 @@ import org.apache.cxf.ws.addressing.soap.MAPCodec;
 import org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadExtractorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
 /**
- * Factory for ITI web-service stubs.
+ * Factory for ITI Web Service stubs.
  * @author Jens Riemschneider
  */
 public class ItiClientFactory {
@@ -51,24 +52,29 @@ public class ItiClientFactory {
     protected final ItiServiceInfo serviceInfo;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;
+    protected final WsAuditStrategy auditStrategy;
 
     /**
      * Constructs the factory.
      * @param serviceInfo
-     *          the info about the web-service.
+     *          the info about the Web Service.
      * @param serviceUrl
-     *          the URL of the web-service.
+     *          the URL of the Web Service.
+     * @param auditStrategy
+     *          client-side ATNA audit strategy.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.          
      */
     public ItiClientFactory(
             ItiServiceInfo serviceInfo, 
-            String serviceUrl, 
+            String serviceUrl,
+            WsAuditStrategy auditStrategy,
             InterceptorProvider customInterceptors) 
     {
         notNull(serviceInfo, "serviceInfo");
         this.serviceInfo = serviceInfo;
         this.serviceUrl = serviceUrl;
+        this.auditStrategy = auditStrategy;
         this.customInterceptors = customInterceptors;
     }
 

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+<!--
+
+Log4J Configuration Quick Reference:
+====================================
+
+Priority order of log levels is DEBUG < INFO < WARN < ERROR < FATAL
+
+PatternLayout conversion characters:
+
+%c   Category of the logging event
+%C   Fully qualified class name of the caller
+%d   Date of the logging event  (example: %d{HH:mm:ss,SSS} )
+%F   File name where the logging request was issued (caution: extremely slow)
+%l   Location information of the caller (caution: extremely slow)
+%L   Line number from where the logging request was issued (caution: extremely slow)
+%m   Application-supplied message
+%M   Method name from where the logging request was issued (caution: extremely slow)
+%n   Line separator
+%p   Priority of the logging event
+%r   Number of milliseconds since the start of the application
+%t   Name of the thread that generated the logging event
+%x   Nested diagnostic context associated with the thread
+%%   A single percent sign
+
+Format modifiers examples:
+
+%20c     Left pad with spaces if category is less than 20 characters long
+%-20c    Right pad with spaces if category is less than 20 characters long
+%.30c    Truncate from the beginning if category is more than 30 chars long
+%20.30c  Left pad 20 chars + truncate from beginning if more than 30 chars
+%-20.30c Right pad 20 chars + truncate from beginning if more than 30 chars
+
+Examples:  "%r [%t] %-5p %c %x - %m\n"
+"%-6r [%15.15t] %-5p %30.30c %x - %m\n"
+
+-->
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="threshold" value="TRACE"/>
+		<layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" 
+               value="%d{yyyy-MM-dd'T'HH:mm:ss,SSS} [%t] %-5p - %c{3} | %m%n"/>
+        </layout>
+    </appender>
+    
+    <logger name="org.openhealthtools.ihe.atna.auditor.sender">
+        <level value="DEBUG"/>
+    </logger>
+        
+    <root>
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</log4j:configuration>

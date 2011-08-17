@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.camel.CamelContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.commons.ihe.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;

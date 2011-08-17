@@ -37,7 +37,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
 
     <bean id="pixFeedRequestTranslator"
-      class="org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PixFeedRequest3to2Translator">
+      class="org.openehealth.ipf.commons.ihe.hl7v3.translation.PixFeedRequest3to2Translator">
         <property name="useSenderDeviceName"      value="true" />
         <property name="useReceiverDeviceName"    value="true" />
         <property name="copyEmailAs"              value="PID-13-1" />
@@ -50,7 +50,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </bean>
 
     <bean id="pixFeedAckTranslator"
-      class="org.openehealth.ipf.commons.ihe.pixpdqv3.translation.PixFeedAck2to3Translator">
+      class="org.openehealth.ipf.commons.ihe.hl7v3.translation.PixFeedAck2to3Translator">
         <property name="ackCodeFirstCharacter" value="C" />
     </bean>
 

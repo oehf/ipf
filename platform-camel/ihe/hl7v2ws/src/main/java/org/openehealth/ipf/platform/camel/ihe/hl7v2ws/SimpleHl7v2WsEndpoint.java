@@ -84,7 +84,8 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new ItiClientFactory(
                 getWebServiceConfiguration(),
-                getServiceUrl(), 
+                getServiceUrl(),
+                null,
                 getCustomInterceptors());
         return wrapProducer((Hl7v2ConfigurationHolder) getComponent(),
                 new SimpleHl7v2WsProducer(this, clientFactory));
@@ -95,6 +96,7 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
         ItiServiceFactory serviceFactory = new ItiServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
+                null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
 

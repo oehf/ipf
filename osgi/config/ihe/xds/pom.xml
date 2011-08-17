@@ -49,13 +49,15 @@
             org.springframework.beans.factory.config,
             org.springframework.context,
             org.springframework.osgi.context.support,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti14.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti15.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti16.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti18.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti41.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti42.component,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti43.component,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti14,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti15,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti16,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti18,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti38,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti39,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti41,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti42,
+            org.openehealth.ipf.platform.camel.ihe.xds.iti43,
             *
         </osgi.import.pkg>
     </properties>

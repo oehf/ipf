@@ -15,9 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.IpfInteractionId.*;
+import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
 
 import java.util.HashMap;
 import java.util.Map;

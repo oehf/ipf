@@ -51,8 +51,8 @@ public class Iti39Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
     public Producer createProducer() throws Exception {
         ItiClientFactory clientFactory = new XdsClientFactory(
                 getWebServiceConfiguration(),
-                isAudit() ? new Iti39ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceUrl(),
+                isAudit() ? new Iti39ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getCorrelator(),
                 getCustomInterceptors());
         return new Iti39Producer(this, clientFactory);

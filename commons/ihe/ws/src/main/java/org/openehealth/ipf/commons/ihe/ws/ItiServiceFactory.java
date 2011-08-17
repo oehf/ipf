@@ -25,6 +25,7 @@ import org.apache.cxf.ws.addressing.WSAddressingFeature;
 import org.openehealth.ipf.commons.ihe.ws.cxf.RejectionHandlerInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsSecurityUnderstandingInInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
 import java.util.Collections;
@@ -50,7 +51,10 @@ public class ItiServiceFactory {
      * User-defined strategy for handling rejected messages.
      */
     protected final WsRejectionHandlingStrategy rejectionHandlingStrategy;
-
+    /**
+     * Server-side ATNA audit strategy.
+     */
+    protected final WsAuditStrategy auditStrategy;
 
     /**
      * Constructs the factory.
@@ -58,6 +62,8 @@ public class ItiServiceFactory {
      *          the info about the service to produce.
      * @param serviceAddress
      *          the address of the service that it should be published with.
+     * @param auditStrategy
+     *          server-side ATNA audit strategy.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
      * @param rejectionHandlingStrategy
@@ -67,11 +73,13 @@ public class ItiServiceFactory {
     public ItiServiceFactory(
             ItiServiceInfo serviceInfo, 
             String serviceAddress,
+            WsAuditStrategy auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
         this.serviceInfo = serviceInfo;
         this.serviceAddress = serviceAddress;
+        this.auditStrategy = auditStrategy;
         this.customInterceptors = customInterceptors;
         this.rejectionHandlingStrategy = rejectionHandlingStrategy;
     }

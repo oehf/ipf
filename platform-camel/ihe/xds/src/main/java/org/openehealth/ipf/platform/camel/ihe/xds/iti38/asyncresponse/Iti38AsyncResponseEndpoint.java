@@ -55,8 +55,8 @@ public class Iti38AsyncResponseEndpoint extends DefaultItiEndpoint<ItiServiceInf
     public Consumer createConsumer(Processor processor) throws Exception {
         ItiServiceFactory serviceFactory = new XdsAsyncResponseServiceFactory(
                 getWebServiceConfiguration(),
-                isAudit() ? new Iti38ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),
+                isAudit() ? new Iti38ClientAuditStrategy(isAllowIncompleteAudit()) : null,
                 getCorrelator(),
                 getCustomInterceptors());
         ServerFactoryBean serverFactory =

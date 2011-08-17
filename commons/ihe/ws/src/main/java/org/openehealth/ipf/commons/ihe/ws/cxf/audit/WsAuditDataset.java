@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
 import org.apache.cxf.wsdl.EndpointReferenceUtils;
-import org.openehealth.ipf.commons.ihe.atna.AuditDataset;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 

@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
 
-import java.util.Collection
-
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CNERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CWERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CXRule
@@ -24,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.EIRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.HDRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.XPNRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.XTNRule
-import org.openehealth.ipf.commons.ihe.pixpdq.AbstractMessageAdapterValidator
+import org.openehealth.ipf.commons.ihe.hl7v2.AbstractMessageAdapterValidator
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.builder.MessageRuleBuilder
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
