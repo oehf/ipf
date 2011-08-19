@@ -16,23 +16,40 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import org.apache.camel.Exchange;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
 /**
- * Auditing strategy interface for IHE PIX/PDQ transactions.
+ * ATNA audit strategy base for IHE PIX/PDQ transactions.
  * 
  * @author Dmytro Rud
  */
-public interface MllpAuditStrategy {
-    
+abstract public class MllpAuditStrategy {
+    // whether we audit on server (true) or on client (false)
+    private final boolean serverSide;
+
+
+    /**
+     * Constructor.
+     * @param serverSide
+     *      <code>true</code> when this strategy is a server-side one;
+     *      <code>false</code> otherwise.
+     */
+    protected MllpAuditStrategy(boolean serverSide) {
+        this.serverSide = serverSide;
+    }
+
+
     /**
      * Creates a new audit dataset instance.
      */
-    public MllpAuditDataset createAuditDataset();
-    
-    
+    public MllpAuditDataset createAuditDataset() {
+        return new MllpAuditDataset(serverSide);
+    }
+
+
     /**
      * Returns an array containing names of transaction-specific fields
      * that must be present in a complete audit dataset.
@@ -44,9 +61,8 @@ public interface MllpAuditStrategy {
      *          Event trigger of the current HL7 message, e.g. "A01". 
      * @return
      *          A String array.
-     *          
      */
-    public String[] getNecessaryFields(String eventTrigger);
+    abstract public String[] getNecessaryFields(String eventTrigger);
     
     
     /**
@@ -59,7 +75,7 @@ public interface MllpAuditStrategy {
      * @param exchange
      *      Camel exchange
      */
-    public void enrichAuditDatasetFromRequest(
+    abstract public void enrichAuditDatasetFromRequest(
             MllpAuditDataset auditDataset, 
             MessageAdapter msg,
             Exchange exchange);
@@ -75,7 +91,10 @@ public interface MllpAuditStrategy {
      */
     public void enrichAuditDatasetFromResponse(
             MllpAuditDataset auditDataset, 
-            MessageAdapter msg);
+            MessageAdapter msg)
+    {
+        // does nothing per default
+    }
     
     
     /**
@@ -85,14 +104,18 @@ public interface MllpAuditStrategy {
      * @param auditDataset
      *          Collected audit dataset. 
      */
-    public void doAudit(
+    abstract public void doAudit(
             RFC3881EventOutcomeCodes eventOutcome, 
             MllpAuditDataset auditDataset);
+
 
     /**
      * Audits an authentication node failure.
      * @param hostAddress
      *          the address of the node that is responsible for the failure.
      */
-    void auditAuthenticationNodeFailure(String hostAddress);
+    public void auditAuthenticationNodeFailure(String hostAddress) {
+        AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
+            true, null, getClass().getName(), null, hostAddress, null);
+    }
 }

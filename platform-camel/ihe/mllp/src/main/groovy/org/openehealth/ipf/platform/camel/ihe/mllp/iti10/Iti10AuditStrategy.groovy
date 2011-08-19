@@ -25,19 +25,19 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
  * Generic audit strategy for ITI-10 (PIX Update Notification).
  * @author Dmytro Rud
  */
-abstract class Iti10AuditStrategy implements MllpAuditStrategy {
-    
-    String[] getNecessaryFields(String messageType) {
-        ['PatientIds'] as String[]
+abstract class Iti10AuditStrategy extends MllpAuditStrategy {
+
+    Iti10AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
 
-    
+
+    String[] getNecessaryFields(String messageType) {
+        return ['PatientIds'] as String[]
+    }
+
+
     void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         auditDataset.patientIds = AuditUtils.pidList(msg.PID[3])
-    }
-
-    
-    void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        // nop
     }
 }

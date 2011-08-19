@@ -26,13 +26,18 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils;
  * Generic audit strategy for ITI-9 (PIX Query).
  * @author Dmytro Rud
  */
-abstract class Iti9AuditStrategy implements MllpAuditStrategy {
+abstract class Iti9AuditStrategy extends MllpAuditStrategy {
     
-    String[] getNecessaryFields(String messageType) {
-        ['Payload', 'PatientIds'] as String[]
+    Iti9AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
 
-    
+
+    String[] getNecessaryFields(String messageType) {
+        return ['Payload', 'PatientIds'] as String[]
+    }
+
+
     void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         if(msg.QPD?.value) {
             def patientId = MessageUtils.pipeEncode(msg.QPD[3].target)
@@ -55,7 +60,8 @@ abstract class Iti9AuditStrategy implements MllpAuditStrategy {
             if(( ! auditDataset.patientIds) || patientIds.contains(auditDataset.patientIds[0])) {
                 auditDataset.patientIds = patientIds
             } else {
-                auditDataset.patientIds = patientIds + auditDataset.patientIds[0]
+                patientIds << auditDataset.patientIds[0]
+                auditDataset.patientIds = patientIds
             }
         }
     }

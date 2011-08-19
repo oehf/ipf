@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 
 /**
@@ -23,6 +22,11 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
  * @author Dmytro Rud
  */
 class Iti8ServerAuditStrategy extends Iti8AuditStrategy {
+
+    Iti8ServerAuditStrategy() {
+        super(true)
+    }
+
 
     void callAuditRoutine(action, eventOutcome, auditDataset, newPatientId) {
         AuditorManager.getPIXManagerAuditor()."audit${action}PatientRecordEvent"(
@@ -35,16 +39,6 @@ class Iti8ServerAuditStrategy extends Iti8AuditStrategy {
                 auditDataset.receivingApplication,
                 auditDataset.messageControlId,
                 newPatientId ? auditDataset.patientId : auditDataset.oldPatientId)
-    }
-    
-    
-    MllpAuditDataset createAuditDataset() {
-        return new Iti8AuditDataset(true);
-    }
-
-    public void auditAuthenticationNodeFailure (String hostAddress) {
-        AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
-            true, null, getClass().name, null, hostAddress, null)
     }
 
 }

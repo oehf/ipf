@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
 class PdqClientAuditStrategy extends PdqAuditStrategy {
     
     PdqClientAuditStrategy(String transactionAbbreviation) {
-        super(transactionAbbreviation)
+        super(false, transactionAbbreviation)
     }
      
     void doAudit(RFC3881EventOutcomeCodes eventOutcome, MllpAuditDataset auditDataset) {
@@ -42,14 +42,5 @@ class PdqClientAuditStrategy extends PdqAuditStrategy {
                 auditDataset.patientIds)
     }
     
-     
-    MllpAuditDataset createAuditDataset() {
-        new PdqAuditDataset(false);
-    }
-
-    void auditAuthenticationNodeFailure(String hostAddress) {
-        AuditorManager.getPDQConsumerAuditor().auditNodeAuthenticationFailure(
-            true, null, getClass().name, null, hostAddress, null)
-    }
 }
  

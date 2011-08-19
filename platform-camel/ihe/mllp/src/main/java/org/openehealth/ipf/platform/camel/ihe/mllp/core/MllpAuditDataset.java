@@ -48,6 +48,19 @@ public class MllpAuditDataset extends AuditDataset {
     /** Remote address from MINA session */
     private String remoteAddress;
 
+    /** Patient ID list from PID-3. */
+    private String patientId;
+
+    /** Old patient ID list from MRG-1 (for A40 only). */
+    private String oldPatientId;
+
+    /** Patient ID list from PID-3. */
+    private String[] patientIds;
+
+    /** Request payload. */
+    private String payload;
+
+
     
     public static final String[] GENERIC_NECESSARY_AUDIT_FIELDS = new String[] {
         /*
@@ -68,7 +81,7 @@ public class MllpAuditDataset extends AuditDataset {
     /**
      * Constructor.
      * @param serverSide
-     *      Where we are&nbsp;mdash; server side 
+     *      Where we are&nbsp;&mdash; server side
      *      ({@code true}) or client side ({@code false}).
      */
     public MllpAuditDataset(boolean serverSide) {
@@ -141,4 +154,37 @@ public class MllpAuditDataset extends AuditDataset {
     public String getRemoteAddress() {
         return remoteAddress;
     }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setOldPatientId(String oldPatientId) {
+        this.oldPatientId = oldPatientId;
+    }
+
+    public String getOldPatientId() {
+        return oldPatientId;
+    }
+
+    public void setPatientIds(String[] patientIds) {
+        this.patientIds = patientIds;
+    }
+
+    public String[] getPatientIds() {
+        return patientIds;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
 }

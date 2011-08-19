@@ -21,8 +21,6 @@ import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpInterceptor
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 

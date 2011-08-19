@@ -26,13 +26,20 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Generic audit strategy for ITI-8 (PIX Feed).
  * @author Dmytro Rud
  */
-abstract class Iti8AuditStrategy implements MllpAuditStrategy {
+abstract class Iti8AuditStrategy extends MllpAuditStrategy {
     
-    String[] getNecessaryFields(String messageType) {
-        (messageType == 'A40') ? ['PatientId', 'OldPatientId'] as String[] : ['PatientId'] as String[]
+    Iti8AuditStrategy(boolean serverSide) {
+        super(serverSide)
     }
 
-    
+
+    String[] getNecessaryFields(String messageType) {
+        return (messageType == 'A40') ?
+            ['PatientId', 'OldPatientId'] as String[] :
+            ['PatientId'] as String[]
+    }
+
+
     void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         def pidSegment
         if(msg.MSH[9][2].value == 'A40') {
@@ -45,11 +52,6 @@ abstract class Iti8AuditStrategy implements MllpAuditStrategy {
         auditDataset.patientId = AuditUtils.pidList(pidSegment)?.join(msg.MSH[2].value[1])
     }
 
-    
-    void enrichAuditDatasetFromResponse(MllpAuditDataset auditDataset, MessageAdapter msg) {
-        // nop
-    }
-    
     
     void doAudit(RFC3881EventOutcomeCodes eventOutcome, MllpAuditDataset auditDataset) {
         if(auditDataset.messageType == 'A08') {

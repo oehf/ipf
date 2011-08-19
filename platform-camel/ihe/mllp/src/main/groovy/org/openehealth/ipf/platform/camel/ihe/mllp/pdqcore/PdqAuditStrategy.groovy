@@ -25,16 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.AuditUtils;
  * Generic audit strategy for ITI-21 and ITI-22 (PDQ).
  * @author Dmytro Rud
  */
-abstract class PdqAuditStrategy implements MllpAuditStrategy {
-    
-    // patient ID list is obligatory for auditing, but might  
-    // be not available in reality -- particularly when search
-    // criteria were not based on patient ID and no patients
-    // have been found  
-    String[] getNecessaryFields(String messageType) {
-        ['Payload', /*'PatientIds'*/] as String[]
-    }
-
+abstract class PdqAuditStrategy extends MllpAuditStrategy {
     
     /**
      * Whether this strategy serves 
@@ -43,7 +34,9 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
      */
     final String transactionAbbreviation
     
-    PdqAuditStrategy(String transactionAbbreviation) {
+    PdqAuditStrategy(boolean serverSide, String transactionAbbreviation) {
+        super(serverSide)
+
         if( ! ['PDQ', 'PDVQ'].contains(transactionAbbreviation)) {
             throw new IllegalStateException('Bad transaction abbreviation')
         }
@@ -52,6 +45,15 @@ abstract class PdqAuditStrategy implements MllpAuditStrategy {
     }
 
     
+    // patient ID list is obligatory for auditing, but might
+    // be not available in reality -- particularly when search
+    // criteria were not based on patient ID and no patients
+    // have been found
+    String[] getNecessaryFields(String messageType) {
+        return ['Payload', /*'PatientIds'*/] as String[]
+    }
+
+
     void enrichAuditDatasetFromRequest(MllpAuditDataset auditDataset, MessageAdapter msg, Exchange exchange) {
         if(msg.QPD?.value) {
             // Try to extract a complete patient ID from query pieces.  

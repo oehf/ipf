@@ -24,7 +24,12 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
  * @author Dmytro Rud
  */
 class Iti10ClientAuditStrategy extends Iti10AuditStrategy {
-    
+
+    Iti10ClientAuditStrategy() {
+        super(false)
+    }
+
+
     void doAudit(RFC3881EventOutcomeCodes eventOutcome, MllpAuditDataset auditDataset) {
         AuditorManager.getPIXManagerAuditor().auditUpdateNotificationEvent(
                 eventOutcome,
@@ -38,14 +43,5 @@ class Iti10ClientAuditStrategy extends Iti10AuditStrategy {
                 auditDataset.patientIds)
     }
     
-     
-    MllpAuditDataset createAuditDataset() {
-        new Iti10AuditDataset(false);
-    }
-
-    void auditAuthenticationNodeFailure(String hostAddress) {
-        AuditorManager.getPIXManagerAuditor().auditNodeAuthenticationFailure(
-            true, null, getClass().name, null, hostAddress, null)
-    }
 }
  
