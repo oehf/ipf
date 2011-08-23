@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.xcpd;
+package org.openehealth.ipf.platform.camel.ihe.xcpd;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.message.Exchange;
-import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractWsRejectionHandlingStrategy;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Sample rejection handling strategy.
  * @author Dmytro Rud
  */
-public class MyRejectionHandlingStrategy extends WsRejectionHandlingStrategy {
+public class MyRejectionHandlingStrategy extends AbstractWsRejectionHandlingStrategy {
     private static final Log LOG = LogFactory.getLog(MyRejectionHandlingStrategy.class);
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);

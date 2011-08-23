@@ -16,13 +16,12 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf;
 
 import org.apache.cxf.message.Exchange;
-import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
 /**
- * Rejection handling strategy base for WS transactions.
+ * Rejection handling strategy for WS transactions.
  * @author Dmytro Rud
  */
-abstract public class WsRejectionHandlingStrategy {
+public interface WsRejectionHandlingStrategy {
 
     /**
      * This method will be called when the request has been rejected
@@ -33,14 +32,14 @@ abstract public class WsRejectionHandlingStrategy {
      *      CXF exchange containing multiple representations of the request
      *      message and the whole context information.
      */
-    abstract public void handleRejectedExchange(Exchange cxfExchange);
+    void handleRejectedExchange(Exchange cxfExchange);
 
 
     /**
      * This method should return <code>true</code> when the given CXF
-     * exchange can be considered rejected (failed).  Per default,
-     * only outbound SOAP Faults will lead to positive responses.
-     * May be overwritten in derived classes.
+     * exchange can be considered rejected (failed).
+     * <p>
+     * @see org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils#extractOutgoingException(org.apache.cxf.message.Exchange)
      *
      * @param cxfExchange
      *      CXF exchange under consideration.
@@ -48,7 +47,5 @@ abstract public class WsRejectionHandlingStrategy {
      *      <code>true</code> when the given CXF exchange has been
      *      rejected; <code>false</code> otherwise.
      */
-    public boolean isRejected(Exchange cxfExchange) {
-        return (SoapUtils.extractOutgoingException(cxfExchange) != null);
-    }
+    boolean isRejected(Exchange cxfExchange);
 }

@@ -19,7 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.message.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.Hl7v2WsRejectionHandlingStrategy;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsRejectionHandlingStrategy;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractOutgoing
  * Sample rejection handling strategy.
  * @author Dmytro Rud
  */
-public class MyRejectionHandlingStrategy extends Hl7v2WsRejectionHandlingStrategy {
+public class MyRejectionHandlingStrategy extends AbstractHl7v2WsRejectionHandlingStrategy {
     private static final Log LOG = LogFactory.getLog(MyRejectionHandlingStrategy.class);
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
