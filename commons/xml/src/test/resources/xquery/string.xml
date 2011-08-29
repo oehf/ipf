@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+    <book isbn="978-1935182368" type="ISBN-13">
+        <title>Camel In Action</title>
+        <author>Claus Ibsen</author>
+        <author>Jonathan Anstey</author>
+        <language>English</language>
+    </book>
+    <book isbn="978-0321200686" type="ISBN-13">
+        <title>Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions</title>
+        <author>Gregor Hohpe</author>
+        <author>Bobby Woolf</author>
+        <language>English</language> 
+    </book>
+    <book isbn="someisbn" type="ISBN-13">
+        <title>SOA-Expertenwissen</title>
+        <author>Gernot Starke</author>
+        <author>Stefan Tilkov</author>
+        <language>German</language> 
+    </book>
+    <book isbn="other" type="ISBN-13">
+        <title>John Atanasoff Biography</title>
+        <author>John Atanasoff</author>
+        <language>Bulgarian</language> 
+    </book>
+</books>

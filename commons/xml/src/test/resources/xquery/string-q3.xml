@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books filter-lang="Bulgarian" filter-name="John">
+    <book isbn="other" type="ISBN-13">
+        <title>John Atanasoff Biography</title>
+        <author>John Atanasoff</author>
+        <language>Bulgarian</language>
+    </book>
+</books>

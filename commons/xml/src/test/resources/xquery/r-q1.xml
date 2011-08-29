@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report>
+   <item count="1" isbn="978-0321200686" type="book">
+      <title>Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions</title>
+   </item>
+   <item count="3" isbn="978-1935182368" type="book">
+      <title>Camel In Action</title>
+   </item>
+</report>
