@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orders>
+    <order id="T9999">
+        <item type="book">
+            <book isbn="978-1935182368" type="ISBN-13"/>
+            <amount>1</amount>
+        </item>
+        <item type="book">
+            <book isbn="978-0321200686" type="ISBN-13"/>
+            <amount>1</amount>
+        </item>
+        <status>PAID</status>
+    </order>
+    <order id="T9998">
+        <item type="book">
+            <book isbn="978-1935182368" type="ISBN-13"/>
+            <amount>1</amount>
+        </item>
+        <status>DRAFT</status>
+    </order>
+    <order id="T9997">
+        <item type="book">
+            <book isbn="978-1935182368" type="ISBN-13"/>
+            <amount>2</amount>
+        </item>
+        <status>PAID</status>
+    </order>
+	<order id="T9996">
+        <item type="car">
+            <car shasy="293782430-23498572349"/>
+            <amount>1</amount>
+        </item>
+        <status>PAID</status>
+    </order>
+</orders>

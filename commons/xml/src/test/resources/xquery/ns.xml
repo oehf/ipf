@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books xmlns="urn:default:ns"
+    xmlns:ns="urn:default:ns"
+    xmlns:new="urn:ns:2011"
+    xmlns:other="urn:ns:1999">
+    <book> 
+        <new:isbn ns:number="978-1935182368" type="ISBN-13"/>
+        <other:isbn ns:number="blabla" type="ISBN-10"/>
+        <title>Camel In Action</title>
+        <author>Claus Ibsen</author>
+        <author>Jonathan Anstey</author>
+        <new:language name="en" displayName="English"/>
+        <other:language>English</other:language>
+    </book>
+    <book>
+        <new:isbn ns:number="978-0321200686" type="ISBN-13"/>
+        <other:isbn ns:number="blabla" type="ISBN-10"/>
+        <title>Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions</title>
+        <author>Gregor Hohpe</author>
+        <author>Bobby Woolf</author>
+        <new:language name="en" displayName="English"/>
+        <other:language>English</other:language>
+    </book>
+    <book>
+        <new:isbn ns:number="someisbn" type="ISBN-13"/>
+        <other:isbn ns:number="blabla" type="ISBN-10"/>
+        <title>SOA-Expertenwissen</title>
+        <author>Gernot Starke</author>
+        <author>Stefan Tilkov</author>
+        <new:language name="de" displayName="German"/>
+        <other:language>German</other:language> 
+    </book>
+    <book>
+        <new:isbn ns:number="otherisbn" type="ISBN-13"/>
+        <other:isbn ns:number="blabla" type="ISBN-10"/>
+        <title>John Atanasoff Biography</title>
+        <author>John Atanasoff</author>
+        <new:language name="bg" displayName="Bulgarian"/>
+        <other:language>Bulgarian</other:language>
+    </book>
+</books>

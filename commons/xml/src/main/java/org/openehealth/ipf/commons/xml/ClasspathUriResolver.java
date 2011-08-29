@@ -19,16 +19,16 @@ import java.net.URL;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 
 import org.xml.sax.InputSource;
 
 /**
- * URIResolver used to correctly resolve xsl:import commands if the imported
- * stylesheet can be found somewhere in the classloader's classpath. If it can't
- * be found, the default URIResolver is used.
+ * URIResolver used to correctly resolve import commands in xslt or xquery
+ * content. The referenced resource (stylesheet or document) can be found
+ * somewhere in the classloader's classpath. If it can't be found, the default
+ * URIResolver is used.
  * 
  * @author Christian Ohr
  */
@@ -36,9 +36,9 @@ class ClasspathUriResolver implements URIResolver {
 
     private final URIResolver standardResolver;
     
-    public ClasspathUriResolver(TransformerFactory factory) {
+    public ClasspathUriResolver(URIResolver resolver) {
         super();
-        standardResolver = factory.getURIResolver();
+        standardResolver = resolver;
     }
 
     /**
