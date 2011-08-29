@@ -20,7 +20,6 @@ import groovy.util.slurpersupport.GPathResult;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.DatatypeFactory;
 import org.apache.camel.Message;
-import org.apache.commons.io.IOUtils;
 
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.TtlHeaderUtils;
 
@@ -30,11 +29,6 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.TtlHeaderUtils;
  */
 class XcpdTestUtils {
 
-    static String readFile(String fn) {
-        InputStream stream = XcpdTestUtils.class.classLoader.getResourceAsStream(fn)
-        return IOUtils.toString(stream)
-    }
-    
     static void setTtl(Message message, int n) {
         Duration dura = DatatypeFactory.newInstance().newDuration("P${n}Y")
         TtlHeaderUtils.setTtl(dura, message)

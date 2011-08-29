@@ -26,6 +26,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.XcpdTestUtils
 import org.apache.commons.logging.LogFactory
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * Test routes for ITI-55.
@@ -37,7 +38,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
     
-    static final String RESPONSE = XcpdTestUtils.readFile('iti55/iti55-sample-response.xml') 
+    static final String RESPONSE = StandardTestContainer.readFile('iti55/iti55-sample-response.xml')
 
     static final long ASYNC_DELAY = 10 * 1000L
 

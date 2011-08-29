@@ -220,6 +220,61 @@ public abstract class SoapUtils {
 
 
     /**
+     * Extracts the given XML element from the given XML document.
+     * <p>
+     * Notes:
+     * <ul>
+     *     <li>Only non-empty elements can be found, the form
+     *          <tt>&lt;prefix:elementName (attr="value")* /&gt;</tt> is not supported.</li>
+     *     <li>When multiple elements with the given local name are present,
+     *          the last one will be returned.</li>
+     * </ul>
+     *
+     * @param document
+     *      XML document as String.
+     * @param elementName
+     *      XML local element name.
+     * @return
+     *      XML element as String, or <code>null</code> when no element could be extracted.
+     */
+    public static String extractNonEmptyElement(String document, String elementName) {
+
+        // ... <prefix:elementName attr1="abcd"> ... </prefix:elementName> ...
+        //     3                                     2        1
+
+        try {
+            int pos1 = document.lastIndexOf(elementName + '>');
+            if (pos1 < 0) {
+                LOG.warn("Cannot find end of the closing tag of " + elementName);
+                return null;
+            }
+
+            int pos2 = document.lastIndexOf('<', pos1 - 1);
+            if (pos2 < 0) {
+                LOG.warn("Cannot find start of the closing tag of " + elementName);
+                return null;
+            }
+
+            StringBuilder sb = new StringBuilder().append('<');
+            if (pos1 - pos2 > 2) {
+                sb.append(document, pos2 + 2, pos1 - 1).append(':');
+            }
+            int pos3 = document.indexOf(sb.append(elementName).toString());
+            if (pos3 < 0) {
+                LOG.warn("Cannot find start of the opening tag of " + elementName);
+                return null;
+            }
+
+            return document.substring(pos3, pos1 + elementName.length() + 1);
+
+        } catch (Exception e) {
+            LOG.error("Could not extract element" + elementName, e);
+            return null;
+        }
+    }
+
+
+    /**
      * Returns local name of the root element of the XML document represented
      * by the given string, or <code>null</code>, when the given string does
      * not contain valid XML.

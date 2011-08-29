@@ -45,7 +45,7 @@ class Utils {
                 return deviceName
             }
         }
-        return device.id.@extension.text() + '@' + device.id.@root.text()
+        return idString(device.id)
     }    
 
 
@@ -65,12 +65,7 @@ class Utils {
         msg.MSH[7][1] = xml.creationTime.@value.text().replaceFirst('[.+-].*$', '')
         
         String idRoot = xml.id.@root?.text()
-        if (idRoot) {
-            String idExtension = xml.id.@extension?.text()
-            msg.MSH[10] = idExtension ? (idExtension + '@' + idRoot) : idRoot
-        } else {
-            msg.MSH[10] = UUID.randomUUID().toString()
-        }
+        msg.MSH[10] = idRoot ? idString(xml.id) : UUID.randomUUID().toString()
     }
 
     
@@ -113,15 +108,6 @@ class Utils {
                    element.@assigningAuthorityName.text())
     }
 
-    
-    /**
-     * Constructs a v2 query ID on the basis of the given v3 XML elements.
-     */
-    static String constructQueryId(GPathResult source) {
-        def x = source.queryId
-        return [x.@extension, x.@root]*.text().findAll { it }.join('@')
-    }
-    
     
     /**
      * Creates a HL7 v3 name element from a v2 XPN.

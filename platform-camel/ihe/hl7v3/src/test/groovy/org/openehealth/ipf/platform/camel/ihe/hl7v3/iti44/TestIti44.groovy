@@ -33,7 +33,15 @@ class TestIti44 extends StandardTestContainer {
     
     def SERVICE1_PIX = "pixv3-iti44://localhost:${port}/pixv3-iti44-service1";
     def SERVICE1_XDS = "xds-iti44://localhost:${port}/xds-iti44-service1";
-    
+
+    private static final String ADD_REQUEST =
+            readFile('translation/pixfeed/v3/PIX_FEED_REG_Maximal_Request.xml')
+    private static final String REVISE_REQUEST =
+            readFile('translation/pixfeed/v3/PIX_FEED_REV_Maximal_Request.xml')
+    private static final String MERGE_REQUEST =
+            readFile('translation/pixfeed/v3/PIX_FEED_MERGE_Maximal_Request.xml')
+
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -42,15 +50,47 @@ class TestIti44 extends StandardTestContainer {
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
-    
+
+
     @Test
-    void testIti44Xds() {
-        def response = send(SERVICE1_XDS, '<PRPA_IN201304UV02 />', String.class)
-        def slurper = new XmlSlurper().parseText(response)
-        assert slurper.@from == 'Document Registry'
+    void testIti44Add() {
+        def response = send(SERVICE1_XDS, ADD_REQUEST, String.class)
+        assert auditSender.messages.size() == 2
+        auditSender.messages.each {
+            assert it.toString().contains('EventActionCode="C"')
+            assert it.toString().contains('EventOutcomeIndicator="0"')
+        }
     }
     
-    
+    @Test
+    void testIti44Revise() {
+        def response = send(SERVICE1_XDS, REVISE_REQUEST, String.class)
+        assert auditSender.messages.size() == 2
+        auditSender.messages.each {
+            assert it.toString().contains('EventActionCode="U"')
+            assert it.toString().contains('EventOutcomeIndicator="0"')
+        }
+    }
+
+    @Test
+    void testIti44Merge() {
+        def response = send(SERVICE1_XDS, MERGE_REQUEST, String.class)
+        assert auditSender.messages.size() == 4
+        int updateCount = 0
+        int deleteCount = 0
+        auditSender.messages.each {
+            if (it.toString().contains('EventActionCode="U"')) {
+                ++updateCount
+            } else if (it.toString().contains('EventActionCode="D"')) {
+                ++deleteCount
+            }
+            assert it.toString().contains('EventOutcomeIndicator="0"')
+        }
+        assert updateCount == 2
+        assert deleteCount == 2
+    }
+
+
     @Test @Ignore
     void testRestart() {
         Consumer consumer = ((Route) camelContext.routes.find {

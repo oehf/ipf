@@ -15,48 +15,47 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti56;
 
-import groovy.util.slurpersupport.GPathResult;
-import groovy.util.slurpersupport.NodeChild;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
+import groovy.util.slurpersupport.GPathResult
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 
 /**
  * Generic audit strategy for ITI-56 (XCPD).
  * @author Dmytro Rud
  */
-abstract class Iti56AuditStrategy extends WsAuditStrategy {
-    private static final transient Log LOG = LogFactory.getLog(Iti56AuditStrategy.class);
+class Iti56AuditStrategy extends Hl7v3AuditStrategy {
+
+    private static final String[] NECESSARY_FIELD_NAMES = [
+            'EventOutcomeCode',
+            'UserId',
+            'ServiceEndpointUrl',
+            'RequestPayload',
+            'PatientId',
+    ]
+
 
     Iti56AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit)
     }
     
     
-    public WsAuditDataset createAuditDataset() {
-        return new Iti56AuditDataset(isServerSide());
-    }    
-    
-
     /**
      * Returns ATNA response code -- SUCCESS if the name of the root element
      * is "PatientLocationQueryResponse", SERIOUS_FAILURE otherwise,
      * MAJOR_FAILURE on exception.
      * 
-     * @param xml
-     *      response message as unparsed XML string.
+     * @param gpath
+     *      response message as {@link GPathResult}.
      */
     @Override
-    RFC3881EventOutcomeCodes getEventOutcomeCode(Object response) {
+    RFC3881EventOutcomeCodes getEventOutcomeCode(Object gpath) {
         try {
-            GPathResult xml = Hl7v3Utils.slurp(response)
-            NodeChild node = (NodeChild) xml
-            return ((node.name() == 'PatientLocationQueryResponse') && 
-                    (node.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?
+            return ((gpath.name() == 'PatientLocationQueryResponse') &&
+                    (gpath.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?
                             RFC3881EventOutcomeCodes.SUCCESS : RFC3881EventOutcomeCodes.SERIOUS_FAILURE
         } catch (Exception e) {
             LOG.error('Exception in ITI-56 audit strategy', e)
@@ -64,28 +63,32 @@ abstract class Iti56AuditStrategy extends WsAuditStrategy {
         }
     }
 
-    
-    /**
-     * Extracts various audit information items from the <b>response</b> HL7 v3 message.
-     * 
-     * @param pojo
-     *      String representation of response HL7 v3 message.
-     * @param auditDataset
-     *      target audit dataset.
-     */
-    @Override
-    void enrichDatasetFromResponse(Object pojo, WsAuditDataset auditDataset) throws Exception {
-        // payload can be missing when the request is not valid
-        if (auditDataset.requestPayload) {
-            GPathResult patientId = Hl7v3Utils.slurp(auditDataset.requestPayload).RequestedPatientId
-            auditDataset.patientId = Hl7v3Utils.iiToCx(patientId)
-        }
-        auditDataset.eventOutcomeCode = getEventOutcomeCode(pojo)
-    }
-
 
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
-        // not used in XCPD
+        GPathResult patientId = slurp((String) request).RequestedPatientId
+        auditDataset.patientIds = [iiToCx(patientId)]
     }
+
+
+    @Override
+    void doAudit(WsAuditDataset auditDataset) {
+        AuditorManager.hl7v3Auditor.auditIti56(
+                serverSide,
+                auditDataset.eventOutcomeCode,
+                auditDataset.userId,
+                auditDataset.userName,
+                auditDataset.serviceEndpointUrl,
+                auditDataset.clientIpAddress,
+                auditDataset.requestPayload,
+                auditDataset.patientId
+        )
+    }
+
+
+    @Override
+    String[] getNecessaryAuditFieldNames() {
+        return NECESSARY_FIELD_NAMES
+    }
+
 }

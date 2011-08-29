@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
@@ -52,7 +51,7 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
     public Hl7v3ClientFactory(
             Hl7v3ServiceInfo serviceInfo,
             String serviceUrl,
-            WsAuditStrategy auditStrategy,
+            Hl7v3AuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors)
     {

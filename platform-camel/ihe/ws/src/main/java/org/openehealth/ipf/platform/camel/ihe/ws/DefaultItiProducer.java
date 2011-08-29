@@ -138,7 +138,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
 
         // for asynchronous interaction: configure WSA headers and store correlation data
         if (replyToUri != null) {
-            String messageId = UUID.randomUUID().toString();
+            String messageId = "urn:uuid:" + UUID.randomUUID().toString();
             configureWSAHeaders(messageId, replyToUri, requestContext);
 
             DefaultItiEndpoint endpoint = (DefaultItiEndpoint) getEndpoint();

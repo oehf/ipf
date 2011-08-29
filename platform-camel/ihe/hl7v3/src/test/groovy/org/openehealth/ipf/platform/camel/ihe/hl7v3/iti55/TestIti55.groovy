@@ -40,9 +40,9 @@ class TestIti55 extends StandardTestContainer {
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti55service-response"
     final String SERVICE2_URI = "xcpd-iti55://localhost:${port}/iti55service2"
     
-    static final String REQUEST = XcpdTestUtils.readFile('iti55/iti55-sample-request.xml')
+    static final String REQUEST = StandardTestContainer.readFile('iti55/iti55-sample-request.xml')
     
-    static final Set<Integer> CALLS_WITH_TTL_HEADER = [1, 5, 9]as Set
+    static final Set<Integer> CALLS_WITH_TTL_HEADER = [1, 5, 9] as Set
     static final AtomicInteger ttlResponsesCount = new AtomicInteger(0)
     
     static void main(args) {
@@ -92,9 +92,10 @@ class TestIti55 extends StandardTestContainer {
     
     
     private void send(
-    String endpointUri,
-    int n,
-    String responseEndpointUri = null) {
+            String endpointUri,
+            int n,
+            String responseEndpointUri = null)
+    {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
         

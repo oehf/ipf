@@ -25,8 +25,7 @@ import org.apache.commons.logging.LogFactory
 import org.junit.After
 import org.junit.AfterClass
 import org.openehealth.ipf.commons.ihe.core.atna.MockedSender
-import org.openehealth.ipf.commons.ihe.core.atna.custom.XCPDInitiatingGatewayAuditor
-import org.openehealth.ipf.commons.ihe.core.atna.custom.XCPDRespondingGatewayAuditor
+import org.openehealth.ipf.commons.ihe.core.atna.custom.Hl7v3Auditor
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -36,6 +35,7 @@ import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.WebApplicationContextUtils
+import org.apache.commons.io.IOUtils
 
 /**
  * Base class for tests that are run within an embedded web container.
@@ -54,10 +54,11 @@ class StandardTestContainer {
      static CamelContext camelContext
      
      static int port
-    /*
-     *  Port to be used, when the test is subclassed by java applications.
-     */
-    public static int DEMO_APP_PORT = 8999
+
+     /*
+      *  Port to be used, when the test is subclassed by java applications.
+      */
+     public static int DEMO_APP_PORT = 8999
      
      static void startServer(servlet, String appContextName, boolean secure, int serverPort) {
          def contextResource = new ClassPathResource(appContextName)
@@ -114,19 +115,9 @@ class StandardTestContainer {
          XDSRepositoryAuditor.auditor.config.systemUserId = 'repositoryUserId'
          XDSRepositoryAuditor.auditor.config.systemAltUserId = 'repositoryAltUserId'
              
-         XCPDInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
-         XCPDInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'
-         XCPDInitiatingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XCPDInitiatingGatewayAuditor.auditor.config.auditRepositoryPort = auditPort
-         XCPDInitiatingGatewayAuditor.auditor.config.systemUserId = 'initiatingGwUserId'
-         XCPDInitiatingGatewayAuditor.auditor.config.systemAltUserId = 'initiatingGwAltUserId'
-
-         XCPDRespondingGatewayAuditor.auditor.config = new AuditorModuleConfig()
-         XCPDRespondingGatewayAuditor.auditor.config.auditSourceId = 'respondingGwId'
-         XCPDRespondingGatewayAuditor.auditor.config.auditRepositoryHost = 'localhost'
-         XCPDRespondingGatewayAuditor.auditor.config.auditRepositoryPort = auditPort
-         XCPDRespondingGatewayAuditor.auditor.config.systemUserId = 'respondingGwUserId'
-         XCPDRespondingGatewayAuditor.auditor.config.systemAltUserId = 'respondingGwAltUserId'
+         Hl7v3Auditor.auditor.config = new AuditorModuleConfig()
+         Hl7v3Auditor.auditor.config.auditRepositoryHost = 'localhost'
+         Hl7v3Auditor.auditor.config.auditRepositoryPort = auditPort
 
          XCAInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
          XCAInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'
@@ -319,5 +310,17 @@ class StandardTestContainer {
          assert submissionSet.@ParticipantObjectTypeCodeRole == '20'
          checkCode(submissionSet.ParticipantObjectIDTypeCode, 'urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd', 'IHE XDS Metadata')
          assert submissionSet.@ParticipantObjectID == '123'
+     }
+
+     static String readFile(String fn) {
+         InputStream inputStream
+         String s = null
+         try {
+             inputStream = StandardTestContainer.class.classLoader.getResourceAsStream(fn)
+             s = IOUtils.toString(inputStream)
+         } finally {
+             IOUtils.closeQuietly(inputStream)
+             return s
+         }
      }
 }

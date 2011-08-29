@@ -404,6 +404,10 @@
                     <value value="19630804"/>
                     <semanticsText>LivingSubject..birthTime</semanticsText>
                 </livingSubjectBirthTime>
+                <livingSubjectId>
+                    <value root="1.2.840.114350.1.13.99997.2.3412" extension="1234"/>
+                    <semanticsText>LivingSubject.id</semanticsText>
+                </livingSubjectId>
                 <livingSubjectName>
                     <value>
                         <given>Jimmy</given>

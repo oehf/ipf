@@ -24,6 +24,7 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
@@ -59,27 +60,46 @@ public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceIn
 
     @Override
     public Producer createProducer() throws Exception {
+
+        // When interactive continuation is supported by the endpoint,
+        // the ATNA auditing is performed by the producer, therefore
+        // the audit strategy is deployed there instead of the CXF factory.
+
+        Iti47AuditStrategy auditStrategy = isAudit() ?
+                new Iti47AuditStrategy(false, isAllowIncompleteAudit()) : null;
+
         ItiClientFactory clientFactory = new Hl7v3ClientFactory(
                 getWebServiceConfiguration(),
                 getServiceUrl(),
-                null,
+                isSupportContinuation() ? null : auditStrategy,
                 null,
                 getCustomInterceptors());
+
         return new Hl7v3ContinuationAwareProducer(
                 this,
                 clientFactory,
                 getWebServiceConfiguration(),
                 isSupportContinuation(),
                 isAutoCancel(),
-                isValidationOnContinuation());
+                isValidationOnContinuation(),
+                isSupportContinuation() ? auditStrategy : null);
     }
+
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
+
+        // When interactive continuation is supported by the endpoint,
+        // the ATNA auditing is performed by the service, therefore
+        // the audit strategy is deployed there instead of the CXF factory.
+
+        Iti47AuditStrategy auditStrategy = isAudit() ?
+                new Iti47AuditStrategy(true, isAllowIncompleteAudit()) : null;
+
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
-                null,
+                isSupportContinuation() ? null : auditStrategy,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
 
@@ -87,7 +107,8 @@ public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceIn
                 new Iti47ContinuationAwareService(
                         getContinuationStorage(),
                         getDefaultContinuationThreshold(),
-                        isValidationOnContinuation()) :
+                        isValidationOnContinuation(),
+                        auditStrategy) :
                 new Iti47Service();
 
         ServerFactoryBean serverFactory = serviceFactory.createServerFactory(portTypeImpl);

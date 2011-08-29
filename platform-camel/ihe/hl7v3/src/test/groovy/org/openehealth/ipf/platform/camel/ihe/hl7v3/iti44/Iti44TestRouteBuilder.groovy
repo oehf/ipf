@@ -16,23 +16,28 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 
 /**
  * @author Dmytro Rud
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class Iti44TestRouteBuilder extends SpringRouteBuilder {
+
+    private static final String ACK =
+            StandardTestContainer.readFile('translation/pixfeed/v3/Ack.xml')
+
     @Override
     public void configure() throws Exception {
         from('pixv3-iti44:pixv3-iti44-service1')
-            .process { 
-                Exchanges.resultMessage(it).body = '<response from="PIX Manager"/>'
-            }
+            .process(PixPdqV3CamelValidators.iti44RequestValidator())
+            .setBody(constant(ACK))
+            .process(PixPdqV3CamelValidators.iti44ResponseValidator())
 
         from('xds-iti44:xds-iti44-service1')
-            .process { 
-                Exchanges.resultMessage(it).body = '<response from="Document Registry"/>'
-            }
+            .process(PixPdqV3CamelValidators.iti44RequestValidator())
+            .setBody(constant(ACK))
+            .process(PixPdqV3CamelValidators.iti44ResponseValidator())
 
     }
 }

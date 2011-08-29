@@ -12,11 +12,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:http="http://cxf.apache.org/transports/http/configuration"
     xsi:schemaLocation="
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 http://camel.apache.org/schema/spring 
 http://camel.apache.org/schema/spring/camel-spring.xsd 
+http://cxf.apache.org/transports/http/configuration
+http://cxf.apache.org/schemas/configuration/http-conf.xsd
 ">
 
     <!-- Importing the CXF configuration -->
@@ -56,4 +59,9 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <bean id="rejectionHandlingStrategy"
           class="org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy" />
+
+    <http:conduit name="*.http-conduit">
+        <http:client ConnectionTimeout="0" ReceiveTimeout="0" />
+    </http:conduit>
+
 </beans>

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1;
 
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareWebService;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationStorage;
@@ -33,8 +34,10 @@ public class Pcc1ContinuationAwareService
     public Pcc1ContinuationAwareService(
             Hl7v3ContinuationStorage storage,
             int defaultThreshold,
-            boolean validationOnContinuation)
+            boolean validationOnContinuation,
+            Hl7v3AuditStrategy auditStrategy)
     {
-        super(Pcc1Component.WS_CONFIG, storage, defaultThreshold, validationOnContinuation);
+        super(Pcc1Component.WS_CONFIG, storage, defaultThreshold,
+                validationOnContinuation, auditStrategy);
     }
 }

@@ -16,21 +16,19 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44
 
 import org.junit.Test
-import org.apache.commons.io.IOUtils
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * @author Dmytro Rud
  */
 class TestIti44Validation {
 
-    private String readFile(String fn) {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fn)
-        String s = IOUtils.toString(inputStream)
-        return s
+    private static String readFile(String id) {
+        return StandardTestContainer.readFile("translation/pixfeed/v3/PIX_FEED_${id}_Maximal_Request.xml")
     }
 
     @Test
@@ -41,15 +39,15 @@ class TestIti44Validation {
         String message
 
         // 301
-        message = readFile('iti44/PIX_FEED_REG_Maximal_Request.xml')
+        message = readFile('REG')
         validator.validate(message, validationProfile)
 
         // 302
-        message = readFile('iti44/PIX_FEED_REV_Maximal_Request.xml')
+        message = readFile('REV')
         validator.validate(message, validationProfile)
 
         // 304
-        message = readFile('iti44/PIX_FEED_MERGE_Maximal_Request.xml')
+        message = readFile('MERGE')
         validator.validate(message, validationProfile)
     }
 }

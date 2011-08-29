@@ -18,11 +18,8 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.commons.lang.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 
 /**
  * Service factory for receivers of asynchronous XCPD responses.
@@ -47,7 +44,7 @@ public class Hl7v3AsyncResponseServiceFactory extends Hl7v3ServiceFactory {
     public Hl7v3AsyncResponseServiceFactory(
             Hl7v3ServiceInfo serviceInfo,
             String serviceAddress,
-            WsAuditStrategy auditStrategy,
+            Hl7v3AuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors)
     {
@@ -65,7 +62,7 @@ public class Hl7v3AsyncResponseServiceFactory extends Hl7v3ServiceFactory {
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
             AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, true, correlator, true);
+                new AuditResponseInterceptor(auditStrategy, false, correlator, true);
             svrFactory.getInInterceptors().add(auditInterceptor);
             svrFactory.getInFaultInterceptors().add(auditInterceptor);
         }

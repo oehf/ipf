@@ -23,6 +23,7 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 import org.apache.cxf.phase.Phase;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 
 /**
  * CXF interceptor which inserts data of String content type  
@@ -41,8 +42,9 @@ public class InPayloadInjectorInterceptor extends AbstractPhaseInterceptor<Messa
      *      message payload should be inserted.
      */
     public InPayloadInjectorInterceptor(int position) {
-        super(Phase.INVOKE);
-        addBefore(ServiceInvokerInterceptor.class.getName());
+        super(Phase.UNMARSHAL);
+        addBefore(AuditInRequestInterceptor.class.getName());
+        addAfter(InNamespaceMergeInterceptor.class.getName());
         this.position = position;
     }
 

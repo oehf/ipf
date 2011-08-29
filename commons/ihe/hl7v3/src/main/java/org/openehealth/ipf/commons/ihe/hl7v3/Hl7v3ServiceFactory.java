@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
@@ -50,7 +49,7 @@ public class Hl7v3ServiceFactory extends ItiServiceFactory {
     public Hl7v3ServiceFactory(
             Hl7v3ServiceInfo serviceInfo,
             String serviceAddress,
-            WsAuditStrategy auditStrategy,
+            Hl7v3AuditStrategy auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {

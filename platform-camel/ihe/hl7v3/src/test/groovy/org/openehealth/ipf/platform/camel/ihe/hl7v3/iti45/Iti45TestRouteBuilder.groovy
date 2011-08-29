@@ -16,16 +16,29 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45
 
 import org.apache.camel.spring.SpringRouteBuilder
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
  * @author Dmytro Rud
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class Iti45TestRouteBuilder extends SpringRouteBuilder {
+
+    private static final String RESPONSE =
+        StandardTestContainer.readFile('translation/pixquery/v3/07_PIXQuery1Response.xml')
+
+
     @Override
     public void configure() throws Exception {
         from('pixv3-iti45:pixv3-iti45-service1')
-            .process { 
+            .process(PixPdqV3CamelValidators.iti45RequestValidator())
+            .setBody(constant(RESPONSE))
+            .process(PixPdqV3CamelValidators.iti45ResponseValidator())
+
+
+        from('pixv3-iti45:pixv3-iti45-service2?audit=false')
+            .process {
                 Exchanges.resultMessage(it).body = '''
                     <!-- comment 1 -->
                     <!-- comment 2 -->

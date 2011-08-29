@@ -24,17 +24,6 @@ import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType {
 
     /**
-     * "IHE Transactions","ITI-55","Cross Gateway Patient Discovery"
-     */
-    public static final class CrossGatewayPatientDiscovery extends IHETransactionEventTypeCodes
-    {
-        public CrossGatewayPatientDiscovery()
-        {
-            super("ITI-55", "Cross Gateway Patient Discovery");
-        }   
-    }
-
-    /**
      * "IHE Transactions","ITI-56","Patient Location Query"
      */
     public static final class PatientLocationQuery extends IHETransactionEventTypeCodes

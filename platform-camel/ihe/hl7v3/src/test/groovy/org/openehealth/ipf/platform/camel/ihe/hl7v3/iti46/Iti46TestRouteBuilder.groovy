@@ -18,17 +18,23 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti46
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.apache.camel.Exchange
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 
 /**
  * @author Dmytro Rud
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class Iti46TestRouteBuilder extends SpringRouteBuilder {
+
+    private static final String ACK =
+            StandardTestContainer.readFile('translation/pixfeed/v3/Ack.xml')
+
     @Override
     public void configure() throws Exception {
         from('pixv3-iti46:pixv3-iti46-service1')
-            .process { 
-                Exchanges.resultMessage(it).body = '<response from="PIX Consumer"/>'
-            }
+            .process(PixPdqV3CamelValidators.iti46RequestValidator())
+            .setBody(constant(ACK))
+            .process(PixPdqV3CamelValidators.iti46ResponseValidator())
 
 
         from('pixv3-iti46:pixv3-iti46-charset')

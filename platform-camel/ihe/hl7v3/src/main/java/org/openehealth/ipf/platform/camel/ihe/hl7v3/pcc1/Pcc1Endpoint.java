@@ -72,7 +72,8 @@ public class Pcc1Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceInf
                 getWebServiceConfiguration(),
                 isSupportContinuation(),
                 isAutoCancel(),
-                isValidationOnContinuation());
+                isValidationOnContinuation(),
+                /* auditStrategy */ null);
     }
 
     @Override
@@ -88,7 +89,8 @@ public class Pcc1Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceInf
                 new Pcc1ContinuationAwareService(
                         getContinuationStorage(),
                         getDefaultContinuationThreshold(),
-                        isValidationOnContinuation()) :
+                        isValidationOnContinuation(),
+                        /* auditStrategy */ null) :
                 new Pcc1Service();
 
         ServerFactoryBean serverFactory = serviceFactory.createServerFactory(portTypeImpl);

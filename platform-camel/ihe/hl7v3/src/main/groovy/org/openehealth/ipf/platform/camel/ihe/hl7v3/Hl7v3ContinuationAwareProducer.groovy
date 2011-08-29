@@ -35,7 +35,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import groovy.xml.XmlUtil
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -59,7 +59,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     private final boolean autoCancel
     private final boolean validationOnContinuation
 
-    private final WsAuditStrategy auditStrategy
+    private final Hl7v3AuditStrategy auditStrategy
 
     // TODO: make this value configurable
     private final int defaultContinuationQuantity = 10
@@ -79,6 +79,9 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
      *      (relevant only when continuation support is turned on).
      * @param validationOnContinuation
      *      whether internally handled incoming messages should be validated.
+     * @param auditStrategy
+     *      client-side ATNA audit strategy; may be <code>null</code>;
+     *      will be used only when <code>supportContinuation==true</code>.
      */
     public Hl7v3ContinuationAwareProducer(
             Hl7v3Endpoint endpoint,
@@ -86,7 +89,8 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             Hl7v3ContinuationAwareServiceInfo serviceInfo,
             boolean supportContinuation,
             boolean autoCancel,
-            boolean validationOnContinuation)
+            boolean validationOnContinuation,
+            Hl7v3AuditStrategy auditStrategy)
     {
         super(endpoint, clientFactory)
 
@@ -94,7 +98,10 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
         this.serviceInfo = serviceInfo
         this.supportContinuation = supportContinuation
         this.autoCancel = autoCancel
-        this.auditStrategy = auditStrategy
+
+        if (supportContinuation) {
+            this.auditStrategy = auditStrategy
+        }
     }
 
 

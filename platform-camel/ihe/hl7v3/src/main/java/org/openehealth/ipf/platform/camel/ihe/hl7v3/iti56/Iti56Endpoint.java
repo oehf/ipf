@@ -26,8 +26,7 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56ClientAuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
@@ -65,7 +64,7 @@ public class Iti56Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
         ItiClientFactory clientFactory = new Hl7v3ClientFactory(
                 getWebServiceConfiguration(),
                 getServiceUrl(),
-                isAudit() ? new Iti56ClientAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? new Iti56AuditStrategy(false, isAllowIncompleteAudit()) : null,
                 getCorrelator(),
                 getCustomInterceptors());
         return new Iti56Producer(this, clientFactory);
@@ -75,7 +74,7 @@ public class Iti56Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
         ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
-                isAudit() ? new Iti56ServerAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? new Iti56AuditStrategy(true, isAllowIncompleteAudit()) : null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
         ServerFactoryBean serverFactory =

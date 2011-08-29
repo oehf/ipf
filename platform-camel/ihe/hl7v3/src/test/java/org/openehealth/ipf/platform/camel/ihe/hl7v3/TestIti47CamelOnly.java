@@ -67,19 +67,7 @@ public class TestIti47CamelOnly extends StandardTestContainer {
         Assert.assertTrue(response.contains("<typeCode code=\"AA\"/>"));
     }
 
-    
-    private static String readFile(String fn) {
-        try {
-            InputStream is = CamelOnlyRouteBuilder.class.getClassLoader().getResourceAsStream(fn);
-            String s = IOUtils.toString(is);
-            IOUtils.closeQuietly(is);
-            return s;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    
     public static String getRequestMessage() {
         return requestMessage;
     }

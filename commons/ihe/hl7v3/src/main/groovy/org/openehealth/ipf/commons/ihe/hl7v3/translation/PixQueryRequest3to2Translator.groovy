@@ -24,7 +24,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 
 /**
  * PIX Query Requests translator v3 to v2.
- * @author Marek V�clav�k, Dmytro Rud
+ * @author Marek Václavík, Dmytro Rud
  */
 class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
     
@@ -78,7 +78,7 @@ class PixQueryRequest3to2Translator implements Hl7TranslatorV3toV2 {
 		def queryByParameter = xml.controlActProcess.queryByParameter
         def params = queryByParameter.parameterList
         qry.QPD[1] = this.queryName
-        qry.QPD[2] = constructQueryId(queryByParameter)
+        qry.QPD[2] = idString(queryByParameter.queryId)
         fillCx(qry.QPD[3], params.patientIdentifier[0].value[0])
         for (source in params.dataSource) {
             def cx = nextRepetition(qry.QPD[4])

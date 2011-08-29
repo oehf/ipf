@@ -15,20 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import groovy.xml.MarkupBuilder
-import groovy.util.XmlSlurper
 import groovy.util.slurpersupport.GPathResult
-import groovy.util.slurpersupport.Node
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
+import groovy.xml.MarkupBuilder
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.format.ISODateTimeFormat
 import org.openehealth.ipf.commons.xml.XmlYielder
 
 /*
- * Generic routines for HL7 v3 transformation.
- * @author Dmytro Rud, Marek Václavík
+ * Generic routines for HL7 v3 processing.
+ * @author Dmytro Rud, Marek VÃ¡clavÃ­k
  */
 class Hl7v3Utils {
 
@@ -184,4 +180,17 @@ class Hl7v3Utils {
         
         return ''
     }
+
+    /**
+     * Takes an element which contains an ID (II data type)
+     * and returns its extension and root parts concatenated with '@'.
+     * @param element
+     *      HL7v3 II element.
+     * @return
+     *      "extension @ root".
+     */
+    static String idString(GPathResult id) {
+        return "${id.@extension.text()}@${id.@root.text()}"
+    }
+
 }

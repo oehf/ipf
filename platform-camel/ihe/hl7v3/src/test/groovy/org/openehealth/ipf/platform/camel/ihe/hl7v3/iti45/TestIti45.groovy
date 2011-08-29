@@ -29,7 +29,11 @@ class TestIti45 extends StandardTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti-45.xml'
     
     def SERVICE1 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service1";
-    
+    def SERVICE2 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service2?audit=false";
+
+    private static final String REQUEST =
+        readFile('translation/pixquery/v3/NistPixpdq_Mesa10501-04_Example_01.xml')
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -41,7 +45,18 @@ class TestIti45 extends StandardTestContainer {
     
     @Test
     void testIti45() {
-        def response = send(SERVICE1, '<request/>', String.class)
+        def response = send(SERVICE1, REQUEST, String.class)
+        assert auditSender.messages.size() == 2
+        auditSender.messages.each {
+            assert it.toString().contains('EventActionCode="E"')
+            assert it.toString().contains('EventOutcomeIndicator="0"')
+        }
+    }
+
+
+    @Test
+    void testIti45XmlProcessing() {
+        def response = send(SERVICE2, '<request/>', String.class)
         def slurper = new XmlSlurper().parseText(response)
         assert slurper.@from == 'PIX Manager'
     }

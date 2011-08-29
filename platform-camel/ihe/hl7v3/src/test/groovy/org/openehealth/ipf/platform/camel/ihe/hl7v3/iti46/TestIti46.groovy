@@ -33,7 +33,10 @@ class TestIti46 extends StandardTestContainer {
     
     def SERVICE1 = "pixv3-iti46://localhost:${port}/pixv3-iti46-service1"
     def SERVICE_CHARSET = "pixv3-iti46://localhost:${port}/pixv3-iti46-charset"
-    
+
+    private static final String NOTIFICATION =
+            readFile('translation/pixfeed/v3/PIX_FEED_REV_Maximal_Request.xml')
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
@@ -45,9 +48,12 @@ class TestIti46 extends StandardTestContainer {
     
     @Test
     void testIti46() {
-        def response = send(SERVICE1, '<request/>', String.class)
-        def slurper = new XmlSlurper().parseText(response)
-        assert slurper.@from == 'PIX Consumer'
+        def response = send(SERVICE1, NOTIFICATION, String.class)
+        assert auditSender.messages.size() == 2
+        auditSender.messages.each {
+            assert it.toString().contains('EventActionCode="R"')
+            assert it.toString().contains('EventOutcomeIndicator="0"')
+        }
     }
     
     /**

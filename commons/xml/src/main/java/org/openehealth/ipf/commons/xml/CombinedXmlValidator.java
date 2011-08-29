@@ -44,8 +44,8 @@ public class CombinedXmlValidator implements Validator<String, CombinedXmlValida
 
     @Override
     public void validate(String message, CombinedXmlValidationProfile profile) throws ValidationException {
-        Validate.notNull(message, "message");
-        Validate.notNull(profile, "validation profile");
+        Validate.notNull(message, "message must be not null");
+        Validate.notNull(profile, "validation profile must be not null");
 
         // check whether the root element name is valid
         String rootElementName = getRootElementLocalName(message);

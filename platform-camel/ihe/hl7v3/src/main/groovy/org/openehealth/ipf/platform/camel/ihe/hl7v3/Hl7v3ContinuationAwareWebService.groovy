@@ -30,6 +30,7 @@ import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -50,13 +51,15 @@ public class Hl7v3ContinuationAwareWebService
     private final Hl7v3ContinuationStorage storage
     private final int defaultThreshold
     private final boolean validation
+    private final Hl7v3AuditStrategy auditStrategy
 
     
     public Hl7v3ContinuationAwareWebService(
             Hl7v3ContinuationAwareServiceInfo serviceInfo,
             Hl7v3ContinuationStorage storage,
             int defaultThreshold,
-            boolean validation)
+            boolean validation,
+            Hl7v3AuditStrategy auditStrategy)
     {
         super(serviceInfo);
 
@@ -64,6 +67,7 @@ public class Hl7v3ContinuationAwareWebService
         this.storage = storage
         this.defaultThreshold = defaultThreshold
         this.validation = validation
+        this.auditStrategy = auditStrategy
     }
 
 

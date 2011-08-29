@@ -16,26 +16,25 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.apache.commons.io.IOUtils
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translator
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * @author Dmytro Rud
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class Iti47TestRouteBuilder extends SpringRouteBuilder {
     private static final PdqRequest3to2Translator REQUEST_TRANSLATOR =
         new PdqRequest3to2Translator(translateInitialQuantity: true)
 
     private static final PdqResponse2to3Translator RESPONSE_TRANSLATOR =
         new PdqResponse2to3Translator()
 
-    private static final String V3_RESPONSE =
-        IOUtils.toString(GroovyRouteBuilder.class.classLoader
-                .getResourceAsStream('iti47/02_PDQQuery1Response.xml'))
+    private static final String V3_RESPONSE = StandardTestContainer.readFile('iti47/02_PDQQuery1Response.xml')
 
     private static final String V2_RESPONSE =
         'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' +
@@ -59,19 +58,27 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        from('pdqv3-iti47:pdqv3-iti47-service1')
+            .process(PixPdqV3CamelValidators.iti47RequestValidator())
+            .setBody(constant(V3_RESPONSE))
+            .process(PixPdqV3CamelValidators.iti47ResponseValidator())
+
+
         from('pdqv3-iti47:pdqv3-iti47-serviceConti' +
              '?supportContinuation=true' +
              '&defaultContinuationThreshold=1' +
              '&continuationStorage=#hl7v3ContinuationStorage' +
              '&validationOnContinuation=true')
-            .process {
-                Exchanges.resultMessage(it).body = V3_RESPONSE
-            }
+            .process(PixPdqV3CamelValidators.iti47RequestValidator())
+            .setBody(constant(V3_RESPONSE))
+            .process(PixPdqV3CamelValidators.iti47ResponseValidator())
+
 
         from('pdqv3-iti47:pdqv3-iti47-serviceIntercept')
             .process {
                 Exchanges.resultMessage(it).body = '<response from="PDSupplier"/>'
             }
+
 
         // check Hl7v3 exception handling (NAK with issue management code)
         from('pdqv3-iti47:pdqv3-iti47-serviceNak1')
@@ -85,6 +92,7 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                     acknowledgementDetailCode: 'FEHLER'
                 ])
             }
+
 
         // check Hl7v3 exception handling (NAK without issue management code)
         from('pdqv3-iti47:pdqv3-iti47-serviceNak2')
@@ -108,11 +116,11 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
 
         // routes for v3-v2 continuation interoperability test
         from('pdqv3-iti47:pdqv3-iti47-serviceV2Conti')
-            .validate().iti47Request()
+            .process(PixPdqV3CamelValidators.iti47RequestValidator())
             .translateHL7v3toHL7v2(REQUEST_TRANSLATOR)
             .to('pdq-iti21://localhost:8888?supportInteractiveContinuation=true')
             .translateHL7v2toHL7v3(RESPONSE_TRANSLATOR)
-            .validate().iti47Response()
+            .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 
 
         from('pdq-iti21://localhost:8888?supportInteractiveContinuation=true' +

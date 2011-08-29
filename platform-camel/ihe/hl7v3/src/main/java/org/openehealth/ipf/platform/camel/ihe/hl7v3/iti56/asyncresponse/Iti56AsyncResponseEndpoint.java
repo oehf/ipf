@@ -25,7 +25,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
@@ -66,7 +66,7 @@ public class Iti56AsyncResponseEndpoint extends DefaultItiEndpoint<Hl7v3ServiceI
         ItiServiceFactory serviceFactory = new Hl7v3AsyncResponseServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
-                isAudit() ? new Iti56ClientAuditStrategy(isAllowIncompleteAudit()) : null,
+                isAudit() ? new Iti56AuditStrategy(false, isAllowIncompleteAudit()) : null,
                 getCorrelator(),
                 getCustomInterceptors());
         ServerFactoryBean serverFactory = 

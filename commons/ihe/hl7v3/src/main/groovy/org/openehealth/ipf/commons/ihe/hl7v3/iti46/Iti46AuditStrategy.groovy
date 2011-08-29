@@ -1,80 +1,73 @@
 /*
- * Copyright 2010 the original author or authors.
- * 
+ * Copyright 2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.iti55;
+package org.openehealth.ipf.commons.ihe.hl7v3.iti46
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
-
-import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 
 /**
- * Generic audit strategy for ITI-55 (XCPD).
  * @author Dmytro Rud
  */
-class Iti55AuditStrategy extends Iti47AuditStrategy {
+class Iti46AuditStrategy extends Hl7v3AuditStrategy {
 
     private static final String[] NECESSARY_FIELD_NAMES = [
             'EventOutcomeCode',
             'UserId',
             'ServiceEndpointUrl',
             'PatientIds',
-            'RequestPayload',
-            'QueryId',
-            'HomeCommunityId',
+            'MessageId',
     ]
 
 
-    Iti55AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    Iti46AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit)
     }
-    
-    
+
+
     @Override
-    void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset0) {
+    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
-        super.enrichDatasetFromResponse(response, auditDataset)
+        GPathResult xml = slurp((String) request)
 
-        GPathResult xml = slurp((String) response)
-        
-        // query ID
-        auditDataset.queryId = idString(xml.controlActProcess.queryByParameter.queryId)
+        // message ID
+        auditDataset.messageId = idString(xml.id)
 
-        // home community ID
-        auditDataset.homeCommunityId = 
-            xml.receiver.device.asAgent.representedOrganization.id.@root.text() ?: null
+        // patient IDs
+        def patientIds = [] as Set<String>
+        addPatientIds(xml.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
+        auditDataset.patientIds = patientIds.toArray()
     }
 
 
     @Override
     void doAudit(WsAuditDataset auditDataset) {
-        AuditorManager.hl7v3Auditor.auditIti55(
+        AuditorManager.hl7v3Auditor.auditIti46(
                 serverSide,
                 auditDataset.eventOutcomeCode,
                 auditDataset.userId,
                 auditDataset.userName,
                 auditDataset.serviceEndpointUrl,
                 auditDataset.clientIpAddress,
-                auditDataset.requestPayload,
-                auditDataset.queryId,
-                auditDataset.homeCommunityId,
-                auditDataset.patientIds)
+                auditDataset.patientIds,
+                auditDataset.messageId)
     }
 
 

@@ -20,7 +20,7 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.XcpdTestUtils.*
+import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
  * Test routes for ITI-56.
@@ -31,7 +31,7 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
     
-    static final String RESPONSE = readFile('iti56/iti56-sample-response.xml') 
+    static final String RESPONSE = StandardTestContainer.readFile('iti56/iti56-sample-response.xml')
 
     static final long ASYNC_DELAY = 10 * 1000L
     
