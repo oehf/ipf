@@ -31,6 +31,14 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
+import org.apache.cxf.jaxws.context.WebServiceContextImpl
+import javax.xml.ws.handler.MessageContext
+import javax.servlet.http.HttpServletRequest
+import org.apache.cxf.message.Message
+import org.apache.cxf.transport.http.AbstractHTTPDestination
+import org.apache.cxf.ws.addressing.AddressingProperties
+import org.apache.cxf.ws.addressing.JAXWSAConstants
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -96,27 +104,58 @@ public class Hl7v3ContinuationAwareWebService
     String operation0(String requestString) {
         LOG.debug('operation(): Got request\n' + requestString)
 
-        // validate request
+        // prepare ATNA audit, if necessary
+        WsAuditDataset auditDataset = null
+        if (auditStrategy != null) {
+            auditDataset = auditStrategy.createAuditDataset()
+            MessageContext messageContext = new WebServiceContextImpl().getMessageContext()
+            HttpServletRequest servletRequest = messageContext.get(AbstractHTTPDestination.HTTP_REQUEST)
+            auditDataset.clientIpAddress = servletRequest?.remoteAddr
+            auditDataset.serviceEndpointUrl = messageContext.get(Message.REQUEST_URL)
+
+            AddressingProperties apropos = messageContext.get(JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND)
+            auditDataset.userId = apropos?.replyTo?.address?.value
+
+            if (serviceInfo.auditRequestPayload) {
+                auditDataset.requestPayload = requestString
+            }
+
+            auditStrategy.enrichDatasetFromRequest(requestString, auditDataset)
+        }
+
+        // validate request, if necessary
         if (validation) {
             try {
                 VALIDATOR.validate(requestString,
                         Hl7v3ValidationProfiles.getRequestValidationProfile(serviceInfo.getInteractionId()))
             } catch (ValidationException e) {
                 LOG.error('operation(): invalid request')
-                return createNak(requestString, e)
+                String nak = createNak(requestString, e)
+                finalizeAuditing(nak, auditDataset)
+                return nak
             }
         }
 
         // run the route
         final String responseString = doProcess(requestString)
 
-        // validate response -- exception will go to the service route
+        // validate response, if necessary
         if (validation) {
-            VALIDATOR.validate(responseString,
-                    Hl7v3ValidationProfiles.getResponseValidationProfile(serviceInfo.getInteractionId()))
+            try {
+                VALIDATOR.validate(responseString,
+                        Hl7v3ValidationProfiles.getResponseValidationProfile(serviceInfo.getInteractionId()))
+            } catch (ValidationException e) {
+                LOG.error('operation(): invalid response')
+                String nak = createNak(requestString, e)
+                finalizeAuditing(nak, auditDataset)
+                return nak
+            }
         }
 
-        // process
+        // finalize ATNA auditing
+        finalizeAuditing(responseString, auditDataset)
+
+        // process continuations
         GPathResult request = slurp(requestString)
         int threshold = parseInt(request.controlActProcess.queryByParameter.initialQuantity.@value.text())
         if (threshold < 1) {
@@ -142,6 +181,14 @@ public class Hl7v3ContinuationAwareWebService
             } else {
                 throw e
             }
+        }
+    }
+
+
+    private void finalizeAuditing(String responseString, WsAuditDataset auditDataset) {
+        if (auditStrategy != null) {
+            auditStrategy.enrichDatasetFromResponse(responseString, auditDataset)
+            auditStrategy.audit(auditDataset)
         }
     }
 

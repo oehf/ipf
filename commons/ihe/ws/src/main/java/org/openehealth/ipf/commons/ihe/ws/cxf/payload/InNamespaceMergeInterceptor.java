@@ -133,7 +133,7 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
 
             // insert remained definitions (if any)
             if (!namespaces.isEmpty()) {
-                StringBuffer sb = new StringBuffer(startTag);
+                StringBuilder sb = new StringBuilder(startTag);
                 for (String prefix : namespaces.keySet()) {
                     sb.append(" xmlns:").append(prefix).append("=\"")
                       .append(namespaces.get(prefix)).append('"');

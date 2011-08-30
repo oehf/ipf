@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
 import java.util.List;
 
-import org.apache.cxf.interceptor.ServiceInvokerInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;

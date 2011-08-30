@@ -101,7 +101,11 @@ class TestIti47 extends StandardTestContainer {
         EhcacheHl7v3ContinuationStorage storage = appContext.getBean('hl7v3ContinuationStorage')
         assertEquals(0, storage.ehcache.size)
 
-        assert auditSender.messages.size() == 0
+        assert auditSender.messages.size() == 1   // currently only server-side
+        def xml = new XmlSlurper().parseText(auditSender.messages[0].toString())
+        assert xml.EventIdentification.@EventActionCode.text() == 'E'
+        assert xml.EventIdentification.@EventOutcomeIndicator.text() == '0'
+        assert xml.ParticipantObjectIdentification.size() == 9
     }
     
     

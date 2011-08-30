@@ -51,7 +51,7 @@ abstract class Hl7v3AuditStrategy extends WsAuditStrategy {
      * </ul>
      *
      * @param gpath
-     *      response message as {@kink GPathResult}.
+     *      response message as {@link GPathResult}.
      */
     @Override
     RFC3881EventOutcomeCodes getEventOutcomeCode(Object gpath) {
