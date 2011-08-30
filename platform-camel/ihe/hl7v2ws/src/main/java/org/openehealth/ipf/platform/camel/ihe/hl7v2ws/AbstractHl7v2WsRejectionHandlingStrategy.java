@@ -16,14 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import org.apache.cxf.message.Exchange;
-import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractWsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
 /**
  * Rejection handling strategy base for HL7v2-based WS transactions.
  * @author Dmytro Rud
  */
-abstract public class Hl7v2WsRejectionHandlingStrategy extends WsRejectionHandlingStrategy {
+abstract public class AbstractHl7v2WsRejectionHandlingStrategy extends AbstractWsRejectionHandlingStrategy {
 
     /**
      * Specific rejection determination logic tor HL7v2-based WS transactions.
