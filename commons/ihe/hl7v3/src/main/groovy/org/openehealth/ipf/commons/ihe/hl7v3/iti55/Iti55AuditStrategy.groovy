@@ -47,18 +47,18 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
     
     
     @Override
-    void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset0) {
+    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
-        super.enrichDatasetFromResponse(response, auditDataset)
+        super.enrichDatasetFromRequest(request, auditDataset)
 
-        GPathResult xml = slurp((String) response)
+        GPathResult xml = slurp((String) request)
         
         // query ID
         auditDataset.queryId = idString(xml.controlActProcess.queryByParameter.queryId)
 
         // home community ID
         auditDataset.homeCommunityId = 
-            xml.receiver.device.asAgent.representedOrganization.id.@root.text() ?: null
+            xml.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
     }
 
 

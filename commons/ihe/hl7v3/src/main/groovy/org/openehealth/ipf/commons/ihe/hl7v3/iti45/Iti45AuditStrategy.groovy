@@ -45,8 +45,15 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
-        // not used in ITI-45
+    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+        Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
+        GPathResult xml = slurp((String) request)
+
+        // patient ID from request
+        auditDataset.patientIds = [iiToCx(xml.controlActProcess.queryByParameter.parameterList.patientIdentifier[0].value)]
+
+        // dump of queryByParameter
+        auditDataset.requestPayload = SoapUtils.extractNonEmptyElement((String) request, 'queryByParameter')
     }
 
 
@@ -57,14 +64,13 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
 
         GPathResult xml = slurp((String) response)
 
-        // patient ID from request and response
+        // patient IDs from response
         def patientIds = [] as Set<String>
-        patientIds << iiToCx(xml.controlActProcess.queryByParameter.parameterList.patientIdentifier[0].value)
         addPatientIds(xml.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
+        if (auditDataset.patientIds) {
+            patientIds << auditDataset.patientIds[0]
+        }
         auditDataset.patientIds = patientIds.toArray()
-
-        // dump of queryByParameter
-        auditDataset.requestPayload = SoapUtils.extractNonEmptyElement((String) response, 'queryByParameter')
     }
 
 
