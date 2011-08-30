@@ -52,10 +52,12 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
     @Override
     public void handleMessage(Message message) throws Fault {
         StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
-        String payload = (payloadHolder != null) ? payloadHolder.get(SOAP_BODY) : null;
-        if (isXmlContent(payload)) {
-            Document document = (Document) message.getContent(Node.class);
-            message.setContent(String.class, enrichNamespaces(document, payload));
+        if (payloadHolder != null) {
+            String payload = payloadHolder.get(SOAP_BODY);
+            if (isXmlContent(payload)) {
+                Document document = (Document) message.getContent(Node.class);
+                payloadHolder.put(SOAP_BODY, enrichNamespaces(document, payload));
+            }
         }
     }
 
