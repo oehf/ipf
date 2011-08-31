@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/lang
+http://www.springframework.org/schema/lang/spring-lang.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd 
+">
+
+	<camel:camelContext id="camelContext">
+		<camel:jmxAgent id="agent" disabled="false" />
+		<camel:routeBuilder ref="routeBuilder" />
+	</camel:camelContext>
+
+	<bean id="routeBuilder"
+		class="org.openehealth.ipf.platform.camel.core.management.ManagementNamingStrategyTestRouteBuilder" />
+
+	<bean id="processorNaming"
+		class="org.openehealth.ipf.platform.camel.core.management.ProcessorManagementNamingStrategy" />
+
+</beans>
