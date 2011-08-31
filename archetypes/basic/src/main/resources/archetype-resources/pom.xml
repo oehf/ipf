@@ -1,4 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>${groupId}</groupId>
@@ -7,12 +11,23 @@
     <version>${version}</version>
     <packaging>jar</packaging>
 
+    <properties>
+        <!-- libraries -->
+        <ipf-version>${archetypeVersion}</ipf-version>
+        <groovy-version>1.7.9</groovy-version>
+
+        <!-- plugins -->
+        <assembly-plugin-version>2.2-beta-2</assembly-plugin-version>
+        <eclipse-plugin-version>2.8</eclipse-plugin-version>
+        <gmaven-version>1.2</gmaven-version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.openehealth.ipf</groupId>
                 <artifactId>ipf</artifactId>
-                <version>${archetypeVersion}</version>
+                <version>${symbol_dollar}{ipf-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -20,11 +35,22 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- dependencies for production -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>platform-camel-core</artifactId>
-            <version>${archetypeVersion}</version>
+            <version>${symbol_dollar}{ipf-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!-- dependencies for test -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -38,14 +64,55 @@
     </dependencies>
 
     <build>
-         <resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${symbol_dollar}{assembly-plugin-version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.gmaven</groupId>
+                    <artifactId>gmaven-plugin</artifactId>
+                    <version>${symbol_dollar}{gmaven-version}</version>
+                    <configuration>
+                        <providerSelection>1.7</providerSelection>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.gmaven.runtime</groupId>
+                            <artifactId>gmaven-runtime-1.7</artifactId>
+                            <version>${symbol_dollar}{gmaven-version}</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>org.codehaus.groovy</groupId>
+                                    <artifactId>groovy-all</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-all</artifactId>
+                            <version>${symbol_dollar}{groovy-version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <version>${symbol_dollar}{eclipse-plugin-version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <resources>
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
             <resource>
-                 <!-- This seems to be the only way to add the .groovy source files --> 
-                 <!-- in src/main/groovy to the Eclipse build path. -->
-                 <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
+                <!-- This seems to be the only way to add the .groovy source files -->
+                <!-- in src/main/groovy to the Eclipse build path. -->
+                <!-- The source files have to be excluded binaries explicitly (see maven-jar-plugin config). -->
                 <directory>src/main/groovy</directory>
             </resource>
             <resource>
@@ -60,6 +127,7 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
+
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -115,14 +183,14 @@
                     <ajdtVersion>none</ajdtVersion>
                     <classpathContainers>
                         <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
-                         <!-- Add explicitly the groovy libs. Groovy nature alone seems not to be enough. -->
+                        <!-- Add explicitly the groovy libs. Groovy nature alone seems not to be enough. -->
                         <classpathContainer>GROOVY_SUPPORT</classpathContainer>
                     </classpathContainers>
-                 </configuration>
+                </configuration>
             </plugin>
         </plugins>
     </build>
-    
+
     <repositories>
         <repository>
             <id>openehealth.releases</id>
@@ -150,7 +218,7 @@
             <id>codehaus nexus</id>
             <name>Codehaus Nexus Maven Repository</name>
             <url>https://nexus.codehaus.org/content/repositories/releases/</url>
-               <releases>
+            <releases>
                 <enabled>true</enabled>
             </releases>
             <snapshots>
@@ -172,11 +240,6 @@
             <name>JBoss Maven Repository</name>
             <url>http://repository.jboss.com/maven2</url>
         </repository>
-        <repository>
-            <id>hapi-sf</id>
-            <name>HAPI Sourceforge Repository</name>
-            <url>http://hl7api.sourceforge.net/m2</url>
-        </repository>
     </repositories>
-    
+
 </project>
