@@ -55,5 +55,5 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     <import resource="../ehcache-spring.xml" />
 
     <bean id="rejectionHandlingStrategy"
-          class="org.openehealth.ipf.platform.camel.xcpd.MyRejectionHandlingStrategy" />
+          class="org.openehealth.ipf.platform.camel.ihe.xcpd.MyRejectionHandlingStrategy" />
 </beans>

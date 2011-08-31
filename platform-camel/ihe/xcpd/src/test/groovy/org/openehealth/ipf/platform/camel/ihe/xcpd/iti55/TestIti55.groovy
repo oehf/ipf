@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.xcpd.XcpdTestUtils
-import org.openehealth.ipf.platform.camel.xcpd.MyRejectionHandlingStrategy
+import org.openehealth.ipf.platform.camel.ihe.xcpd.MyRejectionHandlingStrategy
 
 /**
  * Tests for ITI-55.
