@@ -24,6 +24,7 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 /**
  * This exception is used to wrap one of more
@@ -87,12 +88,12 @@ public class CompositeHL7v2Exception extends AbstractHL7v2Exception implements
 	@Override
 	public Message populateMessage(Message m, AckTypeCode code) {
 		try {
-            if (m.getVersion().compareTo("2.5") < 0) {
-                Segment msaSegment = (Segment) m.get("MSA");
-                Terser.set(msaSegment, 3, 0, 1, 1, getMessage());
-            } else {
+            if (MessageUtils.atLeastVersion(m, "2.5")) {
                 Segment errorSegment = (Segment) m.get("ERR");
                 fillErr347(errorSegment);
+            } else {
+                Segment msaSegment = (Segment) m.get("MSA");
+                Terser.set(msaSegment, 3, 0, 1, 1, getMessage());
             }
             
             for (AbstractHL7v2Exception exception : wrapped) {

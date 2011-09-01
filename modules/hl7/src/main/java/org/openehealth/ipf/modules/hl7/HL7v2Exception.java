@@ -18,6 +18,7 @@ package org.openehealth.ipf.modules.hl7;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.Segment;
 import ca.uhn.hl7v2.util.Terser;
+import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 /**
  * Alternative HL7 Exception. Compared to the HAPI HL7Exception, it adds
@@ -91,10 +92,10 @@ public class HL7v2Exception extends AbstractHL7v2Exception {
 
 		try {
 			Segment errorSegment = (Segment) m.get("ERR");
-			if (m.getVersion().compareTo("2.5") < 0) {
-				populateErr1(errorSegment);
+            if (MessageUtils.atLeastVersion(m, "2.5")) {
+                populateErr2347(errorSegment);
 			} else {
-				populateErr2347(errorSegment);
+                populateErr1(errorSegment);
 			}
 			Segment msaSegment = (Segment) m.get("MSA");
 			Terser.set(msaSegment, 1, 0, 1, 1, code.name());

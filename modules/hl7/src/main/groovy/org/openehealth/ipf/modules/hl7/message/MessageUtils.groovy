@@ -36,14 +36,49 @@ import ca.uhn.hl7v2.util.Terser
  * methods directly to the affected classes.
  * 
  * @author Christian Ohr
- * @author Marek V�clav�k
+ * @author Marek Václavík
+ * @author Dmytro Rud
  */
 class MessageUtils {
     
     private static DateTimeFormatter FMT = ISODateTimeFormat.basicDateTimeNoMillis()
     private static int INDENT_SIZE = 3
     private static defaultFactory = new DefaultModelClassFactory();
-    
+
+    public static final List<String> HL7V2_VERSIONS = [
+            '2.1',
+            '2.2',
+            '2.3',
+            '2.3.1',
+            '2.4',
+            '2.5',
+            '2.5.1',
+            '2.6',
+            '2.7',
+    ]
+
+    /**
+     * Returns <code>true</code> when the HL7 version of the given message
+     * is not smaller than the given one.
+     */
+    static boolean atLeastVersion(Message msg, String targetVersion) {
+        return atLeastVersion(msg.version, targetVersion)
+    }
+
+
+    /**
+     * Returns <code>true</code> when the given actual HL7 version
+     * is not smaller than the target one.
+     */
+    static boolean atLeastVersion(String actualVersion, String targetVersion) {
+        int actualIndex = HL7V2_VERSIONS.indexOf(actualVersion)
+        int targetIndex = HL7V2_VERSIONS.indexOf(targetVersion)
+        if ((actualIndex < 0) || (targetIndex < 0)) {
+            throw new IllegalArgumentException('unknown HL7 version')
+        }
+        return (actualIndex >= targetIndex)
+    }
+
     
     /**
      * @return Returns current time in HL7 format
@@ -93,7 +128,7 @@ class MessageUtils {
      */
     static String messageStructure(Message msg) {
         def structName = eventType(msg) + '_' + triggerEvent(msg)
-        if (['2.4', '2.5', '2.5.1', '2.6'].contains(msg.version)) {
+        if (atLeastVersion(msg, '2.4')) {
             structName = Parser.getMessageStructureForEvent(structName, msg.version)
         }
         structName
@@ -102,6 +137,7 @@ class MessageUtils {
     /*
      * @deprecated. Use {@link #ack(ModelClassFactory, Message)}.
      */
+    @Deprecated
     static Message ack(Message msg) {
         ack(defaultFactory, msg)
     }
@@ -126,6 +162,7 @@ class MessageUtils {
     /*
      * @deprecated. Use {@link #nak(ModelClassFactory, Message, String, AckTypeCode)}.
      */
+    @Deprecated
     static Message nak(Message msg, String cause, AckTypeCode ackType) {
         nak(defaultFactory, msg, cause, ackType)
     }
@@ -141,6 +178,7 @@ class MessageUtils {
     /*
      * @deprecated. Use {@link #nak(ModelClassFactory, Message, Exception, AckTypeCode)}.
      */
+    @Deprecated
     static Message nak(Message msg, AbstractHL7v2Exception e, AckTypeCode ackType) {
         nak(defaultFactory, msg, e, ackType)
     }
@@ -158,12 +196,13 @@ class MessageUtils {
      *  @return a negative ACK response message constructed from scratch
      */
     static Message defaultNak(
-    AbstractHL7v2Exception e,
-    AckTypeCode ackType,
-    String version,
-    String sendingApplication,
-    String sendingFacility,
-    String msh9) {
+            AbstractHL7v2Exception e,
+            AckTypeCode ackType,
+            String version,
+            String sendingApplication,
+            String sendingFacility,
+            String msh9)
+    {
         def cause = encodeHL7String(e.message, null)
         def now = hl7Now()
         
@@ -198,6 +237,7 @@ class MessageUtils {
     /*
      * @deprecated
      */
+    @Deprecated
     static Message response(Message msg, String eventType, String triggerEvent) {
         response(defaultFactory, msg, eventType, triggerEvent)
     }
@@ -209,8 +249,9 @@ class MessageUtils {
         
         // make message of correct version
         def version = msg.version
-        if (!triggerEvent)
+        if (! triggerEvent) {
             triggerEvent = Terser.get(msg.MSH, 9, 0, 2, 1)
+        }
         Message out = makeMessage(factory, eventType, triggerEvent, version)
         
         //populate outbound MSH using data from inbound message ...
@@ -236,7 +277,7 @@ class MessageUtils {
         outTerser.set('MSH-6-3', Terser.get(msh, 4, 0, 3, 1))
         
         outTerser.set('MSH-11', Terser.get(msh, 11, 0, 1, 1))
-        
+
         if (out.get("MSA") != null) {
             outTerser.set('MSA-2', Terser.get(msh, 10, 0, 1, 1))
         }
@@ -247,31 +288,31 @@ class MessageUtils {
     public static Message makeMessage(ModelClassFactory factory, String eventType, String triggerEvent, String version) {
         def structName
         Message result;
-        
+
         if (eventType == 'ACK') {
             structName = 'ACK'
         } else {
             structName = "${eventType}_${triggerEvent}"
-            if (['2.4', '2.5', '2.5.1', '2.6'].contains(version)) {
+            if (atLeastVersion(version, '2.4')) {
                 structName = Parser.getMessageStructureForEvent(structName, version)
             }
         }
         
         Class c = factory.getMessageClass(structName, version, true);
         if (!c) {
-            throw new HL7v2Exception("Can't instantiate message $structName",
-            HL7Exception.UNSUPPORTED_MESSAGE_TYPE)
+            throw new HL7v2Exception("Can't instantiate message ${structName}",
+                HL7Exception.UNSUPPORTED_MESSAGE_TYPE)
         }
         Message msg = c.newInstance([factory]as Object[])
         Terser terser = new Terser(msg)
-        def msh = msg.MSH
         terser.set('MSH-1', '|')
         terser.set('MSH-2', '^~\\&')
         terser.set('MSH-7', hl7Now())
         terser.set("MSH-9-1", eventType)
         terser.set("MSH-9-2", triggerEvent)
-        if (['2.4', '2.5', '2.5.1', '2.6'].contains(version))
+        if (atLeastVersion(version, '2.4')) {
             terser.set("MSH-9-3", structName)
+        }
         terser.set('MSH-10', MessageIDGenerator.getInstance().getNewID())
         terser.set('MSH-11-1', 'P')
         terser.set('MSH-11-2', 'T')

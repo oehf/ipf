@@ -18,7 +18,7 @@ package org.openehealth.ipf.modules.hl7.validation.builder
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 
 import ca.uhn.hl7v2.validation.Rule
-import ca.uhn.hl7v2.validation.ValidationContext
+import static org.openehealth.ipf.modules.hl7.message.MessageUtils.HL7V2_VERSIONS
 
 /**
  * @author Christian Ohr
@@ -29,8 +29,6 @@ public class VersionBuilder extends RuleBuilder{
     
 	Rule rule
     
-	static def versions = [ '2.1', '2.2', '2.3', '2.3.1', '2.4', '2.5', '2.5.1', '2.6']
-	
 	VersionBuilder(DefaultValidationContext context) {
 		super(context)	    
 	}
@@ -38,11 +36,12 @@ public class VersionBuilder extends RuleBuilder{
 	VersionBuilder(String version, DefaultValidationContext context) {
 	    this(context)
 	    if (!version) {
-	        throw IllegalArgumentException("Version must not be empty")
-	    } else if (version == '*')
-		    this.version = versions.join(' ')
-		else
+	        throw new IllegalArgumentException("Version must not be empty")
+	    } else if (version == '*') {
+		    this.version = HL7V2_VERSIONS.join(' ')
+        } else {
 		    this.version = version
+        }
 	}
 	
     /**
@@ -50,7 +49,7 @@ public class VersionBuilder extends RuleBuilder{
      * @return restricts the rules to message versions starting with the passed version
      */
 	VersionBuilder asOf(String version) {
-	    def matchingVersions = versions.findAll { version <= it }
+	    def matchingVersions = HL7V2_VERSIONS.findAll { version <= it }
 	    this.version = matchingVersions.join(' ')
 	    this
 	}
@@ -60,7 +59,7 @@ public class VersionBuilder extends RuleBuilder{
      * @return restricts the rules to message versions older than the passed version
      */
 	VersionBuilder before(String version) {
-	    def matchingVersions = versions.findAll { version > it }
+	    def matchingVersions = HL7V2_VERSIONS.findAll { version > it }
 	    this.version = matchingVersions.join(' ')	
 	    this
 	}
@@ -70,7 +69,7 @@ public class VersionBuilder extends RuleBuilder{
       * @return restricts the rules to all message versions but the passed version
       */
 	VersionBuilder except(String version) {
-	    def matchingVersions = versions.findAll { version != it }
+	    def matchingVersions = HL7V2_VERSIONS.findAll { version != it }
 	    this.version = matchingVersions.join(' ')
 	    this
 	}

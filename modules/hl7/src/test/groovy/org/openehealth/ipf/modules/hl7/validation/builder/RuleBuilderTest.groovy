@@ -35,14 +35,14 @@ public class RuleBuilderTest extends GroovyTestCase {
          def context = new DefaultValidationContext()
          def builder = context.configure().forAllVersions()
          assert context == builder.context
-         assert builder.version == '2.1 2.2 2.3 2.3.1 2.4 2.5 2.5.1 2.6'
+         assert builder.version == '2.1 2.2 2.3 2.3.1 2.4 2.5 2.5.1 2.6 2.7'
      }
      
      void testForVersionAsOf() {
          def context = new DefaultValidationContext()
          def builder = context.configure().forVersion().asOf('2.3')
          assert context == builder.context
-         assert builder.version == '2.3 2.3.1 2.4 2.5 2.5.1 2.6'
+         assert builder.version == '2.3 2.3.1 2.4 2.5 2.5.1 2.6 2.7'
      }
      
      void testForVersionBefore() {
@@ -56,7 +56,7 @@ public class RuleBuilderTest extends GroovyTestCase {
          def context = new DefaultValidationContext()
          def builder = context.configure().forVersion().except('2.3.1')
          assert context == builder.context
-         assert builder.version == '2.1 2.2 2.3 2.4 2.5 2.5.1 2.6'
+         assert builder.version == '2.1 2.2 2.3 2.4 2.5 2.5.1 2.6 2.7'
      }
      
      void testForVersionAndType() {
