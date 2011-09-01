@@ -14,11 +14,13 @@
     
     <phase id='errors'>
         <active pattern='p-1.3.6.1.4.1.19376.1.3.3-errors'/>
+        <active pattern='p-1.3.6.1.4.1.19376.1.3.1-errors'/>
     </phase>    
   
   
     <phase id='warnings'>
         <active pattern='p-1.3.6.1.4.1.19376.1.3.3-warnings'/>
+        <active pattern='p-1.3.6.1.4.1.19376.1.3.1-warnings'/>
     </phase>
   
     <!--  
