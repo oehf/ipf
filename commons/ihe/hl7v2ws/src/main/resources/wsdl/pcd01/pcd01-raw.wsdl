@@ -52,7 +52,6 @@
     <binding name="DeviceObservationConsumer_Binding_Soap12" type="ihe:DeviceObservationConsumer_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <operation name="CommunicatePCDData">
-            <soap12:operation soapAction="urn:ihe:pcd:2010:CommunicatePCDData" soapActionRequired=""/>
             <input>
                 <soap12:body use="literal"/>
             </input>
