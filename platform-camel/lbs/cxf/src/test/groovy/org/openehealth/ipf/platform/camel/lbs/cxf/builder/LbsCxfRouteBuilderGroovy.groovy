@@ -15,24 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.cxf.builder
 
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.BufferedReader
-import java.io.ByteArrayInputStream
-import java.net.URI
-import org.openehealth.ipf.platform.camel.core.extend.RouteModelExtender
 import javax.activation.DataHandler
-import javax.xml.ws.Holder;
-
+import javax.xml.ws.Holder
 import org.apache.camel.Exchange
-import org.apache.camel.component.cxf.CxfConstants
+import org.apache.camel.component.cxf.common.message.CxfConstants
 import org.apache.camel.spring.SpringRouteBuilder
-
 import org.apache.cxf.message.MessageContentsList
-
 import org.openehealth.ipf.commons.lbs.resource.ResourceFactory
-import org.openehealth.ipf.platform.camel.core.extend.RouteModelExtender
 import org.openehealth.ipf.platform.camel.lbs.cxf.process.AbstractLbsCxfTest
 
 /**

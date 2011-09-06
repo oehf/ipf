@@ -16,10 +16,9 @@
 package org.openehealth.tutorial
 
 import javax.activation.DataHandler
-import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
 import static org.apache.camel.Exchange.HTTP_METHOD
-import static org.apache.camel.component.cxf.CxfConstants.OPERATION_NAME
+import static org.apache.camel.component.cxf.common.message.CxfConstants.OPERATION_NAME
 
 class SampleRouteBuilder extends SpringRouteBuilder {
     
