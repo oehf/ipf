@@ -200,7 +200,19 @@ public abstract class AbstractFlowReplayTest {
         mock.assertIsSatisfied();
         assertEquals(String.class, firstBody().getClass());
     }
-    
+
+    @Test
+    public void testReplayTransacted() throws InterruptedException {
+        mock.expectedMessageCount(1);
+        producerTemplate.sendBody("direct:flow-test-9", "transacted");
+        mock.assertIsSatisfied();
+        Long flowId = firstFlowId();
+        mock.reset();
+        mock.expectedBodiesReceived("transacted");
+        flowManager.replayFlow(flowId);
+        mock.assertIsSatisfied();
+    }
+
     private Exchange createExchange(String body) {
         Exchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(body);

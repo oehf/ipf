@@ -125,6 +125,13 @@ class GroovyFlowRouteBuilder extends SpringRouteBuilder {
             .to("mock:mock")
             .ackFlow()
             
+        from('direct:flow-test-9')
+            .initFlow('test-9')
+                .application('test')
+            .transacted()
+            .to('mock:mock')
+            .ackFlow()
+
         // --------------------------------------------------------------
         //  Split Flows (original Camel splitter)
         // --------------------------------------------------------------

@@ -19,6 +19,7 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultExchange;
+import org.apache.camel.impl.DefaultUnitOfWork;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.DataFormat;
 import org.openehealth.ipf.commons.flow.FlowManager;
@@ -272,9 +273,10 @@ public abstract class FlowProcessor extends DelegateProcessor implements Platfor
     protected Exchange createExchange(PlatformPacket packet) {
         DefaultExchange exchange = new DefaultExchange(camelContext);
         
+        exchange.setUnitOfWork(new DefaultUnitOfWork(exchange));
         exchange.setProperties(new HashMap<String, Object>(packet.getExchangeProperties()));
         exchange.getIn().setHeaders(new HashMap<String, Object>(packet.getMessageProperties()));
-        
+
         setInBody(packet.getMessageBody(), exchange);
     
         return exchange;
