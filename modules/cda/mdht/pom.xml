@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.modules</groupId>
-    <artifactId>modules-cda-mdht</artifactId>
-    <name>modules-cda-mdht</name>
+    <artifactId>ipf-modules-cda-mdht</artifactId>
+    <name>ipf-modules-cda-mdht</name>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
-        <artifactId>modules-cda</artifactId>
+        <artifactId>ipf-modules-cda</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
@@ -19,12 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-core</artifactId>
+            <artifactId>ipf-commons-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-cda-core</artifactId>
+            <artifactId>ipf-modules-cda-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

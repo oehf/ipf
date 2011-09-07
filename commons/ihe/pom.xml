@@ -2,13 +2,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>commons-ihe</artifactId>
-    <name>commons-ihe</name>
+    <artifactId>ipf-commons-ihe</artifactId>
+    <name>ipf-commons-ihe</name>
     <packaging>pom</packaging>
      
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <artifactId>commons</artifactId>
+        <artifactId>ipf-commons</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

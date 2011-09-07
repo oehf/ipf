@@ -2,13 +2,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel-ihe</artifactId>
-    <name>platform-camel-ihe</name>
+    <artifactId>ipf-platform-camel-ihe</artifactId>
+    <name>ipf-platform-camel-ihe</name>
     <packaging>pom</packaging>
      
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>platform-camel</artifactId>
+        <artifactId>ipf-platform-camel</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
@@ -19,13 +19,13 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-core</artifactId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-core</artifactId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>

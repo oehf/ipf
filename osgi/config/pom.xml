@@ -2,13 +2,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-config</artifactId>
-    <name>osgi-config</name>
+    <artifactId>ipf-osgi-config</artifactId>
+    <name>ipf-osgi-config</name>
     <packaging>pom</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
-        <artifactId>osgi</artifactId>
+        <artifactId>ipf-osgi</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 

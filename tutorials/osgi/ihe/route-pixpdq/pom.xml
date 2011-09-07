@@ -3,12 +3,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials-osgi-ihe-route-pixpdq</artifactId>
-    <name>tutorials-osgi-ihe-route-pixpdq</name>
+    <artifactId>ipf-tutorials-osgi-ihe-route-pixpdq</artifactId>
+    <name>ipf-tutorials-osgi-ihe-route-pixpdq</name>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <artifactId>tutorials-osgi-ihe</artifactId>
+        <artifactId>ipf-tutorials-osgi-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 
@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-hl7v2</artifactId>
+            <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

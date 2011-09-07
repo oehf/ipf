@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-config-ihe-xds</artifactId>
-    <name>osgi-config-ihe-xds</name>
+    <artifactId>ipf-osgi-config-ihe-xds</artifactId>
+    <name>ipf-osgi-config-ihe-xds</name>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
-        <artifactId>osgi-config-ihe</artifactId>
+        <artifactId>ipf-osgi-config-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 

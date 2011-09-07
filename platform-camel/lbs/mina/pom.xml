@@ -2,12 +2,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel-lbs-mina</artifactId>
-    <name>platform-camel-lbs-mina</name>
+    <artifactId>ipf-platform-camel-lbs-mina</artifactId>
+    <name>ipf-platform-camel-lbs-mina</name>
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>platform-camel-lbs</artifactId>
+        <artifactId>ipf-platform-camel-lbs</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 
@@ -15,7 +15,7 @@
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-lbs-core</artifactId>
+            <artifactId>ipf-platform-camel-lbs-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -30,7 +30,7 @@
         <!-- Dependencies for test -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
+            <artifactId>ipf-platform-camel-core</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>

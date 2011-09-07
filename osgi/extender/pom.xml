@@ -2,13 +2,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-extender</artifactId>
-    <name>osgi-extender</name>
+    <artifactId>ipf-osgi-extender</artifactId>
+    <name>ipf-osgi-extender</name>
     <packaging>pom</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
-        <artifactId>osgi</artifactId>
+        <artifactId>ipf-osgi</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

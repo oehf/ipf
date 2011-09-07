@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel</artifactId>
-    <name>platform-camel</name>
+    <artifactId>ipf-platform-camel</artifactId>
+    <name>ipf-platform-camel</name>
     <packaging>pom</packaging>
 
     <parent>

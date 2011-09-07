@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>commons-ihe-core</artifactId>
-    <name>commons-ihe-core</name>
+    <artifactId>ipf-commons-ihe-core</artifactId>
+    <name>ipf-commons-ihe-core</name>
     
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.commons.ihe.core.*</osgi.export.pkg>
@@ -11,7 +11,7 @@
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <artifactId>commons-ihe</artifactId>
+        <artifactId>ipf-commons-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

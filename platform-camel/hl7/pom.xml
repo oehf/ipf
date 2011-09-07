@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel-hl7</artifactId>
-    <name>platform-camel-hl7</name>
+    <artifactId>ipf-platform-camel-hl7</artifactId>
+    <name>ipf-platform-camel-hl7</name>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>platform-camel</artifactId>
+        <artifactId>ipf-platform-camel</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
@@ -30,17 +30,17 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
+            <artifactId>ipf-platform-camel-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7dsl</artifactId>
+            <artifactId>ipf-modules-hl7dsl</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7</artifactId>
+            <artifactId>ipf-modules-hl7</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

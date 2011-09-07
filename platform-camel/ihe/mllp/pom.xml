@@ -2,8 +2,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel-ihe-mllp</artifactId>
-    <name>platform-camel-ihe-mllp</name>
+    <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+    <name>ipf-platform-camel-ihe-mllp</name>
 
     <properties>
         <osgi.export.pkg>org.openehealth.ipf.platform.camel.ihe.mllp.*</osgi.export.pkg>
@@ -19,7 +19,7 @@
 
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>platform-camel-ihe</artifactId>
+        <artifactId>ipf-platform-camel-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 
@@ -27,12 +27,12 @@
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-hl7v2</artifactId>
+            <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-hl7v2</artifactId>
+            <artifactId>ipf-commons-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

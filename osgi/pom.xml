@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi</artifactId>
-    <name>osgi</name>
+    <artifactId>ipf-osgi</artifactId>
+    <name>ipf-osgi</name>
     <packaging>pom</packaging>
 
     <parent>

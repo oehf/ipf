@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>commons-test</artifactId>
-    <name>commons-test</name>
+    <artifactId>ipf-commons-test</artifactId>
+    <name>ipf-commons-test</name>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <artifactId>commons</artifactId>
+        <artifactId>ipf-commons</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
@@ -18,7 +18,7 @@
     <dependencies>
          <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-core</artifactId>
+            <artifactId>ipf-commons-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

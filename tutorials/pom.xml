@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials</artifactId>
-    <name>tutorials</name>
+    <artifactId>ipf-tutorials</artifactId>
+    <name>ipf-tutorials</name>
     <packaging>pom</packaging>
 
     <parent>

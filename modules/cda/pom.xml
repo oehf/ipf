@@ -2,13 +2,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.modules</groupId>
-    <artifactId>modules-cda</artifactId>
-    <name>modules-cda</name>
+    <artifactId>ipf-modules-cda</artifactId>
+    <name>ipf-modules-cda</name>
     <packaging>pom</packaging>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>ipf-modules</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

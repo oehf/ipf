@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.modules</groupId>
-    <artifactId>modules-hl7dsl</artifactId>
-    <name>modules-hl7dsl</name>
+    <artifactId>ipf-modules-hl7dsl</artifactId>
+    <name>ipf-modules-hl7dsl</name>
     
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>ipf-modules</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

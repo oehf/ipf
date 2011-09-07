@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel-test</artifactId>
-    <name>platform-camel-test</name>
+    <artifactId>ipf-platform-camel-test</artifactId>
+    <name>ipf-platform-camel-test</name>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>platform-camel</artifactId>
+        <artifactId>ipf-platform-camel</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
@@ -21,12 +21,12 @@
     <dependencies>
        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
+            <artifactId>ipf-platform-camel-core</artifactId>
             <version>${project.version}</version>
         </dependency>
        <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-test</artifactId>
+            <artifactId>ipf-commons-test</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

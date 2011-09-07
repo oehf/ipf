@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>commons-lbs</artifactId>
-    <name>commons-lbs</name>
+    <artifactId>ipf-commons-lbs</artifactId>
+    <name>ipf-commons-lbs</name>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <artifactId>commons</artifactId>
+        <artifactId>ipf-commons</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

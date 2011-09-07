@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-config-flow-repository</artifactId>
-    <name>osgi-config-flow-repository</name>
+    <artifactId>ipf-osgi-config-flow-repository</artifactId>
+    <name>ipf-osgi-config-flow-repository</name>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
-        <artifactId>osgi-config-flow</artifactId>
+        <artifactId>ipf-osgi-config-flow</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

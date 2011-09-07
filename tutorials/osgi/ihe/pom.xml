@@ -2,13 +2,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials-osgi-ihe</artifactId>
-    <name>tutorials-osgi-ihe</name>
+    <artifactId>ipf-tutorials-osgi-ihe</artifactId>
+    <name>ipf-tutorials-osgi-ihe</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <artifactId>tutorials-osgi</artifactId>
+        <artifactId>ipf-tutorials-osgi</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 
@@ -207,36 +207,36 @@
             <param>mvn:org.ops4j.pax.web/pax-web-jetty/${pax-web-version}@2</param>
             <param>mvn:org.ops4j.pax.web/pax-web-runtime/${pax-web-version}@2</param>
             <param>mvn:org.ops4j.pax.web/pax-web-spi/${pax-web-version}@2</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-commons/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-extender-basic/${project.version}@2</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-extender-spring/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-jms/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-log/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-atna/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-hl7v2/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-hl7v3/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.osgi/osgi-config-ihe-xds/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-core/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-xml/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-map/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-atna/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v2/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v3/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-hl7v2ws/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-ws/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-hl7v2/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-hl7v2ws/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.commons/commons-ihe-xds/${project.version}@nostart</param>
-            <param>mvn:org.openehealth.ipf.modules/modules-hl7/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.modules/modules-hl7dsl/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-core/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-hl7/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-ws/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-xds/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-mllp/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-hl7v3/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.platform-camel/platform-camel-ihe-atna/${project.version}@start</param>
-            <param>mvn:org.openehealth.ipf.tutorials/tutorials-xds/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-commons/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-extender-basic/${project.version}@2</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-extender-spring/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-jms/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-log/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-ihe-atna/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-ihe-hl7v2/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-ihe-hl7v3/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.osgi/ipf-osgi-config-ihe-xds/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-core/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-xml/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-map/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-atna/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-hl7v2/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-hl7v3/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-hl7v2ws/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-ws/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-hl7v2/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-hl7v2ws/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-xds/${project.version}@nostart</param>
+            <param>mvn:org.openehealth.ipf.modules/ipf-modules-hl7/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.modules/ipf-modules-hl7dsl/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-core/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-hl7/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-ws/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-xds/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-mllp/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-hl7v3/${project.version}@3</param>
+            <param>mvn:org.openehealth.ipf.platform-camel/ipf-platform-camel-ihe-atna/${project.version}@start</param>
+            <param>mvn:org.openehealth.ipf.tutorials/ipf-tutorials-xds/${project.version}@start</param>
             <param>mvn:org.openhealthtools.ihe/atna-bundle/${oht-atna-version}@start</param>
                 </provision>
             </configuration>

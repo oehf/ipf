@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials-osgi-service</artifactId>
-    <name>tutorials-osgi-service</name>
+    <artifactId>ipf-tutorials-osgi-service</artifactId>
+    <name>ipf-tutorials-osgi-service</name>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <artifactId>tutorials-osgi</artifactId>
+        <artifactId>ipf-tutorials-osgi</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
@@ -19,12 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-core</artifactId>
+            <artifactId>ipf-commons-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-hl7dsl</artifactId>
+            <artifactId>ipf-modules-hl7dsl</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

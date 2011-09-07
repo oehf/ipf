@@ -2,8 +2,8 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.modules</groupId>
-    <artifactId>modules</artifactId>
-    <name>modules</name>
+    <artifactId>ipf-modules</artifactId>
+    <name>ipf-modules</name>
     <packaging>pom</packaging>
 
     <parent>

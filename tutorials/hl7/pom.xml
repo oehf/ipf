@@ -2,20 +2,20 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials-hl7</artifactId>
-    <name>tutorials-hl7</name>
+    <artifactId>ipf-tutorials-hl7</artifactId>
+    <name>ipf-tutorials-hl7</name>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <artifactId>tutorials</artifactId>
+        <artifactId>ipf-tutorials</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-hl7</artifactId>
+            <artifactId>ipf-platform-camel-hl7</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

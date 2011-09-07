@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.platform-camel</groupId>
-    <artifactId>platform-camel-cda</artifactId>
-    <name>platform-camel-cda</name>
+    <artifactId>ipf-platform-camel-cda</artifactId>
+    <name>ipf-platform-camel-cda</name>
     
     <parent>
         <groupId>org.openehealth.ipf.platform-camel</groupId>
-        <artifactId>platform-camel</artifactId>
+        <artifactId>ipf-platform-camel</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
@@ -31,7 +31,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
+            <artifactId>ipf-platform-camel-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>
-            <artifactId>modules-cda-oht</artifactId>
+            <artifactId>ipf-modules-cda-oht</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

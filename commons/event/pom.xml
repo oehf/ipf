@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>commons-event</artifactId>
-    <name>commons-event</name>
+    <artifactId>ipf-commons-event</artifactId>
+    <name>ipf-commons-event</name>
     
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <artifactId>commons</artifactId>
+        <artifactId>ipf-commons</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

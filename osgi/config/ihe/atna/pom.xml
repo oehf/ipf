@@ -2,12 +2,12 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.osgi</groupId>
-    <artifactId>osgi-config-ihe-atna</artifactId>
-    <name>osgi-config-ihe-atna</name>
+    <artifactId>ipf-osgi-config-ihe-atna</artifactId>
+    <name>ipf-osgi-config-ihe-atna</name>
     
     <parent>
         <groupId>org.openehealth.ipf.osgi</groupId>
-        <artifactId>osgi-config-ihe</artifactId>
+        <artifactId>ipf-osgi-config-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 
@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-ihe-atna</artifactId>
+            <artifactId>ipf-platform-camel-ihe-atna</artifactId>
             <version>${project.version}</version>
         </dependency>
         

@@ -3,12 +3,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials-osgi-ihe-route-auditor</artifactId>
-    <name>tutorials-osgi-ihe-route-auditor</name>
+    <artifactId>ipf-tutorials-osgi-ihe-route-auditor</artifactId>
+    <name>ipf-tutorials-osgi-ihe-route-auditor</name>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <artifactId>tutorials-osgi-ihe</artifactId>
+        <artifactId>ipf-tutorials-osgi-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 

@@ -2,13 +2,13 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials-osgi</artifactId>
-    <name>tutorials-osgi</name>
+    <artifactId>ipf-tutorials-osgi</artifactId>
+    <name>ipf-tutorials-osgi</name>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <artifactId>tutorials</artifactId>
+        <artifactId>ipf-tutorials</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     

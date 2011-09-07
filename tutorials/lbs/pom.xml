@@ -2,30 +2,30 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.tutorials</groupId>
-    <artifactId>tutorials-lbs</artifactId>
-    <name>tutorials-lbs</name>
+    <artifactId>ipf-tutorials-lbs</artifactId>
+    <name>ipf-tutorials-lbs</name>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
-        <artifactId>tutorials</artifactId>
+        <artifactId>ipf-tutorials</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
     
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
+            <artifactId>ipf-platform-camel-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-lbs-cxf</artifactId>
+            <artifactId>ipf-platform-camel-lbs-cxf</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-lbs-http</artifactId>
+            <artifactId>ipf-platform-camel-lbs-http</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

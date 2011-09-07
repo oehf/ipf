@@ -2,12 +2,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openehealth.ipf.commons</groupId>
-    <artifactId>commons-ihe-hl7v2ws</artifactId>
-    <name>commons-ihe-hl7v2ws</name>
+    <artifactId>ipf-commons-ihe-hl7v2ws</artifactId>
+    <name>ipf-commons-ihe-hl7v2ws</name>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <artifactId>commons-ihe</artifactId>
+        <artifactId>ipf-commons-ihe</artifactId>
         <version>2.3-SNAPSHOT</version>
     </parent>
 
@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>commons-ihe-hl7v2</artifactId>
+            <artifactId>ipf-commons-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
 
