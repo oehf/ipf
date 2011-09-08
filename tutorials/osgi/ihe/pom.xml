@@ -219,7 +219,6 @@
             <param>mvn:org.openehealth.ipf.commons/ipf-commons-core/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/ipf-commons-xml/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/ipf-commons-map/${project.version}@3</param>
-            <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-atna/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-hl7v2/${project.version}@start</param>
             <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-hl7v3/${project.version}@nostart</param>
             <param>mvn:org.openehealth.ipf.commons/ipf-commons-ihe-hl7v2ws/${project.version}@nostart</param>

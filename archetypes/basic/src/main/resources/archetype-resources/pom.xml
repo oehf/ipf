@@ -38,7 +38,7 @@
         <!-- dependencies for production -->
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>platform-camel-core</artifactId>
+            <artifactId>ipf-platform-camel-core</artifactId>
             <version>${symbol_dollar}{ipf-version}</version>
         </dependency>
         <dependency>
