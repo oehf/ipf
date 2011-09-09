@@ -5,16 +5,16 @@
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="xds-iti8" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.iti8.Iti8Component"/>
+    <bean id="xds-iti8" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8Component"/>
 
-    <bean id="pix-iti8" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.iti8.Iti8Component"/>
+    <bean id="pix-iti8" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8Component"/>
 
-    <bean id="pix-iti9" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.iti9.Iti9Component"/>
+    <bean id="pix-iti9" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti9.Iti9Component"/>
 
-    <bean id="pix-iti10" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.iti10.Iti10Component"/>
+    <bean id="pix-iti10" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti10.Iti10Component"/>
 
-    <bean id="pdq-iti21" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.iti21.Iti21Component"/>
+    <bean id="pdq-iti21" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti21.Iti21Component"/>
 
-    <bean id="pdq-iti22" class="org.openehealth.ipf.platform.camel.ihe.hl7v2.iti22.Iti22Component"/>
+    <bean id="pdq-iti22" class="org.openehealth.ipf.platform.camel.ihe.mllp.iti22.Iti22Component"/>
 
 </beans>
