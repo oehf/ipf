@@ -30,8 +30,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 ">
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />                       
-	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />        
-	<import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" />  
 
     <camel:camelContext id="camelContext" streamCache="false">
         <camel:jmxAgent id="agent" disabled="true" />        

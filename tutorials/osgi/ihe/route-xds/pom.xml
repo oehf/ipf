@@ -22,7 +22,6 @@
             org.openehealth.ipf.platform.camel.core.util,
             org.openehealth.ipf.commons.ihe.xds.core.requests,
             org.openehealth.ipf.commons.ihe.xds.core.responses,
-            org.openehealth.ipf.platform.camel.ihe.xds.iti17.servlet,
             javax.servlet,
             org.apache.commons.io,
             *
