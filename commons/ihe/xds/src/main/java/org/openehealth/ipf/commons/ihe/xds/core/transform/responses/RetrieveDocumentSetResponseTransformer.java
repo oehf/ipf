@@ -27,7 +27,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
  */
 public class RetrieveDocumentSetResponseTransformer {
     private final EbXMLFactory factory;
-    
+    private final ErrorInfoListTransformer errorInfoListTransformer;
+
     /**
      * Constructs the transformer.
      * @param factory
@@ -36,6 +37,7 @@ public class RetrieveDocumentSetResponseTransformer {
     public RetrieveDocumentSetResponseTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
+        this.errorInfoListTransformer = new ErrorInfoListTransformer(factory);
     }
     
     /**
@@ -51,7 +53,7 @@ public class RetrieveDocumentSetResponseTransformer {
         
         EbXMLRetrieveDocumentSetResponse ebXML = factory.createRetrieveDocumentSetResponse();
         if (!response.getErrors().isEmpty()) {
-            ebXML.setErrors(response.getErrors());
+            ebXML.setErrors(errorInfoListTransformer.toEbXML(response.getErrors()));
         }
         ebXML.setStatus(response.getStatus());
         ebXML.setDocuments(response.getDocuments());        
@@ -71,7 +73,9 @@ public class RetrieveDocumentSetResponseTransformer {
             
         RetrievedDocumentSet response = new RetrievedDocumentSet();
         response.getDocuments().addAll(ebXML.getDocuments());
-        response.getErrors().addAll(ebXML.getErrors());
+        if (!ebXML.getErrors().isEmpty()) {
+            response.setErrors(errorInfoListTransformer.fromEbXML(ebXML.getErrors()));
+        }
         response.setStatus(ebXML.getStatus());
         return response;
     }

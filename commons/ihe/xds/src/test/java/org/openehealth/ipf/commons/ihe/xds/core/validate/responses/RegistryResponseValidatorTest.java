@@ -67,14 +67,8 @@ public class RegistryResponseValidatorTest {
     }
     
     @Test
-    public void testInvalidErrorInfo() {
-        response.getErrors().add(null);
-        expectFailure(INVALID_ERROR_INFO_IN_RESPONSE);
-    }
-    
-    @Test
     public void testInvalidErrorCode() {
-        response.getErrors().add(new ErrorInfo(null, null, Severity.ERROR, null));
+        response.getErrors().add(new ErrorInfo(null, null, Severity.ERROR, null, null));
         expectFailure(INVALID_ERROR_CODE_IN_RESPONSE);
     }    
 

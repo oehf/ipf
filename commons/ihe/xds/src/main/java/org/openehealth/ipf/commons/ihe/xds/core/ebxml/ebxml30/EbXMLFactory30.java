@@ -15,28 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.ResponseOptionType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AssociationType1;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryObjectListType;
-import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.RegistryPackageType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryError;
 
 /**
  * Factory for EbXML 2.1 objects.
@@ -171,5 +156,11 @@ public class EbXMLFactory30 implements EbXMLFactory {
         }
         
         return new EbXMLQueryResponse30(response, objectLibrary);        
+    }
+
+    @Override
+    public EbXMLRegistryError createRegistryError() {
+        RegistryError registryError = RS_FACTORY.createRegistryError();
+        return new EbXMLRegistryError30(registryError);
     }
 }

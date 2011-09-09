@@ -119,5 +119,11 @@ public interface EbXMLFactory {
      * Creates a new response for a retrieve document request.
      * @return the created object.
      */
-    EbXMLRetrieveDocumentSetResponse createRetrieveDocumentSetResponse();    
+    EbXMLRetrieveDocumentSetResponse createRetrieveDocumentSetResponse();
+
+    /**
+     * Creates a new registry error object.
+     * @return the created object.
+     */
+    EbXMLRegistryError createRegistryError();
 }

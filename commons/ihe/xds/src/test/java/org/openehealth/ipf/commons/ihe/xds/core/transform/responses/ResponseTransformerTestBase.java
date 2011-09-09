@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
@@ -48,20 +49,26 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
         EbXMLRegistryResponse ebXML = transformer.toEbXML(response);
 
         assertEquals(Status.FAILURE, ebXML.getStatus());
-        List<ErrorInfo> errors = ebXML.getErrors();
-        assertEquals(2, errors.size());
-        
-        ErrorInfo error = errors.get(0);
+        List<EbXMLRegistryError> errors = ebXML.getErrors();
+        assertEquals(3, errors.size());
+
+        EbXMLRegistryError error = errors.get(0);
         assertEquals("context1", error.getCodeContext());
-        assertEquals(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, error.getErrorCode());
+        assertEquals(ErrorCode.PATIENT_ID_DOES_NOT_MATCH.getOpcode(), error.getErrorCode());
         assertEquals(Severity.ERROR, error.getSeverity());
         assertEquals("location1", error.getLocation());
 
         error = errors.get(1);
         assertEquals("context2", error.getCodeContext());
-        assertEquals(ErrorCode.SQL_ERROR, error.getErrorCode());
+        assertEquals(ErrorCode.SQL_ERROR.getOpcode(), error.getErrorCode());
         assertEquals(Severity.WARNING, error.getSeverity());
         assertEquals(null, error.getLocation());
+
+        error = errors.get(2);
+        assertEquals("context3", error.getCodeContext());
+        assertEquals("MyCustomErrorCode", error.getErrorCode());
+        assertEquals(Severity.ERROR, error.getSeverity());
+        assertEquals("location3", error.getLocation());
     }
     
     @Test

@@ -17,13 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
 import static org.apache.commons.lang.Validate.notNull;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
@@ -46,6 +40,7 @@ public class QueryResponseTransformer {
     private final DocumentEntryTransformer documentEntryTransformer;
     private final FolderTransformer folderTransformer;
     private final AssociationTransformer associationTransformer;
+    private final ErrorInfoListTransformer errorInfoListTransformer;
 
     /**
      * Constructs the transformer.
@@ -60,6 +55,7 @@ public class QueryResponseTransformer {
         documentEntryTransformer = new DocumentEntryTransformer(factory);
         folderTransformer = new FolderTransformer(factory);
         associationTransformer = new AssociationTransformer(factory);
+        errorInfoListTransformer = new ErrorInfoListTransformer(factory);
     }
 
     /**
@@ -76,8 +72,9 @@ public class QueryResponseTransformer {
         EbXMLObjectLibrary library = factory.createObjectLibrary();        
         EbXMLQueryResponse ebXML = factory.createAdhocQueryResponse(library, !response.getReferences().isEmpty());
         ebXML.setStatus(response.getStatus());
+
         if (!response.getErrors().isEmpty()) {
-            ebXML.setErrors(response.getErrors());
+            ebXML.setErrors(errorInfoListTransformer.toEbXML(response.getErrors()));
         }
         
         for (DocumentEntry docEntry : response.getDocumentEntries()) {
@@ -118,8 +115,11 @@ public class QueryResponseTransformer {
         
         QueryResponse response = new QueryResponse();
         response.setStatus(ebXML.getStatus());
-        response.getErrors().addAll(ebXML.getErrors());
-        
+
+        if (!ebXML.getErrors().isEmpty()) {
+            response.setErrors(errorInfoListTransformer.fromEbXML(ebXML.getErrors()));
+        }
+
         boolean foundNonObjRefs = false;
         
         for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {

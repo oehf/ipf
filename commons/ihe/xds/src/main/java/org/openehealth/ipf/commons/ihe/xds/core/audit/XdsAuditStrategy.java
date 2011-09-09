@@ -19,8 +19,8 @@ import java.util.List;
 
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
@@ -74,7 +74,7 @@ public abstract class XdsAuditStrategy extends WsAuditStrategy {
             return RFC3881EventOutcomeCodes.SUCCESS; 
         }
 
-        List<ErrorInfo> errors = response.getErrors();
+        List<EbXMLRegistryError> errors = response.getErrors();
         
         // error list is empty
         if((errors == null) || errors.isEmpty()) {
@@ -82,7 +82,7 @@ public abstract class XdsAuditStrategy extends WsAuditStrategy {
         }
         
         // determine the highest severity 
-        for(ErrorInfo error : errors) {
+        for(EbXMLRegistryError error : errors) {
             if(error.getSeverity() == Severity.ERROR) {
                 return RFC3881EventOutcomeCodes.SERIOUS_FAILURE;
             }

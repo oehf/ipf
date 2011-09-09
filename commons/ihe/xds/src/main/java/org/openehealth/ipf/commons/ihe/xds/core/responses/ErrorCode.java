@@ -110,7 +110,10 @@ public enum ErrorCode {
 
     /* --- codes for ITI-16 (obsolete XDS.a profile) --- */
     /** An error occurred when executing an SQL query. */
-    @XmlEnumValue("XDSSqlError") SQL_ERROR("XDSSqlError");
+    @XmlEnumValue("XDSSqlError") SQL_ERROR("XDSSqlError"),
+
+    /* --- special value for custom user-defined error codes --- */
+    @XmlEnumValue("_UserDefined") _USER_DEFINED("_UserDefined");
 
 
     private final String opcode;
@@ -140,10 +143,12 @@ public enum ErrorCode {
      * Returns the error code that corresponds to the given opcode.
      * @param opcode
      *          the opcode. Can be <code>null</code>.
-     * @return the error code. <code>null</code> if the opcode was <code>null</code>.
+     * @return the error code.
+     *      <code>null</code> when the opcode is <code>null</code> or empty,
+     *      {@link #_USER_DEFINED} when the code is not a standard one.
      */
     public static ErrorCode valueOfOpcode(String opcode) {
-        if (opcode == null) {
+        if ((opcode == null) || (opcode.trim().length() == 0)) {
             return null;
         }
         
@@ -153,6 +158,6 @@ public enum ErrorCode {
             }
         }
         
-        throw new IllegalArgumentException("Unknown upcode for error code: " + opcode);
+        return _USER_DEFINED;
     }
 }

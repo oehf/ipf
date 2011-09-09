@@ -27,7 +27,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
  */
 public class ResponseTransformer {    
     private final EbXMLFactory factory;
-    
+    private final ErrorInfoListTransformer errorInfoListTransformer;
+
     /**
      * Constructs the transformer.
      * @param factory
@@ -36,6 +37,7 @@ public class ResponseTransformer {
     public ResponseTransformer(EbXMLFactory factory) {
         notNull(factory, "factory cannot be null");
         this.factory = factory;
+        this.errorInfoListTransformer = new ErrorInfoListTransformer(factory);
     }
     
     /**
@@ -51,7 +53,7 @@ public class ResponseTransformer {
         
         ebXML.setStatus(response.getStatus());
         if (!response.getErrors().isEmpty()) {
-            ebXML.setErrors(response.getErrors());
+            ebXML.setErrors(errorInfoListTransformer.toEbXML(response.getErrors()));
         }
         
         return ebXML;
@@ -69,7 +71,9 @@ public class ResponseTransformer {
         Response response = new Response();
         
         response.setStatus(ebXML.getStatus());
-        response.getErrors().addAll(ebXML.getErrors());
+        if (!ebXML.getErrors().isEmpty()) {
+            response.setErrors(errorInfoListTransformer.fromEbXML(ebXML.getErrors()));
+        }
         
         return response;
     }

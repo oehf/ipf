@@ -31,7 +31,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
 
 /**
  * Tests for {@link AssociationTransformer}.

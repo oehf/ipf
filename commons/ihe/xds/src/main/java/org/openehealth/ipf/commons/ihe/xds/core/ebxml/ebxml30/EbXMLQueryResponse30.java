@@ -25,10 +25,8 @@ import javax.xml.bind.JAXBElement;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.IdentifiableType;
@@ -87,36 +85,27 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
     }
 
     @Override
-    public List<ErrorInfo> getErrors() {
+    public List<EbXMLRegistryError> getErrors() {
         RegistryErrorList list = response.getRegistryErrorList();
         if (list == null) {
             return Collections.emptyList();
         }
         
-        List<ErrorInfo> errors = new ArrayList<ErrorInfo>();
+        List<EbXMLRegistryError> errors = new ArrayList<EbXMLRegistryError>();
         for (RegistryError regError : list.getRegistryError()) {
-            ErrorInfo error = new ErrorInfo();
-            error.setCodeContext(regError.getCodeContext());
-            error.setLocation(regError.getLocation());
-            error.setErrorCode(ErrorCode.valueOfOpcode(regError.getErrorCode()));
-            error.setSeverity(Severity.valueOfOpcode30(regError.getSeverity()));
-            errors.add(error);
+            errors.add(new EbXMLRegistryError30(regError));
         }
         
         return errors;
     }
 
     @Override
-    public void setErrors(List<ErrorInfo> errors) {
+    public void setErrors(List<EbXMLRegistryError> errors) {
         RegistryErrorList value = EbXMLFactory30.RS_FACTORY.createRegistryErrorList();
         response.setRegistryErrorList(value);
         List<RegistryError> list = value.getRegistryError();
-        for (ErrorInfo error : errors) {
-            RegistryError regError = EbXMLFactory30.RS_FACTORY.createRegistryError();
-            regError.setErrorCode(ErrorCode.getOpcode(error.getErrorCode()));
-            regError.setCodeContext(error.getCodeContext());
-            regError.setSeverity(Severity.getOpcode30(error.getSeverity()));
-            regError.setLocation(error.getLocation());
+        for (EbXMLRegistryError error : errors) {
+            RegistryError regError = ((EbXMLRegistryError30) error).getInternal();
             list.add(regError);
         }
     }

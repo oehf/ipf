@@ -82,8 +82,9 @@ public abstract class SampleData {
         Response response = new Response();
         response.setStatus(Status.FAILURE);
         response.getErrors().addAll(Arrays.asList(
-                new ErrorInfo(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, "context1", Severity.ERROR, "location1"), 
-                new ErrorInfo(ErrorCode.SQL_ERROR, "context2", Severity.WARNING, null)));
+                new ErrorInfo(ErrorCode.PATIENT_ID_DOES_NOT_MATCH, "context1", Severity.ERROR, "location1", null),
+                new ErrorInfo(ErrorCode.SQL_ERROR, "context2", Severity.WARNING, null, null),
+                new ErrorInfo(ErrorCode._USER_DEFINED, "context3", Severity.ERROR, "location3", "MyCustomErrorCode")));
         return response;
     }    
 

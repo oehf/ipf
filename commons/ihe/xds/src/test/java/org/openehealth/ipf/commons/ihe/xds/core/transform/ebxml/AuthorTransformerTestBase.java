@@ -33,7 +33,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Name;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AuthorTransformer;
 
 /**
  * Tests for {@link AuthorTransformer}.

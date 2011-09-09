@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21;
 
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryResponse;
@@ -28,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExtrinsicObjectT
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.LeafRegistryObjectListType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ObjectRefType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.RegistryPackageType;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 
@@ -195,5 +193,11 @@ public class EbXMLFactory21 implements EbXMLFactory {
             wrapped.getContents().addAll(objectLibrary.getObjects());
         }
         return wrapped;        
+    }
+
+    @Override
+    public EbXMLRegistryError createRegistryError() {
+        RegistryError registryError = RS_FACTORY.createRegistryError();
+        return new EbXMLRegistryError21(registryError);
     }
 }

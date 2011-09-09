@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
 import java.util.List;
 
-import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status;
 
 /**
@@ -40,12 +39,12 @@ public interface EbXMLRegistryResponse {
      * @param errors
      *          the error list.
      */
-    void setErrors(List<ErrorInfo> errors);
+    void setErrors(List<EbXMLRegistryError> errors);
     
     /**
      * @return the error list.
      */
-    List<ErrorInfo> getErrors();
+    List<EbXMLRegistryError> getErrors();
 
     /**
      * @return the ebXML object being wrapped by this class.
