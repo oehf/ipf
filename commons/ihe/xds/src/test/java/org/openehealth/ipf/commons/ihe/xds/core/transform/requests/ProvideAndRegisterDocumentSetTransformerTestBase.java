@@ -34,7 +34,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.ProvideAndRegisterDocumentSetTransformer;
 
 /**
  * Tests for {@link ProvideAndRegisterDocumentSetTransformer}.
@@ -75,7 +74,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         assertEquals("folder01", associations.get(2).getSource());
         assertEquals("document01", associations.get(2).getTarget());
         
-        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE);
+        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(Vocabulary.STABLE_DOC_ENTRY);
         assertEquals(1, docEntries.size());
         assertEquals("document01", docEntries.get(0).getId());
         assertEquals("Document 01", docEntries.get(0).getName().getValue());

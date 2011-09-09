@@ -85,7 +85,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         super.addAttributes(metaData, ebXML, objectLibrary);
         ebXML.setStatus(metaData.getAvailabilityStatus());                
         ebXML.setMimeType(metaData.getMimeType());
-        ebXML.setObjectType(DOC_ENTRY_CLASS_NODE);
+        ebXML.setObjectType(STABLE_DOC_ENTRY);
         ebXML.setHome(metaData.getHomeCommunityId());
     }
 

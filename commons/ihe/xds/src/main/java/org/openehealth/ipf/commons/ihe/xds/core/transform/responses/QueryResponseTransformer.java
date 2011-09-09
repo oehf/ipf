@@ -122,7 +122,7 @@ public class QueryResponseTransformer {
 
         boolean foundNonObjRefs = false;
         
-        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.STABLE_DOC_ENTRY)) {
             response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
             foundNonObjRefs = true;
         }

@@ -107,7 +107,7 @@ public class RegisterDocumentSetTransformer {
         
         RegisterDocumentSet request = new RegisterDocumentSet();        
         
-        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.STABLE_DOC_ENTRY)) {
             request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
         }
 

@@ -161,7 +161,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(STABLE_DOC_ENTRY)) {
             runValidations(docEntry, documentEntrySlotValidators(profile));
 
             AvailabilityStatus status = docEntry.getStatus();
@@ -188,7 +188,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateUniqueIds(EbXMLObjectContainer container) throws XDSMetaDataException {
-        validateUniqueIds(container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
+        validateUniqueIds(container.getExtrinsicObjects(STABLE_DOC_ENTRY), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
         validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID);
         validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
     }
@@ -224,7 +224,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     
         String patientId = submissionSet.getExternalIdentifierValue(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
     
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(STABLE_DOC_ENTRY)) {
             String patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
             metaDataAssert(patientId.equals(patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
         }
@@ -237,7 +237,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> docEntryIds = new HashSet<String>();
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE)) {
+        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(STABLE_DOC_ENTRY)) {
             if (docEntry.getId() != null) {
                 docEntryIds.add(docEntry.getId());
             }

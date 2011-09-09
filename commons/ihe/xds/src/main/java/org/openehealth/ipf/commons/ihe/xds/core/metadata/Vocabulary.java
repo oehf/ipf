@@ -24,10 +24,21 @@ public abstract class Vocabulary {
         throw new UnsupportedOperationException("Cannot be instantiated");
     }
     
-    /** XDSDocumentEntry classification node */
-    public static final String DOC_ENTRY_CLASS_NODE = 
+    /** XDSDocumentEntry objectType for Stable Document Entries */
+    public static final String STABLE_DOC_ENTRY =
         "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
-    
+
+    /**
+     * XDSDocumentEntry classification node.
+     * @deprecated by IHE CP-ITI-544.  Please use {@link #STABLE_DOC_ENTRY} instead.
+     */
+    @Deprecated
+    public static final String DOC_ENTRY_CLASS_NODE = STABLE_DOC_ENTRY;
+
+    /** XDSDocumentEntry objectType for On-Demand Document Entries */
+    public static final String ON_DEMAND_DOC_ENTRY =
+        "urn:uuid:34268e47-fdf5-41a6-ba33-82133c465248";
+
     /** Author External Classification Scheme of the Document Entry */
     public static final String DOC_ENTRY_AUTHOR_CLASS_SCHEME = 
         "urn:uuid:93606bcf-9494-43ec-9b4e-a7748d1a838d";

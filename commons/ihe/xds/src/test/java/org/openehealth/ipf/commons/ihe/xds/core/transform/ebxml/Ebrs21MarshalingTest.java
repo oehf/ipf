@@ -67,7 +67,7 @@ public class Ebrs21MarshalingTest {
         objList.addAll(objectLibrary.getObjects());
 
         docEntry = factory.createExtrinsic("Document01", objectLibrary);
-        docEntry.setObjectType(Vocabulary.DOC_ENTRY_CLASS_NODE);
+        docEntry.setObjectType(Vocabulary.STABLE_DOC_ENTRY);
         objList.add(docEntry.getInternal());
     }
     

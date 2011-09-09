@@ -59,7 +59,7 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
                 container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE));
 
         patientId = checkForMultiplePatientIds(patientId, DOC_ENTRY_PATIENT_ID_EXTERNAL_ID,
-                container.getExtrinsicObjects(DOC_ENTRY_CLASS_NODE));
+                container.getExtrinsicObjects(STABLE_DOC_ENTRY));
 
         checkForMultiplePatientIds(patientId, FOLDER_PATIENT_ID_EXTERNAL_ID,
                 container.getRegistryPackages(FOLDER_CLASS_NODE));

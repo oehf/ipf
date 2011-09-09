@@ -34,7 +34,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Organization;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.PatientInfo;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTransformer;
 
 /**
  * Tests for {@link DocumentEntryTransformer}.
@@ -139,7 +138,7 @@ public abstract class DocumentEntryTransformerTestBase implements FactoryCreator
         assertEquals(AvailabilityStatus.APPROVED, ebXML.getStatus());
         assertEquals("text/plain", ebXML.getMimeType());
         assertEquals("uuid", ebXML.getId());
-        assertEquals(DOC_ENTRY_CLASS_NODE, ebXML.getObjectType());
+        assertEquals(STABLE_DOC_ENTRY, ebXML.getObjectType());
         if (homeAware) {
             assertEquals("123.456", ebXML.getHome());
         }
