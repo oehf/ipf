@@ -15,59 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionMessageExpression
-import static org.openehealth.ipf.platform.camel.core.util.Expressions.exceptionObjectExpression
-import static org.openehealth.ipf.platform.camel.core.util.Expressions.headersExpression
-import java.lang.IllegalArgumentException
-
-import static org.apache.camel.builder.DataFormatClause.Operation.Marshal;
-import static org.apache.camel.builder.DataFormatClause.Operation.Unmarshal;
-
-import org.openehealth.ipf.commons.core.modules.api.Aggregator
-import org.openehealth.ipf.commons.core.modules.api.Parser
-import org.openehealth.ipf.commons.core.modules.api.Predicate
-import org.openehealth.ipf.commons.core.modules.api.Renderer;
-import org.openehealth.ipf.commons.core.modules.api.Transmogrifier
-import org.openehealth.ipf.commons.core.modules.api.Validator
-import org.openehealth.ipf.platform.camel.core.adapter.Adapter
-import org.openehealth.ipf.platform.camel.core.adapter.AggregatorAdapter
-import org.openehealth.ipf.platform.camel.core.adapter.DataFormatAdapter
-import org.openehealth.ipf.platform.camel.core.adapter.PredicateAdapter
-import org.openehealth.ipf.platform.camel.core.builder.RouteBuilder
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregator
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingAggregationStrategy
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingCamelPredicate
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingInterceptor
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingPredicate
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingProcessor
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingTransmogrifier 
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingValidator 
-import org.openehealth.ipf.platform.camel.core.dataformat.GnodeDataFormat
-import org.openehealth.ipf.platform.camel.core.dataformat.GpathDataFormat
-import org.openehealth.ipf.platform.camel.core.model.AuditDefinition
-import org.openehealth.ipf.platform.camel.core.model.InterceptDefinition
-import org.openehealth.ipf.platform.camel.core.model.IpfDefinition
-import org.openehealth.ipf.platform.camel.core.model.SplitterDefinition
-import org.openehealth.ipf.platform.camel.core.model.ParserAdapterDefinition
-import org.openehealth.ipf.platform.camel.core.model.RendererAdapterDefinition
-import org.openehealth.ipf.platform.camel.core.model.TransmogrifierAdapterDefinition
-import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
-import org.openehealth.ipf.platform.camel.core.model.DataFormatAdapterDefinition
-import org.openehealth.ipf.platform.camel.core.model.ValidationDefinition
-
 import org.apache.camel.Expression
 import org.apache.camel.Processor
 import org.apache.camel.builder.DataFormatClause
 import org.apache.camel.builder.ExpressionClause
-import org.apache.camel.builder.NoErrorHandlerBuilder
 import org.apache.camel.model.ChoiceDefinition
 import org.apache.camel.model.OnExceptionDefinition
 import org.apache.camel.model.ProcessorDefinition
-import org.apache.camel.model.DataFormatDefinition
 import org.apache.camel.processor.DelegateProcessor
 import org.apache.camel.processor.aggregate.AggregationStrategy
-import org.apache.camel.spi.DataFormat
+import org.openehealth.ipf.commons.core.modules.api.*
+import org.apache.camel.builder.RouteBuilder
 
 /**
  * @author Martin Krasser
@@ -309,5 +267,24 @@ class CoreModelExtension {
         DataFormatClause.metaClass.render = { String rendererBeanName ->
             CoreExtension.render(delegate, rendererBeanName)
         }
+
+        // ----------------------------------------------------------------
+        //  Multiplast = Splitter + Multicast
+        // ----------------------------------------------------------------
+
+        ProcessorDefinition.metaClass.multiplast = {
+            RouteBuilder routeBuilder,
+            Expression splittingExpression,
+            Expression recipientListExpression,
+            AggregationStrategy aggregationStrategy ->
+
+            return CoreExtension.multiplast(
+                    delegate,
+                    routeBuilder,
+                    splittingExpression,
+                    recipientListExpression,
+                    aggregationStrategy)
+        }
+
     }
 }

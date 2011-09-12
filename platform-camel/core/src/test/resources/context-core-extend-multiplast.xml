@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:ctx="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://camel.apache.org/schema/spring 
+http://camel.apache.org/schema/spring/camel-spring.xsd 
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
+">
+
+    <camel:camelContext id="camelContext">
+        <camel:properties>
+            <camel:property key="CamelLogDebugBodyMaxChars" value="100000" />
+        </camel:properties>
+        <camel:jmxAgent id="agent" disabled="true"/>
+        <camel:routeBuilder ref="routeBuilder"/>        
+    </camel:camelContext>
+
+    <bean id="routeBuilder" depends-on="routeModelExtender" 
+          class="org.openehealth.ipf.platform.camel.core.multiplast.MultiplastRouteBuilder" />
+
+    <bean id="coreModelExtension"
+          class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension" />
+
+    <bean id="routeModelExtender"
+        class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
+        <property name="routeModelExtensions">
+            <list>
+                <ref bean="coreModelExtension" />
+            </list>
+        </property>
+    </bean>
+
+</beans>

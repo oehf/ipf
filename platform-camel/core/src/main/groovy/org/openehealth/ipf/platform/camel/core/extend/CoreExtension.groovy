@@ -16,8 +16,10 @@
 
 package org.openehealth.ipf.platform.camel.core.extend;
 
-import groovy.lang.Closure;
+import org.apache.camel.Exchange;
+import org.apache.camel.Expression;
 import org.apache.camel.Processor;
+import org.apache.camel.builder.Builder;
 import org.apache.camel.builder.DataFormatClause;
 import org.apache.camel.builder.ExpressionClause;
 import org.apache.camel.builder.NoErrorHandlerBuilder;
@@ -28,6 +30,7 @@ import org.apache.camel.model.FilterDefinition;
 import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.processor.DelegateProcessor;
+import org.apache.camel.processor.aggregate.AggregationStrategy
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
@@ -632,4 +635,53 @@ public class CoreExtension {
             throw new IllegalArgumentException("Unknown data format operation: " + self.operation);
         }
     }
+
+
+    /**
+     * Combines "splitter" and "recipient list" EIPs: Generates a list
+     * of N messages and a list of N endpoint URIs, sends each message
+     * to its corresponding endpoint, and aggregates their responses.
+     *
+     * @param routeBuilder
+     *      the current Camel route builder.
+     * @param splittingExpression
+     *      Camel expression which creates the list of messages.
+     * @param recipientListExpression
+     *      Camel expression which creates the list of target endpoint URIs.
+     * @param aggregationStrategy
+     *      strategy for aggregating received responses.
+     *
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Core+features
+     */
+    public static ProcessorDefinition multiplast(
+            ProcessorDefinition self,
+            RouteBuilder routeBuilder,
+            Expression splittingExpression,
+            Expression recipientListExpression,
+            AggregationStrategy aggregationStrategy)
+    {
+        String dispatcherEndpointUri = 'direct:multiplast-' + UUID.randomUUID().toString();
+        routeBuilder.from(dispatcherEndpointUri)
+            .process {
+                int index = it.properties[Exchange.SPLIT_INDEX];
+                it.in.headers['multiplast.uri'] = it.properties['multiplast.endpointUris'][index];
+            }
+            .recipientList(Builder.header('multiplast.uri'));
+
+        return self.process {
+            List bodies = splittingExpression.evaluate(it, List.class);
+            List endpointUris = recipientListExpression.evaluate(it, List.class);
+            if (bodies.size() != endpointUris.size()) {
+                throw new RuntimeException('lists of bodies and endpoints must be of the same lenght');
+            }
+
+            it.in.body = bodies;
+            it.properties['multiplast.endpointUris'] = endpointUris;
+        }
+        .split(Builder.body())
+            .parallelProcessing()
+            .aggregationStrategy(aggregationStrategy)
+            .to(dispatcherEndpointUri);
+    }
+
 }
