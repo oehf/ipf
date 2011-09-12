@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.lbs.store;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,15 +26,12 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openehealth.ipf.commons.lbs.store.DiskStore;
-import org.openehealth.ipf.commons.lbs.store.FileSystemLayoutStrategy;
-import org.openehealth.ipf.commons.lbs.store.FlatFileSystemLayout;
-import org.openehealth.ipf.commons.lbs.store.FlatUriUuidConversion;
-import org.openehealth.ipf.commons.lbs.store.ResourceIOException;
 
 
 /**
@@ -46,6 +43,7 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
     private static final URI baseUri = URI.create("http://localhost/");
     private FlatUriUuidConversion diskStoreStrategy;
     private FlatFileSystemLayout layoutStrategy;
+    private Log log = LogFactory.getLog(DiskStoreTest.class);
     
     @Before
     public void setUp() throws Exception {
@@ -54,7 +52,10 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
         File temp = File.createTempFile(getClass().getName(), "");
         temp.delete();
         storeLocation = new File(temp.getAbsolutePath());
-        storeLocation.mkdir();
+        if (!storeLocation.mkdir()){
+            log.error("Unable to create the directory in " + storeLocation);
+        }
+        
         
         diskStoreStrategy = new FlatUriUuidConversion(baseUri);
         layoutStrategy = new FlatFileSystemLayout(storeLocation);
@@ -111,18 +112,29 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
     }
      
     @Test(expected = IllegalArgumentException.class)
-    @Ignore
     public void testConstructorWithReadOnlyLocation() {
-        storeLocation.setWritable(false);
-        final FlatFileSystemLayout invalidLayout = 
-            new FlatFileSystemLayout(storeLocation);
-
-        try {
-            new DiskStore(invalidLayout, diskStoreStrategy);
-        }
-        finally {
-            storeLocation.setWritable(true);
-        }
+        if(storeLocation.setWritable(false) && storeLocation.canWrite()){
+            //In this case both storeLocation.setWritable(false) returned true
+            //and storeLocation.canWrite() returns true, 
+            //which is obviously wrong!
+            String msg = "Unable to make a location " 
+                         + storeLocation 
+                         + " non-writable "
+                         + "on platform " 
+                         + System.getProperty("os.name");
+            log.error(msg);
+            throw new IllegalArgumentException(msg);     
+            
+        } else {
+            storeLocation.setWritable(false);
+            final FlatFileSystemLayout invalidLayout = new FlatFileSystemLayout(storeLocation);
+            try {
+                new DiskStore(invalidLayout, diskStoreStrategy);
+            } 
+            finally {
+                storeLocation.setWritable(true);
+            }
+        } 
     }
     
     @Ignore
