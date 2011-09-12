@@ -24,8 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.RunWith;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.openehealth.ipf.commons.test.performance.Measurement;
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Timestamp;
@@ -38,7 +38,7 @@ import org.openehealth.ipf.commons.test.performance.dispatcher.SynchronousMeasur
  * 
  * @author Mitko Kolev
  */
-@RunWith(JUnit4ClassRunner.class)
+@RunWith(BlockJUnit4ClassRunner.class)
 @Ignore
 public class MultiThreadedPerformanceMeasurementServerTest {
     /**

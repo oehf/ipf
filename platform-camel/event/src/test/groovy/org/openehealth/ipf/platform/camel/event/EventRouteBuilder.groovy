@@ -23,7 +23,7 @@ import org.apache.camel.spring.SpringRouteBuilder
 class EventRouteBuilder extends SpringRouteBuilder {
      
     void configure() {
-        errorHandler(defaultErrorHandler().maximumRedeliveries(2).redeliverDelay(0));
+        errorHandler(defaultErrorHandler().maximumRedeliveries(2).redeliveryDelay(0));
         
         from('direct:start_simple')
             .publish { new MyEventImpl1('hello world') }

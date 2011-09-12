@@ -24,7 +24,7 @@ public class LbsMinaRouteBuilder extends SpringRouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        errorHandler(defaultErrorHandler().maximumRedeliveries(2).redeliverDelay(0));
+        errorHandler(defaultErrorHandler().maximumRedeliveries(2).redeliveryDelay(0));
         
         from("mina:tcp://localhost:6123?textline=true&sync=true")
             .to("mock:mock");
