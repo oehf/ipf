@@ -29,10 +29,11 @@ class TypeAdapterTest extends GroovyTestCase{
     SegmentAdapter obx2
     SegmentAdapter obx3
     SegmentAdapter obr
-    MessageAdapter<ORU_R01> msg2
+    MessageAdapter<ORU_R01> msg2 = load('msg-02.hl7')
     
     void setUp() {
-        msg2 = load('msg-02.hl7')
+		
+        
         obr = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBR
         obx1 = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX
         obx2 = msg2.PATIENT_RESULT.ORDER_OBSERVATION(1).OBSERVATION.OBX

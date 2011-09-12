@@ -28,6 +28,7 @@ import ca.uhn.hl7v2.model.Group
 /**
  * @author Martin Krasser
  * @author Christian Ohr
+ * @author Mitko Kolev
  */
 class GroupAdapter<T extends Group> extends StructureAdapter {
     

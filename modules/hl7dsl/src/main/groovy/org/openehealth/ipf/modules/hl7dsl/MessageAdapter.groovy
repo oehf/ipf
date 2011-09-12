@@ -23,6 +23,7 @@ import ca.uhn.hl7v2.model.AbstractMessage;
 
 /**
  * @author Martin Krasser
+ * @author Mitko Kolev
  */
 class MessageAdapter<T extends AbstractMessage> extends GroupAdapter<T> implements Writable {
 

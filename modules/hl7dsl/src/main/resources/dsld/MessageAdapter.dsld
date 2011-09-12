@@ -24,11 +24,14 @@ import org.openehealth.ipf.modules.hl7dsl.*;
 import java.util.List
 
 /*
+ * Debug the script according to 
+ * http://blog.springsource.com/2011/08/02/debugging-dsld-scripts/
+ * 
  * @author Mitko Kolev
  */
 
 String GET_PREFIX = 'get'
-int GET_PREFIX_LEN = GET_PREFIX.length()
+Integer GET_PREFIX_LEN = GET_PREFIX.length()
 String dslPackage = "org.openehealth.ipf.modules.hl7dsl."
 String SELECTOR = "org.openehealth.ipf.modules.hl7dsl.SelectorClosure"
 
@@ -36,6 +39,7 @@ String GROUP_ADAPTER ='org.openehealth.ipf.modules.hl7dsl.GroupAdapter'
 String SEGMENT_ADAPTER = 'org.openehealth.ipf.modules.hl7dsl.SegmentAdapter'
 String MESSAGE_ADAPTER = 'org.openehealth.ipf.modules.hl7dsl.MessageAdapter'
 String TYPE_ADAPTER = 'org.openehealth.ipf.modules.hl7dsl.TypeAdapter'
+String PRIMITIVE_ADAPTER = 'org.openehealth.ipf.modules.hl7dsl.PrimitiveAdapter'
 
 String GROUP = 'ca.uhn.hl7v2.model.AbstractGroup'
 String SEGMENT = 'ca.uhn.hl7v2.model.Segment'
@@ -81,13 +85,6 @@ def printGenericType = {String context,  GenericsType gt ->
 //class references are mutable, but there are also multiple instances of  them (one for each reference).
 def isReferenceToClassDeclaration = {ClassNode cn ->
     return cn.redirect().is(cn)
-}
-
-def printClassNode = {String context, ClassNode cn ->
-    print(context)
-    println("ClassNode ");
-    println("    name " +  cn.name)
-    println("    reference " + isReferenceToClassDeclaration(cn))
 }
 
 /*
@@ -140,22 +137,45 @@ def adapter = { ClassNode node ->
     if (isType(node)){
         res = ClassHelper.make(TYPE_ADAPTER)
     }
-    //res.setRedirect(node)
     return res
 }
+
+
 
 /*
  *  Triggered when we have a parametrized MessageAdapter
  */
-currentType(subType(MESSAGE_ADAPTER) | subType(GROUP_ADAPTER) | subType(SEGMENT_ADAPTER)).accept {
-    printClassNode("----------- Adapter", currentType)
-    
+currentType(subType(MESSAGE_ADAPTER)  | subType(GROUP_ADAPTER)).accept {
+   
     def gen = currentType?.genericsTypes
     if (gen && (gen.length == 1)) {
-        def genericsType = gen[0]
-        currentType.setRedirect(genericsType.getType())
-        printGenericType("MessageAdapter  ", genericsType)
-    }
+		def genericsType = gen[0].type
+        delegatesTo genericsType
+		
+		for (MethodNode m: genericsType.getMethods()){
+			if (isPublicGetter(m)){
+				String dslName = buildDSLName(m);
+				ClassNode returnType = buildReturnType(m);
+				Map paramsMap = buildParams(m);
+				if (isGroupReturnType(m)){
+					if (paramsMap.isEmpty()){
+						property name: dslName, type: returnType, declaringType : adapter(currentType), provider : "HL7 2.x DSL", doc : "Navigates to the first repetition of ${dslName}";
+					} else {
+						method name: dslName, type: returnType, declaringType: adapter(currentType),  params : paramsMap, provider : "HL7 2.x DSL", doc : "Access a repetition of ${dslName}";
+						method name: dslName, type:returnType, declaringType:  adapter(currentType), provider : "HL7 2.x DSL",  doc : "Access all repetitions of ${dslName}";
+					}
+				}
+				if (isSegmentReturnType(m)){
+					if (paramsMap.isEmpty()){
+						property name: dslName, type: returnType, declaringType : adapter(currentType), provider : "HL7 2.x DSL", doc : "Navigates to the first repetition of ${dslName}";
+					} else {
+						method name: dslName, type: returnType, declaringType: adapter(currentType),  params : paramsMap, provider : "HL7 2.x DSL", doc : "Access a repetition of ${dslName}";
+						method name: dslName, type:returnType, declaringType:  adapter(currentType), provider : "HL7 2.x DSL",  doc : "Access all repetitions of ${dslName}";
+					}
+				}
+			}
+		}
+	}
 }
 
 
@@ -163,42 +183,69 @@ currentType(subType(MESSAGE_ADAPTER) | subType(GROUP_ADAPTER) | subType(SEGMENT_
  * Group
  */
 currentType(subType(GROUP) & fileExtension('groovy')).accept {
-    printClassNode("Group ", currentType)
 
     for (MethodNode m: currentType.getMethods()){
         if (isPublicGetter(m)){
             String dslName = buildDSLName(m);
             ClassNode returnType = buildReturnType(m);
             Map paramsMap = buildParams(m);
-            if (isGroupReturnType(m) | isSegmentReturnType(m)){
+			def declType = adapter(currentType)
+            if (isGroupReturnType(m)){
                 if (paramsMap.isEmpty()){
-                    property name: dslName, type: adapter(returnType), declaringType : adapter(currentType), provider : "HL7 2.x DSL - GroupAdapter", doc : "Navigates to the first repetition of ${dslName}";
+                    property name: dslName, type: returnType, declaringType : declType, provider : "HL7 2.x DSL - Group", doc : "Navigates to the first repetition of ${dslName}";
                 } else {
-                    method name: dslName, type: adapter(returnType), declaringType: adapter(currentType),  params : paramsMap, provider : "HL7 2.x DSL - GroupAdapter", doc : "Access a repetition of ${dslName}";
-                    method name: dslName, type:'java.util.List', declaringType:  adapter(currentType), provider : "HL7 2.x DSL - GroupAdapter",  doc : "Access all repetitions of ${dslName}";
+                    method name: dslName, type:returnType, declaringType: declType,  params : paramsMap, provider : "HL7 2.x DSL - Group", doc : "Access a repetition of ${dslName}";
+                    method name: dslName, type:returnType, declaringType:  declType, provider : "HL7 2.x DSL - Group",  doc : "Access all repetitions of ${dslName}";
                 }
             }
+			if (isSegmentReturnType(m)){
+				if (paramsMap.isEmpty()){
+					property name: dslName, type: returnType, declaringType :declType, provider : "HL7 2.x DSL - Group", doc : "Navigates to the first repetition of ${dslName}";
+				} else {
+					method name: dslName, type:returnType, declaringType: declType,  params : paramsMap, provider : "HL7 2.x DSL - Group", doc : "Access a repetition of ${dslName}";
+					method name: dslName, type:returnType, declaringType: declType, provider : "HL7 2.x DSL - Group",  doc : "Access all repetitions of ${dslName}";
+				}
+			}
         }
     }
     def declType = ClassHelper.make(GROUP_ADAPTER)
-    method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns true if the group is empty. Example: msgAdapter.PATIENT_RESULT(1).isEmpty()"
-    property name:'path', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the group in the message.Example: msgAdapter.PATIENT_RESULT(1).path"
-    method name:'getPath', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the group in the message. Example: msgAdapter.PATIENT_RESULT(1).getPath()"
+	method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "HL7 2.x DSL - Group",  doc : "Returns true if the group is empty. Example: msgAdapter.PATIENT_RESULT(1).isEmpty()"
+    property name:'path', type : String, declaringType:  declType, provider : "HL7 2.x DSL - Group",  doc : "Returns the path of the group in the message.Example: msgAdapter.PATIENT_RESULT(1).path"
+    method name:'getPath', type : String, declaringType:  declType, provider : "HL7 2.x DSL - Group",  doc : "Returns the path of the group in the message. Example: msgAdapter.PATIENT_RESULT(1).getPath()"
+	method name:'count', type : Integer, declaringType:  declType,  params : ['structure' : String], provider : "HL7 2.x DSL - Group",  doc : "Returns the number of repetitions of the give structure in the group"
+	method name:'getTarget', type : currentType, declaringType:  declType,  provider : "HL7 2.x DSL - Group",  doc : "Returns the adapted (wrappped) group"
 }
 
 /*
  * Segment
  */
 currentType(subType(SEGMENT)).accept {
-    printClassNode("Segment ", currentType)
-    def declType = ClassHelper.make(SEGMENT_ADAPTER)
-    
-    method name: 'getAt', type: ClassHelper.make(TYPE_ADAPTER), declaringType: declType, params : [field : Integer], provider : "HL7 2.x DSL - SegmentAdapter", doc : "Access with repetition";
-    method name:'isEmpty', type : Boolean, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns true if the segment is empty. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.isEmpty()"
-    property name:'path', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.path returns \'PATIENT_RESULT(1).PATIENT.PID\'"
-    method name:'getPath', type : String, declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.getPath() returns \'PATIENT_RESULT(1).PATIENT.PID\'"
-    method name:'nrp', type : TYPE, params : [field : Integer], declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Adds a number of repetitions of the field to the segment. Example: message.PATIENT_RESULT(0).PATIENT.NK1(0).nrp(5) adds a repetition to NK1[5]"
-    method name:'from', type: Void, params : [copy : currentType], declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Copy the argument in the current segment.Example: def mySegment = ...;     msg1.NK1(0).from(mySegment)"
-    method name:'count', type: Integer, params : [field : Integer], declaringType:  declType, provider : "HL7 2.x DSL - SegmentAdapter",  doc : "Returns the number of repetitions of the j-th field. Example: segment.count(j)"
+	delegatesTo ClassHelper.make(SEGMENT_ADAPTER)
+    method name: 'getAt', type: ClassHelper.make(TYPE_ADAPTER), declaringType: currentType, params : [field : Integer], provider : "HL7 2.x DSL - Segment", doc : "Access with repetition";
+    method name:'isEmpty', type : Boolean, declaringType:  adapter(currentType), provider : "HL7 2.x DSL - Segment",  doc : "Returns true if the segment is empty. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.isEmpty()"
+    property name:'path', type : String, declaringType:  currentType, provider : "HL7 2.x DSL - Segment",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.path returns \'PATIENT_RESULT(1).PATIENT.PID\'"
+    method name:'getPath', type : String, declaringType:  currentType, provider : "HL7 2.x DSL - Segment",  doc : "Returns the path of the segment in the message. Example: msgAdapter.PATIENT_RESULT(1).PATIENT.PID.getPath() returns \'PATIENT_RESULT(1).PATIENT.PID\'"
+    method name:'nrp', type : TYPE, params : [field : Integer], declaringType:  currentType, provider : "HL7 2.x DSL - Segment",  doc : "Adds a number of repetitions of the field to the segment. Example: message.PATIENT_RESULT(0).PATIENT.NK1(0).nrp(5) adds a repetition to NK1[5]"
+    method name:'from', type: Void, params : [copy : currentType], declaringType:  currentType, provider : "HL7 2.x DSL - Segment",  doc : "Copy the argument in the current segment.Example: def mySegment = ...;     msg1.NK1(0).from(mySegment)"
+    method name:'count', type: Integer, params : [field : Integer], declaringType:  currentType, provider : "HL7 2.x DSL - Segment",  doc : "Returns the number of repetitions of the j-th field. Example: segment.count(j)"
+	method name:'getTarget', type : currentType, declaringType:  currentType,  provider : "HL7 2.x DSL - Segment",  doc : "Returns the adapted (wrappped) group"
 }
+
+currentType(subType(TYPE_ADAPTER)).accept {
+	property name:'value', type : String, declaringType:  currentType, provider : "HL7 2.x DSL - Primitive",  doc : "Property to return/set the value"
+}
+/*
+ *   Helper for the primitive adapter
+ */
+currentType(subType(PRIMITIVE_ADAPTER)).accept {
+   def declType = ClassHelper.make(PRIMITIVE_ADAPTER)
+   def primitiveClass = ClassHelper.make('ca.uhn.hl7v2.model.Primitive')
+   //delegatesTo primitiveClass
+   //Currently not possible to delegate to interface in DSLD, so declare the methods
+   method name:'encode', type : String, declaringType:  declType, provider : "HL7 2.x DSL - Primitive",  doc : "Returns the literal value of the target primitive"
+   method name:'name', type : String, declaringType:  declType, provider : "HL7 2.x DSL - Primitive",  doc : "Returns the name of the type (used in XML encoding and profile checking)"
+   method name:'clear', type: Void, declaringType:  declType, provider : "HL7 2.x DSL - Primitive",  doc : "Clears all data from this primitive"
+   property name:'value', type : String, declaringType:  declType, provider : "HL7 2.x DSL - Primitive",  doc : "Property to return/set the value"
+}
+
 

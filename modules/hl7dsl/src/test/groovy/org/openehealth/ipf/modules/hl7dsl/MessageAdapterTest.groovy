@@ -15,29 +15,33 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
-
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
+import ca.uhn.hl7v2.model.v22.message.ADT_A01
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 /**
  * @author Martin Krasser
  */
 class MessageAdapterTest extends GroovyTestCase {
     
-    def msg
+    MessageAdapter<ADT_A01> msg;
     
     void setUp() {
         msg = load('msg-01.hl7')
+
     }
 
     void testMakeStream() {
         def stream = getClass().classLoader.getResource('msg-01.hl7').openStream()
-        def result = MessageAdapters.make(stream)
+        MessageAdapter<ADT_A01> result = make(stream)
+		
         assert result.MSH[4].value == 'HZL'
     }
     
     void testRender() {
         def writer
         def result
-
+		
         writer = new StringWriter()
         writer << msg // msg is writable
         result = writer.buffer.toString()
@@ -59,8 +63,8 @@ class MessageAdapterTest extends GroovyTestCase {
     }
     
     void testCopy() {
-        msg.MSH[5] = 'X'
-        def copy = msg.copy()
+		msg.MSH[5] = 'X';
+		MessageAdapter<ADT_A01> copy = msg.copy()
         assert copy.MSH[5].value == 'X'
         copy.MSH[5].value = 'Y'
         assert copy.MSH[5].value == 'Y'
