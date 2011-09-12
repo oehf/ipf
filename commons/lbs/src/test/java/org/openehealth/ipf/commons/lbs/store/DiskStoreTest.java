@@ -111,6 +111,7 @@ public class DiskStoreTest extends LargeBinaryStoreTest {
     }
      
     @Test(expected = IllegalArgumentException.class)
+    @Ignore
     public void testConstructorWithReadOnlyLocation() {
         storeLocation.setWritable(false);
         final FlatFileSystemLayout invalidLayout = 
