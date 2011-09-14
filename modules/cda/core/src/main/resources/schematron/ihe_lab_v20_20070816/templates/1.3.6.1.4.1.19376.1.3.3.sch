@@ -13,19 +13,19 @@
     <ns prefix="lab" uri="urn:oid:1.3.6.1.4.1.19376.1.3.2"/> 
     
     <phase id='errors'>
-        <active pattern='p1.3.6.1.4.1.19376.1.3.3-errors'/>
-        <active pattern='p1.3.6.1.4.1.19376.1.3.3-Lev2-errors'/>
+        <active pattern='p-1.3.6.1.4.1.19376.1.3.3-errors'/>
+        <active pattern='p-1.3.6.1.4.1.19376.1.3.3-Lev2-errors'/>
     </phase>
     
     <!--
         <phase id='warning'>
         <active pattern=' '/>
         </phase>
-    -->     
+    
         <phase id='note'>
             <active pattern='p1.3.6.1.4.1.19376.1.3.3-note'/>
         </phase>
-        
+    -->         
   
     
     

@@ -199,7 +199,7 @@
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
                                                                 <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
                                                                     <lab:low inclusive="true" unit="a" value="18"/>
                                                                 </lab:value>
                                                             </lab:criterion>
@@ -208,13 +208,13 @@
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
@@ -235,28 +235,28 @@
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
                                                                 <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
                                                                     <lab:low inclusive="true" unit="a" value="18"/>
                                                                 </lab:value>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:CD" code="M" displayName="Male"/>
+                                                                <lab:code code="M" codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:PQ"/>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
@@ -277,28 +277,28 @@
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
                                                                 <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
                                                                     <lab:low inclusive="true" unit="a" value="18"/>
                                                                 </lab:value>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:CD" code="M" displayName="Male"/>
+                                                                <lab:code code="M" codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:PQ"/>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
@@ -319,7 +319,7 @@
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
                                                                 <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
                                                                     <lab:low inclusive="true" unit="a" value="18"/>
                                                                 </lab:value>
                                                             </lab:criterion>
@@ -328,16 +328,74 @@
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
                                                             <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <interpretationCode code="N"/>
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
+                                            </component>
+                                        </organizer>
+                                    </entryRelationship>
+                                    <entryRelationship typeCode="COMP">
+                                        <organizer classCode="CLUSTER" moodCode="EVN">
+                                            <statusCode code="active" />
+                                            <effectiveTime value="20101010" />
+                                            <specimen typeCode="SPC">
+                                                <specimenRole classCode="ISLT">
+                                                    <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5" />
+                                                    <specimenPlayingEntity classCode="MIC">
+                                                        <code xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  code="P" codeSystem="2.16.840.1.113883.5.111.16515" codeSystemName="RoleCode - SpecimenRoleType" displayName="Patient">
+                                                            <originalText>A specimen that has been collected from a patient.</originalText>
+                                                        </code>
+                                                    </specimenPlayingEntity>
+                                                    <lab:productOf typeCode="PRD">
+                                                        <lab:procedure classCode="PROC" moodCode="EVN">
+                                                            <code></code>
+                                                            <effectiveTime></effectiveTime>
+                                                            <targetSiteCode></targetSiteCode>
+                                                        </lab:procedure>
+                                                    </lab:productOf>
+                                                </specimenRole>
+                                            </specimen>
+                                            <component typeCode="COMP">
+                                                <observation classCode="OBS" moodCode="EVN">
+                                                    <code />
+                                                    <statusCode code="completed" />
+                                                </observation>
+                                            </component>
+                                            <component typeCode="COMP">
+                                                <organizer classCode="CLUSTER" moodCode="EVN">
+                                                    <statusCode code="completed" />
+                                                    <effectiveTime value="20101010" />
+                                                    <specimen typeCode="SPC">
+                                                        <specimenRole classCode="SPEC">
+                                                            <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5" />
+                                                            <specimenPlayingEntity>
+                                                                <code xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                                                    <originalText>A specimen that has been collected from a patient.</originalText>
+                                                                </code>
+                                                            </specimenPlayingEntity>
+                                                            <lab:productOf typeCode="PRD">
+                                                                <lab:procedure classCode="PROC" moodCode="EVN">
+                                                                    <code></code>
+                                                                    <effectiveTime></effectiveTime>
+                                                                    <targetSiteCode></targetSiteCode>
+                                                                </lab:procedure>
+                                                            </lab:productOf>
+                                                        </specimenRole>
+                                                    </specimen>
+                                                    <component typeCode="COMP">
+                                                        <observation classCode="OBS" moodCode="EVN">
+                                                            <code />
+                                                            <statusCode code="completed" />
+                                                        </observation>
+                                                    </component>
+                                                </organizer>
                                             </component>
                                         </organizer>
                                     </entryRelationship>

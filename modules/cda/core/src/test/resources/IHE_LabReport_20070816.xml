@@ -1,101 +1,432 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:hl7-org:v3 C:\_dev\ipf\modules\cda\core\src\main\resources\schema\ihe_lab\infrastructure\cda\LabCDA.xsd">
-    <realmCode code="US"/>
-    <typeId extension="POCD_HD000040" root="2.16.840.1.113883.1.3"/>
-    <templateId extension="Lab.Report.Clinical.Document" root="1.3.6.1.4.1.19376.1.3.3"/>
-    <id extension="68f56991-c4d2-4ffc-8252-f5483066885f" root="2.16.840.1.113883.3.72.5"/>
-    <code code="11502-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="LABORATORY REPORT.TOTAL"/>
-    <effectiveTime value="20071123115501+0500"/>
-    <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25"/>
-    <languageCode code="en-US"/>
-    <setId extension="POLB_IN224200" root="2.16.840.1.113883.1.6"/>
-    <versionNumber value="1"/>
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:cda="urn:hl7-org:v3" xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:hl7-org:v3 ../../../../../main/resources/schema/ihe_lab/infrastructure/cda/LabCDA.xsd">
+    <realmCode code="US" />
+    <typeId root="2.16.840.1.113883.1.3" extension="POCD_HD000040" />
+    <templateId root="1.3.6.1.4.1.19376.1.3.3" extension="Lab.Report.Clinical.Document" assigningAuthorityName="IHE C37" />
+    <id extension="LenGalla_TestLabReport_#1" root="2.16.840.1.113883.3.72.5" assigningAuthorityName="NIST Test Laboratory" />
+    <code code="26436-6" displayName="LABORATORY STUDIES" codeSystemName="LOINC" codeSystem="2.16.840.1.113883.6.1" />
+    <effectiveTime value="20071127132600-0500" />
+    <confidentialityCode code="N" displayName="Normal" codeSystemName="HL7 Confidentiality" codeSystem="2.16.840.1.113883.5.25" />
+    <setId extension="LenGalla_TestLabReport_Original_SetId#1" root="2.16.840.1.113883.3.72.5" assigningAuthorityName="NIST Test Laboratory" />
+    <versionNumber value="1" />
     <recordTarget>
-        <patientRole>
-            <id extension="JustReflectedBackInResponseMessages" root="ProbablyLocalToPlacerOrg"/>
-            <addr>
-                <streetAddressLine>100 Bureau Drive</streetAddressLine>
-                <city>Gaithersburg Md</city>
-            </addr>
-            <telecom value="555-333-2222"/>
-            <patient>
-                <name>
-                    <given>Patient_firstname</given>
-                    <family>Patient_firstname</family>
-                </name>
-                <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 Administrative Gender" displayName="Male"/>
-                <birthTime value="19611021"/>
+        <patientRole classCode="PAT">
+            <id extension="JustReflectedBackInResponseMessages" root="ProbablyLocalToPlacerOrg" />
+            <addr>Patient Name, His Town, His state, USA 101900</addr>
+            <telecom nullFlavor="ASKU" />
+            <patient classCode="PSN" determinerCode="INSTANCE">
+                <name>My Patient Name - Unstructured</name>
+                <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 Administrative Gender" displayName="Male" />
+                <birthTime value="19611021" />
+                <maritalStatusCode code="M" codeSystem="2.16.840.1.113883.5.2" codeSystemName="HL7 Marital Status" displayName="Married" />
+                <religiousAffiliationCode>
+                    <originalText>Local Self-Declared Sect</originalText>
+                </religiousAffiliationCode>
+                <raceCode nullFlavor="ASKU" />
+                <ethnicGroupCode nullFlavor="ASKU" />
+                <birthplace classCode="BIRTHPL">
+                    <place nullFlavor="NASK" />
+                </birthplace>
             </patient>
+            <providerOrganization>
+                <name></name>
+            </providerOrganization>
         </patientRole>
     </recordTarget>
-    <author>
-        <time value="20071123115501"/>
-        <assignedAuthor>
-            <id extension="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5"/>
-            <addr>
-                <streetAddressLine>100 Bureau Drive</streetAddressLine>
-                <city>Gaithersburg Md</city>
-            </addr>
-            <telecom value="555-333-2222"/>
-            <assignedAuthoringDevice>
-                <softwareName xmlns:cda="urn:hl7-org:v3" xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">NIST
-                    Laboratory Fulfiller Reverence Implementation
-                </softwareName>
-            </assignedAuthoringDevice>
+
+    <recordTarget>
+        <patientRole classCode="PAT">
+            <id extension="JustReflectedBackInResponseMessages" root="ProbablyLocalToPlacerOrg" />
+            <addr>Patient Name, His Town, His state, USA 101900</addr>
+            <telecom nullFlavor="ASKU" />
+            <patient classCode="PSN" determinerCode="INSTANCE">
+                <name>My Patient Name - Unstructured</name>
+                <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 Administrative Gender" displayName="Male" />
+                <birthTime value="19611021" />
+                <maritalStatusCode code="M" codeSystem="2.16.840.1.113883.5.2" codeSystemName="HL7 Marital Status" displayName="Married" />
+                <religiousAffiliationCode>
+                    <originalText>Local Self-Declared Sect</originalText>
+                </religiousAffiliationCode>
+                <raceCode nullFlavor="ASKU" />
+                <ethnicGroupCode nullFlavor="ASKU" />
+                <birthplace classCode="BIRTHPL">
+                    <place nullFlavor="NASK" />
+                </birthplace>
+            </patient>
+            <providerOrganization>
+                <name></name>
+            </providerOrganization>
+        </patientRole>
+    </recordTarget>
+
+    <author typeCode="AUT">
+        <time value="20071114152917" />
+        <assignedAuthor classCode="ASSIGNED">
+            <id extension="Len" assigningAuthorityName="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5" />
+            <addr>Bldg 222 Room A305</addr>
+            <telecom value="+1-975-3251" />
+            <assignedPerson>
+                <name>Len Gallagher</name>
+            </assignedPerson>
+            <representedOrganization classCode="ORG">
+                <id assigningAuthorityName="NIST HL7 Test Laboratory" root="2.16.840.1.113883.3.72.5" />
+                <name></name>
+                <addr>
+                    <streetAddressLine>Mail Drop 8970</streetAddressLine>
+                    <city>Gaithersburg</city>
+                    <state>MD</state>
+                    <postalCode>20899</postalCode>
+                </addr>
+            </representedOrganization>
         </assignedAuthor>
     </author>
-    <custodian>
+    <author>
+        <time value="2005032922441+0500" />
+        <assignedAuthor>
+            <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+            <addr>Bldg 222 Room A305</addr>
+            <telecom value="+1-975-3251" />
+            <assignedAuthoringDevice>
+                <softwareName>Pretty Good Lab System</softwareName>
+            </assignedAuthoringDevice>
+            <representedOrganization classCode="ORG">
+                <id assigningAuthorityName="NIST HL7 Test Laboratory" root="2.16.840.1.113883.3.72.5" />
+                <name></name>
+                <addr>
+                    <streetAddressLine>Mail Drop 8970</streetAddressLine>
+                    <city>Gaithersburg</city>
+                    <state>MD</state>
+                    <postalCode>20899</postalCode>
+                </addr>
+            </representedOrganization>
+        </assignedAuthor>
+    </author>
+    <custodian typeCode="CST">
         <assignedCustodian>
             <representedCustodianOrganization>
-                <id extension="1" root="1.3.6.4.1.4.1.2835.3"/>
-                <name>YourOrganizationName</name>
-                <telecom value="YourTelephoneNbrOrEmailAddress"/>
+                <id assigningAuthorityName="NIST HL7 Test Laboratory" root="2.16.840.1.113883.3.72.5" />
+                <name>NIST Healthcare Test Laboratory</name>
+                <telecom value="+1-975-3251" />
                 <addr>
-                    <streetAddressLine>100 Bureau Drive</streetAddressLine>
-                    <city>Gaithersburg Md</city>
+                    <streetAddressLine>Mail Drop 8970</streetAddressLine>
+                    <city>Gaithersburg</city>
+                    <state>MD</state>
+                    <postalCode>20899</postalCode>
                 </addr>
             </representedCustodianOrganization>
         </assignedCustodian>
     </custodian>
+
+    <informationRecipient>
+        <intendedRecipient>
+            <id extension="1" root="1.3.6.4.1.4.1.2835.3" />
+            <addr>
+                <streetAddressLine>21 North Ave</streetAddressLine>
+                <city>Burlington</city>
+            </addr>
+            <telecom value="tel:(999)555-1212" use="DIR" />
+            <informationRecipient>
+                <name>
+                    <prefix>Dr.</prefix>
+                    <given>Specialist</given>
+                    <family>Physician</family>
+                </name>
+            </informationRecipient>
+            <receivedOrganization>
+                <name></name>
+            </receivedOrganization>
+        </intendedRecipient>
+    </informationRecipient>
+
+    <informationRecipient>
+        <intendedRecipient>
+            <id extension="1" root="1.3.6.4.1.4.1.2835.3" />
+            <addr>
+                <streetAddressLine>21 North Ave</streetAddressLine>
+                <city>Burlington</city>
+            </addr>
+            <telecom value="tel:(999)555-1212" use="DIR" />
+            <informationRecipient>
+                <name>
+                    <prefix>Dr.</prefix>
+                    <given>Specialist</given>
+                    <family>Physician</family>
+                </name>
+            </informationRecipient>
+            <receivedOrganization>
+                <name></name>
+            </receivedOrganization>
+        </intendedRecipient>
+    </informationRecipient>
+
+    <legalAuthenticator>
+        <time value="20050329224512+0500" />
+        <signatureCode code="S" />
+        <assignedEntity>
+            <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+            <addr>
+                <streetAddressLine>21 North Ave</streetAddressLine>
+                <city>Burlington</city>
+            </addr>
+            <telecom value="tel:(999)555-1212" use="DIR" />
+            <assignedPerson>
+                <name>
+                    <given>Mike</given>
+                    <family>Roscopp</family>
+                </name>
+            </assignedPerson>
+            <representedOrganization>
+                <name></name>
+            </representedOrganization>
+        </assignedEntity>
+    </legalAuthenticator>
+
+    <authenticator>
+        <time value="20050329224512+0500" />
+        <signatureCode code="S" />
+        <assignedEntity>
+            <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+            <addr>
+                <streetAddressLine>21 North Ave</streetAddressLine>
+                <city>Burlington</city>
+            </addr>
+            <telecom value="tel:(999)555-1212" use="DIR" />
+            <assignedPerson>
+                <name>
+                </name>
+            </assignedPerson>
+            <representedOrganization>
+                <name>
+                </name>
+            </representedOrganization>
+        </assignedEntity>
+    </authenticator>
+
+    <authenticator>
+        <time value="20050329224512+0500" />
+        <signatureCode code="S" />
+        <assignedEntity>
+            <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+            <addr>
+                <streetAddressLine>21 North Ave</streetAddressLine>
+                <city>Burlington</city>
+            </addr>
+            <telecom value="tel:(999)555-1212" use="DIR" />
+            <assignedPerson>
+                <name>
+                </name>
+            </assignedPerson>
+            <representedOrganization>
+                <name>
+                </name>
+            </representedOrganization>
+        </assignedEntity>
+    </authenticator>
+
+    <participant typeCode="REF">
+        <time value="20050329224512+0500" />
+        <associatedEntity classCode="mah">
+            <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+            <addr>
+                <streetAddressLine>21 North Ave</streetAddressLine>
+                <city>Burlington</city>
+            </addr>
+            <telecom value="tel:(999)555-1212" use="DIR" />
+            <associatedPerson>
+                <name>
+                    <given>Good</given>
+                    <family>Orderer</family>
+                </name>
+            </associatedPerson>
+            <scopingOrganization>
+                <name></name>
+            </scopingOrganization>
+        </associatedEntity>
+    </participant>
+
+    <participant typeCode="REF">
+        <time value="20050329224512+0500" />
+        <associatedEntity classCode="mah">
+            <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+            <addr>
+                <streetAddressLine>21 North Ave</streetAddressLine>
+                <city>Burlington</city>
+            </addr>
+            <telecom value="tel:(999)555-1212" use="DIR" />
+            <associatedPerson>
+                <name>
+                    <given>Good</given>
+                    <family>Orderer</family>
+                </name>
+            </associatedPerson>
+            <scopingOrganization>
+                <name></name>
+            </scopingOrganization>
+        </associatedEntity>
+    </participant>
+
+    <inFulfillmentOf typeCode="FLFS">
+        <order>
+            <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="POLB_OBS_RQO_LenGalla_CBC_20071123" root="2.16.840.1.113883.3.72.5" />
+        </order>
+    </inFulfillmentOf>
+    <inFulfillmentOf typeCode="FLFS">
+        <order>
+            <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="POLB_OBS_RQO_LenGalla_GTT_20071126" root="2.16.840.1.113883.3.72.5" />
+        </order>
+    </inFulfillmentOf>
+    <inFulfillmentOf typeCode="FLFS">
+        <order>
+            <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="POLB_OBS_RQO_LenGalla_CULTSENSRPT_20071126" root="2.16.840.1.113883.3.72.5" />
+        </order>
+    </inFulfillmentOf>
+
     <documentationOf>
-        <serviceEvent classCode="PCPR">
-            <effectiveTime>
-                <low value="20071123115501"/>
-                <high value="20071123115501"/>
-            </effectiveTime>
+        <serviceEvent>
+            <lab:statusCode code="completed" />
+        </serviceEvent>
+    </documentationOf>
+
+    <documentationOf>
+        <serviceEvent>
+            <lab:statusCode code="active" />
+        </serviceEvent>
+    </documentationOf>
+
+    <documentationOf>
+        <serviceEvent>
             <performer typeCode="PRF">
-                <time>
-                    <low value="20071123115501"/>
-                    <high value="20071123115501"/>
-                </time>
                 <assignedEntity>
-                    <id extension="1" root="1.3.6.4.1.4.1.2835.1"/>
-                    <code code="59058001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="General Physician"/>
+                    <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
                     <addr>
                         <streetAddressLine>100 Bureau Drive</streetAddressLine>
                         <city>Gaithersburg Md</city>
                     </addr>
-                    <telecom value="555-333-2222"/>
+                    <telecom value="555-333-2222" />
                     <assignedPerson>
                         <name>
                             <given>Doctor_firstname&gt;</given>
                             <family>Doctor_firstname&gt;</family>
                         </name>
                     </assignedPerson>
+                    <representedOrganization>
+                        <name></name>
+                    </representedOrganization>
+                </assignedEntity>
+            </performer>
+            <performer typeCode="PRF">
+                <assignedEntity>
+                    <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+                    <addr>
+                        <streetAddressLine>100 Bureau Drive</streetAddressLine>
+                        <city>Gaithersburg Md</city>
+                    </addr>
+                    <telecom value="555-333-2222" />
+                    <assignedPerson>
+                        <name>
+                            <given>Doctor_firstname&gt;</given>
+                            <family>Doctor_firstname&gt;</family>
+                        </name>
+                    </assignedPerson>
+                    <representedOrganization>
+                        <name></name>
+                    </representedOrganization>
                 </assignedEntity>
             </performer>
         </serviceEvent>
     </documentationOf>
+
+    <relatedDocument typeCode="RPLC">
+        <parentDocument>
+            <id />
+        </parentDocument>
+    </relatedDocument>
+
+    <componentOf>
+        <encompassingEncounter>
+            <id extension="9876543" root="1.2.3" />
+            <effectiveTime>
+                <low value="200605230910" />
+            </effectiveTime>
+            <responsibleParty>
+                <assignedEntity>
+                    <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+                    <addr>
+                        <streetAddressLine>21 North Ave</streetAddressLine>
+                        <city>Burlington</city>
+                    </addr>
+                    <telecom value="tel:(999)555-1212" use="DIR" />
+                    <assignedPerson>
+                        <name>
+                        </name>
+                    </assignedPerson>
+                    <representedOrganization>
+                        <name>
+                        </name>
+                    </representedOrganization>
+                </assignedEntity>
+            </responsibleParty>
+            <encounterParticipant typeCode="ADM">
+                <assignedEntity>
+                    <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+                    <addr>
+                        <streetAddressLine>21 North Ave</streetAddressLine>
+                        <city>Burlington</city>
+                    </addr>
+                    <telecom value="tel:(999)555-1212" use="DIR" />
+                    <assignedPerson>
+                        <name>
+                        </name>
+                    </assignedPerson>
+                    <representedOrganization>
+                        <name>
+                        </name>
+                    </representedOrganization>
+                </assignedEntity>
+            </encounterParticipant>
+
+            <encounterParticipant typeCode="ADM">
+                <assignedEntity>
+                    <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+                    <addr>
+                        <streetAddressLine>21 North Ave</streetAddressLine>
+                        <city>Burlington</city>
+                    </addr>
+                    <telecom value="tel:(999)555-1212" use="DIR" />
+                    <assignedPerson>
+                        <name>
+                        </name>
+                    </assignedPerson>
+                    <representedOrganization>
+                        <name>
+                        </name>
+                    </representedOrganization>
+                </assignedEntity>
+            </encounterParticipant>
+
+            <location>
+                <healthCareFacility>
+                    <location>
+                    </location>
+                    <serviceProviderOrganization>
+                        <name></name>
+                        <telecom value="tel:(999)555-1212" use="DIR" />
+                        <addr>Patient Name, His Town, His state, USA 101900</addr>
+                    </serviceProviderOrganization>
+                </healthCareFacility>
+            </location>
+        </encompassingEncounter>
+    </componentOf>
     <component typeCode="COMP">
         <structuredBody>
             <component typeCode="COMP">
                 <section>
-                    <templateId root="1.3.6.1.4.1.19376.1.3.3.2.1"/>
-                    <code code="18768-2" codeSystem="2.16.840.1.113883.6.1" displayName="CELL COUNTS+DIFFERENTIAL STUDIES" codeSystemName="LOINC"/>
+                    <templateId root="1.3.6.1.4.1.19376.1.3.3.2.1" />
+                    <code code="18768-2" codeSystem="2.16.840.1.113883.6.1" displayName="CELL COUNTS+DIFFERENTIAL STUDIES" codeSystemName="LOINC" />
                     <component>
                         <section>
-                            <templateId root="1.3.6.1.4.1.19376.1.3.3.2.2"/>
-                            <code code="26436-6" codeSystem="2.16.840.1.113883.6.1" displayName="LABORATORY STUDIES"/>
+                            <templateId root="1.3.6.1.4.1.19376.1.3.3.2.2" />
+                            <code code="26436-6" codeSystem="2.16.840.1.113883.6.1" displayName="LABORATORY STUDIES" />
                             <text>
                                 <table border="1" xmlns:cda="urn:hl7-org:v3" xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                                     <thead>
@@ -150,18 +481,114 @@
                                 </table>
                             </text>
                             <entry typeCode="DRIV">
-                                <templateId root="1.3.6.1.4.1.19376.1.3.1" extension="Lab.Report.Data.Processing.Entry"/>
+                                <templateId root="1.3.6.1.4.1.19376.1.3.1" extension="Lab.Report.Data.Processing.Entry" />
                                 <act classCode="ACT" moodCode="EVN">
-                                    <code code="24317-0" codeSystem="2.16.840.1.113883.6.1" displayName="Hemogram and Platelets Panel"/>
-                                    <statusCode code="completed"/>
+                                    <code code="24317-0" codeSystem="2.16.840.1.113883.6.1" displayName="Hemogram and Platelets Panel" />
+                                    <statusCode code="completed" />
+                                    <effectiveTime value="20101010101010" />
+
+                                    <specimen typeCode="SPC">
+                                        <specimenRole classCode="SPEC">
+                                            <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5" />
+                                            <specimenPlayingEntity>
+                                                <code xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" code="P" codeSystem="2.16.840.1.113883.5.111.16515" codeSystemName="RoleCode - SpecimenRoleType" displayName="Patient">
+                                                    <originalText>A specimen that has been collected from a patient.</originalText>
+                                                </code>
+                                            </specimenPlayingEntity>
+                                            <lab:productOf typeCode="PRD">
+                                                <lab:procedure classCode="PROC" moodCode="EVN">
+                                                    <code></code>
+                                                    <effectiveTime></effectiveTime>
+                                                    <targetSiteCode></targetSiteCode>
+                                                </lab:procedure>
+                                            </lab:productOf>
+                                        </specimenRole>
+                                    </specimen>
+
+                                    <performer typeCode="PRF">
+                                        <assignedEntity classCode="ASSIGNED">
+                                            <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+                                            <code code="59058001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="General Physician" />
+                                            <addr>
+                                            </addr>
+                                            <telecom value="555-333-2222" />
+                                            <assignedPerson>
+                                                <name>
+                                                </name>
+                                            </assignedPerson>
+                                            <representedOrganization>
+                                                <name></name>
+                                            </representedOrganization>
+                                        </assignedEntity>
+                                    </performer>
+
+                                    <author typeCode="AUT">
+                                        <time value="20071123115501" />
+                                        <assignedAuthor classCode="ASSIGNED">
+                                            <id extension="Len" assigningAuthorityName="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5" />
+                                            <addr>Bldg 222 Room A305</addr>
+                                            <telecom value="555-333-2222" />
+                                            <assignedPerson>
+                                                <name>Len Gallagher</name>
+                                            </assignedPerson>
+                                            <representedOrganization classCode="ORG">
+                                            </representedOrganization>
+                                        </assignedAuthor>
+                                    </author>
+
+                                    <author typeCode="AUT">
+                                        <time value="20071123115501" />
+                                        <assignedAuthor classCode="ASSIGNED">
+                                            <id extension="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5" />
+                                            <addr>Bldg 222 Room A305</addr>
+                                            <telecom value="555-333-2222" />
+                                            <assignedAuthoringDevice>
+                                                <manufacturerModelName></manufacturerModelName>
+                                                <softwareName></softwareName>
+                                            </assignedAuthoringDevice>
+                                            <representedOrganization classCode="ORG">
+                                                <name></name>
+                                            </representedOrganization>
+                                        </assignedAuthor>
+                                    </author>
+
+                                    <participant typeCode="DEV">
+                                        <participantRole classCode="ASSIGNED">
+                                            <id extension="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5" />
+                                            <addr>Bldg 222 Room A305</addr>
+                                            <telecom value="555-333-2222" />
+                                            <playingDevice>
+                                                <code></code>
+                                                <manufacturerModelName></manufacturerModelName>
+                                            </playingDevice>
+                                            <scopingEntity>
+                                                <id></id>
+                                            </scopingEntity>
+                                        </participantRole>
+                                    </participant>
+
+                                    <participant typeCode="RESP">
+                                        <participantRole classCode="ASSIGNED">
+                                            <id extension="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5" />
+                                            <addr>Bldg 222 Room A305</addr>
+                                            <telecom value="555-333-2222" />
+                                            <playingEntity>
+                                                <name></name>
+                                            </playingEntity>
+                                            <scopingEntity>
+                                                <id></id>
+                                            </scopingEntity>
+                                        </participantRole>
+                                    </participant>
+
                                     <entryRelationship typeCode="COMP">
                                         <organizer classCode="BATTERY" moodCode="EVN">
-                                            <id extension="6be473d1-2fb8-4b39-8a10-c0527d017366" root="2.16.840.1.113883.3.72.5"/>
-                                            <code code="24317-0" codeSystem="2.16.840.1.113883.6.1" displayName="Hemogram and Platelets Panel"/>
-                                            <statusCode code="completed"/>
+                                            <id extension="6be473d1-2fb8-4b39-8a10-c0527d017366" root="2.16.840.1.113883.3.72.5" />
+                                            <code code="24317-0" codeSystem="2.16.840.1.113883.6.1" displayName="Hemogram and Platelets Panel" />
+                                            <statusCode code="completed" />
                                             <specimen typeCode="SPC">
                                                 <specimenRole classCode="SPEC">
-                                                    <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5"/>
+                                                    <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5" />
                                                     <specimenPlayingEntity>
                                                         <code xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" code="P" codeSystem="2.16.840.1.113883.5.111.16515" codeSystemName="RoleCode - SpecimenRoleType" displayName="Patient">
                                                             <originalText>A specimen that has been collected from a patient.</originalText>
@@ -171,163 +598,341 @@
                                             </specimen>
                                             <component typeCode="COMP">
                                                 <observation classCode="OBS" moodCode="EVN">
-                                                    <templateId root="1.3.6.1.4.1.19376.1.3.1.6"/>
-                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="f833f003-962f-46cd-8bd0-7b602b0b6616" root="2.16.840.1.113883.3.72.5"/>
-                                                    <code code="6690-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Leukocytes"/>
-                                                    <statusCode code="completed"/>
-                                                    <effectiveTime value="20071123115501"/>
-                                                    <value unit="10*9/L" value="8.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ"/>
-                                                    <interpretationCode code="N"/>
+                                                    <templateId root="1.3.6.1.4.1.19376.1.3.1.6" />
+                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="f833f003-962f-46cd-8bd0-7b602b0b6616" root="2.16.840.1.113883.3.72.5" />
+                                                    <code code="6690-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Leukocytes" />
+                                                    <statusCode code="completed" />
+                                                    <effectiveTime value="20071123115501" />
+                                                    <value unit="10*9/L" value="8.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ" />
+                                                    <interpretationCode code="N" />
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="N"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
-                                                                    <lab:low inclusive="true" unit="a" value="18"/>
+                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported" />
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                    <lab:low inclusive="true" unit="a" value="18" />
                                                                 </lab:value>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
                                             </component>
                                             <component typeCode="COMP">
                                                 <observation classCode="OBS" moodCode="EVN">
-                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="62aa5dfd-fb22-445c-8db3-caee47eccd9e" root="2.16.840.1.113883.3.72.5"/>
-                                                    <code code="789-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Erythrocytes"/>
-                                                    <statusCode code="completed"/>
-                                                    <effectiveTime value="20071123115501"/>
-                                                    <value unit="10*12/L" value="5.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ"/>
-                                                    <interpretationCode code="N"/>
+                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="62aa5dfd-fb22-445c-8db3-caee47eccd9e" root="2.16.840.1.113883.3.72.5" />
+                                                    <code code="789-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Erythrocytes" />
+                                                    <statusCode code="completed" />
+                                                    <effectiveTime value="20071123115501" />
+                                                    <value unit="10*12/L" value="5.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ" />
+                                                    <interpretationCode code="N" />
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="N"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
-                                                                    <lab:low inclusive="true" unit="a" value="18"/>
+                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported" />
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                    <lab:low inclusive="true" unit="a" value="18" />
                                                                 </lab:value>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:CD" code="M" displayName="Male"/>
+                                                                <lab:code code="M" codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender" />
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:PQ" />
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
                                             </component>
                                             <component typeCode="COMP">
                                                 <observation classCode="OBS" moodCode="EVN">
-                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="9f061318-cbae-4ce3-9905-64eecd7edb83" root="2.16.840.1.113883.3.72.5"/>
-                                                    <code code="4544-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocrit"/>
-                                                    <statusCode code="completed"/>
-                                                    <effectiveTime value="20071123115501"/>
-                                                    <value unit="%" value="46" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ"/>
-                                                    <interpretationCode code="N"/>
+                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="9f061318-cbae-4ce3-9905-64eecd7edb83" root="2.16.840.1.113883.3.72.5" />
+                                                    <code code="4544-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Hematocrit" />
+                                                    <statusCode code="completed" />
+                                                    <effectiveTime value="20071123115501" />
+                                                    <value unit="%" value="46" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ" />
+                                                    <interpretationCode code="N" />
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="N"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
-                                                                    <lab:low inclusive="true" unit="a" value="18"/>
+                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported" />
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                    <lab:low inclusive="true" unit="a" value="18" />
                                                                 </lab:value>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:CD" code="M" displayName="Male"/>
+                                                                <lab:code code="M" codeSystem="2.16.840.1.113883.1.11.1" codeSystemName="Administrative Gender" />
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:PQ" />
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
                                             </component>
                                             <component typeCode="COMP">
                                                 <observation classCode="OBS" moodCode="EVN">
-                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="15545035-4e76-4342-b2d6-ff4efbe80c41" root="2.16.840.1.113883.3.72.5"/>
-                                                    <code code="777-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Platelets"/>
-                                                    <statusCode code="completed"/>
-                                                    <effectiveTime value="20071123115501"/>
-                                                    <value unit="10*9/L" value="363" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ"/>
-                                                    <interpretationCode code="N"/>
+                                                    <id assigningAuthorityName="NIST HL7 Test Laboratory" extension="15545035-4e76-4342-b2d6-ff4efbe80c41" root="2.16.840.1.113883.3.72.5" />
+                                                    <code code="777-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Platelets" />
+                                                    <statusCode code="completed" />
+                                                    <effectiveTime value="20071123115501" />
+                                                    <value unit="10*9/L" value="363" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ" />
+                                                    <interpretationCode code="N" />
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="N"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                         <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
                                                             <lab:criterion classCode="COND" moodCode="EVN">
-                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported"/>
-                                                                <lab:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
-                                                                    <lab:low inclusive="true" unit="a" value="18"/>
+                                                                <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported" />
+                                                                <lab:value value="1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ">
+                                                                    <lab:low inclusive="true" unit="a" value="18" />
                                                                 </lab:value>
                                                             </lab:criterion>
                                                         </lab:precondition>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="H"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                     <referenceRange typeCode="REFV">
                                                         <observationRange classCode="OBS" moodCode="EVN.CRT">
-                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ"/>
-                                                            <interpretationCode code="L"/>
+                                                            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_PQ" />
+                                                            <interpretationCode code="N" />
                                                         </observationRange>
                                                     </referenceRange>
                                                 </observation>
                                             </component>
                                         </organizer>
                                     </entryRelationship>
+
+                                    <entryRelationship typeCode="COMP">
+                                        <organizer classCode="CLUSTER" moodCode="EVN">
+                                            <statusCode code="active" />
+                                            <effectiveTime value="20101010" />
+                                            <specimen typeCode="SPC">
+                                                <specimenRole classCode="ISLT">
+                                                    <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5" />
+                                                    <specimenPlayingEntity classCode="MIC">
+                                                        <code xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" code="P" codeSystem="2.16.840.1.113883.5.111.16515" codeSystemName="RoleCode - SpecimenRoleType" displayName="Patient">
+                                                            <originalText>A specimen that has been collected from a patient.</originalText>
+                                                        </code>
+                                                    </specimenPlayingEntity>
+                                                    <lab:productOf typeCode="PRD">
+                                                        <lab:procedure classCode="PROC" moodCode="EVN">
+                                                            <code></code>
+                                                            <effectiveTime></effectiveTime>
+                                                            <targetSiteCode></targetSiteCode>
+                                                        </lab:procedure>
+                                                    </lab:productOf>
+                                                </specimenRole>
+                                            </specimen>
+                                            <component typeCode="COMP">
+                                                <observation classCode="OBS" moodCode="EVN">
+                                                    <code />
+                                                    <statusCode code="completed" />
+                                                </observation>
+                                            </component>
+                                            <component typeCode="COMP">
+                                                <organizer classCode="BATTERY" moodCode="EVN">
+                                                    <statusCode code="completed" />
+                                                    <effectiveTime value="20101010" />
+                                                    <specimen typeCode="SPC">
+                                                        <specimenRole classCode="SPEC">
+                                                            <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5" />
+                                                            <specimenPlayingEntity>
+                                                                <code xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" code="P" codeSystem="2.16.840.1.113883.5.111.16515" codeSystemName="RoleCode - SpecimenRoleType" displayName="Patient">
+                                                                    <originalText>A specimen that has been collected from a patient.</originalText>
+                                                                </code>
+                                                            </specimenPlayingEntity>
+                                                            <lab:productOf typeCode="PRD">
+                                                                <lab:procedure classCode="PROC" moodCode="EVN">
+                                                                    <code></code>
+                                                                    <effectiveTime></effectiveTime>
+                                                                    <targetSiteCode></targetSiteCode>
+                                                                </lab:procedure>
+                                                            </lab:productOf>
+                                                        </specimenRole>
+                                                    </specimen>
+                                                    <component typeCode="COMP">
+                                                        <observation classCode="OBS" moodCode="EVN">
+                                                            <code />
+                                                            <statusCode code="completed" />
+                                                        </observation>
+                                                    </component>
+                                                </organizer>
+                                            </component>
+                                        </organizer>
+                                    </entryRelationship>
+
+                                    <entryRelationship typeCode="COMP">
+                                        <observation classCode="OBS" moodCode="EVN">
+                                            <code />
+                                            <statusCode code="aborted" />
+                                            <effectiveTime value="20101010" />
+                                            <interpretationCode code="L" />
+                                            <methodCode code="L" />
+
+                                            <specimen typeCode="SPC">
+                                                <specimenRole classCode="SPEC">
+                                                    <id xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" assigningAuthorityName="NIST HL7 Test Laboratory" extension="e918fc96-68d7-4ea9-b06f-98a3786b0be0" root="2.16.840.1.113883.3.72.5" />
+                                                    <specimenPlayingEntity>
+                                                        <code xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" code="P" codeSystem="2.16.840.1.113883.5.111.16515" codeSystemName="RoleCode - SpecimenRoleType" displayName="Patient">
+                                                            <originalText>A specimen that has been collected from a patient.</originalText>
+                                                        </code>
+                                                    </specimenPlayingEntity>
+                                                    <lab:productOf typeCode="PRD">
+                                                        <lab:procedure classCode="PROC" moodCode="EVN">
+                                                            <code></code>
+                                                            <effectiveTime></effectiveTime>
+                                                            <targetSiteCode></targetSiteCode>
+                                                        </lab:procedure>
+                                                    </lab:productOf>
+                                                </specimenRole>
+                                            </specimen>
+
+                                            <performer typeCode="PRF">
+                                                <assignedEntity classCode="ASSIGNED">
+                                                    <id extension="1" root="1.3.6.4.1.4.1.2835.1" />
+                                                    <code code="59058001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="General Physician" />
+                                                    <addr>
+                                                    </addr>
+                                                    <telecom value="555-333-2222" />
+                                                    <assignedPerson>
+                                                        <name>
+                                                        </name>
+                                                    </assignedPerson>
+                                                    <representedOrganization>
+                                                        <name></name>
+                                                    </representedOrganization>
+                                                </assignedEntity>
+                                            </performer>
+
+                                            <author typeCode="AUT">
+                                                <time value="20071123115501" />
+                                                <assignedAuthor classCode="ASSIGNED">
+                                                    <id extension="Len" assigningAuthorityName="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5" />
+                                                    <addr>Bldg 222 Room A305</addr>
+                                                    <telecom value="555-333-2222" />
+                                                    <assignedPerson>
+                                                        <name>Len Gallagher</name>
+                                                    </assignedPerson>
+                                                    <representedOrganization classCode="ORG">
+                                                    </representedOrganization>
+                                                </assignedAuthor>
+                                            </author>
+
+                                            <author typeCode="AUT">
+                                                <time value="20071123115501" />
+                                                <assignedAuthor classCode="ASSIGNED">
+                                                    <id extension="NIST HL7 Testing System" root="2.16.840.1.113883.3.72.5" />
+                                                    <addr>Bldg 222 Room A305</addr>
+                                                    <telecom value="555-333-2222" />
+                                                    <assignedAuthoringDevice>
+                                                        <manufacturerModelName></manufacturerModelName>
+                                                        <softwareName></softwareName>
+                                                    </assignedAuthoringDevice>
+                                                    <representedOrganization classCode="ORG">
+                                                        <name></name>
+                                                    </representedOrganization>
+                                                </assignedAuthor>
+                                            </author>
+
+                                            <entryRelationship typeCode="COMP">
+                                                <act classCode="ACT" moodCode="EVN">
+                                                    <code />
+                                                    <text />
+                                                </act>
+                                            </entryRelationship>
+
+                                            <entryRelationship typeCode="REFR">
+                                                <observation classCode="OBS" moodCode="EVN">
+                                                    <code />
+                                                    <statusCode code="completed" />
+                                                    <effectiveTime value="20101010" />
+                                                    <value unit="10*9/L" value="8.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="PQ" />
+                                                </observation>
+                                            </entryRelationship>
+
+
+                                            <referenceRange typeCode="REFV">
+                                                <observationRange classCode="OBS" moodCode="EVN.CRT">
+                                                    <interpretationCode code="N" />
+                                                </observationRange>
+                                                <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
+                                                    <lab:criterion classCode="COND" moodCode="EVN">
+                                                        <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported" />
+                                                        <lab:value value="12.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ" />
+                                                    </lab:criterion>
+                                                </lab:precondition>
+                                                <lab:precondition xmlns:lab="urn:oid:1.3.6.1.4.1.19376.1.3.2" typeCode="PRCN">
+                                                    <lab:criterion classCode="COND" moodCode="EVN">
+                                                        <lab:code code="21612-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Age - Reported" />
+                                                        <lab:value value="12.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="lab:IVL_PQ" />
+                                                    </lab:criterion>
+                                                </lab:precondition>
+                                            </referenceRange>
+
+                                        </observation>
+                                    </entryRelationship>
+
+                                    <cda:entryRelationship typeCode="COMP">
+                                        <cda:act classCode="ACT" moodCode="EVN">
+                                            <cda:code />
+                                            <cda:text />
+                                        </cda:act>
+                                    </cda:entryRelationship>
+
                                 </act>
                             </entry>
                         </section>

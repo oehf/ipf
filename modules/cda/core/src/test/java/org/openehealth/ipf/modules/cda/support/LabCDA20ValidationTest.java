@@ -31,11 +31,9 @@ public class LabCDA20ValidationTest {
     private XsdValidator validator;
     private SchematronValidator schematron;
     private Map<String, Object> params;
-    
-    // as of C37 should be also Lab 2.0 conform
-    private String sample1 = "IHE_LabReport_20070816.xml";
+
+    private String sample = "IHE_LabReport_20070816.xml";
     private String sample_errored = "IHE_LabReport_20070816_Errored.xml";
-    private String sample2 = "HITSP_C37_With_CBC_GTT_GS_Sensitivity.xml";
 
     @Before
     public void setUp() throws Exception {
@@ -51,19 +49,23 @@ public class LabCDA20ValidationTest {
     
     @Test
     public void testSchemaValidate() throws Exception {
-        Source testXml = new StreamSource(new ClassPathResource(sample2).getInputStream());
+        Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
         validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
     }
     
     @Test
     public void testValidateErrors() throws Exception {
-        Source testXml = new StreamSource(new ClassPathResource(sample2).getInputStream());
+        Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
         schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_20_SCHEMATRON_RULES, params));
     }
 
     @Test
     public void validateBodyPositive() throws Exception {
-        Source testXml = new StreamSource(new ClassPathResource(sample1).getInputStream());
+
+        Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
+        validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
+
+        testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
         schematron.validate(testXml, new SchematronProfile(
                 "schematron/ihe_lab_v20_20070816/templates/1.3.6.1.4.1.19376.1.3.1.sch", params));
     }
@@ -77,8 +79,19 @@ public class LabCDA20ValidationTest {
             fail();
         } catch (ValidationException ex) {
             System.out.println(ex);
-            assertEquals(5, ex.getCauses().length);
+            assertEquals(9, ex.getCauses().length);
         }
+    }
+
+    @Test
+    public void validateHeaderPositive() throws Exception {
+
+        Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
+        validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
+
+        testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
+        schematron.validate(testXml, new SchematronProfile(
+                "schematron/ihe_lab_v20_20070816/templates/1.3.6.1.4.1.19376.1.3.3.sch", params));
     }
 
 }
