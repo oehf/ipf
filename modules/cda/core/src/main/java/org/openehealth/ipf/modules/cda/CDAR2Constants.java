@@ -44,6 +44,8 @@ public interface CDAR2Constants {
     
     static final String IHE_LAB_SCHEMATRON_RULES = "schematron/ihe_lab_v21_20080803/IHE_LAB.sch";
 
+    static final String IHE_LAB_20_SCHEMATRON_RULES = "schematron/ihe_lab_v20_20070816/IHE_LAB.sch";
+
     static final String IHE_PCC_ANTEPARTUM_EDUCATION_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/ape.sch";
 
     static final String IHE_PCC_ANTEPARTUM_H_AND_P_SCHEMATRON_RULES = "schematron/ihe_pcc_20081223/aphp.sch";

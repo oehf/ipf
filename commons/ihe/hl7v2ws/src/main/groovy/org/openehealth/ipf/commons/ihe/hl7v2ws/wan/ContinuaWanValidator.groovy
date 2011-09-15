@@ -108,13 +108,13 @@ class ContinuaWanValidator extends  Pcd01Validator {
     }
    
 	void checkOBR(GroupAdapter ooGroup, int obrIndex, Collection<Exception> violations) {
-		checkSegmentValues(ooGroup, 'OBR', [1, 2, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
+		checkSegmentValues(ooGroup, 'OBR', [1, 2, 3, 4], [obrIndex, ANY, ANY, ANY, ANY], violations)
 	}
 
 	/*
 	 * The <code>checkTime</code> tells if the OBX-14 will be checked. It is requred when OBS-7 is not given
 	 */
-    void checkOBSERVATION(GroupAdapter obs, boolean checkTime, Collection<Exception> violations) {
+    void checkOBSERVATION(GroupAdapter obs,  int expectedObservationIndex, boolean checkTime, Collection<Exception> violations) {
 		checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(checkTime), violations);
 		if (obs.OBX[2].value){
 			//OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
