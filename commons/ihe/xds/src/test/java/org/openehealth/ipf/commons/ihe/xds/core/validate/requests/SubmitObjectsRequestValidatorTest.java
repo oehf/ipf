@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
@@ -39,7 +40,7 @@ public class SubmitObjectsRequestValidatorTest {
     private EbXMLFactory factory;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
-    private ValidationProfile profile = new ValidationProfile(false, IheProfile.XDS_B, Actor.REGISTRY);
+    private ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.ITI_42);
 
     private DocumentEntry docEntry;
 

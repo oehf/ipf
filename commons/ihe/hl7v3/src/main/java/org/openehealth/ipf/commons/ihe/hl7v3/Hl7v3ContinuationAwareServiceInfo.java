@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.commons.lang.Validate;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
 
 import javax.xml.namespace.QName;
 
@@ -30,7 +30,7 @@ public class Hl7v3ContinuationAwareServiceInfo extends Hl7v3ServiceInfo {
 
 
     public Hl7v3ContinuationAwareServiceInfo(
-            IpfInteractionId interactionId,
+            InteractionId interactionId,
             QName serviceName,
             Class<?> serviceClass,
             QName bindingName,

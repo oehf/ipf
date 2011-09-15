@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
@@ -27,12 +28,9 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,8 +50,7 @@ public class AdhocQueryRequestValidatorTest {
         validator = new AdhocQueryRequestValidator();
         transformer = new QueryRegistryTransformer();
         request = SampleData.createFindDocumentsQuery();
-        profile = new ValidationProfile();
-        profile.setIheProfile(IheProfile.XDS_B);
+        profile = new ValidationProfileImpl(IpfInteractionId.ITI_18);
     }
     
     @Test

@@ -15,95 +15,38 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
+import com.ctc.wstx.sr.CompactNsContext;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
+
 /**
- * Validation profile allowing the definition of actor specific validation
- * settings.
+ * Validation profile interface for XDS-like transactions.
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
-public class ValidationProfile {
-    private boolean query;
-    private IheProfile iheProfile;
-    private Actor actor;
-    
-    /**
-     * Constructs a profile.
-     */
-    public ValidationProfile() {}
+public interface ValidationProfile {
 
-
-    /**
-     * Constructs a profile.
-     * @param query
-     *          <code>true</code> if checks are done for query transactions.
-     * @param iheProfile
-     *          IHE profile which rules should be applied.
-     * @param actor
-     *          defines the actor that validates messages.
-     */
-    public ValidationProfile(boolean query, IheProfile iheProfile, Actor actor) {
-        this.query = query;
-        this.iheProfile = iheProfile;
-        this.actor = actor;
-    }
-
-
-    /**
-     * Copy constructor.
-     * @param profile
-     *          profile to copy.
-     */
-    public ValidationProfile(ValidationProfile profile) {
-        if (profile != null) {
-            query = profile.query;
-            iheProfile = profile.iheProfile;
-            actor = profile.actor;
-        }
+    public static enum InteractionProfile {
+        XDS_A, XDS_B, XCA, Continua_HRN;
     }
 
     /**
      * @return <code>true</code> if checks are done for query transactions.
      */
-    public boolean isQuery() {
-        return query;
-    }
+    boolean isQuery();
 
     /**
-     * @param query
-     *          <code>true</code> if checks are done for query transactions. 
+     * @return ID of the eHealth transaction.
      */
-    public void setQuery(boolean query) {
-        this.query = query;
-    }
+    InteractionId getInteractionId();
 
     /**
-     * @return IHE Profile which rules should be applied.
+     * @return ID of interaction profile the transaction belongs to.
      */
-    public IheProfile getIheProfile() {
-        return iheProfile;
-    }
+    InteractionProfile getProfile();
 
     /**
-     * @param iheProfile
-     *          IHE Profile which rules should be applied.
+     * @return <code>true</code> when the transaction uses ebXML 3.0.
      */
-    public void setIheProfile(IheProfile iheProfile) {
-        this.iheProfile = iheProfile;
-    }
-
-    /**
-     * @return defines the actor that validates messages.
-     */
-    public Actor getActor() {
-        return actor;
-    }
-
-    /**
-     * @param actor
-     *          defines the actor that validates messages.
-     */
-    public void setActor(Actor actor) {
-        this.actor = actor;
-    }
-
-    public boolean isXdsb() {throw new RuntimeException(); };
+    boolean isEbXml30Based();
 }

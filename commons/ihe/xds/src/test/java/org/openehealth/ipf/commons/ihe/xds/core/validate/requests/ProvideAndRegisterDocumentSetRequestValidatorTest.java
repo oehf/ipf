@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
@@ -38,8 +39,8 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     private ProvideAndRegisterDocumentSetRequestValidator validator;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
-    private ValidationProfile profile = new ValidationProfile(false, IheProfile.XDS_B, Actor.REPOSITORY);
-    
+    private ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.ITI_41);
+
     private DocumentEntry docEntry;
 
     @Before

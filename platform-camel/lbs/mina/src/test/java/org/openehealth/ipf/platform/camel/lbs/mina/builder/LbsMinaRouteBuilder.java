@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.lbs.mina.builder;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
 
 /**
@@ -34,18 +36,39 @@ public class LbsMinaRouteBuilder extends SpringRouteBuilder {
             .to("mock:mock");
         
         from("mina:tcp://localhost:6125?sync=true&codec=#mllpStoreCodec")
-        	.to("mock:mock");
+            .process(new MyProcessor(1))
+            .to("mock:mock");
 
         from("mina:tcp://localhost:6126?sync=true&codec=#mllpStoreCodec")
+            .process(new MyProcessor(2))
             .unmarshal().hl7()
+            .process(new MyProcessor(3))
             .to("mock:mock");
         
         from("mina:tcp://localhost:6127?sync=true&codec=#mllpStoreCodec")
+            .process(new MyProcessor(4))
             .unmarshal().hl7()
+            .process(new MyProcessor(5))
             .marshal().hl7()
+            .process(new MyProcessor(6))
             .to("mina:tcp://localhost:6126?sync=true&codec=#mllpStoreCodec");
 
         from("mina:tcp://localhost:6128?sync=true&codec=#mllpStoreCodec")
+            .process(new MyProcessor(7))
             .to("mina:tcp://localhost:6126?sync=true&codec=#mllpStoreCodec");
+    }
+
+
+    private static class MyProcessor implements Processor {
+        final int x;
+
+        private MyProcessor(int x) {
+            this.x = x;
+        }
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+             System.out.println(x);
+        }
     }
 }

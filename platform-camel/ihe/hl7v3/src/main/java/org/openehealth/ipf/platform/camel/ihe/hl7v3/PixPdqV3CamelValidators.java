@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 
@@ -162,7 +162,7 @@ abstract public class PixPdqV3CamelValidators {
 
 
     private static Processor validatingProcessor(
-            final IpfInteractionId interactionId,
+            final InteractionId interactionId,
             final boolean request)
     {
         return new Processor() {
@@ -175,7 +175,7 @@ abstract public class PixPdqV3CamelValidators {
 
     private static void doValidation(
             Exchange exchange,
-            IpfInteractionId interactionId,
+            InteractionId interactionId,
             boolean request)
     {
         String message = exchange.getIn().getBody(String.class);

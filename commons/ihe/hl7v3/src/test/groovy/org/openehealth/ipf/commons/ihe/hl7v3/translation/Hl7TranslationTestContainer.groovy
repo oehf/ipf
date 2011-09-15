@@ -20,7 +20,7 @@ import org.apache.commons.io.IOUtils
 import org.custommonkey.xmlunit.DetailedDiff
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId
+import org.openehealth.ipf.commons.ihe.core.InteractionId
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 
 import org.openehealth.ipf.commons.ihe.hl7v2.MessageAdapterValidator
@@ -105,7 +105,7 @@ class Hl7TranslationTestContainer {
     }
 
 
-    void doTestV3toV2RequestTranslation(String fn, int v2index, IpfInteractionId v3Id) {
+    void doTestV3toV2RequestTranslation(String fn, int v2index, InteractionId v3Id) {
         String v3request = getFileContent(fn, V3, REQUEST)
         V3_VALIDATOR.validate(v3request, Hl7v3ValidationProfiles.getRequestValidationProfile(v3Id))
         
@@ -116,7 +116,7 @@ class Hl7TranslationTestContainer {
     }
 
 
-    void doTestV2toV3ResponseTranslation(String fn, int v2index, IpfInteractionId v3Id, Parser parser) {
+    void doTestV2toV3ResponseTranslation(String fn, int v2index, InteractionId v3Id, Parser parser) {
         String v3request = getFileContent(fn, V3, REQUEST)
         String v2response = getFileContent(fn, V2, RESPONSE)
         MessageAdapter msg = MessageAdapters.make(parser, v2response)
@@ -133,7 +133,7 @@ class Hl7TranslationTestContainer {
         assert differences[0].toString().contains('creationTime')
     }
     
-    void doTestV2toV3RequestTranslation(String fn, int v2index, IpfInteractionId v3Id, ca.uhn.hl7v2.parser.Parser parser) {
+    void doTestV2toV3RequestTranslation(String fn, int v2index, InteractionId v3Id, ca.uhn.hl7v2.parser.Parser parser) {
         String v2request = getFileContent(fn, V2, REQUEST)
         org.openehealth.ipf.modules.hl7dsl.MessageAdapter msg = org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make(parser, v2request)
         V2_VALIDATOR.validate(msg, null)

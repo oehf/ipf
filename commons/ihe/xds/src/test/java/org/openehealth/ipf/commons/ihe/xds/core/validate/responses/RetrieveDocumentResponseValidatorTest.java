@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetResponse;
@@ -25,10 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.RetrieveDocumentSetResponseTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -50,8 +48,7 @@ public class RetrieveDocumentResponseValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         response = SampleData.createRetrievedDocumentSet();
-        profile = new ValidationProfile();
-        profile.setIheProfile(IheProfile.XDS_B);
+        profile = new ValidationProfileImpl(IpfInteractionId.ITI_43);
     }
 
     @Test

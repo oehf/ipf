@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.core;
  * IDs of interactions (transactions) supported in IPF out-of-the-box.
  * @author Dmytro Rud
  */
-public enum IpfInteractionId {
+public enum IpfInteractionId implements InteractionId {
     ITI_8,
     ITI_9,
     ITI_10,
@@ -42,6 +42,9 @@ public enum IpfInteractionId {
     ITI_47,
     ITI_55,
     ITI_56,
+
+    RAD_68,
+    RAD_69,
 
     PCC_1,
 
