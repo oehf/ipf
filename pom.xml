@@ -12,6 +12,7 @@
         <!-- project.build.sourceEncoding>UTF-8</project.build.sourceEncoding -->
         
         <!-- Report version properties -->
+        <site-plugin-version>3.0</site-plugin-version>
         <surefire-report-plugin-version>2.8.1</surefire-report-plugin-version>
         <jxr-plugin-version>2.1</jxr-plugin-version>
         <project-info-reports-plugin-version>2.1.2</project-info-reports-plugin-version>
@@ -617,7 +618,7 @@
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-servlet_2.5_spec</artifactId>
                 <version>${geronimo-spec-servlet-api-version}</version>
-            </dependency>			
+            </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-annotations</artifactId>
@@ -702,7 +703,7 @@
                         <groupId>javax.servlet</groupId>
                         <artifactId>servlet-api</artifactId>
                     </exclusion>
-                </exclusions>				
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
@@ -811,6 +812,11 @@
         <pluginManagement>
             <plugins>
                 <!-- reporting plugins -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${site-plugin-version}</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -1225,5 +1231,33 @@
             <url>http://svn.apache.org/repos/asf/servicemix/m2-repo/</url>
         </repository>
     </repositories>
-
+    <profiles>
+        <profile>
+            <!-- This profile generates groovystubs with last gmaven plugin        -->
+            <!-- which still respects the javadocs annotations on stub generation. -->
+            <!-- Should be run only together with 'javadoc:aggregate -Pgapidoc'    -->
+            <id>gapidoc</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.groovy.maven</groupId>
+                        <artifactId>gmaven-plugin</artifactId>
+                        <version>1.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-stubs</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generateStubs</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
