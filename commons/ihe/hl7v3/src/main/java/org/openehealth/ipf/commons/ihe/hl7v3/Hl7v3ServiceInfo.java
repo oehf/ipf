@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
 
 import javax.xml.namespace.QName;
@@ -25,7 +25,7 @@ import javax.xml.namespace.QName;
  */
 public class Hl7v3ServiceInfo extends ItiServiceInfo {
 
-    private final IpfInteractionId interactionId;
+    private final InteractionId interactionId;
     private final String nakRootElementName;
     private final boolean nakNeedControlActProcess;
 
@@ -53,7 +53,7 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
      *      whether request payload is needed for ATNA audit.
      */
     public Hl7v3ServiceInfo(
-            IpfInteractionId interactionId,
+            InteractionId interactionId,
             QName serviceName,
             Class<?> serviceClass,
             QName bindingName,
@@ -70,7 +70,7 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
         this.nakNeedControlActProcess = nakNeedControlActProcess;
     }
 
-    public IpfInteractionId getInteractionId() {
+    public InteractionId getInteractionId() {
         return interactionId;
     }
 

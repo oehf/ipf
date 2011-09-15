@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRequest;
@@ -47,8 +48,7 @@ public class RetrieveDocumentSetRequestValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetRequestTransformer(factory);
         request = SampleData.createRetrieveDocumentSet();
-        profile = new ValidationProfile();
-        profile.setIheProfile(IheProfile.XDS_B);
+        profile = new ValidationProfileImpl(IpfInteractionId.ITI_43);
     }
     
     @Test
@@ -57,14 +57,14 @@ public class RetrieveDocumentSetRequestValidatorTest {
     }
     
     @Test
-    public void testRepoIdMustBeSpecfied() {
+    public void testRepoIdMustBeSpecified() {
         request.getDocuments().add(new RetrieveDocument(null, "doc3", "home3"));
         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
         expectFailure(REPO_ID_MUST_BE_SPECIFIED, ebXML);
     }
     
     @Test
-    public void testDocIdMustBeSpecfied() {
+    public void testDocIdMustBeSpecified() {
         request.getDocuments().add(new RetrieveDocument("repo3", "", "home3"));
         EbXMLRetrieveDocumentSetRequest ebXML = transformer.toEbXML(request);
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);

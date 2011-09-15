@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 /**
@@ -43,7 +42,7 @@ public class RegistryResponseValidator implements Validator<EbXMLRegistryRespons
             metaDataAssert(registryError.getErrorCode() != null, INVALID_ERROR_CODE_IN_RESPONSE);
             metaDataAssert(registryError.getSeverity() != null, INVALID_SEVERITY_IN_RESPONSE);
 
-            if (profile.getIheProfile() == IheProfile.XCA) {
+            if (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) {
                 hcValidator.validate(registryError.getLocation());
             }
         }

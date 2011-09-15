@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRetrieveDocumentSetRe
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 /**
@@ -50,7 +49,7 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
             String docId = requestData.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
 
-            if (profile.getIheProfile() == IheProfile.XCA) {
+            if (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) {
                 hcValidator.validate(requestData.getHomeCommunityId());
             }
 

@@ -27,7 +27,7 @@
         <jms-version>1.1-p1</jms-version>
         <joda-time-osgi-version>1.5.2-p1</joda-time-osgi-version>
         <neethi-version>3.0.1</neethi-version>		
-        <pax-web-version>1.0.1</pax-web-version>
+        <pax-web-version>1.1.1</pax-web-version>
         <servicemix-jaxb-api-version>1.4.0</servicemix-jaxb-api-version>
         <servicemix-jaxws-api-version>1.4.0</servicemix-jaxws-api-version>
         <servicemix-saaj-api-version>1.4.0</servicemix-saaj-api-version>
@@ -124,9 +124,9 @@
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.pool/${springsource-commons-pool-version}@start</param>
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.logging/${springsource-commons-logging-version}@start</param>
             <param>mvn:org.slf4j/com.springsource.slf4j.api/${slf4j-version}@start</param>
-            <param>mvn:org.slf4j/com.springsource.slf4j.log4j/${slf4j-version}@nostart</param>
+            <!--param>mvn:org.slf4j/com.springsource.slf4j.log4j/${slf4j-version}@nostart</param-->
             <param>mvn:org.slf4j/com.springsource.slf4j.org.apache.commons.logging/${slf4j-version}@start</param>
-            <param>mvn:org.slf4j/com.springsource.slf4j.nop/${slf4j-version}@start</param>
+            <param>mvn:org.slf4j/com.springsource.slf4j.nop/${slf4j-version}@nostart</param>
             <param>mvn:org.jasypt/com.springsource.org.jasypt.encryption/${springsource-jasypt-version}@start</param>
             <param>mvn:org.dom4j/com.springsource.org.dom4j/${springsource-dom4j-version}@start</param>
             <param>mvn:javax.annotation/com.springsource.javax.annotation/${springsource-annotations-api-version}@start</param>
@@ -162,7 +162,7 @@
             <param>mvn:javax.wsdl/com.springsource.javax.wsdl/${springsource-wsdl-version}@start</param>
             <param>mvn:org.apache.geronimo.specs/geronimo-javamail_1.4_spec/${geronimo-javamail-api-version}@start</param>
             <param>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec/${geronimo-ws-api-version}@start</param>
-            <param>mvn:org.apache.geronimo.specs/geronimo-servlet_3.0_spec/${geronimo-servlet_3.0_spec_version}@start</param>			
+            <param>mvn:org.apache.geronimo.specs/geronimo-servlet_3.0_spec/${geronimo-servlet_3.0_spec_version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlschema/${servicemix-xmlschema-version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlsec/${servicemix-xmlsec-version}@start</param>
             <param>mvn:org.codehaus.woodstox/woodstox-core-asl/${woodstox-core-asl-version}@start</param>

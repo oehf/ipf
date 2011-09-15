@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
@@ -36,12 +37,11 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
     private static final CXValidator cxValidator = new CXValidator();
     private static final TimeValidator timeValidator = new TimeValidator();
-    // private static final OIDValidator oidValidator = new OIDValidator();
     private static final NopValidator nopValidator = new NopValidator();
 
 
     private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
-        boolean requireHomeCommunityId = (profile.getIheProfile() == IheProfile.XCA);
+        boolean requireHomeCommunityId = (profile.getProfile() == ValidationProfile.InteractionProfile.XCA);
 
         switch (queryType) {
             case FIND_DOCUMENTS:

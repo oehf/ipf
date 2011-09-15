@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer;
@@ -42,6 +43,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.responses.ResponseTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfileImpl;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
@@ -49,9 +51,6 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.Arrays;
-
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REGISTRY;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.XDS_B;
 
 public class CxfEndpointTest {
     private final EbXMLFactory factory = new EbXMLFactory30();
@@ -147,7 +146,7 @@ public class CxfEndpointTest {
 
         @Override
         public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest rawReq) {
-            ValidationProfile profile = new ValidationProfile(false, XDS_B, REGISTRY);
+            ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.ITI_42);
 
             EbXMLSubmitObjectsRequest30 ebXMLReq = new EbXMLSubmitObjectsRequest30(rawReq);
             reqValidator.validate(ebXMLReq, profile);

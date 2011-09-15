@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
@@ -64,15 +65,15 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
-                    (profile.getIheProfile() == IheProfile.ContinuaHRN) ? 1 : 0, 1),
+                    (profile.getInteractionId() == IpfInteractionId.Continua_HRN) ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
-                    (profile.getIheProfile() == IheProfile.ContinuaHRN) ? 1 : 0, 1),
+                    (profile.getInteractionId() == IpfInteractionId.Continua_HRN) ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, cxValidator,
-                    (profile.getIheProfile().isEbXml30Based() && ! profile.isQuery()) ? 1 : 0, 1),
+                    (profile.isEbXml30Based() && ! profile.isQuery()) ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
-                    (profile.getIheProfile() == IheProfile.ContinuaHRN) ? 1 : 0, Integer.MAX_VALUE),
+                    (profile.getInteractionId() == IpfInteractionId.Continua_HRN) ? 1 : 0, Integer.MAX_VALUE),
             new SlotValidation(SLOT_NAME_URI, uriValidator),
             new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, authorValidations),
             new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, codingSchemeValidations),
@@ -84,7 +85,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
             new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidator));
 
-        if (profile.getIheProfile().isEbXml30Based() && (profile.getActor() == Actor.REGISTRY)) {
+        if (profile.getInteractionId() == IpfInteractionId.ITI_42) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
 

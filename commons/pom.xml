@@ -31,7 +31,7 @@
                     <execution>
                          <!-- Declare generateStubs in the parent because all commons projects have java to groovy dependencies --> 
                         <id>generateStubs</id>
-                        <phase>process-resources</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>generateStubs</goal>
                         </goals>

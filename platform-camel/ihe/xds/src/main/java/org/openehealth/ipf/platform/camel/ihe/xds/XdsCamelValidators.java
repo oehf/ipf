@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequ
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfileImpl;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveDocumentSetRequestValidator;
@@ -31,10 +32,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RetrieveDocumentSetResponseValidator;
 
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REGISTRY;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.Actor.REPOSITORY;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.XCA;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.IheProfile.XDS_B;
+import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
 
 /**
  * Validating processors for ebXML 3.0-based and (by inheritance)
@@ -49,7 +47,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLAdhocQueryRequest30 message = 
                 new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));            
-            ValidationProfile profile = new ValidationProfile(true, XDS_B, REGISTRY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_18);
             new AdhocQueryRequestValidator().validate(message, profile);
         }
     };        
@@ -59,7 +57,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLQueryResponse30 message = 
                 new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
-            ValidationProfile profile = new ValidationProfile(true, XDS_B, REGISTRY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_18);
             new QueryResponseValidator().validate(message, profile);
         }
     };    
@@ -69,7 +67,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLAdhocQueryRequest30 message =
                 new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
-            ValidationProfile profile = new ValidationProfile(true, XCA, REGISTRY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_38);
             new AdhocQueryRequestValidator().validate(message, profile);
         }
     };
@@ -79,7 +77,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLQueryResponse30 message =
                 new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
-            ValidationProfile profile = new ValidationProfile(true, XCA, REGISTRY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_38);
             new QueryResponseValidator().validate(message, profile);
         }
     };
@@ -89,7 +87,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRetrieveDocumentSetRequest30 message =
                 new EbXMLRetrieveDocumentSetRequest30(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));
-            ValidationProfile profile = new ValidationProfile(false, XCA, REPOSITORY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_39);
             new RetrieveDocumentSetRequestValidator().validate(message, profile);
         }
     };
@@ -99,7 +97,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRetrieveDocumentSetResponse30 message =
                 new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));
-            ValidationProfile profile = new ValidationProfile(false, XCA, REPOSITORY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_39);
             new RetrieveDocumentSetResponseValidator().validate(message, profile);
         }
     };
@@ -109,7 +107,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLProvideAndRegisterDocumentSetRequest30 message = 
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));            
-            ValidationProfile profile = new ValidationProfile(false, XDS_B, REPOSITORY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_41);
             new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
         }
     };        
@@ -119,7 +117,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRegistryResponse30 message = 
                 new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));            
-            ValidationProfile profile = new ValidationProfile(false, XDS_B, REPOSITORY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_41);
             new RegistryResponseValidator().validate(message, profile);
         }
     };    
@@ -129,7 +127,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLSubmitObjectsRequest30 message = 
                 new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
-            ValidationProfile profile = new ValidationProfile(false, XDS_B, REGISTRY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_42);
             new SubmitObjectsRequestValidator().validate(message, profile);
         }
     };
@@ -138,7 +136,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         @Override
         public void process(Exchange exchange) throws Exception {
             EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));            
-            ValidationProfile profile = new ValidationProfile(false, XDS_B, REGISTRY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_42);
             new RegistryResponseValidator().validate(message, profile);
         }
     };
@@ -148,7 +146,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRetrieveDocumentSetRequest30 message = 
                 new EbXMLRetrieveDocumentSetRequest30(exchange.getIn().getBody(RetrieveDocumentSetRequestType.class));           
-            ValidationProfile profile = new ValidationProfile(false, XDS_B, REPOSITORY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_43);
             new RetrieveDocumentSetRequestValidator().validate(message, profile);
         }
     };       
@@ -158,7 +156,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRetrieveDocumentSetResponse30 message = 
                 new EbXMLRetrieveDocumentSetResponse30(exchange.getIn().getBody(RetrieveDocumentSetResponseType.class));            
-            ValidationProfile profile = new ValidationProfile(false, XDS_B, REPOSITORY);
+            ValidationProfile profile = new ValidationProfileImpl(ITI_43);
             new RetrieveDocumentSetResponseValidator().validate(message, profile);
         }
     };    

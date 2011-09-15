@@ -40,11 +40,8 @@ public class QueryResponseValidator implements Validator<EbXMLQueryResponse, Val
     public void validate(EbXMLQueryResponse response, ValidationProfile profile) {
         notNull(response, "response cannot be null");
         
-        ValidationProfile queryProfile = new ValidationProfile(profile);
-        queryProfile.setQuery(true);
-        
-        regResponseValidator.validate(response, queryProfile);        
-        objectContainerValidator.validate(response, queryProfile);       
+        regResponseValidator.validate(response, profile);
+        objectContainerValidator.validate(response, profile);
 
         List<ObjectReference> references = response.getReferences();
         for (ObjectReference objRef : references) {

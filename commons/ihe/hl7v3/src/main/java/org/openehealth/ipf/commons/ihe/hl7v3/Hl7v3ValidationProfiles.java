@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
@@ -29,26 +29,26 @@ import java.util.Map;
  */
 public class Hl7v3ValidationProfiles {
 
-    private static final Map<IpfInteractionId, CombinedXmlValidationProfile> REQUEST_VALIDATION_PROFILES =
-            new HashMap<IpfInteractionId, CombinedXmlValidationProfile>();
+    private static final Map<InteractionId, CombinedXmlValidationProfile> REQUEST_VALIDATION_PROFILES =
+            new HashMap<InteractionId, CombinedXmlValidationProfile>();
 
-    private static final Map<IpfInteractionId, CombinedXmlValidationProfile> RESPONSE_VALIDATION_PROFILES =
-            new HashMap<IpfInteractionId, CombinedXmlValidationProfile>();
+    private static final Map<InteractionId, CombinedXmlValidationProfile> RESPONSE_VALIDATION_PROFILES =
+            new HashMap<InteractionId, CombinedXmlValidationProfile>();
 
-    public static CombinedXmlValidationProfile getRequestValidationProfile(IpfInteractionId id) {
+    public static CombinedXmlValidationProfile getRequestValidationProfile(InteractionId id) {
         return REQUEST_VALIDATION_PROFILES.get(id);
     }
 
-    public static CombinedXmlValidationProfile getResponseValidationProfile(IpfInteractionId id) {
+    public static CombinedXmlValidationProfile getResponseValidationProfile(InteractionId id) {
         return RESPONSE_VALIDATION_PROFILES.get(id);
     }
 
 
-    private static void registerRequestValidationProfile(IpfInteractionId id, String[][] rows) {
+    private static void registerRequestValidationProfile(InteractionId id, String[][] rows) {
         REQUEST_VALIDATION_PROFILES.put(id, new Hl7v3ValidationProfile(rows));
     }
 
-    private static void registerResponseValidationProfile(IpfInteractionId id, String[][] rows) {
+    private static void registerResponseValidationProfile(InteractionId id, String[][] rows) {
         RESPONSE_VALIDATION_PROFILES.put(id, new Hl7v3ValidationProfile(rows));
     }
 

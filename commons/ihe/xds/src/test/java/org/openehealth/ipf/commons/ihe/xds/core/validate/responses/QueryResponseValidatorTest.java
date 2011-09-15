@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
@@ -39,7 +40,7 @@ public class QueryResponseValidatorTest {
     private QueryResponse response;
     private QueryResponseTransformer transformer;
     private DocumentEntry docEntry;
-    private ValidationProfile profile = new ValidationProfile(false, IheProfile.XDS_B, Actor.REGISTRY);
+    private ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.ITI_18);
 
     @Before
     public void setUp() {
