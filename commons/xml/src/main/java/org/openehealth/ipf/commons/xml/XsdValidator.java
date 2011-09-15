@@ -48,76 +48,76 @@ import org.xml.sax.SAXParseException;
  */
 public class XsdValidator implements Validator<Source, String> {
 
-	private final static Log LOG = LogFactory.getLog(XsdValidator.class);
-	private static ResourceLoader resourceLoader;
-	private final static LSResourceResolverImpl lrri = new LSResourceResolverImpl();
-	private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+    private final static Log LOG = LogFactory.getLog(XsdValidator.class);
+    private ResourceLoader resourceLoader;
+    private final static LSResourceResolverImpl lrri = new LSResourceResolverImpl();
+    private String schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
-	private final static Map<String, Schema> cachedSchemas = Collections
-			.synchronizedMap(new HashMap<String, Schema>(3));
+    private final static Map<String, Schema> cachedSchemas = Collections
+            .synchronizedMap(new HashMap<String, Schema>(3));
 
-	public XsdValidator(){
-		resourceLoader = new DefaultResourceLoader();
-	}
-	
-	public XsdValidator(ClassLoader classloader){
+    public XsdValidator() {
+        resourceLoader = new DefaultResourceLoader();
+    }
+
+    public XsdValidator(ClassLoader classloader) {
         resourceLoader = new DefaultResourceLoader(classloader);
-	}
-	
-	@Override
-	public void validate(Source message, String schema) {
-		List<ValidationException> exceptions = doValidate(message, schema);
-		if (exceptions != null && exceptions.size() > 0) {
-			throw new ValidationException(exceptions);
-		}
-	}
+    }
 
-	/**
-	 * @param message
-	 *            the message to be validated
-	 * @param schemaSource
-	 *            the XML schema to validate against
-	 * @return an array of validation exceptions
-	 */
-	protected List<ValidationException> doValidate(Source message,
-			String schemaResource) {
-		try {
-			LOG.debug("Validating XML message");
-			Schema schema = obtainSchema(schemaResource);
-			javax.xml.validation.Validator validator = schema.newValidator();
-			CollectingErrorHandler errorHandler = new CollectingErrorHandler();
-			validator.setErrorHandler(errorHandler);
-			validator.validate(message);
-			List<ValidationException> exceptions = errorHandler.getExceptions();
-			if (exceptions.size() > 0) {
-				LOG.debug("Message validation found " + exceptions.size()
-						+ " problems");
-			} else {
-				LOG.debug("Message validation successful");
-			}
-			return exceptions;
-		} catch (SAXException e) {
-			return Arrays
-					.asList(new ValidationException(
-							"Unexpected validation failure because "
-									+ e.getMessage(), e));
-		} catch (IOException e) {
-			return Arrays
-					.asList(new ValidationException(
-							"Unexpected validation failure because "
-									+ e.getMessage(), e));
-		}
-	}
+    @Override
+    public void validate(Source message, String schema) {
+        List<ValidationException> exceptions = doValidate(message, schema);
+        if (exceptions != null && exceptions.size() > 0) {
+            throw new ValidationException(exceptions);
+        }
+    }
 
-	protected Schema obtainSchema(String schemaResource) throws SAXException, IOException {
-		if (! cachedSchemas.containsKey(schemaResource)) {
-		    createSchema(schemaResource);
-		}
-		return cachedSchemas.get(schemaResource);
-	}
+    /**
+     * @param message
+     *            the message to be validated
+     * @param schemaSource
+     *            the XML schema to validate against
+     * @return an array of validation exceptions
+     */
+    protected List<ValidationException> doValidate(Source message,
+            String schemaResource) {
+        try {
+            LOG.debug("Validating XML message");
+            Schema schema = obtainSchema(schemaResource);
+            javax.xml.validation.Validator validator = schema.newValidator();
+            CollectingErrorHandler errorHandler = new CollectingErrorHandler();
+            validator.setErrorHandler(errorHandler);
+            validator.validate(message);
+            List<ValidationException> exceptions = errorHandler.getExceptions();
+            if (exceptions.size() > 0) {
+                LOG.debug("Message validation found " + exceptions.size()
+                        + " problems");
+            } else {
+                LOG.debug("Message validation successful");
+            }
+            return exceptions;
+        } catch (SAXException e) {
+            return Arrays
+                    .asList(new ValidationException(
+                            "Unexpected validation failure because "
+                                    + e.getMessage(), e));
+        } catch (IOException e) {
+            return Arrays
+                    .asList(new ValidationException(
+                            "Unexpected validation failure because "
+                                    + e.getMessage(), e));
+        }
+    }
 
-	protected synchronized void createSchema(String schemaResource) throws SAXException, IOException {
-        if (! cachedSchemas.containsKey(schemaResource)) {
+    protected Schema obtainSchema(String schemaResource) throws SAXException, IOException {
+        if (!cachedSchemas.containsKey(schemaResource)) {
+            createSchema(schemaResource);
+        }
+        return cachedSchemas.get(schemaResource);
+    }
+
+    protected synchronized void createSchema(String schemaResource) throws SAXException, IOException {
+        if (!cachedSchemas.containsKey(schemaResource)) {
             // SchemaFactory is neither thread-safe nor reentrant
             SchemaFactory factory = SchemaFactory.newInstance(getSchemaLanguage());
 
@@ -126,82 +126,82 @@ public class XsdValidator implements Validator<Source, String> {
             Schema schema = factory.newSchema(schemaSource(schemaResource));
             cachedSchemas.put(schemaResource, schema);
         }
-	}
+    }
 
-	public Source schemaSource(String resource) throws IOException {
-		Resource r = resourceLoader.getResource(resource);
-		if (r != null) {
-			if (r.getURL() != null) {
-				return new StreamSource(r.getInputStream(), r.getURL()
-						.toExternalForm());
-			} else {
-				return new StreamSource(r.getInputStream());
-			}
-		} else {
-			throw new IllegalArgumentException("Schema not specified properly");
-		}
-	}
+    public Source schemaSource(String resource) throws IOException {
+        Resource r = resourceLoader.getResource(resource);
+        if (r != null) {
+            if (r.getURL() != null) {
+                return new StreamSource(r.getInputStream(), r.getURL()
+                        .toExternalForm());
+            } else {
+                return new StreamSource(r.getInputStream());
+            }
+        } else {
+            throw new IllegalArgumentException("Schema not specified properly");
+        }
+    }
 
-	public String getSchemaLanguage() {
-		return schemaLanguage;
-	}
+    public String getSchemaLanguage() {
+        return schemaLanguage;
+    }
 
-	public void setSchemaLanguage(String schemaLanguage) {
-		this.schemaLanguage = schemaLanguage;
-	}
-	
-	// Just for testing purposes
-	static Map<String, Schema> getCachedSchemas() {
-		return cachedSchemas;
-	}
+    public void setSchemaLanguage(String schemaLanguage) {
+        this.schemaLanguage = schemaLanguage;
+    }
 
-	/**
-	 * Error handler that collects {@link SAXParseException}s and provides them
-	 * wrapped in an {@link ValidationException} array.
-	 * 
-	 * @author Christian Ohr
-	 */
-	class CollectingErrorHandler implements ErrorHandler {
+    // Just for testing purposes
+    static Map<String, Schema> getCachedSchemas() {
+        return cachedSchemas;
+    }
 
-		private List<SAXParseException> exceptions;
+    /**
+     * Error handler that collects {@link SAXParseException}s and provides them
+     * wrapped in an {@link ValidationException} array.
+     * 
+     * @author Christian Ohr
+     */
+    static class CollectingErrorHandler implements ErrorHandler {
 
-		@Override
+        private List<SAXParseException> exceptions;
+
+        @Override
         public void error(SAXParseException exception) throws SAXException {
-			if (exceptions == null) {
-				exceptions = new ArrayList<SAXParseException>();
-			}
-			exceptions.add(exception);
-		}
+            if (exceptions == null) {
+                exceptions = new ArrayList<SAXParseException>();
+            }
+            exceptions.add(exception);
+        }
 
-		@Override
+        @Override
         public void fatalError(SAXParseException exception) throws SAXException {
-			if (exceptions == null) {
-				exceptions = new ArrayList<SAXParseException>();
-			}
-			exceptions.add(exception);
-		}
+            if (exceptions == null) {
+                exceptions = new ArrayList<SAXParseException>();
+            }
+            exceptions.add(exception);
+        }
 
-		@Override
+        @Override
         public void warning(SAXParseException exception) throws SAXException {
-			// TODO LOG some message
-		}
+            // TODO LOG some message
+        }
 
-		public List<ValidationException> getExceptions() {
-			List<ValidationException> validationExceptions = new ArrayList<ValidationException>();
-			if (exceptions != null) {
-				for (SAXParseException exception : exceptions) {
-					validationExceptions
-							.add(new ValidationException(exception));
-				}
-			}
-			return validationExceptions;
+        public List<ValidationException> getExceptions() {
+            List<ValidationException> validationExceptions = new ArrayList<ValidationException>();
+            if (exceptions != null) {
+                for (SAXParseException exception : exceptions) {
+                    validationExceptions
+                            .add(new ValidationException(exception));
+                }
+            }
+            return validationExceptions;
 
-		}
+        }
 
-		public void reset() {
-			if (exceptions != null) {
-				exceptions.clear();
-			}
-		}
-	}
+        public void reset() {
+            if (exceptions != null) {
+                exceptions.clear();
+            }
+        }
+    }
 }

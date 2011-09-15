@@ -75,8 +75,6 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
         this.outputFormat = outputFormat;
     }
 
-
-
     /**
      * @param outputFormat
      *            currently supported: String
@@ -118,14 +116,15 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
         doZap(source, result, params);
         return accessor.getResult();
     }
-    
+
     private void doZap(Source source, Result result, Object... params) {
         XQResultSequence seq = null;
         try {
             XQPreparedExpression expression = expression(params);
             expression.bindDocument(XQConstants.CONTEXT_ITEM, source, null);
-            if (params.length != 0)
+            if (params.length != 0) {
                 bindExpressionContext(expression, ParametersHelper.parameters(params));
+            }
             seq = expression.executeQuery();
             seq.writeSequenceToResult(result);
         } catch (XQException e) {
@@ -136,11 +135,11 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
         }
     }
 
-
     private void bindExpressionContext(XQDynamicContext exp, Map<String, Object> params)
             throws XQException {
-        if (params == null)
+        if (params == null) {
             return;
+        }
         for (Entry<String, Object> entry : params.entrySet()) {
             if (entry.getKey().equalsIgnoreCase(ParametersHelper.RESOURCE_LOCATION))
                 continue;
@@ -181,13 +180,14 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
         try {
             initConnection();
             XQPreparedExpression expression = connection
-                .prepareExpression(source(resource(params)));
-            if (staticParams != null)
+                    .prepareExpression(source(resource(params)));
+            if (staticParams != null) {
                 bindExpressionContext(expression, ParametersHelper.parameters(staticParams));
+            }
             return expression;
         } catch (Exception e) {
             throw new IllegalArgumentException("The resource "
-                + resourceLocation + " is not valid", e);
+                    + resourceLocation + " is not valid", e);
         }
     }
 
@@ -208,7 +208,7 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
         return staticParams;
     }
 
-    public void setConfigParams(Map<String, String> staticParams) {
+    public void setStaticParams(Map<String, String> staticParams) {
         this.staticParams = staticParams;
     }
 
