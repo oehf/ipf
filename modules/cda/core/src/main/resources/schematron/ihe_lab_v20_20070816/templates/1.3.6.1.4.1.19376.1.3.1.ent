@@ -1,0 +1,402 @@
+<!-- These schematron rules are written for the "IHE Laboratory Technical Framework Volume3 (LAB TF-3) August 16, 2007". 
+ They are used in conjunction with the LabCDA.xsd file. An instance of a lab document must first validate to the LabCDA schema. 
+ Then these rules are applied for additional checks to insure conformance to the profile.
+ 
+ Sechematron Rules exist for the following sections:
+ 
+ Table 4.4-1:Structure of Report_Entry
+ Table 4.4-2:Structure of SpecimenObservationCluster_Organizer organizer/specimen
+ Table 4.4-3:Structure of Battery_Organizer
+ Table 4.4-4:Structure of Observation
+ Table 4.4-5:Specimen for Report_Organizer or Battery_Organizer or Observation
+ Table 4.4-6:Performer at any level
+ Table 4.4-7:Author at any level
+ Table 4.4-8:Participant at any level
+ 
+ -->
+<pattern id='p-1.3.6.1.4.1.19376.1.3.1-errors'>
+
+    <!--  TF_Vol3_Ref_4.4.1 Global modeling and general rules  Page 41 -->
+    <rule context='//cda:structuredBody/cda:component/cda:section'>
+        <!-- Rules for an section/entry as defined in 4.4.2 Template "Report_Entry": An entry of a laboratory report -->
+        <assert test='count(cda:entry) = 1 or count(cda:component/child::cda:section/cda:entry)= 1'>
+        Error: A leaf section of the structuredBody shall contain one entry containing the machine-readable 
+        result data rendered in the section.
+        </assert>
+        <assert test='cda:entry[@typeCode="DRIV"] or cda:component/child::cda:section/cda:entry[@typeCode="DRIV"]'>
+        Error: The section/entry typeCode value is "DRIV".
+        </assert>
+    </rule>
+
+    <rule context='//cda:section/cda:entry'>
+        <!-- Check for Table 4.4-1:Structure of Report_Entry -->
+        <assert test='cda:templateId[@root="1.3.6.1.4.1.19376.1.3.1"] and cda:templateId[@extension="Lab.Report.Data.Processing.Entry"]'>
+        Error: The entry/templateId root value shall be 1.3.6.1.4.1.19376.1.3.1 and the extension shall 
+        be "Lab.Report.Data.Processing.Entry".
+        </assert>
+        <assert test='cda:act'>Error: The section/entry shall contain an act element with classCode="ACT" and moodCode="EVN".</assert>
+    </rule>
+
+    <rule context='//cda:entry/cda:act'>
+        <assert test='@classCode="ACT" and @moodCode="EVN"'>
+        Error: The act classCode shall be "ACT" and the act moodCode shall be "EVN" for a laboratory report.
+        </assert>
+        <assert test='cda:statusCode[@code="completed"] or 
+                cda:statusCode[@code="active"] or 
+                cda:statusCode[@code="aborted"] or 
+                cda:statusCode[@code="obsolete"]'>
+        Error: the act/statusCode code value shall be completed, active, aborted, or obsolete. 
+        </assert>
+        <assert test='not(cda:effectiveTime) or cda:effectiveTime[@value]'>
+        Error: act/effectiveTime value shall be present.
+        </assert>
+        <assert test='count(cda:entryRelationship) &gt;= 1'>
+        Error: The entry/act shall have at least one entryRelationship containing the content for an 
+        Isolate, Battery or Observation
+        </assert>
+    </rule>
+
+    <rule context='//cda:entry/cda:act/cda:entryRelationship'>
+        <assert test='@typeCode="COMP"'>
+          Error the entry/act/entryRelationship shall have a typeCode of "COMP".
+        </assert>
+        <assert test='not(cda:act) or (cda:act/@classCode="ACT" and cda:act/@moodCode="EVN")'>
+          Error: The act classCode shall be "ACT" and the act moodCode shall be "EVN".
+        </assert>
+        <assert test='not(cda:act) or cda:act/cda:text'>
+          Error: An entry/act/entryRelationship/act shall have a text.
+        </assert>
+    </rule>
+
+    <!-- Check for Table 4.4-5:Specimen for Report_Organizer or Battery_Organizer or Observation -->
+    <rule context='//cda:entry/cda:act//cda:specimen'>
+        <assert test='@typeCode="SPC"'>Error: The specimen typeCode shall be "SPC".</assert>
+        <assert test='not(../@classCode="CLUSTER") or cda:specimenRole/@classCode="ISLT"'>
+        Error: The specimen/specimenRole classCode shall be "ISLT".
+        </assert>        
+        <assert test='../@classCode="CLUSTER" or cda:specimenRole/@classCode="SPEC"'>
+        Error: The specimen/specimenRole classCode shall be "SPEC".
+        </assert>
+        <assert test='cda:specimenRole/cda:specimenPlayingEntity'>
+        Error: The specimen/specimenRole/specimenPlayingEntity shall be present.
+        </assert>
+        <assert test='not(../@classCode="CLUSTER") or cda:specimenRole/cda:specimenPlayingEntity/@classCode="MIC"'>
+        Error: The specimen/specimenRole/specimenPlayingEntity classCode shall be "MIC".
+        </assert>
+        <assert test='cda:specimenRole/cda:specimenPlayingEntity/cda:code'>
+        Error: The specimen/specimenRole/specimenPlayingEntity/code shall be present.
+        </assert>
+        <assert test='not(../@classCode="CLUSTER") or (
+          cda:specimenRole/cda:specimenPlayingEntity/cda:code/@code and
+          cda:specimenRole/cda:specimenPlayingEntity/cda:code/@codeSystem and
+          cda:specimenRole/cda:specimenPlayingEntity/cda:code/@codeSystemName and
+          cda:specimenRole/cda:specimenPlayingEntity/cda:code/@displayName)'>
+        Error: The specimen/specimenRole/specimenPlayingEntity/code code, codeSystem, codeSystemName, displayName shall be present.
+        </assert>
+        <assert test='not(cda:specimenRole/lab:productOf) or cda:specimenRole/lab:productOf[@typeCode="PRD"]'>
+        Error: The specimenRole/productOf typeCode shall be "PRD".
+        </assert>
+        <assert test='not(cda:specimenRole/lab:productOf/lab:procedure) or
+                cda:specimenRole/lab:productOf/lab:procedure[@classCode="PROC"]'>
+        Error: The specimenRole/productOf/procedure classCode shall be "PROC".
+        </assert>
+        <assert test='not(cda:specimenRole/lab:productOf/lab:procedure) or
+                cda:specimenRole/lab:productOf/lab:procedure[@moodCode="EVN"]'>
+        Error: The specimenRole/productOf/procedure moodCode shall be "EVN".
+        </assert>
+        <assert test='not(cda:specimenRole/lab:productOf/lab:procedure) or 
+                (cda:specimenRole/lab:productOf/lab:procedure and cda:specimenRole/lab:productOf/lab:procedure/cda:effectiveTime)'>
+        Error: Specimen date/time of specimen collection shall be specified.
+        </assert>
+    </rule>
+
+    <!-- Check for Table 4.4-6:Performer at any level -->
+    <rule context='//cda:entry/cda:act//cda:performer'>
+        <assert test='@typeCode="PRF"'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer typeCode shall be "PRF".
+        </assert>
+        <assert test='cda:assignedEntity[@classCode="ASSIGNED"]'>
+        Error: the <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity classCode shall be "ASSIGNED".
+        </assert>
+        <!-- check for id -->
+        <assert test='count(cda:assignedEntity/cda:id) = 1'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity shall have 1 id
+        </assert>        
+        <!-- checking for addr and telecom -->
+        <assert test='cda:assignedEntity/cda:addr'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity shall have an address
+        </assert>
+        <assert test='cda:assignedEntity/cda:telecom'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity shall have a telecom
+        </assert>
+        <!-- check for assignedPerson/name -->
+        <assert test='not(cda:assignedEntity/cda:assignedPerson) or (cda:assignedEntity/cda:assignedPerson/cda:name)'>
+        Error: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity/assignedPerson element shall have a name.
+        </assert>
+        <!-- check for representedOrganization/name -->
+        <assert test='not(cda:assignedEntity/cda:representedOrganization) or (cda:assignedEntity/cda:representedOrganization/cda:name)'>
+        Error: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity/representedOrganization element shall have a name.
+        </assert>
+    </rule>
+
+    <!-- Check for Table 4.4-7:Author at any level -->
+    <rule context='//cda:entry/cda:act//cda:author'>
+        <assert test='@typeCode="AUT"'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author typeCode shall be "AUT".</assert>
+        <assert test='cda:assignedAuthor[@classCode="ASSIGNED"]'>Error: the <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor classCode shall be "ASSIGNED".</assert>
+        <!-- check for id -->
+        <assert test='count(cda:assignedAuthor/cda:id) = 1'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor shall have 1 id
+        </assert>
+        <assert test='(cda:assignedAuthor/cda:id/@extension) and (cda:assignedAuthor/cda:id/@root)'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor/id element shall have attributes @extension and @root.</assert>
+        <assert test='cda:assignedAuthor/cda:assignedPerson | cda:assignedAuthor/cda:assignedAuthoringDevice'>
+        Error: An entry/act/author/assignedAuthor element shall contain at least one assignedPerson or assignedAuthoringDevice element.</assert>
+        <!--checking for addr and telecom elements -->
+        <assert test='cda:assignedAuthor/cda:addr'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor shall have an address</assert>
+        <assert test='cda:assignedAuthor/cda:telecom'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor shall have a telecom</assert>
+        <!-- check for assignedPerson/name -->
+        <assert test='(not(cda:assignedAuthor/cda:assignedPerson) or
+                           cda:assignedAuthor/cda:assignedPerson/cda:name and 
+                 (normalize-space(cda:assignedAuthor/cda:assignedPerson/cda:name) or count(cda:assignedAuthor/cda:assignedPerson/cda:name/child::*) &gt; 0))'>
+           Error: The non-blank name element shall be present for <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor/assignedPerson.
+        </assert>
+        <!-- check for assignedAuthoringDevice/manufacturerModelName --> 
+        <assert test='not(cda:assignedAuthor/cda:assignedAuthoringDevice) or 
+                          cda:assignedAuthor/cda:assignedAuthoringDevice/cda:manufacturerModelName'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor/assignedAuthoringDevice shall have a manufacturerModelName.
+        </assert>
+        <!-- check for assignedAuthoringDevice/softwareName --> 
+        <assert test='not(cda:assignedAuthor/cda:assignedAuthoringDevice) or 
+                          cda:assignedAuthor/cda:assignedAuthoringDevice/cda:softwareName'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor/assignedAuthoringDevice shall have a softwareName.
+        </assert>
+        <!-- check for assignedAuthor/representedOrganizaion -->
+        <assert test='cda:assignedAuthor/cda:representedOrganization'>Error: The entry/act/author/assignedAuthor shall have an representedOrganization element.</assert>
+    </rule>
+
+    <!-- Check for Table 4.4-8:Participant at any level -->
+    <rule context='//cda:entry/cda:act//cda:participant'>
+        <!-- testing the prticipant type code -->
+        <assert test='(@typeCode="VRF") or (@typeCode="RESP") or (@typeCode="DEV")'>Error: The typeCode for <name path="parent::*/parent::*"/>/<name path="parent::*"/>/participant shall be "VRF", "RESP" or "DEV".</assert>
+        <assert test='cda:participantRole and cda:participantRole[@classCode="ASSIGNED"]'>
+           Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/participant/participantRole shall exist with attribute classCode value = "ASSIGNED".</assert>
+        <assert test='cda:participantRole/cda:id'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/participant/participantRole shall have an id.</assert>
+        <!-- checking for addr and telecom -->
+        <assert test='cda:participantRole/cda:addr'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/participant/participantRole shall have an address.</assert>
+        <assert test='cda:participantRole/cda:telecom'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/> /participant/participantRole shall have a telecom</assert>
+        <assert test='not(cda:participantRole/cda:scopingEntity) or
+                          cda:participantRole/cda:scopingEntity/cda:id'>
+        Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/participant/participantRole/scopingEntity shall have a id
+        </assert>
+    </rule>
+    <!-- check for participantRole/playingEntity -->
+    <rule context='//cda:entry/cda:act/cda:participant/cda:participantRole/cda:playingEntity'>
+        <assert test='../../@typeCode="RESP" or ../../@typeCode="VRF"'> Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/playingEntity appears only when participant typeCode equals "RESP" or "VRF".</assert>
+        <assert test='cda:name'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/playingEntity shall have a name element.</assert>
+    </rule>
+    <!-- check for participantRole/playingDevice -->
+    <rule context='//cda:entry/cda:act/cda:participant/cda:participantRole/cda:playingDevice'>
+        <assert test='../../@typeCode="DEV"'> Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/playingDevice appears only when participant typeCode equals "DEV".</assert>
+        <assert test='cda:code'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/playingDevice shall have a code element.</assert>
+        <assert test='cda:manufacturerModelName'>Error: The <name path="parent::*/parent::*"/>/<name path="parent::*"/>/playingDevice shall have a manufacturerModelName element.</assert>
+    </rule>
+    <!-- Check for Table 4.4-2:Structure of SpecimenObservationCluster_Organizer -->
+    <!-- Check for Table 4.4-3:Structure of Battery_Organizer -->
+
+    <rule context='//cda:organizer'>
+        <assert test='@moodCode = "EVN"'>
+          Error: The organizer shall have a moodCode of "EVN".
+        </assert>
+        <assert test='not(@classCode = "CLUSTER") or 
+          cda:statusCode/@code = "completed" or 
+          cda:statusCode/@code = "active" or 
+          cda:statusCode/@code = "aborted" or 
+          cda:statusCode/@code = "obsolete"'>
+          Error: organizer/statusCode shall be completed, active, aborted, or obsolete for a SpecimenObservationCluster_Organizer.
+        </assert>
+        <assert test='not(@classCode = "BATTERY") or
+          cda:statusCode/@code = "completed" or 
+          cda:statusCode/@code = "aborted" or 
+          cda:statusCode/@code = "obsolete"'>
+          Error: organizer/statusCode shall be completed, aborted, or obsolete for a Battery_Organizer.
+        </assert>
+        <assert test='not(cda:effectiveTime) or cda:effectiveTime/@value'>
+          Error: organizer/effectiveTime value shall be present.
+        </assert>
+        <assert test='not(@classCode = "CLUSTER") or count(cda:specimen) = 1'>
+          Error: organizer shall have 1 specimen node for a SpecimenObservationCluster_Organizer.
+        </assert>
+        <assert test='not(@classCode = "BATTERY") or count(cda:specimen) &lt;= 1'>
+          Error: organizer shall have not more than 1 specimen node for a Battery_Organizer.
+        </assert>
+        <assert test='not(@classCode = "CLUSTER") or count(cda:component) &gt;= 1'>
+          Error: The organizer element of a SpecimenObservationCluster_Organizer shall have one or more component elements.
+        </assert>
+    </rule>
+
+    <rule context='//cda:organizer/cda:component'>
+        <assert test='@typeCode = "COMP"'>
+          Error: The organizer/component typeCode shall be COMP.
+        </assert>
+        <assert test='not(../@classCode = "CLUSTER") or cda:observation or cda:organizer/@classCode = "BATTERY"'>
+          Error: The organizer/component element of a SpecimenObservationCluster_Organizer shall have an observation or an organizer of a Battery_Organizer. 
+        </assert>
+        <assert test='not(../@classCode = "BATTERY") or cda:observation'>
+          Error: The organizer/component element of a Battery_Organizer shall have an observation . 
+        </assert>
+    </rule>
+
+    <!-- Check Table 4.4-4:Structure of Observation -->
+    <!-- Some checks are handled as notes. See pattern id='p1.3.6.1.4.1.19376.1.3.1-note -->
+    <rule context='//cda:observation'>
+        <assert test='@classCode="OBS" and @moodCode="EVN"'>Error: An observation shall have the values classCode = "OBS" and moodCode = "EVN".</assert>
+        <assert test='cda:statusCode[@code="completed"] or cda:statusCode[@code="aborted"] or cda:statusCode[@code="obsolete"]'>
+          Error: The observation/statusCode code shall be completed, aborted, or obsolete.
+        </assert>
+        <assert test='not(../@typeCode = "REFR") or cda:statusCode/@code="completed"'>
+          Error: The observation/statusCode code shall be completed.
+        </assert>
+        <assert test='not(cda:effectiveTime) or cda:effectiveTime[@value]'>
+          Error: observation/effectiveTime value shall be present.
+        </assert>
+        <assert test='not(../@typeCode = "REFR") or cda:effectiveTime'>
+          Error: observation/effectiveTime shall be present.
+        </assert>
+        <assert test='not(cda:interpretationCode) or cda:interpretationCode[@code]'>
+        Error: observation/interpretationCode code shall be present.
+        </assert>
+        <assert test='not(cda:methodCode) or cda:methodCode[@code]'>
+        Error: observation/methodCode code shall be present.
+        </assert>
+        <assert test='not(../@typeCode = "REFR") or count(cda:value) = 1'>
+          Error: observation shall have 1 value
+        </assert>
+    </rule>
+
+    <rule context='//cda:observation/cda:entryRelationship'>
+        <assert test='@typeCode="COMP" or @typeCode="REFR"'>
+          Error: An observation/entryRelationship shall have the typeCode "COMP" or "REFR".
+        </assert>
+        <assert test='not(@typeCode="REFR") or cda:observation'>
+          Error: An observation/entryRelationship with the typeCode "REFR" shall have an observation.
+        </assert>
+        <assert test='not(@typeCode="COMP") or cda:act'>
+          Error: An observation/entryRelationship with the typeCode "COMP" shall have an act.
+        </assert>
+        <assert test='not(@typeCode="COMP") or (cda:act/@classCode="ACT" and cda:act/@moodCode="EVN")'>
+          Error: The act classCode shall be "ACT" and the act moodCode shall be "EVN".
+        </assert>
+        <assert test='not(@typeCode="COMP") or cda:act/cda:text'>
+          Error: An observation/entryRelationship/act shall have a text.
+        </assert>
+    </rule>
+
+    <!-- //observation/referenceRange. -->
+    <rule context='//cda:observation/cda:referenceRange'>
+        <assert test='@typeCode="REFV"'>Error: The component/observation/referenceRange shall have a typeCode value "REFV".</assert>
+        <assert test='cda:observationRange[@classCode="OBS"] and cda:observationRange[@moodCode="EVN.CRT"]'>Error: The component/observation/referenceRange shall have the values classCode = "OBS" and moodCode = "EVN.CRT".</assert>
+        <assert test='cda:observationRange/cda:interpretationCode'>Error: The referenceRange/observationRange shall have an interpretationCode.</assert>
+        <assert test='cda:observationRange/cda:interpretationCode[@code="N"]'>Error: The observationRange/interpretationCode code shall be N.</assert>
+    </rule>
+    <rule context='//cda:observation/cda:referenceRange/lab:precondition'>
+        <assert test='@typeCode="PRCN"'>Error: The observation/referenceRange/precondition shall have a typeCode value "PRCN".</assert>
+        <assert test='lab:criterion[@classCode="COND"] and lab:criterion[@moodCode="EVN"]'>Error: The observation/referenceRange/precondition/criterion shall have the attributes classCode = "COND" and moodCode = "EVN".</assert>
+        <assert test='lab:criterion/lab:code[@code]'>Error: observation/referenceRange/precondition/criterion/code code shall exist</assert>
+        <assert test='lab:criterion/lab:value[@value]'>Error: observation/referenceRange/precondition/criterion/value value shall exist</assert>
+    </rule>
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.1-warnings'>
+    <!-- TF_Vol3_Ref_4.3 Level 3 entries dedicated to multimedia rendering  -->
+    <rule context='//cda:entry/cda:observationMedia'>
+        <assert test='cda:value[@mediaType="image/gif"] or cda:value[@mediaType="image/jpeg"] or cda:value[@mediaType="image/png"] or cda:value[@mediaType="image/bmp"]'>
+      Warning: The entry/observationMedia is only required to support small image formats gif, jpeg, png, or bmp. Readability at the target may depend on using only these formats.</assert>
+        <assert test='cda:value[@representation="B64"]'>Warning: A multimedia object shall be encoded in BASE 64.</assert>
+    </rule>
+    <!-- Check for Table 4.4-6:Performer at any level -->
+    <rule context='//cda:entry/cda:act//cda:performer'>
+        <!-- Testing time interval -->
+        <assert test='not(cda:time) or (cda:time/cda:low) or (cda:time/cda:low/@value)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/time/low element used to represent a time interval should have a value.</assert>
+        <assert test='not(cda:time) or (cda:time/cda:high) or (cda:time/cda:high/@value)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/time/high element used to represent a time interval should have a value.</assert>
+        <!-- checking for addr and telecom -->
+        <assert test='(cda:assignedEntity/cda:addr) and (normalize-space(cda:assignedEntity/cda:addr) or count(cda:assignedEntity/cda:addr/child::*) &gt; 0)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity should have a non-blank addr element.</assert>
+        <assert test='(cda:assignedEntity/cda:telecom) and (cda:assignedEntity/cda:telecom/@value)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity telecom element should have a value.</assert>
+        <!-- check for  name -->
+        <assert test='(cda:assignedEntity/cda:assignedPerson/cda:name) and (normalize-space(cda:assignedEntity/cda:assignedPerson//cda:name) or count(cda:assignedEntity/cda:assignedPerson//cda:name/child::*) &gt; 0)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/performer/assignedEntity/assignedPerson should have a non-blank name element.</assert>
+    </rule>
+    <!-- Check for Table 4.4-7:Author at any level -->
+    <rule context='//cda:entry/cda:act//cda:author'>
+        <!-- Testing time interval -->
+        <assert test='not(cda:time) or (cda:time/cda:low) or (cda:time/cda:low/@value)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/time/low element used to represent a time interval should have a value.</assert>
+        <assert test='not(cda:time) or (cda:time/cda:high) or (cda:time/cda:high/@value)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/time/high element used to represent a time interval should have a value.</assert>
+        <!--checking for addr and telecom elements -->
+        <assert test='(cda:assignedAuthor/cda:addr) and (normalize-space(cda:assignedAuthor/cda:addr) or count(cda:assignedAuthor/cda:addr/child::*) &gt; 0)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor should have a non-blank addr element.</assert>
+        <assert test='(cda:assignedAuthor/cda:telecom) and (cda:assignedAuthor/cda:telecom/@value)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/author/assignedAuthor telecom element should have a value.</assert>
+    </rule>
+    <!-- Check for Table 4.4-8:Participant at any level -->
+    <rule context='//cda:entry/cda:act//cda:participant'>
+        <!-- checking for addr and telecom -->
+        <assert test='(cda:participantRole/cda:addr) and (normalize-space(cda:participantRole/cda:addr) or count(cda:participantRole/cda:addr/child::*) &gt; 0)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/participant/participantRole should have a non-blank addr element.</assert>
+        <assert test='(cda:participantRole/cda:telecom) and (cda:participantRole/cda:telecom/@value)'>
+           Warning: A <name path="parent::*/parent::*"/>/<name path="parent::*"/>/participant/participantRole telecom element should have a value.</assert>
+    </rule>
+</pattern>
+
+<pattern id='p-1.3.6.1.4.1.19376.1.3.1-note'>
+    <!-- Check for Table 4.4-1:Structure of Report_Entry -->
+    <rule context='//cda:act'>
+        <assert test='not[cda:code]'>Note: This entry/act/code is the unique code from which the section/code is derived.</assert>
+    </rule>
+    <!-- Check for Table 4.4-3:Structure of Battery_Organizer -->
+    <rule context='//cda:entry/cda:act/cda:entryRelationship/cda:organizer'>
+        <assert test='not(cda:id)'>Note: entry/act/entryRelationship/organizer/id represents the lab filler order number for this battery.</assert>
+        <assert test='not(cda:code)'>Note: entry/act/entryRelationship/organizer/code is the unique code for the battery in the appropriate vocabulary.</assert>
+    </rule>
+    
+    <!-- check for entry/act/entryRelationship  See Page 42 under comments -->
+    <rule context='//cda:entryRelationship'>
+        <assert test='@typeCode="COMP"'>
+        Note: The entry/act/entryRelationship typeCode may equal "COMP". This indicates an Annotation_Act 
+        having an act sub-element.
+        The comment is delivered by the text sub-element if it is purely textual or a code sub-element for a coded comment.
+        </assert>
+    </rule>
+    <rule context='//cda:observation/cda:entryRelationship'>
+        <assert test='@typeCode="REFR"'> Note: The entry/act/entryRelationship typeCode may equal "REFR". This indicates an observation complemented by any number 
+      of previous results as pertinent information.</assert>
+        <assert test='@typeCode="REFR" and count(cda:sequenceNumber) &gt;= 1'> Note: The entry/act/entryRelationship typeCode may equal "REFR". A sequenceNumber element should be included with a 
+       number of 1 or greater.</assert>
+    </rule>
+    <!-- check for entry/act/entryRelationship. See Page 42 under comments -->
+    <!-- This note will always be displayed -->
+    <rule context='//cda:entry/cda:act'>
+        <assert test='cda:specimen'>Note: If all observations of the entry have been produced on the same specimen thenthat specimen
+    SHALL be attached to the Report_Entry through a subject participation represented by a specimen element.</assert>
+        <assert test='not(cda:specimen)'>Note: If all observations of the entry have been produced on the same specimen than that speciment 
+    SHALL be attached to the Report_Entry through a subject participation represented by a specimen element.</assert>
+    </rule>
+    <!-- check for the SpecimenObservationCluster. See Page 43 under comments -->
+    <rule context='//cda:entry/cda:act/cda:entryRelationship/cda:organizer'>
+        <assert test='not(@classCode="CLUSTER")'>Note:The SpecimenObservationCluster can have any number of Battery_Organizers or Observations.</assert>
+    </rule>
+    <!-- Observation Notes for specimen and interpretationCode. See Page 46 -->
+    <!-- This notes will be displayed when the element does not exist  -->
+    <rule context='//cda:observation'>
+        <assert test='cda:specimen'>Note: An observation may have a specimen if it does not inherit this relationship from an upper level.</assert>
+        <assert test='cda:interpretationCode'>Note: An observation may have an interpretationCode.</assert>
+        <!-- Notes from the table 4.4-4: Structure of Observation -->
+        <assert test='cda:effectiveTime'>Note: An observation may have an effectiveTime. See table 4.4.-4 Structure of Observation.</assert>
+        <assert test='cda:value'>Note: An observation may have a value which is the result obtained for the test using the appropriate value. See table 4.4.-4 Structure of Observation.</assert>
+        <assert test='cda:methodCode'>Note: An obervation may have a methodCode. See table 4.4.-4 Structure of Observation.</assert>
+    </rule>
+</pattern>
