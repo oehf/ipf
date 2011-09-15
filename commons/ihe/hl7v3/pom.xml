@@ -67,14 +67,14 @@
                 <executions>
                     <execution>
                         <id>generateStubs</id>
-                        <phase>process-resources</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>generateStubs</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>generateTestStubs</id>
-                        <phase>process-test-resources</phase>
+                        <phase>generate-test-sources</phase>
                         <goals>
                             <goal>generateTestStubs</goal>
                         </goals>
