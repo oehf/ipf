@@ -35,6 +35,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
 
+    <!-- necessary only for HL7 translation in Iti47TestRouteBuilder.groovy -->
     <bean id="pixpdqv3ModelExtension"
           class="org.openehealth.ipf.platform.camel.ihe.hl7v3.extend.PixPdqV3ModelExtension">
     </bean>

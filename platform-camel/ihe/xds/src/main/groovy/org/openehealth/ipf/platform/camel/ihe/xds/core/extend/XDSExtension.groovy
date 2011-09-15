@@ -20,12 +20,19 @@ import static org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExch
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*;
 
 /**
- * XDS DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.
+ * XDS DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder}
+ * using the {@code use} keyword.
  *
  * @DSL
  *
+ * @deprecated Please use standard Camel <code>.process()</code> DSL
+ * element with one of processors from
+ * {@link org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators}
+ * as argument.
+ *
  * @author Jens Riemschneider
  */
+@Deprecated
 public class XDSExtension {
 
      /**

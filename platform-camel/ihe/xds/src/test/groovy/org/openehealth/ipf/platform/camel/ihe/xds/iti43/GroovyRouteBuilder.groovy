@@ -16,10 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti43
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
@@ -34,9 +34,9 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti43:xds-iti43-service1')
-            .validate().iti43Request()
+            .process(iti43RequestValidator())
             .process { checkValue(it, 'service 1') } 
-            .validate().iti43Response()
+            .process(iti43ResponseValidator())
     
         from('xds-iti43:xds-iti43-service2')
             .process { checkValue(it, 'service 2') } 

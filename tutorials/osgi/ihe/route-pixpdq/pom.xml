@@ -28,7 +28,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-ihe-hl7v2</artifactId>
+            <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

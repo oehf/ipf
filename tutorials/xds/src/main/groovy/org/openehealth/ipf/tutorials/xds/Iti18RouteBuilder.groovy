@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 /**
  * Route builder for ITI-18.
@@ -53,7 +54,7 @@ class Iti18RouteBuilder extends SpringRouteBuilder {
         // Entry point for Stored Query
         from('xds-iti18:xds-iti18')
             .log(log) { 'received iti18: ' + it.in.getBody(QueryRegistry.class) }
-            .validate().iti18Request()
+            .process(iti18RequestValidator())
             .transform { 
                 [ 'req': it.in.getBody(QueryRegistry.class), 'resp': new QueryResponse(SUCCESS) ] 
             }
@@ -79,7 +80,7 @@ class Iti18RouteBuilder extends SpringRouteBuilder {
                 .otherwise()
             .end()
             .transform { it.in.body.resp }
-            .validate().iti18Response()     // This includes the check for RESULT_NOT_SINGLE_PATIENT
+            .process(iti18ResponseValidator())     // This includes the check for RESULT_NOT_SINGLE_PATIENT
             .log(log) { 'response iti18: ' + it.in.body }
 
         // Converts all results into ObjectReferences

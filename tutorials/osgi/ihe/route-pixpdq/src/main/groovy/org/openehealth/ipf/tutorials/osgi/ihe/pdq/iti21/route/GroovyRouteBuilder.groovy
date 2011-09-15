@@ -16,7 +16,7 @@
 package org.openehealth.ipf.tutorials.osgi.ihe.pdq.iti21.route
 
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 
 /**
@@ -48,11 +48,11 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||Müller^Joachim
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .validate().iti21Request()	
+            .process(iti21RequestValidator())
             .process {
                 resultMessage(it).body = rsp
             }
-            .validate().iti21Response()
+            .process(iti21ResponseValidator())
 
     }
 }

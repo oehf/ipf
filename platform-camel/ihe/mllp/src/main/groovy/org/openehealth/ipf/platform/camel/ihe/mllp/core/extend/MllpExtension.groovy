@@ -21,12 +21,19 @@ import org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExchangeVal
 import org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators;
 
 /**
- * PIX/PDQ DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} using the {@code use} keyword.
+ * PIX/PDQ DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder}
+ * using the {@code use} keyword.
  *
  * @DSL
  *
+ * @deprecated Please use standard Camel <code>.process()</code> DSL
+ * element with one of processors from
+ * {@link org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators}
+ * as argument.
+ *
  * @author Jens Riemschneider
  */
+@Deprecated
 class MllpExtension {
      /**
       * Validates an ITI-8 request

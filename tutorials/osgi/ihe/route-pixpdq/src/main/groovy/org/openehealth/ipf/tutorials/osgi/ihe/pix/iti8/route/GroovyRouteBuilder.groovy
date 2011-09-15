@@ -16,9 +16,9 @@
 package org.openehealth.ipf.tutorials.osgi.ihe.pix.iti8.route
 
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
 
 
 /**
@@ -37,11 +37,11 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
 
         // normal processing with auditing
         from('pix-iti8://0.0.0.0:8882')
-            .validate().iti8Request()
+            .process(iti8RequestValidator())
             .process {
                 println('PIX-ITI8 Content: ' + it.in.body)
                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
             }
-            .validate().iti8Response()
+            .process(iti8ResponseValidator())
     }
 }

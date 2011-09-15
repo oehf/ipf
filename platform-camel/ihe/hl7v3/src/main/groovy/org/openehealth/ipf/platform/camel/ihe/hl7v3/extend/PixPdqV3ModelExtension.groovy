@@ -20,6 +20,13 @@ import org.apache.camel.model.ProcessorDefinition
 
 /**
  * DSL extensions for PIXv3/PDQv3 components.
+ * <p>
+ * Note that validation-related DSL extensions are deprecated.
+ * Please use standard Camel <code>.process()</code> DSL
+ * element with one of processors from
+ * {@link org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators}
+ * as argument.
+ *
  * @author Dmytro Rud
  */
 class PixPdqV3ModelExtension {

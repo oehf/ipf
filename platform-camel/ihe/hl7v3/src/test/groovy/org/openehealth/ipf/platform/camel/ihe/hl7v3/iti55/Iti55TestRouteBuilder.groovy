@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.xml.datatype.Duration;
 
-
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
 import org.apache.camel.spring.SpringRouteBuilder;
@@ -27,6 +26,8 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.XcpdTestUtils
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
 
 /**
  * Test routes for ITI-55.
@@ -49,7 +50,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
 
         // receiver of asynchronous responses
         from('xcpd-iti55-async-response:iti55service-response?correlator=#correlator')
-            .validate().iti55Response()
+            .process(iti55ResponseValidator())
             .process {
                 try {
                     def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
@@ -69,7 +70,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
 
         // responding route
         from('xcpd-iti55:iti55service?rejectionHandlingStrategy=#rejectionHandlingStrategy')
-            .validate().iti55Request()
+            .process(iti55RequestValidator())
             .process {
                 // check incoming SOAP and HTTP headers
                 Duration dura = TtlHeaderUtils.getTtl(it.in)
@@ -93,7 +94,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                 
                 responseCount.incrementAndGet()
             }
-            .validate().iti55Response()
+            .process(iti55ResponseValidator())
 
 
         // generates NAK

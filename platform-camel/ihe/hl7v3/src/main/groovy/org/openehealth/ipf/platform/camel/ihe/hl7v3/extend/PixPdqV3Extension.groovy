@@ -27,7 +27,13 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
 /**
  * HL7 v3 DSL extensions for usage in a {@link org.apache.camel.builder.RouteBuilder} 
  * using the {@code use} keyword.
- * 
+ * <p>
+ * Note that validation-related DSL extensions are deprecated.
+ * Please use standard Camel <code>.process()</code> DSL
+ * element with one of processors from
+ * {@link org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators}
+ * as argument.
+ *
  * @DSL
  *
  * @author Jens Riemschneider
@@ -37,64 +43,80 @@ class PixPdqV3Extension {
 
      /**
       * Validates an ITI-44 request
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti44Request(ValidatorAdapterDefinition self) {
          return definition(self, iti44RequestValidator());
      }
      
      /**
       * Validates an ITI-44 response
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti44Response(ValidatorAdapterDefinition self) {
          return definition(self, iti44ResponseValidator());
      }
      
      /**
       * Validates an ITI-45 request
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti45Request(ValidatorAdapterDefinition self) {
          return definition(self, iti45RequestValidator());
      }
      
      /**
       * Validates an ITI-45 response
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti45Response(ValidatorAdapterDefinition self) {
          return definition(self, iti45ResponseValidator());
      }
      
      /**
       * Validates an ITI-46 request
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti46Request(ValidatorAdapterDefinition self) {
          return definition(self, iti46RequestValidator());
      }
      
      /**
       * Validates an ITI-46 response
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti46Response(ValidatorAdapterDefinition self) {
          return definition(self, iti46ResponseValidator());
      }
      
      /**
       * Validates an ITI-47 request
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti47Request(ValidatorAdapterDefinition self) {
          return definition(self, iti47RequestValidator());
      }
      
      /**
       * Validates an ITI-47 response
+      * @deprecated
       * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/IHE+support#IHEsupport-validationpixpdq
       */
+     @Deprecated
      public static ValidatorAdapterDefinition iti47Response(ValidatorAdapterDefinition self) {
          return definition(self, iti47ResponseValidator());
      }

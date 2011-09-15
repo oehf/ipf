@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
@@ -29,9 +30,9 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti42:xds-iti42-service1')
-            .validate().iti42Request()
+            .process(iti42RequestValidator())
             .process { checkValue(it, 'service 1') }
-            .validate().iti42Response()
+            .process(iti42ResponseValidator())
     
         from('xds-iti42:xds-iti42-service2')
             .process { checkValue(it, 'service 2') }

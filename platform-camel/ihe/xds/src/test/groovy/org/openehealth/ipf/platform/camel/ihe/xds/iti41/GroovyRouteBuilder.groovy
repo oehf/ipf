@@ -24,6 +24,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import javax.activation.DataHandler
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 /**
  * @author Jens Riemschneider
@@ -32,9 +33,9 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti41:xds-iti41-service1?rejectionHandlingStrategy=#rejectionHandlingStrategy')
-            .validate().iti41Request()
+            .process(iti41RequestValidator())
             .process { checkValue(it, 'service 1') }
-            .validate().iti41Response()
+            .process(iti41ResponseValidator())
     
         from('xds-iti41:xds-iti41-service2')
             .process { checkValue(it, 'service 2') }

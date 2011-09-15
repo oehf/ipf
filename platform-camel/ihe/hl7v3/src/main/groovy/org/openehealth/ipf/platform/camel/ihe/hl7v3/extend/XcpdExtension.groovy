@@ -26,8 +26,14 @@ import static org.openehealth.ipf.platform.camel.core.process.ProcessorBasedExch
  *
  * @DSL
  *
+ * @deprecated Please use standard Camel <code>.process()</code> DSL
+ * element with one of processors from
+ * {@link org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators}
+ * as argument.
+ *
  * @author Dmytro Rud
  */
+@Deprecated
 class XcpdExtension {
      
      /**

@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
 import org.apache.camel.spring.SpringRouteBuilder;
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage;
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
 
 /**
  * Camel route for continuations unit tests.
@@ -110,11 +111,11 @@ class ContinuationsRouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .validate().iti21Request()
+            .process(iti21RequestValidator())
             .process {
                 resultMessage(it).body = BIG_RESPONSE
             }
-            .validate().iti21Response()
+            .process(iti21ResponseValidator())
 
             
         /**
@@ -125,7 +126,7 @@ class ContinuationsRouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .validate().iti21Request()
+            .process(iti21RequestValidator())
             .process {
                 def dsc = it.in.body.DSC[1].value ?: ''
                 resultMessage(it).body = CHAIN_1[dsc]

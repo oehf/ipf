@@ -16,11 +16,11 @@
 package org.openehealth.ipf.tutorials.osgi.ihe.xds.iti14.route
 
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsACamelValidators.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 
 /**
@@ -31,9 +31,9 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('xds-iti14:xds-iti14-service1')
-            .validate().iti14Request()
+            .process(iti14RequestValidator())
             .process { createResponse(it) }
-            .validate().iti14Response()
+            .process(iti14ResponseValidator())
             
 
         from('xds-iti14:xds-iti14-service2?audit=false')

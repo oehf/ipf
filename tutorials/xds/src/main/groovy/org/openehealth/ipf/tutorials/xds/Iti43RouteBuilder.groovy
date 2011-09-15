@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 /**
  * Route builder for ITI-43.
@@ -36,7 +37,7 @@ class Iti43RouteBuilder extends SpringRouteBuilder {
         from('xds-iti43:xds-iti43')
             .log(log) { 'received iti43: ' + it.in.getBody(RetrieveDocumentSet.class) }
             // Validate and convert the request
-    		.validate().iti43Request()
+    		.process(iti43RequestValidator())
     		.convertBodyTo(RetrieveDocumentSet.class)
     		// Retrieve each requested document and aggregate them in a list
     		.ipf().split { it.in.body.documents }

@@ -16,12 +16,10 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapters
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
 
 
 /**
@@ -38,11 +36,11 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
              .onException(ValidationException.class)
                  .maximumRedeliveries(0)
                  .end()
-             .validate().iti8Request()
+             .process(iti8RequestValidator())
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
-             .validate().iti8Response()
+             .process(iti8ResponseValidator())
              
              
          // manual ACK generation on error
@@ -53,11 +51,11 @@ class ValidationRouteBuilder extends SpringRouteBuilder {
                      resultMessage(it).body = MessageUtils.ack(it.in.body.target) 
                  }
                  .end()
-             .validate().iti8Request()
+             .process(iti8RequestValidator())
              .process {
                  throw new RuntimeException('SHOULD NOT BE THROWN')
              }
-             .validate().iti8Response()
+             .process(iti8ResponseValidator())
              
      }
 }

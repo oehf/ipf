@@ -22,6 +22,8 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
+
 /**
  * Test routes for ITI-56.
  * @author Dmytro Rud
@@ -44,7 +46,7 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
                 '?correlator=#correlator' +
                 '&inInterceptors=#inLogInterceptor' +
                 '&outInterceptors=#outLogInterceptor')
-            .validate().iti56Response()
+            .process(iti56ResponseValidator())
             .process {
                 if (! it.in.body.contains('<soap:Fault')) {
                     assert it.pattern == ExchangePattern.InOnly
@@ -59,12 +61,12 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
         from('xcpd-iti56:iti56service' +
                 '?inInterceptors=#inLogInterceptor' +
                 '&outInterceptors=#outLogInterceptor')
-            .validate().iti56Request()
+            .process(iti56RequestValidator())
             .process {
                 Exchanges.resultMessage(it).body = RESPONSE
                 responseCount.incrementAndGet()
             }
-            .validate().iti56Response()
+            .process(iti56ResponseValidator())
 
 
         // responding route for testing errors

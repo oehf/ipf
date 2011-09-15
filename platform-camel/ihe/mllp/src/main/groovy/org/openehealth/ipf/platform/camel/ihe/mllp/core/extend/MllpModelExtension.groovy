@@ -19,8 +19,15 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition
 
 /**
  * DSL extensions for MLLP PIX/PDQ components.
+ *
+ * @deprecated Please use standard Camel <code>.process()</code> DSL
+ * element with one of processors from
+ * {@link org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators}
+ * as argument.
+ *
  * @author Dmytro Rud
  */
+@Deprecated
 class MllpModelExtension {
     static extensions = {
         ValidatorAdapterDefinition.metaClass.iti8Request   = { -> MllpExtension.iti8Request(delegate) }        

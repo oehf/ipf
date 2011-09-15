@@ -19,6 +19,7 @@ import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus.*
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.*
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
 
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.Log
@@ -44,7 +45,7 @@ class Iti4142RouteBuilder extends SpringRouteBuilder {
         from('xds-iti41:xds-iti41')
             .log(log) { 'received iti41: ' + it.in.getBody(ProvideAndRegisterDocumentSet.class) }
             // Validate and convert the request
-            .validate().iti41Request()
+            .process(iti41RequestValidator())
             .transform { 
                 [ 'req': it.in.getBody(ProvideAndRegisterDocumentSet.class), 'uuidMap': [:] ]
             }
@@ -67,7 +68,7 @@ class Iti4142RouteBuilder extends SpringRouteBuilder {
         from('xds-iti42:xds-iti42')
             .log(log) { 'received iti42: ' + it.in.getBody(RegisterDocumentSet.class) }
             // Validate and convert the request
-            .validate().iti42Request()
+            .process(iti42RequestValidator())
             .transform { 
                 [ 'req': it.in.getBody(RegisterDocumentSet.class), 'uuidMap': [:] ]
             }

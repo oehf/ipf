@@ -16,9 +16,9 @@
 package org.openehealth.ipf.tutorials.osgi.ihe.pix.iti10.route
 
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
-import org.apache.camel.Exchange
 import org.apache.camel.spring.SpringRouteBuilder
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
 
 
 /**
@@ -41,10 +41,10 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
             .onException(Exception.class)
                 .maximumRedeliveries(0)
                 .end()
-            .validate().iti10Request()
+            .process(iti10RequestValidator())
             .process {
                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
             }
-            .validate().iti10Response()
+            .process(iti10ResponseValidator())
     }
 } 

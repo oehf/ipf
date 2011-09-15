@@ -34,16 +34,11 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
 
-    <bean id="xdsModelExtension"
-        class="org.openehealth.ipf.platform.camel.ihe.xds.core.extend.XDSModelExtension">
-    </bean>
-
-    <bean id="routeModelExtender" 
+    <bean id="routeModelExtender"
         class="org.openehealth.ipf.platform.camel.core.extend.DefaultModelExtender">
         <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
-                <ref bean="xdsModelExtension" />
             </list>
         </property>
     </bean>
