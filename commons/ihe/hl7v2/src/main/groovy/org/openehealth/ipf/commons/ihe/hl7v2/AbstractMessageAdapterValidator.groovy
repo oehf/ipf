@@ -191,13 +191,14 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
      * Checks that a segment value is one in a list
      */
     void checkFieldInAllowedDomain(msg, String segmentName, int field, Collection<String> allowedDomain, Collection<Exception> violations){
+        
         String value = msg."${segmentName}"[field].encode()
         for (allowedValue in allowedDomain){
             if (allowedValue.equals(value)){
                 return;
             }
         }
-        violations.add(new Exception("Expected one of ${allowedDomain} in ${segmentName}-${field}, found ${value}"))
+        violations.add(new Exception("Expected one of ${allowedDomain} in ${msg.path}.${segmentName}-${field}, found ${value}"))
     }
 
     /**
@@ -220,8 +221,10 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
         checkSegmentStructure(msg, segmentName, fieldNumbers, violations)
         
         for(i in fieldNumbers) {
-            if(values [i] != ANY && !values [i].toString().equals(segment[i]?.encode())) {
-                violations.add(new Exception("Expected ${values[i]} of ${msg.path}.${segmentName}-${i}, found ${segment[i]?.value}"))
+            String expected = values [i - 1]?.toString();
+            String actual = segment[i]?.encode()
+            if(expected != ANY && !(expected == actual)) {
+                violations.add(new Exception("Expected ${expected} of ${msg.path}.${segmentName}-${i}, found ${actual}"))
             }
         }
     }

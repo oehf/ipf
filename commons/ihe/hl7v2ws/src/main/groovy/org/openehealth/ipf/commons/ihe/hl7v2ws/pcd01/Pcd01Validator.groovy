@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01
 
+import org.openehealth.ipf.commons.ihe.hl7v2.AbstractMessageAdapterValidator
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CNERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CWERule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.CXRule
@@ -22,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.EIRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.HDRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.XPNRule
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.rules.XTNRule
-import org.openehealth.ipf.commons.ihe.hl7v2.AbstractMessageAdapterValidator
 import org.openehealth.ipf.modules.hl7.validation.DefaultValidationContext
 import org.openehealth.ipf.modules.hl7.validation.builder.MessageRuleBuilder
 import org.openehealth.ipf.modules.hl7dsl.GroupAdapter
@@ -127,7 +127,7 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
             }
             
             prGroup.ORDER_OBSERVATION().eachWithIndex(){  ooGroup, t ->
-                ooGroup.withPath(prGroup, t)
+                ooGroup.withPath(prGroup, t) //add explicitly, because the path tracking works only with the field like access
                 checkORDER_OBSERVATION(ooGroup, t + 1, violations)
             }
         }
@@ -137,9 +137,9 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
         checkOBR(ooGroup, obrIndex, violations)
         boolean checkTime = shouldValidateOBXTime(ooGroup, violations)
         
-        ooGroup.OBSERVATION().eachWithIndex() { obs, i ->
-            obs.withPath(ooGroup, i)
-            checkOBSERVATION(obs, checkTime, violations)
+        ooGroup.OBSERVATION().eachWithIndex() { obs, int i ->
+            obs.withPath(ooGroup, i) //add explicitly, because the path tracking works only with the field like access
+            checkOBSERVATION(obs, i + 1, checkTime, violations)
         }
     }
     
@@ -158,21 +158,71 @@ class Pcd01Validator extends  AbstractMessageAdapterValidator {
         }
     }
     
-    void checkOBR(GroupAdapter ooGroup, int obrIndex, Collection<Exception> violations) {
-        checkSegmentValues(ooGroup, 'OBR', [1, 3, 4], [obrIndex, ANY, ANY, ANY, ANY, ANY], violations)
+    void checkOBR(GroupAdapter ooGroup, int expectedObrIndex, Collection<Exception> violations) {
+        checkSegmentValues(ooGroup, 'OBR', [1, 3, 4], [expectedObrIndex, ANY, ANY], violations)
+        checkOBR7NotAfterOBR8(ooGroup, violations)
+       
     }
+    void checkOBR7NotAfterOBR8(GroupAdapter ooGroup, Collection<Exception> violations){
+        //check if OBR-7 is befor OBR-8
+        Date obr7Date = null
+        Date obr8Date = null
+        if (ooGroup.OBR[7].getValue()){
+            obr7Date = ooGroup.OBR[7]?.getValueAsDate()
+        }
+        if (ooGroup.OBR[8].getValue()){
+            obr8Date = ooGroup.OBR[8]?.getValueAsDate()
+        }
+        if(obr7Date && obr8Date && obr7Date.after(obr8Date)){
+            violations.add(new Exception("${ooGroup.OBR}.path OBR-7 must be before OBR-8"))
+        }
+    }
+    
 
     /*
      * The <code>checkTime</code> tells if the OBX-14 will be checked. It is required when OBX-7 is not given
      */
-    void checkOBSERVATION(GroupAdapter obs, boolean checkTime, Collection<Exception> violations) {
+    void checkOBSERVATION(GroupAdapter obs, int expectedObservationIndex, boolean checkTime, Collection<Exception> violations) {
         checkSegmentStructure(obs, 'OBX', getOBXRequiredFields(checkTime), violations);
+        //make sure that the observations are in the correct order
+        checkSegmentValues(obs, 'OBX', [1], [expectedObservationIndex], violations)
+        
+        // FIXME although stated in the spec
+        //checkOBX2WhenOBX11NotX(obs, violations)
+        checkOBX6WhenOBX5HasValue(obs, violations)
+        checkOBX2InAllowedDomain(obs,violations)
+        checkOBX11InAllowedDomain(obs,violations)
+    }
+    
+    void checkOBX2InAllowedDomain(obs,Collection<Exception> violations){
         if (obs.OBX[2].value) {
             //OBX [2] must have the same name as OBX[5]. This is guaranteed by the parser.
             checkFieldInAllowedDomain(obs, 'OBX', 2, ['CD', 'CF', 'DT', 'ED', 'FT', 'NA', 'NM', 'PN', 'SN', 'ST', 'TM', 'DTM', 'XCN'], violations);
         }
-        
     }
+    void checkOBX11InAllowedDomain(obs,Collection<Exception> violations){
+        checkFieldInAllowedDomain(obs, 'OBX', 11, ['C', 'D', 'F', 'P', 'R', 'S', 'U', 'W', 'X'], violations);
+    }
+    
+    void checkOBX2WhenOBX11NotX(obs, Collection<Exception> violations){
+        def obx11 = obs.OBX[11]
+        if (obx11 != 'X'){
+            def obx2 = obs.OBX[2]
+            if(!obx2){
+                violations.add(new Exception("${obs.path} OBX-2 must be valued if the value of OBX-11 is not X"))
+            }
+        }
+    }
+    void checkOBX6WhenOBX5HasValue(obs, Collection<Exception> violations){
+        def obx5 = obs.OBX[5]
+        if (!obx5.isEmpty()){
+            def obx6 = obs.OBX[6]
+            if(obx6.isEmpty()){
+                violations.add(new Exception("${obs.path} if OBX-5 is populated then OBX-6 must contain an appropriate value."))
+            }
+        }
+    }
+   
     
     Collection getOBXRequiredFields(boolean checkTime){
         Collection fields = [1, 3, 4]
