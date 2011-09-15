@@ -30,6 +30,8 @@ import ca.uhn.hl7v2.validation.ValidationException;
  */
 public abstract class CompositeTypeRule<T extends Composite> implements Rule {
 
+    private static final long serialVersionUID = -8277252874737667192L;
+
     /**
      * Tests the given (fully populated) message against the criteria defined by
      * this rule class.
