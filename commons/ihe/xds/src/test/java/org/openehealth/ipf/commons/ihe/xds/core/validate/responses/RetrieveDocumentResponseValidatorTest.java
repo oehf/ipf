@@ -48,7 +48,7 @@ public class RetrieveDocumentResponseValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new RetrieveDocumentSetResponseTransformer(factory);
         response = SampleData.createRetrievedDocumentSet();
-        profile = new ValidationProfileImpl(IpfInteractionId.ITI_43);
+        profile = new ValidationProfile(IpfInteractionId.ITI_43);
     }
 
     @Test

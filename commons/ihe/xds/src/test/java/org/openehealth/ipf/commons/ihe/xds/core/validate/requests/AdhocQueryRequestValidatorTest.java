@@ -50,7 +50,7 @@ public class AdhocQueryRequestValidatorTest {
         validator = new AdhocQueryRequestValidator();
         transformer = new QueryRegistryTransformer();
         request = SampleData.createFindDocumentsQuery();
-        profile = new ValidationProfileImpl(IpfInteractionId.ITI_18);
+        profile = new ValidationProfile(IpfInteractionId.ITI_18);
     }
     
     @Test

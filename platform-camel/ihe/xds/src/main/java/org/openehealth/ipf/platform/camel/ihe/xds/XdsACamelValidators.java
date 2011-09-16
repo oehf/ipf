@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequ
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfileImpl;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.AdhocQueryRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator;
@@ -46,7 +45,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLSubmitObjectsRequest21 message = 
                 new EbXMLSubmitObjectsRequest21(exchange.getIn().getBody(SubmitObjectsRequest.class));
-            ValidationProfile profile = new ValidationProfileImpl(ITI_14);
+            ValidationProfile profile = new ValidationProfile(ITI_14);
             new SubmitObjectsRequestValidator().validate(message, profile);
         }
     };
@@ -56,7 +55,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRegistryResponse21 message = 
                 new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));     
-            ValidationProfile profile = new ValidationProfileImpl(ITI_14);
+            ValidationProfile profile = new ValidationProfile(ITI_14);
             new RegistryResponseValidator().validate(message, profile);
         }
     };
@@ -67,7 +66,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLProvideAndRegisterDocumentSetRequest21 message = 
                 new EbXMLProvideAndRegisterDocumentSetRequest21(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));            
-            ValidationProfile profile = new ValidationProfileImpl(ITI_15);
+            ValidationProfile profile = new ValidationProfile(ITI_15);
             new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
         }
     };        
@@ -77,7 +76,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLRegistryResponse21 message = 
                 new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));            
-            ValidationProfile profile = new ValidationProfileImpl(ITI_15);
+            ValidationProfile profile = new ValidationProfile(ITI_15);
             new RegistryResponseValidator().validate(message, profile);
         }
     };
@@ -87,7 +86,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLAdhocQueryRequest21 message = 
                 new EbXMLAdhocQueryRequest21(exchange.getIn().getBody(AdhocQueryRequest.class));            
-            ValidationProfile profile = new ValidationProfileImpl(ITI_16);
+            ValidationProfile profile = new ValidationProfile(ITI_16);
             new AdhocQueryRequestValidator().validate(message, profile);
         }
     };        
@@ -97,7 +96,7 @@ abstract public class XdsACamelValidators {
         public void process(Exchange exchange) throws Exception {
             EbXMLQueryResponse21 message = 
                 new EbXMLQueryResponse21(exchange.getIn().getBody(RegistryResponse.class));            
-            ValidationProfile profile = new ValidationProfileImpl(ITI_16);
+            ValidationProfile profile = new ValidationProfile(ITI_16);
             new QueryResponseValidator().validate(message, profile);
         }
     };         
