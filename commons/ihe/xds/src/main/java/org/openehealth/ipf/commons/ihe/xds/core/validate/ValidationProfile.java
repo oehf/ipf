@@ -15,38 +15,90 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import com.ctc.wstx.sr.CompactNsContext;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
 
 /**
- * Validation profile interface for XDS-like transactions.
+ * Validation profile for XDS-like transactions.
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public interface ValidationProfile {
+public class ValidationProfile {
 
     public static enum InteractionProfile {
-        XDS_A, XDS_B, XCA, Continua_HRN;
+        XDS_A, XDS_B, XCA, Continua_HRN
     }
+
+    private InteractionId interactionId;
+
+
+    /**
+     * Constructor.
+     * @param interactionId
+     *          ID of the eHealth transaction.
+     */
+    public ValidationProfile(InteractionId interactionId) {
+        this.interactionId = interactionId;
+    }
+
 
     /**
      * @return <code>true</code> if checks are done for query transactions.
      */
-    boolean isQuery();
+    public boolean isQuery() {
+        return ((interactionId == ITI_16) ||
+                (interactionId == ITI_18) ||
+                (interactionId == ITI_38));
+    }
+
 
     /**
      * @return ID of the eHealth transaction.
      */
-    InteractionId getInteractionId();
+    public InteractionId getInteractionId() {
+        return interactionId;
+    }
+
 
     /**
      * @return ID of interaction profile the transaction belongs to.
      */
-    InteractionProfile getProfile();
+    public InteractionProfile getProfile() {
+        if (interactionId == Continua_HRN) {
+            return InteractionProfile.Continua_HRN;
+        }
+
+        if ((interactionId == ITI_14) ||
+            (interactionId == ITI_15) ||
+            (interactionId == ITI_16))
+        {
+            return InteractionProfile.XDS_A;
+        }
+
+        if ((interactionId == ITI_38) || (interactionId == ITI_39)) {
+            return InteractionProfile.XCA;
+        }
+
+        if ((interactionId == ITI_18) ||
+            (interactionId == ITI_41) ||
+            (interactionId == ITI_42) ||
+            (interactionId == ITI_43))
+        {
+            return InteractionProfile.XDS_B;
+        }
+
+        throw new IllegalArgumentException("Unknown interaction ID: " + interactionId);
+    }
+
 
     /**
      * @return <code>true</code> when the transaction uses ebXML 3.0.
      */
-    boolean isEbXml30Based();
+    public boolean isEbXml30Based() {
+        InteractionProfile profile = getProfile();
+        return ((profile == InteractionProfile.XDS_B) ||
+                (profile == InteractionProfile.XCA) ||
+                (profile == InteractionProfile.Continua_HRN));
+    }
+
 }

@@ -24,7 +24,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegister
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfileImpl;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ProvideAndRegisterDocumentSetRequestValidator;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
@@ -51,7 +50,7 @@ abstract public class ContinuaHrnCamelProcessors {
             // ebXML validation
             EbXMLProvideAndRegisterDocumentSetRequest30 message =
                 new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-            ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.Continua_HRN);
+            ValidationProfile profile = new ValidationProfile(IpfInteractionId.Continua_HRN);
             new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
 
             // transform ebXML into simplified model, extract embedded documents, check document count

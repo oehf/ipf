@@ -40,7 +40,7 @@ public class QueryResponseValidatorTest {
     private QueryResponse response;
     private QueryResponseTransformer transformer;
     private DocumentEntry docEntry;
-    private ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.ITI_18);
+    private ValidationProfile profile = new ValidationProfile(IpfInteractionId.ITI_18);
 
     @Before
     public void setUp() {

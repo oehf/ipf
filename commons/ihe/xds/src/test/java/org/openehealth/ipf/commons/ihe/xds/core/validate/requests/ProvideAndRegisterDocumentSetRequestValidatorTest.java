@@ -39,7 +39,7 @@ public class ProvideAndRegisterDocumentSetRequestValidatorTest {
     private ProvideAndRegisterDocumentSetRequestValidator validator;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
-    private ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.ITI_41);
+    private ValidationProfile profile = new ValidationProfile(IpfInteractionId.ITI_41);
 
     private DocumentEntry docEntry;
 

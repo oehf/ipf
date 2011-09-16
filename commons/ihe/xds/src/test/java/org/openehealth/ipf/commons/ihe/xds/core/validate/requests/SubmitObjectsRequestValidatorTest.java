@@ -40,7 +40,7 @@ public class SubmitObjectsRequestValidatorTest {
     private EbXMLFactory factory;
     private ProvideAndRegisterDocumentSet request;
     private ProvideAndRegisterDocumentSetTransformer transformer;
-    private ValidationProfile profile = new ValidationProfileImpl(IpfInteractionId.ITI_42);
+    private ValidationProfile profile = new ValidationProfile(IpfInteractionId.ITI_42);
 
     private DocumentEntry docEntry;
 

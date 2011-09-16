@@ -49,7 +49,7 @@ public class RegistryResponseValidatorTest {
         EbXMLFactory factory = new EbXMLFactory30();
         transformer = new ResponseTransformer(factory);
         response = SampleData.createResponse();
-        profile = new ValidationProfileImpl(IpfInteractionId.ITI_18);
+        profile = new ValidationProfile(IpfInteractionId.ITI_18);
     }
 
     @Test
