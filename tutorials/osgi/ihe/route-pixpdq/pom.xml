@@ -19,6 +19,7 @@
         </osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.platform.camel.core.util,
+            org.openehealth.ipf.platform.camel.ihe.mllp,
             org.openehealth.ipf.modules.hl7.message,
             org.apache.camel.component.hl7,
             *

@@ -20,6 +20,7 @@
         </osgi.export.pkg>
         <osgi.import.pkg>
             org.openehealth.ipf.platform.camel.core.util,
+            org.openehealth.ipf.platform.camel.ihe.xds,
             org.openehealth.ipf.commons.ihe.xds.core.requests,
             org.openehealth.ipf.commons.ihe.xds.core.responses,
             javax.servlet,
