@@ -66,7 +66,7 @@
         <ehcache-version>2.2.0</ehcache-version>
         <geronimo-jpa_2.0_spec.version>1.0</geronimo-jpa_2.0_spec.version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
-        <geronimo-spec-servlet-api-version>1.2</geronimo-spec-servlet-api-version> 
+        <geronimo-spec-servlet-api-25-version>1.2</geronimo-spec-servlet-api-25-version> 
         <groovy-version>1.7.9</groovy-version>
         <hapi-version>1.2</hapi-version>
         <hibernate-version>3.5.6-Final</hibernate-version>
@@ -428,6 +428,12 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-http</artifactId>
                 <version>${camel-version}</version>
+                 <exclusions>
+                     <exclusion>
+                          <groupId>org.apache.geronimo.specs</groupId>
+                          <artifactId>geronimo-servlet_2.4_spec</artifactId>
+                     </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -617,7 +623,7 @@
             <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                <version>${geronimo-spec-servlet-api-version}</version>
+                <version>${geronimo-spec-servlet-api-25-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>

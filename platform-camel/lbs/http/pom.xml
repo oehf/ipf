@@ -22,6 +22,10 @@
             <artifactId>commons-fileupload</artifactId>
         </dependency>
         <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-servlet_2.5_spec</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-lbs-core</artifactId>
             <version>${project.version}</version>
