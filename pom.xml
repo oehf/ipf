@@ -1258,7 +1258,7 @@
                         <executions>
                             <execution>
                                 <id>generate-stubs</id>
-                                <phase>generate-sources</phase>
+                                <phase>process-resources</phase>
                                 <goals>
                                     <goal>generateStubs</goal>
                                 </goals>

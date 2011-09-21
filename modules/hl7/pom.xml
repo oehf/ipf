@@ -92,7 +92,7 @@
                     <execution>
                         <!-- Additionally to the groovy compilation generate stubs here -->
                         <id>generateStubs</id>
-                        <phase>generate-sources</phase>
+                        <phase>process-resources</phase>
                         <goals>
                             <goal>generateStubs</goal>
                         </goals>
