@@ -26,6 +26,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  * @author Stefan Ivanov
  * 
  */
+@Deprecated
 @ManagedResource("Managed IPF WS ITI Endpoint")
 public class ManagedWsItiEndpoint extends ManagedEndpoint {
     private final ItiServiceInfo info;

@@ -17,18 +17,18 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.ManagedMllpItiEndp
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean.SomeMllpItiComponent
 
 public class ManagedMllpItiEndpointTest extends MllpTestContainer {
-    
+
     def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
-    
+
     static void main(args) {
         init(CONTEXT_DESCRIPTOR)
     }
-    
+
     @BeforeClass
     static void setUpClass() {
         init(CONTEXT_DESCRIPTOR)
     }
-    
+
     @Test
     void initContext() throws Exception {
         ObjectName on = queryForNamedObjects(
@@ -36,15 +36,15 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
         ObjectInstance oi = getMBeanServer().getObjectInstance(on)
         assertNotNull(oi)
     }
-    
+
     @Test
     void endpointManagedType() throws Exception {
         ObjectName on = queryForNamedObjects(
                 'org.apache.camel:*,type=endpoints,name=\"mina:tcp:*\"')
         ObjectInstance oi = getMBeanServer().getObjectInstance(on)
-        assertEquals(ManagedMllpItiEndpoint.class.getCanonicalName(), oi.getClassName());
+        assertEquals(MllpEndpoint.class.getCanonicalName(), oi.getClassName());
     }
-    
+
     @Test
     void endpointAttributes() throws Exception {
         ObjectName on = queryForNamedObjects(
@@ -58,21 +58,21 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
         assertEquals(true,
                 ((Boolean) getMBeanServer().getAttribute(on, "SslSecure")).booleanValue());
         assertEquals(2,
-                ((String[]) getMBeanServer().getAttribute(on, "CustomInterceptors")).length);
+                ((String[]) getMBeanServer().getAttribute(on, "CustomInterceptorsList")).length);
     }
-    
-    /** some helper getters **/
+
+    /** some helper methods **/
     private ObjectName queryForNamedObjects(String query) {
         MBeanServer mbeanServer = getMBeanServer()
         Set<ObjectName> s = mbeanServer.queryNames(new ObjectName(query), null)
         ObjectName on = (ObjectName) s.toArray()[0]
         on
     }
-    
+
     private CamelContext getContext() {
         return (CamelContext) super.getCamelContext();
     }
-    
+
     private MBeanServer getMBeanServer() {
         return getContext().getManagementStrategy().getManagementAgent().getMBeanServer();
     }
