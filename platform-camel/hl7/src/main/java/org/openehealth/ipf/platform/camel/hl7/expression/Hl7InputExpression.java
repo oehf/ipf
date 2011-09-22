@@ -26,7 +26,7 @@ public class Hl7InputExpression implements Expression {
 
     @Override
     public <T> T evaluate(Exchange exchange, Class<T> type) {
-        MessageAdapter adapter = (MessageAdapter)exchange.getIn().getBody();
+        MessageAdapter<?> adapter = (MessageAdapter<?>)exchange.getIn().getBody();
         return type.cast(adapter.getTarget());
     }
 

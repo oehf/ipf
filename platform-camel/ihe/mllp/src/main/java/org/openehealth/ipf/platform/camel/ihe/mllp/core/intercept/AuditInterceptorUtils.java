@@ -51,7 +51,7 @@ public class AuditInterceptorUtils  {
      * raised during the proper call.
      */
     public static void doProcess(AuditInterceptor interceptor, Exchange exchange) throws Exception {
-        MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
+        MessageAdapter<?> msg = exchange.getIn().getBody(MessageAdapter.class);
 
         // pass in case of non-auditable message types
         if( ! isAuditable(interceptor, msg)) {
@@ -87,7 +87,7 @@ public class AuditInterceptorUtils  {
      * Checks whether the given message should be audited.
      * All exceptions are ignored. 
      */
-    private static boolean isAuditable(AuditInterceptor interceptor, MessageAdapter msg) {
+    private static boolean isAuditable(AuditInterceptor interceptor, MessageAdapter<?> msg) {
         try {
             Message message = msg.getHapiMessage();
             Terser terser = new Terser(message);
@@ -117,7 +117,7 @@ public class AuditInterceptorUtils  {
     private static MllpAuditDataset createAndEnrichAuditDatasetFromRequest(
             MllpAuditStrategy strategy,
             Exchange exchange,
-            MessageAdapter msg)
+            MessageAdapter<?> msg)
     {
         try {
             MllpAuditDataset auditDataset = strategy.createAuditDataset();
@@ -138,7 +138,7 @@ public class AuditInterceptorUtils  {
     private static void enrichAuditDatasetFromResponse(
             MllpAuditStrategy strategy,
             MllpAuditDataset auditDataset,
-            MessageAdapter msg) 
+            MessageAdapter<?> msg) 
     {
         try {
             strategy.enrichAuditDatasetFromResponse(auditDataset, msg);

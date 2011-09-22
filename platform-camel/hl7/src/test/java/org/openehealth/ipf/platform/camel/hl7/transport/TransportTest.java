@@ -31,6 +31,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
+import ca.uhn.hl7v2.model.AbstractMessage;
+
 /**
  * @author Martin Krasser
  */
@@ -67,7 +69,7 @@ public class TransportTest {
         mockOutput.assertIsSatisfied();
     }
 
-    private static MessageAdapter inputMessage(String resource) {
+    private static <T extends AbstractMessage>  MessageAdapter<T> inputMessage(String resource) {
         return MessageAdapters.load(resource);
     }
     

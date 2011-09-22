@@ -29,6 +29,9 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 
+import ca.uhn.hl7v2.model.AbstractMessage;
+import ca.uhn.hl7v2.model.v22.message.ADT_A01;
+
 /**
  * @author Martin Krasser
  */
@@ -74,7 +77,7 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
     }
 
     private void testMarshal(String endpoint) throws Exception {
-        MessageAdapter message = inputMessage(resource);
+        MessageAdapter<ADT_A01> message = inputMessage(resource);
         mockOutput.expectedMessageCount(1);
         producerTemplate.sendBody(endpoint, message);
         mockOutput.assertIsSatisfied();
@@ -93,8 +96,9 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
         return resultMessage().getBody(String.class);
     }
 
-    private MessageAdapter resultAdapter() {
-        return (MessageAdapter)resultMessage().getBody();
+    @SuppressWarnings("unchecked")
+    private <T extends AbstractMessage> MessageAdapter<T> resultAdapter() {
+        return (MessageAdapter<T>)resultMessage().getBody();
     }
 
     private Message resultMessage() {
@@ -105,7 +109,7 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
         return new ClassPathResource(resource).getInputStream();
     }
 
-    private static MessageAdapter inputMessage(String resource) {
+    private static <T extends AbstractMessage> MessageAdapter<T> inputMessage(String resource) {
         return MessageAdapters.load(resource);
     }
     

@@ -28,7 +28,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 public class Hl7TypeConverter {
 
     @Converter
-    public static InputStream toInputStream(MessageAdapter messageAdapter) {
+    public static InputStream toInputStream(MessageAdapter<?> messageAdapter) {
         return new ByteArrayInputStream(messageAdapter.toString().getBytes());
     }
     

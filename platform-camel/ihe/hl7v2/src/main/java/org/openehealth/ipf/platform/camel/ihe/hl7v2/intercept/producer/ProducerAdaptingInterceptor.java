@@ -87,7 +87,7 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
+        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 characterSet(exchange),
                 getTransactionConfiguration().getParser());

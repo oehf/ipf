@@ -57,7 +57,7 @@ public class Hl7DataFormat implements DataFormat {
 
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
-        MessageAdapter adapter = (MessageAdapter)graph;
+        MessageAdapter<?> adapter = (MessageAdapter<?>)graph;
         adapter.writeTo(new OutputStreamWriter(stream, charset));
     }
 

@@ -57,7 +57,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
     @Override
     public void process(Exchange exchange) throws Exception {
         Hl7v2TransactionConfiguration config = getTransactionConfiguration();
-        MessageAdapter request = exchange.getIn().getBody(MessageAdapter.class);
+        MessageAdapter<?> request = exchange.getIn().getBody(MessageAdapter.class);
         
         Terser requestTerser = null;
         String responseString = null;
@@ -180,7 +180,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
         }
 
         // unmarshal and return
-        MessageAdapter rsp = MessageAdapters.make(config.getParser(), responseString);
+        MessageAdapter<?> rsp = MessageAdapters.make(config.getParser(), responseString);
         if (recordsCount != 0) {
             Terser responseTerser = new Terser(rsp.getHapiMessage());
             String recordsCountString = Integer.toString(recordsCount);

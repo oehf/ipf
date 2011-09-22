@@ -47,7 +47,7 @@ public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
         
         // marshal
         message = exchange.getIn();
-        MessageAdapter request = message.getBody(MessageAdapter.class);
+        MessageAdapter<?> request = message.getBody(MessageAdapter.class);
         message.setBody(request.toString());
 
         // run the route

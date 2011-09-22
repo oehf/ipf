@@ -77,7 +77,7 @@ abstract public class MllpAuditStrategy {
      */
     abstract public void enrichAuditDatasetFromRequest(
             MllpAuditDataset auditDataset, 
-            MessageAdapter msg,
+            MessageAdapter<?> msg,
             Exchange exchange);
     
     
@@ -91,7 +91,7 @@ abstract public class MllpAuditStrategy {
      */
     public void enrichAuditDatasetFromResponse(
             MllpAuditDataset auditDataset, 
-            MessageAdapter msg)
+            MessageAdapter<?> msg)
     {
         // does nothing per default
     }

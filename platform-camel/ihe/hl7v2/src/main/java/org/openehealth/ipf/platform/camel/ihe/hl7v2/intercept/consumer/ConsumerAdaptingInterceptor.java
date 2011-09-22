@@ -94,7 +94,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, MessageAdapter.class); 
+        MessageAdapter<?> originalAdapter = exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, MessageAdapter.class); 
         Message originalMessage = originalAdapter.getHapiMessage();
 
         // run the route
@@ -113,7 +113,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         if (charsetName != null) {
             exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
         }
-        MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
+        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 m,
                 characterSet(exchange),
                 getTransactionConfiguration().getParser());
@@ -144,6 +144,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      * Considers a specific header to determine whether the route author want us to generate
      * an automatic acknowledgment, and generates the latter when the author really does.   
      */
+    @SuppressWarnings("rawtypes")
     private MessageAdapter analyseMagicHeader(org.apache.camel.Message m, Message originalMessage) {
         Object header = m.getHeader(ACK_TYPE_CODE_HEADER, AckTypeCode.class);
         if (header == null) {

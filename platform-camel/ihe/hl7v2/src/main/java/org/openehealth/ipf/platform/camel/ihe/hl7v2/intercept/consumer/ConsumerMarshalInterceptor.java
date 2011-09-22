@@ -57,7 +57,7 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        MessageAdapter originalAdapter = null;
+        MessageAdapter<?> originalAdapter = null;
         Parser parser = getTransactionConfiguration().getParser();
         
         // unmarshal

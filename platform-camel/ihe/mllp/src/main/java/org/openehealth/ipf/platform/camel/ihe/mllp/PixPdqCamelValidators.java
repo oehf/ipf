@@ -138,7 +138,7 @@ abstract public class PixPdqCamelValidators {
     }
     
     private static void doValidate(Exchange exchange, Parser parser) throws Exception {
-        MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
+        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                 parser);  

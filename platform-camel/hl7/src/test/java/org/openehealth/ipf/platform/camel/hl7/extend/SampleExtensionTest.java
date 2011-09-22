@@ -26,6 +26,8 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.springframework.test.context.ContextConfiguration;
 
+import ca.uhn.hl7v2.model.AbstractMessage;
+
 /**
  * @author Martin Krasser
  */
@@ -78,7 +80,7 @@ public class SampleExtensionTest extends AbstractExtensionTest {
         return mock.getExchanges().get(0).getIn();
     }
     
-    private static MessageAdapter inputMessage(String resource) {
+    private static <T extends AbstractMessage>  MessageAdapter<T> inputMessage(String resource) {
         return MessageAdapters.load(resource);
     }
     

@@ -75,7 +75,7 @@ public class Hl7v2WsCamelValidators {
     }
     
     private static void doValidate(Exchange exchange, Validator<Object,Object> validator, Parser parser) throws Exception {
-        MessageAdapter msg = Hl7v2MarshalUtils.extractMessageAdapter(
+        MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),
                 parser);  

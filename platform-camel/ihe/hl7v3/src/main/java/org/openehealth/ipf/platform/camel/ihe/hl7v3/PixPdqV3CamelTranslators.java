@@ -44,7 +44,7 @@ abstract public class PixPdqV3CamelTranslators {
         return new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                MessageAdapter initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, MessageAdapter.class);
+                MessageAdapter<?> initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, MessageAdapter.class);
                 String xmlText = exchange.getIn().getBody(String.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
                 Message resultMessage = Exchanges.resultMessage(exchange);
@@ -64,7 +64,7 @@ abstract public class PixPdqV3CamelTranslators {
             @Override
             public void process(Exchange exchange) throws Exception {
                 String initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
-                MessageAdapter msg = exchange.getIn().getBody(MessageAdapter.class);
+                MessageAdapter<?> msg = exchange.getIn().getBody(MessageAdapter.class);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
                 Message resultMessage = Exchanges.resultMessage(exchange);
                 resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());

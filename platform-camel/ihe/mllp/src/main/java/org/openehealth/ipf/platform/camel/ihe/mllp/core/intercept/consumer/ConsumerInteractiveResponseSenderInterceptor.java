@@ -61,7 +61,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
     @Override
     public void process(Exchange exchange) throws Exception {
         Parser parser = getTransactionConfiguration().getParser();
-        MessageAdapter request = (MessageAdapter) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
+        MessageAdapter<?> request = (MessageAdapter<?>) exchange.getIn().getHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME);
         Message requestMessage = request.getHapiMessage();
         Terser requestTerser = new Terser(requestMessage);
         String requestMessageType = requestTerser.get("MSH-9-1");
@@ -150,7 +150,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
         } else {
             // no fragment found --> run the route and create fragments if necessary
             getWrappedProcessor().process(exchange);
-            MessageAdapter response = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
+            MessageAdapter<?> response = Exchanges.resultMessage(exchange).getBody(MessageAdapter.class);
             responseMessage = considerFragmentingResponse(response, threshold, queryTag, chainId);
         }
         Exchanges.resultMessage(exchange).setBody(parser.encode(responseMessage));
@@ -166,7 +166,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpIn
      * If no -- simply returns the response message back.
      */
     private Message considerFragmentingResponse(
-            MessageAdapter response, 
+            MessageAdapter<?> response, 
             int threshold,
             String queryTag,
             String chainId) throws Exception
