@@ -28,10 +28,11 @@ import ca.uhn.hl7v2.model.v26.message.ORU_R01;
  * @author Mitko Kolev
  *
  */
-public class AbstractPCD01ValidatorTest {
+public abstract class AbstractPCD01ValidatorTest {
 
     protected MessageAdapter<ORU_R01> maximumMessage;
-    Pcd01Validator validator = new Pcd01Validator();
+    
+    private Pcd01Validator validator = new Pcd01Validator();
 
     public Pcd01Validator getValiadtor(){
         return validator;
