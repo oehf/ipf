@@ -37,51 +37,51 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
 
     @Test
     public void testOximeterMessage() {
-        getValiadtor().validate(load("wan/valid-oximeter-continua-wan.hl7v2"));
+        validate(load("wan/valid-oximeter-continua-wan.hl7v2"));
     }
     
     @Test
     public void testWeightScaleMessage() {
-        getValiadtor().validate(load("wan/valid-scale-continua-wan.hl7v2"));
+        validate(load("wan/valid-scale-continua-wan.hl7v2"));
     }
     
     @Test
     public void testBPMessage() {
-        getValiadtor().validate(load("wan/valid-bp-continua-wan.hl7v2"));
+        validate(load("wan/valid-bp-continua-wan.hl7v2"));
     }
 
     @Test
     public void testFitnessMessage() {
-        getValiadtor().validate(load("wan/valid-fitness-continua-wan.hl7v2"));
+        validate(load("wan/valid-fitness-continua-wan.hl7v2"));
     }
     @Test
     public void testFitnessAndActivityMessage() {
-        getValiadtor().validate(load("wan/valid-fitness-and-activity-continua-wan.hl7v2"));
+        validate(load("wan/valid-fitness-and-activity-continua-wan.hl7v2"));
     }
 
     @Test
     public void testThermometerMessage() {
-        getValiadtor().validate(load("wan/valid-thermometer-continua-wan.hl7v2"));
+        validate(load("wan/valid-thermometer-continua-wan.hl7v2"));
     }
     
     @Test
     public void testGlucoseMessage() {
-        getValiadtor().validate(load("wan/valid-glucose-continua-wan.hl7v2"));
+        validate(load("wan/valid-glucose-continua-wan.hl7v2"));
     }
     
     @Test
     public void testResponseMessage() {
-        getValiadtor().validate(load("wan/valid-wan-response.hl7v2"));
+        validate(load("wan/valid-wan-response.hl7v2"));
     }
     
     @Test(expected=ValidationException.class)
     public void testResponseMessage2() {
-        getValiadtor().validate(rsp2);
+        validate(rsp2);
     }
     
     @Test(expected=ValidationException.class)
     public void testInvalidResponseMessage() {
-        getValiadtor().validate(load("wan/invalid-wan-response.hl7v2"));
+        validate(load("wan/invalid-wan-response.hl7v2"));
     }
     
     @Ignore
@@ -94,7 +94,7 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
         // When OBX-5 is filled, obx-2 mus not be null. The message can not be parsed.
         // The default obx-2 type must be set with the system property
         // DEFAULT_OBX2_TYPE_PROP
-        getValiadtor().validate(load("wan/invalid-glucose-continua-wan.hl7v2"));
+        validate(load("wan/invalid-glucose-continua-wan.hl7v2"));
     }
 
 }

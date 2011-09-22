@@ -15,86 +15,65 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
-
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make;
-
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-
-
 
 /**
  * @author Kingsley Nwaigbo
  * 
  */
-public class QA_Pcd01PIDPV1ValidatorTest {
+public class QA_Pcd01PIDPV1ValidatorTest extends AbstractPCD01ValidatorTest {
 
-    MessageAdapter maximumMessage = load("pcd01/valid-pcd01-MaximumRequest2.hl7");
+    // ################ PID Segment tests ###############################
 
-    
-    Pcd01Validator validator = new Pcd01Validator();
-
-    public Pcd01Validator getValiadtor(){
-    	return validator;
-    }
-    
-    
-    //################ PID Segment tests ###############################
-    
-    @Test(expected = ValidationException.class)  
+    @Test(expected = ValidationException.class)
     public void testMissingPID3() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI", ""));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                               ""));
     }
-    
-    @Test(expected = ValidationException.class)  
+
+    @Test(expected = ValidationException.class)
     public void testSpaceAsPID3() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI", " "));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                               " "));
     }
-    
-    @Test(expected = ValidationException.class)  
+
+    @Test(expected = ValidationException.class)
     public void testMissingPID3_1() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI", "^^^Imaginary Hospital&1.3.4.565&ISO^PI"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                               "^^^Imaginary Hospital&1.3.4.565&ISO^PI"));
     }
-    
-    @Test(expected = ValidationException.class)  
+
+    @Test(expected = ValidationException.class)
     public void testMissingPID34_1_2_3() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI", "111222333444"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                               "111222333444"));
     }
-    
-    @Test(expected = ValidationException.class)  
+
+    @Test(expected = ValidationException.class)
     public void testMissingPID34_1_2() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI", "111222333444^^^ISO"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("111222333444^^^Imaginary Hospital&1.3.4.565&ISO^PI",
+                               "111222333444^^^ISO"));
     }
-    
-    @Test(expected = ValidationException.class)  
+
+    @Test(expected = ValidationException.class)
     public void testMissingPID5() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("Doe^John^Joseph", ""));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("Doe^John^Joseph", ""));
     }
-    
-    @Test  
+
+    @Test
     public void testMissingPID5_1() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("Doe^John^Joseph", "^John^Joseph"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("Doe^John^Joseph", "^John^Joseph"));
     }
-    
-    @Test 
+
+    @Test
     public void testMissingPID5_2_3() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("Doe^John^Joseph", "Doe^^"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("Doe^John^Joseph", "Doe^^"));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testMissingPV12() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("|I|", "||"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("|I|", "||"));
     }
-  
+
 }

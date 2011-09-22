@@ -15,126 +15,104 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01;
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make;
-
 import org.junit.Test;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
-import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
-
-
 
 /**
  * @author Kingsley Nwaigbo
  * 
  */
-public class QA_Pcd01OBRValidatorTest {
+public class QA_Pcd01OBRValidatorTest extends AbstractPCD01ValidatorTest {
 
-    MessageAdapter maximumMessage = load("pcd01/valid-pcd01-MaximumRequest2.hl7");
-
-    
-    Pcd01Validator validator = new Pcd01Validator();
-
-    public Pcd01Validator getValiadtor(){
-    	return validator;
-    }
-    
     @Test
     public void testMaximalMessage() {
-    	getValiadtor().validate(maximumMessage);
+        validate(maximumMessage);
     }
-    
-     //################ OBR Segment tests ###############################
-    @Test(expected = ValidationException.class) 
+
+    // ################ OBR Segment tests ###############################
+    @Test(expected = ValidationException.class)
     public void testMissingOBR1() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("OBR|1|", "OBR||"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("OBR|1|", "OBR||"));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testWrongSetIDForOBR1() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("OBR|2|AB112233", "OBR|1|AB112233"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("OBR|2|AB112233", "OBR|1|AB112233"));
     }
-    
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testMissingOBR3() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", ""));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", ""));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testSpaceAsOBR3() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", " "));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                               " "));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testEmptyOBR3_1() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", "^AcmeAHDInc^ACDE48234567ABCD^EUI-64"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                               "^AcmeAHDInc^ACDE48234567ABCD^EUI-64"));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testSpaceAsOBR3_1() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", " ^AcmeAHDInc^ACDE48234567ABCD^EUI-64"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                               " ^AcmeAHDInc^ACDE48234567ABCD^EUI-64"));
     }
-    
+
     @Test
     public void testOnlyOBR31_32() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", "CD12345^AcmeAHDInc"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                               "CD12345^AcmeAHDInc"));
     }
-    
+
     @Test
     public void testOnlyOBR31_33_34() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", "CD12345^^ACDE48234567ABCD^EUI-64"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                               "CD12345^^ACDE48234567ABCD^EUI-64"));
     }
-    
+
     @Test(expected = ValidationException.class)
     public void testOnlyOBR31() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64", "CD12345"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64",
+                               "CD12345"));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testMissingOBR4() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", ""));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", ""));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testSpaceAsOBR4() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", " "));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", " "));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testMissingOBR4_2() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", "528391^^MDC"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC",
+                               "528391^^MDC"));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testSpaceAsOBR4_2() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", "528391^ ^MDC"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC",
+                               "528391^ ^MDC"));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testOBR8_withoutOBR7() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("|20090813095715+0500|20090813105715+0500", "||20090813105715+0500"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("|20090813095715+0500|20090813105715+0500",
+                               "||20090813105715+0500"));
     }
-    
-    @Test(expected = ValidationException.class) 
+
+    @Test(expected = ValidationException.class)
     public void testOBR7_olderThanOBR8() {
-        MessageAdapter msg = make(maximumMessage.toString().replace("|20090813095715+0500|20090813105715+0500", "|20100813095715+0500|20090813105715+0500"));
-        getValiadtor().validate(msg);
+        validate(maxMsgReplace("|20090813095715+0500|20090813105715+0500",
+                               "|20100813095715+0500|20090813105715+0500"));
     }
-    
-    
+
 }

@@ -24,17 +24,18 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 
 import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.v26.message.ACK;
 import ca.uhn.hl7v2.model.v26.message.ORU_R01;
 
 /**
  * @author Mitko Kolev
  * 
  */
-public class Pcd01ValidatorTest {
-    protected MessageAdapter msg1 = load("pcd01/valid-pcd01-request.hl7v2");
-    protected MessageAdapter msg2 = load("pcd01/valid-pcd01-request2.hl7v2");
-    protected MessageAdapter rsp = load("pcd01/valid-pcd01-response.hl7v2");
-    protected MessageAdapter rsp2 = load("pcd01/valid-pcd01-response2.hl7v2");
+public class Pcd01ValidatorTest extends AbstractPCD01ValidatorTest {
+    protected MessageAdapter<ORU_R01> msg1 = load("pcd01/valid-pcd01-request.hl7v2");
+    protected MessageAdapter<ORU_R01>  msg2 = load("pcd01/valid-pcd01-request2.hl7v2");
+    protected MessageAdapter<ACK>  rsp = load("pcd01/valid-pcd01-response.hl7v2");
+    protected MessageAdapter<ACK> rsp2 = load("pcd01/valid-pcd01-response2.hl7v2");
 
     static String MSH = "MSH|^~\\&|AcmeInc^ACDE48234567ABCD^EUI-64||||20090713090030+0500||ORU^R01^ORU_R01|MSGID1234|P|2.6|||NE|AL|||||IHE PCD ORU-R01 2006^HL7^2.16.840.1.113883.9.n.m^HL7\r";
     static String PID = "PID|||789567^^^Imaginary Hospital^PI||Doe^John^Joseph^^^^L^A|||M\r";
@@ -50,49 +51,44 @@ public class Pcd01ValidatorTest {
     static String ERR = "ERR|||100|E|||Missing required OBR segment\r";
     static String VALID_RESPONSE =  ACK_MSH + MSA + ERR;
     
-    Pcd01Validator validator = new Pcd01Validator();
-
-    public Pcd01Validator getValiadtor(){
-    	return validator;
-    }
-
+   
     @Test
     public void testMessageSectionJ2() {
-    	getValiadtor().validate(msg1);
+    	validate(msg1);
     }
 
     @Test
     public void testMessageSectionE11() {
-    	getValiadtor().validate(msg2);
+    	validate(msg2);
     }
 
     @Test
     public void testSyntheticMessage() throws HL7Exception{
-        MessageAdapter adapter = make(VALID);
-        getValiadtor().validate(adapter);
+        MessageAdapter<ORU_R01> adapter = make(VALID);
+        validate(adapter);
         assertObservationCount(4, adapter);
     }
     
     @Test
     public void testSyntheticMessageTrimmed() throws HL7Exception{
-        MessageAdapter adapter = make(VALID.trim());
-        getValiadtor().validate(adapter);
+        MessageAdapter<ORU_R01>  adapter = make(VALID.trim());
+        validate(adapter);
         assertObservationCount(4, adapter);
     }
     
     @Test
     public void testResponseMessage() {
-    	getValiadtor().validate(rsp);
+    	validate(rsp);
     }
     
     @Test
     public void testResponseMessage2() {
-    	getValiadtor().validate(rsp2);
+    	validate(rsp2);
     }
     
     @Test
     public void testSyntheticResponseMessage() {
-    	getValiadtor().validate(make(VALID_RESPONSE));
+    	validate(make(VALID_RESPONSE));
     }
     
     
@@ -100,61 +96,55 @@ public class Pcd01ValidatorTest {
     @Test
     public void testNoPID() {
         //no PID is allowed (see the definition of ORU^R01) 
-    	getValiadtor().validate(make(VALID.replace(PID,"")));
+    	validate(make(VALID.replace(PID,"")));
     }
     
     @Test
     public void testOnlyFamilyName() {
-        MessageAdapter msg = make(VALID.replace("Doe^John^Joseph", "Doe^^"));
-        getValiadtor().validate(msg);
+        validate(make(VALID.replace("Doe^John^Joseph", "Doe^^")));
     }
     
     @Test
     public void testNotPresentPatientName() {
-        MessageAdapter msg = make(VALID.replace("Doe^John^Joseph", "^^"));
-        getValiadtor().validate(msg);
+        validate(make(VALID.replace("Doe^John^Joseph", "^^")));
     }
     
 
     // ///////// Negative tests
     @Test(expected = ValidationException.class)
     public void testNoOBR() {
-    	getValiadtor().validate(make(VALID.replace(OBR,"")));
+    	validate(make(VALID.replace(OBR,"")));
     }
 
     @Test(expected = ValidationException.class)
     public void testSyntheticResponseUnsupportedCODE() {
     	//code SN is not supported
-    	getValiadtor().validate(make(VALID_RESPONSE.replace("MSA|CE|","MSA|SN|")));
+    	validate(make(VALID_RESPONSE.replace("MSA|CE|","MSA|SN|")));
     }
     
 
     /////////////////// Field cheks
     @Test(expected = ValidationException.class)
     public void testIncompletePatientId() {
-        MessageAdapter msg = make(VALID.replace("789567", ""));
-        getValiadtor().validate(msg);
+        validate(make(VALID.replace("789567", "")));
     }
 
     @Test(expected = ValidationException.class)
     public void testObservationIdentifierNotPresent() {
-        MessageAdapter msg = make(VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", ""));
-        getValiadtor().validate(msg);
+        validate(make(VALID.replace("528391^MDC_DEV_SPEC_PROFILE_BP^MDC", "")));
     }
     
     @Test(expected = ValidationException.class)
     public void testObservationWithNoSubId() {
-        MessageAdapter msg = make(VALID.replace("PROFILE_BP^MDC|1|", "PROFILE_BP^MDC||"));
-        getValiadtor().validate(msg);
+        validate(make(VALID.replace("PROFILE_BP^MDC|1|", "PROFILE_BP^MDC||")));
     }
     
     @Test(expected = ValidationException.class)
     public void testObservationWithNoSubId2() {
-        MessageAdapter msg = make(VALID.replace("|1.0.1|", "||"));
-        getValiadtor().validate(msg);
+        validate(make(VALID.replace("|1.0.1|", "||")));
     }
     
-    private void assertObservationCount(int expected, MessageAdapter adapter){
+    private void assertObservationCount(int expected, MessageAdapter<ORU_R01> adapter){
         ORU_R01 msg = (ORU_R01)adapter.getTarget();
         int observationsInMsg = msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATIONReps();
         assertEquals(expected, observationsInMsg);
