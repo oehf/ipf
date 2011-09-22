@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.ws;
 
-import org.apache.commons.lang.Validate;
-
 import javax.xml.namespace.QName;
+
+import org.apache.commons.lang.Validate;
 
 /**
  * Contains information about a web-service (e.g. the service class). 

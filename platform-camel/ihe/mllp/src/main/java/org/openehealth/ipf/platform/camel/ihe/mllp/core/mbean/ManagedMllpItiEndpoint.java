@@ -127,12 +127,12 @@ public class ManagedMllpItiEndpoint extends ManagedEndpoint {
     public int getSegmentFragmentationThreshold() {
         return getEndpoint().getSegmentFragmentationThreshold();
     }
-    
+
     @ManagedAttribute(description = "Client Authentication Type")
     public MllpClientAuthType getClientAuthType() {
         return getEndpoint().getClientAuthType();
     }
-    
+
     @ManagedAttribute(description = "SSL Secure Enabled")
     public boolean isSslSecure() {
         return getEndpoint().getSslContext() != null;
