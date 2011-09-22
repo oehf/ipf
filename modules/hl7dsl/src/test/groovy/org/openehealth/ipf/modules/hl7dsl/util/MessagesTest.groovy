@@ -18,13 +18,18 @@ package org.openehealth.ipf.modules.hl7dsl.util
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 import static org.openehealth.ipf.modules.hl7dsl.util.Messages.*
 
+import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
+
+import ca.uhn.hl7v2.model.v22.message.ADT_A01
+import ca.uhn.hl7v2.model.v24.message.ORU_R01
+
 /**
  * @author Martin Krasser
  */
 public class MessagesTest extends GroovyTestCase {
 
-     def msg1
-     def msg2
+     MessageAdapter<ADT_A01> msg1
+     MessageAdapter<ORU_R01> msg2
      
      void setUp() {
          msg1 = load('msg-01.hl7')

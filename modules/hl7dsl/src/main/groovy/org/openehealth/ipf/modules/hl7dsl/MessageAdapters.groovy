@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
+import ca.uhn.hl7v2.model.AbstractMessage
 import ca.uhn.hl7v2.parser.GenericParser
 import ca.uhn.hl7v2.parser.Parser
 
@@ -31,23 +32,23 @@ public class MessageAdapters {
 	//  Factory methods using default parser
 	// -----------------------------------------------------------------
 	
-	static MessageAdapter load(String resource) {
+	static <T extends AbstractMessage>  MessageAdapter<T> load(String resource) {
 		make(MessageAdapter.class.classLoader.getResource(resource)?.text)
 	}
 	
-	static MessageAdapter load(String resource, String charset) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  load(String resource, String charset) {
 		make(MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
 	}
 	
-	static MessageAdapter make(InputStream stream) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  make(InputStream stream) {
 		return make(stream.text)
 	}
 	
-	static MessageAdapter make(InputStream stream, String charset) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  make(InputStream stream, String charset) {
 		return make(stream.getText(charset))
 	}
 	
-	static MessageAdapter make(String message) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  make(String message) {
 		make(defaultParser(), message)
 	}
 	
@@ -55,23 +56,23 @@ public class MessageAdapters {
 	//  Factory methods using custom parser
 	// -----------------------------------------------------------------
 	
-	static MessageAdapter load(Parser parser, String resource) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  load(Parser parser, String resource) {
 		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.text)
 	}
 	
-	static MessageAdapter load(Parser parser, String resource, String charset) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  load(Parser parser, String resource, String charset) {
 		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
 	}
 	
-	static MessageAdapter make(Parser parser, InputStream stream) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, InputStream stream) {
 		return make(parser, stream.text)
 	}
 	
-	static MessageAdapter make(Parser parser, InputStream stream, String charset) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, InputStream stream, String charset) {
 		return make(parser, stream.getText(charset))
 	}
 	
-	static MessageAdapter make(Parser parser, String message) {
+	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, String message) {
 		if (!message) {
 			return null
 		}

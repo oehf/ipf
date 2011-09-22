@@ -26,7 +26,6 @@ import ca.uhn.log.HapiLogFactory
 * addSegment and addGroup extension methods, that take a String instead of a Class as
 * first parameter.
 */
-@SuppressWarnings("serial")
 public class MDM_T02 extends ca.uhn.hl7v2.model.v25.message.MDM_T02 {
 
    public MDM_T02() {

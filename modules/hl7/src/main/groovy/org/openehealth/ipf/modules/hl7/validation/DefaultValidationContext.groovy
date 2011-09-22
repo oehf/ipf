@@ -110,6 +110,7 @@ public class DefaultValidationContext implements ValidationContext, Serializable
 		rules as MessageRule[]
 	}
     
+   @SuppressWarnings("rawtypes")
    public <T extends Composite> CompositeTypeRule<T> [] getCompositeTypeRules(String version, String messageType, String triggerEvent, Class<T> clazz){
        def rules = []
        def matchingRules = ruleMap[version]["_C_$messageType^$triggerEvent"]

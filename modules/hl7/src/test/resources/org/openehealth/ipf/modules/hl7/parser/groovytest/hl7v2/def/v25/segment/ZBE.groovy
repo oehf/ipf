@@ -48,7 +48,6 @@ import ca.uhn.log.HapiLogFactory
  *
  * @author Christian Ohr
  */
-@SuppressWarnings("serial")
 public class ZBE extends AbstractSegment {
 
 	/**

@@ -15,20 +15,16 @@
  */
 package org.openehealth.ipf.modules.hl7.config;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-import ca.uhn.hl7v2.parser.DefaultModelClassFactory;
-import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.core.config.SpringConfigurer;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
+
+import ca.uhn.hl7v2.parser.ModelClassFactory;
 
 /**
  * 
@@ -49,7 +45,6 @@ public class CustomModelClassFactoryConfigurer extends SpringConfigurer<CustomMo
 
     boolean configureRecursively = true;
     
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<CustomModelClasses> lookup(ListableBeanFactory source) {
         return BeanFactoryUtils.beansOfTypeIncludingAncestors(source,

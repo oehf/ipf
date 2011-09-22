@@ -15,13 +15,15 @@
  */
 package org.openehealth.ipf.modules.hl7dsl
 
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
+import ca.uhn.hl7v2.model.v24.message.ORU_R01
+
 /**
  * @author Christian Ohr
  */
 class GroupAdapterIteratorTest extends GroovyTestCase {
     
-    def message
+    MessageAdapter<ORU_R01> message
     
     void setUp() {
         message = load('msg-02.hl7')

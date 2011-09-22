@@ -16,6 +16,7 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
+import ca.uhn.hl7v2.model.v22.message.ADT_A01
 
 /**
  * @author Martin Krasser
@@ -23,7 +24,7 @@ import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
 class CompositeAdapterTest extends GroovyTestCase {
     
     def composite
-    def msg
+    MessageAdapter<ADT_A01> msg
     
     void setUp() {
         msg = load('msg-01.hl7')

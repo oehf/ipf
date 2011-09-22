@@ -16,7 +16,7 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
-
+import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import ca.uhn.hl7v2.model.v231.message.ADT_A40
 
 /**
@@ -24,9 +24,9 @@ import ca.uhn.hl7v2.model.v231.message.ADT_A40
  */
 public class ShortcutSyntaxTest extends GroovyTestCase{
 
-     def msg1
-     def msg2
-     def msg3
+     MessageAdapter<ca.uhn.hl7v2.model.v22.message.ADT_A01> msg1
+     MessageAdapter<ca.uhn.hl7v2.model.v25.message.ADT_A01> msg2
+     MessageAdapter<ca.uhn.hl7v2.model.v24.message.ORU_R01> msg3
      
      void setUp() {
          msg1 = load('msg-01.hl7')
@@ -103,8 +103,8 @@ public class ShortcutSyntaxTest extends GroovyTestCase{
      }
      
      void testUndesiredReplication() {
-         def hapiMessage = new ADT_A40()
-         def adt = new MessageAdapter(hapiMessage)
+         ADT_A40 hapiMessage = new ADT_A40()
+         MessageAdapter<ADT_A40> adt = new MessageAdapter(hapiMessage)
          def grp = adt.PIDPD1MRGPV1(0)
          grp.PID[5][1] = 'X'
          grp.PID[5][2] = 'Y'
