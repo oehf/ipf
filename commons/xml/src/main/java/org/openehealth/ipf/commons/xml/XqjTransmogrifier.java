@@ -15,8 +15,9 @@
  */
 package org.openehealth.ipf.commons.xml;
 
+import static org.openehealth.ipf.commons.xml.ParametersHelper.parameters;
 import static org.openehealth.ipf.commons.xml.ParametersHelper.resource;
-import static org.openehealth.ipf.commons.xml.ParametersHelper.source;
+import static org.openehealth.ipf.commons.xml.ParametersHelper.stream;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -123,7 +124,7 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
             XQPreparedExpression expression = expression(params);
             expression.bindDocument(XQConstants.CONTEXT_ITEM, source, null);
             if (params.length != 0) {
-                bindExpressionContext(expression, ParametersHelper.parameters(params));
+                bindExpressionContext(expression, parameters(params));
             }
             seq = expression.executeQuery();
             seq.writeSequenceToResult(result);
@@ -180,7 +181,7 @@ public class XqjTransmogrifier<T> implements Transmogrifier<Source, T> {
         try {
             initConnection();
             XQPreparedExpression expression = connection
-                    .prepareExpression(source(resource(params)));
+                    .prepareExpression(stream(resource(params)));
             if (staticParams != null) {
                 bindExpressionContext(expression, ParametersHelper.parameters(staticParams));
             }

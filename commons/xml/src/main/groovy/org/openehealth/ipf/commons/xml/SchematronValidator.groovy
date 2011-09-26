@@ -30,36 +30,34 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException;
  * @author Christian Ohr
  */
 public class SchematronValidator implements Validator {
-	
-	private SchematronTransmogrifier<String> schematronTransmogrifier
-	
-	public SchematronValidator() {
-	    this.schematronTransmogrifier = new ValidatingSchematronTransmogrifier<String>(String.class)
-	}
-		
-	public void validate(Object message, Object profile) {
-		String s = schematronTransmogrifier.zap((Source)message, profile);
-		validateResult(s)
-	}
-	
-	protected void validateResult(String s) { 
-		def exceptions = []
-		def result = new XmlSlurper()
-				.parseText(s)
-				.declareNamespace(svrl:'http://purl.oclc.org/dsdl/svrl')
-		
-		exceptions = result.'svrl:failed-assert'.collect {
-			def location = it.@location?.text()
-			def text = it.'svrl:text'?.text()
-			def detail = it.'svrl:diagnostic-reference'?.text()
-			def message = text + (detail ? "\nDetail:$detail" : "") 
-			new ValidationException("Validation error at $location : $message")
-		}
-		
-		if (exceptions.size > 0) {
-			throw new ValidationException("Schematron validation error", exceptions)
-		}
-	}        
-	
-	
+
+    private SchematronTransmogrifier<String> schematronTransmogrifier
+
+    public SchematronValidator() {
+        this.schematronTransmogrifier = new ValidatingSchematronTransmogrifier<String>(String.class)
+    }
+
+    public void validate(Object message, Object profile) {
+        String s = schematronTransmogrifier.zap((Source)message, profile);
+        validateResult(s)
+    }
+
+    protected void validateResult(String s) {
+        def exceptions = []
+        def result = new XmlSlurper()
+                .parseText(s)
+                .declareNamespace(svrl:'http://purl.oclc.org/dsdl/svrl')
+
+        exceptions = result.'svrl:failed-assert'.collect {
+            def location = it.@location?.text()
+            def text = it.'svrl:text'?.text()
+            def detail = it.'svrl:diagnostic-reference'?.text()
+            def message = text + (detail ? "\nDetail:$detail" : "")
+            new ValidationException("Validation error at $location : $message")
+        }
+
+        if (exceptions.size > 0) {
+            throw new ValidationException("Schematron validation error", exceptions)
+        }
+    }
 }

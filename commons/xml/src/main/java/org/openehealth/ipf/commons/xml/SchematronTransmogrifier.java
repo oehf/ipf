@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.commons.xml;
 
+import static org.openehealth.ipf.commons.xml.ParametersHelper.parameters;
+import static org.openehealth.ipf.commons.xml.ParametersHelper.resource;
+import static org.openehealth.ipf.commons.xml.ParametersHelper.source;
+
 import java.io.StringReader;
 import java.util.Map;
 
@@ -88,7 +92,7 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
     protected Templates doCreateTemplate(Object... params) {
         try {
             LOG.debug("Creating new Schematron stylesheet");
-            Source rules = stylesheetSource(resource(params));
+            Source rules = source(resource(params));
             Map<String, Object> parameters = parameters(params);
             LOG.debug("step 1 of 3");
             Source source = step(xsltTransmogrifier, rules,

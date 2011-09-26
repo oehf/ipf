@@ -17,23 +17,17 @@ package org.openehealth.ipf.commons.xml;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * This package private SchematronTransmogrifier works exactly like its
  * superclass, {@link SchematronTransmogrifier} except for its expectations
  * towards the parameters for the
  * {@link #zap(javax.xml.transform.Source, Object...)} method. There must be
- * exactly one parameter of type {@link SchematronProfile}, whoch contains both
- * rules resource location and optioal Schematron parameters.
+ * exactly one parameter of type {@link SchematronProfile}, which contains both
+ * rules resource location and optional Schematron parameters.
  * 
  * @author Christian Ohr
  */
 class ValidatingSchematronTransmogrifier<T> extends SchematronTransmogrifier<T> {
-
-    private final static Log LOG = LogFactory
-            .getLog(ValidatingSchematronTransmogrifier.class);
 
     public ValidatingSchematronTransmogrifier() {
         super();
@@ -56,20 +50,6 @@ class ValidatingSchematronTransmogrifier<T> extends SchematronTransmogrifier<T> 
     public ValidatingSchematronTransmogrifier(XsltTransmogrifier<String> t,
             Class<T> clazz) {
         super(t, clazz);
-    }
-
-    @Override
-    protected String resource(Object... params) {
-        SchematronProfile p = (SchematronProfile) params[0];
-        LOG.debug("Schematron rules are : " + p.getRules());
-        return p.getRules();
-    }
-
-    @Override
-    protected Map<String, Object> parameters(Object... params) {
-        SchematronProfile p = (SchematronProfile) params[0];
-        LOG.debug("Schematron parameters are : " + p.getParameters());
-        return p.getParameters();
     }
 
 }

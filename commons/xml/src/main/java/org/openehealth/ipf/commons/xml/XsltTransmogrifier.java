@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import java.io.IOException;
+import static org.openehealth.ipf.commons.xml.ParametersHelper.parameters;
+import static org.openehealth.ipf.commons.xml.ParametersHelper.resource;
+import static org.openehealth.ipf.commons.xml.ParametersHelper.source;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,20 +30,14 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.core.modules.api.Transmogrifier;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
 /**
- * Xslt Processor transforming a {@link Source} into an object of type T. The
- * stylesheet to be used is passed with the {@link #zap(Source, Object...)}
- * call, however, the Xslt Template object is cached for subsequent
- * transformations using this stylesheet.
+ * Xslt Processor transforming a {@link Source} into an object of type T. The stylesheet to be used is passed with the
+ * {@link #zap(Source, Object...)} call, however, the Xslt Template object is cached for subsequent transformations
+ * using this stylesheet.
  * <p>
  * Xslt parameters can be passed in as Map parameter.
  * <p>
@@ -49,6 +46,7 @@ import org.springframework.core.io.ResourceLoader;
  * @author Christian Ohr
  */
 public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
+    private final static Log LOG = LogFactory.getLog(XsltTransmogrifier.class);
 
     private final Map<Object, Templates> templateCache = new HashMap<Object, Templates>();
 
@@ -57,12 +55,6 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
     private final TransformerFactory factory;
     private final URIResolver resolver;
     private final Class<T> outputFormat;
-
-    private final static ResourceLoader resourceLoader = new DefaultResourceLoader(XsltTransmogrifier.class.getClassLoader());
-    private final static Log LOG = LogFactory.getLog(XsltTransmogrifier.class);
-
-    @Deprecated
-    private static final String RESOURCE_LOCATION = "org.openehealth.ipf.commons.xml.ResourceLocation";
 
     @SuppressWarnings("unchecked")
     public XsltTransmogrifier() {
@@ -114,11 +106,10 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
      * 
      * Converts a Source into a Result using a XSL processor.
      * <p>
-     * The XSL stylesheet resource location is mandatory in the first extra
-     * parameter. XSL Parameters may be passed as a Map in the second parameter.
+     * The XSL stylesheet resource location is mandatory in the first extra parameter. XSL Parameters may be passed as a
+     * Map in the second parameter.
      * 
-     * @see org.openehealth.ipf.commons.core.modules.api.Transmogrifier#zap(java.lang.Object,
-     *      java.lang.Object[])
+     * @see org.openehealth.ipf.commons.core.modules.api.Transmogrifier#zap(java.lang.Object, java.lang.Object[])
      */
     @Override
     public T zap(Source source, Object... params) {
@@ -166,12 +157,11 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
     }
 
     /**
-     * Instantiates a {@link Templates} object according to the parameters. The
-     * template is stored in a cache for faster access in subsequent calls.
+     * Instantiates a {@link Templates} object according to the parameters. The template is stored in a cache for faster
+     * access in subsequent calls.
      * 
      * @param params
-     *            params[0] must be of type String and reference the stylesheet
-     *            resource
+     *            params[0] must be of type String and reference the stylesheet resource
      * @return a {@link Templates} object according to the parameters
      * @TODO use an external cache implementation?
      */
@@ -192,60 +182,11 @@ public class XsltTransmogrifier<T> implements Transmogrifier<Source, T> {
         String resourceLocation = resource(params);
         LOG.debug("Create new template for " + resourceLocation);
         try {
-            return factory.newTemplates(stylesheetSource(resourceLocation));
+            return factory.newTemplates(source(resourceLocation));
         } catch (Exception e) {
             throw new IllegalArgumentException("The resource "
                     + resourceLocation + " is not valid", e);
         }
     }
 
-    /**
-     * Retrieves the stylesheet resource from the parameters
-     * 
-     * @param params
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-	protected String resource(Object... params) {
-        String resourceLocation = null;
-        if (params[0] instanceof String) {
-            resourceLocation = (String) params[0];
-        } else if (params[0] instanceof Map) {
-            resourceLocation = (String) ((Map<?, ?>) params[0])
-                    .get(RESOURCE_LOCATION);
-        }
-        return resourceLocation;
-    }
-
-    /**
-     * Retrieves the dynamic parameters
-     * 
-     * @param params
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    protected Map<String, Object> parameters(Object... params) {
-        if (params[0] instanceof Map) {
-            return (Map<String, Object>) params[0];
-        } else if (params.length > 1 && params[1] instanceof Map) {
-            return (Map<String, Object>) params[1];
-        } else {
-            return null;
-        }
-    }
-
-    protected Source stylesheetSource(String resource) throws IOException {
-        Resource r = resourceLoader.getResource(resource);
-        if (r != null) {
-            if (r.getURL() != null) {
-                return new StreamSource(r.getInputStream(), r.getURL()
-                        .toExternalForm());
-            } else {
-                return new StreamSource(r.getInputStream());
-            }
-        } else {
-            throw new IllegalArgumentException(
-                    "Stylesheet not specified properly");
-        }
-    }
 }

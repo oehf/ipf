@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -45,6 +48,9 @@ public class ParametersHelper {
     static Map<String, Object> parameters(Object... params) {
         if (params[0] instanceof Map) {
             return (Map<String, Object>) params[0];
+        } else if (params[0] instanceof SchematronProfile) {
+            SchematronProfile p = (SchematronProfile) params[0];
+            return p.getParameters();
         } else if (params.length > 1 && params[1] instanceof Map) {
             return (Map<String, Object>) params[1];
         } else {
@@ -63,6 +69,9 @@ public class ParametersHelper {
         } else if (params[0] instanceof Map) {
             resourceLocation = (String) ((Map<?, ?>) params[0])
                 .get(RESOURCE_LOCATION);
+        } else if (params[0] instanceof SchematronProfile) {
+            SchematronProfile p = (SchematronProfile) params[0];
+            return p.getRules();
         }
         return resourceLocation;
     }
@@ -70,15 +79,36 @@ public class ParametersHelper {
     /**
      * 
      * @param resource
-     * @return the resource as a stream
+     * @return the resource as InputStream
      * @throws IOException
      */
-    static InputStream source(String resource) throws IOException {
+    static InputStream stream(String resource) throws IOException {
         Resource r = resourceLoader.getResource(resource);
         if (r != null) {
             return r.getInputStream();
         } else {
             throw new IllegalArgumentException("Resource location not specified properly");
+        }
+    }
+
+    /**
+     * 
+     * @param resource
+     * @return the resource as Source
+     * @throws IOException
+     */
+    static Source source(String resource) throws IOException {
+        Resource r = resourceLoader.getResource(resource);
+        if (r != null) {
+            if (r.getURL() != null) {
+                return new StreamSource(r.getInputStream(), r.getURL()
+                        .toExternalForm());
+            } else {
+                return new StreamSource(r.getInputStream());
+            }
+        } else {
+            throw new IllegalArgumentException(
+                    "Stylesheet not specified properly");
         }
     }
 
