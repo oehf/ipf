@@ -15,21 +15,18 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Collection;
-
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.validation.Schema;
-
+import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.databinding.DataWriter;
 import org.apache.cxf.message.Attachment;
 import org.apache.cxf.service.model.MessagePartInfo;
 import org.apache.cxf.staxutils.StaxUtils;
-import org.xml.sax.InputSource;
+
+import javax.xml.stream.XMLStreamWriter;
+import javax.xml.validation.Schema;
+import java.io.ByteArrayInputStream;
+import java.util.Collection;
 
 /**
  * A special writer for some transactions (e.g. HL7 v3) whose    
@@ -46,11 +43,11 @@ public class XmlStringWriter implements DataWriter<XMLStreamWriter> {
         if (obj != null) {
             try {
                 String s = (String) obj;
-                InputStream stream = new ByteArrayInputStream(s.getBytes());
-                SAXSource saxSource = new SAXSource(new InputSource(stream));
-                StaxUtils.copy(saxSource, writer);
+                ByteArrayInputStream stream = new ByteArrayInputStream(s.getBytes());
+                XmlStreamReader reader = new XmlStreamReader(stream);
+                StaxUtils.copy(StaxUtils.createXMLStreamReader(reader), writer);
             } catch (Exception e) {
-                LOG.error("Error in XML string writer", e);
+                throw new RuntimeException(e);
             }
         }
     }
