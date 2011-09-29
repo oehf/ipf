@@ -16,7 +16,9 @@
 package org.openehealth.ipf.commons.ihe.ws;
 
 import org.apache.commons.lang3.Validate;
-import javax.xml.namespace.QName;/**
+import javax.xml.namespace.QName;
+
+/**
  * Contains information about a web-service (e.g. the service class). 
  * This is the static information about the web-service, i.e. all data that does
  * not depend on the dynamic endpoint configuration (e.g. if SOAP 1.1 or 1.2 is
