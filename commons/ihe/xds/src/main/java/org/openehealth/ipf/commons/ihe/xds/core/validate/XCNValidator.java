@@ -20,7 +20,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
 
 import java.util.List;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 

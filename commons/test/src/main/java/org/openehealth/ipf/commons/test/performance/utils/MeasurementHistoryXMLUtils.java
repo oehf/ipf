@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.test.performance.utils;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.io.StringReader;
 import java.io.StringWriter;

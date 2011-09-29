@@ -19,7 +19,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
 
 import groovy.util.slurpersupport.GPathResult
 import javax.xml.parsers.DocumentBuilder
-import org.apache.commons.lang.Validate
+import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType

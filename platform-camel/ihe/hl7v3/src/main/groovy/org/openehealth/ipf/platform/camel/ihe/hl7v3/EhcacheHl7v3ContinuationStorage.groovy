@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
 import net.sf.ehcache.Ehcache
-import org.apache.commons.lang.Validate
+import org.apache.commons.lang3.Validate
 import net.sf.ehcache.Element
 
 /**

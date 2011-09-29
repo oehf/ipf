@@ -18,8 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests;
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * Contains a request for a single document.

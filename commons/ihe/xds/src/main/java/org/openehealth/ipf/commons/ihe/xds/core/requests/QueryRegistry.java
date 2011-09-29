@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
-import static org.apache.commons.lang.Validate.notNull;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import static org.apache.commons.lang3.Validate.notNull;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
 import javax.xml.bind.annotation.*;

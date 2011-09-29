@@ -19,7 +19,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByIdAndCodesQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Base class of transformers for {@link GetByIdAndCodesQuery}.

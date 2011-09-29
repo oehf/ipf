@@ -119,7 +119,7 @@
             <param>mvn:org.jboss.javassist/com.springsource.javassist/${springsource-javassist-version}@start</param>
             <param>mvn:org.apache.log4j/com.springsource.org.apache.log4j/${springsource-log4j-version}@start</param>
             <param>mvn:net.sourceforge.cglib/com.springsource.net.sf.cglib/${springsource-cglib-version}@start</param>
-            <param>mvn:org.apache.commons/com.springsource.org.apache.commons.lang/${springsource-commons-lang-version}@start</param>
+            <param>mvn:org.apache.commons/com.springsource.org.apache.commons.lang3/${springsource-commons-lang-version}@start</param>
             <param>mvn:org.apache.lucene/com.springsource.org.apache.lucene/${springsource-lucene-version}@start</param>
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.pool/${springsource-commons-pool-version}@start</param>
             <param>mvn:org.apache.commons/com.springsource.org.apache.commons.logging/${springsource-commons-logging-version}@start</param>

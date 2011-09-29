@@ -1,6 +1,6 @@
 package org.openehealth.ipf.platform.camel.event.adapter;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import org.apache.camel.ProducerTemplate;
 import org.openehealth.ipf.commons.event.EventChannelAdapter;

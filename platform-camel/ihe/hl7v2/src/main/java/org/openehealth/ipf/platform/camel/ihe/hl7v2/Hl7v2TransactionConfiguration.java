@@ -17,10 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import ca.uhn.hl7v2.parser.Parser;
 
-import static org.apache.commons.lang.Validate.isTrue;
-import static org.apache.commons.lang.Validate.noNullElements;
-import static org.apache.commons.lang.Validate.notEmpty;
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.isTrue;
+import static org.apache.commons.lang3.Validate.noNullElements;
+import static org.apache.commons.lang3.Validate.notEmpty;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.List;
 

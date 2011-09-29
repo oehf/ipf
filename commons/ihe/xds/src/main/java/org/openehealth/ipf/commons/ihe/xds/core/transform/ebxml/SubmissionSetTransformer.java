@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 
 /**

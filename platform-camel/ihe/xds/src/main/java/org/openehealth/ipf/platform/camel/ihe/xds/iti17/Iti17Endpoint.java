@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti17;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
 /**

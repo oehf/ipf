@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetByIdQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.test.performance.processingtime;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.ArrayList;
 import java.util.List;

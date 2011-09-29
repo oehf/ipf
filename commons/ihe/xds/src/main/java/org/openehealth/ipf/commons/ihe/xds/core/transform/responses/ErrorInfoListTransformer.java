@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryError;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Transforms between lists of {@link ErrorInfo} objects and their ebXML representations.

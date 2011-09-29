@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.hl7;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
-import static org.apache.commons.lang.Validate.notNull;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.Arrays;
 import java.util.Collections;

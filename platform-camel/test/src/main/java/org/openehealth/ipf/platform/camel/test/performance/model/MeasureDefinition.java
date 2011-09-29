@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.test.performance.process.CheckpointPro
 import org.openehealth.ipf.platform.camel.test.performance.process.FinishProcessor;
 import org.openehealth.ipf.platform.camel.test.performance.process.TimeProcessor;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Extension type to support performance measurement.

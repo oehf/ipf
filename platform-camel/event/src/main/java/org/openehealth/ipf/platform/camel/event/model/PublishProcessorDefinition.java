@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.event.model;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import groovy.lang.Closure;
 

@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import groovy.util.slurpersupport.GPathResult;
 import org.apache.camel.Exchange;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;

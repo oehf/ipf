@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * A storage of HL7 v2 unsolicited fragmentation accumulators.

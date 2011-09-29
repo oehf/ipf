@@ -25,7 +25,7 @@ import javax.xml.ws.handler.MessageContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 

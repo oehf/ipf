@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.modules.hl7.AbstractHL7v2Exception;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
 import org.openehealth.ipf.modules.hl7.HL7v2Exception;

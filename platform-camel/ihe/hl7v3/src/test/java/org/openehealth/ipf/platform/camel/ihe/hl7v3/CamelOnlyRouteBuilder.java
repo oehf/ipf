@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqRequest3to2Translator;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translator;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;

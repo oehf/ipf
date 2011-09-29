@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.test.performance.handler;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.test.performance.MeasurementHistory;
 import org.openehealth.ipf.commons.test.performance.Statistics;

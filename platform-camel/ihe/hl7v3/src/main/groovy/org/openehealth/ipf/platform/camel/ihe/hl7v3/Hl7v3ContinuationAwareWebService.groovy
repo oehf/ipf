@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3
 import groovy.util.slurpersupport.GPathResult
 import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
-import org.apache.commons.lang.Validate
+import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.core.modules.api.ValidationException

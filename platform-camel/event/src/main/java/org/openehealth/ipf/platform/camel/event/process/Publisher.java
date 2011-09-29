@@ -22,7 +22,7 @@ import org.apache.camel.processor.DelegateProcessor;
 import org.openehealth.ipf.commons.event.EventEngine;
 import org.openehealth.ipf.commons.event.EventObject;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * The Camel processor to use within routes to create and publish events

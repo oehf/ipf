@@ -15,14 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
-import static org.apache.commons.lang.Validate.notNull;
-
+import javax.servlet.Servlet;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Random;
 
-import javax.servlet.Servlet;
-
-import org.apache.commons.lang.math.RandomUtils;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Simple abstraction of an embedded servlet server (e.g. Jetty or Tomcat).
@@ -217,7 +215,7 @@ public abstract class ServletServer {
         int port = 8000;
         boolean portFree = false;
         while (!portFree) {
-            port = 8000 + RandomUtils.nextInt(2000);
+            port = 8000 + new Random().nextInt(2000);
             portFree = isPortFree(port);
         }
         return port;

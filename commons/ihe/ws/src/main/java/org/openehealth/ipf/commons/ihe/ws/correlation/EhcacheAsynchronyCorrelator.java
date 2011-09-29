@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.ws.correlation;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import java.io.Serializable;

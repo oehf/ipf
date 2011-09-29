@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.test.performance.process;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;

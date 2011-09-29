@@ -20,7 +20,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 import org.apache.cxf.endpoint.Server;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Camel component used to create process incoming exchanges based on webservice calls.

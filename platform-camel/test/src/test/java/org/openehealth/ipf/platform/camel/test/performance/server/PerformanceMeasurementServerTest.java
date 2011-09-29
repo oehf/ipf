@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.test.performance.server;
 import static org.apache.camel.component.http.HttpMethods.DELETE;
 import static org.apache.camel.component.http.HttpMethods.GET;
 
-import static org.apache.commons.lang.Validate.notNull;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

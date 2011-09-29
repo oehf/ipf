@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 

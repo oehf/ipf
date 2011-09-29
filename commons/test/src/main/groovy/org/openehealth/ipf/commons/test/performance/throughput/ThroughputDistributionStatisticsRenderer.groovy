@@ -15,21 +15,9 @@
  */
 package org.openehealth.ipf.commons.test.performance.throughput
 
-import static org.openehealth.ipf.commons.test.performance.utils.NumberUtils.format
-
-import java.io.IOException
-import java.io.OutputStream
-import java.io.Writer
-import java.util.List
-import java.util.concurrent.TimeUnit
-import java.text.SimpleDateFormat
-import javax.xml.transform.Result
-
 import groovy.xml.MarkupBuilder
-
-import org.apache.commons.lang.NotImplementedException
 import org.openehealth.ipf.commons.test.performance.Statistics
-import org.openehealth.ipf.commons.test.performance.StatisticsRenderer
+import static org.openehealth.ipf.commons.test.performance.utils.NumberUtils.format
 
 /**
  * @author Mitko Kolev

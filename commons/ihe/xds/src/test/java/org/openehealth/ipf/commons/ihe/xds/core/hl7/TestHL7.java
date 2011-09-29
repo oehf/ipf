@@ -93,12 +93,12 @@ public class TestHL7 {
         assertNull(HL7.render(HL7Delimiter.COMPONENT));
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testRenderIsNullSafeParam1() {
         HL7.render(null, "fail");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testRenderIsNullSafeParam2() {
         HL7.render(HL7Delimiter.COMPONENT, (String[])null);
     }
@@ -149,7 +149,7 @@ public class TestHL7 {
         assertEquals(0, result.size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testParseIsNullSafeParam1() {
         HL7.parse(null, "fail");
     }
