@@ -15,10 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45
 
+import org.apache.cxf.helpers.XMLUtils
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import javax.xml.transform.stream.StreamSource
 
 /**
  * Tests for ITI-45.
@@ -59,5 +61,38 @@ class TestIti45 extends StandardTestContainer {
         def response = send(SERVICE2, '<request/>', String.class)
         def slurper = new XmlSlurper().parseText(response)
         assert slurper.@from == 'PIX Manager'
+    }
+
+
+    @Test
+    void testDatatypes() {
+        String request = '<request/>'
+
+        // String
+        send(SERVICE2, request, String.class)
+
+        // byte[]
+        send(SERVICE2, request.bytes, String.class)
+
+        // Stream
+        send(SERVICE2, new ByteArrayInputStream(request.bytes), String.class)
+
+        // Reader
+        send(SERVICE2, new InputStreamReader(new ByteArrayInputStream(request.bytes)), String.class)
+
+        // DOM Document
+        send(SERVICE2, XMLUtils.parse(request))
+
+        // Source
+        send(SERVICE2, new StreamSource(new ByteArrayInputStream(request.bytes)), String.class)
+
+        // Unsupported type
+        boolean caught = false
+        try {
+            send(SERVICE2, new Integer(666), String.class)
+        } catch (Exception e) {
+            caught = true
+        }
+        assert caught
     }
 }

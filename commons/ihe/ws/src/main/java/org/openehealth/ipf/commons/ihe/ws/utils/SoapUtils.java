@@ -164,7 +164,7 @@ public abstract class SoapUtils {
 
         return element;
     }
-    
+
 
     /**
      * Extracts the proper body (for example, a Query) from the
@@ -271,20 +271,6 @@ public abstract class SoapUtils {
             LOG.error("Could not extract element" + elementName, e);
             return null;
         }
-    }
-
-
-    /**
-     * Returns local name of the root element of the XML document represented
-     * by the given string, or <code>null</code>, when the given string does
-     * not contain valid XML.
-     */
-    public static String getRootElementLocalName(String xml) {
-        if (xml == null) {
-            return null;
-        }
-        Matcher matcher = ROOT_ELEMENT_PATTERN.matcher(xml);
-        return (matcher.find() && (matcher.start() == 0)) ? matcher.group(1) : null;
     }
 
 

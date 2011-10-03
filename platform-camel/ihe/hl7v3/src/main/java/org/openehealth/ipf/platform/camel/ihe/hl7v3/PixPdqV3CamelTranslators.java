@@ -20,6 +20,7 @@ import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.Hl7TranslatorV2toV3;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.Hl7TranslatorV3toV2;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
@@ -45,7 +46,8 @@ abstract public class PixPdqV3CamelTranslators {
             @Override
             public void process(Exchange exchange) throws Exception {
                 MessageAdapter<?> initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, MessageAdapter.class);
-                String xmlText = exchange.getIn().getBody(String.class);
+                String charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+                String xmlText = XmlUtils.toString(exchange.getIn().getBody(), charsetName);
                 exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
                 Message resultMessage = Exchanges.resultMessage(exchange);
                 resultMessage.getHeaders().putAll(exchange.getIn().getHeaders());

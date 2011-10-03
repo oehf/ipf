@@ -25,6 +25,7 @@ import org.apache.cxf.message.MessageUtils;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.VersionTransformer;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
+import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.w3c.dom.Element;
@@ -94,6 +95,11 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
             return;
         }
 
+        Object response = extractPojo(message);
+        if (response == PlainXmlDataBinding.EMPTY_BODY) {
+            return;
+        }
+
         WsAuditDataset auditDataset = null;
 
         // try to get the audit dataset from the asynchrony correlator --
@@ -131,7 +137,6 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
         // check whether the response POJO is available and
         // perform transaction-specific enrichment of the audit dataset
         Exchange exchange = message.getExchange();
-        Object response = extractPojo(message);
         WsAuditStrategy auditStrategy = getAuditStrategy();
 
         if ((message == exchange.getInFaultMessage())

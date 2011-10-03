@@ -29,17 +29,17 @@ public class Iti47Service extends DefaultHl7v3WebService implements Iti47PortTyp
     }
 
     @Override
-    public String operation(String body) {
-        return doProcess(body);
+    public Object operation(Object request) {
+        return doProcess(request);
     }
 
     @Override
-    public String continuation(String body) {
-        return doProcess(body);
+    public Object continuation(Object request) {
+        return doProcess(request);
     }
 
     @Override
-    public String cancel(String body) {
-        return doProcess(body);
+    public Object cancel(Object request) {
+        return doProcess(request);
     }
 }

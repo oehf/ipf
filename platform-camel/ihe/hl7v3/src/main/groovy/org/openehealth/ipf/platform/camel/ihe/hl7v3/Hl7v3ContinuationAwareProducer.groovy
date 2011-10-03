@@ -42,6 +42,7 @@ import org.apache.cxf.ws.addressing.AddressingProperties
 import org.apache.cxf.ws.addressing.JAXWSAConstants
 import javax.xml.ws.BindingProvider
 import org.apache.cxf.message.Message
+import static org.openehealth.ipf.commons.xml.XmlUtils.*
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -114,16 +115,17 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
 
     /**
      * Dispatches the original request message, optionally handling continuations.
+     * <p>
+     * The response is always an XML String.
      */
     @Override
     protected Object callService(Object clientObject, Object requestObject) {
         Hl7v3ContinuationsPortType client = (Hl7v3ContinuationsPortType) clientObject
-        String requestString = (String) requestObject
-        String rootElementName = getRootElementLocalName(requestString)
+        String rootElementName = rootElementName(requestObject).localPart
         switch (rootElementName) {
-
             case serviceInfo.mainRequestRootElementName:
-                String responseString = client.operation(requestString)
+                String requestString = toString(requestObject, null)
+                String responseString = client.operation(requestObject)
                 if (! supportContinuation) {
                     return responseString
                 }
@@ -133,9 +135,9 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
 
             case 'QUQI_IN000003UV01':
                 // continuation is supported by the route, not by us
-                return client.continuation(requestString)
+                return client.continuation(requestObject)
             case 'QUQI_IN000003UV01_Cancel':
-                return client.cancel(requestString)
+                return client.cancel(requestObject)
         }
         throw new RuntimeException('Cannot dispatch request message with root element ' + rootElementName)
     }
@@ -325,7 +327,8 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
      * @return
      *          XML string containing an HL7v3 continuation request.
      */
-    private String createQuqiRequest(GPathResult initialRequest,
+    private String createQuqiRequest(
+            GPathResult initialRequest,
             boolean isCancel,
             int startResultNumber0,
             int continuationQuantity0)

@@ -16,14 +16,12 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti45
 
 import groovy.util.slurpersupport.GPathResult
-
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
-import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
 
 /**
  * @author Dmytro Rud
@@ -46,27 +44,28 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+        request = slurp(request)
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
-        GPathResult xml = slurp((String) request)
+
+        GPathResult qbp = request.controlActProcess.queryByParameter
 
         // patient ID from request
-        auditDataset.patientIds = [iiToCx(xml.controlActProcess.queryByParameter.parameterList.patientIdentifier[0].value)]
+        auditDataset.patientIds = [iiToCx(qbp.parameterList.patientIdentifier[0].value)]
 
         // dump of queryByParameter
-        auditDataset.requestPayload = SoapUtils.extractNonEmptyElement((String) request, 'queryByParameter')
+        auditDataset.requestPayload = render(qbp)
     }
 
 
     @Override
     void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset0) {
+        response = slurp(response)
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
         super.enrichDatasetFromResponse(response, auditDataset)
 
-        GPathResult xml = slurp((String) response)
-
         // patient IDs from response
         def patientIds = [] as Set<String>
-        addPatientIds(xml.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
+        addPatientIds(response.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
         if (auditDataset.patientIds) {
             patientIds << auditDataset.patientIds[0]
         }

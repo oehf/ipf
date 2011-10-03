@@ -19,36 +19,27 @@ import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static org.openehealth.ipf.commons.xml.XmlUtils.*;
 
 /**
  * XSD- and Schematron-based validator for HL7 v3 messages.
  * @author Dmytro Rud
  */
-public class CombinedXmlValidator implements Validator<String, CombinedXmlValidationProfile> {
-
-    private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
-        "(?:\\s*<\\!--.*?-->)*"                             +  // optional comments before prolog (are they allowed?)
-        "(?:\\s*<\\?xml.+?\\?>(?:\\s*<\\!--.*?-->)*)?"      +  // optional prolog and comments after it
-        "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
-        Pattern.DOTALL
-    );
+public class CombinedXmlValidator implements Validator<Object, CombinedXmlValidationProfile> {
 
     private static final XsdValidator XSD_VALIDATOR = new XsdValidator(CombinedXmlValidator.class.getClassLoader());
     private static final SchematronValidator SCHEMATRON_VALIDATOR = new SchematronValidator();
 
 
     @Override
-    public void validate(String message, CombinedXmlValidationProfile profile) throws ValidationException {
+    public void validate(Object message, CombinedXmlValidationProfile profile) throws ValidationException {
         Validate.notNull(message, "message must be not null");
         Validate.notNull(profile, "validation profile must be not null");
 
+        byte[] bytes = bytes(message, null);
+
         // check whether the root element name is valid
-        String rootElementName = getRootElementLocalName(message);
+        String rootElementName = rootElementName(bytes).getLocalPart();
         if (! profile.isValidRootElement(rootElementName)) {
             throw new ValidationException("Invalid root element '" + rootElementName + "'");
         }
@@ -56,7 +47,7 @@ public class CombinedXmlValidator implements Validator<String, CombinedXmlValida
         // XSD validation
         String xsdPath = profile.getXsdPath(rootElementName);
         if (xsdPath != null) {
-            XSD_VALIDATOR.validate(getSource(message), xsdPath);
+            XSD_VALIDATOR.validate(source(bytes, null), xsdPath);
         }
 
         // Schematron validation
@@ -65,29 +56,8 @@ public class CombinedXmlValidator implements Validator<String, CombinedXmlValida
             SchematronProfile schematronProfile = new SchematronProfile(
                     schematronPath,
                     profile.getCustomSchematronParameters());
-            SCHEMATRON_VALIDATOR.validate(getSource(message), schematronProfile);
+            SCHEMATRON_VALIDATOR.validate(source(bytes, null), schematronProfile);
         }
     }
 
-
-    /**
-     * Converts the given XML string to a Source object.
-     */
-    private static Source getSource(String message) {
-        return new StreamSource(new ByteArrayInputStream(message.getBytes()));
-    }
-
-
-    /**
-     * Returns local name of the root element of the XML document represented
-     * by the given string, or <code>null</code>, when the given string does
-     * not contain valid XML.
-     */
-    private static String getRootElementLocalName(String xml) {
-        if (xml == null) {
-            return null;
-        }
-        Matcher matcher = ROOT_ELEMENT_PATTERN.matcher(xml);
-        return (matcher.find() && (matcher.start() == 0)) ? matcher.group(1) : null;
-    }
 }

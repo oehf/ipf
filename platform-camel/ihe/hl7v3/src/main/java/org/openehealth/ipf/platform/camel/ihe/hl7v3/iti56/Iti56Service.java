@@ -16,10 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.cxf.interceptor.Fault;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
@@ -29,14 +27,13 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 public class Iti56Service extends DefaultItiWebService implements Iti56PortType {
 
     @Override
-    public String respondingGatewayPatientLocationQuery(String request) {
+    public Object respondingGatewayPatientLocationQuery(Object request) {
         Exchange result = process(request);
         if(result.getException() != null) {
             throw new Fault(result.getException());
         }
         
-        Message resultMessage = Exchanges.resultMessage(result);
-        return resultMessage.getBody(String.class);
+        return prepareBody(result);
     }
 
 }

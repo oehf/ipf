@@ -34,8 +34,8 @@ public interface Iti55AsyncResponsePortType {
     //@Oneway
     @Action(input = "urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery")
     @WebMethod(operationName = "RespondingGateway_PRPA_IN201305UV02")
-    public Object respondingGatewayPRPAIN201305UV02(
+    Object respondingGatewayPRPAIN201305UV02(
             @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009" )
-            String response
+            Object response
     );
 }

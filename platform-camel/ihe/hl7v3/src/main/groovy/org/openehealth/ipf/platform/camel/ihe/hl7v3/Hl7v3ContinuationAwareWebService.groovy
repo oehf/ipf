@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
 import groovy.util.slurpersupport.GPathResult
 import javax.xml.transform.Source
-import javax.xml.transform.stream.StreamSource
 import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -25,7 +24,6 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
-import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
@@ -39,6 +37,7 @@ import org.apache.cxf.message.Message
 import org.apache.cxf.transport.http.AbstractHTTPDestination
 import org.apache.cxf.ws.addressing.AddressingProperties
 import org.apache.cxf.ws.addressing.JAXWSAConstants
+import static org.openehealth.ipf.commons.xml.XmlUtils.*
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -79,8 +78,45 @@ public class Hl7v3ContinuationAwareWebService
     }
 
 
+    /**
+     * Serves the "main" service operation.
+     * @param requestObject
+     *      request, actually always a String from CXF.
+     * @return
+     *      operation response in one of supported formats.
+     */
+    @Override
+    Object operation(Object requestObject) {
+        return process0((String) requestObject)
+    }
+
+    /**
+     * Serves response continuation requests.
+     * @param requestObject
+     *      continuation request, actually always a String from CXF.
+     * @return
+     *      next portion of response data in one of supported formats.
+     */
+    @Override
+    Object continuation(Object requestObject) {
+        return process0((String) requestObject)
+    }
+
+    /**
+     * Serves response continuation cancel requests.
+     * @param requestObject
+     *      continuation cancel request, actually always a String from CXF.
+     * @return
+     *      cancel acknowledgement response in one of supported formats.
+     */
+    @Override
+    Object cancel(Object requestObject) {
+        return process0((String) requestObject)
+    }
+
+
     String process0(String requestString) {
-        String rootElementName = SoapUtils.getRootElementLocalName(requestString)
+        String rootElementName = rootElementName(requestString).localPart
         switch (rootElementName) {
             case serviceInfo.mainRequestRootElementName:
                 return operation0(requestString)
@@ -91,11 +127,6 @@ public class Hl7v3ContinuationAwareWebService
         }
         throw new RuntimeException('Cannot dispatch request message with root element ' + rootElementName)
     }
-
-
-    String operation    (String requestString) { return process0(requestString) }
-    String continuation (String requestString) { return process0(requestString) }
-    String cancel       (String requestString) { return process0(requestString) }
 
 
     /**
@@ -137,7 +168,7 @@ public class Hl7v3ContinuationAwareWebService
         }
 
         // run the route
-        final String responseString = doProcess(requestString)
+        final String responseString = toString(doProcess(requestString), null)
 
         // validate response, if necessary
         if (validation) {
@@ -304,7 +335,7 @@ public class Hl7v3ContinuationAwareWebService
             int startResultNumber,
             int continuationCount) throws Exception
     {
-        Source source = new StreamSource(new ByteArrayInputStream(responseString.getBytes()))
+        Source source = source(responseString, null)
         def params = [
             'startResultNumber'        : startResultNumber,
             'continuationCount'        : continuationCount,

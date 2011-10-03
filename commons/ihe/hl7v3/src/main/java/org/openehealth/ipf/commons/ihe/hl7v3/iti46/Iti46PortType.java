@@ -29,8 +29,8 @@ public interface Iti46PortType {
     @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201302UV02", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "PIXConsumer_PRPA_IN201302UV02", action = "urn:hl7-org:v3:PRPA_IN201302UV02")
-    public String recordRevised(
+    Object recordRevised(
         @WebParam(partName = "Body", name = "PRPA_IN201302UV02", targetNamespace = "urn:hl7-org:v3")
-        String request
+        Object request
     );
 }

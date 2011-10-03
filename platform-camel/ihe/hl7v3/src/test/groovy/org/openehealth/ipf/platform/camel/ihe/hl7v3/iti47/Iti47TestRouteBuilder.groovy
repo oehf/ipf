@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translat
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import groovy.xml.XmlUtil
+import org.apache.cxf.helpers.XMLUtils
 
 /**
  * @author Dmytro Rud
@@ -60,7 +62,7 @@ class Iti47TestRouteBuilder extends SpringRouteBuilder {
 
         from('pdqv3-iti47:pdqv3-iti47-service1')
             .process(PixPdqV3CamelValidators.iti47RequestValidator())
-            .setBody(constant(V3_RESPONSE))
+            .setBody(constant(XMLUtils.parse(V3_RESPONSE)))
             .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 
 
@@ -70,13 +72,14 @@ class Iti47TestRouteBuilder extends SpringRouteBuilder {
              '&continuationStorage=#hl7v3ContinuationStorage' +
              '&validationOnContinuation=true')
             .process(PixPdqV3CamelValidators.iti47RequestValidator())
-            .setBody(constant(V3_RESPONSE))
+            .streamCaching()
+            .setBody(constant(new ByteArrayInputStream(V3_RESPONSE.bytes)))
             .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 
 
         from('pdqv3-iti47:pdqv3-iti47-serviceIntercept')
             .process {
-                Exchanges.resultMessage(it).body = '<response from="PDSupplier"/>'
+                Exchanges.resultMessage(it).body = '<response from="PDSupplier"/>'.bytes
             }
 
 

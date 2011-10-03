@@ -21,6 +21,7 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 import org.openehealth.ipf.commons.xml.XmlYielder
+import groovy.xml.XmlUtil
 
 /*
  * Generic routines for HL7 v3 processing.
@@ -193,4 +194,14 @@ class Hl7v3Utils {
         return "${id.@extension.text()}@${id.@root.text()}"
     }
 
+
+    /**
+     * Renders the given GPath source to String.
+     */
+    static String render(GPathResult source) {
+        OutputStream output = new ByteArrayOutputStream()
+        MarkupBuilder builder = getBuilder(output)
+        XmlYielder.yieldElement(source, builder, HL7V3_NSURI)
+        return output.toString()
+    }
 }

@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55;
 
-import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 
 /**
@@ -48,17 +46,16 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
     
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+        request = slurp(request)
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
         super.enrichDatasetFromRequest(request, auditDataset)
 
-        GPathResult xml = slurp((String) request)
-        
         // query ID
-        auditDataset.queryId = idString(xml.controlActProcess.queryByParameter.queryId)
+        auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
 
         // home community ID
         auditDataset.homeCommunityId = 
-            xml.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
+            request.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
     }
 
 

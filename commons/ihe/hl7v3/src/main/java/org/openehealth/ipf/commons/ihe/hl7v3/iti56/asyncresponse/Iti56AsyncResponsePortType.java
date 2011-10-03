@@ -34,8 +34,8 @@ public interface Iti56AsyncResponsePortType {
     //@Oneway
     @Action(input = "urn:ihe:iti:2009:PatientLocationQueryResponse")
     @WebMethod(operationName = "RespondingGateway_PatientLocationQuery")
-    public Object respondingGatewayPatientLocationQuery(
+    Object respondingGatewayPatientLocationQuery(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-        String response
+        Object response
     );
 }

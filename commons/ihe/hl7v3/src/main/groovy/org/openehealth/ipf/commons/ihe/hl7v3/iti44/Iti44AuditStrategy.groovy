@@ -16,12 +16,12 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti44
 
 import groovy.util.slurpersupport.GPathResult
-
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 
 /**
  * @author Dmytro Rud
@@ -43,16 +43,16 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+        request = slurp(request)
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
 
-        GPathResult xml = slurp((String) request)
-        GPathResult regEvent = xml.controlActProcess.subject[0].registrationEvent
+        GPathResult regEvent = request.controlActProcess.subject[0].registrationEvent
 
         // request type
-        auditDataset.requestType = xml.name()
+        auditDataset.requestType = request.name()
 
         // message ID
-        auditDataset.messageId = idString(xml.id)
+        auditDataset.messageId = idString(request.id)
 
         // (actual) patient IDs --
         // potentially multiple for Add/Revise, single for Merge

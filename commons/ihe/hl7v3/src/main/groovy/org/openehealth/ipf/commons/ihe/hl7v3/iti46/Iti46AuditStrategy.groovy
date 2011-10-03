@@ -15,11 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti46
 
-import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 
@@ -44,15 +42,15 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+        request = slurp(request)
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
-        GPathResult xml = slurp((String) request)
 
         // message ID
-        auditDataset.messageId = idString(xml.id)
+        auditDataset.messageId = idString(request.id)
 
         // patient IDs
         def patientIds = [] as Set<String>
-        addPatientIds(xml.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
+        addPatientIds(request.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
         auditDataset.patientIds = patientIds.toArray()
     }
 

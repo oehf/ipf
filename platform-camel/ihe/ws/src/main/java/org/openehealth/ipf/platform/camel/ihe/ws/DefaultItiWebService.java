@@ -25,6 +25,7 @@ import javax.xml.ws.handler.MessageContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
+import org.apache.camel.StreamCache;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -111,5 +112,22 @@ public class DefaultItiWebService {
      */
     protected DefaultItiConsumer getConsumer() {
         return consumer;
+    }
+
+
+    /**
+     * Returns the resulting message body of the given Camel exchange.
+     * When the body is a {@link StreamCache}, it will be automatically reset.
+     * @param exchange
+     *      Camel exchange.
+     * @return
+     *      Resulting message body.
+     */
+    protected static Object prepareBody(Exchange exchange) {
+        Object body = Exchanges.resultMessage(exchange).getBody();
+        if (body instanceof StreamCache) {
+            ((StreamCache) body).reset();
+        }
+        return body;
     }
 }

@@ -29,7 +29,7 @@ public class Iti46Service extends DefaultHl7v3WebService implements Iti46PortTyp
     }
 
     @Override
-    public String recordRevised(String body) {
+    public Object recordRevised(Object body) {
         return doProcess(body);
     }
 }

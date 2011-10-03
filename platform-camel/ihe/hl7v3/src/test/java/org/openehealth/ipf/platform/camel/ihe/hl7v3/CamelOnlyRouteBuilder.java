@@ -53,6 +53,7 @@ public class CamelOnlyRouteBuilder extends SpringRouteBuilder {
                 .end()
             .process(iti47RequestValidator())
             .setHeader("myHeader", constant("content-1"))
+            .convertBodyTo(byte[].class)
             .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
             .process(typeAndHeaderChecker(MessageAdapter.class, "content-1"))
             .process(iti21RequestValidator())

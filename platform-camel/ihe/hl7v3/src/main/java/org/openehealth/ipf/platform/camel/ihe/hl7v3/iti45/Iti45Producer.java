@@ -22,7 +22,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 /**
  * The producer implementation for the ITI-45 component.
  */
-public class Iti45Producer extends DefaultItiProducer<String, String> {
+public class Iti45Producer extends DefaultItiProducer<Object, Object> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -35,7 +35,7 @@ public class Iti45Producer extends DefaultItiProducer<String, String> {
     }
 
     @Override
-    protected String callService(Object client, String body) {
-        return ((Iti45PortType) client).getIdentifiers(body);
+    protected Object callService(Object client, Object request) {
+        return ((Iti45PortType) client).getIdentifiers(request);
     }
 }

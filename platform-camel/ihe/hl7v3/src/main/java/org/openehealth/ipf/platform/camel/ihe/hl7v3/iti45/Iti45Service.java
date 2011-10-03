@@ -29,7 +29,7 @@ public class Iti45Service extends DefaultHl7v3WebService implements Iti45PortTyp
     }
 
     @Override
-    public String getIdentifiers(String body) {
-        return doProcess(body);
+    public Object getIdentifiers(Object request) {
+        return doProcess(request);
     }
 }

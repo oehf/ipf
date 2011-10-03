@@ -37,26 +37,26 @@ public interface Pcc1PortType extends Hl7v3ContinuationsPortType {
             output = "urn:hl7-org:v3:QUPC_IN043200UV01")
     @WebMethod(operationName = "ClinicalDataSource_QUPC_IN043100UV01",
                action = "urn:hl7-org:v3:QUPC_IN043100UV01")
-    String operation(
+    Object operation(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:pcc:qed:2007")
-        String request
+        Object request
     );
 
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue",
             output = "urn:hl7-org:v3:QUPC_IN043200UV01")
     @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Continue",
                action = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue")
-    String continuation(
+    Object continuation(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:pcc:qed:2007")
-        String request
+        Object request
     );
 
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel",
             output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "ClinicalDataSource_QUQI_IN000003UV01_Cancel",
                action = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel")
-    String cancel(
+    Object cancel(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:pcc:qed:2007")
-        String request
+        Object request
     );
 }

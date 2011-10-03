@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
  * The producer implementation for the ITI-55 component.
  * @author Dmytro Rud
  */
-public class Iti55Producer extends DefaultItiProducer<String, String> {
+public class Iti55Producer extends DefaultItiProducer<Object, Object> {
     
     /**
      * Constructs the producer.
@@ -38,7 +38,7 @@ public class Iti55Producer extends DefaultItiProducer<String, String> {
     
     
     @Override
-    protected String callService(Object client, String body) {
-        return ((Iti55PortType) client).respondingGatewayPRPAIN201305UV02(body);
+    protected Object callService(Object client, Object request) {
+        return ((Iti55PortType) client).respondingGatewayPRPAIN201305UV02(request);
     }
 }

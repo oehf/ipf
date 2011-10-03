@@ -30,17 +30,17 @@ public class Iti44Service extends DefaultHl7v3WebService implements Iti44XdsPort
     }
 
     @Override
-    public String recordAdded(String body) {
-        return doProcess(body);
+    public Object recordAdded(Object request) {
+        return doProcess(request);
     }
 
     @Override
-    public String recordRevised(String body) {
-        return doProcess(body);
+    public Object recordRevised(Object request) {
+        return doProcess(request);
     }
 
     @Override
-    public String duplicatesResolved(String body) {
-        return doProcess(body);
+    public Object duplicatesResolved(Object request) {
+        return doProcess(request);
     }
 }

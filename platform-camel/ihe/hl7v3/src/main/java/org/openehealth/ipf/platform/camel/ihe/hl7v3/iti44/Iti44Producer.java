@@ -17,14 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.GenericIti44PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * Producer implementation for the ITI-44 component (PIX Feed v3).
  */
-public class Iti44Producer extends DefaultItiProducer<String, String> {
+public class Iti44Producer extends DefaultItiProducer<Object, Object> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -37,9 +37,9 @@ public class Iti44Producer extends DefaultItiProducer<String, String> {
     }
 
     @Override
-    protected String callService(Object clientObject, String request) {
+    protected Object callService(Object clientObject, Object request) {
         GenericIti44PortType client = (GenericIti44PortType) clientObject;
-        String rootElementName = SoapUtils.getRootElementLocalName(request);
+        String rootElementName = XmlUtils.rootElementName(request).getLocalPart();
         if ("PRPA_IN201301UV02".equals(rootElementName)) {
             return client.recordAdded(request);
         }

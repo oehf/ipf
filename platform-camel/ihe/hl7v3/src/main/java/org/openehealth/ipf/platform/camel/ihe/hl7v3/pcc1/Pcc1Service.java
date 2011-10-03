@@ -29,17 +29,17 @@ public class Pcc1Service extends DefaultHl7v3WebService implements Pcc1PortType 
     }
 
     @Override
-    public String operation(String request) {
+    public Object operation(Object request) {
         return doProcess(request);
     }
 
     @Override
-    public String continuation(String request) {
+    public Object continuation(Object request) {
         return doProcess(request);
     }
 
     @Override
-    public String cancel(String request) {
+    public Object cancel(Object request) {
         return doProcess(request);
     }
 }

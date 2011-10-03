@@ -16,13 +16,11 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti47;
 
 import groovy.util.slurpersupport.GPathResult
-
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
-import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
 
 /**
  * @author Dmytro Rud
@@ -45,29 +43,30 @@ class Iti47AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+        request = slurp(request)
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
-        GPathResult xml = slurp((String) request)
+
+        GPathResult qbp = request.controlActProcess.queryByParameter
 
         // patient IDs from request
         def patientIds = [] as Set<String>
-        addPatientIds(xml.controlActProcess.queryByParameter.parameterList.livingSubjectId.value, patientIds)
+        addPatientIds(qbp.parameterList.livingSubjectId.value, patientIds)
         auditDataset.patientIds = patientIds.toArray() ?: null
 
         // dump of the "queryByParameter" element
-        auditDataset.requestPayload = SoapUtils.extractNonEmptyElement((String) request, 'queryByParameter')
+        auditDataset.requestPayload = render(qbp)
     }
 
 
     @Override
     void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset0) {
+        response = slurp(response)
         Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
         super.enrichDatasetFromResponse(response, auditDataset)
         
-        GPathResult xml = slurp((String) response)
-
         // patient IDs from response
         def patientIds = [] as Set<String>
-        addPatientIds(xml.controlActProcess.subject.registrationEvent.subject1.patient.id, patientIds)
+        addPatientIds(response.controlActProcess.subject.registrationEvent.subject1.patient.id, patientIds)
         if (auditDataset.patientIds) {
             patientIds.addAll(auditDataset.patientIds)
         }

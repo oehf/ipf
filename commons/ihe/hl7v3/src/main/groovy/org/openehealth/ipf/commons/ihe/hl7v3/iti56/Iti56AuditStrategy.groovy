@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 
 /**
@@ -66,7 +65,7 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
-        GPathResult patientId = slurp((String) request).RequestedPatientId
+        GPathResult patientId = slurp(request).RequestedPatientId
         auditDataset.patientIds = [iiToCx(patientId)]
     }
 

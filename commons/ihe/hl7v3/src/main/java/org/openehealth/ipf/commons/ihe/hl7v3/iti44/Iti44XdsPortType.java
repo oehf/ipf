@@ -32,24 +32,24 @@ public interface Iti44XdsPortType extends GenericIti44PortType {
     @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201301UV02", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "DocumentRegistry_PRPA_IN201301UV02", action = "urn:hl7-org:v3:PRPA_IN201301UV02")
-    String recordAdded(
+    Object recordAdded(
         @WebParam(partName = "Body", name = "PRPA_IN201301UV02", targetNamespace = "urn:hl7-org:v3")
-        String request
+        Object request
     );
 
     @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201302UV02", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "DocumentRegistry_PRPA_IN201302UV02", action = "urn:hl7-org:v3:PRPA_IN201302UV02")
-    String recordRevised(
+    Object recordRevised(
         @WebParam(partName = "Body", name = "PRPA_IN201302UV02", targetNamespace = "urn:hl7-org:v3")
-        String request
+        Object request
     );
 
     @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:PRPA_IN201304UV02", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "DocumentRegistry_PRPA_IN201304UV02", action = "urn:hl7-org:v3:PRPA_IN201304UV02")
-    String duplicatesResolved(
+    Object duplicatesResolved(
         @WebParam(partName = "Body", name = "PRPA_IN201304UV02", targetNamespace = "urn:hl7-org:v3")
-        String request
+        Object request
     );
 }

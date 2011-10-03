@@ -20,7 +20,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti44;
  * @author Dmytro Rud
  */
 public interface GenericIti44PortType {
-    String recordAdded(String request);
-    String recordRevised(String request);
-    String duplicatesResolved(String request);
+    Object recordAdded(Object request);
+    Object recordRevised(Object request);
+    Object duplicatesResolved(Object request);
 }

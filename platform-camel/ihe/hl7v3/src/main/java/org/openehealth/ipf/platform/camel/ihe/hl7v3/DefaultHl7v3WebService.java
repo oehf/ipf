@@ -20,7 +20,7 @@ import org.apache.camel.Exchange;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 /**
@@ -43,14 +43,14 @@ public class DefaultHl7v3WebService extends DefaultItiWebService {
      * @return
      *      XML payload of the HL7 v3 response message or an automatically generated NAK.
      */
-    protected String doProcess(String request) {
+    protected Object doProcess(Object request) {
         Exchange result = process(request);
         if(result.getException() != null) {
-            return Hl7v3NakFactory.createNak(request, result.getException(),
+            return Hl7v3NakFactory.createNak(XmlUtils.toString(request, null), result.getException(),
                     serviceInfo.getNakRootElementName(),
                     serviceInfo.isNakNeedControlActProcess());
         }
-        return Exchanges.resultMessage(result).getBody(String.class);
+        return prepareBody(result);
     }
 
     /**

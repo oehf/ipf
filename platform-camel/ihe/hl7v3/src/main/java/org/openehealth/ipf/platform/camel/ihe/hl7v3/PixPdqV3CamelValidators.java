@@ -178,7 +178,7 @@ abstract public class PixPdqV3CamelValidators {
             InteractionId interactionId,
             boolean request)
     {
-        String message = exchange.getIn().getBody(String.class);
+        Object message = exchange.getIn().getBody();
         VALIDATOR.validate(message, request
                 ? Hl7v3ValidationProfiles.getRequestValidationProfile(interactionId)
                 : Hl7v3ValidationProfiles.getResponseValidationProfile(interactionId));
