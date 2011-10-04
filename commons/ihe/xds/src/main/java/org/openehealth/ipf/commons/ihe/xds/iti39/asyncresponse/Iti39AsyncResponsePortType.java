@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti39.asyncresponse;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 
+import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -36,9 +37,10 @@ import javax.xml.ws.Action;
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti39AsyncResponsePortType {
 
+    @Oneway
     @Action(input = "urn:ihe:iti:2007:CrossGatewayRetrieveResponse")
     @WebMethod(operationName = "RespondingGateway_CrossGatewayRetrieve")
-    public Object documentRepositoryRetrieveDocumentSet(
+    public void documentRepositoryRetrieveDocumentSet(
             @WebParam(partName = "body", name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007")
             RetrieveDocumentSetResponseType body
     );

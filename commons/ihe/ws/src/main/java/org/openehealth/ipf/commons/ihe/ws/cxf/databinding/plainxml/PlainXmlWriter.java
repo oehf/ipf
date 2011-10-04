@@ -41,7 +41,6 @@ import java.util.Collection;
  *     <li>{@link Reader}</li>
  *     <li>DOM {@link Document}</li>
  *     <li>{@link Source}</li>
- *     <li>{@link PlainXmlDataBinding#EMPTY_BODY}</li>
  * </ul>
  *
  * @author Dmytro Rud
@@ -51,10 +50,6 @@ public class PlainXmlWriter implements DataWriter<XMLStreamWriter> {
     @Override
     public void write(Object obj, MessagePartInfo part, XMLStreamWriter writer) {
         try {
-            if (obj == PlainXmlDataBinding.EMPTY_BODY) {
-                return;
-            }
-
             if (obj instanceof String) {
                 obj = ((String) obj).getBytes();
             }

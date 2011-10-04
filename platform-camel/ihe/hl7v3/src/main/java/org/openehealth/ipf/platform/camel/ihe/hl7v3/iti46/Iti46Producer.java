@@ -35,7 +35,7 @@ public class Iti46Producer extends DefaultItiProducer<Object, Object> {
     }
 
     @Override
-    protected Object callService(Object client, Object body) {
-        return ((Iti46PortType) client).recordRevised(body);
+    protected Object callService(Object client, Object request) {
+        return ((Iti46PortType) client).recordRevised(request);
     }
 }

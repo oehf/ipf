@@ -21,7 +21,6 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 import org.openehealth.ipf.commons.xml.XmlYielder
-import groovy.xml.XmlUtil
 
 /*
  * Generic routines for HL7 v3 processing.

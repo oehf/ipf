@@ -29,11 +29,6 @@ import org.apache.cxf.service.Service;
  */
 public class PlainXmlDataBinding extends AbstractDataBinding {
 
-    /**
-     * Special value for intentionally empty message bodies.
-     */
-    public static final Object EMPTY_BODY = new Object();
-
     @SuppressWarnings("unchecked")
     @Override
     public <T> DataReader<T> createReader(Class<T> cls) {

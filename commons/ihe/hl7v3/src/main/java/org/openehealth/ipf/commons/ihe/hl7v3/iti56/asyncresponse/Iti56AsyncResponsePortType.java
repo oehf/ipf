@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse;
 
+import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -31,10 +32,10 @@ import javax.xml.ws.Action;
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti56AsyncResponsePortType {
 
-    //@Oneway
+    @Oneway
     @Action(input = "urn:ihe:iti:2009:PatientLocationQueryResponse")
     @WebMethod(operationName = "RespondingGateway_PatientLocationQuery")
-    Object respondingGatewayPatientLocationQuery(
+    void respondingGatewayPatientLocationQuery(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
         Object response
     );

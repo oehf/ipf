@@ -44,15 +44,10 @@
         <part name="body" element="ihe:RetrieveDocumentSetResponse"/>
     </message>
 
-    <message name="Dummy_Response_Message">
-        <part name="Body" element="ihe:rawData" />
-    </message>
-
     <portType name="RespondingGateway_Response_PortType">
         <operation name="RespondingGateway_CrossGatewayRetrieve">
             <input message="ihe:CrossGatewayRetrieveResponse_Message"
                    wsam:Action="urn:ihe:iti:2007:CrossGatewayRetrieveResponse"/>
-            <output message="ihe:Dummy_Response_Message" />
         </operation>
     </portType>
 
@@ -62,9 +57,6 @@
             <input>
                 <soap12:body use="literal"/>
             </input>
-            <output>
-                <soap12:body use="literal"/>
-            </output>
         </operation>
     </binding>
 

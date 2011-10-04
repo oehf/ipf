@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse;
 
+import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -31,10 +32,10 @@ import javax.xml.ws.Action;
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti55AsyncResponsePortType {
     
-    //@Oneway
+    @Oneway
     @Action(input = "urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery")
     @WebMethod(operationName = "RespondingGateway_PRPA_IN201305UV02")
-    Object respondingGatewayPRPAIN201305UV02(
+    void respondingGatewayPRPAIN201305UV02(
             @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009" )
             Object response
     );

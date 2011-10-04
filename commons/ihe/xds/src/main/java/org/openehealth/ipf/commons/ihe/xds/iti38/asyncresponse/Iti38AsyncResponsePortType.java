@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.iti38.asyncresponse;
 
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 
+import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -37,9 +38,10 @@ import javax.xml.ws.Action;
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface Iti38AsyncResponsePortType {
 
+    @Oneway
     @Action(input = "urn:ihe:iti:2007:CrossGatewayQueryResponse")
     @WebMethod(operationName = "RespondingGateway_CrossGatewayQuery")
-    public Object documentRegistryRegistryStoredQuery(
+    public void documentRegistryRegistryStoredQuery(
             @WebParam(partName = "Body",
                     name = "AdhocQueryResponse",
                     targetNamespace = "urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0")

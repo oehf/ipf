@@ -32,15 +32,11 @@
     <message name="PatientLocationQueryResponse_Message">
         <part name="Body" element="xcpd:rawData" />
     </message>
-    <message name="Dummy_Response_Message">
-        <part name="Body" element="xcpd:rawData" />
-    </message>
-    
+
     <portType name="RespondingGateway_Response_PortType">
 		<operation name="RespondingGateway_PatientLocationQuery">
 			<input message="xcpd:PatientLocationQueryResponse_Message" 
 		        wsam:Action="urn:ihe:iti:2009:PatientLocationQueryResponse"/>
-            <output message="xcpd:Dummy_Response_Message" />
 		</operation>
     </portType>
     
@@ -50,9 +46,6 @@
             <input>
                 <wsoap12:body use="literal" />
             </input>
-            <output>
-                <wsoap12:body use="literal" />
-            </output>
         </operation>
     </binding>
     

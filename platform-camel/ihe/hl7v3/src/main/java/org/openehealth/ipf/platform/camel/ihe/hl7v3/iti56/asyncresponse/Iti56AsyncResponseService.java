@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56.asyncresponse;
 
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncResponsePortType;
-import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
 
 /**
@@ -27,8 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebServi
 public class Iti56AsyncResponseService extends AsynchronousResponseItiWebService implements Iti56AsyncResponsePortType {
 
     @Override
-    public Object respondingGatewayPatientLocationQuery(Object response) {
+    public void respondingGatewayPatientLocationQuery(Object response) {
         process(response, null, ExchangePattern.InOnly);
-        return PlainXmlDataBinding.EMPTY_BODY;
     }
 }

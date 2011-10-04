@@ -26,8 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebServi
  */
 public class Iti38AsyncResponseService extends AsynchronousResponseItiWebService implements Iti38AsyncResponsePortType {
     @Override
-    public AdhocQueryResponse documentRegistryRegistryStoredQuery(AdhocQueryResponse response) {
+    public void documentRegistryRegistryStoredQuery(AdhocQueryResponse response) {
         process(response, null, ExchangePattern.InOnly);
-        return null;
     }
 }

@@ -26,8 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebServi
  */
 public class Iti39AsyncResponseService extends AsynchronousResponseItiWebService implements Iti39AsyncResponsePortType {
     @Override
-    public Object documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetResponseType response) {
+    public void documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetResponseType response) {
         process(response, null, ExchangePattern.InOnly);
-        return null;
     }
 }

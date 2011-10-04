@@ -92,11 +92,8 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
     protected void process(SoapMessage message) throws Exception {
         // partial responses are for us out of interest
         if (MessageUtils.isPartialResponse(message)) {
-            return;
-        }
-
-        Object response = extractPojo(message);
-        if (response == PlainXmlDataBinding.EMPTY_BODY) {
+            // workaround for https://issues.apache.org/jira/browse/CXF-3768
+            message.put(SoapMessage.RESPONSE_CODE, 202);
             return;
         }
 
@@ -137,6 +134,7 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
         // check whether the response POJO is available and
         // perform transaction-specific enrichment of the audit dataset
         Exchange exchange = message.getExchange();
+        Object response = extractPojo(message);
         WsAuditStrategy auditStrategy = getAuditStrategy();
 
         if ((message == exchange.getInFaultMessage())
