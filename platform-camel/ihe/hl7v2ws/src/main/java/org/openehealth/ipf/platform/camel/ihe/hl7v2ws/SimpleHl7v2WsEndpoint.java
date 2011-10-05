@@ -24,7 +24,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
@@ -38,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * Camel endpoint for HL7v2-WS transaction with a single operation.
  */
-public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<WsTransactionConfiguration> {
 
     private final Class<? extends AbstractHl7v2WebService> serviceClass;
 
@@ -58,7 +58,7 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
     public SimpleHl7v2WsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<ItiServiceInfo> component,
+            AbstractWsComponent<WsTransactionConfiguration> component,
             InterceptorProvider customInterceptors,
             Class<? extends AbstractHl7v2WebService> serviceClass)
     {

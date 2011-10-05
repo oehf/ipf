@@ -22,7 +22,7 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
@@ -36,7 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-47 transaction.
  */
-public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceInfo> {
+public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareWsTransactionConfiguration> {
 
     /**
      * Constructs the endpoint.

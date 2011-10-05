@@ -43,7 +43,7 @@ public class AcceptanceInterceptorUtils {
         // check input message
         AcceptanceCheckUtils.checkRequestAcceptance(
                 exchange.getIn().getBody(MessageAdapter.class),
-                interceptor.getTransactionConfiguration());
+                interceptor.getHl7v2TransactionConfiguration());
         
         // run the route
         interceptor.getWrappedProcessor().process(exchange);
@@ -63,6 +63,6 @@ public class AcceptanceInterceptorUtils {
         // check output message
         AcceptanceCheckUtils.checkResponseAcceptance(
                 Exchanges.resultMessage(exchange).getBody(MessageAdapter.class),
-                interceptor.getTransactionConfiguration());
+                interceptor.getHl7v2TransactionConfiguration());
     }
 }

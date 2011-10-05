@@ -39,9 +39,13 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class ItiServiceFactory {
     private static final Log log = LogFactory.getLog(ItiServiceFactory.class);
 
-    /** The service info. */
-    protected final ItiServiceInfo serviceInfo;
-    /** The service address. */
+    /**
+     * Transaction configuration.
+     */
+    protected final WsTransactionConfiguration wsTransactionConfiguration;
+    /**
+     * Service endpoint address.
+     */
     protected final String serviceAddress;
     /**
      * User-defined custom CXF interceptors.
@@ -58,7 +62,7 @@ public class ItiServiceFactory {
 
     /**
      * Constructs the factory.
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *          the info about the service to produce.
      * @param serviceAddress
      *          the address of the service that it should be published with.
@@ -71,13 +75,13 @@ public class ItiServiceFactory {
      *
      */
     public ItiServiceFactory(
-            ItiServiceInfo serviceInfo, 
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             WsAuditStrategy auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        this.serviceInfo = serviceInfo;
+        this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceAddress = serviceAddress;
         this.auditStrategy = auditStrategy;
         this.customInterceptors = customInterceptors;
@@ -100,7 +104,7 @@ public class ItiServiceFactory {
         ServerFactoryBean svrFactory = createServerFactory(serviceImplClass);
         svrFactory.setStart(true);
         svrFactory.create();
-        log.debug("Published webservice endpoint for: " + serviceInfo.getServiceName());
+        log.debug("Published webservice endpoint for: " + wsTransactionConfiguration.getServiceName());
         return serviceImplClass.cast(svrFactory.getServiceBean());
     }
 
@@ -134,20 +138,20 @@ public class ItiServiceFactory {
 
 
     private void configureService(ServerFactoryBean svrFactory, Object service) {
-        svrFactory.setServiceClass(serviceInfo.getServiceClass());
-        svrFactory.setServiceName(serviceInfo.getServiceName());
-        svrFactory.setWsdlLocation(serviceInfo.getWsdlLocation());
+        svrFactory.setServiceClass(wsTransactionConfiguration.getSei());
+        svrFactory.setServiceName(wsTransactionConfiguration.getServiceName());
+        svrFactory.setWsdlLocation(wsTransactionConfiguration.getWsdlLocation());
         svrFactory.setAddress(serviceAddress);
         svrFactory.setServiceBean(service);
         svrFactory.getFeatures().add(new WSAddressingFeature());
-        if (serviceInfo.isMtom()) {
+        if (wsTransactionConfiguration.isMtom()) {
             svrFactory.setProperties(Collections.<String, Object>singletonMap("mtom-enabled", "true"));
         }
     }
 
     private void configureBinding(ServerFactoryBean svrFactory) {
         SoapBindingConfiguration bindingConfig = new SoapBindingConfiguration();
-        bindingConfig.setBindingName(serviceInfo.getBindingName());
+        bindingConfig.setBindingName(wsTransactionConfiguration.getBindingName());
         svrFactory.setBindingConfig(bindingConfig);
     }
 
@@ -173,8 +177,8 @@ public class ItiServiceFactory {
     }
 
 
-    protected ItiServiceInfo getServiceInfo() {
-        return serviceInfo;
+    protected WsTransactionConfiguration getWsTransactionConfiguration() {
+        return wsTransactionConfiguration;
     }
 
 }

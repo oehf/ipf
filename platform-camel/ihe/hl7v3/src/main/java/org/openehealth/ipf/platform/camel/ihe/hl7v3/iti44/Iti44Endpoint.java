@@ -23,7 +23,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
@@ -35,7 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-44 transaction.
  */
-public class Iti44Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
+public class Iti44Endpoint extends DefaultItiEndpoint<Hl7v3WsTransactionConfiguration> {
 
     /**
      * Constructs the endpoint.
@@ -51,7 +51,7 @@ public class Iti44Endpoint extends DefaultItiEndpoint<Hl7v3ServiceInfo> {
     public Iti44Endpoint(
             String endpointUri,
             String address, 
-            AbstractWsComponent<Hl7v3ServiceInfo> component,
+            AbstractWsComponent<Hl7v3WsTransactionConfiguration> component,
             InterceptorProvider customInterceptors) 
     {
         super(endpointUri, address, component, customInterceptors);

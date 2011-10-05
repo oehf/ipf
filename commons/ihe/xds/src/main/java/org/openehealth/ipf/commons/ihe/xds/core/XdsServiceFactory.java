@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
@@ -36,7 +36,7 @@ public class XdsServiceFactory extends ItiServiceFactory {
 
     /**
      * Constructs the factory.
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *          the info about the service to produce.
      * @param auditStrategy
      *          the auditing strategy to use.
@@ -48,13 +48,13 @@ public class XdsServiceFactory extends ItiServiceFactory {
      *          user-defined rejection handling strategy.
      */
     public XdsServiceFactory(
-            ItiServiceInfo serviceInfo,
+            WsTransactionConfiguration wsTransactionConfiguration,
             XdsAuditStrategy auditStrategy,
             String serviceAddress,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(serviceInfo, serviceAddress, auditStrategy,
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy,
                 customInterceptors, rejectionHandlingStrategy);
     }
 
@@ -64,12 +64,12 @@ public class XdsServiceFactory extends ItiServiceFactory {
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            if (serviceInfo.isAuditRequestPayload()) {
+            if (wsTransactionConfiguration.isAuditRequestPayload()) {
                 svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
             }
 
             svrFactory.getInInterceptors().add(new AuditInRequestInterceptor(
-                    auditStrategy, getServiceInfo()));
+                    auditStrategy, getWsTransactionConfiguration()));
 
             AuditResponseInterceptor auditInterceptor =
                 new AuditResponseInterceptor(auditStrategy, true, null, false);

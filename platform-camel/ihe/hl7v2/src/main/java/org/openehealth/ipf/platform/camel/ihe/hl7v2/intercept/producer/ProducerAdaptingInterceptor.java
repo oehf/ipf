@@ -90,7 +90,7 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
         MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 characterSet(exchange),
-                getTransactionConfiguration().getParser());
+                getHl7v2TransactionConfiguration().getParser());
         
         if (msg == null) {
             Object body = exchange.getIn().getBody();

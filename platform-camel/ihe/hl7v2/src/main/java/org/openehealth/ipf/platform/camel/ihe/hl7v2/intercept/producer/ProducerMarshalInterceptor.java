@@ -56,6 +56,6 @@ public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
         // unmarshal
         message = Exchanges.resultMessage(exchange);
         String responseString = message.getBody(String.class);
-        message.setBody(MessageAdapters.make(getTransactionConfiguration().getParser(), responseString));
+        message.setBody(MessageAdapters.make(getHl7v2TransactionConfiguration().getParser(), responseString));
     }
 }

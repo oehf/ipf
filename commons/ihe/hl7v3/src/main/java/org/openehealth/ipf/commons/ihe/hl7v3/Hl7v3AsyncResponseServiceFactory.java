@@ -30,7 +30,7 @@ public class Hl7v3AsyncResponseServiceFactory extends Hl7v3ServiceFactory {
 
     /**
      * Constructs the factory.
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *          the info about the service to produce.
      * @param auditStrategy
      *          the auditing strategy to use.
@@ -42,13 +42,13 @@ public class Hl7v3AsyncResponseServiceFactory extends Hl7v3ServiceFactory {
      *          user-defined custom CXF interceptors.
      */
     public Hl7v3AsyncResponseServiceFactory(
-            Hl7v3ServiceInfo serviceInfo,
+            Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             Hl7v3AuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors)
     {
-        super(serviceInfo, serviceAddress, auditStrategy, customInterceptors, null);
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors, null);
         
         Validate.notNull(correlator);
         this.correlator = correlator;

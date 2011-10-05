@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -26,7 +26,7 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 abstract public class AbstractHl7v2WsComponent
-        extends AbstractWsComponent<ItiServiceInfo>
+        extends AbstractWsComponent<WsTransactionConfiguration>
         implements Hl7v2ConfigurationHolder
 {
 

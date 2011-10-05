@@ -23,14 +23,14 @@ import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 
 /**
  * Base component class for Web Service-based IHE components.
  * @author Dmytro Rud
  */
 @SuppressWarnings("deprecation")
-abstract public class AbstractWsComponent<C extends ItiServiceInfo> extends DefaultComponent {
+abstract public class AbstractWsComponent<C extends WsTransactionConfiguration> extends DefaultComponent {
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
         AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {};
@@ -53,6 +53,6 @@ abstract public class AbstractWsComponent<C extends ItiServiceInfo> extends Defa
 		return (List<Interceptor<? extends Message>>) (List<?>) param;
 	}
 
-    public abstract C getWebServiceConfiguration();
+    public abstract C getWsTransactionConfiguration();
     
 }

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
@@ -31,13 +31,14 @@ import javax.xml.namespace.QName;
  */
 public class Pcd01Component extends AbstractHl7v2WsComponent {
     private static final String NS_URI = "urn:ihe:pcd:dec:2010";
-    public static final ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+    public static final WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName(NS_URI, "DeviceObservationConsumer_Service", "ihe"),
             Pcd01PortType.class,
             new QName(NS_URI, "DeviceObservationConsumer_Binding_Soap12", "ihe"),
             false,
             "wsdl/pcd01/pcd01.wsdl",
             true,
+            false,
             false,
             false);
 
@@ -59,7 +60,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
 
 
     @Override
-    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return HL7V2_CONFIG;
     }
 
@@ -69,7 +70,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
     }
 
     @Override
-    public ItiServiceInfo getWebServiceConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 

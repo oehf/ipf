@@ -61,8 +61,8 @@ public abstract class AbstractHl7v2Interceptor implements Hl7v2Interceptor {
     }
 
     @Override
-    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
-        return configurationHolder.getTransactionConfiguration();
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+        return configurationHolder.getHl7v2TransactionConfiguration();
     }
 
     @Override

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-abstract public class AbstractIti44Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
+abstract public class AbstractIti44Component extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {

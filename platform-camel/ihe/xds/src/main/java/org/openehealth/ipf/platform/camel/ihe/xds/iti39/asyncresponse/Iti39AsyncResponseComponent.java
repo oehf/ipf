@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39.asyncresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.iti39.asyncresponse.Iti39AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -26,14 +26,15 @@ import java.util.Map;
 /**
  * The Camel component for the ITI-39 (XCA) async response.
  */
-public class Iti39AsyncResponseComponent extends AbstractWsComponent<ItiServiceInfo> {
-    private final static ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+public class Iti39AsyncResponseComponent extends AbstractWsComponent<WsTransactionConfiguration> {
+    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Response_Service", "ihe"),
             Iti39AsyncResponsePortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Response_Binding_Soap12", "ihe"),
             false,
             "wsdl/iti39-asyncresponse.wsdl",
             true,
+            false,
             false,
             false);
 
@@ -44,7 +45,7 @@ public class Iti39AsyncResponseComponent extends AbstractWsComponent<ItiServiceI
     }
 
     @Override
-    public ItiServiceInfo getWebServiceConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

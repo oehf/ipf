@@ -68,7 +68,7 @@ public class Iti10Component extends MllpComponent {
     }
     
     @Override
-    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return CONFIGURATION;
     }
 

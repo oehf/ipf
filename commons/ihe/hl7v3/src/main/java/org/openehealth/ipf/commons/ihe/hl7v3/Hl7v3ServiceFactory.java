@@ -35,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class Hl7v3ServiceFactory extends ItiServiceFactory {
     /**
      * Constructs the factory.
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *          the info about the service to produce.
      * @param serviceAddress
      *          the address of the service that it should be published with.
@@ -47,13 +47,13 @@ public class Hl7v3ServiceFactory extends ItiServiceFactory {
      *          user-defined rejection handling strategy.
      */
     public Hl7v3ServiceFactory(
-            Hl7v3ServiceInfo serviceInfo,
+            Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             Hl7v3AuditStrategy auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
-        super(serviceInfo, serviceAddress, auditStrategy,
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy,
                 customInterceptors, rejectionHandlingStrategy);
     }
     
@@ -68,7 +68,7 @@ public class Hl7v3ServiceFactory extends ItiServiceFactory {
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
             svrFactory.getInInterceptors().add(new AuditInRequestInterceptor(
-                    auditStrategy, getServiceInfo()));
+                    auditStrategy, getWsTransactionConfiguration()));
 
             AuditResponseInterceptor auditInterceptor =
                 new AuditResponseInterceptor(auditStrategy, true, null, false);

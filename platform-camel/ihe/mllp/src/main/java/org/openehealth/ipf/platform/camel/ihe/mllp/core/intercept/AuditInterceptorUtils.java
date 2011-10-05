@@ -100,7 +100,7 @@ public class AuditInterceptorUtils  {
             }
             
             String messageType = terser.get("MSH-9-1");
-            return interceptor.getMllpEndpoint().getTransactionConfiguration().isAuditable(messageType);
+            return interceptor.getMllpEndpoint().getHl7v2TransactionConfiguration().isAuditable(messageType);
         } catch (Exception e) {
             LOG.error("Exception when determining message auditability, no audit will be performed", e);
             return false;

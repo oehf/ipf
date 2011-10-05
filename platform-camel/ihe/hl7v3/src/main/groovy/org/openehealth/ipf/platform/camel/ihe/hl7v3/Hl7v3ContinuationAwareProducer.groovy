@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import groovy.xml.XmlUtil
@@ -55,12 +55,12 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.*
  * <code>&lt;String, String&gt;</code>.
  */
 class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> {
-    private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class);
+    private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class)
 
     private static final ThreadLocal<DocumentBuilder> DOM_BUILDERS = new DomBuildersThreadLocal()
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
-    private final Hl7v3ContinuationAwareServiceInfo serviceInfo;
+    private final Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration
 
     private final boolean supportContinuation
     private final boolean autoCancel
@@ -76,7 +76,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
      * Constructor.
      * @param endpoint
      * @param clientFactory
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *      parameters of the transaction served by this producer.
      * @param supportContinuation
      *      whether this producer should support HL7v3 continuation.
@@ -93,7 +93,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     public Hl7v3ContinuationAwareProducer(
             Hl7v3Endpoint endpoint,
             ItiClientFactory clientFactory,
-            Hl7v3ContinuationAwareServiceInfo serviceInfo,
+            Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration,
             boolean supportContinuation,
             boolean autoCancel,
             boolean validationOnContinuation,
@@ -101,8 +101,8 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     {
         super(endpoint, clientFactory)
 
-        Validate.notNull(serviceInfo)
-        this.serviceInfo = serviceInfo
+        Validate.notNull(wsTransactionConfiguration)
+        this.wsTransactionConfiguration = wsTransactionConfiguration
         this.supportContinuation = supportContinuation
         this.autoCancel = autoCancel
         this.validationOnContinuation = validationOnContinuation
@@ -123,7 +123,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
         Hl7v3ContinuationsPortType client = (Hl7v3ContinuationsPortType) clientObject
         String rootElementName = rootElementName(requestObject).localPart
         switch (rootElementName) {
-            case serviceInfo.mainRequestRootElementName:
+            case wsTransactionConfiguration.mainRequestRootElementName:
                 String requestString = toString(requestObject, null)
                 String responseString = client.operation(requestObject)
                 if (! supportContinuation) {
@@ -219,7 +219,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             // validate current fragment
             if (validationOnContinuation) {
                 VALIDATOR.validate(fragmentString,
-                        Hl7v3ValidationProfiles.getResponseValidationProfile(serviceInfo.getInteractionId()))
+                        Hl7v3ValidationProfiles.getResponseValidationProfile(wsTransactionConfiguration.interactionId))
             }
 
             Document fragment = DOM_BUILDERS.get().parse(new ByteArrayInputStream(fragmentString.getBytes()))
@@ -227,7 +227,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
             Element queryAck = getElementNS(controlActProcess, HL7V3_NSURI_SET, 'queryAck')
 
             // check whether the fragment is a valid and positive response
-            if ((fragment.documentElement.localName != serviceInfo.mainResponseRootElementName) ||
+            if ((fragment.documentElement.localName != wsTransactionConfiguration.mainResponseRootElementName) ||
                 (getAttribute(queryAck, 'queryResponseCode', 'code') != 'OK'))
             {
                 LOG.debug('Bad response type, continuation not possible')

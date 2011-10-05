@@ -26,7 +26,7 @@ public interface Hl7v2ConfigurationHolder {
     /**
      * Returns component configuration.
      */
-    public Hl7v2TransactionConfiguration getTransactionConfiguration();
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
 
     /**
      * Returns transaction-specific NAK factory.

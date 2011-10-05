@@ -19,7 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti18;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,8 +28,8 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the ITI-18 transaction.
  */
-public class Iti18Component extends AbstractWsComponent<ItiServiceInfo> {
-    private final static ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+public class Iti18Component extends AbstractWsComponent<WsTransactionConfiguration> {
+    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Service", "ihe"),
             Iti18PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "DocumentRegistry_Binding_Soap12", "ihe"),
@@ -37,7 +37,8 @@ public class Iti18Component extends AbstractWsComponent<ItiServiceInfo> {
             "wsdl/iti18.wsdl",
             true,
             false,
-            true);
+            true,
+            false);
 
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
@@ -46,7 +47,7 @@ public class Iti18Component extends AbstractWsComponent<ItiServiceInfo> {
     }
 
     @Override
-    public ItiServiceInfo getWebServiceConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

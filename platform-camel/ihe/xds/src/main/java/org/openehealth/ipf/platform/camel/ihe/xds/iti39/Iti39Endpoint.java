@@ -23,7 +23,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ClientAuditStrategy;
@@ -35,7 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The endpoint implementation for the ITI-39 component.
  */
-public class Iti39Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+public class Iti39Endpoint extends DefaultItiEndpoint<WsTransactionConfiguration> {
 
     public Iti39Endpoint(
             String endpointUri,

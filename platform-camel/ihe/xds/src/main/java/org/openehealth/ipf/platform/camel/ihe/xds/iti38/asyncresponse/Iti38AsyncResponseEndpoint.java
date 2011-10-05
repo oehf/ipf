@@ -22,7 +22,7 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
@@ -34,7 +34,7 @@ import java.net.URISyntaxException;
 /**
  * The Camel endpoint for the ITI-38 async response.
  */
-public class Iti38AsyncResponseEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+public class Iti38AsyncResponseEndpoint extends DefaultItiEndpoint<WsTransactionConfiguration> {
 
     /**
      * Constructs the endpoint.

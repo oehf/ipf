@@ -21,7 +21,7 @@ import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
@@ -62,13 +62,13 @@ public class Hl7v3ContinuationAwareWebService
 
     
     public Hl7v3ContinuationAwareWebService(
-            Hl7v3ContinuationAwareServiceInfo serviceInfo,
+            Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration,
             Hl7v3ContinuationStorage storage,
             int defaultThreshold,
             boolean validation,
             Hl7v3AuditStrategy auditStrategy)
     {
-        super(serviceInfo);
+        super(wsTransactionConfiguration)
 
         Validate.notNull(storage)
         this.storage = storage
@@ -118,7 +118,7 @@ public class Hl7v3ContinuationAwareWebService
     String process0(String requestString) {
         String rootElementName = rootElementName(requestString).localPart
         switch (rootElementName) {
-            case serviceInfo.mainRequestRootElementName:
+            case wsTransactionConfiguration.mainRequestRootElementName:
                 return operation0(requestString)
             case 'QUQI_IN000003UV01':
                 return continuation0(requestString)
@@ -147,7 +147,7 @@ public class Hl7v3ContinuationAwareWebService
             AddressingProperties apropos = messageContext.get(JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND)
             auditDataset.userId = apropos?.replyTo?.address?.value
 
-            if (serviceInfo.auditRequestPayload) {
+            if (wsTransactionConfiguration.auditRequestPayload) {
                 auditDataset.requestPayload = requestString
             }
 
@@ -158,7 +158,7 @@ public class Hl7v3ContinuationAwareWebService
         if (validation) {
             try {
                 VALIDATOR.validate(requestString,
-                        Hl7v3ValidationProfiles.getRequestValidationProfile(serviceInfo.getInteractionId()))
+                        Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
                 LOG.error('operation(): invalid request')
                 String nak = createNak(requestString, e)
@@ -174,7 +174,7 @@ public class Hl7v3ContinuationAwareWebService
         if (validation) {
             try {
                 VALIDATOR.validate(responseString,
-                        Hl7v3ValidationProfiles.getResponseValidationProfile(serviceInfo.getInteractionId()))
+                        Hl7v3ValidationProfiles.getResponseValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
                 LOG.error('operation(): invalid response')
                 String nak = createNak(requestString, e)
@@ -234,7 +234,7 @@ public class Hl7v3ContinuationAwareWebService
         if (validation) {
             try {
                 VALIDATOR.validate(requestString,
-                        Hl7v3ValidationProfiles.getRequestValidationProfile(serviceInfo.getInteractionId()))
+                        Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
                 LOG.error('continuation(): invalid request')
                 def nak = createNak(requestString, e)
@@ -289,7 +289,7 @@ public class Hl7v3ContinuationAwareWebService
         if (validation) {
             try {
                 VALIDATOR.validate(requestString,
-                        Hl7v3ValidationProfiles.getRequestValidationProfile(serviceInfo.getInteractionId()))
+                        Hl7v3ValidationProfiles.getRequestValidationProfile(wsTransactionConfiguration.interactionId))
             } catch (ValidationException e) {
                 LOG.error('cancel(): invalid request')
                 return createNak(requestString, e)

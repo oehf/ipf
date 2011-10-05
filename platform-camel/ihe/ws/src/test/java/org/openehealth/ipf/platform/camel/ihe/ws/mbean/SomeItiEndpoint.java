@@ -4,10 +4,10 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
-public class SomeItiEndpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+public class SomeItiEndpoint extends DefaultItiEndpoint<WsTransactionConfiguration> {
     
     @SuppressWarnings("unchecked")
     public SomeItiEndpoint(

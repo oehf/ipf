@@ -23,7 +23,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ClientAuditStrategy;
@@ -35,7 +35,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 /**
  * The Camel endpoint for the ITI-42 transaction.
  */
-public class Iti42Endpoint extends DefaultItiEndpoint<ItiServiceInfo> {
+public class Iti42Endpoint extends DefaultItiEndpoint<WsTransactionConfiguration> {
 
     /**
      * Constructs the endpoint.

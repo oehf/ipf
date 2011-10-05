@@ -16,14 +16,14 @@
 package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 
 import javax.xml.namespace.QName;
 
 /**
  * @author Dmytro Rud
  */
-public class Hl7v3ServiceInfo extends ItiServiceInfo {
+public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration {
 
     private final InteractionId interactionId;
     private final String nakRootElementName;
@@ -36,8 +36,8 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
      *      id of the interaction (transaction) which corresponds to this service info.
      * @param serviceName
      *      the qualified name of the service.
-     * @param serviceClass
-     *      the class of the service interface.
+     * @param sei
+     *      service endpoint interface.
      * @param bindingName
      *      the qualified name of the binding to use.
      * @param mtom
@@ -51,19 +51,23 @@ public class Hl7v3ServiceInfo extends ItiServiceInfo {
      *      of the request message will be included into the NAK.
      * @param auditRequestPayload
      *      whether request payload is needed for ATNA audit.
+     * @param supportAsynchrony
+     *      whether producers can request asynchronous responses via WSA.
      */
-    public Hl7v3ServiceInfo(
+    public Hl7v3WsTransactionConfiguration(
             InteractionId interactionId,
             QName serviceName,
-            Class<?> serviceClass,
+            Class<?> sei,
             QName bindingName,
             boolean mtom,
             String wsdlLocation,
             String nakRootElementName,
             boolean nakNeedControlActProcess,
-            boolean auditRequestPayload)
+            boolean auditRequestPayload,
+            boolean supportAsynchrony)
     {
-        super(serviceName, serviceClass, bindingName, mtom, wsdlLocation, true, false, auditRequestPayload);
+        super(serviceName, sei, bindingName, mtom, wsdlLocation,
+                true, false, auditRequestPayload, supportAsynchrony);
 
         this.interactionId = interactionId;
         this.nakRootElementName = nakRootElementName;

@@ -41,7 +41,7 @@ import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
@@ -107,7 +107,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
     
     @Override
     public void process(Exchange exchange) throws Exception {
-        log.debug("Calling web service on '" + getServiceInfo().getServiceName() + "' with " + exchange);
+        log.debug("Calling web service on '" + getWsTransactionConfiguration().getServiceName() + "' with " + exchange);
         
         // prepare
         InType body = exchange.getIn().getBody(inTypeClass);
@@ -267,7 +267,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
     /**
      * @return the info describing the Web Service.
      */
-    public ItiServiceInfo getServiceInfo() {
-        return clientFactory.getServiceInfo();
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
+        return clientFactory.getWsTransactionConfiguration();
     }
 }

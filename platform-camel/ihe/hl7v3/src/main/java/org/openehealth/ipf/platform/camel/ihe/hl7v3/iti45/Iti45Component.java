@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti45.Iti45PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,9 +28,9 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the ITI-45 transaction (PIX v3).
  */
-public class Iti45Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
+public class Iti45Component extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
     private static final String NS_URI = "urn:ihe:iti:pixv3:2007";
-    public static final Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+    public static final Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_45,
             new QName(NS_URI, "PIXManager_Service", "ihe"),
             Iti45PortType.class,
@@ -39,6 +39,7 @@ public class Iti45Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
             "wsdl/iti45/iti45-raw.wsdl",
             "PRPA_IN201310UV02",
             true,
+            false,
             false);
 
     @SuppressWarnings("unchecked") // Required because of base class
@@ -48,7 +49,7 @@ public class Iti45Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
     }
 
     @Override
-    public Hl7v3ServiceInfo getWebServiceConfiguration() {
+    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

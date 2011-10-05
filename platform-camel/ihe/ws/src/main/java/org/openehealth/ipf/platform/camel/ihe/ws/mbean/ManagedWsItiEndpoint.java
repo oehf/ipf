@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
 import org.apache.camel.management.mbean.ManagedEndpoint;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
@@ -29,12 +29,12 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 @Deprecated
 @ManagedResource("Managed IPF WS ITI Endpoint")
 public class ManagedWsItiEndpoint extends ManagedEndpoint {
-    private final ItiServiceInfo info;
+    private final WsTransactionConfiguration wsTransactionConfiguration;
 
-    public ManagedWsItiEndpoint(DefaultItiEndpoint<? extends ItiServiceInfo> endpoint,
-        ItiServiceInfo info) {
+    public ManagedWsItiEndpoint(DefaultItiEndpoint<? extends WsTransactionConfiguration> endpoint,
+        WsTransactionConfiguration wsTransactionConfiguration) {
         super(endpoint);
-        this.info = info;
+        this.wsTransactionConfiguration = wsTransactionConfiguration;
     }
     
     @ManagedAttribute(description = "Service Address")
@@ -59,21 +59,21 @@ public class ManagedWsItiEndpoint extends ManagedEndpoint {
     
     @ManagedAttribute(description = "Addressing Enabled")
     public boolean isAddressing() {
-        return getInfo().isAddressing();
+        return getWsTransactionConfiguration().isAddressing();
     }
     
     @ManagedAttribute(description = "Mtom Enabled")
     public boolean isMtom() {
-        return getInfo().isMtom();
+        return getWsTransactionConfiguration().isMtom();
     }
     
     @ManagedAttribute(description = "SOAP With Attachments Output Enabled")
     public boolean isSwaOutSupport() {
-        return getInfo().isSwaOutSupport();
+        return getWsTransactionConfiguration().isSwaOutSupport();
     }
 
-    public ItiServiceInfo getInfo() {
-        return info;
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
+        return wsTransactionConfiguration;
     }
     
     @Override

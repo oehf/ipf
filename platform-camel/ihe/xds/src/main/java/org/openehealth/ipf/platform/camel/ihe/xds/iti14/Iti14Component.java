@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti14;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.iti14.Iti14PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -27,13 +27,14 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the ITI-14 transaction.
  */
-public class Iti14Component extends AbstractWsComponent<ItiServiceInfo> {
-    private final static ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+public class Iti14Component extends AbstractWsComponent<WsTransactionConfiguration> {
+    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Service", "ihe"),
             Iti14PortType.class,
             new QName("urn:ihe:iti:xds:2007", "DocumentRegistry_Binding_Soap11", "ihe"),
             false,
             "wsdl/iti14.wsdl",
+            false,
             false,
             false,
             false);
@@ -45,7 +46,7 @@ public class Iti14Component extends AbstractWsComponent<ItiServiceInfo> {
     }
 
     @Override
-    public ItiServiceInfo getWebServiceConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,9 +28,9 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the ITI-55 transaction (XCPD).
  */
-public class Iti55Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
+public class Iti55Component extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    public final static Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+    public final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_55,
             new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
             Iti55PortType.class,
@@ -39,7 +39,8 @@ public class Iti55Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
             "wsdl/iti55/iti55-raw.wsdl",
             "PRPA_IN201306UV02",
             true,
-            false);
+            false,
+            true);
 
     /**
      * Name of Camel header where the contents of the incoming CorrelationTimeToLive
@@ -61,7 +62,7 @@ public class Iti55Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
     }
 
     @Override
-    public Hl7v3ServiceInfo getWebServiceConfiguration() {
+    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

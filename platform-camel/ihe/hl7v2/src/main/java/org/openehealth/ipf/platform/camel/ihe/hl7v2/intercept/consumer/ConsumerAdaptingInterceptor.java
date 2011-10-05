@@ -116,7 +116,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 m,
                 characterSet(exchange),
-                getTransactionConfiguration().getParser());
+                getHl7v2TransactionConfiguration().getParser());
         
         // additionally: an Exception in the body?
         if((msg == null) && (body instanceof Throwable)) {
@@ -159,7 +159,7 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
         } else {
             HL7v2Exception exception = new HL7v2Exception(
                     "HL7v2 processing failed",
-                    getTransactionConfiguration().getResponseErrorDefaultErrorCode());
+                    getHl7v2TransactionConfiguration().getResponseErrorDefaultErrorCode());
             ack = getNakFactory().createNak(
                     originalMessage,
                     exception, 

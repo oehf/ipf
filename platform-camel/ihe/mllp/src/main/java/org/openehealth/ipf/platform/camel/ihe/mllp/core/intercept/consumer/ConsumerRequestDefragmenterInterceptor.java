@@ -60,7 +60,7 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
     @Override
     public void process(Exchange exchange) throws Exception {
         String requestString = exchange.getIn().getBody(String.class);
-        Parser parser = getTransactionConfiguration().getParser();
+        Parser parser = getHl7v2TransactionConfiguration().getParser();
         Message requestMessage = parser.parse(requestString);
         Terser requestTerser = new Terser(requestMessage);
         String msh14 = requestTerser.get("MSH-14");

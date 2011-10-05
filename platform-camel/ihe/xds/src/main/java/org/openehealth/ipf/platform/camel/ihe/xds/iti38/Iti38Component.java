@@ -18,7 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti38;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -27,8 +27,8 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the ITI-38 transaction.
  */
-public class Iti38Component extends AbstractWsComponent<ItiServiceInfo> {
-    private final static ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+public class Iti38Component extends AbstractWsComponent<WsTransactionConfiguration> {
+    private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Service", "ihe"),
             Iti38PortType.class,
             new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Binding_Soap12", "ihe"),
@@ -36,6 +36,7 @@ public class Iti38Component extends AbstractWsComponent<ItiServiceInfo> {
             "wsdl/iti38.wsdl",
             true,
             false,
+            true,
             true);
 
     @Override
@@ -45,7 +46,7 @@ public class Iti38Component extends AbstractWsComponent<ItiServiceInfo> {
     }
 
     @Override
-    public ItiServiceInfo getWebServiceConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

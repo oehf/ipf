@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
@@ -35,7 +35,7 @@ public class XdsClientFactory extends ItiClientFactory {
     
     /**
      * Constructs the factory.
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *          the info about the web-service.
      * @param serviceAddress
      *          the URL of the web-service.
@@ -47,13 +47,13 @@ public class XdsClientFactory extends ItiClientFactory {
      *          user-defined custom CXF interceptors.
      */
     public XdsClientFactory(
-            ItiServiceInfo serviceInfo,
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             XdsAuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors) 
     {
-        super(serviceInfo, serviceAddress, auditStrategy, customInterceptors);
+        super(wsTransactionConfiguration, serviceAddress, auditStrategy, customInterceptors);
         this.correlator = correlator;
     }
 
@@ -65,12 +65,12 @@ public class XdsClientFactory extends ItiClientFactory {
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
-            if (serviceInfo.isAuditRequestPayload()) {
+            if (wsTransactionConfiguration.isAuditRequestPayload()) {
                 installPayloadInterceptors(client);
             }
 
             client.getOutInterceptors().add(new AuditOutRequestInterceptor(
-                    auditStrategy, correlator, getServiceInfo()));
+                    auditStrategy, correlator, getWsTransactionConfiguration()));
 
             AuditResponseInterceptor auditInterceptor =
                 new AuditResponseInterceptor(auditStrategy, false, correlator, false);

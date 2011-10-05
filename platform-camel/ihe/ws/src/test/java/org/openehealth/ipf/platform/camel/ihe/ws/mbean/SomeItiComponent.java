@@ -5,13 +5,13 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
-public class SomeItiComponent extends AbstractWsComponent<ItiServiceInfo> {
+public class SomeItiComponent extends AbstractWsComponent<WsTransactionConfiguration> {
     
     private static final String NS_URI = "urn:iti:some:mai:2011";
-    public static final ItiServiceInfo WS_CONFIG = new ItiServiceInfo(
+    public static final WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             new QName(NS_URI, "SomeConsumer_Service", "iti"),
             String.class,
             new QName(NS_URI, "SomeConsumer_Binding_Soap12", "iti"),
@@ -19,10 +19,11 @@ public class SomeItiComponent extends AbstractWsComponent<ItiServiceInfo> {
             "wsdl/some/some.wsdl",
             true,
             false,
+            false,
             false);
     
     @Override
-    public ItiServiceInfo getWebServiceConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
     

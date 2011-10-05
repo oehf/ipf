@@ -56,7 +56,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends Ab
      */
     @Override
     public void process(Exchange exchange) throws Exception {
-        Hl7v2TransactionConfiguration config = getTransactionConfiguration();
+        Hl7v2TransactionConfiguration config = getHl7v2TransactionConfiguration();
         MessageAdapter<?> request = exchange.getIn().getBody(MessageAdapter.class);
         
         Terser requestTerser = null;

@@ -37,7 +37,7 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
 
     /**
      * Constructs the factory.
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *          the info about the Web Service.
      * @param serviceUrl
      *          the URL of the Web Service.
@@ -49,13 +49,13 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
      *          user-defined custom CXF interceptors.
      */
     public Hl7v3ClientFactory(
-            Hl7v3ServiceInfo serviceInfo,
+            Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
             Hl7v3AuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors)
     {
-        super(serviceInfo, serviceUrl, auditStrategy, customInterceptors);
+        super(wsTransactionConfiguration, serviceUrl, auditStrategy, customInterceptors);
         this.correlator = correlator;
     }
 
@@ -73,7 +73,7 @@ public class Hl7v3ClientFactory extends ItiClientFactory {
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
             client.getOutInterceptors().add(new AuditOutRequestInterceptor(
-                    auditStrategy, correlator, getServiceInfo()));
+                    auditStrategy, correlator, getWsTransactionConfiguration()));
 
             AuditResponseInterceptor auditInterceptor =
                 new AuditResponseInterceptor(auditStrategy, false, correlator, false);

@@ -49,14 +49,14 @@ public class ItiClientFactory {
     private static final Log log = LogFactory.getLog(ItiClientFactory.class);
 
     protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<Object>();
-    protected final ItiServiceInfo serviceInfo;
+    protected final WsTransactionConfiguration wsTransactionConfiguration;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;
     protected final WsAuditStrategy auditStrategy;
 
     /**
      * Constructs the factory.
-     * @param serviceInfo
+     * @param wsTransactionConfiguration
      *          the info about the Web Service.
      * @param serviceUrl
      *          the URL of the Web Service.
@@ -66,13 +66,13 @@ public class ItiClientFactory {
      *          user-defined custom CXF interceptors.          
      */
     public ItiClientFactory(
-            ItiServiceInfo serviceInfo, 
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
             WsAuditStrategy auditStrategy,
             InterceptorProvider customInterceptors) 
     {
-        notNull(serviceInfo, "serviceInfo");
-        this.serviceInfo = serviceInfo;
+        notNull(wsTransactionConfiguration, "wsTransactionConfiguration");
+        this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceUrl = serviceUrl;
         this.auditStrategy = auditStrategy;
         this.customInterceptors = customInterceptors;
@@ -86,15 +86,15 @@ public class ItiClientFactory {
      */
     public synchronized Object getClient() {
         if (threadLocalPort.get() == null) {
-            URL wsdlURL = getClass().getClassLoader().getResource(serviceInfo.getWsdlLocation());
-            Service service = Service.create(wsdlURL, serviceInfo.getServiceName());
-            Object port = service.getPort(serviceInfo.getServiceClass());
+            URL wsdlURL = getClass().getClassLoader().getResource(wsTransactionConfiguration.getWsdlLocation());
+            Service service = Service.create(wsdlURL, wsTransactionConfiguration.getServiceName());
+            Object port = service.getPort(wsTransactionConfiguration.getSei());
             Client client = ClientProxy.getClient(port);
             configureBinding(port);
             configureInterceptors(client);
 
             threadLocalPort.set(port);
-            log.debug("Created client adapter for: " + serviceInfo.getServiceName());
+            log.debug("Created client adapter for: " + wsTransactionConfiguration.getServiceName());
         }        
         return threadLocalPort.get();
     }
@@ -103,8 +103,8 @@ public class ItiClientFactory {
     /**
      * @return the service info of this factory.
      */
-    public ItiServiceInfo getServiceInfo() {
-        return serviceInfo;
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
+        return wsTransactionConfiguration;
     }
 
 
@@ -113,7 +113,7 @@ public class ItiClientFactory {
      */
     protected void configureInterceptors(Client client) {
         // WS-Addressing-related interceptors
-        if (serviceInfo.isAddressing()) {
+        if (wsTransactionConfiguration.isAddressing()) {
             MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
             for (String nsUri : SoapUtils.WS_ADDRESSING_NS_URIS) {
                 interceptor.addHeader(new QName(nsUri, "Action"));
@@ -134,7 +134,7 @@ public class ItiClientFactory {
             client.getOutFaultInterceptors().add(mapAggregator);
         }
         
-        if (serviceInfo.isSwaOutSupport()) {
+        if (wsTransactionConfiguration.isSwaOutSupport()) {
             client.getOutInterceptors().add(new ProvidedAttachmentOutInterceptor());
             client.getOutInterceptors().add(new FixContentTypeOutInterceptor());            
         }
@@ -164,6 +164,6 @@ public class ItiClientFactory {
 
         Binding binding = bindingProvider.getBinding();
         SOAPBinding soapBinding = (SOAPBinding) binding;
-        soapBinding.setMTOMEnabled(serviceInfo.isMtom());
+        soapBinding.setMTOMEnabled(wsTransactionConfiguration.isMtom());
     }
 }

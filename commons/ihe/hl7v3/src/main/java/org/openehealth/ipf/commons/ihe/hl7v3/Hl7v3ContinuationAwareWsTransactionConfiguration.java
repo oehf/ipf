@@ -23,27 +23,29 @@ import javax.xml.namespace.QName;
 /**
  * @author Dmytro Rud
  */
-public class Hl7v3ContinuationAwareServiceInfo extends Hl7v3ServiceInfo {
+public class Hl7v3ContinuationAwareWsTransactionConfiguration extends Hl7v3WsTransactionConfiguration {
 
     private final String mainRequestRootElementName;
     private final String mainResponseRootElementName;
 
 
-    public Hl7v3ContinuationAwareServiceInfo(
+    public Hl7v3ContinuationAwareWsTransactionConfiguration(
             InteractionId interactionId,
             QName serviceName,
-            Class<?> serviceClass,
+            Class<?> sei,
             QName bindingName,
             boolean mtom,
             String wsdlLocation,
             String nakRootElementName,
             boolean nakNeedControlActProcess,
             boolean auditRequestPayload,
+            boolean supportAsynchrony,
             String mainRequestRootElementName,
             String mainResponseRootElementName)
     {
-        super(interactionId, serviceName, serviceClass, bindingName, mtom, wsdlLocation,
-                nakRootElementName, nakNeedControlActProcess, auditRequestPayload);
+        super(interactionId, serviceName, sei, bindingName, mtom, wsdlLocation,
+                nakRootElementName, nakNeedControlActProcess,
+                auditRequestPayload, supportAsynchrony);
 
         Validate.notEmpty(mainRequestRootElementName);
         Validate.notEmpty(mainResponseRootElementName);

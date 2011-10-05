@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.interceptor.DocLiteralInInterceptor;
 import org.apache.cxf.phase.Phase;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
 /**
@@ -29,15 +29,15 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  * @author Dmytro Rud
  */
 public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
-    private final ItiServiceInfo serviceInfo;
+    private final WsTransactionConfiguration wsTransactionConfiguration;
 
     /**
      * Constructor.
      */
-    public AuditInRequestInterceptor(WsAuditStrategy auditStrategy, ItiServiceInfo serviceInfo) {
+    public AuditInRequestInterceptor(WsAuditStrategy auditStrategy, WsTransactionConfiguration wsTransactionConfiguration) {
         super(Phase.UNMARSHAL, auditStrategy);
         addAfter(DocLiteralInInterceptor.class.getName());
-        this.serviceInfo = serviceInfo;
+        this.wsTransactionConfiguration = wsTransactionConfiguration;
     }
 
     
@@ -46,7 +46,7 @@ public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
         WsAuditDataset auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
         
-        if (serviceInfo.isAuditRequestPayload()) {
+        if (wsTransactionConfiguration.isAuditRequestPayload()) {
             auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));
         }
 

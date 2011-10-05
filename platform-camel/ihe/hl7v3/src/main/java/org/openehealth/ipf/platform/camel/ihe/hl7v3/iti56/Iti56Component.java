@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,9 +28,9 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the ITI-56 transaction (XCPD).
  */
-public class Iti56Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
+public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
-    public final static Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+    public final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_56,
             new QName(NS_URI, "RespondingGateway_Service", "xcpd"),
             Iti56PortType.class,
@@ -39,6 +39,7 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
             "wsdl/iti56/iti56-raw.wsdl",
             null,
             false,
+            true,
             true);
 
     @SuppressWarnings("unchecked") // Required because of base class
@@ -48,7 +49,7 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3ServiceInfo> {
     }
 
     @Override
-    public Hl7v3ServiceInfo getWebServiceConfiguration() {
+    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

@@ -307,8 +307,8 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      * Returns transaction configuration.
      */
     @Override
-    public Hl7v2TransactionConfiguration getTransactionConfiguration() {
-        return mllpComponent.getTransactionConfiguration();
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
+        return mllpComponent.getHl7v2TransactionConfiguration();
     }
 
     /**

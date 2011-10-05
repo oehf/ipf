@@ -21,7 +21,7 @@ import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.apache.cxf.ws.addressing.Names;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceInfo;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
 
@@ -34,7 +34,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  */
 public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
     private final AsynchronyCorrelator correlator;
-    private final ItiServiceInfo serviceInfo;
+    private final WsTransactionConfiguration wsTransactionConfiguration;
 
     /**
      * Constructor.
@@ -42,11 +42,11 @@ public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
     public AuditOutRequestInterceptor(
             WsAuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
-            ItiServiceInfo serviceInfo)
+            WsTransactionConfiguration wsTransactionConfiguration)
     {
         super(Phase.WRITE_ENDING, auditStrategy);
         this.correlator = correlator;
-        this.serviceInfo = serviceInfo;
+        this.wsTransactionConfiguration = wsTransactionConfiguration;
     }
 
     
@@ -60,7 +60,7 @@ public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
         // Get request payload, handle different variants thereby:
         //   a) for HL7v3-based transactions, payload corresponds to the "main" message;
         //   b) for ebXML-based transactions, rely on the {@link OutPayloadExtractorInterceptor}.
-        if (serviceInfo.isAuditRequestPayload()) {
+        if (wsTransactionConfiguration.isAuditRequestPayload()) {
             if (request instanceof String) {
                 auditDataset.setRequestPayload((String) request);
             } else {

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
  * Camel endpoint class for HL7v3-based IHE components.
  * @author Dmytro Rud
  */
-abstract public class Hl7v3Endpoint<C extends Hl7v3ServiceInfo> extends DefaultItiEndpoint<C> {
+abstract public class Hl7v3Endpoint<C extends Hl7v3WsTransactionConfiguration> extends DefaultItiEndpoint<C> {
 
     /**
      * Whether this endpoint should support HL7v3 continuation.

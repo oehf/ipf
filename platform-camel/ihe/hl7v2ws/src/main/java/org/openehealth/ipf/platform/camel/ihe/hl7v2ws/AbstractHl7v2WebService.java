@@ -59,7 +59,7 @@ public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
             throw new IllegalStateException("multiple calls to this method are not allowed");
         }
 
-        this.config = configurationHolder.getTransactionConfiguration();
+        this.config = configurationHolder.getHl7v2TransactionConfiguration();
         this.nakFactory = configurationHolder.getNakFactory();
     }
 

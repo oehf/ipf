@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,10 +28,10 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the PCC-1 transaction (QED).
  */
-public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareServiceInfo> {
+public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsTransactionConfiguration> {
 
     private final static String NS_URI = "urn:ihe:pcc:qed:2007";
-    public final static Hl7v3ContinuationAwareServiceInfo WS_CONFIG = new Hl7v3ContinuationAwareServiceInfo(
+    public final static Hl7v3ContinuationAwareWsTransactionConfiguration WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
             IpfInteractionId.PCC_1,
             new QName(NS_URI, "ClinicalDataSource_Service", "qed"),
             Pcc1PortType.class,
@@ -40,6 +40,7 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareSer
             "wsdl/pcc1/pcc1-raw.wsdl",
             "QUPC_IN043200UV01",
             true,
+            false,
             false,
             "QUPC_IN043100UV01",
             "QUPC_IN043200UV01");
@@ -51,7 +52,7 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareSer
     }
 
     @Override
-    public Hl7v3ContinuationAwareServiceInfo getWebServiceConfiguration() {
+    public Hl7v3ContinuationAwareWsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44PixPortType;
 
 import javax.xml.namespace.QName;
@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
  */
 public class Iti44PixComponent extends AbstractIti44Component {
     private static final String NS_URI_PIX = "urn:ihe:iti:pixv3:2007";
-    public static final Hl7v3ServiceInfo WS_CONFIG = new Hl7v3ServiceInfo(
+    public static final Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_44_PIX,
             new QName(NS_URI_PIX, "PIXManager_Service", "ihe"),
             Iti44PixPortType.class,
@@ -35,10 +35,11 @@ public class Iti44PixComponent extends AbstractIti44Component {
             "wsdl/iti44/iti44-pix-raw.wsdl",
             "MCCI_IN000002UV01",
             false,
+            false,
             false);
 
     @Override
-    public Hl7v3ServiceInfo getWebServiceConfiguration() {
+    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }

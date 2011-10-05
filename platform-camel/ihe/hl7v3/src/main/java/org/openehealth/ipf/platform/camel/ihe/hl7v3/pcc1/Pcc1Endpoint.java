@@ -22,7 +22,7 @@ import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
@@ -36,7 +36,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  * Camel endpoint for the PCC-1 transaction.
  * @author Dmytro Rud
  */
-public class Pcc1Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareServiceInfo> {
+public class Pcc1Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareWsTransactionConfiguration> {
 
     /**
      * Constructs the endpoint.

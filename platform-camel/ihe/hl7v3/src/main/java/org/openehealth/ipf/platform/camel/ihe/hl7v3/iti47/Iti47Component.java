@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareServiceInfo;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
@@ -28,10 +28,10 @@ import javax.xml.namespace.QName;
 /**
  * The Camel component for the ITI-47 transaction (PDQ v3).
  */
-public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareServiceInfo> {
+public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsTransactionConfiguration> {
 
     private final static String NS_URI = "urn:ihe:iti:pdqv3:2007";
-    public final static Hl7v3ContinuationAwareServiceInfo WS_CONFIG = new Hl7v3ContinuationAwareServiceInfo(
+    public final static Hl7v3ContinuationAwareWsTransactionConfiguration WS_CONFIG = new Hl7v3ContinuationAwareWsTransactionConfiguration(
             IpfInteractionId.ITI_47,
             new QName(NS_URI, "PDSupplier_Service", "ihe"),
             Iti47PortType.class,
@@ -40,6 +40,7 @@ public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareSe
             "wsdl/iti47/iti47-raw.wsdl",
             "PRPA_IN201306UV02",
             true,
+            false,
             false,
             "PRPA_IN201305UV02",
             "PRPA_IN201306UV02");
@@ -51,7 +52,7 @@ public class Iti47Component extends AbstractWsComponent<Hl7v3ContinuationAwareSe
     }
 
     @Override
-    public Hl7v3ContinuationAwareServiceInfo getWebServiceConfiguration() {
+    public Hl7v3ContinuationAwareWsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 }
