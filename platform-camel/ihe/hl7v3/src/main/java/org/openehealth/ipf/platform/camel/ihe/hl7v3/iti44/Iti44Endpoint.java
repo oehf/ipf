@@ -25,8 +25,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
@@ -59,7 +59,7 @@ public class Iti44Endpoint extends DefaultItiEndpoint<Hl7v3WsTransactionConfigur
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = new Hl7v3ClientFactory(
+        JaxWsClientFactory clientFactory = new Hl7v3ClientFactory(
                 getWebServiceConfiguration(),
                 getServiceUrl(),
                 isAudit() ? new Iti44AuditStrategy(false, isAllowIncompleteAudit()) : null,
@@ -70,7 +70,7 @@ public class Iti44Endpoint extends DefaultItiEndpoint<Hl7v3WsTransactionConfigur
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
+        JaxWsServiceFactory serviceFactory = new Hl7v3ServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
                 isAudit() ? new Iti44AuditStrategy(true, isAllowIncompleteAudit()) : null,

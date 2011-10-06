@@ -23,6 +23,8 @@ import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 
 /**
@@ -54,5 +56,7 @@ abstract public class AbstractWsComponent<C extends WsTransactionConfiguration> 
 	}
 
     public abstract C getWsTransactionConfiguration();
-    
+
+    public abstract JaxWsClientFactory getJaxWsClientFactory(DefaultItiEndpoint<C> endpoint);
+    public abstract JaxWsServiceFactory getJaxWsServiceFactory(DefaultItiEndpoint<C> endpoint);
 }

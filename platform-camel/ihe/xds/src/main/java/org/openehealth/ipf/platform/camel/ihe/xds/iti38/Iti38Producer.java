@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti38;
 
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
  */
 public class Iti38Producer extends DefaultItiProducer<AdhocQueryRequest, AdhocQueryResponse> {
 
-    public Iti38Producer(Iti38Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti38Producer(Iti38Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory, true);
     }
 

@@ -26,7 +26,7 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55AuditStrategy;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
@@ -63,7 +63,7 @@ public class Iti55AsyncResponseEndpoint extends DefaultItiEndpoint<Hl7v3WsTransa
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new Hl7v3AsyncResponseServiceFactory(
+        JaxWsServiceFactory serviceFactory = new Hl7v3AsyncResponseServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
                 isAudit() ? new Iti55AuditStrategy(false, isAllowIncompleteAudit()) : null,

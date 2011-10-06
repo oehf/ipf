@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import org.openehealth.ipf.commons.ihe.hl7v2ws.SimpleHl7v2WsPortType;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
  */
 public class SimpleHl7v2WsProducer extends DefaultItiProducer<String, String> {
 
-    public SimpleHl7v2WsProducer(DefaultItiEndpoint endpoint, ItiClientFactory clientFactory) {
+    public SimpleHl7v2WsProducer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 

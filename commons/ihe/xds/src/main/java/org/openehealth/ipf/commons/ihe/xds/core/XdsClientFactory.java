@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
  * @author Jens Riemschneide
  * @author Dmytro Rud
  */
-public class XdsClientFactory extends ItiClientFactory {
+public class XdsClientFactory extends JaxWsClientFactory {
     private final AsynchronyCorrelator correlator;
     
     /**

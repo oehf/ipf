@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
@@ -32,7 +32,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * Factory for HL7 v3 Web Service clients.
  * @author Dmytro Rud
  */
-public class Hl7v3ClientFactory extends ItiClientFactory {
+public class Hl7v3ClientFactory extends JaxWsClientFactory {
     private final AsynchronyCorrelator correlator;
 
     /**

@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti46;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.iti46.Iti46PortType;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
@@ -30,7 +30,7 @@ public class Iti46Producer extends DefaultItiProducer<Object, Object> {
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti46Producer(Iti46Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti46Producer(Iti46Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 

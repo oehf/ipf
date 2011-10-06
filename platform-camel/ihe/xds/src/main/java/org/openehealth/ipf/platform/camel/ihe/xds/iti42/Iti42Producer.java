@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
@@ -33,7 +33,7 @@ public class Iti42Producer extends DefaultItiProducer<SubmitObjectsRequest, Regi
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti42Producer(Iti42Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti42Producer(Iti42Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 

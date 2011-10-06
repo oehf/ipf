@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39;
 
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
@@ -26,7 +26,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
  */
 public class Iti39Producer extends DefaultItiProducer<RetrieveDocumentSetRequestType, RetrieveDocumentSetResponseType> {
 
-    public Iti39Producer(Iti39Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti39Producer(Iti39Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory, true);
     }
 

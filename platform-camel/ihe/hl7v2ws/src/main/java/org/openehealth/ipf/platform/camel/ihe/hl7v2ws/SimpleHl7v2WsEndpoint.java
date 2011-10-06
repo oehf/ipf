@@ -22,8 +22,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
@@ -82,7 +82,7 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<WsTransactionConfi
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = new ItiClientFactory(
+        JaxWsClientFactory clientFactory = new JaxWsClientFactory(
                 getWebServiceConfiguration(),
                 getServiceUrl(),
                 null,
@@ -93,7 +93,7 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<WsTransactionConfi
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new ItiServiceFactory(
+        JaxWsServiceFactory serviceFactory = new JaxWsServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
                 null,

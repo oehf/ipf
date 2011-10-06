@@ -21,7 +21,7 @@ import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsAsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
@@ -53,7 +53,7 @@ public class Iti38AsyncResponseEndpoint extends DefaultItiEndpoint<WsTransaction
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new XdsAsyncResponseServiceFactory(
+        JaxWsServiceFactory serviceFactory = new XdsAsyncResponseServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
                 isAudit() ? new Iti38ClientAuditStrategy(isAllowIncompleteAudit()) : null,

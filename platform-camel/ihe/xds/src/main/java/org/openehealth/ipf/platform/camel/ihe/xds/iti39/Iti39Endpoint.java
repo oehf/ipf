@@ -21,8 +21,8 @@ import org.apache.camel.Producer;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
@@ -49,7 +49,7 @@ public class Iti39Endpoint extends DefaultItiEndpoint<WsTransactionConfiguration
 
     @Override
     public Producer createProducer() throws Exception {
-        ItiClientFactory clientFactory = new XdsClientFactory(
+        JaxWsClientFactory clientFactory = new XdsClientFactory(
                 getWebServiceConfiguration(),
                 getServiceUrl(),
                 isAudit() ? new Iti39ClientAuditStrategy(isAllowIncompleteAudit()) : null,
@@ -61,7 +61,7 @@ public class Iti39Endpoint extends DefaultItiEndpoint<WsTransactionConfiguration
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
-        ItiServiceFactory serviceFactory = new XdsServiceFactory(
+        JaxWsServiceFactory serviceFactory = new XdsServiceFactory(
                 getWebServiceConfiguration(),
                 isAudit() ? new Iti39ServerAuditStrategy(isAllowIncompleteAudit()) : null,
                 getServiceAddress(),

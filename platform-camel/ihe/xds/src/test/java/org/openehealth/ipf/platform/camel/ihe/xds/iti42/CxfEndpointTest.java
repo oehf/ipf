@@ -23,8 +23,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.server.JettyServer;
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
@@ -85,7 +85,7 @@ public class CxfEndpointTest {
     public void test() throws Exception {
         runRequestAndExpectFailure();
 
-        ItiServiceFactory serviceFactory = new XdsServiceFactory(
+        JaxWsServiceFactory serviceFactory = new XdsServiceFactory(
                 Iti42Component.WS_CONFIG, null, "/iti-42", null, null);
         ServerFactoryBean factory = serviceFactory.createServerFactory(MyIti42.class);
         Server serviceServer = factory.create();
@@ -114,7 +114,7 @@ public class CxfEndpointTest {
     }
 
     private Response runRequest() {
-        ItiClientFactory clientFactory = new XdsClientFactory(
+        JaxWsClientFactory clientFactory = new XdsClientFactory(
                 Iti42Component.WS_CONFIG,
                 "http://localhost:" + port + "/iti-42",
                 null, null, null);

@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti16;
 
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16PortType;
@@ -32,7 +32,7 @@ public class Iti16Producer extends DefaultItiProducer<AdhocQueryRequest, Registr
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti16Producer(Iti16Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti16Producer(Iti16Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 

@@ -26,8 +26,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransaction
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareProducer;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
@@ -68,7 +68,7 @@ public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareWsTransac
         Iti47AuditStrategy auditStrategy = isAudit() ?
                 new Iti47AuditStrategy(false, isAllowIncompleteAudit()) : null;
 
-        ItiClientFactory clientFactory = new Hl7v3ClientFactory(
+        JaxWsClientFactory clientFactory = new Hl7v3ClientFactory(
                 getWebServiceConfiguration(),
                 getServiceUrl(),
                 isSupportContinuation() ? null : auditStrategy,
@@ -96,7 +96,7 @@ public class Iti47Endpoint extends Hl7v3Endpoint<Hl7v3ContinuationAwareWsTransac
         Iti47AuditStrategy auditStrategy = isAudit() ?
                 new Iti47AuditStrategy(true, isAllowIncompleteAudit()) : null;
 
-        ItiServiceFactory serviceFactory = new Hl7v3ServiceFactory(
+        JaxWsServiceFactory serviceFactory = new Hl7v3ServiceFactory(
                 getWebServiceConfiguration(),
                 getServiceAddress(),
                 isSupportContinuation() ? null : auditStrategy,

@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
@@ -31,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * Service factory for receivers of asynchronous XDS and XCA responses.
  * @author Dmytro Rud
  */
-public class XdsAsyncResponseServiceFactory extends ItiServiceFactory {
+public class XdsAsyncResponseServiceFactory extends JaxWsServiceFactory {
     private final AsynchronyCorrelator correlator;
 
     /**

@@ -21,7 +21,7 @@ import java.util.Map;
 import javax.activation.DataHandler;
 import javax.xml.ws.BindingProvider;
 
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
@@ -40,7 +40,7 @@ public class Iti15Producer extends DefaultItiProducer<ProvideAndRegisterDocument
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti15Producer(Iti15Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti15Producer(Iti15Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 

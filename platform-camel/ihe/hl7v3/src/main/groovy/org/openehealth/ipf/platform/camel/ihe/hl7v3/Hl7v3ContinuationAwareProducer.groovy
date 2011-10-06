@@ -23,7 +23,7 @@ import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -92,7 +92,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
      */
     public Hl7v3ContinuationAwareProducer(
             Hl7v3Endpoint endpoint,
-            ItiClientFactory clientFactory,
+            JaxWsClientFactory clientFactory,
             Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration,
             boolean supportContinuation,
             boolean autoCancel,

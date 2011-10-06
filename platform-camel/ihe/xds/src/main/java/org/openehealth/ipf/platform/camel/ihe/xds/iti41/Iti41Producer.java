@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41;
 
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41PortType;
@@ -33,7 +33,7 @@ public class Iti41Producer extends DefaultItiProducer<ProvideAndRegisterDocument
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti41Producer(Iti41Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti41Producer(Iti41Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 

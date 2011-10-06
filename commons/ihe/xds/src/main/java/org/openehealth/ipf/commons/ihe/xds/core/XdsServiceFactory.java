@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
@@ -32,7 +32,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * @author Jens Riemschneide
  * @author Dmytro Rud
  */
-public class XdsServiceFactory extends ItiServiceFactory {
+public class XdsServiceFactory extends JaxWsServiceFactory {
 
     /**
      * Constructs the factory.

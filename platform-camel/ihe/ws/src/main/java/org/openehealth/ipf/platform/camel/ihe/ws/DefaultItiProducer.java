@@ -40,7 +40,7 @@ import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -59,7 +59,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 public abstract class DefaultItiProducer<InType, OutType> extends DefaultProducer {
     private static final Log log = LogFactory.getLog(DefaultItiProducer.class);
 
-    private final ItiClientFactory clientFactory;
+    private final JaxWsClientFactory clientFactory;
     private final Class<InType> inTypeClass;
     private final boolean allowAsynchrony; 
     
@@ -72,7 +72,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public DefaultItiProducer(DefaultItiEndpoint endpoint, ItiClientFactory clientFactory) {
+    public DefaultItiProducer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
         this(endpoint, clientFactory, false);
     }
 
@@ -90,7 +90,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
     @SuppressWarnings("unchecked")
     public DefaultItiProducer(
             DefaultItiEndpoint endpoint, 
-            ItiClientFactory clientFactory,
+            JaxWsClientFactory clientFactory,
             boolean allowAsynchrony) 
     {
         super(endpoint);

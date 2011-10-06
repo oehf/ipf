@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.ItiServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
@@ -32,7 +32,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * Factory for HL7 v3 Web Services.
  * @author Dmytro Rud
  */
-public class Hl7v3ServiceFactory extends ItiServiceFactory {
+public class Hl7v3ServiceFactory extends JaxWsServiceFactory {
     /**
      * Constructs the factory.
      * @param wsTransactionConfiguration

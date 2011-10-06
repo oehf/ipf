@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti18;
 
-import org.openehealth.ipf.commons.ihe.ws.ItiClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
@@ -32,7 +32,7 @@ public class Iti18Producer extends DefaultItiProducer<AdhocQueryRequest, AdhocQu
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti18Producer(Iti18Endpoint endpoint, ItiClientFactory clientFactory) {
+    public Iti18Producer(Iti18Endpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory);
     }
 
