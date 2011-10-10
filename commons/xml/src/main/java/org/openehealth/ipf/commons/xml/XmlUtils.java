@@ -28,8 +28,8 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.StringReader;
 
 /**
  * Various XML utilities.
@@ -109,17 +109,18 @@ abstract public class XmlUtils {
                 return (Source) obj;
             }
 
-            if (obj instanceof String) {
-                String s = (String) obj;
-                obj = (charsetName != null) ? s.getBytes(charsetName) : s.getBytes();
+            if (obj instanceof InputStream) {
+                obj = IOUtils.toByteArray((InputStream) obj);
             }
 
             if (obj instanceof byte[]) {
-                obj = new ByteArrayInputStream((byte[]) obj);
+                obj = (charsetName != null) ? new String((byte[]) obj, charsetName)
+                                            : new String((byte[]) obj);
             }
 
-            if (obj instanceof InputStream) {
-                return new StreamSource((InputStream) obj);
+            if (obj instanceof String) {
+                String s = (String) obj;
+                return new StreamSource(new StringReader(s));
             }
 
             if (obj instanceof Document) {
@@ -187,13 +188,27 @@ abstract public class XmlUtils {
      *      element name.
      */
     public static QName rootElementName(Object obj) {
+        return rootElementName(obj, null);
+    }
+
+
+    /**
+     * Determines the name of the root element of the XML document contained in the given object.
+     * @param obj
+     *      an object whose type is supported by the method {@link #source}.
+     * @param encoding
+     *      charset encoding to initialize xml stream reader with.
+     * @return
+     *      element name.
+     */
+    public static QName rootElementName(Object obj, String encoding) {
         if (obj instanceof Document) {
             Element element = ((Document) obj).getDocumentElement();
             return new QName(element.getNamespaceURI(), element.getTagName());
         }
 
         try {
-            XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(source(obj, null));
+            XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(source(obj, encoding));
             while (reader.hasNext()) {
                 reader.next();
                 if (reader.getEventType() == XMLStreamConstants.START_ELEMENT) {
