@@ -27,12 +27,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegister
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 /**
  * The producer implementation for the ITI-15 component.
  */
-public class Iti15Producer extends DefaultItiProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponse> {
+public class Iti15Producer extends DefaultItiProducer {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -40,12 +41,13 @@ public class Iti15Producer extends DefaultItiProducer<ProvideAndRegisterDocument
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti15Producer(Iti15Endpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory);
+    public Iti15Producer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
+        super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class);
     }
 
     @Override
-    protected RegistryResponse callService(Object client, ProvideAndRegisterDocumentSetRequestType body) {
+    protected RegistryResponse callService(Object client, Object request) {
+        ProvideAndRegisterDocumentSetRequestType body = (ProvideAndRegisterDocumentSetRequestType) request;
         Map<String, DataHandler> attachments = new HashMap<String, DataHandler>();
         for (Document document : body.getDocument()) {
             attachments.put(document.getId(), document.getValue());

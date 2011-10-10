@@ -17,11 +17,13 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import org.openehealth.ipf.commons.ihe.hl7v2ws.pcd01.Pcd01PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WebService;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 import javax.xml.namespace.QName;
 
@@ -75,7 +77,17 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
     }
 
     @Override
-    protected Class<? extends AbstractHl7v2WebService> getServiceClass() {
-        return Pcd01Service.class;
+    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+        return null;   // not defined for this transaction
+    }
+
+    @Override
+    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+        return null;   // not defined for this transaction
+    }
+
+    @Override
+    public DefaultItiWebService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+        return new Pcd01Service();
     }
 }

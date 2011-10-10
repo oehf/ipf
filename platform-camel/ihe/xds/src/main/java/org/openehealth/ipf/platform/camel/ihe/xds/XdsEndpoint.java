@@ -1,11 +1,11 @@
 /*
- * Copyright 2010 the original author or authors.
+ * Copyright 2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3;
+package org.openehealth.ipf.platform.camel.ihe.xds;
 
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsClientFactory;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
 /**
- * Camel endpoint implementation for HL7v3-based IHE components.
+ * Camel Endpoint implementation for XDS-like transactions
+ * which have only a single Web Service operation.
  * @author Dmytro Rud
  */
-public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
-        extends DefaultItiEndpoint<AbstractWsComponent<ConfigType>>
-{
+public class XdsEndpoint extends DefaultItiEndpoint<AbstractWsComponent<?>> {
 
-    public Hl7v3Endpoint(
+    public XdsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<ConfigType> component,
+            AbstractWsComponent<?> component,
             InterceptorProvider customInterceptors)
     {
         super(endpointUri, address, component, customInterceptors);
@@ -44,7 +42,7 @@ public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
 
     @Override
     public JaxWsClientFactory getJaxWsClientFactory() {
-        return new Hl7v3ClientFactory(
+        return new XdsClientFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getComponent().getClientAuditStrategy(isAllowIncompleteAudit()) : null,
@@ -55,12 +53,11 @@ public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
 
     @Override
     public JaxWsServiceFactory getJaxWsServiceFactory() {
-        return new Hl7v3ServiceFactory(
+        return new XdsServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,
                 getCustomInterceptors(),
                 getRejectionHandlingStrategy());
     }
-
 }

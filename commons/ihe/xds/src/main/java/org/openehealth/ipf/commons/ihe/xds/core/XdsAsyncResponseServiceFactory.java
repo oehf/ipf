@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
@@ -50,7 +50,7 @@ public class XdsAsyncResponseServiceFactory extends JaxWsServiceFactory {
     public XdsAsyncResponseServiceFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            XdsAuditStrategy auditStrategy,
+            WsAuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors) 
     {

@@ -21,7 +21,14 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.DefaultHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 import javax.xml.namespace.QName;
 
@@ -48,11 +55,39 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Pcc1Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
     public Hl7v3ContinuationAwareWsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
+    }
+
+    @Override
+    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+        return null;   // ATNA audit is not defined for this transaction
+    }
+
+    @Override
+    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+        return null;   // ATNA audit is not defined for this transaction
+    }
+
+    @Override
+    public DefaultHl7v3WebService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+        Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
+        return endpoint2.isSupportContinuation() ?
+                new Pcc1ContinuationAwareService(endpoint2) :
+                new Pcc1Service();
+    }
+
+    @Override
+    public DefaultItiProducer getProducer(
+            DefaultItiEndpoint<?> endpoint,
+            JaxWsClientFactory clientFactory)
+    {
+        return new Hl7v3ContinuationAwareProducer(
+                (Hl7v3ContinuationAwareEndpoint) endpoint,
+                clientFactory);
     }
 }

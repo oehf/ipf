@@ -21,14 +21,12 @@ import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.apache.cxf.jaxws.context.WebServiceContextImpl
 import javax.xml.ws.handler.MessageContext
@@ -38,6 +36,7 @@ import org.apache.cxf.transport.http.AbstractHTTPDestination
 import org.apache.cxf.ws.addressing.AddressingProperties
 import org.apache.cxf.ws.addressing.JAXWSAConstants
 import static org.openehealth.ipf.commons.xml.XmlUtils.*
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -58,23 +57,19 @@ public class Hl7v3ContinuationAwareWebService
     private final Hl7v3ContinuationStorage storage
     private final int defaultThreshold
     private final boolean validation
-    private final Hl7v3AuditStrategy auditStrategy
+    private final WsAuditStrategy auditStrategy
 
     
-    public Hl7v3ContinuationAwareWebService(
-            Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration,
-            Hl7v3ContinuationStorage storage,
-            int defaultThreshold,
-            boolean validation,
-            Hl7v3AuditStrategy auditStrategy)
-    {
-        super(wsTransactionConfiguration)
+    public Hl7v3ContinuationAwareWebService(Hl7v3ContinuationAwareEndpoint endpoint) {
+        super(endpoint.component.wsTransactionConfiguration)
 
-        Validate.notNull(storage)
-        this.storage = storage
-        this.defaultThreshold = defaultThreshold
-        this.validation = validation
-        this.auditStrategy = auditStrategy
+        Validate.notNull(endpoint.continuationStorage)
+
+        this.storage          = endpoint.continuationStorage
+        this.defaultThreshold = endpoint.defaultContinuationThreshold
+        this.validation       = endpoint.validationOnContinuation
+        this.auditStrategy    = endpoint.manualAudit ?
+            endpoint.component.getServerAuditStrategy(endpoint.allowIncompleteAudit) : null
     }
 
 

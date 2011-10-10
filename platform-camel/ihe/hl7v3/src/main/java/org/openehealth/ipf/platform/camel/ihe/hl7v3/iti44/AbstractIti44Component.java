@@ -17,7 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti44.Iti44AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.DefaultHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 import java.util.Map;
 
@@ -28,6 +35,26 @@ abstract public class AbstractIti44Component extends AbstractWsComponent<Hl7v3Ws
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti44Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+    }
+
+    @Override
+    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti44AuditStrategy(false, allowIncompleteAudit);
+    }
+
+    @Override
+    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti44AuditStrategy(true, allowIncompleteAudit);
+    }
+
+    @Override
+    public DefaultHl7v3WebService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+        return new Iti44Service();
+    }
+
+    @Override
+    public DefaultItiProducer getProducer(DefaultItiEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+        return new Iti44Producer(endpoint, clientFactory);
     }
 }

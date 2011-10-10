@@ -31,7 +31,7 @@ public class WsTransactionConfiguration {
     private final boolean addressing;
     private final boolean swaOutSupport;
     private final boolean auditRequestPayload;
-    private final boolean supportAsynchrony;
+    private final boolean allowAsynchrony;
 
     /**
      * Constructs the service info.
@@ -51,7 +51,7 @@ public class WsTransactionConfiguration {
      *          <code>true</code> if this service requires SwA for its output.
      * @param auditRequestPayload
      *          <code>true</code> if this service must save payload in audit record.
-     * @param supportAsynchrony
+     * @param allowAsynchrony
      *      <code>true</code> if service producers should be allowed to request
      *      asynchronous responses via WS-Addressing &lt;ReplyTo&gt; header.
      *      (obviously does not make any sense when <code>addressing==false</code>).
@@ -64,7 +64,7 @@ public class WsTransactionConfiguration {
                                       boolean addressing,
                                       boolean swaOutSupport,
                                       boolean auditRequestPayload,
-                                      boolean supportAsynchrony)
+                                      boolean allowAsynchrony)
     {
         Validate.notNull(serviceName, "serviceName");
         Validate.notNull(sei, "service endpoint interface");
@@ -79,7 +79,7 @@ public class WsTransactionConfiguration {
         this.addressing = addressing;
         this.swaOutSupport = swaOutSupport;
         this.auditRequestPayload = auditRequestPayload;
-        this.supportAsynchrony = supportAsynchrony;
+        this.allowAsynchrony = allowAsynchrony;
     }
 
     /**
@@ -146,7 +146,7 @@ public class WsTransactionConfiguration {
      *      <code>true</code> if service producers sre allowed to request
      *      asynchronous responses via WS-Addressing &lt;ReplyTo&gt; header.
      */
-    public boolean isSupportAsynchrony() {
-        return supportAsynchrony;
+    public boolean isAllowAsynchrony() {
+        return allowAsynchrony;
     }
 }

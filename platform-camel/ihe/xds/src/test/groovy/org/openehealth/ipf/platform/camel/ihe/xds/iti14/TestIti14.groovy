@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti14
 
-import static org.junit.Assert.*
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
 
 import org.apache.cxf.transport.servlet.CXFServlet

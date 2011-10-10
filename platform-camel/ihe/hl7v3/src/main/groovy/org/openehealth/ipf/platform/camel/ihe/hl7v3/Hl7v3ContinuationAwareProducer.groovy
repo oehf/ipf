@@ -19,7 +19,6 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
 
 import groovy.util.slurpersupport.GPathResult
 import javax.xml.parsers.DocumentBuilder
-import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
@@ -35,7 +34,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransaction
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import groovy.xml.XmlUtil
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
+
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.apache.cxf.ws.addressing.AddressingProperties
@@ -43,6 +42,7 @@ import org.apache.cxf.ws.addressing.JAXWSAConstants
 import javax.xml.ws.BindingProvider
 import org.apache.cxf.message.Message
 import static org.openehealth.ipf.commons.xml.XmlUtils.*
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -54,7 +54,7 @@ import static org.openehealth.ipf.commons.xml.XmlUtils.*
  * due to Groovy peculiarities, in reality is should be
  * <code>&lt;String, String&gt;</code>.
  */
-class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> {
+class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class)
 
     private static final ThreadLocal<DocumentBuilder> DOM_BUILDERS = new DomBuildersThreadLocal()
@@ -66,50 +66,25 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer<Object, Object> 
     private final boolean autoCancel
     private final boolean validationOnContinuation
 
-    private final Hl7v3AuditStrategy auditStrategy
+    private final WsAuditStrategy auditStrategy
 
     // TODO: make this value configurable
     private final int defaultContinuationQuantity = 10
 
 
-    /**
-     * Constructor.
-     * @param endpoint
-     * @param clientFactory
-     * @param wsTransactionConfiguration
-     *      parameters of the transaction served by this producer.
-     * @param supportContinuation
-     *      whether this producer should support HL7v3 continuation.
-     * @param autoCancel
-     *      whether a "continuation cancel" message should be automatically
-     *      sent after the last fragment has been read
-     *      (relevant only when continuation support is turned on).
-     * @param validationOnContinuation
-     *      whether internally handled incoming messages should be validated.
-     * @param auditStrategy
-     *      client-side ATNA audit strategy; may be <code>null</code>;
-     *      will be used only when <code>supportContinuation==true</code>.
-     */
     public Hl7v3ContinuationAwareProducer(
-            Hl7v3Endpoint endpoint,
-            JaxWsClientFactory clientFactory,
-            Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration,
-            boolean supportContinuation,
-            boolean autoCancel,
-            boolean validationOnContinuation,
-            Hl7v3AuditStrategy auditStrategy)
+            Hl7v3ContinuationAwareEndpoint endpoint,
+            JaxWsClientFactory clientFactory)
     {
-        super(endpoint, clientFactory)
+        super(endpoint, clientFactory, Object.class)
 
-        Validate.notNull(wsTransactionConfiguration)
-        this.wsTransactionConfiguration = wsTransactionConfiguration
-        this.supportContinuation = supportContinuation
-        this.autoCancel = autoCancel
-        this.validationOnContinuation = validationOnContinuation
+        this.wsTransactionConfiguration = endpoint.component.wsTransactionConfiguration
+        this.supportContinuation        = endpoint.supportContinuation
+        this.autoCancel                 = endpoint.autoCancel
+        this.validationOnContinuation   = endpoint.validationOnContinuation
 
-        if (supportContinuation) {
-            this.auditStrategy = auditStrategy
-        }
+        this.auditStrategy = endpoint.manualAudit ?
+            endpoint.component.getClientAuditStrategy(endpoint.allowIncompleteAudit) : null
     }
 
 

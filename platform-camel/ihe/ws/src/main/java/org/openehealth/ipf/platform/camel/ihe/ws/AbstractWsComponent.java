@@ -24,15 +24,16 @@ import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.message.Message;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 
 /**
  * Base component class for Web Service-based IHE components.
  * @author Dmytro Rud
  */
-@SuppressWarnings("deprecation")
-abstract public class AbstractWsComponent<C extends WsTransactionConfiguration> extends DefaultComponent {
+abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfiguration>
+        extends DefaultComponent
+{
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
         AbstractBasicInterceptorProvider provider = new AbstractBasicInterceptorProvider() {};
@@ -55,8 +56,50 @@ abstract public class AbstractWsComponent<C extends WsTransactionConfiguration> 
 		return (List<Interceptor<? extends Message>>) (List<?>) param;
 	}
 
-    public abstract C getWsTransactionConfiguration();
+    /**
+     * @return
+     *      static configuration parameters of the Web Service which
+     *      server endpoints of this transaction.
+     */
+    public abstract ConfigType getWsTransactionConfiguration();
 
-    public abstract JaxWsClientFactory getJaxWsClientFactory(DefaultItiEndpoint<C> endpoint);
-    public abstract JaxWsServiceFactory getJaxWsServiceFactory(DefaultItiEndpoint<C> endpoint);
+    /**
+     * @param allowIncompleteAudit
+     *      whether incomplete ATNA audit records are allowed.
+     * @return
+     *      transaction-specific client-side ATNA audit strategy instance.
+     */
+    public abstract WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit);
+
+    /**
+     * @param allowIncompleteAudit
+     *      whether incomplete ATNA audit records are allowed.
+     * @return
+     *      transaction-specific server-side ATNA audit strategy instance.
+     */
+    public abstract WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit);
+
+    /**
+     * Constructs and returns a transaction-specific service class instance
+     * for the given endpoint.
+     * @param endpoint
+     *      Camel endpoint.
+     * @return
+     *      service class instance for the given endpoint.
+     */
+    public abstract DefaultItiWebService getServiceInstance(DefaultItiEndpoint<?> endpoint);
+
+    /**
+     * Constructs and returns a transaction-specific Camel producer instance
+     * for the given endpoint.
+     * @param endpoint
+     *      Camel endpoint.
+     * @param clientFactory
+     *      JAX-WS client factory instance.
+     * @return
+     *      Camel producer instance.
+     */
+    public abstract DefaultItiProducer getProducer(
+            DefaultItiEndpoint<?> endpoint,
+            JaxWsClientFactory clientFactory);
 }

@@ -17,10 +17,16 @@ package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import javax.xml.namespace.QName;
 
+import org.apache.camel.Consumer;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
@@ -32,7 +38,8 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF WS ITI Endpoint")
-public abstract class DefaultItiEndpoint<C extends WsTransactionConfiguration> extends DefaultEndpoint {
+public abstract class DefaultItiEndpoint<ComponentType extends AbstractWsComponent<?>>
+    extends DefaultEndpoint {
 
     private static final String ENDPOINT_PROTOCOL = "http://";
     private static final String ENDPOINT_PROTOCOL_SECURE = "https://";
@@ -99,22 +106,13 @@ public abstract class DefaultItiEndpoint<C extends WsTransactionConfiguration> e
     protected DefaultItiEndpoint(
             String endpointUri, 
             String address, 
-            AbstractWsComponent<C> component,
+            ComponentType component,
             InterceptorProvider customInterceptors) 
     {
         super(endpointUri, component);
         this.address = address;
         this.customInterceptors = customInterceptors;
         configure();
-    }
-
-    /**
-     * @return Web Service parameters of the component to
-     *      which this endpoint belongs.
-     */
-    @SuppressWarnings("unchecked")
-    protected C getWebServiceConfiguration() {
-        return ((AbstractWsComponent<C>) getComponent()).getWsTransactionConfiguration();
     }
 
     private void configure() {
@@ -258,13 +256,46 @@ public abstract class DefaultItiEndpoint<C extends WsTransactionConfiguration> e
         this.rejectionHandlingStrategy = rejectionHandlingStrategy;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public ComponentType getComponent() {
+        return (ComponentType) super.getComponent();
+    }
+
+    /**
+     * @return JAX-WS client object factory.
+     */
+    public abstract JaxWsClientFactory getJaxWsClientFactory();
+
+    /**
+     * @return JAX-WS service object factory.
+     */
+    public abstract JaxWsServiceFactory getJaxWsServiceFactory();
+
+
+    @Override
+    public Producer createProducer() throws Exception {
+        return getComponent().getProducer(this, getJaxWsClientFactory());
+    }
+
+
+    @Override
+    public Consumer createConsumer(Processor processor) throws Exception {
+        DefaultItiWebService serviceInstance = getComponent().getServiceInstance(this);
+        ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
+        Server server = serverFactory.create();
+        DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
+        return new DefaultItiConsumer(this, processor, service, server);
+    }
+
+
     //special managed attributes
     /**
      * @return <code>true</code> if WS-Addressing enabled.
      */
     @ManagedAttribute(description = "Addressing Enabled")
     public boolean isAddressing() {
-        return getWebServiceConfiguration().isAddressing();
+        return getComponent().getWsTransactionConfiguration().isAddressing();
     }
 
     /**
@@ -272,7 +303,7 @@ public abstract class DefaultItiEndpoint<C extends WsTransactionConfiguration> e
      */
     @ManagedAttribute(description = "Mtom Enabled")
     public boolean isMtom() {
-        return getWebServiceConfiguration().isMtom();
+        return getComponent().getWsTransactionConfiguration().isMtom();
     }
 
     /**
@@ -280,7 +311,7 @@ public abstract class DefaultItiEndpoint<C extends WsTransactionConfiguration> e
      */
     @ManagedAttribute(description = "SOAP With Attachments Output Enabled")
     public boolean isSwaOutSupport() {
-        return getWebServiceConfiguration().isSwaOutSupport();
+        return getComponent().getWsTransactionConfiguration().isSwaOutSupport();
     }
 
 

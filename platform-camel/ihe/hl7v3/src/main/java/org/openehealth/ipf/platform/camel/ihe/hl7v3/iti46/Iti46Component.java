@@ -20,8 +20,16 @@ import java.util.Map;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti46.Iti46AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti46.Iti46PortType;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.DefaultHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
 import javax.xml.namespace.QName;
 
@@ -45,11 +53,31 @@ public class Iti46Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti46Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
     public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
+    }
+
+    @Override
+    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti46AuditStrategy(false, allowIncompleteAudit);
+    }
+
+    @Override
+    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti46AuditStrategy(true, allowIncompleteAudit);
+    }
+
+    @Override
+    public DefaultHl7v3WebService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+        return new Iti46Service();
+    }
+
+    @Override
+    public DefaultItiProducer getProducer(DefaultItiEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+        return new SimpleWsProducer(endpoint, clientFactory);
     }
 }

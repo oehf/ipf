@@ -20,8 +20,14 @@ import java.util.Map;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55AsyncResponsePortType;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 import javax.xml.namespace.QName;
 
@@ -45,11 +51,34 @@ public class Iti55AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti55AsyncResponseEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3AsyncResponseEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
     public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
+    }
+
+    @Override
+    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+        return null;   // no producer support
+    }
+
+    @Override
+    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti55AuditStrategy(false, allowIncompleteAudit);
+    }
+
+    @Override
+    public Iti55AsyncResponseService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+        return new Iti55AsyncResponseService();
+    }
+
+    @Override
+    public DefaultItiProducer getProducer(
+            DefaultItiEndpoint<?> endpoint,
+            JaxWsClientFactory clientFactory)
+    {
+        throw new IllegalStateException("No producer support for asynchronous response endpoints");
     }
 }

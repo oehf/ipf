@@ -15,10 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1;
 
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareWebService;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationStorage;
 
 // The main purpose of this class is to add "implements Pcc1PortType"
 // to the class Hl7v3ContinuationAwareWebService, as required by CXF.
@@ -31,13 +30,7 @@ public class Pcc1ContinuationAwareService
         extends Hl7v3ContinuationAwareWebService
         implements Pcc1PortType
 {
-    public Pcc1ContinuationAwareService(
-            Hl7v3ContinuationStorage storage,
-            int defaultThreshold,
-            boolean validationOnContinuation,
-            Hl7v3AuditStrategy auditStrategy)
-    {
-        super(Pcc1Component.WS_CONFIG, storage, defaultThreshold,
-                validationOnContinuation, auditStrategy);
+    public Pcc1ContinuationAwareService(Hl7v3ContinuationAwareEndpoint endpoint) {
+        super(endpoint);
     }
 }

@@ -15,18 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import static org.apache.commons.lang3.Validate.notNull;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.soap.SOAPFaultException;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
@@ -45,36 +33,26 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.soap.SOAPFaultException;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
+
 /**
  * Camel producer used to make calls to a Web Service.
- * 
- * @param <InType>
- *            type of request messages (what the Camel route prepares).
- * @param <OutType>
- *            type of response messages (what the Camel route obtains after the call).
- * 
+ *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class DefaultItiProducer<InType, OutType> extends DefaultProducer {
+public abstract class DefaultItiProducer extends DefaultProducer {
     private static final Log log = LogFactory.getLog(DefaultItiProducer.class);
 
     private final JaxWsClientFactory clientFactory;
-    private final Class<InType> inTypeClass;
-    private final boolean allowAsynchrony; 
-    
-
-    /**
-     * Constructs the producer without support for asynchronous calls.
-     * 
-     * @param endpoint
-     *          the endpoint that creates this producer.
-     * @param clientFactory
-     *          the factory for clients to produce messages for the service.              
-     */
-    public DefaultItiProducer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        this(endpoint, clientFactory, false);
-    }
+    private final Class<?> requestClass;
 
     
     /**
@@ -84,24 +62,18 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
      *          the endpoint that creates this producer.
      * @param clientFactory
      *          the factory for clients to produce messages for the service.
-     * @param allowAsynchrony
-     *          whether asynchronous calls should be supported.
      */
     @SuppressWarnings("unchecked")
     public DefaultItiProducer(
             DefaultItiEndpoint endpoint, 
             JaxWsClientFactory clientFactory,
-            boolean allowAsynchrony) 
+            Class<?> requestClass)
     {
         super(endpoint);
-        notNull(clientFactory, "clientFactory cannot be null");
+        notNull(clientFactory, "client factory cannot be null");
+        notNull(requestClass, "request class cannot be null");
         this.clientFactory = clientFactory;
-        this.allowAsynchrony = allowAsynchrony;
-        
-        // get java.lang.Class object for the input type
-        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-        Type type = genericSuperclass.getActualTypeArguments()[0];
-        this.inTypeClass = (Class<InType>) type;
+        this.requestClass = requestClass;
     }
 
     
@@ -110,7 +82,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         log.debug("Calling web service on '" + getWsTransactionConfiguration().getServiceName() + "' with " + exchange);
         
         // prepare
-        InType body = exchange.getIn().getBody(inTypeClass);
+        Object body = exchange.getIn().getMandatoryBody(requestClass);
         Object client = getClient();
         configureClient(client);
         BindingProvider bindingProvider = (BindingProvider) client;
@@ -127,9 +99,9 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         }
 
         // get and analyse WS-Addressing asynchrony configuration
-        String replyToUri = 
-            allowAsynchrony 
-                    ? exchange.getIn().getHeader(DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME, String.class) 
+        String replyToUri =
+                getWsTransactionConfiguration().isAllowAsynchrony()
+                    ? exchange.getIn().getHeader(DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME, String.class)
                     : null; 
         if ((replyToUri != null) && replyToUri.trim().isEmpty()) {
             replyToUri = null;
@@ -154,7 +126,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
         
         // invoke
         exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
-        OutType result = null;
+        Object result = null;
         try {
              result = callService(client, body);
         } catch (SOAPFaultException fault) {
@@ -188,7 +160,7 @@ public abstract class DefaultItiProducer<InType, OutType> extends DefaultProduce
     /**
      * Sends the given request body to a Web Service via the given client proxy.
      */
-    protected abstract OutType callService(Object client, InType body);
+    protected abstract Object callService(Object client, Object body) throws Exception;
 
     
     /**

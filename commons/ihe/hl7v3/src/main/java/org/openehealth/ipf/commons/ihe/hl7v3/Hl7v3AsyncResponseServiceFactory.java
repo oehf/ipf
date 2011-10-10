@@ -20,6 +20,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 
 /**
  * Service factory for receivers of asynchronous XCPD responses.
@@ -44,7 +45,7 @@ public class Hl7v3AsyncResponseServiceFactory extends Hl7v3ServiceFactory {
     public Hl7v3AsyncResponseServiceFactory(
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            Hl7v3AuditStrategy auditStrategy,
+            WsAuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors)
     {

@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47;
 
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47PortType;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationStorage;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareWebService;
 
 // The main purpose of this class is to add "implements Iti47PortType"
@@ -31,13 +30,7 @@ public class Iti47ContinuationAwareService
         extends Hl7v3ContinuationAwareWebService
         implements Iti47PortType
 {
-    public Iti47ContinuationAwareService(
-            Hl7v3ContinuationStorage storage,
-            int defaultThreshold,
-            boolean validationOnContinuation,
-            Hl7v3AuditStrategy auditStrategy)
-    {
-        super(Iti47Component.WS_CONFIG, storage, defaultThreshold,
-                validationOnContinuation, auditStrategy);
+    public Iti47ContinuationAwareService(Hl7v3ContinuationAwareEndpoint endpoint) {
+        super(endpoint);
     }
 }

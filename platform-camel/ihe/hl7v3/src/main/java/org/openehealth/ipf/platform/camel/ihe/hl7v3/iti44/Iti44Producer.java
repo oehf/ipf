@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 /**
  * Producer implementation for the ITI-44 component (PIX Feed v3).
  */
-public class Iti44Producer extends DefaultItiProducer<Object, Object> {
+public class Iti44Producer extends DefaultItiProducer {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -33,7 +33,7 @@ public class Iti44Producer extends DefaultItiProducer<Object, Object> {
      *          the factory for clients to produce messages for the service.              
      */
     public Iti44Producer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory);
+        super(endpoint, clientFactory, Object.class);
     }
 
     @Override

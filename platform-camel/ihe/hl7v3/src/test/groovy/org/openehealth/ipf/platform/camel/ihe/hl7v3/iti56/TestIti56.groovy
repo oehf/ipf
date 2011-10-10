@@ -15,10 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.XcpdTestUtils.*
-
-import javax.xml.ws.soap.SOAPFaultException
-
 import org.apache.camel.ExchangePattern
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
@@ -27,6 +23,7 @@ import org.junit.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.apache.cxf.binding.soap.SoapFault
 
 /**
  * Tests for ITI-56.
@@ -91,7 +88,7 @@ class TestIti56 extends StandardTestContainer {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
         def responseExchange = producerTemplate.send(SERVICE_URI_ERROR, requestExchange)
-        assert responseExchange.exception instanceof SOAPFaultException
+        assert responseExchange.exception instanceof SoapFault
         assert responseExchange.exception.message == 'abcd'
     }
     
@@ -108,9 +105,10 @@ class TestIti56 extends StandardTestContainer {
     
     
     private void send(
-    String endpointUri,
-    int n,
-    String responseEndpointUri = null) {
+        String endpointUri,
+        int n,
+        String responseEndpointUri = null)
+    {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
         

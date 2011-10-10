@@ -31,7 +31,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 public class ManagedWsItiEndpoint extends ManagedEndpoint {
     private final WsTransactionConfiguration wsTransactionConfiguration;
 
-    public ManagedWsItiEndpoint(DefaultItiEndpoint<? extends WsTransactionConfiguration> endpoint,
+    public ManagedWsItiEndpoint(DefaultItiEndpoint<?> endpoint,
         WsTransactionConfiguration wsTransactionConfiguration) {
         super(endpoint);
         this.wsTransactionConfiguration = wsTransactionConfiguration;

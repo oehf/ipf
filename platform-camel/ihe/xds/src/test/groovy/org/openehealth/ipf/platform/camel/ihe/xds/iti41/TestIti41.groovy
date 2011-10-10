@@ -45,6 +45,7 @@ class TestIti41 extends StandardTestContainer {
 
     def request
     def docEntry
+
     static void main(args) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }

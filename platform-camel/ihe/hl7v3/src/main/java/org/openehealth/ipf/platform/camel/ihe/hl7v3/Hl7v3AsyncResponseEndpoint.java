@@ -16,8 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.cxf.interceptor.InterceptorProvider;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
@@ -25,14 +24,15 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
 /**
- * Camel endpoint implementation for HL7v3-based IHE components.
+ * Camel endpoint implementation for asynchronous response
+ * receivers of HL7v3-based IHE components.
  * @author Dmytro Rud
  */
-public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
+public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
         extends DefaultItiEndpoint<AbstractWsComponent<ConfigType>>
 {
 
-    public Hl7v3Endpoint(
+    public Hl7v3AsyncResponseEndpoint(
             String endpointUri,
             String address,
             AbstractWsComponent<ConfigType> component,
@@ -44,23 +44,18 @@ public class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
 
     @Override
     public JaxWsClientFactory getJaxWsClientFactory() {
-        return new Hl7v3ClientFactory(
-                getComponent().getWsTransactionConfiguration(),
-                getServiceUrl(),
-                isAudit() ? getComponent().getClientAuditStrategy(isAllowIncompleteAudit()) : null,
-                getCorrelator(),
-                getCustomInterceptors());
+        return null;   // no producer support
     }
 
 
     @Override
     public JaxWsServiceFactory getJaxWsServiceFactory() {
-        return new Hl7v3ServiceFactory(
+        return new Hl7v3AsyncResponseServiceFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceAddress(),
                 isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,
-                getCustomInterceptors(),
-                getRejectionHandlingStrategy());
+                getCorrelator(),
+                getCustomInterceptors());
     }
 
 }

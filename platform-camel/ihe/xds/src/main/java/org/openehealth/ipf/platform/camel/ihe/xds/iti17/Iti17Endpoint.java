@@ -19,6 +19,8 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.commons.lang3.Validate;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
 
 /**
@@ -58,5 +60,15 @@ public class Iti17Endpoint extends DefaultItiEndpoint {
         Validate.isTrue(this.activeConsumer == null || activeConsumer == null,
                 "Only one ITI-17 consumer can be active at any time");
         this.activeConsumer = activeConsumer;
+    }
+
+    @Override
+    public JaxWsClientFactory getJaxWsClientFactory() {
+        return null;   // dummy
+    }
+
+    @Override
+    public JaxWsServiceFactory getJaxWsServiceFactory() {
+        return null;   // dummy
     }
 }

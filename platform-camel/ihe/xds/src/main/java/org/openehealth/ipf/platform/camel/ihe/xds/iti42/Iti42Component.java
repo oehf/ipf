@@ -18,9 +18,17 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
+import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42ServerAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
 import javax.xml.namespace.QName;
 
@@ -42,11 +50,34 @@ public class Iti42Component extends AbstractWsComponent<WsTransactionConfigurati
     @Override
     @SuppressWarnings("unchecked") // Required because of base class
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti42Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new XdsEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
     public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
+    }
+
+    @Override
+    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti42ClientAuditStrategy(allowIncompleteAudit);
+    }
+
+    @Override
+    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+        return new Iti42ServerAuditStrategy(allowIncompleteAudit);
+    }
+
+    @Override
+    public Iti42Service getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+        return new Iti42Service();
+    }
+
+    @Override
+    public DefaultItiProducer getProducer(
+            DefaultItiEndpoint<?> endpoint,
+            JaxWsClientFactory clientFactory)
+    {
+        return new SimpleWsProducer(endpoint, clientFactory);
     }
 }

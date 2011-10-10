@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 
 /**
  * Client factory for XDS and XCA transactions.
@@ -49,7 +49,7 @@ public class XdsClientFactory extends JaxWsClientFactory {
     public XdsClientFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
-            XdsAuditStrategy auditStrategy,
+            WsAuditStrategy auditStrategy,
             AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors) 
     {

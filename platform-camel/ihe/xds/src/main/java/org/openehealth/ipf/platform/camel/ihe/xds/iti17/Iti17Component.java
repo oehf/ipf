@@ -16,8 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 
 import java.util.Map;
 
@@ -34,5 +39,25 @@ public class Iti17Component extends AbstractWsComponent<WsTransactionConfigurati
     @Override
     public WsTransactionConfiguration getWsTransactionConfiguration() {
         return null;
+    }
+
+    @Override
+    public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
+        return null;   // dummy
+    }
+
+    @Override
+    public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
+        return null;   // dummy
+    }
+
+    @Override
+    public DefaultItiWebService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+        return null;   // dummy
+    }
+
+    @Override
+    public DefaultItiProducer getProducer(DefaultItiEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+        return null;   // dummy
     }
 }

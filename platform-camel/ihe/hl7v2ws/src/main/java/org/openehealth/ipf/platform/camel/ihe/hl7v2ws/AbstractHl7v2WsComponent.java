@@ -16,9 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
 import org.apache.camel.Endpoint;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
 import java.util.Map;
 
@@ -37,10 +41,14 @@ abstract public class AbstractHl7v2WsComponent
                 uri,
                 remaining,
                 this,
-                getCustomInterceptors(parameters),
-                getServiceClass());
+                getCustomInterceptors(parameters));
     }
 
-
-    abstract protected Class<? extends AbstractHl7v2WebService> getServiceClass();
+    @Override
+    public DefaultItiProducer getProducer(
+            DefaultItiEndpoint<?> endpoint,
+            JaxWsClientFactory clientFactory)
+    {
+        return new SimpleWsProducer(endpoint, clientFactory);
+    }
 }

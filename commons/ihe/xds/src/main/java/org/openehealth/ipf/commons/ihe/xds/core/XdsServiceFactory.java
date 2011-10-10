@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 
 import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
@@ -38,10 +38,10 @@ public class XdsServiceFactory extends JaxWsServiceFactory {
      * Constructs the factory.
      * @param wsTransactionConfiguration
      *          the info about the service to produce.
-     * @param auditStrategy
-     *          the auditing strategy to use.
      * @param serviceAddress
      *          the address of the service that it should be published with.
+     * @param auditStrategy
+     *          the auditing strategy to use.
      * @param customInterceptors
      *          user-defined custom CXF interceptors.
      * @param rejectionHandlingStrategy
@@ -49,14 +49,15 @@ public class XdsServiceFactory extends JaxWsServiceFactory {
      */
     public XdsServiceFactory(
             WsTransactionConfiguration wsTransactionConfiguration,
-            XdsAuditStrategy auditStrategy,
             String serviceAddress,
+            WsAuditStrategy auditStrategy,
             InterceptorProvider customInterceptors,
             WsRejectionHandlingStrategy rejectionHandlingStrategy)
     {
         super(wsTransactionConfiguration, serviceAddress, auditStrategy,
                 customInterceptors, rejectionHandlingStrategy);
     }
+
 
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
