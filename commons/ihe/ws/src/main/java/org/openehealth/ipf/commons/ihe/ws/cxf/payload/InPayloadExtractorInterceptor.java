@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.interceptor.AttachmentInInterceptor;
@@ -81,7 +82,16 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
         }
 
         // optionally extract SOAP Body from the SOAP Envelope
-        String payload = new String(bytes);
+        String payload;
+        try {
+            String charsetName = (String) message.get(Message.ENCODING);
+            payload = (charsetName != null) ? new String(bytes, charsetName) : new String(bytes);
+        } catch (UnsupportedEncodingException e) {
+            // actually cannot occur, because non-supported encodings
+            // will cause exceptions a lot earlier
+            throw new RuntimeException(e);
+        }
+
         if (payloadType == PayloadType.SOAP_BODY) {
             payload = SoapUtils.extractSoapBody(payload);
         }
