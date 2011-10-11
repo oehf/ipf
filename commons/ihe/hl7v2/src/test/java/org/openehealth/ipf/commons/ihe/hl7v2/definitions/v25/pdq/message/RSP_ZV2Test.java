@@ -19,7 +19,9 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 import org.junit.Test;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.group.RSP_ZV2_QUERY_RESPONSE;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group.RSP_ZV2_QUERY_RESPONSE;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_ZV2;
+
 /**
  * Tests the fix of issue #69 (Problem with RSP_K21.getRSP_K21_QUERY_RESPONSE()) with the  
  * structure RSP_ZV2

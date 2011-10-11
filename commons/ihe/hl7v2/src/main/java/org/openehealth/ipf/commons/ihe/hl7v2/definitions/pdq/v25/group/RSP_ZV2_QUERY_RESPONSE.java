@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.group;
+package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.AbstractGroup;

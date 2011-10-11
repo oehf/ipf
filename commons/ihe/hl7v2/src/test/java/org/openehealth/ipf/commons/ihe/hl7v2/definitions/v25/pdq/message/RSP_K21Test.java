@@ -22,6 +22,8 @@ import static junit.framework.Assert.assertTrue;
 import org.junit.Test;
 
 import ca.uhn.hl7v2.model.v25.group.RSP_K21_QUERY_RESPONSE;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21;
+
 /**
  * Tests the fix of issue #69 (Problem with RSP_K21.getRSP_K21_QUERY_RESPONSE())
  * 

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.message;
+package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message;
 
 import java.util.Map;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.group.RSP_ZV2_QUERY_RESPONSE;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.segment.QPD;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group.RSP_ZV2_QUERY_RESPONSE;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import ca.uhn.hl7v2.HL7Exception;

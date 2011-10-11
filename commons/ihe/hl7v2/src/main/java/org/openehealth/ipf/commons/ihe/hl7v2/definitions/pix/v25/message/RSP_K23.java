@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,53 +13,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pix.message;
-
-import java.util.Map;
-
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pix.segment.QPD;
-import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
+package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message;
 
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Structure;
-import ca.uhn.hl7v2.model.v25.segment.DSC;
-import ca.uhn.hl7v2.model.v25.segment.SFT;
-import ca.uhn.hl7v2.model.v25.segment.MSH;
-import ca.uhn.hl7v2.model.v25.segment.RCP;
+import ca.uhn.hl7v2.model.v25.group.RSP_K23_QUERY_RESPONSE;
+import ca.uhn.hl7v2.model.v25.segment.*;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment.QPD;
+import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
+
+import java.util.Map;
 
 /**
- * <p>Represents a QBP_Q21 message structure (see chapter 3.3.56). This structure contains the
+ * <p>Represents a RSP_K23 message structure (see chapter 3.3.58). This structure contains the
  * following elements: </p>
- * 0: MSH (Message Header) <b></b><br>
- * 1: SFT (Software Segment) <b>optional repeating</b><br>
- * 2: QPD (Query Parameter Definition) <b></b><br>
- * 3: RCP (Response Control Parameter) <b></b><br>
- * 4: DSC (Continuation Pointer) <b>optional </b><br>
+ * <ul>
+ * <li>1: MSH (Message Header) <b> </b></li>
+ * <li>2: SFT (Software Segment) <b>optional repeating</b></li>
+ * <li>3: MSA (Message Acknowledgment) <b> </b></li>
+ * <li>4: ERR (Error) <b>optional </b></li>
+ * <li>5: QAK (Query Acknowledgment) <b> </b></li>
+ * <li>6: QPD (Query Parameter Definition) <b> </b></li>
+ * <li>7: RSP_K23_QUERY_RESPONSE (a Group object) <b>optional </b></li>
+ * <li>8: DSC (Continuation Pointer) <b>optional </b></li>
+ * </ul>
  */
 @SuppressWarnings("serial")
-public class QBP_Q21 extends AbstractMessage {
+public class RSP_K23 extends AbstractMessage {
     /**
-      * Creates a new QBP_Q21 Group with custom ModelClassFactory.
+      * Creates a new RSP_K23 Group with custom ModelClassFactory.
       */
-    public QBP_Q21(ModelClassFactory factory) {
+    public RSP_K23(ModelClassFactory factory) {
         super(factory);
     }
 
     /**
-      * Creates a new QBP_Q21 Group with DefaultModelClassFactory.
+      * Creates a new RSP_K23 Group with DefaultModelClassFactory.
       */
-    public QBP_Q21() {
+    public RSP_K23() {
         super();
     }
 
     @Override
     protected Map<Class<? extends Structure>, Cardinality> structures(
-              Map<Class<? extends Structure>, Cardinality> s) {
+              Map<Class<? extends Structure>, Cardinality> s)
+    {
         s.put(MSH.class, Cardinality.REQUIRED);
         s.put(SFT.class, Cardinality.OPTIONAL_REPEATING);
+        s.put(MSA.class, Cardinality.REQUIRED);
+        s.put(ERR.class, Cardinality.OPTIONAL);
+        s.put(QAK.class, Cardinality.REQUIRED);
         s.put(QPD.class, Cardinality.REQUIRED);
-        s.put(RCP.class, Cardinality.REQUIRED);
+        s.put(RSP_K23_QUERY_RESPONSE.class, Cardinality.OPTIONAL);
         s.put(DSC.class, Cardinality.OPTIONAL);
         return s;
     }
@@ -97,6 +103,27 @@ public class QBP_Q21 extends AbstractMessage {
     }
 
     /**
+      * Returns MSA (Message Acknowledgment) - creates it if necessary
+      */
+    public MSA getMSA() {
+        return get(MSA.class);
+    }
+
+    /**
+      * Returns ERR (Error) - creates it if necessary
+      */
+    public ERR getERR() {
+        return get(ERR.class);
+    }
+
+    /**
+      * Returns QAK (Query Acknowledgment) - creates it if necessary
+      */
+    public QAK getQAK() {
+        return get(QAK.class);
+    }
+
+    /**
       * Returns QPD (Query Parameter Definition) - creates it if necessary
       */
     public QPD getQPD() {
@@ -104,10 +131,10 @@ public class QBP_Q21 extends AbstractMessage {
     }
 
     /**
-      * Returns RCP (Response Control Parameter) - creates it if necessary
+      * Returns RSP_K23_QUERY_RESPONSE (a Group object) - creates it if necessary
       */
-    public RCP getRCP() {
-        return get(RCP.class);
+    public RSP_K23_QUERY_RESPONSE getRSP_K23_QUERY_RESPONSE() {
+        return get(RSP_K23_QUERY_RESPONSE.class);
     }
 
     /**
