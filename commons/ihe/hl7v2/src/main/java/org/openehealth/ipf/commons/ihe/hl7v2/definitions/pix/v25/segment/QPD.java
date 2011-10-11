@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.segment;
+package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.segment;
 
 import java.util.Collection;
 
+import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.model.Varies;
-import ca.uhn.hl7v2.model.v25.datatype.*;
-
-import ca.uhn.log.HapiLogFactory;
+import ca.uhn.hl7v2.model.v25.datatype.CE;
+import ca.uhn.hl7v2.model.v25.datatype.CX;
+import ca.uhn.hl7v2.model.v25.datatype.ST;
 import ca.uhn.hl7v2.parser.ModelClassFactory;
-import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.log.HapiLogFactory;
 import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
 
 
@@ -33,11 +33,9 @@ import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
  * The fields contained in this segment:</p><p>
  * QPD-1: Message Query Name (CE)<br>
  * QPD-2: Query Tag (ST)<br>
- * QPD-3: Hierarchic Designator (HD)<br>
- * QPD-4: Query Input Parameter List (QIP)<br>
- * QPD-5,6,7: User Parameters (in successive fields) (varies)<br>
- * QPD-8: Extended Composite ID with Check Digit (CX)<br>
- */
+ * QPD-3: PIX Query parameter<br>
+ * QPD-4: What domains returned
+  */
 @SuppressWarnings("serial")
 public class QPD extends AbstractSegment {
 
@@ -49,14 +47,10 @@ public class QPD extends AbstractSegment {
         super(parentGroup, modelFactory);
         Message msg = getMessage();
         try {
-            add("CE", true, 1, 250, new Object[]{msg});
-            add("ST", false, 1, 32, new Object[]{msg});
-            add("HD", true, 0, 256, new Object[]{msg});
-            add("QIP", false, 0, 256, new Object[]{msg});
-            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
-            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
-            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
-            add("CX", true, 0, 256, new Object[]{msg}, null);
+        	add("CE", true, 1, 250, new Object[]{msg});
+            add("ST", true, 1, 32, new Object[]{msg});
+            add("CX", true, 1, 256, new Object[]{msg});
+            add("CX", false, 0, 256, new Object[]{msg});
         } catch (HL7Exception e) {
             HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), e);
         }
@@ -77,34 +71,26 @@ public class QPD extends AbstractSegment {
     }
 
     /**
-     * Returns Demographics Fields (QPD-3).
+     * Returns Person identifier (QPD-3).
      */
-    public QIP getDemographicsFields(int rep) {
-        return getTypedField(3, rep);
+    public CX getPersonIdentifier() {
+        return getTypedField(3, 0);
     }
 
     /**
-     * Returns Demographics Fields (QPD-3).
-     */
-    public QIP[] getDemographicsFields() {
-        Collection<QIP> result = getTypedField(3);
-        return result.toArray(new QIP[result.size()]);
-    }
-
-    /**
-     * Returns What Domains to be returned (QPD-8).
+     * Returns What Domains to be returned (QPD-4).
      */
     public CX getWhatDomainsReturned(int rep) {
-        return getTypedField(8, rep);
+        return getTypedField(4, rep);
     }
 
     /**
-     * Returns What Domains to be returned (QPD-8).
+     * Returns What Domains to be returned (QPD-4).
      *
      * @return movement IDs
      */
     public CX[] getWhatDomainsReturned() {
-        Collection<CX> result = getTypedField(8);
+        Collection<CX> result = getTypedField(4);
         return result.toArray(new CX[result.size()]);
     }
 
