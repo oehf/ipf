@@ -22,8 +22,6 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti9.Iti9ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti9.Iti9ServerAuditStrategy;
 
 /**
  * Camel component for ITI-9 (PIX Query).

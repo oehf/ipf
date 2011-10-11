@@ -20,8 +20,6 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.*;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8ClientAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8ServerAuditStrategy;
 
 /**
  * Camel component for ITI-8 (PIX Feed).

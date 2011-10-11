@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.message;
+package org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message;
 
 import java.util.Map;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.group.RSP_ZV2_QUERY_RESPONSE;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.v25.pdq.segment.QPD;
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.group.RSP_ZV2_QUERY_RESPONSE;
 import org.openehealth.ipf.modules.hl7.model.AbstractMessage;
 
 import ca.uhn.hl7v2.HL7Exception;
@@ -63,7 +62,7 @@ public class RSP_ZV2 extends AbstractMessage {
         s.put(MSA.class, Cardinality.REQUIRED);
         s.put(ERR.class, Cardinality.OPTIONAL);
         s.put(QAK.class, Cardinality.REQUIRED);
-        s.put(QPD.class, Cardinality.REQUIRED);
+        s.put(org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD.class, Cardinality.REQUIRED);
         s.put(RSP_ZV2_QUERY_RESPONSE.class, Cardinality.OPTIONAL_REPEATING);
         s.put(DSC.class, Cardinality.OPTIONAL);
         return s;
@@ -101,8 +100,8 @@ public class RSP_ZV2 extends AbstractMessage {
     /**
       * Returns QPD (Query Parameter Definition) - creates it if necessary
       */
-    public QPD getQPD() {
-        return get(QPD.class);
+    public org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD getQPD() {
+        return get(org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.segment.QPD.class);
     }
 
     /**

@@ -39,10 +39,10 @@ public class CustomModelClassUtils {
     public static CustomModelClassFactory createFactory(String transaction, String version) {
         String packageName = new StringBuilder()
             .append(CustomModelClassUtils.class.getPackage().getName())
-            .append(".v")
-            .append(version.replace(".", ""))
             .append('.')
             .append(transaction)
+            .append(".v")
+            .append(version.replace(".", ""))
             .toString();
         Map<String, String[]> map = Collections.singletonMap(version, new String[] {packageName});
         return new CustomModelClassFactory(map);
