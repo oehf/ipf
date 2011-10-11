@@ -61,14 +61,18 @@ public class Splitter extends
         // The aggregate needs to be copied to ensure that we can change it
         // without affecting the input into the destination processor of the
         // splitter.
-        Exchange copiedAggregate = aggregate.copy();
-        ManagedMessage message = new PlatformMessage(copiedAggregate);
-        SplitHistory aggregateHistory = message.getSplitHistory();
-        if (!aggregateHistory.equals(origHistory)) {
-            message.setSplitHistory(origHistory);
+        if (aggregate != null){
+            Exchange copiedAggregate = aggregate.copy();
+            ManagedMessage message = new PlatformMessage(copiedAggregate);
+            SplitHistory aggregateHistory = message.getSplitHistory();
+            if (!aggregateHistory.equals(origHistory)) {
+                message.setSplitHistory(origHistory);
+            }
+            super.finalizeAggregate(origExchange, copiedAggregate);
+        } else {
+            super.finalizeAggregate(origExchange, aggregate);
         }
         
-        super.finalizeAggregate(origExchange, copiedAggregate);
     }
     
     /* (non-Javadoc)
