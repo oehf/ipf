@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.asyncresponse;
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
 
 /**
@@ -26,6 +27,11 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebServi
  * @author Dmytro Rud
  */
 public class Iti55DeferredResponseService extends AsynchronousResponseItiWebService implements Iti55DeferredResponsePortType {
+
+    @Override
+    protected boolean canDropCorrelation(Object response) {
+        return "PRPA_IN201306UV02".equals(XmlUtils.rootElementName(response).getLocalPart());
+    }
 
     @Override
     public Object receiveDeferredResponse(Object response) {

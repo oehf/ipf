@@ -137,7 +137,23 @@ public abstract class WsAuditStrategy {
             doAudit(auditDataset);
         }
     }
-        
+
+
+    /**
+     * Determines whether the given response finalizes the interaction
+     * and thus the ATNA auditing should be finalized as well.
+     * <p>
+     * Per default always returns <code>true</code>.
+     *
+     * @param response
+     *      response in transaction-specific format (POJO, XML string, etc.).
+     * @return
+     *      <code>true</code> when this response finalizes the interaction.
+     */
+    public boolean isAuditableResponse(Object response) {
+        return true;
+    }
+
     
     /**
      * Returns a transaction-specific list of names of fields 

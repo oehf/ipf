@@ -19,10 +19,19 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 /**
  * Interface for message correlators in asynchronous 
- * Web Service-based IHE transactions. 
+ * Web Service-based eHealth transactions.
  * @author Dmytro Rud
  */
 public interface AsynchronyCorrelator {
+
+    /**
+     * When the Web Service context of an outgoing request message contains
+     * <code>Boolean.TRUE</code> value in the property with this name,
+     * then correlation items of this request message will be stored
+     * in the configured asynchrony correlator instance, even when the
+     * WS-Addressing <tt>&lt;ReplyTo&gt;</tt> header is not set.
+     */
+    public static final String FORCE_CORRELATION = AsynchronyCorrelator.class.getName() + ".NEED";
 
     /**
      * Stores a service endpoint URI.

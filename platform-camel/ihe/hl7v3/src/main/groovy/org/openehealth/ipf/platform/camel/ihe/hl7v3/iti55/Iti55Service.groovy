@@ -96,7 +96,7 @@ public class Iti55Service extends DefaultHl7v3WebService implements Iti55PortTyp
             // process synchronous route
             Object response = doProcess0(requestString, requestXml)
             finalizeAtnaAuditing(response, auditStrategy, auditDataset)
-            setOutboundWsaProperties(Iti55PortType.REGULAR_REQUEST_OUTPUT_ACTION, requestMessageId)
+            configureWsaHeaders(Iti55PortType.REGULAR_REQUEST_OUTPUT_ACTION, requestMessageId)
             return response
         }
 
@@ -122,13 +122,13 @@ public class Iti55Service extends DefaultHl7v3WebService implements Iti55PortTyp
                 void run() {
                     Object response = doProcess0(requestString, requestXml)
                     finalizeAtnaAuditing(response, auditStrategy, auditDataset)
-                    setOutboundWsaProperties(Iti55DeferredResponsePortType.DEFERRED_RESPONSE_INPUT_ACTION, requestMessageId)
+                    configureWsaHeaders(Iti55DeferredResponsePortType.DEFERRED_RESPONSE_INPUT_ACTION, requestMessageId)
                     producerTemplate.sendBody(respondToUri, response)
                 }
             })
 
             // return an immediate MCCI ACK
-            setOutboundWsaProperties(Iti55PortType.DEFERRED_REQUEST_OUTPUT_ACTION, requestMessageId)
+            configureWsaHeaders(Iti55PortType.DEFERRED_REQUEST_OUTPUT_ACTION, requestMessageId)
             return response(requestXml, null, "MCCI_IN000002UV01", false, false)
         }
 
@@ -179,7 +179,7 @@ public class Iti55Service extends DefaultHl7v3WebService implements Iti55PortTyp
     /**
      * Configures outbound WS-Addressing headers "Action" and "RelatesTo".
      */
-    private static void setOutboundWsaProperties(String action, String relatesTo) {
+    private static void configureWsaHeaders(String action, String relatesTo) {
         MessageContext messageContext = new WebServiceContextImpl().messageContext
         AddressingProperties apropos = (AddressingProperties) messageContext.get(SERVER_ADDRESSING_PROPERTIES_OUTBOUND)
         if (! apropos) {

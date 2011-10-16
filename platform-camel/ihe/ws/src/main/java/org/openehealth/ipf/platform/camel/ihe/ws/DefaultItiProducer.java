@@ -108,7 +108,9 @@ public abstract class DefaultItiProducer extends DefaultProducer {
         }
 
         // for asynchronous interaction: configure WSA headers and store correlation data
-        if (replyToUri != null) {
+        if ((replyToUri != null) ||
+            Boolean.TRUE.equals(requestContext.get(AsynchronyCorrelator.FORCE_CORRELATION)))
+        {
             String messageId = "urn:uuid:" + UUID.randomUUID().toString();
             configureWSAHeaders(messageId, replyToUri, requestContext);
 
@@ -215,11 +217,13 @@ public abstract class DefaultItiProducer extends DefaultProducer {
         log.debug("Set WS-Addressing message ID: " + messageId);
 
         // ReplyTo header
-        AttributedURIType uri2 = new AttributedURIType();
-        uri2.setValue(replyToUri);
-        EndpointReferenceType endpointReference = new EndpointReferenceType();
-        endpointReference.setAddress(uri2);
-        maps.setReplyTo(endpointReference);
+        if (replyToUri != null) {
+            AttributedURIType uri2 = new AttributedURIType();
+            uri2.setValue(replyToUri);
+            EndpointReferenceType endpointReference = new EndpointReferenceType();
+            endpointReference.setAddress(uri2);
+            maps.setReplyTo(endpointReference);
+        }
     }
     
     

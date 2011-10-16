@@ -48,38 +48,44 @@ public abstract class DefaultItiEndpoint<ComponentType extends AbstractWsCompone
      * Name of incoming Camel header where the user should store the URL
      * of asynchronous response endpoint (WS-Addressing header "ReplyTo").  
      */
-    public static final String WSA_REPLYTO_HEADER_NAME = "ipf.wsa.ReplyTo";
+    public static final String WSA_REPLYTO_HEADER_NAME =
+            DefaultItiEndpoint.class.getName() + ".REPLY_TO";
     
     /**
      * Name of Camel message header where the user should store 
      * the optional correlation key.  
      */
-    public static final String CORRELATION_KEY_HEADER_NAME = "ipf.correlation.key";
+    public static final String CORRELATION_KEY_HEADER_NAME =
+            DefaultItiEndpoint.class.getName() + ".CORRELATION_KEY";
     
     /**
      * Name of Camel message header where incoming HTTP headers
      * will be stored as a <code>Map&lt;String, String&gt</code>.
      */
-    public static final String INCOMING_HTTP_HEADERS = "ipf.ihe.http.headers.incoming";
+    public static final String INCOMING_HTTP_HEADERS =
+            DefaultItiEndpoint.class.getName() + ".INCOMING_HTTP_HEADERS";
 
     /**
      * Name of Camel message header from where additional user-defined HTTP 
      * headers will be taken as a <code>Map&lt;String, String&gt</code>.
      */
-    public static final String OUTGOING_HTTP_HEADERS = "ipf.ihe.http.headers.outgoing";
-    
+    public static final String OUTGOING_HTTP_HEADERS =
+            DefaultItiEndpoint.class.getName() + ".OUTGOING_HTTP_HEADERS";
+
     /**
      * Name of Camel message header where incoming SOAP headers
      * will be stored as a <code>Map&lt;{@link QName}, {@link Header}&gt</code>.
      */
-    public static final String INCOMING_SOAP_HEADERS = "ipf.ihe.soap.headers.incoming";
+    public static final String INCOMING_SOAP_HEADERS =
+            DefaultItiEndpoint.class.getName() + ".INCOMING_SOAP_HEADERS";
 
     /**
      * Name of Camel message header from where additional user-defined HTTP 
      * headers will be taken as a <code>List&lt;{@link Header}&gt</code>.
      */
-    public static final String OUTGOING_SOAP_HEADERS = "ipf.ihe.soap.headers.outgoing";
-    
+    public static final String OUTGOING_SOAP_HEADERS =
+            DefaultItiEndpoint.class.getName() + ".OUTGOING_SOAP_HEADERS";
+
     private final String address;
 
     private String serviceAddress;

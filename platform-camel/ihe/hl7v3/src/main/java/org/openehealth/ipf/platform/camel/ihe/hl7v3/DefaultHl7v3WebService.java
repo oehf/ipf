@@ -91,7 +91,6 @@ public class DefaultHl7v3WebService extends DefaultItiWebService {
     }
 
 
-
     protected WsAuditDataset startAtnaAuditing(String requestString, WsAuditStrategy auditStrategy) {
         WsAuditDataset auditDataset = null;
         if (auditStrategy != null) {
@@ -117,7 +116,7 @@ public class DefaultHl7v3WebService extends DefaultItiWebService {
 
                 auditStrategy.enrichDatasetFromRequest(requestString, auditDataset);
             } catch (Exception e) {
-                LOG.error("Error while starting manual ATNA auditing", e);
+                LOG.error("Phase 1 of server-side ATNA auditing failed", e);
             }
         }
         return auditDataset;
@@ -134,7 +133,7 @@ public class DefaultHl7v3WebService extends DefaultItiWebService {
                 auditStrategy.enrichDatasetFromResponse(response, auditDataset);
                 auditStrategy.audit(auditDataset);
             } catch (Exception e) {
-                LOG.error("Error while finalizing manual ATNA auditing", e);
+                LOG.error("Phase 2 of server-side ATNA auditing failed", e);
             }
         }
     }

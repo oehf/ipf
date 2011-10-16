@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.ws.handler.MessageContext;
@@ -35,7 +34,22 @@ import org.apache.cxf.ws.addressing.JAXWSAConstants;
  */
 public class AsynchronousResponseItiWebService extends DefaultItiWebService {
     private static final transient Log LOG = LogFactory.getLog(AsynchronousResponseItiWebService.class);
-    
+
+    /**
+     * Determines whether correlation items related to the given message can be dropped.
+     * <p>
+     * Per default, always returns <code>true</code>.
+     * @param response
+     *      response message.
+     * @return
+     *      <code>true</code> when correlation items related
+     *      to the given message can be dropped.
+     */
+    protected boolean canDropCorrelation(Object response) {
+        return true;
+    }
+
+
     /**
      * Before calling the base method, determines correlation key  
      * and stores it into message headers. 
@@ -65,9 +79,11 @@ public class AsynchronousResponseItiWebService extends DefaultItiWebService {
                 }
                 headers.put(DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME, correlationKey);
             }
-            
-            // correlation data in not necessary any more
-            endpoint.getCorrelator().delete(messageId);
+
+            // drop correlation data when appropriate
+            if (canDropCorrelation(body)) {
+                endpoint.getCorrelator().delete(messageId);
+            }
         } else {
             LOG.error("Cannot retrieve WSA RelatesTo header, message correlation not possible");
         }

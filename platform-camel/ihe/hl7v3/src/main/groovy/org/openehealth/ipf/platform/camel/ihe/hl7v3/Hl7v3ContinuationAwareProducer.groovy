@@ -15,34 +15,32 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*
-
 import groovy.util.slurpersupport.GPathResult
-import javax.xml.parsers.DocumentBuilder
+import groovy.xml.XmlUtil
+import javax.xml.ws.BindingProvider
+import org.apache.camel.Exchange
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.apache.cxf.message.Message
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.NodeList
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.*
+import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
+import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
+import static org.openehealth.ipf.commons.xml.XmlUtils.toString
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
-import org.openehealth.ipf.commons.xml.CombinedXmlValidator
-import groovy.xml.XmlUtil
-
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
-import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
-import org.apache.cxf.ws.addressing.AddressingProperties
-import org.apache.cxf.ws.addressing.JAXWSAConstants
-import javax.xml.ws.BindingProvider
-import org.apache.cxf.message.Message
-import static org.openehealth.ipf.commons.xml.XmlUtils.*
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*
 
 /**
  * Camel producer HL7 v3-based IHE transactions with Continuation support.
@@ -57,7 +55,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class)
 
-    private static final ThreadLocal<DocumentBuilder> DOM_BUILDERS = new DomBuildersThreadLocal()
+    private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal()
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
     private final Hl7v3ContinuationAwareWsTransactionConfiguration wsTransactionConfiguration
@@ -88,6 +86,15 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
     }
 
 
+    @Override
+    void process(Exchange exchange) {
+        if (exchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME]) {
+            throw new IllegalStateException('WS-Addressing asynchrony cannot be used in conjunction with interactive response continuation')
+        }
+        super.process(exchange)
+    }
+
+
     /**
      * Dispatches the original request message, optionally handling continuations.
      * <p>
@@ -100,13 +107,14 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
         switch (rootElementName) {
             case wsTransactionConfiguration.mainRequestRootElementName:
                 String requestString = toString(requestObject, null)
+                GPathResult request = slurp(requestString)
                 String responseString = client.operation(requestObject)
                 if (! supportContinuation) {
                     return responseString
                 }
-                return (auditStrategy != null) ?
-                        processContinuationWithAtnaAuditing(client, requestString, responseString) :
-                        processContinuation(client, requestString, responseString)
+                return auditStrategy ?
+                        processContinuationWithAtnaAuditing(client, request, responseString) :
+                        processContinuation(client, request, responseString)
 
             case 'QUQI_IN000003UV01':
                 // continuation is supported by the route, not by us
@@ -124,45 +132,45 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
      */
     private String processContinuationWithAtnaAuditing(
         Hl7v3ContinuationsPortType client,
-        String requestString,
+        GPathResult request,
         String fragmentString)
     {
+        WsAuditDataset auditDataset = null
+
         // fill request-related ATNA audit fields
-        WsAuditDataset auditDataset = auditStrategy.createAuditDataset()
         try {
-            auditDataset.clientIpAddress = InetAddress.localHost.hostAddress
-        } catch (UnknownHostException e) {
-            // nop
-        }
-
-        Map requestContext = ((BindingProvider) client).requestContext
-
-        // When the user has provided an endpoint URI for the WS-A ReplyTo header, the method
-        // org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer.configureWSAHeaders
-        // will put this URI into the request context, and we try to retrieve it here.
-        // Otherwise, the field auditDataset.userId remains null, and this is Ok as well.
-        AddressingProperties apropos = requestContext.get(JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES)
-        auditDataset.userId = apropos?.replyTo?.address?.value
-
-        auditDataset.serviceEndpointUrl = requestContext.get(Message.ENDPOINT_ADDRESS)
-        auditStrategy.enrichDatasetFromRequest(requestString, auditDataset)
-
-        try {
-            // perform the call and play the interactive continuations MEP
-            String responseString = processContinuation(client, requestString, fragmentString)
-
-            // fill response-related ATNA audit fields and perform the audit
-            auditStrategy.enrichDatasetFromResponse(responseString, auditDataset)
-            auditStrategy.audit(auditDataset)
-            return responseString
-
+            auditDataset = auditStrategy.createAuditDataset()
+            Map requestContext = ((BindingProvider) client).requestContext
+            auditDataset.serviceEndpointUrl = requestContext.get(Message.ENDPOINT_ADDRESS)
+            auditStrategy.enrichDatasetFromRequest(request, auditDataset)
         } catch (Exception e) {
-
-            // when exception occurs -- audit it and rethrow to the caller's route
-            auditDataset.eventOutcomeCode = RFC3881EventOutcomeCodes.SERIOUS_FAILURE
-            auditStrategy.audit(auditDataset)
-            throw e
+            LOG.error("Phase 1 of client-side ATNA auditing failed", e);
         }
+
+        Exception exception
+        String responseString = null
+        try {
+            responseString = processContinuation(client, request, fragmentString)
+        } catch (Exception e) {
+            exception = e
+        }
+
+        try {
+            if (exception) {
+                auditDataset.eventOutcomeCode = RFC3881EventOutcomeCodes.SERIOUS_FAILURE
+            } else {
+                auditStrategy.enrichDatasetFromResponse(responseString, auditDataset)
+            }
+            auditStrategy.audit(auditDataset)
+        } catch (Exception e) {
+            LOG.error("Phase 2 of client-side ATNA auditing failed", e);
+        } finally {
+            if (exception) {
+                throw exception
+            }
+        }
+
+        return responseString
     }
 
 
@@ -171,11 +179,9 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
      */
     private String processContinuation(
         Hl7v3ContinuationsPortType client,
-        String requestString,
+        GPathResult request,
         String fragmentString)
     {
-        GPathResult request = slurp(requestString)
-
         int continuationQuantity = parseInt(request.controlActProcess.queryByParameter.initialQuantity.@value.text())
         if (continuationQuantity < 0) {
             continuationQuantity = defaultContinuationQuantity

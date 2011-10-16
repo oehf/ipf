@@ -96,6 +96,13 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
             return;
         }
 
+        // check whether the response is relevant for ATNA audit finalization
+        Object response = extractPojo(message);
+        WsAuditStrategy auditStrategy = getAuditStrategy();
+        if (! auditStrategy.isAuditableResponse(response)) {
+            return;
+        }
+
         WsAuditDataset auditDataset = null;
 
         // try to get the audit dataset from the asynchrony correlator --
@@ -133,9 +140,6 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
         // check whether the response POJO is available and
         // perform transaction-specific enrichment of the audit dataset
         Exchange exchange = message.getExchange();
-        Object response = extractPojo(message);
-        WsAuditStrategy auditStrategy = getAuditStrategy();
-
         if ((message == exchange.getInFaultMessage())
                 || (message == exchange.getOutFaultMessage())
                 || (response == null))

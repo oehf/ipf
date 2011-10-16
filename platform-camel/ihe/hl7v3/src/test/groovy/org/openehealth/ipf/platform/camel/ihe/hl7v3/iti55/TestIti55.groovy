@@ -147,6 +147,8 @@ class TestIti55 extends StandardTestContainer {
         def responseMessage = Exchanges.resultMessage(producerTemplate.send(SERVICE2_URI, requestExchange))
         def response = Hl7v3Utils.slurp(responseMessage.body)
 
+        // TODO: code NS250 vs INTERR
+
         /*
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'INTERR'
