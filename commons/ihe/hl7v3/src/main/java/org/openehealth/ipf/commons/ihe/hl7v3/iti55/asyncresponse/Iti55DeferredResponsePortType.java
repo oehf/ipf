@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 the original author or authors.
+ * Copyright 2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.ihe.hl7v3.iti56;
+package org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -24,18 +24,21 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.xml.ws.Action;
 
 /**
- * SEI for XCPD ITI-56 -- Patient Location Query.
+ * SEI for the ITI-55 XCPD Initiating Gateway actor: receiver of Deferred responses.
  * @author Dmytro Rud
  */
-@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "InitiatingGatewayDeferredResponse_PortType")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
-public interface Iti56PortType {
+public interface Iti55DeferredResponsePortType {
+    public static final String DEFERRED_RESPONSE_INPUT_ACTION =
+            "urn:hl7-org:v3:PRPA_IN201306UV02:Deferred:CrossGatewayPatientDiscovery";
+    public static final String DEFERRED_RESPONSE_OUTPUT_ACTION =
+            "urn:hl7-org:v3:MCCI_IN000002UV01";
 
-    @Action(input = "urn:ihe:iti:2009:PatientLocationQuery", 
-            output = "urn:ihe:iti:2009:PatientLocationQueryResponse")
-    @WebMethod(operationName = "RespondingGateway_PatientLocationQuery")
-    Object locatePatients(
+    @Action(input = DEFERRED_RESPONSE_INPUT_ACTION, output = DEFERRED_RESPONSE_OUTPUT_ACTION)
+    @WebMethod(operationName = "InitiatingGateway_Deferred_PRPA_IN201306UV02")
+    Object receiveDeferredResponse(
             @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-            Object request
+            Object response
     );
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2010 the original author or authors. Licensed under the Apache
+    Copyright 2011 the original author or authors. Licensed under the Apache
     License, Version 2.0 (the "License"); you may not use this file except
     in compliance with the License. You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable
@@ -22,7 +22,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
     <documentation>
-        IHE ITI-55 XCPD Initiating Gateway: Receiver of Asynchronous responses
+        IHE ITI-55 XCPD Initiating Gateway: Receiver of Deferred responses
     </documentation>
     
     <types>
@@ -34,25 +34,33 @@
     <message name="PRPA_IN201306UV02_Message">
         <part name="Body" element="xcpd:rawData" />
     </message>
+    <message name="MCCI_IN000002UV01_Message">
+        <part name="Body" element="xcpd:rawData" />
+    </message>
 
-    <portType name="InitiatingGateway_PortType">
-        <operation name="InitiatingGateway_Async_PRPA_IN201306UV02">
+    <portType name="InitiatingGatewayDeferredResponse_PortType">
+        <operation name="InitiatingGateway_Deferred_PRPA_IN201306UV02">
             <input message="xcpd:PRPA_IN201306UV02_Message"
-                wsam:Action="urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery" />
+                   wsam:Action="urn:hl7-org:v3:PRPA_IN201306UV02:Deferred:CrossGatewayPatientDiscovery"/>
+            <output message="xcpd:MCCI_IN000002UV01_Message"
+                    wsam:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
         </operation>
     </portType>
     
-    <binding name="InitiatingGateway_Binding" type="xcpd:InitiatingGateway_PortType">
+    <binding name="InitiatingGatewayDeferredResponse_Binding" type="xcpd:InitiatingGatewayDeferredResponse_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
-        <operation name="InitiatingGateway_Async_PRPA_IN201306UV02">
+        <operation name="InitiatingGateway_Deferred_PRPA_IN201306UV02">
             <input>
                 <wsoap12:body use="literal" />
             </input>
+            <output>
+                <wsoap12:body use="literal" />
+            </output>
         </operation>
     </binding>
     
     <service name="InitiatingGateway_Service">
-        <port binding="xcpd:InitiatingGateway_Binding" name="InitiatingGateway_Port">
+        <port binding="xcpd:InitiatingGatewayDeferredResponse_Binding" name="InitiatingGateway_Response_Port_Soap12">
             <wsoap12:address location="http://localhost/InitiatingGateway" />
         </port>
     </service>

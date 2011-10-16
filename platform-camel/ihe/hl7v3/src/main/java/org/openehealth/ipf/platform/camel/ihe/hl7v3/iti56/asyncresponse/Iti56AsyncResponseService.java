@@ -20,13 +20,14 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncRespo
 import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
 
 /**
- * Service implementation for the IHE ITI-56 (XCPD) async response.
+ * Service implementation for the ITI-56 XCPD Initiating Gateway actor
+ * (receiver of asynchronous responses).
  * @author Dmytro Rud
  */
 public class Iti56AsyncResponseService extends AsynchronousResponseItiWebService implements Iti56AsyncResponsePortType {
 
     @Override
-    public void respondingGatewayPatientLocationQuery(Object response) {
+    public void receiveAsyncResponse(Object response) {
         process(response, null, ExchangePattern.InOnly);
     }
 }

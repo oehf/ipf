@@ -31,15 +31,16 @@ import javax.xml.namespace.QName;
 import java.util.Map;
 
 /**
- * The Camel component for the ITI-56 (XCPD) async response.
+ * Camel component for the ITI-56 XCPD Initiating Gateway actor
+ * (receiver of asynchronous responses).
  */
 public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
     private final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_56,
-            new QName(NS_URI, "RespondingGateway_Response_Service", "xcpd"),
+            new QName(NS_URI, "InitiatingGateway_Service", "xcpd"),
             Iti56AsyncResponsePortType.class,
-            new QName(NS_URI, "RespondingGateway_Response_Binding_Soap12", "xcpd"),
+            new QName(NS_URI, "InitiatingGateway_Binding", "xcpd"),
             false,
             "wsdl/iti56/iti56-asyncresponse-raw.wsdl",
             null,

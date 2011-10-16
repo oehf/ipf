@@ -21,22 +21,16 @@ import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
-import org.openehealth.ipf.commons.xml.XsltTransmogrifier
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
-import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
-import org.apache.cxf.jaxws.context.WebServiceContextImpl
-import javax.xml.ws.handler.MessageContext
-import javax.servlet.http.HttpServletRequest
-import org.apache.cxf.message.Message
-import org.apache.cxf.transport.http.AbstractHTTPDestination
-import org.apache.cxf.ws.addressing.AddressingProperties
-import org.apache.cxf.ws.addressing.JAXWSAConstants
-import static org.openehealth.ipf.commons.xml.XmlUtils.*
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.commons.xml.XsltTransmogrifier
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
+import static org.openehealth.ipf.commons.xml.XmlUtils.*
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 
 /**
  * Generic Web Service implementation for HL7 v3-based transactions
@@ -131,23 +125,7 @@ public class Hl7v3ContinuationAwareWebService
         LOG.debug('operation(): Got request\n' + requestString)
 
         // prepare ATNA audit, if necessary
-        WsAuditDataset auditDataset = null
-        if (auditStrategy != null) {
-            auditDataset = auditStrategy.createAuditDataset()
-            MessageContext messageContext = new WebServiceContextImpl().getMessageContext()
-            HttpServletRequest servletRequest = messageContext.get(AbstractHTTPDestination.HTTP_REQUEST)
-            auditDataset.clientIpAddress = servletRequest?.remoteAddr
-            auditDataset.serviceEndpointUrl = messageContext.get(Message.REQUEST_URL)
-
-            AddressingProperties apropos = messageContext.get(JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND)
-            auditDataset.userId = apropos?.replyTo?.address?.value
-
-            if (wsTransactionConfiguration.auditRequestPayload) {
-                auditDataset.requestPayload = requestString
-            }
-
-            auditStrategy.enrichDatasetFromRequest(requestString, auditDataset)
-        }
+        WsAuditDataset auditDataset = startAtnaAuditing(requestString, auditStrategy)
 
         // validate request, if necessary
         if (validation) {
@@ -157,7 +135,7 @@ public class Hl7v3ContinuationAwareWebService
             } catch (ValidationException e) {
                 LOG.error('operation(): invalid request')
                 String nak = createNak(requestString, e)
-                finalizeAuditing(nak, auditDataset)
+                finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
                 return nak
             }
         }
@@ -173,13 +151,13 @@ public class Hl7v3ContinuationAwareWebService
             } catch (ValidationException e) {
                 LOG.error('operation(): invalid response')
                 String nak = createNak(requestString, e)
-                finalizeAuditing(nak, auditDataset)
+                finalizeAtnaAuditing(nak, auditStrategy, auditDataset)
                 return nak
             }
         }
 
         // finalize ATNA auditing
-        finalizeAuditing(responseString, auditDataset)
+        finalizeAtnaAuditing(responseString, auditStrategy, auditDataset)
 
         // process continuations
         GPathResult request = slurp(requestString)
@@ -207,14 +185,6 @@ public class Hl7v3ContinuationAwareWebService
             } else {
                 throw e
             }
-        }
-    }
-
-
-    private void finalizeAuditing(String responseString, WsAuditDataset auditDataset) {
-        if (auditStrategy != null) {
-            auditStrategy.enrichDatasetFromResponse(responseString, auditDataset)
-            auditStrategy.audit(auditDataset)
         }
     }
 
@@ -298,7 +268,7 @@ public class Hl7v3ContinuationAwareWebService
         if (responseString) {
             storage.remove(key)
             GPathResult response = slurp(responseString)
-            String result = createCancelAcknowledgement(request, response.id.@root.text())
+            String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', false, true)
             LOG.debug('cancel(): generated ACK\n' + result)
             return result
         } else {
@@ -368,40 +338,6 @@ public class Hl7v3ContinuationAwareWebService
         def sender = request.sender.device.id[0]
         return [queryId.@root, queryId.@extension, queryId.@assigningAuthorityName,
                  sender.@root,  sender.@extension,  sender.@assigningAuthorityName].join('/')
-    }
-
-
-    /**
-     * Creates an ACK for continuation cancel requests.
-     */
-    private static String createCancelAcknowledgement(GPathResult request, String messageIdRoot) {
-        def output  = new ByteArrayOutputStream()
-        def builder = getBuilder(output)
-
-        builder.MCCI_IN000002UV01(
-            'ITSVersion' : 'XML_1.0',
-            'xmlns'      : HL7V3_NSURI,
-            'xmlns:xsi'  : 'http://www.w3.org/2001/XMLSchema-instance',
-            'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema')
-        {         
-            buildInstanceIdentifier(builder, 'id', false, messageIdRoot ?: '1.2.3', UUID.randomUUID().toString())
-            creationTime(value: hl7timestamp())
-            interactionId(root: request.interactionId.@root, extension: 'MCCI_IN000002UV01')
-            processingCode(code: 'P')
-            processingModeCode(code: 'T')
-            acceptAckCode(code: 'NE')
-            buildReceiverAndSender(builder, request, HL7V3_NSURI)
-            acknowledgement {
-                typeCode(code: 'CA')
-                targetMessage {
-                    buildInstanceIdentifier(builder, 'id', false,
-                            request.id.@root.text(),
-                            request.id.@extension.text())
-                }
-            }
-        }
-
-        return output.toString()
     }
 
 }

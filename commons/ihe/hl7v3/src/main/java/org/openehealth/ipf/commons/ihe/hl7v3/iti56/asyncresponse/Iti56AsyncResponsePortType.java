@@ -25,18 +25,18 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.xml.ws.Action;
 
 /**
- * SEI for asynchronous ITI-56 response receiver. 
+ * SEI for the ITI-56 XCPD Initiating Gateway actor: receiver of WSA asynchronous responses.
  * @author Dmytro Rud
  */
-@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "RespondingGateway_Response_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xcpd:2009", name = "InitiatingGateway_PortType")
 @SOAPBinding(style = Style.DOCUMENT, parameterStyle = ParameterStyle.BARE)
 public interface Iti56AsyncResponsePortType {
 
     @Oneway
     @Action(input = "urn:ihe:iti:2009:PatientLocationQueryResponse")
-    @WebMethod(operationName = "RespondingGateway_PatientLocationQuery")
-    void respondingGatewayPatientLocationQuery(
-        @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-        Object response
+    @WebMethod(operationName = "InitiatingGateway_Async_PatientLocationQueryResponse")
+    void receiveAsyncResponse(
+            @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
+            Object response
     );
 }

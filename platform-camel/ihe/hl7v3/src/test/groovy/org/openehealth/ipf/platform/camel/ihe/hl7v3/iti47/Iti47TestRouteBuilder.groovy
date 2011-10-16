@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.hl7v3.translation.PdqResponse2to3Translat
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import groovy.xml.XmlUtil
 import org.apache.cxf.helpers.XMLUtils
 
 /**
@@ -85,29 +84,25 @@ class Iti47TestRouteBuilder extends SpringRouteBuilder {
 
         // check Hl7v3 exception handling (NAK with issue management code)
         from('pdqv3-iti47:pdqv3-iti47-serviceNak1')
-            .process {
-                throw new Hl7v3Exception('message1', [
+            .throwException(new Hl7v3Exception(
+                    message: 'message1',
                     detectedIssueEventCode: 'ISSUE',
                     detectedIssueManagementCode: 'ABCD',
                     typeCode: 'XX',
                     statusCode: 'revised',
                     queryResponseCode: 'YY',
-                    acknowledgementDetailCode: 'FEHLER'
-                ])
-            }
+                    acknowledgementDetailCode: 'FEHLER'))
 
 
         // check Hl7v3 exception handling (NAK without issue management code)
         from('pdqv3-iti47:pdqv3-iti47-serviceNak2')
-            .process {
-                throw new Hl7v3Exception('message1', [
+            .throwException(new Hl7v3Exception(
+                    message: 'message1',
                     detectedIssueEventCode: 'ISSUE',
                     typeCode: 'XX',
                     statusCode: 'revised',
                     queryResponseCode: 'YY',
-                    acknowledgementDetailCode: 'FEHLER'
-                ])
-            }
+                    acknowledgementDetailCode: 'FEHLER'))
 
 
         // check validation exception handling

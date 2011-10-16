@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
 public class Iti56Service extends DefaultItiWebService implements Iti56PortType {
 
     @Override
-    public Object respondingGatewayPatientLocationQuery(Object request) {
+    public Object locatePatients(Object request) {
         Exchange result = process(request);
         if(result.getException() != null) {
             throw new Fault(result.getException());

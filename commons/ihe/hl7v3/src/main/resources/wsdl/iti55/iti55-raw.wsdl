@@ -35,20 +35,40 @@
     <message name="PRPA_IN201306UV02_Message">
         <part name="Body" element="xcpd:rawData" />
     </message>
-    
+    <message name="MCCI_IN000002UV01_Message">
+        <part name="Body" element="xcpd:rawData" />
+    </message>
+
     <portType name="RespondingGateway_PortType">
         <!-- Cross-Gateway Patient Discovery -->
         <operation name="RespondingGateway_PRPA_IN201305UV02">
             <input message="xcpd:PRPA_IN201305UV02_Message"
-                wsam:Action="urn:hl7-org:v3:PRPA_IN201305UV02:CrossGatewayPatientDiscovery" />
+                   wsam:Action="urn:hl7-org:v3:PRPA_IN201305UV02:CrossGatewayPatientDiscovery" />
             <output message="xcpd:PRPA_IN201306UV02_Message"
-                wsam:Action="urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery" />
+                    wsam:Action="urn:hl7-org:v3:PRPA_IN201306UV02:CrossGatewayPatientDiscovery" />
         </operation>
+
+        <!-- Cross-Gateway Patient Discovery with Deferred Response option-->
+        <operation name="RespondingGateway_Deferred_PRPA_IN201305UV02">
+			<input message="xcpd:PRPA_IN201305UV02_Message"
+                   wsam:Action="urn:hl7-org:v3:PRPA_IN201305UV02:Deferred:CrossGatewayPatientDiscovery"/>
+		    <output message="xcpd:MCCI_IN000002UV01_Message"
+                    wsam:Action="urn:hl7-org:v3:MCCI_IN000002UV01"/>
+		</operation>
     </portType>
     
     <binding name="RespondingGateway_Binding_Soap12" type="xcpd:RespondingGateway_PortType">
         <wsoap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <operation name="RespondingGateway_PRPA_IN201305UV02">
+            <input>
+                <wsoap12:body use="literal" />
+            </input>
+            <output>
+                <wsoap12:body use="literal" />
+            </output>
+        </operation>
+
+        <operation name="RespondingGateway_Deferred_PRPA_IN201305UV02">
             <input>
                 <wsoap12:body use="literal" />
             </input>

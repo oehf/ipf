@@ -22,32 +22,26 @@ import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 
 /**
- * Factory class for HL7 v3 NAK messages.
+ * Generator for HL7v3 ACK and NAK response messages.
+ * <p>
+ * This class has been tested in the context of PDQv3, XCPD, and QED transactions.
  * @author Dmytro Rud
  */
 class Hl7v3NakFactory {
 
-    static String nakMessageIdRoot = '1.2.3'
+    static String messageIdRoot = '1.2.3'
 
     /**
-     * Creates a HL7 v3 NAK message as XML String.
-     * 
-     * @param originalMessageString
-     *      original request message as XML String.
-     * @param t
-     *      the occurred exception.
-     * @param nakRootElementName
-     *      root element name of the target NAK message, for example, 
-     *      'MCCI_IN000002UV01' or 'PRPA_IN201306UV02'.
-     * @param needControlActProcess
-     *      whether a <tt>controlAckProcess</tt> element should be created in the NAK.
-     * @return
+     * Parses the given String into a {@link GPathResult GPath object}
+     * and calls the other variant of the <code>response()</code> method.
+     * See javadocs there.
      */
-    static String createNak(
+    static String response(
             String originalMessageString,
-            Throwable t,
-            String nakRootElementName,
-            boolean needControlActProcess)
+            Throwable throwable,
+            String rootElementName,
+            boolean needControlActProcess,
+            boolean useCAckTypeCodes)
     {
         GPathResult xml
         try {
@@ -56,43 +50,63 @@ class Hl7v3NakFactory {
             xml = slurp('<dummy/>')
         }
 
-        return createNak(xml, t, nakRootElementName, needControlActProcess)
+        return response(xml, throwable, rootElementName, needControlActProcess, useCAckTypeCodes)
     }
 
 
     /**
-     * Creates a HL7 v3 NAK message as XML String.
+     * Creates an HL7v3 ACK/NAK response message as XML String.
      *
      * @param originalMessage
-     *      original request message as parsed XML.
-     * @param t
-     *      the occurred exception.
-     * @param nakRootElementName
+     *      original request message as parsed Groovy GPath instance.
+     * @param throwable
+     *      the occurred exception, may be <code>null</code>.
+     * @param rootElementName
      *      root element name of the target NAK message, for example,
      *      'MCCI_IN000002UV01' or 'PRPA_IN201306UV02'.
      * @param needControlActProcess
      *      whether a <tt>controlAckProcess</tt> element should be created in the NAK.
+     *      Note that setting this parameter to <code>true</code> is only allowed when
+     *      <code>throwable!=null</code>.
+     * @param useCAckTypeCodes
+     *      if <code>true</code>, HL7v2 acknowledgement codes
+     *      <tt>CA</tt>, <tt>CE</tt>, <tt>CR</tt> will be used instead of the default
+     *      <tt>AA</tt>, <tt>AE</tt>, <tt>AR</tt>.  Ignored when the parameter
+     *      <code>throwable</code> contanis an instance of {@link Hl7v3Exception}.
      * @return
+     *      HL7v3 response as XML String.
      */
-    static String createNak(
+    static String response(
         GPathResult originalMessage,
-        Throwable t,
-        String nakRootElementName,
-        boolean needControlActProcess)
+        Throwable throwable,
+        String rootElementName,
+        boolean needControlActProcess,
+        boolean useCAckTypeCodes)
     {
-        String typeCode0 = 'AE'
-        String acknowledgementDetailCode0 = 'INTERR'
-        String queryResponseCode0 = 'AE'
-        String statusCode0
+        if (needControlActProcess && ! throwable) {
+            throw new IllegalArgumentException("canot generate positive ACKs with <controlActProcess>")
+        }
 
+        String typeCode0 = (useCAckTypeCodes ? 'C' : 'A') + (throwable ? 'E' : 'A')
+        String queryResponseCode0 = 'OK'
+
+        // variables below will be used only when the parameter "throwable" is not null
+        String statusCode0
+        String acknowledgementDetailCode0
         String detectedIssueEventCode0
-        String detectedIssueEventCodeSystem0 = '2.16.840.1.113883.5.4'
+        String detectedIssueEventCodeSystem0
         String detectedIssueManagementCode0
-        String detectedIssueManagementCodeSystem0 = '2.16.840.1.113883.5.4'
+        String detectedIssueManagementCodeSystem0
 
         // special mode for some exception types
-        if (t instanceof Hl7v3Exception) {
-            Hl7v3Exception hl7v3exception = (Hl7v3Exception) t
+        if (throwable) {
+            acknowledgementDetailCode0         = 'INTERR'
+            queryResponseCode0                 = 'AE'
+            detectedIssueEventCodeSystem0      = '2.16.840.1.113883.5.4'
+            detectedIssueManagementCodeSystem0 = '2.16.840.1.113883.5.4'
+        }
+        if (throwable instanceof Hl7v3Exception) {
+            Hl7v3Exception hl7v3exception = (Hl7v3Exception) throwable
             typeCode0                          = hl7v3exception.typeCode
             acknowledgementDetailCode0         = hl7v3exception.acknowledgementDetailCode
             queryResponseCode0                 = hl7v3exception.queryResponseCode
@@ -102,7 +116,7 @@ class Hl7v3NakFactory {
             detectedIssueManagementCode0       = hl7v3exception.detectedIssueManagementCode
             detectedIssueManagementCodeSystem0 = hl7v3exception.detectedIssueManagementCodeSystem
         }
-        if (t instanceof ValidationException) {
+        if (throwable instanceof ValidationException) {
             typeCode0                    = 'AE'
             acknowledgementDetailCode0   = 'SYN113'
             queryResponseCode0           = 'QE'
@@ -115,15 +129,15 @@ class Hl7v3NakFactory {
         OutputStream output = new ByteArrayOutputStream()
         MarkupBuilder builder = getBuilder(output)
 
-        builder."${nakRootElementName}"(
+        builder."${rootElementName}"(
             'ITSVersion' : 'XML_1.0',
             'xmlns'      : HL7V3_NSURI,
             'xmlns:xsi'  : 'http://www.w3.org/2001/XMLSchema-instance',
             'xmlns:xsd'  : 'http://www.w3.org/2001/XMLSchema')
         {
-            buildInstanceIdentifier(builder, 'id', false, nakMessageIdRoot, UUID.randomUUID().toString())
+            buildInstanceIdentifier(builder, 'id', false, messageIdRoot, UUID.randomUUID().toString())
             creationTime(value: hl7timestamp())
-            interactionId(root: originalMessage.interactionId.@root.text(), extension: nakRootElementName)
+            interactionId(root: originalMessage.interactionId.@root.text(), extension: rootElementName)
             processingCode(code: 'P')
             processingModeCode(code: 'T')
             acceptAckCode(code: 'NE')
@@ -135,9 +149,11 @@ class Hl7v3NakFactory {
                     def quid = originalMessage.id
                     buildInstanceIdentifier(builder, 'id', false, quid.@root.text(), quid.@extension.text())
                 }
-                acknowledgementDetail(typeCode: 'E') {
-                    code(code: acknowledgementDetailCode0, codeSystem: '2.16.840.1.113883.5.1100')
-                    text(t.getMessage())
+                if (throwable) {
+                    acknowledgementDetail(typeCode: 'E') {
+                        code(code: acknowledgementDetailCode0, codeSystem: '2.16.840.1.113883.5.1100')
+                        text(throwable.getMessage())
+                    }
                 }
             }
 
