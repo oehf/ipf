@@ -14,6 +14,7 @@
 
     <properties>
         <commons-management-version>1.0</commons-management-version>
+        <cxf-bundle-version>2.4.3</cxf-bundle-version>
         <equinox-cm-version>1.0.100-v20090520-1800</equinox-cm-version>
         <fileinstall-version>1.0.0</fileinstall-version>
         <geronimo-blueprint-version>1.0.0</geronimo-blueprint-version>
@@ -156,7 +157,7 @@
             <param>mvn:org.apache.camel/camel-http/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-jetty/${camel-version}@start</param>
             <param>mvn:org.apache.camel/camel-hl7/${camel-version}@start</param>
-            <param>mvn:org.apache.cxf/cxf-bundle/${cxf-version}@start</param>
+            <param>mvn:org.apache.cxf/cxf-bundle/${cxf-bundle-version}@start</param>
             <param>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.mina/${servicemix-mina-version}@start</param>
             <param>mvn:org.fusesource.commonman/commons-management/${commons-management-version}@start</param>
             <param>mvn:javax.wsdl/com.springsource.javax.wsdl/${springsource-wsdl-version}@start</param>

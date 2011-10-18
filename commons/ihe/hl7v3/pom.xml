@@ -22,7 +22,7 @@
         <osgi.export.pkg>
             org.openehealth.ipf.commons.ihe.hl7v3.*,
             '=schema.HL7V3.NE2008.coreschemas',
-            '=schema.HL7V3.NE2008.multicacheschemas'
+            '=schema.HL7V3.NE2008.multicacheschemas',
             schematron.*,
             wsdl.*
         </osgi.export.pkg>

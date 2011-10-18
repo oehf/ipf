@@ -21,6 +21,8 @@
             org.openehealth.ipf.platform.camel.ihe.hl7v3,
             org.openehealth.ipf.commons.ihe.hl7v3.translation,
             org.apache.camel.component.hl7,
+            org.apache.cxf.bus.spring,
+            META-INF.cxf,
             *
         </osgi.import.pkg>
     </properties>

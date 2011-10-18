@@ -25,8 +25,10 @@
             org.openehealth.ipf.commons.ihe.xds.core.responses,
             org.openehealth.ipf.commons.ihe.xds.core.validate,
             org.apache.commons.io,
+            org.apache.cxf.bus.spring,
             javax.activation,
             javax.mail.util,
+            META-INF.cxf,
             *
         </osgi.import.pkg>
         <ipf.extension.beans>regRepModelExtension</ipf.extension.beans>

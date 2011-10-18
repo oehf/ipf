@@ -25,6 +25,8 @@
             org.openehealth.ipf.commons.ihe.xds.core.responses,
             javax.servlet,
             org.apache.commons.io,
+            org.apache.cxf.bus.spring,
+            META-INF.cxf,
             *
         </osgi.import.pkg>
     </properties>
