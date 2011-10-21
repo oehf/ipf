@@ -21,7 +21,7 @@ import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
@@ -52,11 +52,11 @@ class Iti38TestRouteBuilder extends SpringRouteBuilder {
             .process(iti38ResponseValidator())
             .process {
                 try {
-                    def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
                     assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] ==
+                    assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] ==
                         "corr ${asyncResponseCount.getAndIncrement() * 2}"
 
                     assert it.in.getBody(QueryResponse.class).status == Status.SUCCESS
@@ -73,7 +73,7 @@ class Iti38TestRouteBuilder extends SpringRouteBuilder {
             .process(iti38RequestValidator())
             .process {
                 // check incoming SOAP and HTTP headers
-                def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
 
                 try {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
@@ -85,7 +85,7 @@ class Iti38TestRouteBuilder extends SpringRouteBuilder {
                 // create response, inclusive SOAP and HTTP headers
                 Message message = Exchanges.resultMessage(it)
                 message.body = RESPONSE
-                message.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] =
+                message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 
                 responseCount.incrementAndGet()

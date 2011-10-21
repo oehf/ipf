@@ -32,7 +32,7 @@ import org.apache.cxf.ws.addressing.JAXWSAConstants;
  * Base class for receivers of asynchronous responses for Web Service-based IHE transactions.
  * @author Dmytro Rud
  */
-public class AsynchronousResponseItiWebService extends DefaultItiWebService {
+public class AsynchronousResponseItiWebService extends AbstractWebService {
     private static final transient Log LOG = LogFactory.getLog(AsynchronousResponseItiWebService.class);
 
     /**
@@ -68,7 +68,7 @@ public class AsynchronousResponseItiWebService extends DefaultItiWebService {
                 : null;
 
         if (messageId != null) {
-            DefaultItiEndpoint endpoint = (DefaultItiEndpoint) getConsumer().getEndpoint();
+            AbstractWsEndpoint endpoint = (AbstractWsEndpoint) getConsumer().getEndpoint();
             
             // expose user-defined correlation key as message header
             String correlationKey = endpoint.getCorrelator().getCorrelationKey(messageId);
@@ -77,7 +77,7 @@ public class AsynchronousResponseItiWebService extends DefaultItiWebService {
                     // NB: it shouldn't be a non-modifiable singleton map...
                     headers = new HashMap<String, Object>();
                 }
-                headers.put(DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME, correlationKey);
+                headers.put(AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME, correlationKey);
             }
 
             // drop correlation data when appropriate

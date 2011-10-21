@@ -23,9 +23,9 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncRespo
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.namespace.QName;
 import java.util.Map;
@@ -71,13 +71,13 @@ public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
     }
 
     @Override
-    public Iti56AsyncResponseService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public Iti56AsyncResponseService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti56AsyncResponseService();
     }
 
     @Override
-    public DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
+    public AbstractWsProducer getProducer(
+            AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
         throw new IllegalStateException("No producer support for asynchronous response endpoints");

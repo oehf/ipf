@@ -22,7 +22,7 @@ import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
@@ -52,11 +52,11 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
             .process(iti55ResponseValidator())
             .process {
                 try {
-                    def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
                     assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${asyncResponseCount.getAndIncrement() * 3}"
+                    assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${asyncResponseCount.getAndIncrement() * 3}"
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true
@@ -71,11 +71,11 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
             .process(iti55ResponseValidator())
             .process {
                 try {
-                    def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
                     //assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${2 + deferredResponseCount.getAndIncrement() * 3}"
+                    assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${2 + deferredResponseCount.getAndIncrement() * 3}"
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true
@@ -91,7 +91,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
             .process {
                 // check incoming SOAP and HTTP headers
                 Duration dura = TtlHeaderUtils.getTtl(it.in)
-                def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
 
                 try {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
@@ -106,7 +106,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                 if (dura) {
                     XcpdTestUtils.setTtl(message, dura.years * 2)
                 }
-                message.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] = 
+                message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                     ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
                 
                 responseCount.incrementAndGet()

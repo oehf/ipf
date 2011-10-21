@@ -21,7 +21,7 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.apache.cxf.binding.soap.SoapFault
 
@@ -95,7 +95,7 @@ class TestIti56 extends StandardTestContainer {
     void testAsyncError() {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
-        requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = SERVICE1_RESPONSE_URI
+        requestExchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME] = SERVICE1_RESPONSE_URI
         def responseExchange = producerTemplate.send(SERVICE_URI_ERROR, requestExchange)
         assert responseExchange.exception == null
         assert responseExchange.pattern == ExchangePattern.InOnly
@@ -112,11 +112,11 @@ class TestIti56 extends StandardTestContainer {
         
         // set WSA ReplyTo header, when necessary
         if (responseEndpointUri) {
-            requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
+            requestExchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
         }
         
         // set correlation key
-        requestExchange.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
+        requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
         
         // send and check timing
         long startTimestamp = System.currentTimeMillis()

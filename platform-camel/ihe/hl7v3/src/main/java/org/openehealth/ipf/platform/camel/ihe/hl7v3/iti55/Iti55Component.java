@@ -69,12 +69,12 @@ public class Iti55Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
     }
 
     @Override
-    public Iti55Service getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public Iti55Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti55Service((Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>) endpoint);
     }
 
     @Override
-    public DefaultItiProducer getProducer(DefaultItiEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+    public AbstractWsProducer getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
         return new Iti55Producer(endpoint, clientFactory);
     }
 }

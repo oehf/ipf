@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
@@ -32,8 +32,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
  *
  * @author Jens Riemschneider
  */
-public class Iti43Service extends DefaultItiWebService implements Iti43PortType {
-    @Override public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
+public class Iti43Service extends AbstractWebService implements Iti43PortType {
+    @Override
+    public RetrieveDocumentSetResponseType documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetRequestType body) {
         Exchange result = process(body);
         if (result.getException() != null) {
             RetrievedDocumentSet errorResponse = new RetrievedDocumentSet(result.getException(), ErrorCode.REPOSITORY_METADATA_ERROR, ErrorCode.REPOSITORY_ERROR, null);

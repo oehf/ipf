@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
@@ -105,11 +105,11 @@ class TestIti55 extends StandardTestContainer {
         
         // set WSA ReplyTo header, when necessary
         if (requestType == RequestType.ASYNC) {
-            requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = SERVICE1_ASYNC_RESPONSE_URI
+            requestExchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME] = SERVICE1_ASYNC_RESPONSE_URI
         }
         
         // set correlation key
-        requestExchange.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
+        requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
         
         // set TTL SOAP header
         // we do it not on each message to check whether message context is being properly cleared
@@ -119,7 +119,7 @@ class TestIti55 extends StandardTestContainer {
         }
         
         // set request HTTP headers
-        requestExchange.in.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] =
+        requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                 ['MyRequestHeader': "Number ${n}".toString()]
         
         // send and check timing
@@ -138,7 +138,7 @@ class TestIti55 extends StandardTestContainer {
                 ttlResponsesCount.incrementAndGet()
             }
 
-            def inHttpHeaders = resultMessage.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+            def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
 

@@ -20,14 +20,14 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsAsyncResponseServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 /**
  * Camel Endpoint implementation for XDS-like transactions
  * which have only a single Web Service operation.
  * @author Dmytro Rud
  */
-public class XdsAsyncResponseEndpoint extends DefaultItiEndpoint<AbstractWsComponent<?>> {
+public class XdsAsyncResponseEndpoint extends AbstractWsEndpoint<AbstractWsComponent<?>> {
 
     public XdsAsyncResponseEndpoint(
             String endpointUri,

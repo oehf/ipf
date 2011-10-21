@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
 import org.apache.camel.management.mbean.ManagedEndpoint;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
@@ -31,7 +31,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 public class ManagedWsItiEndpoint extends ManagedEndpoint {
     private final WsTransactionConfiguration wsTransactionConfiguration;
 
-    public ManagedWsItiEndpoint(DefaultItiEndpoint<?> endpoint,
+    public ManagedWsItiEndpoint(AbstractWsEndpoint<?> endpoint,
         WsTransactionConfiguration wsTransactionConfiguration) {
         super(endpoint);
         this.wsTransactionConfiguration = wsTransactionConfiguration;
@@ -77,8 +77,8 @@ public class ManagedWsItiEndpoint extends ManagedEndpoint {
     }
     
     @Override
-    public DefaultItiEndpoint<?> getEndpoint() {
-        return (DefaultItiEndpoint<?>) super.getEndpoint();
+    public AbstractWsEndpoint<?> getEndpoint() {
+        return (AbstractWsEndpoint<?>) super.getEndpoint();
     }
 
 }

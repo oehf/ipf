@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.namespace.QName;
 import java.util.Map;
@@ -72,12 +72,12 @@ public class Iti55DeferredResponseComponent extends AbstractWsComponent<Hl7v3WsT
     }
 
     @Override
-    public Iti55DeferredResponseService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public Iti55DeferredResponseService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti55DeferredResponseService();
     }
 
     @Override
-    public DefaultItiProducer getProducer(DefaultItiEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+    public AbstractWsProducer getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
         return new Iti55DeferredResponseProducer(endpoint, clientFactory);
     }
 }

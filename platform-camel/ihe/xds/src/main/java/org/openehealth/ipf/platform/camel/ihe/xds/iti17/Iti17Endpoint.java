@@ -21,12 +21,12 @@ import org.apache.camel.Producer;
 import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 /**
  * The Camel endpoint for the ITI-17 transaction.
  */
-public class Iti17Endpoint extends DefaultItiEndpoint {
+public class Iti17Endpoint extends AbstractWsEndpoint {
     private Iti17Consumer activeConsumer;
 
     /**

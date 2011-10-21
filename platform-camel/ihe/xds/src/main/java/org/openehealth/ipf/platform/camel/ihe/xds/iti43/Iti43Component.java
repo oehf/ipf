@@ -24,9 +24,9 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43ServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
@@ -69,13 +69,13 @@ public class Iti43Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public Iti43Service getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public Iti43Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti43Service();
     }
 
     @Override
-    public DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
+    public AbstractWsProducer getProducer(
+            AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
         return new SimpleWsProducer(endpoint, clientFactory);

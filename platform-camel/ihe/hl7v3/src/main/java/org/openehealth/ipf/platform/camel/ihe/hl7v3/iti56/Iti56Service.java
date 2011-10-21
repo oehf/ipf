@@ -18,13 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
 import org.apache.camel.Exchange;
 import org.apache.cxf.interceptor.Fault;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 /**
  * Service implementation for the IHE ITI-56 transaction (XCPD).
  * @author Dmytro Rud
  */
-public class Iti56Service extends DefaultItiWebService implements Iti56PortType {
+public class Iti56Service extends AbstractWebService implements Iti56PortType {
 
     @Override
     public Object locatePatients(Object request) {

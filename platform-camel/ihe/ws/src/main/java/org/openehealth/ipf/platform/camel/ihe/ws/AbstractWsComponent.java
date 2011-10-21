@@ -87,7 +87,7 @@ abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfig
      * @return
      *      service class instance for the given endpoint.
      */
-    public abstract DefaultItiWebService getServiceInstance(DefaultItiEndpoint<?> endpoint);
+    public abstract AbstractWebService getServiceInstance(AbstractWsEndpoint<?> endpoint);
 
     /**
      * Constructs and returns a transaction-specific Camel producer instance
@@ -99,7 +99,7 @@ abstract public class AbstractWsComponent<ConfigType extends WsTransactionConfig
      * @return
      *      Camel producer instance.
      */
-    public abstract DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
+    public abstract AbstractWsProducer getProducer(
+            AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory);
 }

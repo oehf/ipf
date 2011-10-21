@@ -127,7 +127,7 @@ abstract public class HeaderUtils {
     /**
      * Stores a map of incoming SOAP headers from the given  
      * Web Service message context into the Camel header
-     * {@link DefaultItiEndpoint#INCOMING_SOAP_HEADERS} 
+     * {@link AbstractWsEndpoint#INCOMING_SOAP_HEADERS}
      * of the given Camel message.
      * 
      * @param messageContext
@@ -148,13 +148,13 @@ abstract public class HeaderUtils {
                 userHeaders.put(soapHeader.getName(), soapHeader);
             }
         }
-        message.setHeader(DefaultItiEndpoint.INCOMING_SOAP_HEADERS, userHeaders);
+        message.setHeader(AbstractWsEndpoint.INCOMING_SOAP_HEADERS, userHeaders);
     }
 
 
     /**
      * Injects user-defined SOAP headers from the header 
-     * {@link DefaultItiEndpoint#OUTGOING_SOAP_HEADERS} 
+     * {@link AbstractWsEndpoint#OUTGOING_SOAP_HEADERS}
      * of the given Camel message into the given Web Service 
      * message context.
      * 
@@ -174,7 +174,7 @@ abstract public class HeaderUtils {
             boolean isRequest) 
     {
         List<Header> userHeaders = CastUtils.cast(
-                message.getHeader(DefaultItiEndpoint.OUTGOING_SOAP_HEADERS, List.class));
+                message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, List.class));
         
         if ((userHeaders != null) && ! userHeaders.isEmpty()) {
             List<Header> soapHeaders = getHeaders(
@@ -187,7 +187,7 @@ abstract public class HeaderUtils {
     /**
      * Stores a map of incoming HTTP headers from the given  
      * Web Service message context into the Camel header
-     * {@link DefaultItiEndpoint#INCOMING_HTTP_HEADERS} 
+     * {@link AbstractWsEndpoint#INCOMING_HTTP_HEADERS}
      * of the given Camel message.
      * 
      * @param messageContext
@@ -206,13 +206,13 @@ abstract public class HeaderUtils {
         for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
             userHeaders.put(entry.getKey(), entry.getValue().get(0));
         }
-        message.setHeader(DefaultItiEndpoint.INCOMING_HTTP_HEADERS, userHeaders);
+        message.setHeader(AbstractWsEndpoint.INCOMING_HTTP_HEADERS, userHeaders);
     }
 
 
     /**
      * Injects user-defined HTTP headers from the header 
-     * {@link DefaultItiEndpoint#OUTGOING_HTTP_HEADERS} 
+     * {@link AbstractWsEndpoint#OUTGOING_HTTP_HEADERS}
      * of the given Camel message into the given Web Service 
      * message context.
      * 
@@ -232,7 +232,7 @@ abstract public class HeaderUtils {
             boolean isRequest) 
     {
         Map<String, String> headers = CastUtils.cast(
-                message.getHeader(DefaultItiEndpoint.OUTGOING_HTTP_HEADERS, Map.class));
+                message.getHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.class));
         
         if ((headers != null) && ! headers.isEmpty()) {
             Map<String, List<String>> httpHeaders = getHeaders(

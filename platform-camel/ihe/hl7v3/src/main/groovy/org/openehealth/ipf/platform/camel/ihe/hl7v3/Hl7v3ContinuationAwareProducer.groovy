@@ -29,8 +29,8 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -52,7 +52,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  * due to Groovy peculiarities, in reality is should be
  * <code>&lt;String, String&gt;</code>.
  */
-class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
+class Hl7v3ContinuationAwareProducer extends AbstractWsProducer {
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class)
 
     private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal()
@@ -88,7 +88,7 @@ class Hl7v3ContinuationAwareProducer extends DefaultItiProducer {
 
     @Override
     void process(Exchange exchange) {
-        if (exchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME]) {
+        if (exchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME]) {
             throw new IllegalStateException('WS-Addressing asynchrony cannot be used in conjunction with interactive response continuation')
         }
         super.process(exchange)

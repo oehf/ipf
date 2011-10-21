@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.pcc1;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.DefaultHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 
 /**
  * Service implementation for the IHE PCC-1 transaction (QED).
  * @author Dmytro Rud
  */
-public class Pcc1Service extends DefaultHl7v3WebService implements Pcc1PortType {
+public class Pcc1Service extends AbstractHl7v3WebService implements Pcc1PortType {
 
     public Pcc1Service() {
         super(Pcc1Component.WS_CONFIG);

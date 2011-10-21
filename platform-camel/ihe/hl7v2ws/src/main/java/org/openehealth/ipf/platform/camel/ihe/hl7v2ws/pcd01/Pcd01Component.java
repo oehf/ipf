@@ -22,8 +22,8 @@ import org.openehealth.ipf.modules.hl7.parser.PipeParser;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 import javax.xml.namespace.QName;
 
@@ -87,7 +87,7 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
     }
 
     @Override
-    public DefaultItiWebService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public AbstractWebService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Pcd01Service();
     }
 }

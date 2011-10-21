@@ -19,9 +19,9 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
 import java.util.Map;
@@ -45,8 +45,8 @@ abstract public class AbstractHl7v2WsComponent
     }
 
     @Override
-    public DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
+    public AbstractWsProducer getProducer(
+            AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
         return new SimpleWsProducer(endpoint, clientFactory);

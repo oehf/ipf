@@ -25,9 +25,9 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18ServerAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsEndpoint;
 
@@ -70,13 +70,13 @@ public class Iti18Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public Iti18Service getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public Iti18Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti18Service();
     }
 
     @Override
-    public DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
+    public AbstractWsProducer getProducer(
+            AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
         return new SimpleWsProducer(endpoint, clientFactory);

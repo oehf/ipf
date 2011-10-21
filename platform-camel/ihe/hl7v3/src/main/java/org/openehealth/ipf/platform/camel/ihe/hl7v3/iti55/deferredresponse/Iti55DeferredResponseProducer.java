@@ -23,17 +23,17 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredRe
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import static org.apache.cxf.ws.addressing.JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES;
 
 /**
  * @author Dmytro Rud
  */
-public class Iti55DeferredResponseProducer extends DefaultItiProducer {
+public class Iti55DeferredResponseProducer extends AbstractWsProducer {
 
-    public Iti55DeferredResponseProducer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
+    public Iti55DeferredResponseProducer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory, Object.class);
     }
 

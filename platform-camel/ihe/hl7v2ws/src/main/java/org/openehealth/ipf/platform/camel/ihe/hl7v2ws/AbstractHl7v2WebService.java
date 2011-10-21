@@ -29,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 /**
  * Generic implementation of an HL7v2-based Web Service.
@@ -38,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
  * @author Mitko Kolev
  * @author Stefan Ivanov
  */
-public abstract class AbstractHl7v2WebService extends DefaultItiWebService {
+public abstract class AbstractHl7v2WebService extends AbstractWebService {
     private static final Log LOG = LogFactory.getLog(AbstractHl7v2WebService.class);
 
     private Hl7v2TransactionConfiguration config = null;

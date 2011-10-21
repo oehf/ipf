@@ -21,9 +21,9 @@ import org.apache.camel.Producer;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
-public class SomeItiEndpoint extends DefaultItiEndpoint<SomeItiComponent> {
+public class SomeItiEndpoint extends AbstractWsEndpoint<SomeItiComponent> {
     
     @SuppressWarnings("unchecked")
     public SomeItiEndpoint(

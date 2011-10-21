@@ -36,9 +36,9 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.DefaultHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -56,7 +56,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredrespons
  *
  * @author Dmytro Rud
  */
-public class Iti55Service extends DefaultHl7v3WebService implements Iti55PortType {
+public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortType {
     private static final transient Log LOG = LogFactory.getLog(Iti55Service.class);
 
     private final ProducerTemplate producerTemplate;
@@ -152,7 +152,7 @@ public class Iti55Service extends DefaultHl7v3WebService implements Iti55PortTyp
                     exchange.getIn().setHeader("iti55.deferred.requestMessageId", requestMessageId);
                     exchange.getIn().setHeader("iti55.deferred.auditDataset", auditDataset);
 
-                    DefaultItiEndpoint targetEndpoint = (DefaultItiEndpoint) camelContext.getEndpoint(deferredResponseUri);
+                    AbstractWsEndpoint targetEndpoint = (AbstractWsEndpoint) camelContext.getEndpoint(deferredResponseUri);
                     targetEndpoint.setAudit(endpoint.isAudit());
                     targetEndpoint.setAllowIncompleteAudit(endpoint.isAllowIncompleteAudit());
 

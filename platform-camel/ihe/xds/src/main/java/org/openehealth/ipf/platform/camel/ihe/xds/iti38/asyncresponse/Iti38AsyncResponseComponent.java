@@ -22,8 +22,8 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.asyncresponse.Iti38AsyncResponsePortType;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
 
 import javax.xml.namespace.QName;
@@ -66,13 +66,13 @@ public class Iti38AsyncResponseComponent extends AbstractWsComponent<WsTransacti
     }
 
     @Override
-    public Iti38AsyncResponseService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public Iti38AsyncResponseService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti38AsyncResponseService();
     }
 
     @Override
-    public DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
+    public AbstractWsProducer getProducer(
+            AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
         throw new IllegalStateException("No producer support for asynchronous response endpoints");

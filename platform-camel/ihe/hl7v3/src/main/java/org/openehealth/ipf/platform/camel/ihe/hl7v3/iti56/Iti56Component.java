@@ -25,9 +25,9 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
 import javax.xml.namespace.QName;
@@ -71,12 +71,12 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
     }
 
     @Override
-    public Iti56Service getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public Iti56Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti56Service();
     }
 
     @Override
-    public DefaultItiProducer getProducer(DefaultItiEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+    public AbstractWsProducer getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
         return new SimpleWsProducer(endpoint, clientFactory);
     }
 }

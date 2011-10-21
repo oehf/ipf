@@ -27,13 +27,13 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegister
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.ProvideAndRegisterDocumentSetRequestType.Document;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti15.Iti15PortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 /**
  * The producer implementation for the ITI-15 component.
  */
-public class Iti15Producer extends DefaultItiProducer {
+public class Iti15Producer extends AbstractWsProducer {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -41,7 +41,7 @@ public class Iti15Producer extends DefaultItiProducer {
      * @param clientFactory
      *          the factory for clients to produce messages for the service.              
      */
-    public Iti15Producer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
+    public Iti15Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class);
     }
 

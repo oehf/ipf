@@ -22,17 +22,17 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
  * Service implementation for the IHE ITI-38 transaction.
  */
-public class Iti38Service extends DefaultItiWebService implements Iti38PortType {
-    private final DefaultItiEndpoint endpoint;
+public class Iti38Service extends AbstractWebService implements Iti38PortType {
+    private final AbstractWsEndpoint endpoint;
 
-    public Iti38Service(DefaultItiEndpoint endpoint) {
+    public Iti38Service(AbstractWsEndpoint endpoint) {
         this.endpoint = endpoint;
     }
 

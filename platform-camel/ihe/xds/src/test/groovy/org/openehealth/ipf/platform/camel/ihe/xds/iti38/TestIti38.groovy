@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 /**
@@ -93,14 +93,14 @@ class TestIti38 extends StandardTestContainer {
         
         // set WSA ReplyTo header, when necessary
         if (responseEndpointUri) {
-            requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
+            requestExchange.in.headers[AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
         }
         
         // set correlation key
-        requestExchange.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
+        requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
         
         // set request HTTP headers
-        requestExchange.in.headers[DefaultItiEndpoint.OUTGOING_HTTP_HEADERS] =
+        requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
                 ['MyRequestHeader': "Number ${n}".toString()]
         
         // send and check timing
@@ -113,7 +113,7 @@ class TestIti38 extends StandardTestContainer {
         if (!responseEndpointUri) {
             assert resultMessage.getBody(QueryResponse.class).status == Status.SUCCESS
             
-            def inHttpHeaders = resultMessage.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+            def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
     }

@@ -39,7 +39,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  * @author Dmytro Rud
  */
 public class Hl7v3ContinuationAwareWebService
-        extends DefaultHl7v3WebService
+        extends AbstractHl7v3WebService
         implements Hl7v3ContinuationsPortType
 {
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareWebService.class)

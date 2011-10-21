@@ -28,7 +28,7 @@ import org.apache.camel.Message;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.jaxb.JAXBDataBinding;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -52,7 +52,7 @@ public class TtlHeaderUtils {
      */
     public static Duration getTtl(Message message) {
         Map<QName, Header> soapHeaders = CastUtils.cast(message.getHeader(
-                DefaultItiEndpoint.INCOMING_SOAP_HEADERS, 
+                AbstractWsEndpoint.INCOMING_SOAP_HEADERS,
                 Map.class));
         if ((soapHeaders != null) && soapHeaders.containsKey(TTL_HEADER_QNAME)) {
             Object o = soapHeaders.get(TTL_HEADER_QNAME).getObject();
@@ -78,10 +78,10 @@ public class TtlHeaderUtils {
      */
     public static void setTtl(Duration dura, Message message) {
         List<Header> soapHeaders = CastUtils.cast(message.getHeader(
-                DefaultItiEndpoint.OUTGOING_SOAP_HEADERS, List.class));
+                AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, List.class));
         if (soapHeaders == null) {
             soapHeaders = new ArrayList<Header>();
-            message.setHeader(DefaultItiEndpoint.OUTGOING_SOAP_HEADERS, soapHeaders);
+            message.setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, soapHeaders);
         }
         
         Header ttlHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());

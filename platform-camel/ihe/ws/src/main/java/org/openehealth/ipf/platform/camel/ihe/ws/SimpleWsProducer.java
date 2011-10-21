@@ -19,7 +19,6 @@ import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.frontend.ClientProxy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 
-import javax.jws.Oneway;
 import javax.jws.WebMethod;
 import java.lang.reflect.Method;
 
@@ -27,7 +26,7 @@ import java.lang.reflect.Method;
  * Producer for Web Services which have only one operation.
  * @author Dmytro Rud
  */
-public class SimpleWsProducer extends DefaultItiProducer {
+public class SimpleWsProducer extends AbstractWsProducer {
 
     private final String operationName;
     private final Class<?> declaredRequestClass;
@@ -40,7 +39,7 @@ public class SimpleWsProducer extends DefaultItiProducer {
      *      JAX-WS client object factory.
      */
     public SimpleWsProducer(
-            DefaultItiEndpoint endpoint,
+            AbstractWsEndpoint endpoint,
             JaxWsClientFactory clientFactory)
     {
         super(endpoint, clientFactory, Object.class);

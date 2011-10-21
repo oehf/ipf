@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.handler.MessageContext;
@@ -38,12 +38,12 @@ import javax.xml.ws.handler.MessageContext;
  * Generic Web Service implementation for HL7 v3-based transactions.
  * @author Dmytro Rud
  */
-public class DefaultHl7v3WebService extends DefaultItiWebService {
-    private static final transient Log LOG = LogFactory.getLog(DefaultHl7v3WebService.class);
+abstract public class AbstractHl7v3WebService extends AbstractWebService {
+    private static final transient Log LOG = LogFactory.getLog(AbstractHl7v3WebService.class);
 
     private final Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
 
-    public DefaultHl7v3WebService(Hl7v3WsTransactionConfiguration wsTransactionConfiguration) {
+    public AbstractHl7v3WebService(Hl7v3WsTransactionConfiguration wsTransactionConfiguration) {
         Validate.notNull(wsTransactionConfiguration);
         this.wsTransactionConfiguration = wsTransactionConfiguration;
     }

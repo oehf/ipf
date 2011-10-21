@@ -24,8 +24,8 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.xml.XmlUtils;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.ws.BindingProvider;
 import java.util.Map;
@@ -35,10 +35,10 @@ import java.util.Map;
  * with support of the Deferred Response option.
  * @author Dmytro Rud
  */
-class Iti55Producer extends DefaultItiProducer {
+class Iti55Producer extends AbstractWsProducer {
     private static final String PROCESSING_MODE_PROPERTY = Iti55Producer.class.getName() + ".MODE";
 
-    Iti55Producer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
+    Iti55Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
         super(endpoint, clientFactory, Object.class);
     }
 

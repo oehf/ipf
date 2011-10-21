@@ -28,14 +28,14 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerA
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiConsumer;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsConsumer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 /**
  * Camel endpoint for HL7v2-WS transaction with a single operation.
  */
-public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<AbstractHl7v2WsComponent> {
+public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsComponent> {
 
     /**
      * Constructs the endpoint.
@@ -85,8 +85,8 @@ public class SimpleHl7v2WsEndpoint extends DefaultItiEndpoint<AbstractHl7v2WsCom
         serviceInstance.setHl7v2Configuration(getComponent());
         ServerFactoryBean serverFactory = getJaxWsServiceFactory().createServerFactory(serviceInstance);
         Server server = serverFactory.create();
-        DefaultItiWebService service = (DefaultItiWebService) serverFactory.getServiceBean();
-        return new DefaultItiConsumer(this, processor, service, server);
+        AbstractWebService service = (AbstractWebService) serverFactory.getServiceBean();
+        return new DefaultWsConsumer(this, processor, service, server);
     }
 
 

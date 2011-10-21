@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
@@ -50,7 +50,7 @@ class Iti56TestRouteBuilder extends SpringRouteBuilder {
             .process {
                 if (! it.in.body.contains('<soap:Fault')) {
                     assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] ==
+                    assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] ==
                         "corr ${asyncResponseCount.getAndIncrement() * 2}"
                 }
             }

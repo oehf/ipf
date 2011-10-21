@@ -22,17 +22,17 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
 /**
  * Service implementation for the IHE ITI-39 transaction.
  */
-public class Iti39Service extends DefaultItiWebService implements Iti39PortType {
-    private final DefaultItiEndpoint endpoint;
+public class Iti39Service extends AbstractWebService implements Iti39PortType {
+    private final AbstractWsEndpoint endpoint;
 
-    public Iti39Service(DefaultItiEndpoint endpoint) {
+    public Iti39Service(AbstractWsEndpoint endpoint) {
         this.endpoint = endpoint;
     }
 

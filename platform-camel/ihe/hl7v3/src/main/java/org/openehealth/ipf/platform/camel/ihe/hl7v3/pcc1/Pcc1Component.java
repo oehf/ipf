@@ -23,12 +23,12 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransaction
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.DefaultHl7v3WebService;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 import javax.xml.namespace.QName;
 
@@ -74,7 +74,7 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
     }
 
     @Override
-    public DefaultHl7v3WebService getServiceInstance(DefaultItiEndpoint<?> endpoint) {
+    public AbstractHl7v3WebService getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         Hl7v3ContinuationAwareEndpoint endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
         return endpoint2.isSupportContinuation() ?
                 new Pcc1ContinuationAwareService(endpoint2) :
@@ -82,8 +82,8 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
     }
 
     @Override
-    public DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
+    public AbstractWsProducer getProducer(
+            AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
         return new Hl7v3ContinuationAwareProducer(
