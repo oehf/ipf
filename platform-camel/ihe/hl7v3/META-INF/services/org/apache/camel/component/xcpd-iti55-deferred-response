@@ -9,4 +9,4 @@
 
 # Camel registration for the xcpd-iti55-deferred-response component
  
-class=org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponseComponent
+class=org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent

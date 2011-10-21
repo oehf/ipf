@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3;
+package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
 import groovy.util.slurpersupport.GPathResult;
 
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.DatatypeFactory;
 import org.apache.camel.Message;
-
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.TtlHeaderUtils;
 
 /**
  * Helper functions for XCPD tests.

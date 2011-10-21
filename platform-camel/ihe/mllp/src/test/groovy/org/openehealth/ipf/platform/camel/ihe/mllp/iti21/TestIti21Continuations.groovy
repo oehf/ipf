@@ -15,15 +15,13 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21
 
-import static org.junit.Assert.*
-
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.EhcacheInteractiveConfigurationStorage
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer
 
 /**
- * Tests for HL7 continuations, see � 2.10.2 of the HL7 v.2.5 specification.
+ * Tests for HL7 continuations, see Section 2.10.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
 class TestIti21Continuations extends MllpTestContainer {
@@ -68,13 +66,13 @@ class TestIti21Continuations extends MllpTestContainer {
     void testHappyCaseAndAudit() {
         def msg = send(endpointUri(28210, true, true, true, true), REQUEST_MESSAGE)
         assert 4 == msg.QUERY_RESPONSE().size()
-        assert 2 == org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size()
+        assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value
         
         // check whether "autoCancel" parameter works
-        EhcacheInteractiveConfigurationStorage storage = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.appContext.getBean('interactiveContinuationStorage')
+        EhcacheInteractiveConfigurationStorage storage = appContext.getBean('interactiveContinuationStorage')
         assert storage.ehcache.size == 0
     }
     
@@ -82,7 +80,7 @@ class TestIti21Continuations extends MllpTestContainer {
     void testInteractiveAssembly() {
         def msg = send(endpointUri(28211, true, false, false, false), REQUEST_MESSAGE)
         assert 4 == msg.QUERY_RESPONSE().size()
-        assert 2 == org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size()
+        assert 2 == auditSender.messages.size()
         assert '4' == msg.QAK[4].value
         assert '4' == msg.QAK[5].value
         assert '0' == msg.QAK[6].value

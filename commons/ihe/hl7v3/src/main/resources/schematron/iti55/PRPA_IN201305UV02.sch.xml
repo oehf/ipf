@@ -130,7 +130,9 @@
             <sch:assert test="not(hl7:initialQuantity)">initialQuantity must be omitted</sch:assert>
             <sch:assert test="not(hl7:initialQuantityCode)">initialQuantityCode must be omitted</sch:assert>
 
-            <sch:assert test="hl7:responsePriorityCode/@code = 'I'">responsePriorityCode must equal to 'I'</sch:assert>
+            <sch:assert test="(hl7:responsePriorityCode/@code = 'I') or (hl7:responsePriorityCode/@code = 'D')">
+                responsePriorityCode must equal to 'I' (immediate) or 'D' (deferred)
+            </sch:assert>
             <sch:assert test="hl7:responseModalityCode/@code = 'R'">responseModalityCode must equal to 'R'</sch:assert>
             <sch:assert test="hl7:statusCode/@code = 'new'">statusCode must equal to 'new'</sch:assert>
             
@@ -169,6 +171,15 @@
         <!-- XCPD supplement, line 765; but must be mothersMaidenName, not livingSubjectName -->
         <sch:rule context="/hl7:PRPA_IN201305UV02/hl7:controlActProcess/hl7:queryByParameter/hl7:parameterList/hl7:mothersMaidenName/hl7:value">
             <sch:assert test="not(@use = 'SRCH')">attribute 'use' should not be set to 'SRCH'</sch:assert>
+        </sch:rule>
+
+        <sch:rule context="/hl7:PRPA_IN201305UV02[hl7:controlActProcess/hl7:queryByParameter/hl7:responsePriorityCode/@code = 'D']">
+            <sch:assert test="count(hl7:respondTo) = 1">
+                exactly one respondTo element must be present when responsePriorityCode equals 'D'
+            </sch:assert>
+            <sch:assert test="hl7:respondTo[1]/hl7:telecom/@value">
+                deferred response URI must be specified when responsePriorityCode equals 'D'
+            </sch:assert>
         </sch:rule>
     </sch:pattern>
 

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.asyncresponse;
+package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55AsyncResponsePortType;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
@@ -35,12 +35,14 @@ import java.util.Map;
  * (receivers of deferred responses).
  */
 public class Iti55DeferredResponseComponent extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
+    public static final String THREAD_POOL_NAME = "iti55.deferred.response";
+
     private final static String NS_URI = "urn:ihe:iti:xcpd:2009";
     private final static Hl7v3WsTransactionConfiguration WS_CONFIG = new Hl7v3WsTransactionConfiguration(
             IpfInteractionId.ITI_55,
             new QName(NS_URI, "InitiatingGateway_Service", "xcpd"),
-            Iti55AsyncResponsePortType.class,
-            new QName(NS_URI, "InitiatingGateway_Binding", "xcpd"),
+            Iti55DeferredResponsePortType.class,
+            new QName(NS_URI, "InitiatingGatewayDeferredResponse_Binding", "xcpd"),
             false,
             "wsdl/iti55/iti55-deferred-response-raw.wsdl",
             null,
@@ -61,7 +63,7 @@ public class Iti55DeferredResponseComponent extends AbstractWsComponent<Hl7v3WsT
 
     @Override
     public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return null;   // no producer support
+        return null;   // producers send responses, so the server-side strategy must be used
     }
 
     @Override
@@ -75,10 +77,7 @@ public class Iti55DeferredResponseComponent extends AbstractWsComponent<Hl7v3WsT
     }
 
     @Override
-    public DefaultItiProducer getProducer(
-            DefaultItiEndpoint<?> endpoint,
-            JaxWsClientFactory clientFactory)
-    {
-        throw new IllegalStateException("No producer support for deferred response endpoints");
+    public DefaultItiProducer getProducer(DefaultItiEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+        return new Iti55DeferredResponseProducer(endpoint, clientFactory);
     }
 }

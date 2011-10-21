@@ -24,10 +24,7 @@ import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
-import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
-import org.apache.cxf.ws.addressing.AttributedURIType;
-import org.apache.cxf.ws.addressing.EndpointReferenceType;
-import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.apache.cxf.ws.addressing.*;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.w3c.dom.Document;
@@ -43,9 +40,9 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
     private static final transient Log LOG = LogFactory.getLog(AbstractAuditInterceptor.class);
     
     /**
-     * Key used to store audit datasets in CXF exchanges
+     * Key used to store audit datasets in Web Service contexts.
      */
-    public static final String CXF_EXCHANGE_KEY = "atna.audit.dataset";
+    public static final String CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".CONTEXT_KEY";
 
     /**
      * Audit strategy associated with this interceptor.  
@@ -67,8 +64,8 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
         Validate.notNull(auditStrategy);
         this.auditStrategy = auditStrategy;
     }
-    
-    
+
+
     /**
      * Returns an audit dataset instance which corresponds to the given message.
      * <p>
@@ -83,14 +80,32 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      *      could be neither obtained nor created from scratch.
      */
     protected WsAuditDataset getAuditDataset(SoapMessage message) {
-        WsAuditDataset auditDataset = (WsAuditDataset) message.getExchange().get(CXF_EXCHANGE_KEY);
+        Exchange exchange = message.getExchange();
+        Message[] messages = new Message[] {
+                message,
+                exchange.getInMessage(),
+                exchange.getOutMessage(),
+                exchange.getInFaultMessage(),
+                exchange.getOutFaultMessage()
+        };
+
+        WsAuditDataset auditDataset = null;
+        for (Message m : messages) {
+            if (m != null) {
+                auditDataset = (WsAuditDataset) m.getContextualProperty(CONTEXT_KEY);
+                if (auditDataset != null) {
+                    break;
+                }
+            }
+        }
+
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {
                 LOG.warn("Cannot obtain audit dataset instance, NPE is pending");
                 return null;
             }
-            message.getExchange().put(CXF_EXCHANGE_KEY, auditDataset);
+            message.setContextualProperty(CONTEXT_KEY, auditDataset);
         }
         return auditDataset;
     }

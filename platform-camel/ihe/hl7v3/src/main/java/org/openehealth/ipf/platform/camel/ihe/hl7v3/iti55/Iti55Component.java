@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.*;
 
 import javax.xml.namespace.QName;
@@ -45,23 +46,11 @@ public class Iti55Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
             false,
             true);
 
-    /**
-     * Name of Camel header where the contents of the incoming CorrelationTimeToLive
-     * SOAP header will be stored.
-     */
-    public static final String XCPD_INPUT_TTL_HEADER_NAME  = "xcpd.input.CorrelationTimeToLive";
 
-    /**
-     * Name of Camel header where the user should store the value for the outgoing 
-     * CorrelationTimeToLive SOAP header.
-     */
-    public static final String XCPD_OUTPUT_TTL_HEADER_NAME = "xcpd.output.CorrelationTimeToLive";
-    
-    
     @SuppressWarnings("unchecked") // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Iti55Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
@@ -76,12 +65,12 @@ public class Iti55Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
 
     @Override
     public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return null;   // server-side auditing is performed manually
+        return new Iti55AuditStrategy(true, allowIncompleteAudit);
     }
 
     @Override
     public Iti55Service getServiceInstance(DefaultItiEndpoint<?> endpoint) {
-        return new Iti55Service((Iti55Endpoint) endpoint);
+        return new Iti55Service((Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>) endpoint);
     }
 
     @Override

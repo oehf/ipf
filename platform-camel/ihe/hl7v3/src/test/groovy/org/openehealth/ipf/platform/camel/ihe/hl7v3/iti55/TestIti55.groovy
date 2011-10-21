@@ -16,33 +16,41 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
 import java.util.concurrent.atomic.AtomicInteger
-
+import org.apache.camel.Exchange
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
+import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.XcpdTestUtils
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
 
 /**
  * Tests for ITI-55.
  * @author Dmytro Rud
  */
 class TestIti55 extends StandardTestContainer {
-    
+    enum RequestType {REGULAR, ASYNC, DEFERRED}
+
     def static CONTEXT_DESCRIPTOR = 'iti55/iti-55.xml'
     
     final String SERVICE1_URI = "xcpd-iti55://localhost:${port}/iti55service?correlator=#correlator"
-    final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti55service-response"
     final String SERVICE2_URI = "xcpd-iti55://localhost:${port}/iti55service2"
-    
-    static final String REQUEST = StandardTestContainer.readFile('iti55/iti55-sample-request.xml')
-    
-    static final Set<Integer> CALLS_WITH_TTL_HEADER = [1, 5, 9] as Set
+
+    final String SERVICE1_ASYNC_RESPONSE_URI = "http://localhost:${port}/iti55service-async-response"
+    final String SERVICE1_DEFERRED_RESPONSE_URI = "http://localhost:${port}/iti55service-deferred-response"
+
+    final String REQUEST = StandardTestContainer.readFile('iti55/iti55-sample-request.xml')
+
+    final String REQUEST_DEFERRED =
+        StandardTestContainer.readFile('iti55/iti55-sample-request-deferred.xml').replace(
+                '***REPLACEME***', SERVICE1_DEFERRED_RESPONSE_URI)
+
+
+    static final Set<Integer> CALLS_WITH_TTL_HEADER = [1, 7, 13] as Set
     static final AtomicInteger ttlResponsesCount = new AtomicInteger(0)
     
     static void main(args) {
@@ -57,7 +65,7 @@ class TestIti55 extends StandardTestContainer {
     /**
      * Test whether:
      * <ol>
-     *   <li> sync and async requests are possible...
+     *   <li> sync, async and deferred mode requests are possible...
      *   <li> ...and not influence each other (they shouldn't),
      *   <li> async requests are really async (exchanges are InOnly and delays do not matter),
      *   <li> SOAP headers (WSA ReplyTo + TTL) can be set and read,
@@ -69,39 +77,35 @@ class TestIti55 extends StandardTestContainer {
     @Test
     void testIti55() {
         final int N = 5
-        auditSender.reset(N * 4)
         int i = 0
-        
+
         N.times {
-            send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
-            send(SERVICE1_URI, i++)
+            sendMainTestMessage(RequestType.ASYNC,    i++)
+            sendMainTestMessage(RequestType.REGULAR,  i++)
+            sendMainTestMessage(RequestType.DEFERRED, i++)
         }
         
         // wait for completion of asynchronous routes
         Thread.currentThread().sleep(1000 + Iti55TestRouteBuilder.ASYNC_DELAY)
-        auditSender.latch.await()
-        
-        assert Iti55TestRouteBuilder.responseCount.get() == N * 2
-        assert Iti55TestRouteBuilder.asyncResponseCount.get() == N
-        
-        assert auditSender.messages.size() == N * 4
+
+        assert Iti55TestRouteBuilder.responseCount.get()         == N * 3
+        assert Iti55TestRouteBuilder.asyncResponseCount.get()    == N
+        assert Iti55TestRouteBuilder.deferredResponseCount.get() == N
+
+        assert auditSender.messages.size() == N * 6
         assert ttlResponsesCount.get() == CALLS_WITH_TTL_HEADER.size()
         
         assert ! Iti55TestRouteBuilder.errorOccurred
     }
     
     
-    private void send(
-            String endpointUri,
-            int n,
-            String responseEndpointUri = null)
-    {
-        def requestExchange = new DefaultExchange(camelContext)
-        requestExchange.in.body = REQUEST
+    private void sendMainTestMessage(RequestType requestType, int n) {
+        Exchange requestExchange = new DefaultExchange(camelContext)
+        requestExchange.in.body = (requestType == RequestType.DEFERRED) ? REQUEST_DEFERRED : REQUEST
         
         // set WSA ReplyTo header, when necessary
-        if (responseEndpointUri) {
-            requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = responseEndpointUri
+        if (requestType == RequestType.ASYNC) {
+            requestExchange.in.headers[DefaultItiEndpoint.WSA_REPLYTO_HEADER_NAME] = SERVICE1_ASYNC_RESPONSE_URI
         }
         
         // set correlation key
@@ -120,12 +124,12 @@ class TestIti55 extends StandardTestContainer {
         
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
-        def resultMessage = Exchanges.resultMessage(producerTemplate.send(endpointUri, requestExchange))
+        def resultMessage = Exchanges.resultMessage(producerTemplate.send(SERVICE1_URI, requestExchange))
         // TODO: reactivate test
         //assert (System.currentTimeMillis() - startTimestamp < Iti55TestRouteBuilder.ASYNC_DELAY)
         
-        // for sync messages -- check acknowledgement code and incoming TTL header
-        if (!responseEndpointUri) {
+        // for regular requests -- check acknowledgement code and incoming TTL header
+        if (requestType == RequestType.REGULAR) {
             XcpdTestUtils.testPositiveAckCode(resultMessage.body)
             
             def dura = TtlHeaderUtils.getTtl(resultMessage)
@@ -133,9 +137,14 @@ class TestIti55 extends StandardTestContainer {
                 assert dura.toString() == "P${n * 2}Y"
                 ttlResponsesCount.incrementAndGet()
             }
-            
+
             def inHttpHeaders = resultMessage.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+        }
+
+        // for deferred response requests -- check whether a positive MCCI ACK is returned
+        if (requestType == RequestType.DEFERRED) {
+            assert Iti55Utils.isMcciAck(resultMessage.body)
         }
     }
     
@@ -143,13 +152,10 @@ class TestIti55 extends StandardTestContainer {
     @Test
     void testNakGeneration() {
         def requestExchange = new DefaultExchange(camelContext)
-        requestExchange.in.body = '<test />'
+        requestExchange.in.body = REQUEST
         def responseMessage = Exchanges.resultMessage(producerTemplate.send(SERVICE2_URI, requestExchange))
         def response = Hl7v3Utils.slurp(responseMessage.body)
 
-        // TODO: code NS250 vs INTERR
-
-        /*
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'INTERR'
         assert response.controlActProcess.reasonOf.detectedIssueEvent.code.@code == 'ActAdministrativeDetectedIssueCode'
@@ -157,7 +163,6 @@ class TestIti55 extends StandardTestContainer {
         assert response.controlActProcess.reasonOf.detectedIssueEvent.mitigatedBy.detectedIssueManagement.code.@codeSystem == '1.3.6.1.4.1.19376.1.2.27.3'
         assert response.controlActProcess.queryAck.statusCode.@code == 'aborted'
         assert response.controlActProcess.queryAck.queryResponseCode.@code == 'AE'
-        */
     }
 
 

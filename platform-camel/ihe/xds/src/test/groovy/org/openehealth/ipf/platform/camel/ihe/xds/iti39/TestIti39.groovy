@@ -65,7 +65,6 @@ class TestIti39 extends StandardTestContainer {
     @Test
     void testIti39() {
         final int N = 5
-        auditSender.reset(N * 4)
         int i = 0
         
         N.times {
@@ -75,8 +74,7 @@ class TestIti39 extends StandardTestContainer {
         
         // wait for completion of asynchronous routes
         Thread.currentThread().sleep(1000 + Iti39TestRouteBuilder.ASYNC_DELAY)
-        auditSender.latch.await()
-        
+
         assert Iti39TestRouteBuilder.responseCount.get() == N * 2
         assert Iti39TestRouteBuilder.asyncResponseCount.get() == N
         

@@ -18,15 +18,22 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
 import org.apache.commons.lang3.Validate;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadInjectorInterceptor;
+
+import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder.PayloadType.SOAP_BODY;
 
 /**
  * Service factory for receivers of asynchronous XCPD responses.
  * @author Dmytro Rud
  */
-public class Hl7v3AsyncResponseServiceFactory extends Hl7v3ServiceFactory {
+public class Hl7v3AsyncResponseServiceFactory extends JaxWsServiceFactory {
     private final AsynchronyCorrelator correlator;
 
     /**
@@ -59,6 +66,10 @@ public class Hl7v3AsyncResponseServiceFactory extends Hl7v3ServiceFactory {
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
+        svrFactory.getInInterceptors().add(new InPayloadExtractorInterceptor(SOAP_BODY));
+        svrFactory.getInInterceptors().add(new InNamespaceMergeInterceptor());
+        svrFactory.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
+        svrFactory.setDataBinding(new PlainXmlDataBinding());
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {

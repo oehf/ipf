@@ -82,7 +82,7 @@ class TestIti8 extends MllpTestContainer {
         final String body = getMessageString('ADT^A01', '2.3.1')
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
     
     /**
@@ -117,21 +117,21 @@ class TestIti8 extends MllpTestContainer {
     
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = 'pix-iti8://localhost:18084'
-        def endpoint = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.camelContext.getEndpoint(endpointUri)
+        def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
                 [process : { Exchange e -> /* nop */ }] as Processor
                 )
         def processor = consumer.processor
         
         def body = getMessageString(msh9, msh12);
-        def exchange = new DefaultExchange(org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.camelContext)
+        def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
         
         processor.process(exchange)
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        assertEquals(0, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(0, auditSender.messages.size())
     }
     
     
@@ -177,7 +177,7 @@ class TestIti8 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(0, auditSender.messages.size())
     }
     
     
@@ -210,7 +210,7 @@ class TestIti8 extends MllpTestContainer {
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
         assertACK(msg)
-        assertEquals(expectedAuditItemsCount, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
     
     
@@ -238,8 +238,8 @@ class TestIti8 extends MllpTestContainer {
     void testAlterativeHl7CodecFactory() {
         def endpointUri1 = 'pix-iti8://fake.address.no.uri:180?codec=#alternativeCodec'
         def endpointUri2 = 'xds-iti8://localhost:18085'
-        def endpoint1 = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.camelContext.getEndpoint(endpointUri1)
-        def endpoint2 = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.camelContext.getEndpoint(endpointUri2)
+        def endpoint1 = camelContext.getEndpoint(endpointUri1)
+        def endpoint2 = camelContext.getEndpoint(endpointUri2)
         assertEquals('UTF-8', endpoint1.configuration.charsetName)
         assertEquals('ISO-8859-1', endpoint2.configuration.charsetName)
     }

@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
-import org.openehealth.ipf.commons.xml.XmlUtils
 
 /**
  * Generic audit strategy for ITI-55 (XCPD).
@@ -87,6 +86,6 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
      */
     @Override
     boolean isAuditableResponse(Object response) {
-        return XmlUtils.rootElementName(response).localPart == 'PRPA_IN201306UV02'
+        return (! Iti55Utils.isMcciAck(response))
     }
 }
