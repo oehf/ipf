@@ -24,6 +24,7 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.apache.cxf.helpers.XMLUtils
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.*
 
 /**
  * @author Dmytro Rud
@@ -115,9 +116,9 @@ class Iti47TestRouteBuilder extends SpringRouteBuilder {
         // routes for v3-v2 continuation interoperability test
         from('pdqv3-iti47:pdqv3-iti47-serviceV2Conti')
             .process(PixPdqV3CamelValidators.iti47RequestValidator())
-            .translateHL7v3toHL7v2(REQUEST_TRANSLATOR)
+            .process(translatorHL7v3toHL7v2(REQUEST_TRANSLATOR))
             .to('pdq-iti21://localhost:8888?supportInteractiveContinuation=true')
-            .translateHL7v2toHL7v3(RESPONSE_TRANSLATOR)
+            .process(translatorHL7v2toHL7v3(RESPONSE_TRANSLATOR))
             .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 
 

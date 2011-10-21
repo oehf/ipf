@@ -25,9 +25,12 @@ import org.openehealth.ipf.platform.camel.core.model.ValidatorAdapterDefinition;
 /**
  * A {@link Validator} which allows the usage of Camel validating  
  * processors from IPF IHE components in Groovy DSL.
- * 
+ *
+ * @deprecated because is used only from deprecated DSL model extensions.
+ *
  * @author Dmytro Rud
  */
+@Deprecated
 public class ProcessorBasedExchangeValidator implements Validator<Exchange, Processor> {
 
     private static final Expression EXPRESSION = new Expression() {

@@ -18,6 +18,7 @@ package org.openehealth.ipf.tutorials.osgi.ihe.pixv3.iti44.route
 import org.apache.camel.spring.SpringRouteBuilder
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelTranslators.*
 
 /**
  * @author Dmytro Rud
@@ -35,9 +36,9 @@ class GroovyRouteBuilder extends SpringRouteBuilder {
                 .maximumRedeliveries(0)
                 .end()
             .process(iti44RequestValidator())
-            .translateHL7v3toHL7v2(pixFeedRequestTranslator)
+            .process(translatorHL7v3toHL7v2(pixFeedRequestTranslator))
             .to('pix-iti8://localhost:8882')
-            .translateHL7v2toHL7v3(pixFeedAckTranslator)
+            .process(translatorHL7v2toHL7v3(pixFeedAckTranslator))
             .process(iti44ResponseValidator())
             
 

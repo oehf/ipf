@@ -35,11 +35,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         class="org.openehealth.ipf.platform.camel.core.extend.CoreModelExtension">
     </bean>
 
-    <!-- necessary only for HL7 translation in Iti47TestRouteBuilder.groovy -->
-    <bean id="pixpdqv3ModelExtension"
-          class="org.openehealth.ipf.platform.camel.ihe.hl7v3.extend.PixPdqV3ModelExtension">
-    </bean>
-
     <bean id="mappingService" class="org.openehealth.ipf.commons.map.BidiMappingService">
         <property name="mappingScripts">
             <list>
@@ -61,7 +56,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
         <property name="routeModelExtensions">
             <list>
                 <ref bean="coreModelExtension" />
-                <ref bean="pixpdqv3ModelExtension" />
                 <ref bean="hapiModelExtension" />
                 <ref bean="mappingModelExtension" />
             </list>
