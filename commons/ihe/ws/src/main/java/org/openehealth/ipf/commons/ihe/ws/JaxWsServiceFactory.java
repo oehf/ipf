@@ -23,6 +23,7 @@ import org.apache.cxf.ws.addressing.WSAddressingFeature;
 import org.openehealth.ipf.commons.ihe.ws.cxf.RejectionHandlerInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsSecurityUnderstandingInInterceptor;
+import org.openehealth.ipf.commons.ihe.ws.cxf.async.Cxf3768WorkaroundInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadExtractorInterceptor;
 
@@ -139,6 +140,7 @@ public class JaxWsServiceFactory {
      */
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         svrFactory.getInInterceptors().add(new WsSecurityUnderstandingInInterceptor());
+        svrFactory.getOutInterceptors().add(new Cxf3768WorkaroundInterceptor());
         InterceptorUtils.copyInterceptorsFromProvider(customInterceptors, svrFactory);
 
         if (rejectionHandlingStrategy != null) {
