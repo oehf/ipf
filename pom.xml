@@ -84,12 +84,12 @@
         <mina-version>1.1.7</mina-version>
         <oht-atna-version>1.2.0-v20110609</oht-atna-version>
         <oht-cdar-version>1.1.0</oht-cdar-version>
-        <osgi-api-version>1.2.0</osgi-api-version>
+        <osgi-api-version>1.4.0</osgi-api-version>
         <quartz-version>1.6.1</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.6.1</slf4j-version>
         <spring-version>3.0.5.RELEASE</spring-version>
-        <spring-osgi-version>1.2.0</spring-osgi-version>
+        <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.22</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>
         <xerces-impl-version>2.11.0</xerces-impl-version>

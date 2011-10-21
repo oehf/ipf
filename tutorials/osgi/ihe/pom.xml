@@ -22,7 +22,7 @@
         <geronimo-ws-api-version>1.1.2</geronimo-ws-api-version>
         <geronimo-management-spec-version>1.0.1</geronimo-management-spec-version>
         <geronimo-servlet_3.0_spec_version>1.0</geronimo-servlet_3.0_spec_version>
-        <hapi-osgi-version>1.0.1</hapi-osgi-version>
+        <hapi-osgi-version>1.2</hapi-osgi-version>
         <hibernate-annotations-common-version>3.3.0.ga-p1</hibernate-annotations-common-version>
         <jdom-version>1.0.0</jdom-version>
         <jms-version>1.1-p1</jms-version>
