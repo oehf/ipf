@@ -72,7 +72,7 @@ public class XdsAsyncResponseServiceFactory extends JaxWsServiceFactory {
             }
 
             AuditResponseInterceptor auditInterceptor =
-                new AuditResponseInterceptor(auditStrategy, true, correlator, true);
+                new AuditResponseInterceptor(auditStrategy, false, correlator, true);
             svrFactory.getInInterceptors().add(auditInterceptor);
             svrFactory.getInFaultInterceptors().add(auditInterceptor);
         }

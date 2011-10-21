@@ -31,7 +31,7 @@ public interface AsynchronyCorrelator {
      * in the configured asynchrony correlator instance, even when the
      * WS-Addressing <tt>&lt;ReplyTo&gt;</tt> header is not set.
      */
-    public static final String FORCE_CORRELATION = AsynchronyCorrelator.class.getName() + ".NEED";
+    public static final String FORCE_CORRELATION = AsynchronyCorrelator.class.getName() + ".FORCE";
 
     /**
      * Stores a service endpoint URI.
@@ -80,7 +80,7 @@ public interface AsynchronyCorrelator {
     WsAuditDataset getAuditDataset(String messageId);
 
     /**
-     * Deletes informations about the message with the given ID.
+     * Deletes information pieces about the message with the given ID.
      * <p>
      * This method is supposed to be called internally after the correlation
      * of an asynchronous response has been completed; the user does not have 

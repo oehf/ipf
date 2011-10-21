@@ -15,19 +15,17 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.xml.datatype.Duration;
-
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.Message;
-import org.apache.camel.spring.SpringRouteBuilder;
-import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.XcpdTestUtils
+import java.util.concurrent.atomic.AtomicInteger
+import javax.xml.datatype.Duration
+import org.apache.camel.ExchangePattern
+import org.apache.camel.Message
+import org.apache.camel.spring.SpringRouteBuilder
 import org.apache.commons.logging.LogFactory
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.*
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
 
 /**
  * Test routes for ITI-55.
@@ -36,20 +34,21 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
 class Iti55TestRouteBuilder extends SpringRouteBuilder {
     private static final transient LOG = LogFactory.getLog(Iti55TestRouteBuilder.class)
 
-    static final AtomicInteger responseCount = new AtomicInteger()  
-    static final AtomicInteger asyncResponseCount = new AtomicInteger()
-    
+    static final AtomicInteger responseCount         = new AtomicInteger()
+    static final AtomicInteger asyncResponseCount    = new AtomicInteger()
+    static final AtomicInteger deferredResponseCount = new AtomicInteger()
+
     static final String RESPONSE = StandardTestContainer.readFile('iti55/iti55-sample-response.xml')
 
     static final long ASYNC_DELAY = 10 * 1000L
 
     static boolean errorOccurred = false
-    
+
     @Override
     public void configure() throws Exception {
 
         // receiver of asynchronous responses
-        from('xcpd-iti55-async-response:iti55service-response?correlator=#correlator')
+        from('xcpd-iti55-async-response:iti55service-async-response?correlator=#correlator')
             .process(iti55ResponseValidator())
             .process {
                 try {
@@ -57,8 +56,26 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                     assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] ==
-                        "corr ${asyncResponseCount.getAndIncrement() * 2}"
+                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${asyncResponseCount.getAndIncrement() * 3}"
+                    XcpdTestUtils.testPositiveAckCode(it.in.body)
+                } catch (Exception e) {
+                    errorOccurred = true
+                    LOG.error(e)
+                }
+            }
+            .delay(ASYNC_DELAY)
+
+
+        // receiver of deferred responses
+        from('xcpd-iti55-deferred-response:iti55service-deferred-response?correlator=#correlator')
+            .process(iti55ResponseValidator())
+            .process {
+                try {
+                    def inHttpHeaders = it.in.headers[DefaultItiEndpoint.INCOMING_HTTP_HEADERS]
+                    //assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+
+                    assert it.pattern == ExchangePattern.InOnly
+                    assert it.in.headers[DefaultItiEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${2 + deferredResponseCount.getAndIncrement() * 3}"
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true

@@ -91,8 +91,6 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
     protected void process(SoapMessage message) throws Exception {
         // partial responses are for us out of interest
         if (MessageUtils.isPartialResponse(message)) {
-            // workaround for https://issues.apache.org/jira/browse/CXF-3768
-            message.put(SoapMessage.RESPONSE_CODE, 202);
             return;
         }
 

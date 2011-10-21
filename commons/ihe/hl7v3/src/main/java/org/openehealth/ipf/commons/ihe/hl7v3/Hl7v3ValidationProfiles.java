@@ -118,7 +118,8 @@ public class Hl7v3ValidationProfiles {
         });
 
         registerResponseValidationProfile(ITI_55, new String[][]{
-                new String[]{"PRPA_IN201306UV02", "iti55/PRPA_IN201306UV02"}
+                new String[]{"PRPA_IN201306UV02", "iti55/PRPA_IN201306UV02"},
+                new String[]{"MCCI_IN000002UV01", null}
         });
 
         registerResponseValidationProfile(ITI_56, new String[][]{
