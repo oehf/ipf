@@ -54,6 +54,7 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
      * @param serverSide
      *      whether this interceptor is being used on the server side 
      *      (<code>true</code>) or on the client side (<code>false</code>).
+     *      Server side is where the response is generated.
      * @param correlator
      *      correlator for asynchronous messages (<code>null</code> on server side).
      * @param asyncReceiver

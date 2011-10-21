@@ -19,21 +19,22 @@ import org.apache.camel.Exchange;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
 import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.RelatesToType;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.DefaultItiProducer;
 
 import static org.apache.cxf.ws.addressing.JAXWSAConstants.CLIENT_ADDRESSING_PROPERTIES;
 
 /**
  * @author Dmytro Rud
  */
-public class Iti55DeferredResponseProducer extends SimpleWsProducer {
+public class Iti55DeferredResponseProducer extends DefaultItiProducer {
 
     public Iti55DeferredResponseProducer(DefaultItiEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory);
+        super(endpoint, clientFactory, Object.class);
     }
 
 
@@ -56,5 +57,11 @@ public class Iti55DeferredResponseProducer extends SimpleWsProducer {
         if (auditDataset != null) {
             requestContext.put(AbstractAuditInterceptor.CONTEXT_KEY, auditDataset);
         }
+    }
+
+
+    @Override
+    protected Object callService(Object client, Object body) throws Exception {
+        return ((Iti55DeferredResponsePortType) client).receiveDeferredResponse(body);
     }
 }
