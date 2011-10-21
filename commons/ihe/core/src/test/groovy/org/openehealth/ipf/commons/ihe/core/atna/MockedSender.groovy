@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.core.atna
 
 import org.openhealthtools.ihe.atna.auditor.events.AuditEventMessage
 import org.openhealthtools.ihe.atna.auditor.sender.AuditMessageSender
-import java.util.concurrent.CountDownLatch
 
 /**
  * Mocked sender implementation for ATNA messages. 
@@ -26,24 +25,9 @@ import java.util.concurrent.CountDownLatch
  */
 class MockedSender implements AuditMessageSender {
     List<AuditEventMessage> messages = Collections.synchronizedList(new ArrayList<AuditEventMessage>())
-    CountDownLatch latch
-
-    MockedSender() {
-        this(0)
-    }
-
-    MockedSender(int expectedCount) {
-        this.latch = new CountDownLatch(expectedCount) 
-    }
-
-    void reset(int expectedCount) {
-        messages.clear()
-        this.latch = new CountDownLatch(expectedCount)
-    }
 
     void sendAuditEvent(AuditEventMessage[] msg) {
         messages.addAll(Arrays.asList(msg))
-        msg.length.times { latch.countDown() }
     }
     
     void sendAuditEvent(AuditEventMessage[] msg, InetAddress destination, int port) {

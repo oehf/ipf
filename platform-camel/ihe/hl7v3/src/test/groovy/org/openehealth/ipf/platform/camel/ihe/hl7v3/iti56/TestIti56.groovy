@@ -64,7 +64,6 @@ class TestIti56 extends StandardTestContainer {
     @Test
     void testIti56() {
         final int N = 5
-        auditSender.reset(N * 4)
         int i = 0
         
         N.times {
