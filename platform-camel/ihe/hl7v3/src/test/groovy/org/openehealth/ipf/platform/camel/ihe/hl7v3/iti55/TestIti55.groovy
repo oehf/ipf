@@ -87,7 +87,6 @@ class TestIti55 extends StandardTestContainer {
         
         // wait for completion of asynchronous routes
         Thread.currentThread().sleep(1000 + Iti55TestRouteBuilder.ASYNC_DELAY)
-        auditSender.latch.await()
 
         assert Iti55TestRouteBuilder.responseCount.get()         == N * 3
         assert Iti55TestRouteBuilder.asyncResponseCount.get()    == N

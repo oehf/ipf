@@ -86,6 +86,7 @@ class TestIti21 extends MllpTestContainer {
         }
         assert failed
 
+        auditSender.messages.clear()
         doTestHappyCaseAndAudit('pdq-iti21://localhost:18230?secure=true&sslContext=#sslContextWithoutKeyStore', 2)
     }
 
@@ -127,7 +128,7 @@ class TestIti21 extends MllpTestContainer {
             // 2.) CamelExchangeException (expected)
         }
         
-        def messages = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages
+        def messages = auditSender.messages
         assertEquals(3, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
         assertTrue(messages[1] instanceof SecurityAlertEvent)
@@ -156,23 +157,22 @@ class TestIti21 extends MllpTestContainer {
             // 2.) CamelExchangeException (expected)
         }
         
-        def messages = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages
+        def messages = auditSender.messages
         assertEquals(2, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
     
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {
         final String body = getMessageString('QBP^Q22', '2.5')
-        org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.reset(expectedAuditItemsCount)
         def msg = send(endpointUri, body)
         assertRSP(msg)
-        assertEquals(expectedAuditItemsCount, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(expectedAuditItemsCount, auditSender.messages.size())
     }
     
     @Test
     void testCustomInterceptorCanThrowAuthenticationException() {
         send('pdq-iti21://localhost:18214', getMessageString('QBP^Q22', '2.5'))
-        def messages = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages
+        def messages = auditSender.messages
         assertEquals(3, messages.size())
         assertTrue(messages[0] instanceof SecurityAlertEvent)
     }
@@ -214,21 +214,21 @@ class TestIti21 extends MllpTestContainer {
     
     def doTestInacceptanceOnConsumer(String msh9, String msh12) {
         def endpointUri = 'pdq-iti21://localhost:18210'
-        def endpoint = org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.camelContext.getEndpoint(endpointUri)
+        def endpoint = camelContext.getEndpoint(endpointUri)
         def consumer = endpoint.createConsumer(
                 [process : { Exchange e -> /* nop */ }] as Processor
                 )
         def processor = consumer.processor
         
         def body = getMessageString(msh9, msh12);
-        def exchange = new DefaultExchange(org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.camelContext)
+        def exchange = new DefaultExchange(camelContext)
         exchange.in.body = body
         
         processor.process(exchange)
         def response = Exchanges.resultMessage(exchange).body
         def msg = MessageAdapters.make(new PipeParser(), response)
         assertNAK(msg)
-        assertEquals(0, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(0, auditSender.messages.size())
     }
     
     
@@ -273,7 +273,7 @@ class TestIti21 extends MllpTestContainer {
             }
         }
         assertFalse(failed)
-        assertEquals(0, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(0, auditSender.messages.size())
     }
     
     
@@ -285,7 +285,7 @@ class TestIti21 extends MllpTestContainer {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = 'pdq-iti21://localhost:18213'
         def msg = send(endpointUri, body)
-        assertEquals(2, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
     
@@ -297,7 +297,7 @@ class TestIti21 extends MllpTestContainer {
         def body = getMessageString('QBP^Q22', '2.5')
         def endpointUri = 'pdq-iti21://localhost:18219'
         def msg = send(endpointUri, body)
-        assertEquals(2, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(2, auditSender.messages.size())
         assertNAKwithQPD(msg, 'RSP', 'K22')
     }
     
@@ -310,7 +310,7 @@ class TestIti21 extends MllpTestContainer {
                 'QID|dummy|gummy||\n'
         def endpointUri = 'pdq-iti21://localhost:18212'
         def msg = send(endpointUri, body)
-        assertEquals(0, org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTestContainer.auditSender.messages.size())
+        assertEquals(0, auditSender.messages.size())
         assertACK(msg)
     }
 }
