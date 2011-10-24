@@ -31,10 +31,10 @@ import static org.apache.cxf.ws.addressing.JAXWSAConstants.CLIENT_ADDRESSING_PRO
 /**
  * @author Dmytro Rud
  */
-public class Iti55DeferredResponseProducer extends AbstractWsProducer {
+public class Iti55DeferredResponseProducer extends AbstractWsProducer<String, String> {
 
     public Iti55DeferredResponseProducer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory, Object.class);
+        super(endpoint, clientFactory, String.class);
     }
 
 
@@ -61,7 +61,7 @@ public class Iti55DeferredResponseProducer extends AbstractWsProducer {
 
 
     @Override
-    protected Object callService(Object client, Object body) throws Exception {
-        return ((Iti55DeferredResponsePortType) client).receiveDeferredResponse(body);
+    protected String callService(Object client, String responseString) throws Exception {
+        return ((Iti55DeferredResponsePortType) client).receiveDeferredResponse(responseString);
     }
 }

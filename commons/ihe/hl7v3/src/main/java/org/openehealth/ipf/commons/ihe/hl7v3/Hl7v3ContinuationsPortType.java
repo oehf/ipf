@@ -21,7 +21,7 @@ package org.openehealth.ipf.commons.ihe.hl7v3;
  * @author Dmytro Rud
  */
 public interface Hl7v3ContinuationsPortType {
-    Object operation(Object request);
-    Object continuation(Object request);
-    Object cancel(Object request);
+    String operation(String request);
+    String continuation(String request);
+    String cancel(String request);
 }

@@ -22,7 +22,6 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 
 import groovy.util.slurpersupport.GPathResult
-import org.openehealth.ipf.commons.xml.XmlUtils
 
 /**
  * @author Dmytro Rud
@@ -87,6 +86,6 @@ abstract class Hl7v3AuditStrategy extends WsAuditStrategy {
 
 
     static GPathResult slurp(Object message) {
-        return (message instanceof GPathResult) ? message : Hl7v3Utils.slurp(XmlUtils.toString(message, null))
+        return (message instanceof GPathResult) ? message : Hl7v3Utils.slurp((String) message)
     }
 }

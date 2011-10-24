@@ -37,6 +37,6 @@ public interface Iti55AsyncResponsePortType {
     @WebMethod(operationName = "InitiatingGateway_Async_PRPA_IN201306UV02")
     void receiveAsyncResponse(
             @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-            Object response
+            String response
     );
 }

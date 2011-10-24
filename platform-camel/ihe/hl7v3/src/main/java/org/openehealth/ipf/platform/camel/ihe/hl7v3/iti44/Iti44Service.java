@@ -30,17 +30,17 @@ public class Iti44Service extends AbstractHl7v3WebService implements Iti44XdsPor
     }
 
     @Override
-    public Object recordAdded(Object request) {
+    public String recordAdded(String request) {
         return doProcess(request);
     }
 
     @Override
-    public Object recordRevised(Object request) {
+    public String recordRevised(String request) {
         return doProcess(request);
     }
 
     @Override
-    public Object duplicatesResolved(Object request) {
+    public String duplicatesResolved(String request) {
         return doProcess(request);
     }
 }

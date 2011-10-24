@@ -42,14 +42,19 @@ import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserD
 /**
  * Camel producer used to make calls to a Web Service.
  *
+ * @param <InType>
+ *     type of input data (i.e. of the data got from the route).
+ * @param <OutType>
+ *     type of output data (i.e. of the data returned to the route).
+ *
  * @author Jens Riemschneider
  * @author Dmytro Rud
  */
-public abstract class AbstractWsProducer extends DefaultProducer {
+public abstract class AbstractWsProducer<InType, OutType> extends DefaultProducer {
     private static final Log LOG = LogFactory.getLog(AbstractWsProducer.class);
 
     private final JaxWsClientFactory clientFactory;
-    private final Class<?> requestClass;
+    private final Class<InType> requestClass;
 
     
     /**
@@ -59,12 +64,14 @@ public abstract class AbstractWsProducer extends DefaultProducer {
      *          the endpoint that creates this producer.
      * @param clientFactory
      *          the factory for clients to produce messages for the service.
+     * @param requestClass
+     *          type of request messages.
      */
     @SuppressWarnings("unchecked")
     public AbstractWsProducer(
             AbstractWsEndpoint endpoint,
             JaxWsClientFactory clientFactory,
-            Class<?> requestClass)
+            Class<InType> requestClass)
     {
         super(endpoint);
         notNull(clientFactory, "client factory cannot be null");
@@ -79,7 +86,7 @@ public abstract class AbstractWsProducer extends DefaultProducer {
         LOG.debug("Calling web service on '" + getWsTransactionConfiguration().getServiceName() + "' with " + exchange);
         
         // prepare
-        Object body = exchange.getIn().getMandatoryBody(requestClass);
+        InType body = exchange.getIn().getBody(requestClass);
         Object client = getClient();
         configureClient(client);
         BindingProvider bindingProvider = (BindingProvider) client;
@@ -130,7 +137,7 @@ public abstract class AbstractWsProducer extends DefaultProducer {
         
         // invoke
         exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
-        Object result = null;
+        OutType result = null;
         try {
              result = callService(client, body);
         } catch (SOAPFaultException fault) {
@@ -164,7 +171,7 @@ public abstract class AbstractWsProducer extends DefaultProducer {
     /**
      * Sends the given request body to a Web Service via the given client proxy.
      */
-    protected abstract Object callService(Object client, Object body) throws Exception;
+    protected abstract OutType callService(Object client, InType body) throws Exception;
 
     
     /**

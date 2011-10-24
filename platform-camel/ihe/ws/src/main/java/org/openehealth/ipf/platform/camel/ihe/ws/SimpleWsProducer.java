@@ -23,13 +23,11 @@ import javax.jws.WebMethod;
 import java.lang.reflect.Method;
 
 /**
- * Producer for Web Services which have only one operation.
+ * Generic producer for Web Services which have only one operation.
  * @author Dmytro Rud
  */
-public class SimpleWsProducer extends AbstractWsProducer {
-
+public class SimpleWsProducer<InType, OutType> extends AbstractWsProducer<InType, OutType> {
     private final String operationName;
-    private final Class<?> declaredRequestClass;
 
     /**
      * Constructor.
@@ -37,31 +35,31 @@ public class SimpleWsProducer extends AbstractWsProducer {
      *      Camel endpoint instance.
      * @param clientFactory
      *      JAX-WS client object factory.
+     * @param requestClass
+     *          type of request messages.
      */
     public SimpleWsProducer(
             AbstractWsEndpoint endpoint,
-            JaxWsClientFactory clientFactory)
+            JaxWsClientFactory clientFactory,
+            Class<InType> requestClass)
     {
-        super(endpoint, clientFactory, Object.class);
+        super(endpoint, clientFactory, requestClass);
 
         for (Method method : endpoint.getComponent().getWsTransactionConfiguration().getSei().getDeclaredMethods()) {
             WebMethod annotation = method.getAnnotation(WebMethod.class);
             if (annotation != null) {
                 this.operationName = annotation.operationName();
-                this.declaredRequestClass = method.getParameterTypes()[0];
                 return;
             }
         }
-
         throw new IllegalStateException("the SEI does not contain any methods annotated with @WebMethod");
     }
 
 
     @Override
-    protected Object callService(Object clientObject, Object request) throws Exception {
+    protected OutType callService(Object clientObject, InType request) throws Exception {
         ClientImpl client = (ClientImpl) ClientProxy.getClient(clientObject);
-        request = getEndpoint().getCamelContext().getTypeConverter().convertTo(declaredRequestClass, request);
         Object[] result = client.invoke(operationName, request);
-        return (result != null) ? result[0] : null;
+        return (result != null) ? (OutType) result[0] : null;
     }
 }

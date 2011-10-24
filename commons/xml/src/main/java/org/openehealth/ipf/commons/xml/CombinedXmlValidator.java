@@ -19,31 +19,25 @@ import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 
-import static org.openehealth.ipf.commons.xml.XmlUtils.*;
+import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName;
+import static org.openehealth.ipf.commons.xml.XmlUtils.source;
 
 /**
  * XSD- and Schematron-based validator for HL7 v3 messages.
  * @author Dmytro Rud
  */
-public class CombinedXmlValidator implements Validator<Object, CombinedXmlValidationProfile> {
+public class CombinedXmlValidator implements Validator<String, CombinedXmlValidationProfile> {
 
     private static final XsdValidator XSD_VALIDATOR = new XsdValidator(CombinedXmlValidator.class.getClassLoader());
     private static final SchematronValidator SCHEMATRON_VALIDATOR = new SchematronValidator();
 
 
-    @Override
-    public void validate(Object message, CombinedXmlValidationProfile profile) throws ValidationException {
-        validate(message, profile, null);
-    }
-
-    public void validate(Object message, CombinedXmlValidationProfile profile, String encoding) throws ValidationException {
+    public void validate(String message, CombinedXmlValidationProfile profile) throws ValidationException {
         Validate.notNull(message, "message must be not null");
         Validate.notNull(profile, "validation profile must be not null");
 
-        String sMessage = XmlUtils.toString(message, encoding);
-
         // check whether the root element name is valid
-        String rootElementName = rootElementName(sMessage, encoding).getLocalPart();
+        String rootElementName = rootElementName(message);
         if (! profile.isValidRootElement(rootElementName)) {
             throw new ValidationException("Invalid root element '" + rootElementName + "'");
         }
@@ -51,7 +45,7 @@ public class CombinedXmlValidator implements Validator<Object, CombinedXmlValida
         // XSD validation
         String xsdPath = profile.getXsdPath(rootElementName);
         if (xsdPath != null) {
-            XSD_VALIDATOR.validate(source(sMessage, encoding), xsdPath);
+            XSD_VALIDATOR.validate(source(message), xsdPath);
         }
 
         // Schematron validation
@@ -60,7 +54,7 @@ public class CombinedXmlValidator implements Validator<Object, CombinedXmlValida
             SchematronProfile schematronProfile = new SchematronProfile(
                     schematronPath,
                     profile.getCustomSchematronParameters());
-            SCHEMATRON_VALIDATOR.validate(source(sMessage, encoding), schematronProfile);
+            SCHEMATRON_VALIDATOR.validate(source(message), schematronProfile);
         }
     }
 }

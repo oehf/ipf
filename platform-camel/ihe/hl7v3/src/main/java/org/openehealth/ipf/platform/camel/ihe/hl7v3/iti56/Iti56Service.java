@@ -18,6 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
 import org.apache.camel.Exchange;
 import org.apache.cxf.interceptor.Fault;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 /**
@@ -27,13 +28,13 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 public class Iti56Service extends AbstractWebService implements Iti56PortType {
 
     @Override
-    public Object locatePatients(Object request) {
+    public String locatePatients(String request) {
         Exchange result = process(request);
         if(result.getException() != null) {
             throw new Fault(result.getException());
         }
         
-        return prepareBody(result);
+        return Exchanges.resultMessage(result).getBody(String.class);
     }
 
 }

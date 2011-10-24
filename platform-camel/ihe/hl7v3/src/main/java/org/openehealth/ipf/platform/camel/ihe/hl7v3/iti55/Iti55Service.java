@@ -36,6 +36,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -85,25 +86,25 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
 
     @Override
-    public Object discoverPatients(Object requestString) {
+    public String discoverPatients(String requestString) {
         return doProcess(requestString);
     }
 
     @Override
-    public Object discoverPatientsDeferred(Object requestString) {
+    public String discoverPatientsDeferred(String requestString) {
         return doProcess(requestString);
     }
 
 
     @Override
-    protected Object doProcess(Object request) {
+    protected String doProcess(String request) {
         final String requestString = (String) request;
         final GPathResult requestXml = Hl7v3Utils.slurp(requestString);
         final String processingMode = Iti55Utils.processingMode(requestXml);
 
         // process regular requests in a synchronous route
         if ("I".equals(processingMode)) {
-            Object response = doProcess0(requestString, requestXml);
+            String response = doProcess0(requestString, requestXml);
             configureWsaAction(Iti55PortType.REGULAR_REQUEST_OUTPUT_ACTION);
             return response;
         }
@@ -182,11 +183,11 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
     }
 
 
-    public Object doProcess0(String requestString, GPathResult requestXml) {
+    private String doProcess0(String requestString, GPathResult requestXml) {
         Exchange result = process(requestString);
         return (result.getException() != null) ?
             nak(result.getException(), requestXml) :
-            prepareBody(result);
+            Exchanges.resultMessage(result).getBody(String.class);
     }
 
 

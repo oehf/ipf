@@ -77,6 +77,6 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
 
     @Override
     public AbstractWsProducer getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
-        return new SimpleWsProducer(endpoint, clientFactory);
+        return new SimpleWsProducer<String, String>(endpoint, clientFactory, String.class);
     }
 }

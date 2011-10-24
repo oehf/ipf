@@ -29,17 +29,17 @@ public class Pcc1Service extends AbstractHl7v3WebService implements Pcc1PortType
     }
 
     @Override
-    public Object operation(Object request) {
+    public String operation(String request) {
         return doProcess(request);
     }
 
     @Override
-    public Object continuation(Object request) {
+    public String continuation(String request) {
         return doProcess(request);
     }
 
     @Override
-    public Object cancel(Object request) {
+    public String cancel(String request) {
         return doProcess(request);
     }
 }

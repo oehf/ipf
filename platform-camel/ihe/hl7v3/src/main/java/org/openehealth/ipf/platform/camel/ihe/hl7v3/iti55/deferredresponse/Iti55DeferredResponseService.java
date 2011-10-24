@@ -31,13 +31,13 @@ public class Iti55DeferredResponseService extends AsynchronousResponseWebService
 
     @Override
     protected boolean canDropCorrelation(Object response) {
-        return (! Iti55Utils.isMcciAck(response));
+        return (! Iti55Utils.isMcciAck((String) response));
     }
 
     @Override
-    public Object receiveDeferredResponse(Object response) {
-        process(response, null, ExchangePattern.InOnly);
-        return Hl7v3NakFactory.response((String) response, null, "MCCI_IN000002UV01", false, false);
+    public String receiveDeferredResponse(String responseString) {
+        process(responseString, null, ExchangePattern.InOnly);
+        return Hl7v3NakFactory.response(responseString, null, "MCCI_IN000002UV01", false, false);
     }
 
     @Override

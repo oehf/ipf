@@ -38,7 +38,6 @@ import org.w3c.dom.NodeList
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS
 import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
-import static org.openehealth.ipf.commons.xml.XmlUtils.toString
 import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.*
 
@@ -52,7 +51,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  * due to Groovy peculiarities, in reality is should be
  * <code>&lt;String, String&gt;</code>.
  */
-class Hl7v3ContinuationAwareProducer extends AbstractWsProducer {
+class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> {
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class)
 
     private static final DomBuildersThreadLocal DOM_BUILDERS = new DomBuildersThreadLocal()
@@ -101,14 +100,13 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer {
      * The response is always an XML String.
      */
     @Override
-    protected Object callService(Object clientObject, Object requestObject) {
+    protected String callService(Object clientObject, String requestString) {
         Hl7v3ContinuationsPortType client = (Hl7v3ContinuationsPortType) clientObject
-        String rootElementName = rootElementName(requestObject).localPart
+        String rootElementName = rootElementName(requestString)
         switch (rootElementName) {
             case wsTransactionConfiguration.mainRequestRootElementName:
-                String requestString = toString(requestObject, null)
                 GPathResult request = slurp(requestString)
-                String responseString = client.operation(requestObject)
+                String responseString = client.operation(requestString)
                 if (! supportContinuation) {
                     return responseString
                 }
@@ -118,9 +116,9 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer {
 
             case 'QUQI_IN000003UV01':
                 // continuation is supported by the route, not by us
-                return client.continuation(requestObject)
+                return client.continuation(requestString)
             case 'QUQI_IN000003UV01_Cancel':
-                return client.cancel(requestObject)
+                return client.cancel(requestString)
         }
         throw new RuntimeException('Cannot dispatch request message with root element ' + rootElementName)
     }

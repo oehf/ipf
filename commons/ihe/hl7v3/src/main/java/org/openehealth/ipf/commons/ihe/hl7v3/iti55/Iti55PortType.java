@@ -41,15 +41,15 @@ public interface Iti55PortType {
 
     @Action(input = REGULAR_REQUEST_INPUT_ACTION, output = REGULAR_REQUEST_OUTPUT_ACTION)
     @WebMethod(operationName = "RespondingGateway_PRPA_IN201305UV02")
-    Object discoverPatients(
+    String discoverPatients(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-        Object request
+        String request
     );
 
     @Action(input = DEFERRED_REQUEST_INPUT_ACTION, output = DEFERRED_REQUEST_OUTPUT_ACTION)
     @WebMethod(operationName = "RespondingGateway_Deferred_PRPA_IN201305UV02")
-    Object discoverPatientsDeferred(
+    String discoverPatientsDeferred(
         @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-        Object request
+        String request
     );
 }

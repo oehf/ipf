@@ -34,8 +34,8 @@ public interface Iti56PortType {
     @Action(input = "urn:ihe:iti:2009:PatientLocationQuery", 
             output = "urn:ihe:iti:2009:PatientLocationQueryResponse")
     @WebMethod(operationName = "RespondingGateway_PatientLocationQuery")
-    Object locatePatients(
+    String locatePatients(
             @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-            Object request
+            String request
     );
 }

@@ -21,6 +21,8 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ServerAuditStrategy;
@@ -78,6 +80,7 @@ public class Iti39Component extends AbstractWsComponent<WsTransactionConfigurati
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
-        return new SimpleWsProducer(endpoint, clientFactory);
+        return new SimpleWsProducer<RetrieveDocumentSetRequestType, RetrieveDocumentSetResponseType>(
+                endpoint, clientFactory, RetrieveDocumentSetRequestType.class);
     }
 }

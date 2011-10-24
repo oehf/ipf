@@ -31,8 +31,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Generic constants and subroutines for SOAP/XML processing.
@@ -40,14 +38,6 @@ import java.util.regex.Pattern;
  */
 public abstract class SoapUtils {
     private static final transient Log LOG = LogFactory.getLog(SoapUtils.class);
-
-    private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
-        "(?:\\s*<\\!--.*?-->)*"                             +  // optional comments before prolog (are they allowed?)
-        "(?:\\s*<\\?xml.+?\\?>(?:\\s*<\\!--.*?-->)*)?"      +  // optional prolog and comments after it
-        "\\s*<(?:[\\w\\.-]+?:)?([\\w\\.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
-        Pattern.DOTALL
-    );
-
 
     private SoapUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");

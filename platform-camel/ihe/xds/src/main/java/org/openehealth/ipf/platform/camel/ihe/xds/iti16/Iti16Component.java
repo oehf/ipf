@@ -21,6 +21,8 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rs.RegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti16.Iti16ServerAuditStrategy;
@@ -78,6 +80,7 @@ public class Iti16Component extends AbstractWsComponent<WsTransactionConfigurati
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
-        return new SimpleWsProducer(endpoint, clientFactory);
+        return new SimpleWsProducer<AdhocQueryRequest, RegistryResponse>(
+                endpoint, clientFactory, AdhocQueryRequest.class);
     }
 }

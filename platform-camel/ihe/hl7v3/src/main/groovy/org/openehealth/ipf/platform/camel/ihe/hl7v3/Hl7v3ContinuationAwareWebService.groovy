@@ -29,7 +29,8 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.commons.xml.XsltTransmogrifier
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
-import static org.openehealth.ipf.commons.xml.XmlUtils.*
+import static org.openehealth.ipf.commons.xml.XmlUtils.rootElementName
+import static org.openehealth.ipf.commons.xml.XmlUtils.source
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtils.parseInt
 
 /**
@@ -75,8 +76,8 @@ public class Hl7v3ContinuationAwareWebService
      *      operation response in one of supported formats.
      */
     @Override
-    Object operation(Object requestObject) {
-        return process0((String) requestObject)
+    String operation(String requestString) {
+        return process0(requestString)
     }
 
     /**
@@ -87,8 +88,8 @@ public class Hl7v3ContinuationAwareWebService
      *      next portion of response data in one of supported formats.
      */
     @Override
-    Object continuation(Object requestObject) {
-        return process0((String) requestObject)
+    String continuation(String requestString) {
+        return process0(requestString)
     }
 
     /**
@@ -99,13 +100,13 @@ public class Hl7v3ContinuationAwareWebService
      *      cancel acknowledgement response in one of supported formats.
      */
     @Override
-    Object cancel(Object requestObject) {
-        return process0((String) requestObject)
+    String cancel(String requestString) {
+        return process0(requestString)
     }
 
 
     String process0(String requestString) {
-        String rootElementName = rootElementName(requestString).localPart
+        String rootElementName = rootElementName(requestString)
         switch (rootElementName) {
             case wsTransactionConfiguration.mainRequestRootElementName:
                 return operation0(requestString)
@@ -141,7 +142,7 @@ public class Hl7v3ContinuationAwareWebService
         }
 
         // run the route
-        final String responseString = toString(doProcess(requestString), null)
+        final String responseString = doProcess(requestString)
 
         // validate response, if necessary
         if (validation) {
@@ -300,7 +301,7 @@ public class Hl7v3ContinuationAwareWebService
             int startResultNumber,
             int continuationCount) throws Exception
     {
-        Source source = source(responseString, null)
+        Source source = source(responseString)
         def params = [
             'startResultNumber'        : startResultNumber,
             'continuationCount'        : continuationCount,

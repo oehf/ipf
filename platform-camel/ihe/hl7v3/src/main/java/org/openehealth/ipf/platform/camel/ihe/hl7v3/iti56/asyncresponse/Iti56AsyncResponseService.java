@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseWebService;
 public class Iti56AsyncResponseService extends AsynchronousResponseWebService implements Iti56AsyncResponsePortType {
 
     @Override
-    public void receiveAsyncResponse(Object response) {
+    public void receiveAsyncResponse(String response) {
         process(response, null, ExchangePattern.InOnly);
     }
 }

@@ -178,11 +178,9 @@ abstract public class PixPdqV3CamelValidators {
             InteractionId interactionId,
             boolean request)
     {
-        Object message = exchange.getIn().getBody();
-        String encoding = (String)exchange.getProperty(Exchange.CHARSET_NAME);
+        String message = exchange.getIn().getBody(String.class);
         VALIDATOR.validate(message, request
                 ? Hl7v3ValidationProfiles.getRequestValidationProfile(interactionId)
-                : Hl7v3ValidationProfiles.getResponseValidationProfile(interactionId),
-                encoding);
+                : Hl7v3ValidationProfiles.getResponseValidationProfile(interactionId));
     }
 }

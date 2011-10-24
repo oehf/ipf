@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 import groovy.util.slurpersupport.GPathResult
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 
 /**
@@ -91,13 +90,12 @@ abstract class Iti55Utils {
      * Positive ACKs should be ignored in the context of both ATNA auditing and
      * asynchrony correlation.
      *
-     * @param responseObject
-     *      response message in one of supported data types.
+     * @param responseString
+     *      response message as XML string.
      * @return
      *      <code>true</code> when the given message uis a positive MCCI ACK.
      */
-    static boolean isMcciAck(Object responseObject) {
-        def responseString = XmlUtils.toString(responseObject, null)
+    static boolean isMcciAck(String responseString) {
         GPathResult responseXml = Hl7v3Utils.slurp(responseString)
         return (responseXml.name() == 'MCCI_IN000002UV01') &&
                (responseXml.acknowledgement.typeCode.@code.text() in ['AA', 'CA'])

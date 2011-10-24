@@ -32,26 +32,26 @@ public interface Iti47PortType extends Hl7v3ContinuationsPortType {
     @Action(input = "urn:hl7-org:v3:PRPA_IN201305UV02", output = "urn:hl7-org:v3:PRPA_IN201306UV02")
     @WebMethod(operationName = "PDSupplier_PRPA_IN201305UV02",
                action = "urn:hl7-org:v3:PRPA_IN201305UV02")
-    Object operation(
+    String operation(
         @WebParam(partName = "Body", name = "PRPA_IN201305UV02", targetNamespace = "urn:hl7-org:v3")
-        Object request
+        String request
     );
 
     @WebResult(name = "PRPA_IN201306UV02", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Continue", output = "urn:hl7-org:v3:PRPA_IN201306UV02")
     @WebMethod(operationName = "PDSupplier_QUQI_IN000003UV01_Continue",
                action = "urn:hl7-org:v3:PDSupplier_QUQI_IN000003UV01_Continue")
-    Object continuation(
+    String continuation(
         @WebParam(partName = "Body", name = "QUQI_IN000003UV01", targetNamespace = "urn:hl7-org:v3")
-        Object request
+        String request
     );
 
     @WebResult(name = "MCCI_IN000002UV01", targetNamespace = "urn:hl7-org:v3", partName = "Body")
     @Action(input = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel", output = "urn:hl7-org:v3:MCCI_IN000002UV01")
     @WebMethod(operationName = "PDSupplier_QUQI_IN000003UV01_Cancel",
                action = "urn:hl7-org:v3:QUQI_IN000003UV01_Cancel")
-    Object cancel(
+    String cancel(
         @WebParam(partName = "Body", name = "QUQI_IN000003UV01_Cancel", targetNamespace = "urn:hl7-org:v3")
-        Object request
+        String request
     );
 }

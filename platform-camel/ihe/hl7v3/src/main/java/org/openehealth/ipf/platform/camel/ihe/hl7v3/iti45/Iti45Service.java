@@ -29,7 +29,7 @@ public class Iti45Service extends AbstractHl7v3WebService implements Iti45PortTy
     }
 
     @Override
-    public Object getIdentifiers(Object request) {
+    public String getIdentifiers(String request) {
         return doProcess(request);
     }
 }

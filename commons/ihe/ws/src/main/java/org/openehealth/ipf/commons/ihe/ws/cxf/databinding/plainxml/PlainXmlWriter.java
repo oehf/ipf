@@ -17,31 +17,24 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml;
 
 import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.cxf.databinding.DataWriter;
+import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.message.Attachment;
+import org.apache.cxf.message.Message;
 import org.apache.cxf.service.model.MessagePartInfo;
 import org.apache.cxf.staxutils.StaxUtils;
-import org.w3c.dom.Document;
 
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Source;
 import javax.xml.validation.Schema;
+import javax.xml.ws.handler.MessageContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Collection;
 
 /**
- * A special writer for some transactions (e.g. HL7 v3) whose    
- * expected input data is some representation of an XML element.
- * Following data types are supported:
- * <ul>
- *     <li>{@link String}</li>
- *     <li><tt>byte[]</tt></li>
- *     <li>{@link InputStream}</li>
- *     <li>{@link Reader}</li>
- *     <li>DOM {@link Document}</li>
- *     <li>{@link Source}</li>
- * </ul>
+ * A special writer for some transactions (e.g. HL7 v3) whose
+ * expected input data is String representation of an XML element.
  *
  * @author Dmytro Rud
  */
@@ -50,36 +43,17 @@ public class PlainXmlWriter implements DataWriter<XMLStreamWriter> {
     @Override
     public void write(Object obj, MessagePartInfo part, XMLStreamWriter writer) {
         try {
-            if (obj instanceof String) {
-                obj = ((String) obj).getBytes();
-            }
-            if (obj instanceof byte[]) {
-                obj = new ByteArrayInputStream((byte[]) obj);
-            }
-            if (obj instanceof InputStream) {
-                obj = new XmlStreamReader((InputStream) obj);
-            }
-            if (obj instanceof Reader) {
-                StaxUtils.copy(StaxUtils.createXMLStreamReader((Reader) obj), writer);
-                return;
-            }
-
-            if (obj instanceof Document) {
-                StaxUtils.copy((Document) obj, writer);
-                return;
-            }
-
-            if (obj instanceof Source) {
-                StaxUtils.copy((Source) obj, writer);
-                return;
-            }
-
+            String s = (String) obj;
+            /*
+            byte[] bytes = s.getBytes();
+            InputStream stream = new ByteArrayInputStream(bytes);
+            Reader reader = new XmlStreamReader(stream);
+            */
+            Reader reader = new StringReader(s);
+            StaxUtils.copy(StaxUtils.createXMLStreamReader(reader), writer);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        throw new IllegalArgumentException("Cannot handle instance of type " +
-                ((obj == null) ? "<null>" : obj.getClass().getName()));
     }
 
 

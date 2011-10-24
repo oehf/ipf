@@ -37,8 +37,8 @@ public interface Iti55DeferredResponsePortType {
 
     @Action(input = DEFERRED_RESPONSE_INPUT_ACTION, output = DEFERRED_RESPONSE_OUTPUT_ACTION)
     @WebMethod(operationName = "InitiatingGateway_Deferred_PRPA_IN201306UV02")
-    Object receiveDeferredResponse(
+    String receiveDeferredResponse(
             @WebParam(partName = "Body", targetNamespace = "urn:ihe:iti:xcpd:2009")
-            Object response
+            String response
     );
 }

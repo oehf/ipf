@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
+import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,17 +51,16 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
     
     /**
      * The proper message processing method.
-     * @param request
-     *      XML payload of the HL7 v3 request message, actually always a String from CXF.
+     * @param requestString
+     *      XML payload of the HL7 v3 request message.
      * @return
      *      XML payload of the HL7 v3 response message or an automatically generated NAK.
      */
-    protected Object doProcess(Object request) {
-        String requestString = (String) request;
-        Exchange result = process(request);
+    protected String doProcess(String requestString) {
+        Exchange result = process(requestString);
         return (result.getException() != null)
                 ? createNak(requestString, result.getException())
-                : prepareBody(result);
+                : Exchanges.resultMessage(result).getBody(String.class);
     }
 
     /**

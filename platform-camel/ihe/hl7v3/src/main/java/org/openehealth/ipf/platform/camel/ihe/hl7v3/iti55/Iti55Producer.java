@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
@@ -35,17 +34,18 @@ import java.util.Map;
  * with support of the Deferred Response option.
  * @author Dmytro Rud
  */
-class Iti55Producer extends AbstractWsProducer {
+class Iti55Producer extends AbstractWsProducer<String, String> {
     private static final String PROCESSING_MODE_PROPERTY = Iti55Producer.class.getName() + ".MODE";
 
     Iti55Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory, Object.class);
+        super(endpoint, clientFactory, String.class);
     }
 
 
     @Override
     protected void enrichRequestContext(Exchange exchange, WrappedMessageContext requestContext) {
-        GPathResult requestXml = requestXml(exchange);
+        String requestString = exchange.getIn().getBody(String.class);
+        GPathResult requestXml = Hl7v3Utils.slurp(requestString);
         String processingMode = Iti55Utils.processingMode(requestXml);
 
         if ("D".equals(processingMode)) {
@@ -59,7 +59,7 @@ class Iti55Producer extends AbstractWsProducer {
 
 
     @Override
-    protected Object callService(Object client, Object request) {
+    protected String callService(Object client, String request) {
         BindingProvider bindingProvider = (BindingProvider) client;
         Map<String, Object> requestContext = bindingProvider.getRequestContext();
 
@@ -71,14 +71,9 @@ class Iti55Producer extends AbstractWsProducer {
 
     @Override
     protected String[] getAlternativeRequestKeys(Exchange exchange) {
-        GPathResult requestXml = requestXml(exchange);
+        String requestString = exchange.getIn().getBody(String.class);
+        GPathResult requestXml = Hl7v3Utils.slurp(requestString);
         return new String[] { Iti55Utils.requestQueryId(requestXml) };
     }
 
-
-    private static GPathResult requestXml(Exchange exchange) {
-        String encoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
-        String requestString = XmlUtils.toString(exchange.getIn().getBody(), encoding);
-        return Hl7v3Utils.slurp(requestString);
-    }
 }

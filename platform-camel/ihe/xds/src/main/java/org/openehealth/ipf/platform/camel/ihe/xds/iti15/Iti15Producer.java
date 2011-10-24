@@ -33,7 +33,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 /**
  * The producer implementation for the ITI-15 component.
  */
-public class Iti15Producer extends AbstractWsProducer {
+public class Iti15Producer extends AbstractWsProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponse> {
     /**
      * Constructs the producer.
      * @param endpoint
@@ -46,10 +46,9 @@ public class Iti15Producer extends AbstractWsProducer {
     }
 
     @Override
-    protected RegistryResponse callService(Object client, Object request) {
-        ProvideAndRegisterDocumentSetRequestType body = (ProvideAndRegisterDocumentSetRequestType) request;
+    protected RegistryResponse callService(Object client, ProvideAndRegisterDocumentSetRequestType request) {
         Map<String, DataHandler> attachments = new HashMap<String, DataHandler>();
-        for (Document document : body.getDocument()) {
+        for (Document document : request.getDocument()) {
             attachments.put(document.getId(), document.getValue());
         }
         
@@ -57,6 +56,6 @@ public class Iti15Producer extends AbstractWsProducer {
         Map<String, Object> requestContext = bindingProvider.getRequestContext();
         requestContext.put(ProvidedAttachmentOutInterceptor.ATTACHMENTS, attachments);
 
-        return ((Iti15PortType) client).documentRepositoryProvideAndRegisterDocumentSet(body.getSubmitObjectsRequest());
+        return ((Iti15PortType) client).documentRepositoryProvideAndRegisterDocumentSet(request.getSubmitObjectsRequest());
     }
 }

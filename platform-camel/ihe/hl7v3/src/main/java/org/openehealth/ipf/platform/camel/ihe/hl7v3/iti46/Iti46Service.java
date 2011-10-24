@@ -29,7 +29,7 @@ public class Iti46Service extends AbstractHl7v3WebService implements Iti46PortTy
     }
 
     @Override
-    public Object recordRevised(Object body) {
+    public String recordRevised(String body) {
         return doProcess(body);
     }
 }
