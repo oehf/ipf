@@ -80,6 +80,36 @@ public interface AsynchronyCorrelator {
     WsAuditDataset getAuditDataset(String messageId);
 
     /**
+     * Stores a set of alternative keys for the message with the given
+     * WS-Addressing ID.  When the &lt;RelatesTo&gt; header of the incoming
+     * response does not contain a valid/a known message ID for correlation,
+     * the system will use transaction-specific mechanisms to extract
+     * additional keys from the message body and to perform the correlation
+     * of their basis.
+     * <p>
+     * The correlator must maintain bi-directional correspondence
+     * between the "primary" key (WS-Addressing message ID of the request)
+     * and the alternative keys.  The uniqueness of the alternative keys
+     * should be provided, but cannot be guaranteed.
+     *
+     * @param messageId
+     *      WS-Addressing message ID of the request.
+     * @param alternativeKeys
+     *      alternative keys, should be not <code>null</code>.
+     */
+    void storeAlternativeKeys(String messageId, String... alternativeKeys);
+
+    /**
+     * Determines WS-Addressing message ID ("primary key")
+     * which corresponds to the given alternative key.
+     * @param alternativeKey
+     *      alternative key.
+     * @return
+     *      WS-Addressing message ID or <code>null</code> when not found.
+     */
+    String getMessageId(String alternativeKey);
+
+    /**
      * Deletes information pieces about the message with the given ID.
      * <p>
      * This method is supposed to be called internally after the correlation

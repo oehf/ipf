@@ -121,6 +121,11 @@ public abstract class AbstractWsProducer extends DefaultProducer {
             if (correlationKey != null) {
                 correlator.storeCorrelationKey(messageId, correlationKey);
             }
+
+            String[] alternativeKeys = getAlternativeRequestKeys(exchange);
+            if (alternativeKeys != null) {
+                correlator.storeAlternativeKeys(messageId, alternativeKeys);
+            }
         }
         
         // invoke
@@ -170,7 +175,25 @@ public abstract class AbstractWsProducer extends DefaultProducer {
         // does nothing per default
     }
 
-    
+
+    /**
+     * Determines the set of correlation keys for the request message contained
+     * in the given exchange, which are alternative to the WS-Addressing message ID.
+     * An example of alternative key is the query ID in HL7v3-based transactions.
+     * <p>
+     * Per default, this method returns <code>null</code>.
+     *
+     * @param exchange
+     *      Camel exchange containing a request message.
+     * @return
+     *      A non-empty collection of non-<code>null</code> alternative keys,
+     *      or <code>null</code>, when no keys could have been extracted.
+     */
+    protected String[] getAlternativeRequestKeys(Exchange exchange) {
+        return null;
+    }
+
+
     /**
      * Enriches the given response message from the Web Service request context data.
      */

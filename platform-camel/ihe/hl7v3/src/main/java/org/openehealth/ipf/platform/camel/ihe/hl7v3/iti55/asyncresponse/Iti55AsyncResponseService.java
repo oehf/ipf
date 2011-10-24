@@ -16,18 +16,25 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.asyncresponse;
 
 import org.apache.camel.ExchangePattern;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils;
+import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseWebService;
 
 /**
  * Service implementation for the ITI-55 XCPD Initiating Gateway actor
  * (receiver of asynchronous responses).
  * @author Dmytro Rud
  */
-public class Iti55AsyncResponseService extends AsynchronousResponseItiWebService implements Iti55AsyncResponsePortType {
+public class Iti55AsyncResponseService extends AsynchronousResponseWebService implements Iti55AsyncResponsePortType {
 
     @Override
     public void receiveAsyncResponse(Object response) {
         process(response, null, ExchangePattern.InOnly);
+    }
+
+    @Override
+    protected String[] getAlternativeResponseKeys(String responseString) {
+        return new String[] { Iti55Utils.responseQueryId(Hl7v3Utils.slurp(responseString)) };
     }
 }

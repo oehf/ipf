@@ -103,4 +103,25 @@ abstract class Iti55Utils {
                (responseXml.acknowledgement.typeCode.@code.text() in ['AA', 'CA'])
     }
 
+
+    /**
+     * @param requestXml
+     *      parsed request message.
+     * @return
+     *      query ID from the request.
+     */
+    static String requestQueryId(GPathResult requestXml) {
+        return Hl7v3Utils.idString(requestXml.controlActProcess.queryByParameter.queryId)
+    }
+
+
+    /**
+     * @param responseXml
+     *      parsed response message.
+     * @return
+     *      query ID from the response.
+     */
+    static String responseQueryId(GPathResult responseXml) {
+        return Hl7v3Utils.idString(responseXml.controlActProcess.queryAck.queryId)
+    }
 }

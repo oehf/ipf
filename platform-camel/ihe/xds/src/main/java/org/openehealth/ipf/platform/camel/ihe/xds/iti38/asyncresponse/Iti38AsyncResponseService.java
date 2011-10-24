@@ -18,13 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti38.asyncresponse;
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.xds.iti38.asyncresponse.Iti38AsyncResponsePortType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
-import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseWebService;
 
 /**
  * Service implementation for the IHE ITI-38 (XCA) asynchronous response.
  * @author Dmytro Rud
  */
-public class Iti38AsyncResponseService extends AsynchronousResponseItiWebService implements Iti38AsyncResponsePortType {
+public class Iti38AsyncResponseService extends AsynchronousResponseWebService implements Iti38AsyncResponsePortType {
     @Override
     public void documentRegistryRegistryStoredQuery(AdhocQueryResponse response) {
         process(response, null, ExchangePattern.InOnly);

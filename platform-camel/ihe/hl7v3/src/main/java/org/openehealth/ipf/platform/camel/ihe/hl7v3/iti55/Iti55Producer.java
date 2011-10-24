@@ -45,9 +45,7 @@ class Iti55Producer extends AbstractWsProducer {
 
     @Override
     protected void enrichRequestContext(Exchange exchange, WrappedMessageContext requestContext) {
-        String encoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
-        String requestString = XmlUtils.toString(exchange.getIn().getBody(), encoding);
-        GPathResult requestXml = Hl7v3Utils.slurp(requestString);
+        GPathResult requestXml = requestXml(exchange);
         String processingMode = Iti55Utils.processingMode(requestXml);
 
         if ("D".equals(processingMode)) {
@@ -70,4 +68,17 @@ class Iti55Producer extends AbstractWsProducer {
             ((Iti55PortType) client).discoverPatients(request);
     }
 
+
+    @Override
+    protected String[] getAlternativeRequestKeys(Exchange exchange) {
+        GPathResult requestXml = requestXml(exchange);
+        return new String[] { Iti55Utils.requestQueryId(requestXml) };
+    }
+
+
+    private static GPathResult requestXml(Exchange exchange) {
+        String encoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
+        String requestString = XmlUtils.toString(exchange.getIn().getBody(), encoding);
+        return Hl7v3Utils.slurp(requestString);
+    }
 }

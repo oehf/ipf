@@ -17,16 +17,17 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse;
 
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55DeferredResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseItiWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseWebService;
 
 /**
  * Service implementation for the ITI-55 XCPD Initiating Gateway actor
  * (receiver of deferred responses).
  * @author Dmytro Rud
  */
-public class Iti55DeferredResponseService extends AsynchronousResponseItiWebService implements Iti55DeferredResponsePortType {
+public class Iti55DeferredResponseService extends AsynchronousResponseWebService implements Iti55DeferredResponsePortType {
 
     @Override
     protected boolean canDropCorrelation(Object response) {
@@ -37,5 +38,10 @@ public class Iti55DeferredResponseService extends AsynchronousResponseItiWebServ
     public Object receiveDeferredResponse(Object response) {
         process(response, null, ExchangePattern.InOnly);
         return Hl7v3NakFactory.response((String) response, null, "MCCI_IN000002UV01", false, false);
+    }
+
+    @Override
+    protected String[] getAlternativeResponseKeys(String responseString) {
+        return new String[] { Iti55Utils.responseQueryId(Hl7v3Utils.slurp(responseString)) };
     }
 }

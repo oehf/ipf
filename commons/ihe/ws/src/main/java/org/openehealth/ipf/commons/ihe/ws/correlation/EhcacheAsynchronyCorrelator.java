@@ -17,10 +17,13 @@ package org.openehealth.ipf.commons.ihe.ws.correlation;
 
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import java.io.Serializable;
+import java.lang.String;
+
+import static org.apache.commons.lang3.Validate.noNullElements;
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * Ehcache-based implementation of asynchronous message correlator.
@@ -31,36 +34,37 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
     private final String SERVICE_ENDPOINT_URI_SUFFIX = ".serviceEndpoint";
     private final String CORRELATION_KEY_SUFFIX      = ".correlationKey";
     private final String AUDIT_DATASET_SUFFIX        = ".auditDataset";
+    private final String ALTERNATIVE_KEY_SUFFIX      = ".alternativeKey";
+    private final String ALTERNATIVE_KEYS_SUFFIX     = ".alternativeKeys";
 
     private final Ehcache ehcache;
 
     public EhcacheAsynchronyCorrelator(Ehcache ehcache) {
-        Validate.notNull(ehcache);
-        this.ehcache = ehcache;
+        this.ehcache = notNull(ehcache, "ehcache instance");
     }
 
-    private void put(String messageId, String suffix, Serializable value) {
-        ehcache.put(new Element(messageId + suffix, value));
+    private void put(String key, String suffix, Serializable value) {
+        ehcache.put(new Element(key + suffix, value));
     }
 
-    private <T extends Serializable> T get(String messageId, String suffix) {
-        Element element = ehcache.get(messageId + suffix);
+    private <T extends Serializable> T get(String key, String suffix) {
+        Element element = ehcache.get(key + suffix);
         return (element != null) ? (T) element.getValue() : null;
     }
 
     @Override
     public void storeServiceEndpointUri(String messageId, String serviceEndpointUri) {
-        put(messageId, SERVICE_ENDPOINT_URI_SUFFIX, serviceEndpointUri);
+        put(messageId, SERVICE_ENDPOINT_URI_SUFFIX, notNull(serviceEndpointUri, "service endpoint URI"));
     }
 
     @Override
     public void storeCorrelationKey(String messageId, String correlationKey) {
-        put(messageId, CORRELATION_KEY_SUFFIX, correlationKey);
+        put(messageId, CORRELATION_KEY_SUFFIX, notNull(correlationKey, "correlation key"));
     }
 
     @Override
     public void storeAuditDataset(String messageId, WsAuditDataset auditDataset) {
-        put(messageId, AUDIT_DATASET_SUFFIX, auditDataset);
+        put(messageId, AUDIT_DATASET_SUFFIX, notNull(auditDataset, "audit dataset"));
     }
 
     @Override
@@ -79,7 +83,28 @@ public class EhcacheAsynchronyCorrelator implements AsynchronyCorrelator {
     }
 
     @Override
+    public void storeAlternativeKeys(String messageId, String... alternativeKeys) {
+        noNullElements(alternativeKeys, "alternative keys should be not null");
+        for (String key : alternativeKeys) {
+            put(key, ALTERNATIVE_KEY_SUFFIX, messageId);
+        }
+        put(messageId, ALTERNATIVE_KEYS_SUFFIX, alternativeKeys);
+    }
+
+    @Override
+    public String getMessageId(String alternativeKey) {
+        return get(alternativeKey, ALTERNATIVE_KEY_SUFFIX);
+    }
+
+    @Override
     public boolean delete(String messageId) {
+        String[] alternativeKeys = get(messageId, ALTERNATIVE_KEYS_SUFFIX);
+        if (alternativeKeys != null) {
+            for (String key : alternativeKeys) {
+                ehcache.remove(key + ALTERNATIVE_KEY_SUFFIX);
+            }
+        }
+        ehcache.remove(messageId + ALTERNATIVE_KEYS_SUFFIX);
         ehcache.remove(messageId + CORRELATION_KEY_SUFFIX);
         ehcache.remove(messageId + AUDIT_DATASET_SUFFIX);
         return ehcache.remove(messageId + SERVICE_ENDPOINT_URI_SUFFIX);
