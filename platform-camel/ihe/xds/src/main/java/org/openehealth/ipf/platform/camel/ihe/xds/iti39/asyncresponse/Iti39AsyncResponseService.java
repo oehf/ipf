@@ -18,13 +18,13 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti39.asyncresponse;
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.xds.iti39.asyncresponse.Iti39AsyncResponsePortType;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService;
 
 /**
  * Service implementation for the IHE ITI-39 (XCA) asynchronous response.
  * @author Dmytro Rud
  */
-public class Iti39AsyncResponseService extends AsynchronousResponseWebService implements Iti39AsyncResponsePortType {
+public class Iti39AsyncResponseService extends AbstractAsyncResponseWebService implements Iti39AsyncResponsePortType {
     @Override
     public void documentRepositoryRetrieveDocumentSet(RetrieveDocumentSetResponseType response) {
         process(response, null, ExchangePattern.InOnly);

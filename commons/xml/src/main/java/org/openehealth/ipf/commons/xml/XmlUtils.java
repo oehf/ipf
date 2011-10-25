@@ -15,11 +15,6 @@
  */
 package org.openehealth.ipf.commons.xml;
 
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
@@ -53,29 +48,6 @@ abstract public class XmlUtils {
      */
     public static Source source(String s) {
         return new StreamSource(new StringReader(s));
-    }
-
-
-    /**
-     * Determines the name of the root element of the XML document contained in the given object.
-     * @param s
-     *      XML String.
-     * @return
-     *      element name.
-     */
-    public static QName rootElementName0(String s) {
-        try {
-            XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(source(s));
-            while (reader.hasNext()) {
-                reader.next();
-                if (reader.getEventType() == XMLStreamConstants.START_ELEMENT) {
-                    return reader.getName();
-                }
-            }
-        } catch (XMLStreamException e) {
-            throw new RuntimeException(e);
-        }
-        throw new RuntimeException("Cannot determine root element name");
     }
 
 

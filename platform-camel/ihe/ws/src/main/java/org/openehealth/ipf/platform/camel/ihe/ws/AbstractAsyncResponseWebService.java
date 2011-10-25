@@ -33,8 +33,8 @@ import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
  * Base class for receivers of asynchronous responses for Web Service-based IHE transactions.
  * @author Dmytro Rud
  */
-public class AsynchronousResponseWebService extends AbstractWebService {
-    private static final transient Log LOG = LogFactory.getLog(AsynchronousResponseWebService.class);
+abstract public class AbstractAsyncResponseWebService extends AbstractWebService {
+    private static final transient Log LOG = LogFactory.getLog(AbstractAsyncResponseWebService.class);
 
     /**
      * Determines whether correlation items related to the given message can be dropped.
@@ -72,7 +72,7 @@ public class AsynchronousResponseWebService extends AbstractWebService {
 
         // when no ReplyTo header found -- try alternative keys
         if (messageId == null) {
-            String[] alternativeKeys = getAlternativeResponseKeys((String) body);
+            String[] alternativeKeys = getAlternativeResponseKeys(body);
             if (alternativeKeys != null) {
                 for (String key : alternativeKeys) {
                     messageId = correlator.getMessageId(key);
@@ -114,13 +114,13 @@ public class AsynchronousResponseWebService extends AbstractWebService {
      * <p>
      * Per default, this method returns <code>null</code>.
      *
-     * @param responseString
-     *      response message as XML string.
+     * @param response
+     *      response message.
      * @return
      *      A non-empty collection of non-<code>null</code> alternative keys,
      *      or <code>null</code>, when no keys could have been extracted.
      */
-    protected String[] getAlternativeResponseKeys(String responseString) {
+    protected String[] getAlternativeResponseKeys(Object response) {
         return null;
     }
 }

@@ -39,7 +39,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  *
  * @author Dmytro Rud
  */
-public class Hl7v3ContinuationAwareWebService
+abstract public class Hl7v3ContinuationAwareWebService
         extends AbstractHl7v3WebService
         implements Hl7v3ContinuationsPortType
 {

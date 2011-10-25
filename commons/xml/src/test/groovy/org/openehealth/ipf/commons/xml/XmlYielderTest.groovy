@@ -17,12 +17,14 @@ package org.openehealth.ipf.commons.xml
 
 import static org.openehealth.ipf.commons.xml.XmlYielder.*
 
-import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
-import groovy.xml.MarkupBuilderimport org.junit.BeforeClassimport org.junit.Test
+import groovy.xml.MarkupBuilder
+import org.junit.BeforeClass
+import org.junit.Test
 
 import org.custommonkey.xmlunit.XMLUnit
-import org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.Diff
+
 /**
  * Unit test for GPath-to-XMLBuilder content yielding.
  * @author Dmytro Rud

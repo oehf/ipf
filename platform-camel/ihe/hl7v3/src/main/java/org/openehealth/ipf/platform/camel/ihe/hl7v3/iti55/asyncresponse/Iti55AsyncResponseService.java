@@ -19,14 +19,14 @@ import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.asyncresponse.Iti55AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService;
 
 /**
  * Service implementation for the ITI-55 XCPD Initiating Gateway actor
  * (receiver of asynchronous responses).
  * @author Dmytro Rud
  */
-public class Iti55AsyncResponseService extends AsynchronousResponseWebService implements Iti55AsyncResponsePortType {
+public class Iti55AsyncResponseService extends AbstractAsyncResponseWebService implements Iti55AsyncResponsePortType {
 
     @Override
     public void receiveAsyncResponse(String responseString) {
@@ -34,7 +34,7 @@ public class Iti55AsyncResponseService extends AsynchronousResponseWebService im
     }
 
     @Override
-    protected String[] getAlternativeResponseKeys(String responseString) {
-        return new String[] { Iti55Utils.responseQueryId(Hl7v3Utils.slurp(responseString)) };
+    protected String[] getAlternativeResponseKeys(Object response) {
+        return new String[] { Iti55Utils.responseQueryId(Hl7v3Utils.slurp((String) response)) };
     }
 }

@@ -15,19 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml;
 
-import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.cxf.databinding.DataWriter;
-import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.message.Attachment;
-import org.apache.cxf.message.Message;
 import org.apache.cxf.service.model.MessagePartInfo;
 import org.apache.cxf.staxutils.StaxUtils;
 
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.validation.Schema;
-import javax.xml.ws.handler.MessageContext;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Collection;
@@ -44,11 +38,6 @@ public class PlainXmlWriter implements DataWriter<XMLStreamWriter> {
     public void write(Object obj, MessagePartInfo part, XMLStreamWriter writer) {
         try {
             String s = (String) obj;
-            /*
-            byte[] bytes = s.getBytes();
-            InputStream stream = new ByteArrayInputStream(bytes);
-            Reader reader = new XmlStreamReader(stream);
-            */
             Reader reader = new StringReader(s);
             StaxUtils.copy(StaxUtils.createXMLStreamReader(reader), writer);
         } catch (Exception e) {

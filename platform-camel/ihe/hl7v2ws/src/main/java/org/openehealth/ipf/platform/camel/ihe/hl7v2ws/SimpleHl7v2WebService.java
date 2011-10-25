@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2ws.SimpleHl7v2WsPortType;
  * Web Service for HL7v2 components with a single operation.
  * @author Dmytro Rud
  */
-public class SimpleHl7v2WebService extends AbstractHl7v2WebService implements SimpleHl7v2WsPortType {
+abstract public class SimpleHl7v2WebService extends AbstractHl7v2WebService implements SimpleHl7v2WsPortType {
 
     @Override
     public String operation(String request) {

@@ -17,14 +17,14 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56.asyncresponse;
 
 import org.apache.camel.ExchangePattern;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AsynchronousResponseWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService;
 
 /**
  * Service implementation for the ITI-56 XCPD Initiating Gateway actor
  * (receiver of asynchronous responses).
  * @author Dmytro Rud
  */
-public class Iti56AsyncResponseService extends AsynchronousResponseWebService implements Iti56AsyncResponsePortType {
+public class Iti56AsyncResponseService extends AbstractAsyncResponseWebService implements Iti56AsyncResponsePortType {
 
     @Override
     public void receiveAsyncResponse(String response) {
