@@ -33,9 +33,8 @@ import org.openehealth.ipf.modules.hl7.model.AbstractSegment;
  * The fields contained in this segment:</p><p>
  * QPD-1: Message Query Name (CE)<br>
  * QPD-2: Query Tag (ST)<br>
- * QPD-3: Hierarchic Designator (HD)<br>
- * QPD-4: Query Input Parameter List (QIP)<br>
- * QPD-5,6,7: User Parameters (in successive fields) (varies)<br>
+ * QPD-3: Query Input Parameter List (QIP)<br>
+ * QPD-4,5,6,7: User Parameters (in successive fields) (varies)<br>
  * QPD-8: Extended Composite ID with Check Digit (CX)<br>
  */
 @SuppressWarnings("serial")
@@ -50,13 +49,13 @@ public class QPD extends AbstractSegment {
         Message msg = getMessage();
         try {
             add("CE", true, 1, 250, new Object[]{msg});
-            add("ST", false, 1, 32, new Object[]{msg});
-            add("HD", true, 0, 256, new Object[]{msg});
-            add("QIP", false, 0, 256, new Object[]{msg});
+            add("ST", true, 1, 32, new Object[]{msg});
+            add("QIP", true, 0, 256, new Object[]{msg});
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
-            add("CX", true, 0, 256, new Object[]{msg}, null);
+            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
+            add("CX", false, 0, 256, new Object[]{msg}, null);
         } catch (HL7Exception e) {
             HapiLogFactory.getHapiLog(getClass()).error("Can't instantiate " + getClass().getName(), e);
         }
