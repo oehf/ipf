@@ -69,10 +69,10 @@
         <geronimo-spec-servlet-api-25-version>1.2</geronimo-spec-servlet-api-25-version> 
         <groovy-version>1.7.9</groovy-version>
         <hapi-version>1.2</hapi-version>
-        <hibernate-version>3.5.6-Final</hibernate-version>
+        <hibernate-version>3.6.7.Final</hibernate-version>
         <hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
-        <hibernate-search-version>3.1.0.GA</hibernate-search-version>
+        <hibernate-search-version>3.4.1.Final</hibernate-search-version>
         <jasypt-version>1.7</jasypt-version>
         <jetty-version>7.4.2.v20110526</jetty-version>
         <joda-time-version>1.5.2</joda-time-version>
@@ -625,17 +625,6 @@
                 <artifactId>geronimo-servlet_2.5_spec</artifactId>
                 <version>${geronimo-spec-servlet-api-25-version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-annotations</artifactId>
-                <version>${hibernate-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hibernate.javax.persistence</groupId>
-                        <artifactId>hibernate-jpa-2.0-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>    
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-commons-annotations</artifactId>
