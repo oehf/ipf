@@ -49,6 +49,9 @@ class Iti55Producer extends AbstractWsProducer<String, String> {
         String processingMode = Iti55Utils.processingMode(requestXml);
 
         if ("D".equals(processingMode)) {
+            if (exchange.getIn().getHeader(AbstractWsEndpoint.WSA_REPLYTO_HEADER_NAME, String.class) != null) {
+                throw new RuntimeException("WS-Addressing asynchrony cannot be combined with the Deferred Response option");
+            }
             if (Iti55Utils.deferredResponseUri(requestXml) == null) {
                 throw new RuntimeException("missing deferred response URI in the request");
             }
