@@ -37,13 +37,16 @@ public class SimpleWsProducer<InType, OutType> extends AbstractWsProducer<InType
      *      JAX-WS client object factory.
      * @param requestClass
      *          type of request messages.
+     * @param responseClass
+     *          type of response messages.
      */
     public SimpleWsProducer(
             AbstractWsEndpoint endpoint,
             JaxWsClientFactory clientFactory,
-            Class<InType> requestClass)
+            Class<InType> requestClass,
+            Class<OutType> responseClass)
     {
-        super(endpoint, clientFactory, requestClass);
+        super(endpoint, clientFactory, requestClass, responseClass);
 
         for (Method method : endpoint.getComponent().getWsTransactionConfiguration().getSei().getDeclaredMethods()) {
             WebMethod annotation = method.getAnnotation(WebMethod.class);
@@ -56,6 +59,7 @@ public class SimpleWsProducer<InType, OutType> extends AbstractWsProducer<InType
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     protected OutType callService(Object clientObject, InType request) throws Exception {
         ClientImpl client = (ClientImpl) ClientProxy.getClient(clientObject);

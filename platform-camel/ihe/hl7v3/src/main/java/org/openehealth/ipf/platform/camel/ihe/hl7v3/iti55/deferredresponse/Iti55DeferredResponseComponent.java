@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse;
 
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
@@ -26,9 +30,6 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
-
-import javax.xml.namespace.QName;
-import java.util.Map;
 
 /**
  * Camel component for the ITI-55 XCPD Initiating Gateway actor
@@ -50,10 +51,10 @@ public class Iti55DeferredResponseComponent extends AbstractWsComponent<Hl7v3WsT
             false,
             false);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({ "unchecked", "rawtypes" }) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3AsyncResponseEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3AsyncResponseEndpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override

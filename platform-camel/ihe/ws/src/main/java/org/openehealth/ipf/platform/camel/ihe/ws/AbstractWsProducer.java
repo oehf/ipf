@@ -55,8 +55,10 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
 
     private final JaxWsClientFactory clientFactory;
     private final Class<InType> requestClass;
+    private final Class<OutType> responseClass;
 
-    
+   
+
     /**
      * Constructs the producer.
      * 
@@ -71,13 +73,16 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
     public AbstractWsProducer(
             AbstractWsEndpoint endpoint,
             JaxWsClientFactory clientFactory,
-            Class<InType> requestClass)
+            Class<InType> requestClass, 
+            Class<OutType> responseClass)
     {
         super(endpoint);
         notNull(clientFactory, "client factory cannot be null");
         notNull(requestClass, "request class cannot be null");
+        notNull(responseClass, "responseClass class cannot be null");
         this.clientFactory = clientFactory;
         this.requestClass = requestClass;
+        this.responseClass = responseClass;
     }
 
     
@@ -86,7 +91,7 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         LOG.debug("Calling web service on '" + getWsTransactionConfiguration().getServiceName() + "' with " + exchange);
         
         // prepare
-        InType body = exchange.getIn().getBody(requestClass);
+        InType body = exchange.getIn().getMandatoryBody(requestClass);
         Object client = getClient();
         configureClient(client);
         BindingProvider bindingProvider = (BindingProvider) client;
@@ -139,7 +144,8 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
         exchange.setPattern((replyToUri == null) ? ExchangePattern.InOut : ExchangePattern.InOnly);
         OutType result = null;
         try {
-             result = callService(client, body);
+            // normalize response type when called via reflection or similar non-type-safe mechanisms
+            result = responseClass.cast(callService(client, body));
         } catch (SOAPFaultException fault) {
             // handle http://www.w3.org/TR/2006/NOTE-soap11-ror-httpbinding-20060321/
             // see also: https://issues.apache.org/jira/browse/CXF-3768
@@ -151,7 +157,9 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
             }
         }
 
-        // for synchronous interaction: handle response
+        // for synchronous interaction (replyToUri == null): handle response.
+        // (async responses are handled in the service instance derived from 
+        // org.openehealth.ipf.platform.camel.ihe.ws.AbstractAsyncResponseWebService)
         if (replyToUri == null) {
             Message responseMessage = Exchanges.resultMessage(exchange);
             responseMessage.getHeaders().putAll(exchange.getIn().getHeaders());
@@ -162,8 +170,7 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
             // set Camel exchange property based on response encoding
             exchange.setProperty(Exchange.CHARSET_NAME,
                     responseContext.get(org.apache.cxf.message.Message.ENCODING));
-
-            responseMessage.setBody(result);
+            responseMessage.setBody(result, responseClass);
         } 
     }
 
@@ -277,4 +284,14 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
     public WsTransactionConfiguration getWsTransactionConfiguration() {
         return clientFactory.getWsTransactionConfiguration();
     }
+    
+    
+    public Class<InType> getRequestClass() {
+        return requestClass;
+    }
+
+    public Class<OutType> getResponseClass() {
+        return responseClass;
+    }
+
 }

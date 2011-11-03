@@ -34,7 +34,7 @@ import static org.apache.cxf.ws.addressing.JAXWSAConstants.CLIENT_ADDRESSING_PRO
 public class Iti55DeferredResponseProducer extends AbstractWsProducer<String, String> {
 
     public Iti55DeferredResponseProducer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory, String.class);
+        super(endpoint, clientFactory, String.class, String.class);
     }
 
 

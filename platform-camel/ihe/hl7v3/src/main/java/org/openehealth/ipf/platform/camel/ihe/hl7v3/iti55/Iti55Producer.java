@@ -38,7 +38,7 @@ class Iti55Producer extends AbstractWsProducer<String, String> {
     private static final String PROCESSING_MODE_PROPERTY = Iti55Producer.class.getName() + ".MODE";
 
     Iti55Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory, String.class);
+        super(endpoint, clientFactory, String.class, String.class);
     }
 
 

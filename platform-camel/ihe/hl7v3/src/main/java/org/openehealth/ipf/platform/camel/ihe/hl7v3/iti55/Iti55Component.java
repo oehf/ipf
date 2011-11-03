@@ -47,10 +47,10 @@ public class Iti55Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
             true);
 
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({ "unchecked", "rawtypes" }) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
@@ -68,6 +68,7 @@ public class Iti55Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
         return new Iti55AuditStrategy(true, allowIncompleteAudit);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Iti55Service getServiceInstance(AbstractWsEndpoint<?> endpoint) {
         return new Iti55Service((Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>) endpoint);

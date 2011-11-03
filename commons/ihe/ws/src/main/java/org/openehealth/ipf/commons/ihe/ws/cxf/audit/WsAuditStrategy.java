@@ -32,6 +32,8 @@ public abstract class WsAuditStrategy {
 
     /**
      * Whether this is a server-side or a client-side strategy. 
+     * Server side is where the response is generated, i.e. asynchronous
+     * response receivers must use <code>false</code> here.
      */
     private boolean serverSide;
 
@@ -46,6 +48,8 @@ public abstract class WsAuditStrategy {
      *   
      * @param serverSide
      *      whether this is a server-side or a client-side strategy.
+     *      Server side is where the response is generated, i.e. asynchronous
+     *      response receivers must use <code>false</code> here.
      * @param allowIncompleteAudit
      *      whether this strategy should allow incomplete audit records
      *      (parameter initially configurable via endpoint URL).
