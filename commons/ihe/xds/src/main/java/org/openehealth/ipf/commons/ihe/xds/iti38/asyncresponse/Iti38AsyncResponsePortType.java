@@ -28,7 +28,7 @@ import javax.xml.ws.Action;
 /**
  * ITI-38 Service Endpoint Interface for Asynchronous Response receiver
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "RespondingGateway_Response_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "InitiatingGateway_PortType")
 @XmlSeeAlso({
         org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
         org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
@@ -40,7 +40,7 @@ public interface Iti38AsyncResponsePortType {
 
     @Oneway
     @Action(input = "urn:ihe:iti:2007:CrossGatewayQueryResponse")
-    @WebMethod(operationName = "RespondingGateway_CrossGatewayQuery")
+    @WebMethod(operationName = "InitiatingGateway_Async_CrossGatewayQuery")
     public void documentRegistryRegistryStoredQuery(
             @WebParam(partName = "Body",
                     name = "AdhocQueryResponse",

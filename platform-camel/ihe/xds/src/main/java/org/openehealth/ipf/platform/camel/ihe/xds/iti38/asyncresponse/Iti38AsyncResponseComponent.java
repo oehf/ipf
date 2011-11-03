@@ -35,9 +35,9 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
  */
 public class Iti38AsyncResponseComponent extends AbstractWsComponent<WsTransactionConfiguration> {
     private final static WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Response_Service", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Service", "ihe"),
             Iti38AsyncResponsePortType.class,
-            new QName("urn:ihe:iti:xds-b:2007", "RespondingGateway_Response_Binding_Soap12", "ihe"),
+            new QName("urn:ihe:iti:xds-b:2007", "InitiatingGateway_Binding", "ihe"),
             false,
             "wsdl/iti38-asyncresponse.wsdl",
             true,

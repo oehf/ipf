@@ -18,7 +18,7 @@
         
 <definitions 
         targetNamespace="urn:ihe:iti:xds-b:2007" 
-        name="RespondingGateway"
+        name="InitiatingGateway"
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:ihe="urn:ihe:iti:xds-b:2007"
@@ -42,25 +42,25 @@
         <part name="body" element="query:AdhocQueryResponse"/>
     </message>
 
-    <portType name="RespondingGateway_Response_PortType">
-        <operation name="RespondingGateway_CrossGatewayQuery">
+    <portType name="InitiatingGateway_PortType">
+        <operation name="InitiatingGateway_Async_CrossGatewayQuery">
             <input message="ihe:CrossGatewayQueryResponse_Message"
                    wsam:Action="urn:ihe:iti:2007:CrossGatewayQueryResponse"/>
         </operation>
     </portType>
 
-    <binding name="RespondingGateway_Response_Binding_Soap12" type="ihe:RespondingGateway_Response_PortType">
+    <binding name="InitiatingGateway_Binding" type="ihe:InitiatingGateway_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="RespondingGateway_CrossGatewayQuery">
+        <operation name="InitiatingGateway_Async_CrossGatewayQuery">
             <input>
                 <soap12:body use="literal"/>
             </input>
         </operation>
     </binding>
 
-    <service name="RespondingGateway_Response_Service">
-        <port name="RespondingGateway_Response_Port_Soap12" binding="ihe:RespondingGateway_Response_Binding_Soap12">
-            <soap12:address location="http://servicelocation/RespondingGateway_Response_Service12"/>
+    <service name="InitiatingGateway_Service">
+        <port name="InitiatingGateway_Port" binding="ihe:InitiatingGateway_Binding">
+            <soap12:address location="http://servicelocation/InitiatingGateway"/>
         </port>
     </service>
 </definitions>
