@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AsyncResponseServiceFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3DeferredResponseSenderFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3DeferredResponderFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
@@ -46,7 +46,7 @@ public class Hl7v3AsyncResponseEndpoint<ConfigType extends Hl7v3WsTransactionCon
     // currently is used for deferred response receivers only!
     @Override
     public JaxWsClientFactory getJaxWsClientFactory() {
-        return new Hl7v3DeferredResponseSenderFactory(
+        return new Hl7v3DeferredResponderFactory(
                 getComponent().getWsTransactionConfiguration(),
                 getServiceUrl(),
                 isAudit() ? getComponent().getServerAuditStrategy(isAllowIncompleteAudit()) : null,

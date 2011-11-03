@@ -15,19 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti39.asyncresponse;
 
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti39.Iti39ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti39.asyncresponse.Iti39AsyncResponsePortType;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
-
-import javax.xml.namespace.QName;
-import java.util.Map;
 
 /**
  * The Camel component for the ITI-39 (XCA) async response.
@@ -71,7 +72,7 @@ public class Iti39AsyncResponseComponent extends AbstractWsComponent<WsTransacti
     }
 
     @Override
-    public AbstractWsProducer getProducer(
+    public AbstractWsProducer<?,?> getProducer(
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {

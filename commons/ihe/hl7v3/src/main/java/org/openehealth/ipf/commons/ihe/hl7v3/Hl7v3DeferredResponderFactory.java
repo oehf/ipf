@@ -27,9 +27,9 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataB
  * Special factory for HL7 v3 Deferred Response senders.
  * @author Dmytro Rud
  */
-public class Hl7v3DeferredResponseSenderFactory extends JaxWsClientFactory {
+public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory {
 
-    public Hl7v3DeferredResponseSenderFactory(
+    public Hl7v3DeferredResponderFactory(
             Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
             WsAuditStrategy auditStrategy,

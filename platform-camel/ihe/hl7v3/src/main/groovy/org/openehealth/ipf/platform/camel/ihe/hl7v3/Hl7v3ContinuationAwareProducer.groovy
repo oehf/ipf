@@ -73,7 +73,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> 
             Hl7v3ContinuationAwareEndpoint endpoint,
             JaxWsClientFactory clientFactory)
     {
-        super(endpoint, clientFactory, Object.class)
+        super(endpoint, clientFactory, String.class, String.class)
 
         this.wsTransactionConfiguration = endpoint.component.wsTransactionConfiguration
         this.supportContinuation        = endpoint.supportContinuation

@@ -34,7 +34,7 @@ public class Iti44Producer extends AbstractWsProducer<String, String> {
      *          the factory for clients to produce messages for the service.              
      */
     public Iti44Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory, String.class);
+        super(endpoint, clientFactory, String.class, String.class);
     }
 
     @Override

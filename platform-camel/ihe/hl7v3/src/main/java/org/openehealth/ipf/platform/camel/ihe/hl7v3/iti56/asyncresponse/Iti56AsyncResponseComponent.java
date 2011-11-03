@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56.asyncresponse;
 
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
@@ -23,12 +27,9 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti56.asyncresponse.Iti56AsyncRespo
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
-
-import javax.xml.namespace.QName;
-import java.util.Map;
 
 /**
  * Camel component for the ITI-56 XCPD Initiating Gateway actor
@@ -49,10 +50,10 @@ public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
             false);
 
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({"rawtypes", "unchecked" }) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3AsyncResponseEndpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3AsyncResponseEndpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class Iti56AsyncResponseComponent extends AbstractWsComponent<Hl7v3WsTran
 
     @Override
     public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return null;   // no producer support
+        return null; 
     }
 
     @Override
