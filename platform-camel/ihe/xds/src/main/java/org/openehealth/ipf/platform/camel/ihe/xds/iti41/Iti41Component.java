@@ -76,11 +76,11 @@ public class Iti41Component extends AbstractWsComponent<WsTransactionConfigurati
     }
 
     @Override
-    public AbstractWsProducer getProducer(
+    public SimpleWsProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponseType> getProducer(
             AbstractWsEndpoint<?> endpoint,
             JaxWsClientFactory clientFactory)
     {
         return new SimpleWsProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponseType>(
-                endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class);
+                endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponseType.class);
     }
 }

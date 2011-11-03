@@ -15,24 +15,23 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti17;
 
+import java.util.Map;
+
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-
-import java.util.Map;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
 /**
  * The Camel component for the ITI-17 transaction.
  */
 public class Iti17Component extends AbstractWsComponent<WsTransactionConfiguration> {
     @Override
-    @SuppressWarnings("unchecked") // Required because of base class
-    protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
+    protected Endpoint createEndpoint(String uri, String remaining, @SuppressWarnings("rawtypes") Map parameters) throws Exception {
         return new Iti17Endpoint(uri, remaining, this);
     }
 

@@ -17,6 +17,8 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti56;
 
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
@@ -25,12 +27,9 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti56.Iti56PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
-
-import javax.xml.namespace.QName;
 
 /**
  * The Camel component for the ITI-56 transaction (XCPD).
@@ -49,10 +48,10 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
             true,
             true);
 
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({ "unchecked", "rawtypes" }) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override
@@ -76,7 +75,7 @@ public class Iti56Component extends AbstractWsComponent<Hl7v3WsTransactionConfig
     }
 
     @Override
-    public AbstractWsProducer getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
-        return new SimpleWsProducer<String, String>(endpoint, clientFactory, String.class);
+    public SimpleWsProducer<String, String> getProducer(AbstractWsEndpoint<?> endpoint, JaxWsClientFactory clientFactory) {
+        return new SimpleWsProducer<String, String>(endpoint, clientFactory, String.class, String.class);
     }
 }

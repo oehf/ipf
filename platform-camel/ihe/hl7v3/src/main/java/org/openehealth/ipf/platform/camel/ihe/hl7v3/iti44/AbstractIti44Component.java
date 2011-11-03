@@ -32,10 +32,10 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 abstract public class AbstractIti44Component extends AbstractWsComponent<Hl7v3WsTransactionConfiguration> {
-    @SuppressWarnings("unchecked") // Required because of base class
+    @SuppressWarnings({ "unchecked", "rawtypes" }) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map parameters) throws Exception {
-        return new Hl7v3Endpoint(uri, remaining, this, getCustomInterceptors(parameters));
+        return new Hl7v3Endpoint<Hl7v3WsTransactionConfiguration>(uri, remaining, this, getCustomInterceptors(parameters));
     }
 
     @Override

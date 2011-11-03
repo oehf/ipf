@@ -42,7 +42,7 @@ public class Iti15Producer extends AbstractWsProducer<ProvideAndRegisterDocument
      *          the factory for clients to produce messages for the service.              
      */
     public Iti15Producer(AbstractWsEndpoint endpoint, JaxWsClientFactory clientFactory) {
-        super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class);
+        super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponse.class);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Iti15Producer extends AbstractWsProducer<ProvideAndRegisterDocument
         BindingProvider bindingProvider = (BindingProvider) client;
         Map<String, Object> requestContext = bindingProvider.getRequestContext();
         requestContext.put(ProvidedAttachmentOutInterceptor.ATTACHMENTS, attachments);
-
+        //RegistryResponse result = getResponseClass().cast
         return ((Iti15PortType) client).documentRepositoryProvideAndRegisterDocumentSet(request.getSubmitObjectsRequest());
     }
 }

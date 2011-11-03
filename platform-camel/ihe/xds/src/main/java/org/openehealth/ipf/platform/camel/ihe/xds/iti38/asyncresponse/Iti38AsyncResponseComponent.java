@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti38.asyncresponse;
 
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
@@ -25,9 +29,6 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsAsyncResponseEndpoint;
-
-import javax.xml.namespace.QName;
-import java.util.Map;
 
 /**
  * The Camel component for the ITI-38 (XCA) async response.
