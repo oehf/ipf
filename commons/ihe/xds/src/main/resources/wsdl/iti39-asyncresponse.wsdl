@@ -23,7 +23,7 @@
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
         xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         targetNamespace="urn:ihe:iti:xds-b:2007"
-        name="RespondingGateway">
+        name="InitiatingGateway">
 
     <documentation>IHE XCA Initiating Gateway Asynchronous Response Receiver = ITI-39 adaptor = Cross-Gateway Retrieve</documentation>
 
@@ -44,25 +44,25 @@
         <part name="body" element="ihe:RetrieveDocumentSetResponse"/>
     </message>
 
-    <portType name="RespondingGateway_Response_PortType">
-        <operation name="RespondingGateway_CrossGatewayRetrieve">
+    <portType name="InitiatingGateway_PortType">
+        <operation name="InitiatingGateway_Async_CrossGatewayRetrieve">
             <input message="ihe:CrossGatewayRetrieveResponse_Message"
                    wsam:Action="urn:ihe:iti:2007:CrossGatewayRetrieveResponse"/>
         </operation>
     </portType>
 
-    <binding name="RespondingGateway_Response_Binding_Soap12" type="ihe:RespondingGateway_Response_PortType">
+    <binding name="InitiatingGateway_Binding" type="ihe:InitiatingGateway_PortType">
         <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="RespondingGateway_CrossGatewayRetrieve">
+        <operation name="InitiatingGateway_Async_CrossGatewayRetrieve">
             <input>
                 <soap12:body use="literal"/>
             </input>
         </operation>
     </binding>
 
-    <service name="RespondingGateway_Response_Service">
-        <port name="RespondingGateway_Response_Port_Soap12" binding="ihe:RespondingGateway_Response_Binding_Soap12">
-            <soap12:address location="http://servicelocation/RespondingGateway_Response_Service12"/>
+    <service name="InitiatingGateway_Service">
+        <port name="InitiatingGateway_Port" binding="ihe:InitiatingGateway_Binding">
+            <soap12:address location="http://servicelocation/InitiatingGateway"/>
         </port>
     </service>
 </definitions>
