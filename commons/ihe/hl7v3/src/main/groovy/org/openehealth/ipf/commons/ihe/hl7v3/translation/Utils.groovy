@@ -59,9 +59,9 @@ class Utils {
             boolean useReceiverDeviceName) 
     {
         msg.MSH[3][1] = senderOrReceiverIdentification(xml.sender, useSenderDeviceName)
-        msg.MSH[4][1] = ''
+        msg.MSH[4][1] = 'unknown'
         msg.MSH[5][1] = senderOrReceiverIdentification(xml.receiver, useReceiverDeviceName)
-        msg.MSH[6][1] = ''
+        msg.MSH[6][1] = 'unknown'
         msg.MSH[7][1] = xml.creationTime.@value.text().replaceFirst('[.+-].*$', '')
         
         String idRoot = xml.id.@root?.text()

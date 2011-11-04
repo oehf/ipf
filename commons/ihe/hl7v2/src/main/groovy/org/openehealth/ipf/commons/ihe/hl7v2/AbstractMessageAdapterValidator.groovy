@@ -249,7 +249,7 @@ public abstract class AbstractMessageAdapterValidator implements Validator<Objec
      * Validates segment MSH.
      */
     void checkMSH(MessageAdapter msg, Collection<Exception> violations) {
-        checkSegmentStructure(msg, 'MSH', [1, 2, 7, 9, 10, 11, 12], violations)
+        checkSegmentStructure(msg, 'MSH', [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12], violations)
     }
 
     /**

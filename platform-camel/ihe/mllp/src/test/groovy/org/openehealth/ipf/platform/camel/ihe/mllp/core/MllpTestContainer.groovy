@@ -133,7 +133,7 @@ class MllpTestContainer {
      * Returns a sample HL7 message as String. 
      */
     static String getMessageString(String msh9, String msh12, boolean needPid = true) {
-        def s = 'MSH|^~\\&|MESA_PD_SUPPLIER|XYZ_HOSPITAL|||20081204114742||' +
+        def s = 'MSH|^~\\&|MESA_PD_SUPPLIER|XYZ_HOSPITAL|dummy|dummy|20081204114742||' +
                 msh9 +
                 '|123456|T|' +
                 msh12 +
