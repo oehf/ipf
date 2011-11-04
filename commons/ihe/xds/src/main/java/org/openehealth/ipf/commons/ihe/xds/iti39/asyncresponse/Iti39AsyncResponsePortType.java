@@ -28,7 +28,7 @@ import javax.xml.ws.Action;
 /**
  * ITI-39 SEI for asynchronous response receiver.
  */
-@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "RespondingGateway_Response_PortType")
+@WebService(targetNamespace = "urn:ihe:iti:xds-b:2007", name = "InitiatingGateway_PortType")
 @XmlSeeAlso({
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ObjectFactory.class,
     org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.ObjectFactory.class,
@@ -39,9 +39,11 @@ public interface Iti39AsyncResponsePortType {
 
     @Oneway
     @Action(input = "urn:ihe:iti:2007:CrossGatewayRetrieveResponse")
-    @WebMethod(operationName = "RespondingGateway_CrossGatewayRetrieve")
+    @WebMethod(operationName = "InitiatingGateway_Async_CrossGatewayRetrieve")
     public void documentRepositoryRetrieveDocumentSet(
-            @WebParam(partName = "body", name = "RetrieveDocumentSetResponse", targetNamespace = "urn:ihe:iti:xds-b:2007")
+            @WebParam(partName = "body",
+                    name = "RetrieveDocumentSetResponse",
+                    targetNamespace = "urn:ihe:iti:xds-b:2007")
             RetrieveDocumentSetResponseType body
     );
 }

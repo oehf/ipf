@@ -681,7 +681,8 @@ public class CoreExtension {
         .split(Builder.body())
             .parallelProcessing()
             .aggregationStrategy(aggregationStrategy)
-            .to(dispatcherEndpointUri);
+            .to(dispatcherEndpointUri)
+            .end();
     }
 
 }
