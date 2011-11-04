@@ -30,7 +30,7 @@ import org.apache.camel.model.FilterDefinition;
 import org.apache.camel.model.OnExceptionDefinition;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.processor.DelegateProcessor;
-import org.apache.camel.processor.aggregate.AggregationStrategy
+import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.openehealth.ipf.commons.core.modules.api.Aggregator;
