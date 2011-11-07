@@ -207,6 +207,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         } else {
             hl7v3Exception = new Hl7v3Exception();
             hl7v3Exception.setCause(exception);
+            hl7v3Exception.setMessage(exception.getMessage());
             hl7v3Exception.setDetectedIssueManagementCode("InternalError");
             hl7v3Exception.setDetectedIssueManagementCodeSystem("1.3.6.1.4.1.19376.1.2.27.3");
         }
@@ -222,6 +223,13 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
     private static void configureWsaAction(String action) {
         WrappedMessageContext messageContext = (WrappedMessageContext) new WebServiceContextImpl().getMessageContext();
         Message outMessage = messageContext.getWrappedMessage().getExchange().getOutMessage();
+
+        // when WS-Addressing headers were missing from the beginning
+        // TODO: is this check still necessary under CXF 2.5?
+        if (outMessage == null) {
+            return;
+        }
+
         AddressingProperties apropos = (AddressingProperties) outMessage.get(SERVER_ADDRESSING_PROPERTIES_OUTBOUND);
         if (apropos == null) {
             apropos = new AddressingPropertiesImpl();
