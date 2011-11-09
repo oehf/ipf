@@ -32,7 +32,7 @@ class Iti55AuditStrategy extends Iti47AuditStrategy {
             'EventOutcomeCode',
             'UserId',
             'ServiceEndpointUrl',
-            'PatientIds',
+            /* 'PatientIds', */
             'RequestPayload',
             'QueryId',
             'HomeCommunityId',
