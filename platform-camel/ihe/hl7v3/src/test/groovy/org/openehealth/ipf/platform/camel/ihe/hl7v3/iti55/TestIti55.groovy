@@ -16,18 +16,22 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
 import java.util.concurrent.atomic.AtomicInteger
+
 import org.apache.camel.Exchange
+import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
+import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
+import org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-
+    
 /**
  * Tests for ITI-55.
  * @author Dmytro Rud
@@ -44,7 +48,7 @@ class TestIti55 extends StandardTestContainer {
     final String SERVICE1_DEFERRED_RESPONSE_URI = "http://localhost:${port}/iti55service-deferred-response"
 
     final String REQUEST = StandardTestContainer.readFile('iti55/iti55-sample-request.xml')
-
+    
     final String REQUEST_DEFERRED =
         StandardTestContainer.readFile('iti55/iti55-sample-request-deferred.xml').replace(
                 '***REPLACEME***', SERVICE1_DEFERRED_RESPONSE_URI)
@@ -57,10 +61,24 @@ class TestIti55 extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
     
+    private MockEndpoint response;
+    private MockEndpoint asyncResponse;
+    private MockEndpoint deferredResponse;
+    
     @BeforeClass
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
+    
+    @Before
+    public void setUp(){
+        response = camelContext.getEndpoint('mock:response')
+        asyncResponse = camelContext.getEndpoint('mock:asyncResponse')
+        deferredResponse = camelContext.getEndpoint('mock:deferredResponse')
+        
+        MockEndpoint.resetMocks(camelContext)
+    }
+    
     
     /**
      * Test whether:
@@ -78,20 +96,25 @@ class TestIti55 extends StandardTestContainer {
     void testIti55() {
         final int N = 5
         int i = 0
-
+        
+        //how many async responses do we expect?
+        response.setExpectedMessageCount(N * 3)
+        asyncResponse.setExpectedMessageCount(N)
+        deferredResponse.setExpectedMessageCount(N)
+ 
+        
         N.times {
             sendMainTestMessage(RequestType.ASYNC,    i++)
             sendMainTestMessage(RequestType.REGULAR,  i++)
             sendMainTestMessage(RequestType.DEFERRED, i++)
         }
-        
+
         // wait for completion of asynchronous routes
-        Thread.currentThread().sleep(1000 + Iti55TestRouteBuilder.ASYNC_DELAY)
-
-        assert Iti55TestRouteBuilder.responseCount.get()         == N * 3
-        assert Iti55TestRouteBuilder.asyncResponseCount.get()    == N
-        assert Iti55TestRouteBuilder.deferredResponseCount.get() == N
-
+        response.assertIsSatisfied()
+        asyncResponse.assertIsSatisfied()
+        deferredResponse.assertIsSatisfied()
+        
+        
         assert auditSender.messages.size() == N * 6
         assert ttlResponsesCount.get() == CALLS_WITH_TTL_HEADER.size()
         
@@ -139,7 +162,7 @@ class TestIti55 extends StandardTestContainer {
             }
 
             def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
-            assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
+            assert inHttpHeaders['MyResponseHeader'].equals('Re: Number ' + n)
         }
 
         // for deferred response requests -- check whether a positive MCCI ACK is returned
@@ -154,7 +177,7 @@ class TestIti55 extends StandardTestContainer {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
         def responseMessage = Exchanges.resultMessage(producerTemplate.send(SERVICE2_URI, requestExchange))
-        def response = Hl7v3Utils.slurp(responseMessage.body)
+        def response = Hl7v3Utils.slurp(responseMessage.body) 
 
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'INTERR'

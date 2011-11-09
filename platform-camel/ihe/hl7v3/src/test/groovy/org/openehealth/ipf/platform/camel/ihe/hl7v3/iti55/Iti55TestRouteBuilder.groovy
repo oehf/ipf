@@ -15,8 +15,14 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
+
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
+
 import javax.xml.datatype.Duration
+
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
 import org.apache.camel.spring.SpringRouteBuilder
@@ -24,8 +30,6 @@ import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
 
 /**
  * Test routes for ITI-55.
@@ -37,16 +41,16 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
     static final AtomicInteger responseCount         = new AtomicInteger()
     static final AtomicInteger asyncResponseCount    = new AtomicInteger()
     static final AtomicInteger deferredResponseCount = new AtomicInteger()
-
+    
     static final String RESPONSE = StandardTestContainer.readFile('iti55/iti55-sample-response.xml')
-
+    
     static final long ASYNC_DELAY = 10 * 1000L
-
+    
     static boolean errorOccurred = false
 
     @Override
     public void configure() throws Exception {
-
+        
         // receiver of asynchronous responses
         from('xcpd-iti55-async-response:iti55service-async-response?correlator=#correlator')
             .process(iti55ResponseValidator())
@@ -64,6 +68,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                 }
             }
             .delay(ASYNC_DELAY)
+            .to("mock:asyncResponse")
 
 
         // receiver of deferred responses
@@ -83,6 +88,7 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                 }
             }
             .delay(ASYNC_DELAY)
+            .to("mock:deferredResponse")
 
 
         // responding route
@@ -112,7 +118,8 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                 responseCount.incrementAndGet()
             }
             .process(iti55ResponseValidator())
-
+            .to("mock:response")
+            
 
         // generates NAK
         from('xcpd-iti55:iti55service2')

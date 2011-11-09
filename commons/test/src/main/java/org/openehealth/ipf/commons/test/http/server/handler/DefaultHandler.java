@@ -40,7 +40,9 @@ public class DefaultHandler implements RequestHandler {
         String result = IOUtils.toString(requestStream);
         response.getWriter().println(result);
         response.setContentType("text/plain");
-        LOG.info(result);
+        if (LOG.isInfoEnabled()){
+            LOG.info(result);
+        }
         IOUtils.closeQuietly(requestStream);
     }
 

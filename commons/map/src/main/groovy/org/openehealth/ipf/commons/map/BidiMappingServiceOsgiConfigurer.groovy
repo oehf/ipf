@@ -94,7 +94,9 @@ class BidiMappingServiceOsgiConfigurer implements BundleListener {
             resources.each { 
                 LOG.info("Added mapping resource ${it} to mapping service")
             }
-            LOG.debug("Current mappings: ${service.reverseMap}")
+            if (LOG.isDebugEnabled()){
+                LOG.debug("Current mappings: ${service.reverseMap}")
+            }
         }
     }
          
