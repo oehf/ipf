@@ -194,7 +194,9 @@ abstract public class Hl7v3ContinuationAwareWebService
      * Handles continuation requests.
      */
     String continuation0(String requestString) {
-        LOG.debug('continuation(): Got request\n' + requestString)
+        if (LOG.isDebugEnabled()){
+            LOG.debug('continuation(): Got request\n' + requestString)
+        }
 
         // validate
         if (validation) {
@@ -235,7 +237,9 @@ abstract public class Hl7v3ContinuationAwareWebService
 
         try {
             String result = createFragment(request, responseString, startResultNumber, continuationQuantity)
-            LOG.debug('continuation(): Generated fragment\n' + result)
+            if (LOG.isDebugEnabled()){
+                LOG.debug('continuation(): Generated fragment\n' + result)
+            }
             storage.storeLastResultNumber(key, startResultNumber + continuationQuantity)
             storage.storeContinuationQuantity(key, continuationQuantity)
             return result
@@ -249,7 +253,9 @@ abstract public class Hl7v3ContinuationAwareWebService
      * Handles continuation cancel requests.
      */
     String cancel0(String requestString) {
-        LOG.debug('cancel(): Got request\n' + requestString)
+        if (LOG.isDebugEnabled()){
+            LOG.debug('cancel(): Got request\n' + requestString)
+        }
 
         // validate
         if (validation) {
@@ -270,7 +276,9 @@ abstract public class Hl7v3ContinuationAwareWebService
             storage.remove(key)
             GPathResult response = slurp(responseString)
             String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', false, true)
-            LOG.debug('cancel(): generated ACK\n' + result)
+            if (LOG.isDebugEnabled()){
+                LOG.debug('cancel(): generated ACK\n' + result)
+            }
             return result
         } else {
             return error(request, 'cancel(): Unknown continuation key', key)

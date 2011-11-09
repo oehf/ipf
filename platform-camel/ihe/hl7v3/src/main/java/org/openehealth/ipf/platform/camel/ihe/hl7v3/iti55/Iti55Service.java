@@ -15,12 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
+import static org.apache.cxf.ws.addressing.JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND;
+import static org.apache.cxf.ws.addressing.JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_OUTBOUND;
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory.response;
+import static org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent.THREAD_POOL_NAME;
 import groovy.util.slurpersupport.GPathResult;
+
+import java.util.concurrent.ExecutorService;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.spi.ExecutorServiceStrategy;
+import org.apache.camel.spi.ThreadPoolProfile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
@@ -40,15 +48,6 @@ import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.AbstractHl7v3WebService;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-
-import static org.apache.cxf.ws.addressing.JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_INBOUND;
-import static org.apache.cxf.ws.addressing.JAXWSAConstants.SERVER_ADDRESSING_PROPERTIES_OUTBOUND;
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3NakFactory.response;
-import static org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent.THREAD_POOL_NAME;
 
 /**
  * Service implementation for the Responding Gateway actor
@@ -76,15 +75,31 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         this.endpoint = endpoint;
         this.camelContext = endpoint.getCamelContext();
         this.producerTemplate = this.camelContext.createProducerTemplate();
-
-        ExecutorServiceStrategy executorServiceStrategy = this.camelContext.getExecutorServiceStrategy();
-        ExecutorService executorService0 = executorServiceStrategy.lookup(this, THREAD_POOL_NAME, THREAD_POOL_NAME);
-        this.executorService = (executorService0 != null)
-                ? executorService0
-                : executorServiceStrategy.newThreadPool(this, THREAD_POOL_NAME, 10, 100);
+        this.executorService = getDeferredResponseExecutorService();
     }
 
-
+    private ExecutorService getDeferredResponseExecutorService(){
+        ExecutorServiceStrategy executorServiceStrategy = this.camelContext.getExecutorServiceStrategy();
+        
+        //Try to get one from the registry
+        ExecutorService result = executorServiceStrategy.lookup(this, THREAD_POOL_NAME, THREAD_POOL_NAME);
+        
+        //Create a default one with non-daemon threads
+        if (result == null){
+            ThreadPoolProfile  defaultCamelProfile =  executorServiceStrategy.getDefaultThreadPoolProfile();
+            result = executorServiceStrategy.newThreadPool(this, 
+                                                  THREAD_POOL_NAME, 
+                                                  5, 
+                                                  20, 
+                                                  defaultCamelProfile.getKeepAliveTime() * 20L, 
+                                                  defaultCamelProfile.getTimeUnit(), 
+                                                  defaultCamelProfile.getMaxQueueSize(), 
+                                                  defaultCamelProfile.getRejectedExecutionHandler(), 
+                                                  false);
+        }
+        return result;
+    }
+    
     @Override
     public String discoverPatients(String requestString) {
         return doProcess(requestString);
@@ -135,9 +150,10 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
             // in a separate thread: run the route, send its result synchronously
             // to the deferred response URI, ignore all errors and ACKs
-            Callable<?> command = new Callable<Object>() {
+            Runnable processRouteAndNotifyTask = new Runnable() {
+                
                 @Override
-                public Object call() throws Exception {
+                public void run() {
                     // Message context is a thread local object, so we need to propagate in into
                     // this new thread.  Note that the producer (see producerTemplate below) will
                     // get its own message context, precisely spoken a freshly created one.
@@ -153,19 +169,18 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
                     exchange.getIn().setHeader("iti55.deferred.requestMessageId", requestMessageId);
                     exchange.getIn().setHeader("iti55.deferred.auditDataset", auditDataset);
 
-                    AbstractWsEndpoint targetEndpoint = (AbstractWsEndpoint) camelContext.getEndpoint(deferredResponseUri);
-                    targetEndpoint.setAudit(endpoint.isAudit());
-                    targetEndpoint.setAllowIncompleteAudit(endpoint.isAllowIncompleteAudit());
+                    AbstractWsEndpoint responseEndpoint = (AbstractWsEndpoint) camelContext.getEndpoint(deferredResponseUri);
+                    responseEndpoint.setAudit(endpoint.isAudit());
+                    responseEndpoint.setAllowIncompleteAudit(endpoint.isAllowIncompleteAudit());
 
-                    exchange = producerTemplate.send(targetEndpoint, exchange);
+                    exchange = producerTemplate.send(responseEndpoint, exchange);
                     if (exchange.isFailed()) {
                         LOG.error("Sending deferred response failed", exchange.getException());
                     }
-                    return null;
-                }
+               }
             };
 
-            Future<?> future = executorService.submit(command);
+            executorService.submit(processRouteAndNotifyTask);
 
             // return an immediate MCCI ACK
             configureWsaAction(Iti55PortType.DEFERRED_REQUEST_OUTPUT_ACTION);

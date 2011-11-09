@@ -88,10 +88,8 @@ public abstract class AbstractWsProducer<InType, OutType> extends DefaultProduce
     
     @Override
     public void process(Exchange exchange) throws Exception {
-        LOG.debug("Calling web service on '" + getWsTransactionConfiguration().getServiceName() + "' with " + exchange);
-        
         // prepare
-        InType body = exchange.getIn().getMandatoryBody(requestClass);
+        InType body = exchange.getIn().getMandatoryBody(requestClass); 
         Object client = getClient();
         configureClient(client);
         BindingProvider bindingProvider = (BindingProvider) client;

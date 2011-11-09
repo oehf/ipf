@@ -30,7 +30,9 @@ public class DefaultValidationHandler implements ValidationHandler {
     
     @Override
     public void handleError(Diagnostic diagnostic) {
-        LOG.error("Validation error:" + diagnostic);
+        if (LOG.isErrorEnabled()){
+            LOG.error("Validation error:" + diagnostic);
+        }
         
     }
     
