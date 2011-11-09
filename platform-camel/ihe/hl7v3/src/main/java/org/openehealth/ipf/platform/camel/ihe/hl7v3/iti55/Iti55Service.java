@@ -86,20 +86,22 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         
         //Create a default one with non-daemon threads
         if (result == null){
-            ThreadPoolProfile  defaultCamelProfile =  executorServiceStrategy.getDefaultThreadPoolProfile();
-            result = executorServiceStrategy.newThreadPool(this, 
-                                                  THREAD_POOL_NAME, 
-                                                  defaultCamelProfile.getPoolSize(), 
-                                                  defaultCamelProfile.getMaxPoolSize(), 
-                                                  defaultCamelProfile.getKeepAliveTime(), 
-                                                  defaultCamelProfile.getTimeUnit(), 
-                                                  defaultCamelProfile.getMaxQueueSize(), 
-                                                  defaultCamelProfile.getRejectedExecutionHandler(), 
-                                                  false);
+            ThreadPoolProfile defaultCamelProfile = executorServiceStrategy.getDefaultThreadPoolProfile();
+            result = executorServiceStrategy.newThreadPool(
+                    this,
+                    THREAD_POOL_NAME,
+                    defaultCamelProfile.getPoolSize(),
+                    defaultCamelProfile.getMaxPoolSize(),
+                    defaultCamelProfile.getKeepAliveTime(),
+                    defaultCamelProfile.getTimeUnit(),
+                    defaultCamelProfile.getMaxQueueSize(),
+                    defaultCamelProfile.getRejectedExecutionHandler(),
+                    false);
         }
         return result;
     }
-    
+
+
     @Override
     public String discoverPatients(String requestString) {
         return doProcess(requestString);

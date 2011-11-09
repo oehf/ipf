@@ -31,9 +31,7 @@ public class DefaultHandler implements ResponseHandler {
     
     @Override
     public void handleResponse(InputStream response) throws Exception {
-        if (LOG.isInfoEnabled()){
-            LOG.info(IOUtils.toString(response));
-        }
+        LOG.info(IOUtils.toString(response));
     }
 
 }

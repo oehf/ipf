@@ -123,7 +123,9 @@ abstract public class Hl7v3ContinuationAwareWebService
      * Handles "main operation" requests of the IHE transaction.
      */
     String operation0(String requestString) {
-        LOG.debug('operation(): Got request\n' + requestString)
+        if (LOG.debugEnabled) {
+            LOG.debug('operation(): Got request\n' + requestString)
+        }
 
         // prepare ATNA audit, if necessary
         WsAuditDataset auditDataset = startAtnaAuditing(requestString, auditStrategy)
@@ -173,7 +175,9 @@ abstract public class Hl7v3ContinuationAwareWebService
 
         try {
             String result = createFragment(request, responseString, 1, threshold)
-            LOG.debug('operation(): Generated fragment\n' + result)
+            if (LOG.debugEnabled) {
+                LOG.debug('operation(): Generated fragment\n' + result)
+            }
             def key = getQueryKey(request, false)
             storage.storeMessage(key, responseString)
             storage.storeLastResultNumber(key, threshold + 1)
@@ -194,7 +198,7 @@ abstract public class Hl7v3ContinuationAwareWebService
      * Handles continuation requests.
      */
     String continuation0(String requestString) {
-        if (LOG.isDebugEnabled()){
+        if (LOG.debugEnabled) {
             LOG.debug('continuation(): Got request\n' + requestString)
         }
 
@@ -237,7 +241,7 @@ abstract public class Hl7v3ContinuationAwareWebService
 
         try {
             String result = createFragment(request, responseString, startResultNumber, continuationQuantity)
-            if (LOG.isDebugEnabled()){
+            if (LOG.debugEnabled) {
                 LOG.debug('continuation(): Generated fragment\n' + result)
             }
             storage.storeLastResultNumber(key, startResultNumber + continuationQuantity)
@@ -253,7 +257,7 @@ abstract public class Hl7v3ContinuationAwareWebService
      * Handles continuation cancel requests.
      */
     String cancel0(String requestString) {
-        if (LOG.isDebugEnabled()){
+        if (LOG.debugEnabled) {
             LOG.debug('cancel(): Got request\n' + requestString)
         }
 
@@ -276,7 +280,7 @@ abstract public class Hl7v3ContinuationAwareWebService
             storage.remove(key)
             GPathResult response = slurp(responseString)
             String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', false, true)
-            if (LOG.isDebugEnabled()){
+            if (LOG.debugEnabled) {
                 LOG.debug('cancel(): generated ACK\n' + result)
             }
             return result
