@@ -37,10 +37,8 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 class Iti55TestRouteBuilder extends SpringRouteBuilder {
     private static final transient LOG = LogFactory.getLog(Iti55TestRouteBuilder.class)
 
-    static final AtomicInteger responseCount         = new AtomicInteger()
-    static final AtomicInteger asyncResponseCount    = new AtomicInteger()
-    static final AtomicInteger deferredResponseCount = new AtomicInteger()
-    
+    static final AtomicInteger responseCount = new AtomicInteger()
+
     static final String RESPONSE = StandardTestContainer.readFile('iti55/iti55-sample-response.xml')
     
     static final long ASYNC_DELAY = 10 * 1000L
@@ -59,7 +57,11 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                     assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${asyncResponseCount.getAndIncrement() * 3}"
+
+                    String correlationKey = it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME]
+                    assert correlationKey.startsWith('ASYNC')
+                    assert TestIti55.CORRELATION_KEYS.remove(correlationKey)
+
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true
@@ -79,7 +81,11 @@ class Iti55TestRouteBuilder extends SpringRouteBuilder {
                     //assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
-                    assert it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] == "corr ${2 + deferredResponseCount.getAndIncrement() * 3}"
+
+                    String correlationKey = it.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME]
+                    assert correlationKey.startsWith('DEFERRED')
+                    assert TestIti55.CORRELATION_KEYS.remove(correlationKey)
+
                     XcpdTestUtils.testPositiveAckCode(it.in.body)
                 } catch (Exception e) {
                     errorOccurred = true

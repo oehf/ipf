@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
-import org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse.Iti55DeferredResponseComponent
+
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
     
@@ -61,10 +61,15 @@ class TestIti55 extends StandardTestContainer {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
     
-    private MockEndpoint response;
-    private MockEndpoint asyncResponse;
-    private MockEndpoint deferredResponse;
-    
+    private MockEndpoint allResponsesMockEndpoint
+    private MockEndpoint asyncResponsesMockEndpoint
+    private MockEndpoint deferredResponsesMockEndpoint
+
+    static Set<String> CORRELATION_KEYS = Collections.synchronizedSet(new HashSet<String>())
+
+    final int REPETITIONS_COUNT = 5
+
+
     @BeforeClass
     static void setUpClass() {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
@@ -72,11 +77,19 @@ class TestIti55 extends StandardTestContainer {
     
     @Before
     public void setUp(){
-        response = camelContext.getEndpoint('mock:response')
-        asyncResponse = camelContext.getEndpoint('mock:asyncResponse')
-        deferredResponse = camelContext.getEndpoint('mock:deferredResponse')
-        
+        allResponsesMockEndpoint      = camelContext.getEndpoint('mock:response')
+        asyncResponsesMockEndpoint    = camelContext.getEndpoint('mock:asyncResponse')
+        deferredResponsesMockEndpoint = camelContext.getEndpoint('mock:deferredResponse')
+
         MockEndpoint.resetMocks(camelContext)
+
+        CORRELATION_KEYS.clear()
+        int i = 0
+        REPETITIONS_COUNT.times {
+            CORRELATION_KEYS << "ASYNC-${i++}".toString()
+            i++
+            CORRELATION_KEYS << "DEFERRED-${i++}".toString()
+        }
     }
     
     
@@ -94,28 +107,32 @@ class TestIti55 extends StandardTestContainer {
      */
     @Test
     void testIti55() {
-        final int N = 5
-        int i = 0
-        
         // how many responses of different types do we expect?
-        response.setExpectedMessageCount(N * 3)
-        asyncResponse.setExpectedMessageCount(N)
-        deferredResponse.setExpectedMessageCount(N)
+        allResponsesMockEndpoint.expectedMessageCount      = REPETITIONS_COUNT * 3
+        asyncResponsesMockEndpoint.expectedMessageCount    = REPETITIONS_COUNT
+        deferredResponsesMockEndpoint.expectedMessageCount = REPETITIONS_COUNT
 
-        
-        N.times {
+        /*
+        allResponsesMockEndpoint.resultWaitTime      = Long.MAX_VALUE
+        asyncResponsesMockEndpoint.resultWaitTime    = Long.MAX_VALUE
+        deferredResponsesMockEndpoint.resultWaitTime = Long.MAX_VALUE
+        */
+
+        int i = 0
+        REPETITIONS_COUNT.times {
             sendMainTestMessage(RequestType.ASYNC,    i++)
             sendMainTestMessage(RequestType.REGULAR,  i++)
             sendMainTestMessage(RequestType.DEFERRED, i++)
         }
 
         // wait for completion of asynchronous routes
-        response.assertIsSatisfied()
-        asyncResponse.assertIsSatisfied()
-        deferredResponse.assertIsSatisfied()
-        
-        
-        assert auditSender.messages.size() == N * 6
+        allResponsesMockEndpoint.assertIsSatisfied()
+        asyncResponsesMockEndpoint.assertIsSatisfied()
+        deferredResponsesMockEndpoint.assertIsSatisfied()
+
+        assert CORRELATION_KEYS.empty
+
+        assert auditSender.messages.size() == REPETITIONS_COUNT * 6
         assert ttlResponsesCount.get() == CALLS_WITH_TTL_HEADER.size()
         
         assert ! Iti55TestRouteBuilder.errorOccurred
@@ -132,7 +149,7 @@ class TestIti55 extends StandardTestContainer {
         }
         
         // set correlation key
-        requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
+        requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "${requestType}-${n}"
         
         // set TTL SOAP header
         // we do it not on each message to check whether message context is being properly cleared
