@@ -33,6 +33,7 @@ import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.apache.cxf.ws.addressing.soap.MAPCodec;
+import org.openehealth.ipf.commons.ihe.ws.cxf.Cxf3791WorkaroundInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.FixContentTypeOutInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.MustUnderstandDecoratorInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.ProvidedAttachmentOutInterceptor;
@@ -46,7 +47,7 @@ import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
  * @author Jens Riemschneider
  */
 public class JaxWsClientFactory {
-    private static final Log log = LogFactory.getLog(JaxWsClientFactory.class);
+    private static final Log LOG = LogFactory.getLog(JaxWsClientFactory.class);
 
     protected final ThreadLocal<Object> threadLocalPort = new ThreadLocal<Object>();
     protected final WsTransactionConfiguration wsTransactionConfiguration;
@@ -94,7 +95,7 @@ public class JaxWsClientFactory {
             configureInterceptors(client);
 
             threadLocalPort.set(port);
-            log.debug("Created client adapter for: " + wsTransactionConfiguration.getServiceName());
+            LOG.debug("Created client adapter for: " + wsTransactionConfiguration.getServiceName());
         }        
         return threadLocalPort.get();
     }
@@ -112,6 +113,8 @@ public class JaxWsClientFactory {
      * Configures SOAP interceptors for the given client. 
      */
     protected void configureInterceptors(Client client) {
+        client.getInInterceptors().add(new Cxf3791WorkaroundInterceptor());
+
         // WS-Addressing-related interceptors
         if (wsTransactionConfiguration.isAddressing()) {
             MustUnderstandDecoratorInterceptor interceptor = new MustUnderstandDecoratorInterceptor();
