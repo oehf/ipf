@@ -89,7 +89,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             ThreadPoolProfile  defaultCamelProfile =  executorServiceStrategy.getDefaultThreadPoolProfile();
             result = executorServiceStrategy.newThreadPool(this, 
                                                   THREAD_POOL_NAME, 
-                                                  5, 
+                                                  defaultCamelProfile.getPoolSize(), 
                                                   defaultCamelProfile.getMaxPoolSize(), 
                                                   defaultCamelProfile.getKeepAliveTime(), 
                                                   defaultCamelProfile.getTimeUnit(), 
