@@ -15,9 +15,6 @@
  */
 package org.openehealth.ipf.commons.map
 
-import java.net.URL
-import java.util.Enumeration
-
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.osgi.framework.Bundle
@@ -94,7 +91,7 @@ class BidiMappingServiceOsgiConfigurer implements BundleListener {
             resources.each { 
                 LOG.info("Added mapping resource ${it} to mapping service")
             }
-            if (LOG.isDebugEnabled()){
+            if (LOG.debugEnabled){
                 LOG.debug("Current mappings: ${service.reverseMap}")
             }
         }

@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
 
-import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
 import javax.xml.datatype.Duration

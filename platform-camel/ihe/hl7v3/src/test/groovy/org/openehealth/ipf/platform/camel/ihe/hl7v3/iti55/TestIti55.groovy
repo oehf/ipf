@@ -97,11 +97,11 @@ class TestIti55 extends StandardTestContainer {
         final int N = 5
         int i = 0
         
-        //how many async responses do we expect?
+        // how many responses of different types do we expect?
         response.setExpectedMessageCount(N * 3)
         asyncResponse.setExpectedMessageCount(N)
         deferredResponse.setExpectedMessageCount(N)
- 
+
         
         N.times {
             sendMainTestMessage(RequestType.ASYNC,    i++)
@@ -162,7 +162,7 @@ class TestIti55 extends StandardTestContainer {
             }
 
             def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
-            assert inHttpHeaders['MyResponseHeader'].equals('Re: Number ' + n)
+            assert inHttpHeaders['MyResponseHeader'] == "Re: Number ${n}"
         }
 
         // for deferred response requests -- check whether a positive MCCI ACK is returned
