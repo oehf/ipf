@@ -26,12 +26,14 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01.Pcd01Component;
 
 import ca.uhn.hl7v2.parser.Parser;
 
+import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
+
 /**
  * @author Mitko Kolev
  *
  */
 public class Hl7v2WsCamelValidators {
-    
+
     private static final Validator<Object, Object> PCD01_VALIDATOR = new Pcd01Validator();
     private static final Validator<Object, Object> CONTINUA_WAN_VALIDATOR = new ContinuaWanValidator();
 
@@ -74,11 +76,14 @@ public class Hl7v2WsCamelValidators {
         };
     }
     
-    private static void doValidate(Exchange exchange, Validator<Object,Object> validator, Parser parser) throws Exception {
+    private static void doValidate(Exchange exchange, Validator<Object, Object> validator, Parser parser) throws Exception {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
         MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),
-                parser);  
+                parser);
         validator.validate(msg, null);
     }
 }

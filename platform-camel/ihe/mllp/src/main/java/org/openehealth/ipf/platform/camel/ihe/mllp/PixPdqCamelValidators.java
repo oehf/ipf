@@ -28,6 +28,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.iti9.Iti9Component;
 
 import ca.uhn.hl7v2.parser.Parser;
 
+import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
+
 /**
  * Validating processors for MLLP-based IPF IHE components.
  * @author Dmytro Rud
@@ -138,6 +140,9 @@ abstract public class PixPdqCamelValidators {
     }
     
     private static void doValidate(Exchange exchange, Parser parser) throws Exception {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
         MessageAdapter<?> msg = Hl7v2MarshalUtils.extractMessageAdapter(
                 exchange.getIn(),
                 exchange.getProperty(Exchange.CHARSET_NAME, String.class),

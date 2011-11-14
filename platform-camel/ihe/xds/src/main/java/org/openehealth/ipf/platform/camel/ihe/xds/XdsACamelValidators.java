@@ -29,13 +29,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.validate.responses.RegistryResponseValidator;
 
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
+import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
  * Validating processors for ebXML 2.1-based IPF XDS.a components.
  * <p>
  * These processors are placed in a separate class instead of be put together
  * with ebXML 3.0 XDS.b ones in order to prevent import salad.
- *  
+ *
  * @author Dmytro Rud
  */
 abstract public class XdsACamelValidators {
@@ -43,65 +44,84 @@ abstract public class XdsACamelValidators {
     private static final Processor ITI_14_REQUEST_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
-            EbXMLSubmitObjectsRequest21 message = 
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLSubmitObjectsRequest21 message =
                 new EbXMLSubmitObjectsRequest21(exchange.getIn().getBody(SubmitObjectsRequest.class));
             ValidationProfile profile = new ValidationProfile(ITI_14);
             new SubmitObjectsRequestValidator().validate(message, profile);
         }
     };
-    
+
     private static final Processor ITI_14_RESPONSE_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
-            EbXMLRegistryResponse21 message = 
-                new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));     
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRegistryResponse21 message =
+                new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));
             ValidationProfile profile = new ValidationProfile(ITI_14);
             new RegistryResponseValidator().validate(message, profile);
         }
     };
-    
-    
+
+
     private static final Processor ITI_15_REQUEST_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
-            EbXMLProvideAndRegisterDocumentSetRequest21 message = 
-                new EbXMLProvideAndRegisterDocumentSetRequest21(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));            
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLProvideAndRegisterDocumentSetRequest21 message =
+                new EbXMLProvideAndRegisterDocumentSetRequest21(
+                        exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
             ValidationProfile profile = new ValidationProfile(ITI_15);
             new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
         }
-    };        
-   
+    };
+
     private static final Processor ITI_15_RESPONSE_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
-            EbXMLRegistryResponse21 message = 
-                new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));            
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLRegistryResponse21 message =
+                new EbXMLRegistryResponse21(exchange.getIn().getBody(RegistryResponse.class));
             ValidationProfile profile = new ValidationProfile(ITI_15);
             new RegistryResponseValidator().validate(message, profile);
         }
     };
-    
+
     private static final Processor ITI_16_REQUEST_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
-            EbXMLAdhocQueryRequest21 message = 
-                new EbXMLAdhocQueryRequest21(exchange.getIn().getBody(AdhocQueryRequest.class));            
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLAdhocQueryRequest21 message =
+                new EbXMLAdhocQueryRequest21(exchange.getIn().getBody(AdhocQueryRequest.class));
             ValidationProfile profile = new ValidationProfile(ITI_16);
             new AdhocQueryRequestValidator().validate(message, profile);
         }
-    };        
-   
+    };
+
     private static final Processor ITI_16_RESPONSE_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
-            EbXMLQueryResponse21 message = 
-                new EbXMLQueryResponse21(exchange.getIn().getBody(RegistryResponse.class));            
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLQueryResponse21 message =
+                new EbXMLQueryResponse21(exchange.getIn().getBody(RegistryResponse.class));
             ValidationProfile profile = new ValidationProfile(ITI_16);
             new QueryResponseValidator().validate(message, profile);
         }
-    };         
+    };
 
-    
+
     /**
      * Returns a validating processor for ITI-14 request messages.
      */
