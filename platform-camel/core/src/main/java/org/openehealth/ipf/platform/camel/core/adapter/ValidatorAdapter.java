@@ -21,6 +21,8 @@ import java.io.IOException;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 
 /**
@@ -29,6 +31,14 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
  * @author Martin Krasser
  */
 public class ValidatorAdapter extends ProcessorAdapter {
+    private static final transient Log LOG = LogFactory.getLog(ValidatorAdapter.class.getName());
+
+    /**
+     * Validators may check whether the Camel message header is set
+     * and omit validation when it resolves to <tt>false</tt>.
+     */
+    public static final String NEED_VALIDATION_HEADER_NAME =
+            ValidatorAdapter.class.getName() + ".need.validation";
 
     private final Validator validator;
     
@@ -103,7 +113,9 @@ public class ValidatorAdapter extends ProcessorAdapter {
     @Override
     protected void doProcess(Exchange exchange, Object inputData, Object... inputParams) throws IOException {
         prepareResult(exchange);
-        validator.validate(inputData, getProfile(exchange));
+        if (validationEnabled(exchange)) {
+            validator.validate(inputData, getProfile(exchange));
+        }
     }
 
     private Object getProfile(Exchange exchange) {
@@ -112,5 +124,21 @@ public class ValidatorAdapter extends ProcessorAdapter {
         } else {
             return profile;
         }
+    }
+
+
+    /**
+     * @param exchange
+     *      Camel exchange containing the message to be validated.
+     * @return
+     *      <code>false</code> if the message header {@link #NEED_VALIDATION_HEADER_NAME}
+     *      equals to {@link Boolean#FALSE}, <code>true</code> otherwise.
+     */
+    public static boolean validationEnabled(Exchange exchange) {
+        if (Boolean.FALSE.equals(exchange.getIn().getHeader(NEED_VALIDATION_HEADER_NAME, Boolean.class))) {
+            LOG.warn("Validation disabled");
+            return false;
+        }
+        return true;
     }
 }

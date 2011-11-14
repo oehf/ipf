@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ValidationProfiles;
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator;
 
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
+import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
 
 /**
  * Validating processors for HL7v3-based IPF components.
@@ -178,6 +179,9 @@ abstract public class PixPdqV3CamelValidators {
             InteractionId interactionId,
             boolean request)
     {
+        if (! validationEnabled(exchange)) {
+            return;
+        }
         String message = exchange.getIn().getBody(String.class);
         VALIDATOR.validate(message, request
                 ? Hl7v3ValidationProfiles.getRequestValidationProfile(interactionId)
