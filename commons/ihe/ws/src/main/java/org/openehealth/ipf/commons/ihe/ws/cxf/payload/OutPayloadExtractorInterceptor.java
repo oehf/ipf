@@ -15,10 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 
-import java.io.OutputStream;
-
 import org.apache.cxf.binding.soap.interceptor.SoapOutInterceptor.SoapOutEndingInterceptor;
-import org.apache.cxf.io.CacheAndWriteOutputStream;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
@@ -34,25 +31,29 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  */
 public class OutPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Message> {
 
+    /**
+     * When the CXF message contains <code>Boolean.FALSE</code> in the property
+     * with this name, collecting message payload will not be deactivated
+     * after the SOAP part has been written.
+     */
+    public static final String PAYLOAD_COLLECTING_DEACTIVATION_ENABLED =
+            OutPayloadExtractorInterceptor.class.getName() + ".collecting.deactivation.enabled";
+
+
     public OutPayloadExtractorInterceptor() {
         super(Phase.WRITE_ENDING);
         addAfter(SoapOutEndingInterceptor.class.getName());
     }
-    
+
+
     @Override
     public void handleMessage(Message message) {
-        WrappedOutputStream wrapper;
-        OutputStream outputStream =  message.getContent(OutputStream.class);
-        if (outputStream instanceof CacheAndWriteOutputStream) {
-            // Extract what we need from the wrapper added by CXF. CXF sometimes adds the wrapper for diagnostics.
-            outputStream = ((CacheAndWriteOutputStream)outputStream).getFlowThroughStream();
+        WrappedOutputStream wrapper = OutStreamSubstituteInterceptor.getStreamWrapper(message);
+        if (! Boolean.FALSE.equals(message.getContextualProperty(PAYLOAD_COLLECTING_DEACTIVATION_ENABLED))) {
+            wrapper.deactivate();
         }
-        if (outputStream instanceof WrappedOutputStream) {
-            wrapper = (WrappedOutputStream) outputStream;
-        } else {
-            throw new IllegalStateException("Message output stream is not of expected type");
-        }
-        String soapEnvelope = wrapper.getCollectedPayloadAndDeactivate();
+
+        String soapEnvelope = wrapper.getCollectedPayload();
         String payload = SoapUtils.extractSoapBody(soapEnvelope);
         StringPayloadHolder payloadHolder = new StringPayloadHolder();
         payloadHolder.put(SOAP_BODY, payload);

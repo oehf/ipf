@@ -80,25 +80,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      *      could be neither obtained nor created from scratch.
      */
     protected WsAuditDataset getAuditDataset(SoapMessage message) {
-        Exchange exchange = message.getExchange();
-        Message[] messages = new Message[] {
-                message,
-                exchange.getInMessage(),
-                exchange.getOutMessage(),
-                exchange.getInFaultMessage(),
-                exchange.getOutFaultMessage()
-        };
-
-        WsAuditDataset auditDataset = null;
-        for (Message m : messages) {
-            if (m != null) {
-                auditDataset = (WsAuditDataset) m.getContextualProperty(CONTEXT_KEY);
-                if (auditDataset != null) {
-                    break;
-                }
-            }
-        }
-
+        WsAuditDataset auditDataset = findContextualProperty(message, CONTEXT_KEY);
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {

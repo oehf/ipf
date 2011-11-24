@@ -20,13 +20,13 @@ import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 
-import java.util.List;
-
 /**
  * Workaround for the bug
  * <a href="https://issues.apache.org/jira/browse/CXF-3768">CXF-3768</a>:
  * set HTTP response code 202 for WS-Addressing asynchrony ACKs.
  * Intended for server-side deployment.
+ *
+ * @see <a href="http://www.ws-i.org/Profiles/BasicProfile-2_0%28WGD%29.html#Use_of_Non-Anonymous_Reponse_EPR_in_a_Request-Response_Operation">WS-I Basic Profile v.2.0, Section 3.8.6</a>.
  *
  * @author Dmytro Rud
  */
@@ -39,8 +39,7 @@ public class Cxf3768WorkaroundInterceptor extends AbstractPhaseInterceptor<Messa
 
     @Override
     public void handleMessage(Message message) {
-        List list = message.getContent(List.class);
-        if ((list == null) || list.isEmpty()) {
+        if (Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE))) {
             message.put(Message.RESPONSE_CODE, 202);
         }
     }
