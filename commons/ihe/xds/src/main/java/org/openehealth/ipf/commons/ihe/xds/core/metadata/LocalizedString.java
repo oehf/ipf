@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;

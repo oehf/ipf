@@ -28,6 +28,8 @@ public abstract class Vocabulary {
     public static final String STABLE_DOC_ENTRY =
         "urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1";
 
+    public enum DisplayNameUsage {REQUIRED, OPTIONAL}
+    
     /**
      * XDSDocumentEntry classification node.
      * @deprecated by IHE CP-ITI-544.  Please use {@link #STABLE_DOC_ENTRY} instead.

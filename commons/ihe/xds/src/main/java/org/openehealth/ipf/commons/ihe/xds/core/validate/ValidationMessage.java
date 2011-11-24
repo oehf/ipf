@@ -41,6 +41,7 @@ public enum ValidationMessage {
     SOURCE_UUID_NOT_FOUND("The source of an association for a document relationship did not specify a valid UUID of a document entry contained in the request"),
     WRONG_NUMBER_OF_CLASSIFICATIONS("Unexpected amount of classifications of scheme %1s, allowed = [%2s-%3s], Was = %4s"),
     NO_CLASSIFIED_OBJ("Classification does not classify any object: %1s"),
+    NO_CLASSIFICATION_NAME_OBJ("Required a display name element for classification scheme %s and classified object %s. The name is used to communicate the meaning of scheme %2$s to a human reader."),
     WRONG_CLASSIFIED_OBJ("Classification does not classify expected object: %1s, Was = %2s"),
     WRONG_NODE_REPRESENTATION("Classification does not specify its node representation. Scheme = %1s"),
     CX_TOO_MANY_COMPONENTS("Only the ID number and the assigning authority can be definied for a CX value"),

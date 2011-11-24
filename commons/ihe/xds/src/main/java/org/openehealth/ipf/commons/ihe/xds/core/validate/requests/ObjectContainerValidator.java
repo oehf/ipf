@@ -26,7 +26,9 @@ import java.util.*;
 import static org.apache.commons.lang3.Validate.notNull;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.DisplayNameUsage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+
 
 /**
  * Validation of an ebXML object container.
@@ -57,38 +59,50 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final SlotValueValidation[] codingSchemeValidations = new SlotValueValidation[] {
         new SlotValueValidation(SLOT_NAME_CODING_SCHEME, nopValidator)};
 
+    private final SlotValueValidation[] iheEventCodeListValidations = new SlotValueValidation [] {
+        new EventCodeListDisplayNameValidator()
+    };
 
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile) {
         List<RegistryObjectValidator> validators = new ArrayList<RegistryObjectValidator>();
+        boolean isContinuaHRN = profile.getInteractionId() == IpfInteractionId.Continua_HRN;
+        
         Collections.addAll(validators,
             new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator),
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
-                    (profile.getInteractionId() == IpfInteractionId.Continua_HRN) ? 1 : 0, 1),
+                    isContinuaHRN ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
-                    (profile.getInteractionId() == IpfInteractionId.Continua_HRN) ? 1 : 0, 1),
+                    isContinuaHRN ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, cxValidator,
                     (profile.isEbXml30Based() && ! profile.isQuery()) ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
-                    (profile.getInteractionId() == IpfInteractionId.Continua_HRN) ? 1 : 0, Integer.MAX_VALUE),
+                    isContinuaHRN ? 1 : 0, Integer.MAX_VALUE),
             new SlotValidation(SLOT_NAME_URI, uriValidator),
-            new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, authorValidations),
-            new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, codingSchemeValidations),
-            new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
-            new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
-            new ClassificationValidation(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, codingSchemeValidations),
-            new ClassificationValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
-            new ClassificationValidation(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, codingSchemeValidations),
-            new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
+            new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, OPTIONAL, authorValidations),
+            new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
+            new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, 
+                                         isContinuaHRN ? REQUIRED : OPTIONAL, 
+                                         codingSchemeValidations),
+            //IHE: iheEventCodeListValidations handles the conditionally REQUIRED 
+            //     validation of display name of eventCodeListDisplayName in a slotValueValidator
+            new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, 
+                                         isContinuaHRN ? REQUIRED : OPTIONAL, 
+                                         isContinuaHRN ? codingSchemeValidations : iheEventCodeListValidations),
+            new ClassificationValidation(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, 
+                                         isContinuaHRN ? OPTIONAL : REQUIRED, 
+                                         codingSchemeValidations),
+            new ClassificationValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
+            new ClassificationValidation(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
+            new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidator));
 
         if (profile.getInteractionId() == IpfInteractionId.ITI_42) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
-
         return validators;
     }
 
@@ -96,8 +110,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     private final List<RegistryObjectValidator> submissionSetSlotValidations = Arrays.asList(
         new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
         new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
-        new ClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, authorValidations),
-        new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, codingSchemeValidations),
+        new ClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, OPTIONAL, authorValidations),
+        new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
         new ExternalIdentifierValidation(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID, cxValidator),
         new ExternalIdentifierValidation(SUBMISSION_SET_SOURCE_ID_EXTERNAL_ID, oidValidator));
 
@@ -107,9 +121,8 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         // The spec says that the code list is required to have at least 1 code. However, 
         // the XDStoolkit tests do currently not always provide a code. Therefore, we 
         // accept 0 codes as well.
-        new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME, 0, Integer.MAX_VALUE, codingSchemeValidations),
+        new ClassificationValidation(FOLDER_CODE_LIST_CLASS_SCHEME, 0, Integer.MAX_VALUE, REQUIRED, codingSchemeValidations),
         new ExternalIdentifierValidation(FOLDER_PATIENT_ID_EXTERNAL_ID, cxValidator));
-
 
     @Override
     public void validate(EbXMLObjectContainer container, ValidationProfile profile) {
