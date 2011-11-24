@@ -55,7 +55,7 @@ public class ClassificationDisplayNameValidatorTest {
     public void setUp() throws Exception {
         ebXMLObject = createProvideAndRegisterDocumentSetRequest();
         extrinsicObject = ebXMLObject.getExtrinsicObjects().get(0);
-        marshalEbXML(ebXMLObject);
+        //marshalEbXML(ebXMLObject);
     }
 
     @Test
@@ -108,7 +108,6 @@ public class ClassificationDisplayNameValidatorTest {
     
     private void clearNameInFirstClassification(String classScheme){
         extrinsicObject.getClassifications(classScheme).get(0).setName(null);
-        marshalEbXML(ebXMLObject);
     }
     
     private ClassificationValidation buildEventListValidator(){
