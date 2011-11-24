@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.commons.ihe.ws.cxf.payload.PayloadLogInterceptorBase
 
 /**
  * Tests for ITI-39.
@@ -35,18 +36,27 @@ class TestIti39 extends StandardTestContainer {
     
     def static CONTEXT_DESCRIPTOR = 'iti-39.xml'
     
-    final String SERVICE1_URI = "xca-iti39://localhost:${port}/iti39service?correlator=#correlator"
+    final String SERVICE1_URI =
+            "xca-iti39://localhost:${port}/iti39service" +
+            '?correlator=#correlator' +
+            '&inInterceptors=clientSyncInLogger' +
+            '&inFaultInterceptors=clientSyncInLogger' +
+            '&outInterceptors=clientSyncOutLogger' +
+            '&outFaultInterceptors=clientSyncOutLogger'
+
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti39service-response"
     final String SERVICE2_URI = "xca-iti39://localhost:${port}/iti39service2"
     
     static final RetrieveDocumentSet REQUEST = SampleData.createRetrieveDocumentSet()
     
     static void main(args) {
+        PayloadLogInterceptorBase.setGloballyEnabled(false)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
     
     @BeforeClass
     static void setUpClass() {
+        PayloadLogInterceptorBase.setGloballyEnabled(false)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
@@ -85,9 +95,10 @@ class TestIti39 extends StandardTestContainer {
     
     
     private void send(
-    String endpointUri,
-    int n,
-    String responseEndpointUri = null) {
+            String endpointUri,
+            int n,
+            String responseEndpointUri = null)
+    {
         def requestExchange = new DefaultExchange(camelContext)
         requestExchange.in.body = REQUEST
         

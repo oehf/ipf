@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 import java.io.OutputStream;
 
 import org.apache.cxf.interceptor.MessageSenderInterceptor;
+import org.apache.cxf.io.CacheAndWriteOutputStream;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
@@ -38,7 +39,31 @@ public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Mes
     @Override
     public void handleMessage(Message message) {
         OutputStream os = message.getContent(OutputStream.class);
-        WrappedOutputStream wrapper = new WrappedOutputStream(os);
+        WrappedOutputStream wrapper = new WrappedOutputStream(os, (String) message.get(Message.ENCODING));
         message.setContent(OutputStream.class, wrapper);
     }
+
+
+    /**
+     * Retrieves the instance of stream wrapper installed by this interceptor.
+     * @param message
+     *      CXF message which contains output stream as one of content types.
+     * @return
+     *      an instance of {@link WrappedOutputStream}.
+     * @throws IllegalStateException
+     *      when the stream wrapper instance could not be retrieved.
+     */
+    public static WrappedOutputStream getStreamWrapper(Message message) {
+        OutputStream outputStream =  message.getContent(OutputStream.class);
+        if (outputStream instanceof CacheAndWriteOutputStream) {
+            // Extract what we need from the wrapper added by CXF. CXF sometimes adds the wrapper for diagnostics.
+            outputStream = ((CacheAndWriteOutputStream) outputStream).getFlowThroughStream();
+        }
+        if (outputStream instanceof WrappedOutputStream) {
+            return (WrappedOutputStream) outputStream;
+        } else {
+            throw new IllegalStateException("Message output stream is not of expected type");
+        }
+    }
+
 }

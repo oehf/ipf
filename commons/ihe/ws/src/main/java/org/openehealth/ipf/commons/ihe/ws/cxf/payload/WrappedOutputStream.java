@@ -18,58 +18,73 @@ package org.openehealth.ipf.commons.ihe.ws.cxf.payload;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 /**
  * An implementation of output stream which serves as a proxy for another output
  * stream instance and collects the data pieces to be written in a string buffer
  * (these pieces are XML and/or MIME artifacts).
- * <p>
- * Collecting of data is automagically deactivated on first read access. After
- * that, only dumb proxy functionality remains.
- * 
+ *
  * @author Dmytro Rud
  */
 public class WrappedOutputStream extends FilterOutputStream {
 
+    private final String charsetName;
     private final StringBuilder payloadCollector;
     private boolean isActive;
 
     /**
      * Constructor.
      * 
-     * @param os the output data stream to be wrapped
+     * @param os
+     *      the output data stream to be wrapped
+     * @param charsetName
+     *      character set name, may be <code>null</code> if not known.
      */
-    public WrappedOutputStream(OutputStream os) {
+    public WrappedOutputStream(OutputStream os, String charsetName) {
         super(os);
+        this.charsetName = (charsetName != null) ? charsetName : Charset.defaultCharset().name();
         isActive = true;
         payloadCollector = new StringBuilder();
     }
 
+
     /**
-     * Returns the collected message payload and deactivates 
+     * Returns the collected message payload and deactivates
      * any further data collecting.
-     * @return SOAP payload as a <code>String</code>
+     * @return SOAP payload as a <code>String</code>.
      */
+    @Deprecated
     public String getCollectedPayloadAndDeactivate() {
-        isActive = false;
+        deactivate();
+        return getCollectedPayload();
+    }
+
+
+    /**
+     * Returns the collected message payload.
+     * @return SOAP payload as XML String.
+     */
+    public String getCollectedPayload() {
         return payloadCollector.toString();
     }
 
-    /* ----- implementation of standard OutputStream methods ----- */
 
-    @Override
-    public void write(byte[] b) throws IOException {
-        super.write(b);
-        if (isActive) {
-            payloadCollector.append(new String(b));
-        }
+    /**
+     * Deactivates any further data collecting.
+     */
+    public void deactivate() {
+        isActive = false;
     }
+
+
+    /* ----- implementation of standard OutputStream methods ----- */
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         super.write(b, off, len);
         if (isActive) {
-            payloadCollector.append(new String(b, off, len));
+            payloadCollector.append(new String(b, off, len, charsetName));
         }
     }
 }
