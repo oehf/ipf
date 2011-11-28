@@ -39,10 +39,10 @@ class TestIti39 extends StandardTestContainer {
     final String SERVICE1_URI =
             "xca-iti39://localhost:${port}/iti39service" +
             '?correlator=#correlator' +
-            '&inInterceptors=clientSyncInLogger' +
-            '&inFaultInterceptors=clientSyncInLogger' +
-            '&outInterceptors=clientSyncOutLogger' +
-            '&outFaultInterceptors=clientSyncOutLogger'
+            '&inInterceptors=#clientSyncInLogger' +
+            '&inFaultInterceptors=#clientSyncInLogger' +
+            '&outInterceptors=#clientSyncOutLogger' +
+            '&outFaultInterceptors=#clientSyncOutLogger'
 
     final String SERVICE1_RESPONSE_URI = "http://localhost:${port}/iti39service-response"
     final String SERVICE2_URI = "xca-iti39://localhost:${port}/iti39service2"

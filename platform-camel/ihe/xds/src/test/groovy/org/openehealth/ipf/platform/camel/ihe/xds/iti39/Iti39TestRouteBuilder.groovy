@@ -49,10 +49,10 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
         // receiver of asynchronous responses
         from('xca-iti39-async-response:iti39service-response' + 
              '?correlator=#correlator' +
-             '&inInterceptors=clientAsyncInLogger' +
-             '&inFaultInterceptors=clientAsyncInLogger' +
-             '&outInterceptors=clientAsyncOutLogger' +
-             '&outFaultInterceptors=clientAsyncOutLogger'
+             '&inInterceptors=#clientAsyncInLogger' +
+             '&inFaultInterceptors=#clientAsyncInLogger' +
+             '&outInterceptors=#clientAsyncOutLogger' +
+             '&outFaultInterceptors=#clientAsyncOutLogger'
         )
             .process(iti39ResponseValidator())
             .process {
@@ -75,10 +75,10 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
 
         // responding route
         from('xca-iti39:iti39service' +
-             '?inInterceptors=serverInLogger' +
-             '&inFaultInterceptors=serverInLogger' +
-             '&outInterceptors=serverOutLogger' +
-             '&outFaultInterceptors=serverOutLogger'
+             '?inInterceptors=#serverInLogger' +
+             '&inFaultInterceptors=#serverInLogger' +
+             '&outInterceptors=#serverOutLogger' +
+             '&outFaultInterceptors=#serverOutLogger'
         )
             .process(iti39RequestValidator())
             .process {
