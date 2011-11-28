@@ -86,7 +86,7 @@ abstract public class PayloadLogInterceptorBase extends AbstractSafeInterceptor 
     private String fileNamePattern;
     private boolean locallyEnabled;
 
-    private static final int MAX_ERROR_COUNT = 5;
+    private int errorCountLimit = -1;
     private int errorCount;
 
 
@@ -101,6 +101,105 @@ abstract public class PayloadLogInterceptorBase extends AbstractSafeInterceptor 
         super(phase);
         setFileNamePattern(fileNamePattern);
         setLocallyEnabled(true);
+    }
+
+
+    /**
+     * Returns message body payload ("plain" SOAP or a MIME structure) as a String.
+     * @param message
+     *      CXF message whose payload is of interest.
+     * @return
+     *      body as a String.
+     */
+    abstract protected String getBodyPayload(SoapMessage message);
+
+
+    /**
+     * Returns HTTP headers payload as a String.
+     * @param message
+     *      CXF message whose headers are of interest.
+     * @return
+     *      headers as a String.
+     */
+    abstract protected String getHeadersPayload(SoapMessage message);
+
+
+    @Override
+    protected void process(SoapMessage message) {
+        // check whether we can process
+        if (! (globallyEnabled && locallyEnabled)) {
+            LOG.debug("File-based logging is disabled");
+            return;
+        }
+        if ((errorCountLimit >= 0) && (errorCount >= errorCountLimit)) {
+            LOG.warn("Error count limit has bean reached, reset the counter to enable further trials");
+            return;
+        }
+
+        // determine sequence ID
+        Long sequenceId = findContextualProperty(message, SEQUENCE_ID_KEY);
+        if (sequenceId == null) {
+            sequenceId = SEQUENCE_ID_GENERATOR.getAndIncrement();
+            message.setContextualProperty(SEQUENCE_ID_KEY, sequenceId);
+        }
+
+        // parse file name pattern and resolve references
+        Parameters parameters = new Parameters(
+                String.format("%012d", sequenceId),
+                Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE)));
+        String path = SPEL_EXPRESSIONS.get().getValue(parameters, String.class);
+
+        // write payload pieces into the file
+        Writer writer = null;
+        try {
+            FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
+            String charsetName = (String) message.get(Message.ENCODING);
+            writer = (charsetName != null) ?
+                    new OutputStreamWriter(outputStream, charsetName) :
+                    new OutputStreamWriter(outputStream);
+            writer.write(getHeadersPayload(message));
+            writer.write(getBodyPayload(message));
+            errorCount = 0;
+        } catch (IOException e) {
+            ++errorCount;
+            LOG.warn("Cannot write into " + path, e);
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+    }
+
+
+    /**
+     * Appends generic HTTP headers to the given String builder.
+     * @param message
+     *      CXF message which contains the headers.
+     * @param sb
+     *      target String builder instance.
+     */
+    protected static void appendGenericHttpHeaders(SoapMessage message, StringBuilder sb) {
+        Object encoding = message.get(Message.ENCODING);
+        if (encoding != null) {
+            sb.append("Character set: ").append(encoding).append('\n');
+        }
+        sb.append('\n');
+
+        Map<String, List<String>> httpHeaders = (Map<String, List<String>>) message.get(Message.PROTOCOL_HEADERS);
+        if (httpHeaders != null) {
+            for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
+                for (String header : entry.getValue()) {
+                    sb.append(entry.getKey()).append(": ").append(header).append('\n');
+                }
+            }
+            sb.append('\n');
+        }
+    }
+
+
+    /**
+     * Resets count of occurred errors, can be used e.g. via JMX.
+     */
+    public void resetErrorCount() {
+        errorCount = 0;
     }
 
 
@@ -155,103 +254,22 @@ abstract public class PayloadLogInterceptorBase extends AbstractSafeInterceptor 
         this.fileNamePattern = Validate.notEmpty(fileNamePattern, "log file path/name pattern");
     }
 
-
     /**
-     * Returns message body payload ("plain" SOAP or a MIME structure) as a String.
-     * @param message
-     *      CXF message whose payload is of interest.
-     * @return
-     *      body as a String.
+     * @return maximal allowed count of file creation errors, negative value means "no limit".
      */
-    abstract protected String getBodyPayload(SoapMessage message);
-
-
-    /**
-     * Returns HTTP headers payload as a String.
-     * @param message
-     *      CXF message whose headers are of interest.
-     * @return
-     *      headers as a String.
-     */
-    abstract protected String getHeadersPayload(SoapMessage message);
-
-
-    @Override
-    protected void process(SoapMessage message) {
-        // check whether we can process
-        if (! (globallyEnabled && locallyEnabled)) {
-            LOG.debug("File-based logging is disabled");
-            return;
-        }
-        if (errorCount >= MAX_ERROR_COUNT) {
-            LOG.warn("Maximal error count has bean reached, reset the counter to enable further trials");
-            return;
-        }
-
-        // determine sequence ID
-        Long sequenceId = findContextualProperty(message, SEQUENCE_ID_KEY);
-        if (sequenceId == null) {
-            sequenceId = SEQUENCE_ID_GENERATOR.getAndIncrement();
-            message.setContextualProperty(SEQUENCE_ID_KEY, sequenceId);
-        }
-
-        // parse file name pattern and resolve references
-        Parameters parameters = new Parameters(
-                String.format("%012d", sequenceId),
-                Boolean.TRUE.equals(message.get(Message.PARTIAL_RESPONSE_MESSAGE)));
-        String path = SPEL_EXPRESSIONS.get().getValue(parameters, String.class);
-
-        // write payload pieces into the file
-        Writer writer = null;
-        try {
-            FileOutputStream outputStream = FileUtils.openOutputStream(new File(path), true);
-            String charsetName = (String) message.get(Message.ENCODING);
-            writer = (charsetName != null) ?
-                    new OutputStreamWriter(outputStream, charsetName) :
-                    new OutputStreamWriter(outputStream);
-            writer.write(getHeadersPayload(message));
-            writer.write(getBodyPayload(message));
-        } catch (IOException e) {
-            ++errorCount;
-            LOG.warn("Cannot write into " + path, e);
-        } finally {
-            IOUtils.closeQuietly(writer);
-        }
+    public int getErrorCountLimit() {
+        return errorCountLimit;
     }
 
-
     /**
-     * Appends generic HTTP headers to the given String builder.
-     * @param message
-     *      CXF message which contains the headers.
-     * @param sb
-     *      target String builder instance.
+     * Configures maximal allowed count of file creation errors.
+     * @param errorCountLimit
+     *      maximal allowed count of file creation errors, negative value means "no limit".
      */
-    protected static void appendGenericHttpHeaders(SoapMessage message, StringBuilder sb) {
-        Object encoding = message.get(Message.ENCODING);
-        if (encoding != null) {
-            sb.append("Character set: ").append(encoding).append('\n');
-        }
-        sb.append('\n');
-
-        Map<String, List<String>> httpHeaders = (Map<String, List<String>>) message.get(Message.PROTOCOL_HEADERS);
-        if (httpHeaders != null) {
-            for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
-                for (String header : entry.getValue()) {
-                    sb.append(entry.getKey()).append(": ").append(header).append('\n');
-                }
-            }
-            sb.append('\n');
-        }
+    public void setErrorCountLimit(int errorCountLimit) {
+        this.errorCountLimit = errorCountLimit;
     }
 
-
-    /**
-     * Resets count of occurred errors, can be used e.g. via JMX.
-     */
-    public void resetErrorCount() {
-        errorCount = 0;
-    }
 
 
     /**
