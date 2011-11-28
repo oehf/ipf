@@ -27,7 +27,6 @@ import org.apache.cxf.ws.addressing.VersionTransformer.Names200408;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,11 +52,6 @@ public abstract class SoapUtils {
     public static final Set<String> WS_ADDRESSING_NS_URIS;
 
     /**
-     * Set of URIs corresponding to supported WS-Security specification versions.
-     */
-    public static final Set<String> WS_SECURITY_NS_URIS;
-
-    /**
      * Set of URIs corresponding to supported SOAP versions.
      */
     public static final Set<String> SOAP_NS_URIS;
@@ -67,10 +61,6 @@ public abstract class SoapUtils {
         WS_ADDRESSING_NS_URIS.add(Names.WSA_NAMESPACE_NAME);
         WS_ADDRESSING_NS_URIS.add(Names200403.WSA_NAMESPACE_NAME);
         WS_ADDRESSING_NS_URIS.add(Names200408.WSA_NAMESPACE_NAME);
-
-        WS_SECURITY_NS_URIS = new HashSet<String>();
-        WS_SECURITY_NS_URIS.add("http://schemas.xmlsoap.org/ws/2002/07/secext");
-        WS_SECURITY_NS_URIS.add("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
 
         SOAP_NS_URIS = new HashSet<String>();
         SOAP_NS_URIS.add(Soap11.SOAP_NAMESPACE);
@@ -117,42 +107,6 @@ public abstract class SoapUtils {
         }
 
         return null;
-    }
-
-
-    /**
-     * Recursively searches for an XML element.
-     * <p>
-     * In the first step of the recursion, any namespace URI from the given
-     * set will be accepted.  After the first (the topmost) element has been
-     * found, its namespace URI is the only acceptable one.
-     *
-     * @param root
-     *      an XML element whose children will be iterated, null values are allowed
-     * @param nsUris
-     *      a set of namespace URIs the wanted elements can belong to
-     * @param wantedLocalNamesChain
-     *      a chain of local element names, e.g. <code>{"outer", "middle", "inner"}</code>
-     * @return the XML element or {@code null} if none was found.
-     */
-    public static Element getDeepElementNS(
-            Element root,
-            Set<String> nsUris,
-            String[] wantedLocalNamesChain)
-    {
-        Element element = root;
-
-        for(String name : wantedLocalNamesChain) {
-            element = getElementNS(element, nsUris, name);
-            if(element == null) {
-                return null;
-            }
-            if(nsUris.size() > 1) {
-                nsUris = Collections.singleton(element.getNamespaceURI());
-            }
-        }
-
-        return element;
     }
 
 

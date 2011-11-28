@@ -45,6 +45,7 @@ public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
     protected void process(SoapMessage message) throws Exception {
         WsAuditDataset auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
+        extractXuaUserNameFromSaml2Assertion(message, auditDataset);
         
         if (wsTransactionConfiguration.isAuditRequestPayload()) {
             auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));

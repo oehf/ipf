@@ -148,7 +148,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             }
 
             final WsAuditDataset auditDataset = (WsAuditDataset) messageContext.getWrappedMessage()
-                    .getContextualProperty(AbstractAuditInterceptor.CONTEXT_KEY);
+                    .getContextualProperty(AbstractAuditInterceptor.DATASET_CONTEXT_KEY);
 
             // in a separate thread: run the route, send its result synchronously
             // to the deferred response URI, ignore all errors and ACKs
