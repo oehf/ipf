@@ -15,21 +15,24 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.cxf.audit;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.AbstractHTTPDestination;
-import org.apache.cxf.ws.addressing.*;
+import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
+import org.apache.cxf.ws.addressing.AttributedURIType;
+import org.apache.cxf.ws.addressing.EndpointReferenceType;
+import org.apache.cxf.ws.addressing.JAXWSAConstants;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
-import org.w3c.dom.Document;
+import org.springframework.util.xml.SimpleNamespaceContext;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.xpath.*;
 import java.util.List;
 
 /**
@@ -42,7 +45,46 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
     /**
      * Key used to store audit datasets in Web Service contexts.
      */
-    public static final String CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".CONTEXT_KEY";
+    public static final String DATASET_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".DATASET";
+
+    /**
+     * Key used to store audit datasets in Web Service contexts.
+     */
+    public static final String XUA_USERNAME_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".XUA_USERNAME";
+
+    /**
+     * XML Namespace URI of WS-Security Extensions 1.1.
+     */
+    public static final String WSSE_NS_URI = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
+
+    private static final SimpleNamespaceContext WSS_NS_CONTEXT;
+    static {
+        WSS_NS_CONTEXT = new SimpleNamespaceContext();
+        WSS_NS_CONTEXT.bindNamespaceUri("wsse", WSSE_NS_URI);
+        WSS_NS_CONTEXT.bindNamespaceUri("soap", Soap12.SOAP_NAMESPACE);
+        WSS_NS_CONTEXT.bindNamespaceUri("saml2", "urn:oasis:names:tc:SAML:2.0:assertion");
+    }
+
+    private static final String XUA_EXPRESSION_PREFIX    = "/soap:Envelope/soap:Header/wsse:Security[1]/saml2:Assertion[1]";
+    private static final String XUA_NAME_NODE_EXPRESSION = XUA_EXPRESSION_PREFIX + "/saml2:Subject[1]/saml2:NameID[1]";
+    private static final String XUA_ISSUES_EXPRESSION    = XUA_EXPRESSION_PREFIX + "/saml2:Issuer[1]/text()";
+
+    private static final ThreadLocal<XPathExpression[]> XUA_XPATH_EXPRESSIONS = new ThreadLocal<XPathExpression[]>() {
+        @Override
+        protected XPathExpression[] initialValue() {
+            try {
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                xPath.setNamespaceContext(WSS_NS_CONTEXT);
+                return new XPathExpression[] {
+                    xPath.compile(XUA_NAME_NODE_EXPRESSION),
+                    xPath.compile(XUA_ISSUES_EXPRESSION)
+                };
+            } catch (XPathExpressionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    };
+
 
     /**
      * Audit strategy associated with this interceptor.  
@@ -80,14 +122,14 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      *      could be neither obtained nor created from scratch.
      */
     protected WsAuditDataset getAuditDataset(SoapMessage message) {
-        WsAuditDataset auditDataset = findContextualProperty(message, CONTEXT_KEY);
+        WsAuditDataset auditDataset = findContextualProperty(message, DATASET_CONTEXT_KEY);
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {
                 LOG.warn("Cannot obtain audit dataset instance, NPE is pending");
                 return null;
             }
-            message.setContextualProperty(CONTEXT_KEY, auditDataset);
+            message.setContextualProperty(DATASET_CONTEXT_KEY, auditDataset);
         }
         return auditDataset;
     }
@@ -101,17 +143,6 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      */
     protected WsAuditStrategy getAuditStrategy() {
         return auditStrategy;
-    }
-    
-    
-    /**
-     * Returns <code>true</code> when the given XCF message is an inbound one
-     * (i.e. input or input-fault).
-     */
-    protected static boolean isInboundMessage(SoapMessage message) {
-        Exchange exchange = message.getExchange();
-        return message == exchange.getInMessage()
-                || message == exchange.getInFaultMessage();
     }
     
     
@@ -159,38 +190,57 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
             LOG.error("Missing WS-Addressing headers");
         }
     }
-    
-    
+
+
     /**
-     * Extracts user name from WS-Security SOAP header, if available.
-     * <p>
-     * Seems to be of marginal nature.
+     * Extracts ITI-40 XUA user name from the SAML2 assertion contained
+     * in the given CXF message, and stores it in the ATNA audit dataset.
+     *
+     * @param message
+     *      source CXF message.
+     * @param auditDataset
+     *      target ATNA audit dataset.
+     * @throws XPathExpressionException
+     *      actually cannot occur.
      */
-    protected static void extractUserNameFromWSSecurity(
-            SoapMessage message, 
-            WsAuditDataset auditDataset) 
+    protected static void extractXuaUserNameFromSaml2Assertion(
+            SoapMessage message,
+            WsAuditDataset auditDataset)
+                throws XPathExpressionException
     {
-        // get <soapenv:Header> element
-        Document rootDocument = (Document) message.getContent(org.w3c.dom.Node.class);
-        if (rootDocument != null) {
-            Element soapHeader = SoapUtils.getElementNS(
-                rootDocument.getDocumentElement(), 
-                SoapUtils.SOAP_NS_URIS, 
-                "Header");
-    
-            // extract client User Name (as contents of <WSS:Usename>)
-            Element elem = SoapUtils.getDeepElementNS(
-                soapHeader,
-                SoapUtils.WS_SECURITY_NS_URIS, 
-                new String[] {"Security", "UsernameToken", "Username"});
-            
-            if (elem != null) {
-                auditDataset.setUserName(elem.getTextContent());
-            }
+        // check whether someone has already parsed the SAML2 assertion
+        // and provided the XUA user name for us via WS message context
+        if (message.getContextualProperty(XUA_USERNAME_CONTEXT_KEY) != null) {
+            auditDataset.setUserName(message.getContextualProperty(XUA_USERNAME_CONTEXT_KEY).toString());
+            return;
         }
+
+        // extract information from SAML2 assertion
+        XPathExpression[] expressions = XUA_XPATH_EXPRESSIONS.get();
+        Node envelopeNode = message.getContent(Node.class);
+        Node nameNode = (Node) expressions[0].evaluate(envelopeNode, XPathConstants.NODE);
+        if (nameNode == null) {
+            return;
+        }
+
+        String issuer = (String) expressions[1].evaluate(envelopeNode, XPathConstants.STRING);
+        String userName = nameNode.getTextContent();
+        if (issuer.isEmpty() || userName.isEmpty()) {
+            return;
+        }
+
+        // set ATNA XUA userName element
+        StringBuilder sb = new StringBuilder()
+                .append(((Element) nameNode).getAttribute("SPProvidedID"))
+                .append('<')
+                .append(userName)
+                .append('@')
+                .append(issuer)
+                .append('>');
+        auditDataset.setUserName(sb.toString());
     }
-    
-    
+
+
     /**
      * Extracts service URI and client IP address from the servlet request.
      */

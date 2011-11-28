@@ -55,7 +55,7 @@ public class Iti55DeferredResponseProducer extends AbstractWsProducer<String, St
         // inject audit dataset
         WsAuditDataset auditDataset = exchange.getIn().getHeader("iti55.deferred.auditDataset", WsAuditDataset.class);
         if (auditDataset != null) {
-            requestContext.put(AbstractAuditInterceptor.CONTEXT_KEY, auditDataset);
+            requestContext.put(AbstractAuditInterceptor.DATASET_CONTEXT_KEY, auditDataset);
         }
     }
 
