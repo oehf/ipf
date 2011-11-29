@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset
+import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 
 /**
@@ -29,7 +31,12 @@ class Iti8ClientAuditStrategy extends Iti8AuditStrategy {
     }
 
 
-    void callAuditRoutine(action, eventOutcome, auditDataset, newPatientId) {
+    void callAuditRoutine(
+            String action,
+            RFC3881EventOutcomeCodes eventOutcome,
+            MllpAuditDataset auditDataset,
+            boolean newPatientId)
+    {
         AuditorManager.getPIXSourceAuditor()."audit${action}PatientRecordEvent"(
                 eventOutcome,
                 auditDataset.remoteAddress,

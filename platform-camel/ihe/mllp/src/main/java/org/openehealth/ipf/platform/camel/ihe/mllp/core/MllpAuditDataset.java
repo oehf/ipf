@@ -63,15 +63,10 @@ public class MllpAuditDataset extends AuditDataset {
 
     
     public static final String[] GENERIC_NECESSARY_AUDIT_FIELDS = new String[] {
-        /*
-        // -------------------------------------------------------------------------
-        // MSH-3,4,5,6 are optional in HL7 v.2.3, but mandatory in ITI TF.
-        // -------------------------------------------------------------------------
         "SendingApplication",
         "SendingFacility",
         "ReceivingApplication",
         "ReceivingFacility",
-        */
         "MessageControlId",
         "LocalAddress",
         "RemoteAddress"
