@@ -51,7 +51,7 @@ public class ProducerAuditInterceptor
             MllpAuditDataset auditDataset) throws Exception 
     {
         auditDataset.setLocalAddress(InetAddress.getLocalHost().getCanonicalHostName());
-        auditDataset.setRemoteAddress(getMllpEndpoint().getEndpointUri().substring(6));
+        auditDataset.setRemoteAddress(getMllpEndpoint().getEndpointUri());
     }
 
 

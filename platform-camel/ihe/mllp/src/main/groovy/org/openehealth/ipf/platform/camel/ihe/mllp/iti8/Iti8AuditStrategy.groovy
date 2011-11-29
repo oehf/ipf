@@ -66,5 +66,9 @@ abstract class Iti8AuditStrategy extends MllpAuditStrategy {
     }
 
     
-    abstract void callAuditRoutine(action, eventOutcome, auditDataset, newPatientId)
+    abstract void callAuditRoutine(
+            String action,
+            RFC3881EventOutcomeCodes eventOutcome,
+            MllpAuditDataset auditDataset,
+            boolean newPatientId)
 }
