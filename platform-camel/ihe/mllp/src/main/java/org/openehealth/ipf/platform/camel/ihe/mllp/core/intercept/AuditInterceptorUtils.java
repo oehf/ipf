@@ -69,7 +69,7 @@ public class AuditInterceptorUtils  {
             interceptor.getWrappedProcessor().process(exchange);
             msg = resultMessage(exchange).getBody(MessageAdapter.class);
             enrichAuditDatasetFromResponse(strategy, auditDataset, msg);
-            failed = AuditUtils.isNotPositiveAck(msg);
+            failed = ! AuditUtils.isPositiveAck(msg);
         } catch (Exception e) {
             failed = true;
             throw e;

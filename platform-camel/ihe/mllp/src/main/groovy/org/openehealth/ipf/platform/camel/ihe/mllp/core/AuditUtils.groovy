@@ -116,14 +116,14 @@ class AuditUtils {
 
     /**
      * Returns <code>true</code> when the given {@link MessageAdapter}
-     * does not contain code 'AA' in MSA-1.
+     * does contain code 'AA' or 'CA' in MSA-1.
      * <p>
      * <code>null</code> values, damaged messages, etc. will lead
-     * to <code>true</code> return vales as well.
+     * to <code>false</code> return values as well.
      */
-    static boolean isNotPositiveAck(MessageAdapter msg) {
+    static boolean isPositiveAck(MessageAdapter msg) {
         try {
-            return msg.MSA[1].value != 'AA'
+            return (msg.MSA[1].value in ['AA', 'CA'])
         } catch (Exception e) {
             return false
         }
