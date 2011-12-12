@@ -26,14 +26,18 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
     /**
      * "IHE Transactions","ITI-56","Patient Location Query"
      */
-    public static final class PatientLocationQuery extends IHETransactionEventTypeCodes
-    {
-        public PatientLocationQuery()
-        {
+    public static final class PatientLocationQuery extends IHETransactionEventTypeCodes {
+        public PatientLocationQuery() {
             super("ITI-56", "Patient Location Query");
         }   
     }
 
+
+    public static final class QueryExistingData extends IHETransactionEventTypeCodes {
+        public QueryExistingData() {
+            super("PCC-1", "Query Existing Data");
+        }
+    }
 }
 
 

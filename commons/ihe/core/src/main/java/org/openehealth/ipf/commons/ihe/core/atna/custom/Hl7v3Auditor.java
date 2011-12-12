@@ -37,6 +37,7 @@ import java.io.UnsupportedEncodingException;
  *     <li>ITI-47 (PDQ v3)</li>
  *     <li>ITI-55 (XCPD)</li>
  *     <li>ITI-56 (XCPD)</li>
+ *     <li>PCC-1 (QED)</li>
  * </ul>
  *
  * @author Dmytro Rud
@@ -151,7 +152,8 @@ public class Hl7v3Auditor extends IHEAuditor {
 
         configureEvent(serverSide, event, replyToUri, userName, pixManagerUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
-        event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null);
+        event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null,
+                new IHETransactionEventTypeCodes.PIXQueryV3());
         audit(event);
     }
 
@@ -206,7 +208,8 @@ public class Hl7v3Auditor extends IHEAuditor {
 
         configureEvent(serverSide, event, replyToUri, userName, pdSupplierUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
-        event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null);
+        event.addQueryParticipantObject(null, null, payloadBytes(queryPayload), null,
+                new IHETransactionEventTypeCodes.PatientDemographicsQueryV3());
         audit(event);
     }
 
@@ -235,7 +238,7 @@ public class Hl7v3Auditor extends IHEAuditor {
 
         configureEvent(serverSide, event, replyToUri, userName, respondingGatewayUri, clientIpAddress);
         addPatientParticipantObjects(event, patientIds, null);
-        event.addXCPDParticipantObject(homeCommunityId, payloadBytes(queryPayload));
+        event.addXCPDParticipantObject(queryId, homeCommunityId, payloadBytes(queryPayload));
         audit(event);
     }
 
@@ -263,6 +266,34 @@ public class Hl7v3Auditor extends IHEAuditor {
         configureEvent(serverSide, event, replyToUri, userName, respondingGatewayUri, clientIpAddress);
         event.addPatientParticipantObject(patientId);
         event.addQueryParametersObject(queryPayload);
+        audit(event);
+    }
+
+
+    public void auditPcc1(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String replyToUri,
+            String userName,
+            String clinicalDataSourceUri,
+            String clientIpAddress,
+
+            String queryPayload,
+            String queryId,
+            String[] patientIds)
+    {
+        if (! isAuditorEnabled()) {
+            return;
+        }
+
+        QueryEvent event = new QueryEvent(
+                true,
+                eventOutcome,
+                new CustomIHETransactionEventTypeCodes.QueryExistingData());
+
+        configureEvent(serverSide, event, replyToUri, userName, clinicalDataSourceUri, clientIpAddress);
+        addPatientParticipantObjects(event, patientIds, null);
+        event.addQedParticipantObject(queryId, payloadBytes(queryPayload));
         audit(event);
     }
 

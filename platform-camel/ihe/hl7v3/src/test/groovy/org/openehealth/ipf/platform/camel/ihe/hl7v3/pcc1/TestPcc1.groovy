@@ -41,8 +41,15 @@ class TestPcc1 extends StandardTestContainer {
     
     @Test
     void testPcc1() {
-        def response = send(SERVICE1, '<QUPC_IN043100UV01 />', String.class)
-        def slurper = new XmlSlurper().parseText(response)
-        assert slurper.@from == 'Clinical Data Source'
+        String request = readFile('pcc1/pcc1-sample-request.xml')
+        String response = send(SERVICE1, request, String.class)
+
+        assert auditSender.messages.size() == 2
+        auditSender.messages.each {
+            def xml = new XmlSlurper().parseText(it.toString())
+            assert xml.EventIdentification.@EventActionCode.text() == 'E'
+            assert xml.EventIdentification.@EventOutcomeIndicator.text() == '0'
+            assert xml.ParticipantObjectIdentification.size() == 3
+        }
     }
 }

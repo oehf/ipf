@@ -20,6 +20,7 @@ import java.util.Map;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.pcc1.Pcc1PortType;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
@@ -65,12 +66,12 @@ public class Pcc1Component extends AbstractWsComponent<Hl7v3ContinuationAwareWsT
 
     @Override
     public WsAuditStrategy getClientAuditStrategy(boolean allowIncompleteAudit) {
-        return null;   // ATNA audit is not defined for this transaction
+        return new Pcc1AuditStrategy(false, allowIncompleteAudit);
     }
 
     @Override
     public WsAuditStrategy getServerAuditStrategy(boolean allowIncompleteAudit) {
-        return null;   // ATNA audit is not defined for this transaction
+        return new Pcc1AuditStrategy(true, allowIncompleteAudit);
     }
 
     @Override
