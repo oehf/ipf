@@ -65,8 +65,9 @@
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.5.0</ehcache-version>
         <geronimo-jpa_2.0_spec.version>1.0</geronimo-jpa_2.0_spec.version>
+        <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
-        <geronimo-spec-servlet-api-25-version>1.2</geronimo-spec-servlet-api-25-version> 
+        <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
         <groovy-version>1.7.9</groovy-version>
         <hapi-version>1.2</hapi-version>
         <hibernate-version>3.6.7.Final</hibernate-version>
@@ -74,7 +75,7 @@
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
         <hibernate-search-version>3.4.1.Final</hibernate-search-version>
         <jasypt-version>1.7</jasypt-version>
-        <jetty-version>7.4.2.v20110526</jetty-version>
+        <jetty-version>7.4.5.v20110725</jetty-version>
         <joda-time-version>2.0</joda-time-version>
         <junit-version>4.10</junit-version>
         <junitperf-version>1.8</junitperf-version>
@@ -412,6 +413,12 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-cxf</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+                     <exclusion>
+                          <groupId>javax.activation</groupId>
+                          <artifactId>activation</artifactId>
+                     </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -622,8 +629,13 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                <version>${geronimo-spec-servlet-api-25-version}</version>
+                <artifactId>geronimo-activation_1.1_spec</artifactId>
+                <version>${geronimo-spec-activation-11-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-servlet_3.0_spec</artifactId>
+                <version>${geronimo-spec-servlet-api-30-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
