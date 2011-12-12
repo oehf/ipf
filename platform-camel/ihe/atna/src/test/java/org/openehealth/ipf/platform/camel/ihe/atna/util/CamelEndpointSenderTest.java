@@ -50,7 +50,7 @@ public class CamelEndpointSenderTest {
         String body = message.getBody(String.class);
         Object header1 = message.getHeader(CamelEndpointSender.HEADER_NAMESPACE + ".destination.address");
         Object header2 = message.getHeader(CamelEndpointSender.HEADER_NAMESPACE + ".destination.port");
-        assertTrue(body.contains("<ActiveParticipant UserID=\"A|B\" UserIsRequestor=\"false\">"));
+        assertTrue(body.contains("<ActiveParticipant UserID=\"A|B\" UserIsRequestor=\"false\" "));
         assertEquals("0.0.0.0", header1);
         assertEquals(-1, header2);
     }

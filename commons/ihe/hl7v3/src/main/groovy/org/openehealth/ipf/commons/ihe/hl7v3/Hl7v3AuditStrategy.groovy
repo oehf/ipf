@@ -56,7 +56,7 @@ abstract class Hl7v3AuditStrategy extends WsAuditStrategy {
     @Override
     RFC3881EventOutcomeCodes getEventOutcomeCode(Object gpath) {
         try {
-            String code = gpath.acknowledgement.typeCode.@code.text()
+            String code = gpath.acknowledgement[0].typeCode.@code.text()
             if (! code) {
                 // code not found -- bad XML
                 return RFC3881EventOutcomeCodes.MAJOR_FAILURE
