@@ -51,7 +51,7 @@ public class QPD extends AbstractSegment {
             add("CE", true, 1, 250, new Object[]{msg});
             add("ST", true, 1, 32, new Object[]{msg});
             add("QIP", true, 0, 256, new Object[]{msg});
-            add(Varies.class, false, 0, 256, new Object[]{msg}, null);
+            add("QIP", false, 0, 256, new Object[]{msg});       // for fuzzy search
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
             add(Varies.class, false, 0, 256, new Object[]{msg}, null);
