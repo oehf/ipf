@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.ws.server;
 
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
+
 import javax.servlet.Servlet;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -39,6 +41,7 @@ public abstract class ServletServer {
     private String keystorePass;
     private String truststoreFile;
     private String truststorePass;
+    private ClientAuthType clientAuthType;
 
     /**
      * Starts the server.
@@ -207,7 +210,22 @@ public abstract class ServletServer {
     public void setContextResource(String contextResource) {
         this.contextResource = contextResource;
     }
-    
+
+    /**
+     * @return type of client authentication.
+     */
+    public ClientAuthType getClientAuthType() {
+        return clientAuthType;
+    }
+
+    /**
+     * @param clientAuthType
+     *      type of client authentication.
+     */
+    public void setClientAuthType(ClientAuthType clientAuthType) {
+        this.clientAuthType = clientAuthType;
+    }
+
     /**
      * @return a free port for testing between 8000-9999.
      */

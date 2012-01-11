@@ -22,6 +22,7 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
 
 /**
@@ -67,6 +68,8 @@ public class JettyServer extends ServletServer {
         sslContextFactory.setKeyStorePassword(getKeystorePass());
         sslContextFactory.setTrustStore(getTruststoreFile());
         sslContextFactory.setTrustStorePassword(getTruststorePass());
+        sslContextFactory.setNeedClientAuth(getClientAuthType() == ClientAuthType.MUST);
+        sslContextFactory.setWantClientAuth(getClientAuthType() == ClientAuthType.WANT);
         return new SslSocketConnector(sslContextFactory);
     }
 

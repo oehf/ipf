@@ -23,6 +23,7 @@ import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
@@ -81,8 +82,8 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
                 getAndRemoveParameter(parameters, "allowIncompleteAudit", boolean.class, false);
 
         boolean secure = getAndRemoveParameter(parameters, "secure", boolean.class, false);
-        MllpClientAuthType clientAuthType = getAndRemoveParameter(parameters, "clientAuth",
-                MllpClientAuthType.class, MllpClientAuthType.NONE);
+        ClientAuthType clientAuthType = getAndRemoveParameter(parameters, "clientAuth",
+                ClientAuthType.class, ClientAuthType.NONE);
         String sslProtocolsString = getAndRemoveParameter(parameters, "sslProtocols", String.class, null);
         String sslCiphersString = getAndRemoveParameter(parameters, "sslCiphers", String.class, null);
         

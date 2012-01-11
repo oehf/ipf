@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.core;
+package org.openehealth.ipf.commons.ihe.core;
 
 /**
  * @author Dmytro Rud
  */
-public enum MllpClientAuthType {
-    NONE, WANT, MUST
+public enum ClientAuthType {
+    NONE, WANT, MUST;
+
+    public static ClientAuthType MUST() { return MUST; }
+    public static ClientAuthType WANT() { return WANT; }
+    public static ClientAuthType NONE() { return NONE; }
 }

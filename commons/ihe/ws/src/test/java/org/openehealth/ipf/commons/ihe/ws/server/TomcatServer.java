@@ -22,6 +22,7 @@ import org.apache.catalina.loader.VirtualWebappLoader;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -75,6 +76,11 @@ public class TomcatServer extends ServletServer {
             connector.setProperty("keystorePass", getKeystorePass());
             connector.setProperty("truststoreFile", getTruststoreFile());
             connector.setProperty("truststorePass", getTruststorePass());
+            if (getClientAuthType() == ClientAuthType.MUST) {
+                connector.setProperty("clientAuth", "true");
+            } else if (getClientAuthType() == ClientAuthType.WANT) {
+                connector.setProperty("clientAuth", "want");
+            }
         }
 
         try {

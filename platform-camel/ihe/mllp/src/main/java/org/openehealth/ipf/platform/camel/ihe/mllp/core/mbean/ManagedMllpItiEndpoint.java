@@ -20,7 +20,7 @@ import java.util.List;
 import org.apache.camel.component.mina.MinaConfiguration;
 import org.apache.camel.management.mbean.ManagedEndpoint;
 import org.apache.mina.common.IoFilter;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpClientAuthType;
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
@@ -129,7 +129,7 @@ public class ManagedMllpItiEndpoint extends ManagedEndpoint {
     }
 
     @ManagedAttribute(description = "Client Authentication Type")
-    public MllpClientAuthType getClientAuthType() {
+    public ClientAuthType getClientAuthType() {
         return getEndpoint().getClientAuthType();
     }
 

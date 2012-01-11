@@ -35,6 +35,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.mina.common.DefaultIoFilterChainBuilder;
 import org.apache.mina.common.IoFilter;
 import org.apache.mina.common.IoSession;
+import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
@@ -75,7 +76,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
 
     private final SSLContext sslContext;
     private final List<MllpCustomInterceptor> customInterceptors;
-    private final MllpClientAuthType clientAuthType;
+    private final ClientAuthType clientAuthType;
     private final String[] sslProtocols;
     private final String[] sslCiphers;
     
@@ -135,7 +136,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             boolean audit, 
             boolean allowIncompleteAudit, 
             SSLContext sslContext,
-            MllpClientAuthType clientAuthType,
+            ClientAuthType clientAuthType,
             List<MllpCustomInterceptor> customInterceptors, 
             String[] sslProtocols, 
             String[] sslCiphers,
@@ -190,8 +191,8 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
             if (!filterChain.contains("ssl")) {
                 HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
-                filter.setNeedClientAuth(clientAuthType == MllpClientAuthType.MUST);
-                filter.setWantClientAuth(clientAuthType == MllpClientAuthType.WANT);
+                filter.setNeedClientAuth(clientAuthType == ClientAuthType.MUST);
+                filter.setWantClientAuth(clientAuthType == ClientAuthType.WANT);
                 filter.setHandshakeExceptionCallback(new HandshakeFailureCallback());
                 filter.setEnabledProtocols(sslProtocols);
                 filter.setEnabledCipherSuites(sslCiphers);
@@ -471,7 +472,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     /**
      * @return the client authentication type.
      */
-    public MllpClientAuthType getClientAuthType() {
+    public ClientAuthType getClientAuthType() {
         return clientAuthType;
     }
 
