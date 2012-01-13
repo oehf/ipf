@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core;
 
+import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 
@@ -34,10 +35,10 @@ public class XdsRuntimeException extends RuntimeException {
             String location)
     {
         super();
-        this.errorCode = errorCode;
-        this.codeContext = codeContext;
-        this.severity = severity;
-        this.location = location;
+        this.errorCode   = Validate.notNull(errorCode);
+        this.codeContext = Validate.notEmpty(codeContext);
+        this.severity    = Validate.notNull(severity);
+        this.location    = location;
     }
 
     public ErrorCode getErrorCode() {
@@ -54,5 +55,18 @@ public class XdsRuntimeException extends RuntimeException {
 
     public String getLocation() {
         return location;
+    }
+
+    @Override
+    public String getMessage() {
+        StringBuilder sb = new StringBuilder()
+                .append((severity == Severity.ERROR) ? "Error " : "Warning ")
+                .append(errorCode.getOpcode())
+                .append(": ")
+                .append(codeContext);
+        if (location != null) {
+            sb.append(". Location: ").append(location);
+        }
+        return sb.toString();
     }
 }
