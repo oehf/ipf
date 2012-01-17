@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Message;
-import org.apache.camel.component.file.GenericFile;
+import org.apache.camel.WrappedFile;
 import org.apache.camel.converter.IOConverter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
@@ -68,8 +68,8 @@ public class Hl7v2MarshalUtils {
             s = parser.encode((ca.uhn.hl7v2.model.Message) body);
         } else if(body instanceof File) {
             s = readFile(body, charset);
-        } else if(body instanceof GenericFile<?>) {
-            Object file = ((GenericFile<?>) body).getFile();
+        } else if(body instanceof WrappedFile<?>) {
+            Object file = ((WrappedFile<?>) body).getFile();
             if(file instanceof File) {
                 s = readFile(file, charset);
             }
@@ -110,7 +110,7 @@ public class Hl7v2MarshalUtils {
             InputStream.class,
             java.nio.ByteBuffer.class,
             byte[].class,
-            GenericFile.class
+            WrappedFile.class
         };
         
         for(Class<?> type : knownTypes) {
