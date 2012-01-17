@@ -20,7 +20,6 @@ import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
@@ -61,7 +60,6 @@ public class XdsClientFactory extends JaxWsClientFactory {
     @Override
     protected void configureInterceptors(Client client) {
         super.configureInterceptors(client);
-        client.getInInterceptors().add(new InPartialResponseHackInterceptor());
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {

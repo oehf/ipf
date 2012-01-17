@@ -19,7 +19,6 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
-import org.openehealth.ipf.commons.ihe.ws.cxf.async.InPartialResponseHackInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditOutRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy;
@@ -68,8 +67,6 @@ public class Hl7v3ClientFactory extends JaxWsClientFactory {
         client.getInInterceptors().add(new InNamespaceMergeInterceptor());
         client.getInInterceptors().add(new InPayloadInjectorInterceptor(0));
         client.getEndpoint().getService().setDataBinding(new PlainXmlDataBinding());
-
-        client.getInInterceptors().add(new InPartialResponseHackInterceptor());
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
