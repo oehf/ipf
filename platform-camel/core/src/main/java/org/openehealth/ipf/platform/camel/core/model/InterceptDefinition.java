@@ -50,7 +50,7 @@ public class InterceptDefinition extends OutputDefinition<RouteDefinition> {
                 }
             };
         }
-    	delegateProcessor.setProcessor(routeContext.createProcessor(this));
+        delegateProcessor.setProcessor(createChildProcessor(routeContext, false));
     	return delegateProcessor;
     }
     

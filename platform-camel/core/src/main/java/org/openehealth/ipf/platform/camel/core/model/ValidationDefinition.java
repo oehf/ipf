@@ -45,7 +45,7 @@ public class ValidationDefinition extends OutputDefinition<ValidationDefinition>
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
         Validation validation = createValidationProcessor(routeContext);
-        validation.setProcessor(routeContext.createProcessor(this));
+        validation.setProcessor(createChildProcessor(routeContext, false));
         return validation;
     }
     

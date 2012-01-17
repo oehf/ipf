@@ -28,7 +28,7 @@ import org.apache.camel.spi.RouteContext;
 /**
  * An {@link OutputDefinition} that combines the {@link Processor} created by
  * {@link #doCreateDelegate(RouteContext)} and the child processor created by
- * {@link RouteContext#createProcessor} into a {@link Pipeline}.
+ * {@link #createChildProcessor} into a {@link Pipeline}.
  * This base class supports the implementation of parameterizable DSL extensions
  * without forcing implementors to create {@link DelegateProcessor} instances.
  * Instead, plain {@link Processor} instances can be returned by
@@ -41,7 +41,7 @@ public abstract class DelegateDefinition extends OutputDefinition<RouteDefinitio
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
         Processor delegate = doCreateDelegate(routeContext);
-        Processor next = routeContext.createProcessor(this);
+        Processor next = createChildProcessor(routeContext, false);
         
         List<Processor> processors = new ArrayList<Processor>();
         processors.add(delegate);

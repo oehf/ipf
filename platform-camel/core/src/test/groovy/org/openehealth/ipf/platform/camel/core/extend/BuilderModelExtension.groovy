@@ -15,9 +15,8 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
+import org.apache.camel.builder.RouteBuilder
 
-import org.apache.camel.builder.RouteBuilder
 /**
  * @author Martin Krasser
  */

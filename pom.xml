@@ -50,7 +50,7 @@
         <!-- Dependency version properties -->
         <activemq-version>5.5.0</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
-        <camel-version>2.8.1</camel-version>
+        <camel-version>2.9.0</camel-version>
         <commons-codec-version>1.5</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
@@ -60,7 +60,7 @@
         <commons-lang-version>3.0.1</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <commons-math-version>2.2</commons-math-version>
-        <cxf-version>2.4.2</cxf-version>
+        <cxf-version>2.5.1</cxf-version>
         <derby-version>10.6.2.1</derby-version>
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.5.0</ehcache-version>
@@ -75,7 +75,7 @@
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
         <hibernate-search-version>3.4.1.Final</hibernate-search-version>
         <jasypt-version>1.7</jasypt-version>
-        <jetty-version>7.4.5.v20110725</jetty-version>
+        <jetty-version>7.5.3.v20111011</jetty-version>
         <joda-time-version>2.0</joda-time-version>
         <junit-version>4.10</junit-version>
         <junitperf-version>1.8</junitperf-version>
@@ -89,7 +89,7 @@
         <quartz-version>1.6.1</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.6.1</slf4j-version>
-        <spring-version>3.0.5.RELEASE</spring-version>
+        <spring-version>3.0.6.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.22</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>
@@ -435,17 +435,23 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-http</artifactId>
                 <version>${camel-version}</version>
-                 <exclusions>
-                     <exclusion>
-                          <groupId>org.apache.geronimo.specs</groupId>
-                          <artifactId>geronimo-servlet_2.4_spec</artifactId>
-                     </exclusion>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.geronimo.specs</groupId>
+                        <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-jetty</artifactId>
                 <version>${camel-version}</version>
+                <exclusions>
+                    <exclusion>
+                         <groupId>org.apache.geronimo.specs</groupId>
+                         <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -496,6 +502,12 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http-jetty</artifactId>
                 <version>${cxf-version}</version>             
+                <exclusions>
+                    <exclusion>
+                         <groupId>org.apache.geronimo.specs</groupId>
+                         <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.mina</groupId>

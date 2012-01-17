@@ -53,7 +53,7 @@ public class StoreProcessorDefinition extends OutputDefinition<StoreProcessorDef
     public Processor createProcessor(RouteContext routeContext) throws Exception {
         StoreProcessor storer = new StoreProcessor();
 
-        storer.setProcessor(routeContext.createProcessor(this));
+        storer.setProcessor(createChildProcessor(routeContext, false));
 
         if (resourceHandlersBeanName == null) {
             throw new IllegalStateException("resource handlers must be set via with()");

@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.flow.extend
 
 import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder
-import org.apache.camel.Expression
-
 import org.apache.camel.model.ProcessorDefinition
 
 /**

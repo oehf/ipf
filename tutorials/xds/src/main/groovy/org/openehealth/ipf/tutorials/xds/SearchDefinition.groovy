@@ -21,7 +21,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType.
 import org.apache.camel.model.OutputDefinition
 import org.apache.camel.spi.RouteContext
 import org.apache.camel.Processor
-import org.openehealth.ipf.tutorials.xds.DataStore
 
 
 /**
@@ -153,7 +152,7 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
 		        resultTypes : resultTypes, 
 		        resultField : resultField,
 				store : routeContext.lookup('dataStore', DataStore.class),
-				processor : routeContext.createProcessor(this))
+				processor : createChildProcessor(routeContext, false))
 	}    
 
     private static def get(body, resultField) {

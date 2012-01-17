@@ -70,7 +70,7 @@ public class SplitterDefinition extends OutputDefinition<RouteDefinition> {
 
     @Override
     public Processor createProcessor(RouteContext routeContext) throws Exception {
-        Processor childProcessor = routeContext.createProcessor(this);
+        Processor childProcessor = createChildProcessor(routeContext, false);
         if (aggregationStrategy == null) {
             aggregationStrategy = new UseLatestAggregationStrategy();
         }

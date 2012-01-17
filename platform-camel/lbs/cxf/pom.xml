@@ -40,7 +40,12 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
-    
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_3.0_spec</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
          
 </project>

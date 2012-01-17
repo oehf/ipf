@@ -121,7 +121,7 @@ public abstract class FlowProcessorDefinition extends OutputDefinition<RouteDefi
             .outFormat(outFormat)
             .outConversion(outConversion)
             .renderer(renderer(routeContext, processor.getMessageRenderer()))
-            .setProcessor(routeContext.createProcessor(this));
+            .setProcessor(createChildProcessor(routeContext, false));
         return processor;
     }
     

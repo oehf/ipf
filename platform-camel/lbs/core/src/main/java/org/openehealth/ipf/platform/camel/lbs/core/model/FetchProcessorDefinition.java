@@ -53,7 +53,7 @@ public class FetchProcessorDefinition extends OutputDefinition<FetchProcessorDef
     public Processor createProcessor(RouteContext routeContext) throws Exception {
         FetchProcessor fetcher = new FetchProcessor();
 
-        fetcher.setProcessor(routeContext.createProcessor(this));
+        fetcher.setProcessor(createChildProcessor(routeContext, false));
 
         if (resourceHandlersBeanName == null) {
             throw new IllegalStateException("resource handlers must be set via with()");

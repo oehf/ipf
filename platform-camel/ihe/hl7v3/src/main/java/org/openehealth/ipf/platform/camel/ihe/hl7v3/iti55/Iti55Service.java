@@ -27,8 +27,7 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.impl.DefaultExchange;
-import org.apache.camel.spi.ExecutorServiceStrategy;
-import org.apache.camel.spi.ThreadPoolProfile;
+import org.apache.camel.spi.ExecutorServiceManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
@@ -79,24 +78,14 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
     }
 
     private ExecutorService getDeferredResponseExecutorService(){
-        ExecutorServiceStrategy executorServiceStrategy = this.camelContext.getExecutorServiceStrategy();
-        
+        ExecutorServiceManager manager = this.camelContext.getExecutorServiceManager();
+
         //Try to get one from the registry
-        ExecutorService result = executorServiceStrategy.lookup(this, THREAD_POOL_NAME, THREAD_POOL_NAME);
+        ExecutorService result = manager.newThreadPool(this, THREAD_POOL_NAME, THREAD_POOL_NAME);
         
         //Create a default one with non-daemon threads
         if (result == null){
-            ThreadPoolProfile defaultCamelProfile = executorServiceStrategy.getDefaultThreadPoolProfile();
-            result = executorServiceStrategy.newThreadPool(
-                    this,
-                    THREAD_POOL_NAME,
-                    defaultCamelProfile.getPoolSize(),
-                    defaultCamelProfile.getMaxPoolSize(),
-                    defaultCamelProfile.getKeepAliveTime(),
-                    defaultCamelProfile.getTimeUnit(),
-                    defaultCamelProfile.getMaxQueueSize(),
-                    defaultCamelProfile.getRejectedExecutionHandler(),
-                    false);
+            result = manager.newDefaultThreadPool(this, THREAD_POOL_NAME);
         }
         return result;
     }

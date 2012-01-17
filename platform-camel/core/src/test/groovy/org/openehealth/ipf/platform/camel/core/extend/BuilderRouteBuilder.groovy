@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.core.extend
 
-import static org.apache.camel.builder.Builder.*
-
 import org.apache.camel.spring.SpringRouteBuilder
 
 /**

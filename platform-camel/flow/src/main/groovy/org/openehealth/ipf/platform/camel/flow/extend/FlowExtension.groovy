@@ -15,18 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.flow.extend;
 
-import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder;
-import org.openehealth.ipf.platform.camel.flow.model.DedupeDefinition;
-import org.openehealth.ipf.platform.camel.flow.model.FlowBeginProcessorDefinition;
-import org.openehealth.ipf.platform.camel.flow.model.FlowEndProcessorDefinition;
-import org.openehealth.ipf.platform.camel.flow.model.FlowErrorProcessorDefinition;
-import org.openehealth.ipf.platform.camel.flow.model.SplitterDefinition;
-import org.openehealth.ipf.platform.camel.flow.model.IpfDefinition;
-import org.openehealth.ipf.platform.camel.core.closures.DelegatingExpression;
-import org.apache.camel.Expression;
-
-import org.apache.camel.model.ProcessorDefinition;
-import org.apache.camel.spi.DataFormat;
+import org.apache.camel.model.ProcessorDefinition
+import org.openehealth.ipf.platform.camel.flow.builder.RouteBuilder
+import org.openehealth.ipf.platform.camel.flow.model.*
 
 /**
  * Flow DSL extensions for usage in a {@link RouteBuilder} using the {@code use} keyword.

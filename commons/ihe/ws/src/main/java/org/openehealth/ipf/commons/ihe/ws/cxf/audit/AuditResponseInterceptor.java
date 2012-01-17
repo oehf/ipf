@@ -40,8 +40,6 @@ import org.w3c.dom.Element;
 public class AuditResponseInterceptor extends AbstractAuditInterceptor {
     private static final transient Log LOG = LogFactory.getLog(AuditResponseInterceptor.class);
 
-    private static final VersionTransformer WSA_VERSION_HELPER = new VersionTransformer();
-
     private final AsynchronyCorrelator correlator;
     private final boolean asyncReceiver;
     private final boolean serverSide;
@@ -112,7 +110,7 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
             String messageId = null;
             for (Header header : message.getHeaders()) {
                 if ("RelatesTo".equals(header.getName().getLocalPart())
-                        && WSA_VERSION_HELPER.isSupported(header.getName().getNamespaceURI()))
+                        && VersionTransformer.isSupported(header.getName().getNamespaceURI()))
                 {
                     messageId = ((Element) header.getObject()).getTextContent();
                     break;

@@ -26,12 +26,14 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.management.DefaultManagementNamingStrategy;
 import org.apache.camel.management.ManagementTestSupport;
 import org.apache.camel.util.CastUtils;
+import org.junit.Ignore;
 
 /**
  * 
  * @author Stefan Ivanov
  * 
  */
+@Ignore
 public class ManagedWsItiEndpointTest extends ManagementTestSupport {
     
     @Override

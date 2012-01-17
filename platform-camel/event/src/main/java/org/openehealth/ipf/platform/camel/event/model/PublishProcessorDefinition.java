@@ -107,7 +107,7 @@ public class PublishProcessorDefinition extends OutputDefinition<PublishProcesso
             publisher.asynchronous();
         }
         
-        publisher.setProcessor(routeContext.createProcessor(this));
+        publisher.setProcessor(createChildProcessor(routeContext, false));
         return publisher;
     }
 }
