@@ -26,7 +26,7 @@ import org.apache.camel.impl.DefaultExchange;
 import org.apache.camel.spi.TransactedPolicy;
 import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
