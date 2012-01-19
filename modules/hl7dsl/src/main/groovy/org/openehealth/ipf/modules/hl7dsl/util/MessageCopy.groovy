@@ -18,15 +18,13 @@ package org.openehealth.ipf.modules.hl7dsl.util
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Group;
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.model.Segment;
-import ca.uhn.hl7v2.model.Structure;
 import ca.uhn.hl7v2.util.DeepCopy;
 import ca.uhn.hl7v2.util.Terser;
 
 /**
  * @author Martin Krasser
  */
-public class MessageCopy {
+class MessageCopy {
 
     Message src
     Message dst
@@ -34,7 +32,7 @@ public class MessageCopy {
     Terser srcTerser
     Terser dstTerser
 
-    private MessageCopy(Message src, Message dst) {
+    MessageCopy(Message src, Message dst) {
         this.src = src
         this.dst = dst
         this.srcTerser = new Terser(src)
@@ -43,15 +41,15 @@ public class MessageCopy {
 	
 	// TODO refactor to use GroupAdapterIterator
     void execute() {
-        execute('/', src)
+        doExecute('/', src)
     }
     
-    private void execute(String path, Group grp) {
+    private void doExecute(String path, Group grp) {
         grp.names.each { name ->
             grp.getAll(name).eachWithIndex { structure, index ->
                 String spec = spec(path, structure, index)
                 if (structure instanceof Group) {
-                    execute(spec, structure) // recursion
+                    doExecute(spec, structure) // recursion
                 } else {
                     copySegment(spec)
                 }
@@ -65,8 +63,7 @@ public class MessageCopy {
                     srcTerser.getSegment(spec), 
                     dstTerser.getSegment(spec))
         } catch (HL7Exception e) {
-            println e.getMessage()
-            // perfectly fine (either src or dst doesn't exist)
+            throw new RuntimeException("Either source or destination segment does not exist", e)
         }
     }
     
