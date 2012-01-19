@@ -17,9 +17,8 @@ package org.openehealth.ipf.modules.hl7dsl;
 
 import static org.junit.Assert.*
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.*
-import groovy.util.GroovyTestCase
-import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.v24.message.ORU_R01
+
 /**
  * @author Mitko Kolev
  *
@@ -32,8 +31,6 @@ class TypeAdapterTest extends GroovyTestCase{
     MessageAdapter<ORU_R01> msg2 = load('msg-02.hl7')
     
     void setUp() {
-		
-        
         obr = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBR
         obx1 = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX
         obx2 = msg2.PATIENT_RESULT.ORDER_OBSERVATION(1).OBSERVATION.OBX
@@ -110,6 +107,7 @@ class TypeAdapterTest extends GroovyTestCase{
         assertFieldEquals('HL^^L', obx3, 15)
         assertFieldsEmpty(obx3, 16, 17)
     }
+
     void testDelimetersAreRemoved() {
         String msgCopy = msg2.copy().toString()
         msgCopy = msgCopy.replace('25026500^CREATININE, RANDOM URINE^^25026500^CREATININE, RANDOM URINE', '^^^^')
@@ -117,7 +115,7 @@ class TypeAdapterTest extends GroovyTestCase{
         def emptyObx3 = emptyObx3Msg.PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX
         String val = emptyObx3[3].encode()
         assertFieldsEmpty(emptyObx3, 3)
-   }
+    }
     
     void testIsEmptyMsg2OBR() {
         assertFieldEquals('1', obr, 1)

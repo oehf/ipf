@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
-import ca.uhn.hl7v2.model.GenericMessage;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
@@ -60,31 +59,35 @@ public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
         MessageAdapter<?> originalAdapter = null;
         Parser parser = getHl7v2TransactionConfiguration().getParser();
         
+        org.apache.camel.Message inMessage = exchange.getIn();
+        String originalString = inMessage.getBody(String.class);
+
         // unmarshal
         boolean unmarshallingFailed = false;
         try {
-            org.apache.camel.Message in = exchange.getIn();
-            String originalString = in.getBody(String.class);
             originalAdapter = MessageAdapters.make(parser, originalString);
-            in.setBody(originalAdapter);
-            
-            // Store different representations of the original request into Camel headers.
-            // Call to .copy() will throw an NPE when the message structure (MSH-9-3)
-            // is wrong.
-            in.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME,
-                    (originalAdapter.getTarget() instanceof GenericMessage) 
-                        ? originalAdapter 
-                        : originalAdapter.copy());
-            in.setHeader(ORIGINAL_MESSAGE_STRING_HEADER_NAME, originalString);
         } catch (Exception e) {
             unmarshallingFailed = true;
             LOG.error("Unmarshalling failed, message processing not possible", e);
             Message nak = getNakFactory().createDefaultNak(e);
             resultMessage(exchange).setBody(nak);
         }
-        
-        // run the route
+
         if( ! unmarshallingFailed) {
+            // prepare exchange
+            MessageAdapter<?> copyAdapter;
+            try {
+                copyAdapter = originalAdapter.copy();
+            } catch (Exception e) {
+                // this exception will occur when the message structure (MSH-9-3) of
+                // the original adapter is wrong or when unknown segments are present
+                copyAdapter = originalAdapter;
+            }
+            inMessage.setBody(originalAdapter);
+            inMessage.setHeader(ORIGINAL_MESSAGE_ADAPTER_HEADER_NAME, copyAdapter);
+            inMessage.setHeader(ORIGINAL_MESSAGE_STRING_HEADER_NAME, originalString);
+
+            // run the route
             try {
                 getWrappedProcessor().process(exchange);
             } catch (Hl7v2AdaptingException mae) {

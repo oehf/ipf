@@ -35,7 +35,7 @@ class GroupAdapterIteratorTest extends GroovyTestCase {
 		while (iterator.hasNext()) {
 			structures += iterator.next().path
 		}
-		assertEquals(35, structures.size())
+		assertEquals(34, structures.size())
     }
     
     

@@ -144,14 +144,14 @@ class GroupAdapterTest extends GroovyTestCase {
 	
 	void testSplit() {
 		def (segments, groups) = message.split { it instanceof SegmentAdapter }
-		assertEquals(28, segments.size())
+		assertEquals(27, segments.size())
 		assertEquals(7, groups.size())
 	}
 	
 	void testEach() {
 		int numberOfStructures = 0
 		message.each { numberOfStructures++ }
-		assertEquals(35,  numberOfStructures)
+		assertEquals(34,  numberOfStructures)
 	}
 	
 	void testEachWithIndex() {
@@ -174,7 +174,7 @@ class GroupAdapterTest extends GroovyTestCase {
 	
 	void testSpread() {
 		// Length of all structure names concatenated
-		assertEquals(172,  message*.name.join('').length())
+		assertEquals(169,  message*.name.join('').length())
 	}
     
     void testNrp() {
@@ -193,7 +193,7 @@ class GroupAdapterTest extends GroovyTestCase {
 		for (def s in message) {
 			length += s.name.length()
 		}
-		assertEquals(172, length)
+		assertEquals(169, length)
 	}
 	
     
