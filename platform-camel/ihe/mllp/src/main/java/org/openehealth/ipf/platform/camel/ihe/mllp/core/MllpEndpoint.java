@@ -28,6 +28,8 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.PollingConsumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
+import org.apache.camel.api.management.ManagedAttribute;
+import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.component.mina.MinaConfiguration;
 import org.apache.camel.component.mina.MinaEndpoint;
 import org.apache.camel.impl.DefaultEndpoint;
@@ -58,15 +60,13 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.Produ
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerStringProcessingInterceptor;
-import org.springframework.jmx.export.annotation.ManagedAttribute;
-import org.springframework.jmx.export.annotation.ManagedResource;
 
 /**
  * A wrapper for standard camel-mina endpoint 
  * which provides support for IHE PIX/PDQ-related extensions.
  * @author Dmytro Rud
  */
-@ManagedResource("Managed IPF MLLP ITI Endpoint")
+@ManagedResource(description = "Managed IPF MLLP ITI Endpoint")
 public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationHolder {
 
     private final MllpComponent mllpComponent;
