@@ -23,12 +23,12 @@
  
    <assert test='not(cda:performer) or cda:performer[@typeCode="PRF"]'>Error: The performer/@typeCode shall be "PRF" for Laboratory Observation.</assert> 
 
-   <assert test='not(cda:performer) or cda:author[@typeCode="AUT"]'>Error: The author/@typeCode shall be "AUT" for Laboratory Observation.</assert>  
+   <assert test='not(cda:author) or cda:author[@typeCode="AUT"]'>Error: The author/@typeCode shall be "AUT" for Laboratory Observation.</assert>  
   
    <assert test='not(cda:participant) or cda:participant[@typeCode="AUTHEN"] or cda:participant[@typeCode="RESP"] or cda:participant[@typeCode="DEV"]'>
         Error: The participant/@typeCode for shall be "AUTHEN", "RESP" or "DEV" for Laboratory Observation.</assert>
 
-   <assert test='not(cda:entryRelationship) or cda:entryRelationship[@typeCode="REFR"]'>Error: The entryRelationship/@typeCode shall be "REFR" for Laboratory Observation.</assert>
+   <assert test='not(cda:entryRelationship and cda:entryRelationship/cda:observation) or cda:entryRelationship[@typeCode="REFR"]'>Error: The entryRelationship/@typeCode shall be "REFR" for Laboratory Observation.</assert>
 
    <assert test='not(cda:entryRelationship/cda:observation) or cda:entryRelationship/cda:observation[@classCode="OBS"]'>Error: The entryRelationship/observation/@classCode shall be "OBS" for Laboratory Observation.</assert>
 
