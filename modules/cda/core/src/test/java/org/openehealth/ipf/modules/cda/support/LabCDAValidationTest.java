@@ -30,6 +30,7 @@ public class LabCDAValidationTest {
     private Map<String, Object> params;
     
     private String sample = "IHE_LabReport_20080103.xml";
+    private String sample_extended = "IHE_LabReport_21_Extended.xml";
     private String sample2 = "IHE_LabReport_20080103_Errored.xml";
 
     @Before
@@ -51,11 +52,24 @@ public class LabCDAValidationTest {
     }
     
     @Test
+    public void testSchemaValidateExtended() throws Exception {
+        Source testXml = new StreamSource(new ClassPathResource(sample_extended).getInputStream());
+        validator.validate(testXml, CDAR2Constants.IHE_LAB_SCHEMA);
+    }
+    
+    @Test
     public void testValidateErrors() throws Exception {
         Source testXml = new StreamSource(new ClassPathResource(sample).getInputStream());
         schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES,
             params));
     }
+    
+    @Test
+    public void testValidateErrorsExtended() throws Exception {
+        Source testXml = new StreamSource(new ClassPathResource(sample_extended).getInputStream());
+        schematron.validate(testXml, new SchematronProfile(CDAR2Constants.IHE_LAB_SCHEMATRON_RULES,
+            params));
+    }    
     
     @Test(expected = ValidationException.class)
     public void testValidateOnlyErrors() throws Exception {
