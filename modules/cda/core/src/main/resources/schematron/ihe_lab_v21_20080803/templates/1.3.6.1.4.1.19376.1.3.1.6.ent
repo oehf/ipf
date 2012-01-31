@@ -10,7 +10,7 @@
      Error: The templateId  1.3.6.1.4.1.19376.1.3.1.6 child element of observation and identifies a Laboratory Observation. This records a single laboratory observation as standalone or part of a battery.
    </assert>      
      
-   <assert test='parent::cda:component[@typeCode="COMP"]'>Error: The observation parent component shall have a typeCode set to "COMP".</assert>
+   <assert test='not(parent::cda:component) or parent::cda:component[@typeCode="COMP"]'>Error: The observation parent component shall have a typeCode set to "COMP".</assert>
    
    <assert test='@classCode="OBS"'>Error: An observation/@classCode shall be "OBS" for Laboratory Observation.</assert>
   
@@ -23,12 +23,12 @@
  
    <assert test='not(cda:performer) or cda:performer[@typeCode="PRF"]'>Error: The performer/@typeCode shall be "PRF" for Laboratory Observation.</assert> 
 
-   <assert test='not(cda:performer) or cda:author[@typeCode="AUT"]'>Error: The author/@typeCode shall be "AUT" for Laboratory Observation.</assert>  
+   <assert test='not(cda:author) or cda:author[@typeCode="AUT"]'>Error: The author/@typeCode shall be "AUT" for Laboratory Observation.</assert>  
   
    <assert test='not(cda:participant) or cda:participant[@typeCode="AUTHEN"] or cda:participant[@typeCode="RESP"] or cda:participant[@typeCode="DEV"]'>
         Error: The participant/@typeCode for shall be "AUTHEN", "RESP" or "DEV" for Laboratory Observation.</assert>
 
-   <assert test='not(cda:entryRelationship) or cda:entryRelationship[@typeCode="REFR"]'>Error: The entryRelationship/@typeCode shall be "REFR" for Laboratory Observation.</assert>
+   <assert test='not(cda:entryRelationship and cda:entryRelationship/cda:observation) or cda:entryRelationship[@typeCode="REFR"]'>Error: The entryRelationship/@typeCode shall be "REFR" for Laboratory Observation.</assert>
 
    <assert test='not(cda:entryRelationship/cda:observation) or cda:entryRelationship/cda:observation[@classCode="OBS"]'>Error: The entryRelationship/observation/@classCode shall be "OBS" for Laboratory Observation.</assert>
 
