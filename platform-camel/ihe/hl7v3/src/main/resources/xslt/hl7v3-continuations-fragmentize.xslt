@@ -79,7 +79,9 @@ Creates interactive continuation pieces of PDQv3 and QED responses.
     <xsl:template match="/hl7:*/hl7:acknowledgement/hl7:targetMessage/hl7:id">
 		<xsl:element name="id" namespace="urn:hl7-org:v3">
 			<xsl:attribute name="root" select="$targetMessageIdRoot" />
-			<xsl:attribute name="extension" select="$targetMessageIdExtension" />
+            <xsl:if test="$targetMessageIdExtension">
+                <xsl:attribute name="extension" select="$targetMessageIdExtension" />
+            </xsl:if>
 		</xsl:element>
     </xsl:template>
 
