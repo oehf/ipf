@@ -27,85 +27,87 @@ Creates interactive continuation pieces of PDQv3 and QED responses.
 
     <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
-	<!-- all parameters are supposed to be validated beforehand -->
+    <!-- all parameters are supposed to be validated beforehand -->
     <xsl:param name="startResultNumber" required="yes" as="xs:integer" />
     <xsl:param name="continuationCount" required="yes" as="xs:integer" />
     
     <xsl:param name="targetMessageIdRoot" required="yes" as="xs:string" />
     <xsl:param name="targetMessageIdExtension" required="yes" as="xs:string" />
 
-	<!-- Identity copy of original contents -->
-	<xsl:template match="@* | node()">
-		<xsl:copy>
-			<xsl:apply-templates select="@* | node()" />
-		</xsl:copy>
-	</xsl:template>
+    <!-- Identity copy of original contents -->
+    <xsl:template match="@* | node()">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node()" />
+        </xsl:copy>
+    </xsl:template>
 
-	<!-- check whether the response is positive -->
-	<xsl:template match="/hl7:*/hl7:controlActProcess/hl7:queryAck/hl7:queryResponseCode[@code ne 'OK']">
-		<xsl:copy-of select="error(QName('dummy', 'dummy'), '[ipf] negative response')" />
-	</xsl:template>
+    <!-- check whether the response is positive -->
+    <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:queryAck/hl7:queryResponseCode[@code ne 'OK']">
+        <xsl:copy-of select="error(QName('dummy', 'dummy'), '[ipf] negative response')" />
+    </xsl:template>
 
     <!-- handle subjects -->
     <xsl:variable name="subjectsCount" as="xs:integer" select="count(/hl7:*/hl7:controlActProcess/hl7:subject)" />
     <xsl:variable name="endIndex" as="xs:integer" select="min(($subjectsCount, $startResultNumber + $continuationCount - 1))" />
-	<xsl:template match="/*[$subjectsCount lt $startResultNumber]">
-		<xsl:copy-of select="error(QName('dummy', 'dummy'), '[ipf] wrong startResultNumber')" />
-	</xsl:template>
+    <xsl:template match="/*[$subjectsCount lt $startResultNumber]">
+        <xsl:copy-of select="error(QName('dummy', 'dummy'), '[ipf] wrong startResultNumber')" />
+    </xsl:template>
     <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:subject[position() lt $startResultNumber]" />
     <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:subject[position() gt $endIndex]" />
 
-	<!-- actualize messaege id -->
+    <!-- actualize messaege id -->
     <xsl:template match="/hl7:*/hl7:id">
-		<xsl:copy>
-			<xsl:apply-templates select="@*[local-name() ne 'nullFlavor']" />
-			<xsl:if test="not(@root)">
-				<xsl:attribute name="root" select="'1.2.3'" />
-			</xsl:if>
-			<xsl:attribute name="extension" 
+        <xsl:copy>
+            <xsl:apply-templates select="@*[local-name() ne 'nullFlavor']" />
+            <xsl:if test="not(@root)">
+                <xsl:attribute name="root" select="'1.2.3'" />
+            </xsl:if>
+            <xsl:attribute name="extension" 
                    select="uuid:toString(uuid:randomUUID())"
                    xmlns:uuid="java:java.util.UUID" />
-		</xsl:copy>
+        </xsl:copy>
     </xsl:template>
     
     <!-- actualize message creation time -->
-   	<xsl:template match="/hl7:*/hl7:creationTime">
-		<xsl:element name="creationTime" namespace="urn:hl7-org:v3">
-			<xsl:attribute name="value" select="format-dateTime(current-dateTime(), '[Y][M01][D01][H01][m][s]')" />
-		</xsl:element>
-	</xsl:template>
+       <xsl:template match="/hl7:*/hl7:creationTime">
+        <xsl:element name="creationTime" namespace="urn:hl7-org:v3">
+            <xsl:attribute name="value" select="format-dateTime(current-dateTime(), '[Y][M01][D01][H01][m][s]')" />
+        </xsl:element>
+    </xsl:template>
 
     <!-- actualize target message id -->
     <xsl:template match="/hl7:*/hl7:acknowledgement/hl7:targetMessage/hl7:id">
-		<xsl:element name="id" namespace="urn:hl7-org:v3">
-			<xsl:attribute name="root" select="$targetMessageIdRoot" />
+        <xsl:element name="id" namespace="urn:hl7-org:v3">
+            <xsl:if test="$targetMessageIdRoot">
+                <xsl:attribute name="root" select="$targetMessageIdRoot" />
+            </xsl:if>
             <xsl:if test="$targetMessageIdExtension">
                 <xsl:attribute name="extension" select="$targetMessageIdExtension" />
             </xsl:if>
-		</xsl:element>
+        </xsl:element>
     </xsl:template>
 
-	<!-- actualize counters -->
-	<xsl:template match="/hl7:*/hl7:controlActProcess/hl7:queryAck">	
-		<xsl:copy>
-			<xsl:apply-templates select="@* | *[not(ends-with(local-name(), 'Quantity'))]" />
-			
-			<xsl:element name="resultTotalQuantity" namespace="urn:hl7-org:v3">
-				<xsl:attribute name="value" select="$subjectsCount" />
-			</xsl:element>
-			<xsl:element name="resultCurrentQuantity" namespace="urn:hl7-org:v3">
-				<xsl:attribute name="value" select="$endIndex - $startResultNumber + 1" />
-			</xsl:element>
-			<xsl:element name="resultRemainingQuantity" namespace="urn:hl7-org:v3">
-				<xsl:attribute name="value" select="$subjectsCount - $endIndex" />
-			</xsl:element>
-		</xsl:copy>
-	</xsl:template>
+    <!-- actualize counters -->
+    <xsl:template match="/hl7:*/hl7:controlActProcess/hl7:queryAck">    
+        <xsl:copy>
+            <xsl:apply-templates select="@* | *[not(ends-with(local-name(), 'Quantity'))]" />
+            
+            <xsl:element name="resultTotalQuantity" namespace="urn:hl7-org:v3">
+                <xsl:attribute name="value" select="$subjectsCount" />
+            </xsl:element>
+            <xsl:element name="resultCurrentQuantity" namespace="urn:hl7-org:v3">
+                <xsl:attribute name="value" select="$endIndex - $startResultNumber + 1" />
+            </xsl:element>
+            <xsl:element name="resultRemainingQuantity" namespace="urn:hl7-org:v3">
+                <xsl:attribute name="value" select="$subjectsCount - $endIndex" />
+            </xsl:element>
+        </xsl:copy>
+    </xsl:template>
 
-	<!-- add human-readable message for the user -->
-	<xsl:template match="/hl7:*/hl7:acknowledgement">
-		<xsl:copy>
-			<xsl:apply-templates select="@* | *" />
+    <!-- add human-readable message for the user -->
+    <xsl:template match="/hl7:*/hl7:acknowledgement">
+        <xsl:copy>
+            <xsl:apply-templates select="@* | *" />
             <xsl:element name="acknowledgementDetail" namespace="urn:hl7-org:v3">
                 <xsl:attribute name="typeCode" select="'I'" />
                 <xsl:element name="text" namespace="urn:hl7-org:v3">
@@ -114,6 +116,6 @@ Creates interactive continuation pieces of PDQv3 and QED responses.
                 </xsl:element>
             </xsl:element>
         </xsl:copy>
-	</xsl:template>
+    </xsl:template>
 
 </xsl:stylesheet>
