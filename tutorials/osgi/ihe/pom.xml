@@ -26,7 +26,6 @@
         <hibernate-annotations-common-version>3.3.0.ga-p1</hibernate-annotations-common-version>
         <jdom-version>1.0.0</jdom-version>
         <jms-version>1.1-p1</jms-version>
-        <joda-time-osgi-version>1.5.2-p1</joda-time-osgi-version>
         <neethi-version>3.0.1</neethi-version>
         <pax-web-version>1.1.1</pax-web-version>
         <servicemix-jaxb-api-version>1.4.0</servicemix-jaxb-api-version>
@@ -71,7 +70,6 @@
         <servlet-api-version>2.5-p1</servlet-api-version>
         <serializer-version>2.7.1-v200806030322</serializer-version>
         <slf4j-version>1.6.1</slf4j-version>
-        <spring-framework-version>3.0.5.RELEASE</spring-framework-version>
         <stax2-api-version>3.1.1</stax2-api-version>
         <woodstox-core-asl-version>4.1.1</woodstox-core-asl-version>
         <ws-xmlschema-version>2.0.1</ws-xmlschema-version>
@@ -177,17 +175,17 @@
             <param>mvn:xerces/xercesImpl/${xerces-impl-osgi-version}@start</param>
             <param>mvn:xalan/serializer/${serializer-version}@start</param>
             <param>mvn:org.apache.felix/org.apache.felix.fileinstall/${fileinstall-version}@2</param>
-            <param>mvn:org.springframework/org.springframework.context/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.beans/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.jdbc/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.orm/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.jms/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.transaction/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.aop/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.core/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.web/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.asm/${spring-framework-version}@start</param>
-            <param>mvn:org.springframework/org.springframework.expression/${spring-framework-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.context/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.beans/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.jdbc/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.orm/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.jms/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.transaction/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.aop/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.core/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.web/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.asm/${spring-version}@start</param>
+            <param>mvn:org.springframework/org.springframework.expression/${spring-version}@start</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.extender/${spring-osgi-version}@2</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.core/${spring-osgi-version}@start</param>
             <param>mvn:org.springframework.osgi/org.springframework.osgi.io/${spring-osgi-version}@start</param>
@@ -207,7 +205,7 @@
             <param>mvn:javax.jms/jms/${jms-version}@start</param>
             <param>mvn:xml-apis/xml-apis/${xml-apis-version}@start</param>
             <param>mvn:xalan/xalan/${xalan-version}@start</param>
-            <param>mvn:joda-time/joda-time/${joda-time-osgi-version}@start</param>
+            <param>mvn:joda-time/joda-time/${joda-time-version}@start</param>
             <param>mvn:org.codehaus.groovy/groovy-all/${groovy-version}@1</param>
             <param>mvn:org.ops4j.pax.web/pax-web-extender-whiteboard/${pax-web-version}@2</param>
             <param>mvn:org.ops4j.pax.web/pax-web-jetty/${pax-web-version}@2</param>
