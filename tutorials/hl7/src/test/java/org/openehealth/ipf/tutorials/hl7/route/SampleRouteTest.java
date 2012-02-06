@@ -57,8 +57,8 @@ public class SampleRouteTest {
         producerTemplate.sendBody("direct:input", input.getInputStream());
         Resource result = new FileSystemResource("target/output/HZL.hl7");
         assertEquals(
-                MessageAdapters.load("msg-01.hl7.expected").toString(),
-                MessageAdapters.make(result.getInputStream()).toString());
+                MessageAdapters.loadUtf8("msg-01.hl7.expected").toString(),
+                MessageAdapters.makeUtf8(result.getInputStream()).toString());
     }
     
 }

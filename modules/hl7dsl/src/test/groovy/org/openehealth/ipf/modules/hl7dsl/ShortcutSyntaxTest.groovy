@@ -29,9 +29,9 @@ public class ShortcutSyntaxTest extends GroovyTestCase{
      MessageAdapter<ca.uhn.hl7v2.model.v24.message.ORU_R01> msg3
      
      void setUp() {
-         msg1 = load('msg-01.hl7')
-         msg2 = load('msg-06.hl7')
-         msg3 = load('msg-02.hl7')
+         msg1 = loadUtf8('msg-01.hl7')
+         msg2 = loadUtf8('msg-06.hl7')
+         msg3 = loadUtf8('msg-02.hl7')
      }
      
      void testShortCut22() {

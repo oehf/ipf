@@ -110,7 +110,7 @@ public class Ghl7ExtensionTest extends AbstractExtensionTest {
     }
 
     private static <T extends AbstractMessage> MessageAdapter<T> inputMessage(String resource) {
-        return MessageAdapters.load(resource);
+        return MessageAdapters.loadUtf8(resource);
     }
     
 }

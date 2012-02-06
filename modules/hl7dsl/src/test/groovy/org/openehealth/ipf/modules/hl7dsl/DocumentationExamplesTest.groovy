@@ -16,7 +16,7 @@
 package org.openehealth.ipf.modules.hl7dsl;
 
 import static org.junit.Assert.*
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.loadUtf8
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make
 
 import org.junit.Before
@@ -40,7 +40,7 @@ class DocumentationExamplesTest {
 	
 	@Before
 	public void setUp(){
-		message = load('oru-r01-25.hl7');
+		message = loadUtf8('oru-r01-25.hl7');
 	}
 	
 	@Test
@@ -55,7 +55,7 @@ class DocumentationExamplesTest {
 	
 	@Test
 	public void testConstruction(){
-		MessageAdapter<ORU_R01> msg = load('oru-r01-25.hl7');
+		MessageAdapter<ORU_R01> msg = loadUtf8('oru-r01-25.hl7');
 		MessageAdapter<ORU_R01> messageCopy = message.copy();
 		MessageAdapter<ORU_R01> messageFromString = make(messageCopy.toString())
 	}

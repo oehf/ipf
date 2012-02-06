@@ -32,8 +32,8 @@ class SegmentAdapterTest extends GroovyTestCase {
 	def pv2
     
     void setUp() {
-        def msg1 = load('msg-01.hl7')
-        def msg2 = load('msg-03.hl7')
+        def msg1 = loadUtf8('msg-01.hl7')
+        def msg2 = loadUtf8('msg-03.hl7')
         
         nk1 = msg1.NK1(0)
         nk1_all = msg1.NK1

@@ -26,7 +26,7 @@ class GroupAdapterIteratorTest extends GroovyTestCase {
     MessageAdapter<ORU_R01> message
     
     void setUp() {
-        message = load('msg-02.hl7')
+        message = loadUtf8('msg-02.hl7')
     }
     
     void testIterate() {

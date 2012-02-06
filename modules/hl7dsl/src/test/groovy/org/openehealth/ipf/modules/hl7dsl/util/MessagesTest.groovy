@@ -32,8 +32,8 @@ public class MessagesTest extends GroovyTestCase {
      MessageAdapter<ORU_R01> msg2
      
      void setUp() {
-         msg1 = load('msg-01.hl7')
-         msg2 = load('msg-04.hl7')
+         msg1 = loadUtf8('msg-01.hl7')
+         msg2 = loadUtf8('msg-04.hl7')
      }
      
      void testCopyMessage1() {

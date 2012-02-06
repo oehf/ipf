@@ -35,7 +35,7 @@ import javax.management.ObjectName;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.loadUtf8;
 
 
 /**
@@ -46,8 +46,8 @@ import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load;
 public class Pcd01Test extends StandardTestContainer {
     public static final String CONTEXT_DESCRIPTOR = "pcd-01.xml";
     
-    public static final String PCD_01_SPEC_REQUEST = load("pcd01/pcd01-request.hl7").toString();
-    public static final String PCD_01_SPEC_RESPONSE = load("pcd01/pcd01-response.hl7").toString();
+    public static final String PCD_01_SPEC_REQUEST = loadUtf8("pcd01/pcd01-request.hl7").toString();
+    public static final String PCD_01_SPEC_RESPONSE = loadUtf8("pcd01/pcd01-response.hl7").toString();
     
     public static void main(String args[]) {
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);

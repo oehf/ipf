@@ -31,45 +31,55 @@ public class MessageAdapters {
 	// -----------------------------------------------------------------
 	//  Factory methods using default parser
 	// -----------------------------------------------------------------
-	
+    @Deprecated
 	static <T extends AbstractMessage>  MessageAdapter<T> load(String resource) {
 		make(MessageAdapter.class.classLoader.getResource(resource)?.text)
 	}
+    
+    static <T extends AbstractMessage>  MessageAdapter<T> loadUtf8(String resource) {
+        make(MessageAdapter.class.classLoader.getResource(resource)?.getText('UTF-8'))
+    }
 	
 	static <T extends AbstractMessage>  MessageAdapter<T>  load(String resource, String charset) {
 		make(MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
 	}
 	
-	static <T extends AbstractMessage>  MessageAdapter<T>  make(InputStream stream) {
-		return make(stream.text)
-	}
-	
-	static <T extends AbstractMessage>  MessageAdapter<T>  make(InputStream stream, String charset) {
+    static <T extends AbstractMessage>  MessageAdapter<T>  make(String message) {
+        make(defaultParser(), message)
+    }
+    
+    static <T extends AbstractMessage>  MessageAdapter<T>  makeUtf8(InputStream stream) {
+        return make(stream?.getText('UTF-8'))
+    }
+    
+    static <T extends AbstractMessage>  MessageAdapter<T>  make(InputStream stream, String charset) {
 		return make(stream.getText(charset))
 	}
-	
-	static <T extends AbstractMessage>  MessageAdapter<T>  make(String message) {
-		make(defaultParser(), message)
-	}
+    
+    @Deprecated
+    static <T extends AbstractMessage>  MessageAdapter<T>  make(InputStream stream) {
+        return make(stream.text)
+    }
 	
 	// -----------------------------------------------------------------
 	//  Factory methods using custom parser
 	// -----------------------------------------------------------------
-	
-	static <T extends AbstractMessage>  MessageAdapter<T>  load(Parser parser, String resource) {
-		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.text)
-	}
-	
 	static <T extends AbstractMessage>  MessageAdapter<T>  load(Parser parser, String resource, String charset) {
 		make(parser, MessageAdapter.class.classLoader.getResource(resource)?.getText(charset))
 	}
 	
+    static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, InputStream stream, String charset) {
+        return make(parser, stream.getText(charset))
+    }
+    
+    @Deprecated
+    static <T extends AbstractMessage>  MessageAdapter<T>  load(Parser parser, String resource) {
+        make(parser, MessageAdapter.class.classLoader.getResource(resource)?.text)
+    }
+    
+    @Deprecated
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, InputStream stream) {
 		return make(parser, stream.text)
-	}
-	
-	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, InputStream stream, String charset) {
-		return make(parser, stream.getText(charset))
 	}
 	
 	static <T extends AbstractMessage>  MessageAdapter<T>  make(Parser parser, String message) {

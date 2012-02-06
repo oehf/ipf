@@ -28,7 +28,7 @@ class DoubleQuoteAdapterTest extends GroovyTestCase {
     def msg
     
     void setUp() {
-        msg = load('msg-07.hl7')
+        msg = loadUtf8('msg-07.hl7')
         maidenName = msg.PID[6]
         streetAddress = msg.PID[11](0)[1]
         address = msg.PID[11]
