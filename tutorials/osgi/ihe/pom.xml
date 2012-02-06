@@ -41,7 +41,6 @@
         <springsource-antlr-version>2.7.6</springsource-antlr-version>
         <springsource-aopalliance-version>1.0.0</springsource-aopalliance-version>
         <springsource-asm-version>2.2.3</springsource-asm-version>
-        <springsource-aspectj-version>1.6.2.RELEASE</springsource-aspectj-version>
         <springsource-cglib-version>2.1.3</springsource-cglib-version>
         <springsource-commons-cli-version>1.1.0</springsource-commons-cli-version>
         <springsource-commons-codec-version>1.4.0</springsource-commons-codec-version>
@@ -97,7 +96,7 @@
             <configuration>
                 <provision>
             <param>--platform=equinox</param>
-            <param>--version=3.6.1</param>
+            <param>--version=3.7.0</param>
             <param>--ee=J2SE-1.5</param>
             <param>--vmo=-Dosgi.classloader.lock=classname -Xmx256M</param>
             <param>--startLevel=5</param>
