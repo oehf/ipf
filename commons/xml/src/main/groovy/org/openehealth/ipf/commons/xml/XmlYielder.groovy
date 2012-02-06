@@ -15,10 +15,9 @@
  */
 package org.openehealth.ipf.commons.xml
 
-import groovy.xml.MarkupBuilder
-import groovy.util.XmlSlurper
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.Node
+import groovy.xml.MarkupBuilder
 
 /**
  * Routines for yielding of XML contents from a {@link GPathResult GPath object} 
@@ -26,17 +25,18 @@ import groovy.util.slurpersupport.Node
  * @author Dmytro Rud
  */
 class XmlYielder {
+    private static final String DEFAULT_NS_PREFIX = ''
     
     /**
      * Yields the XML element represented by the given GPath result instance 
      * into the given target XML builder, using the given namespace URI  
      * as a default one, i.e. without prefix for it.
      */
-    static void yieldElement(GPathResult source, MarkupBuilder target, String defaultNamespaceUri) {
-        if (!source) {
+    static void yieldElement(GPathResult origin, MarkupBuilder target, String defaultNamespaceUri) {
+        if (!origin) {
             return
         }
-        yieldElement(source.nodeIterator().next(), target, [(defaultNamespaceUri) : '*'])
+        yieldElement(origin, origin.nodeIterator().next(), target, [(defaultNamespaceUri) : '*'])
     }
      
      
@@ -44,7 +44,7 @@ class XmlYielder {
      * Yields the given source XML element into the given target XML builder,
      * using the provided set of pre-defined namespace prefixes.
      */
-    static void yieldElement(Node source, MarkupBuilder target, Map<String, String> predefinedNamespaces) {
+    static void yieldElement(GPathResult origin, Node source, MarkupBuilder target, Map<String, String> predefinedNamespaces) {
         if (!source) {
             return
         }
@@ -54,37 +54,76 @@ class XmlYielder {
         knownNamespaces.putAll(predefinedNamespaces)
 
         String elementNsPrefix = getNsPrefix(source.namespaceURI(), knownNamespaces, attributes)
-
-        for(attribute in source.attributes()) {
-            String nsUri = source.attributeNamespaces[attribute.key]
-            String nsPrefix
-            if (elementNsPrefix && (knownNamespaces[nsUri] == '*')) {
+        String namespaceUri = source.namespaceURI();
+        
+        Map attributeNamespaces = source.attributeNamespaces;
+        
+        for(Map<String, String> attribute in source.attributes()) {
+            String attributeNsUri = lookupNsUri(origin, attributeNamespaces.get(attribute.key))
+            
+            String attributeNsPrefix
+            if (elementNsPrefix && (knownNamespaces[attributeNsUri] == '*')) {
                 // attribute with the default namespace inside of an element with a custom namespace 
-                nsPrefix = createNsPrefix(nsUri, knownNamespaces, attributes)
+                attributeNsPrefix = createNsPrefix(attributeNsUri, knownNamespaces, attributes)
             } else {
-                nsPrefix = getNsPrefix(nsUri, knownNamespaces, attributes)
+                attributeNsPrefix = getNsPrefix(attributeNsUri, knownNamespaces, attributes)
             }
             
-            attributes[nsPrefix + attribute.key] = attribute.value
+            String attributeName = attribute.key
+            String attributeValue = attribute.value
+            
+            if (isXSITypeInAttributeValue(attributeNsUri, attributeName)){
+               attributeValue = updateNsPrefixInAttributeValue(origin, attributeValue, attributes, knownNamespaces)                                                      
+            } 
+            
+            attributes[attributeNsPrefix + attributeName] = attributeValue
         }
 
         target."${elementNsPrefix + source.name()}"(attributes) { 
-            yieldChildren(source, target, knownNamespaces)
+            yieldChildren(origin, source, target, knownNamespaces)
         }
     }
     
+    private static String lookupNsUri(GPathResult origin, String attributeNsUri){
+        attributeNsUri != null? attributeNsUri: origin.lookupNamespace(DEFAULT_NS_PREFIX);
+    }
 
+    /**
+     * Updates the namespace prefix in attribute values <br>
+     * For example, for attribute value <b>xsi:type="ns1:II", ns1="http:some.namespace.uri"</b>
+     * the method returns <b>xsi:type="II"</b>, where <b>"http:some.namespace.uri"</b> is the default namespace.  
+     */
+    private static String updateNsPrefixInAttributeValue(GPathResult origin, 
+                                                 String attributeValue, 
+                                                 Map<String, String> attributes, 
+                                                 Map<String, String> knownNamespaces){
+        def nsPrefixAndType = attributeValue.split(':')
+        def nsPrefix = nsPrefixAndType.size() == 1? DEFAULT_NS_PREFIX :  nsPrefixAndType[0]
+        def type = nsPrefixAndType.size() == 1? nsPrefixAndType[0] : nsPrefixAndType[1]
+        // Use the GPathResult to resolve the namespace uri
+        def nsUri = origin.lookupNamespace(nsPrefix)
+        
+        def newNsPrefix = getNsPrefix(nsUri, knownNamespaces, attributes)
+        return newNsPrefix + type
+    }
+                                                 
+    private static Boolean isXSITypeInAttributeValue(String attributeUri, String attributeName){
+        return 'http://www.w3.org/2001/XMLSchema-instance' == attributeUri && 
+               attributeName == 'type' 
+    }
+    
+    
     /**
      * Yields child elements of the given source XML element into the given target 
      * XML builder, using the provided set of pre-defined namespace prefixes.
      */
-    static void yieldChildren(Node source, MarkupBuilder target, Map<String, String> predefinedNamespaces) {
+    static void yieldChildren(GPathResult origin, Node source, MarkupBuilder target, Map<String, String> predefinedNamespaces) {
         if (!source) {
             return
         }
         for (child in source.children()) {
             if (child instanceof Node) {
-                yieldElement(child, target, predefinedNamespaces)
+                yieldElement(origin, child, target, predefinedNamespaces)
             } else {
                 target.yield(child, true)
             }
@@ -97,11 +136,11 @@ class XmlYielder {
      * instance into the given target XML builder, using the given namespace URI  
      * as a default one, i.e. without prefix for it.
      */
-    static void yieldChildren(GPathResult source, MarkupBuilder target, String defaultNamespaceUri) {
-        if (!source) {
+    static void yieldChildren(GPathResult origin, MarkupBuilder target, String defaultNamespaceUri) {
+        if (!origin) {
             return
         }
-        yieldChildren(source.nodeIterator().next(), target, [(defaultNamespaceUri) : '*'])
+        yieldChildren(origin, origin.nodeIterator().next(), target, [(defaultNamespaceUri) : '*'])
     }
 
      
@@ -115,7 +154,7 @@ class XmlYielder {
         if (nsUri && !prefix) {
             prefix = createNsPrefix(nsUri, knownNamespaces, attributes)
         }
-        return (prefix && (prefix != '*')) ? prefix : '' 
+        return (prefix && (prefix != '*')) ? prefix : DEFAULT_NS_PREFIX 
     }
 
 

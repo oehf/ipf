@@ -15,9 +15,22 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.translation
 
-import org.junit.*;
-import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import static org.junit.Assert.*
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_47
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.HL7V3_NSURI
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.getBuilder
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.slurp
+import groovy.util.slurpersupport.GPathResult
+import groovy.xml.FactorySupport
+import groovy.xml.MarkupBuilder
+
+import javax.xml.parsers.SAXParserFactory
+
+import org.apache.commons.io.IOUtils
+import org.junit.*
+import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
+import org.openehealth.ipf.commons.xml.XmlYielder
+import org.springframework.core.io.ClassPathResource
 
 /**
  * Unit test for PDQ translator.
@@ -26,7 +39,7 @@ import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.ITI_47
 class PdqTranslatorTest extends Hl7TranslationTestContainer {
 
     static def parser
-    
+   
     @BeforeClass
     static void setUpClass() {
         doSetUp('pdq',
@@ -34,8 +47,9 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
                 new PdqResponse2to3Translator())
 
         parser = CustomModelClassUtils.createParser('pdq', '2.5')
-    }      
+    }
 
+   
     @Test
     void testPdqQuery() {
         doTestV3toV2RequestTranslation('PDQ_Maximal_Query', 21, ITI_47)
@@ -47,4 +61,10 @@ class PdqTranslatorTest extends Hl7TranslationTestContainer {
     void testResponseWithPid4() {
         doTestV2toV3ResponseTranslation('PDQ_with_PID4', 21, ITI_47, parser)
     }
+    
+    @Test
+    void testConnectathon2011Issue() {
+        doTestV2toV3ResponseTranslation('PDQ_connectathon2011_namespaces_issue', 21, ITI_47, parser)
+    }
+
 }

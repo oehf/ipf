@@ -1,0 +1,54 @@
+<ns1:PRPA_IN201305UV02 xmlns:ns1="urn:hl7-org:v3"
+  ITSVersion="XML_1.0">
+  <ns1:realmCode code="PRPA_IN201305UV02" />
+  <ns1:id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:type="ns1:II" root="bac7f21e-4b55-4fd2-be92-6ed0edf4ef88"
+    extension="1326231396714" />
+  <ns1:creationTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:type="ns1:TS" value="20120110153636" />
+  <ns1:interactionId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:type="ns1:II" root="2.16.840.1.113883.1.6" extension="PRPA_IN201305UV02" />
+  <ns1:processingCode code="P" />
+  <ns1:processingModeCode code="T" />
+  <ns1:acceptAckCode code="AL" />
+  <ns1:receiver typeCode="RCV">
+    <ns1:device classCode="DEV" determinerCode="INSTANCE">
+      <ns1:id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="ns1:II" root="1.2.3.4.5" />
+    </ns1:device>
+  </ns1:receiver>
+  <ns1:sender typeCode="SND">
+    <ns1:device classCode="DEV" determinerCode="INSTANCE">
+      <ns1:id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="ns1:II" root="1.2.3.4.5" />
+    </ns1:device>
+  </ns1:sender>
+  <ns1:controlActProcess classCode="CACT"
+    moodCode="EVN">
+    <ns1:code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="ns1:CD" code="PRPA_TE201305UV02" />
+    <ns1:queryByParameter>
+      <ns1:queryId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="ns1:II" root="1.2.3.4.5" extension="1326231396750" />
+      <ns1:statusCode code="new" />
+      <ns1:responseModalityCode code="R" />
+      <ns1:responsePriorityCode code="I" />
+      <ns1:initialQuantity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="ns1:INT" value="30" />
+      <ns1:initialQuantityCode code="RD" />
+      <ns1:parameterList>
+        <ns1:id xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:type="ns1:II" root="bac7f21e-4b55-4fd2-be92-6ed0edf4ef88"
+          extension="1326231396714" />
+        <ns1:livingSubjectName>
+          <ns1:value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:type="ns1:EN">
+            <ns1:given>CHIP</ns1:given>
+            <ns1:family>MOORE</ns1:family>
+          </ns1:value>
+          <ns1:semanticsText>LivingSubject.name</ns1:semanticsText>
+        </ns1:livingSubjectName>
+      </ns1:parameterList>
+    </ns1:queryByParameter>
+  </ns1:controlActProcess>
+</ns1:PRPA_IN201305UV02>

@@ -1,0 +1,142 @@
+<PRPA_IN201306UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <id root="1.2.3" extension="211338" />
+  <creationTime value="20120203221136" />
+  <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201306UV02" />
+  <processingCode code="P" />
+  <processingModeCode code="T" />
+  <acceptAckCode code="NE" />
+  <receiver typeCode="RCV">
+    <device determinerCode="INSTANCE" classCode="DEV">
+      <id root="1.2.3.4.5" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance" ns1:type="II" />
+    </device>
+  </receiver>
+  <sender typeCode="SND">
+    <device determinerCode="INSTANCE" classCode="DEV">
+      <id root="1.2.3.4.5" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance" ns1:type="II" />
+    </device>
+  </sender>
+  <acknowledgement>
+    <typeCode code="AA" />
+    <targetMessage>
+      <id root="bac7f21e-4b55-4fd2-be92-6ed0edf4ef88" extension="1326231396714" />
+    </targetMessage>
+  </acknowledgement>
+  <controlActProcess classCode="CACT" moodCode="EVN">
+    <code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6" />
+    <effectiveTime value="20100324122837" />
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <statusCode code="active" />
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.511.1" extension="79653" assigningAuthorityName="HZLN" />
+            <statusCode code="active" />
+            <patientPerson classCode="PSN" determinerCode="INSTANCE">
+              <name use="L">
+                <family>Mueller</family>
+                <given>Hannes</given>
+              </name>
+              <name>
+                <family qualifier="BR">Mueller</family>
+              </name>
+              <telecom value="tel:022/843274" use="H" />
+              <administrativeGenderCode code="M" />
+              <birthTime value="19400101" />
+              <addr>
+                <country>DE</country>
+                <postalCode>57000</postalCode>
+                <city>Koeln</city>
+                <streetAddressLine>Am Domplatz 14</streetAddressLine>
+              </addr>
+            </patientPerson>
+            <subjectOf1>
+              <queryMatchObservation classCode="COND" moodCode="EVN">
+                <code code="IHE_PDQ" />
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="INT" value="50" />
+              </queryMatchObservation>
+            </subjectOf1>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.3" />
+          </assignedEntity>
+        </custodian>
+      </registrationEvent>
+    </subject>
+    <subject typeCode="SUBJ">
+      <registrationEvent classCode="REG" moodCode="EVN">
+        <statusCode code="active" />
+        <subject1 typeCode="SBJ">
+          <patient classCode="PAT">
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.411.1" extension="79471" assigningAuthorityName="HZLN" />
+            <id root="2.16.840.1.113883.3.37.4.1.1.2.511.1" extension="78912" assigningAuthorityName="PKLN" />
+            <statusCode code="active" />
+            <patientPerson classCode="PSN" determinerCode="INSTANCE">
+              <name use="L">
+                <family>Mueller</family>
+                <given>Hans</given>
+              </name>
+              <name>
+                <family qualifier="BR">Mueller</family>
+              </name>
+              <telecom value="tel:022/235715" use="H" />
+              <telecom value="tel:022/874491" use="H" />
+              <telecom value="tel:01732356265" use="H" />
+              <administrativeGenderCode code="M" />
+              <birthTime value="19400101" />
+              <addr>
+                <country>DE</country>
+                <postalCode>57000</postalCode>
+                <city>Koeln</city>
+                <streetAddressLine>Am Domplatz 1</streetAddressLine>
+              </addr>
+              <asOtherIDs classCode="PAT">
+                <id root="2.16.840.1.113883.4.1" extension="123-11-1234" />
+                <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id root="2.16.840.1.113883.4.1" />
+                </scopingOrganization>
+              </asOtherIDs>
+            </patientPerson>
+            <subjectOf1>
+              <queryMatchObservation classCode="COND" moodCode="EVN">
+                <code code="IHE_PDQ" />
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="INT" value="50" />
+              </queryMatchObservation>
+            </subjectOf1>
+          </patient>
+        </subject1>
+        <custodian typeCode="CST">
+          <assignedEntity classCode="ASSIGNED">
+            <id root="1.2.3" />
+          </assignedEntity>
+        </custodian>
+      </registrationEvent>
+    </subject>
+    <queryAck>
+      <queryId root="1.2.3.4.5" extension="1326231396750" />
+      <queryResponseCode code="OK" />
+      <resultTotalQuantity value="2" />
+      <resultCurrentQuantity value="2" />
+      <resultRemainingQuantity value="0" />
+    </queryAck>
+    <queryByParameter>
+      <queryId extension="1326231396750" root="1.2.3.4.5" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance" ns1:type="II" />
+      <statusCode code="new" />
+      <responseModalityCode code="R" />
+      <responsePriorityCode code="I" />
+      <initialQuantity value="30" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance" ns1:type="INT" />
+      <initialQuantityCode code="RD" />
+      <parameterList>
+        <id extension="1326231396714" root="bac7f21e-4b55-4fd2-be92-6ed0edf4ef88" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance" ns1:type="II" />
+        <livingSubjectName>
+          <value xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance" ns1:type="EN">
+            <given>CHIP</given>
+            <family>MOORE</family>
+          </value>
+          <semanticsText>LivingSubject.name</semanticsText>
+        </livingSubjectName>
+      </parameterList>
+    </queryByParameter>
+  </controlActProcess>
+</PRPA_IN201306UV02>
