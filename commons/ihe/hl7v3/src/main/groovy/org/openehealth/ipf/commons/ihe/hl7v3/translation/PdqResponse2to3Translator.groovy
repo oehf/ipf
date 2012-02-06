@@ -81,7 +81,8 @@ class PdqResponse2to3Translator extends AbstractHl7TranslatorV2toV3 {
         def output = new ByteArrayOutputStream()
         def builder = getBuilder(output)
 
-        def xml = slurp(origMessage)
+        GPathResult xml = slurp(origMessage)
+        xml.namespaceTagHints
 
         def messageTimestamp = dropTimeZone(rsp.MSH[7][1].value) ?: MessageUtils.hl7Now()
         def status = getStatusInformation(rsp, xml)

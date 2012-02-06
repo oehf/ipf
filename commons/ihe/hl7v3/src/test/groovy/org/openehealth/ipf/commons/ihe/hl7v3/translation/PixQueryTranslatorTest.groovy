@@ -54,4 +54,6 @@ class PixQueryTranslatorTest extends Hl7TranslationTestContainer {
 		String v3response = v2tov3Translator.translateV2toV3(abrakadapter, v3request)
         V3_VALIDATOR.validate(v3response, Hl7v3ValidationProfiles.getResponseValidationProfile(ITI_45))
 	}
+    
+   
 }

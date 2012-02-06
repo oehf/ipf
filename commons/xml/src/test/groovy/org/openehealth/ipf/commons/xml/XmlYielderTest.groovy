@@ -16,18 +16,18 @@
 package org.openehealth.ipf.commons.xml
 
 import static org.openehealth.ipf.commons.xml.XmlYielder.*
-
-import groovy.util.slurpersupport.GPathResult;
+import groovy.util.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
+
+import org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.XMLUnit
 import org.junit.BeforeClass
 import org.junit.Test
-
-import org.custommonkey.xmlunit.XMLUnit
-import org.custommonkey.xmlunit.Diff
 
 /**
  * Unit test for GPath-to-XMLBuilder content yielding.
  * @author Dmytro Rud
+ * @author Mitko Kolev
  */
 class XmlYielderTest {
 
@@ -47,7 +47,133 @@ class XmlYielderTest {
         return builder
     }
 
+    @Test
+    void testXmlYieldAtributeValueQnameXSIDefaultNamespace() {
+        def sourceText = '''
+            <!-- default NS with prefix -->
+            <urn:envelope xmlns="http://www.w3.org/2001/XMLSchema-instance" xmlns:urn="urn:hl7-org:v3">
+                <urn:element>
+                    <urn:child type="urn:II"/>
+                </urn:element>
+            </urn:envelope>
+        '''
+        def expected = '''
+            <rootElement xmlns="urn:hl7-org:v3">
+                <element>
+                    <child ns1:type="II" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance"/>
+                </element>
+            </rootElement>
+        '''
+        yieldAndAssertIdentical(expected, sourceText, false)
+    }
+
+    @Test
+    void testXmlYieldAtributeValueQname() {
+        def sourceText = '''
+            <urn:envelope xmlns:urn="urn:hl7-org:v3">
+                <element>
+                    <child xsi:type="urn:II" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                </element>
+            </urn:envelope>
+        '''
+        def expected = '''
+            <rootElement xmlns="urn:hl7-org:v3">
+                <element>
+                    <child ns1:type="II" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance"/>
+                </element>
+            </rootElement>
+        '''
+        yieldAndAssertIdentical(expected, sourceText, false)
+    }
     
+    @Test
+    void testXmlYieldAtributeValueQnameNoNamespacePrefix() {
+        def sourceText = '''
+            <envelope xmlns="urn:hl7-org:v3">
+                <element>
+                    <child xsi:type="II" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                </element>
+            </envelope>
+        '''
+        def expected = '''
+            <rootElement xmlns="urn:hl7-org:v3">
+                <element>
+                    <child ns1:type="II" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance"/>
+                </element>
+            </rootElement>
+        '''
+        yieldAndAssertIdentical(expected, sourceText, false)
+    }
+    
+    @Test
+    void testXmlYieldAtributeValueQnameNoNamespacePrefix2() {
+        def sourceText = '''
+            <envelope xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <element>
+                    <child xsi:type="II" />
+                </element>
+            </envelope>
+        '''
+        def expected = '''
+            <rootElement xmlns="urn:hl7-org:v3">
+                <element>
+                    <child ns1:type="II" xmlns:ns1="http://www.w3.org/2001/XMLSchema-instance"/>
+                </element>
+            </rootElement>
+        '''
+        yieldAndAssertIdentical(expected, sourceText, false)
+    }
+
+    @Test
+    void testAttributeNamespaceSpecified() {
+        def sourceText = '''
+            <urn:envelope xmlns:urn="urn:hl7-org:v3">
+                <element attrib="value" xmlns="abcd">
+                </element>
+            </urn:envelope>
+        '''
+        def expected = '''
+            <rootElement xmlns="urn:hl7-org:v3">
+               <ns1:element ns1:attrib="value" xmlns:ns1="abcd"/>
+            </rootElement>
+        '''
+        yieldAndAssertIdentical(expected, sourceText, false)
+    }
+
+    @Test
+    void testAttributeNamespaceSpecified2() {
+        def sourceText = '''
+            <urn:envelope xmlns:urn="urn:hl7-org:v3">
+                <element attrib="value" xmlns="abcd">
+                    <ns1:element2 ns1:attrib="value" xmlns:ns1="ns1"/>
+                </element>
+            </urn:envelope>
+        '''
+        def expected = '''
+            <rootElement xmlns="urn:hl7-org:v3">
+               <ns1:element ns1:attrib="value" xmlns:ns1="abcd">
+                   <ns2:element2 ns2:attrib="value" xmlns:ns2="ns1"/>
+               </ns1:element>
+            </rootElement>
+        '''
+        yieldAndAssertIdentical(expected, sourceText, false)
+    }
+    
+    @Test
+    void testAttributesNamespaceNotSpecified() {
+        def sourceText = '''
+            <urn:envelope xmlns:urn="urn:hl7-org:v3">
+                <element attrib="value"/>
+            </urn:envelope>
+        '''
+        def expected = '''
+            <rootElement xmlns="urn:hl7-org:v3">
+                <element attrib="value"/>
+            </rootElement>
+        '''
+        yieldAndAssertIdentical(expected, sourceText, false)
+    }
+
     @Test
     void testXmlYield() {
         def sourceText = '''
@@ -58,7 +184,7 @@ class XmlYielderTest {
                 <element attrib="value" xmlns="abcd">
 
                     <!-- default NS with prefix in an enemy context -->
-                    <urn:child1 /> 
+                    <urn:child1 />
 
                     <!-- locally defined NS with prefix -->
                     <prefix:child2 xmlns:prefix="http://utiputi">
@@ -74,12 +200,11 @@ class XmlYielderTest {
                 </element>
             </urn:envelope>
         '''
-        
-        def expectedTargetText = '''
+        def expected = '''
             <rootElement xmlns="urn:hl7-org:v3">
                 <childElement>
-                    <ns1:element attrib="value" xmlns:ns1="abcd">
-                        <child1></child1> 
+                    <ns1:element ns1:attrib="value" xmlns:ns1="abcd">
+                        <child1></child1>
                         <ns2:child2 xmlns:ns2="http://utiputi">
                             text content
                         </ns2:child2>
@@ -91,26 +216,28 @@ class XmlYielderTest {
                 </childElement>
             </rootElement>
         '''
+        yieldAndAssertIdentical(expected, sourceText, true)
+    }
 
-
-        // prepare
-        GPathResult source = new XmlSlurper(false, true).parseText(sourceText)
+    private yieldAndAssertIdentical(String expected, String yielded, boolean useChildElement) {
+        GPathResult source = new XmlSlurper(false, true).parseText(yielded)
         Writer writer = new StringWriter()
         MarkupBuilder builder = getBuilder(writer)
-        
-        // test per se
-        String defaultNs = 'urn:hl7-org:v3' 
+
+        String defaultNs = 'urn:hl7-org:v3'
         builder.rootElement(xmlns: defaultNs) {
-            childElement {
+            if (useChildElement){
+                childElement {
+                    yieldElement(source.element, builder, defaultNs)
+                }
+            } else {
                 yieldElement(source.element, builder, defaultNs)
             }
         }
-
-        Diff diff = new Diff(expectedTargetText, writer.toString())
+        Diff diff = new Diff(expected, writer.toString())
         assert diff.identical()
     }
-    
-    
+
     @Test
     void testMissingSource() {
         GPathResult source = new XmlSlurper(false, true).parseText('<abc />')
@@ -120,5 +247,4 @@ class XmlYielderTest {
         yieldChildren(source, builder, 'urn:dummy-ns')
         assert writer.toString() == '<element />'
     }
-
 }
