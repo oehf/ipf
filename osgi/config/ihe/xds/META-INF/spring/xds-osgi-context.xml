@@ -8,8 +8,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.springframework.org/schema/osgi
 http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
-    <osgi:reference id="osgiServlet" bean-name="osgiServlet" interface="javax.servlet.Servlet"/>
-
     <osgi:service ref="xds-iti14" interface="org.apache.camel.Component"/>
 
     <osgi:service ref="xds-iti15" interface="org.apache.camel.Component"/>
