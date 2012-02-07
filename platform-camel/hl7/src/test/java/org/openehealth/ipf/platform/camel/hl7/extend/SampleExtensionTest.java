@@ -81,7 +81,7 @@ public class SampleExtensionTest extends AbstractExtensionTest {
     }
     
     private static <T extends AbstractMessage>  MessageAdapter<T> inputMessage(String resource) {
-        return MessageAdapters.loadUtf8(resource);
+        return MessageAdapters.load(resource);
     }
     
 }

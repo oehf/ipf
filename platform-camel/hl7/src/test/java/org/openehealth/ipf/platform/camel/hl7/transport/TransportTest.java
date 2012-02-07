@@ -70,7 +70,7 @@ public class TransportTest {
     }
 
     private static <T extends AbstractMessage>  MessageAdapter<T> inputMessage(String resource) {
-        return MessageAdapters.loadUtf8(resource);
+        return MessageAdapters.load(resource);
     }
     
 }

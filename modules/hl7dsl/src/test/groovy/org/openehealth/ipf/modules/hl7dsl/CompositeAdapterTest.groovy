@@ -27,7 +27,7 @@ class CompositeAdapterTest extends GroovyTestCase {
     MessageAdapter<ADT_A01> msg
     
     void setUp() {
-        msg = loadUtf8('msg-01.hl7')
+        msg = load('msg-01.hl7')
         composite = msg.NK1(0)[4]
     }
     

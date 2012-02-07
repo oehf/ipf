@@ -28,7 +28,7 @@ class TypeAdapterTest extends GroovyTestCase{
     SegmentAdapter obx2
     SegmentAdapter obx3
     SegmentAdapter obr
-    MessageAdapter<ORU_R01> msg2 = loadUtf8('msg-02.hl7')
+    MessageAdapter<ORU_R01> msg2 = load('msg-02.hl7')
     
     void setUp() {
         obr = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBR

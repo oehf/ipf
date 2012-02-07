@@ -26,8 +26,8 @@ class VariesAdapterTest extends GroovyTestCase {
     def msg2
 
     void setUp() {
-        msg1 = loadUtf8('msg-05.hl7')
-        msg2 = loadUtf8('msg-02.hl7')
+        msg1 = load('msg-05.hl7')
+        msg2 = load('msg-02.hl7')
     }
 
     //TODO Organize tests by classes, not by usage;

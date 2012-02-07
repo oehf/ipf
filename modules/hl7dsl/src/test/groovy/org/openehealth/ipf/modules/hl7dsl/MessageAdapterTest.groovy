@@ -16,7 +16,7 @@
 package org.openehealth.ipf.modules.hl7dsl
 
 import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.make
-import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.loadUtf8
+import static org.openehealth.ipf.modules.hl7dsl.MessageAdapters.load
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 /**
@@ -27,13 +27,13 @@ class MessageAdapterTest extends GroovyTestCase {
     MessageAdapter<ADT_A01> msg;
     
     void setUp() {
-        msg = loadUtf8('msg-01.hl7')
+        msg = load('msg-01.hl7')
 
     }
 
     void testMakeStream() {
         def stream = getClass().classLoader.getResource('msg-01.hl7').openStream()
-        MessageAdapter<ADT_A01> result = make(stream, 'UTF-8');
+        MessageAdapter<ADT_A01> result = make(stream)
 		
         assert result.MSH[4].value == 'HZL'
     }

@@ -29,7 +29,7 @@ class GroupAdapterTest extends GroovyTestCase {
     MessageAdapter<ORU_R01> message
     
     void setUp() {
-        message = loadUtf8('msg-02.hl7')
+        message = load('msg-02.hl7')
     }
     
     void testInvokeMethod() {
