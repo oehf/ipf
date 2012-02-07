@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.xml
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.Node
 import groovy.xml.MarkupBuilder
+import javax.xml.XMLConstants
 
 /**
  * Routines for yielding of XML contents from a {@link GPathResult GPath object} 
@@ -25,7 +26,7 @@ import groovy.xml.MarkupBuilder
  * @author Dmytro Rud
  */
 class XmlYielder {
-    private static final String DEFAULT_NS_PREFIX = ''
+    private static final String EMPTY_NS_PREFIX = ''
     
     /**
      * Yields the XML element represented by the given GPath result instance 
@@ -54,65 +55,58 @@ class XmlYielder {
         knownNamespaces.putAll(predefinedNamespaces)
 
         String elementNsPrefix = getNsPrefix(source.namespaceURI(), knownNamespaces, attributes)
-        String namespaceUri = source.namespaceURI();
-        
-        Map attributeNamespaces = source.attributeNamespaces;
-        
-        for(Map<String, String> attribute in source.attributes()) {
-            String attributeNsUri = lookupNsUri(origin, attributeNamespaces.get(attribute.key))
-            
-            String attributeNsPrefix
-            if (elementNsPrefix && (knownNamespaces[attributeNsUri] == '*')) {
-                // attribute with the default namespace inside of an element with a custom namespace 
-                attributeNsPrefix = createNsPrefix(attributeNsUri, knownNamespaces, attributes)
-            } else {
-                attributeNsPrefix = getNsPrefix(attributeNsUri, knownNamespaces, attributes)
-            }
-            
-            String attributeName = attribute.key
-            String attributeValue = attribute.value
-            
-            if (isXSITypeInAttributeValue(attributeNsUri, attributeName)){
-               attributeValue = updateNsPrefixInAttributeValue(origin, attributeValue, attributes, knownNamespaces)                                                      
-            } 
-            
-            attributes[attributeNsPrefix + attributeName] = attributeValue
+
+        for(Map.Entry<String, String> attribute in source.attributes()) {
+            String attributeNsUri = source.attributeNamespaces[attribute.key] ?: origin.lookupNamespace(EMPTY_NS_PREFIX)
+
+            String attributeNsPrefix = (elementNsPrefix && (knownNamespaces[attributeNsUri] == '*')) ?
+                // attribute with the default namespace inside of an element with a custom namespace
+                createNsPrefix(attributeNsUri, knownNamespaces, attributes) :
+                getNsPrefix(attributeNsUri, knownNamespaces, attributes)
+
+            boolean isXsiTypeAttribute = ((attributeNsUri == XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI) && (attribute.key == 'type'))
+
+            attributes[attributeNsPrefix + attribute.key] = isXsiTypeAttribute ?
+                normalizeXsiTypeAttribute(origin, attribute.value, attributes, knownNamespaces) :
+                attribute.value
         }
 
-        target."${elementNsPrefix + source.name()}"(attributes) { 
+        target."${elementNsPrefix}${source.name()}"(attributes) {
             yieldChildren(origin, source, target, knownNamespaces)
         }
     }
-    
-    private static String lookupNsUri(GPathResult origin, String attributeNsUri){
-        attributeNsUri != null? attributeNsUri: origin.lookupNamespace(DEFAULT_NS_PREFIX);
-    }
+
 
     /**
-     * Updates the namespace prefix in attribute values <br>
-     * For example, for attribute value <b>xsi:type="ns1:II", ns1="http:some.namespace.uri"</b>
-     * the method returns <b>xsi:type="II"</b>, where <b>"http:some.namespace.uri"</b> is the default namespace.  
+     * Updates the namespace prefix in attribute values. <br>
+     * For example, for attribute value <b>xsi:type="ns1:II", ns1="http://some.namespace.uri"</b>
+     * the method returns <b>xsi:type="II"</b>, where <b>"http://some.namespace.uri"</b>
+     * is the default namespace.
      */
-    private static String updateNsPrefixInAttributeValue(GPathResult origin, 
-                                                 String attributeValue, 
-                                                 Map<String, String> attributes, 
-                                                 Map<String, String> knownNamespaces){
-        def nsPrefixAndType = attributeValue.split(':')
-        def nsPrefix = nsPrefixAndType.size() == 1? DEFAULT_NS_PREFIX :  nsPrefixAndType[0]
-        def type = nsPrefixAndType.size() == 1? nsPrefixAndType[0] : nsPrefixAndType[1]
+    private static String normalizeXsiTypeAttribute(
+            GPathResult origin,
+            String attributeValue,
+            Map<String, String> attributes,
+            Map<String, String> knownNamespaces)
+    {
+        String nsPrefix, typeName
+
+        int pos = attributeValue.indexOf(':')
+        if (pos > 0) {
+            nsPrefix = attributeValue.substring(0, pos)
+            typeName = attributeValue.substring(pos + 1)
+        } else {
+            nsPrefix = EMPTY_NS_PREFIX
+            typeName = attributeValue
+        }
+
         // Use the GPathResult to resolve the namespace uri
-        def nsUri = origin.lookupNamespace(nsPrefix)
-        
-        def newNsPrefix = getNsPrefix(nsUri, knownNamespaces, attributes)
-        return newNsPrefix + type
+        String nsUri = origin.lookupNamespace(nsPrefix)
+        String newNsPrefix = getNsPrefix(nsUri, knownNamespaces, attributes)
+        return newNsPrefix + typeName
     }
                                                  
-    private static Boolean isXSITypeInAttributeValue(String attributeUri, String attributeName){
-        return 'http://www.w3.org/2001/XMLSchema-instance' == attributeUri && 
-               attributeName == 'type' 
-    }
-    
-    
+
     /**
      * Yields child elements of the given source XML element into the given target 
      * XML builder, using the provided set of pre-defined namespace prefixes.
@@ -154,7 +148,7 @@ class XmlYielder {
         if (nsUri && !prefix) {
             prefix = createNsPrefix(nsUri, knownNamespaces, attributes)
         }
-        return (prefix && (prefix != '*')) ? prefix : DEFAULT_NS_PREFIX 
+        return (prefix && (prefix != '*')) ? prefix : EMPTY_NS_PREFIX
     }
 
 
