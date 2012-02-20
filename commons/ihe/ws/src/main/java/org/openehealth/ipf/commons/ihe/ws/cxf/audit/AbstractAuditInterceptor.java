@@ -48,7 +48,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
     public static final String DATASET_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".DATASET";
 
     /**
-     * Key used to store audit datasets in Web Service contexts.
+     * Key used to find XUA user name tokens in Web Service contexts.
      */
     public static final String XUA_USERNAME_CONTEXT_KEY = AbstractAuditInterceptor.class.getName() + ".XUA_USERNAME";
 

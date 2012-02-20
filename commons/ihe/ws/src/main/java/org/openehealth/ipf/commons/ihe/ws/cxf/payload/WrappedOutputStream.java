@@ -50,18 +50,6 @@ public class WrappedOutputStream extends FilterOutputStream {
 
 
     /**
-     * Returns the collected message payload and deactivates
-     * any further data collecting.
-     * @return SOAP payload as a <code>String</code>.
-     */
-    @Deprecated
-    public String getCollectedPayloadAndDeactivate() {
-        deactivate();
-        return getCollectedPayload();
-    }
-
-
-    /**
      * Returns the collected message payload.
      * @return SOAP payload as XML String.
      */

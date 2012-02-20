@@ -70,6 +70,10 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
 
     @Override
     public void handleMessage(Message message) {
+        if (isGET(message)) {
+            return;
+        }
+
         // extract current message contents from the stream,
         // substitute the used stream by an again-usable one.
         byte[] bytes;

@@ -43,6 +43,10 @@ public class AuditInRequestInterceptor extends AbstractAuditInterceptor {
     
     @Override
     protected void process(SoapMessage message) throws Exception {
+        if (isGET(message)) {
+            return;
+        }
+
         WsAuditDataset auditDataset = getAuditDataset(message);
         extractAddressesFromServletRequest(message, auditDataset);
         extractXuaUserNameFromSaml2Assertion(message, auditDataset);
