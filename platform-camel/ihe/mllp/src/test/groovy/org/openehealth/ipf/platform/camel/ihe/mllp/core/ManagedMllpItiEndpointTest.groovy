@@ -30,12 +30,12 @@ public class ManagedMllpItiEndpointTest extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'some-mllp-iti-context.xml'
 
     static void main(args) {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, true)
     }
 
     @BeforeClass
     static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, false)
     }
 
     @Test

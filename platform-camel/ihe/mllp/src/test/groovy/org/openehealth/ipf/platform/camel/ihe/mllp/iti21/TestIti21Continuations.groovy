@@ -37,12 +37,12 @@ class TestIti21Continuations extends MllpTestContainer {
     'RCP|I|1^RD|||||\n'
     
     static void main(args) {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, true)
     }
     
     @BeforeClass
     static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, false)
     }
     
     static String endpointUri(

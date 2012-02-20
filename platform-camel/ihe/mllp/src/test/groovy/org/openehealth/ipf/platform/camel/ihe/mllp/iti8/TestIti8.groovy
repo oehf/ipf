@@ -41,12 +41,12 @@ class TestIti8 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti8/iti-8.xml'
     
     static void main(args) {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, true)
     }
     
     @BeforeClass
     static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, false)
     }
     
     // -----------------------------------

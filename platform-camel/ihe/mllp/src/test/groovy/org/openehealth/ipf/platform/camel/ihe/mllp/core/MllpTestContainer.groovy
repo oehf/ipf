@@ -47,7 +47,7 @@ class MllpTestContainer {
     /**
      * Initializes a test on the basis of a Spring descriptor.
      */
-    def static init(String descriptorFile) {
+    def static init(String descriptorFile, boolean standalone) {
         appContext = new ClassPathXmlApplicationContext(descriptorFile)
         producerTemplate = appContext.getBean('template', ProducerTemplate.class)
         camelContext = appContext.getBean('camelContext', CamelContext.class)
@@ -62,6 +62,10 @@ class MllpTestContainer {
         AuditorModuleContext.context.config.auditRepositoryPort = 514
         AuditorModuleContext.context.config.auditSourceId = 'audit-source-id'
         AuditorModuleContext.context.config.auditEnterpriseSiteId = 'audit-enterprise-site-id'
+
+        if (standalone) {
+            Thread.currentThread().join()
+        }
     }
     
     @After

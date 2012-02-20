@@ -40,12 +40,12 @@ class TestIti22 extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti22/iti-22.xml'
     
     static void main(args) {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, true)
     }
     
     @BeforeClass
     static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, false)
     }
     
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
