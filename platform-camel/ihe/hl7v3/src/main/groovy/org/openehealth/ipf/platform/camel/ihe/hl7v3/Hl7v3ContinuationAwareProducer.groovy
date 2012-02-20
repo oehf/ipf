@@ -46,10 +46,6 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  * <p>
  * Format of continuation messages is described, for example,
  * in the IHE PIXv3/PDQv3 Supplement August 2010, pp. 85-87 and 117-119.
- * <p>
- * The class is parametrized with <code>&lt;Object, Object&gt;</code> 
- * due to Groovy peculiarities, in reality is should be
- * <code>&lt;String, String&gt;</code>.
  */
 class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<String, String> {
     private static final transient Log LOG = LogFactory.getLog(Hl7v3ContinuationAwareProducer.class)
