@@ -36,12 +36,12 @@ class TestIti8Datatypes extends MllpTestContainer {
     def static CONTEXT_DESCRIPTOR = 'iti8/iti-8-datatypes.xml'
     
     def static main(args) {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, true)
     }
     
     @BeforeClass
     static void setUpClass() {
-        init(CONTEXT_DESCRIPTOR)
+        init(CONTEXT_DESCRIPTOR, false)
     }
     
     /**
