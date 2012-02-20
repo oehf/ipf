@@ -13,25 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v3
-
-import javax.xml.parsers.DocumentBuilder
-import javax.xml.parsers.DocumentBuilderFactory
+package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 /**
- * Thread local for DOM document builders.
  * @author Dmytro Rud
  */
-class DomBuildersThreadLocal extends ThreadLocal<DocumentBuilder> {
-    DocumentBuilder initialValue() {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        return factory.newDocumentBuilder();
-    }
+public interface Hl7v3ContinuationStorage {
+    void storeMessage(String key, String message);
+    String getMessage(String key);
 
-    DocumentBuilder get() {
-        DocumentBuilder builder = (DocumentBuilder) super.get();
-        builder.reset();
-        return builder;
-    }
+    void storeLastResultNumber(String key, int lastResultNumber);
+    int getLastResultNumber(String key);
+
+    void storeContinuationQuantity(String key, int continuationQuantity);
+    int getContinuationQuantity(String key);
+
+    boolean remove(String key);
 }
