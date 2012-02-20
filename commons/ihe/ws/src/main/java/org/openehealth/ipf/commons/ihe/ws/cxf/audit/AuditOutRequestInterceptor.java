@@ -52,6 +52,10 @@ public class AuditOutRequestInterceptor extends AbstractAuditInterceptor {
     
     @Override
     protected void process(SoapMessage message) throws Exception {
+        if (isGET(message)) {
+            return;
+        }
+
         WsAuditDataset auditDataset = getAuditDataset(message);
         auditDataset.setServiceEndpointUrl((String) message.get(Message.ENDPOINT_ADDRESS));
 

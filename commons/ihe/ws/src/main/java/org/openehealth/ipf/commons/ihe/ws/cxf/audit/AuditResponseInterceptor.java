@@ -88,6 +88,10 @@ public class AuditResponseInterceptor extends AbstractAuditInterceptor {
 
     @Override
     protected void process(SoapMessage message) throws Exception {
+        if (isGET(message)) {
+            return;
+        }
+
         // partial responses are for us out of interest
         if (MessageUtils.isPartialResponse(message)) {
             return;

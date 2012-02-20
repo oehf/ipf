@@ -51,6 +51,10 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
 
     @Override
     public void handleMessage(Message message) throws Fault {
+        if (isGET(message)) {
+            return;
+        }
+
         StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
         if (payloadHolder != null) {
             String payload = payloadHolder.get(SOAP_BODY);
@@ -134,9 +138,9 @@ public class InNamespaceMergeInterceptor extends AbstractPhaseInterceptor<Messag
             // insert remained definitions (if any)
             if (!namespaces.isEmpty()) {
                 StringBuilder sb = new StringBuilder(startTag);
-                for (String prefix : namespaces.keySet()) {
-                    sb.append(" xmlns:").append(prefix).append("=\"")
-                      .append(namespaces.get(prefix)).append('"');
+                for (Map.Entry<String, String> ns : namespaces.entrySet()) {
+                    sb.append(" xmlns:").append(ns.getKey()).append("=\"")
+                      .append(ns.getValue()).append('"');
                 }
                 sb.append(target.substring(endPos));
                 return sb.toString();

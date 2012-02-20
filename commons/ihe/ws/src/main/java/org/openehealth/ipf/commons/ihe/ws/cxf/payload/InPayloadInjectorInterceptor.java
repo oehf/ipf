@@ -50,6 +50,10 @@ public class InPayloadInjectorInterceptor extends AbstractPhaseInterceptor<Messa
     @SuppressWarnings("unchecked")
     @Override
     public void handleMessage(Message message) {
+        if (isGET(message)) {
+            return;
+        }
+
         List list = message.getContent(List.class);
         StringPayloadHolder payloadHolder = message.getContent(StringPayloadHolder.class);
         if ((list != null) && (payloadHolder != null)) {

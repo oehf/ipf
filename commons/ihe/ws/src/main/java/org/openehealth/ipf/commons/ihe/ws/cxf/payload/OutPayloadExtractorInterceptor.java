@@ -48,6 +48,10 @@ public class OutPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mes
 
     @Override
     public void handleMessage(Message message) {
+        if (isGET(message)) {
+            return;
+        }
+
         WrappedOutputStream wrapper = OutStreamSubstituteInterceptor.getStreamWrapper(message);
         if (! Boolean.FALSE.equals(message.getContextualProperty(PAYLOAD_COLLECTING_DEACTIVATION_ENABLED))) {
             wrapper.deactivate();
