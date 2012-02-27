@@ -40,12 +40,7 @@ public class MessageRuleBuilder extends VersionBuilder{
 		this.triggerEvent = triggerEvent
 	}
     
-    @Deprecated
 	MessageRuleBuilder checkIf(Closure c) {
-        checkMessageWithClosure(c)
-	}
-	
-    MessageRuleBuilder checkMessageWithClosure(Closure c) {
         if (!rule) {
             rule = new ClosureMessageRule(c)
             addMessageRule(rule)
@@ -53,7 +48,7 @@ public class MessageRuleBuilder extends VersionBuilder{
             rule.testClosure = c
         }
         this
-    }
+	}
 
     PrimitiveRuleBuilder checkPrimitive(String name){
         return new PrimitiveRuleBuilder(version, context, name)
