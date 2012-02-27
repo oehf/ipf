@@ -22,7 +22,6 @@ import ca.uhn.hl7v2.model.v25.message.QCN_J01;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.apache.camel.Producer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
@@ -30,7 +29,8 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.List;
 
@@ -41,18 +41,21 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
 /**
  * Producer-side Hl7 marshalling/unmarshalling interceptor 
  * with support for interactive continuation.
+ * <p>
+ * Note that this interceptor has the same ID as {@link ProducerMarshalInterceptor}.
+ *
  * @author Dmytro Rud
  */
-public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpProducerInterceptor {
+public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends AbstractMllpInterceptor {
     private static final transient Log LOG = LogFactory.getLog(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
-    
-    public ProducerMarshalAndInteractiveResponseReceiverInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
-        super(endpoint, wrappedProducer);
+
+    public ProducerMarshalAndInteractiveResponseReceiverInterceptor() {
+        setId(ProducerMarshalInterceptor.class.getName());
     }
 
-    
+
     /**
-     * Marshals the request, sends it to the route, and unmarshals the response. 
+     * Marshals the request, sends it to the route, and unmarshals the response.
      */
     @Override
     public void process(Exchange exchange) throws Exception {

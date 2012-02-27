@@ -16,12 +16,12 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.mbean;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 
-public class DummyInterceptor implements MllpCustomInterceptor {
+public class DummyInterceptor extends AbstractHl7v2Interceptor {
+
     @Override
-    public void process(Processor wrappedProcessor, Exchange exchange) throws Exception {
-        wrappedProcessor.process(exchange);
+    public void process(Exchange exchange) throws Exception {
+        getWrappedProcessor().process(exchange);
     }
 }

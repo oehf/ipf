@@ -25,8 +25,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 
 import javax.net.ssl.SSLContext;
 import java.nio.charset.Charset;
@@ -152,8 +152,8 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
                 SSLContext.class,
                 SSLContext.getDefault()) : null;
 
-        List<MllpCustomInterceptor> customInterceptors = resolveAndRemoveReferenceListParameter(
-                parameters, "interceptors", MllpCustomInterceptor.class);
+        List<AbstractHl7v2Interceptor> customInterceptors = resolveAndRemoveReferenceListParameter(
+                parameters, "interceptors", AbstractHl7v2Interceptor.class);
 
         String[] sslProtocols = sslProtocolsString != null ? sslProtocolsString.split(",") : null;
         String[] sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept;
 
-import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 
@@ -24,19 +23,11 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
  * Abstract Camel interceptor for MLLP-based HL7v2 transactions.
  * @author Dmytro Rud
  */
-public abstract class AbstractMllpInterceptor extends AbstractHl7v2Interceptor {
-
-    /**
-     * Constructor.
-     * @param endpoint
-     *      The Camel endpoint to which this interceptor belongs.
-     * @param wrappedProcessor
-     *      Original camel-mina processor.
-     */
-    public AbstractMllpInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        super(endpoint, wrappedProcessor);
-    }
-
+public abstract class AbstractMllpInterceptor
+        extends AbstractHl7v2Interceptor
+        implements MllpInterceptor
+{
+    @Override
     public MllpEndpoint getMllpEndpoint() {
         return (MllpEndpoint) getConfigurationHolder();
     }

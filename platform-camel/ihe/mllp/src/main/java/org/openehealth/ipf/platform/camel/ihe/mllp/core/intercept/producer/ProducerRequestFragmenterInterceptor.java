@@ -17,12 +17,11 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.apache.camel.Producer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.List;
 
@@ -34,14 +33,10 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * fragmentation as described in paragraph 2.10.2.2 of the HL7 v.2.5 specification.
  * @author Dmytro Rud
  */
-public class ProducerRequestFragmenterInterceptor extends AbstractMllpProducerInterceptor {
+public class ProducerRequestFragmenterInterceptor extends AbstractMllpInterceptor {
     private static final transient Log LOG = LogFactory.getLog(ProducerRequestFragmenterInterceptor.class);
     
-    public ProducerRequestFragmenterInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
-        super(endpoint, wrappedProducer);
-    }
 
-    
     @Override
     public void process(Exchange exchange) throws Exception {
         int threshold = getMllpEndpoint().getUnsolicitedFragmentationThreshold();

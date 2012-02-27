@@ -17,11 +17,9 @@ package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.Processor;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtils;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 
@@ -31,10 +29,6 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpIn
  * @author Dmytro Rud
  */
 public class ConsumerStringProcessingInterceptor extends AbstractMllpInterceptor {
-
-    public ConsumerStringProcessingInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        super(endpoint, wrappedProcessor);
-    }
 
     @Override
     public void process(Exchange exchange) throws Exception {

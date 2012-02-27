@@ -18,13 +18,11 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 
@@ -41,13 +39,6 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  */
 public class ConsumerMarshalInterceptor extends AbstractHl7v2Interceptor {
     private static final transient Log LOG = LogFactory.getLog(ConsumerMarshalInterceptor.class);
-
-    public ConsumerMarshalInterceptor(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Processor wrappedProcessor)
-    {
-        super(configurationHolder, wrappedProcessor);
-    }
 
 
     /**

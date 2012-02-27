@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
 import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.AckTypeCode;
@@ -26,7 +24,6 @@ import org.openehealth.ipf.modules.hl7.HL7v2Exception;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 
@@ -51,20 +48,11 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      * The given value will be propagated to the Camel exchange property
      * {@link Exchange#CHARSET_NAME}, rewriting its old content.
      *
-     * @param configurationHolder
-     *      HL7v2 configuration holder.
-     * @param wrappedProcessor
-     *      wrapped Camel processor.
      * @param charsetName
      *      character set to use in all data transformations.
      */
-    public ConsumerAdaptingInterceptor(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Processor wrappedProcessor,
-            String charsetName)
-    {
-        super(configurationHolder, wrappedProcessor);
-        Validate.notEmpty(charsetName);
+    public ConsumerAdaptingInterceptor(String charsetName) {
+        super();
         this.charsetName = charsetName;
     }
 
@@ -73,18 +61,9 @@ public class ConsumerAdaptingInterceptor extends AbstractHl7v2Interceptor {
      * Constructor which does not enforce the use of a particular character set.
      * When the Camel exchange does not contain property {@link Exchange#CHARSET_NAME},
      * the default system character set will be used.
-     *
-     * @param configurationHolder
-     *      HL7v2 configuration holder.
-     * @param wrappedProcessor
-     *      wrapped Camel processor.
      */
-    public ConsumerAdaptingInterceptor(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Processor wrappedProcessor)
-    {
-        super(configurationHolder, wrappedProcessor);
-        charsetName = null;
+    public ConsumerAdaptingInterceptor() {
+        this(null);
     }
 
     

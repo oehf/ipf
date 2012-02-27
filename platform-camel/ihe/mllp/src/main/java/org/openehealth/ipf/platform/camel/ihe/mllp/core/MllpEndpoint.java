@@ -15,19 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.SSLContext;
-
-import org.apache.camel.CamelContext;
-import org.apache.camel.Component;
-import org.apache.camel.Consumer;
-import org.apache.camel.Exchange;
-import org.apache.camel.ExchangePattern;
-import org.apache.camel.PollingConsumer;
-import org.apache.camel.Processor;
-import org.apache.camel.Producer;
+import org.apache.camel.*;
 import org.apache.camel.api.management.ManagedAttribute;
 import org.apache.camel.api.management.ManagedResource;
 import org.apache.camel.component.mina.MinaConfiguration;
@@ -41,6 +29,9 @@ import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.ChainUtils;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerInputAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
@@ -49,17 +40,16 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerA
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.CustomInterceptorWrapper;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuthenticationFailureInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInteractiveResponseSenderInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerRequestDefragmenterInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerStringProcessingInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerRequestFragmenterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerStringProcessingInterceptor;
+
+import javax.net.ssl.SSLContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A wrapper for standard camel-mina endpoint 
@@ -75,7 +65,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     private final boolean allowIncompleteAudit;
 
     private final SSLContext sslContext;
-    private final List<MllpCustomInterceptor> customInterceptors;
+    private final List<AbstractHl7v2Interceptor> customInterceptors;
     private final ClientAuthType clientAuthType;
     private final String[] sslProtocols;
     private final String[] sslCiphers;
@@ -89,6 +79,9 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     private final InteractiveContinuationStorage interactiveContinuationStorage;
     private final UnsolicitedFragmentationStorage unsolicitedFragmentationStorage;
     private final boolean autoCancel;
+
+    private List<AbstractHl7v2Interceptor> consumerInterceptorChain;
+    private List<AbstractHl7v2Interceptor> producerInterceptorChain;
 
     /**
      * Constructor.
@@ -117,9 +110,9 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      * @param supportSegmentFragmentation
      *      {@code true} when this endpoint should support segment fragmentation.
      * @param interactiveContinuationDefaultThreshold
-     *      default consumer-side threshold for interactive response continuation. 
+     *      default consumer-side threshold for interactive response continuation.
      * @param unsolicitedFragmentationThreshold
-     *      producer-side threshold for unsolicited message fragmentation. 
+     *      producer-side threshold for unsolicited message fragmentation.
      * @param segmentFragmentationThreshold
      *      threshold for segment fragmentation.
      * @param interactiveContinuationStorage
@@ -132,13 +125,13 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      */
     public MllpEndpoint(
             MllpComponent mllpComponent,
-            MinaEndpoint wrappedEndpoint, 
-            boolean audit, 
-            boolean allowIncompleteAudit, 
+            MinaEndpoint wrappedEndpoint,
+            boolean audit,
+            boolean allowIncompleteAudit,
             SSLContext sslContext,
             ClientAuthType clientAuthType,
-            List<MllpCustomInterceptor> customInterceptors, 
-            String[] sslProtocols, 
+            List<AbstractHl7v2Interceptor> customInterceptors,
+            String[] sslProtocols,
             String[] sslCiphers,
             boolean supportInteractiveContinuation,
             boolean supportUnsolicitedFragmentation,
@@ -164,7 +157,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
         this.customInterceptors = customInterceptors;
         this.sslProtocols = sslProtocols;
         this.sslCiphers = sslCiphers;
-        
+
         this.supportInteractiveContinuation = supportInteractiveContinuation;
         this.supportUnsolicitedFragmentation = supportUnsolicitedFragmentation;
         this.supportSegmentFragmentation = supportSegmentFragmentation;
@@ -177,19 +170,71 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     }
 
 
+    private List<AbstractHl7v2Interceptor> getConsumerInterceptorChain() {
+        if (consumerInterceptorChain == null) {
+            // set up initial interceptor chain
+            List<AbstractHl7v2Interceptor> initialChain = new ArrayList<AbstractHl7v2Interceptor>();
+            initialChain.add(new ConsumerStringProcessingInterceptor());
+            if (isSupportUnsolicitedFragmentation()) {
+                initialChain.add(new ConsumerRequestDefragmenterInterceptor());
+            }
+            initialChain.add(new ConsumerMarshalInterceptor());
+            initialChain.add(new ConsumerInputAcceptanceInterceptor());
+            if (isSupportInteractiveContinuation()) {
+                initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
+            }
+            if (isAudit()) {
+                initialChain.add(new ConsumerAuditInterceptor());
+            }
+            initialChain.add(new ConsumerOutputAcceptanceInterceptor());
+            initialChain.add(new ConsumerAdaptingInterceptor(getConfiguration().getCharsetName()));
+            if (isAudit()) {
+                initialChain.add(new ConsumerAuthenticationFailureInterceptor());
+            }
+
+            // add interceptors provided by the user
+            consumerInterceptorChain = ChainUtils.createChain(initialChain, customInterceptors);
+        }
+        return consumerInterceptorChain;
+    }
+
+
+    private List<AbstractHl7v2Interceptor> getProducerInterceptorChain() {
+        if (producerInterceptorChain == null) {
+            // set up initial interceptor chain
+            List<AbstractHl7v2Interceptor> initialChain = new ArrayList<AbstractHl7v2Interceptor>();
+            initialChain.add(new ProducerStringProcessingInterceptor());
+            if (isSupportUnsolicitedFragmentation()) {
+                initialChain.add(new ProducerRequestFragmenterInterceptor());
+            }
+            initialChain.add(isSupportInteractiveContinuation()
+                    ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor()
+                    : new ProducerMarshalInterceptor());
+            initialChain.add(new ProducerOutputAcceptanceInterceptor());
+            if (isAudit()) {
+                initialChain.add(new ProducerAuditInterceptor());
+            }
+            initialChain.add(new ProducerInputAcceptanceInterceptor());
+            initialChain.add(new ProducerAdaptingInterceptor());
+
+            // add interceptors provided by the user
+            producerInterceptorChain = ChainUtils.createChain(initialChain, customInterceptors);
+        }
+        return producerInterceptorChain;
+    }
+
+
     /**
      * Wraps the original starting point of the consumer route 
      * into a set of PIX/PDQ-specific interceptors.
-     * @param processor
-     *      The original consumer processor.  
+     * @param originalProcessor
+     *      The original consumer processor.
      */
     @Override
-    public Consumer createConsumer(Processor processor) throws Exception {
-        final String charsetName = getConfiguration().getCharsetName();
-
+    public Consumer createConsumer(Processor originalProcessor) throws Exception {
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getAcceptorConfig().getFilterChain();
-            if (!filterChain.contains("ssl")) {
+            if (! filterChain.contains("ssl")) {
                 HandshakeCallbackSSLFilter filter = new HandshakeCallbackSSLFilter(sslContext);
                 filter.setNeedClientAuth(clientAuthType == ClientAuthType.MUST);
                 filter.setWantClientAuth(clientAuthType == ClientAuthType.WANT);
@@ -200,28 +245,17 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             }
         }
 
-        Processor x = processor;
-        for (MllpCustomInterceptor interceptor : customInterceptors) {
-            x = new CustomInterceptorWrapper(interceptor, this, x);
+        // configure interceptor chain
+        List<AbstractHl7v2Interceptor> chain = getConsumerInterceptorChain();
+        Processor processor = originalProcessor;
+        for (int i = chain.size() - 1; i >= 0; --i) {
+            AbstractHl7v2Interceptor interceptor = chain.get(i);
+            interceptor.setConfigurationHolder(this);
+            interceptor.setWrappedProcessor(processor);
+            processor = interceptor;
         }
-        if (isAudit()) {
-            x = new ConsumerAuthenticationFailureInterceptor(this, x);
-        }
-        x = new ConsumerAdaptingInterceptor(this, x, charsetName);
-        x = new ConsumerOutputAcceptanceInterceptor(this, x);
-        if (isAudit()) {
-            x = new ConsumerAuditInterceptor(this, x);
-        }
-        if (isSupportInteractiveContinuation()) {
-            x = new ConsumerInteractiveResponseSenderInterceptor(this, x);
-        }
-        x = new ConsumerInputAcceptanceInterceptor(this, x);
-        x = new ConsumerMarshalInterceptor(this, x);
-        if (isSupportUnsolicitedFragmentation()) {
-            x = new ConsumerRequestDefragmenterInterceptor(this, x);
-        }
-        x = new ConsumerStringProcessingInterceptor(this, x);
-        return wrappedEndpoint.createConsumer(x);
+
+        return wrappedEndpoint.createConsumer(processor);
     }
 
 
@@ -231,8 +265,6 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      */
     @Override
     public Producer createProducer() throws Exception {
-        final String charsetName = getConfiguration().getCharsetName();
-
         if (sslContext != null) {
             DefaultIoFilterChainBuilder filterChain = wrappedEndpoint.getConnectorConfig().getFilterChain();
             if (!filterChain.contains("ssl")) {
@@ -245,21 +277,10 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             }
         }
 
-        Producer x = wrappedEndpoint.createProducer();
-        x = new ProducerStringProcessingInterceptor(this, x);
-        if (isSupportUnsolicitedFragmentation()) {
-            x = new ProducerRequestFragmenterInterceptor(this, x);
-        }
-        x = isSupportInteractiveContinuation() 
-                ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor(this, x)
-                : new ProducerMarshalInterceptor(this, x);
-        x = new ProducerOutputAcceptanceInterceptor(this, x);
-        if (isAudit()) {
-            x = new ProducerAuditInterceptor(this, x);
-        }
-        x = new ProducerInputAcceptanceInterceptor(this, x);
-        x = new ProducerAdaptingInterceptor(this, x, charsetName);
-        return x;
+        return Hl7v2InterceptorUtils.adaptProducerChain(
+                getProducerInterceptorChain(),
+                this,
+                wrappedEndpoint.createProducer());
     }
 
 
@@ -484,7 +505,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     /**
      * @return the customInterceptors
      */
-    public List<MllpCustomInterceptor> getCustomInterceptors() {
+    public List<AbstractHl7v2Interceptor> getCustomInterceptors() {
         return customInterceptors;
     }
 
@@ -493,8 +514,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
      */
     @ManagedAttribute(description = "Custom Interceptors")
     public String[] getCustomInterceptorsList() {
-        List<MllpCustomInterceptor> interceptors = getCustomInterceptors();
-        return toStringArray(interceptors);
+        return toStringArray(getCustomInterceptors());
     }
 
     private String[] toStringArray(List<?> list) {

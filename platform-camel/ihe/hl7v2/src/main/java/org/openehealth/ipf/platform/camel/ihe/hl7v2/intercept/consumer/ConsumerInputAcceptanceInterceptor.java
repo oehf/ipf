@@ -16,10 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceInterceptorUtils;
 
 
@@ -27,13 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceIntercep
  * Consumer-side interceptor for input message acceptance checking.
  * @author Dmytro Rud
  */
-public class ConsumerInputAcceptanceInterceptor 
-        extends AbstractHl7v2Interceptor
-        implements AcceptanceInterceptor 
-{
-    public ConsumerInputAcceptanceInterceptor(Hl7v2ConfigurationHolder configurationHolder, Processor wrappedProcessor) {
-        super(configurationHolder, wrappedProcessor);
-    }
+public class ConsumerInputAcceptanceInterceptor extends AbstractHl7v2Interceptor {
 
     @Override
     public void process(Exchange exchange) throws Exception {

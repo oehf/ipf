@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti21;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpCustomInterceptor;
 
-public class AuthenticationInterceptor implements MllpCustomInterceptor {
+public class AuthenticationInterceptor extends AbstractHl7v2Interceptor {
+
     @Override
-    public void process(Processor wrappedProcessor, Exchange exchange) throws Exception {
+    public void process(Exchange exchange) throws Exception {
         throw new MllpAuthenticationFailure("test");
     }
 }

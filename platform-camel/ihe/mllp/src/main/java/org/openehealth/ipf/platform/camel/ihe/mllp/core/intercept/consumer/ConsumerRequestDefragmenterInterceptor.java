@@ -20,13 +20,12 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
 
 import ca.uhn.hl7v2.HL7Exception;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.UnsolicitedFragmentationStorage;
 
 import ca.uhn.hl7v2.model.Message;
@@ -45,10 +44,12 @@ public class ConsumerRequestDefragmenterInterceptor extends AbstractMllpIntercep
     private static final transient Log LOG = LogFactory.getLog(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
-    private final UnsolicitedFragmentationStorage storage;
+    private UnsolicitedFragmentationStorage storage;
     
-    public ConsumerRequestDefragmenterInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        super(endpoint, wrappedProcessor);
+
+    @Override
+    public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {
+        super.setConfigurationHolder(configurationHolder);
         this.storage = getMllpEndpoint().getUnsolicitedFragmentationStorage();
         Validate.notNull(storage);
     }

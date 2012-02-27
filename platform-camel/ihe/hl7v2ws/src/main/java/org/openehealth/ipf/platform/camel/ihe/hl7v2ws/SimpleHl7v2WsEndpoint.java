@@ -23,14 +23,18 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsConsumer;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Camel endpoint for HL7v2-WS transaction with a single operation.
@@ -58,21 +62,20 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
     }
 
 
-    protected static Producer wrapProducer(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Producer producer)
-    {
-        producer = new ProducerMarshalInterceptor(configurationHolder, producer);
-        producer = new ProducerOutputAcceptanceInterceptor(configurationHolder, producer);
-        producer = new ProducerInputAcceptanceInterceptor(configurationHolder, producer);
-        producer = new ProducerAdaptingInterceptor(configurationHolder, producer);
-        return producer;
+    protected List<AbstractHl7v2Interceptor> getProducerInterceptorChain() {
+        return Arrays.asList(
+                new ProducerMarshalInterceptor(),
+                new ProducerOutputAcceptanceInterceptor(),
+                new ProducerInputAcceptanceInterceptor(),
+                new ProducerAdaptingInterceptor()
+        );
     }
 
 
     @Override
     public Producer createProducer() throws Exception {
-        return wrapProducer(
+        return Hl7v2InterceptorUtils.adaptProducerChain(
+                getProducerInterceptorChain(),
                 getComponent(),
                 getComponent().getProducer(this, getJaxWsClientFactory()));
     }

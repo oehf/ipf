@@ -37,7 +37,7 @@ public class AcceptanceInterceptorUtils {
      * Checks acceptance of the input message and calls the route.
      */
     public static void processInput(
-            AcceptanceInterceptor interceptor, 
+            AbstractHl7v2Interceptor interceptor,
             Exchange exchange) throws Exception
     {
         // check input message
@@ -54,7 +54,7 @@ public class AcceptanceInterceptorUtils {
      * Calls the route and checks acceptance of the output message.
      */
     public static void processOutput(
-            AcceptanceInterceptor interceptor,
+            AbstractHl7v2Interceptor interceptor,
             Exchange exchange) throws Exception 
     {
         // run the route

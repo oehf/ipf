@@ -28,6 +28,7 @@ import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AcceptanceException;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.Interceptor2ProducerAdapter;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import javax.management.MBeanServer;
@@ -99,6 +100,7 @@ public class Pcd01Test extends StandardTestContainer {
         String uri = "pcd-pcd01://localhost:" + getPort() + "/devicedata";
         Endpoint endpoint = getCamelContext().getEndpoint(uri);
         Processor processor = endpoint.createProducer();
+        processor = ((Interceptor2ProducerAdapter) processor).getProcessor();
         while (processor instanceof AbstractHl7v2Interceptor) {
             processor = ((AbstractHl7v2Interceptor) processor).getWrappedProcessor();
         }

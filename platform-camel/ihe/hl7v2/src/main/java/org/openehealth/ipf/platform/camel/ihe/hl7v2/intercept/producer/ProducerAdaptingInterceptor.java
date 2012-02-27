@@ -17,12 +17,10 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
-import org.apache.camel.Producer;
-import org.apache.commons.lang3.Validate;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 
 
 /**
@@ -31,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2MarshalUtils;
  *  
  * @author Dmytro Rud
  */
-public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
+public class ProducerAdaptingInterceptor extends AbstractHl7v2Interceptor {
 
     private final String charsetName;
 
@@ -41,20 +39,11 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
      * The given value will be propagated to the Camel exchange property
      * {@link Exchange#CHARSET_NAME}, rewriting its old content.
      *
-     * @param configurationHolder
-     *      HL7v2 configuration holder.
-     * @param wrappedProducer
-     *      wrapped Camel producer.
      * @param charsetName
      *      character set to use in all data transformations.
      */
-    public ProducerAdaptingInterceptor(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Producer wrappedProducer,
-            String charsetName)
-    {
-        super(configurationHolder, wrappedProducer);
-        Validate.notEmpty(charsetName);
+    public ProducerAdaptingInterceptor(String charsetName) {
+        super();
         this.charsetName = charsetName;
     }
 
@@ -63,18 +52,9 @@ public class ProducerAdaptingInterceptor extends AbstractProducerInterceptor {
      * Constructor which does not enforce the use of a particular character set.
      * When the Camel exchange does not contain property {@link Exchange#CHARSET_NAME},
      * the default system character set will be used.
-     *
-     * @param configurationHolder
-     *      HL7v2 configuration holder.
-     * @param wrappedProducer
-     *      wrapped Camel producer.
      */
-    public ProducerAdaptingInterceptor(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Producer wrappedProducer)
-    {
-        super(configurationHolder, wrappedProducer);
-        this.charsetName = null;
+    public ProducerAdaptingInterceptor() {
+        this(null);
     }
 
 

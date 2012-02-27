@@ -16,9 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Producer;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceInterceptorUtils;
 
 
@@ -26,16 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceIntercep
  * Producer-side interceptor for input message acceptance checking.
  * @author Dmytro Rud
  */
-public class ProducerInputAcceptanceInterceptor 
-        extends AbstractProducerInterceptor
-        implements AcceptanceInterceptor
-{
-    public ProducerInputAcceptanceInterceptor(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Producer wrappedProducer) 
-    {
-        super(configurationHolder, wrappedProducer);
-    }
+public class ProducerInputAcceptanceInterceptor extends AbstractHl7v2Interceptor {
 
     @Override
     public void process(Exchange exchange) throws Exception {

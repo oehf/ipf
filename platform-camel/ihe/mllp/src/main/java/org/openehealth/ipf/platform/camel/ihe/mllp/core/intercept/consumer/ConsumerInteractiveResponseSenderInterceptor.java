@@ -19,16 +19,15 @@ import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.parser.Parser;
 import ca.uhn.hl7v2.util.Terser;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.InteractiveContinuationStorage;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.util.ArrayList;
@@ -46,13 +45,12 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  */
 public class ConsumerInteractiveResponseSenderInterceptor extends AbstractMllpInterceptor {
     private static final transient Log LOG = LogFactory.getLog(ConsumerInteractiveResponseSenderInterceptor.class);
-    private final InteractiveContinuationStorage storage;
+    private InteractiveContinuationStorage storage;
 
-    public ConsumerInteractiveResponseSenderInterceptor(
-            MllpEndpoint endpoint, 
-            Processor wrappedProcessor)
-    {
-        super(endpoint, wrappedProcessor);
+
+    @Override
+    public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {
+        super.setConfigurationHolder(configurationHolder);
         this.storage = getMllpEndpoint().getInteractiveContinuationStorage();
         Validate.notNull(storage);
     }

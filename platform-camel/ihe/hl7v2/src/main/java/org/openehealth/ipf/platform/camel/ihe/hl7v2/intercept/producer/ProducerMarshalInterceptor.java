@@ -17,27 +17,18 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.Producer;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter;
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapters;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
 
 
 /**
  * Producer-side Hl7 marshalling/unmarshalling interceptor.
  * @author Dmytro Rud
  */
-public class ProducerMarshalInterceptor extends AbstractProducerInterceptor {
+public class ProducerMarshalInterceptor extends AbstractHl7v2Interceptor {
 
-    public ProducerMarshalInterceptor(
-            Hl7v2ConfigurationHolder configurationHolder,
-            Producer wrappedProducer)
-    {
-        super(configurationHolder, wrappedProducer);
-    }
-
-    
     /**
      * Marshals the request, sends it to the route, and unmarshals the response. 
      */

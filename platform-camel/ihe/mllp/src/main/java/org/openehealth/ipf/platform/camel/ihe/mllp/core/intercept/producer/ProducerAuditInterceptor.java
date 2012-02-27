@@ -15,30 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer;
 
-import java.net.InetAddress;
-
 import org.apache.camel.Exchange;
-import org.apache.camel.Producer;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptorUtils;
+
+import java.net.InetAddress;
 
 
 /**
  * Producer-side ATNA auditing Camel interceptor.
  * @author Dmytro Rud
  */
-public class ProducerAuditInterceptor 
-        extends AbstractMllpProducerInterceptor
-        implements AuditInterceptor
-{
-    public ProducerAuditInterceptor(MllpEndpoint endpoint, Producer wrappedProducer) {
-        super(endpoint, wrappedProducer);
-    }
-    
-    
+public class ProducerAuditInterceptor extends AbstractMllpInterceptor implements AuditInterceptor {
+
     @Override
     public void process(Exchange exchange) throws Exception {
         AuditInterceptorUtils.doProcess(this, exchange);

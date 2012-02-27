@@ -19,11 +19,9 @@ import java.net.InetSocketAddress;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.camel.Processor;
 import org.apache.camel.component.mina.MinaConstants;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AuditInterceptorUtils;
@@ -37,10 +35,6 @@ public class ConsumerAuditInterceptor
         extends AbstractMllpInterceptor 
         implements AuditInterceptor 
 {
-    public ConsumerAuditInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        super(endpoint, wrappedProcessor);
-    }
-
     @Override
     public void process(Exchange exchange) throws Exception {
         AuditInterceptorUtils.doProcess(this, exchange);

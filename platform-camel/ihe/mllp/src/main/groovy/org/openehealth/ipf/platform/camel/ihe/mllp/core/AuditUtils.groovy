@@ -21,8 +21,8 @@ import org.apache.commons.logging.LogFactory
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7dsl.MessageAdapter
 import org.openehealth.ipf.modules.hl7dsl.SelectorClosure
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.MllpInterceptor
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor
 
 /**
  * Various ATNA-auditing related utilities.
@@ -145,6 +145,6 @@ class AuditUtils {
       * or by serializing the given message adapter. 
       */
     static String getRequestString(Exchange exchange, MessageAdapter msg) {
-        exchange.in.headers[MllpInterceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME] ?: msg.toString()
+        exchange.in.headers[Hl7v2Interceptor.ORIGINAL_MESSAGE_STRING_HEADER_NAME] ?: msg.toString()
     }
 }

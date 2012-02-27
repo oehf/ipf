@@ -16,10 +16,8 @@
 package org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.component.mina.MinaConstants;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuthenticationFailure;
-import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.AbstractMllpInterceptor;
 
 import java.net.InetSocketAddress;
@@ -29,17 +27,6 @@ import java.net.InetSocketAddress;
  * processing an exchange.
  */
 public class ConsumerAuthenticationFailureInterceptor extends AbstractMllpInterceptor {
-
-    /**
-     * Constructs the interceptor.
-     * @param endpoint
-     *      The Camel endpoint to which this interceptor belongs.
-     * @param wrappedProcessor
-     *      Original camel-mina processor.
-     */
-    public ConsumerAuthenticationFailureInterceptor(MllpEndpoint endpoint, Processor wrappedProcessor) {
-        super(endpoint, wrappedProcessor);
-    }
 
     @Override
     public void process(Exchange exchange) throws Exception {
