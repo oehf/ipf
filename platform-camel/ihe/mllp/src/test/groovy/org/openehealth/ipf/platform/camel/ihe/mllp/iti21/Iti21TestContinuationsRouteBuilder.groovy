@@ -23,7 +23,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.
  * Camel route for continuations unit tests.
  * @author Dmytro Rud
  */
-class ContinuationsRouteBuilder extends SpringRouteBuilder {
+class Iti21TestContinuationsRouteBuilder extends SpringRouteBuilder {
 
      static final String BIG_RESPONSE =
          'MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|' + 

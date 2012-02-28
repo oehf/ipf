@@ -13,48 +13,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
+package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.spring.SpringRouteBuilder
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
+import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
 
+
 /**
- * Camel route for generic unit tests.
+ * Camel route for validation-related unit tests.
+ * 
  * @author Dmytro Rud
  */
-class RouteBuilder extends SpringRouteBuilder {
+class Iti8TestValidationRouteBuilder extends SpringRouteBuilder {
 
      void configure() throws Exception {
 
-         from('pix-iti10://0.0.0.0:18106?allowIncompleteAudit=true')
-             .onException(Exception.class)
+         // no error handling
+         from('xds-iti8://0.0.0.0:18080?audit=false')
+             .onException(ValidationException.class)
                  .maximumRedeliveries(0)
                  .end()
+             .process(iti8RequestValidator())
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
-         
-         
-         from('pix-iti10://0.0.0.0:18107?audit=false')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
-                 .end()
-             .process(iti10RequestValidator())
-             .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
-             }
-             .process(iti10ResponseValidator())
-
+             .process(iti8ResponseValidator())
              
-         from('pix-iti10://0.0.0.0:18108')
-             .onException(Exception.class)
-                 .maximumRedeliveries(0)
+             
+         // manual ACK generation on error
+         from('xds-iti8://0.0.0.0:18089?audit=false')
+             .onException(ValidationException.class)
+                 .handled(true)
+                 .process {
+                     resultMessage(it).body = MessageUtils.ack(it.in.body.target) 
+                 }
                  .end()
+             .process(iti8RequestValidator())
              .process {
-                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+                 throw new RuntimeException('SHOULD NOT BE THROWN')
              }
+             .process(iti8ResponseValidator())
+             
      }
 }
  

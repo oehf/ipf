@@ -27,7 +27,7 @@ import org.openehealth.ipf.modules.hl7.AckTypeCode
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class RouteBuilder extends SpringRouteBuilder {
+class Iti9TestRouteBuilder extends SpringRouteBuilder {
 
     def rsp = '''MSH|^~\\&|MESA_XREF|XYZ_HOSPITAL|MESA_PIX_CLIENT|MESA_DEPARTMENT|20090901141123||RSP^K23^RSP_K23|356813|P|2.5
          MSA|AA|10501108

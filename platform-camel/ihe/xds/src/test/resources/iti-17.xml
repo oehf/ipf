@@ -27,7 +27,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.ihe.xds.iti17.GroovyRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.ihe.xds.iti17.Iti17TestRouteBuilder">
     </bean>
 
     <bean id="coreModelExtension"

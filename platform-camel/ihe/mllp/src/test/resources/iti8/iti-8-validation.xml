@@ -31,7 +31,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
     </camel:camelContext>
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.ValidationRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.ihe.mllp.iti8.Iti8TestValidationRouteBuilder">
     </bean>
 
     <bean id="coreModelExtension"

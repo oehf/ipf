@@ -59,7 +59,7 @@ http://cxf.apache.org/schemas/configuration/security.xsd
     </camel:camelContext>
 
     <bean id="routeBuilder" depends-on="routeModelExtender"
-        class="org.openehealth.ipf.platform.camel.ihe.xds.iti41.GroovyRouteBuilder">
+        class="org.openehealth.ipf.platform.camel.ihe.xds.iti41.Iti41TestRouteBuilder">
     </bean>
 
     <bean id="coreModelExtension"

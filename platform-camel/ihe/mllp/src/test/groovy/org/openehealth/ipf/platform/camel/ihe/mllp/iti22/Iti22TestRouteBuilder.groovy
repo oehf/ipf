@@ -26,7 +26,7 @@ import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessa
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class RouteBuilder extends SpringRouteBuilder {
+class Iti22TestRouteBuilder extends SpringRouteBuilder {
 
      def rsp = '''MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|20090901140929||RSP^ZV2|356757|P|2.5
 MSA|AA|1305506339

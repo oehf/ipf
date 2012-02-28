@@ -24,7 +24,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidato
 /**
  * @author Dmytro Rud
  */
-class GroovyRouteBuilder extends SpringRouteBuilder {
+class Pcc1TestRouteBuilder extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
         from('qed-pcc1:qed-pcc1-service1')

@@ -13,50 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
+package org.openehealth.ipf.platform.camel.ihe.mllp.iti10
 
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.apache.camel.spring.SpringRouteBuilder
 import static org.openehealth.ipf.platform.camel.core.util.Exchanges.resultMessage
-import org.openehealth.ipf.commons.core.modules.api.ValidationException
 import static org.openehealth.ipf.platform.camel.ihe.mllp.PixPdqCamelValidators.*
 
-
 /**
- * Camel route for validation-related unit tests.
- * 
+ * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class ValidationRouteBuilder extends SpringRouteBuilder {
+class Iti10TestRouteBuilder extends SpringRouteBuilder {
 
      void configure() throws Exception {
 
-         // no error handling
-         from('xds-iti8://0.0.0.0:18080?audit=false')
-             .onException(ValidationException.class)
+         from('pix-iti10://0.0.0.0:18106?allowIncompleteAudit=true')
+             .onException(Exception.class)
                  .maximumRedeliveries(0)
                  .end()
-             .process(iti8RequestValidator())
              .process {
                  resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
-             .process(iti8ResponseValidator())
-             
-             
-         // manual ACK generation on error
-         from('xds-iti8://0.0.0.0:18089?audit=false')
-             .onException(ValidationException.class)
-                 .handled(true)
-                 .process {
-                     resultMessage(it).body = MessageUtils.ack(it.in.body.target) 
-                 }
+         
+         
+         from('pix-iti10://0.0.0.0:18107?audit=false')
+             .onException(Exception.class)
+                 .maximumRedeliveries(0)
                  .end()
-             .process(iti8RequestValidator())
+             .process(iti10RequestValidator())
              .process {
-                 throw new RuntimeException('SHOULD NOT BE THROWN')
+                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
              }
-             .process(iti8ResponseValidator())
+             .process(iti10ResponseValidator())
+
              
+         from('pix-iti10://0.0.0.0:18108')
+             .onException(Exception.class)
+                 .maximumRedeliveries(0)
+                 .end()
+             .process {
+                 resultMessage(it).body = MessageUtils.ack(it.in.body.target)
+             }
      }
 }
  

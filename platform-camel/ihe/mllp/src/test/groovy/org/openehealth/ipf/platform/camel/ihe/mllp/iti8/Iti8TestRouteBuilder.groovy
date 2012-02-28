@@ -25,7 +25,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
  * Camel route for generic unit tests.
  * @author Dmytro Rud
  */
-class RouteBuilder extends SpringRouteBuilder {
+class Iti8TestRouteBuilder extends SpringRouteBuilder {
     
     void configure() throws Exception {
         
