@@ -17,6 +17,8 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xds.iti42.Iti42PortType;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
@@ -36,7 +38,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Convert
 public class Iti42Service extends AbstractWebService implements Iti42PortType {
     @Override
     public RegistryResponseType documentRegistryRegisterDocumentSetB(SubmitObjectsRequest body) {
-        Exchange result = process(body);
+        Exchange result = process(body, XdsJaxbDataBinding.getMap(body), ExchangePattern.InOut);
         if (result.getException() != null) {
             Response errorResponse = new Response(result.getException(), ErrorCode.REGISTRY_METADATA_ERROR, ErrorCode.REGISTRY_ERROR, null);
             return EbXML30Converters.convert(errorResponse);

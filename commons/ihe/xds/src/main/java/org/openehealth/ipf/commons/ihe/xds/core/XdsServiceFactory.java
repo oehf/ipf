@@ -62,6 +62,7 @@ public class XdsServiceFactory extends JaxWsServiceFactory {
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
+        svrFactory.setDataBinding(new XdsJaxbDataBinding());
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {

@@ -15,21 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-
+import javax.xml.bind.JAXBContext
+import javax.xml.bind.Unmarshaller
+import org.apache.camel.impl.DefaultExchange
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
+import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
-import org.apache.camel.impl.DefaultExchange
-import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 
 /**
  * Tests the ITI-41 transaction with a webservice and client adapter defined via URIs.
@@ -41,6 +42,7 @@ class TestIti41 extends StandardTestContainer {
 
     def SERVICE1 = "xds-iti41://localhost:${port}/xds-iti41-service1"
     def SERVICE2 = "xds-iti41://localhost:${port}/xds-iti41-service2"
+    def SERVICE3 = "xds-iti41://localhost:${port}/xds-iti41-service3"
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti41-service2"
 
     def request
@@ -75,6 +77,28 @@ class TestIti41 extends StandardTestContainer {
         assert auditSender.messages.size() == 2
         checkAudit('8')
     }
+
+    @Test
+    void testIti41ExtraMetadata() {
+        // request with extra metadata
+        String submissionSetString = readFile('submission-set.xml')
+        String pnrRequestString = """
+            <urn:ProvideAndRegisterDocumentSetRequest xmlns:urn="urn:ihe:iti:xds-b:2007">
+                ${submissionSetString}
+                <urn:Document id="Document01">SGVsbG8gTWFyZWshIDotKQ0K</urn:Document>
+            </urn:ProvideAndRegisterDocumentSetRequest>
+        """
+        JAXBContext jaxbContext = JAXBContext.newInstance(ProvideAndRegisterDocumentSetRequestType.class)
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller()
+        def requestWitmMetadata = unmarshaller.unmarshal(XmlUtils.source(pnrRequestString))
+        def response = send(SERVICE3, requestWitmMetadata, Response.class)
+        assert response.status == SUCCESS
+
+        // request without extra metadata
+        response = send(SERVICE3, request, Response.class)
+        assert response.status == FAILURE
+    }
+
 
     /**
      * Send some garbage to an XDS endpoint (via raw HTTP, because we want to test

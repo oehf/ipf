@@ -15,13 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
-
 import org.apache.camel.spring.SpringRouteBuilder
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
+import org.openehealth.ipf.platform.camel.core.util.Exchanges
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti42RequestValidator
+import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti42ResponseValidator
 
 /**
  * @author Jens Riemschneider
@@ -36,6 +38,14 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     
         from('xds-iti42:xds-iti42-service2')
             .process { checkValue(it, 'service 2') }
+
+        from('xds-iti42:xds-iti42-service3')
+            .process {
+                boolean hasExtraMetadata = it.in.getHeader(XdsJaxbDataBinding.SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.class)
+                def response = new Response(hasExtraMetadata ? SUCCESS : FAILURE)
+                Exchanges.resultMessage(it).body = response
+            }
+
     }
 
     void checkValue(exchange, expected) {

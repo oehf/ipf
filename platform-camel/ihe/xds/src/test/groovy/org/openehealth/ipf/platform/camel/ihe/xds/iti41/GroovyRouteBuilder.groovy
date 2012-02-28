@@ -25,6 +25,9 @@ import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import javax.activation.DataHandler
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLProvideAndRegisterDocumentSetRequest30
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType
+import org.openehealth.ipf.commons.ihe.xds.core.XdsJaxbDataBinding
 
 /**
  * @author Jens Riemschneider
@@ -39,7 +42,15 @@ public class GroovyRouteBuilder extends SpringRouteBuilder {
     
         from('xds-iti41:xds-iti41-service2')
             .process { checkValue(it, 'service 2') }
-   }
+
+        from('xds-iti41:xds-iti41-service3')
+            .process {
+                boolean hasExtraMetadata = it.in.getHeader(XdsJaxbDataBinding.SUBMISSION_SET_HAS_EXTRA_METADATA, Boolean.class)
+                def response = new Response(hasExtraMetadata ? SUCCESS : FAILURE)
+                Exchanges.resultMessage(it).body = response
+            }
+    }
+
 
     void checkValue(exchange, expected) {
         def doc = exchange.in.getBody(ProvideAndRegisterDocumentSet.class).documents[0]

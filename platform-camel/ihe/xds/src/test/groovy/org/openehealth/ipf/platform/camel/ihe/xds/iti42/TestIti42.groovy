@@ -15,9 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti42
 
-import static junit.framework.Assert.assertEquals
-import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.*
-
+import javax.xml.bind.JAXBContext
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.Before
 import org.junit.BeforeClass
@@ -25,7 +23,12 @@ import org.junit.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.LocalizedString
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
+import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import javax.xml.bind.Unmarshaller
+import org.openehealth.ipf.commons.xml.XmlUtils
 
 /**
  * Tests the ITI-42 transaction with a webservice and client adapter defined via URIs.
@@ -37,7 +40,8 @@ class TestIti42 extends StandardTestContainer {
     
     def SERVICE1 = "xds-iti42://localhost:${port}/xds-iti42-service1"
     def SERVICE2 = "xds-iti42://localhost:${port}/xds-iti42-service2"
-    
+    def SERVICE3 = "xds-iti42://localhost:${port}/xds-iti42-service3"
+
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti42-service2"
     
     def request
@@ -74,7 +78,23 @@ class TestIti42 extends StandardTestContainer {
         
         checkAudit('8')
     }
-    
+
+    @Test
+    void checkIti42ExtraMetadata() {
+        // request with extra metadata
+        String submissionSetString = readFile('submission-set.xml')
+        JAXBContext jaxbContext = JAXBContext.newInstance(SubmitObjectsRequest.class)
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller()
+        def requestWitmMetadata = unmarshaller.unmarshal(XmlUtils.source(submissionSetString))
+        def response = send(SERVICE3, requestWitmMetadata, Response.class)
+        assert response.status == SUCCESS
+
+        // request without extra metadata
+        response = send(SERVICE3, request, Response.class)
+        assert response.status == FAILURE
+    }
+
+
     void checkAudit(outcome) {
         def message = getAudit('C', SERVICE2_ADDR)[0]
         
