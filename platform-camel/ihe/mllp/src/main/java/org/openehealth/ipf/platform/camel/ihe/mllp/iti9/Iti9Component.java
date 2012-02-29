@@ -19,9 +19,14 @@ import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.QpdAwareNakFactory;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Camel component for ITI-9 (PIX Query).
@@ -77,5 +82,10 @@ public class Iti9Component extends MllpComponent {
     @Override
     public NakFactory getNakFactory() {
         return NAK_FACTORY;
+    }
+
+    @Override
+    public List<AbstractHl7v2Interceptor> getAdditionalConsumerInterceptors() {
+        return Collections.<AbstractHl7v2Interceptor> singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

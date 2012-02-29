@@ -170,7 +170,7 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
     }
 
 
-    private List<AbstractHl7v2Interceptor> getConsumerInterceptorChain() {
+    private synchronized List<AbstractHl7v2Interceptor> getConsumerInterceptorChain() {
         if (consumerInterceptorChain == null) {
             // set up initial interceptor chain
             List<AbstractHl7v2Interceptor> initialChain = new ArrayList<AbstractHl7v2Interceptor>();
@@ -193,13 +193,16 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             }
 
             // add interceptors provided by the user
-            consumerInterceptorChain = ChainUtils.createChain(initialChain, customInterceptors);
+            List<AbstractHl7v2Interceptor> additionalInterceptors =
+                    new ArrayList<AbstractHl7v2Interceptor>(mllpComponent.getAdditionalConsumerInterceptors());
+            additionalInterceptors.addAll(customInterceptors);
+            consumerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
         }
         return consumerInterceptorChain;
     }
 
 
-    private List<AbstractHl7v2Interceptor> getProducerInterceptorChain() {
+    private synchronized List<AbstractHl7v2Interceptor> getProducerInterceptorChain() {
         if (producerInterceptorChain == null) {
             // set up initial interceptor chain
             List<AbstractHl7v2Interceptor> initialChain = new ArrayList<AbstractHl7v2Interceptor>();
@@ -218,7 +221,10 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             initialChain.add(new ProducerAdaptingInterceptor());
 
             // add interceptors provided by the user
-            producerInterceptorChain = ChainUtils.createChain(initialChain, customInterceptors);
+            List<AbstractHl7v2Interceptor> additionalInterceptors =
+                    new ArrayList<AbstractHl7v2Interceptor>(mllpComponent.getAdditionalProducerInterceptors());
+            additionalInterceptors.addAll(customInterceptors);
+            producerInterceptorChain = ChainUtils.createChain(initialChain, additionalInterceptors);
         }
         return producerInterceptorChain;
     }

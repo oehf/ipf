@@ -185,6 +185,34 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
     }
 
 
+    /**
+     * @return
+     *      a list of component-specific (i.e. transaction-specific)
+     *      HL7v2 interceptors which will be integrated into the interceptor
+     *      chain of each consumer instance created by this component.
+     *      <p>
+     *      Per default returns an empty list.
+     *      <code>null</code> return values are not allowed.
+     */
+    public List<AbstractHl7v2Interceptor> getAdditionalConsumerInterceptors() {
+        return Collections.emptyList();
+    }
+
+
+    /**
+     * @return
+     *      a list of component-specific (i.e. transaction-specific)
+     *      HL7v2 interceptors which will be integrated into the interceptor
+     *      chain of each consumer instance created by this component.
+     *      <p>
+     *      Per default returns an empty list.
+     *      <code>null</code> return values are not allowed.
+     */
+    public List<AbstractHl7v2Interceptor> getAdditionalProducerInterceptors() {
+        return Collections.emptyList();
+    }
+
+
     // ----- abstract methods -----
 
     /**
