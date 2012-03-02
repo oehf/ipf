@@ -26,6 +26,7 @@ import org.apache.cxf.ws.addressing.AddressingPropertiesImpl;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.apache.cxf.ws.addressing.EndpointReferenceType;
 import org.apache.cxf.ws.addressing.JAXWSAConstants;
+import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractSafeInterceptor;
 import org.springframework.util.xml.SimpleNamespaceContext;
 import org.w3c.dom.Element;
@@ -122,7 +123,7 @@ abstract public class AbstractAuditInterceptor extends AbstractSafeInterceptor {
      *      could be neither obtained nor created from scratch.
      */
     protected WsAuditDataset getAuditDataset(SoapMessage message) {
-        WsAuditDataset auditDataset = findContextualProperty(message, DATASET_CONTEXT_KEY);
+        WsAuditDataset auditDataset = InterceptorUtils.findContextualProperty(message, DATASET_CONTEXT_KEY);
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {

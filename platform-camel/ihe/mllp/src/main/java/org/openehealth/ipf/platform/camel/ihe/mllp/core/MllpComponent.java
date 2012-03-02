@@ -25,12 +25,15 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
 
 import javax.net.ssl.SSLContext;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -152,8 +155,8 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
                 SSLContext.class,
                 SSLContext.getDefault()) : null;
 
-        List<AbstractHl7v2Interceptor> customInterceptors = resolveAndRemoveReferenceListParameter(
-                parameters, "interceptors", AbstractHl7v2Interceptor.class);
+        List<Hl7v2Interceptor> customInterceptors = resolveAndRemoveReferenceListParameter(
+                parameters, "interceptors", Hl7v2Interceptor.class);
 
         String[] sslProtocols = sslProtocolsString != null ? sslProtocolsString.split(",") : null;
         String[] sslCiphers = sslCiphersString != null ? sslCiphersString.split(",") : null;
@@ -192,9 +195,17 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
      *      chain of each consumer instance created by this component.
      *      <p>
      *      Per default returns an empty list.
-     *      <code>null</code> return values are not allowed.
+     *      <br>
+     *      When overwriting this method, please note:
+     *      <ul>
+     *          <li>Neither the returned list nor any element of it
+     *              are allowed to be <code>null</code>.
+     *          <li>Each invocation should return freshly created instances
+     *              of interceptors (like prototype-scope beans in Spring),
+     *              because interceptors cannot be reused by multiple endpoints.
+     *      </ul>
      */
-    public List<AbstractHl7v2Interceptor> getAdditionalConsumerInterceptors() {
+    public List<Hl7v2Interceptor> getAdditionalConsumerInterceptors() {
         return Collections.emptyList();
     }
 
@@ -208,7 +219,7 @@ public abstract class MllpComponent extends MinaComponent implements Hl7v2Config
      *      Per default returns an empty list.
      *      <code>null</code> return values are not allowed.
      */
-    public List<AbstractHl7v2Interceptor> getAdditionalProducerInterceptors() {
+    public List<Hl7v2Interceptor> getAdditionalProducerInterceptors() {
         return Collections.emptyList();
     }
 

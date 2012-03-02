@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
+package org.openehealth.ipf.commons.ihe.core.chain;
 
 import org.apache.commons.lang3.Validate;
 
@@ -25,7 +25,7 @@ import java.util.Set;
  * Base for an element of interceptor chain.
  * @author Dmytro Rud
  */
-public class Chainable {
+abstract public class ChainableImpl implements Chainable {
     private String id = getClass().getName();
     private Set<String> before = new HashSet<String>();
     private Set<String> after = new HashSet<String>();
@@ -36,13 +36,14 @@ public class Chainable {
      * @param id
      *      ID of this interceptor.
      */
-    protected void setId(String id) {
+    public void setId(String id) {
         this.id = Validate.notEmpty(id);
     }
 
     /**
      * @return ID of this interceptor.
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -52,7 +53,7 @@ public class Chainable {
      * @param ids
      *      IDs of interceptors this interceptor should be deployed before.
      */
-    protected void addBefore(String... ids) {
+    public void addBefore(String... ids) {
         Collections.addAll(before, ids);
     }
 
@@ -61,13 +62,14 @@ public class Chainable {
      * @param ids
      *      IDs of interceptors this interceptor should be deployed after.
      */
-    protected void addAfter(String... ids) {
+    public void addAfter(String... ids) {
         Collections.addAll(after, ids);
     }
 
     /**
      * @return IDs of interceptors this interceptor will be/has been deployed before.
      */
+    @Override
     public Set<String> getBefore() {
         return before;
     }
@@ -75,6 +77,7 @@ public class Chainable {
     /**
      * @return IDs of interceptors this interceptor will be/has been deployed after.
      */
+    @Override
     public Set<String> getAfter() {
         return after;
     }

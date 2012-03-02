@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
-import org.openehealth.ipf.commons.ihe.ws.cxf.payload.PayloadLogInterceptorBase
+import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase
 
 /**
  * Tests for ITI-39.
@@ -50,13 +50,13 @@ class TestIti39 extends StandardTestContainer {
     static final RetrieveDocumentSet REQUEST = SampleData.createRetrieveDocumentSet()
     
     static void main(args) {
-        PayloadLogInterceptorBase.setGloballyEnabled(false)
+        PayloadLoggerBase.setGloballyEnabled(false)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR, false, DEMO_APP_PORT);
     }
     
     @BeforeClass
     static void setUpClass() {
-        PayloadLogInterceptorBase.setGloballyEnabled(false)
+        PayloadLoggerBase.setGloballyEnabled(false)
         startServer(new CXFServlet(), CONTEXT_DESCRIPTOR)
     }
     
@@ -81,7 +81,7 @@ class TestIti39 extends StandardTestContainer {
             send(SERVICE1_URI, i++, SERVICE1_RESPONSE_URI)
             send(SERVICE1_URI, i++)
         }
-        
+
         // wait for completion of asynchronous routes
         Thread.currentThread().sleep(1000 + Iti39TestRouteBuilder.ASYNC_DELAY)
 

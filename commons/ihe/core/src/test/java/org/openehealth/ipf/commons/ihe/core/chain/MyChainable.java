@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
-
-import org.apache.camel.Exchange;
+package org.openehealth.ipf.commons.ihe.core.chain;
 
 /**
  * @author Dmytro Rud
  */
-public class MyInterceptor extends AbstractHl7v2Interceptor {
+public class MyChainable extends ChainableImpl {
 
-    public MyInterceptor(String id, String before, String after) {
+    public MyChainable(String id, String before, String after) {
         setId(id);
         addBefore(before.split(" "));
         addAfter(after.split(" "));
     }
 
-    public void process(Exchange exchange) {
-        // nop
-    }
 }

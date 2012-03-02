@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.openehealth.ipf.commons.ihe.core.chain.ChainableImpl;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
@@ -27,34 +28,44 @@ import java.nio.charset.Charset;
  * Abstract interceptor for Hl7v2-based transactions.
  * @author Dmytro Rud
  */
-abstract public class AbstractHl7v2Interceptor extends Chainable implements Hl7v2Interceptor {
+abstract public class AbstractHl7v2Interceptor extends ChainableImpl implements Hl7v2Interceptor {
 
     private Hl7v2ConfigurationHolder configurationHolder;
     private Processor wrappedProcessor;
 
 
+    @Override
     public Hl7v2ConfigurationHolder getConfigurationHolder() {
         return configurationHolder;
     }
 
+    @Override
     public void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder) {
         this.configurationHolder = configurationHolder;
     }
 
+    @Override
     public Processor getWrappedProcessor() {
         return wrappedProcessor;
     }
 
+    @Override
     public void setWrappedProcessor(Processor wrappedProcessor) {
         this.wrappedProcessor = wrappedProcessor;
     }
 
-    @Override
+    /**
+     * Shortcut to access HL7v2 transaction configuration.
+     * @return HL7v2 transaction configuration.
+     */
     public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return configurationHolder.getHl7v2TransactionConfiguration();
     }
 
-    @Override
+    /**
+     * Shortcut to access HL7v2 NAK factory.
+     * @return HL7v2 NAK factory.
+     */
     public NakFactory getNakFactory() {
         return configurationHolder.getNakFactory();
     }

@@ -32,7 +32,7 @@ public class ProducerStringProcessingInterceptor extends AbstractMllpInterceptor
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        final String charsetName = getMllpEndpoint().getConfiguration().getCharsetName();
+        final String charsetName = getMllpEndpoint().getCharsetName();
         exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
 
         boolean supportSegmentFragmentation = getMllpEndpoint().isSupportSegmentFragmentation();
@@ -49,7 +49,7 @@ public class ProducerStringProcessingInterceptor extends AbstractMllpInterceptor
         
         // run the route
         getWrappedProcessor().process(exchange);
-        
+
         // read in the response
         message = Exchanges.resultMessage(exchange);
         message.setBody(Hl7v2MarshalUtils.convertBodyToString(

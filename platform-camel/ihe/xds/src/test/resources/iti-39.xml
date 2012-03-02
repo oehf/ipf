@@ -61,32 +61,26 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <bean id="serverInLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
         <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
-        <property name="locallyEnabled" value="true" />
     </bean>
 
     <bean id="serverOutLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
         <constructor-arg value="#{@logFileNamePrefix}-server-out[partialResponse ? '-partial' : ''].txt" />
-        <property name="locallyEnabled" value="true" />
     </bean>
 
     <bean id="clientSyncInLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
         <constructor-arg value="#{@logFileNamePrefix}-client-sync-in.txt" />
-        <property name="locallyEnabled" value="true" />
     </bean>
 
     <bean id="clientSyncOutLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
         <constructor-arg value="#{@logFileNamePrefix}-client-sync-out.txt" />
-        <property name="locallyEnabled" value="true" />
     </bean>
 
     <bean id="clientAsyncInLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.InPayloadLoggerInterceptor">
         <constructor-arg value="#{@logFileNamePrefix}-client-async-in.txt" />
-        <property name="locallyEnabled" value="true" />
     </bean>
 
     <bean id="clientAsyncOutLogger" class="org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutPayloadLoggerInterceptor">
         <constructor-arg value="#{@logFileNamePrefix}-client-async-out.txt" />
-        <property name="locallyEnabled" value="true" />
     </bean>
 
 

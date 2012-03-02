@@ -23,7 +23,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
@@ -62,8 +62,8 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
     }
 
 
-    protected List<AbstractHl7v2Interceptor> getProducerInterceptorChain() {
-        return Arrays.asList(
+    protected List<Hl7v2Interceptor> getProducerInterceptorChain() {
+        return Arrays.<Hl7v2Interceptor> asList(
                 new ProducerMarshalInterceptor(),
                 new ProducerOutputAcceptanceInterceptor(),
                 new ProducerInputAcceptanceInterceptor(),

@@ -70,6 +70,10 @@ Examples:  "%r [%t] %-5p %c %x - %m\n"
         <level value="DEBUG"/>
     </logger>
         
+    <logger name="org.openehealth.ipf.commons.ihe.core.chain">
+        <level value="DEBUG"/>
+    </logger>
+
     <root>
         <level value="WARN"/>
         <appender-ref ref="CONSOLE"/>

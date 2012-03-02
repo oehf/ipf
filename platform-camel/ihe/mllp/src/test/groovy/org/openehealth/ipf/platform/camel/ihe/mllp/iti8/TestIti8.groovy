@@ -240,8 +240,8 @@ class TestIti8 extends MllpTestContainer {
         def endpointUri2 = 'xds-iti8://localhost:18085'
         def endpoint1 = camelContext.getEndpoint(endpointUri1)
         def endpoint2 = camelContext.getEndpoint(endpointUri2)
-        assertEquals('UTF-8', endpoint1.configuration.charsetName)
-        assertEquals('ISO-8859-1', endpoint2.configuration.charsetName)
+        assertEquals('UTF-8', endpoint1.charsetName)
+        assertEquals('ISO-8859-1', endpoint2.charsetName)
     }
     
     @Test

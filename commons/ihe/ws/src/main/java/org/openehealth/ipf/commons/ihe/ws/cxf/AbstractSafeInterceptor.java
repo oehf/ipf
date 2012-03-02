@@ -19,7 +19,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
-import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 
 /**
@@ -62,41 +61,6 @@ abstract public class AbstractSafeInterceptor extends AbstractSoapInterceptor {
         } catch(Exception e) {
             LOG.error(e);
         }
-    }
-
-
-    /**
-     * Searches for a property in all available contexts
-     * associated with the given SOAP message.
-     *
-     * @param message
-     *      CXF message.
-     * @param propertyName
-     *      name of the property.
-     * @param <T>
-     *      type of the property.
-     * @return
-     *      property value, or <code>null</code> when not found.
-     */
-    protected static <T> T findContextualProperty(SoapMessage message, String propertyName) {
-        Exchange exchange = message.getExchange();
-        Message[] messages = new Message[] {
-                message,
-                exchange.getInMessage(),
-                exchange.getOutMessage(),
-                exchange.getInFaultMessage(),
-                exchange.getOutFaultMessage()
-        };
-
-        for (Message m : messages) {
-            if (m != null) {
-                T t  = (T) m.getContextualProperty(propertyName);
-                if (t != null) {
-                    return t;
-                }
-            }
-        }
-        return null;
     }
 
 }

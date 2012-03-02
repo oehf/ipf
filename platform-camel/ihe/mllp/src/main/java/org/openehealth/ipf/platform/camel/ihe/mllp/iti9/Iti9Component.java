@@ -19,7 +19,7 @@ import org.apache.camel.CamelContext;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AbstractHl7v2Interceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerSegmentEchoingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpAuditStrategy;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpComponent;
@@ -85,7 +85,7 @@ public class Iti9Component extends MllpComponent {
     }
 
     @Override
-    public List<AbstractHl7v2Interceptor> getAdditionalConsumerInterceptors() {
-        return Collections.<AbstractHl7v2Interceptor> singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
+    public List<Hl7v2Interceptor> getAdditionalConsumerInterceptors() {
+        return Collections.<Hl7v2Interceptor> singletonList(new ConsumerSegmentEchoingInterceptor("QPD"));
     }
 }

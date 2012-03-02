@@ -28,12 +28,12 @@ import java.util.List;
 public class Hl7v2InterceptorUtils {
 
     public static Producer adaptProducerChain(
-            List<AbstractHl7v2Interceptor> chain,
+            List<Hl7v2Interceptor> chain,
             Hl7v2ConfigurationHolder configurationHolder,
             Producer originalProducer)
     {
         Processor processor = originalProducer;
-        for (AbstractHl7v2Interceptor interceptor : chain) {
+        for (Hl7v2Interceptor interceptor : chain) {
             interceptor.setConfigurationHolder(configurationHolder);
             interceptor.setWrappedProcessor(processor);
             processor = interceptor;

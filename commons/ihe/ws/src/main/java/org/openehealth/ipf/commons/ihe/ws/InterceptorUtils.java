@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.InterceptorProvider;
+import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 
 /**
@@ -56,4 +57,40 @@ abstract public class InterceptorUtils {
             target.addAll(source);
         }
     }
+
+
+    /**
+     * Searches for a property in all available contexts
+     * associated with the given SOAP message.
+     *
+     * @param message
+     *      CXF message.
+     * @param propertyName
+     *      name of the property.
+     * @param <T>
+     *      type of the property.
+     * @return
+     *      property value, or <code>null</code> when not found.
+     */
+    public static <T> T findContextualProperty(Message message, String propertyName) {
+        Exchange exchange = message.getExchange();
+        Message[] messages = new Message[] {
+                message,
+                exchange.getInMessage(),
+                exchange.getOutMessage(),
+                exchange.getInFaultMessage(),
+                exchange.getOutFaultMessage()
+        };
+
+        for (Message m : messages) {
+            if (m != null) {
+                T t  = (T) m.getContextualProperty(propertyName);
+                if (t != null) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+
 }

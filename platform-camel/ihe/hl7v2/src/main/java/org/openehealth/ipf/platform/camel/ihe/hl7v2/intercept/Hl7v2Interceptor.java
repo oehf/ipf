@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
 
 import org.apache.camel.Processor;
+import org.openehealth.ipf.commons.ihe.core.chain.Chainable;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 
 
@@ -23,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
  * Camel interceptor interface for HL7v2 transactions.
  * @author Dmytro Rud
  */
-public interface Hl7v2Interceptor extends Processor, Hl7v2ConfigurationHolder {
+public interface Hl7v2Interceptor extends Processor, Chainable {
 
     /**
      * Name of the Camel message header where a copy of the original request
@@ -40,8 +41,27 @@ public interface Hl7v2Interceptor extends Processor, Hl7v2ConfigurationHolder {
     
 
     /**
-     * Returns the processor instance wrapped by this interceptor.
+     * @return the processor instance wrapped by this interceptor.
      */
-    public Processor getWrappedProcessor();
+    Processor getWrappedProcessor();
+
+    /**
+     * Lets this interceptor wrap the given processor.
+     * @param wrappedProcessor
+     *      processor instance to be wrapped.
+     */
+    void setWrappedProcessor(Processor wrappedProcessor);
+
+    /**
+     * @return holder of HL7v2 transaction configuration.
+     */
+    Hl7v2ConfigurationHolder getConfigurationHolder();
+
+    /**
+     * @param configurationHolder
+     *      holder of HL7v2 transaction configuration.
+     */
+    void setConfigurationHolder(Hl7v2ConfigurationHolder configurationHolder);
+
     
 }

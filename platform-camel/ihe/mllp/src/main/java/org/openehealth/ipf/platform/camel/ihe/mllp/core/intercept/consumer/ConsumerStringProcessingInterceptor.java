@@ -32,7 +32,7 @@ public class ConsumerStringProcessingInterceptor extends AbstractMllpInterceptor
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        final String charsetName = getMllpEndpoint().getConfiguration().getCharsetName();
+        final String charsetName = getMllpEndpoint().getCharsetName();
         exchange.setProperty(Exchange.CHARSET_NAME, charsetName);
 
         boolean supportSegmentFragmentation = getMllpEndpoint().isSupportSegmentFragmentation();
@@ -47,7 +47,7 @@ public class ConsumerStringProcessingInterceptor extends AbstractMllpInterceptor
         
         // run the route
         getWrappedProcessor().process(exchange);
-        
+
         // preprocess output
         if (supportSegmentFragmentation && (segmentFragmentationThreshold >= 5)) {
             message = Exchanges.resultMessage(exchange);

@@ -13,21 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept;
+package org.openehealth.ipf.commons.ihe.core.chain;
+
+import java.util.Set;
 
 /**
+ * Base for an element of interceptor chain.
  * @author Dmytro Rud
  */
-public class ChainException extends RuntimeException {
-    public ChainException(String message) {
-        super(message);
-    }
+public interface Chainable {
 
-    public ChainException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    /**
+     * @return ID of this interceptor.
+     */
+    String getId();
 
-    public ChainException(Throwable cause) {
-        super(cause);
-    }
+    /**
+     * @return IDs of interceptors this interceptor will be/has been deployed before.
+     */
+    Set<String> getBefore();
+
+    /**
+     * @return IDs of interceptors this interceptor will be/has been deployed after.
+     */
+    Set<String> getAfter();
 }
