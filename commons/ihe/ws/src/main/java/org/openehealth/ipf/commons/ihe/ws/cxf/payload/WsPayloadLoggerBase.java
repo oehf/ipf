@@ -19,10 +19,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageUtils;
+import org.apache.cxf.transport.http.AbstractHTTPDestination;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggerBase;
 import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingSpelContext;
 import org.openehealth.ipf.commons.ihe.ws.InterceptorUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -128,9 +130,10 @@ public class WsPayloadLoggerBase
         if (endpointAddress != null) {
             sb.append("Target endpoint: ").append(endpointAddress).append('\n');
         } else {
-            Object responseCode = message.get(Message.RESPONSE_CODE);
+            HttpServletResponse response =
+                    (HttpServletResponse) message.get(AbstractHTTPDestination.HTTP_RESPONSE);
             sb.append("HTTP response code: ")
-                    .append((responseCode != null) ? responseCode : "200")
+                    .append((response != null) ? response.getStatus() : "unknown")
                     .append('\n');
         }
 
