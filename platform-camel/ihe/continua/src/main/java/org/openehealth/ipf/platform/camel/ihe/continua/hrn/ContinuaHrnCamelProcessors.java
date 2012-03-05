@@ -36,6 +36,8 @@ import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.Map;
 
+import static org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter.validationEnabled;
+
 /**
  * Validating and transformation processors for the Continua HRN transaction.
  * 
@@ -47,18 +49,24 @@ abstract public class ContinuaHrnCamelProcessors {
     private static final Processor HRN_REQUEST_TRANSFORMER_AND_VALIDATOR = new Processor() {
         @Override
         public void process(Exchange exchange) throws Exception {
+            boolean validationEnabled = validationEnabled(exchange);
+
             // ebXML validation
-            EbXMLProvideAndRegisterDocumentSetRequest30 message =
-                new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
-            ValidationProfile profile = new ValidationProfile(IpfInteractionId.Continua_HRN);
-            new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+            if (validationEnabled) {
+                EbXMLProvideAndRegisterDocumentSetRequest30 message =
+                    new EbXMLProvideAndRegisterDocumentSetRequest30(exchange.getIn().getBody(ProvideAndRegisterDocumentSetRequestType.class));
+                ValidationProfile profile = new ValidationProfile(IpfInteractionId.Continua_HRN);
+                new ProvideAndRegisterDocumentSetRequestValidator().validate(message, profile);
+            }
 
             // transform ebXML into simplified model, extract embedded documents, check document count
             ProvideAndRegisterDocumentSet request = exchange.getIn().getBody(ProvideAndRegisterDocumentSet.class);
             exchange.getIn().setBody(request);
 
-            if (request.getDocuments().size() != 1) {
-                throw new ValidationException("exactly one document must be provided in the HRN request");
+            if (validationEnabled) {
+                if (request.getDocuments().size() != 1) {
+                    throw new ValidationException("exactly one document must be provided in the HRN request");
+                }
             }
 
             // Document content type enrichment: create byte array and String
@@ -66,8 +74,10 @@ abstract public class ContinuaHrnCamelProcessors {
             byte[] documentBytes = document.getContent(byte[].class);
             String documentString = document.getContent(String.class);
 
-            // perform PHMR-specific validations
-            new CombinedXmlValidator().validate(documentString, new PhmrValidationProfile());
+            // PHMR-specific validation
+            if (validationEnabled) {
+                new CombinedXmlValidator().validate(documentString, new PhmrValidationProfile());
+            }
         }
     };
 
