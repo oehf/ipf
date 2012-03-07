@@ -49,6 +49,9 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
             String docId = requestData.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
 
+            String mimeType = doc.getMimeType();
+            metaDataAssert(mimeType != null && !mimeType.isEmpty(), MIME_TYPE_MUST_BE_SPECIFIED);
+
             if (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) {
                 hcValidator.validate(requestData.getHomeCommunityId());
             }

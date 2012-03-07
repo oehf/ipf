@@ -102,17 +102,19 @@ public abstract class SampleData {
         RetrievedDocument doc1 = new RetrievedDocument();
         doc1.setRequestData(requestData1);
         doc1.setDataHandler(dataHandler1);
+        doc1.setMimeType("application/test1");
 
         RetrieveDocument requestData2 = new RetrieveDocument();
         requestData2.setDocumentUniqueId("doc2");
         requestData2.setHomeCommunityId("urn:oid:1.2.4");
         requestData2.setRepositoryUniqueId("repo2");
-        
+
         DataHandler dataHandler2 = createDataHandler();        
         RetrievedDocument doc2 = new RetrievedDocument();
         doc2.setRequestData(requestData2);
         doc2.setDataHandler(dataHandler2);
-        
+        doc2.setMimeType("application/test2");
+
         RetrievedDocumentSet response = new RetrievedDocumentSet();
         response.getDocuments().add(doc1);
         response.getDocuments().add(doc2);

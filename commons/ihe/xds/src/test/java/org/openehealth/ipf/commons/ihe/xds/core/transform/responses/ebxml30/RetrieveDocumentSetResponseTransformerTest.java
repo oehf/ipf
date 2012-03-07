@@ -61,6 +61,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
         assertEquals("doc1", requestData.getDocumentUniqueId());
         assertEquals("urn:oid:1.2.3", requestData.getHomeCommunityId());
         assertEquals("repo1", requestData.getRepositoryUniqueId());
+        assertEquals("application/test1", doc.getMimeType());
         assertSame(dataHandler1, doc.getDataHandler());
  
         doc = ebXML.getDocuments().get(1);
@@ -68,6 +69,7 @@ public class RetrieveDocumentSetResponseTransformerTest {
         assertEquals("doc2", requestData.getDocumentUniqueId());
         assertEquals("urn:oid:1.2.4", requestData.getHomeCommunityId());
         assertEquals("repo2", requestData.getRepositoryUniqueId());
+        assertEquals("application/test2", doc.getMimeType());
         assertSame(dataHandler2, doc.getDataHandler());
      }
     

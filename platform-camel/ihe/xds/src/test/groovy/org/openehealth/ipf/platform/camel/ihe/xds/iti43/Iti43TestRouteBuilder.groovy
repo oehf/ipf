@@ -54,6 +54,7 @@ public class Iti43TestRouteBuilder extends SpringRouteBuilder {
             def doc = new RetrievedDocument()
             doc.dataHandler = new DataHandler(new LargeDataSource())
             doc.requestData = retrieveDocument
+            doc.mimeType = 'application/octet-cream'
             response.documents.add(doc)
         }
         

@@ -87,6 +87,7 @@ public enum ValidationMessage {
     PARAMETER_VALUE_NOT_STRING_LIST("Query parameter value is not specified as a list of strings: %1s"),
     REPO_ID_MUST_BE_SPECIFIED("The repository Unique ID is missing"),
     DOC_ID_MUST_BE_SPECIFIED("The document Unique ID is missing"),
+    MIME_TYPE_MUST_BE_SPECIFIED("The document MIME type is missing"),
     INVALID_STATUS_IN_RESPONSE("Invalid status in response"),
     INVALID_ERROR_INFO_IN_RESPONSE("Invalid error info in response"),
     INVALID_ERROR_CODE_IN_RESPONSE("Invalid error code in response"),

@@ -64,33 +64,48 @@ public class RetrieveDocumentResponseValidatorTest {
     }
     
     @Test
-    public void testRepoIdMustBeSpecfied() {
+    public void testRepoIdMustBeSpecified() {
         RetrieveDocument requestData = new RetrieveDocument(null, "doc3", "home3");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
+        doc.setMimeType("text/plain");
         response.getDocuments().add(doc);
         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
         expectFailure(REPO_ID_MUST_BE_SPECIFIED, ebXML);
     }
     
     @Test
-    public void testDocIdMustBeSpecfied() {
+    public void testDocIdMustBeSpecified() {
         RetrieveDocument requestData = new RetrieveDocument("repo3", "", "home3");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(SampleData.createDataHandler());
+        doc.setMimeType("text/plain");
         response.getDocuments().add(doc);
         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
         expectFailure(DOC_ID_MUST_BE_SPECIFIED, ebXML);
     }
     
     @Test
-    public void testDocumentMustBeSpecfied() {
+    public void testMimeTypeMustBeSpecified() {
+        RetrieveDocument requestData = new RetrieveDocument("repo3", "doc3", "home3");
+        RetrievedDocument doc = new RetrievedDocument();
+        doc.setRequestData(requestData);
+        doc.setDataHandler(SampleData.createDataHandler());
+        doc.setMimeType("");
+        response.getDocuments().add(doc);
+        EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
+        expectFailure(MIME_TYPE_MUST_BE_SPECIFIED, ebXML);
+    }
+
+    @Test
+    public void testDocumentMustBeSpecified() {
         RetrieveDocument requestData = new RetrieveDocument("repo3", "doc3", "urn:oid:1.2.5");
         RetrievedDocument doc = new RetrievedDocument();
         doc.setRequestData(requestData);
         doc.setDataHandler(null);
+        doc.setMimeType("text/plain");
         response.getDocuments().add(doc);
         EbXMLRetrieveDocumentSetResponse ebXML = transformer.toEbXML(response);
         expectFailure(MISSING_DOCUMENT_FOR_DOC_ENTRY, ebXML);

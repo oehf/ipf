@@ -114,6 +114,7 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
         RetrievedDocument doc1 = new RetrievedDocument();
         doc1.setRequestData(requestData1);
         doc1.setDataHandler(dataHandler1);
+        doc1.setMimeType("animal/dog");
 
         RetrieveDocument requestData2 = new RetrieveDocument();
         requestData2.setDocumentUniqueId("doc2");
@@ -124,6 +125,7 @@ class Iti39TestRouteBuilder extends SpringRouteBuilder {
         RetrievedDocument doc2 = new RetrievedDocument();
         doc2.setRequestData(requestData2);
         doc2.setDataHandler(dataHandler2);
+        doc2.setMimeType("animal/cat");
 
         RetrievedDocumentSet response = new RetrievedDocumentSet();
         response.getDocuments().add(doc1);

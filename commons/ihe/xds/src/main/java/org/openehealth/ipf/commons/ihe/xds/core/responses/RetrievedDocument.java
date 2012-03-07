@@ -31,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocument;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "RetrievedDocument")
+@XmlType(name = "RetrievedDocument", propOrder = {"requestData", "mimeType"})
 @XmlRootElement(name = "retrievedDocument")
 public class RetrievedDocument implements Serializable {
     private static final long serialVersionUID = -3950026651885804263L;
@@ -39,6 +39,7 @@ public class RetrievedDocument implements Serializable {
     private transient DataHandler dataHandler;
     @XmlElementRef
     private RetrieveDocument requestData;
+    private String mimeType;
     
     /**
      * Constructs the retrieved document.
@@ -51,10 +52,13 @@ public class RetrievedDocument implements Serializable {
      *          the data handler allowing access to the content of the document. 
      * @param requestData
      *          the data specified in the request.
+     * @param mimeType
+     *          MIME type of the document.
      */
-    public RetrievedDocument(DataHandler dataHandler, RetrieveDocument requestData) {
+    public RetrievedDocument(DataHandler dataHandler, RetrieveDocument requestData, String mimeType) {
         this.dataHandler = dataHandler;
         this.requestData = requestData;
+        this.mimeType = mimeType;
     }
 
     /**
@@ -87,12 +91,29 @@ public class RetrievedDocument implements Serializable {
         this.requestData = requestData;
     }
 
+
+    /**
+     * @return MIME type of the retrieved document.
+     */
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    /**
+     * @param mimeType
+     *      MIME type of the retrieved document.
+     */
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((dataHandler == null) ? 0 : dataHandler.hashCode());
         result = prime * result + ((requestData == null) ? 0 : requestData.hashCode());
+        result = prime * result + ((mimeType == null) ? 0 : mimeType.hashCode());
         return result;
     }
 
@@ -114,6 +135,11 @@ public class RetrievedDocument implements Serializable {
             if (other.requestData != null)
                 return false;
         } else if (!requestData.equals(other.requestData))
+            return false;
+        if (mimeType == null) {
+            if (other.mimeType != null)
+                return false;
+        } else if (!mimeType.equals(other.mimeType))
             return false;
         return true;
     }
