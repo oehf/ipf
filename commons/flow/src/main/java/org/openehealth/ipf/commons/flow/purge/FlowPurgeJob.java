@@ -171,7 +171,7 @@ public class FlowPurgeJob implements Job {
      */
     public void execute(ApplicationConfig config) {
         String name = "once";
-        schedule(config, new SimpleTrigger(name, null), name);
+        schedule(config, new SimpleTrigger(name, (String) null), name);
         LOG.info("Execute purge job once for application " + application);
     }
     

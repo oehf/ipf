@@ -48,9 +48,9 @@
         <resources-plugin-version>2.4.3</resources-plugin-version>
         
         <!-- Dependency version properties -->
-        <activemq-version>5.5.0</activemq-version>
+        <activemq-version>5.5.1</activemq-version>
         <aspectj-version>1.6.2</aspectj-version>
-        <camel-version>2.9.0</camel-version>
+        <camel-version>2.9.1</camel-version>
         <commons-codec-version>1.5</commons-codec-version>
         <commons-collections-version>3.2.1</commons-collections-version>
         <commons-dbcp-version>1.4</commons-dbcp-version>
@@ -60,11 +60,11 @@
         <commons-lang-version>3.0.1</commons-lang-version>
         <commons-logging-version>1.1.1</commons-logging-version>
         <commons-math-version>2.2</commons-math-version>
-        <cxf-version>2.5.1</cxf-version>
-        <derby-version>10.6.2.1</derby-version>
+        <cxf-version>2.5.2</cxf-version>
+        <derby-version>10.8.2.2</derby-version>
         <easymock-version>3.1</easymock-version>
         <ehcache-version>2.5.0</ehcache-version>
-        <geronimo-jpa_2.0_spec.version>1.0</geronimo-jpa_2.0_spec.version>
+        <geronimo-jpa_2.0_spec.version>1.1</geronimo-jpa_2.0_spec.version>
         <geronimo-spec-activation-11-version>1.1</geronimo-spec-activation-11-version>
         <geronimo-spec-jta-version>1.0.1B-rc4</geronimo-spec-jta-version>
         <geronimo-spec-servlet-api-30-version>1.0</geronimo-spec-servlet-api-30-version>
@@ -75,7 +75,7 @@
         <hibernate-javassist-version>3.9.0.GA</hibernate-javassist-version>
         <hibernate-search-version>3.4.1.Final</hibernate-search-version>
         <jasypt-version>1.7</jasypt-version>
-        <jetty-version>7.5.3.v20111011</jetty-version>
+        <jetty-version>7.5.4.v20111024</jetty-version>
         <joda-time-version>2.0</joda-time-version>
         <junit-version>4.10</junit-version>
         <junitperf-version>1.8</junitperf-version>
@@ -86,10 +86,10 @@
         <oht-atna-version>2.0-v20111211</oht-atna-version>
         <oht-cdar-version>1.1.0</oht-cdar-version>
         <osgi-api-version>1.4.0</osgi-api-version>
-        <quartz-version>1.6.1</quartz-version>
+        <quartz-version>1.8.5</quartz-version>
         <saxon-version>9.1.0.8</saxon-version>
         <slf4j-version>1.6.1</slf4j-version>
-        <spring-version>3.0.6.RELEASE</spring-version>
+        <spring-version>3.0.7.RELEASE</spring-version>
         <spring-osgi-version>1.2.1</spring-osgi-version>
         <tomcat-version>7.0.22</tomcat-version>
         <xbean-spring-version>3.5</xbean-spring-version>
@@ -699,7 +699,7 @@
                 <version>${jasypt-version}</version>
             </dependency>
             <dependency>
-                <groupId>org.opensymphony.quartz</groupId>
+                <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
                 <version>${quartz-version}</version>
             </dependency>

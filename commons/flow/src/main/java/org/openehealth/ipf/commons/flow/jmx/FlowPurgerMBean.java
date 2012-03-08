@@ -215,8 +215,8 @@ public class FlowPurgerMBean implements InitializingBean, DisposableBean {
             map.put("Scheduler Class", scheduler.getMetaData().getSchedulerClass().getCanonicalName());
             map.put("Thread Pool Class", scheduler.getMetaData().getThreadPoolClass().getCanonicalName());
             map.put("Thread Pool Size", String.valueOf(scheduler.getMetaData().getThreadPoolSize()));
-            map.put("Number Of Jobs Executed", String.valueOf(scheduler.getMetaData().numJobsExecuted()));
-            map.put("Running Since", MBeanUtils.formatDate(scheduler.getMetaData().runningSince()));
+            map.put("Number Of Jobs Executed", String.valueOf(scheduler.getMetaData().getNumberOfJobsExecuted()));
+            map.put("Running Since", MBeanUtils.formatDate(scheduler.getMetaData().getRunningSince()));
             return map;
         } catch (SchedulerException e) {
             return null;
