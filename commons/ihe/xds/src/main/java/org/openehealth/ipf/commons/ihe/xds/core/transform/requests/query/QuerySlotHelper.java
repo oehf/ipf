@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.hl7.HL7Delimiter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
@@ -39,6 +40,7 @@ import java.util.regex.Pattern;
  * <p>
  * Note that this class is only used for ebXML 3.0! 
  * @author Jens Riemschneider
+ * @author Dmytro Rud
  */
 public class QuerySlotHelper {
     private final EbXMLAdhocQueryRequest ebXML;
@@ -326,6 +328,31 @@ public class QuerySlotHelper {
             associationTypes.add(AssociationType.valueOfOpcode30(opcode));
         }
         return associationTypes;
+    }
+
+    public void fromDocumentEntryType(QueryParameter param, List<DocumentEntryType> documentEntryTypes) {
+        if (documentEntryTypes == null) {
+            return;
+        }
+
+        List<String> uuids = new ArrayList<String>(documentEntryTypes.size());
+        for (DocumentEntryType type : documentEntryTypes) {
+            uuids.add(DocumentEntryType.toUuid(type));
+        }
+        fromStringList(param, uuids);
+    }
+
+    public List<DocumentEntryType> toDocumentEntryType(QueryParameter param) {
+        List<String> uuids = toStringList(param);
+        if (uuids == null) {
+            return null;
+        }
+
+        ArrayList<DocumentEntryType> documentEntryTypes = new ArrayList<DocumentEntryType>();
+        for (String uuid : uuids) {
+            documentEntryTypes.add(DocumentEntryType.valueOfUuid(uuid));
+        }
+        return documentEntryTypes;
     }
 
     private String fromCodeToHL7CE(Code code) {

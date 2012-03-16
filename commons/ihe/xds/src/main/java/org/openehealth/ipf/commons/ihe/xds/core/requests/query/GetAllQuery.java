@@ -19,11 +19,10 @@ import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 
 /**
  * Represents a stored query for GetAll.
@@ -31,22 +30,27 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetAllQuery", propOrder = {
-        "statusDocuments", "statusSubmissionSets", "statusFolders", "confidentialityCodes", "formatCodes"})
+        "statusDocuments", "statusSubmissionSets", "statusFolders", "confidentialityCodes", "formatCodes",
+        "documentEntryTypes"})
 @XmlRootElement(name = "getAllQuery")
-public class GetAllQuery extends PatientIdBasedStoredQuery implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+public class GetAllQuery extends PatientIdBasedStoredQuery
+        implements Serializable, DocumentEntryTypeAwareStoredQuery
+{
     private static final long serialVersionUID = -4161172318244319631L;
 
     @XmlElement(name = "documentStatus")
-    private List<AvailabilityStatus> statusDocuments;
+    @Getter @Setter private List<AvailabilityStatus> statusDocuments;
     @XmlElement(name = "submissionSetStatus")
-    private List<AvailabilityStatus> statusSubmissionSets;
+    @Getter @Setter private List<AvailabilityStatus> statusSubmissionSets;
     @XmlElement(name = "folderStatus")
-    private List<AvailabilityStatus> statusFolders;
-
+    @Getter @Setter private List<AvailabilityStatus> statusFolders;
     @XmlElement(name = "confidentialityCode")
-    private QueryList<Code> confidentialityCodes;
+    @Getter @Setter private QueryList<Code> confidentialityCodes;
     @XmlElement(name = "formatCode")
-    private List<Code> formatCodes;
+    @Getter @Setter private List<Code> formatCodes;
+    @XmlElement(name = "documentEntryType")
+    @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
 
     /**
      * Constructs the query.
@@ -55,134 +59,8 @@ public class GetAllQuery extends PatientIdBasedStoredQuery implements Serializab
         super(QueryType.GET_ALL);
     }
 
-    /**
-     * @return the states for filtering {@link DocumentEntry#getAvailabilityStatus()}.
-     */
-    public List<AvailabilityStatus> getStatusDocuments() {
-        return statusDocuments;
-    }
-
-    /**
-     * @param statusDocuments
-     *          the states for filtering {@link DocumentEntry#getAvailabilityStatus()}.
-     */
-    public void setStatusDocuments(List<AvailabilityStatus> statusDocuments) {
-        this.statusDocuments = statusDocuments;
-    }
-
-    /**
-     * @return the states for filtering {@link SubmissionSet#getAvailabilityStatus()}.
-     */
-    public List<AvailabilityStatus> getStatusSubmissionSets() {
-        return statusSubmissionSets;
-    }
-
-    /**
-     * @param statusSubmissionSets
-     *          the states for filtering {@link SubmissionSet#getAvailabilityStatus()}.
-     */
-    public void setStatusSubmissionSets(List<AvailabilityStatus> statusSubmissionSets) {
-        this.statusSubmissionSets = statusSubmissionSets;
-    }
-
-    /**
-     * @return the states for filtering {@link Folder#getAvailabilityStatus()}.
-     */
-    public List<AvailabilityStatus> getStatusFolders() {
-        return statusFolders;
-    }
-
-    /**
-     * @param statusFolders
-     *          the states for filtering {@link Folder#getAvailabilityStatus()}.
-     */
-    public void setStatusFolders(List<AvailabilityStatus> statusFolders) {
-        this.statusFolders = statusFolders;
-    }
-
-    /**
-     * @return the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
-     */
-    public QueryList<Code> getConfidentialityCodes() {
-        return confidentialityCodes;
-    }
-
-    /**
-     * @param confidentialityCodes
-     *          the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
-     */
-    public void setConfidentialityCodes(QueryList<Code> confidentialityCodes) {
-        this.confidentialityCodes = confidentialityCodes;
-    }
-
-    /**
-     * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
-     */
-    public List<Code> getFormatCodes() {
-        return formatCodes;
-    }
-
-    /**
-     * @param formatCodes
-     *          the codes for filtering {@link DocumentEntry#getFormatCode()}.
-     */
-    public void setFormatCodes(List<Code> formatCodes) {
-        this.formatCodes = formatCodes;
-    }
-
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result
-                + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
-        result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
-        result = prime * result + ((statusDocuments == null) ? 0 : statusDocuments.hashCode());
-        result = prime * result + ((statusFolders == null) ? 0 : statusFolders.hashCode());
-        result = prime * result
-                + ((statusSubmissionSets == null) ? 0 : statusSubmissionSets.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GetAllQuery other = (GetAllQuery) obj;
-        if (confidentialityCodes == null) {
-            if (other.confidentialityCodes != null)
-                return false;
-        } else if (!confidentialityCodes.equals(other.confidentialityCodes))
-            return false;
-        if (formatCodes == null) {
-            if (other.formatCodes != null)
-                return false;
-        } else if (!formatCodes.equals(other.formatCodes))
-            return false;
-        if (statusDocuments == null) {
-            if (other.statusDocuments != null)
-                return false;
-        } else if (!statusDocuments.equals(other.statusDocuments))
-            return false;
-        if (statusFolders == null) {
-            if (other.statusFolders != null)
-                return false;
-        } else if (!statusFolders.equals(other.statusFolders))
-            return false;
-        if (statusSubmissionSets == null) {
-            if (other.statusSubmissionSets != null)
-                return false;
-        } else if (!statusSubmissionSets.equals(other.statusSubmissionSets))
-            return false;
-        return true;
     }
 }

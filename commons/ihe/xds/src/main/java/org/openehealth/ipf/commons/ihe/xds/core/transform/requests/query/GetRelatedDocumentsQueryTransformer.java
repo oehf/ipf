@@ -36,6 +36,7 @@ public class GetRelatedDocumentsQueryTransformer extends GetFromDocumentQueryTra
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);
         slots.fromAssociationType(ASSOCIATION_TYPE, query.getAssociationTypes());
+        slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
     }
     
     @Override
@@ -48,5 +49,6 @@ public class GetRelatedDocumentsQueryTransformer extends GetFromDocumentQueryTra
         
         QuerySlotHelper slots = new QuerySlotHelper(ebXML);        
         query.setAssociationTypes(slots.toAssociationType(ASSOCIATION_TYPE));
+        query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
     }
 }

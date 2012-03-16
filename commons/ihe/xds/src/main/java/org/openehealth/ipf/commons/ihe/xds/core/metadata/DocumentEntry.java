@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -37,7 +38,7 @@ import java.util.List;
         "sourcePatientId", "sourcePatientInfo", "creationTime", "authors", "legalAuthenticator", "serviceStartTime",
         "serviceStopTime", "classCode", "confidentialityCodes", "eventCodeList", "formatCode",
         "healthcareFacilityTypeCode", "languageCode", "practiceSettingCode", "typeCode", "repositoryUniqueId",
-        "mimeType", "size", "hash", "uri"})
+        "mimeType", "size", "hash", "uri", "type"})
 @XmlRootElement(name = "documentEntry")
 public class DocumentEntry extends XDSMetaClass implements Serializable {
     private static final long serialVersionUID = -4779500440504776909L;
@@ -71,6 +72,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
     private Code typeCode;
     private String uri;
     private String repositoryUniqueId;
+    private DocumentEntryType type = DocumentEntryType.STABLE;
 
     /**
      * @return the list of authors of the document. Cannot be <code>null</code>.
@@ -366,6 +368,21 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
         return eventCodeList;
     }
 
+    /**
+     * @return the type of this document entry.
+     */
+    public DocumentEntryType getType() {
+        return type;
+    }
+
+    /**
+     * @param type
+     *      type of this document entry.
+     */
+    public void setType(DocumentEntryType type) {
+        this.type = Validate.notNull(type);
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
@@ -401,6 +418,7 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
         result = prime * result + ((sourcePatientInfo == null) ? 0 : sourcePatientInfo.hashCode());
         result = prime * result + ((typeCode == null) ? 0 : typeCode.hashCode());
         result = prime * result + ((uri == null) ? 0 : uri.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
     }
 
@@ -512,6 +530,11 @@ public class DocumentEntry extends XDSMetaClass implements Serializable {
             if (other.uri != null)
                 return false;
         } else if (!uri.equals(other.uri))
+            return false;
+        if (type == null) {
+            if (other.type != null)
+                return false;
+        } else if (!type.equals(other.type))
             return false;
         return true;
     }

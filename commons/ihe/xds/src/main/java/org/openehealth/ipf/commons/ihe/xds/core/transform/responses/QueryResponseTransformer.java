@@ -18,12 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.responses;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTransformer;
@@ -122,9 +117,11 @@ public class QueryResponseTransformer {
 
         boolean foundNonObjRefs = false;
         
-        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.STABLE_DOC_ENTRY)) {
-            response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
-            foundNonObjRefs = true;
+        for (DocumentEntryType entryType : DocumentEntryType.values()) {
+            for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(entryType.getUuid())) {
+                response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
+                foundNonObjRefs = true;
+            }
         }
 
         for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {

@@ -74,6 +74,8 @@ public enum QueryParameter {
     DOC_ENTRY_UUID("$XDSDocumentEntryEntryUUID"),
     /** Used to filter {@link DocumentEntry#getUniqueId()}. */
     DOC_ENTRY_UNIQUE_ID("$XDSDocumentEntryUniqueId"),
+    /** User to filter {@link DocumentEntry#getType()}. */
+    DOC_ENTRY_TYPE("$XDSDocumentEntryType"),
      
     /** Used to filter {@link Folder#getCodeList()}. */
     FOLDER_CODES("$XDSFolderCodeList"),

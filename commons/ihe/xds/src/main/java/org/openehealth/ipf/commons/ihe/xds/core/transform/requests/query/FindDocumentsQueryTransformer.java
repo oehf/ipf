@@ -71,6 +71,8 @@ public class FindDocumentsQueryTransformer {
         slots.fromCode(DOC_ENTRY_PRACTICE_SETTING_CODE, query.getPracticeSettingCodes());
         slots.fromCode(DOC_ENTRY_EVENT_CODE, query.getEventCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
+
+        slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
     }
     
     /**
@@ -113,5 +115,7 @@ public class FindDocumentsQueryTransformer {
         
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
         query.setHomeCommunityId(ebXML.getHome());
+
+        query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
     }
 }

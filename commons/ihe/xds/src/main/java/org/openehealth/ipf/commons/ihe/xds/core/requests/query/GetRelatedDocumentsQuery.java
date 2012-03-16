@@ -15,71 +15,39 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
-
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 
 /**
  * Represents a stored query for GetRelatedDocuments.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetRelatedDocumentsQuery")
+@XmlType(name = "GetRelatedDocumentsQuery", propOrder = {"documentEntryTypes"})
 @XmlRootElement(name = "getRelatedDocumentsQuery")
-public class GetRelatedDocumentsQuery extends GetFromDocumentQuery implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
+        implements Serializable, DocumentEntryTypeAwareStoredQuery
+{
     private static final long serialVersionUID = -8768793068458839362L;
 
     @XmlElement(name = "associationType")
-    private List<AssociationType> associationTypes;
+    @Getter @Setter private List<AssociationType> associationTypes;
+    @XmlElement(name = "documentEntryType")
+    @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
 
     /**
      * Constructs the query.
      */
     public GetRelatedDocumentsQuery() {
         super(QueryType.GET_RELATED_DOCUMENTS);
-    }
-
-    /**
-     * @return the types used for filtering {@link Association#getAssociationType()}.
-     */
-    public List<AssociationType> getAssociationTypes() {
-        return associationTypes;
-    }
-
-    /**
-     * @param associationTypes
-     *          the types used for filtering {@link Association#getAssociationType()}.
-     */
-    public void setAssociationTypes(List<AssociationType> associationTypes) {
-        this.associationTypes = associationTypes;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((associationTypes == null) ? 0 : associationTypes.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GetRelatedDocumentsQuery other = (GetRelatedDocumentsQuery) obj;
-        if (associationTypes == null) {
-            if (other.associationTypes != null)
-                return false;
-        } else if (!associationTypes.equals(other.associationTypes))
-            return false;
-        return true;
     }
 
     @Override

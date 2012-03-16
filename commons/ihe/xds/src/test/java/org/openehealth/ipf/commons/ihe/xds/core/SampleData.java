@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core;
 
+import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
@@ -372,6 +373,7 @@ public abstract class SampleData {
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
         
         return new QueryRegistry(query);
     }
@@ -433,7 +435,8 @@ public abstract class SampleData {
         query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setStatusFolders(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+
         return new QueryRegistry(query);
     }
 
@@ -478,6 +481,7 @@ public abstract class SampleData {
                 Arrays.asList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
         
         return new QueryRegistry(query);
     }
@@ -523,6 +527,7 @@ public abstract class SampleData {
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
         query.setAssociationTypes(Arrays.asList(AssociationType.APPEND, AssociationType.TRANSFORM));
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
                 
         return new QueryRegistry(query);
     }
@@ -541,7 +546,8 @@ public abstract class SampleData {
                 Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
-                
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
+
         return new QueryRegistry(query);
     }
 

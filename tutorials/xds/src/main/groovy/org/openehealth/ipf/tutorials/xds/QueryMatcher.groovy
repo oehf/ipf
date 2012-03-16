@@ -57,6 +57,7 @@ class QueryMatcher {
         any(query.practiceSettingCodes) { matchesCode(it, entry.practiceSettingCode) } &&
         evalQueryList(query.eventCodes, entry.eventCodeList) &&
         evalQueryList(query.confidentialityCodes, entry.confidentialityCodes) &&
-        matchesAuthors(query.authorPersons, entry.authors)
+        matchesAuthors(query.authorPersons, entry.authors) &&
+        contains(query.documentEntryTypes, entry.type)
     }
 }

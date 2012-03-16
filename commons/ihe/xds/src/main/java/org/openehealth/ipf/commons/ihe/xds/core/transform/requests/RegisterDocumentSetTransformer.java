@@ -26,11 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Association;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.AssociationTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTransformer;
@@ -107,8 +103,10 @@ public class RegisterDocumentSetTransformer {
         
         RegisterDocumentSet request = new RegisterDocumentSet();        
         
-        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(Vocabulary.STABLE_DOC_ENTRY)) {
-            request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
+        for (DocumentEntryType entryType : DocumentEntryType.values()) {
+            for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(entryType.getUuid())) {
+                request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
+            }
         }
 
         for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {

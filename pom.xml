@@ -80,6 +80,7 @@
         <junit-version>4.10</junit-version>
         <junitperf-version>1.8</junitperf-version>
         <log4j-version>1.2.16</log4j-version>
+        <lombok-version>0.10.8</lombok-version>
         <mdht-version>0.7.0.201012100720</mdht-version>
         <metabuilder-version>1.1.6</metabuilder-version>
         <mina-version>1.1.7</mina-version>
@@ -815,6 +816,11 @@
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit-version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

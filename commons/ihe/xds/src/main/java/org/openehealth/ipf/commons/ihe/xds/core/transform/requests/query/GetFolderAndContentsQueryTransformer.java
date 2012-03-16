@@ -19,10 +19,9 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFolderAndContentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetAndContentsQuery;
 
 /**
- * Transforms between a {@link GetSubmissionSetAndContentsQuery} and {@link EbXMLAdhocQueryRequest}.
+ * Transforms between a {@link GetFolderAndContentsQuery} and {@link EbXMLAdhocQueryRequest}.
  * @author Jens Riemschneider
  */
 public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTransformer<GetFolderAndContentsQuery> {
@@ -36,5 +35,27 @@ public class GetFolderAndContentsQueryTransformer extends GetByIDAndCodesQueryTr
                 DOC_ENTRY_FORMAT_CODE_SCHEME, 
                 DOC_ENTRY_CONFIDENTIALITY_CODE,
                 DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME);
+    }
+
+    @Override
+    public void toEbXML(GetFolderAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
+    }
+
+    @Override
+    public void fromEbXML(GetFolderAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
     }
 }

@@ -26,12 +26,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFolderAndContentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsQueryTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetFolderAndContentsQueryTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.query.QueryParameterValidation;
 
 /**
  * Tests for {@link GetDocumentsQueryTransformer}.
@@ -57,6 +59,7 @@ public class GetFolderAndContentsQueryTransformerTest {
                 Arrays.asList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setFormatCodes(Arrays.asList(new Code("code13", null, null), new Code("code14", null, null)));
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -81,8 +84,11 @@ public class GetFolderAndContentsQueryTransformerTest {
         assertEquals(2, slots.size());
         assertEquals(Arrays.asList("('code10^^scheme10')", "('code11^^scheme11')"), slots.get(0).getValueList());
         assertEquals(Arrays.asList("('code12^^scheme12')"), slots.get(1).getValueList());
-        
-        assertEquals(5, ebXML.getSlots().size());
+
+        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
+
+        assertEquals(6, ebXML.getSlots().size());
     }
     
     @Test

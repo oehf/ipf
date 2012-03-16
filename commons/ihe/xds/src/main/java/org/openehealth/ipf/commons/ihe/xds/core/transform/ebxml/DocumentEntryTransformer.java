@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Author;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PatientInfoTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.hl7.PersonTransformer;
 
@@ -77,6 +79,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         super.addAttributesFromEbXML(docEntry, extrinsic);
         docEntry.setAvailabilityStatus(extrinsic.getStatus());        
         docEntry.setMimeType(extrinsic.getMimeType());
+        docEntry.setType(DocumentEntryType.valueOfUuid(extrinsic.getObjectType()));
         docEntry.setHomeCommunityId(extrinsic.getHome());
     }
 
@@ -85,7 +88,7 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         super.addAttributes(metaData, ebXML, objectLibrary);
         ebXML.setStatus(metaData.getAvailabilityStatus());                
         ebXML.setMimeType(metaData.getMimeType());
-        ebXML.setObjectType(STABLE_DOC_ENTRY);
+        ebXML.setObjectType(DocumentEntryType.toUuid(metaData.getType()));
         ebXML.setHome(metaData.getHomeCommunityId());
     }
 

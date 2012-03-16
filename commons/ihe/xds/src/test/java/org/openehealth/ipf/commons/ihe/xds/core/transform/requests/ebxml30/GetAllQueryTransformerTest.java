@@ -25,10 +25,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
@@ -61,6 +58,7 @@ public class GetAllQueryTransformerTest {
         query.setStatusFolders(Arrays.asList(AvailabilityStatus.DEPRECATED));
         query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.SUBMITTED));
         query.setHomeCommunityId("12.21.41");
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -90,8 +88,11 @@ public class GetAllQueryTransformerTest {
 
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_STATUS.getSlotName()));
-        
-        assertEquals(7, ebXML.getSlots().size());
+
+        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
+
+        assertEquals(8, ebXML.getSlots().size());
     }
     
     @Test

@@ -102,8 +102,11 @@ public class FindDocumentsQueryTransformerTest {
         
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
-        
-        assertEquals(18, ebXML.getSlots().size());
+
+        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
+
+        assertEquals(19, ebXML.getSlots().size());
     }
     
     @Test

@@ -36,4 +36,26 @@ public class GetSubmissionSetAndContentsQueryTransformer extends GetByIDAndCodes
                 DOC_ENTRY_CONFIDENTIALITY_CODE,
                 DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME);
     }
+
+    @Override
+    public void toEbXML(GetSubmissionSetAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.toEbXML(query, ebXML);
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
+    }
+
+    @Override
+    public void fromEbXML(GetSubmissionSetAndContentsQuery query, EbXMLAdhocQueryRequest ebXML) {
+        if (query == null || ebXML == null) {
+            return;
+        }
+
+        super.fromEbXML(query, ebXML);
+        QuerySlotHelper slots = new QuerySlotHelper(ebXML);
+        query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
+    }
 }

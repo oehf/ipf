@@ -57,6 +57,8 @@ public class GetAllQueryTransformer {
         
         slots.fromCode(DOC_ENTRY_FORMAT_CODE, query.getFormatCodes());
         slots.fromCode(DOC_ENTRY_CONFIDENTIALITY_CODE, query.getConfidentialityCodes());
+
+        slots.fromDocumentEntryType(DOC_ENTRY_TYPE, query.getDocumentEntryTypes());
     }
     
     /**
@@ -84,5 +86,7 @@ public class GetAllQueryTransformer {
         query.setConfidentialityCodes(slots.toCodeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME));
         query.setFormatCodes(slots.toCodeList(DOC_ENTRY_FORMAT_CODE));
         query.setHomeCommunityId(ebXML.getHome());
+
+        query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
     }
 }

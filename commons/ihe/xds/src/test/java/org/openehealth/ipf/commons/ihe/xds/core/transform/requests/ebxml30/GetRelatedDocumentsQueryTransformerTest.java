@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetRelatedDocumentsQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
@@ -47,6 +48,7 @@ public class GetRelatedDocumentsQueryTransformerTest {
         query.setUniqueId("uniqueId1");
         query.setHomeCommunityId("home");
         query.setAssociationTypes(Arrays.asList(AssociationType.HAS_MEMBER, AssociationType.TRANSFORM_AND_REPLACE));
+        query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
@@ -66,8 +68,11 @@ public class GetRelatedDocumentsQueryTransformerTest {
 
         assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:AssociationType:HasMember')", "('urn:ihe:iti:2007:AssociationType:XFRM_RPLC')"),
                 ebXML.getSlotValues(QueryParameter.ASSOCIATION_TYPE.getSlotName()));
-        
-        assertEquals(3, ebXML.getSlots().size());
+
+        assertEquals(Arrays.asList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
+                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_TYPE.getSlotName()));
+
+        assertEquals(4, ebXML.getSlots().size());
     }
     
     @Test
