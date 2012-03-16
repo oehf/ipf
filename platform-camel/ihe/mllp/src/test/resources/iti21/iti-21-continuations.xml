@@ -83,6 +83,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <bean id="serverInLogger" scope="prototype" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerInPayloadLoggerInterceptor">
         <constructor-arg value="#{@logFileNamePrefix}-server-in.txt" />
+        <property name="locallyEnabled" value="true" />
     </bean>
 
     <bean id="serverOutLogger" scope="prototype" class="org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerOutPayloadLoggerInterceptor">

@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.core.payload.PayloadLoggingSpelContext;
  */
 public class MllpPayloadLoggerBase extends PayloadLoggerBase<PayloadLoggingSpelContext> {
 
-    protected void logPayload(Exchange exchange, boolean useOutMessage) throws Exception {
+    public void logPayload(Exchange exchange, boolean useOutMessage) throws Exception {
         Long sequenceId = exchange.getProperty(SEQUENCE_ID_PROPERTY_NAME, Long.class);
         if (sequenceId == null) {
             sequenceId = getNextSequenceId();
