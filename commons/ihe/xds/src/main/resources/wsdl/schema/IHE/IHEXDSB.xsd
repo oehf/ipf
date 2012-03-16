@@ -51,8 +51,18 @@
 									<xs:documentation>This is the XDSDocumentEntry.uniqueId attribute in the XDS metadata</xs:documentation>
 								</xs:annotation>
 							</xs:element>
+							<xs:element name="NewRepositoryUniqueId" type="rim:LongName" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This identifies the Document Repository that will support retrieval of the document created as a result of retrieval of the On-Demand Document.  This is required when the On-Demand Document Source supports the Persistence of Retrieved Documents Option.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NewDocumentUniqueId" type="rim:LongName" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>This identifies the document returned in the response when retrieval is of an On-Demand Document.  This is required when retrieval is of an On-Demand Document.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
 							<xs:element name="mimeType" type="rim:LongName"/>
-							<xs:element name="Document" type="xs:base64Binary" xmime:expectedContentTypes="application/octet-stream"/>
+							<xs:element name="Document" type="xs:base64Binary"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -68,7 +78,7 @@
 				<xs:element name="Document" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:simpleContent>
-							<xs:extension base="xs:base64Binary" xmime:expectedContentTypes="application/octet-stream">
+							<xs:extension base="xs:base64Binary">
 								<xs:attribute name="id" type="xs:anyURI" use="required">
 									<xs:annotation>
 										<xs:documentation>This corresponds to the ExtrinsicObject id in the eb RIM metadata a provides a linkage between the actual document data and its metadata</xs:documentation>

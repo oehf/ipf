@@ -57,14 +57,18 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
     public List<RetrievedDocument> getDocuments() {
         List<RetrievedDocument> docs = new ArrayList<RetrievedDocument>();
         for (DocumentResponse documentResponse : response.getDocumentResponse()) {
-            RetrievedDocument doc = new RetrievedDocument();            
-            doc.setDataHandler(documentResponse.getDocument());
             RetrieveDocument requestData = new RetrieveDocument();
-            doc.setRequestData(requestData);
             requestData.setDocumentUniqueId(documentResponse.getDocumentUniqueId());
             requestData.setHomeCommunityId(documentResponse.getHomeCommunityId());
             requestData.setRepositoryUniqueId(documentResponse.getRepositoryUniqueId());
+
+            RetrievedDocument doc = new RetrievedDocument();
+            doc.setDataHandler(documentResponse.getDocument());
+            doc.setRequestData(requestData);
+            doc.setNewRepositoryUniqueId(documentResponse.getNewRepositoryUniqueId());
+            doc.setNewDocumentUniqueId(documentResponse.getNewDocumentUniqueId());
             doc.setMimeType(documentResponse.getMimeType());
+
             docs.add(doc);
         }
         return docs;
@@ -77,6 +81,8 @@ public class EbXMLRetrieveDocumentSetResponse30 implements EbXMLRetrieveDocument
             for (RetrievedDocument doc : documents) {
                 DocumentResponse documentResponse = new DocumentResponse();
                 documentResponse.setDocument(doc.getDataHandler());
+                documentResponse.setNewRepositoryUniqueId(doc.getNewRepositoryUniqueId());
+                documentResponse.setNewDocumentUniqueId(doc.getNewDocumentUniqueId());
                 documentResponse.setMimeType(doc.getMimeType());
                 RetrieveDocument requestData = doc.getRequestData();
                 if (requestData != null) {

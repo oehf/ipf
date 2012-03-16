@@ -40,7 +40,7 @@ class RegRepModelExtension {
         
         ProcessorDefinition.metaClass.retrieve = {
             delegate.transform {
-                [ new RetrievedDocument(dataStore.get(it.in.body.documentUniqueId), it.in.body, 'text/plain') ]
+                [ new RetrievedDocument(dataStore.get(it.in.body.documentUniqueId), it.in.body, null, null, 'text/plain') ]
             }
         }
         

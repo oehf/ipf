@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
 import org.openehealth.ipf.commons.ihe.ws.utils.LargeDataSource;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.*;
@@ -115,6 +114,8 @@ public abstract class SampleData {
         doc2.setRequestData(requestData2);
         doc2.setDataHandler(dataHandler2);
         doc2.setMimeType("application/test2");
+        doc2.setNewRepositoryUniqueId("repo2-new");
+        doc2.setNewDocumentUniqueId("doc2-new");
 
         RetrievedDocumentSet response = new RetrievedDocumentSet();
         response.getDocuments().add(doc1);

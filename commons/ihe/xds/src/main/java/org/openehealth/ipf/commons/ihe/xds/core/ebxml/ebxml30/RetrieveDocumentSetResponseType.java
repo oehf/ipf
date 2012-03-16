@@ -43,6 +43,8 @@ import java.util.List;
  *                     &lt;element name="HomeCommunityId" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}LongName" minOccurs="0"/>
  *                     &lt;element name="RepositoryUniqueId" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}LongName"/>
  *                     &lt;element name="DocumentUniqueId" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}LongName"/>
+ *                     &lt;element name="NewRepositoryUniqueId" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}LongName" minOccurs="0"/>
+ *                     &lt;element name="NewDocumentUniqueId" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}LongName" minOccurs="0"/>
  *                     &lt;element name="mimeType" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}LongName"/>
  *                     &lt;element name="Document" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
  *                   &lt;/sequence>
@@ -155,6 +157,8 @@ public class RetrieveDocumentSetResponseType {
         "homeCommunityId",
         "repositoryUniqueId",
         "documentUniqueId",
+        "newRepositoryUniqueId",
+        "newDocumentUniqueId",
         "mimeType",
         "document"
     })
@@ -166,6 +170,10 @@ public class RetrieveDocumentSetResponseType {
         private String repositoryUniqueId;
         @XmlElement(name = "DocumentUniqueId", required = true)
         private String documentUniqueId;
+        @XmlElement(name = "NewRepositoryUniqueId")
+        private String newRepositoryUniqueId;
+        @XmlElement(name = "NewDocumentUniqueId")
+        private String newDocumentUniqueId;
         @XmlElement(required = true)
         private String mimeType;
         @XmlElement(name = "Document", required = true)
@@ -242,6 +250,22 @@ public class RetrieveDocumentSetResponseType {
          */
         public void setDocumentUniqueId(String value) {
             documentUniqueId = value;
+        }
+
+        public String getNewRepositoryUniqueId() {
+            return newRepositoryUniqueId;
+        }
+
+        public void setNewRepositoryUniqueId(String newRepositoryUniqueId) {
+            this.newRepositoryUniqueId = newRepositoryUniqueId;
+        }
+
+        public String getNewDocumentUniqueId() {
+            return newDocumentUniqueId;
+        }
+
+        public void setNewDocumentUniqueId(String newDocumentUniqueId) {
+            this.newDocumentUniqueId = newDocumentUniqueId;
         }
 
         /**
