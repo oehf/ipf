@@ -30,7 +30,7 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Audit strategy for ITI-42.
  * @author Dmytro Rud
  */
-abstract class Iti42AuditStrategy extends XdsAuditStrategy {
+public abstract class Iti42AuditStrategy extends XdsAuditStrategy {
 
     /**
      * Constructs the audit strategy.
@@ -40,7 +40,7 @@ abstract class Iti42AuditStrategy extends XdsAuditStrategy {
      *      whether this strategy should allow incomplete audit records
      *      (parameter initially configurable via endpoint URL).
      */
-    Iti42AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
+    protected Iti42AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 

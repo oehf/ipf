@@ -36,6 +36,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.context.support.WebApplicationContextUtils
 import org.apache.commons.io.IOUtils
+import org.openehealth.ipf.commons.ihe.core.atna.custom.CustomXdsAuditor
 
 /**
  * Base class for tests that are run within an embedded web container.
@@ -118,6 +119,14 @@ class StandardTestContainer {
          Hl7v3Auditor.auditor.config = new AuditorModuleConfig()
          Hl7v3Auditor.auditor.config.auditRepositoryHost = 'localhost'
          Hl7v3Auditor.auditor.config.auditRepositoryPort = auditPort
+
+         CustomXdsAuditor.auditor.config = new AuditorModuleConfig()
+         CustomXdsAuditor.auditor.config.auditSourceId = 'registryId'
+         CustomXdsAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         CustomXdsAuditor.auditor.config.auditRepositoryHost = 'localhost'
+         CustomXdsAuditor.auditor.config.auditRepositoryPort = auditPort
+         CustomXdsAuditor.auditor.config.systemUserId = 'registryUserId'
+         CustomXdsAuditor.auditor.config.systemAltUserId = 'registryAltUserId'
 
          XCAInitiatingGatewayAuditor.auditor.config = new AuditorModuleConfig()
          XCAInitiatingGatewayAuditor.auditor.config.auditSourceId = 'initiatingGwId'

@@ -62,6 +62,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                     new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                     new StatusValidation(DOC_ENTRY_STATUS),
+                    new DocumentEntryTypeValidation(),
                 };
 
             case FIND_SUBMISSION_SETS:
@@ -73,7 +74,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new NumberValidation(SUBMISSION_SET_SUBMISSION_TIME_TO, timeValidator),
                     new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
                     new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
-                    new StatusValidation(SUBMISSION_SET_STATUS)
+                    new StatusValidation(SUBMISSION_SET_STATUS),
                 };
 
             case FIND_FOLDERS:
@@ -82,7 +83,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new NumberValidation(FOLDER_LAST_UPDATE_TIME_FROM, timeValidator),
                     new NumberValidation(FOLDER_LAST_UPDATE_TIME_TO, timeValidator),
                     new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
-                    new StatusValidation(FOLDER_STATUS)
+                    new StatusValidation(FOLDER_STATUS),
                 };
 
             case GET_ALL:
@@ -91,7 +92,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StatusValidation(DOC_ENTRY_STATUS),
                     new StatusValidation(SUBMISSION_SET_STATUS),
                     new StatusValidation(FOLDER_STATUS),
-                    new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME)
+                    new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                    new DocumentEntryTypeValidation(),
                 };
 
             case GET_DOCUMENTS:
@@ -100,7 +102,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new HomeCommunityIdValidation(requireHomeCommunityId),
                     new ChoiceValidation(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
                     new StringListValidation(DOC_ENTRY_UUID, nopValidator),
-                    new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator)
+                    new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
                 };
 
             case GET_FOLDERS_FOR_DOCUMENT:
@@ -134,6 +136,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
                     new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                     new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                    new DocumentEntryTypeValidation(),
                 };
 
             case GET_FOLDER_AND_CONTENTS:
@@ -144,6 +147,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
                     new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
                     new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                    new DocumentEntryTypeValidation(),
                 };
 
             case GET_RELATED_DOCUMENTS:
@@ -153,6 +157,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                     new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
                     new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
                     new AssociationValidation(ASSOCIATION_TYPE),
+                    new DocumentEntryTypeValidation(),
                 };
         }
 

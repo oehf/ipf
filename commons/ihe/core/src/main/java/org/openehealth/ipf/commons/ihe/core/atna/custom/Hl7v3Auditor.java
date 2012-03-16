@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
-import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
 import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCodes;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes;
 import org.openhealthtools.ihe.atna.auditor.context.AuditorModuleContext;
@@ -29,7 +28,7 @@ import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Implementation of an HL7v3 Auditors to send audit messages for
+ * Implementation of HL7v3 Auditors to send audit messages for
  * <ul>
  *     <li>ITI-44 (PIX v3)</li>
  *     <li>ITI-45 (PIX v3)</li>
@@ -42,7 +41,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Dmytro Rud
  */
-public class Hl7v3Auditor extends IHEAuditor {
+public class Hl7v3Auditor extends CustomAuditor {
 
     public static Hl7v3Auditor getAuditor() {
         AuditorModuleContext ctx = AuditorModuleContext.getContext();
@@ -295,41 +294,6 @@ public class Hl7v3Auditor extends IHEAuditor {
         addPatientParticipantObjects(event, patientIds, null);
         event.addQedParticipantObject(queryId, payloadBytes(queryPayload));
         audit(event);
-    }
-
-
-    protected void configureEvent(
-            boolean serverSide,
-            GenericIHEAuditEventMessage event,
-            String replyToUri,
-            String userName,
-            String serverUri,
-            String clientIpAddress)
-    {
-        event.setAuditSourceId(
-                getAuditSourceId(),
-                getAuditEnterpriseSiteId());
-
-        // Set the source active participant
-        event.addSourceActiveParticipant(
-                replyToUri,
-                serverSide ? null : getSystemAltUserId(),
-                null,
-                serverSide ? clientIpAddress : getSystemNetworkId(),
-                true);
-
-        // Set the human requestor active participant (from XUA)
-        if (! EventUtils.isEmptyOrNull(userName)) {
-            event.addHumanRequestorActiveParticipant(userName, null, userName, null);
-        }
-
-        // Set the destination active participant
-        event.addDestinationActiveParticipant(
-                serverUri,
-                serverSide ? getSystemAltUserId() : null,
-                null,
-                EventUtils.getAddressForUrl(serverUri, false),
-                false);
     }
 
 

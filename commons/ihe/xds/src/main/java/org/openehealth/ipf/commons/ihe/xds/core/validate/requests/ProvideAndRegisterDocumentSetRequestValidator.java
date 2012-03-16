@@ -20,9 +20,10 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.STABLE_DOC_ENTRY;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOCUMENT_FOR_DOC_ENTRY;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_DOC_ENTRY_FOR_DOCUMENT;
+
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
@@ -52,7 +53,7 @@ public class ProvideAndRegisterDocumentSetRequestValidator implements Validator<
         Map<String, DataHandler> documents = request.getDocuments();
 
         Set<String> docEntryIds = new HashSet<String>();
-        for (EbXMLExtrinsicObject docEntry : request.getExtrinsicObjects(STABLE_DOC_ENTRY)) {
+        for (EbXMLExtrinsicObject docEntry : request.getExtrinsicObjects(DocumentEntryType.STABLE.getUuid())) {
             String docId = docEntry.getId();
             if (docId != null) {
                 docEntryIds.add(docId);

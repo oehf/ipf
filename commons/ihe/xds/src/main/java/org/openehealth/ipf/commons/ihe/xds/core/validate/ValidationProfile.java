@@ -82,7 +82,8 @@ public class ValidationProfile {
         if ((interactionId == ITI_18) ||
             (interactionId == ITI_41) ||
             (interactionId == ITI_42) ||
-            (interactionId == ITI_43))
+            (interactionId == ITI_43) ||
+            (interactionId == ITI_61))
         {
             return InteractionProfile.XDS_B;
         }

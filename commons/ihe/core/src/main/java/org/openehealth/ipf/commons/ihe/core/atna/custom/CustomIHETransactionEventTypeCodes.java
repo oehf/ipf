@@ -19,19 +19,21 @@ import org.openhealthtools.ihe.atna.auditor.codes.ihe.IHETransactionEventTypeCod
 import org.openhealthtools.ihe.atna.auditor.models.rfc3881.CodedValueType;
 
 /**
- * Audit Event ID codes for XCPD Transactions
+ * Audit Event ID codes for custom eHealth Transactions
  */
 public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType {
 
-    /**
-     * "IHE Transactions","ITI-56","Patient Location Query"
-     */
     public static final class PatientLocationQuery extends IHETransactionEventTypeCodes {
         public PatientLocationQuery() {
             super("ITI-56", "Patient Location Query");
         }   
     }
 
+    public static final class RegisterOnDemandDocumentEntry extends IHETransactionEventTypeCodes {
+        public RegisterOnDemandDocumentEntry() {
+            super("ITI-61", "Register On-Demand Document Entry");
+        }
+    }
 
     public static final class QueryExistingData extends IHETransactionEventTypeCodes {
         public QueryExistingData() {

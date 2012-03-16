@@ -50,7 +50,7 @@ public class Hl7v3AuditorTest extends TestCase {
 
     
     public void testAuditors() {
-        final Hl7v3Auditor auditor = new Hl7v3Auditor();
+        final Hl7v3Auditor auditor = AuditorManager.getHl7v3Auditor();
 
         auditor.auditIti44Add(true,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP,

@@ -43,6 +43,9 @@ import java.util.regex.Pattern;
  * @author Dmytro Rud
  */
 public class QuerySlotHelper {
+    private static final Pattern PATTERN =
+            Pattern.compile("\\s*,?\\s*'((?:[^']*(?:'')*[^']*)*)'(.*)", Pattern.DOTALL);
+
     private final EbXMLAdhocQueryRequest ebXML;
 
     /**
@@ -426,13 +429,12 @@ public class QuerySlotHelper {
         
         List<String> values = new ArrayList<String>();
 
-        Pattern pattern = Pattern.compile("\\s*,?\\s*'((?:[^']*(?:'')*[^']*)*)'(.*)", Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(list);
+        Matcher matcher = PATTERN.matcher(list);
         while (matcher.matches() && matcher.groupCount() == 2) {
             String value = matcher.group(1);
             value = value.replaceAll("''", "'");
             values.add(value);
-            matcher = pattern.matcher(matcher.group(2));            
+            matcher = PATTERN.matcher(matcher.group(2));
         }
         
         return values;
