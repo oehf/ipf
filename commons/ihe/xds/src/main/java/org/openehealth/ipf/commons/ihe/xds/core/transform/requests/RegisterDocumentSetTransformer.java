@@ -103,10 +103,8 @@ public class RegisterDocumentSetTransformer {
         
         RegisterDocumentSet request = new RegisterDocumentSet();        
         
-        for (DocumentEntryType entryType : DocumentEntryType.values()) {
-            for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(entryType.getUuid())) {
-                request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
-            }
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+            request.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
         }
 
         for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {

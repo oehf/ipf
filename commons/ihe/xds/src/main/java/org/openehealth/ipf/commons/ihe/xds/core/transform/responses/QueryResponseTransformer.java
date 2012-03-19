@@ -117,11 +117,9 @@ public class QueryResponseTransformer {
 
         boolean foundNonObjRefs = false;
         
-        for (DocumentEntryType entryType : DocumentEntryType.values()) {
-            for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(entryType.getUuid())) {
-                response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
-                foundNonObjRefs = true;
-            }
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+            response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
+            foundNonObjRefs = true;
         }
 
         for (EbXMLRegistryPackage regPackage : ebXML.getRegistryPackages(Vocabulary.FOLDER_CLASS_NODE)) {

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30;
 
+import static org.apache.commons.lang3.Validate.noNullElements;
 import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.*;
@@ -111,14 +112,19 @@ public abstract class EbXMLObjectContainer30 implements EbXMLObjectContainer {
     }
     
     @Override
-    public List<EbXMLExtrinsicObject> getExtrinsicObjects(String objectType) {
-        notNull(objectType, "objectType cannot be null");
-        
+    public List<EbXMLExtrinsicObject> getExtrinsicObjects(String... objectTypes) {
+        noNullElements(objectTypes, "objectTypes cannot be null or contain null elements");
+
         List<EbXMLExtrinsicObject> results = new ArrayList<EbXMLExtrinsicObject>();
         for (JAXBElement<? extends IdentifiableType> identifiable : getContents()) {
             ExtrinsicObjectType extrinsic = cast(identifiable, ExtrinsicObjectType.class);            
-            if (extrinsic != null && objectType.equals(extrinsic.getObjectType())) {
-                results.add(new EbXMLExtrinsicObject30(extrinsic, objectLibrary));
+            if (extrinsic != null) {
+                for (String objectType : objectTypes) {
+                    if (objectType.equals(extrinsic.getObjectType())) {
+                        results.add(new EbXMLExtrinsicObject30(extrinsic, objectLibrary));
+                        break;
+                    }
+                }
             }
         }
         

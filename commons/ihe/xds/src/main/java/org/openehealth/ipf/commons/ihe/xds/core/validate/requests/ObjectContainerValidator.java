@@ -63,20 +63,24 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         new EventCodeListDisplayNameValidator()
     };
 
+
     private List<RegistryObjectValidator> documentEntrySlotValidators(ValidationProfile profile) {
         List<RegistryObjectValidator> validators = new ArrayList<RegistryObjectValidator>();
-        boolean isContinuaHRN = profile.getInteractionId() == IpfInteractionId.Continua_HRN;
-        
+        boolean isContinuaHRN = (profile.getInteractionId() == IpfInteractionId.Continua_HRN);
+        boolean isIti61       = (profile.getInteractionId() == IpfInteractionId.ITI_61);
+
         Collections.addAll(validators,
-            new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator),
+            new SlotValueValidation(SLOT_NAME_CREATION_TIME, timeValidator, 0, isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_START_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_SERVICE_STOP_TIME, timeValidator, 0, 1),
             new SlotValueValidation(SLOT_NAME_HASH, hashValidator,
-                    isContinuaHRN ? 1 : 0, 1),
+                    isContinuaHRN ? 1 : 0,
+                    isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_LANGUAGE_CODE, languageCodeValidator, 0, 1),
-            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, 1),
+            new SlotValueValidation(SLOT_NAME_LEGAL_AUTHENTICATOR, xcnValidator, 0, isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SIZE, positiveNumberValidator,
-                    isContinuaHRN ? 1 : 0, 1),
+                    isContinuaHRN ? 1 : 0,
+                    isIti61 ? 0 : 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_ID, cxValidator,
                     (profile.isEbXml30Based() && ! profile.isQuery()) ? 1 : 0, 1),
             new SlotValueValidation(SLOT_NAME_SOURCE_PATIENT_INFO, pidValidator,
@@ -84,23 +88,23 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
             new SlotValidation(SLOT_NAME_URI, uriValidator),
             new ClassificationValidation(DOC_ENTRY_AUTHOR_CLASS_SCHEME, 0, Integer.MAX_VALUE, OPTIONAL, authorValidations),
             new ClassificationValidation(DOC_ENTRY_CLASS_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
-            new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, 
-                                         isContinuaHRN ? REQUIRED : OPTIONAL, 
+            new ClassificationValidation(DOC_ENTRY_CONFIDENTIALITY_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE,
+                                         isContinuaHRN ? REQUIRED : OPTIONAL,
                                          codingSchemeValidations),
-            //IHE: iheEventCodeListValidations handles the conditionally REQUIRED 
+            //IHE: iheEventCodeListValidations handles the conditionally REQUIRED
             //     validation of display name of eventCodeListDisplayName in a slotValueValidator
-            new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE, 
-                                         isContinuaHRN ? REQUIRED : OPTIONAL, 
+            new ClassificationValidation(DOC_ENTRY_EVENT_CODE_CLASS_SCHEME, 0, Integer.MAX_VALUE,
+                                         isContinuaHRN ? REQUIRED : OPTIONAL,
                                          isContinuaHRN ? codingSchemeValidations : iheEventCodeListValidations),
-            new ClassificationValidation(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME, 
-                                         isContinuaHRN ? OPTIONAL : REQUIRED, 
+            new ClassificationValidation(DOC_ENTRY_FORMAT_CODE_CLASS_SCHEME,
+                                         isContinuaHRN ? OPTIONAL : REQUIRED,
                                          codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_PRACTICE_SETTING_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ClassificationValidation(DOC_ENTRY_TYPE_CODE_CLASS_SCHEME, REQUIRED, codingSchemeValidations),
             new ExternalIdentifierValidation(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID, cxValidator));
 
-        if (profile.getInteractionId() == IpfInteractionId.ITI_42) {
+        if ((profile.getInteractionId() == IpfInteractionId.ITI_42) || isIti61) {
             validators.add(new SlotValueValidation(SLOT_NAME_REPOSITORY_UNIQUE_ID, oidValidator));
         }
         return validators;
@@ -175,7 +179,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateDocumentEntries(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(STABLE_DOC_ENTRY)) {
+        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
+            boolean onDemandExpected = (profile.getInteractionId() == IpfInteractionId.ITI_61);
+            boolean onDemandProvided = DocumentEntryType.ON_DEMAND.getUuid().equals(docEntry.getObjectType());
+            metaDataAssert(profile.isQuery() || (onDemandExpected == onDemandProvided),
+                    WRONG_DOCUMENT_ENTRY_TYPE, docEntry.getObjectType());
+
             runValidations(docEntry, documentEntrySlotValidators(profile));
 
             AvailabilityStatus status = docEntry.getStatus();
@@ -202,7 +211,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     }
 
     private void validateUniqueIds(EbXMLObjectContainer container) throws XDSMetaDataException {
-        validateUniqueIds(container.getExtrinsicObjects(STABLE_DOC_ENTRY), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
+        validateUniqueIds(container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND), DOC_ENTRY_UNIQUE_ID_EXTERNAL_ID);
         validateUniqueIds(container.getRegistryPackages(FOLDER_CLASS_NODE), FOLDER_UNIQUE_ID_EXTERNAL_ID);
         validateUniqueIds(container.getRegistryPackages(SUBMISSION_SET_CLASS_NODE), SUBMISSION_SET_UNIQUE_ID_EXTERNAL_ID);
     }
@@ -238,7 +247,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
     
         String patientId = submissionSet.getExternalIdentifierValue(SUBMISSION_SET_PATIENT_ID_EXTERNAL_ID);
     
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(STABLE_DOC_ENTRY)) {
+        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             String patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
             metaDataAssert(patientId.equals(patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
         }
@@ -251,7 +260,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
     private void validateAssociations(EbXMLObjectContainer container, ValidationProfile profile) throws XDSMetaDataException {
         Set<String> docEntryIds = new HashSet<String>();
-        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(STABLE_DOC_ENTRY)) {
+        for (EbXMLExtrinsicObject docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             if (docEntry.getId() != null) {
                 docEntryIds.add(docEntry.getId());
             }
@@ -287,7 +296,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         }
     }
 
-    private void validateDocumentRelationship(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile)throws XDSMetaDataException {
+    private void validateDocumentRelationship(EbXMLAssociation association, Set<String> docEntryIds, ValidationProfile profile) throws XDSMetaDataException {
         if (!profile.isQuery()) {
             metaDataAssert(docEntryIds.contains(association.getSource()), SOURCE_UUID_NOT_FOUND);
         }

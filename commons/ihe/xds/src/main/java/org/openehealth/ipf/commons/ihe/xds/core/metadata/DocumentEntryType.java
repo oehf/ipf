@@ -23,6 +23,11 @@ public enum DocumentEntryType {
     STABLE("urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1"),
     ON_DEMAND("urn:uuid:34268e47-fdf5-41a6-ba33-82133c465248");
 
+    public static final String[] STABLE_OR_ON_DEMAND = new String[] {
+            STABLE.getUuid(),
+            ON_DEMAND.getUuid(),
+    };
+
     private final String uuid;
 
     private DocumentEntryType(String uuid) {

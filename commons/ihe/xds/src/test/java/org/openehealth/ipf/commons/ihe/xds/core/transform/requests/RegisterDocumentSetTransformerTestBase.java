@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
@@ -63,7 +64,7 @@ public abstract class RegisterDocumentSetTransformerTestBase implements FactoryC
         assertEquals("folder01", associations.get(2).getSource());
         assertEquals("document01", associations.get(2).getTarget());
         
-        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(Vocabulary.STABLE_DOC_ENTRY);
+        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
         assertEquals(1, docEntries.size());
         assertEquals("document01", docEntries.get(0).getId());
         assertEquals("Document 01", docEntries.get(0).getName().getValue());

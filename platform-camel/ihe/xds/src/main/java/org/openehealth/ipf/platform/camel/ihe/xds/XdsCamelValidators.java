@@ -206,7 +206,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
             EbXMLSubmitObjectsRequest30 message =
                 new EbXMLSubmitObjectsRequest30(exchange.getIn().getBody(SubmitObjectsRequest.class));
             ValidationProfile profile = new ValidationProfile(ITI_61);
-            // TODO: new SubmitObjectsRequestValidator().validate(message, profile);
+            new SubmitObjectsRequestValidator().validate(message, profile);
         }
     };
 
@@ -218,7 +218,7 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
             }
             EbXMLRegistryResponse30 message = new EbXMLRegistryResponse30(exchange.getIn().getBody(RegistryResponseType.class));
             ValidationProfile profile = new ValidationProfile(ITI_61);
-            // TODO: new RegistryResponseValidator().validate(message, profile);
+            new RegistryResponseValidator().validate(message, profile);
         }
     };
 

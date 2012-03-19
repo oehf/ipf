@@ -31,6 +31,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLProvideAndRegisterDocumentSetRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FactoryCreator;
@@ -74,7 +75,7 @@ public abstract class ProvideAndRegisterDocumentSetTransformerTestBase implement
         assertEquals("folder01", associations.get(2).getSource());
         assertEquals("document01", associations.get(2).getTarget());
         
-        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(Vocabulary.STABLE_DOC_ENTRY);
+        List<EbXMLExtrinsicObject> docEntries = ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND);
         assertEquals(1, docEntries.size());
         assertEquals("document01", docEntries.get(0).getId());
         assertEquals("Document 01", docEntries.get(0).getName().getValue());

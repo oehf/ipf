@@ -115,19 +115,17 @@ public class ProvideAndRegisterDocumentSetTransformer {
         ProvideAndRegisterDocumentSet request = new ProvideAndRegisterDocumentSet();
         
         Map<String, DataHandler> documents = ebXML.getDocuments();
-        for (DocumentEntryType entryType : DocumentEntryType.values()) {
-            for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(entryType.getUuid())) {
-                DocumentEntry docEntry = documentEntryTransformer.fromEbXML(extrinsic);
-                if (docEntry != null) {
-                    Document document = new Document();
-                    document.setDocumentEntry(docEntry);
-                    if (docEntry.getEntryUuid() != null) {
-                        String id = docEntry.getEntryUuid();
-                        DataHandler data = documents.get(id);
-                        document.setContent(DataHandler.class, data);
-                    }
-                    request.getDocuments().add(document);
+        for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE.getUuid())) {
+            DocumentEntry docEntry = documentEntryTransformer.fromEbXML(extrinsic);
+            if (docEntry != null) {
+                Document document = new Document();
+                document.setDocumentEntry(docEntry);
+                if (docEntry.getEntryUuid() != null) {
+                    String id = docEntry.getEntryUuid();
+                    DataHandler data = documents.get(id);
+                    document.setContent(DataHandler.class, data);
                 }
+                request.getDocuments().add(document);
             }
         }
 

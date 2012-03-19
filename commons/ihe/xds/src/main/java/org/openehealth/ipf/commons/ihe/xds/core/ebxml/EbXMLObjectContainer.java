@@ -31,11 +31,11 @@ public interface EbXMLObjectContainer {
     
     /**
      * Returns the list of extrinsic objects of a given type.
-     * @param objectType
-     *          the object type of the extrinsic objects to return.
+     * @param objectTypes
+     *          the object types of the extrinsic objects to return.
      * @return the extrinsic objects.
      */
-    List<EbXMLExtrinsicObject> getExtrinsicObjects(String objectType);
+    List<EbXMLExtrinsicObject> getExtrinsicObjects(String... objectTypes);
     
     /**
      * Returns the list of all extrinsic objects.

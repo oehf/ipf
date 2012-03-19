@@ -49,6 +49,9 @@ public class RetrieveDocumentSetResponseValidator implements Validator<EbXMLRetr
             String docId = requestData.getDocumentUniqueId();
             metaDataAssert(docId != null && !docId.isEmpty(), DOC_ID_MUST_BE_SPECIFIED);
 
+            String newDocId = doc.getNewDocumentUniqueId();
+            metaDataAssert(! docId.equals(newDocId), ON_DEMAND_DOC_ID_MUST_DIFFER);
+
             String mimeType = doc.getMimeType();
             metaDataAssert(mimeType != null && !mimeType.isEmpty(), MIME_TYPE_MUST_BE_SPECIFIED);
 
