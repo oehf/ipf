@@ -30,7 +30,7 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetRelatedDocumentsQuery", propOrder = {"documentEntryTypes"})
+@XmlType(name = "GetRelatedDocumentsQuery", propOrder = {"associationTypes", "documentEntryTypes"})
 @XmlRootElement(name = "getRelatedDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class GetRelatedDocumentsQuery extends GetFromDocumentQuery

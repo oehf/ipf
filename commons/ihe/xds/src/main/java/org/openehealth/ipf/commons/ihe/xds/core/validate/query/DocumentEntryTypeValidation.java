@@ -44,10 +44,10 @@ public class DocumentEntryTypeValidation implements QueryParameterValidation {
         QuerySlotHelper slots = new QuerySlotHelper(request);
         List<DocumentEntryType> list = slots.toDocumentEntryType(param);
 
-        metaDataAssert((list != null ) && (! list.isEmpty()), MISSING_REQUIRED_QUERY_PARAMETER, param);
-        
-        for (DocumentEntryType type : list) {
-            metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
+        if (list != null) {
+            for (DocumentEntryType type : list) {
+                metaDataAssert(type != null, INVALID_QUERY_PARAMETER_VALUE, param);
+            }
         }
     }
 }

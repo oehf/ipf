@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.FAILURE
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType
 
 /**
  * Tests the ITI-61 transaction with a webservice and client adapter defined via URIs.
@@ -59,6 +60,14 @@ class TestIti61 extends StandardTestContainer {
     @Before
     void setUp() {
         request = SampleData.createRegisterDocumentSet()
+        request.documentEntries.each { entry ->
+            // validation should fail when one of the following lines is deactivated
+            entry.type = DocumentEntryType.ON_DEMAND
+            entry.creationTime = null
+            entry.hash = null
+            entry.size = null
+            entry.legalAuthenticator = null
+        }
         docEntry = request.documentEntries[0]
     }
     

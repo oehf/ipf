@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "GetByIdQuery")
+@XmlType(name = "GetByIdQuery", propOrder = {"uniqueIds"})
 public abstract class GetByIdQuery extends GetByUuidQuery implements Serializable {
     private static final long serialVersionUID = -3955280836816390271L;
     @XmlElement(name = "uniqueId")
