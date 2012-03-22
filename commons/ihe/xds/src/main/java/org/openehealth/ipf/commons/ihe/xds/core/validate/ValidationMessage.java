@@ -77,6 +77,7 @@ public enum ValidationMessage {
     MISSING_DOC_ENTRY_FOR_DOCUMENT("A document was provided without a corresponding document entry. UUID=%1s", ErrorCode.MISSING_DOCUMENT_METADATA),
     MISSING_DOCUMENT_FOR_DOC_ENTRY("A document entry was provided without a corresponding document. UUID=%1s", ErrorCode.MISSING_DOCUMENT),
     UNKNOWN_QUERY_TYPE("Unknown query type: %1s"),
+    WRONG_QUERY_TYPE("Wring query type: %s"),
     MISSING_SQL_QUERY_TEXT("Missing SQL query text"),
     UNKNOWN_RETURN_TYPE("Unknown return type: %1s"),
     MISSING_REQUIRED_QUERY_PARAMETER("Missing required query parameter: %1s"),

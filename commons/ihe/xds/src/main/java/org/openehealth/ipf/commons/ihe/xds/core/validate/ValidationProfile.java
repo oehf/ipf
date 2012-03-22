@@ -26,7 +26,7 @@ import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
 public class ValidationProfile {
 
     public static enum InteractionProfile {
-        XDS_A, XDS_B, XCA, Continua_HRN
+        XDS_A, XDS_B, XCA, Continua_HRN, XCF
     }
 
     private InteractionId interactionId;
@@ -48,7 +48,8 @@ public class ValidationProfile {
     public boolean isQuery() {
         return ((interactionId == ITI_16) ||
                 (interactionId == ITI_18) ||
-                (interactionId == ITI_38));
+                (interactionId == ITI_38) ||
+                (interactionId == ITI_63));
     }
 
 
@@ -79,6 +80,10 @@ public class ValidationProfile {
             return InteractionProfile.XCA;
         }
 
+        if (interactionId == ITI_63) {
+            return InteractionProfile.XCF;
+        }
+
         if ((interactionId == ITI_18) ||
             (interactionId == ITI_41) ||
             (interactionId == ITI_42) ||
@@ -99,7 +104,8 @@ public class ValidationProfile {
         InteractionProfile profile = getProfile();
         return ((profile == InteractionProfile.XDS_B) ||
                 (profile == InteractionProfile.XCA) ||
-                (profile == InteractionProfile.Continua_HRN));
+                (profile == InteractionProfile.Continua_HRN) ||
+                (profile == InteractionProfile.XCF));
     }
 
 }

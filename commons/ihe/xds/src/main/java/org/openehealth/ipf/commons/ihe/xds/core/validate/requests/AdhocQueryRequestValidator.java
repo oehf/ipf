@@ -16,13 +16,17 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
 
+import java.util.*;
+
 import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
@@ -38,6 +42,35 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     private static final CXValidator cxValidator = new CXValidator();
     private static final TimeValidator timeValidator = new TimeValidator();
     private static final NopValidator nopValidator = new NopValidator();
+
+
+    private static final Map<List<InteractionId>, List<QueryType>> ALLOWED_QUERY_TYPES;
+    static {
+        ALLOWED_QUERY_TYPES = new HashMap<List<InteractionId>, List<QueryType>>(3);
+        ALLOWED_QUERY_TYPES.put(
+                Collections.<InteractionId> singletonList(ITI_16),
+                Collections.singletonList(SQL));
+        ALLOWED_QUERY_TYPES.put(
+                Arrays.<InteractionId> asList(ITI_18, ITI_38),
+                Arrays.asList(
+                        FIND_DOCUMENTS,
+                        FIND_SUBMISSION_SETS,
+                        FIND_FOLDERS,
+                        GET_ALL,
+                        GET_DOCUMENTS,
+                        GET_FOLDERS,
+                        GET_ASSOCIATIONS,
+                        GET_DOCUMENTS_AND_ASSOCIATIONS,
+                        GET_SUBMISSION_SETS,
+                        GET_SUBMISSION_SET_AND_CONTENTS,
+                        GET_FOLDER_AND_CONTENTS,
+                        GET_FOLDERS_FOR_DOCUMENT,
+                        GET_RELATED_DOCUMENTS
+                ));
+        ALLOWED_QUERY_TYPES.put(
+                Collections.<InteractionId> singletonList(ITI_63),
+                Collections.singletonList(FETCH));
+    }
 
 
     private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
@@ -173,6 +206,17 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
         QueryType queryType = QueryType.valueOfId(request.getId());
         metaDataAssert(queryType != null, UNKNOWN_QUERY_TYPE, request.getId());
+
+        boolean found = false;
+        for(Map.Entry<List<InteractionId>, List<QueryType>> entry : ALLOWED_QUERY_TYPES.entrySet()) {
+            if (entry.getKey().contains(profile.getInteractionId())) {
+                metaDataAssert(entry.getValue().contains(queryType), WRONG_QUERY_TYPE, queryType);
+                found = true;
+                break;
+            }
+        }
+        metaDataAssert(found, UNKNOWN_QUERY_TYPE, queryType);
+
         if (queryType == QueryType.SQL) {
             metaDataAssert(request.getSql() != null, MISSING_SQL_QUERY_TEXT);
         } else {
