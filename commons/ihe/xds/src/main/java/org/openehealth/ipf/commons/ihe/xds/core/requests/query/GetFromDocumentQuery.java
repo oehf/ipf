@@ -15,10 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Base class for queries that retrieve results via a document entry.
@@ -26,11 +29,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetFromDocumentQuery", propOrder = {"uuid", "uniqueId" })
-public abstract class GetFromDocumentQuery extends StoredQuery implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+public abstract class GetFromDocumentQuery extends StoredQuery {
     private static final long serialVersionUID = 627720659958894242L;
     
-    private String uuid;
-    private String uniqueId;
+    @Getter @Setter private String uuid;
+    @Getter @Setter private String uniqueId;
 
     /**
      * For JAXB serialization only.
@@ -45,66 +49,5 @@ public abstract class GetFromDocumentQuery extends StoredQuery implements Serial
      */
     protected GetFromDocumentQuery(QueryType type) {
         super(type);
-    }
-
-    /**
-     * @return the uuid to filter {@link DocumentEntry#getEntryUuid()}.
-     */
-    public String getUuid() {
-        return uuid;
-    }
-
-    /**
-     * @param uuid
-     *          the uuid to filter {@link DocumentEntry#getEntryUuid()}.
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    /**
-     * @return the unique ID to filter {@link DocumentEntry#getUniqueId()}.
-     */
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    /**
-     * @param uniqueId
-     *          the unique ID to filter {@link DocumentEntry#getUniqueId()}.
-     */
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((uniqueId == null) ? 0 : uniqueId.hashCode());
-        result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GetFromDocumentQuery other = (GetFromDocumentQuery) obj;
-        if (uniqueId == null) {
-            if (other.uniqueId != null)
-                return false;
-        } else if (!uniqueId.equals(other.uniqueId))
-            return false;
-        if (uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!uuid.equals(other.uuid))
-            return false;
-        return true;
     }
 }

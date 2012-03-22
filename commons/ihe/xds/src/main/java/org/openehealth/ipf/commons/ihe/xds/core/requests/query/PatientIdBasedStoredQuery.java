@@ -17,76 +17,11 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlType;
-import java.io.Serializable;
-
 /**
- * Base class for stored queries by patient ID.
+ * Interface for stored queries which take a patient ID as parameter.
  * @author Dmytro Rud
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "PatientIdBasedStoredQuery", propOrder = { "patientId" })
-abstract public class PatientIdBasedStoredQuery extends StoredQuery implements Serializable {
-    private static final long serialVersionUID = 8640351939561728468L;
-
-    private Identifiable patientId;
-
-    /**
-     * For JAXB serialization only.
-     */
-    public PatientIdBasedStoredQuery() {
-    }
-
-    /**
-     * Constructs the query.
-     * @param type
-     *          the type of the query.
-     */
-    protected PatientIdBasedStoredQuery(QueryType type) {
-        super(type);
-    }
-
-    /**
-     * @return the patient ID to search for.
-     */
-    public Identifiable getPatientId() {
-        return patientId;
-    }
-
-    /**
-     * @param patientId
-     *          the patient ID to search for.
-     */
-    public void setPatientId(Identifiable patientId) {
-        this.patientId = patientId;
-    }
-
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        PatientIdBasedStoredQuery other = (PatientIdBasedStoredQuery) obj;
-        if (patientId == null) {
-            if (other.patientId != null)
-                return false;
-        } else if (!patientId.equals(other.patientId))
-            return false;
-        return true;
-    }
-
+public interface PatientIdBasedStoredQuery {
+    Identifiable getPatientId();
+    void setPatientId(Identifiable patientId);
 }

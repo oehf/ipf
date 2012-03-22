@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import static org.apache.commons.lang3.Validate.noNullElements;
 import static org.apache.commons.lang3.Validate.notNull;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -43,11 +45,12 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QueryList")
+@EqualsAndHashCode(doNotUseGetters = true)
 public class QueryList<T> implements Serializable {
     private static final long serialVersionUID = -2729640243221349924L;
     
     @XmlJavaTypeAdapter(ListOfListAdapter.class)
-    private List<List<T>> outerList = new ArrayList<List<T>>();
+    @Getter private List<List<T>> outerList = new ArrayList<List<T>>();
 
     /**
      * Constructs a query list.
@@ -78,38 +81,6 @@ public class QueryList<T> implements Serializable {
     public QueryList(T singleElement) {
         notNull(singleElement, "singleElement cannot be null");
         outerList.add(Collections.singletonList(singleElement));
-    }
-
-    /**
-     * @return the outer list.
-     */
-    public List<List<T>> getOuterList() {
-        return outerList;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((outerList == null) ? 0 : outerList.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        QueryList<?> other = (QueryList<?>) obj;
-        if (outerList == null) {
-            if (other.outerList != null)
-                return false;
-        } else if (!outerList.equals(other.outerList))
-            return false;
-        return true;
     }
 
     @Override

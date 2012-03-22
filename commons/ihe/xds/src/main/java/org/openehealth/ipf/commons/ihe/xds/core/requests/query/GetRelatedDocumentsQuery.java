@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 
 import javax.xml.bind.annotation.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ import java.util.List;
 @XmlRootElement(name = "getRelatedDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
-        implements Serializable, DocumentEntryTypeAwareStoredQuery
+        implements DocumentEntryTypeAwareStoredQuery
 {
     private static final long serialVersionUID = -8768793068458839362L;
 

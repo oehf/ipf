@@ -18,10 +18,10 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 import javax.xml.bind.annotation.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,34 +29,12 @@ import java.util.List;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FindDocumentsQuery", propOrder = {
-        "status", "authorPersons", "creationTime", "serviceStartTime", "serviceStopTime", "classCodes",
-        "confidentialityCodes", "eventCodes", "formatCodes", "healthcareFacilityTypeCodes", "practiceSettingCodes",
-        "typeCodes", "documentEntryTypes"})
+@XmlType(name = "FindDocumentsQuery", propOrder = {"documentEntryTypes"})
 @XmlRootElement(name = "findDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-public class FindDocumentsQuery extends PatientIdBasedStoredQuery
-        implements Serializable, DocumentEntryTypeAwareStoredQuery
-{
+public class FindDocumentsQuery extends AbstractDocumentsQuery implements DocumentEntryTypeAwareStoredQuery {
     private static final long serialVersionUID = -5765363916663583605L;
 
-    @Getter @Setter private List<AvailabilityStatus> status;
-    @XmlElement(name = "typeCode")
-    @Getter @Setter private List<Code> typeCodes;
-    @XmlElement(name = "classCode")
-    @Getter @Setter private List<Code> classCodes;
-    @XmlElement(name = "practiceSettingCode")
-    @Getter @Setter private List<Code> practiceSettingCodes;
-    @XmlElement(name = "healthcareFacilityTypeCode")
-    @Getter @Setter private List<Code> healthcareFacilityTypeCodes;
-    @XmlElement(name = "eventCode")
-    @Getter @Setter private QueryList<Code> eventCodes;
-    @XmlElement(name = "confidentialityCode")
-    @Getter @Setter private QueryList<Code> confidentialityCodes;
-    @XmlElement(name = "formatCode")
-    @Getter @Setter private List<Code> formatCodes;
-    @XmlElement(name = "authorPerson")
-    @Getter @Setter private List<String> authorPersons;
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
 

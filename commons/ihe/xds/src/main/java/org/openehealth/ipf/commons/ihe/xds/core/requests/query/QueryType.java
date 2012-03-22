@@ -53,8 +53,10 @@ public enum QueryType {
     /** Returns folders for a specific document. */
     @XmlEnumValue("GetFoldersForDocument") GET_FOLDERS_FOR_DOCUMENT("urn:uuid:10cae35a-c7f9-4cf5-b61e-fc3278ffb578", GetFoldersForDocumentQuery.class),
     /** Returns all documents with a given relation to a specified entry. */
-    @XmlEnumValue("GetRelatedDocuments") GET_RELATED_DOCUMENTS("urn:uuid:d90e5407-b356-4d91-a89f-873917b4b0e6", GetRelatedDocumentsQuery.class);
-    
+    @XmlEnumValue("GetRelatedDocuments") GET_RELATED_DOCUMENTS("urn:uuid:d90e5407-b356-4d91-a89f-873917b4b0e6", GetRelatedDocumentsQuery.class),
+    /** Cross-Community Fetch query (ITI-63). */
+    @XmlEnumValue("Fetch") FETCH("urn:uuid:f2072993-9478-41df-a603-8f016706efe8", FetchQuery.class);
+
     private final String id;
     private final Class<? extends Query> type; 
     

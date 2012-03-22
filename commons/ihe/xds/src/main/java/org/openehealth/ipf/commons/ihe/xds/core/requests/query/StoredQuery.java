@@ -15,13 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
-import java.io.Serializable;
 
 /**
  * Base class for stored queries.
@@ -29,10 +31,11 @@ import java.io.Serializable;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "StoredQuery", propOrder = { "homeCommunityId" })
-public abstract class StoredQuery extends Query implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+public abstract class StoredQuery extends Query {
     private static final long serialVersionUID = -8296981156625412818L;
 
-    private String homeCommunityId;
+    @Getter @Setter private String homeCommunityId;
 
     /**
      * For JAXB serialization only.
@@ -47,46 +50,6 @@ public abstract class StoredQuery extends Query implements Serializable {
      */
     protected StoredQuery(QueryType type) {
         super(type);
-    }
-
-    /**
-     * @return the home community ID.
-     */
-    public String getHomeCommunityId() {
-        return homeCommunityId;
-    }
-
-    /**
-     * @param homeCommunityId
-     *          the home community ID.
-     */
-    public void setHomeCommunityId(String homeCommunityId) {
-        this.homeCommunityId = homeCommunityId;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((homeCommunityId == null) ? 0 : homeCommunityId.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        StoredQuery other = (StoredQuery) obj;
-        if (homeCommunityId == null) {
-            if (other.homeCommunityId != null)
-                return false;
-        } else if (!homeCommunityId.equals(other.homeCommunityId))
-            return false;
-        return true;
     }
 
     @Override

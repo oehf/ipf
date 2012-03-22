@@ -15,30 +15,35 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
+
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
-
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Folder;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 /**
  * Represents a stored query for FindFolders.
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FindFoldersQuery", propOrder = {"status", "lastUpdateTime", "codes"})
+@XmlType(name = "FindFoldersQuery", propOrder = {"status", "lastUpdateTime", "codes", "patientId"})
 @XmlRootElement(name = "findFoldersQuery")
-public class FindFoldersQuery extends PatientIdBasedStoredQuery implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+public class FindFoldersQuery extends StoredQuery implements PatientIdBasedStoredQuery {
     private static final long serialVersionUID = 4156643982985304259L;
 
-    private List<AvailabilityStatus> status;
+    @Getter @Setter private List<AvailabilityStatus> status;
     @XmlElement(name = "code")
-    private QueryList<Code> codes;
+    @Getter @Setter private QueryList<Code> codes;
+    @Getter @Setter private Identifiable patientId;
     
-    private final TimeRange lastUpdateTime = new TimeRange();
+    @Getter private final TimeRange lastUpdateTime = new TimeRange();
 
     /**
      * Constructs the query.
@@ -47,82 +52,8 @@ public class FindFoldersQuery extends PatientIdBasedStoredQuery implements Seria
         super(QueryType.FIND_FOLDERS);
     }
 
-    /**
-     * @return the states for filtering {@link Folder#getAvailabilityStatus()}.
-     */
-    public List<AvailabilityStatus> getStatus() {
-        return status;
-    }
-    
-    /**
-     * @param status
-     *          the states for filtering {@link Folder#getAvailabilityStatus()}.
-     */
-    public void setStatus(List<AvailabilityStatus> status) {
-        this.status = status;
-    }
-
-    /**
-     * @return the time range for filtering {@link Folder#getLastUpdateTime()}.
-     */
-    public TimeRange getLastUpdateTime() {
-        return lastUpdateTime;
-    }
-
-    /**
-     * @return the codes for filtering {@link Folder#getCodeList()}.
-     */
-    public QueryList<Code> getCodes() {
-        return codes;
-    }
-
-    /**
-     * @param codes
-     *          the codes for filtering {@link Folder#getCodeList()}.
-     */
-    public void setCodes(QueryList<Code> codes) {
-        this.codes = codes;
-    }
-
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((codes == null) ? 0 : codes.hashCode());
-        result = prime * result + ((lastUpdateTime == null) ? 0 : lastUpdateTime.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        FindFoldersQuery other = (FindFoldersQuery) obj;
-        if (codes == null) {
-            if (other.codes != null)
-                return false;
-        } else if (!codes.equals(other.codes))
-            return false;
-        if (lastUpdateTime == null) {
-            if (other.lastUpdateTime != null)
-                return false;
-        } else if (!lastUpdateTime.equals(other.lastUpdateTime))
-            return false;
-        if (status == null) {
-            if (other.status != null)
-                return false;
-        } else if (!status.equals(other.status))
-            return false;
-        return true;
     }
 }

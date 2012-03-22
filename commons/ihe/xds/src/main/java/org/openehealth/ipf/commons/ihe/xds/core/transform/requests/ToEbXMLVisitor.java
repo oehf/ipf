@@ -18,35 +18,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindSubmissionSetsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAllQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetAssociationsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsAndAssociationsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFolderAndContentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersForDocumentQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetFoldersQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetRelatedDocumentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetAndContentsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetSubmissionSetsQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SqlQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query.Visitor;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDocumentsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindFoldersQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindSubmissionSetsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetAllQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetAssociationsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsAndAssociationsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetDocumentsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetFolderAndContentsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetFoldersForDocumentQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetFoldersQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetRelatedDocumentsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetSubmissionSetAndContentsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.GetSubmissionSetsQueryTransformer;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.SqlQueryTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.*;
 
 /**
  * Query visitor to transform a query into its ebXML representation.
@@ -133,5 +107,10 @@ final class ToEbXMLVisitor implements Visitor {
     @Override
     public void visit(FindSubmissionSetsQuery query) {
         new FindSubmissionSetsQueryTransformer().toEbXML(query, ebXML);                
+    }
+
+    @Override
+    public void visit(FetchQuery query) {
+        new FetchQueryTransformer().toEbXML(query, ebXML);
     }
 }

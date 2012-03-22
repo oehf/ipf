@@ -15,11 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import javax.xml.bind.annotation.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.List;
-
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by a list of UUIDs or unique IDs. 
@@ -27,10 +32,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetByIdQuery", propOrder = {"uniqueIds"})
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public abstract class GetByIdQuery extends GetByUuidQuery implements Serializable {
     private static final long serialVersionUID = -3955280836816390271L;
+
     @XmlElement(name = "uniqueId")
-    private List<String> uniqueIds;
+    @Getter @Setter private List<String> uniqueIds;
 
     /**
      * For JAXB serialization only.
@@ -45,45 +52,5 @@ public abstract class GetByIdQuery extends GetByUuidQuery implements Serializabl
      */
     protected GetByIdQuery(QueryType type) {
         super(type);
-    }
-    
-    /**
-     * @return the IDs for filtering {@link XDSMetaClass#getUniqueId()}.
-     */
-    public List<String> getUniqueIds() {
-        return uniqueIds;
-    }
-
-    /**
-     * @param uniqueIds
-     *          the IDs for filtering {@link XDSMetaClass#getUniqueId()}.
-     */
-    public void setUniqueIds(List<String> uniqueIds) {
-        this.uniqueIds = uniqueIds;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((uniqueIds == null) ? 0 : uniqueIds.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GetByIdQuery other = (GetByIdQuery) obj;
-        if (uniqueIds == null) {
-            if (other.uniqueIds != null)
-                return false;
-        } else if (!uniqueIds.equals(other.uniqueIds))
-            return false;
-        return true;
     }
 }

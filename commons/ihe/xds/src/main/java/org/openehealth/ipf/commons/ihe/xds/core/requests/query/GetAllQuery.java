@@ -31,11 +31,11 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetAllQuery", propOrder = {
         "statusDocuments", "statusSubmissionSets", "statusFolders", "confidentialityCodes", "formatCodes",
-        "documentEntryTypes"})
+        "documentEntryTypes", "patientId"})
 @XmlRootElement(name = "getAllQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
-public class GetAllQuery extends PatientIdBasedStoredQuery
-        implements Serializable, DocumentEntryTypeAwareStoredQuery
+public class GetAllQuery extends StoredQuery
+        implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery
 {
     private static final long serialVersionUID = -4161172318244319631L;
 
@@ -51,6 +51,7 @@ public class GetAllQuery extends PatientIdBasedStoredQuery
     @Getter @Setter private List<Code> formatCodes;
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
+    @Getter @Setter private Identifiable patientId;
 
     /**
      * Constructs the query.

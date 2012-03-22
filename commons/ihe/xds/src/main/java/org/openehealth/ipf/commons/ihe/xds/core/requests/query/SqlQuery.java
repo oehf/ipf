@@ -16,8 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import javax.xml.bind.annotation.*;
-import java.io.Serializable;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -30,56 +32,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SQLQuery")
 @XmlRootElement(name = "sqlQuery")
-public class SqlQuery extends Query implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+public class SqlQuery extends Query {
     private static final long serialVersionUID = -4059622155305044092L;
 
-    private String sql;
+    @Getter @Setter private String sql;
 
     /**
      * Constructs the query.
      */
     public SqlQuery() {
         super(QueryType.SQL);
-    }
-
-    /**
-     * @return the SQL string.
-     */
-    public String getSql() {
-        return sql;
-    }
-
-    /**
-     * @param sql   
-     *          the SQL string.
-     */
-    public void setSql(String sql) {
-        this.sql = sql;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((sql == null) ? 0 : sql.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SqlQuery other = (SqlQuery) obj;
-        if (sql == null) {
-            if (other.sql != null)
-                return false;
-        } else if (!sql.equals(other.sql))
-            return false;
-        return true;
     }
 
     @Override

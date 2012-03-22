@@ -15,11 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import javax.xml.bind.annotation.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.List;
-
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
 
 /**
  * Base class for queries that are defined by a list of UUIDs. 
@@ -27,11 +32,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetByUuidQuery", propOrder = {"uuids"})
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 public abstract class GetByUuidQuery extends StoredQuery implements Serializable {
     private static final long serialVersionUID = -7962722576557371093L;
 
     @XmlElement(name = "uuid")
-    private List<String> uuids;
+    @Getter @Setter private List<String> uuids;
 
     /**
      * For JAXB serialization only.
@@ -46,45 +52,5 @@ public abstract class GetByUuidQuery extends StoredQuery implements Serializable
      */
     protected GetByUuidQuery(QueryType type) {
         super(type);
-    }
-
-    /**
-     * @return the UUIDs used for filtering of {@link XDSMetaClass#getEntryUuid()}.
-     */
-    public List<String> getUuids() {
-        return uuids;
-    }
-
-    /**
-     * @param uuids
-     *          the UUIDs used for filtering of {@link XDSMetaClass#getEntryUuid()}.
-     */
-    public void setUuids(List<String> uuids) {
-        this.uuids = uuids;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((uuids == null) ? 0 : uuids.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GetByUuidQuery other = (GetByUuidQuery) obj;
-        if (uuids == null) {
-            if (other.uuids != null)
-                return false;
-        } else if (!uuids.equals(other.uuids))
-            return false;
-        return true;
     }
 }

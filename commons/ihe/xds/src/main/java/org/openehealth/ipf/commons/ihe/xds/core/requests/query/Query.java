@@ -15,6 +15,10 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import static org.apache.commons.lang3.Validate.notNull;
 
 import javax.xml.bind.annotation.*;
@@ -26,10 +30,12 @@ import java.io.Serializable;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Query")
+@EqualsAndHashCode(doNotUseGetters = true)
 public abstract class Query implements Serializable {
     private static final long serialVersionUID = 7597105342752455732L;
+
     @XmlAttribute
-    private QueryType type;
+    @Getter private QueryType type;
 
     /**
      * For JAXB serialization only.
@@ -45,13 +51,6 @@ public abstract class Query implements Serializable {
     protected Query(QueryType type) {
         notNull(type, "type cannot be null");
         this.type = type;
-    }
-
-    /**
-     * @return the type of the query.
-     */
-    public QueryType getType() {
-        return type;
     }
 
     /**
@@ -72,6 +71,7 @@ public abstract class Query implements Serializable {
         void visit(GetAssociationsQuery query);
         void visit(GetAllQuery query);
         void visit(FindSubmissionSetsQuery query);
+        void visit(FetchQuery query);
     }
     
     /**

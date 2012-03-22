@@ -15,12 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
-import java.util.List;
-
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import java.util.List;
 
 /**
  * Base class for queries that are defined by:
@@ -31,13 +35,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetByIdAndCodesQuery", propOrder = {"confidentialityCodes", "formatCodes"})
-public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery implements Serializable {
+@EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
+public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery {
     private static final long serialVersionUID = -8311996966550912396L;
 
     @XmlElement(name = "confidentialityCode")
-    private QueryList<Code> confidentialityCodes;
+    @Getter @Setter private QueryList<Code> confidentialityCodes;
     @XmlElement(name = "formatCode")
-    private List<Code> formatCodes;
+    @Getter @Setter private List<Code> formatCodes;
 
     /**
      * For JAXB serialization only.
@@ -52,67 +57,5 @@ public abstract class GetByIdAndCodesQuery extends GetFromDocumentQuery implemen
      */
     protected GetByIdAndCodesQuery(QueryType type) {
         super(type);
-    }
-    
-    /**
-     * @return the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
-     */
-    public QueryList<Code> getConfidentialityCodes() {
-        return confidentialityCodes;
-    }
-
-    /**
-     * @param confidentialityCodes
-     *          the codes for filtering {@link DocumentEntry#getConfidentialityCodes()}.
-     */
-    public void setConfidentialityCodes(QueryList<Code> confidentialityCodes) {
-        this.confidentialityCodes = confidentialityCodes;
-    }
-
-    /**
-     * @return the codes for filtering {@link DocumentEntry#getFormatCode()}.
-     */
-    public List<Code> getFormatCodes() {
-        return formatCodes;
-    }
-
-    /**
-     * @param formatCodes
-     *          the codes for filtering {@link DocumentEntry#getFormatCode()}.
-     */
-    public void setFormatCodes(List<Code> formatCodes) {
-        this.formatCodes = formatCodes;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result
-                + ((confidentialityCodes == null) ? 0 : confidentialityCodes.hashCode());
-        result = prime * result + ((formatCodes == null) ? 0 : formatCodes.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GetByIdAndCodesQuery other = (GetByIdAndCodesQuery) obj;
-        if (confidentialityCodes == null) {
-            if (other.confidentialityCodes != null)
-                return false;
-        } else if (!confidentialityCodes.equals(other.confidentialityCodes))
-            return false;
-        if (formatCodes == null) {
-            if (other.formatCodes != null)
-                return false;
-        } else if (!formatCodes.equals(other.formatCodes))
-            return false;
-        return true;
     }
 }

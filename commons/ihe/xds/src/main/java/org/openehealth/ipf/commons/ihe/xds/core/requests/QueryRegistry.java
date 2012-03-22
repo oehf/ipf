@@ -35,6 +35,7 @@ public class QueryRegistry implements Serializable {
 
     @XmlElementRefs({
             @XmlElementRef(type = FindDocumentsQuery.class),
+            @XmlElementRef(type = FetchQuery.class),
             @XmlElementRef(type = FindFoldersQuery.class),
             @XmlElementRef(type = FindSubmissionSetsQuery.class),
             @XmlElementRef(type = GetAllQuery.class),
@@ -48,6 +49,7 @@ public class QueryRegistry implements Serializable {
             @XmlElementRef(type = GetRelatedDocumentsQuery.class),
             @XmlElementRef(type = GetSubmissionSetAndContentsQuery.class),
             @XmlElementRef(type = GetSubmissionSetsQuery.class)})
+
     private Query query;
     @XmlAttribute
     private boolean returnLeafObjects;
