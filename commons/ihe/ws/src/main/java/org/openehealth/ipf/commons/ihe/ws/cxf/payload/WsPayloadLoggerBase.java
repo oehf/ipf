@@ -49,7 +49,7 @@ public class WsPayloadLoggerBase
     private static final Log LOG = LogFactory.getLog(WsPayloadLoggerBase.class);
 
 
-    protected void logPayload(Message message) {
+    public void logPayload(Message message) {
         Long sequenceId = InterceptorUtils.findContextualProperty(message, SEQUENCE_ID_PROPERTY_NAME);
         if (sequenceId == null) {
             sequenceId = getNextSequenceId();
