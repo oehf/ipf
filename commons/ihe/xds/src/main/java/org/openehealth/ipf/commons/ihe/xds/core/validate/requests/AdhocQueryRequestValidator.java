@@ -210,7 +210,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         boolean found = false;
         for(Map.Entry<List<InteractionId>, List<QueryType>> entry : ALLOWED_QUERY_TYPES.entrySet()) {
             if (entry.getKey().contains(profile.getInteractionId())) {
-                metaDataAssert(entry.getValue().contains(queryType), WRONG_QUERY_TYPE, queryType);
+                metaDataAssert(entry.getValue().contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
                 found = true;
                 break;
             }
