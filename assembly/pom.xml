@@ -35,6 +35,11 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-hl7v2</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -76,6 +81,11 @@
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.modules</groupId>
+            <artifactId>ipf-modules-cda-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
