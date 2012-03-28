@@ -21,13 +21,13 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceIntercep
 
 
 /**
- * Consumer-side interceptor for input message acceptance checking.
+ * Consumer-side interceptor for response message acceptance checking.
  * @author Dmytro Rud
  */
-public class ConsumerInputAcceptanceInterceptor extends AbstractHl7v2Interceptor {
+public class ConsumerResponseAcceptanceInterceptor extends AbstractHl7v2Interceptor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        AcceptanceInterceptorUtils.processInput(this, exchange);
+        AcceptanceInterceptorUtils.processResponse(this, exchange);
     }
 }

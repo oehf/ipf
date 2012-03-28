@@ -33,13 +33,13 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.NakFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerInputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerOutputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.*;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerAuditInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.producer.ProducerMarshalAndInteractiveResponseReceiverInterceptor;
@@ -179,14 +179,14 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
                 initialChain.add(new ConsumerRequestDefragmenterInterceptor());
             }
             initialChain.add(new ConsumerMarshalInterceptor());
-            initialChain.add(new ConsumerInputAcceptanceInterceptor());
+            initialChain.add(new ConsumerRequestAcceptanceInterceptor());
             if (isSupportInteractiveContinuation()) {
                 initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
             }
             if (isAudit()) {
                 initialChain.add(new ConsumerAuditInterceptor());
             }
-            initialChain.add(new ConsumerOutputAcceptanceInterceptor());
+            initialChain.add(new ConsumerResponseAcceptanceInterceptor());
             initialChain.add(new ConsumerAdaptingInterceptor(getCharsetName()));
             if (isAudit()) {
                 initialChain.add(new ConsumerAuthenticationFailureInterceptor());
@@ -213,11 +213,11 @@ public class MllpEndpoint extends DefaultEndpoint implements Hl7v2ConfigurationH
             initialChain.add(isSupportInteractiveContinuation()
                     ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor()
                     : new ProducerMarshalInterceptor());
-            initialChain.add(new ProducerOutputAcceptanceInterceptor());
+            initialChain.add(new ProducerResponseAcceptanceInterceptor());
             if (isAudit()) {
                 initialChain.add(new ProducerAuditInterceptor());
             }
-            initialChain.add(new ProducerInputAcceptanceInterceptor());
+            initialChain.add(new ProducerRequestAcceptanceInterceptor());
             initialChain.add(new ProducerAdaptingInterceptor());
 
             // add interceptors provided by the user

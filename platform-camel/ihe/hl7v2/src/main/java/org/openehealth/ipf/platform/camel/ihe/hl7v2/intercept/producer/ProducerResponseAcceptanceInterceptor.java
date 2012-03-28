@@ -21,13 +21,13 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.AcceptanceIntercep
 
 
 /**
- * Producer-side interceptor for input message acceptance checking.
+ * Producer-side interceptor for response message acceptance checking.
  * @author Dmytro Rud
  */
-public class ProducerInputAcceptanceInterceptor extends AbstractHl7v2Interceptor {
+public class ProducerResponseAcceptanceInterceptor extends AbstractHl7v2Interceptor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        AcceptanceInterceptorUtils.processInput(this, exchange);
+        AcceptanceInterceptorUtils.processResponse(this, exchange);
     }
 }

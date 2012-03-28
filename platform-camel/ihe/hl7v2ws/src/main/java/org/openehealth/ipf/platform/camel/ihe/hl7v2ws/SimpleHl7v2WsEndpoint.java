@@ -26,9 +26,9 @@ import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.Hl7v2InterceptorUtils;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerInputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
-import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerOutputAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.DefaultWsConsumer;
@@ -65,8 +65,8 @@ public class SimpleHl7v2WsEndpoint extends AbstractWsEndpoint<AbstractHl7v2WsCom
     protected List<Hl7v2Interceptor> getProducerInterceptorChain() {
         return Arrays.<Hl7v2Interceptor> asList(
                 new ProducerMarshalInterceptor(),
-                new ProducerOutputAcceptanceInterceptor(),
-                new ProducerInputAcceptanceInterceptor(),
+                new ProducerResponseAcceptanceInterceptor(),
+                new ProducerRequestAcceptanceInterceptor(),
                 new ProducerAdaptingInterceptor()
         );
     }
