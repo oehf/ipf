@@ -60,7 +60,7 @@
   <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
     <property name="dataSource" ref="testDataSource"/>
     <property name="configLocation" value="classpath:hibernate-flow.xml"/>
-    <property name="configurationClass" value="org.hibernate.cfg.Configuration"/>
+    <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
     <property name="hibernateProperties">
       <props>
       	<!-- For Hibernate version < 3.5.x use org.openehealth.ipf.commons.flow.derby.DerbyDialect -->
@@ -68,7 +68,7 @@
         <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="hibernate.format_sql">false</prop>
-        <prop key="hibernate.search.autoregister_listeners">true</prop>
+        <prop key="hibernate.search.autoregister_listeners">false</prop>
         <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.FSDirectoryProvider</prop>
         <prop key="hibernate.search.default.indexBase">./target/lucene</prop>
       </props>
@@ -79,14 +79,17 @@
         <entry key="post-update">
           <list>
             <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
           </list>
         </entry>
         <entry key="pre-insert" value-ref="textEncryptorEventListener"/>
         <entry key="post-insert">
           <list>
             <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
           </list>
         </entry>
+        <entry key="post-delete" value-ref="textIndexEventListener"/>
         <entry key="post-load" value-ref="textDecryptorEventListener"/>
       </map>
     </property>
@@ -138,7 +141,7 @@
   <!--  Fulltext search setup                                            -->
   <!-- ================================================================= -->
  
-  <!--bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener" /-->
+  <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener" />
   <bean id="flowSearchCallback" class="org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback" />
 
 </beans>

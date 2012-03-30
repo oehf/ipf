@@ -64,7 +64,7 @@ public class JettyServer extends ServletServer {
 
     private SslSocketConnector createSecureConnector() {
         SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setKeyStore(getKeystoreFile());
+        sslContextFactory.setKeyStorePath(getKeystoreFile());
         sslContextFactory.setKeyStorePassword(getKeystorePass());
         sslContextFactory.setTrustStore(getTruststoreFile());
         sslContextFactory.setTrustStorePassword(getTruststorePass());

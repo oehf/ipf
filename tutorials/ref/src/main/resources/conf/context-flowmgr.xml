@@ -103,7 +103,7 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
         <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.show_sql">false</prop>
         <prop key="hibernate.format_sql">false</prop>
-        <prop key="hibernate.search.autoregister_listeners">true</prop>
+        <prop key="hibernate.search.autoregister_listeners">false</prop>
          <!-- 
             THESE SETTINGS ARE PRELIMINARY. CLUSTER-SUPPORT FOR LUCENE INDEX TO FOLLOW.
          -->
@@ -129,14 +129,17 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
         <entry key="post-update">
           <list>
             <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
           </list>
         </entry>
         <entry key="pre-insert" value-ref="textEncryptorEventListener"/>
         <entry key="post-insert">
           <list>
             <ref bean="textDecryptorEventListener"/>
+            <ref bean="textIndexEventListener"/>
           </list>
         </entry>
+        <entry key="post-delete" value-ref="textIndexEventListener"/>
         <entry key="post-load" value-ref="textDecryptorEventListener"/>
       </map>
     </property>
@@ -233,6 +236,7 @@ http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
   <!--  Full text indexing/search setup                                  -->
   <!-- ================================================================= -->
   
+  <bean id="textIndexEventListener" class="org.hibernate.search.event.FullTextIndexEventListener"/>
   <bean id="flowSearchCallback" class="org.openehealth.ipf.commons.flow.repository.search.DefaultSearchCallback" />
    
   <!-- ================================================================== -->
