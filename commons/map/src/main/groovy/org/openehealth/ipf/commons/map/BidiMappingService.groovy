@@ -92,12 +92,12 @@ class BidiMappingService implements MappingService, InitializingBean {
         	c?.delegate = this
         	map.putAll(mb.mappings(c))
            	updateReverseMap()   		
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             if (! ignoreResourceNotFound) {
                 throw e
             }
         } catch (Exception e) {
-    		// TODO handle: IOException (file not found) or CompilationException (error in script)
+    		// TODO handle CompilationException (error in script)
     		throw e
     	}
         
