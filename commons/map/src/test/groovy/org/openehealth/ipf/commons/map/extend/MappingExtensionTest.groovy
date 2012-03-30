@@ -34,7 +34,7 @@ public class MappingExtensionTest extends GroovyTestCase {
 	
     void setUp() {
         mappingService = new BidiMappingService()
-        mappingService.mappingScript = new ClassPathResource("example2.map")
+        mappingService.addMappingScript(new ClassPathResource("example2.map"))
         extension = new MappingExtension()
         extension.mappingService = mappingService
         extension.extensions()

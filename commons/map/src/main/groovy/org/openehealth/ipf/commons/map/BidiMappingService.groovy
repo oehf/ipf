@@ -15,10 +15,8 @@
  */
 package org.openehealth.ipf.commons.map
 
-import java.util.Collection
-import java.util.Set
+import org.springframework.beans.factory.InitializingBean
 import org.springframework.core.io.Resource
-import java.lang.Deprecated
 
 /**
  * An simple example of a MappingService implementation, backed by a
@@ -32,7 +30,7 @@ import java.lang.Deprecated
  * @see MappingsBuilder
  *
  */
-class BidiMappingService implements MappingService {
+class BidiMappingService implements MappingService, InitializingBean {
 
 	private static final String KEYSYSTEM  = '_%KEYSYSTEM%_'
 	private static final String VALUESYSTEM = '_%VALUESYSTEM%_'
@@ -42,6 +40,10 @@ class BidiMappingService implements MappingService {
 	def map = [:]	
     def reverseMap = [:]
 	def separator
+
+    boolean ignoreResourceNotFound = false
+    List<Resource> resources = []
+
 	
     public BidiMappingService() {
     	this(SEPARATOR)
@@ -51,16 +53,21 @@ class BidiMappingService implements MappingService {
     	this.separator = separator
     }
 
-    // bean configuration support 
+    // bean configuration support
     void setMappingScript(Resource resource) {
-        addMappingScript(resource)
+        this.resources.add(resource)
     }
     
     // bean configuration support 
     void setMappingScripts(Resource[] resources) {
-        addMappingScripts(resources)
+        this.resources.addAll(resources)
     }
-    
+
+    @Override
+    void afterPropertiesSet() {
+        addMappingScripts(resources.toArray(new Resource[0]))
+    }
+
     // Read in the mapping definition
     synchronized void addMappingScript(Resource resource) {
         Binding binding = new Binding()
@@ -85,7 +92,11 @@ class BidiMappingService implements MappingService {
         	c?.delegate = this
         	map.putAll(mb.mappings(c))
            	updateReverseMap()   		
-    	} catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            if (! ignoreResourceNotFound) {
+                throw e
+            }
+        } catch (Exception e) {
     		// TODO handle: IOException (file not found) or CompilationException (error in script)
     		throw e
     	}

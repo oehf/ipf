@@ -59,7 +59,7 @@ class Hl7TranslationTestContainer {
             Hl7TranslatorV2toV3 v2tov3Translator)
     {
         def mappingService = new BidiMappingService()
-        mappingService.mappingScript = new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map')
+        mappingService.addMappingScript(new ClassPathResource('META-INF/map/hl7-v2-v3-translation.map'))
         def mappingExtension = new MappingExtension()
         mappingExtension.mappingService = mappingService
         mappingExtension.extensions()
