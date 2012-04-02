@@ -15,21 +15,22 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti18;
 
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLAdhocQueryRequest30;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.AdhocQueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes;
 
 /**
  * Base audit strategy for ITI-18.
  * @author Dmytro Rud
  */
-abstract public class Iti18AuditStrategy extends XdsAuditStrategy {
+abstract public class Iti18AuditStrategy extends XdsAuditStrategy<Iti18AuditDataset> {
 
     /**
      * Constructs the audit strategy.
@@ -44,19 +45,19 @@ abstract public class Iti18AuditStrategy extends XdsAuditStrategy {
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, Iti18AuditDataset auditDataset) {
         AdhocQueryRequest request = (AdhocQueryRequest) pojo;
-        Iti18AuditDataset xdsAuditDataset = (Iti18AuditDataset) auditDataset;
-
         AdhocQueryType adHocQuery = request.getAdhocQuery();
         if (adHocQuery != null) {
-            xdsAuditDataset.setQueryUuid(adHocQuery.getId());
-            xdsAuditDataset.setHomeCommunityId(adHocQuery.getHome());
+            auditDataset.setQueryUuid(adHocQuery.getId());
+            auditDataset.setHomeCommunityId(adHocQuery.getHome());
         }
+        QuerySlotHelper slotHelper = new QuerySlotHelper(new EbXMLAdhocQueryRequest30(request));
+        auditDataset.setPatientId(slotHelper.toString(QueryParameter.DOC_ENTRY_PATIENT_ID));
     }
-    
+
     @Override
-    public XdsAuditDataset createAuditDataset() {
+    public Iti18AuditDataset createAuditDataset() {
         return new Iti18AuditDataset(isServerSide());
     }
 

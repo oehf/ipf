@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.iti14;
 
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
@@ -30,14 +29,14 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Audit strategy for ITI-14.
  * @author Dmytro Rud
  */
-abstract class Iti14AuditStrategy extends XdsAuditStrategy {
+abstract class Iti14AuditStrategy extends XdsAuditStrategy<XdsAuditDataset> {
 
     Iti14AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, XdsAuditDataset auditDataset) {
         XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
         SubmitObjectsRequest request = (SubmitObjectsRequest) pojo;
         EbXMLSubmitObjectsRequest ebXML = new EbXMLSubmitObjectsRequest21(request);
@@ -49,5 +48,10 @@ abstract class Iti14AuditStrategy extends XdsAuditStrategy {
         RegistryResponse response = (RegistryResponse) pojo;
         EbXMLRegistryResponse ebXML = new EbXMLRegistryResponse21(response); 
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
+    }
+
+    @Override
+    public XdsAuditDataset createAuditDataset() {
+        return new XdsAuditDataset(isServerSide());
     }
 }

@@ -348,7 +348,7 @@ public abstract class SampleData {
         FindDocumentsQuery query = new FindDocumentsQuery();
         
         query.setHomeCommunityId("12.21.41");
-        query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setClassCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
         query.setTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));

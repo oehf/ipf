@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.iti43;
 
 import java.util.List;
 
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLRegistryResponse30;
@@ -31,16 +29,15 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
  * Audit strategy for ITI-43.
  * @author Dmytro Rud
  */
-abstract public class Iti43AuditStrategy extends XdsAuditStrategy {
+abstract public class Iti43AuditStrategy extends XdsAuditStrategy<Iti43AuditDataset> {
 
     public Iti43AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
         super(serverSide, allowIncompleteAudit);
     }
 
     @Override
-    public void enrichDatasetFromRequest(Object pojo, WsAuditDataset auditDataset) {
+    public void enrichDatasetFromRequest(Object pojo, Iti43AuditDataset auditDataset) {
         RetrieveDocumentSetRequestType request = (RetrieveDocumentSetRequestType) pojo;
-        Iti43AuditDataset xdsAuditDataset = (Iti43AuditDataset) auditDataset;
 
         List<DocumentRequest> requestedDocuments = request.getDocumentRequest();
         if (requestedDocuments != null) {
@@ -57,14 +54,14 @@ abstract public class Iti43AuditStrategy extends XdsAuditStrategy {
                 homeCommunityUuids[i] = document.getHomeCommunityId();
             }
 
-            xdsAuditDataset.setDocumentUuids(documentUuids);
-            xdsAuditDataset.setRepositoryUuids(repositoryUuids);
-            xdsAuditDataset.setHomeCommunityUuids(homeCommunityUuids);
+            auditDataset.setDocumentUuids(documentUuids);
+            auditDataset.setRepositoryUuids(repositoryUuids);
+            auditDataset.setHomeCommunityUuids(homeCommunityUuids);
         }
     }
     
     @Override
-    public XdsAuditDataset createAuditDataset() {
+    public Iti43AuditDataset createAuditDataset() {
         return new Iti43AuditDataset(isServerSide());
     }
 

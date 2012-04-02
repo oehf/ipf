@@ -25,9 +25,13 @@ import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3
 /**
  * Basis for Strategy pattern implementation for ATNA Auditing
  * in Web Service-based IHE transactions.
+ *
+ * @param <T>
+ *     type of audit dataset.
+ *
  * @author Dmytro Rud
  */
-public abstract class WsAuditStrategy {
+public abstract class WsAuditStrategy<T extends WsAuditDataset> {
     private static final transient Log LOG = LogFactory.getLog(WsAuditStrategy.class);
 
     /**
@@ -66,9 +70,7 @@ public abstract class WsAuditStrategy {
      * @return
      *      newly created audit dataset
      */
-    public WsAuditDataset createAuditDataset() {
-        return new WsAuditDataset(isServerSide());
-    }
+    public abstract T createAuditDataset();
 
     
     /**
@@ -81,7 +83,7 @@ public abstract class WsAuditStrategy {
      * @throws Exception
      *      any exception that occurred during this operation
      */
-    public abstract void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset)
+    public abstract void enrichDatasetFromRequest(Object request, T auditDataset)
         throws Exception;
 
 
@@ -95,7 +97,7 @@ public abstract class WsAuditStrategy {
      * @throws Exception
      *      any exception that occurred during this operation
      */
-    public abstract void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset)
+    public abstract void enrichDatasetFromResponse(Object response, T auditDataset)
         throws Exception;
 
 
@@ -108,7 +110,7 @@ public abstract class WsAuditStrategy {
      * @throws Exception
      *      any exception that occurred during this operation
      */
-    public abstract void doAudit(WsAuditDataset auditDataset)
+    public abstract void doAudit(T auditDataset)
         throws Exception;
 
     
@@ -125,7 +127,7 @@ public abstract class WsAuditStrategy {
      * @throws Exception
      *      any exception that occurred during auditing
      */
-    public void audit(WsAuditDataset auditDataset) throws Exception {
+    public void audit(T auditDataset) throws Exception {
         Set<String> missing = auditDataset.checkFields(getNecessaryAuditFieldNames(), true);
         if(! missing.isEmpty()) {
             StringBuilder sb = new StringBuilder("Missing audit fields: ");

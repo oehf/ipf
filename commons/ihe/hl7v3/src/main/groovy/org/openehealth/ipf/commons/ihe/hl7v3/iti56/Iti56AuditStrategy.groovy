@@ -17,10 +17,10 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti56;
 
 import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 
 /**
  * Generic audit strategy for ITI-56 (XCPD).
@@ -64,14 +64,14 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset) {
+    void enrichDatasetFromRequest(Object request, Hl7v3AuditDataset auditDataset) {
         GPathResult patientId = slurp(request).RequestedPatientId
         auditDataset.patientIds = [iiToCx(patientId)]
     }
 
 
     @Override
-    void doAudit(WsAuditDataset auditDataset) {
+    void doAudit(Hl7v3AuditDataset auditDataset) {
         AuditorManager.hl7v3Auditor.auditIti56(
                 serverSide,
                 auditDataset.eventOutcomeCode,

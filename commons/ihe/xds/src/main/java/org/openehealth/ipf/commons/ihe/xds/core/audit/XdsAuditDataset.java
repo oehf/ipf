@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
  * @author Dmytro Rud
  */
 public class XdsAuditDataset extends WsAuditDataset {
+    private static final long serialVersionUID = 652866992858926778L;
 
     // patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO"
     private String patientId;

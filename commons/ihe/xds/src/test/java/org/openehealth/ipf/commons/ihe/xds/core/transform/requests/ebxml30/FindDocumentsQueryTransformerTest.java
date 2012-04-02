@@ -54,7 +54,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(QueryType.FIND_DOCUMENTS.getId(), ebXML.getId());
         assertEquals("12.21.41", ebXML.getHome());
 
-        assertEquals(Arrays.asList("'id1^^^&1.2&ISO'"),
+        assertEquals(Arrays.asList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
         
         assertEquals(Arrays.asList("('code1^^scheme1')", "('code2^^scheme2')"),

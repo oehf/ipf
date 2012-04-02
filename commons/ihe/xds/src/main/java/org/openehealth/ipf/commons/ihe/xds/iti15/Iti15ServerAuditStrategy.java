@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.iti15;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 /**
@@ -37,16 +36,15 @@ public class Iti15ServerAuditStrategy extends Iti15AuditStrategy {
     }
 
     @Override
-    public void doAudit(WsAuditDataset auditDataset) {
-        XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
+    public void doAudit(XdsAuditDataset auditDataset) {
         AuditorManager.getRepositoryAuditor().auditProvideAndRegisterDocumentSetEvent(
-                xdsAuditDataset.getEventOutcomeCode(),
-                xdsAuditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
-                xdsAuditDataset.getClientIpAddress(),
-                xdsAuditDataset.getUserName(),
-                xdsAuditDataset.getServiceEndpointUrl(),
-                xdsAuditDataset.getSubmissionSetUuid(),
-                xdsAuditDataset.getPatientId());
+                auditDataset.getEventOutcomeCode(),
+                auditDataset.getClientIpAddress(),  // Must be set to something, otherwise schema is broken
+                auditDataset.getClientIpAddress(),
+                auditDataset.getUserName(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getSubmissionSetUuid(),
+                auditDataset.getPatientId());
     }
 
     @Override

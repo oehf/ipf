@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.iti18;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 /**
  * Server audit strategy for ITI-18.
@@ -44,18 +43,17 @@ public class Iti18ServerAuditStrategy extends Iti18AuditStrategy {
     }
 
     @Override
-    public void doAudit(WsAuditDataset auditDataset) {
-        Iti18AuditDataset xdsAuditDataset = (Iti18AuditDataset) auditDataset;
+    public void doAudit(Iti18AuditDataset auditDataset) {
         AuditorManager.getRegistryAuditor().auditRegistryStoredQueryEvent(
-                xdsAuditDataset.getEventOutcomeCode(),
-                xdsAuditDataset.getUserId(), 
-                xdsAuditDataset.getUserName(),
-                xdsAuditDataset.getClientIpAddress(), 
-                xdsAuditDataset.getServiceEndpointUrl(),
-                xdsAuditDataset.getQueryUuid(), 
-                xdsAuditDataset.getRequestPayload(),
-                xdsAuditDataset.getHomeCommunityId(),
-                xdsAuditDataset.getPatientId());
+                auditDataset.getEventOutcomeCode(),
+                auditDataset.getUserId(), 
+                auditDataset.getUserName(),
+                auditDataset.getClientIpAddress(), 
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getQueryUuid(), 
+                auditDataset.getRequestPayload(),
+                auditDataset.getHomeCommunityId(),
+                auditDataset.getPatientId());
     }
 
     @Override

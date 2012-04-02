@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.iti43;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 /**
  * Server audit strategy for ITI-43.
@@ -38,17 +37,16 @@ public class Iti43ServerAuditStrategy extends Iti43AuditStrategy {
     }
 
     @Override
-    public void doAudit(WsAuditDataset auditDataset) {
-        Iti43AuditDataset xdsAuditDataset = (Iti43AuditDataset) auditDataset;
+    public void doAudit(Iti43AuditDataset auditDataset) {
         AuditorManager.getRepositoryAuditor().auditRetrieveDocumentSetEvent(
-                xdsAuditDataset.getEventOutcomeCode(),
-                xdsAuditDataset.getUserId(),
-                xdsAuditDataset.getUserName(),
-                xdsAuditDataset.getClientIpAddress(),
-                xdsAuditDataset.getServiceEndpointUrl(),
-                xdsAuditDataset.getDocumentUuids(),
-                xdsAuditDataset.getRepositoryUuids(),
-                xdsAuditDataset.getHomeCommunityUuids());
+                auditDataset.getEventOutcomeCode(),
+                auditDataset.getUserId(),
+                auditDataset.getUserName(),
+                auditDataset.getClientIpAddress(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getDocumentUuids(),
+                auditDataset.getRepositoryUuids(),
+                auditDataset.getHomeCommunityUuids());
     }
 
     @Override

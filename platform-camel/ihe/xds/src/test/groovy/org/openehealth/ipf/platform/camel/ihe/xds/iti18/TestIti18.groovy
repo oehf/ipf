@@ -99,14 +99,14 @@ class TestIti18 extends StandardTestContainer {
         messages.each { message ->
             assert message.AuditSourceIdentification.size() == 1
             assert message.ActiveParticipant.size() == 2
-            assert message.ParticipantObjectIdentification.size() == 1
-            assert message.children().size() == 5
+            assert message.ParticipantObjectIdentification.size() == 2
+            assert message.children().size() == 6
             
             checkEvent(message.EventIdentification, '110112', 'ITI-18', 'E', outcome)
             checkSource(message.ActiveParticipant[0], 'true')
             checkDestination(message.ActiveParticipant[1], SERVICE2_ADDR, 'false')
-            //            checkPatient(message.ParticipantObjectIdentification[0])
-            checkQuery(message.ParticipantObjectIdentification[0], 'ITI-18', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d')
+            checkPatient(message.ParticipantObjectIdentification[0])
+            checkQuery(message.ParticipantObjectIdentification[1], 'ITI-18', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d', 'urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d')
         }
     }
     

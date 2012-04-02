@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.iti46
 
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
@@ -41,9 +40,8 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+    void enrichDatasetFromRequest(Object request, Hl7v3AuditDataset auditDataset) {
         request = slurp(request)
-        Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
 
         // message ID
         auditDataset.messageId = idString(request.id)
@@ -56,7 +54,7 @@ class Iti46AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    void doAudit(WsAuditDataset auditDataset) {
+    void doAudit(Hl7v3AuditDataset auditDataset) {
         AuditorManager.hl7v3Auditor.auditIti46(
                 serverSide,
                 auditDataset.eventOutcomeCode,

@@ -19,7 +19,6 @@ import groovy.util.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3AuditStrategy
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 
@@ -42,10 +41,8 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    void enrichDatasetFromRequest(Object request, WsAuditDataset auditDataset0) {
+    void enrichDatasetFromRequest(Object request, Hl7v3AuditDataset auditDataset) {
         request = slurp(request)
-        Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
-
         GPathResult regEvent = request.controlActProcess.subject[0].registrationEvent
 
         // request type
@@ -73,9 +70,7 @@ class Iti44AuditStrategy extends Hl7v3AuditStrategy {
 
 
     @Override
-    void doAudit(WsAuditDataset auditDataset0) {
-        Hl7v3AuditDataset auditDataset = (Hl7v3AuditDataset) auditDataset0
-
+    void doAudit(Hl7v3AuditDataset auditDataset) {
         switch (auditDataset.requestType) {
             case 'PRPA_IN201301UV02':
                 AuditorManager.hl7v3Auditor.auditIti44Add(

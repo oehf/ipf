@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.hl7v3
 
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditStrategy
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset
 import org.openhealthtools.ihe.atna.auditor.codes.rfc3881.RFC3881EventCodes.RFC3881EventOutcomeCodes
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
@@ -26,7 +25,7 @@ import groovy.util.slurpersupport.GPathResult
 /**
  * @author Dmytro Rud
  */
-abstract class Hl7v3AuditStrategy extends WsAuditStrategy {
+abstract class Hl7v3AuditStrategy extends WsAuditStrategy<Hl7v3AuditDataset> {
     protected static final transient Log LOG = LogFactory.getLog(Hl7v3AuditStrategy.class)
 
     Hl7v3AuditStrategy(boolean serverSide, boolean allowIncompleteAudit) {
@@ -35,7 +34,7 @@ abstract class Hl7v3AuditStrategy extends WsAuditStrategy {
 
 
     @Override
-    public WsAuditDataset createAuditDataset() {
+    public Hl7v3AuditDataset createAuditDataset() {
         return new Hl7v3AuditDataset(serverSide)
     }
 
@@ -73,7 +72,7 @@ abstract class Hl7v3AuditStrategy extends WsAuditStrategy {
 
 
     @Override
-    void enrichDatasetFromResponse(Object response, WsAuditDataset auditDataset) {
+    void enrichDatasetFromResponse(Object response, Hl7v3AuditDataset auditDataset) {
         auditDataset.eventOutcomeCode = getEventOutcomeCode(slurp(response))
     }
 

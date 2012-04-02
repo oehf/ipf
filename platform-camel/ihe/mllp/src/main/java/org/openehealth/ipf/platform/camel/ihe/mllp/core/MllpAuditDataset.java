@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
  * @author Dmytro Rud
  */
 public class MllpAuditDataset extends AuditDataset {
+    private static final long serialVersionUID = -4427222097816361541L;
+
     /** Sending application from MSH-3 */
     private String sendingApplication;
     

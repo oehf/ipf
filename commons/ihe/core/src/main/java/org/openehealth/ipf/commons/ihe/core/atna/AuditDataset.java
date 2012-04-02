@@ -32,8 +32,10 @@ import org.apache.commons.logging.LogFactory;
  * @author Dmytro Rud
  */
 public class AuditDataset implements Serializable {
+    private static final long serialVersionUID = -2919172035448943710L;
+
     private static final transient Log LOG = LogFactory.getLog(AuditDataset.class);
-    
+
     // whether we audit on server (true) or on client (false)
     private final boolean serverSide;
 

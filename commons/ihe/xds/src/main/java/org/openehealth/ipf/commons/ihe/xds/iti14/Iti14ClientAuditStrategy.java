@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.xds.iti14;
 import java.net.InetAddress;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 /**
@@ -38,15 +37,14 @@ public class Iti14ClientAuditStrategy extends Iti14AuditStrategy {
     }
 
     @Override
-    public void doAudit(WsAuditDataset auditDataset) throws Exception {
-        XdsAuditDataset xdsAuditDataset = (XdsAuditDataset) auditDataset;
+    public void doAudit(XdsAuditDataset auditDataset) throws Exception {
         AuditorManager.getRepositoryAuditor().auditRegisterDocumentSetEvent(
-                xdsAuditDataset.getEventOutcomeCode(),
+                auditDataset.getEventOutcomeCode(),
                 InetAddress.getLocalHost().getHostAddress(),
-                xdsAuditDataset.getUserName(),
-                xdsAuditDataset.getServiceEndpointUrl(),
-                xdsAuditDataset.getSubmissionSetUuid(),
-                xdsAuditDataset.getPatientId());
+                auditDataset.getUserName(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getSubmissionSetUuid(),
+                auditDataset.getPatientId());
     }
 
     @Override

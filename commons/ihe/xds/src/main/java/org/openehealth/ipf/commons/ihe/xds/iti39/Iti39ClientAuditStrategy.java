@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.iti39;
 
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorManager;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43AuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti43.Iti43AuditStrategy;
 
@@ -39,17 +38,15 @@ public class Iti39ClientAuditStrategy extends Iti43AuditStrategy {
     }
 
     @Override
-    public void doAudit(WsAuditDataset auditDataset) {
-        Iti43AuditDataset xcaAuditDataset = (Iti43AuditDataset) auditDataset;
-        String[] homeCommunityIds = xcaAuditDataset.getHomeCommunityUuids();
-
+    public void doAudit(Iti43AuditDataset auditDataset) {
+        String[] homeCommunityIds = auditDataset.getHomeCommunityUuids();
         AuditorManager.getXCAInitiatingGatewayAuditor().auditCrossGatewayRetrieveEvent(
-                xcaAuditDataset.getEventOutcomeCode(),
-                xcaAuditDataset.getServiceEndpointUrl(),
-                xcaAuditDataset.getUserId(),
-                xcaAuditDataset.getUserName(),
-                xcaAuditDataset.getDocumentUuids(),
-                xcaAuditDataset.getRepositoryUuids(),
+                auditDataset.getEventOutcomeCode(),
+                auditDataset.getServiceEndpointUrl(),
+                auditDataset.getUserId(),
+                auditDataset.getUserName(),
+                auditDataset.getDocumentUuids(),
+                auditDataset.getRepositoryUuids(),
                 ((homeCommunityIds != null) && (homeCommunityIds.length != 0)) ? homeCommunityIds[0] : null);
     }
 

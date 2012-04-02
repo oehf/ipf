@@ -23,7 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
  * @author Dmytro Rud
  */
 public class Iti43AuditDataset extends XdsAuditDataset {
-    
+    private static final long serialVersionUID = -8776033207572005899L;
+
     private String[] documentUuids;
     private String[] repositoryUuids;
     private String[] homeCommunityUuids;

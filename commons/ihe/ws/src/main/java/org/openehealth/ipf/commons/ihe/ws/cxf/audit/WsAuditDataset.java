@@ -33,6 +33,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  * @author Dmytro Rud
  */
 public class WsAuditDataset extends AuditDataset {
+    private static final long serialVersionUID = 7940196804508126576L;
 
     // event outcome code as defined in RFC 3881
     private RFC3881EventOutcomeCodes eventOutcomeCode;

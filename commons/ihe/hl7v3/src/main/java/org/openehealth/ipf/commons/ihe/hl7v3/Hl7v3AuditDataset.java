@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
  * @author Dmytro Rud
  */
 public class Hl7v3AuditDataset extends WsAuditDataset {
+    private static final long serialVersionUID = -7303748425104562452L;
 
     /** HL7v3 message ID. */
     private String messageId;
