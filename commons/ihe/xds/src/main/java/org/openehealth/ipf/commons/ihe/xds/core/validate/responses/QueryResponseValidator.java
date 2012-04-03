@@ -15,19 +15,23 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.responses;
 
-import static org.apache.commons.lang3.Validate.notNull;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ObjectReference;
-import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.requests.ObjectContainerValidator;
 
 import java.util.List;
+
+import static org.apache.commons.lang3.Validate.notNull;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_OBJ_REF;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.RESULT_NOT_SINGLE_PATIENT;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validate a {@link EbXMLQueryResponse}.

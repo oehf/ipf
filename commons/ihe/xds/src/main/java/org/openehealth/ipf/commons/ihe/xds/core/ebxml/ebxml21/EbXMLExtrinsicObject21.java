@@ -20,6 +20,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs21.rim.ExtrinsicObjectType;
 
+import javax.activation.DataHandler;
+
 /**
  * Encapsulation of {@link ExtrinsicObjectType}.
  * @author Jens Riemschneider
@@ -56,5 +58,15 @@ public class EbXMLExtrinsicObject21 extends EbXMLRegistryObject21<ExtrinsicObjec
     @Override
     public void setMimeType(String mimeType) {
         getInternal().setMimeType(mimeType);
+    }
+
+    @Override
+    public DataHandler getDataHandler() {
+        return null;  // not applicable in XDS.a
+    }
+
+    @Override
+    public void setDataHandler(DataHandler dataHandler) {
+        // not applicable in XDS.a
     }
 }

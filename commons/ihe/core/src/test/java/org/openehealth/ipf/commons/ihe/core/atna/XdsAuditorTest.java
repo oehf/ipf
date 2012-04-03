@@ -29,8 +29,11 @@ public class XdsAuditorTest extends TestCase {
     private static final String USER_NAME           = "user-name";
     private static final String SERVER_URI          = "server-uri";
     private static final String CLIENT_IP_ADDRESS   = "141.44.162.126";
-    private static final String PATIENT_ID          = "patient-id";
+    private static final String PATIENT_ID          = "patientId^^^&1.2.3&ISO";
     private static final String SUBMISSION_SET_ID   = "submission-set-id";
+    private static final String QUERY_UUID          = "query-uuid";
+    private static final String REQUEST_PAYLOAD     = "request-payload";
+    private static final String HOME_COMMUNITY_ID   = "home-community-id";
 
 
     protected void setUp() throws Exception {
@@ -50,6 +53,20 @@ public class XdsAuditorTest extends TestCase {
         auditor.auditIti61(false,
                 RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
                 SUBMISSION_SET_ID,
+                PATIENT_ID);
+
+        auditor.auditIti63(true,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                QUERY_UUID,
+                REQUEST_PAYLOAD,
+                HOME_COMMUNITY_ID,
+                PATIENT_ID);
+
+        auditor.auditIti63(false,
+                RFC3881EventOutcomeCodes.SUCCESS, REPLY_TO_URI, USER_NAME, SERVER_URI, CLIENT_IP_ADDRESS,
+                QUERY_UUID,
+                REQUEST_PAYLOAD,
+                HOME_COMMUNITY_ID,
                 PATIENT_ID);
     }
 

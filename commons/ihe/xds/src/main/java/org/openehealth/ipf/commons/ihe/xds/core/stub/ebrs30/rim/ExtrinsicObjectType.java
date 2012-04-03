@@ -8,11 +8,8 @@
 
 package org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.activation.DataHandler;
+import javax.xml.bind.annotation.*;
 
 
 /**
@@ -31,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}RegistryObjectType">
  *       &lt;sequence>
  *         &lt;element name="ContentVersionInfo" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}VersionInfoType" minOccurs="0"/>
+ *         &lt;element ref="{urn:ihe:iti:xds-b:2007}Document" maxOccurs="1" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="mimeType" type="{urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0}LongName" default="application/octet-stream" />
  *       &lt;attribute name="isOpaque" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
@@ -43,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ExtrinsicObjectType", propOrder = {
-    "contentVersionInfo"
+    "contentVersionInfo", "dataHandler"
 })
 public class ExtrinsicObjectType
     extends RegistryObjectType
@@ -51,6 +49,9 @@ public class ExtrinsicObjectType
 
     @XmlElement(name = "ContentVersionInfo")
     protected VersionInfoType contentVersionInfo;
+    @XmlElement(name = "Document", namespace = "urn:ihe:iti:xds-b:2007")
+    @XmlMimeType("application/octet-stream")
+    protected DataHandler dataHandler;
     @XmlAttribute
     protected String mimeType;
     @XmlAttribute
@@ -78,6 +79,14 @@ public class ExtrinsicObjectType
      */
     public void setContentVersionInfo(VersionInfoType value) {
         this.contentVersionInfo = value;
+    }
+
+    public DataHandler getDataHandler() {
+        return dataHandler;
+    }
+
+    public void setDataHandler(DataHandler dataHandler) {
+        this.dataHandler = dataHandler;
     }
 
     /**

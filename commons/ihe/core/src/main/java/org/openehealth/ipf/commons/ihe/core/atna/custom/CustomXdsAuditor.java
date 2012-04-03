@@ -24,7 +24,8 @@ import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 /**
  * Implementation of XDS Auditors to send audit messages for
  * <ul>
- *     <li>ITI-61 (Register On-Demand Document Entry)</li>
+ *     <li>ITI-61 (XDS.b Register On-Demand Document Entry)</li>
+ *     <li>ITI-63 (XCF Cross-Community Fetch)</li>
  * </ul>
  *
  * @author Dmytro Rud
@@ -64,5 +65,39 @@ public class CustomXdsAuditor extends CustomAuditor {
         }
         event.addSubmissionSetParticipantObject(submissionSetUniqueId);
         audit(event);
+    }
+
+
+    public void auditIti63(
+            boolean serverSide,
+            RFC3881EventCodes.RFC3881EventOutcomeCodes eventOutcome,
+            String userId,
+            String userName,
+            String respondingGatewayUri,
+            String clientIpAddress,
+            String queryUuid,
+            String requestPayload,
+            String homeCommunityId,
+            String patientId)
+    {
+        auditQueryEvent(
+                ! serverSide,
+                new CustomIHETransactionEventTypeCodes.CrossCommunityFetch(),
+                eventOutcome,
+                getAuditSourceId(),
+                getAuditEnterpriseSiteId(),
+                userId,
+                serverSide ? null : getSystemAltUserId(),
+                null,
+                clientIpAddress,
+                userName,
+                userName,
+                false,
+                respondingGatewayUri,
+                serverSide ? getSystemAltUserId() : null,
+                queryUuid,
+                requestPayload,
+                homeCommunityId,
+                patientId);
     }
 }

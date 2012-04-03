@@ -27,8 +27,6 @@
         <xsd:schema elementFormDefault="qualified">
             <xsd:import namespace="urn:ihe:iti:xds-b:2007" schemaLocation="classpath:wsdl/schema/IHE/IHEXDSB.xsd"/>
             <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rs.xsd"/>
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/lcm.xsd"/>
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rim.xsd"/>
         </xsd:schema>
     </types>
 

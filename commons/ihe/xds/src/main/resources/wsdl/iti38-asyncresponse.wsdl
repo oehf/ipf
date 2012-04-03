@@ -32,9 +32,6 @@
         <xsd:schema elementFormDefault="qualified">
             <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:query:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/query.xsd"/>
         </xsd:schema>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="urn:ihe:iti:xds-b:2007">
-            <xsd:element name="rawData" type="xsd:anyType" />
-        </xsd:schema>
     </types>
 
     <message name="CrossGatewayQueryResponse_Message">

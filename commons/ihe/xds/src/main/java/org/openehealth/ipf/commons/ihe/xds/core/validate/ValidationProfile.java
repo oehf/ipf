@@ -16,6 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
+
+import java.util.*;
+
 import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
 
 /**
@@ -26,7 +30,21 @@ import static org.openehealth.ipf.commons.ihe.core.IpfInteractionId.*;
 public class ValidationProfile {
 
     public static enum InteractionProfile {
-        XDS_A, XDS_B, XCA, Continua_HRN, XCF
+        XDS_A(ITI_14, ITI_15, ITI_16),
+        XDS_B(ITI_18, ITI_41, ITI_42, ITI_43, ITI_61),
+        XCA(ITI_38, ITI_39),
+        XCF(ITI_63),
+        Continua_HRN(IpfInteractionId.Continua_HRN);
+
+        private List<InteractionId> ids;
+
+        InteractionProfile(InteractionId... ids) {
+            this.ids = Arrays.asList(ids);
+        }
+
+        public List<InteractionId> getIds() {
+            return ids;
+        }
     }
 
     private InteractionId interactionId;
@@ -65,34 +83,11 @@ public class ValidationProfile {
      * @return ID of interaction profile the transaction belongs to.
      */
     public InteractionProfile getProfile() {
-        if (interactionId == Continua_HRN) {
-            return InteractionProfile.Continua_HRN;
+        for (InteractionProfile profile : InteractionProfile.values()) {
+            if (profile.getIds().contains(getInteractionId())) {
+                return profile;
+            }
         }
-
-        if ((interactionId == ITI_14) ||
-            (interactionId == ITI_15) ||
-            (interactionId == ITI_16))
-        {
-            return InteractionProfile.XDS_A;
-        }
-
-        if ((interactionId == ITI_38) || (interactionId == ITI_39)) {
-            return InteractionProfile.XCA;
-        }
-
-        if (interactionId == ITI_63) {
-            return InteractionProfile.XCF;
-        }
-
-        if ((interactionId == ITI_18) ||
-            (interactionId == ITI_41) ||
-            (interactionId == ITI_42) ||
-            (interactionId == ITI_43) ||
-            (interactionId == ITI_61))
-        {
-            return InteractionProfile.XDS_B;
-        }
-
         throw new IllegalArgumentException("Unknown interaction ID: " + interactionId);
     }
 

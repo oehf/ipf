@@ -201,6 +201,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
                 metaDataAssert(name.getValue().length() <= 128,
                         TITLE_TOO_LONG, name.getValue());
             }
+
+            boolean attachmentExpected = (profile.getInteractionId() == IpfInteractionId.ITI_63);
+            boolean attachmentProvided = (docEntry.getDataHandler() != null);
+            metaDataAssert(attachmentProvided == attachmentExpected,
+                    attachmentExpected ? MISSING_DOCUMENT_FOR_DOC_ENTRY : DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY,
+                    docEntry.getId());
         }
     }
 

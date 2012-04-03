@@ -15,14 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.core.atna.custom;
 
-import org.openhealthtools.ihe.atna.auditor.IHEAuditor;
+import org.openhealthtools.ihe.atna.auditor.XDSAuditor;
 import org.openhealthtools.ihe.atna.auditor.events.ihe.GenericIHEAuditEventMessage;
 import org.openhealthtools.ihe.atna.auditor.utils.EventUtils;
 
 /**
  * @author Dmytro Rud
  */
-abstract class CustomAuditor extends IHEAuditor {
+abstract class CustomAuditor extends XDSAuditor {
 
     protected void configureEvent(
             boolean serverSide,

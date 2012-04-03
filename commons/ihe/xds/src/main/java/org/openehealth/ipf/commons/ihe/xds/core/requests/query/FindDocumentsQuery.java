@@ -19,7 +19,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 import javax.xml.bind.annotation.*;
 import java.util.List;
@@ -37,10 +36,6 @@ public class FindDocumentsQuery extends AbstractDocumentsQuery implements Docume
 
     @XmlElement(name = "documentEntryType")
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
-
-    @Getter private final TimeRange creationTime = new TimeRange();
-    @Getter private final TimeRange serviceStartTime = new TimeRange();
-    @Getter private final TimeRange serviceStopTime = new TimeRange();
 
     /**
      * Constructs the query.

@@ -222,6 +222,31 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
         }
     };
 
+    private static final Processor ITI_63_REQUEST_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLAdhocQueryRequest30 message =
+                new EbXMLAdhocQueryRequest30(exchange.getIn().getBody(AdhocQueryRequest.class));
+            ValidationProfile profile = new ValidationProfile(ITI_63);
+            new AdhocQueryRequestValidator().validate(message, profile);
+        }
+    };
+
+    private static final Processor ITI_63_RESPONSE_VALIDATOR = new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            if (! validationEnabled(exchange)) {
+                return;
+            }
+            EbXMLQueryResponse30 message =
+                new EbXMLQueryResponse30(exchange.getIn().getBody(AdhocQueryResponse.class));
+            ValidationProfile profile = new ValidationProfile(ITI_63);
+            new QueryResponseValidator().validate(message, profile);
+        }
+    };
 
 
 
@@ -321,6 +346,20 @@ abstract public class XdsCamelValidators extends XdsACamelValidators {
      */
     public static Processor iti61ResponseValidator() {
         return ITI_61_RESPONSE_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-63 request messages.
+     */
+    public static Processor iti63RequestValidator() {
+        return ITI_63_REQUEST_VALIDATOR;
+    }
+
+    /**
+     * Returns a validating processor for ITI-63 response messages.
+     */
+    public static Processor iti63ResponseValidator() {
+        return ITI_63_RESPONSE_VALIDATOR;
     }
 
 }

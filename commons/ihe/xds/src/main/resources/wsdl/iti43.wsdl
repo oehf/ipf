@@ -15,7 +15,6 @@
         xmlns="http://schemas.xmlsoap.org/wsdl/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:ihe="urn:ihe:iti:xds-b:2007"
-        xmlns:rs="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0"
         xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
         xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
         targetNamespace="urn:ihe:iti:xds-b:2007"
@@ -26,9 +25,6 @@
     <types>
         <xsd:schema elementFormDefault="qualified">
             <xsd:import namespace="urn:ihe:iti:xds-b:2007" schemaLocation="classpath:wsdl/schema/IHE/IHEXDSB.xsd"/>
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rs:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rs.xsd"/>
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:lcm:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/lcm.xsd"/>
-            <xsd:import namespace="urn:oasis:names:tc:ebxml-regrep:xsd:rim:3.0" schemaLocation="classpath:wsdl/schema/ebRS30/rim.xsd"/>
         </xsd:schema>
     </types>
 

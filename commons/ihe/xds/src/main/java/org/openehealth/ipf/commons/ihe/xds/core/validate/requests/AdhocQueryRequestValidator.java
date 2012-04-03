@@ -74,9 +74,32 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
 
 
     private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
-        boolean requireHomeCommunityId = (profile.getProfile() == ValidationProfile.InteractionProfile.XCA);
+        boolean requireHomeCommunityId =
+                (profile.getProfile() == ValidationProfile.InteractionProfile.XCA) ||
+                (profile.getProfile() == ValidationProfile.InteractionProfile.XCF);
 
         switch (queryType) {
+            case FETCH:
+                return new QueryParameterValidation[] {
+                    new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                    new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                    new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                    new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                    new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                    new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                    new NumberValidation(DOC_ENTRY_CREATION_TIME_FROM, timeValidator),
+                    new NumberValidation(DOC_ENTRY_CREATION_TIME_TO, timeValidator),
+                    new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_FROM, timeValidator),
+                    new NumberValidation(DOC_ENTRY_SERVICE_START_TIME_TO, timeValidator),
+                    new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM, timeValidator),
+                    new NumberValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO, timeValidator),
+                    new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                    new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                    new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                    new StatusValidation(DOC_ENTRY_STATUS),
+                    new HomeCommunityIdValidation(true),
+                };
+
             case FIND_DOCUMENTS:
                 return new QueryParameterValidation[] {
                     new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),

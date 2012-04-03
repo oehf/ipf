@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.ebxml;
 
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 
+import javax.activation.DataHandler;
+
 /**
  * Encapsulation of the ebXML classes for {@code ExtrinsicObjectType}.
  * <p>
@@ -46,4 +48,15 @@ public interface EbXMLExtrinsicObject extends EbXMLRegistryObject {
      *          the status of this entry.
      */
     void setStatus(AvailabilityStatus status);
+
+    /**
+     * @return document returned in an ITI-63 response.
+     */
+    DataHandler getDataHandler();
+
+    /**
+     * @param dataHandler
+     *      document to be returned in an ITI-63 response.
+     */
+    void setDataHandler(DataHandler dataHandler);
 }

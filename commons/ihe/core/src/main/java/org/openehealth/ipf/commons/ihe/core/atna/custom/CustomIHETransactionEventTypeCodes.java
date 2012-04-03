@@ -35,6 +35,18 @@ public abstract class CustomIHETransactionEventTypeCodes extends CodedValueType 
         }
     }
 
+    public static final class CrossCommunityFetch extends IHETransactionEventTypeCodes {
+        public CrossCommunityFetch() {
+            super("ITI-63", "XCF Fetch");
+        }
+    }
+
+    public static final class CrossCommunityFetchIntermediateDocumentCreation extends IHETransactionEventTypeCodes {
+        public CrossCommunityFetchIntermediateDocumentCreation() {
+            super("ITI-63", "XCF Fetch Intermediate Document Creation");
+        }
+    }
+
     public static final class QueryExistingData extends IHETransactionEventTypeCodes {
         public QueryExistingData() {
             super("PCC-1", "Query Existing Data");

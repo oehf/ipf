@@ -20,6 +20,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rim.ExtrinsicObjectType;
 
+import javax.activation.DataHandler;
+
 /**
  * Encapsulation of {@link ExtrinsicObjectType}.
  * @author Jens Riemschneider
@@ -54,5 +56,15 @@ public class EbXMLExtrinsicObject30 extends EbXMLRegistryObject30<ExtrinsicObjec
     @Override
     public void setStatus(AvailabilityStatus status) {
         getInternal().setStatus(AvailabilityStatus.toQueryOpcode(status));
+    }
+
+    @Override
+    public DataHandler getDataHandler() {
+        return getInternal().getDataHandler();
+    }
+
+    @Override
+    public void setDataHandler(DataHandler dataHandler) {
+        getInternal().setDataHandler(dataHandler);
     }
 }

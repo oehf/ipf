@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.DocumentEntryTra
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.FolderTransformer;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.SubmissionSetTransformer;
 
+import javax.activation.DataHandler;
+
 /**
  * Transforms between {@link QueryResponse} and the {@link EbXMLQueryResponse} representation.
  * @author Jens Riemschneider
@@ -73,7 +75,14 @@ public class QueryResponseTransformer {
         }
         
         for (DocumentEntry docEntry : response.getDocumentEntries()) {
-            ebXML.addExtrinsicObject(documentEntryTransformer.toEbXML(docEntry, library));
+            EbXMLExtrinsicObject extrinsic = documentEntryTransformer.toEbXML(docEntry, library);
+            for (Document document : response.getDocuments()) {
+                if ((document != null) && (document.getDocumentEntry() == docEntry)) {
+                    extrinsic.setDataHandler(document.getContent(DataHandler.class));
+                    break;
+                }
+            }
+            ebXML.addExtrinsicObject(extrinsic);
         }
         
         for (Folder folder : response.getFolders()) {
@@ -118,7 +127,11 @@ public class QueryResponseTransformer {
         boolean foundNonObjRefs = false;
         
         for (EbXMLExtrinsicObject extrinsic : ebXML.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
-            response.getDocumentEntries().add(documentEntryTransformer.fromEbXML(extrinsic));
+            DocumentEntry documentEntry = documentEntryTransformer.fromEbXML(extrinsic);
+            response.getDocumentEntries().add(documentEntry);
+            if (extrinsic.getDataHandler() != null) {
+                response.getDocuments().add(new Document(documentEntry, extrinsic.getDataHandler()));
+            }
             foundNonObjRefs = true;
         }
 
