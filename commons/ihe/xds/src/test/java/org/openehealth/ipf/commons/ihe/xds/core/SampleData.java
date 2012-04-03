@@ -371,7 +371,7 @@ public abstract class SampleData {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
-        query.setAuthorPersons(Arrays.asList("person1", "person2"));
+        query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
         query.setDocumentEntryTypes(Arrays.asList(DocumentEntryType.STABLE));
@@ -410,7 +410,7 @@ public abstract class SampleData {
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.getSubmissionTime().setFrom("1980");
         query.getSubmissionTime().setTo("1981");
-        query.setAuthorPerson("person1");
+        query.setAuthorPerson("per'son1");
         query.setSourceIds(Arrays.asList("1.2.3", "3.2.1"));
         query.setContentTypeCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
@@ -594,7 +594,7 @@ public abstract class SampleData {
         confidentialityCodes.getOuterList().add(
                 Arrays.asList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
-        query.setAuthorPersons(Arrays.asList("person1", "person2"));
+        query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
 
