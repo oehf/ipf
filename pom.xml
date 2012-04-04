@@ -842,6 +842,13 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <!-- scope "provided" is used here in the sense
+                "necessary for compilation, not necessary at runtime" -->
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     
     <build>

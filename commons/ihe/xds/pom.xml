@@ -23,10 +23,6 @@
             <artifactId>ipf-commons-ihe-ws</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
 
         <!-- Dependencies for test -->
         <dependency>
