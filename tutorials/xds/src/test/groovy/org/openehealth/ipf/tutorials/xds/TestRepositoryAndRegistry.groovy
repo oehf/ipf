@@ -17,6 +17,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import static junit.framework.Assert.assertEquals
 import javax.activation.DataHandler
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
 
 /**
  * Tests against the registry/repository.
@@ -50,7 +51,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         query.patientId = docEntry.patientId
         query.status = [AvailabilityStatus.APPROVED]
         def queryReg = new QueryRegistry(query)
-        queryReg.returnLeafObjects = true
+        queryReg.returnType = QueryReturnType.LEAF_CLASS
         def queryResponse = send(ITI18, queryReg, QueryResponse.class)
         assertEquals(queryResponse.toString(), Status.SUCCESS, queryResponse.status)
         assertEquals(1, queryResponse.documentEntries.size())
@@ -72,7 +73,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         query.patientId = docEntry.patientId
         query.status = [AvailabilityStatus.APPROVED]
         def queryReg = new QueryRegistry(query)
-        queryReg.returnLeafObjects = true
+        queryReg.returnType = QueryReturnType.LEAF_CLASS
         def queryResponse = send(ITI18, queryReg, QueryResponse.class)
         assertEquals(queryResponse.toString(), Status.SUCCESS, queryResponse.status)
         assertEquals(1, queryResponse.documentEntries.size())

@@ -17,7 +17,9 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.core.IpfInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
@@ -36,9 +38,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  * @author Jens Riemschneider
  */
 public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequest, ValidationProfile> {
-    private static final String OBJECT_REF = "ObjectRef";
-    private static final String LEAF_CLASS = "LeafClass";
-
     private static final CXValidator cxValidator = new CXValidator();
     private static final TimeValidator timeValidator = new TimeValidator();
     private static final NopValidator nopValidator = new NopValidator();
@@ -223,9 +222,15 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     @Override
     public void validate(EbXMLAdhocQueryRequest request, ValidationProfile profile) {
         notNull(request, "request cannot be null");
-        
-        metaDataAssert(OBJECT_REF.equals(request.getReturnType()) || LEAF_CLASS.equals(request.getReturnType()), 
+
+        if (profile.getInteractionId() == IpfInteractionId.ITI_63) {
+            metaDataAssert(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM.getCode().equals(request.getReturnType()),
+                    UNKNOWN_RETURN_TYPE, request.getReturnType());
+        } else {
+            metaDataAssert(QueryReturnType.LEAF_CLASS.getCode().equals(request.getReturnType())
+                        || QueryReturnType.OBJECT_REF.getCode().equals(request.getReturnType()),
                 UNKNOWN_RETURN_TYPE, request.getReturnType());
+        }
 
         QueryType queryType = QueryType.valueOfId(request.getId());
         metaDataAssert(queryType != null, UNKNOWN_QUERY_TYPE, request.getId());

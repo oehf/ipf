@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml21.EbXMLFactory21;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.Query;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 
 /**
@@ -28,9 +29,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
  * @author Jens Riemschneider
  */
 public class QueryRegistryTransformer {
-    private static final String OBJECT_REF = "ObjectRef";
-    private static final String LEAF_CLASS = "LeafClass";
-    
     private final EbXMLFactory factory30 = new EbXMLFactory30();
     private final EbXMLFactory factory21 = new EbXMLFactory21();
     
@@ -48,9 +46,9 @@ public class QueryRegistryTransformer {
         Query query = request.getQuery();
         EbXMLAdhocQueryRequest ebXML = createAdhocQueryRequest(query);        
         query.accept(new ToEbXMLVisitor(ebXML));        
-        
-        ebXML.setReturnType(request.isReturnLeafObjects() ? LEAF_CLASS : OBJECT_REF);
-        
+
+        ebXML.setReturnType(request.getReturnType().getCode());
+
         return ebXML;        
     }
 
@@ -75,7 +73,7 @@ public class QueryRegistryTransformer {
         query.accept(new FromEbXMLVisitor(ebXML));
         
         QueryRegistry queryRegistry = new QueryRegistry(query);
-        queryRegistry.setReturnLeafObjects(ebXML.getReturnType().equals(LEAF_CLASS));
+        queryRegistry.setReturnType(QueryReturnType.valueOfCode(ebXML.getReturnType()));
 
         return queryRegistry;
     }

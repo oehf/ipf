@@ -25,6 +25,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.
 import static org.openehealth.ipf.commons.ihe.xds.core.responses.Status.SUCCESS
 import static org.openehealth.ipf.tutorials.xds.SearchResult.*
 import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.*
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
 
 /**
  * Route builder for ITI-18.
@@ -76,7 +77,7 @@ class Iti18RouteBuilder extends SpringRouteBuilder {
             .end()
             // Convert to object references if requested
             .choice()
-                .when { !it.in.body.req.returnLeafObjects }.to('direct:convertToObjRefs')
+                .when { it.in.body.req.returnType == QueryReturnType.OBJECT_REF }.to('direct:convertToObjRefs')
                 .otherwise()
             .end()
             .transform { it.in.body.resp }

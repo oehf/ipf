@@ -16,6 +16,10 @@
 package org.openehealth.ipf.commons.ihe.xds.core.requests;
 
 import static org.apache.commons.lang3.Validate.notNull;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
@@ -30,6 +34,7 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QueryRegistry")
 @XmlRootElement(name = "queryRegistry")
+@EqualsAndHashCode(callSuper = false, doNotUseGetters = true)
 public class QueryRegistry implements Serializable {
     private static final long serialVersionUID = -7089029668323133489L;
 
@@ -50,9 +55,9 @@ public class QueryRegistry implements Serializable {
             @XmlElementRef(type = GetSubmissionSetAndContentsQuery.class),
             @XmlElementRef(type = GetSubmissionSetsQuery.class)})
 
-    private Query query;
+    @Getter private Query query;
     @XmlAttribute
-    private boolean returnLeafObjects;
+    @Getter @Setter private QueryReturnType returnType = QueryReturnType.OBJECT_REF;
 
     /**
      * For JAXB serialization only.
@@ -68,58 +73,6 @@ public class QueryRegistry implements Serializable {
     public QueryRegistry(Query query) {
         notNull(query, "query cannot be null");
         this.query = query;
-    }
-
-    /**
-     * @return the query to use (never <code>null</code>).
-     */
-    public Query getQuery() {
-        return query;
-    }
-
-    /**
-     * @return <code>true</code> if the objects data for any found object should be 
-     *          returned in the response. <code>false</code> if only an object reference
-     *          should be returned.  
-     */
-    public boolean isReturnLeafObjects() {
-        return returnLeafObjects;
-    }
-
-    /**
-     * @param returnLeafObjects
-     *          <code>true</code> if the objects data for any found object should be 
-     *          returned in the response. <code>false</code> if only an object reference
-     *          should be returned.
-     */
-    public void setReturnLeafObjects(boolean returnLeafObjects) {
-        this.returnLeafObjects = returnLeafObjects;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((query == null) ? 0 : query.hashCode());
-        result = prime * result + (returnLeafObjects ? 1231 : 1237);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        QueryRegistry other = (QueryRegistry) obj;
-        if (query == null) { 
-            if (other.query != null)
-                return false;
-        } else if (!query.equals(other.query))
-            return false;
-        return returnLeafObjects == other.returnLeafObjects;
     }
 
     @Override
