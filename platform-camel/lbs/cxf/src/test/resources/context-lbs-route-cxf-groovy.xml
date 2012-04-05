@@ -31,7 +31,6 @@ http://camel.apache.org/schema/spring/camel-spring.xsd
 
     <!-- Imports used for the CXF endpoint -->
     <import resource="classpath:META-INF/cxf/cxf.xml" />
-    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
     <import resource="classpath:META-INF/cxf/cxf-extension-http-jetty.xml" />
 
     <!-- Definition of a CXF endpoint via a service using a WSDL. -->

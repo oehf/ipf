@@ -24,9 +24,7 @@ http://cxf.apache.org/schemas/configuration/http-conf.xsd
 
     <!-- Importing the CXF configuration -->
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-extension-addr.xml"/>
 
     <camel:camelContext id="camelContext">
         <camel:jmxAgent id="agent" disabled="true"/>
